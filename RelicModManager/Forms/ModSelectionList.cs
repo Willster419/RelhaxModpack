@@ -168,7 +168,7 @@ namespace RelhaxModpack
                 //always delete the file before redownloading
                 if (File.Exists(localDest))
                     File.Delete(localDest);
-                using (WebClient downloader = new WebClient() { Proxy = null })
+                using (WebClient downloader = new WebClient() {  })
                 {
                     try
                     {
@@ -188,7 +188,7 @@ namespace RelhaxModpack
                 //download the modInfo.dat
                 Logging.Manager("downloading modInfo.dat");
                 string dlURL = "";
-                using (WebClient downloader = new WebClient() { Proxy = null })
+                using (WebClient downloader = new WebClient() {  })
                 {
                     try
                     {
@@ -364,6 +364,33 @@ namespace RelhaxModpack
                         lsl.legacyTreeView.Items.Add(c.CategoryHeader.TreeViewItem);
                         cb2.Click += OnWPFComponentCheck;
                         break;
+                    case Settings.SelectionView.LegacyV2:
+                        //make the treeview
+                        TreeView tv = new TreeView()
+                        {
+                            Location = new Point(5, 5),
+                            Size = new Size(t.Size.Width - 5 - 5, t.Size.Height - 5 - 5),
+                            Dock = DockStyle.Fill,
+                            DrawMode = TreeViewDrawMode.OwnerDrawText
+                        };
+                        tv.DrawNode += Tv_DrawNode;
+                        RelhaxFormCheckBox cbv2 = new RelhaxFormCheckBox()
+                        {
+                            Package = c.CategoryHeader,
+                            Text = c.CategoryHeader.NameFormatted,
+                            AutoSize = true,
+                            AutoCheck = false
+                        };
+                        c.CategoryHeader.UIComponent = cbv2;
+                        c.CategoryHeader.ParentUIComponent = cbv2;
+                        c.CategoryHeader.TopParentUIComponent = cbv2;
+                        c.CategoryHeader.Packages = c.Packages;
+                        //add to the tree
+                        c.CategoryHeader.TreeNode.Component = c.CategoryHeader.UIComponent;
+                        cbv2.Click += OnMultiPackageClick;
+                        tv.Nodes.Add(c.CategoryHeader.TreeNode);
+                        t.Controls.Add(tv);
+                        break;
                 }
                 modTabGroups.TabPages.Add(t);
             }
@@ -413,6 +440,21 @@ namespace RelhaxModpack
                 }
             }
             //end ui building
+        }
+
+        private void Tv_DrawNode(object sender, DrawTreeNodeEventArgs e)
+        {
+            TreeView tv = (TreeView)sender;
+            if(e.Node is RelhaxFormTreeNode node)
+            {
+                if(node.Component is Control cont)
+                {
+                    e.Node.Tag = node.Component;
+                    tv.Controls.Add(cont);
+                    cont.SetBounds(node.Bounds.X, node.Bounds.Y, node.Bounds.Width, node.Bounds.Height);
+                    cont.Show();
+                }
+            }
         }
 
         //adds all usermods to thier own userMods tab
@@ -918,8 +960,9 @@ namespace RelhaxModpack
                             sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
                         }
                     }
-                    //make the root tree view item for the package and set it with the UI component
-                    
+                    break;
+                case Settings.SelectionView.LegacyV2:
+
                     break;
             }
             if(sp.Packages.Count > 0)

@@ -99,6 +99,8 @@ namespace RelhaxModpack
         public RelhaxWPFComboBox[] RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
         //the TreeViewItem for WPF
         public System.Windows.Controls.TreeViewItem @TreeViewItem = new System.Windows.Controls.TreeViewItem();
+        //the TreeViewItem for winForms
+        public RelhaxFormTreeNode TreeNode = new RelhaxFormTreeNode();
         //the panel that this package sits in
         public Panel ParentPanel = null;
         public Panel ChildPanel = null;

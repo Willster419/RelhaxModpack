@@ -91,7 +91,6 @@
             this.Controls.Add(this.SelectButton);
             this.Controls.Add(this.ExportWindowDesctiption);
             this.Controls.Add(this.WoTVersionsHolder);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(300, 569);

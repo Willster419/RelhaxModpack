@@ -21,6 +21,7 @@ namespace RelhaxModpack
         public static bool CleanInstallation { get; set; }
         public static bool ForceManuel { get; set; }
         public static bool ExpandAllLegacy { get; set; }
+        public static bool ExpandAllLegacy2 { get; set; }
         public static bool ComicSans { get; set; }
         public static bool FirstLoad { get; set; }
         public static bool SaveLastConfig { get; set; }
@@ -98,7 +99,12 @@ namespace RelhaxModpack
         }
         public static UninstallModes UninstallMode = UninstallModes.Smart;
         //enumeration for the type of mod selection list view
-        public enum SelectionView { Default = 0, Legacy = 1 };
+        public enum SelectionView
+        {
+            Default = 0,
+            Legacy = 1,
+            LegacyV2 = 2
+        };
         public static SelectionView SView = SelectionView.Default;
         public enum FontSize
         {
@@ -175,6 +181,7 @@ namespace RelhaxModpack
                 FontSizeforum = FontSize.Font100;
                 UninstallMode = UninstallModes.Smart;
                 ExpandAllLegacy = false;
+                ExpandAllLegacy2 = false;
                 ModSelectionFullscreen = false;
                 DisableColorChange = true;
                 DeleteLogs = false;
@@ -230,6 +237,9 @@ namespace RelhaxModpack
                             break;
                         case "expandAllLegacy":
                             ExpandAllLegacy = bool.Parse(n.InnerText);
+                            break;
+                        case "expandAllLegacy2":
+                            ExpandAllLegacy2 = bool.Parse(n.InnerText);
                             break;
                         case "disableBorders":
                             //feature disabled/removed
@@ -334,6 +344,9 @@ namespace RelhaxModpack
             XmlElement xexpandAllLegacy = doc.CreateElement("expandAllLegacy");
             xexpandAllLegacy.InnerText = "" + ExpandAllLegacy;
             settingsHolder.AppendChild(xexpandAllLegacy);
+            XmlElement xexpandAllLegacy2 = doc.CreateElement("expandAllLegacy2");
+            xexpandAllLegacy2.InnerText = "" + ExpandAllLegacy2;
+            settingsHolder.AppendChild(xexpandAllLegacy2);
             XmlElement xdisableBorders = doc.CreateElement("disableBorders");
             //feature disabled/removed
             xdisableBorders.InnerText = "" + true;

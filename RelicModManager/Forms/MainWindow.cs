@@ -1801,7 +1801,7 @@ namespace RelhaxModpack
                 installRelhaxMod, uninstallRelhaxMod, settingsGroupBox,loadingImageGroupBox, languageSelectionGB, findBugAddModLabel, formPageLink, selectionDefault, selectionLegacy, donateLabel,
                 cancelDownloadButton, fontSizeGB, expandNodesDefault, clearCacheCB, DiscordServerLink, viewAppUpdates, viewDBUpdates, clearLogFilesCB,
                 notifyIfSameDatabaseCB, ShowInstallCompleteWindowCB,  createShortcutsCB, InstantExtractionCB, DiagnosticUtilitiesButton, UninstallModeGroupBox, SmartUninstallModeRB,
-                CleanUninstallModeRB, SuperExtractionCB, ExportModeCB, };
+                CleanUninstallModeRB, SuperExtractionCB, ExportModeCB, selectionLegacyV2, expandNodesDefault2 };
             foreach (var set in translationSetList)
             {
                 set.Text = Translations.getTranslatedString(set.Name);
@@ -1827,6 +1827,7 @@ namespace RelhaxModpack
                 this.InstantExtractionCB.Checked = Settings.InstantExtraction;
                 this.SuperExtractionCB.Checked = Settings.SuperExtraction;
                 this.ExportModeCB.Checked = Settings.ExportMode;
+                this.expandNodesDefault2.Checked = Settings.ExpandAllLegacy2;
                 switch (Settings.UninstallMode)
                 {
                     case (Settings.UninstallModes.Smart):
@@ -1875,6 +1876,9 @@ namespace RelhaxModpack
                         break;
                     case (Settings.SelectionView.Legacy):
                         selectionLegacy.Checked = true;
+                        break;
+                    case (Settings.SelectionView.LegacyV2):
+                        selectionLegacyV2.Checked = true;
                         break;
                 }
                 switch (Settings.FontSizeforum)
@@ -2314,6 +2318,12 @@ namespace RelhaxModpack
             this.ApplySettings();
         }
 
+        private void selectionLegacyV2_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.SView = Settings.SelectionView.LegacyV2;
+            this.ApplySettings();
+        }
+
         private void languagePL_CheckedChanged(object sender, EventArgs e)
         {
             Translations.language = Translations.Languages.Polish;
@@ -2330,7 +2340,12 @@ namespace RelhaxModpack
         {
             Settings.ExpandAllLegacy = expandNodesDefault.Checked;
         }
-        
+
+        private void expandNodesDefault2_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.ExpandAllLegacy2 = expandNodesDefault2.Checked;
+        }
+
         private void clearCacheCB_CheckedChanged(object sender, EventArgs e)
         {
             Settings.ClearCache = clearCacheCB.Checked;
@@ -2685,6 +2700,6 @@ namespace RelhaxModpack
             ToggleUIButtons(true);
         }
         #endregion
-
+        
     }
 }

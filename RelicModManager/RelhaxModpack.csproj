@@ -181,6 +181,7 @@
     <Compile Include="UIComponents\RelhaxFormRadioButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UIComponents\RelhaxFormTreeNode.cs" />
     <Compile Include="UIComponents\RelhaxUserCheckBox.cs">
       <SubType>Component</SubType>
     </Compile>

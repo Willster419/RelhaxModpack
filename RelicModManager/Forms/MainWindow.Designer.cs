@@ -52,6 +52,7 @@
             this.saveLastInstallCB = new System.Windows.Forms.CheckBox();
             this.SuperExtractionCB = new System.Windows.Forms.CheckBox();
             this.clearLogFilesCB = new System.Windows.Forms.CheckBox();
+            this.ExportModeCB = new System.Windows.Forms.CheckBox();
             this.languageSelectionGB = new System.Windows.Forms.GroupBox();
             this.LanguageComboBox = new System.Windows.Forms.ComboBox();
             this.loadingImageGroupBox = new System.Windows.Forms.GroupBox();
@@ -66,6 +67,8 @@
             this.selectionDefault = new System.Windows.Forms.RadioButton();
             this.expandNodesDefault = new System.Windows.Forms.CheckBox();
             this.selectionLegacy = new System.Windows.Forms.RadioButton();
+            this.selectionLegacyV2 = new System.Windows.Forms.RadioButton();
+            this.expandNodesDefault2 = new System.Windows.Forms.CheckBox();
             this.donateLabel = new System.Windows.Forms.LinkLabel();
             this.fontSizeGB = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
@@ -95,7 +98,6 @@
             this.CleanUninstallModeRB = new System.Windows.Forms.RadioButton();
             this.SmartUninstallModeRB = new System.Windows.Forms.RadioButton();
             this.ButtonTable = new System.Windows.Forms.TableLayoutPanel();
-            this.ExportModeCB = new System.Windows.Forms.CheckBox();
             this.ExportModeBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.settingsGroupBox.SuspendLayout();
             this.SettingsTable.SuspendLayout();
@@ -448,6 +450,23 @@
             this.clearLogFilesCB.MouseEnter += new System.EventHandler(this.clearLogFilesCB_MouseEnter);
             this.clearLogFilesCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
+            // ExportModeCB
+            // 
+            this.ExportModeCB.AutoSize = true;
+            this.ExportModeCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.ExportModeCB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ExportModeCB.Location = new System.Drawing.Point(226, 171);
+            this.ExportModeCB.Margin = new System.Windows.Forms.Padding(1);
+            this.ExportModeCB.Name = "ExportModeCB";
+            this.ExportModeCB.Size = new System.Drawing.Size(223, 19);
+            this.ExportModeCB.TabIndex = 38;
+            this.ExportModeCB.Text = "Export Mode";
+            this.ExportModeCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.ExportModeCB.UseVisualStyleBackColor = true;
+            this.ExportModeCB.CheckedChanged += new System.EventHandler(this.ExportModeCB_CheckedChanged);
+            this.ExportModeCB.MouseEnter += new System.EventHandler(this.ExportModeCB_MouseEnter);
+            this.ExportModeCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            // 
             // languageSelectionGB
             // 
             this.languageSelectionGB.Controls.Add(this.LanguageComboBox);
@@ -587,6 +606,8 @@
             this.tableLayoutPanel5.Controls.Add(this.selectionDefault, 0, 0);
             this.tableLayoutPanel5.Controls.Add(this.expandNodesDefault, 0, 5);
             this.tableLayoutPanel5.Controls.Add(this.selectionLegacy, 0, 4);
+            this.tableLayoutPanel5.Controls.Add(this.selectionLegacyV2, 0, 2);
+            this.tableLayoutPanel5.Controls.Add(this.expandNodesDefault2, 0, 3);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
@@ -646,6 +667,38 @@
             this.selectionLegacy.CheckedChanged += new System.EventHandler(this.selectionLegacy_CheckedChanged);
             this.selectionLegacy.MouseEnter += new System.EventHandler(this.selectionView_MouseEnter);
             this.selectionLegacy.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            // 
+            // selectionLegacyV2
+            // 
+            this.selectionLegacyV2.AutoSize = true;
+            this.selectionLegacyV2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.selectionLegacyV2.Location = new System.Drawing.Point(1, 41);
+            this.selectionLegacyV2.Margin = new System.Windows.Forms.Padding(1);
+            this.selectionLegacyV2.Name = "selectionLegacyV2";
+            this.selectionLegacyV2.Size = new System.Drawing.Size(172, 18);
+            this.selectionLegacyV2.TabIndex = 3;
+            this.selectionLegacyV2.TabStop = true;
+            this.selectionLegacyV2.Text = "Legacy V2";
+            this.selectionLegacyV2.UseVisualStyleBackColor = true;
+            this.selectionLegacyV2.CheckedChanged += new System.EventHandler(this.selectionLegacyV2_CheckedChanged);
+            this.selectionLegacyV2.MouseEnter += new System.EventHandler(this.selectionView_MouseEnter);
+            this.selectionLegacyV2.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            // 
+            // expandNodesDefault2
+            // 
+            this.expandNodesDefault2.AutoSize = true;
+            this.expandNodesDefault2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.expandNodesDefault2.Location = new System.Drawing.Point(1, 61);
+            this.expandNodesDefault2.Margin = new System.Windows.Forms.Padding(1);
+            this.expandNodesDefault2.Name = "expandNodesDefault2";
+            this.expandNodesDefault2.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.expandNodesDefault2.Size = new System.Drawing.Size(172, 18);
+            this.expandNodesDefault2.TabIndex = 4;
+            this.expandNodesDefault2.Text = "Expand all";
+            this.expandNodesDefault2.UseVisualStyleBackColor = true;
+            this.expandNodesDefault2.CheckedChanged += new System.EventHandler(this.expandNodesDefault2_CheckedChanged);
+            this.expandNodesDefault2.MouseEnter += new System.EventHandler(this.expandNodesDefault_MouseEnter);
+            this.expandNodesDefault2.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // donateLabel
             // 
@@ -1082,23 +1135,6 @@
             this.ButtonTable.Size = new System.Drawing.Size(456, 90);
             this.ButtonTable.TabIndex = 42;
             // 
-            // ExportModeCB
-            // 
-            this.ExportModeCB.AutoSize = true;
-            this.ExportModeCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.ExportModeCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ExportModeCB.Location = new System.Drawing.Point(226, 171);
-            this.ExportModeCB.Margin = new System.Windows.Forms.Padding(1);
-            this.ExportModeCB.Name = "ExportModeCB";
-            this.ExportModeCB.Size = new System.Drawing.Size(223, 19);
-            this.ExportModeCB.TabIndex = 38;
-            this.ExportModeCB.Text = "Export Mode";
-            this.ExportModeCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.ExportModeCB.UseVisualStyleBackColor = true;
-            this.ExportModeCB.CheckedChanged += new System.EventHandler(this.ExportModeCB_CheckedChanged);
-            this.ExportModeCB.MouseEnter += new System.EventHandler(this.ExportModeCB_MouseEnter);
-            this.ExportModeCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1130,6 +1166,7 @@
             this.tableLayoutPanel8.ResumeLayout(false);
             this.viewTypeGB.ResumeLayout(false);
             this.tableLayoutPanel5.ResumeLayout(false);
+            this.tableLayoutPanel5.PerformLayout();
             this.fontSizeGB.ResumeLayout(false);
             this.tableLayoutPanel6.ResumeLayout(false);
             this.InfoTable.ResumeLayout(false);
@@ -1208,6 +1245,8 @@
         private System.Windows.Forms.RichTextBox downloadProgress;
         private System.Windows.Forms.CheckBox ExportModeCB;
         private System.Windows.Forms.FolderBrowserDialog ExportModeBrowserDialog;
+        private System.Windows.Forms.RadioButton selectionLegacyV2;
+        private System.Windows.Forms.CheckBox expandNodesDefault2;
     }
 }
 
