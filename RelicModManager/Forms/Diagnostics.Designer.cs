@@ -31,12 +31,12 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Diagnostics));
             this.MainTextBox = new System.Windows.Forms.RichTextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.StartWoTLauncherResult = new System.Windows.Forms.Label();
-            this.CollectLogInfoResult = new System.Windows.Forms.Label();
             this.SelectedInstallation = new System.Windows.Forms.Label();
             this.ChangeInstall = new System.Windows.Forms.Button();
             this.LaunchWoTLauncher = new System.Windows.Forms.Button();
             this.CollectLogInfo = new System.Windows.Forms.Button();
+            this.StartWoTLauncherResult = new System.Windows.Forms.Label();
+            this.CollectLogInfoResult = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -76,26 +76,6 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(566, 243);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
-            // StartWoTLauncherResult
-            // 
-            this.StartWoTLauncherResult.AutoSize = true;
-            this.StartWoTLauncherResult.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.StartWoTLauncherResult.Location = new System.Drawing.Point(229, 120);
-            this.StartWoTLauncherResult.Name = "StartWoTLauncherResult";
-            this.StartWoTLauncherResult.Size = new System.Drawing.Size(334, 60);
-            this.StartWoTLauncherResult.TabIndex = 2;
-            this.StartWoTLauncherResult.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // CollectLogInfoResult
-            // 
-            this.CollectLogInfoResult.AutoSize = true;
-            this.CollectLogInfoResult.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CollectLogInfoResult.Location = new System.Drawing.Point(229, 180);
-            this.CollectLogInfoResult.Name = "CollectLogInfoResult";
-            this.CollectLogInfoResult.Size = new System.Drawing.Size(334, 63);
-            this.CollectLogInfoResult.TabIndex = 3;
-            this.CollectLogInfoResult.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // SelectedInstallation
             // 
             this.SelectedInstallation.AutoSize = true;
@@ -122,6 +102,7 @@
             // 
             this.LaunchWoTLauncher.AutoSize = true;
             this.LaunchWoTLauncher.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LaunchWoTLauncher.Enabled = false;
             this.LaunchWoTLauncher.Location = new System.Drawing.Point(3, 123);
             this.LaunchWoTLauncher.Name = "LaunchWoTLauncher";
             this.LaunchWoTLauncher.Size = new System.Drawing.Size(220, 54);
@@ -141,6 +122,26 @@
             this.CollectLogInfo.Text = "Collect Log info";
             this.CollectLogInfo.UseVisualStyleBackColor = true;
             this.CollectLogInfo.Click += new System.EventHandler(this.CollectLogInfo_Click);
+            // 
+            // StartWoTLauncherResult
+            // 
+            this.StartWoTLauncherResult.AutoSize = true;
+            this.StartWoTLauncherResult.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.StartWoTLauncherResult.Location = new System.Drawing.Point(229, 120);
+            this.StartWoTLauncherResult.Name = "StartWoTLauncherResult";
+            this.StartWoTLauncherResult.Size = new System.Drawing.Size(334, 60);
+            this.StartWoTLauncherResult.TabIndex = 2;
+            this.StartWoTLauncherResult.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // CollectLogInfoResult
+            // 
+            this.CollectLogInfoResult.AutoSize = true;
+            this.CollectLogInfoResult.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CollectLogInfoResult.Location = new System.Drawing.Point(229, 180);
+            this.CollectLogInfoResult.Name = "CollectLogInfoResult";
+            this.CollectLogInfoResult.Size = new System.Drawing.Size(334, 63);
+            this.CollectLogInfoResult.TabIndex = 3;
+            this.CollectLogInfoResult.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // Diagnostics
             // 
