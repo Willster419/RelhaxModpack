@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
+using RelhaxModpack.UIComponents;
 
 namespace RelhaxModpack
 {
@@ -15,6 +16,9 @@ namespace RelhaxModpack
         //the holder for all packages of a catagory
         public SelectablePackage CategoryHeader = null;
         public List<SelectablePackage> Packages = new List<SelectablePackage>();
+
+        public List<RelhaxFormTreeNode> TreeNodes = new List<RelhaxFormTreeNode>();
+        public TreeView @TreeView;
         //list of dependencies required if anything is
         //selected from this catagory
         public List<Dependency> Dependencies = new List<Dependency>();

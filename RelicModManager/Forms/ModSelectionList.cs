@@ -277,6 +277,7 @@ namespace RelhaxModpack
         //must be only one catagory
         private void AddAllMods()
         {
+            TreeView tv = null;
             //start build category selections
             foreach (Category c in ParsedCatagoryList)
             {
@@ -366,7 +367,7 @@ namespace RelhaxModpack
                         break;
                     case Settings.SelectionView.LegacyV2:
                         //make the treeview
-                        TreeView tv = new TreeView()
+                        tv = new TreeView()
                         {
                             Location = new Point(5, 5),
                             Size = new Size(t.Size.Width - 5 - 5, t.Size.Height - 5 - 5),
@@ -374,6 +375,8 @@ namespace RelhaxModpack
                             DrawMode = TreeViewDrawMode.OwnerDrawText
                         };
                         tv.DrawNode += Tv_DrawNode;
+                        tv.BeforeCollapse += Tv_BeforeCollapse;
+                        c.TreeView = tv;
                         RelhaxFormCheckBox cbv2 = new RelhaxFormCheckBox()
                         {
                             Package = c.CategoryHeader,
@@ -385,10 +388,15 @@ namespace RelhaxModpack
                         c.CategoryHeader.ParentUIComponent = cbv2;
                         c.CategoryHeader.TopParentUIComponent = cbv2;
                         c.CategoryHeader.Packages = c.Packages;
+                        c.CategoryHeader.TreeNode.Category = c;
                         //add to the tree
                         c.CategoryHeader.TreeNode.Component = c.CategoryHeader.UIComponent;
                         cbv2.Click += OnMultiPackageClick;
                         tv.Nodes.Add(c.CategoryHeader.TreeNode);
+                        c.TreeNodes.Add(c.CategoryHeader.TreeNode);
+                        Control cont = (Control)c.CategoryHeader.UIComponent;
+                        tv.Controls.Add(cont);
+                        cont.Show();
                         t.Controls.Add(tv);
                         break;
                 }
@@ -428,33 +436,97 @@ namespace RelhaxModpack
                         pw.SetProgress(Prog++);
                         Application.DoEvents();
                     }
-                    /*
-                    switch (Settings.SView)
-                    {
-                        case Settings.SelectionView.Default:
-                            AddPackage(m, c, c.CategoryHeader);
-                            break;
-                        case Settings.SelectionView.Legacy:
-                            AddPackage(m, c, c.CategoryHeader);
-                            break;
-                    }
-                    */
                     AddPackage(m, c, c.CategoryHeader);
+                    if (Settings.ExpandAllLegacy2)
+                    {
+                        m.TreeNode.ExpandAll();
+                    }
+                    else
+                    {
+                        m.TreeNode.Collapse();
+                    }
+                }
+                if(Settings.ExpandAllLegacy2)
+                {
+                    c.CategoryHeader.TreeNode.Expand();
+                }
+                else
+                {
+                    c.CategoryHeader.TreeNode.Collapse();
                 }
             }
             //end ui building
         }
 
-        private void Tv_DrawNode(object sender, DrawTreeNodeEventArgs e)
+        private void Tv_BeforeCollapse(object sender, TreeViewCancelEventArgs e)
         {
-            TreeView tv = (TreeView)sender;
             if(e.Node is RelhaxFormTreeNode node)
             {
-                if(node.Component is Control cont)
+                foreach(RelhaxFormTreeNode subNode in node.Nodes)
                 {
-                    tv.Controls.Add(cont);
-                    cont.SetBounds(node.Bounds.X, node.Bounds.Y, node.Bounds.Width+50, node.Bounds.Height);
-                    cont.Show();
+                    if(subNode.Component is Control c)
+                    {
+                        c.Hide();
+                    }
+                    if (subNode.Nodes.Count > 0)
+                        BeforeCollapseSubNodes(subNode.Nodes);
+                }
+            }
+        }
+
+        private void BeforeCollapseSubNodes(TreeNodeCollection tnc)
+        {
+            foreach(RelhaxFormTreeNode subNode in tnc)
+            {
+                if(subNode.Component is Control c)
+                {
+                    c.Hide();
+                }
+                if (subNode.Nodes.Count > 0)
+                    BeforeCollapseSubNodes(subNode.Nodes);
+            }
+        }
+
+        //actually update UI bounds for legacy tree view
+        //assumes the first one passed into the stack in the top view
+        private void UpdateUIBounds(List<RelhaxFormTreeNode> nodes)
+        {
+            if (LoadingConfig)
+                return;
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                if(nodes[i].Component != null)
+                {
+                    Control cont = (Control)nodes[i].Component;
+                    RelhaxFormTreeNode node = nodes[i];
+                    cont.SetBounds(node.Bounds.X, node.Bounds.Y, node.Bounds.Width, node.Bounds.Height);
+                }
+            }
+        }
+
+        private void Tv_DrawNode(object sender, DrawTreeNodeEventArgs e)
+        {
+            if (LoadingConfig)
+                return;
+            if(e.Node is RelhaxFormTreeNode tn)
+            {
+                int index = tn.Category.TreeNodes.IndexOf(tn);
+                List<RelhaxFormTreeNode> nodesList = tn.Category.TreeNodes;
+                if ((index + 1 < nodesList.Count) && (!nodesList[index + 1].IsVisible))
+                {
+                    UpdateUIBounds(nodesList);
+                }
+                else if ((index - 1 > -1) && (!nodesList[index - 1].IsVisible))
+                {
+                    UpdateUIBounds(nodesList);
+                }
+                else if (index == 0)
+                {
+                    UpdateUIBounds(nodesList);
+                }
+                else if (index == nodesList.Count - 1)
+                {
+                    UpdateUIBounds(nodesList);
                 }
             }
         }
@@ -964,6 +1036,7 @@ namespace RelhaxModpack
                     }
                     break;
                 case Settings.SelectionView.LegacyV2:
+                    sp.TreeNode.Category = c;
                     switch (sp.Type)
                     {
                         case "single":
@@ -980,6 +1053,7 @@ namespace RelhaxModpack
                             break;
                         case "single_dropdown":
                         case "single_dropdown1":
+                            //sp.TreeNode.Bounds.Inflate(0, 25);
                             if (sp.Parent.RelhaxFormComboBoxList[0] == null)
                             {
                                 sp.Parent.RelhaxFormComboBoxList[0] = new RelhaxFormComboBox()
@@ -1017,11 +1091,18 @@ namespace RelhaxModpack
                                 }
                                 sp.Parent.RelhaxFormComboBoxList[0].Name = "added";
                                 sp.TreeNode.Component = sp.Parent.RelhaxFormComboBoxList[0];
+                                
                                 sp.Parent.TreeNode.Nodes.Add(sp.TreeNode);
+                                //also add the control
+                                Control CBCONT1 = sp.Parent.RelhaxFormComboBoxList[0];
+                                sp.ParentCategory.TreeView.Controls.Add(CBCONT1);
+                                CBCONT1.Show();
+                                sp.ParentCategory.TreeNodes.Add(sp.TreeNode);
                                 //sp.ParentPanel.Controls.Add(sp.Parent.RelhaxFormComboBoxList[0]);
                             }
                             break;
                         case "single_dropdown2":
+                            //sp.TreeNode.Bounds.Inflate(0, 5);
                             if (sp.Parent.RelhaxFormComboBoxList[1] == null)
                             {
                                 sp.Parent.RelhaxFormComboBoxList[1] = new RelhaxFormComboBox()
@@ -1060,6 +1141,11 @@ namespace RelhaxModpack
                                 sp.Parent.RelhaxFormComboBoxList[1].Name = "added";
                                 sp.TreeNode.Component = sp.Parent.RelhaxFormComboBoxList[1];
                                 sp.Parent.TreeNode.Nodes.Add(sp.TreeNode);
+                                //also add the control
+                                Control CBCONT = sp.Parent.RelhaxFormComboBoxList[1];
+                                sp.ParentCategory.TreeView.Controls.Add(CBCONT);
+                                CBCONT.Show();
+                                sp.ParentCategory.TreeNodes.Add(sp.TreeNode);
                                 //sp.ParentPanel.Controls.Add(sp.Parent.RelhaxFormComboBoxList[1]);
                             }
                             break;
@@ -1097,6 +1183,11 @@ namespace RelhaxModpack
                         //attach to treeview
                         sp.TreeNode.Component = sp.UIComponent;
                         sp.Parent.TreeNode.Nodes.Add(sp.TreeNode);
+                        //attach as control
+                        Control MULSINCONT = (Control) sp.UIComponent;
+                        sp.ParentCategory.TreeView.Controls.Add(MULSINCONT);
+                        MULSINCONT.Show();
+                        sp.ParentCategory.TreeNodes.Add(sp.TreeNode);
                     }
                     //end code for handlers tooltips and attaching
                     break;
@@ -1761,20 +1852,30 @@ namespace RelhaxModpack
 
         private void expandAllButton_Click(object sender, EventArgs e)
         {
-            foreach (Control c in modTabGroups.SelectedTab.Controls)
+            if (Settings.SView == Settings.SelectionView.Legacy)
             {
-                if (c is ElementHost)
+                foreach (Control c in modTabGroups.SelectedTab.Controls)
                 {
-                    ElementHost eh = (ElementHost)c;
-                    LegacySelectionList lsl = (LegacySelectionList)eh.Child;
-                    foreach (System.Windows.Controls.TreeViewItem tvi in lsl.legacyTreeView.Items)
+                    if (c is ElementHost)
                     {
-                        tvi.IsExpanded = true;
-                        if (tvi.Items.Count > 0)
+                        ElementHost eh = (ElementHost)c;
+                        LegacySelectionList lsl = (LegacySelectionList)eh.Child;
+                        foreach (System.Windows.Controls.TreeViewItem tvi in lsl.legacyTreeView.Items)
                         {
-                            processTreeViewItems(tvi.Items, true);
+                            tvi.IsExpanded = true;
+                            if (tvi.Items.Count > 0)
+                            {
+                                processTreeViewItems(tvi.Items, true);
+                            }
                         }
                     }
+                }
+            }
+            else if (Settings.SView == Settings.SelectionView.LegacyV2)
+            {
+                foreach (Control c in modTabGroups.SelectedTab.Controls)
+                {
+
                 }
             }
         }

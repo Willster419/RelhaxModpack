@@ -680,6 +680,7 @@
             this.selectionLegacyV2.TabStop = true;
             this.selectionLegacyV2.Text = "Legacy V2";
             this.selectionLegacyV2.UseVisualStyleBackColor = true;
+            this.selectionLegacyV2.Visible = false;
             this.selectionLegacyV2.CheckedChanged += new System.EventHandler(this.selectionLegacyV2_CheckedChanged);
             this.selectionLegacyV2.MouseEnter += new System.EventHandler(this.selectionView_MouseEnter);
             this.selectionLegacyV2.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
@@ -696,6 +697,7 @@
             this.expandNodesDefault2.TabIndex = 4;
             this.expandNodesDefault2.Text = "Expand all";
             this.expandNodesDefault2.UseVisualStyleBackColor = true;
+            this.expandNodesDefault2.Visible = false;
             this.expandNodesDefault2.CheckedChanged += new System.EventHandler(this.expandNodesDefault2_CheckedChanged);
             this.expandNodesDefault2.MouseEnter += new System.EventHandler(this.expandNodesDefault_MouseEnter);
             this.expandNodesDefault2.MouseLeave += new System.EventHandler(this.generic_MouseLeave);

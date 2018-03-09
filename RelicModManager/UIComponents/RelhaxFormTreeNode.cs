@@ -9,5 +9,6 @@ namespace RelhaxModpack.UIComponents
     public class RelhaxFormTreeNode : TreeNode
     {
         public IPackageUIComponent Component = null;
+        public Category @Category = null;
     }
 }

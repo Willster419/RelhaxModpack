@@ -1352,6 +1352,13 @@ namespace RelhaxModpack
             polish.Add("selectionDefault", "Domyślne");
             french.Add("selectionDefault", "Normal");
 
+            //Componet: Mod selection view default (OMC V2)
+            //
+            english.Add("selectionLegacyV2", "OMC Legacy V2");
+            german.Add("selectionLegacyV2", "TODO");
+            polish.Add("selectionLegacyV2", "TODO");
+            french.Add("selectionLegacyV2", "TODO");
+
             //Componet: Mod selection view legacy (OMC)
             //
             english.Add("selectionLegacy", "OMC Legacy");
@@ -1470,6 +1477,13 @@ namespace RelhaxModpack
             german.Add("expandNodesDefault", "Alle erweitern");
             polish.Add("expandNodesDefault", "Rozwiń wszystkie");
             french.Add("expandNodesDefault", "Développer tout");
+
+            //Componet: expandNodesDefault2
+            //
+            english.Add("expandNodesDefault2", "Expand all");
+            german.Add("expandNodesDefault2", "Alle erweitern");
+            polish.Add("expandNodesDefault2", "Rozwiń wszystkie");
+            french.Add("expandNodesDefault2", "Développer tout");
 
             //Component: expandAllDesc
             //
