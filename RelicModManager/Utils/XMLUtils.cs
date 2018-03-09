@@ -47,8 +47,8 @@ namespace RelhaxModpack
         //allows one to get an xml element or attribute value from the above methods
         //element example: "//root/element"
         //attribute example: "//root/element/@attribute"
-        //for the onlineFolder version: //modInfo.xml/@onlineFolder
-        //for the folder version: //modInfo.xml/@version
+        //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
+        //for the folder version: //modInfoAlpha.xml/@version
         public static string GetXMLElementAttributeMain(XmlDocument doc, string xpath)
         {
             XmlNode result = doc.SelectSingleNode(xpath);
@@ -72,7 +72,7 @@ namespace RelhaxModpack
                     string xmlString = Utils.GetStringFromZip(Settings.ModInfoDatFile, "modInfo.xml");
                     if (!Program.betaDatabase && !Program.testMode)
                     {
-                        Settings.TanksOnlineFolderVersion = GetXMLElementAttributeFromString(xmlString, "//modInfo.xml/@onlineFolder");
+                        Settings.TanksOnlineFolderVersion = GetXMLElementAttributeFromString(xmlString, "//modInfoAlpha.xml/@onlineFolder");
                     }
                     doc = XDocument.Parse(xmlString, LoadOptions.SetLineInfo);
                     // create new developerSelections NameList
@@ -99,7 +99,7 @@ namespace RelhaxModpack
                 return;
             }
             //add the global dependencies
-            foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfo.xml/globaldependencies/globaldependency"))
+            foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/globaldependencies/globaldependency"))
             {
                 List<string> depNodeList = new List<string>() { "zipFile", "crc", "enabled", "packageName", "appendExtraction" };
                 List<string> optionalDepNodList = new List<string>() { "startAddress", "endAddress", "devURL", "timestamp" };
@@ -176,7 +176,7 @@ namespace RelhaxModpack
                 globalDependencies.Add(d);
             }
             //add the dependencies
-            foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfo.xml/dependencies/dependency"))
+            foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/dependencies/dependency"))
             {
                 List<string> depNodeList = new List<string>() { "zipFile", "crc", "enabled", "packageName", "appendExtraction" };
                 List<string> optionalDepNodList = new List<string>() { "startAddress", "endAddress", "devURL", "timestamp" , "logicalDependencies" };
@@ -298,7 +298,7 @@ namespace RelhaxModpack
                 dependencies.Add(d);
             }
             //add the logicalDependencies
-            foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfo.xml/logicalDependencies/logicalDependency"))
+            foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/logicalDependencies/logicalDependency"))
             {
                 List<string> depNodeList = new List<string>() { "zipFile", "crc", "enabled", "packageName", };
                 List<string> optionalDepNodList = new List<string>() { "startAddress", "endAddress", "devURL", "timestamp" };
@@ -371,7 +371,7 @@ namespace RelhaxModpack
                 }
                 logicalDependencies.Add(d);
             }
-            foreach (XElement catagoryHolder in doc.XPathSelectElements("/modInfo.xml/catagories/catagory"))
+            foreach (XElement catagoryHolder in doc.XPathSelectElements("/modInfoAlpha.xml/catagories/catagory"))
             {
                 Category cat = new Category();
                 string[] catNodeList = new string[] { "name", "installGroup", "packages", "dependencies" };

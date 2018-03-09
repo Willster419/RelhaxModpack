@@ -55,9 +55,9 @@ namespace RelhaxModpack
             if (databaseLocationTextBox.Text.Equals("-none-"))
                 return;
             // read onlineFolder of the selected local modInfo.xml to get the right online database.xml
-            Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(databaseLocationTextBox.Text, "//modInfo.xml/@onlineFolder");
+            Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(databaseLocationTextBox.Text, "//modInfoAlpha.xml/@onlineFolder");
             // read gameVersion of the selected local modInfo.xml
-            Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(databaseLocationTextBox.Text, "//modInfo.xml/@version");
+            Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(databaseLocationTextBox.Text, "//modInfoAlpha.xml/@version");
             Logging.Manager(String.Format("working with game version: {0}, located at online Folder: {1}", Settings.TanksVersion, Settings.TanksOnlineFolderVersion));
             // download online database.xml
             try
@@ -340,8 +340,8 @@ namespace RelhaxModpack
             parsedCatagoryList = new List<Category>();
             dependencies = new List<Dependency>();
             logicalDependencies = new List<LogicalDependency>();
-            Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(databaseLocationTextBox.Text, "//modInfo.xml/@version");
-            Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(databaseLocationTextBox.Text, "//modInfo.xml/@onlineFolder");
+            Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(databaseLocationTextBox.Text, "//modInfoAlpha.xml/@version");
+            Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(databaseLocationTextBox.Text, "//modInfoAlpha.xml/@onlineFolder");
             XMLUtils.CreateModStructure(databaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             int duplicatesCounter = 0;
             //check for duplicates
