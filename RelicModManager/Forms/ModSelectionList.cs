@@ -428,6 +428,7 @@ namespace RelhaxModpack
                         pw.SetProgress(Prog++);
                         Application.DoEvents();
                     }
+                    /*
                     switch (Settings.SView)
                     {
                         case Settings.SelectionView.Default:
@@ -437,6 +438,8 @@ namespace RelhaxModpack
                             AddPackage(m, c, c.CategoryHeader);
                             break;
                     }
+                    */
+                    AddPackage(m, c, c.CategoryHeader);
                 }
             }
             //end ui building
@@ -449,9 +452,8 @@ namespace RelhaxModpack
             {
                 if(node.Component is Control cont)
                 {
-                    e.Node.Tag = node.Component;
                     tv.Controls.Add(cont);
-                    cont.SetBounds(node.Bounds.X, node.Bounds.Y, node.Bounds.Width, node.Bounds.Height);
+                    cont.SetBounds(node.Bounds.X, node.Bounds.Y, node.Bounds.Width+50, node.Bounds.Height);
                     cont.Show();
                 }
             }
@@ -962,7 +964,141 @@ namespace RelhaxModpack
                     }
                     break;
                 case Settings.SelectionView.LegacyV2:
-
+                    switch (sp.Type)
+                    {
+                        case "single":
+                        case "single1":
+                            sp.UIComponent = new RelhaxFormRadioButton()
+                            {
+                                Text = packageDisplayName,
+                                Package = sp,
+                                Enabled = canBeEnabled,
+                                Checked = (canBeEnabled && sp.Checked) ? true : false,
+                                AutoCheck = false,
+                                AutoSize = true
+                            };
+                            break;
+                        case "single_dropdown":
+                        case "single_dropdown1":
+                            if (sp.Parent.RelhaxFormComboBoxList[0] == null)
+                            {
+                                sp.Parent.RelhaxFormComboBoxList[0] = new RelhaxFormComboBox()
+                                {
+                                    //autosize should be true...
+                                    Size = new Size((int)(225 * DPISCALE), 15),
+                                    Enabled = false,
+                                    Name = "notAddedYet",
+                                    DropDownStyle = ComboBoxStyle.DropDownList
+                                };
+                                //https://stackoverflow.com/questions/1882993/c-sharp-how-do-i-prevent-mousewheel-scrolling-in-my-combobox
+                                sp.Parent.RelhaxFormComboBoxList[0].MouseWheel += (o, e) => ((HandledMouseEventArgs)e).Handled = true;
+                                sp.Parent.RelhaxFormComboBoxList[0].MouseDown += Generic_MouseDown;
+                                sp.Parent.RelhaxFormComboBoxList[0].SelectedIndexChanged += OnSingleDDPackageClick;
+                                sp.Parent.RelhaxFormComboBoxList[0].handler = OnSingleDDPackageClick;
+                            }
+                            if (sp.Enabled)
+                            {
+                                ComboBoxItem cbi = new ComboBoxItem(sp, packageDisplayName);
+                                sp.Parent.RelhaxFormComboBoxList[0].Items.Add(cbi);
+                                if (sp.Checked)
+                                {
+                                    //sp.Parent.RelhaxFormComboBoxList[0].Enabled = true;
+                                    sp.Parent.RelhaxFormComboBoxList[0].SelectedItem = cbi;
+                                    DescriptionToolTip.SetToolTip(sp.Parent.RelhaxFormComboBoxList[0], tooltipString);
+                                }
+                            }
+                            if (sp.Parent.RelhaxFormComboBoxList[0].Name.Equals("notAddedYet"))
+                            {
+                                if (sp.Parent.RelhaxFormComboBoxList[0].Items.Count > 0)
+                                {
+                                    sp.Parent.RelhaxFormComboBoxList[0].Enabled = true;
+                                    if (sp.Parent.RelhaxFormComboBoxList[0].SelectedIndex == -1)
+                                        sp.Parent.RelhaxFormComboBoxList[0].SelectedIndex = 0;
+                                }
+                                sp.Parent.RelhaxFormComboBoxList[0].Name = "added";
+                                sp.TreeNode.Component = sp.Parent.RelhaxFormComboBoxList[0];
+                                sp.Parent.TreeNode.Nodes.Add(sp.TreeNode);
+                                //sp.ParentPanel.Controls.Add(sp.Parent.RelhaxFormComboBoxList[0]);
+                            }
+                            break;
+                        case "single_dropdown2":
+                            if (sp.Parent.RelhaxFormComboBoxList[1] == null)
+                            {
+                                sp.Parent.RelhaxFormComboBoxList[1] = new RelhaxFormComboBox()
+                                {
+                                    //autosize should be true...
+                                    Size = new Size((int)(225 * DPISCALE), 15),
+                                    Enabled = false,
+                                    Name = "notAddedYet",
+                                    DropDownStyle = ComboBoxStyle.DropDownList
+                                };
+                                //https://stackoverflow.com/questions/1882993/c-sharp-how-do-i-prevent-mousewheel-scrolling-in-my-combobox
+                                sp.Parent.RelhaxFormComboBoxList[1].MouseWheel += (o, e) => ((HandledMouseEventArgs)e).Handled = true;
+                                sp.Parent.RelhaxFormComboBoxList[1].MouseDown += Generic_MouseDown;
+                                sp.Parent.RelhaxFormComboBoxList[1].SelectedIndexChanged += OnSingleDDPackageClick;
+                                sp.Parent.RelhaxFormComboBoxList[1].handler = OnSingleDDPackageClick;
+                            }
+                            if (sp.Enabled)
+                            {
+                                ComboBoxItem cbi = new ComboBoxItem(sp, packageDisplayName);
+                                sp.Parent.RelhaxFormComboBoxList[1].Items.Add(cbi);
+                                if (sp.Checked)
+                                {
+                                    //sp.Parent.RelhaxFormComboBoxList[1].Enabled = true;
+                                    sp.Parent.RelhaxFormComboBoxList[1].SelectedItem = cbi;
+                                    DescriptionToolTip.SetToolTip(sp.Parent.RelhaxFormComboBoxList[1], tooltipString);
+                                }
+                            }
+                            if (sp.Parent.RelhaxFormComboBoxList[1].Name.Equals("notAddedYet"))
+                            {
+                                if (sp.Parent.RelhaxFormComboBoxList[1].Items.Count > 0)
+                                {
+                                    sp.Parent.RelhaxFormComboBoxList[1].Enabled = true;
+                                    if (sp.Parent.RelhaxFormComboBoxList[1].SelectedIndex == -1)
+                                        sp.Parent.RelhaxFormComboBoxList[1].SelectedIndex = 0;
+                                }
+                                sp.Parent.RelhaxFormComboBoxList[1].Name = "added";
+                                sp.TreeNode.Component = sp.Parent.RelhaxFormComboBoxList[1];
+                                sp.Parent.TreeNode.Nodes.Add(sp.TreeNode);
+                                //sp.ParentPanel.Controls.Add(sp.Parent.RelhaxFormComboBoxList[1]);
+                            }
+                            break;
+                        case "multi":
+                            sp.UIComponent = new RelhaxFormCheckBox()
+                            {
+                                Text = packageDisplayName,
+                                Package = sp,
+                                Enabled = canBeEnabled,
+                                Checked = (canBeEnabled && sp.Checked) ? true : false,
+                                AutoSize = true,
+                                AutoCheck = false
+                            };
+                            break;
+                    }
+                    //color change code
+                    
+                    //color change code
+                    //start code for handlers tooltips and attaching
+                    if ((sp.UIComponent != null) && (sp.UIComponent is Control cont3))
+                    {
+                        //add tooltip
+                        DescriptionToolTip.SetToolTip(cont3, tooltipString);
+                        //take care of spacing and handlers
+                        cont3.MouseDown += Generic_MouseDown;
+                        //ADD HANDLERS HERE
+                        if (cont3 is RelhaxFormCheckBox FormCheckBox)
+                        {
+                            FormCheckBox.Click += OnMultiPackageClick;
+                        }
+                        else if (cont3 is RelhaxFormRadioButton FormRadioButton)
+                        {
+                            FormRadioButton.Click += OnSinglePackageClick;
+                        }
+                        //attach to treeview
+                        sp.TreeNode.Component = sp.UIComponent;
+                        sp.Parent.TreeNode.Nodes.Add(sp.TreeNode);
+                    }
+                    //end code for handlers tooltips and attaching
                     break;
             }
             if(sp.Packages.Count > 0)
