@@ -41,6 +41,8 @@ namespace RelhaxModpack
         public static bool SuperExtraction { get; set; }
         public static string FontName { get; set; }
         public static float ScaleSize { get; set; }
+        //turn on export mode
+        public static bool ExportMode { get; set; }
         //file and folder locations
         public static string SettingsXmlFile = Path.Combine(Application.StartupPath, "RelHaxSettings.xml");
         public static string RelhaxDownloadsFolder = Path.Combine(Application.StartupPath, "RelHaxDownloads");
@@ -148,6 +150,7 @@ namespace RelhaxModpack
                 CreateShortcuts = false;
                 InstantExtraction = false;
                 PreviewFullscreen = false;
+                ExportMode = false;
                 PreviewWidth = 450;
                 PreviewHeight = 550;
                 Logging.Manager("Language: " + CultureInfo.CurrentCulture.DisplayName);
@@ -287,6 +290,9 @@ namespace RelhaxModpack
                         case "PreviewHeight":
                             PreviewHeight = int.Parse(n.InnerText);
                             break;
+                        case "ExportMode":
+                            ExportMode = bool.Parse(n.InnerText);
+                            break;
                     }
                 }
             }
@@ -345,6 +351,9 @@ namespace RelhaxModpack
             XmlElement xShowInstallCompleteWindow = doc.CreateElement("ShowInstallCompleteWindow");
             xShowInstallCompleteWindow.InnerText = "" + ShowInstallCompleteWindow;
             settingsHolder.AppendChild(xShowInstallCompleteWindow);
+            XmlElement xExportMode = doc.CreateElement("ExportMode");
+            xExportMode.InnerText = "" + ExportMode;
+            settingsHolder.AppendChild(xExportMode);
             XmlElement xlanguage = doc.CreateElement("language");
             xlanguage.InnerText = "" + (int)Translations.language;
             settingsHolder.AppendChild(xlanguage);

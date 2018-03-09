@@ -13,6 +13,8 @@ using System.Xml.XPath;
 using System.Xml.Linq;
 using RelhaxModpack.DatabaseComponents;
 using RelhaxModpack.InstallerComponents;
+using RelhaxModpack.Forms;
+using RelhaxModpack.UIComponents;
 
 namespace RelhaxModpack
 {
@@ -784,66 +786,130 @@ namespace RelhaxModpack
             }
             //reset the interface
             this.downloadProgress.Text = "";
-            //attempt to locate the tanks directory automatically
-            //if it fails, it will prompt the user to return the world of tanks exe
-            if (Settings.ForceManuel || this.autoFindTanks() == null)
+            //if export mode, show a different selection method
+            if(Settings.ExportMode)
             {
-                if (this.manuallyFindTanks() == null)
+                if(Program.Version != Program.ProgramVersion.Stable)
+                    Logging.Manager("DEBUG: export mode selected, asking where to set folder");
+                if(string.IsNullOrWhiteSpace(ExportModeBrowserDialog.SelectedPath))
+                    ExportModeBrowserDialog.SelectedPath = Application.StartupPath;
+                if (ExportModeBrowserDialog.ShowDialog() != DialogResult.OK)
                 {
-                    Logging.Manager("user stopped installation");
+                    if (Program.Version != Program.ProgramVersion.Stable)
+                        Logging.Manager("DEBUG: user cancled export mode");
                     ToggleUIButtons(true);
                     return;
                 }
-            }
-            //parse all strings for installation
-            tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
-            Settings.TanksLocation = tanksLocation;
-            Logging.Manager("tanksLocation parsed as " + tanksLocation);
-            Logging.Manager("customUserMods parsed as " + Path.Combine(Application.StartupPath, "RelHaxUserMods"));
-            if (tanksLocation.Equals(Application.StartupPath))
-            {
-                //display error and abort
-                MessageBox.Show(Translations.getTranslatedString("moveOutOfTanksLocation"));
-                ToggleUIButtons(true);
-                return;
-            }
-            tanksVersion = this.getFolderVersion();
-            tanksVersionForInstaller = tanksVersion;
-            Settings.TanksVersion = tanksVersion;
-            Logging.Manager("tanksVersion parsed as " + tanksVersion);
-            //determine if the tanks client version is supported
-            if (!Program.testMode && !isClientVersionSupported(tanksVersion))
-            {
-                //log and inform the user
-                Logging.Manager("WARNING: Detected client version is " + tanksVersion + ", not supported");
-                Logging.Manager("Supported versions are: " + string.Join(", ", supportedVersions));
-                // parse the string that we get from the server and delete all "Testserver" entries (Testserver entries are the version number with prefix "T")
-                string publicVersions = string.Join("\n", supportedVersions.Select(sValue => sValue.Trim()).ToArray().Where(s => !(s.Substring(0, 1) == "T")).ToArray());
-                MessageBox.Show(string.Format("{0}: {1}\n{2}\n\n{3}:\n{4}", Translations.getTranslatedString("detectedClientVersion"), tanksVersion, Translations.getTranslatedString("supportNotGuarnteed"), Translations.getTranslatedString("supportedClientVersions"), publicVersions), Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                // select the last public modpack version
-                tanksVersion = publicVersions.Split('\n').Last();
-                // go to Client check again, because the online folder must be set correct
-                isClientVersionSupported(tanksVersion);
-                Logging.Manager(string.Format("Version selected: {0}  OnlineFolder: {1}", tanksVersion, Settings.TanksOnlineFolderVersion));
-            }
-            //if the user wants to, check if the database has actually changed
-            if (Settings.NotifyIfSameDatabase && SameDatabaseVersions())        // the get the string databaseVersionString filles in any case, the function must be performed first!
-            {
-                if (MessageBox.Show(Translations.getTranslatedString("DatabaseVersionsSameBody"), Translations.getTranslatedString("DatabaseVersionsSameHeader"), MessageBoxButtons.YesNo) == DialogResult.No)
+                if (Program.Version != Program.ProgramVersion.Stable)
+                    Logging.Manager("DEBUG: user continues to select version of game to export for");
+                //create the list of radioButtons
+                List<ExportModeRadioButton> supportedClients = new List<ExportModeRadioButton>();
+                //parse the list of supportd clients
+                supportedVersions.Clear();
+                string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "supported_clients.xml");  //xml doc name can change
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(xmlString);
+                foreach(XmlNode node in doc.SelectNodes("//versions/version"))
                 {
+                    supportedClients.Add(new ExportModeRadioButton()
+                    {
+                        Text = node.InnerText,
+                        FolderVersion = node.InnerText,
+                        OnlineFolderVersion = node.Attributes["folder"].InnerText,
+                        AutoSize = true,
+                    });
+                    // fill the supportedVersions array to possible create messages
+                    supportedVersions.Add(node.InnerText);
+                }
+                //check if the selection is valid
+                using (RelhaxModpack.Forms.ExportSelectWoTVersion wotv = new Forms.ExportSelectWoTVersion()
+                {
+                    SupportedWoTVersions = supportedClients
+                })
+                {
+                    if(wotv.ShowDialog() != DialogResult.OK)
+                    {
+                        if (Program.Version != Program.ProgramVersion.Stable)
+                            Logging.Manager("DEBUG: user cancled export mode");
+                        ToggleUIButtons(true);
+                        return;
+                    }
+                    tanksLocation = ExportModeBrowserDialog.SelectedPath;
+                    Settings.TanksLocation = tanksLocation;
+                    Logging.Manager("tanksLocation parsed as " + tanksLocation);
+                    Logging.Manager("customUserMods parsed as " + Path.Combine(Application.StartupPath, "RelHaxUserMods"));
+                    tanksVersion = wotv.selectedVersion.FolderVersion;
+                    tanksVersionForInstaller = tanksVersion;
+                    Settings.TanksVersion = tanksVersion;
+                    Settings.TanksOnlineFolderVersion = wotv.selectedVersion.OnlineFolderVersion;
+                    Logging.Manager("tanksVersion parsed as " + tanksVersion);
+                }
+            }
+            else
+            {
+                //attempt to locate the tanks directory automatically
+                //if it fails, it will prompt the user to return the world of tanks exe
+                if (Settings.ForceManuel || this.autoFindTanks() == null)
+                {
+                    if (this.manuallyFindTanks() == null)
+                    {
+                        Logging.Manager("user stopped installation");
+                        ToggleUIButtons(true);
+                        return;
+                    }
+                }
+                //parse all strings for installation
+                tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
+                Settings.TanksLocation = tanksLocation;
+                Logging.Manager("tanksLocation parsed as " + tanksLocation);
+                Logging.Manager("customUserMods parsed as " + Path.Combine(Application.StartupPath, "RelHaxUserMods"));
+                if (tanksLocation.Equals(Application.StartupPath))
+                {
+                    //display error and abort
+                    MessageBox.Show(Translations.getTranslatedString("moveOutOfTanksLocation"));
                     ToggleUIButtons(true);
                     return;
+                }
+                tanksVersion = this.getFolderVersion();
+                tanksVersionForInstaller = tanksVersion;
+                Settings.TanksVersion = tanksVersion;
+                Logging.Manager("tanksVersion parsed as " + tanksVersion);
+                //determine if the tanks client version is supported
+                if (!Program.testMode && !isClientVersionSupported(tanksVersion))
+                {
+                    //log and inform the user
+                    Logging.Manager("WARNING: Detected client version is " + tanksVersion + ", not supported");
+                    Logging.Manager("Supported versions are: " + string.Join(", ", supportedVersions));
+                    // parse the string that we get from the server and delete all "Testserver" entries (Testserver entries are the version number with prefix "T")
+                    string publicVersions = string.Join("\n", supportedVersions.Select(sValue => sValue.Trim()).ToArray().Where(s => !(s.Substring(0, 1) == "T")).ToArray());
+                    MessageBox.Show(string.Format("{0}: {1}\n{2}\n\n{3}:\n{4}", Translations.getTranslatedString("detectedClientVersion"), tanksVersion, Translations.getTranslatedString("supportNotGuarnteed"), Translations.getTranslatedString("supportedClientVersions"), publicVersions), Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    // select the last public modpack version
+                    tanksVersion = publicVersions.Split('\n').Last();
+                    // go to Client check again, because the online folder must be set correct
+                    isClientVersionSupported(tanksVersion);
+                    Logging.Manager(string.Format("Version selected: {0}  OnlineFolder: {1}", tanksVersion, Settings.TanksOnlineFolderVersion));
+                }
+                //if the user wants to, check if the database has actually changed
+                if (Settings.NotifyIfSameDatabase && SameDatabaseVersions())        // the get the string databaseVersionString filles in any case, the function must be performed first!
+                {
+                    if (MessageBox.Show(Translations.getTranslatedString("DatabaseVersionsSameBody"), Translations.getTranslatedString("DatabaseVersionsSameHeader"), MessageBoxButtons.YesNo) == DialogResult.No)
+                    {
+                        ToggleUIButtons(true);
+                        return;
+                    }
                 }
             }
             //reset the childProgressBar value
             childProgressBar.Maximum = 100;
             //childProgressBar.Value = 0;
             //check to make sure that the md5hashdatabase is valid before using it
+            Logging.Manager("Checking md5 database file");
             if ((File.Exists(Settings.MD5HashDatabaseXmlFile)) && (!XMLUtils.IsValidXml(Settings.MD5HashDatabaseXmlFile)))
             {
                 File.Delete(Settings.MD5HashDatabaseXmlFile);
             }
             //show the mod selection window
+            Logging.Manager("Loading ModSelectionList");
             ModSelectionList list = new ModSelectionList()
             {
                 TanksVersion = this.tanksVersion,
@@ -1735,7 +1801,7 @@ namespace RelhaxModpack
                 installRelhaxMod, uninstallRelhaxMod, settingsGroupBox,loadingImageGroupBox, languageSelectionGB, findBugAddModLabel, formPageLink, selectionDefault, selectionLegacy, donateLabel,
                 cancelDownloadButton, fontSizeGB, expandNodesDefault, clearCacheCB, DiscordServerLink, viewAppUpdates, viewDBUpdates, clearLogFilesCB,
                 notifyIfSameDatabaseCB, ShowInstallCompleteWindowCB,  createShortcutsCB, InstantExtractionCB, DiagnosticUtilitiesButton, UninstallModeGroupBox, SmartUninstallModeRB,
-                CleanUninstallModeRB, SuperExtractionCB };
+                CleanUninstallModeRB, SuperExtractionCB, ExportModeCB, };
             foreach (var set in translationSetList)
             {
                 set.Text = Translations.getTranslatedString(set.Name);
@@ -1760,6 +1826,7 @@ namespace RelhaxModpack
                 this.createShortcutsCB.Checked = Settings.CreateShortcuts;
                 this.InstantExtractionCB.Checked = Settings.InstantExtraction;
                 this.SuperExtractionCB.Checked = Settings.SuperExtraction;
+                this.ExportModeCB.Checked = Settings.ExportMode;
                 switch (Settings.UninstallMode)
                 {
                     case (Settings.UninstallModes.Smart):
@@ -1846,6 +1913,8 @@ namespace RelhaxModpack
                         DPIAUTO.Checked = true;
                         break;
                 }
+                if (Settings.ExportMode)
+                    forceManuel.Enabled = false;
             }
         }
 
@@ -1862,7 +1931,10 @@ namespace RelhaxModpack
         //toggle UI buttons to be Enabled or disabled
         public void ToggleUIButtons(bool enableToggle)
         {
-            forceManuel.Enabled = enableToggle;
+            if (ExportModeCB.Checked)
+                forceManuel.Enabled = false;
+            else
+                forceManuel.Enabled = enableToggle;
             installRelhaxMod.Enabled = enableToggle;
             uninstallRelhaxMod.Enabled = enableToggle;
             cleanInstallCB.Enabled = enableToggle;
@@ -1882,6 +1954,7 @@ namespace RelhaxModpack
             SuperExtractionCB.Enabled = enableToggle;
             SmartUninstallModeRB.Enabled = enableToggle;
             CleanUninstallModeRB.Enabled = enableToggle;
+            ExportModeCB.Enabled = enableToggle;
         }
 
         public void ToggleScaleRBs(bool enableToggle)
@@ -2147,6 +2220,12 @@ namespace RelhaxModpack
         {
             if (installRelhaxMod.Enabled)
                 downloadProgress.Text = Translations.getTranslatedString("CleanUninstallModeRBExplanation");
+        }
+
+        private void ExportModeCB_MouseEnter(object sender, EventArgs e)
+        {
+            if (installRelhaxMod.Enabled)
+                downloadProgress.Text = Translations.getTranslatedString("ExportModeCBExplanation");
         }
         #endregion
 
@@ -2544,6 +2623,12 @@ namespace RelhaxModpack
             if (CleanUninstallModeRB.Checked)
                 Settings.UninstallMode = Settings.UninstallModes.Clean;
         }
+
+        private void ExportModeCB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.ExportMode = ExportModeCB.Checked;
+            forceManuel.Enabled = !ExportModeCB.Checked;
+        }
         #endregion
 
         #region Click events
@@ -2600,5 +2685,6 @@ namespace RelhaxModpack
             ToggleUIButtons(true);
         }
         #endregion
+
     }
 }

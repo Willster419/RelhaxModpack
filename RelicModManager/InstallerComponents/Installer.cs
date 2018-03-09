@@ -307,7 +307,6 @@ namespace RelhaxModpack
             if (Directory.Exists(Path.Combine(TanksLocation, "_xmlUnPack")))
             {
                 UnpackXmlFiles();
-                Directory.Delete(Path.Combine(TanksLocation, "_xmlUnPack"), true);
             }
             else
                 Logging.Manager("... skipped");
@@ -334,7 +333,6 @@ namespace RelhaxModpack
             if (Directory.Exists(Path.Combine(TanksLocation, "_atlases")))
             {
                 ExtractAtlases();
-                Directory.Delete(Path.Combine(TanksLocation, "_atlases"), true);
             }
             else
                 Logging.Manager("... skipped");
@@ -368,12 +366,19 @@ namespace RelhaxModpack
             args.InstalProgress = InstallerEventArgs.InstallProgress.CleanUp;
             try
             {
-                if (Directory.Exists(Path.Combine(TanksLocation, "_readme")))
-                    Directory.Delete(Path.Combine(TanksLocation, "_readme"), true);
-                if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
-                    Directory.Delete(Path.Combine(TanksLocation, "_patch"), true);
-                if (Directory.Exists(Path.Combine(TanksLocation, "_shortcuts")))
-                    Directory.Delete(Path.Combine(TanksLocation, "_shortcuts"), true);
+                if(!Settings.ExportMode)
+                {
+                    if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
+                        Directory.Delete(Path.Combine(TanksLocation, "_patch"), true);
+                    if (Directory.Exists(Path.Combine(TanksLocation, "_shortcuts")))
+                        Directory.Delete(Path.Combine(TanksLocation, "_shortcuts"), true);
+                    if (Directory.Exists(Path.Combine(TanksLocation, "_xmlUnPack")))
+                        Directory.Delete(Path.Combine(TanksLocation, "_xmlUnPack"), true);
+                    if (Directory.Exists(Path.Combine(TanksLocation, "_atlases")))
+                        Directory.Delete(Path.Combine(TanksLocation, "_atlases"), true);
+                    if (Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
+                        Directory.Delete(Path.Combine(TanksLocation, "_fonts"), true);
+                }
             }
             catch (Exception ex)
             {
@@ -744,13 +749,24 @@ namespace RelhaxModpack
             try
             {
                 //just a double-check to delete all patches
-                if (Directory.Exists(Path.Combine(TanksLocation, "_patch"))) Directory.Delete(Path.Combine(TanksLocation, "_patch"), true);
-                if (Directory.Exists(Path.Combine(TanksLocation, "_fonts"))) Directory.Delete(Path.Combine(TanksLocation, "_fonts"), true);
-                if (Directory.Exists(Path.Combine(TanksLocation, "_xmlUnPack"))) Directory.Delete(Path.Combine(TanksLocation, "_xmlUnPack"), true);
-                if (Directory.Exists(Path.Combine(TanksLocation, "_atlases"))) Directory.Delete(Path.Combine(TanksLocation, "_atlases"), true);
-                if (!Directory.Exists(Path.Combine(TanksLocation, "res_mods"))) Directory.CreateDirectory(Path.Combine(TanksLocation, "res_mods"));
-                if (!Directory.Exists(Path.Combine(TanksLocation, "mods"))) Directory.CreateDirectory(Path.Combine(TanksLocation, "mods"));
-                if (!Directory.Exists(Path.Combine(TanksLocation, "logs"))) Directory.CreateDirectory(Path.Combine(TanksLocation, "logs"));
+                if (Directory.Exists(Path.Combine(TanksLocation, "_readme")))
+                    Directory.Delete(Path.Combine(TanksLocation, "_readme"), true);
+                if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
+                    Directory.Delete(Path.Combine(TanksLocation, "_patch"), true);
+                if (Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
+                    Directory.Delete(Path.Combine(TanksLocation, "_fonts"), true);
+                if (Directory.Exists(Path.Combine(TanksLocation, "_xmlUnPack")))
+                    Directory.Delete(Path.Combine(TanksLocation, "_xmlUnPack"), true);
+                if (Directory.Exists(Path.Combine(TanksLocation, "_atlases")))
+                    Directory.Delete(Path.Combine(TanksLocation, "_atlases"), true);
+                if (Directory.Exists(Path.Combine(TanksLocation, "_shortcuts")))
+                    Directory.Delete(Path.Combine(TanksLocation, "_shortcuts"), true);
+                if (!Directory.Exists(Path.Combine(TanksLocation, "res_mods")))
+                    Directory.CreateDirectory(Path.Combine(TanksLocation, "res_mods"));
+                if (!Directory.Exists(Path.Combine(TanksLocation, "mods")))
+                    Directory.CreateDirectory(Path.Combine(TanksLocation, "mods"));
+                if (!Directory.Exists(Path.Combine(TanksLocation, "logs")))
+                    Directory.CreateDirectory(Path.Combine(TanksLocation, "logs"));
 
                 //extract RelHax Mods
                 Logging.Manager("Starting Relhax Modpack Extraction");
@@ -1230,49 +1246,75 @@ namespace RelhaxModpack
                             try
                             {
                                 // if value of pkg is empty, it is not contained in an archive
-                                File.Copy(Path.Combine(r.directoryInArchive, r.fileName), Path.Combine(r.extractDirectory, fn), false);     // no overwrite of an exsisting file !!
-                                // Utils.AppendToInstallLog(Path.Combine(r.extractDirectory, fn));
-                                Logging.Installer(Path.Combine(r.extractDirectory, fn));            // write created file with path
+                                if (File.Exists(Path.Combine(r.directoryInArchive, r.fileName)))
+                                {
+                                    File.Copy(Path.Combine(r.directoryInArchive, r.fileName), Path.Combine(r.extractDirectory, fn), false);     // no overwrite of an exsisting file !!
+                                }
+                                else
+                                {
+                                    if (Settings.ExportMode)
+                                    {
+                                        Logging.Manager(string.Format("WARNING: file {0} not found, but most likley expected due to export mode", Path.Combine(r.directoryInArchive, r.fileName)));
+                                    }
+                                    else
+                                    {
+                                        Logging.Manager(string.Format("ERROR: file {0} not found!", Path.Combine(r.directoryInArchive, r.fileName)));
+                                    }
+                                }
+                                    // Utils.AppendToInstallLog(Path.Combine(r.extractDirectory, fn));
+                                    Logging.Installer(Path.Combine(r.extractDirectory, fn));            // write created file with path
                                 Logging.Manager(string.Format("{0} moved", r.fileName));
                             }
                             catch (Exception ex)
                             {
-                                Utils.ExceptionLog("Unzip", string.Format("move: {0}", Path.Combine(r.extractDirectory, fn)), ex);
+                                Utils.ExceptionLog("UnpackXmlFiles", string.Format("copy: {0}", Path.Combine(r.extractDirectory, fn)), ex);
                             }
                         }
                         else
                         {
                             //get file from the zip archive
-                            using (ZipFile zip = new ZipFile(r.pkg))
+                            if(File.Exists(r.pkg))
                             {
-                                for (int i = 0; i < zip.Entries.Count; i++)
+                                using (ZipFile zip = new ZipFile(r.pkg))
                                 {
-                                    if (Regex.IsMatch(zip[i].FileName, Path.Combine(r.directoryInArchive, r.fileName).Replace(@"\", @"/")))
+                                    for (int i = 0; i < zip.Entries.Count; i++)
                                     {
-                                        try
+                                        if (Regex.IsMatch(zip[i].FileName, Path.Combine(r.directoryInArchive, r.fileName).Replace(@"\", @"/")))
                                         {
-                                            zip[i].FileName = fn;
-                                            if (File.Exists(Path.Combine(r.extractDirectory, zip[i].FileName)))
+                                            try
                                             {
-                                                Logging.Manager(string.Format("File {0} already exists, so no extraction/overwrite", Path.Combine(r.extractDirectory, zip[i].FileName)));
+                                                zip[i].FileName = fn;
+                                                if (File.Exists(Path.Combine(r.extractDirectory, zip[i].FileName)))
+                                                {
+                                                    Logging.Manager(string.Format("File {0} already exists, so no extraction/overwrite", Path.Combine(r.extractDirectory, zip[i].FileName)));
+                                                }
+                                                else
+                                                {
+                                                    //when possible please use other methods than throwing exceptions
+                                                    zip.ExtractSelectedEntries(zip[i].FileName, null, r.extractDirectory, ExtractExistingFileAction.DoNotOverwrite);  // no overwrite of an exsisting file !!
+                                                    Logging.Installer(Path.Combine(r.extractDirectory, fn));
+                                                    Logging.Manager(string.Format("{0} extracted", zip[i].FileName));
+                                                    // break;
+                                                }
                                             }
-                                            else
+                                            catch (Exception ex)
                                             {
-                                                //when possible please use other methods than throwing exceptions
-                                                zip.ExtractSelectedEntries(zip[i].FileName, null, r.extractDirectory, ExtractExistingFileAction.DoNotOverwrite);  // no overwrite of an exsisting file !!
-                                                Logging.Installer(Path.Combine(r.extractDirectory, fn));
-                                                Logging.Manager(string.Format("{0} extracted", zip[i].FileName));
-                                                // break;
+                                                Utils.ExceptionLog("UnpackXmlFiles", string.Format("extration: {0}", Path.Combine(r.extractDirectory, zip[i].FileName)), ex);
                                             }
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            Utils.ExceptionLog("Unzip", string.Format("extration: {0}", Path.Combine(r.extractDirectory, zip[i].FileName)), ex);
                                         }
                                     }
                                 }
-                                //the point of the using statement is to remove the need for that
-                                //zip.Dispose(); 
+                            }
+                            else
+                            {
+                                if (Settings.ExportMode)
+                                {
+                                    Logging.Manager(string.Format("WARNING: package {0} not found, but most likley expected due to export mode", r.pkg));
+                                }
+                                else
+                                {
+                                    Logging.Manager(string.Format("ERROR: package {0} not found!", r.pkg));
+                                }
                             }
                         }
                     }
@@ -1452,9 +1494,6 @@ namespace RelhaxModpack
                     args.ParrentProcessed++;
                     InstallWorker.ReportProgress(0);
                 }
-                //all done, delete the patch folder
-                if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
-                    Directory.Delete(Path.Combine(TanksLocation, "_patch"), true);
             }
             catch (Exception ex)
             {
@@ -1813,9 +1852,8 @@ namespace RelhaxModpack
                 }
                 finally
                 {
-                    System.Threading.Thread.Sleep(20);
-                    if (Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
-                        Directory.Delete(Path.Combine(TanksLocation, "_fonts"), true);
+                    //System.Threading.Thread.Sleep(20);
+                    
                 }
             }
             catch (Exception ex)

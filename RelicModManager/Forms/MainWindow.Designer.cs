@@ -95,6 +95,8 @@
             this.CleanUninstallModeRB = new System.Windows.Forms.RadioButton();
             this.SmartUninstallModeRB = new System.Windows.Forms.RadioButton();
             this.ButtonTable = new System.Windows.Forms.TableLayoutPanel();
+            this.ExportModeCB = new System.Windows.Forms.CheckBox();
+            this.ExportModeBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.settingsGroupBox.SuspendLayout();
             this.SettingsTable.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
@@ -242,9 +244,9 @@
             // 
             this.settingsGroupBox.Controls.Add(this.SettingsTable);
             this.settingsGroupBox.Location = new System.Drawing.Point(12, 103);
-            this.settingsGroupBox.MaximumSize = new System.Drawing.Size(502, 192);
+            this.settingsGroupBox.MaximumSize = new System.Drawing.Size(502, 210);
             this.settingsGroupBox.Name = "settingsGroupBox";
-            this.settingsGroupBox.Size = new System.Drawing.Size(456, 192);
+            this.settingsGroupBox.Size = new System.Drawing.Size(456, 210);
             this.settingsGroupBox.TabIndex = 25;
             this.settingsGroupBox.TabStop = false;
             this.settingsGroupBox.Text = "Modpack Settings";
@@ -269,18 +271,20 @@
             this.SettingsTable.Controls.Add(this.forceManuel, 1, 2);
             this.SettingsTable.Controls.Add(this.clearLogFilesCB, 0, 1);
             this.SettingsTable.Controls.Add(this.backupModsCheckBox, 0, 4);
+            this.SettingsTable.Controls.Add(this.ExportModeCB, 1, 7);
             this.SettingsTable.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SettingsTable.Location = new System.Drawing.Point(3, 16);
             this.SettingsTable.Name = "SettingsTable";
-            this.SettingsTable.RowCount = 7;
+            this.SettingsTable.RowCount = 8;
             this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 9F));
-            this.SettingsTable.Size = new System.Drawing.Size(450, 173);
+            this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.SettingsTable.Size = new System.Drawing.Size(450, 191);
             this.SettingsTable.TabIndex = 43;
             // 
             // InstantExtractionCB
@@ -290,7 +294,7 @@
             this.InstantExtractionCB.Location = new System.Drawing.Point(1, 136);
             this.InstantExtractionCB.Margin = new System.Windows.Forms.Padding(1);
             this.InstantExtractionCB.Name = "InstantExtractionCB";
-            this.InstantExtractionCB.Size = new System.Drawing.Size(223, 36);
+            this.InstantExtractionCB.Size = new System.Drawing.Size(223, 33);
             this.InstantExtractionCB.TabIndex = 36;
             this.InstantExtractionCB.Text = "Instant extraction mode (experimental)";
             this.InstantExtractionCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -339,7 +343,7 @@
             this.notifyIfSameDatabaseCB.Location = new System.Drawing.Point(226, 136);
             this.notifyIfSameDatabaseCB.Margin = new System.Windows.Forms.Padding(1);
             this.notifyIfSameDatabaseCB.Name = "notifyIfSameDatabaseCB";
-            this.notifyIfSameDatabaseCB.Size = new System.Drawing.Size(223, 36);
+            this.notifyIfSameDatabaseCB.Size = new System.Drawing.Size(223, 33);
             this.notifyIfSameDatabaseCB.TabIndex = 33;
             this.notifyIfSameDatabaseCB.Text = "Inform if no new database available";
             this.notifyIfSameDatabaseCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -447,7 +451,7 @@
             // languageSelectionGB
             // 
             this.languageSelectionGB.Controls.Add(this.LanguageComboBox);
-            this.languageSelectionGB.Location = new System.Drawing.Point(363, 354);
+            this.languageSelectionGB.Location = new System.Drawing.Point(362, 372);
             this.languageSelectionGB.Margin = new System.Windows.Forms.Padding(1);
             this.languageSelectionGB.Name = "languageSelectionGB";
             this.languageSelectionGB.Padding = new System.Windows.Forms.Padding(2);
@@ -475,7 +479,7 @@
             // loadingImageGroupBox
             // 
             this.loadingImageGroupBox.Controls.Add(this.tableLayoutPanel8);
-            this.loadingImageGroupBox.Location = new System.Drawing.Point(363, 299);
+            this.loadingImageGroupBox.Location = new System.Drawing.Point(362, 317);
             this.loadingImageGroupBox.Margin = new System.Windows.Forms.Padding(1);
             this.loadingImageGroupBox.Name = "loadingImageGroupBox";
             this.loadingImageGroupBox.Padding = new System.Windows.Forms.Padding(2);
@@ -567,7 +571,7 @@
             // viewTypeGB
             // 
             this.viewTypeGB.Controls.Add(this.tableLayoutPanel5);
-            this.viewTypeGB.Location = new System.Drawing.Point(181, 299);
+            this.viewTypeGB.Location = new System.Drawing.Point(180, 317);
             this.viewTypeGB.Margin = new System.Windows.Forms.Padding(1);
             this.viewTypeGB.Name = "viewTypeGB";
             this.viewTypeGB.Size = new System.Drawing.Size(180, 145);
@@ -658,7 +662,7 @@
             // fontSizeGB
             // 
             this.fontSizeGB.Controls.Add(this.tableLayoutPanel6);
-            this.fontSizeGB.Location = new System.Drawing.Point(14, 299);
+            this.fontSizeGB.Location = new System.Drawing.Point(13, 317);
             this.fontSizeGB.Margin = new System.Windows.Forms.Padding(1);
             this.fontSizeGB.Name = "fontSizeGB";
             this.fontSizeGB.Size = new System.Drawing.Size(165, 145);
@@ -934,7 +938,7 @@
             this.InfoTable.Controls.Add(this.donateLabel, 0, 6);
             this.InfoTable.Controls.Add(this.DiscordServerLink, 0, 7);
             this.InfoTable.Controls.Add(this.cancelDownloadButton, 1, 4);
-            this.InfoTable.Location = new System.Drawing.Point(12, 447);
+            this.InfoTable.Location = new System.Drawing.Point(11, 465);
             this.InfoTable.MaximumSize = new System.Drawing.Size(500, 233);
             this.InfoTable.MinimumSize = new System.Drawing.Size(450, 200);
             this.InfoTable.Name = "InfoTable";
@@ -1001,7 +1005,7 @@
             // UninstallModeGroupBox
             // 
             this.UninstallModeGroupBox.Controls.Add(this.tableLayoutPanel7);
-            this.UninstallModeGroupBox.Location = new System.Drawing.Point(363, 396);
+            this.UninstallModeGroupBox.Location = new System.Drawing.Point(362, 414);
             this.UninstallModeGroupBox.Margin = new System.Windows.Forms.Padding(1);
             this.UninstallModeGroupBox.Name = "UninstallModeGroupBox";
             this.UninstallModeGroupBox.Padding = new System.Windows.Forms.Padding(2);
@@ -1078,12 +1082,29 @@
             this.ButtonTable.Size = new System.Drawing.Size(456, 90);
             this.ButtonTable.TabIndex = 42;
             // 
+            // ExportModeCB
+            // 
+            this.ExportModeCB.AutoSize = true;
+            this.ExportModeCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.ExportModeCB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ExportModeCB.Location = new System.Drawing.Point(226, 171);
+            this.ExportModeCB.Margin = new System.Windows.Forms.Padding(1);
+            this.ExportModeCB.Name = "ExportModeCB";
+            this.ExportModeCB.Size = new System.Drawing.Size(223, 19);
+            this.ExportModeCB.TabIndex = 38;
+            this.ExportModeCB.Text = "Export Mode";
+            this.ExportModeCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.ExportModeCB.UseVisualStyleBackColor = true;
+            this.ExportModeCB.CheckedChanged += new System.EventHandler(this.ExportModeCB_CheckedChanged);
+            this.ExportModeCB.MouseEnter += new System.EventHandler(this.ExportModeCB_MouseEnter);
+            this.ExportModeCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(481, 686);
+            this.ClientSize = new System.Drawing.Size(481, 708);
             this.Controls.Add(this.fontSizeGB);
             this.Controls.Add(this.InfoTable);
             this.Controls.Add(this.viewTypeGB);
@@ -1185,6 +1206,8 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
         private System.Windows.Forms.RichTextBox downloadProgress;
+        private System.Windows.Forms.CheckBox ExportModeCB;
+        private System.Windows.Forms.FolderBrowserDialog ExportModeBrowserDialog;
     }
 }
 

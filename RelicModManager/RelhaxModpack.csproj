@@ -149,6 +149,12 @@
     <Compile Include="Forms\BackgroundForm.Designer.cs">
       <DependentUpon>BackgroundForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ExportSelectWoTVersion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ExportSelectWoTVersion.Designer.cs">
+      <DependentUpon>ExportSelectWoTVersion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FTPClean.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -162,6 +168,9 @@
     <Compile Include="DatabaseComponents\Category.cs" />
     <Compile Include="LegacyComponents\Config.cs" />
     <Compile Include="LegacyComponents\Mod.cs" />
+    <Compile Include="UIComponents\ExportModeRadioButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UIComponents\IPackageUIComponent.cs" />
     <Compile Include="UIComponents\RelhaxFormCheckBox.cs">
       <SubType>Component</SubType>
@@ -362,6 +371,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Diagnostics.resx">
       <DependentUpon>Diagnostics.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ExportSelectWoTVersion.resx">
+      <DependentUpon>ExportSelectWoTVersion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FTPClean.resx">
       <DependentUpon>FTPClean.cs</DependentUpon>

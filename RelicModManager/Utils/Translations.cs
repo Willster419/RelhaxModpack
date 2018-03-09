@@ -403,6 +403,22 @@ namespace RelhaxModpack
             polish.Add("CleanUninstallModeRB", "Szybka");
             french.Add("CleanUninstallModeRB", "Rapide");
 
+            //Componet: ExportModeCB
+            //
+            english.Add("ExportModeCB", "Export Mode");
+            german.Add("ExportModeCB", "TODO");
+            polish.Add("ExportModeCB", "TODO");
+            french.Add("ExportModeCB", "TODO");
+
+            //Section: ExportSelectWoTVersion
+
+            //Component: ExportWindowDesctiption
+            //
+            english.Add("ExportWindowDesctiption", "Select the version of the game you wish to export for");
+            german.Add("ExportWindowDesctiption", "TODO");
+            polish.Add("ExportWindowDesctiption", "TODO");
+            french.Add("ExportWindowDesctiption", "TODO");
+
             //Section: FirstLoadHelper
 
             //Componet: helperText
@@ -1122,6 +1138,14 @@ namespace RelhaxModpack
             german.Add("CleanUninstallModeRBExplanation", "Schnelldeinstallation entfernt ALLE Mod-Dateien. Verwende dies, wenn du nur mit dem Relhax Modpack installiert hast und ggf. alle zusätzlich installierten Mods entfernen möchtest.");
             polish.Add("CleanUninstallModeRBExplanation", "Szybka deinstalacja usunie wszystkie pliki modyfikacji. Użyj tego trybu, jeśli instalowałeś tylko paczkę RelHax Modpack.");
             french.Add("CleanUninstallModeRBExplanation", "La désinstallation rapide supprimera tous les fichiers mod de votre installation. Utilisez-le si vos mods sont uniquement installés par le modpack relhax.");
+
+            //Component: ExportModeCBExplanation
+            //Explaiing the export mode
+            english.Add("ExportModeCBExplanation", "Export mode will allow you to select a folder and WoT version you wish to export your mods installation to. For advanced users only." +
+                "Note it will NOT: Unpack game xml files, patch files (provided from the game), or create the atlas files. Instructions can be found in the export directory.");
+            german.Add("ExportModeCBExplanation", "TODO");
+            polish.Add("ExportModeCBExplanation", "TODO");
+            french.Add("ExportModeCBExplanation", "TODO");
 
             //Component: DiagnosticUtilitiesButton
             //
