@@ -1519,7 +1519,7 @@ namespace RelhaxModpack
             english.Add("expandNodesDefault", "Expand all");
             german.Add("expandNodesDefault", "Alle erweitern");
             polish.Add("expandNodesDefault", "Rozwiń wszystkie");
-            french.Add("expandNodesDefault", "Développeur tout");
+            french.Add("expandNodesDefault", "Développer tout");
 
             //Componet: expandNodesDefault2
             //
