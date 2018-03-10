@@ -20,13 +20,13 @@ namespace RelhaxModpack.UIComponents
             for (int i = 0; i < Items.Count; i++)
             {
                 ComboBoxItem cbi = (ComboBoxItem)Items[i];
-                if (cbi.Package.Equals(spc) && value)
+                if (cbi.Package.Equals(spc) && value && cbi.Package.Enabled)
                 {
-                    if (cbi.Package.Enabled && !cbi.Package.Checked)
-                        cbi.Package._Checked = true;
-                    SelectionChanged -= handler;
+                    if(handler != null)
+                        SelectionChanged -= handler;
                     SelectedItem = cbi;
-                    SelectionChanged += handler;
+                    if (handler != null)
+                        SelectionChanged += handler;
                     continue;
                 }//if value is false it will uncheck all the packages
                 if (cbi.Package.Enabled && cbi.Package.Checked)

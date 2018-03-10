@@ -19,9 +19,8 @@ namespace RelhaxModpack.UIComponents
             for(int i = 0; i < Items.Count; i++)
             {
                 ComboBoxItem cbi = (ComboBoxItem)Items[i];
-                if (cbi.Package.Equals(spc) && value && cbi.Package.Enabled && !cbi.Package.Checked)
+                if (cbi.Package.Equals(spc) && value && cbi.Package.Enabled)
                 {
-                    cbi.Package._Checked = true;
                     if(handler != null)
                         SelectedIndexChanged -= handler;
                     SelectedItem = cbi;
