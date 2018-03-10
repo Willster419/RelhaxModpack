@@ -1479,7 +1479,7 @@ namespace RelhaxModpack
         {
             XmlDocument doc = new XmlDocument();
             //database root modInfo.xml
-            XmlElement root = doc.CreateElement("modInfo.xml");
+            XmlElement root = doc.CreateElement("modInfoAlpha.xml");
             root.SetAttribute("version", gameVersion);
             root.SetAttribute("onlineFolder", onlineFolderVersion);
             doc.AppendChild(root);
