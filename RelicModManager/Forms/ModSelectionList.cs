@@ -133,7 +133,6 @@ namespace RelhaxModpack
             helpLabel.Text = Translations.getTranslatedString(helpLabel.Name);
             loadConfigButton.Text = Translations.getTranslatedString(loadConfigButton.Name);
             saveConfigButton.Text = Translations.getTranslatedString(saveConfigButton.Name);
-            TabIndicatesTB.Text = Translations.getTranslatedString(TabIndicatesTB.Name);
             clearSelectionsButton.Text = Translations.getTranslatedString(clearSelectionsButton.Name);
             colapseAllButton.Text = Translations.getTranslatedString(colapseAllButton.Name);
             expandAllButton.Text = Translations.getTranslatedString(expandAllButton.Name);

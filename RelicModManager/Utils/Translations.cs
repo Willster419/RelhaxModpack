@@ -225,7 +225,7 @@ namespace RelhaxModpack
             english.Add("formPageLink", "View modpack forum page (NA)");
             german.Add("formPageLink", "Zeige Modpack Forumbeiträge (NA)");
             polish.Add("formPageLink", "Forum Paczki (NA)");
-            french.Add("formPageLink", "Afficher la page du formulaire (NA)");
+            french.Add("formPageLink", "Afficher la page du forum (NA)");
 
             //Componet: saveUserDataCB
             //
@@ -526,17 +526,17 @@ namespace RelhaxModpack
             //Section: Preview
             //Componet: descriptionBox
             //
-            english.Add("noDescription", "No description provided");
+            english.Add("noDescription", "no description provided");
             german.Add("noDescription", "keine Beschreibung verfügbar");
             polish.Add("noDescription", "nie podano opisu");
-            french.Add("noDescription", "non Description fournie");
+            french.Add("noDescription", "nPas de description fournie");
 
             //Componet: updateBox
             //
             english.Add("noUpdateInfo", "No update info provided");
             german.Add("noUpdateInfo", "keine Aktualisierungsinformationen verfügbar");
             polish.Add("noUpdateInfo", "brak informacji o aktualizacji");
-            french.Add("noUpdateInfo", "Aucune information mise à jour fournie");
+            french.Add("noUpdateInfo", "Aucune information de mise à jour fournie");
             
 
             //Componet: NextPicButton
@@ -1182,7 +1182,14 @@ namespace RelhaxModpack
             english.Add("DiagnosticUtilitiesButton", "Diagnostic utilities");
             german.Add("DiagnosticUtilitiesButton", "TODO");
             polish.Add("DiagnosticUtilitiesButton", "Narzędzia diagnostyczne");
-            french.Add("DiagnosticUtilitiesButton", "Utilitaires de diagnostic");
+            french.Add("DiagnosticUtilitiesButton", "Utilitaires de diagnostique");
+
+            //Component: DatabaseVersionLabel
+            //
+            english.Add("DatabaseVersionLabel", "Latest Database");
+            german.Add("DatabaseVersionLabel", "TODO");
+            polish.Add("DatabaseVersionLabel", "TODO");
+            french.Add("DatabaseVersionLabel", "Base de donné");
 
             //Component: UninstallModeGroupBox
             //
@@ -1512,7 +1519,7 @@ namespace RelhaxModpack
             english.Add("expandNodesDefault", "Expand all");
             german.Add("expandNodesDefault", "Alle erweitern");
             polish.Add("expandNodesDefault", "Rozwiń wszystkie");
-            french.Add("expandNodesDefault", "Développer tout");
+            french.Add("expandNodesDefault", "Développeur tout");
 
             //Componet: expandNodesDefault2
             //

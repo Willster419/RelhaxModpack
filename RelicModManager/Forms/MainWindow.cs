@@ -324,7 +324,7 @@ namespace RelhaxModpack
 
                 //parse the database version
                 var databaseVersion = doc.XPathSelectElement("//version/database");
-                DatabaseVersionLabel.Text = "Latest Database v" + databaseVersion.Value;
+                DatabaseVersionLabel.Text = Translations.getTranslatedString("DatabaseVersionLabel") + " v" + databaseVersion.Value;
                 Settings.DatabaseVersion = databaseVersion.Value;
                 //parse the manager version
                 
@@ -1807,6 +1807,7 @@ namespace RelhaxModpack
                 set.Text = Translations.getTranslatedString(set.Name);
             }
             viewTypeGB.Text = Translations.getTranslatedString("ModSelectionListViewSelection");
+            DatabaseVersionLabel.Text = Translations.getTranslatedString("DatabaseVersionLabel") + " v" + Settings.DatabaseVersion;
             if (init)
             {
                 //apply all checkmarks

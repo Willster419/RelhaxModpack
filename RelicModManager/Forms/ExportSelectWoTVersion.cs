@@ -27,7 +27,7 @@ namespace RelhaxModpack.Forms
             //load translations
             Name = Translations.getTranslatedString("ExportModeCB");
             ExportWindowDesctiption.Text = Translations.getTranslatedString(ExportWindowDesctiption.Name);
-            CancelButton.Text = Translations.getTranslatedString("cancel");
+            CancelButtonn.Text = Translations.getTranslatedString("cancel");
             SelectButton.Text = Translations.getTranslatedString("select");
             //load panel with stuff
             foreach(ExportModeRadioButton rb in SupportedWoTVersions)

@@ -32,7 +32,7 @@
             this.WoTVersionsHolder = new System.Windows.Forms.Panel();
             this.ExportWindowDesctiption = new System.Windows.Forms.Label();
             this.SelectButton = new System.Windows.Forms.Button();
-            this.CancelButton = new System.Windows.Forms.Button();
+            this.CancelButtonn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // WoTVersionsHolder
@@ -71,23 +71,23 @@
             this.SelectButton.UseVisualStyleBackColor = true;
             this.SelectButton.Click += new System.EventHandler(this.SelectButton_Click);
             // 
-            // CancelButton
+            // CancelButtonn
             // 
-            this.CancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.CancelButton.Location = new System.Drawing.Point(12, 240);
-            this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(75, 23);
-            this.CancelButton.TabIndex = 3;
-            this.CancelButton.Text = "Cancel";
-            this.CancelButton.UseVisualStyleBackColor = true;
-            this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
+            this.CancelButtonn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.CancelButtonn.Location = new System.Drawing.Point(12, 240);
+            this.CancelButtonn.Name = "CancelButtonn";
+            this.CancelButtonn.Size = new System.Drawing.Size(75, 23);
+            this.CancelButtonn.TabIndex = 3;
+            this.CancelButtonn.Text = "Cancel";
+            this.CancelButtonn.UseVisualStyleBackColor = true;
+            this.CancelButtonn.Click += new System.EventHandler(this.CancelButton_Click);
             // 
             // ExportSelectWoTVersion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(290, 267);
-            this.Controls.Add(this.CancelButton);
+            this.Controls.Add(this.CancelButtonn);
             this.Controls.Add(this.SelectButton);
             this.Controls.Add(this.ExportWindowDesctiption);
             this.Controls.Add(this.WoTVersionsHolder);
@@ -107,6 +107,6 @@
         private System.Windows.Forms.Panel WoTVersionsHolder;
         private System.Windows.Forms.Label ExportWindowDesctiption;
         private System.Windows.Forms.Button SelectButton;
-        private System.Windows.Forms.Button CancelButton;
+        private System.Windows.Forms.Button CancelButtonn;
     }
 }
