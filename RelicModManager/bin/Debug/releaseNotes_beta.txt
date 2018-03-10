@@ -1,3 +1,23 @@
+Beta Application Version 28.0.0_r1 (03/09/2018)
+-Re-wrote the entire mod selection list window for selection and structure building logic:
+--The build process is done from the perspective of the database, and then changes are propagated to the UI
+--The selection logic is now done from the database logic as well.
+--Instead of updating each UI component for each package, the properties (like enabled, checked) now have code to trigger the UI based on which selection view is made. This will allow easy implementation and fixing of new views.
+-Rewrote the entire modpack class structure. Rather than having a "mod" and "config" structure, they were moved into one "selectablePackage" class.
+-The database was reduced by about 30% by not writing empty or default nodes. Also decreased loading time.
+-Added a new "selection checker" upon loading a selection. It will inform you if any selections needed to be unselected due to changes in the selection structure. This prevents any invalid selections from messing up your install.
+-Added new feature: Export mode. It will allow you install your mods to a custom folder. Keep in mind that it therefore will not unpack, patch, or create atlases for stock WoT files. If you select this you know what you're doing.
+-Improved smoothness and loading of the audio preview
+-fixed issues with getting the WoT version and/or applying the correct version of mods to the specified WoT version, if in test or beta database mode
+-Improved compatibility with Windows Proxy settings. It may take an additional 50-100ms to initialize connections
+-Renamed "Super Extraction" to multicore extraction
+-Removed border and color change options from the default view as they became difficult to maintain and didn't provide much to the modpack
+-Fixed bugs and optimized the database editor to take up less code space and CPU time
+-Optimized usage of macros
+-Fixed issues with lock statements in the install process
+-added the file lastInstalledConfig to list of files included in the diagnostic zip
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Beta Application Version 27.8.0_r2 (02/19/2018)
 -Fixed bugs with the manager not checking crc cache values of configs below level 2
 --------------------------------------------------------------------------------------------------------------------------------------------
