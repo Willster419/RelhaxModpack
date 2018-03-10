@@ -39,6 +39,9 @@ namespace RelhaxModpack.Forms
             if (e.Button != MouseButtons.Right)
                 return;
             //bring up the right click menu
+            MenuItemAppClose.Text = Translations.getTranslatedString(MenuItemAppClose.Name);
+            MenuItemRestore.Text = Translations.getTranslatedString(MenuItemRestore.Name);
+            MenuItemCheckUpdates.Text = Translations.getTranslatedString(MenuItemCheckUpdates.Name);
         }
 
         private void MenuItemRestore_Click(object sender, EventArgs e)
