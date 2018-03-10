@@ -1189,7 +1189,7 @@ namespace RelhaxModpack
             english.Add("DatabaseVersionLabel", "Latest Database");
             german.Add("DatabaseVersionLabel", "TODO");
             polish.Add("DatabaseVersionLabel", "TODO");
-            french.Add("DatabaseVersionLabel", "Base de donné");
+            french.Add("DatabaseVersionLabel", "Base de donnés");
 
             //Component: UninstallModeGroupBox
             //

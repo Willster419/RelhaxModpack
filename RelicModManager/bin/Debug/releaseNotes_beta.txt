@@ -3,6 +3,7 @@ Beta Application Version 28.0.0_r2 (03/10/2018)
 -Fixed issues with the right click taskbar option not changing language selection
 -Fixed bugs with the backend utility database list generator
 -Fixed issues with the main window and mod selection list windows UI placement due to length of translations of other strings
+--------------------------------------------------------------------------------------------------------------------------------------------
 
 Beta Application Version 28.0.0_r1 (03/09/2018)
 -Re-wrote the entire mod selection list window for selection and structure building logic:
