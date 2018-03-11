@@ -175,7 +175,7 @@ namespace RelhaxModpack
 
             DescriptionTabPage.Enabled = false;
             DependenciesTabPage.Enabled = false;
-            PictureTabPage.Enabled = false;
+            MediaTabPage.Enabled = false;
             UserDatasTabPage.Enabled = false;
             if(hardReset)
             {
@@ -409,10 +409,8 @@ namespace RelhaxModpack
                     ListThatContainsPackage = cat.Packages;
                     return;
                 }
-                foreach (SelectablePackage m in cat.Packages)
-                {
-                    ListContainsPackageRecursive(m.Packages, sp);
-                }
+                if(cat.Packages.Count > 0)
+                    ListContainsPackageRecursive(cat.Packages, sp);
             }
         }
         private void ListContainsPackageRecursive(List<SelectablePackage> packageList, SelectablePackage sp)
@@ -556,7 +554,7 @@ namespace RelhaxModpack
 
                     DependenciesTabPage.Enabled = false;
                     ObjectDependenciesLabel.Text = "dependencies (click to edit)";
-                    PictureTabPage.Enabled = false;
+                    MediaTabPage.Enabled = false;
                     UserDatasTabPage.Enabled = false;
                 }
                 else if (node.Dependency != null)
@@ -627,7 +625,7 @@ namespace RelhaxModpack
                     LogicalDependnecyNegateFlagCB.Checked = false;
                     LogicalDependnecyNegateFlagCB.CheckedChanged += LogicalDependnecyNegateFlagCB_CheckedChanged;
 
-                    PictureTabPage.Enabled = false;
+                    MediaTabPage.Enabled = false;
                     UserDatasTabPage.Enabled = false;
                 }
                 else if (node.LogicalDependency != null)
@@ -686,7 +684,7 @@ namespace RelhaxModpack
                     ObjectDependenciesList.DataSource = null;
                     ObjectDependenciesList.Items.Clear();
                     ObjectDependenciesList.DataSource = SelectedLogicalDependency.DatabasePackageLogic;
-                    PictureTabPage.Enabled = false;
+                    MediaTabPage.Enabled = false;
                     UserDatasTabPage.Enabled = false;
                 }
                 else if (node.DatabaseObject != null)
@@ -769,7 +767,7 @@ namespace RelhaxModpack
                     DependenciesTabPage.Enabled = true;
                     DependencyPanel.Enabled = true;
                     LogicalDependencyPanel.Enabled = true;
-                    PictureTabPage.Enabled = true;
+                    MediaTabPage.Enabled = true;
                     UserDatasTabPage.Enabled = true;
 
                     //logicalDependencies
@@ -841,7 +839,7 @@ namespace RelhaxModpack
                     CurrentDependenciesCB.DataSource = Dependencies;
                     CurrentDependenciesCB.SelectedIndex = -1;
 
-                    PictureTabPage.Enabled = false;
+                    MediaTabPage.Enabled = false;
                     UserDatasTabPage.Enabled = false;
                 }
             }
@@ -870,49 +868,49 @@ namespace RelhaxModpack
             using (DatabaseAdder dba = new DatabaseAdder(DatabaseEditorMode, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList, true))
             {
                 dba.ShowDialog();
-                if (dba.DialogResult == DialogResult.OK)
+                if (dba.DialogResult != DialogResult.OK)
+                    return;
+                if (DatabaseEditorMode == EditorMode.GlobalDependnecy)
                 {
-                    if (DatabaseEditorMode == EditorMode.GlobalDependnecy)
-                    {
-                        if (dba.SelectedGlobalDependency == null)
-                            return;
-                        GlobalDependencies.Remove(SelectedGlobalDependency);
-                        int index = GlobalDependencies.IndexOf(dba.SelectedGlobalDependency);
-                        GlobalDependencies.Insert(index, SelectedGlobalDependency);
-                        DisplayDatabase();
-                    }
-                    else if (DatabaseEditorMode == EditorMode.Dependency)
-                    {
-                        if (dba.SelectedDependency == null)
-                            return;
-                        Dependencies.Remove(SelectedDependency);
-                        int index = Dependencies.IndexOf(dba.SelectedDependency);
-                        Dependencies.Insert(index, SelectedDependency);
-                        DisplayDatabase();
-                    }
-                    else if (DatabaseEditorMode == EditorMode.LogicalDependency)
-                    {
-                        if (dba.SelectedLogicalDependency == null)
-                            return;
-                        LogicalDependencies.Remove(SelectedLogicalDependency);
-                        int index = LogicalDependencies.IndexOf(dba.SelectedLogicalDependency);
-                        LogicalDependencies.Insert(index, SelectedLogicalDependency);
-                        DisplayDatabase();
-                    }
-                    else if (DatabaseEditorMode == EditorMode.DBO)
-                    {
-                        if (!AcceptableType(dba.SelectedDatabaseObject))
-                        {
-                            MessageBox.Show("Invalid index of package type for level");
-                            return;
-                        }
-                        ListContainsPackage(SelectedDatabaseObject);
-                        ListThatContainsPackage.Remove(SelectedDatabaseObject);
-                        ListContainsPackage(dba.SelectedDatabaseObject);
-                        int index = ListThatContainsPackage.IndexOf(dba.SelectedDatabaseObject);
-                        ListThatContainsPackage.Insert(index, SelectedDatabaseObject);
-                    }
+                    if (dba.SelectedGlobalDependency == null)
+                        return;
+                    GlobalDependencies.Remove(SelectedGlobalDependency);
+                    int index = GlobalDependencies.IndexOf(dba.SelectedGlobalDependency);
+                    GlobalDependencies.Insert(index, SelectedGlobalDependency);
+                    DisplayDatabase();
                 }
+                else if (DatabaseEditorMode == EditorMode.Dependency)
+                {
+                    if (dba.SelectedDependency == null)
+                        return;
+                    Dependencies.Remove(SelectedDependency);
+                    int index = Dependencies.IndexOf(dba.SelectedDependency);
+                    Dependencies.Insert(index, SelectedDependency);
+                    DisplayDatabase();
+                }
+                else if (DatabaseEditorMode == EditorMode.LogicalDependency)
+                {
+                    if (dba.SelectedLogicalDependency == null)
+                        return;
+                    LogicalDependencies.Remove(SelectedLogicalDependency);
+                    int index = LogicalDependencies.IndexOf(dba.SelectedLogicalDependency);
+                    LogicalDependencies.Insert(index, SelectedLogicalDependency);
+                    DisplayDatabase();
+                }
+                else if (DatabaseEditorMode == EditorMode.DBO)
+                {
+                    if (!AcceptableType(dba.SelectedDatabaseObject))
+                    {
+                        MessageBox.Show("Invalid index of package type for level");
+                        return;
+                    }
+                    ListContainsPackage(SelectedDatabaseObject);
+                    ListThatContainsPackage.Remove(SelectedDatabaseObject);
+                    ListContainsPackage(dba.SelectedDatabaseObject);
+                    int index = ListThatContainsPackage.IndexOf(dba.SelectedDatabaseObject);
+                    ListThatContainsPackage.Insert(index, SelectedDatabaseObject);
+                }
+                
             }
             this.DisplayDatabase(false);
             UnsavedModifications = true;
@@ -939,15 +937,17 @@ namespace RelhaxModpack
                     {
                         if (dba.SelectedGlobalDependency == null)
                             return;
-                        Dependency newDep = new Dependency();
-                        newDep.PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
-                        newDep.StartAddress = ObjectStartAddressTB.Text;
-                        newDep.EndAddress = ObjectEndAddressTB.Text;
-                        newDep.ZipFile = ObjectZipFileTB.Text;
-                        newDep.Enabled = ObjectEnabledCheckBox.Checked;
-                        newDep.AppendExtraction = ObjectAppendExtractionCB.Checked;
-                        newDep.DevURL = ObjectDevURLTB.Text;
-                        newDep.CRC = "";
+                        Dependency newDep = new Dependency()
+                        {
+                            PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text),
+                            StartAddress = ObjectStartAddressTB.Text,
+                            EndAddress = ObjectEndAddressTB.Text,
+                            ZipFile = ObjectZipFileTB.Text,
+                            Enabled = ObjectEnabledCheckBox.Checked,
+                            AppendExtraction = ObjectAppendExtractionCB.Checked,
+                            DevURL = ObjectDevURLTB.Text,
+                            CRC = ""
+                        };
                         //newDep.ExtractPath = "";
                         if (!ObjectZipFileTB.Text.Equals(""))
                             newDep.CRC = "f";
@@ -959,15 +959,17 @@ namespace RelhaxModpack
                     {
                         if (dba.SelectedDependency == null)
                             return;
-                        Dependency newDep = new Dependency();
-                        newDep.PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
-                        newDep.StartAddress = ObjectStartAddressTB.Text;
-                        newDep.EndAddress = ObjectEndAddressTB.Text;
-                        newDep.ZipFile = ObjectZipFileTB.Text;
-                        newDep.Enabled = ObjectEnabledCheckBox.Checked;
-                        newDep.AppendExtraction = ObjectAppendExtractionCB.Checked;
-                        newDep.DevURL = ObjectDevURLTB.Text;
-                        newDep.CRC = "";
+                        Dependency newDep = new Dependency()
+                        {
+                            PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text),
+                            StartAddress = ObjectStartAddressTB.Text,
+                            EndAddress = ObjectEndAddressTB.Text,
+                            ZipFile = ObjectZipFileTB.Text,
+                            Enabled = ObjectEnabledCheckBox.Checked,
+                            AppendExtraction = ObjectAppendExtractionCB.Checked,
+                            DevURL = ObjectDevURLTB.Text,
+                            CRC = ""
+                        };
                         //newDep.ExtractPath = "";
                         if (!ObjectZipFileTB.Text.Equals(""))
                             newDep.CRC = "f";
@@ -980,14 +982,16 @@ namespace RelhaxModpack
                     {
                         if (dba.SelectedLogicalDependency == null)
                             return;
-                        LogicalDependency newDep = new LogicalDependency();
-                        newDep.PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text);
-                        newDep.StartAddress = ObjectStartAddressTB.Text;
-                        newDep.EndAddress = ObjectEndAddressTB.Text;
-                        newDep.ZipFile = ObjectZipFileTB.Text;
-                        newDep.Enabled = ObjectEnabledCheckBox.Checked;
-                        newDep.DevURL = ObjectDevURLTB.Text;
-                        newDep.CRC = "";
+                        LogicalDependency newDep = new LogicalDependency()
+                        {
+                            PackageName = this.GetNewPackageName(ObjectPackageNameTB.Text),
+                            StartAddress = ObjectStartAddressTB.Text,
+                            EndAddress = ObjectEndAddressTB.Text,
+                            ZipFile = ObjectZipFileTB.Text,
+                            Enabled = ObjectEnabledCheckBox.Checked,
+                            DevURL = ObjectDevURLTB.Text,
+                            CRC = ""
+                        };
                         if (!ObjectZipFileTB.Text.Equals(""))
                             newDep.CRC = "f";
                         int index = LogicalDependencies.IndexOf(dba.SelectedLogicalDependency);
@@ -1021,11 +1025,18 @@ namespace RelhaxModpack
                         if (dba.sublist)
                         {
                             dba.SelectedDatabaseObject.Packages.Add(cfg);
+                            cfg.Level = dba.SelectedDatabaseObject.Level + 1;
                         }
                         else
                         {
                             ListContainsPackage(dba.SelectedDatabaseObject);
+                            if (ListThatContainsPackage == null)
+                            {
+                                MessageBox.Show("Error finding list for selected package");
+                                return;
+                            }
                             int index = ListThatContainsPackage.IndexOf(dba.SelectedDatabaseObject);
+                            cfg.Level = dba.SelectedDatabaseObject.Level;
                             ListThatContainsPackage.Insert(index, cfg);
                         }
                     }

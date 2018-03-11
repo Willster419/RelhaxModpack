@@ -11,38 +11,32 @@ namespace RelhaxModpack
         public Dependency SelectedDependency;
         public LogicalDependency SelectedLogicalDependency;
         public SelectablePackage SelectedDatabaseObject;
-        private List<SelectablePackage> configList;
+        private List<SelectablePackage> PackageList;
         private bool ignoreResult = true;
         public bool sublist = false;
+
         public DatabaseAdder(EditorMode mode, List<Dependency> GlobalDependency, List<Dependency> Dependencies, List<LogicalDependency> LogicalDepdnedncies, List<Category> ParsedCatList, bool moveMode)
         {
             InitializeComponent();
             Mode = mode;
             sublist = false;
-            if(mode == EditorMode.GlobalDependnecy)
+            ModPanel.Enabled = false;
+            if (mode == EditorMode.GlobalDependnecy)
             {
-                AddUnderCB.DataSource = GlobalDependency;
-                ModPanel.Enabled = false;
-                ConfigPanel.Enabled = false;
+                CategoryCB.DataSource = GlobalDependency;
             }
             else if(mode == EditorMode.Dependency)
             {
-                AddUnderCB.DataSource = Dependencies;
-                ModPanel.Enabled = false;
-                ConfigPanel.Enabled = false;
+                CategoryCB.DataSource = Dependencies;
             }
             else if (mode == EditorMode.LogicalDependency)
             {
-                AddUnderCB.DataSource = LogicalDepdnedncies;
-                ModPanel.Enabled = false;
-                ConfigPanel.Enabled = false;
+                CategoryCB.DataSource = LogicalDepdnedncies;
             }
             else if (mode == EditorMode.DBO)
             {
                 SelectModePanel.Visible = true;
-                AddUnderCB.DataSource = ParsedCatList;
-                ModPanel.Enabled = false;
-                ConfigPanel.Enabled = false;
+                CategoryCB.DataSource = ParsedCatList;
                 if(moveMode)
                 {
                     SelectModePanel.Visible = false;
@@ -51,23 +45,19 @@ namespace RelhaxModpack
             }
         }
 
-        private void ConfirmAddYes_CheckedChanged(object sender, EventArgs e)
-        {
-            RadioButton send = (RadioButton)sender;
-            if(send.Checked)
-            {
-                AddUnderPanel.Enabled = true;
-            }
-        }
-
-        private void AddUnderCB_SelectedIndexChanged(object sender, EventArgs e)
+        private void CategoryCB_SelectedIndexChanged(object sender, EventArgs e)
         {
             ComboBox cb = (ComboBox)sender;
             if(Mode == EditorMode.DBO)
             {
                 Category selectedCat = (Category)cb.SelectedItem;
                 ModPanel.Enabled = true;
-                ModCB.DataSource = selectedCat.Packages;
+                PackageList = new List<SelectablePackage>();
+                processConfigs(selectedCat.Packages);
+                PackageCB.SelectedIndexChanged -= PackageCB_SelectedIndexChanged;
+                PackageCB.DataSource = PackageList;
+                PackageCB.SelectedIndex = -1;
+                PackageCB.SelectedIndexChanged += PackageCB_SelectedIndexChanged;
             }
             else if (Mode == EditorMode.GlobalDependnecy)
             {
@@ -83,51 +73,36 @@ namespace RelhaxModpack
             }
         }
 
-        private void ModCB_SelectedIndexChanged(object sender, EventArgs e)
+        private void PackageCB_SelectedIndexChanged(object sender, EventArgs e)
         {
             ComboBox cb = (ComboBox)sender;
             SelectablePackage selectedMod = (SelectablePackage)cb.SelectedItem;
             SelectedDatabaseObject = selectedMod;
-            if (selectedMod.Packages.Count == 0)
-            {
-                ConfigPanel.Enabled = false;
-            }
-            else
-            {
-                ConfigPanel.Enabled = true;
-                configList = new List<SelectablePackage>();
-                foreach (SelectablePackage c in selectedMod.Packages)
-                {
-                    configList.Add(c);
-                    processConfigs(c.Packages);
-                }
-                ConfigCB.SelectedIndexChanged -= ConfigCB_SelectedIndexChanged;
-                ConfigCB.DataSource = configList;
-                ConfigCB.SelectedIndex = -1;
-                ConfigCB.SelectedIndexChanged += ConfigCB_SelectedIndexChanged;
-            }
         }
 
         private void processConfigs(List<SelectablePackage> cfgList)
         {
             foreach(SelectablePackage c in cfgList)
             {
-                configList.Add(c);
+                PackageList.Add(c);
                 processConfigs(c.Packages);
             }
         }
 
-        private void ConfigCB_SelectedIndexChanged(object sender, EventArgs e)
+        #region boring stuff
+        private void ConfirmAddYes_CheckedChanged(object sender, EventArgs e)
         {
-            ComboBox cb = (ComboBox)sender;
-            SelectedDatabaseObject = (SelectablePackage)cb.SelectedItem;
+            RadioButton send = (RadioButton)sender;
+            if (send.Checked)
+            {
+                AddUnderPanel.Enabled = true;
+            }
         }
 
         private void applyButton_Click(object sender, EventArgs e)
         {
             ignoreResult = false;
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            DialogResult = DialogResult.OK;
         }
 
         private void DatabaseAdder_FormClosing(object sender, FormClosingEventArgs e)
@@ -160,5 +135,17 @@ namespace RelhaxModpack
                 sublist = true;
             }
         }
+
+        private void ConfirmAddNo_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton send = (RadioButton)sender;
+            if (send.Checked)
+            {
+                AddUnderPanel.Enabled = false;
+            }
+        }
+        #endregion
+
+
     }
 }

@@ -35,6 +35,8 @@
             this.ObjectNameTB = new System.Windows.Forms.TextBox();
             this.DatabasePanelTree = new System.Windows.Forms.Panel();
             this.DatabaseEditPanel = new System.Windows.Forms.Panel();
+            this.ObjectLevelLabel = new System.Windows.Forms.Label();
+            this.ObjectLevel = new System.Windows.Forms.Label();
             this.ObjectLastUpdatedLabel = new System.Windows.Forms.Label();
             this.DownloadZipfileButton = new System.Windows.Forms.Button();
             this.ObjectVersionTB = new System.Windows.Forms.TextBox();
@@ -61,7 +63,7 @@
             this.ObjectDependenciesLabel = new System.Windows.Forms.Label();
             this.RemoveDependencyButton = new System.Windows.Forms.Button();
             this.DependencyPackageNameLabel = new System.Windows.Forms.Label();
-            this.PictureTabPage = new System.Windows.Forms.TabPage();
+            this.MediaTabPage = new System.Windows.Forms.TabPage();
             this.AddPictureTB = new System.Windows.Forms.TextBox();
             this.MovePictureTB = new System.Windows.Forms.TextBox();
             this.AddPictureButton = new System.Windows.Forms.Button();
@@ -110,8 +112,6 @@
             this.MoveButton = new System.Windows.Forms.Button();
             this.SearchBox = new System.Windows.Forms.ComboBox();
             this.ObjectUserdatasToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.ObjectLevel = new System.Windows.Forms.Label();
-            this.ObjectLevelLabel = new System.Windows.Forms.Label();
             this.DatabasePanelTree.SuspendLayout();
             this.DatabaseEditPanel.SuspendLayout();
             this.ObjectPropertiesTabControl.SuspendLayout();
@@ -119,7 +119,7 @@
             this.DependenciesTabPage.SuspendLayout();
             this.LogicalDependencyPanel.SuspendLayout();
             this.DependencyPanel.SuspendLayout();
-            this.PictureTabPage.SuspendLayout();
+            this.MediaTabPage.SuspendLayout();
             this.UserDatasTabPage.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -198,6 +198,24 @@
             this.DatabaseEditPanel.Size = new System.Drawing.Size(547, 600);
             this.DatabaseEditPanel.TabIndex = 4;
             // 
+            // ObjectLevelLabel
+            // 
+            this.ObjectLevelLabel.AutoSize = true;
+            this.ObjectLevelLabel.Location = new System.Drawing.Point(88, 211);
+            this.ObjectLevelLabel.Name = "ObjectLevelLabel";
+            this.ObjectLevelLabel.Size = new System.Drawing.Size(23, 13);
+            this.ObjectLevelLabel.TabIndex = 35;
+            this.ObjectLevelLabel.Text = "null";
+            // 
+            // ObjectLevel
+            // 
+            this.ObjectLevel.AutoSize = true;
+            this.ObjectLevel.Location = new System.Drawing.Point(6, 211);
+            this.ObjectLevel.Name = "ObjectLevel";
+            this.ObjectLevel.Size = new System.Drawing.Size(29, 13);
+            this.ObjectLevel.TabIndex = 34;
+            this.ObjectLevel.Text = "level";
+            // 
             // ObjectLastUpdatedLabel
             // 
             this.ObjectLastUpdatedLabel.AutoSize = true;
@@ -238,7 +256,7 @@
             // 
             this.ObjectPropertiesTabControl.Controls.Add(this.DescriptionTabPage);
             this.ObjectPropertiesTabControl.Controls.Add(this.DependenciesTabPage);
-            this.ObjectPropertiesTabControl.Controls.Add(this.PictureTabPage);
+            this.ObjectPropertiesTabControl.Controls.Add(this.MediaTabPage);
             this.ObjectPropertiesTabControl.Controls.Add(this.UserDatasTabPage);
             this.ObjectPropertiesTabControl.Location = new System.Drawing.Point(3, 241);
             this.ObjectPropertiesTabControl.Name = "ObjectPropertiesTabControl";
@@ -458,27 +476,27 @@
             this.DependencyPackageNameLabel.TabIndex = 35;
             this.DependencyPackageNameLabel.Text = "PackageName";
             // 
-            // PictureTabPage
+            // MediaTabPage
             // 
-            this.PictureTabPage.Controls.Add(this.AddPictureTB);
-            this.PictureTabPage.Controls.Add(this.MovePictureTB);
-            this.PictureTabPage.Controls.Add(this.AddPictureButton);
-            this.PictureTabPage.Controls.Add(this.ApplyPictureEditButton);
-            this.PictureTabPage.Controls.Add(this.RemovePictureButton);
-            this.PictureTabPage.Controls.Add(this.MovePictureButton);
-            this.PictureTabPage.Controls.Add(this.ObjectPicturesLabel);
-            this.PictureTabPage.Controls.Add(this.PictureURLTB);
-            this.PictureTabPage.Controls.Add(this.ObjectPicturesList);
-            this.PictureTabPage.Controls.Add(this.PicturesURLLabel);
-            this.PictureTabPage.Controls.Add(this.PicturesTypeLabel);
-            this.PictureTabPage.Controls.Add(this.PicturesTypeCBox);
-            this.PictureTabPage.Location = new System.Drawing.Point(4, 22);
-            this.PictureTabPage.Name = "PictureTabPage";
-            this.PictureTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.PictureTabPage.Size = new System.Drawing.Size(531, 328);
-            this.PictureTabPage.TabIndex = 3;
-            this.PictureTabPage.Text = "Pictures";
-            this.PictureTabPage.UseVisualStyleBackColor = true;
+            this.MediaTabPage.Controls.Add(this.AddPictureTB);
+            this.MediaTabPage.Controls.Add(this.MovePictureTB);
+            this.MediaTabPage.Controls.Add(this.AddPictureButton);
+            this.MediaTabPage.Controls.Add(this.ApplyPictureEditButton);
+            this.MediaTabPage.Controls.Add(this.RemovePictureButton);
+            this.MediaTabPage.Controls.Add(this.MovePictureButton);
+            this.MediaTabPage.Controls.Add(this.ObjectPicturesLabel);
+            this.MediaTabPage.Controls.Add(this.PictureURLTB);
+            this.MediaTabPage.Controls.Add(this.ObjectPicturesList);
+            this.MediaTabPage.Controls.Add(this.PicturesURLLabel);
+            this.MediaTabPage.Controls.Add(this.PicturesTypeLabel);
+            this.MediaTabPage.Controls.Add(this.PicturesTypeCBox);
+            this.MediaTabPage.Location = new System.Drawing.Point(4, 22);
+            this.MediaTabPage.Name = "MediaTabPage";
+            this.MediaTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.MediaTabPage.Size = new System.Drawing.Size(531, 328);
+            this.MediaTabPage.TabIndex = 3;
+            this.MediaTabPage.Text = "Medias";
+            this.MediaTabPage.UseVisualStyleBackColor = true;
             // 
             // AddPictureTB
             // 
@@ -693,8 +711,8 @@
             this.ObjectTypeComboBox.Items.AddRange(new object[] {
             "-none-",
             "single1",
-            "single_dropDown1",
-            "single_dropDown2",
+            "single_dropdown1",
+            "single_dropdown2",
             "multi"});
             this.ObjectTypeComboBox.Location = new System.Drawing.Point(91, 183);
             this.ObjectTypeComboBox.Name = "ObjectTypeComboBox";
@@ -933,24 +951,6 @@
             this.SearchBox.SelectionChangeCommitted += new System.EventHandler(this.SearchBox_SelectionChangeCommitted);
             this.SearchBox.TextUpdate += new System.EventHandler(this.SearchBox_TextUpdate);
             // 
-            // ObjectLevel
-            // 
-            this.ObjectLevel.AutoSize = true;
-            this.ObjectLevel.Location = new System.Drawing.Point(6, 211);
-            this.ObjectLevel.Name = "ObjectLevel";
-            this.ObjectLevel.Size = new System.Drawing.Size(29, 13);
-            this.ObjectLevel.TabIndex = 34;
-            this.ObjectLevel.Text = "level";
-            // 
-            // ObjectLevelLabel
-            // 
-            this.ObjectLevelLabel.AutoSize = true;
-            this.ObjectLevelLabel.Location = new System.Drawing.Point(88, 211);
-            this.ObjectLevelLabel.Name = "ObjectLevelLabel";
-            this.ObjectLevelLabel.Size = new System.Drawing.Size(23, 13);
-            this.ObjectLevelLabel.TabIndex = 35;
-            this.ObjectLevelLabel.Text = "null";
-            // 
             // DatabaseEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -985,8 +985,8 @@
             this.LogicalDependencyPanel.PerformLayout();
             this.DependencyPanel.ResumeLayout(false);
             this.DependencyPanel.PerformLayout();
-            this.PictureTabPage.ResumeLayout(false);
-            this.PictureTabPage.PerformLayout();
+            this.MediaTabPage.ResumeLayout(false);
+            this.MediaTabPage.PerformLayout();
             this.UserDatasTabPage.ResumeLayout(false);
             this.UserDatasTabPage.PerformLayout();
             this.ResumeLayout(false);
@@ -1050,7 +1050,7 @@
         private System.Windows.Forms.TabControl ObjectPropertiesTabControl;
         private System.Windows.Forms.TabPage DescriptionTabPage;
         private System.Windows.Forms.TabPage DependenciesTabPage;
-        private System.Windows.Forms.TabPage PictureTabPage;
+        private System.Windows.Forms.TabPage MediaTabPage;
         private System.Windows.Forms.TabPage UserDatasTabPage;
         private System.Windows.Forms.TextBox ObjectUserdatasTB;
         private System.Windows.Forms.Button AddUserdatasButton;
