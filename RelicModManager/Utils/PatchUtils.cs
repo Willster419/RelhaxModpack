@@ -297,6 +297,9 @@ namespace RelhaxModpack
                 testValue = addPathArray[addPathArray.Count() - 1];
                 testValue = testValue.Split(new string[] { @"[index=" }, StringSplitOptions.None)[0];
             }
+            //check if the replace value is an xvm path and manually put in the macro equivilants
+            //testValue = testValue.Replace(@"[dollar]", @"$").Replace(@"[lbracket]", @"{").Replace(@"[quote]", @"""").Replace(@"[rbracket]""", @"}");
+            p.replace = p.replace.Replace(@"$", @"[dollar]").Replace(@"{", @"[lbracket]").Replace(@"""", @"[quote]").Replace(@"}", @"[rbracket]");
             //try a bool first, only works with "true" and "false"
             try
             {
@@ -334,6 +337,16 @@ namespace RelhaxModpack
 
             //load file from disk...
             string file = File.ReadAllText(p.completePath);
+
+            //replace all the invalid"${" refrences with 
+            string[] fileSplit = Regex.Split(file, @"\$[ \t]*\{[ \t]*""");
+            for(int i = 1; i < fileSplit.Length; i++)
+            {
+                fileSplit[i] = @"""[dollar][lbracket][quote]" + fileSplit[i];
+                fileSplit[i] = Regex.Replace(fileSplit[i], @"""[\t ]*\}", @"[quote][rbracket]""");
+            }
+
+            /*
             //save the "$" lines
             List<StringSave> ssList = new List<StringSave>();
             StringBuilder backTogether = new StringBuilder();
@@ -369,7 +382,7 @@ namespace RelhaxModpack
                     ssList.Add(ss);
                     temp = "-42069";
                 }
-                else if (Regex.IsMatch(temp, @"^[ \t]*""\$ref"" *: *{.*}"))
+                else if (Regex.IsMatch(temp, @"^[ \t]*""\$ref"" *: *{.*}"))//NEED_THIS
                 {
                     modified = true;
                     //jobject
@@ -382,7 +395,9 @@ namespace RelhaxModpack
                     temp = temp + ",";
                 backTogether.Append(temp + "\n");
             }
-            file = backTogether.ToString();
+            */
+
+            file = string.Join("", fileSplit);
             JsonLoadSettings settings = new JsonLoadSettings()
             {
                 CommentHandling = CommentHandling.Ignore
@@ -395,17 +410,17 @@ namespace RelhaxModpack
             }
             catch (JsonReaderException j)
             {
-                Logging.Manager(string.Format("ERROR: Failed to patch {0}", p.completePath));
+                Logging.Manager(string.Format("JsonReader Exception: Failed to patch {0}, the file is not valid json (run test mode to get more details)", p.completePath));
                 if (Program.testMode)
                 {
-                    //in test mode this is worthy of an EXCEPTION
-                    throw new JsonReaderException(j.Message);
+                    //in test mode this is worthy of an EXCEPTION message
+                    //throw new JsonReaderException(j.Message);
+                    Logging.Manager(j.ToString());
                 }
             }
             //if it failed to parse show the message (above) and pull out
             if (root == null)
             {
-                Logging.Manager(string.Format("ERROR: Failed to patch {0}", p.completePath));
                 return;
             }
             if (p.mode.Equals("add"))
@@ -792,6 +807,8 @@ namespace RelhaxModpack
             {
                 Logging.Manager(string.Format("ERROR: Unknown json patch mode, {0}", p.mode));
             }
+
+            /*
             StringBuilder rebuilder = new StringBuilder();
             string[] putBackDollas = root.ToString().Split('\n');
             for (int i = 0; i < putBackDollas.Count(); i++)
@@ -824,7 +841,10 @@ namespace RelhaxModpack
                 Logging.Manager(string.Format("There was an error with patching the file {0}, with extra refrences. aborting patch", p.completePath));
                 return;
             }
-            File.WriteAllText(p.completePath, rebuilder.ToString());
+            */
+            string toWrite = root.ToString().Replace(@"""[dollar]", @"$").Replace(@"[lbracket]", @"{").Replace(@"[quote]", @"""").Replace(@"[rbracket]""", @"}");
+            //string toWrite = root.ToString();
+            File.WriteAllText(p.completePath, toWrite);
         }
 
         public static void PMODPatch(Patch p, bool testMods = false, string testXVMBootLoc = "")
