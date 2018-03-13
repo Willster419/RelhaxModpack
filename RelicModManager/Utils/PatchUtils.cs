@@ -287,6 +287,10 @@ namespace RelhaxModpack
             //legacy compatibility: treat p.mode being nothing or null default to edit
             if (p.mode == null || p.mode.Equals("") || p.mode.Equals("arrayEdit"))
                 p.mode = "edit";
+            //check if the replace value is an xvm path and manually put in the macro equivilants
+            //testValue = testValue.Replace(@"[dollar]", @"$").Replace(@"[lbracket]", @"{").Replace(@"[quote]", @"""").Replace(@"[rbracket]""", @"}");
+            if(Regex.IsMatch(p.replace, @"\$[ \t]*\{[ \t]*"""))
+                p.replace = p.replace.Replace(@"$", @"[dollar]").Replace(@"{", @"[lbracket]").Replace(@"""", @"[quote]").Replace(@"}", @"[rbracket]");
             //split the replace path here so both can use it later
             string[] addPathArray = null;
             string testValue = p.replace;
@@ -297,9 +301,6 @@ namespace RelhaxModpack
                 testValue = addPathArray[addPathArray.Count() - 1];
                 testValue = testValue.Split(new string[] { @"[index=" }, StringSplitOptions.None)[0];
             }
-            //check if the replace value is an xvm path and manually put in the macro equivilants
-            //testValue = testValue.Replace(@"[dollar]", @"$").Replace(@"[lbracket]", @"{").Replace(@"[quote]", @"""").Replace(@"[rbracket]""", @"}");
-            p.replace = p.replace.Replace(@"$", @"[dollar]").Replace(@"{", @"[lbracket]").Replace(@"""", @"[quote]").Replace(@"}", @"[rbracket]");
             //try a bool first, only works with "true" and "false"
             try
             {
@@ -389,8 +390,8 @@ namespace RelhaxModpack
             }
             catch (JsonReaderException j)
             {
-                Logging.Manager(string.Format("JsonReader Exception: Failed to patch {0}, the file is not valid json (run test mode to get more details)", p.completePath));
-                if (Program.testMode)
+                Logging.Manager(string.Format("JsonReader Exception: Failed to patch {0}, the file is not valid json (run test or beta application to get more details)", p.completePath));
+                if (Program.testMode || Program.betaApplication)
                 {
                     //in test mode this is worthy of an EXCEPTION message
                     //throw new JsonReaderException(j.Message);
@@ -641,7 +642,13 @@ namespace RelhaxModpack
                 }
                 JArray newObjectArray = (JArray)newObject;
                 //check for index value in p.replace (name/value[index=NUMBER])
-                int index = Utils.ParseInt(p.replace.Split(new string[] { @"[index=" }, StringSplitOptions.None)[1].Replace(@"]", ""), -1);
+                string[] splitForAdd = p.replace.Split(new string[] { @"[index=" }, StringSplitOptions.None);
+                if(splitForAdd.Length < 2)
+                {
+                    Logging.Manager(string.Format("ERROR: arrayAdd selected but replace value does not have [index=] tag"));
+                    return;
+                }
+                int index = Utils.ParseInt(splitForAdd[1].Replace(@"]", ""), -1);
                 if(index >= newObjectArray.Count)
                 {
                     //if the array is empty and the index is 0, trying to add to a blank array, don't log it
