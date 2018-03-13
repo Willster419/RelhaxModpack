@@ -575,15 +575,13 @@ namespace RelhaxModpack
                 {
                     string logFile = Path.Combine(TanksLocation, "logs", "uninstallRelhaxFiles.log");
                     // backup the last uninstall logfile
+                    TextWriter tw = null;
                     if (File.Exists(logFile))
                     {
                         if (File.Exists(logFile + ".bak"))
                             File.Delete(logFile + ".bak");
                         File.Move(logFile, logFile + ".bak");
-                    }
-                    TextWriter tw = new StreamWriter(logFile);
-                    if (tw != null)
-                    {
+                        tw = new StreamWriter(logFile);
                         tw.WriteLine(string.Format(@"/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */", DateTime.Now));
                         tw.WriteLine(@"/*  files and folders deleted from logfile  */");
                     }
@@ -601,7 +599,7 @@ namespace RelhaxModpack
                     lines.Reverse();
                     InstallWorker.ReportProgress(0);
                     Logging.Manager(string.Format("Elements to delete (from parsing): {0}", lines.Count()));
-                    if (lines.Count()> 0)
+                    if (lines.Count() > 0)
                     {
                         args.ChildProcessed = 0;
                         args.ChildTotalToProcess = lines.Count();
@@ -612,7 +610,7 @@ namespace RelhaxModpack
                             DeleteFilesByList(lines, true, tw);
                             //don't forget to delete the readme files
                             if (Directory.Exists(Path.Combine(TanksLocation, "_readme")))
-                               Directory.Delete(Path.Combine(TanksLocation, "_readme"), true);
+                                Directory.Delete(Path.Combine(TanksLocation, "_readme"), true);
                         }
                         catch (Exception ex)
                         {
