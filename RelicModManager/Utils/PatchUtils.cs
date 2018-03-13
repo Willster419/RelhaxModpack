@@ -338,15 +338,15 @@ namespace RelhaxModpack
             //load file from disk...
             string file = File.ReadAllText(p.completePath);
 
-            //replace all the invalid"${" refrences with 
+            //replace all the invalid"${" refrences with macros
             string[] fileSplit = Regex.Split(file, @"\$[ \t]*\{[ \t]*""");
             for(int i = 1; i < fileSplit.Length; i++)
             {
                 fileSplit[i] = @"""[dollar][lbracket][quote]" + fileSplit[i];
                 fileSplit[i] = Regex.Replace(fileSplit[i], @"""[\t ]*\}", @"[quote][rbracket]""");
             }
+            file = string.Join("", fileSplit);
 
-            /*
             //save the "$" lines
             List<StringSave> ssList = new List<StringSave>();
             StringBuilder backTogether = new StringBuilder();
@@ -362,27 +362,7 @@ namespace RelhaxModpack
 
                 //determine if it is a illegal refrence in jarray or jobject
                 StringSave ss = new StringSave();
-                if (Regex.IsMatch(temp, @"^[ \t]*\"".*\"" *: *\$\{ *\"".*\""\ *}"))
-                {
-                    modified = true;
-                    //jobject
-                    ss.name = temp.Split('"')[1];
-                    ss.value = temp.Split('$')[1];
-                    ssList.Add(ss);
-                    temp = "\"" + ss.name + "\"" + ": -69420";
-                }
-                else if (Regex.IsMatch(temp, @"^[ \t]*\$ *\{ *\"".*\"" *\}"))
-                {
-                    modified = true;
-                    //jarray
-                    string comment = "//\"comment_Willster419\"";
-                    temp = comment + temp;
-                    ss.name = temp.Split('"')[1];
-                    ss.value = temp.Split('$')[1];
-                    ssList.Add(ss);
-                    temp = "-42069";
-                }
-                else if (Regex.IsMatch(temp, @"^[ \t]*""\$ref"" *: *{.*}"))//NEED_THIS
+                if (Regex.IsMatch(temp, @"^[ \t]*""\$ref"" *: *{.*}"))
                 {
                     modified = true;
                     //jobject
@@ -395,9 +375,8 @@ namespace RelhaxModpack
                     temp = temp + ",";
                 backTogether.Append(temp + "\n");
             }
-            */
+            file = backTogether.ToString();
 
-            file = string.Join("", fileSplit);
             JsonLoadSettings settings = new JsonLoadSettings()
             {
                 CommentHandling = CommentHandling.Ignore
@@ -808,27 +787,12 @@ namespace RelhaxModpack
                 Logging.Manager(string.Format("ERROR: Unknown json patch mode, {0}", p.mode));
             }
 
-            /*
             StringBuilder rebuilder = new StringBuilder();
             string[] putBackDollas = root.ToString().Split('\n');
             for (int i = 0; i < putBackDollas.Count(); i++)
             {
                 string temp = putBackDollas[i];
-                if (Regex.IsMatch(temp, "-69420"))//look for the temp value
-                {
-                    //array of string save and text file are in sync, so when one is found,
-                    //take it from index 0 and remove from the list at index 0
-                    temp = "\"" + ssList[0].name + "\"" + ": $" + ssList[0].value;
-                    putBackDollas[i] = temp;//update the text file file
-                    ssList.RemoveAt(0);//remove the entry from the list of entries to fix/replace
-                }
-                else if (Regex.IsMatch(temp, "-42069"))
-                {
-                    temp = "$" + ssList[0].value;
-                    putBackDollas[i] = temp;
-                    ssList.RemoveAt(0);
-                }
-                else if (Regex.IsMatch(temp, "willster419_refReplace"))
+                if (Regex.IsMatch(temp, "willster419_refReplace"))
                 {
                     temp = "\"" + ssList[0].name + "\"" + ": {" + ssList[0].value;
                     putBackDollas[i] = temp;
@@ -841,9 +805,10 @@ namespace RelhaxModpack
                 Logging.Manager(string.Format("There was an error with patching the file {0}, with extra refrences. aborting patch", p.completePath));
                 return;
             }
-            */
-            string toWrite = root.ToString().Replace(@"""[dollar]", @"$").Replace(@"[lbracket]", @"{").Replace(@"[quote]", @"""").Replace(@"[rbracket]""", @"}");
-            //string toWrite = root.ToString();
+            string toWrite = rebuilder.ToString();
+
+            //unescape the macros
+            toWrite = toWrite.Replace(@"""[dollar]", @"$").Replace(@"[lbracket]", @"{").Replace(@"[quote]", @"""").Replace(@"[rbracket]""", @"}");
             File.WriteAllText(p.completePath, toWrite);
         }
 
