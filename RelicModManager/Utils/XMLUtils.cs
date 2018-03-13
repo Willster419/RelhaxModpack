@@ -1345,6 +1345,7 @@ namespace RelhaxModpack
             if(!defaultChecked)
             {
                 List<SelectablePackage> brokenPackages = Utils.IsValidStructure(parsedCatagoryList);
+                Logging.Manager("Broken selection count: " + brokenPackages.Count);
                 if (brokenPackages.Count > 0)
                 {
                     //list the broken packages
@@ -1353,6 +1354,7 @@ namespace RelhaxModpack
                     {
                         sb.Append(string.Format("Name: {0}, Parent: {1}, Category: {2}\n", sp.NameFormatted, sp.Parent.NameFormatted, sp.ParentCategory.Name));
                     }
+                    Logging.Manager("Broken selections: " + string.Join(", ", brokenPackages));
                     MessageBox.Show(Translations.getTranslatedString("modsBrokenStructure") + sb.ToString());
                 }
             }
