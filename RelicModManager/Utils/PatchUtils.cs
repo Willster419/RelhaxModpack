@@ -289,8 +289,9 @@ namespace RelhaxModpack
                 p.mode = "edit";
             //check if the replace value is an xvm path and manually put in the macro equivilants
             //testValue = testValue.Replace(@"[dollar]", @"$").Replace(@"[lbracket]", @"{").Replace(@"[quote]", @"""").Replace(@"[rbracket]""", @"}");
+            //match ${"
             if(Regex.IsMatch(p.replace, @"\$[ \t]*\{[ \t]*"""))
-                p.replace = p.replace.Replace(@"$", @"[dollar]").Replace(@"{", @"[lbracket]").Replace(@"""", @"[quote]").Replace(@"}", @"[rbracket]");
+                p.replace = p.replace.Replace(@"$", @"[dollar]").Replace(@"{", @"[lbracket]").Replace(@"""", @"[quote]").Replace(@":",@"[colon]").Replace(@"}", @"[rbracket]");
             //split the replace path here so both can use it later
             string[] addPathArray = null;
             string testValue = p.replace;
@@ -344,6 +345,13 @@ namespace RelhaxModpack
             for(int i = 1; i < fileSplit.Length; i++)
             {
                 fileSplit[i] = @"""[dollar][lbracket][quote]" + fileSplit[i];
+                //split it again so we don't replace more than we need to
+                //we only want to replace the first entry that the original split fond
+                string[] splitAgain = fileSplit[i].Split('}');
+                if(Regex.IsMatch(splitAgain[0], @"""[\t ]*\:[\t ]*"""))
+                    splitAgain[0] = Regex.Replace(splitAgain[0], @"""[\t ]*\:[\t ]*""", @"[quote][colon][quote]");
+                //splitAgain[0] = splitAgain[0] + "}";
+                fileSplit[i] = string.Join("}", splitAgain);
                 fileSplit[i] = Regex.Replace(fileSplit[i], @"""[\t ]*\}", @"[quote][rbracket]""");
             }
             file = string.Join("", fileSplit);
@@ -384,6 +392,7 @@ namespace RelhaxModpack
             };
             JObject root = null;
             //load json for editing
+            //File.WriteAllText(Path.Combine(Application.StartupPath, "escaped.xc"), file);
             try
             {
                 root = JObject.Parse(file, settings);
@@ -653,7 +662,7 @@ namespace RelhaxModpack
                 {
                     //if the array is empty and the index is 0, trying to add to a blank array, don't log it
                     if(index != 0)
-                        Logging.Manager("WARNING: index value is greator than array count, putting at end of the array");
+                        Logging.Manager("WARNING: index value >= array count, putting at end of the array");
                     index = -1;
                 }
                 if (newObjectArray.Count > 0)
@@ -815,7 +824,7 @@ namespace RelhaxModpack
             string toWrite = rebuilder.ToString();
 
             //unescape the macros
-            toWrite = toWrite.Replace(@"""[dollar]", @"$").Replace(@"[lbracket]", @"{").Replace(@"[quote]", @"""").Replace(@"[rbracket]""", @"}");
+            toWrite = toWrite.Replace(@"""[dollar]", @"$").Replace(@"[lbracket]", @"{").Replace(@"[quote]", @"""").Replace(@"[colon]",@":").Replace(@"[rbracket]""", @"}");
             File.WriteAllText(p.completePath, toWrite);
         }
 
