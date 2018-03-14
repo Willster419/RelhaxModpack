@@ -157,28 +157,28 @@ namespace RelhaxModpack
             //Component: MenuItemRestore
             //The menu item for restoring the application
             english.Add("MenuItemRestore", "Restore");
-            german.Add("MenuItemRestore", "TODO");
+            german.Add("MenuItemRestore", "Wiederherstellen");
             polish.Add("MenuItemRestore", "Przywróć");
             french.Add("MenuItemRestore", "Restaurer");
 
             //Component: MenuItemCheckUpdates
             //The menu item for restoring the application
             english.Add("MenuItemCheckUpdates", "Check for Updates");
-            german.Add("MenuItemCheckUpdates", "TODO");
+            german.Add("MenuItemCheckUpdates", "Nach Updates suchen");
             polish.Add("MenuItemCheckUpdates", "Sprawdź aktualizacje");
             french.Add("MenuItemCheckUpdates", "Vérifier les mises à jour");
 
             //Component: MenuItemAppClose
             //The menu item for restoring the application
             english.Add("MenuItemAppClose", "Close");
-            german.Add("MenuItemAppClose", "TODO");
+            german.Add("MenuItemAppClose", "Schließen");
             polish.Add("MenuItemAppClose", "Zamknij");
             french.Add("MenuItemAppClose", "Fermer");
 
             //Component: newDBApplied
             //MessageBox for when a new database version is applied
             english.Add("newDBApplied", "New database version applied");
-            german.Add("newDBApplied", "TODO");
+            german.Add("newDBApplied", "Neue Datenbankversion angewendet");
             polish.Add("newDBApplied", "Zastosowano nową bazę danych");
             french.Add("newDBApplied", "Nouvelle version de base de données appliquée");
 
@@ -406,7 +406,7 @@ namespace RelhaxModpack
             //Componet: ExportModeCB
             //
             english.Add("ExportModeCB", "Export Mode");
-            german.Add("ExportModeCB", "TODO");
+            german.Add("ExportModeCB", "Export-Modus");
             polish.Add("ExportModeCB", "Tryb wyboru ścieżki wypakowywania");
             french.Add("ExportModeCB", "Mode d'exportation");
 
@@ -415,7 +415,7 @@ namespace RelhaxModpack
             //Component: ExportWindowDesctiption
             //
             english.Add("ExportWindowDesctiption", "Select the version of WoT you wish to export for");
-            german.Add("ExportWindowDesctiption", "TODO");
+            german.Add("ExportWindowDesctiption", "Wählen Sie die Version von WoT, für die Sie exportieren möchten");
             polish.Add("ExportWindowDesctiption", "Wybór wersji WoT");
             french.Add("ExportWindowDesctiption", "Sélection de la version de WoT que vous souhaitez exporter");
 
@@ -519,7 +519,7 @@ namespace RelhaxModpack
             //Componet: checkingCache
             //
             english.Add("checkingCache", "checking download cache of ");
-            german.Add("checkingCache", "TODO");
+            german.Add("checkingCache", "Überprüfen des Download-Cache von");
             polish.Add("checkingCache", "sprawdzanie ściągniętego cache dla");
             french.Add("checkingCache", "vérification du cache de téléchargement de");
 
@@ -852,17 +852,17 @@ namespace RelhaxModpack
 
             //Componet: 
             //
-            english.Add("failedToDownload_1", "Failed to download:");
-            german.Add("failedToDownload_1", "Fehler beim Herunterladen:");
-            polish.Add("failedToDownload_1", "Ściąganie zakończone niepowodzeniem, plik:");
-            french.Add("failedToDownload_1", "Échec de téléchargement:");
+            english.Add("failed_To_Download_1", "Failed to download:");
+            german.Add("failed_To_Download_1", "Fehler beim Herunterladen:");
+            polish.Add("failed_To_Download_1", "Ściąganie zakończone niepowodzeniem, plik:");
+            french.Add("failed_To_Download_1", "Échec de téléchargement:");
 
             //Componet: 
             //
-            english.Add("failedToDownload_2", "If you know which mod this is, uncheck it and you should be fine. It will be fixed soon. Restart this when it exits");
-            german.Add("failedToDownload_2", "Wenn du weisst, welcher Mod das ist, deaktiviere ihn und alles sollte funktionieren. Es wird bald behoben. Starte das Programm neu nach dem beenden.");
-            polish.Add("failedToDownload_2", "Jeśli wiesz który to mod, odznacz go i wszystko powinno byćw porządku. Wkrótce naprawimy błąd. Zrestartuj, jeśli problem pojawia się ponownie.");
-            french.Add("failedToDownload_2", "Si vous savez quel mod est la cause, déséléectionnez celui-ci. Un corrigé vas être disponible bientôt. Redémarrez ceci a la fermeture");
+            english.Add("failed_To_Download_2", "If you know which mod this is, uncheck it and you should be fine. It will be fixed soon. Restart this when it exits");
+            german.Add("failed_To_Download_2", "Wenn du weisst, welcher Mod das ist, deaktiviere ihn und alles sollte funktionieren. Es wird bald behoben. Starte das Programm neu nach dem beenden.");
+            polish.Add("failed_To_Download_2", "Jeśli wiesz który to mod, odznacz go i wszystko powinno byćw porządku. Wkrótce naprawimy błąd. Zrestartuj, jeśli problem pojawia się ponownie.");
+            french.Add("failed_To_Download_2", "Si vous savez quel mod est la cause, déséléectionnez celui-ci. Un corrigé vas être disponible bientôt. Redémarrez ceci a la fermeture");
 
             //Component: initial download managerInfo.dat
             //
@@ -1170,7 +1170,9 @@ namespace RelhaxModpack
             //Explaiing the export mode
             english.Add("ExportModeCBExplanation", "Export mode will allow you to select a folder and WoT version you wish to export your mods installation to. For advanced users only." +
                 "Note it will NOT: Unpack game xml files, patch files (provided from the game), or create the atlas files. Instructions can be found in the export directory.");
-            german.Add("ExportModeCBExplanation", "TODO");
+            german.Add("ExportModeCBExplanation", "Der Export-Modus ermöglicht es Ihnen, einen Ordner und WoT-Version zu wählen, in die Sie Ihre Mods-Installation exportieren möchten." +
+                " Nur für fortgeschrittene Benutzer. Bitte beachten: es werden KEINE: Spiel-XML-Dateien entpackt und nicht modifiziert oder Atlas Dateien erstellt (jeweils aus dem Spiel" +
+                " bereitgestellt). Anweisungen dazu finden Sie im Export-Verzeichnis.");
             polish.Add("ExportModeCBExplanation", "Tryb wyboru ścieżki wypakowania pozwala na wybór folderu i wersji WoT, do których chcesz zainstalować modyfikacje. Tylko dla zaawansowanych użytkowników." +
                 " Tryb: nie rozpakuje plików gry xml, plików patchy (zapewnianych przez grę), oraz niestworzy plików atlasu. Instrukcje można znaleźć pod ścieżką wypakowania.");
             french.Add("ExportModeCBExplanation", "Le mode Export vous permettra de sélectionner un dossier et la version de WoT vers lesquels vous souhaitez exporter votre installation" +
@@ -1180,7 +1182,7 @@ namespace RelhaxModpack
             //Component: DiagnosticUtilitiesButton
             //
             english.Add("DiagnosticUtilitiesButton", "Diagnostic utilities");
-            german.Add("DiagnosticUtilitiesButton", "TODO");
+            german.Add("DiagnosticUtilitiesButton", "Diagnosedienstprogramme");
             polish.Add("DiagnosticUtilitiesButton", "Narzędzia diagnostyczne");
             french.Add("DiagnosticUtilitiesButton", "Utilitaires de diagnostique");
 
@@ -1194,7 +1196,7 @@ namespace RelhaxModpack
             //Component: UninstallModeGroupBox
             //
             english.Add("UninstallModeGroupBox", "Uninstall Mode");
-            german.Add("UninstallModeGroupBox", "TODO");
+            german.Add("UninstallModeGroupBox", "Deinstallationsmodus");
             polish.Add("UninstallModeGroupBox", "Tryb Deinstalacji");
             french.Add("UninstallModeGroupBox", "Mode de désinstallation");
 
@@ -1280,9 +1282,9 @@ namespace RelhaxModpack
             //Componet: 
             //
             english.Add("modsBrokenStructure", "The following mods were disabled due to modifications in the package structure. You need to re-check them if you want to install them:\n");
-            german.Add("modsBrokenStructure", "TODO");
-            polish.Add("modsBrokenStructure", "Następujące modyfikacje zostały wyłączone ze względu na zmiany w strukturze paczki. Zaznacz je ponownie, jeśli chcesz je zainstalować:");
-            french.Add("modsBrokenStructure", "Les mods suivants ont été désactivés en raison de modifications dans la structure du paquet: vous devez les vérifier de nouveau si vous voulez les installer:");
+            german.Add("modsBrokenStructure", "Die folgenden Mods wurden aufgrund von Änderungen in der Paketstruktur deaktiviert. Sie müssen sie erneut auswählen, wenn Sie sie installieren möchten:\n");
+            polish.Add("modsBrokenStructure", "Następujące modyfikacje zostały wyłączone ze względu na zmiany w strukturze paczki. Zaznacz je ponownie, jeśli chcesz je zainstalować:\n");
+            french.Add("modsBrokenStructure", "Les mods suivants ont été désactivés en raison de modifications dans la structure du paquet: vous devez les vérifier de nouveau si vous voulez les installer:\n");
 
             //Componet: 
             //

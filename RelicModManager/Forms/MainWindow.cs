@@ -193,7 +193,8 @@ namespace RelhaxModpack
                     Utils.ExceptionLog("downloader_DownloadFileCompleted", "downloaded file: " + userToken.url.ToString(), e.Error);
                 else
                     Utils.ExceptionLog("downloader_DownloadFileCompleted", "downloaded file: " + Path.GetFileName(userToken.zipFile.ToString()), e.Error);
-                DialogResult result = MessageBox.Show(string.Format("{0}\n{1}\n\n{2}", Translations.getTranslatedString("failedToDownload_1"), Path.GetFileName(userToken.zipFile.ToString()), Translations.getTranslatedString("failedToDownload_2")),"critical",MessageBoxButtons.AbortRetryIgnore,MessageBoxIcon.Question);
+                DialogResult result = MessageBox.Show(string.Format("{0}\n{1}\n\n{2}", Translations.getTranslatedString("failed_To_Download_1"), Path.GetFileName(userToken.zipFile.ToString()),
+                    Translations.getTranslatedString("failed_To_Download_2")),"critical",MessageBoxButtons.AbortRetryIgnore,MessageBoxIcon.Question);
                 if (result == DialogResult.Abort)
                 {
                     Application.Exit();
@@ -309,7 +310,7 @@ namespace RelhaxModpack
             catch (Exception ex)
             {
                 Utils.ExceptionLog("checkmanagerUpdates", @"Tried to access http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat", ex);
-                MessageBox.Show(string.Format("{0} managerInfo.dat", Translations.getTranslatedString("failedToDownload_1")));
+                MessageBox.Show(string.Format("{0} managerInfo.dat", Translations.getTranslatedString("failed_To_Download_1")));
                 Application.Exit();
             }
             if (Program.skipUpdate && !Program.testMode)
