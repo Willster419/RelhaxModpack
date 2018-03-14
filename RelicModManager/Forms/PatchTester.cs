@@ -122,6 +122,9 @@ namespace RelhaxModpack
         private void regexMakePatchButton_Click(object sender, EventArgs e)
         {
             string fileName = Path.GetFileName(regexFilePathBox.Text) + "_patch.xml";
+            if (File.Exists(fileName))
+                if (MessageBox.Show("patch file already exists, overwrite?", "Patch already exists", MessageBoxButtons.YesNo) == DialogResult.No)
+                    return;
             XmlDocument doc = new XmlDocument();
             XmlElement patchHolder = doc.CreateElement("patchs");
             doc.AppendChild(patchHolder);
@@ -157,6 +160,9 @@ namespace RelhaxModpack
         private void xmlMakePatchButton_Click(object sender, EventArgs e)
         {
             string fileName = Path.GetFileName(xmlFilePathBox.Text) + "_patch.xml";
+            if (File.Exists(fileName))
+                if (MessageBox.Show("patch file already exists, overwrite?", "Patch already exists", MessageBoxButtons.YesNo) == DialogResult.No)
+                    return;
             XmlDocument doc = new XmlDocument();
             XmlElement patchHolder = doc.CreateElement("patchs");
             doc.AppendChild(patchHolder);
@@ -208,6 +214,9 @@ namespace RelhaxModpack
         private void jsonMakePatchButton_Click(object sender, EventArgs e)
         {
             string fileName = Path.GetFileName(jsonFilePathBox.Text) + "_patch.xml";
+            if (File.Exists(fileName))
+                if (MessageBox.Show("patch file already exists, overwrite?", "Patch already exists", MessageBoxButtons.YesNo) == DialogResult.No)
+                    return;
             XmlDocument doc = new XmlDocument();
             XmlElement patchHolder = doc.CreateElement("patchs");
             doc.AppendChild(patchHolder);
@@ -219,7 +228,7 @@ namespace RelhaxModpack
             patch.AppendChild(type);
 
             XmlElement mode = doc.CreateElement("mode");
-            mode.InnerText = "edit";
+            mode.InnerText = JSONMode;
             patch.AppendChild(mode);
 
             XmlElement patchPath = doc.CreateElement("patchPath");
@@ -400,6 +409,9 @@ namespace RelhaxModpack
         private void xvmMakePatchButton_Click(object sender, EventArgs e)
         {
             string fileName = Path.GetFileName(xvmFilePathBox.Text) + "_patch.xml";
+            if (File.Exists(fileName))
+                if (MessageBox.Show("patch file already exists, overwrite?", "Patch already exists", MessageBoxButtons.YesNo) == DialogResult.No)
+                    return;
             XmlDocument doc = new XmlDocument();
             XmlElement patchHolder = doc.CreateElement("patchs");
             doc.AppendChild(patchHolder);
