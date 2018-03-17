@@ -1301,6 +1301,7 @@ namespace RelhaxModpack
             {
                 //check it and propagate change
                 spc.Checked = true;
+                //if it's a user checkbox end here
                 if (ipc is RelhaxUserCheckBox)
                     return;
                 //down
@@ -1327,11 +1328,15 @@ namespace RelhaxModpack
         {
             //the parent of the package we just checked
             SelectablePackage parent = null;
+            //if we're going up the tree, set the package to it's parent
+            //else use itself
             if (upDown)
                 parent = spc.Parent;
             else
                 parent = spc;
+            //first of all, check itself (if not checked already)
             parent.Checked = true;
+            //for each type of requried single selection, check if the package has them, and if any are enabled
             bool hasSingles = false;
             bool singleSelected = false;
             bool hasDD1 = false;
@@ -1340,12 +1345,16 @@ namespace RelhaxModpack
             bool DD2Selected = false;
             foreach (SelectablePackage childPackage in parent.Packages)
             {
+                //if the pacakge is enabled and it is of single type
                 if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
                 {
+                    //then this package does have single type packages
                     hasSingles = true;
+                    //if it's checked, set that bool as well
                     if (childPackage.Checked)
                         singleSelected = true;
                 }
+                //same idea as above
                 else if ((childPackage.Type.Equals("single_dropdown") || childPackage.Type.Equals("single_dropdown1")) && childPackage.Enabled)
                 {
                     hasDD1 = true;
@@ -1359,7 +1368,8 @@ namespace RelhaxModpack
                         DD2Selected = true;
                 }
             }
-            //if going up, will only ever see radiobuttons
+            //if going up, will only ever see radiobuttons (not dropDown)
+            //check if this package is of single type, if it is then we need to unselect all other packages of this level
             if (upDown && (parent.Type.Equals("single") || parent.Type.Equals("single1")))
             {
                 foreach (SelectablePackage childPackage in parent.Parent.Packages)
@@ -1373,7 +1383,7 @@ namespace RelhaxModpack
                         }
                     }
                 }
-                singleSelected = true;
+                //singleSelected = true;
             }
             if (hasSingles && !singleSelected)
             {
@@ -1416,7 +1426,8 @@ namespace RelhaxModpack
                 }
             }
             if(upDown)
-                if (spc.Parent.Level >= 0)
+                if (parent.Level >= 0)
+                    //recursivly propagate the change back up the selection list
                     PropagateChecked(parent,true);
         }
 
@@ -1452,32 +1463,6 @@ namespace RelhaxModpack
                     PropagateDownNotChecked(childPackage);
             }
         }
-
-        /*
-        //propagaetes the change down the selection tree
-        void PropagateDownChecked(SelectablePackage spc)
-        {
-            bool singleSelected = false;
-            foreach (SelectablePackage childPackage in spc.Packages)
-            {
-                if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
-                {
-                    if (!singleSelected)
-                    {
-                        childPackage.Checked = true;
-                        singleSelected = true;
-                        PropagateDownChecked(childPackage);
-                    }
-                    else
-                    {
-                        childPackage.Checked = false;
-                    }
-                }
-                //TODO: dropdown options
-
-            }
-        }
-        */
 
         //method for finding the location of which to put a control
         private int GetYLocation(System.Windows.Forms.Control.ControlCollection ctrl)
