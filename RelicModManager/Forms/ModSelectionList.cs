@@ -10,6 +10,7 @@ using System.Xml.XPath;
 using System.Linq;
 using System.Xml;
 using RelhaxModpack.UIComponents;
+using System.Text;
 
 namespace RelhaxModpack
 {
@@ -1596,18 +1597,471 @@ namespace RelhaxModpack
         }
         #endregion
 
-        #region Config and selection code
-        private void ClearSelectionsButton_Click(object sender, EventArgs e)
-        {
-            //not actually *loading* a config, but want to disable the handlers anyways
-            LoadingConfig = true;
-            Logging.Manager("clearSelectionsButton pressed, clearing selections");
-            Utils.ClearSelectionMemory(ParsedCatagoryList, UserMods);
-            //dispose of not needed stuff and reload the UI
+        #region selection code
 
-            LoadingConfig = false;
-            MessageBox.Show(Translations.getTranslatedString("selectionsCleared"));
-            //ModSelectionList_SizeChanged(null, null);
+        //unchecks all mods from memory
+        public static void ClearSelectionMemory(List<Category> parsedCatagoryList, List<SelectablePackage> UserMods)
+        {
+            Logging.Manager("Unchecking all mods");
+            foreach (Category c in parsedCatagoryList)
+            {
+                if (c.CategoryHeader.Checked)
+                    c.CategoryHeader.Checked = false;
+                foreach (SelectablePackage m in c.Packages)
+                {
+                    if (m.Checked)
+                        m.Checked = false;
+                    //no need to clobber over UI controls, that is now done for us
+                    UncheckProcessConfigs(m.Packages);
+                }
+            }
+            if (UserMods != null)
+            {
+                foreach (SelectablePackage um in UserMods)
+                {
+                    if (um.Checked)
+                        um.Checked = false;
+                }
+            }
+        }
+
+        private static void UncheckProcessConfigs(List<SelectablePackage> configList)
+        {
+            foreach (SelectablePackage c in configList)
+            {
+                if (c.Checked)
+                    c.Checked = false;
+                UncheckProcessConfigs(c.Packages);
+            }
+        }
+
+        //saves the currently checked configs and mods
+        public void SaveConfig(bool fromButton, string fileToConvert, List<Category> parsedCatagoryList, List<SelectablePackage> userMods)
+        {
+            //dialog box to ask where to save the config to
+            SaveFileDialog saveLocation = new SaveFileDialog()
+            {
+                AddExtension = true,
+                DefaultExt = ".xml",
+                Filter = "*.xml|*.xml",
+                InitialDirectory = Path.Combine(Application.StartupPath, "RelHaxUserConfigs"),
+                Title = Translations.getTranslatedString("selectWhereToSave")
+            };
+            if (fromButton)
+            {
+                if (saveLocation.ShowDialog().Equals(DialogResult.Cancel))
+                {
+                    //cancel
+                    return;
+                }
+            }
+            string savePath = saveLocation.FileName;
+            if (Settings.SaveLastConfig && !fromButton && fileToConvert == null)
+            {
+                savePath = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", "lastInstalledConfig.xml");
+                Logging.Manager(string.Format("Save last config checked, saving to {0}", savePath));
+            }
+            else if (!fromButton && !(fileToConvert == null))
+            {
+                savePath = fileToConvert;
+                Logging.Manager(string.Format("convert saved config file \"{0}\" to format {1}", savePath, Settings.ConfigFileVersion));
+            }
+
+            //create saved config xml layout
+            XDocument doc = new XDocument(
+                new XDeclaration("1.0", "utf-8", "yes"),
+                new XElement("mods", new XAttribute("ver", Settings.ConfigFileVersion), new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))));
+
+            //relhax mods root
+            doc.Element("mods").Add(new XElement("relhaxMods"));
+            //user mods root
+            doc.Element("mods").Add(new XElement("userMods"));
+
+            var nodeRelhax = doc.Descendants("relhaxMods").FirstOrDefault();
+            //check every mod
+            foreach (Category c in parsedCatagoryList)
+            {
+                foreach (SelectablePackage m in c.Packages)
+                {
+                    if (m.Checked)
+                    {
+                        //add it to the list
+                        nodeRelhax.Add(new XElement("mod", m.PackageName));
+                        if (m.Packages.Count > 0)
+                        {
+                            SaveProcessConfigs(ref doc, m.Packages);
+                        }
+                    }
+                }
+            }
+
+            var nodeUserMods = doc.Descendants("userMods").FirstOrDefault();
+            //check user mods
+            foreach (SelectablePackage m in userMods)
+            {
+                if (m.Checked)
+                {
+                    //add it to the list
+                    nodeUserMods.Add(new XElement("mod", m.Name));
+                }
+            }
+            doc.Save(savePath);
+            if (fromButton)
+            {
+                MessageBox.Show(Translations.getTranslatedString("configSaveSuccess"));
+            }
+        }
+
+        private void SaveProcessConfigs(ref XDocument doc, List<SelectablePackage> configList)
+        {
+            var node = doc.Descendants("relhaxMods").FirstOrDefault();
+            foreach (SelectablePackage cc in configList)
+            {
+                if (cc.Checked)
+                {
+                    //add the config to the list
+                    node.Add(new XElement("mod", cc.PackageName));
+                    if (cc.Packages.Count > 0)
+                    {
+                        SaveProcessConfigs(ref doc, cc.Packages);
+                    }
+                }
+            }
+        }
+
+        public void LoadConfig(bool fromButton, string[] filePathArray, List<Category> parsedCatagoryList, List<SelectablePackage> userMods)
+        {
+            //uncheck everythihng in memory first
+            ClearSelectionMemory(parsedCatagoryList, userMods);
+            XmlDocument doc = new XmlDocument();
+            //not being whitespace means there is an xml filename, means it is a developer selection
+            if (!string.IsNullOrWhiteSpace(filePathArray[1]))
+            {
+                string xmlString = Utils.GetStringFromZip(filePathArray[0], filePathArray[1]);
+                doc.LoadXml(xmlString);
+            }
+            else
+            {
+                doc.Load(filePathArray[0]);
+            }
+            //check config file version
+            XmlNode xmlNode = doc.SelectSingleNode("//mods");
+            string ver = "";
+            // check if attribut exists and if TRUE, get the value
+            if (xmlNode.Attributes != null && xmlNode.Attributes["ver"] != null)
+            {
+                ver = xmlNode.Attributes["ver"].Value;
+            }
+            if (ver.Equals("2.0"))      //the file is version v2.0, so go "loadConfigV2" (PackageName depended)
+            {
+                Logging.Manager(string.Format("Loading mod selections v2.0 from {0}", filePathArray[0]));
+                LoadConfigV2(doc, parsedCatagoryList, userMods);
+            }
+            else // file is still version v1.0 (name dependend)
+            {
+                LoadConfigV1(fromButton, filePathArray[0], parsedCatagoryList, userMods);
+            }
+        }
+        //loads a saved config from xml and parses it into the memory database
+        public void LoadConfigV1(bool fromButton, string filePath, List<Category> parsedCatagoryList, List<SelectablePackage> userMods)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(filePath);
+            Logging.Manager("Loading mod selections v1.0 from " + filePath);
+            //get a list of mods
+            XmlNodeList xmlModList = doc.SelectNodes("//mods/relhaxMods/mod");
+            foreach (XmlNode n in xmlModList)
+            {
+                //gets the inside of each mod
+                //also store each config that needsto be Enabled
+                SelectablePackage m = new SelectablePackage();
+                foreach (XmlNode nn in n.ChildNodes)
+                {
+                    switch (nn.Name)
+                    {
+                        case "name":
+                            m = Utils.LinkMod(nn.InnerText, parsedCatagoryList);
+                            if ((m != null) && (!m.Visible) && (!Program.forceVisible))
+                                return;
+                            if (m == null)
+                            {
+                                Logging.Manager(string.Format("WARNING: mod \"{0}\" not found", nn.InnerText));
+                                MessageBox.Show(string.Format(Translations.getTranslatedString("modNotFound"), nn.InnerText));
+                                continue;
+                            }
+                            if (m.Enabled)
+                            {
+                                //no need to clobber over UI code, now taken care of for us!
+                                m.Checked = true;
+                                Logging.Manager(string.Format("Checking mod {0}", m.Name));
+                            }
+                            else
+                            {
+                                //uncheck
+                                if (m.Checked)
+                                    m.Checked = false;
+                            }
+                            break;
+                        case "configs":
+                            LoadProcessConfigsV1(nn, m, true);
+                            break;
+                        //compatibility in case it's a super legacy with subConfigs
+                        case "subConfigs":
+                            LoadProcessConfigsV1(nn, m, true);
+                            break;
+                    }
+                }
+            }
+            //user mods
+            XmlNodeList xmlUserModList = doc.SelectNodes("//mods/userMods/mod");
+            foreach (XmlNode n in xmlUserModList)
+            {
+                //gets the inside of each user mod
+                SelectablePackage m = new SelectablePackage();
+                foreach (XmlNode nn in n.ChildNodes)
+                {
+                    switch (nn.Name)
+                    {
+                        case "name":
+                            m = Utils.GetUserMod(nn.InnerText, userMods);
+                            if (m != null)
+                            {
+                                string filename = m.Name + ".zip";
+                                if (File.Exists(Path.Combine(Application.StartupPath, "RelHaxUserMods", filename)))
+                                {
+                                    m.Checked = true;
+                                    Logging.Manager(string.Format("checking user mod {0}", m.ZipFile));
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+            Logging.Manager("Finished loading mod selections v1.0");
+            if (fromButton)
+            {
+                DialogResult result = MessageBox.Show(Translations.getTranslatedString("oldSavedConfigFile"), Translations.getTranslatedString("information"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    // create Path to UserConfigs Backup
+                    string backupFolder = Path.Combine(Application.StartupPath, "RelHaxUserConfigs", "Backup");
+                    // create Backup folder at UserConfigs
+                    Directory.CreateDirectory(backupFolder);
+                    // exctrat filename to create a new filename with backup date and time
+                    string filename = Path.GetFileNameWithoutExtension(filePath);
+                    string fileextention = Path.GetExtension(filePath);
+                    // create target path
+                    string targetFilePath = Path.Combine(backupFolder, string.Format("{0}_{1:yyyy-MM-dd-HH-mm-ss}{2}", filename, DateTime.Now, fileextention));
+                    // move file to new location now
+                    try
+                    {
+                        File.Move(filePath, targetFilePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        Utils.ExceptionLog("loadConfigV1", string.Format("sourceFile: {0}\ntargetFile: {1}", filePath, targetFilePath), ex);
+                    }
+                    // create saved config file with new format
+                    SaveConfig(false, filePath, parsedCatagoryList, userMods);
+                }
+            }
+        }
+        //loads a saved config from xml and parses it into the memory database
+        public void LoadConfigV2(XmlDocument doc, List<Category> parsedCatagoryList, List<SelectablePackage> userMods, bool defaultChecked = false)
+        {
+            List<string> savedConfigList = new List<string>();
+            foreach (var mod in doc.CreateNavigator().Select("//relhaxMods/mod"))
+            {
+                savedConfigList.Add(mod.ToString());
+            }
+            foreach (Category c in parsedCatagoryList)
+            {
+                foreach (SelectablePackage m in c.Packages)
+                {
+                    if (m.Visible || Program.forceVisible)
+                    {
+                        if (savedConfigList.Contains(m.PackageName))
+                        {
+                            savedConfigList.Remove(m.PackageName);
+                            if (!m.Enabled && !defaultChecked && !Program.forceEnabled)
+                            {
+                                MessageBox.Show(string.Format(Translations.getTranslatedString("modDeactivated"),
+                                    m.NameFormatted), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                            else
+                            {
+                                m.Checked = true;
+                                //if it's the top level, chedk the category header
+                                if (m.Level == 0)
+                                {
+                                    if (!m.ParentCategory.CategoryHeader.Checked)
+                                        m.ParentCategory.CategoryHeader.Checked = true;
+                                }
+                                Logging.Manager(string.Format("Checking mod {0}", m.NameFormatted));
+                            }
+                        }
+                        else
+                        {
+                            //uncheck
+                            if (m.Checked)
+                                m.Checked = false;
+                        }
+                        if (m.Packages.Count > 0)
+                        {
+                            LoadProcessConfigsV2(m.Name, m.Packages, ref savedConfigList, defaultChecked);
+                        }
+                    }
+                }
+            }
+            List<string> savedUserConfigList = new List<string>();
+            foreach (var userMod in doc.CreateNavigator().Select("//userMods/mod"))
+            {
+                savedUserConfigList.Add(userMod.ToString());
+            }
+            foreach (SelectablePackage um in userMods)
+            {
+                if (savedUserConfigList.Contains(um.Name))
+                {
+                    string filename = um.Name + ".zip";
+                    if (File.Exists(Path.Combine(Application.StartupPath, "RelHaxUserMods", filename)))
+                    {
+                        //it will be done in the UI code
+                        um.Checked = true;
+                        Logging.Manager(string.Format("Checking user mod {0}", um.ZipFile));
+                    }
+                }
+            }
+            if (savedConfigList.Count > 0)
+            {
+                string modsNotFoundList = "";
+                foreach (var s in savedConfigList)
+                {
+                    modsNotFoundList += "\n" + s;
+                }
+                if (!defaultChecked)
+                    MessageBox.Show(string.Format(Translations.getTranslatedString("modsNotFoundTechnical"), modsNotFoundList), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            //check for structure issues
+            if (!defaultChecked)
+            {
+                List<SelectablePackage> brokenPackages = IsValidStructure(parsedCatagoryList);
+                Logging.Manager("Broken selection count: " + brokenPackages.Count);
+                if (brokenPackages.Count > 0)
+                {
+                    //list the broken packages
+                    StringBuilder sb = new StringBuilder();
+                    foreach (SelectablePackage sp in brokenPackages)
+                    {
+                        sb.Append(string.Format("Name: {0}, Parent: {1}, Category: {2}\n", sp.NameFormatted, sp.Parent.NameFormatted, sp.ParentCategory.Name));
+                    }
+                    Logging.Manager("Broken selections: " + string.Join(", ", brokenPackages));
+                    MessageBox.Show(Translations.getTranslatedString("modsBrokenStructure") + sb.ToString());
+                }
+            }
+            Logging.Manager("Finished loading mod selections v2.0");
+        }
+
+        private void LoadProcessConfigsV1(XmlNode holder, SelectablePackage m, bool parentIsMod, SelectablePackage con = null)
+        {
+            foreach (XmlNode nnn in holder.ChildNodes)
+            {
+                if (parentIsMod)
+                {
+                    if (m == null)
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    if (con == null)
+                    {
+                        continue;
+                    }
+                }
+                SelectablePackage c = new SelectablePackage();
+                foreach (XmlNode nnnn in nnn.ChildNodes)
+                {
+                    switch (nnnn.Name)
+                    {
+                        case "name":
+                            if (parentIsMod)
+                            {
+                                c = m.GetPackage(nnnn.InnerText);
+                                if ((c != null) && (!c.Visible))
+                                    return;
+                            }
+                            else
+                            {
+                                c = con.GetPackage(nnnn.InnerText);
+                                if ((c != null) && (!c.Visible))
+                                    return;
+                            }
+                            if (c == null)
+                            {
+                                Logging.Manager(string.Format("WARNING: config \"{0}\" not found for mod/config \"{1}\"", nnnn.InnerText, holder.InnerText));
+                                MessageBox.Show(string.Format(Translations.getTranslatedString("configNotFound"), nnnn.InnerText, holder.InnerText));
+                                continue;
+                            }
+                            if (c.Enabled)
+                            {
+                                c.Checked = true;
+                                Logging.Manager(string.Format("Checking mod {0}", c.NameFormatted));
+                            }
+                            else
+                            {
+                                if (c.Checked)
+                                    c.Checked = false;
+                            }
+                            break;
+                        case "configs":
+                            LoadProcessConfigsV1(nnnn, m, false, c);
+                            break;
+                        case "subConfigs":
+                            LoadProcessConfigsV1(nnnn, m, false, c);
+                            break;
+                    }
+                }
+            }
+        }
+
+        private void LoadProcessConfigsV2(string parentName, List<SelectablePackage> configList, ref List<string> savedConfigList, bool defaultChecked)
+        {
+            bool shouldBeBA = false;
+            Panel panelRef = null;
+            foreach (SelectablePackage c in configList)
+            {
+                if (c.Visible)
+                {
+                    if (savedConfigList.Contains(c.PackageName))
+                    {
+                        savedConfigList.Remove(c.PackageName);
+                        if (!c.Enabled && !defaultChecked)
+                        {
+                            MessageBox.Show(string.Format(Translations.getTranslatedString("configDeactivated"), c.NameFormatted, parentName), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            c.Checked = true;
+                            Logging.Manager(string.Format("Checking mod {0}", c.NameFormatted));
+                        }
+                    }
+                    else
+                    {
+                        if (c.Checked)
+                            c.Checked = false;
+                    }
+                    if (c.Packages.Count > 0)
+                    {
+                        LoadProcessConfigsV2(c.Name, c.Packages, ref savedConfigList, defaultChecked);
+                    }
+                }
+            }
+            if (shouldBeBA && panelRef != null)
+            {
+                if (!Settings.DisableColorChange)
+                    panelRef.BackColor = System.Drawing.Color.BlanchedAlmond;
+            }
         }
 
         private void ParseLoadConfig()
@@ -1679,17 +2133,107 @@ namespace RelhaxModpack
                     break;
             }
             //actually load the config
-            XMLUtils.LoadConfig(LoadMode == LoadConfigMode.FromButton, filePathArray, ParsedCatagoryList, UserMods);
+            LoadConfig(LoadMode == LoadConfigMode.FromButton, filePathArray, ParsedCatagoryList, UserMods);
             //if it was from a button, tell the user it loaded the config sucessfully
             if (LoadMode == LoadConfigMode.FromButton)
             {
-                if (LoadMode == LoadConfigMode.FromButton) MessageBox.Show(Translations.getTranslatedString("prefrencesSet"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (LoadMode == LoadConfigMode.FromButton)
+                    MessageBox.Show(Translations.getTranslatedString("prefrencesSet"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 ModSelectionList_SizeChanged(null, null);
             }
             //set this back to false so the user can interact
             LoadingConfig = false;
         }
+        //checks for invalid structure in the selected packages
+        //ex: a new mandatory option was added to a mod, but the user does not have it selected
+        public List<SelectablePackage> IsValidStructure(List<Category> ParsedCategoryList)
+        {
+            List<SelectablePackage>  brokenPackages = new List<SelectablePackage>();
+            foreach (Category cat in ParsedCategoryList)
+            {
+                if (cat.Packages.Count > 0)
+                {
+                    foreach (SelectablePackage sp in cat.Packages)
+                        IsValidStructure(sp, ref brokenPackages);
+                }
+                //then check if the header should be checked
+                //at this point it is assumed that the structure is valid, meanign that
+                //if there is at least on package selected it should be propagated up to level 0
+                //so ontly need to do this at level 0
+                bool anyPackagesSelected = false;
+                foreach(SelectablePackage sp in cat.Packages)
+                {
+                    if (sp.Enabled && sp.Checked)
+                        anyPackagesSelected = true;
+                }
+                if (!anyPackagesSelected && cat.CategoryHeader.Checked)
+                    cat.CategoryHeader.Checked = false;
+            }
+            return brokenPackages;
+        }
+
+        private void IsValidStructure(SelectablePackage Package, ref List<SelectablePackage> brokenPackages)
+        {
+            if (Package.Checked)
+            {
+                bool hasSingles = false;
+                bool singleSelected = false;
+                bool hasDD1 = false;
+                bool DD1Selected = false;
+                bool hasDD2 = false;
+                bool DD2Selected = false;
+                foreach (SelectablePackage childPackage in Package.Packages)
+                {
+                    if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
+                    {
+                        hasSingles = true;
+                        if (childPackage.Checked)
+                            singleSelected = true;
+                    }
+                    else if ((childPackage.Type.Equals("single_dropdown") || childPackage.Type.Equals("single_dropdown1")) && childPackage.Enabled)
+                    {
+                        hasDD1 = true;
+                        if (childPackage.Checked)
+                            DD1Selected = true;
+                    }
+                    else if (childPackage.Type.Equals("single_dropdown2") && childPackage.Enabled)
+                    {
+                        hasDD2 = true;
+                        if (childPackage.Checked)
+                            DD2Selected = true;
+                    }
+                }
+                if (hasSingles && !singleSelected)
+                {
+                    Package.Checked = false;
+                    if (!brokenPackages.Contains(Package))
+                        brokenPackages.Add(Package);
+                }
+                if (hasDD1 && !DD1Selected)
+                {
+                    Package.Checked = false;
+                    if (!brokenPackages.Contains(Package))
+                        brokenPackages.Add(Package);
+                }
+                if (hasDD2 && !DD2Selected)
+                {
+                    Package.Checked = false;
+                    if (!brokenPackages.Contains(Package))
+                        brokenPackages.Add(Package);
+                }
+                if (Package.Checked && !Package.Parent.Checked)
+                {
+                    Package.Checked = false;
+                    if (!brokenPackages.Contains(Package))
+                        brokenPackages.Add(Package);
+                }
+            }
+            if (Package.Packages.Count > 0)
+                foreach (SelectablePackage sep in Package.Packages)
+                    IsValidStructure(sep, ref brokenPackages);
+        }
         //handles checking of the "default checked" mods
+        //runs this on all loadings of modSelectionList, but is overridden if the user wants to load his/her own config
         private void CheckDefaultMods()
         {
             Logging.Manager("Checking default mods");
@@ -1703,19 +2247,32 @@ namespace RelhaxModpack
             }
             doc.LoadXml(xmlstring);
             //call XMlUtils.LoadConfigV2
-            XMLUtils.LoadConfigV2(doc, ParsedCatagoryList, UserMods, true);
+            LoadConfigV2(doc, ParsedCatagoryList, UserMods, true);
             Logging.Manager("Finished checking default mods");
         }
         #endregion
 
         #region UI event handlers (resize, button press, expand toggling)
+        //handler for when the clear selections button is pressed
+        private void ClearSelectionsButton_Click(object sender, EventArgs e)
+        {
+            //not actually *loading* a config, but want to disable the handlers anyways
+            LoadingConfig = true;
+            Logging.Manager("clearSelectionsButton pressed, clearing selections");
+            ClearSelectionMemory(ParsedCatagoryList, UserMods);
+            //dispose of not needed stuff and reload the UI
+
+            LoadingConfig = false;
+            MessageBox.Show(Translations.getTranslatedString("selectionsCleared"));
+            //ModSelectionList_SizeChanged(null, null);
+        }
         //handler to set the cancel bool to false
         private void ContinueButton_Click(object sender, EventArgs e)
         {
             //save the last config if told to do so
             if (Settings.SaveLastConfig)
             {
-                XMLUtils.SaveConfig(false, null, ParsedCatagoryList, UserMods);
+                SaveConfig(false, null, ParsedCatagoryList, UserMods);
             }
             DialogResult = DialogResult.OK;
         }
@@ -1733,7 +2290,7 @@ namespace RelhaxModpack
         //handler for when the "save config" button is pressed
         private void SaveConfigButton_Click(object sender, EventArgs e)
         {
-            XMLUtils.SaveConfig(true, null, ParsedCatagoryList, UserMods);
+            SaveConfig(true, null, ParsedCatagoryList, UserMods);
         }
         //handler for when the close button is pressed
         private void ModSelectionList_FormClosing(object sender, FormClosingEventArgs e)
