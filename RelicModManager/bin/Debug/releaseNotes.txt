@@ -1,7 +1,7 @@
-Wargaming is releasing a major application version? So can we! May we present to you, version 28!!! (03/xx/18)
+Wargaming is releasing a major application version? So can we! May we present to you, version 28!!! (03/17/18)
   This version is packed with new features and cleaner code!
 
-https://www.virustotal.com/#/file/4b65c4317d6eb219862134e0fa19f972ba0177376444655bfdd967398e14a13f/detection
+https://www.virustotal.com/#/file/871a790da2e2f89d3873a9d0fe9901be8d48155355542ee07dddd64c3e205116/detection
 
 -The class structure for the modpack has changed again. This time it is less complex and makes more sense. There is an abstract class that represents a component in the modpack. That class is then inherited by other classes, being Dependency, LogicalDependency, and SelectablePackage (no need for mod and config seperate classes). The Selectable Package class has a refrence to the coresponding UIComponent, which is what you as the user interacts with.
 https://puu.sh/zFD3F/66d092ef7c.png

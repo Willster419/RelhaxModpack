@@ -880,10 +880,10 @@ namespace RelhaxModpack
 
             //Componet: 
             //
-            english.Add("fontsPromptInstallText", "Do you have admin rights?");
-            german.Add("fontsPromptInstallText", "Hast Du Admin-Rechte?");
-            polish.Add("fontsPromptInstallText", "Czy masz uprawnienia administratora?");
-            french.Add("fontsPromptInstallText", "Avez-vous les droits d'administrateur?");
+            english.Add("fontsPromptInstallText", "Do you have admin rights to install fonts?");
+            german.Add("fontsPromptInstallText", "Hast Du Admin-Rechte um Schriftarten zu installieren?");
+            polish.Add("fontsPromptInstallText", "Czy masz uprawnienia administratora zainstalować czcionki?");
+            french.Add("fontsPromptInstallText", "Avez-vous les droits d'administrateur installer des polices?");
 
             //Componet: 
             //
@@ -1189,8 +1189,8 @@ namespace RelhaxModpack
             //Component: DatabaseVersionLabel
             //
             english.Add("DatabaseVersionLabel", "Latest Database");
-            german.Add("DatabaseVersionLabel", "TODO");
-            polish.Add("DatabaseVersionLabel", "TODO");
+            german.Add("DatabaseVersionLabel", "Datenbank");
+            polish.Add("DatabaseVersionLabel", "Baza danych");
             french.Add("DatabaseVersionLabel", "Base de donnés");
 
             //Component: UninstallModeGroupBox

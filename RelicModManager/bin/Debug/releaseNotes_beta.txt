@@ -1,9 +1,29 @@
-Beta Version 28.0.0_r3 (03/14/2018)
+Wargaming is releasing a major application version? So can we! May we present to you, version 28!!! (03/17/18)
+  This version is packed with new features and cleaner code!
 
--Fixed several bugs with the database editor when adding or moving packages
--Updated json patcher to allow modification of xvm style references, rather than removing them before parsing
--Fixed exception handling issues with the uninstall method, if no log files exist.
--Added more logging information for broken package detection
--Updated German translations
+https://www.virustotal.com/#/file/871a790da2e2f89d3873a9d0fe9901be8d48155355542ee07dddd64c3e205116/detection
+
+-The class structure for the modpack has changed again. This time it is less complex and makes more sense. There is an abstract class that represents a component in the modpack. That class is then inherited by other classes, being Dependency, LogicalDependency, and SelectablePackage (no need for mod and config seperate classes). The Selectable Package class has a refrence to the coresponding UIComponent, which is what you as the user interacts with.
+https://puu.sh/zFD3F/66d092ef7c.png
+-The mod selection list code for building and handling logic selections was completly re-written. Before, when you make a selection, the UI cound would be triggered and it would then update the database. This was bad for three reasons:
+1: It implies that the UI controls the database, rather than the database controlling the UI
+2: The UI and database could get out of sync.
+3: For each UI view, the code needs to be written.
+Therefore, a new method was made. Now, when you make a selection, it gets updated the database, and then propagates the selection changes throughout the database, which then get reflected in the UI. In other words, the database controls the UI. What you see is what you get.
+-The Category system was changed. Categories no longer have a "single" or "multi" selection type, they are now just categories. This means that we can have single and multi mods at the same top level, in the config. This was done by making a top UI component, the category holder.
+-The filesize of the database was reduced by about 30% due to making some entries optional. For example, if the mod does not have a version associated with it, the empty entry for it is not written to the database.
+-When loading a new selection, it will now check for any invalid entries. An invalid entry, for example, would be if you selected the header for "Arty" in crosshairs, but did not actually select a mod in that list.
+-Added new feature: Export mode. It will allow you install your mods to a custom folder. Keep in mind that it therefore will not unpack, patch, or create atlases for stock WoT files. If you select this you know what you're doing.
+-Improved smoothness and loading of the audio preview
+-fixed issues with getting the WoT version and/or applying the correct version of mods to the specified WoT version, if in test or beta database mode
+-Improved compatibility with Windows Proxy settings. It may take an additional 50-100ms to initialize connections
+-Renamed "Super Extraction" to multicore extraction
+-Removed border and color change options from the default view as they became difficult to maintain and didn't provide much to the modpack
+-Fixed bugs and optimized the database editor to take up less code space and CPU time
+-Optimized usage of macros
+-Fixed issues with lock statements in the install process
+-added the file lastInstalledConfig to list of files included in the diagnostic zip
+-Fixed bugs with the backend utility database list generator
+-Fixed several bugs with the database editor
 
 --------------------------------------------------------------------------------------------------------------------------------------------

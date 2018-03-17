@@ -97,7 +97,7 @@ namespace RelhaxModpack
         {
             string managerVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString().IndexOf('.') + 1);
             if (Program.Version == Program.ProgramVersion.Beta)
-                managerVersion = managerVersion + "_BETA_r3";
+                managerVersion = managerVersion + "_BETA_final";
             return managerVersion;
         }
 
