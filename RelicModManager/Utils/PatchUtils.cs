@@ -352,7 +352,16 @@ namespace RelhaxModpack
                     splitAgain[0] = Regex.Replace(splitAgain[0], @"""[\t ]*\:[\t ]*""", @"[quote][colon][quote]");
                 //splitAgain[0] = splitAgain[0] + "}";
                 fileSplit[i] = string.Join("}", splitAgain);
-                fileSplit[i] = Regex.Replace(fileSplit[i], @"""[\t ]*\}", @"[quote][rbracket]""");
+                //only match the first one...
+                Match m = Regex.Match(fileSplit[i], @"""[\t ]*\}");
+                if(m.Success)
+                {
+                    //create two strings, one for before, one for after
+                    string before = fileSplit[i].Substring(0, m.Index);
+                    string after = fileSplit[i].Substring(m.Index + m.Length);
+                    fileSplit[i] = before + @"[quote][rbracket]""" + after;
+                }
+                //fileSplit[i] = Regex.Replace(fileSplit[i], @"""[\t ]*\}", @"[quote][rbracket]""");
             }
             file = string.Join("", fileSplit);
 
@@ -392,7 +401,8 @@ namespace RelhaxModpack
             };
             JObject root = null;
             //load json for editing
-            //File.WriteAllText(Path.Combine(Application.StartupPath, "escaped.xc"), file);
+            if(Program.Version == Program.ProgramVersion.Alpha)
+                File.WriteAllText(Path.Combine(Application.StartupPath, "escaped.xc"), file);
             try
             {
                 root = JObject.Parse(file, settings);
