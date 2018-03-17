@@ -129,7 +129,7 @@
             this.regexLoadFileButton.Location = new System.Drawing.Point(12, 143);
             this.regexLoadFileButton.Name = "regexLoadFileButton";
             this.regexLoadFileButton.Size = new System.Drawing.Size(212, 23);
-            this.regexLoadFileButton.TabIndex = 0;
+            this.regexLoadFileButton.TabIndex = 2;
             this.regexLoadFileButton.Text = "load file to patch";
             this.regexLoadFileButton.UseVisualStyleBackColor = true;
             this.regexLoadFileButton.Click += new System.EventHandler(this.regexLoadFileButton_Click);
@@ -166,7 +166,7 @@
             this.regexLineBox.Location = new System.Drawing.Point(15, 271);
             this.regexLineBox.Name = "regexLineBox";
             this.regexLineBox.Size = new System.Drawing.Size(212, 20);
-            this.regexLineBox.TabIndex = 1;
+            this.regexLineBox.TabIndex = 3;
             // 
             // xmlModsGroupBox
             // 
@@ -220,7 +220,7 @@
             this.regexSearchBox.Location = new System.Drawing.Point(15, 310);
             this.regexSearchBox.Name = "regexSearchBox";
             this.regexSearchBox.Size = new System.Drawing.Size(212, 20);
-            this.regexSearchBox.TabIndex = 2;
+            this.regexSearchBox.TabIndex = 4;
             // 
             // regexSearchLabel
             // 
@@ -254,7 +254,7 @@
             this.xmlSearchBox.Location = new System.Drawing.Point(250, 310);
             this.xmlSearchBox.Name = "xmlSearchBox";
             this.xmlSearchBox.Size = new System.Drawing.Size(212, 20);
-            this.xmlSearchBox.TabIndex = 8;
+            this.xmlSearchBox.TabIndex = 12;
             // 
             // xmlSearchLabel
             // 
@@ -270,7 +270,7 @@
             this.xmlPathBox.Location = new System.Drawing.Point(250, 271);
             this.xmlPathBox.Name = "xmlPathBox";
             this.xmlPathBox.Size = new System.Drawing.Size(212, 20);
-            this.xmlPathBox.TabIndex = 7;
+            this.xmlPathBox.TabIndex = 11;
             // 
             // xmlPathLabel
             // 
@@ -287,7 +287,7 @@
             this.xmlFilePathBox.Name = "xmlFilePathBox";
             this.xmlFilePathBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
             this.xmlFilePathBox.Size = new System.Drawing.Size(212, 47);
-            this.xmlFilePathBox.TabIndex = 7;
+            this.xmlFilePathBox.TabIndex = 8;
             this.xmlFilePathBox.Text = "";
             // 
             // xmlFilePathLabel
@@ -304,7 +304,7 @@
             this.xmlLoadFileButton.Location = new System.Drawing.Point(250, 143);
             this.xmlLoadFileButton.Name = "xmlLoadFileButton";
             this.xmlLoadFileButton.Size = new System.Drawing.Size(212, 23);
-            this.xmlLoadFileButton.TabIndex = 6;
+            this.xmlLoadFileButton.TabIndex = 10;
             this.xmlLoadFileButton.Text = "load file to patch";
             this.xmlLoadFileButton.UseVisualStyleBackColor = true;
             this.xmlLoadFileButton.Click += new System.EventHandler(this.xmlLoadFileButton_Click);
@@ -314,7 +314,7 @@
             this.regexPatchButton.Location = new System.Drawing.Point(12, 456);
             this.regexPatchButton.Name = "regexPatchButton";
             this.regexPatchButton.Size = new System.Drawing.Size(95, 23);
-            this.regexPatchButton.TabIndex = 4;
+            this.regexPatchButton.TabIndex = 6;
             this.regexPatchButton.Text = "test patch";
             this.regexPatchButton.UseVisualStyleBackColor = true;
             this.regexPatchButton.Click += new System.EventHandler(this.regexPatchButton_Click);
@@ -324,7 +324,7 @@
             this.xmlPatchButton.Location = new System.Drawing.Point(250, 456);
             this.xmlPatchButton.Name = "xmlPatchButton";
             this.xmlPatchButton.Size = new System.Drawing.Size(95, 23);
-            this.xmlPatchButton.TabIndex = 10;
+            this.xmlPatchButton.TabIndex = 14;
             this.xmlPatchButton.Text = "test patch";
             this.xmlPatchButton.UseVisualStyleBackColor = true;
             this.xmlPatchButton.Click += new System.EventHandler(this.xmlPatchButton_Click);
@@ -376,7 +376,7 @@
             this.jsonLoadFileButton.Location = new System.Drawing.Point(483, 143);
             this.jsonLoadFileButton.Name = "jsonLoadFileButton";
             this.jsonLoadFileButton.Size = new System.Drawing.Size(212, 23);
-            this.jsonLoadFileButton.TabIndex = 12;
+            this.jsonLoadFileButton.TabIndex = 18;
             this.jsonLoadFileButton.Text = "load file to patch";
             this.jsonLoadFileButton.UseVisualStyleBackColor = true;
             this.jsonLoadFileButton.Click += new System.EventHandler(this.jsonLoadFileButton_Click);
@@ -396,7 +396,7 @@
             this.jsonFilePathBox.Name = "jsonFilePathBox";
             this.jsonFilePathBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
             this.jsonFilePathBox.Size = new System.Drawing.Size(212, 47);
-            this.jsonFilePathBox.TabIndex = 14;
+            this.jsonFilePathBox.TabIndex = 16;
             this.jsonFilePathBox.Text = "";
             // 
             // jsonPathLabel
@@ -413,7 +413,7 @@
             this.jsonPathBox.Location = new System.Drawing.Point(484, 271);
             this.jsonPathBox.Name = "jsonPathBox";
             this.jsonPathBox.Size = new System.Drawing.Size(212, 20);
-            this.jsonPathBox.TabIndex = 13;
+            this.jsonPathBox.TabIndex = 19;
             // 
             // jsonSearchLabel
             // 
@@ -429,7 +429,7 @@
             this.jsonSearchBox.Location = new System.Drawing.Point(484, 310);
             this.jsonSearchBox.Name = "jsonSearchBox";
             this.jsonSearchBox.Size = new System.Drawing.Size(212, 20);
-            this.jsonSearchBox.TabIndex = 14;
+            this.jsonSearchBox.TabIndex = 20;
             // 
             // jsonReplaceLabel
             // 
@@ -445,7 +445,7 @@
             this.jsonPatchButton.Location = new System.Drawing.Point(484, 456);
             this.jsonPatchButton.Name = "jsonPatchButton";
             this.jsonPatchButton.Size = new System.Drawing.Size(95, 23);
-            this.jsonPatchButton.TabIndex = 16;
+            this.jsonPatchButton.TabIndex = 22;
             this.jsonPatchButton.Text = "test patch";
             this.jsonPatchButton.UseVisualStyleBackColor = true;
             this.jsonPatchButton.Click += new System.EventHandler(this.jsonPatchButton_Click);
@@ -468,7 +468,7 @@
             this.regexMakePatchButton.Location = new System.Drawing.Point(132, 456);
             this.regexMakePatchButton.Name = "regexMakePatchButton";
             this.regexMakePatchButton.Size = new System.Drawing.Size(95, 23);
-            this.regexMakePatchButton.TabIndex = 5;
+            this.regexMakePatchButton.TabIndex = 7;
             this.regexMakePatchButton.Text = "make patch file";
             this.regexMakePatchButton.UseVisualStyleBackColor = true;
             this.regexMakePatchButton.Click += new System.EventHandler(this.regexMakePatchButton_Click);
@@ -478,7 +478,7 @@
             this.xmlMakePatchButton.Location = new System.Drawing.Point(367, 456);
             this.xmlMakePatchButton.Name = "xmlMakePatchButton";
             this.xmlMakePatchButton.Size = new System.Drawing.Size(95, 23);
-            this.xmlMakePatchButton.TabIndex = 11;
+            this.xmlMakePatchButton.TabIndex = 15;
             this.xmlMakePatchButton.Text = "make patch file";
             this.xmlMakePatchButton.UseVisualStyleBackColor = true;
             this.xmlMakePatchButton.Click += new System.EventHandler(this.xmlMakePatchButton_Click);
@@ -488,7 +488,7 @@
             this.jsonMakePatchButton.Location = new System.Drawing.Point(602, 456);
             this.jsonMakePatchButton.Name = "jsonMakePatchButton";
             this.jsonMakePatchButton.Size = new System.Drawing.Size(95, 23);
-            this.jsonMakePatchButton.TabIndex = 17;
+            this.jsonMakePatchButton.TabIndex = 23;
             this.jsonMakePatchButton.Text = "make patch file";
             this.jsonMakePatchButton.UseVisualStyleBackColor = true;
             this.jsonMakePatchButton.Click += new System.EventHandler(this.jsonMakePatchButton_Click);
@@ -498,7 +498,7 @@
             this.regexReplaceBox.Location = new System.Drawing.Point(15, 349);
             this.regexReplaceBox.Name = "regexReplaceBox";
             this.regexReplaceBox.Size = new System.Drawing.Size(212, 100);
-            this.regexReplaceBox.TabIndex = 3;
+            this.regexReplaceBox.TabIndex = 5;
             this.regexReplaceBox.Text = "";
             this.regexReplaceBox.WordWrap = false;
             // 
@@ -507,7 +507,7 @@
             this.xmlReplaceBox.Location = new System.Drawing.Point(250, 349);
             this.xmlReplaceBox.Name = "xmlReplaceBox";
             this.xmlReplaceBox.Size = new System.Drawing.Size(212, 100);
-            this.xmlReplaceBox.TabIndex = 9;
+            this.xmlReplaceBox.TabIndex = 13;
             this.xmlReplaceBox.Text = "";
             this.xmlReplaceBox.WordWrap = false;
             // 
@@ -516,7 +516,7 @@
             this.jsonReplaceBox.Location = new System.Drawing.Point(484, 349);
             this.jsonReplaceBox.Name = "jsonReplaceBox";
             this.jsonReplaceBox.Size = new System.Drawing.Size(212, 100);
-            this.jsonReplaceBox.TabIndex = 15;
+            this.jsonReplaceBox.TabIndex = 21;
             this.jsonReplaceBox.Text = "";
             this.jsonReplaceBox.WordWrap = false;
             // 
@@ -525,7 +525,7 @@
             this.XVMRegressionTesting.Location = new System.Drawing.Point(6, 13);
             this.XVMRegressionTesting.Name = "XVMRegressionTesting";
             this.XVMRegressionTesting.Size = new System.Drawing.Size(140, 23);
-            this.XVMRegressionTesting.TabIndex = 25;
+            this.XVMRegressionTesting.TabIndex = 0;
             this.XVMRegressionTesting.Text = "xvm regression testing";
             this.XVMRegressionTesting.UseVisualStyleBackColor = true;
             this.XVMRegressionTesting.Click += new System.EventHandler(this.xvmRegressionTesting_Click);
@@ -543,7 +543,7 @@
             this.xvmLoadFileButton.Location = new System.Drawing.Point(716, 143);
             this.xvmLoadFileButton.Name = "xvmLoadFileButton";
             this.xvmLoadFileButton.Size = new System.Drawing.Size(213, 23);
-            this.xvmLoadFileButton.TabIndex = 18;
+            this.xvmLoadFileButton.TabIndex = 26;
             this.xvmLoadFileButton.Text = "load file to patch";
             this.xvmLoadFileButton.UseVisualStyleBackColor = true;
             this.xvmLoadFileButton.Click += new System.EventHandler(this.xvmLoadFileButton_Click);
@@ -563,7 +563,7 @@
             this.xvmFilePathBox.Name = "xvmFilePathBox";
             this.xvmFilePathBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
             this.xvmFilePathBox.Size = new System.Drawing.Size(214, 47);
-            this.xvmFilePathBox.TabIndex = 14;
+            this.xvmFilePathBox.TabIndex = 24;
             this.xvmFilePathBox.Text = "";
             // 
             // xvmPathLabel
@@ -580,7 +580,7 @@
             this.xvmPathBox.Location = new System.Drawing.Point(715, 271);
             this.xvmPathBox.Name = "xvmPathBox";
             this.xvmPathBox.Size = new System.Drawing.Size(214, 20);
-            this.xvmPathBox.TabIndex = 21;
+            this.xvmPathBox.TabIndex = 27;
             // 
             // xvmSearchLabel
             // 
@@ -596,7 +596,7 @@
             this.xvmSearchBox.Location = new System.Drawing.Point(715, 310);
             this.xvmSearchBox.Name = "xvmSearchBox";
             this.xvmSearchBox.Size = new System.Drawing.Size(214, 20);
-            this.xvmSearchBox.TabIndex = 22;
+            this.xvmSearchBox.TabIndex = 28;
             // 
             // xvmReplaceLabel
             // 
@@ -612,7 +612,7 @@
             this.xvmPathButton.Location = new System.Drawing.Point(716, 456);
             this.xvmPathButton.Name = "xvmPathButton";
             this.xvmPathButton.Size = new System.Drawing.Size(95, 23);
-            this.xvmPathButton.TabIndex = 24;
+            this.xvmPathButton.TabIndex = 30;
             this.xvmPathButton.Text = "test patch";
             this.xvmPathButton.UseVisualStyleBackColor = true;
             this.xvmPathButton.Click += new System.EventHandler(this.xvmPathButton_Click);
@@ -631,7 +631,7 @@
             this.xvmMakePatchButton.Location = new System.Drawing.Point(835, 456);
             this.xvmMakePatchButton.Name = "xvmMakePatchButton";
             this.xvmMakePatchButton.Size = new System.Drawing.Size(95, 23);
-            this.xvmMakePatchButton.TabIndex = 26;
+            this.xvmMakePatchButton.TabIndex = 31;
             this.xvmMakePatchButton.Text = "make patch file";
             this.xvmMakePatchButton.UseVisualStyleBackColor = true;
             this.xvmMakePatchButton.Click += new System.EventHandler(this.xvmMakePatchButton_Click);
@@ -641,7 +641,7 @@
             this.xvmReplaceBox.Location = new System.Drawing.Point(716, 349);
             this.xvmReplaceBox.Name = "xvmReplaceBox";
             this.xvmReplaceBox.Size = new System.Drawing.Size(214, 100);
-            this.xvmReplaceBox.TabIndex = 23;
+            this.xvmReplaceBox.TabIndex = 29;
             this.xvmReplaceBox.Text = "";
             this.xvmReplaceBox.WordWrap = false;
             // 
@@ -678,7 +678,7 @@
             this.xvmArrayAddModeButton.Location = new System.Drawing.Point(62, 27);
             this.xvmArrayAddModeButton.Name = "xvmArrayAddModeButton";
             this.xvmArrayAddModeButton.Size = new System.Drawing.Size(72, 17);
-            this.xvmArrayAddModeButton.TabIndex = 4;
+            this.xvmArrayAddModeButton.TabIndex = 3;
             this.xvmArrayAddModeButton.Text = "array_add";
             this.xvmArrayAddModeButton.UseVisualStyleBackColor = true;
             this.xvmArrayAddModeButton.CheckedChanged += new System.EventHandler(this.xvm_modeToggle);
@@ -689,7 +689,7 @@
             this.xvmArrayClearModeButton.Location = new System.Drawing.Point(52, 10);
             this.xvmArrayClearModeButton.Name = "xvmArrayClearModeButton";
             this.xvmArrayClearModeButton.Size = new System.Drawing.Size(77, 17);
-            this.xvmArrayClearModeButton.TabIndex = 3;
+            this.xvmArrayClearModeButton.TabIndex = 1;
             this.xvmArrayClearModeButton.Text = "array_clear";
             this.xvmArrayClearModeButton.UseVisualStyleBackColor = true;
             this.xvmArrayClearModeButton.CheckedChanged += new System.EventHandler(this.xvm_modeToggle);
@@ -712,7 +712,7 @@
             this.xvmRemoveModeButton.Location = new System.Drawing.Point(3, 42);
             this.xvmRemoveModeButton.Name = "xvmRemoveModeButton";
             this.xvmRemoveModeButton.Size = new System.Drawing.Size(60, 17);
-            this.xvmRemoveModeButton.TabIndex = 2;
+            this.xvmRemoveModeButton.TabIndex = 4;
             this.xvmRemoveModeButton.Text = "remove";
             this.xvmRemoveModeButton.UseVisualStyleBackColor = true;
             this.xvmRemoveModeButton.CheckedChanged += new System.EventHandler(this.xvm_modeToggle);
@@ -723,7 +723,7 @@
             this.xvmEditModeButton.Location = new System.Drawing.Point(3, 27);
             this.xvmEditModeButton.Name = "xvmEditModeButton";
             this.xvmEditModeButton.Size = new System.Drawing.Size(42, 17);
-            this.xvmEditModeButton.TabIndex = 1;
+            this.xvmEditModeButton.TabIndex = 2;
             this.xvmEditModeButton.Text = "edit";
             this.xvmEditModeButton.UseVisualStyleBackColor = true;
             this.xvmEditModeButton.CheckedChanged += new System.EventHandler(this.xvm_modeToggle);
@@ -752,7 +752,7 @@
             this.xvmPatchRB.Location = new System.Drawing.Point(6, 19);
             this.xvmPatchRB.Name = "xvmPatchRB";
             this.xvmPatchRB.Size = new System.Drawing.Size(48, 17);
-            this.xvmPatchRB.TabIndex = 19;
+            this.xvmPatchRB.TabIndex = 0;
             this.xvmPatchRB.TabStop = true;
             this.xvmPatchRB.Text = "XVM";
             this.xvmPatchRB.UseVisualStyleBackColor = true;
@@ -763,7 +763,7 @@
             this.PMODPatchRB.Location = new System.Drawing.Point(6, 37);
             this.PMODPatchRB.Name = "PMODPatchRB";
             this.PMODPatchRB.Size = new System.Drawing.Size(57, 17);
-            this.PMODPatchRB.TabIndex = 20;
+            this.PMODPatchRB.TabIndex = 1;
             this.PMODPatchRB.Text = "PMOD";
             this.PMODPatchRB.UseVisualStyleBackColor = true;
             // 
@@ -799,7 +799,7 @@
             this.JSONArrayAdd.Location = new System.Drawing.Point(3, 30);
             this.JSONArrayAdd.Name = "JSONArrayAdd";
             this.JSONArrayAdd.Size = new System.Drawing.Size(68, 17);
-            this.JSONArrayAdd.TabIndex = 4;
+            this.JSONArrayAdd.TabIndex = 1;
             this.JSONArrayAdd.Text = "ArrayAdd";
             this.JSONArrayAdd.UseVisualStyleBackColor = true;
             this.JSONArrayAdd.CheckedChanged += new System.EventHandler(this.JSONMode_CheckedChanged);
@@ -810,7 +810,7 @@
             this.JSONArrayRemove.Location = new System.Drawing.Point(3, 45);
             this.JSONArrayRemove.Name = "JSONArrayRemove";
             this.JSONArrayRemove.Size = new System.Drawing.Size(89, 17);
-            this.JSONArrayRemove.TabIndex = 3;
+            this.JSONArrayRemove.TabIndex = 2;
             this.JSONArrayRemove.Text = "ArrayRemove";
             this.JSONArrayRemove.UseVisualStyleBackColor = true;
             this.JSONArrayRemove.CheckedChanged += new System.EventHandler(this.JSONMode_CheckedChanged);
@@ -821,7 +821,7 @@
             this.JSONRemove.Location = new System.Drawing.Point(93, 30);
             this.JSONRemove.Name = "JSONRemove";
             this.JSONRemove.Size = new System.Drawing.Size(65, 17);
-            this.JSONRemove.TabIndex = 2;
+            this.JSONRemove.TabIndex = 4;
             this.JSONRemove.Text = "Remove";
             this.JSONRemove.UseVisualStyleBackColor = true;
             this.JSONRemove.CheckedChanged += new System.EventHandler(this.JSONMode_CheckedChanged);
@@ -832,7 +832,7 @@
             this.JSONAdd.Location = new System.Drawing.Point(93, 15);
             this.JSONAdd.Name = "JSONAdd";
             this.JSONAdd.Size = new System.Drawing.Size(44, 17);
-            this.JSONAdd.TabIndex = 1;
+            this.JSONAdd.TabIndex = 3;
             this.JSONAdd.Text = "Add";
             this.JSONAdd.UseVisualStyleBackColor = true;
             this.JSONAdd.CheckedChanged += new System.EventHandler(this.JSONMode_CheckedChanged);
@@ -877,7 +877,7 @@
             this.JSONRegressionTesting.Location = new System.Drawing.Point(152, 13);
             this.JSONRegressionTesting.Name = "JSONRegressionTesting";
             this.JSONRegressionTesting.Size = new System.Drawing.Size(125, 23);
-            this.JSONRegressionTesting.TabIndex = 26;
+            this.JSONRegressionTesting.TabIndex = 1;
             this.JSONRegressionTesting.Text = "json regression testing";
             this.JSONRegressionTesting.UseVisualStyleBackColor = true;
             this.JSONRegressionTesting.Click += new System.EventHandler(this.JSONRegressionTesting_Click);
@@ -901,7 +901,7 @@
             this.regexPatchPathCB.Location = new System.Drawing.Point(12, 116);
             this.regexPatchPathCB.Name = "regexPatchPathCB";
             this.regexPatchPathCB.Size = new System.Drawing.Size(212, 21);
-            this.regexPatchPathCB.TabIndex = 31;
+            this.regexPatchPathCB.TabIndex = 1;
             // 
             // xmlPatchPathLabel
             // 
@@ -922,7 +922,7 @@
             this.xmlPatchPathCB.Location = new System.Drawing.Point(250, 116);
             this.xmlPatchPathCB.Name = "xmlPatchPathCB";
             this.xmlPatchPathCB.Size = new System.Drawing.Size(212, 21);
-            this.xmlPatchPathCB.TabIndex = 31;
+            this.xmlPatchPathCB.TabIndex = 9;
             // 
             // jsonPatchPathLabel
             // 
@@ -943,7 +943,7 @@
             this.jsonPatchPathCB.Location = new System.Drawing.Point(483, 116);
             this.jsonPatchPathCB.Name = "jsonPatchPathCB";
             this.jsonPatchPathCB.Size = new System.Drawing.Size(212, 21);
-            this.jsonPatchPathCB.TabIndex = 31;
+            this.jsonPatchPathCB.TabIndex = 17;
             // 
             // xvmPatchPathLabel
             // 
@@ -964,7 +964,7 @@
             this.xvmPatchPathCB.Location = new System.Drawing.Point(717, 116);
             this.xvmPatchPathCB.Name = "xvmPatchPathCB";
             this.xvmPatchPathCB.Size = new System.Drawing.Size(212, 21);
-            this.xvmPatchPathCB.TabIndex = 31;
+            this.xvmPatchPathCB.TabIndex = 25;
             // 
             // PatchTester
             // 
