@@ -49,8 +49,6 @@ namespace RelhaxModpack
         //list of all current dependencies
         private List<Dependency> currentDependencies;
         private List<LogicalDependency> currentLogicalDependencies;
-        //DeveloperSelections namelist
-        public static List<DeveloperSelections> developerSelections = new List<DeveloperSelections>();
         //list of patches
         private List<Patch> patchList;
         //list of all needed files from the current loaded modInfo file

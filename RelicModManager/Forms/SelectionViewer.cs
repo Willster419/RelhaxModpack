@@ -35,7 +35,7 @@ namespace RelhaxModpack
             b.Location = new Point(6, (SelectConfigPanel.Controls.Count * (b.Size.Height-3)));
             SelectConfigPanel.Controls.Add(b);
 
-            foreach (var node in MainWindow.developerSelections)
+            foreach (var node in XMLUtils.developerSelections)
             {
                 SelectionRadioButton bb = new SelectionRadioButton
                 {

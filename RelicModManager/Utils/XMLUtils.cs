@@ -13,6 +13,8 @@ namespace RelhaxModpack
     public static class XMLUtils
     {
         public static int TotalModConfigComponents = 0;
+        //DeveloperSelections namelist
+        public static List<DeveloperSelections> developerSelections = new List<DeveloperSelections>();
         //check to make sure an xml file is valid
         public static bool IsValidXml(string xmlString)
         {
@@ -61,7 +63,7 @@ namespace RelhaxModpack
         public static void CreateModStructure(string databaseURL, List<Dependency> globalDependencies, List<Dependency> dependencies,
             List<LogicalDependency> logicalDependencies, List<Category> parsedCatagoryList)
         {
-            MainWindow.developerSelections.Clear();
+            developerSelections.Clear();
             TotalModConfigComponents = 0;
             XDocument doc = null;
             try
@@ -1631,7 +1633,7 @@ namespace RelhaxModpack
                     displayName = x.Attribute("displayName").Value,
                     date = x.Attribute("date").Value
                 };
-                MainWindow.developerSelections.Add(d);
+                developerSelections.Add(d);
             }
         }
         //returns the md5 hash of the file based on the input file string location. It is searching in the database first. If not found in database or the filetime is not the same, it will create a new Hash and update the database
