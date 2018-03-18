@@ -141,10 +141,13 @@ namespace RelhaxModpack
 
         private void Bg_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            if(Program.Version == Program.ProgramVersion.Alpha)
+                Logging.Manager("DEBUG: ON Bg_RunWorkerCompleted");
             lock (lockerInstaller)
             {
                 NumExtractorsCompleted++;
                 args.ParrentProcessed++;
+                Logging.Manager("Number of threads completed: " + NumExtractorsCompleted);
                 InstallWorker.ReportProgress(0);
             }
         }
@@ -802,11 +805,8 @@ namespace RelhaxModpack
                         {
                             if(Settings.InstantExtraction)
                             {
-                                lock (lockerInstaller)
-                                {
-                                    while (!d.ReadyForInstall)
-                                        System.Threading.Thread.Sleep(20);
-                                }
+                                while (!d.ReadyForInstall)
+                                    System.Threading.Thread.Sleep(20);
                             }
                             Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), null,-3,ref patchCounter);
                             patchCounter++;
@@ -837,11 +837,8 @@ namespace RelhaxModpack
                         {
                             if (Settings.InstantExtraction)
                             {
-                                lock (lockerInstaller)
-                                {
-                                    while (!d.ReadyForInstall)
-                                        System.Threading.Thread.Sleep(20);
-                                }
+                                while (!d.ReadyForInstall)
+                                    System.Threading.Thread.Sleep(20);
                             }
                             Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), null,-2,ref patchCounter);
                             patchCounter++;
@@ -874,11 +871,8 @@ namespace RelhaxModpack
                         {
                             if (Settings.InstantExtraction)
                             {
-                                lock (lockerInstaller)
-                                {
-                                    while (!d.ReadyForInstall)
-                                        System.Threading.Thread.Sleep(20);
-                                }
+                                while (!d.ReadyForInstall)
+                                    System.Threading.Thread.Sleep(20);
                             }
                             Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), null,-1,ref patchCounter);
                             patchCounter++;
@@ -918,16 +912,13 @@ namespace RelhaxModpack
                             StringBuilder sb = new StringBuilder();
                             object[] args = new object[] { sb, ig.Categories };
                             bg.RunWorkerAsync(args);
-                            Logging.Manager("BackgroundWorker started for Installgroup. Number=" + igCounter++);
+                            //Logging.Manager("BackgroundWorker started for Installgroup. Number=" + igCounter++);
+                            Logging.Manager(string.Format("BackgroundWorker started for Installgroup={0}, Categories={1}",igCounter++, string.Join(", ",ig.Categories)));
                         }
                     }
-                    //lock to make the installer wait for all threads to complete
-                    lock (lockerInstaller)
+                    while (NumExtractorsCompleted != InstallGroups.Count)
                     {
-                        while (NumExtractorsCompleted != InstallGroups.Count)
-                        {
-                            System.Threading.Thread.Sleep(10);
-                        }
+                        System.Threading.Thread.Sleep(10);
                     }
                 }
                 else
@@ -944,11 +935,8 @@ namespace RelhaxModpack
                             {
                                 if (Settings.InstantExtraction)
                                 {
-                                    lock (lockerInstaller)
-                                    {
-                                        while (!dbo.ReadyForInstall)
-                                            System.Threading.Thread.Sleep(20);
-                                    }
+                                    while (!dbo.ReadyForInstall)
+                                        System.Threading.Thread.Sleep(20);
                                 }
                                 int wtf = 0;
                                 Unzip(Path.Combine(downloadedFilesDir, dbo.ZipFile), null,0, ref wtf);
@@ -982,11 +970,8 @@ namespace RelhaxModpack
                         {
                             if (Settings.InstantExtraction)
                             {
-                                lock (lockerInstaller)
-                                {
-                                    while (!d.ReadyForInstall)
-                                        System.Threading.Thread.Sleep(20);
-                                }
+                                while (!d.ReadyForInstall)
+                                    System.Threading.Thread.Sleep(20);
                             }
                             Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), null,TotalCategories,ref patchCounter);
                             patchCounter++;
@@ -1077,11 +1062,8 @@ namespace RelhaxModpack
                             sb.Append("/*  " + m.ZipFile + "  */\n");
                             if (Settings.InstantExtraction)
                             {
-                                lock (lockerInstaller)
-                                {
-                                    while (!m.ReadyForInstall)
-                                        System.Threading.Thread.Sleep(20);
-                                }
+                                while (!m.ReadyForInstall)
+                                    System.Threading.Thread.Sleep(20);
                             }
                             Logging.Manager("Extraction started  of file " + m.ZipFile + ", superPatchNum=" + superPatchNum);
                             //https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/ref
@@ -1110,11 +1092,8 @@ namespace RelhaxModpack
                         sb.Append("/*  " + config.ZipFile + "  */\n");
                         if (Settings.InstantExtraction)
                         {
-                            lock (lockerInstaller)
-                            {
-                                while (!config.ReadyForInstall)
-                                    System.Threading.Thread.Sleep(20);
-                            }
+                            while (!config.ReadyForInstall)
+                                System.Threading.Thread.Sleep(20);
                         }
                         Logging.Manager("Extraction started  of file " + config.ZipFile + ", superPatchNum=" + superPatchNum);
                         Unzip(Path.Combine(downloadedFilesDir, config.ZipFile), sb, config.ParentCategory.InstallGroup, ref superPatchNum);
@@ -1632,12 +1611,9 @@ namespace RelhaxModpack
                             Utils.ExceptionLog(string.Format("ExtractAtlases", "atlasFile: {0}", Path.Combine(a.atlasSaveDirectory, a.atlasFile)), ex);
                         }
                     }
-                    lock (lockerInstaller)
+                    while (NumAtlasCreatorsComplete < atlasesList.Count)
                     {
-                        while (NumAtlasCreatorsComplete < atlasesList.Count)
-                        {
-                            System.Threading.Thread.Sleep(20);
-                        }
+                        System.Threading.Thread.Sleep(20);
                     }
                     sw.Stop();
                     Logging.Manager("All atlas files created in (msec): " + sw.ElapsedMilliseconds);
