@@ -1658,7 +1658,7 @@ namespace RelhaxModpack
             atlasesArgs.Images = ParseFilesForAtlasList(a.TextureList, fl.ToArray(), a.atlasFile);
             //atlasesArgs.Images = a.TextureList;
             AtlasesCreator.Program.Run(atlasesArgs);
-            lock (a)
+            lock (lockerInstaller)
             {
                 NumAtlasCreatorsComplete++;
                 args.ParrentProcessed++;
