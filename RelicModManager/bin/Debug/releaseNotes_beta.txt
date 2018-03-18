@@ -1,3 +1,9 @@
+Version 28.0.1 (03/18/2018)
+https://www.virustotal.com/#/file/b3ffc455f70215c5b3e8c114fdc1d0d1a2a53ab372c8ded69a0b50e17ead34e9/detection
+-Fixed bugs with the multicore extraction
+-Fixed possible bugs with the instant extraction
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Wargaming is releasing a major application version? So can we! May we present to you, version 28!!! (03/17/18)
   This version is packed with new features and cleaner code!
 

@@ -455,7 +455,7 @@ namespace RelhaxModpack
                 installUpdate.StartInfo = info;
                 installUpdate.Start();
             }
-            catch (Win32Exception e3)
+            catch (Exception e3)
             {
                 Utils.ExceptionLog("updater_DownloadFileCompleted", "could not start new application version", e3);
                 MessageBox.Show(Translations.getTranslatedString("cantStartNewApp") + newExeName);
