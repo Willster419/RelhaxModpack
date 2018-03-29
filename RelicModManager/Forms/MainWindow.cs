@@ -1119,6 +1119,12 @@ namespace RelhaxModpack
                     bool addIt = true;
                     foreach (DatabaseLogic dl in ld.DatabasePackageLogic)
                     {
+                        if(!dl.Enabled)
+                        {
+                            //if the package that trigered it is not enabled, then do not add the logicalDependnecy
+                            addIt = false;
+                            break;
+                        }
                         if (dl.NotFlag)
                         {
                             //package must NOT be checked for it to be included
