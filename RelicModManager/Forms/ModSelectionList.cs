@@ -1529,13 +1529,13 @@ namespace RelhaxModpack
                     return;
             if(sender is IPackageUIComponent ipc)
             {
-                //fix for when dropdown option is on the screen and no packages are in it
-                if (ipc.Package == null)
-                    return;
                 SelectablePackage spc = ipc.Package;
                 if (ipc is RelhaxFormComboBox cb1)
                 {
                     ComboBoxItem cbi = (ComboBoxItem)cb1.SelectedItem;
+                    //fix for when dropdown option is on the screen and no packages are in it
+                    if (cbi == null)
+                        return;
                     spc = cbi.Package;
                 }
                 else if (ipc is RelhaxWPFComboBox cb2)
