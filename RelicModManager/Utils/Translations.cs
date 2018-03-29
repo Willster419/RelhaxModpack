@@ -385,7 +385,7 @@ namespace RelhaxModpack
             //Componet: SuperExtractionCB
             //
             english.Add("SuperExtractionCB", "Multicore extraction mode (experimental)");
-            german.Add("SuperExtractionCB", "TODO");
+            german.Add("SuperExtractionCB", "Mehrkern Extraktion (experimentell)");
             polish.Add("SuperExtractionCB", "Wsparcie wielu rdzeni (eksperymentalne)");
             french.Add("SuperExtractionCB", "Mode d'extraction multicoeur (expérimental)");
 
