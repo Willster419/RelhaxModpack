@@ -20,8 +20,7 @@ namespace RelhaxModpack
         StringBuilder globalDepsSB = new StringBuilder();
         StringBuilder dependenciesSB = new StringBuilder();
         StringBuilder logicalDependenciesSB = new StringBuilder();
-        StringBuilder modsSB = new StringBuilder();
-        StringBuilder configsSB = new StringBuilder();
+        StringBuilder packagesSB = new StringBuilder();
         StringBuilder filesNotFoundSB = new StringBuilder();
         string serverInfo = "creating the manageInfo.dat file, containing the files: " +
             "\nmanager_version.xml\n" +
@@ -81,8 +80,7 @@ namespace RelhaxModpack
             globalDepsSB.Clear();
             dependenciesSB.Clear();
             logicalDependenciesSB.Clear();
-            modsSB.Clear();
-            configsSB.Clear();
+            packagesSB.Clear();
             //load database
             globalDependencies = new List<Dependency>();
             parsedCatagoryList = new List<Category>();
@@ -103,8 +101,7 @@ namespace RelhaxModpack
             globalDepsSB.Append("\nGlobal Dependencies updated:\n");
             dependenciesSB.Append("\nDependencies updated:\n");
             logicalDependenciesSB.Append("\nLogical Dependencies updated:\n");
-            modsSB.Append("\nMods updated:\n");
-            configsSB.Append("\nConfigs updated:\n");
+            packagesSB.Append("\nPackages updated:\n");
             string hash;
             //foreach zip file name
             foreach (Dependency d in globalDependencies)
@@ -194,7 +191,7 @@ namespace RelhaxModpack
 
                             if (!hash.Equals("f"))
                             {
-                                modsSB.Append(m.ZipFile + "\n");
+                                packagesSB.Append(m.ZipFile + "\n");
                             }
                         }
                         if (hash.Equals("f"))
@@ -213,7 +210,7 @@ namespace RelhaxModpack
             //save config file
             XMLUtils.SaveDatabase(databaseLocationTextBox.Text, Settings.TanksVersion, Settings.TanksOnlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             //MessageBox.Show(filesNotFoundSB.ToString() + globalDepsSB.ToString() + dependenciesSB.ToString() + logicalDependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
-            OnlineScriptOutput.Text = filesNotFoundSB.ToString() + globalDepsSB.ToString() + dependenciesSB.ToString() + logicalDependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString();
+            OnlineScriptOutput.Text = filesNotFoundSB.ToString() + globalDepsSB.ToString() + dependenciesSB.ToString() + logicalDependenciesSB.ToString() + packagesSB.ToString();
             Program.databaseUpdateOnline = false;
         }
 
@@ -237,7 +234,7 @@ namespace RelhaxModpack
                             cat.CRC = hash;
                             if (!hash.Equals("f"))
                             {
-                                configsSB.Append(cat.ZipFile + "\n");
+                                packagesSB.Append(cat.ZipFile + "\n");
                             }
                         }
                     }
@@ -333,8 +330,7 @@ namespace RelhaxModpack
                 return;
             globalDepsSB.Clear();
             dependenciesSB.Clear();
-            modsSB.Clear();
-            configsSB.Clear();
+            packagesSB.Clear();
             //load database
             globalDependencies = new List<Dependency>();
             parsedCatagoryList = new List<Category>();
@@ -354,8 +350,7 @@ namespace RelhaxModpack
             Application.DoEvents();
             globalDepsSB.Append("Global Dependencies updated:\n");
             dependenciesSB.Append("Dependencies updated:\n");
-            modsSB.Append("Mods updated:\n");
-            configsSB.Append("Configs updated:\n");
+            packagesSB.Append("Packages updated:\n");
             //foreach zip file name
             foreach (Dependency d in globalDependencies)
             {
@@ -395,7 +390,7 @@ namespace RelhaxModpack
                         {
                             m.CRC = Utils.CreateMd5Hash(addZipsDialog.FileNames[index]);
 
-                            modsSB.Append(m.ZipFile + "\n");
+                            packagesSB.Append(m.ZipFile + "\n");
                         }
                     }
                     if (m.Packages.Count > 0)
@@ -409,7 +404,7 @@ namespace RelhaxModpack
             //save config file
             XMLUtils.SaveDatabase(databaseLocationTextBox.Text, Settings.TanksVersion, Settings.TanksOnlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             //MessageBox.Show(globalDepsSB.ToString() + dependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
-            OnlineScriptOutput.Text = globalDepsSB.ToString() + dependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString();
+            OnlineScriptOutput.Text = globalDepsSB.ToString() + dependenciesSB.ToString() + packagesSB.ToString();
         }
 
         private void processConfigsCRCUpdate_old(List<SelectablePackage> cfgList)
@@ -424,7 +419,7 @@ namespace RelhaxModpack
                     {
                         cat.CRC = Utils.CreateMd5Hash(addZipsDialog.FileNames[cindex]);
 
-                        configsSB.Append(cat.ZipFile + "\n");
+                        packagesSB.Append(cat.ZipFile + "\n");
                     }
                 }
                 if (cat.Packages.Count > 0)
