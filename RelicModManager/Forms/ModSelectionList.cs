@@ -413,7 +413,7 @@ namespace RelhaxModpack
                     {
                         if (pw != null)
                         {
-                            pw.loadingDescBox.Text = string.Format("{0} {1}", Translations.getTranslatedString("checkingCache"), m.Name);
+                            pw.loadingDescBox.Text = string.Format("{0} {1}", Translations.getTranslatedString("checkingCache"), Utils.ReplaceMacro(m.Name, "version", m.Version));
                             pw.SetProgress(Prog++);
                             Application.DoEvents();
                         }
@@ -432,7 +432,7 @@ namespace RelhaxModpack
                 {
                     if (pw != null)
                     {
-                        pw.loadingDescBox.Text = string.Format("{0} {1}", Translations.getTranslatedString("loading"), m.Name);
+                        pw.loadingDescBox.Text = string.Format("{0} {1}", Translations.getTranslatedString("loading"), Utils.ReplaceMacro(m.Name, "version", m.Version));
                         pw.SetProgress(Prog++);
                         Application.DoEvents();
                     }
@@ -1670,7 +1670,7 @@ namespace RelhaxModpack
             //create saved config xml layout
             XDocument doc = new XDocument(
                 new XDeclaration("1.0", "utf-8", "yes"),
-                new XElement("mods", new XAttribute("ver", Settings.ConfigFileVersion), new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))));
+                new XElement("mods", new XAttribute("ver", Settings.ConfigFileVersion), new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")), new XAttribute("dbVersion", Program.betaDatabase ? "beta" : (String)Settings.DatabaseVersion)));
 
             //relhax mods root
             doc.Element("mods").Add(new XElement("relhaxMods"));

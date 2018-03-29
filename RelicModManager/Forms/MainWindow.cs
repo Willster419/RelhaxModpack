@@ -829,7 +829,7 @@ namespace RelhaxModpack
                     if(wotv.ShowDialog() != DialogResult.OK)
                     {
                         if (Program.Version != Program.ProgramVersion.Stable)
-                            Logging.Manager("DEBUG: user cancled export mode");
+                            Logging.Manager("DEBUG: user canceled export mode");
                         ToggleUIButtons(true);
                         return;
                     }
