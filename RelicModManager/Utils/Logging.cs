@@ -159,7 +159,7 @@ namespace RelhaxModpack
 
                 Byte[] bytesSavedFromEndOfOldLog = null;
 
-                if (fi.Length > iMaxLogLength* multi) // if the log file length is already too long
+                if (fi.Length > iMaxLogLength * multi) // if the log file length is already too long
                 {
                     using (BinaryReader br = new BinaryReader(File.Open(strFile, FileMode.Open)))
                     {
@@ -168,6 +168,16 @@ namespace RelhaxModpack
 
                         // Read what you want to save and hang onto it.
                         bytesSavedFromEndOfOldLog = br.ReadBytes((-1 * iTrimmedLogLength * multi));
+                        // search the byte array downwards ...
+                        for (int position = 0; position < bytesSavedFromEndOfOldLog.Length-1; position++)
+                        {
+                            // ... to find the first CR LF bytes
+                            if ((bytesSavedFromEndOfOldLog[position] == 0x0d) && (bytesSavedFromEndOfOldLog[position+1] == 0x0a))
+                            {
+                                // set the start of the new logfile to a regular starting logline
+                                bytesSavedFromEndOfOldLog = bytesSavedFromEndOfOldLog.Skip(position+2).Take(bytesSavedFromEndOfOldLog.Count() - 1).ToArray();
+                            }
+                        }
                     }
                 }
                 else
