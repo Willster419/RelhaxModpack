@@ -307,7 +307,7 @@ namespace RelhaxModpack
                 }
             }
             ApplInternalProperties();
-            Logging.Manager("Settings loaded sucessfully");
+            Logging.Manager("Settings loaded successfully");
         }
         //saves settings to xml file
         public static void saveSettings()
@@ -422,7 +422,7 @@ namespace RelhaxModpack
             settingsHolder.AppendChild(xPreviewHeight);
 
             doc.Save(SettingsXmlFile);
-            Logging.Manager("Settings saved sucessfully");
+            Logging.Manager("Settings saved successfully");
         }
         //returns the loading image for the picture viewer, based on
         //which loading image the user specified

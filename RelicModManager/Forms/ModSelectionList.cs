@@ -2137,7 +2137,7 @@ namespace RelhaxModpack
             }
             //actually load the config
             LoadConfig(LoadMode == LoadConfigMode.FromButton, filePathArray, ParsedCatagoryList, UserMods);
-            //if it was from a button, tell the user it loaded the config sucessfully
+            //if it was from a button, tell the user it loaded the config successfully
             if (LoadMode == LoadConfigMode.FromButton)
             {
                 if (LoadMode == LoadConfigMode.FromButton)
