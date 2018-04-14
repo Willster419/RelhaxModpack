@@ -176,6 +176,7 @@ namespace RelhaxModpack
                             {
                                 // set the start of the new logfile to a regular starting logline
                                 bytesSavedFromEndOfOldLog = bytesSavedFromEndOfOldLog.Skip(position+2).Take(bytesSavedFromEndOfOldLog.Count() - 1).ToArray();
+                                break;
                             }
                         }
                     }
