@@ -1094,7 +1094,7 @@
             this.CleanUninstallModeRB.Size = new System.Drawing.Size(128, 16);
             this.CleanUninstallModeRB.TabIndex = 1;
             this.CleanUninstallModeRB.TabStop = true;
-            this.CleanUninstallModeRB.Text = "Clean";
+            this.CleanUninstallModeRB.Text = "Quick";
             this.CleanUninstallModeRB.UseVisualStyleBackColor = true;
             this.CleanUninstallModeRB.CheckedChanged += new System.EventHandler(this.CleanUninstallModeRB_CheckedChanged);
             this.CleanUninstallModeRB.MouseEnter += new System.EventHandler(this.CleanUninstallModeRB_MouseEnter);
