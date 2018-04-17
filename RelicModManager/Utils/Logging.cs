@@ -39,7 +39,7 @@ namespace RelhaxModpack
                     }
                     //if the info text is containing any linefeed/carrieage return, intend the next line with 26 space char
                     s = s.Replace("\n", "\n" + string.Concat(Enumerable.Repeat(" ", 26)));
-                    s = string.Format("{0:yyyy-MM-dd HH:mm:ss.fff}   {1}\n", DateTime.Now, s);
+                    s = string.Format("{0:yyyy-MM-dd HH:mm:ss.fff}   {1}\r\n", DateTime.Now, s);
                     mfs.Write(Encoding.UTF8.GetBytes(s), 0, Encoding.UTF8.GetByteCount(s));
                     mfs.Flush();        // to get every entry directly is important
                 }
@@ -72,7 +72,7 @@ namespace RelhaxModpack
                         ifs.Write(Encoding.UTF8.GetBytes(databaseHeader), 0, Encoding.UTF8.GetByteCount(databaseHeader));
                         ifs.Write(Encoding.UTF8.GetBytes(dateTimeHeader), 0, Encoding.UTF8.GetByteCount(dateTimeHeader));
                     }
-                    s = string.Format("{0}\n", s);
+                    s = string.Format("{0}\r\n", s);
                     ifs.Write(Encoding.UTF8.GetBytes(s), 0, Encoding.UTF8.GetByteCount(s));
                 }
             }
