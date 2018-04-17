@@ -211,7 +211,6 @@ namespace RelhaxModpack
             // expandAllButton
             // 
             this.expandAllButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.expandAllButton.AutoSize = true;
             this.expandAllButton.Location = new System.Drawing.Point(629, 12);
             this.expandAllButton.Name = "expandAllButton";
             this.expandAllButton.Size = new System.Drawing.Size(149, 34);
@@ -223,7 +222,6 @@ namespace RelhaxModpack
             // colapseAllButton
             // 
             this.colapseAllButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.colapseAllButton.AutoSize = true;
             this.colapseAllButton.Location = new System.Drawing.Point(474, 12);
             this.colapseAllButton.Name = "colapseAllButton";
             this.colapseAllButton.Size = new System.Drawing.Size(149, 34);
