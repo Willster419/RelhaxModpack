@@ -1643,20 +1643,10 @@ namespace RelhaxModpack
                         childProgressBar.Value = e.ChildProcessed;
                     message = string.Format("{0} {1} {2} {3}\n {4} {5} {6} {7}", Translations.getTranslatedString("AtlasCreating"), e.ParrentProcessed, Translations.getTranslatedString("of"), e.ParrentTotalToProcess, e.ChildProcessed,
                         Translations.getTranslatedString("of"), e.ChildTotalToProcess, Translations.getTranslatedString("stepsComplete"));//AtlasCreating, stepsComplete
-                    /*
-                    if (e.ChildTotalToProcess == -1)
-                    {
-                        childProgressBar.Value = childProgressBar.Minimum;
-                        message = string.Format("{0}: {1}\n\n{2} {3}", Translations.getTranslatedString("AtlasCreating"), e.currentFile, e.ChildProcessed, Translations.getTranslatedString("AtlasOptimations"));
-                    }
-                    else
-                    {
-                        childProgressBar.Maximum = e.ChildTotalToProcess;
-                        if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
-                            childProgressBar.Value = e.ChildProcessed;
-                        message = string.Format("{0}: {1}\n{2}: {3}\n{4} {5} {6}", Translations.getTranslatedString("AtlasCreating"), e.currentFile, Translations.getTranslatedString("AtlasTexture"), e.currentSubFile, e.ChildProcessed, Translations.getTranslatedString("of"), e.ChildTotalToProcess);
-                    }
-                    */
+                    break;
+                case InstallerEventArgs.InstallProgress.CreateShortcuts:
+                    //don't bother showing anything cause it's not noticable...
+                    totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.CreateShortcuts;
                     break;
                 case InstallerEventArgs.InstallProgress.InstallUserFonts:
                     totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.InstallFonts;
@@ -1839,7 +1829,7 @@ namespace RelhaxModpack
                     case (Settings.UninstallModes.Smart):
                         SmartUninstallModeRB.Checked = true;
                         break;
-                    case (Settings.UninstallModes.Clean):
+                    case (Settings.UninstallModes.Quick):
                         CleanUninstallModeRB.Checked = true;
                         break;
                 }
@@ -2164,12 +2154,6 @@ namespace RelhaxModpack
         {
             if (installRelhaxMod.Enabled)
                 downloadProgress.Text = Translations.getTranslatedString("saveUserDataDesc");
-        }
-
-        private void cleanUninstallCB_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("cleanUninstallDescription");
         }
 
         private void disableColorsCB_MouseEnter(object sender, EventArgs e)
@@ -2642,7 +2626,7 @@ namespace RelhaxModpack
         private void CleanUninstallModeRB_CheckedChanged(object sender, EventArgs e)
         {
             if (CleanUninstallModeRB.Checked)
-                Settings.UninstallMode = Settings.UninstallModes.Clean;
+                Settings.UninstallMode = Settings.UninstallModes.Quick;
         }
 
         private void ExportModeCB_CheckedChanged(object sender, EventArgs e)

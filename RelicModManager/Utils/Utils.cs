@@ -1062,7 +1062,7 @@ namespace RelhaxModpack
         public static void CreateShortcut(string shortcutTarget, string shortcutName, bool create, bool log)
         {
             string modifiedName = Path.GetFileNameWithoutExtension(shortcutName) + ".lnk";
-            string desktopPath = Utils.ReplaceDirectorySeparatorChar(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), modifiedName));
+            string desktopPath = ReplaceDirectorySeparatorChar(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), modifiedName));
             if (create)
             {
                 try
@@ -1076,16 +1076,19 @@ namespace RelhaxModpack
                         if(!shortcutTarget.Equals(link.TargetPath))
                         {
                             //needs update
+                            Logging.Manager("shortcut already exists but target is wrong, updating");
                             link.TargetPath = shortcutTarget;
                             link.Save();
                         }
                         else
                         {
                             //no update needed
+                            Logging.Manager("shortcut already exists and target is right, ignoring");
                         }
                     }
                     else
                     {
+                        Logging.Manager(string.Format("shortcut {0} does not exist, creating",desktopPath));
                         //file does not exist, needs to be created
                         IShellLink link = (IShellLink)new ShellLink();
                         // setup shortcut information

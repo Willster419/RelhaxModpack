@@ -838,13 +838,6 @@ namespace RelhaxModpack
 
             //Componet: 
             //
-            english.Add("cleanUninstallDescription", "Selected - All mods will be erased\nNot Selected - Only Modpack installed mods will be erased");
-            german.Add("cleanUninstallDescription", "Ausgewählt - Alle Mods werden gelöscht\nNicht ausgewählt - Nur Mods, die vom Modpack installiert wurden, werden gelöscht");
-            polish.Add("cleanUninstallDescription", "Zaznaczone - Wszystkie mody zostaną usunięte\nNie zaznaczone - Tylko zainstalowane mody z paczki zostaną usunięte");
-            french.Add("cleanUninstallDescription", "Sélectionné - Tout les mods vont être supprimé\nNon sélectionné - Seulement les mods installé par le modpack vont être supprimé");
-
-            //Componet: 
-            //
             english.Add("darkUIDesc", "Toggle the DarkUI mode. Usefull for working with the modpack at night.");
             german.Add("darkUIDesc", "Auf dunklen UI Modus umschalten. Nützlich für die Arbeit mit dem Modpack in der Nacht.");
             polish.Add("darkUIDesc", "Zmień interfejs na ciemny. Przydatneprzy pracy z paczką w nocy.");
@@ -1149,22 +1142,17 @@ namespace RelhaxModpack
 
             //Component: SmartUninstallModeRBExplanation
             //
-            english.Add("SmartUninstallModeRBExplanation", "Smart Uninstall will remove files installed only by the relhax modpack, including user mods. Use this is you have files you" +
-                " installed other than just this modpack.");
-            german.Add("SmartUninstallModeRBExplanation", "Intelligentes Deinstallieren entfernt NUR die Dateien, die durch Relhax Modpack installiert wurden. Verwende dies, wenn du noch" +
-                " zusätzliche Dateien installiert hast und diese erhalten willst.");
-            polish.Add("SmartUninstallModeRBExplanation", "Sprytna deinstalacja usunie tylko pliki zainstalowan przez RelHax Modpack. Użyj tego trybu, jeśli zainstalowałeś również inne paczki.");
-            french.Add("SmartUninstallModeRBExplanation", "Smart Uninstall supprimera les fichiers installés uniquement par le modpack relhax, y compris les mods utilisateur. Utilisez ceci" +
-                " est vous avez des fichiers que vous avez installés autre que juste ce modpack.");
+            english.Add("SmartUninstallModeRBExplanation", "Smart Uninstall will remove all files installed by the modpack, including shortcuts and appdata cache files.");
+            german.Add("SmartUninstallModeRBExplanation", "TODO");
+            polish.Add("SmartUninstallModeRBExplanation", "TODO");
+            french.Add("SmartUninstallModeRBExplanation", "TODO");
 
             //Component: CleanUninstallModeRBExplanation
             //
-            english.Add("CleanUninstallModeRBExplanation", "Quick Uninstall will remove all mod files in your installation. Use this if your mods are only installed by the relhax modpack.");
-            german.Add("CleanUninstallModeRBExplanation", "Schnelldeinstallation entfernt ALLE Mod-Dateien. Verwende dies, wenn du nur mit dem Relhax Modpack installiert hast und ggf. alle" +
-                " zusätzlich installierten Mods entfernen möchtest.");
-            polish.Add("CleanUninstallModeRBExplanation", "Szybka deinstalacja usunie wszystkie pliki modyfikacji. Użyj tego trybu, jeśli instalowałeś tylko paczkę RelHax Modpack.");
-            french.Add("CleanUninstallModeRBExplanation", "La désinstallation rapide supprimera tous les fichiers mod de votre installation. Utilisez-le si vos mods sont uniquement" +
-                " installés par le modpack relhax.");
+            english.Add("CleanUninstallModeRBExplanation", "Quick Uninstall will remove all mod files in the game's mod directories only. It does not remove modpack created shortcuts or appdata cache files.");
+            german.Add("CleanUninstallModeRBExplanation", "TODO");
+            polish.Add("CleanUninstallModeRBExplanation", "TODO");
+            french.Add("CleanUninstallModeRBExplanation", "TODO");
 
             //Component: ExportModeCBExplanation
             //Explaiing the export mode

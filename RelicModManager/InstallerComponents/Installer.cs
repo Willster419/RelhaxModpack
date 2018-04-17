@@ -188,7 +188,7 @@ namespace RelhaxModpack
                 case Settings.UninstallModes.Smart:
                     UninstallMods();
                     break;
-                case Settings.UninstallModes.Clean:
+                case Settings.UninstallModes.Quick:
                     DeleteMods();
                     break;
             }
@@ -242,7 +242,7 @@ namespace RelhaxModpack
                     case Settings.UninstallModes.Smart:
                         UninstallMods();
                         break;
-                    case Settings.UninstallModes.Clean:
+                    case Settings.UninstallModes.Quick:
                         DeleteMods();
                         break;
                 }
@@ -350,7 +350,7 @@ namespace RelhaxModpack
             ResetArgs();
             //Step 17: create shortCuts
             Logging.Manager("Installation CreateShortscuts");
-            args.InstalProgress = InstallerEventArgs.InstallProgress.CreateShortCuts;
+            args.InstalProgress = InstallerEventArgs.InstallProgress.CreateShortcuts;
             if (Settings.CreateShortcuts)
                 CreateShortCuts();
             else
@@ -359,7 +359,7 @@ namespace RelhaxModpack
             //Step 18: CheckDatabase and delete outdated or no more needed files
             Logging.Manager("Installation CheckDatabase");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CheckDatabase;
-            if ((!Program.testMode) && (!Program.betaDatabase))
+            if ((!Program.testMode) && (!Program.betaDatabase) && (Program.Version != Program.ProgramVersion.Alpha))
                 checkForOldZipFiles();
             else
                 Logging.Manager("... skipped");
@@ -1908,12 +1908,11 @@ namespace RelhaxModpack
                         string fileTarget = Utils.ReplaceDirectorySeparatorChar(Utils.ReplaceMacro(sc.Path));
                         if (File.Exists(fileTarget))
                         {
-                            Logging.Manager(string.Format("creating desktop ShortCut: {0} ({1})", fileTarget, sc.Name));
+                            Logging.Manager(string.Format("creating desktop Shortcut: {0} ({1})", fileTarget, sc.Name));
                             Utils.CreateShortcut(fileTarget, sc.Name, true, true);
                         }
                     }
                     args.ParrentProcessed++;
-                    InstallWorker.ReportProgress(0);
                 }
             }
             catch (Exception ex)

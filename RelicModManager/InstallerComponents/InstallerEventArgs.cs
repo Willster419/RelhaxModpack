@@ -28,7 +28,7 @@ namespace RelhaxModpack
             ExtractAtlases = 17,
             CreateAtlases = 18,//no longer used
             InstallUserFonts = 19,
-            CreateShortCuts = 20,
+            CreateShortcuts = 20,
             CheckDatabase = 21,
             CleanUp = 22,
             Done = 23,
