@@ -1,3 +1,29 @@
+In celebration of 1 year of Relhax, we hosting a special give-away event! All you need to do is complete a 30 second survey, and you are entered for a chance to win GOLD!
+PLEASE NOTE that we can only give gold to the NA and EU servers.
+
+Read more about it here:
+https://relhaxmodpack.com/1-year-anniversary/
+
+URL for the survey give-away:
+https://docs.google.com/forms/d/e/1FAIpQLSefe80k4ApfzuVcgbha2VnyJJpBN9XP5XBQo370ur3xj1wpUg/viewform
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Version 28.0.4 (04/17/2018)
+https://www.virustotal.com/#/file/f4e7b13d8e188fff7e604802a96acc43842394cf5d7d94ad82ffce0d20e86b6e/detection
+-Fixed bug with logicalDependency being installed when the triggering object is disabled
+-Fixed issue with expand all and collapse all buttons in mod selection list not wrapping the text for some languages
+-Renamed "clean" uninstall mode to "quick", since it is quick, while the other is clean/complete
+-Added database version to stored config files
+-Fixed naming of mods at initialisation time (shows the mod version instead of "{version}" macro text)
+-Fixed bug where in default view, the dropdown list would throw exception if nothing in the dropdown
+-In database editor, moved mod and config lists and update display to package
+-Fixed issues with truncation of the log file
+-Log files will now use carriage return (\r) as well as line feed (\n) so they look readable in notepad and wordpad
+-Corrected spelling in the log file
+-Updated a missing German Translation
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 28.0.1 (03/18/2018)
 https://www.virustotal.com/#/file/b3ffc455f70215c5b3e8c114fdc1d0d1a2a53ab372c8ded69a0b50e17ead34e9/detection
 -Fixed bugs with the multicore extraction

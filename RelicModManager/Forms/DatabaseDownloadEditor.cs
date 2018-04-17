@@ -22,10 +22,10 @@ namespace RelhaxModpack
             using (downloader = new WebClient())
             {
                 SaveDownloadDialog.FileName = ZipFileName;
-                SaveDownloadDialog.InitialDirectory = Path.Combine(Application.StartupPath, "RelHaxDownloads");
+                //SaveDownloadDialog.InitialDirectory = Path.Combine(Application.StartupPath, "RelHaxDownloads");
                 if (SaveDownloadDialog.ShowDialog() == DialogResult.Cancel)
                 {
-                    this.Close();
+                    Close();
                     return;
                 }
                 downloader.DownloadFileCompleted += Downloader_DownloadFileCompleted;
@@ -54,12 +54,12 @@ namespace RelhaxModpack
                     {
                         if (File.Exists(SaveLocation))
                             File.Delete(SaveLocation);
-                        this.Close();
+                        Close();
                     }
                     else
                     {
                         MessageBox.Show(e.Error.ToString());
-                        this.Close();
+                        Close();
                     }
                 }
                 else
@@ -89,7 +89,7 @@ namespace RelhaxModpack
 
         private void DatabaseDownloadEditor_FormClosed(object sender, FormClosedEventArgs e)
         {
-            this.Dispose();
+            Dispose();
         }
 
         private void CancelButton_Click(object sender, System.EventArgs e)
