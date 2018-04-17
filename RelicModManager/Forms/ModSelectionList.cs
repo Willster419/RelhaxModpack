@@ -413,7 +413,7 @@ namespace RelhaxModpack
                     {
                         if (pw != null)
                         {
-                            pw.loadingDescBox.Text = string.Format("{0} {1}", Translations.getTranslatedString("checkingCache"), Utils.ReplaceMacro(m.Name, "version", m.Version));
+                            pw.loadingDescBox.Text = string.Format("{0} {1}", Translations.getTranslatedString("checkingCache"), m.NameFormatted);
                             pw.SetProgress(Prog++);
                             Application.DoEvents();
                         }
@@ -432,7 +432,7 @@ namespace RelhaxModpack
                 {
                     if (pw != null)
                     {
-                        pw.loadingDescBox.Text = string.Format("{0} {1}", Translations.getTranslatedString("loading"), Utils.ReplaceMacro(m.Name, "version", m.Version));
+                        pw.loadingDescBox.Text = string.Format("{0} {1}", Translations.getTranslatedString("loading"), m.NameFormatted);
                         pw.SetProgress(Prog++);
                         Application.DoEvents();
                     }
