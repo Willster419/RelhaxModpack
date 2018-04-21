@@ -2,6 +2,7 @@
 using RelhaxModpack.UIComponents;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace RelhaxModpack
@@ -79,6 +80,25 @@ namespace RelhaxModpack
                         Parent.RelhaxWPFComboBoxList[1].OnDropDownSelectionChanged(this,value);
                     }
                 }
+                //handle color change code
+                if(!Settings.DisableColorChange)
+                {
+                    //BackColor = Color.BlanchedAlmond;
+                    //modPanel.BackColor = Settings.getBackColor();
+                    switch (_Checked)
+                    {
+                        case true:
+                            if(ParentPanel != null && ParentPanel.BackColor != Color.BlanchedAlmond)
+                            {
+                                ParentPanel.BackColor = Color.BlanchedAlmond;
+                            }
+                            break;
+                        case false:
+                            if (ParentPanel != null && !AnyPackagesChecked())
+                                ParentPanel.BackColor = Settings.getBackColor();
+                            break;
+                    }
+                }
             }
         }
         //overriding the enabled so we can trigger the UI components
@@ -135,6 +155,19 @@ namespace RelhaxModpack
         public override string ToString()
         {
             return NameFormatted;
+        }
+
+        //check if the color change should be changed back on
+        public bool AnyPackagesChecked()
+        {
+            foreach (SelectablePackage sp in Parent.Packages)
+            {
+                if (sp.Enabled && sp.Checked)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

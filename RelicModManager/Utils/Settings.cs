@@ -242,12 +242,10 @@ namespace RelhaxModpack
                             ExpandAllLegacy2 = bool.Parse(n.InnerText);
                             break;
                         case "disableBorders":
-                            //feature disabled/removed
-                            DisableBorders = true;
+                            DisableBorders = bool.Parse(n.InnerText);
                             break;
                         case "disableColorChange":
-                            //feature disabled/removed
-                            DisableColorChange = true;
+                            DisableColorChange = bool.Parse(n.InnerText);
                             break;
                         case "deleteLogs":
                             DeleteLogs = bool.Parse(n.InnerText);
@@ -348,12 +346,10 @@ namespace RelhaxModpack
             xexpandAllLegacy2.InnerText = "" + ExpandAllLegacy2;
             settingsHolder.AppendChild(xexpandAllLegacy2);
             XmlElement xdisableBorders = doc.CreateElement("disableBorders");
-            //feature disabled/removed
-            xdisableBorders.InnerText = "" + true;
+            xdisableBorders.InnerText = "" + DisableBorders;
             settingsHolder.AppendChild(xdisableBorders);
             XmlElement xdisableColorChange = doc.CreateElement("disableColorChange");
-            //feature disabled/removed
-            xdisableColorChange.InnerText = "" + true;
+            xdisableColorChange.InnerText = "" + DisableColorChange;
             settingsHolder.AppendChild(xdisableColorChange);
             XmlElement xdeleteLogs = doc.CreateElement("deleteLogs");
             xdeleteLogs.InnerText = "" + DeleteLogs;

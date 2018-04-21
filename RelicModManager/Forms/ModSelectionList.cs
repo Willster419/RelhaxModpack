@@ -1320,6 +1320,11 @@ namespace RelhaxModpack
                 PropagateUpNotChecked(spc);
                 PropagateDownNotChecked(spc);
             }
+            //if it's the top level thing and the color change is enabled (disable is false), then tell it to check again for color change code
+            //if (ParentPanel != null && !AnyPackagesChecked())
+            //ParentPanel.BackColor = Settings.getBackColor();
+            if (!Settings.DisableColorChange && spc.Level == -1 && spc.ParentPanel != null && !spc.AnyPackagesChecked())
+                spc.ParentPanel.BackColor = Settings.getBackColor();
         }
 
         //propagates the change back up the selection tree
