@@ -344,7 +344,7 @@ namespace RelhaxModpack
                         //download new version
                         sw.Reset();
                         sw.Start();
-                        string newExeName = Path.Combine(Application.StartupPath, "RelhaxModpack_update.exe");
+                        string newExeName = Settings.UseLegacyUpdateMethod? Path.Combine(Application.StartupPath, "RelhaxModpack_update.exe"): Path.Combine(Application.StartupPath, "RelhaxModpack_update.zip");
                         updater.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
                         updater.DownloadFileCompleted += new AsyncCompletedEventHandler(updater_DownloadFileCompleted);
 
@@ -369,9 +369,14 @@ namespace RelhaxModpack
                             WindowState = FormWindowState.Normal;
 
                         if (File.Exists(newExeName)) File.Delete(newExeName);
-                        string modpackExeURL = Program.betaApplication ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.exe" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe";
+                        //using new attemp at an update method. Application now downloads a zip file of itself, rather than an exe. Maybe it will help antivirus issues
+                        string modpackExeURL = null;
+                        if(Settings.UseLegacyUpdateMethod)
+                            modpackExeURL = Program.betaApplication ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.exe" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe";
+                        else
+                            modpackExeURL = Program.betaApplication ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.zip" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";
                         updater.DownloadFileAsync(new Uri(modpackExeURL), newExeName);
-                        Logging.Manager("New application download started");
+                        Logging.Manager("New application download started, UseLegacyUpdateMethod=" + Settings.UseLegacyUpdateMethod);
                         currentModDownloading = "update ";
                     }
                     else
@@ -403,14 +408,39 @@ namespace RelhaxModpack
                 this.Close();
             }
 
-            // part/idea of a new batch script if previous download/update failed https://stackoverflow.com/questions/4619088/windows-batch-file-file-download-from-a-url
-            string newExeName = Path.Combine(Application.StartupPath, "RelicCopyUpdate.bat");
+            //try to extract the zipfile (if new update method)
             try
             {
-                //Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "supported_clients.xml");
+                using (Ionic.Zip.ZipFile zip = new Ionic.Zip.ZipFile(Path.Combine(Application.StartupPath, "RelhaxModpack_update.zip")))
+                {
+                    zip.ExtractAll(Application.StartupPath);
+                }
+            }
+            catch(Ionic.Zip.ZipException ezip)
+            {
+                //first, log it
+                Utils.ExceptionLog(ezip);
+                if(MessageBox.Show("Error extracting update, restart and try using legacy update option?","error extraction update",MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    Settings.UseLegacyUpdateMethod = true;
+                    //"If your application was originally supplied command-line options when it first executed, Restart will launch the application again with the same options."
+                    //https://msdn.microsoft.com/en-us/library/system.windows.forms.application.restart(v=vs.110).aspx
+                    Application.Restart();
+                }
+                else
+                {
+                    Application.Exit();
+                }
+            }
+
+            // part/idea of a new batch script if previous download/update failed https://stackoverflow.com/questions/4619088/windows-batch-file-file-download-from-a-url
+            string newBatName = Path.Combine(Application.StartupPath, "RelicCopyUpdate.bat");
+            try
+            {
+                //write batch file to text
                 string updateScript = "";
                 updateScript = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "RelicCopyUpdate.txt");
-                File.WriteAllText(newExeName, updateScript);
+                File.WriteAllText(newBatName, updateScript);
             }
             catch (Exception ex)
             {
@@ -419,11 +449,15 @@ namespace RelhaxModpack
                 if (DialogResult.Yes == MessageBox.Show(msgTxt, Translations.getTranslatedString("critical"), MessageBoxButtons.YesNo, MessageBoxIcon.Stop))
                 {
                     // call the windows explorer and open at the relhax folder
-                    ProcessStartInfo explorer = new ProcessStartInfo();
-                    explorer.FileName = "explorer.exe";
-                    explorer.Arguments = Application.StartupPath;
-                    Process callExplorer = new Process();
-                    callExplorer.StartInfo = explorer;
+                    ProcessStartInfo explorer = new ProcessStartInfo
+                    {
+                        FileName = "explorer.exe",
+                        Arguments = Application.StartupPath
+                    };
+                    Process callExplorer = new Process
+                    {
+                        StartInfo = explorer
+                    };
                     callExplorer.Start();
                 }
                 try
@@ -432,11 +466,15 @@ namespace RelhaxModpack
                     string howToPath = Path.Combine(Path.GetTempPath(), "howTo.txt");
                     File.WriteAllText(howToPath, msgTxt);
                     // call the notepad and open the howto.txt file
-                    ProcessStartInfo notepad = new ProcessStartInfo();
-                    notepad.FileName = "notepad.exe";
-                    notepad.Arguments = howToPath;
-                    Process callNotepad = new Process();
-                    callNotepad.StartInfo = notepad;
+                    ProcessStartInfo notepad = new ProcessStartInfo
+                    {
+                        FileName = "notepad.exe",
+                        Arguments = howToPath
+                    };
+                    Process callNotepad = new Process
+                    {
+                        StartInfo = notepad
+                    };
                     callNotepad.Start();
                 }
                 catch (Exception e2)
@@ -448,17 +486,21 @@ namespace RelhaxModpack
 
             try
             {
-                ProcessStartInfo info = new ProcessStartInfo();
-                info.FileName = newExeName;
-                info.Arguments = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).ToArray());
-                Process installUpdate = new Process();
-                installUpdate.StartInfo = info;
+                ProcessStartInfo info = new ProcessStartInfo
+                {
+                    FileName = newBatName,
+                    Arguments = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).ToArray())
+                };
+                Process installUpdate = new Process
+                {
+                    StartInfo = info
+                };
                 installUpdate.Start();
             }
             catch (Exception e3)
             {
                 Utils.ExceptionLog("updater_DownloadFileCompleted", "could not start new application version", e3);
-                MessageBox.Show(Translations.getTranslatedString("cantStartNewApp") + newExeName);
+                MessageBox.Show(Translations.getTranslatedString("cantStartNewApp") + newBatName);
             }
             Application.Exit();
         }

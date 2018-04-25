@@ -89,6 +89,7 @@ namespace RelhaxModpack
         public static bool PreviewFullscreen { get; set; }
         public static int PreviewHeight { get; set; }
         public static int PreviewWidth { get; set; }
+        public static bool UseLegacyUpdateMethod;
         //
         public static string CustomModInfoPath = "";
         //enumeration for the type of uninstall mode
@@ -136,6 +137,7 @@ namespace RelhaxModpack
             PreviewFullscreen = false;
             PreviewWidth = 450;
             PreviewHeight = 550;
+            UseLegacyUpdateMethod = false;
             Logging.Manager("Loading application settings");
             if (!File.Exists(SettingsXmlFile))
             {
@@ -191,6 +193,7 @@ namespace RelhaxModpack
                 FontSizeforum = FontSize.Font100;
                 SView = SelectionView.Default;
                 ShowInstallCompleteWindow = false;
+                UseLegacyUpdateMethod = false;
             }
             else
             {
@@ -300,6 +303,9 @@ namespace RelhaxModpack
                             break;
                         case "ExportMode":
                             ExportMode = bool.Parse(n.InnerText);
+                            break;
+                        case "UseLegacyUpdateMethod":
+                            UseLegacyUpdateMethod = bool.Parse(n.InnerText);
                             break;
                     }
                 }
@@ -416,6 +422,9 @@ namespace RelhaxModpack
             XmlElement xPreviewHeight = doc.CreateElement("PreviewHeight");
             xPreviewHeight.InnerText = "" + PreviewHeight;
             settingsHolder.AppendChild(xPreviewHeight);
+            XmlElement xUseLegacyUpdateMethod = doc.CreateElement("UseLegacyUpdateMethod");
+            xUseLegacyUpdateMethod.InnerText = "" + UseLegacyUpdateMethod;
+            settingsHolder.AppendChild(xUseLegacyUpdateMethod);
 
             doc.Save(SettingsXmlFile);
             Logging.Manager("Settings saved successfully");
