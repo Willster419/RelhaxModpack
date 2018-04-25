@@ -143,6 +143,12 @@
     <Compile Include="DatabaseComponents\DatabasePackage.cs" />
     <Compile Include="DatabaseComponents\LogicalDependency.cs" />
     <Compile Include="DatabaseComponents\Media.cs" />
+    <Compile Include="Forms\AdvancedSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AdvancedSettings.Designer.cs">
+      <DependentUpon>AdvancedSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\BackgroundForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -154,6 +160,12 @@
     </Compile>
     <Compile Include="Forms\ExportSelectWoTVersion.Designer.cs">
       <DependentUpon>ExportSelectWoTVersion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FontSettingsVerify.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FontSettingsVerify.Designer.cs">
+      <DependentUpon>FontSettingsVerify.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FTPClean.cs">
       <SubType>Form</SubType>
@@ -367,6 +379,9 @@
     <EmbeddedResource Include="Forms\AddPicturesZip.resx">
       <DependentUpon>AddPicturesZip.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AdvancedSettings.resx">
+      <DependentUpon>AdvancedSettings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\BackgroundForm.resx">
       <DependentUpon>BackgroundForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -375,6 +390,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ExportSelectWoTVersion.resx">
       <DependentUpon>ExportSelectWoTVersion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FontSettingsVerify.resx">
+      <DependentUpon>FontSettingsVerify.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FTPClean.resx">
       <DependentUpon>FTPClean.cs</DependentUpon>
