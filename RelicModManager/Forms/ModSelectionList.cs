@@ -1423,7 +1423,7 @@ namespace RelhaxModpack
                 //select one
                 foreach (SelectablePackage childPackage in parent.Packages)
                 {
-                    if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
+                    if (childPackage.Type.Equals("single_dropdown2") && childPackage.Enabled)
                     {
                         childPackage.Checked = true;
                         break;
