@@ -80,24 +80,52 @@ namespace RelhaxModpack
                         Parent.RelhaxWPFComboBoxList[1].OnDropDownSelectionChanged(this,value);
                     }
                 }
-                //handle color change code
-                if(!Settings.DisableColorChange)
+                switch (Settings.SView)
                 {
-                    //BackColor = Color.BlanchedAlmond;
-                    //modPanel.BackColor = Settings.getBackColor();
-                    switch (_Checked)
-                    {
-                        case true:
-                            if(ParentPanel != null && ParentPanel.BackColor != Color.BlanchedAlmond)
-                            {
-                                ParentPanel.BackColor = Color.BlanchedAlmond;
-                            }
-                            break;
-                        case false:
-                            if (ParentPanel != null && !AnyPackagesChecked())
-                                ParentPanel.BackColor = Settings.getBackColor();
-                            break;
-                    }
+                    //default view UI selection code
+                    case Settings.SelectionView.Default:
+                        switch (_Checked)
+                        {
+                            case true:
+                                //handle color change code
+                                if (!Settings.DisableColorChange)
+                                {
+                                    if (ParentPanel != null && ParentPanel.BackColor != Color.BlanchedAlmond)
+                                    {
+                                        ParentPanel.BackColor = Color.BlanchedAlmond;
+                                    }
+                                }
+                                break;
+                            case false:
+                                //handle color change code
+                                if (!Settings.DisableColorChange)
+                                {
+                                    if (ParentPanel != null && !AnyPackagesChecked())
+                                        ParentPanel.BackColor = Settings.getBackColor();
+                                }
+                                break;
+                        }
+                        break;
+                    //WPF treeview is done with treeviewItem
+                    case Settings.SelectionView.Legacy:
+                        switch (_Checked)
+                        {
+                            case true:
+                                //handle color change code
+                                if (!Settings.DisableColorChange)
+                                {
+                                    
+                                }
+                                break;
+                            case false:
+                                //handle color change code
+                                if (!Settings.DisableColorChange)
+                                {
+
+                                }
+                                break;
+                        }
+                        break;
                 }
             }
         }
