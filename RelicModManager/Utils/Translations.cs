@@ -1900,6 +1900,13 @@ namespace RelhaxModpack
             polish.Add("searchTB", "Wyszukaj nazwę modu:");
             french.Add("searchTB", "Rechercher le nom du mod:");
 
+            //Section: Advanced Settings View
+
+            //Component: form name
+            english.Add("AdvancedSettings", "Advanced Settings");
+            german.Add("AdvancedSettings", "TODO");
+            polish.Add("AdvancedSettings", "TODO");
+            french.Add("AdvancedSettings", "TODO");
         }
     }
 }

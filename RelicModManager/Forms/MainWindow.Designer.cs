@@ -32,33 +32,22 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.childProgressBar = new System.Windows.Forms.ProgressBar();
             this.FindWotExe = new System.Windows.Forms.OpenFileDialog();
-            this.forceManuel = new System.Windows.Forms.CheckBox();
             this.formPageLink = new System.Windows.Forms.LinkLabel();
             this.parrentProgressBar = new System.Windows.Forms.ProgressBar();
             this.installRelhaxMod = new System.Windows.Forms.Button();
             this.uninstallRelhaxMod = new System.Windows.Forms.Button();
-            this.cleanInstallCB = new System.Windows.Forms.CheckBox();
-            this.cancerFontCB = new System.Windows.Forms.CheckBox();
             this.backupModsCheckBox = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox = new System.Windows.Forms.GroupBox();
             this.SettingsTable = new System.Windows.Forms.TableLayoutPanel();
-            this.InstantExtractionCB = new System.Windows.Forms.CheckBox();
+            this.cancerFontCB = new System.Windows.Forms.CheckBox();
             this.saveUserDataCB = new System.Windows.Forms.CheckBox();
-            this.ShowInstallCompleteWindowCB = new System.Windows.Forms.CheckBox();
             this.notifyIfSameDatabaseCB = new System.Windows.Forms.CheckBox();
-            this.createShortcutsCB = new System.Windows.Forms.CheckBox();
             this.darkUICB = new System.Windows.Forms.CheckBox();
-            this.clearCacheCB = new System.Windows.Forms.CheckBox();
             this.saveLastInstallCB = new System.Windows.Forms.CheckBox();
             this.SuperExtractionCB = new System.Windows.Forms.CheckBox();
             this.clearLogFilesCB = new System.Windows.Forms.CheckBox();
-            this.ExportModeCB = new System.Windows.Forms.CheckBox();
             this.languageSelectionGB = new System.Windows.Forms.GroupBox();
             this.LanguageComboBox = new System.Windows.Forms.ComboBox();
-            this.loadingImageGroupBox = new System.Windows.Forms.GroupBox();
-            this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
-            this.thirdGuardsLoadingImageRB = new System.Windows.Forms.RadioButton();
-            this.standardImageRB = new System.Windows.Forms.RadioButton();
             this.findBugAddModLabel = new System.Windows.Forms.LinkLabel();
             this.cancelDownloadButton = new System.Windows.Forms.Button();
             this.DownloadTimer = new System.Windows.Forms.Timer(this.components);
@@ -69,7 +58,23 @@
             this.selectionLegacy = new System.Windows.Forms.RadioButton();
             this.selectionLegacyV2 = new System.Windows.Forms.RadioButton();
             this.expandNodesDefault2 = new System.Windows.Forms.CheckBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.donateLabel = new System.Windows.Forms.LinkLabel();
+            this.totalProgressBar = new System.Windows.Forms.ProgressBar();
+            this.DiscordServerLink = new System.Windows.Forms.LinkLabel();
+            this.viewAppUpdates = new System.Windows.Forms.Button();
+            this.viewDBUpdates = new System.Windows.Forms.Button();
+            this.ErrorCounterLabel = new System.Windows.Forms.Label();
+            this.InfoTable = new System.Windows.Forms.TableLayoutPanel();
+            this.DatabaseVersionLabel = new System.Windows.Forms.Label();
+            this.ApplicationVersionLabel = new System.Windows.Forms.Label();
+            this.downloadProgress = new System.Windows.Forms.RichTextBox();
+            this.DiagnosticUtilitiesButton = new System.Windows.Forms.Button();
+            this.ButtonTable = new System.Windows.Forms.TableLayoutPanel();
+            this.ExportModeBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.fontSizeGB = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.DPI100 = new System.Windows.Forms.RadioButton();
@@ -83,35 +88,16 @@
             this.fontSize125 = new System.Windows.Forms.RadioButton();
             this.fontSize225 = new System.Windows.Forms.RadioButton();
             this.fontSize175 = new System.Windows.Forms.RadioButton();
-            this.totalProgressBar = new System.Windows.Forms.ProgressBar();
-            this.DiscordServerLink = new System.Windows.Forms.LinkLabel();
-            this.viewAppUpdates = new System.Windows.Forms.Button();
-            this.viewDBUpdates = new System.Windows.Forms.Button();
-            this.ErrorCounterLabel = new System.Windows.Forms.Label();
-            this.InfoTable = new System.Windows.Forms.TableLayoutPanel();
-            this.DatabaseVersionLabel = new System.Windows.Forms.Label();
-            this.ApplicationVersionLabel = new System.Windows.Forms.Label();
-            this.downloadProgress = new System.Windows.Forms.RichTextBox();
-            this.DiagnosticUtilitiesButton = new System.Windows.Forms.Button();
-            this.UninstallModeGroupBox = new System.Windows.Forms.GroupBox();
-            this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
-            this.CleanUninstallModeRB = new System.Windows.Forms.RadioButton();
-            this.SmartUninstallModeRB = new System.Windows.Forms.RadioButton();
-            this.ButtonTable = new System.Windows.Forms.TableLayoutPanel();
-            this.ExportModeBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.ShowAdvancedSettingsLink = new System.Windows.Forms.LinkLabel();
             this.settingsGroupBox.SuspendLayout();
             this.SettingsTable.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
-            this.loadingImageGroupBox.SuspendLayout();
-            this.tableLayoutPanel8.SuspendLayout();
             this.viewTypeGB.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
+            this.InfoTable.SuspendLayout();
+            this.ButtonTable.SuspendLayout();
             this.fontSizeGB.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
-            this.InfoTable.SuspendLayout();
-            this.UninstallModeGroupBox.SuspendLayout();
-            this.tableLayoutPanel7.SuspendLayout();
-            this.ButtonTable.SuspendLayout();
             this.SuspendLayout();
             // 
             // childProgressBar
@@ -128,22 +114,6 @@
             // 
             this.FindWotExe.Filter = "WorldOfTanks.exe|WorldOfTanks.exe";
             this.FindWotExe.Title = "Find WorldOfTanks.exe";
-            // 
-            // forceManuel
-            // 
-            this.forceManuel.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.forceManuel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.forceManuel.Location = new System.Drawing.Point(232, 41);
-            this.forceManuel.Margin = new System.Windows.Forms.Padding(1);
-            this.forceManuel.Name = "forceManuel";
-            this.forceManuel.Size = new System.Drawing.Size(229, 18);
-            this.forceManuel.TabIndex = 13;
-            this.forceManuel.Text = "Force manual game detection";
-            this.forceManuel.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.forceManuel.UseVisualStyleBackColor = true;
-            this.forceManuel.CheckedChanged += new System.EventHandler(this.forceManuel_CheckedChanged);
-            this.forceManuel.MouseEnter += new System.EventHandler(this.forceManuel_MouseEnter);
-            this.forceManuel.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // formPageLink
             // 
@@ -192,45 +162,11 @@
             this.uninstallRelhaxMod.UseVisualStyleBackColor = true;
             this.uninstallRelhaxMod.Click += new System.EventHandler(this.UninstallRelhaxMod_Click);
             // 
-            // cleanInstallCB
-            // 
-            this.cleanInstallCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.cleanInstallCB.Checked = true;
-            this.cleanInstallCB.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cleanInstallCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cleanInstallCB.Location = new System.Drawing.Point(1, 1);
-            this.cleanInstallCB.Margin = new System.Windows.Forms.Padding(1);
-            this.cleanInstallCB.Name = "cleanInstallCB";
-            this.cleanInstallCB.Size = new System.Drawing.Size(229, 18);
-            this.cleanInstallCB.TabIndex = 21;
-            this.cleanInstallCB.Text = "Clean Installation (Recommended)";
-            this.cleanInstallCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.cleanInstallCB.UseVisualStyleBackColor = true;
-            this.cleanInstallCB.CheckedChanged += new System.EventHandler(this.cleanInstallCB_CheckedChanged);
-            this.cleanInstallCB.MouseEnter += new System.EventHandler(this.cleanInstallCB_MouseEnter);
-            this.cleanInstallCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // cancerFontCB
-            // 
-            this.cancerFontCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.cancerFontCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cancerFontCB.Location = new System.Drawing.Point(232, 21);
-            this.cancerFontCB.Margin = new System.Windows.Forms.Padding(1);
-            this.cancerFontCB.Name = "cancerFontCB";
-            this.cancerFontCB.Size = new System.Drawing.Size(229, 18);
-            this.cancerFontCB.TabIndex = 23;
-            this.cancerFontCB.Text = "Cancer font";
-            this.cancerFontCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.cancerFontCB.UseVisualStyleBackColor = true;
-            this.cancerFontCB.CheckedChanged += new System.EventHandler(this.cancerFontCB_CheckedChanged);
-            this.cancerFontCB.MouseEnter += new System.EventHandler(this.cancerFontCB_MouseEnter);
-            this.cancerFontCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
             // backupModsCheckBox
             // 
             this.backupModsCheckBox.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.backupModsCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.backupModsCheckBox.Location = new System.Drawing.Point(1, 81);
+            this.backupModsCheckBox.Location = new System.Drawing.Point(1, 41);
             this.backupModsCheckBox.Margin = new System.Windows.Forms.Padding(1);
             this.backupModsCheckBox.Name = "backupModsCheckBox";
             this.backupModsCheckBox.Size = new System.Drawing.Size(229, 18);
@@ -248,7 +184,7 @@
             this.settingsGroupBox.Location = new System.Drawing.Point(12, 103);
             this.settingsGroupBox.MaximumSize = new System.Drawing.Size(502, 210);
             this.settingsGroupBox.Name = "settingsGroupBox";
-            this.settingsGroupBox.Size = new System.Drawing.Size(468, 210);
+            this.settingsGroupBox.Size = new System.Drawing.Size(468, 165);
             this.settingsGroupBox.TabIndex = 25;
             this.settingsGroupBox.TabStop = false;
             this.settingsGroupBox.Text = "Modpack Settings";
@@ -259,57 +195,47 @@
             this.SettingsTable.ColumnCount = 2;
             this.SettingsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.SettingsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.SettingsTable.Controls.Add(this.InstantExtractionCB, 0, 6);
-            this.SettingsTable.Controls.Add(this.saveUserDataCB, 0, 3);
-            this.SettingsTable.Controls.Add(this.cleanInstallCB, 0, 0);
-            this.SettingsTable.Controls.Add(this.cancerFontCB, 1, 1);
-            this.SettingsTable.Controls.Add(this.ShowInstallCompleteWindowCB, 1, 3);
-            this.SettingsTable.Controls.Add(this.notifyIfSameDatabaseCB, 1, 6);
-            this.SettingsTable.Controls.Add(this.createShortcutsCB, 1, 4);
+            this.SettingsTable.Controls.Add(this.cancerFontCB, 1, 3);
+            this.SettingsTable.Controls.Add(this.saveUserDataCB, 0, 1);
+            this.SettingsTable.Controls.Add(this.notifyIfSameDatabaseCB, 1, 2);
             this.SettingsTable.Controls.Add(this.darkUICB, 1, 0);
-            this.SettingsTable.Controls.Add(this.clearCacheCB, 0, 2);
-            this.SettingsTable.Controls.Add(this.saveLastInstallCB, 1, 5);
-            this.SettingsTable.Controls.Add(this.SuperExtractionCB, 0, 5);
-            this.SettingsTable.Controls.Add(this.forceManuel, 1, 2);
-            this.SettingsTable.Controls.Add(this.clearLogFilesCB, 0, 1);
-            this.SettingsTable.Controls.Add(this.backupModsCheckBox, 0, 4);
-            this.SettingsTable.Controls.Add(this.ExportModeCB, 1, 7);
+            this.SettingsTable.Controls.Add(this.saveLastInstallCB, 1, 1);
+            this.SettingsTable.Controls.Add(this.SuperExtractionCB, 0, 3);
+            this.SettingsTable.Controls.Add(this.clearLogFilesCB, 0, 0);
+            this.SettingsTable.Controls.Add(this.backupModsCheckBox, 0, 2);
+            this.SettingsTable.Controls.Add(this.ShowAdvancedSettingsLink, 1, 4);
             this.SettingsTable.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SettingsTable.Location = new System.Drawing.Point(3, 16);
             this.SettingsTable.Name = "SettingsTable";
-            this.SettingsTable.RowCount = 8;
+            this.SettingsTable.RowCount = 5;
             this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.SettingsTable.Size = new System.Drawing.Size(462, 191);
+            this.SettingsTable.Size = new System.Drawing.Size(462, 146);
             this.SettingsTable.TabIndex = 43;
             // 
-            // InstantExtractionCB
+            // cancerFontCB
             // 
-            this.InstantExtractionCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.InstantExtractionCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.InstantExtractionCB.Location = new System.Drawing.Point(1, 136);
-            this.InstantExtractionCB.Margin = new System.Windows.Forms.Padding(1);
-            this.InstantExtractionCB.Name = "InstantExtractionCB";
-            this.InstantExtractionCB.Size = new System.Drawing.Size(229, 33);
-            this.InstantExtractionCB.TabIndex = 36;
-            this.InstantExtractionCB.Text = "Instant extraction mode (experimental)";
-            this.InstantExtractionCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.InstantExtractionCB.UseVisualStyleBackColor = true;
-            this.InstantExtractionCB.CheckedChanged += new System.EventHandler(this.InstantExtractionCB_CheckedChanged);
-            this.InstantExtractionCB.MouseEnter += new System.EventHandler(this.InstantExtractionCB_MouseEnter);
-            this.InstantExtractionCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            this.cancerFontCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.cancerFontCB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cancerFontCB.Location = new System.Drawing.Point(232, 61);
+            this.cancerFontCB.Margin = new System.Windows.Forms.Padding(1);
+            this.cancerFontCB.Name = "cancerFontCB";
+            this.cancerFontCB.Size = new System.Drawing.Size(229, 18);
+            this.cancerFontCB.TabIndex = 38;
+            this.cancerFontCB.Text = "Cancer font";
+            this.cancerFontCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.cancerFontCB.UseVisualStyleBackColor = true;
+            this.cancerFontCB.CheckedChanged += new System.EventHandler(this.cancerFontCB_CheckedChanged);
             // 
             // saveUserDataCB
             // 
             this.saveUserDataCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.saveUserDataCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.saveUserDataCB.Location = new System.Drawing.Point(1, 61);
+            this.saveUserDataCB.Location = new System.Drawing.Point(1, 21);
             this.saveUserDataCB.Margin = new System.Windows.Forms.Padding(1);
             this.saveUserDataCB.Name = "saveUserDataCB";
             this.saveUserDataCB.Size = new System.Drawing.Size(229, 18);
@@ -321,31 +247,14 @@
             this.saveUserDataCB.MouseEnter += new System.EventHandler(this.saveUserDataCB_MouseEnter);
             this.saveUserDataCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
-            // ShowInstallCompleteWindowCB
-            // 
-            this.ShowInstallCompleteWindowCB.AutoSize = true;
-            this.ShowInstallCompleteWindowCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.ShowInstallCompleteWindowCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ShowInstallCompleteWindowCB.Location = new System.Drawing.Point(232, 61);
-            this.ShowInstallCompleteWindowCB.Margin = new System.Windows.Forms.Padding(1);
-            this.ShowInstallCompleteWindowCB.Name = "ShowInstallCompleteWindowCB";
-            this.ShowInstallCompleteWindowCB.Size = new System.Drawing.Size(229, 18);
-            this.ShowInstallCompleteWindowCB.TabIndex = 34;
-            this.ShowInstallCompleteWindowCB.Text = "Show Install complete window";
-            this.ShowInstallCompleteWindowCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.ShowInstallCompleteWindowCB.UseVisualStyleBackColor = true;
-            this.ShowInstallCompleteWindowCB.CheckedChanged += new System.EventHandler(this.ShowInstallCompleteWindow_CheckedChanged);
-            this.ShowInstallCompleteWindowCB.MouseEnter += new System.EventHandler(this.ShowInstallCompleteWindowCB_MouseEnter);
-            this.ShowInstallCompleteWindowCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
             // notifyIfSameDatabaseCB
             // 
             this.notifyIfSameDatabaseCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.notifyIfSameDatabaseCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.notifyIfSameDatabaseCB.Location = new System.Drawing.Point(232, 136);
+            this.notifyIfSameDatabaseCB.Location = new System.Drawing.Point(232, 41);
             this.notifyIfSameDatabaseCB.Margin = new System.Windows.Forms.Padding(1);
             this.notifyIfSameDatabaseCB.Name = "notifyIfSameDatabaseCB";
-            this.notifyIfSameDatabaseCB.Size = new System.Drawing.Size(229, 33);
+            this.notifyIfSameDatabaseCB.Size = new System.Drawing.Size(229, 18);
             this.notifyIfSameDatabaseCB.TabIndex = 33;
             this.notifyIfSameDatabaseCB.Text = "Inform if no new database available";
             this.notifyIfSameDatabaseCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -353,22 +262,6 @@
             this.notifyIfSameDatabaseCB.CheckedChanged += new System.EventHandler(this.notifyIfSameDatabaseCB_CheckedChanged);
             this.notifyIfSameDatabaseCB.MouseEnter += new System.EventHandler(this.notifyIfSameDatabaseCB_MouseEnter);
             this.notifyIfSameDatabaseCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // createShortcutsCB
-            // 
-            this.createShortcutsCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.createShortcutsCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.createShortcutsCB.Location = new System.Drawing.Point(232, 81);
-            this.createShortcutsCB.Margin = new System.Windows.Forms.Padding(1);
-            this.createShortcutsCB.Name = "createShortcutsCB";
-            this.createShortcutsCB.Size = new System.Drawing.Size(229, 18);
-            this.createShortcutsCB.TabIndex = 35;
-            this.createShortcutsCB.Text = "Create Shortcuts";
-            this.createShortcutsCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.createShortcutsCB.UseVisualStyleBackColor = true;
-            this.createShortcutsCB.CheckedChanged += new System.EventHandler(this.CreateShortcutsCB_CheckedChanged);
-            this.createShortcutsCB.MouseEnter += new System.EventHandler(this.CreateShortcutsCB_MouseEnter);
-            this.createShortcutsCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // darkUICB
             // 
@@ -386,32 +279,16 @@
             this.darkUICB.MouseEnter += new System.EventHandler(this.darkUICB_MouseEnter);
             this.darkUICB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
-            // clearCacheCB
-            // 
-            this.clearCacheCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.clearCacheCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.clearCacheCB.Location = new System.Drawing.Point(1, 41);
-            this.clearCacheCB.Margin = new System.Windows.Forms.Padding(1);
-            this.clearCacheCB.Name = "clearCacheCB";
-            this.clearCacheCB.Size = new System.Drawing.Size(229, 18);
-            this.clearCacheCB.TabIndex = 31;
-            this.clearCacheCB.Text = "Clear WoT Cache Data";
-            this.clearCacheCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.clearCacheCB.UseVisualStyleBackColor = true;
-            this.clearCacheCB.CheckedChanged += new System.EventHandler(this.clearCacheCB_CheckedChanged);
-            this.clearCacheCB.MouseEnter += new System.EventHandler(this.clearCacheCB_MouseEnter);
-            this.clearCacheCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
             // saveLastInstallCB
             // 
             this.saveLastInstallCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.saveLastInstallCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.saveLastInstallCB.Location = new System.Drawing.Point(232, 101);
+            this.saveLastInstallCB.Location = new System.Drawing.Point(232, 21);
             this.saveLastInstallCB.Margin = new System.Windows.Forms.Padding(1);
             this.saveLastInstallCB.Name = "saveLastInstallCB";
-            this.saveLastInstallCB.Size = new System.Drawing.Size(229, 33);
+            this.saveLastInstallCB.Size = new System.Drawing.Size(229, 18);
             this.saveLastInstallCB.TabIndex = 26;
-            this.saveLastInstallCB.Text = "Save last install\'s config";
+            this.saveLastInstallCB.Text = "Save selection of last install";
             this.saveLastInstallCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.saveLastInstallCB.UseVisualStyleBackColor = true;
             this.saveLastInstallCB.CheckedChanged += new System.EventHandler(this.saveLastInstallCB_CheckedChanged);
@@ -422,10 +299,10 @@
             // 
             this.SuperExtractionCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.SuperExtractionCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SuperExtractionCB.Location = new System.Drawing.Point(1, 101);
+            this.SuperExtractionCB.Location = new System.Drawing.Point(1, 61);
             this.SuperExtractionCB.Margin = new System.Windows.Forms.Padding(1);
             this.SuperExtractionCB.Name = "SuperExtractionCB";
-            this.SuperExtractionCB.Size = new System.Drawing.Size(229, 33);
+            this.SuperExtractionCB.Size = new System.Drawing.Size(229, 18);
             this.SuperExtractionCB.TabIndex = 37;
             this.SuperExtractionCB.Text = "Super extraction mode (Experimental)";
             this.SuperExtractionCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -438,7 +315,7 @@
             // 
             this.clearLogFilesCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.clearLogFilesCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.clearLogFilesCB.Location = new System.Drawing.Point(1, 21);
+            this.clearLogFilesCB.Location = new System.Drawing.Point(1, 1);
             this.clearLogFilesCB.Margin = new System.Windows.Forms.Padding(1);
             this.clearLogFilesCB.Name = "clearLogFilesCB";
             this.clearLogFilesCB.Size = new System.Drawing.Size(229, 18);
@@ -450,31 +327,14 @@
             this.clearLogFilesCB.MouseEnter += new System.EventHandler(this.clearLogFilesCB_MouseEnter);
             this.clearLogFilesCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
-            // ExportModeCB
-            // 
-            this.ExportModeCB.AutoSize = true;
-            this.ExportModeCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.ExportModeCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ExportModeCB.Location = new System.Drawing.Point(232, 171);
-            this.ExportModeCB.Margin = new System.Windows.Forms.Padding(1);
-            this.ExportModeCB.Name = "ExportModeCB";
-            this.ExportModeCB.Size = new System.Drawing.Size(229, 19);
-            this.ExportModeCB.TabIndex = 38;
-            this.ExportModeCB.Text = "Export Mode";
-            this.ExportModeCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.ExportModeCB.UseVisualStyleBackColor = true;
-            this.ExportModeCB.CheckedChanged += new System.EventHandler(this.ExportModeCB_CheckedChanged);
-            this.ExportModeCB.MouseEnter += new System.EventHandler(this.ExportModeCB_MouseEnter);
-            this.ExportModeCB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
             // languageSelectionGB
             // 
             this.languageSelectionGB.Controls.Add(this.LanguageComboBox);
-            this.languageSelectionGB.Location = new System.Drawing.Point(348, 372);
+            this.languageSelectionGB.Location = new System.Drawing.Point(319, 419);
             this.languageSelectionGB.Margin = new System.Windows.Forms.Padding(1);
             this.languageSelectionGB.Name = "languageSelectionGB";
             this.languageSelectionGB.Padding = new System.Windows.Forms.Padding(2);
-            this.languageSelectionGB.Size = new System.Drawing.Size(132, 40);
+            this.languageSelectionGB.Size = new System.Drawing.Size(160, 46);
             this.languageSelectionGB.TabIndex = 30;
             this.languageSelectionGB.TabStop = false;
             this.languageSelectionGB.Text = "Language";
@@ -491,70 +351,9 @@
             "Francais"});
             this.LanguageComboBox.Location = new System.Drawing.Point(2, 15);
             this.LanguageComboBox.Name = "LanguageComboBox";
-            this.LanguageComboBox.Size = new System.Drawing.Size(128, 21);
+            this.LanguageComboBox.Size = new System.Drawing.Size(156, 21);
             this.LanguageComboBox.TabIndex = 4;
             this.LanguageComboBox.SelectedIndexChanged += new System.EventHandler(this.LanguageComboBox_SelectedIndexChanged);
-            // 
-            // loadingImageGroupBox
-            // 
-            this.loadingImageGroupBox.Controls.Add(this.tableLayoutPanel8);
-            this.loadingImageGroupBox.Location = new System.Drawing.Point(348, 317);
-            this.loadingImageGroupBox.Margin = new System.Windows.Forms.Padding(1);
-            this.loadingImageGroupBox.Name = "loadingImageGroupBox";
-            this.loadingImageGroupBox.Padding = new System.Windows.Forms.Padding(2);
-            this.loadingImageGroupBox.Size = new System.Drawing.Size(132, 53);
-            this.loadingImageGroupBox.TabIndex = 26;
-            this.loadingImageGroupBox.TabStop = false;
-            this.loadingImageGroupBox.Text = "Loading Image";
-            // 
-            // tableLayoutPanel8
-            // 
-            this.tableLayoutPanel8.ColumnCount = 1;
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel8.Controls.Add(this.thirdGuardsLoadingImageRB, 0, 1);
-            this.tableLayoutPanel8.Controls.Add(this.standardImageRB, 0, 0);
-            this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel8.Location = new System.Drawing.Point(2, 15);
-            this.tableLayoutPanel8.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel8.Name = "tableLayoutPanel8";
-            this.tableLayoutPanel8.RowCount = 2;
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(128, 36);
-            this.tableLayoutPanel8.TabIndex = 7;
-            // 
-            // thirdGuardsLoadingImageRB
-            // 
-            this.thirdGuardsLoadingImageRB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.thirdGuardsLoadingImageRB.Location = new System.Drawing.Point(0, 18);
-            this.thirdGuardsLoadingImageRB.Margin = new System.Windows.Forms.Padding(0);
-            this.thirdGuardsLoadingImageRB.Name = "thirdGuardsLoadingImageRB";
-            this.thirdGuardsLoadingImageRB.Size = new System.Drawing.Size(128, 18);
-            this.thirdGuardsLoadingImageRB.TabIndex = 1;
-            this.thirdGuardsLoadingImageRB.TabStop = true;
-            this.thirdGuardsLoadingImageRB.Text = "3rdguards";
-            this.thirdGuardsLoadingImageRB.UseVisualStyleBackColor = true;
-            this.thirdGuardsLoadingImageRB.CheckedChanged += new System.EventHandler(this.standardImageRB_CheckedChanged);
-            this.thirdGuardsLoadingImageRB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.standardImageRB_MouseDown);
-            this.thirdGuardsLoadingImageRB.MouseEnter += new System.EventHandler(this.standardImageRB_MouseEnter);
-            this.thirdGuardsLoadingImageRB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // standardImageRB
-            // 
-            this.standardImageRB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.standardImageRB.Location = new System.Drawing.Point(0, 0);
-            this.standardImageRB.Margin = new System.Windows.Forms.Padding(0);
-            this.standardImageRB.Name = "standardImageRB";
-            this.standardImageRB.Size = new System.Drawing.Size(128, 18);
-            this.standardImageRB.TabIndex = 0;
-            this.standardImageRB.TabStop = true;
-            this.standardImageRB.Text = "Standard";
-            this.standardImageRB.UseVisualStyleBackColor = true;
-            this.standardImageRB.CheckedChanged += new System.EventHandler(this.standardImageRB_CheckedChanged);
-            this.standardImageRB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.standardImageRB_MouseDown);
-            this.standardImageRB.MouseEnter += new System.EventHandler(this.standardImageRB_MouseEnter);
-            this.standardImageRB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // findBugAddModLabel
             // 
@@ -590,35 +389,39 @@
             // viewTypeGB
             // 
             this.viewTypeGB.Controls.Add(this.tableLayoutPanel5);
-            this.viewTypeGB.Location = new System.Drawing.Point(175, 317);
+            this.viewTypeGB.Location = new System.Drawing.Point(12, 273);
             this.viewTypeGB.Margin = new System.Windows.Forms.Padding(1);
             this.viewTypeGB.Name = "viewTypeGB";
-            this.viewTypeGB.Size = new System.Drawing.Size(172, 145);
+            this.viewTypeGB.Size = new System.Drawing.Size(305, 192);
             this.viewTypeGB.TabIndex = 31;
             this.viewTypeGB.TabStop = false;
             this.viewTypeGB.Text = "Selection View";
             // 
             // tableLayoutPanel5
             // 
-            this.tableLayoutPanel5.ColumnCount = 1;
+            this.tableLayoutPanel5.ColumnCount = 3;
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 161F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8F));
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel5.Controls.Add(this.selectionDefault, 0, 0);
-            this.tableLayoutPanel5.Controls.Add(this.expandNodesDefault, 0, 5);
-            this.tableLayoutPanel5.Controls.Add(this.selectionLegacy, 0, 4);
-            this.tableLayoutPanel5.Controls.Add(this.selectionLegacyV2, 0, 2);
-            this.tableLayoutPanel5.Controls.Add(this.expandNodesDefault2, 0, 3);
+            this.tableLayoutPanel5.Controls.Add(this.expandNodesDefault, 1, 3);
+            this.tableLayoutPanel5.Controls.Add(this.selectionLegacy, 1, 0);
+            this.tableLayoutPanel5.Controls.Add(this.selectionLegacyV2, 2, 0);
+            this.tableLayoutPanel5.Controls.Add(this.expandNodesDefault2, 2, 1);
+            this.tableLayoutPanel5.Controls.Add(this.checkBox1, 0, 1);
+            this.tableLayoutPanel5.Controls.Add(this.checkBox2, 1, 1);
+            this.tableLayoutPanel5.Controls.Add(this.checkBox3, 0, 2);
+            this.tableLayoutPanel5.Controls.Add(this.checkBox4, 1, 2);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-            this.tableLayoutPanel5.RowCount = 6;
+            this.tableLayoutPanel5.RowCount = 4;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(166, 126);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(299, 173);
             this.tableLayoutPanel5.TabIndex = 5;
             // 
             // selectionDefault
@@ -627,7 +430,7 @@
             this.selectionDefault.Location = new System.Drawing.Point(1, 1);
             this.selectionDefault.Margin = new System.Windows.Forms.Padding(1);
             this.selectionDefault.Name = "selectionDefault";
-            this.selectionDefault.Size = new System.Drawing.Size(164, 18);
+            this.selectionDefault.Size = new System.Drawing.Size(128, 41);
             this.selectionDefault.TabIndex = 0;
             this.selectionDefault.TabStop = true;
             this.selectionDefault.Text = "Default";
@@ -640,11 +443,11 @@
             // 
             this.expandNodesDefault.AutoSize = true;
             this.expandNodesDefault.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.expandNodesDefault.Location = new System.Drawing.Point(1, 101);
+            this.expandNodesDefault.Location = new System.Drawing.Point(131, 130);
             this.expandNodesDefault.Margin = new System.Windows.Forms.Padding(1);
             this.expandNodesDefault.Name = "expandNodesDefault";
             this.expandNodesDefault.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.expandNodesDefault.Size = new System.Drawing.Size(164, 24);
+            this.expandNodesDefault.Size = new System.Drawing.Size(159, 42);
             this.expandNodesDefault.TabIndex = 2;
             this.expandNodesDefault.Text = "Expand all";
             this.expandNodesDefault.UseVisualStyleBackColor = true;
@@ -655,10 +458,10 @@
             // selectionLegacy
             // 
             this.selectionLegacy.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.selectionLegacy.Location = new System.Drawing.Point(1, 81);
+            this.selectionLegacy.Location = new System.Drawing.Point(131, 1);
             this.selectionLegacy.Margin = new System.Windows.Forms.Padding(1);
             this.selectionLegacy.Name = "selectionLegacy";
-            this.selectionLegacy.Size = new System.Drawing.Size(164, 18);
+            this.selectionLegacy.Size = new System.Drawing.Size(159, 41);
             this.selectionLegacy.TabIndex = 1;
             this.selectionLegacy.TabStop = true;
             this.selectionLegacy.Text = "Legacy";
@@ -671,10 +474,10 @@
             // 
             this.selectionLegacyV2.AutoSize = true;
             this.selectionLegacyV2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.selectionLegacyV2.Location = new System.Drawing.Point(1, 41);
+            this.selectionLegacyV2.Location = new System.Drawing.Point(292, 1);
             this.selectionLegacyV2.Margin = new System.Windows.Forms.Padding(1);
             this.selectionLegacyV2.Name = "selectionLegacyV2";
-            this.selectionLegacyV2.Size = new System.Drawing.Size(164, 18);
+            this.selectionLegacyV2.Size = new System.Drawing.Size(6, 41);
             this.selectionLegacyV2.TabIndex = 3;
             this.selectionLegacyV2.TabStop = true;
             this.selectionLegacyV2.Text = "Legacy V2";
@@ -688,11 +491,11 @@
             // 
             this.expandNodesDefault2.AutoSize = true;
             this.expandNodesDefault2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.expandNodesDefault2.Location = new System.Drawing.Point(1, 61);
+            this.expandNodesDefault2.Location = new System.Drawing.Point(292, 44);
             this.expandNodesDefault2.Margin = new System.Windows.Forms.Padding(1);
             this.expandNodesDefault2.Name = "expandNodesDefault2";
             this.expandNodesDefault2.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.expandNodesDefault2.Size = new System.Drawing.Size(164, 18);
+            this.expandNodesDefault2.Size = new System.Drawing.Size(6, 41);
             this.expandNodesDefault2.TabIndex = 4;
             this.expandNodesDefault2.Text = "Expand all";
             this.expandNodesDefault2.UseVisualStyleBackColor = true;
@@ -700,6 +503,58 @@
             this.expandNodesDefault2.CheckedChanged += new System.EventHandler(this.expandNodesDefault2_CheckedChanged);
             this.expandNodesDefault2.MouseEnter += new System.EventHandler(this.expandNodesDefault_MouseEnter);
             this.expandNodesDefault2.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox1.Location = new System.Drawing.Point(1, 44);
+            this.checkBox1.Margin = new System.Windows.Forms.Padding(1);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.checkBox1.Size = new System.Drawing.Size(128, 41);
+            this.checkBox1.TabIndex = 5;
+            this.checkBox1.Text = "checkBox1";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox2.Location = new System.Drawing.Point(131, 44);
+            this.checkBox2.Margin = new System.Windows.Forms.Padding(1);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.checkBox2.Size = new System.Drawing.Size(159, 41);
+            this.checkBox2.TabIndex = 6;
+            this.checkBox2.Text = "checkBox2";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox3.Location = new System.Drawing.Point(1, 87);
+            this.checkBox3.Margin = new System.Windows.Forms.Padding(1);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.checkBox3.Size = new System.Drawing.Size(128, 41);
+            this.checkBox3.TabIndex = 7;
+            this.checkBox3.Text = "checkBox3";
+            this.checkBox3.UseVisualStyleBackColor = true;
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox4.Location = new System.Drawing.Point(131, 87);
+            this.checkBox4.Margin = new System.Windows.Forms.Padding(1);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.checkBox4.Size = new System.Drawing.Size(159, 41);
+            this.checkBox4.TabIndex = 8;
+            this.checkBox4.Text = "checkBox4";
+            this.checkBox4.UseVisualStyleBackColor = true;
             // 
             // donateLabel
             // 
@@ -712,211 +567,6 @@
             this.donateLabel.Text = "Donation for further development";
             this.donateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.donateLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.donateLabel_LinkClicked);
-            // 
-            // fontSizeGB
-            // 
-            this.fontSizeGB.Controls.Add(this.tableLayoutPanel6);
-            this.fontSizeGB.Location = new System.Drawing.Point(13, 317);
-            this.fontSizeGB.Margin = new System.Windows.Forms.Padding(1);
-            this.fontSizeGB.Name = "fontSizeGB";
-            this.fontSizeGB.Size = new System.Drawing.Size(161, 145);
-            this.fontSizeGB.TabIndex = 33;
-            this.fontSizeGB.TabStop = false;
-            this.fontSizeGB.Text = "Scaling Mode";
-            // 
-            // tableLayoutPanel6
-            // 
-            this.tableLayoutPanel6.ColumnCount = 2;
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel6.Controls.Add(this.DPI100, 1, 0);
-            this.tableLayoutPanel6.Controls.Add(this.DPIAUTO, 1, 5);
-            this.tableLayoutPanel6.Controls.Add(this.DPI275, 1, 4);
-            this.tableLayoutPanel6.Controls.Add(this.DPI125, 1, 1);
-            this.tableLayoutPanel6.Controls.Add(this.DPI225, 1, 3);
-            this.tableLayoutPanel6.Controls.Add(this.fontSize100, 0, 0);
-            this.tableLayoutPanel6.Controls.Add(this.fontSize275, 0, 4);
-            this.tableLayoutPanel6.Controls.Add(this.DPI175, 1, 2);
-            this.tableLayoutPanel6.Controls.Add(this.fontSize125, 0, 1);
-            this.tableLayoutPanel6.Controls.Add(this.fontSize225, 0, 3);
-            this.tableLayoutPanel6.Controls.Add(this.fontSize175, 0, 2);
-            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 16);
-            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
-            this.tableLayoutPanel6.RowCount = 6;
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(155, 126);
-            this.tableLayoutPanel6.TabIndex = 11;
-            // 
-            // DPI100
-            // 
-            this.DPI100.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DPI100.Location = new System.Drawing.Point(78, 1);
-            this.DPI100.Margin = new System.Windows.Forms.Padding(1);
-            this.DPI100.Name = "DPI100";
-            this.DPI100.Size = new System.Drawing.Size(76, 18);
-            this.DPI100.TabIndex = 3;
-            this.DPI100.TabStop = true;
-            this.DPI100.Text = "DPI 1x";
-            this.DPI100.UseVisualStyleBackColor = true;
-            this.DPI100.CheckedChanged += new System.EventHandler(this.DPI100_CheckedChanged);
-            this.DPI100.MouseEnter += new System.EventHandler(this.font_MouseEnter);
-            this.DPI100.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // DPIAUTO
-            // 
-            this.DPIAUTO.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DPIAUTO.Location = new System.Drawing.Point(78, 101);
-            this.DPIAUTO.Margin = new System.Windows.Forms.Padding(1);
-            this.DPIAUTO.Name = "DPIAUTO";
-            this.DPIAUTO.Size = new System.Drawing.Size(76, 24);
-            this.DPIAUTO.TabIndex = 6;
-            this.DPIAUTO.TabStop = true;
-            this.DPIAUTO.Text = "DPI AUTO";
-            this.DPIAUTO.UseVisualStyleBackColor = true;
-            this.DPIAUTO.CheckedChanged += new System.EventHandler(this.DPIAUTO_CheckedChanged);
-            this.DPIAUTO.MouseEnter += new System.EventHandler(this.font_MouseEnter);
-            this.DPIAUTO.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // DPI275
-            // 
-            this.DPI275.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DPI275.Location = new System.Drawing.Point(78, 81);
-            this.DPI275.Margin = new System.Windows.Forms.Padding(1);
-            this.DPI275.Name = "DPI275";
-            this.DPI275.Size = new System.Drawing.Size(76, 18);
-            this.DPI275.TabIndex = 10;
-            this.DPI275.TabStop = true;
-            this.DPI275.Text = "DPI 2.75x";
-            this.DPI275.UseVisualStyleBackColor = true;
-            this.DPI275.CheckedChanged += new System.EventHandler(this.DPI275_CheckedChanged);
-            this.DPI275.MouseEnter += new System.EventHandler(this.font_MouseEnter);
-            this.DPI275.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // DPI125
-            // 
-            this.DPI125.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DPI125.Location = new System.Drawing.Point(78, 21);
-            this.DPI125.Margin = new System.Windows.Forms.Padding(1);
-            this.DPI125.Name = "DPI125";
-            this.DPI125.Size = new System.Drawing.Size(76, 18);
-            this.DPI125.TabIndex = 5;
-            this.DPI125.TabStop = true;
-            this.DPI125.Text = "DPI 1.25x";
-            this.DPI125.UseVisualStyleBackColor = true;
-            this.DPI125.CheckedChanged += new System.EventHandler(this.DPI125_CheckedChanged);
-            this.DPI125.MouseEnter += new System.EventHandler(this.font_MouseEnter);
-            this.DPI125.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // DPI225
-            // 
-            this.DPI225.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DPI225.Location = new System.Drawing.Point(78, 61);
-            this.DPI225.Margin = new System.Windows.Forms.Padding(1);
-            this.DPI225.Name = "DPI225";
-            this.DPI225.Size = new System.Drawing.Size(76, 18);
-            this.DPI225.TabIndex = 9;
-            this.DPI225.TabStop = true;
-            this.DPI225.Text = "DPI 2.25x";
-            this.DPI225.UseVisualStyleBackColor = true;
-            this.DPI225.CheckedChanged += new System.EventHandler(this.DPI225_CheckedChanged);
-            this.DPI225.MouseEnter += new System.EventHandler(this.font_MouseEnter);
-            this.DPI225.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // fontSize100
-            // 
-            this.fontSize100.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fontSize100.Location = new System.Drawing.Point(1, 1);
-            this.fontSize100.Margin = new System.Windows.Forms.Padding(1);
-            this.fontSize100.Name = "fontSize100";
-            this.fontSize100.Size = new System.Drawing.Size(75, 18);
-            this.fontSize100.TabIndex = 0;
-            this.fontSize100.TabStop = true;
-            this.fontSize100.Text = "Font 1x";
-            this.fontSize100.UseVisualStyleBackColor = true;
-            this.fontSize100.CheckedChanged += new System.EventHandler(this.fontSize100_CheckedChanged);
-            this.fontSize100.MouseEnter += new System.EventHandler(this.font_MouseEnter);
-            this.fontSize100.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // fontSize275
-            // 
-            this.fontSize275.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fontSize275.Location = new System.Drawing.Point(1, 81);
-            this.fontSize275.Margin = new System.Windows.Forms.Padding(1);
-            this.fontSize275.Name = "fontSize275";
-            this.fontSize275.Size = new System.Drawing.Size(75, 18);
-            this.fontSize275.TabIndex = 8;
-            this.fontSize275.TabStop = true;
-            this.fontSize275.Text = "Font 2.75x";
-            this.fontSize275.UseVisualStyleBackColor = true;
-            this.fontSize275.CheckedChanged += new System.EventHandler(this.fontSize275_CheckedChanged);
-            this.fontSize275.MouseEnter += new System.EventHandler(this.font_MouseEnter);
-            this.fontSize275.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // DPI175
-            // 
-            this.DPI175.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DPI175.Location = new System.Drawing.Point(78, 41);
-            this.DPI175.Margin = new System.Windows.Forms.Padding(1);
-            this.DPI175.Name = "DPI175";
-            this.DPI175.Size = new System.Drawing.Size(76, 18);
-            this.DPI175.TabIndex = 4;
-            this.DPI175.TabStop = true;
-            this.DPI175.Text = "DPI 1.75x";
-            this.DPI175.UseVisualStyleBackColor = true;
-            this.DPI175.CheckedChanged += new System.EventHandler(this.DPI175_CheckedChanged);
-            this.DPI175.MouseEnter += new System.EventHandler(this.font_MouseEnter);
-            this.DPI175.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // fontSize125
-            // 
-            this.fontSize125.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fontSize125.Location = new System.Drawing.Point(1, 21);
-            this.fontSize125.Margin = new System.Windows.Forms.Padding(1);
-            this.fontSize125.Name = "fontSize125";
-            this.fontSize125.Size = new System.Drawing.Size(75, 18);
-            this.fontSize125.TabIndex = 1;
-            this.fontSize125.TabStop = true;
-            this.fontSize125.Text = "Font 1.25x";
-            this.fontSize125.UseVisualStyleBackColor = true;
-            this.fontSize125.CheckedChanged += new System.EventHandler(this.fontSize125_CheckedChanged);
-            this.fontSize125.MouseEnter += new System.EventHandler(this.font_MouseEnter);
-            this.fontSize125.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // fontSize225
-            // 
-            this.fontSize225.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fontSize225.Location = new System.Drawing.Point(1, 61);
-            this.fontSize225.Margin = new System.Windows.Forms.Padding(1);
-            this.fontSize225.Name = "fontSize225";
-            this.fontSize225.Size = new System.Drawing.Size(75, 18);
-            this.fontSize225.TabIndex = 7;
-            this.fontSize225.TabStop = true;
-            this.fontSize225.Text = "Font 2.25x";
-            this.fontSize225.UseVisualStyleBackColor = true;
-            this.fontSize225.CheckedChanged += new System.EventHandler(this.fontSize225_CheckedChanged);
-            this.fontSize225.MouseEnter += new System.EventHandler(this.font_MouseEnter);
-            this.fontSize225.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // fontSize175
-            // 
-            this.fontSize175.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fontSize175.Location = new System.Drawing.Point(1, 41);
-            this.fontSize175.Margin = new System.Windows.Forms.Padding(1);
-            this.fontSize175.Name = "fontSize175";
-            this.fontSize175.Size = new System.Drawing.Size(75, 18);
-            this.fontSize175.TabIndex = 2;
-            this.fontSize175.TabStop = true;
-            this.fontSize175.Text = "Font 1.75x";
-            this.fontSize175.UseVisualStyleBackColor = true;
-            this.fontSize175.CheckedChanged += new System.EventHandler(this.fontSize175_CheckedChanged);
-            this.fontSize175.MouseEnter += new System.EventHandler(this.font_MouseEnter);
-            this.fontSize175.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
             // 
             // totalProgressBar
             // 
@@ -1056,65 +706,6 @@
             this.DiagnosticUtilitiesButton.UseVisualStyleBackColor = true;
             this.DiagnosticUtilitiesButton.Click += new System.EventHandler(this.DiagnosticUtilitiesButton_Click);
             // 
-            // UninstallModeGroupBox
-            // 
-            this.UninstallModeGroupBox.Controls.Add(this.tableLayoutPanel7);
-            this.UninstallModeGroupBox.Location = new System.Drawing.Point(348, 414);
-            this.UninstallModeGroupBox.Margin = new System.Windows.Forms.Padding(1);
-            this.UninstallModeGroupBox.Name = "UninstallModeGroupBox";
-            this.UninstallModeGroupBox.Padding = new System.Windows.Forms.Padding(2);
-            this.UninstallModeGroupBox.Size = new System.Drawing.Size(132, 48);
-            this.UninstallModeGroupBox.TabIndex = 41;
-            this.UninstallModeGroupBox.TabStop = false;
-            this.UninstallModeGroupBox.Text = "Uninstall Mode";
-            // 
-            // tableLayoutPanel7
-            // 
-            this.tableLayoutPanel7.ColumnCount = 1;
-            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel7.Controls.Add(this.CleanUninstallModeRB, 0, 1);
-            this.tableLayoutPanel7.Controls.Add(this.SmartUninstallModeRB, 0, 0);
-            this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel7.Location = new System.Drawing.Point(2, 15);
-            this.tableLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel7.Name = "tableLayoutPanel7";
-            this.tableLayoutPanel7.RowCount = 2;
-            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(128, 31);
-            this.tableLayoutPanel7.TabIndex = 6;
-            // 
-            // CleanUninstallModeRB
-            // 
-            this.CleanUninstallModeRB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CleanUninstallModeRB.Location = new System.Drawing.Point(0, 15);
-            this.CleanUninstallModeRB.Margin = new System.Windows.Forms.Padding(0);
-            this.CleanUninstallModeRB.Name = "CleanUninstallModeRB";
-            this.CleanUninstallModeRB.Size = new System.Drawing.Size(128, 16);
-            this.CleanUninstallModeRB.TabIndex = 1;
-            this.CleanUninstallModeRB.TabStop = true;
-            this.CleanUninstallModeRB.Text = "Quick";
-            this.CleanUninstallModeRB.UseVisualStyleBackColor = true;
-            this.CleanUninstallModeRB.CheckedChanged += new System.EventHandler(this.CleanUninstallModeRB_CheckedChanged);
-            this.CleanUninstallModeRB.MouseEnter += new System.EventHandler(this.CleanUninstallModeRB_MouseEnter);
-            this.CleanUninstallModeRB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
-            // SmartUninstallModeRB
-            // 
-            this.SmartUninstallModeRB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SmartUninstallModeRB.Location = new System.Drawing.Point(0, 0);
-            this.SmartUninstallModeRB.Margin = new System.Windows.Forms.Padding(0);
-            this.SmartUninstallModeRB.Name = "SmartUninstallModeRB";
-            this.SmartUninstallModeRB.Size = new System.Drawing.Size(128, 15);
-            this.SmartUninstallModeRB.TabIndex = 0;
-            this.SmartUninstallModeRB.TabStop = true;
-            this.SmartUninstallModeRB.Text = "Smart";
-            this.SmartUninstallModeRB.UseVisualStyleBackColor = true;
-            this.SmartUninstallModeRB.CheckedChanged += new System.EventHandler(this.SmartUninstallModeRB_CheckedChanged);
-            this.SmartUninstallModeRB.MouseEnter += new System.EventHandler(this.SmartUninstallModeRB_MouseEnter);
-            this.SmartUninstallModeRB.MouseLeave += new System.EventHandler(this.generic_MouseLeave);
-            // 
             // ButtonTable
             // 
             this.ButtonTable.ColumnCount = 2;
@@ -1136,6 +727,189 @@
             this.ButtonTable.Size = new System.Drawing.Size(468, 90);
             this.ButtonTable.TabIndex = 42;
             // 
+            // fontSizeGB
+            // 
+            this.fontSizeGB.Controls.Add(this.tableLayoutPanel6);
+            this.fontSizeGB.Location = new System.Drawing.Point(319, 272);
+            this.fontSizeGB.Margin = new System.Windows.Forms.Padding(1);
+            this.fontSizeGB.Name = "fontSizeGB";
+            this.fontSizeGB.Size = new System.Drawing.Size(161, 145);
+            this.fontSizeGB.TabIndex = 44;
+            this.fontSizeGB.TabStop = false;
+            this.fontSizeGB.Text = "Scaling Mode";
+            // 
+            // tableLayoutPanel6
+            // 
+            this.tableLayoutPanel6.ColumnCount = 2;
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel6.Controls.Add(this.DPI100, 1, 0);
+            this.tableLayoutPanel6.Controls.Add(this.DPIAUTO, 1, 5);
+            this.tableLayoutPanel6.Controls.Add(this.DPI275, 1, 4);
+            this.tableLayoutPanel6.Controls.Add(this.DPI125, 1, 1);
+            this.tableLayoutPanel6.Controls.Add(this.DPI225, 1, 3);
+            this.tableLayoutPanel6.Controls.Add(this.fontSize100, 0, 0);
+            this.tableLayoutPanel6.Controls.Add(this.fontSize275, 0, 4);
+            this.tableLayoutPanel6.Controls.Add(this.DPI175, 1, 2);
+            this.tableLayoutPanel6.Controls.Add(this.fontSize125, 0, 1);
+            this.tableLayoutPanel6.Controls.Add(this.fontSize225, 0, 3);
+            this.tableLayoutPanel6.Controls.Add(this.fontSize175, 0, 2);
+            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 16);
+            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+            this.tableLayoutPanel6.RowCount = 6;
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(155, 126);
+            this.tableLayoutPanel6.TabIndex = 11;
+            // 
+            // DPI100
+            // 
+            this.DPI100.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DPI100.Location = new System.Drawing.Point(78, 1);
+            this.DPI100.Margin = new System.Windows.Forms.Padding(1);
+            this.DPI100.Name = "DPI100";
+            this.DPI100.Size = new System.Drawing.Size(76, 18);
+            this.DPI100.TabIndex = 3;
+            this.DPI100.TabStop = true;
+            this.DPI100.Text = "DPI 1x";
+            this.DPI100.UseVisualStyleBackColor = true;
+            // 
+            // DPIAUTO
+            // 
+            this.DPIAUTO.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DPIAUTO.Location = new System.Drawing.Point(78, 101);
+            this.DPIAUTO.Margin = new System.Windows.Forms.Padding(1);
+            this.DPIAUTO.Name = "DPIAUTO";
+            this.DPIAUTO.Size = new System.Drawing.Size(76, 24);
+            this.DPIAUTO.TabIndex = 6;
+            this.DPIAUTO.TabStop = true;
+            this.DPIAUTO.Text = "DPI AUTO";
+            this.DPIAUTO.UseVisualStyleBackColor = true;
+            // 
+            // DPI275
+            // 
+            this.DPI275.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DPI275.Location = new System.Drawing.Point(78, 81);
+            this.DPI275.Margin = new System.Windows.Forms.Padding(1);
+            this.DPI275.Name = "DPI275";
+            this.DPI275.Size = new System.Drawing.Size(76, 18);
+            this.DPI275.TabIndex = 10;
+            this.DPI275.TabStop = true;
+            this.DPI275.Text = "DPI 2.75x";
+            this.DPI275.UseVisualStyleBackColor = true;
+            // 
+            // DPI125
+            // 
+            this.DPI125.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DPI125.Location = new System.Drawing.Point(78, 21);
+            this.DPI125.Margin = new System.Windows.Forms.Padding(1);
+            this.DPI125.Name = "DPI125";
+            this.DPI125.Size = new System.Drawing.Size(76, 18);
+            this.DPI125.TabIndex = 5;
+            this.DPI125.TabStop = true;
+            this.DPI125.Text = "DPI 1.25x";
+            this.DPI125.UseVisualStyleBackColor = true;
+            // 
+            // DPI225
+            // 
+            this.DPI225.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DPI225.Location = new System.Drawing.Point(78, 61);
+            this.DPI225.Margin = new System.Windows.Forms.Padding(1);
+            this.DPI225.Name = "DPI225";
+            this.DPI225.Size = new System.Drawing.Size(76, 18);
+            this.DPI225.TabIndex = 9;
+            this.DPI225.TabStop = true;
+            this.DPI225.Text = "DPI 2.25x";
+            this.DPI225.UseVisualStyleBackColor = true;
+            // 
+            // fontSize100
+            // 
+            this.fontSize100.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fontSize100.Location = new System.Drawing.Point(1, 1);
+            this.fontSize100.Margin = new System.Windows.Forms.Padding(1);
+            this.fontSize100.Name = "fontSize100";
+            this.fontSize100.Size = new System.Drawing.Size(75, 18);
+            this.fontSize100.TabIndex = 0;
+            this.fontSize100.TabStop = true;
+            this.fontSize100.Text = "Font 1x";
+            this.fontSize100.UseVisualStyleBackColor = true;
+            // 
+            // fontSize275
+            // 
+            this.fontSize275.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fontSize275.Location = new System.Drawing.Point(1, 81);
+            this.fontSize275.Margin = new System.Windows.Forms.Padding(1);
+            this.fontSize275.Name = "fontSize275";
+            this.fontSize275.Size = new System.Drawing.Size(75, 18);
+            this.fontSize275.TabIndex = 8;
+            this.fontSize275.TabStop = true;
+            this.fontSize275.Text = "Font 2.75x";
+            this.fontSize275.UseVisualStyleBackColor = true;
+            // 
+            // DPI175
+            // 
+            this.DPI175.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DPI175.Location = new System.Drawing.Point(78, 41);
+            this.DPI175.Margin = new System.Windows.Forms.Padding(1);
+            this.DPI175.Name = "DPI175";
+            this.DPI175.Size = new System.Drawing.Size(76, 18);
+            this.DPI175.TabIndex = 4;
+            this.DPI175.TabStop = true;
+            this.DPI175.Text = "DPI 1.75x";
+            this.DPI175.UseVisualStyleBackColor = true;
+            // 
+            // fontSize125
+            // 
+            this.fontSize125.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fontSize125.Location = new System.Drawing.Point(1, 21);
+            this.fontSize125.Margin = new System.Windows.Forms.Padding(1);
+            this.fontSize125.Name = "fontSize125";
+            this.fontSize125.Size = new System.Drawing.Size(75, 18);
+            this.fontSize125.TabIndex = 1;
+            this.fontSize125.TabStop = true;
+            this.fontSize125.Text = "Font 1.25x";
+            this.fontSize125.UseVisualStyleBackColor = true;
+            // 
+            // fontSize225
+            // 
+            this.fontSize225.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fontSize225.Location = new System.Drawing.Point(1, 61);
+            this.fontSize225.Margin = new System.Windows.Forms.Padding(1);
+            this.fontSize225.Name = "fontSize225";
+            this.fontSize225.Size = new System.Drawing.Size(75, 18);
+            this.fontSize225.TabIndex = 7;
+            this.fontSize225.TabStop = true;
+            this.fontSize225.Text = "Font 2.25x";
+            this.fontSize225.UseVisualStyleBackColor = true;
+            // 
+            // fontSize175
+            // 
+            this.fontSize175.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fontSize175.Location = new System.Drawing.Point(1, 41);
+            this.fontSize175.Margin = new System.Windows.Forms.Padding(1);
+            this.fontSize175.Name = "fontSize175";
+            this.fontSize175.Size = new System.Drawing.Size(75, 18);
+            this.fontSize175.TabIndex = 2;
+            this.fontSize175.TabStop = true;
+            this.fontSize175.Text = "Font 1.75x";
+            this.fontSize175.UseVisualStyleBackColor = true;
+            // 
+            // ShowAdvancedSettingsLink
+            // 
+            this.ShowAdvancedSettingsLink.AutoSize = true;
+            this.ShowAdvancedSettingsLink.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ShowAdvancedSettingsLink.Location = new System.Drawing.Point(234, 80);
+            this.ShowAdvancedSettingsLink.Name = "ShowAdvancedSettingsLink";
+            this.ShowAdvancedSettingsLink.Size = new System.Drawing.Size(225, 66);
+            this.ShowAdvancedSettingsLink.TabIndex = 39;
+            this.ShowAdvancedSettingsLink.TabStop = true;
+            this.ShowAdvancedSettingsLink.Text = "linkLabel1";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1145,9 +919,7 @@
             this.Controls.Add(this.fontSizeGB);
             this.Controls.Add(this.InfoTable);
             this.Controls.Add(this.viewTypeGB);
-            this.Controls.Add(this.loadingImageGroupBox);
             this.Controls.Add(this.languageSelectionGB);
-            this.Controls.Add(this.UninstallModeGroupBox);
             this.Controls.Add(this.ButtonTable);
             this.Controls.Add(this.settingsGroupBox);
             this.DoubleBuffered = true;
@@ -1163,17 +935,13 @@
             this.SettingsTable.ResumeLayout(false);
             this.SettingsTable.PerformLayout();
             this.languageSelectionGB.ResumeLayout(false);
-            this.loadingImageGroupBox.ResumeLayout(false);
-            this.tableLayoutPanel8.ResumeLayout(false);
             this.viewTypeGB.ResumeLayout(false);
             this.tableLayoutPanel5.ResumeLayout(false);
             this.tableLayoutPanel5.PerformLayout();
+            this.InfoTable.ResumeLayout(false);
+            this.ButtonTable.ResumeLayout(false);
             this.fontSizeGB.ResumeLayout(false);
             this.tableLayoutPanel6.ResumeLayout(false);
-            this.InfoTable.ResumeLayout(false);
-            this.UninstallModeGroupBox.ResumeLayout(false);
-            this.tableLayoutPanel7.ResumeLayout(false);
-            this.ButtonTable.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1181,73 +949,63 @@
         #endregion
         private System.Windows.Forms.ProgressBar childProgressBar;
         private System.Windows.Forms.OpenFileDialog FindWotExe;
-        private System.Windows.Forms.CheckBox forceManuel;
         private System.Windows.Forms.LinkLabel formPageLink;
         private System.Windows.Forms.ProgressBar parrentProgressBar;
         private System.Windows.Forms.Button installRelhaxMod;
         private System.Windows.Forms.Button uninstallRelhaxMod;
-        private System.Windows.Forms.CheckBox cleanInstallCB;
-        private System.Windows.Forms.CheckBox cancerFontCB;
         private System.Windows.Forms.CheckBox backupModsCheckBox;
         private System.Windows.Forms.GroupBox settingsGroupBox;
-        private System.Windows.Forms.GroupBox loadingImageGroupBox;
-        private System.Windows.Forms.RadioButton thirdGuardsLoadingImageRB;
-        private System.Windows.Forms.RadioButton standardImageRB;
         private System.Windows.Forms.LinkLabel findBugAddModLabel;
-        private System.Windows.Forms.CheckBox saveLastInstallCB;
         private System.Windows.Forms.Button cancelDownloadButton;
         private System.Windows.Forms.CheckBox saveUserDataCB;
         private System.Windows.Forms.Timer DownloadTimer;
-        private System.Windows.Forms.CheckBox darkUICB;
         private System.Windows.Forms.GroupBox languageSelectionGB;
         private System.Windows.Forms.GroupBox viewTypeGB;
         private System.Windows.Forms.RadioButton selectionLegacy;
         private System.Windows.Forms.RadioButton selectionDefault;
         private System.Windows.Forms.LinkLabel donateLabel;
         private System.Windows.Forms.CheckBox expandNodesDefault;
-        private System.Windows.Forms.GroupBox fontSizeGB;
-        private System.Windows.Forms.RadioButton fontSize175;
-        private System.Windows.Forms.RadioButton fontSize125;
-        private System.Windows.Forms.RadioButton fontSize100;
-        private System.Windows.Forms.RadioButton DPI100;
-        private System.Windows.Forms.RadioButton DPI125;
-        private System.Windows.Forms.RadioButton DPI175;
         private System.Windows.Forms.ProgressBar totalProgressBar;
         private System.Windows.Forms.LinkLabel DiscordServerLink;
-        private System.Windows.Forms.CheckBox clearCacheCB;
         private System.Windows.Forms.Button viewAppUpdates;
         private System.Windows.Forms.Button viewDBUpdates;
         private System.Windows.Forms.CheckBox clearLogFilesCB;
-        private System.Windows.Forms.RadioButton DPIAUTO;
-        private System.Windows.Forms.RadioButton DPI275;
-        private System.Windows.Forms.RadioButton DPI225;
-        private System.Windows.Forms.RadioButton fontSize275;
-        private System.Windows.Forms.RadioButton fontSize225;
-        private System.Windows.Forms.CheckBox notifyIfSameDatabaseCB;
-        private System.Windows.Forms.CheckBox ShowInstallCompleteWindowCB;
         public System.Windows.Forms.Label ErrorCounterLabel;
-        private System.Windows.Forms.CheckBox createShortcutsCB;
         private System.Windows.Forms.TableLayoutPanel InfoTable;
         private System.Windows.Forms.Label ApplicationVersionLabel;
         private System.Windows.Forms.ComboBox LanguageComboBox;
         private System.Windows.Forms.Button DiagnosticUtilitiesButton;
-        private System.Windows.Forms.CheckBox InstantExtractionCB;
-        private System.Windows.Forms.GroupBox UninstallModeGroupBox;
-        private System.Windows.Forms.RadioButton SmartUninstallModeRB;
         private System.Windows.Forms.CheckBox SuperExtractionCB;
-        private System.Windows.Forms.RadioButton CleanUninstallModeRB;
         private System.Windows.Forms.Label DatabaseVersionLabel;
         private System.Windows.Forms.TableLayoutPanel ButtonTable;
         private System.Windows.Forms.TableLayoutPanel SettingsTable;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
         private System.Windows.Forms.RichTextBox downloadProgress;
-        private System.Windows.Forms.CheckBox ExportModeCB;
         private System.Windows.Forms.FolderBrowserDialog ExportModeBrowserDialog;
         private System.Windows.Forms.RadioButton selectionLegacyV2;
         private System.Windows.Forms.CheckBox expandNodesDefault2;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.CheckBox notifyIfSameDatabaseCB;
+        private System.Windows.Forms.CheckBox darkUICB;
+        private System.Windows.Forms.CheckBox saveLastInstallCB;
+        private System.Windows.Forms.GroupBox fontSizeGB;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
+        private System.Windows.Forms.RadioButton DPI100;
+        private System.Windows.Forms.RadioButton DPIAUTO;
+        private System.Windows.Forms.RadioButton DPI275;
+        private System.Windows.Forms.RadioButton DPI125;
+        private System.Windows.Forms.RadioButton DPI225;
+        private System.Windows.Forms.RadioButton fontSize100;
+        private System.Windows.Forms.RadioButton fontSize275;
+        private System.Windows.Forms.RadioButton DPI175;
+        private System.Windows.Forms.RadioButton fontSize125;
+        private System.Windows.Forms.RadioButton fontSize225;
+        private System.Windows.Forms.RadioButton fontSize175;
+        private System.Windows.Forms.CheckBox cancerFontCB;
+        private System.Windows.Forms.LinkLabel ShowAdvancedSettingsLink;
     }
 }
 

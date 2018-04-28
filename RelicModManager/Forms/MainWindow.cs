@@ -32,7 +32,7 @@ namespace RelhaxModpack
         //the string representation from the xml document manager_version.xml. also passed into the installer for logging the version of the database installed at that time
         private string databaseVersionString;
         //timer to measure download speed
-        Stopwatch sw = new Stopwatch();
+        private Stopwatch sw = new Stopwatch();
         //The list of all mods
         private List<Category> parsedCatagoryLists;
         //queue for downloading mods
@@ -61,7 +61,7 @@ namespace RelhaxModpack
         public Installer ins;
         private Installer unI;
         private string tanksVersion;//0.9.x.y
-        List<double> timeRemainArray;
+        private List<double> timeRemainArray;
         //the ETA variable for downlading
         double actualTimeRemain = 0;
         float previousTotalBytesDownloaded = 0;
@@ -70,12 +70,9 @@ namespace RelhaxModpack
         float sessionDownloadSpeed = 0;
         private int downloadCounter = -1;
         private object lockerMain = new object();
-        private LoadingGifPreview gp;
-        List<string> supportedVersions = new List<string>();
-        List<SelectablePackage> modsConfigsWithData;
+        private List<string> supportedVersions = new List<string>();
+        private List<SelectablePackage> modsConfigsWithData;
         private float scale = 1.0f;
-        public static float originalMainWindowHeight { get; set; }
-        public static float originalMainWindowWidth { get; set; }
 
         //  interpret the created CiInfo buildTag as an "us-US" or a "de-DE" timeformat and return it as a local time- and dateformat string
         public static string compileTime()//if getting build error, check windows date and time format settings https://puu.sh/xgCqO/e97e2e4a34.png
@@ -106,12 +103,13 @@ namespace RelhaxModpack
         {
             Logging.Manager("MainWindow Constructed");
             InitializeComponent();
-            this.SetStyle(                                      /// add double buffering and possibly reduce flicker https://stackoverflow.com/questions/1550293/stopping-textbox-flicker-during-update
+            this.SetStyle
+              (                                      /// add double buffering and possibly reduce flicker https://stackoverflow.com/questions/1550293/stopping-textbox-flicker-during-update
               ControlStyles.AllPaintingInWmPaint |
               ControlStyles.UserPaint |
-              ControlStyles.DoubleBuffer, true);
-            originalMainWindowHeight = this.Size.Height;
-            originalMainWindowWidth = this.Size.Width;
+              ControlStyles.DoubleBuffer, true
+              );
+            Logging.Manager("Style settings applied");
         }
 
         //handler for the mod download file progress
@@ -674,8 +672,6 @@ namespace RelhaxModpack
             if (Program.betaDatabase) this.Text = this.Text + " (BETA DB)";
             if (Program.Version == Program.ProgramVersion.Beta) this.Text = this.Text + " (BETA APP)";
             if (Program.Version == Program.ProgramVersion.Alpha) this.Text = this.Text + " (ALPHA APP)";
-            //setup the gif preview loading window
-            gp = new LoadingGifPreview(this.Location.X + this.Size.Width + 5, this.Location.Y);
             //show the wait screen
             PleaseWait wait = new PleaseWait();
             if(!Program.silentStart)
@@ -1833,64 +1829,36 @@ namespace RelhaxModpack
                 ToggleUIButtons(true);
             }
         }
+        private void ApplyControlTranslations()
+        {
+            foreach (Control c in Controls)
+            {
+                //only apply for common controls
+                if (c is RadioButton || c is CheckBox || c is GroupBox || c is Label)
+                    c.Text = Translations.getTranslatedString(c.Name);
+            }
+            Text = Translations.getTranslatedString(Name);
+        }
         //applies all settings from static settings class to this form
         private void ApplySettings(bool init = false)
         {
-            //set translation text
-            Control[] translationSetList = new Control[] { forceManuel, cleanInstallCB, backupModsCheckBox, cancerFontCB, saveLastInstallCB, saveUserDataCB, darkUICB,
-                installRelhaxMod, uninstallRelhaxMod, settingsGroupBox,loadingImageGroupBox, languageSelectionGB, findBugAddModLabel, formPageLink, selectionDefault, selectionLegacy, donateLabel,
-                cancelDownloadButton, fontSizeGB, expandNodesDefault, clearCacheCB, DiscordServerLink, viewAppUpdates, viewDBUpdates, clearLogFilesCB,
-                notifyIfSameDatabaseCB, ShowInstallCompleteWindowCB,  createShortcutsCB, InstantExtractionCB, DiagnosticUtilitiesButton, UninstallModeGroupBox, SmartUninstallModeRB,
-                CleanUninstallModeRB, SuperExtractionCB, ExportModeCB, selectionLegacyV2, expandNodesDefault2 };
-            foreach (var set in translationSetList)
-            {
-                set.Text = Translations.getTranslatedString(set.Name);
-            }
             viewTypeGB.Text = Translations.getTranslatedString("ModSelectionListViewSelection");
             DatabaseVersionLabel.Text = Translations.getTranslatedString("DatabaseVersionLabel") + " v" + Settings.DatabaseVersion;
             if (init)
             {
                 //apply all checkmarks
-                this.forceManuel.Checked = Settings.ForceManuel;
-                this.cleanInstallCB.Checked = Settings.CleanInstallation;
+                
+                cancerFontCB.Checked = Settings.ComicSans;
                 this.backupModsCheckBox.Checked = Settings.BackupModFolder;
-                this.cancerFontCB.Checked = Settings.ComicSans;
                 this.saveLastInstallCB.Checked = Settings.SaveLastConfig;
                 this.saveUserDataCB.Checked = Settings.SaveUserData;
                 this.darkUICB.Checked = Settings.DarkUI;
                 this.expandNodesDefault.Checked = Settings.ExpandAllLegacy;
-                this.clearCacheCB.Checked = Settings.ClearCache;
                 this.clearLogFilesCB.Checked = Settings.DeleteLogs;
                 this.Font = Settings.AppFont;
                 this.notifyIfSameDatabaseCB.Checked = Settings.NotifyIfSameDatabase;
-                this.ShowInstallCompleteWindowCB.Checked = Settings.ShowInstallCompleteWindow;
-                this.createShortcutsCB.Checked = Settings.CreateShortcuts;
-                this.InstantExtractionCB.Checked = Settings.InstantExtraction;
                 this.SuperExtractionCB.Checked = Settings.SuperExtraction;
-                this.ExportModeCB.Checked = Settings.ExportMode;
                 this.expandNodesDefault2.Checked = Settings.ExpandAllLegacy2;
-                switch (Settings.UninstallMode)
-                {
-                    case (Settings.UninstallModes.Smart):
-                        SmartUninstallModeRB.Checked = true;
-                        break;
-                    case (Settings.UninstallModes.Quick):
-                        CleanUninstallModeRB.Checked = true;
-                        break;
-                }
-                switch (Settings.GIF)
-                {
-                    case (Settings.LoadingGifs.Standard):
-                        {
-                            standardImageRB.Checked = true;
-                            break;
-                        }
-                    case (Settings.LoadingGifs.ThirdGuards):
-                        {
-                            thirdGuardsLoadingImageRB.Checked = true;
-                            break;
-                        }
-                }
                 LanguageComboBox.SelectedIndexChanged -= LanguageComboBox_SelectedIndexChanged;
                 switch (Translations.language)
                 {
@@ -1958,8 +1926,6 @@ namespace RelhaxModpack
                         DPIAUTO.Checked = true;
                         break;
                 }
-                if (Settings.ExportMode)
-                    forceManuel.Enabled = false;
             }
         }
 
@@ -1976,47 +1942,46 @@ namespace RelhaxModpack
         //toggle UI buttons to be Enabled or disabled
         public void ToggleUIButtons(bool enableToggle)
         {
-            if (ExportModeCB.Checked)
-                forceManuel.Enabled = false;
-            else
-                forceManuel.Enabled = enableToggle;
             installRelhaxMod.Enabled = enableToggle;
             uninstallRelhaxMod.Enabled = enableToggle;
-            cleanInstallCB.Enabled = enableToggle;
-            cancerFontCB.Enabled = enableToggle;
             backupModsCheckBox.Enabled = enableToggle;
             darkUICB.Enabled = enableToggle;
             saveUserDataCB.Enabled = enableToggle;
             saveLastInstallCB.Enabled = enableToggle;
-            ToggleScaleRBs(enableToggle);
-            DPIAUTO.Enabled = enableToggle;
-            clearCacheCB.Enabled = enableToggle;
             clearLogFilesCB.Enabled = enableToggle;
             notifyIfSameDatabaseCB.Enabled = enableToggle;
-            ShowInstallCompleteWindowCB.Enabled = enableToggle;
-            createShortcutsCB.Enabled = enableToggle;
-            InstantExtractionCB.Enabled = enableToggle;
+            cancerFontCB.Enabled = enableToggle;
             SuperExtractionCB.Enabled = enableToggle;
-            SmartUninstallModeRB.Enabled = enableToggle;
-            CleanUninstallModeRB.Enabled = enableToggle;
-            ExportModeCB.Enabled = enableToggle;
+            DPIAUTO.Enabled = enableToggle;
         }
 
+        //handler for when the window is goingto be closed
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //save settings
+            if (Program.saveSettings) Settings.saveSettings();
+            Logging.Manager("cleaning \"RelHaxTemp\" folder");
+            Utils.DirectoryDelete(Path.Combine(Application.StartupPath, "RelHaxTemp"), true);
+            Logging.Manager(string.Format("Exception counted: {0}", errorCounter));
+            Logging.Manager("Application Closing");
+            Logging.Manager("|------------------------------------------------------------------------------------------------|");
+            Logging.Dispose();
+        }
         public void ToggleScaleRBs(bool enableToggle)
         {
             float[] scales = new float[] { Settings.Scale100, Settings.Scale125, Settings.Scale175, Settings.Scale225, Settings.Scale275 };
             RadioButton[,] radioButtons = new RadioButton[,] { { fontSize100, DPI100 }, { fontSize125, DPI125 }, { fontSize175, DPI175 }, { fontSize225, DPI225 }, { fontSize275, DPI275 } };
             for (int i = 0; i < scales.Count(); i++)
             {
-                float floatHeight = originalMainWindowHeight * scales[i];
-                float floatWidth = originalMainWindowWidth * scales[i];
+                float floatHeight = Height * scales[i];
+                float floatWidth = Width * scales[i];
                 radioButtons[i, 0].Enabled = CheckMainWindowSizeToMonitorSize((int)floatHeight, (int)floatWidth) && enableToggle;
                 radioButtons[i, 1].Enabled = radioButtons[i, 0].Enabled;
             }
         }
 
         // https://stackoverflow.com/questions/254197/how-can-i-get-the-active-screen-dimensions
-        private bool CheckMainWindowSizeToMonitorSize(int intHeight, int intWidth)              
+        private bool CheckMainWindowSizeToMonitorSize(int intHeight, int intWidth)
         {
             var hwnd = this.Handle;
             var monitor = NativeMethods.MonitorFromWindow(hwnd, NativeMethods.MONITOR_DEFAULTTONEAREST);
@@ -2033,19 +1998,6 @@ namespace RelhaxModpack
             {
                 return false;
             }
-        }
-
-        //handler for when the window is goingto be closed
-        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            //save settings
-            if (Program.saveSettings) Settings.saveSettings();
-            Logging.Manager("cleaning \"RelHaxTemp\" folder");
-            Utils.DirectoryDelete(Path.Combine(Application.StartupPath, "RelHaxTemp"), true);
-            Logging.Manager(string.Format("Exception counted: {0}", errorCounter));
-            Logging.Manager("Application Closing");
-            Logging.Manager("|------------------------------------------------------------------------------------------------|");
-            Logging.Dispose();
         }
 
         #region LinkClicked Events
@@ -2067,44 +2019,6 @@ namespace RelhaxModpack
         private void formPageLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
-        }
-        #endregion
-
-        #region Loading animations handlers
-        //handler for when the "standard" loading animation is clicked
-        private void standardImageRB_CheckedChanged(object sender, EventArgs e)
-        {
-            if (standardImageRB.Checked)
-            {
-                Settings.GIF = Settings.LoadingGifs.Standard;
-            }
-            else if (thirdGuardsLoadingImageRB.Checked)
-            {
-                Settings.GIF = Settings.LoadingGifs.ThirdGuards;
-            }
-        }
-
-        private void standardImageRB_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != System.Windows.Forms.MouseButtons.Right)
-                return;
-            RadioButton rb = (RadioButton)sender;
-            Settings.LoadingGifs backup = Settings.GIF;
-            if (rb.Name.Equals("standardImageRB"))
-            {
-                Settings.GIF = Settings.LoadingGifs.Standard;
-            }
-            else if (rb.Name.Equals("thirdGuardsLoadingImageRB"))
-            {
-                Settings.GIF = Settings.LoadingGifs.ThirdGuards;
-            }
-            else
-                return;
-            //create the preview
-            gp.Hide();
-            gp.SetLoadingImage();
-            gp.Show();
-            GC.Collect();
         }
         #endregion
 
@@ -2289,23 +2203,6 @@ namespace RelhaxModpack
             }
             this.ApplySettings();
         }
-        //handler for what happends when the check box "clean install" is checked or not
-        private void cleanInstallCB_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.CleanInstallation = cleanInstallCB.Checked;
-        }
-        //enalbes the user to use "comic sans" font for the 1 person that would ever want to do that
-        private void cancerFontCB_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.ComicSans = cancerFontCB.Checked;
-            Settings.ApplInternalProperties();
-            this.Font = Settings.AppFont;
-        }
-        //handler for when the "force manuel" checkbox is checked
-        private void forceManuel_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.ForceManuel = forceManuel.Checked;
-        }
         //handler for when the "backupResMods mods" checkbox is changed
         private void backupModsCheckBox_CheckedChanged(object sender, EventArgs e)
         {
@@ -2379,11 +2276,6 @@ namespace RelhaxModpack
         private void expandNodesDefault2_CheckedChanged(object sender, EventArgs e)
         {
             Settings.ExpandAllLegacy2 = expandNodesDefault2.Checked;
-        }
-
-        private void clearCacheCB_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.ClearCache = clearCacheCB.Checked;
         }
 
         private void fontSize100_CheckedChanged(object sender, EventArgs e)
@@ -2631,7 +2523,13 @@ namespace RelhaxModpack
                 ToggleScaleRBs(true);
             }
         }
-
+        //enalbes the user to use "comic sans" font for the 1 person that would ever want to do that
+        private void cancerFontCB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.ComicSans = cancerFontCB.Checked;
+            Settings.ApplInternalProperties();
+            Font = Settings.AppFont;
+        }
         private void clearLogFilesCB_CheckedChanged(object sender, EventArgs e)
         {
             Settings.DeleteLogs = clearLogFilesCB.Checked;
@@ -2642,42 +2540,9 @@ namespace RelhaxModpack
             Settings.NotifyIfSameDatabase = notifyIfSameDatabaseCB.Checked;
         }
 
-        private void ShowInstallCompleteWindow_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.ShowInstallCompleteWindow = ShowInstallCompleteWindowCB.Checked;
-        }
-
-        private void CreateShortcutsCB_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.CreateShortcuts = createShortcutsCB.Checked;
-        }
-
-        private void InstantExtractionCB_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.InstantExtraction = InstantExtractionCB.Checked;
-        }
-
-        private void SmartUninstallModeRB_CheckedChanged(object sender, EventArgs e)
-        {
-            if (SmartUninstallModeRB.Checked)
-                Settings.UninstallMode = Settings.UninstallModes.Smart;
-        }
-
         private void SuperExtractionCB_CheckedChanged(object sender, EventArgs e)
         {
             Settings.SuperExtraction = SuperExtractionCB.Checked;
-        }
-
-        private void CleanUninstallModeRB_CheckedChanged(object sender, EventArgs e)
-        {
-            if (CleanUninstallModeRB.Checked)
-                Settings.UninstallMode = Settings.UninstallModes.Quick;
-        }
-
-        private void ExportModeCB_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.ExportMode = ExportModeCB.Checked;
-            forceManuel.Enabled = !ExportModeCB.Checked;
         }
         #endregion
 
