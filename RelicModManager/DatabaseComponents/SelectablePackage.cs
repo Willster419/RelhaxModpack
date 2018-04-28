@@ -10,6 +10,25 @@ namespace RelhaxModpack
     //a selectable package could be a mod or a config
     public class SelectablePackage : DatabasePackage
     {
+        //constructor
+        public SelectablePackage()
+        {
+            //save memory by only enabling the components we need
+            switch (Settings.SView)
+            {
+                case Settings.SelectionView.Default:
+                    RelhaxFormComboBoxList = new RelhaxFormComboBox[2];
+                    TreeNode = new RelhaxFormTreeNode();
+                    break;
+                case Settings.SelectionView.Legacy:
+                    RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
+                    TreeViewItem = new System.Windows.Controls.TreeViewItem();
+                    ChildBorder = new System.Windows.Controls.Border();
+                    ChildStackPanel = new System.Windows.Controls.StackPanel();
+                    break;
+            }
+
+        }
         //the name of the package for the user display
         public string Name = "";
         public string NameFormatted
@@ -142,16 +161,24 @@ namespace RelhaxModpack
         }
         //keeping track of the level in the tree where it is. 0 is topmost level
         public int Level = -2;
+        //Components for FORMS
         //the list of all dropDown options for each package type
-        public RelhaxFormComboBox[] RelhaxFormComboBoxList = new RelhaxFormComboBox[2];
-        public RelhaxWPFComboBox[] RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
-        //the TreeViewItem for WPF
-        public System.Windows.Controls.TreeViewItem @TreeViewItem = new System.Windows.Controls.TreeViewItem();
+        public RelhaxFormComboBox[] RelhaxFormComboBoxList;
         //the TreeViewItem for winForms
-        public RelhaxFormTreeNode TreeNode = new RelhaxFormTreeNode();
+        public RelhaxFormTreeNode TreeNode;
         //the panel that this package sits in
         public Panel ParentPanel = null;
         public Panel ChildPanel = null;
+
+        //Components for WPF
+        public RelhaxWPFComboBox[] RelhaxWPFComboBoxList;
+        //the TreeViewItem for WPF
+        public System.Windows.Controls.TreeViewItem @TreeViewItem;
+        //the border for the legacy view to allow for putting all subchilderen in the border. sits inside treeviewitem
+        public System.Windows.Controls.Border ChildBorder;
+        //the stackpanel to allow the child treeviewitems to stack upon each other. sits inside the border
+        public System.Windows.Controls.StackPanel ChildStackPanel;
+        
         //the list of cache files that should be backed up before wiping the directory
         public List<string> UserFiles = new List<string>();
         //the list of SelectablePackage entries within this instance of SelectablePackages
@@ -161,7 +188,6 @@ namespace RelhaxModpack
         public List<Dependency> Dependencies = new List<Dependency>();
         //list of media preview items associated with this package
         public List<Media> PictureList = new List<Media>();
-        public SelectablePackage() { }
         //sorts the mods
         public static int CompareMods(SelectablePackage x, SelectablePackage y)
         {
