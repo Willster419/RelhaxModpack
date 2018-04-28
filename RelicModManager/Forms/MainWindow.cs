@@ -344,7 +344,7 @@ namespace RelhaxModpack
                         //download new version
                         sw.Reset();
                         sw.Start();
-                        string newExeName = Settings.UseLegacyUpdateMethod? Path.Combine(Application.StartupPath, "RelhaxModpack_update.exe"): Path.Combine(Application.StartupPath, "RelhaxModpack_update.zip");
+                        string newExeName = Settings.UseAlternateUpdateMethod? Path.Combine(Application.StartupPath, "RelhaxModpack_update.zip"):Path.Combine(Application.StartupPath, "RelhaxModpack_update.exe");
                         updater.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
                         updater.DownloadFileCompleted += new AsyncCompletedEventHandler(updater_DownloadFileCompleted);
 
@@ -371,12 +371,12 @@ namespace RelhaxModpack
                         if (File.Exists(newExeName)) File.Delete(newExeName);
                         //using new attemp at an update method. Application now downloads a zip file of itself, rather than an exe. Maybe it will help antivirus issues
                         string modpackExeURL = null;
-                        if(Settings.UseLegacyUpdateMethod)
-                            modpackExeURL = Program.betaApplication ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.exe" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe";
-                        else
+                        if(Settings.UseAlternateUpdateMethod)
                             modpackExeURL = Program.betaApplication ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.zip" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";
+                        else
+                            modpackExeURL = Program.betaApplication ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.exe" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe";
                         updater.DownloadFileAsync(new Uri(modpackExeURL), newExeName);
-                        Logging.Manager("New application download started, UseLegacyUpdateMethod=" + Settings.UseLegacyUpdateMethod);
+                        Logging.Manager("New application download started, UseAlternateUpdateMethod=" + Settings.UseAlternateUpdateMethod);
                         currentModDownloading = "update ";
                     }
                     else
@@ -420,11 +420,11 @@ namespace RelhaxModpack
             {
                 //first, log it
                 Utils.ExceptionLog(ezip);
-                if(MessageBox.Show("Error extracting update, restart and try using legacy update option?","error extraction update",MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if(MessageBox.Show("Error extracting update, restart and try using normal update option?","error extraction update",MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    Settings.UseLegacyUpdateMethod = true;
-                    //"If your application was originally supplied command-line options when it first executed, Restart will launch the application again with the same options."
+                    Settings.UseAlternateUpdateMethod = false;
                     //https://msdn.microsoft.com/en-us/library/system.windows.forms.application.restart(v=vs.110).aspx
+                    //"If your application was originally supplied command-line options when it first executed, Restart() will launch the application again with the same options."
                     Application.Restart();
                 }
                 else

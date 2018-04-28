@@ -89,7 +89,8 @@ namespace RelhaxModpack
         public static bool PreviewFullscreen { get; set; }
         public static int PreviewHeight { get; set; }
         public static int PreviewWidth { get; set; }
-        public static bool UseLegacyUpdateMethod;
+        //default is to not use it, only use it when issues with normal method
+        public static bool UseAlternateUpdateMethod = false;
         //
         public static string CustomModInfoPath = "";
         //enumeration for the type of uninstall mode
@@ -137,7 +138,7 @@ namespace RelhaxModpack
             PreviewFullscreen = false;
             PreviewWidth = 450;
             PreviewHeight = 550;
-            UseLegacyUpdateMethod = false;
+            UseAlternateUpdateMethod = false;
             Logging.Manager("Loading application settings");
             if (!File.Exists(SettingsXmlFile))
             {
@@ -193,7 +194,7 @@ namespace RelhaxModpack
                 FontSizeforum = FontSize.Font100;
                 SView = SelectionView.Default;
                 ShowInstallCompleteWindow = false;
-                UseLegacyUpdateMethod = false;
+                UseAlternateUpdateMethod = false;
             }
             else
             {
@@ -304,8 +305,8 @@ namespace RelhaxModpack
                         case "ExportMode":
                             ExportMode = bool.Parse(n.InnerText);
                             break;
-                        case "UseLegacyUpdateMethod":
-                            UseLegacyUpdateMethod = bool.Parse(n.InnerText);
+                        case "UseAlternateUpdateMethod":
+                            UseAlternateUpdateMethod = bool.Parse(n.InnerText);
                             break;
                     }
                 }
@@ -422,9 +423,9 @@ namespace RelhaxModpack
             XmlElement xPreviewHeight = doc.CreateElement("PreviewHeight");
             xPreviewHeight.InnerText = "" + PreviewHeight;
             settingsHolder.AppendChild(xPreviewHeight);
-            XmlElement xUseLegacyUpdateMethod = doc.CreateElement("UseLegacyUpdateMethod");
-            xUseLegacyUpdateMethod.InnerText = "" + UseLegacyUpdateMethod;
-            settingsHolder.AppendChild(xUseLegacyUpdateMethod);
+            XmlElement xUseAlternateUpdateMethod = doc.CreateElement("UseAlternateUpdateMethod");
+            xUseAlternateUpdateMethod.InnerText = "" + UseAlternateUpdateMethod;
+            settingsHolder.AppendChild(xUseAlternateUpdateMethod);
 
             doc.Save(SettingsXmlFile);
             Logging.Manager("Settings saved successfully");
