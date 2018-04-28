@@ -208,11 +208,14 @@ namespace RelhaxModpack
             if (DatabasePackagesToDownload.Count != downloadCounter)
             {
                 //downloader components
-                AsyncDownloadArgs args = new AsyncDownloadArgs();
-                //args.url = new Uri(Utils.ReplaceMacro(DatabasePackagesToDownload[downloadCounter].StartAddress) + DatabasePackagesToDownload[downloadCounter].ZipFile + DatabasePackagesToDownload[downloadCounter].EndAddress);
-                args.url = new Uri(DatabasePackagesToDownload[downloadCounter].StartAddress.Replace(@"{onlineFolder}", Settings.TanksOnlineFolderVersion)
-                    + DatabasePackagesToDownload[downloadCounter].ZipFile + DatabasePackagesToDownload[downloadCounter].EndAddress);
-                args.zipFile = Path.Combine(Settings.RelhaxDownloadsFolder,DatabasePackagesToDownload[downloadCounter].ZipFile);
+                AsyncDownloadArgs args = new AsyncDownloadArgs
+                {
+                    //args.url = new Uri(Utils.ReplaceMacro(DatabasePackagesToDownload[downloadCounter].StartAddress) + DatabasePackagesToDownload[downloadCounter].ZipFile + DatabasePackagesToDownload[downloadCounter].EndAddress);
+                    url = new Uri(DatabasePackagesToDownload[downloadCounter].StartAddress.Replace(@"{onlineFolder}", Settings.TanksOnlineFolderVersion)
+                    + DatabasePackagesToDownload[downloadCounter].ZipFile
+                    + DatabasePackagesToDownload[downloadCounter].EndAddress),
+                    zipFile = Path.Combine(Settings.RelhaxDownloadsFolder, DatabasePackagesToDownload[downloadCounter].ZipFile)
+                };
                 //for the next file in the queue, delete it.
                 if (File.Exists(args.zipFile)) File.Delete(args.zipFile);
                 //download new zip file
@@ -863,7 +866,7 @@ namespace RelhaxModpack
                     supportedVersions.Add(node.InnerText);
                 }
                 //check if the selection is valid
-                using (RelhaxModpack.Forms.ExportSelectWoTVersion wotv = new Forms.ExportSelectWoTVersion()
+                using (ExportSelectWoTVersion wotv = new ExportSelectWoTVersion()
                 {
                     SupportedWoTVersions = supportedClients
                 })
@@ -1328,7 +1331,7 @@ namespace RelhaxModpack
                 {
                     if (list.UserMods[i].Enabled && list.UserMods[i].Checked)
                     {
-                        this.userMods.Add(list.UserMods[i]);
+                        userMods.Add(list.UserMods[i]);
                     }
                 }
             }
