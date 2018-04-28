@@ -322,7 +322,7 @@ namespace RelhaxModpack
                         c.CategoryHeader.Packages = c.Packages;
                         c.CategoryHeader.ParentPanel = new Panel()
                         {
-                            BorderStyle = Settings.EnableBordersDefaultView ? BorderStyle.None : BorderStyle.FixedSingle,
+                            BorderStyle = Settings.EnableBordersDefaultView ? BorderStyle.FixedSingle : BorderStyle.None,
                             //autosize is true by default...?
                             Size = new Size(c.TabPage.Size.Width - 25, 60),
                             Location = new Point(5, GetYLocation(c.TabPage.Controls)),
@@ -335,35 +335,50 @@ namespace RelhaxModpack
                         break;
                     case Settings.SelectionView.Legacy:
                         //create the WPF host for this tabPage
-                        lsl = new LegacySelectionList();
+                        //lsl = new LegacySelectionList();
                         ElementHost host = new ElementHost()
                         {
                             Location = new Point(5, 5),
                             Size = new Size(t.Size.Width - 5 - 5, t.Size.Height - 5 - 5),
                             BackColorTransparent = false,
                             BackColor = Color.White,
-                            Child = lsl,
+                            Child = new LegacySelectionList(),
                             Dock = DockStyle.Fill
                         };
-                        //apparently there is an item in there. clear it.
-                        lsl.legacyTreeView.Items.Clear();
-                        lsl.MouseDown += Lsl_MouseDown;
+                        //add the host to the tab control
                         t.Controls.Add(host);
+                        //create legacyselectionlist for inside host
+                        lsl = (LegacySelectionList) host.Child;
+                        if (lsl.legacyTreeView.HasItems)
+                            lsl.legacyTreeView.Items.Clear();
+                        lsl.MouseDown += Lsl_MouseDown;
+                        if (Settings.DarkUI)
+                            lsl.legacyTreeView.Background = System.Windows.Media.Brushes.Gray;
+                        //create checkbox header for inside selecteionlist (treeView)
                         RelhaxWPFCheckBox cb2 = new RelhaxWPFCheckBox()
                         {
                             Package = c.CategoryHeader,
                             Content = c.CategoryHeader.NameFormatted
                         };
+                        cb2.Click += OnWPFComponentCheck;
+                        //create the border and stackpanels
+                        c.CategoryHeader.ChildStackPanel = new System.Windows.Controls.StackPanel();
+                        c.CategoryHeader.ChildBorder = new System.Windows.Controls.Border()
+                        {
+                            BorderBrush = System.Windows.Media.Brushes.Black,
+                            BorderThickness = Settings.EnableBordersLegacyView ? new System.Windows.Thickness(3) : new System.Windows.Thickness(0),
+                            Child = c.CategoryHeader.ChildStackPanel
+                        };
+                        //add the border (and thus the stackpanel) to the treeviewitem
+                        c.CategoryHeader.TreeViewItem.Items.Add(c.CategoryHeader.ChildBorder);
+                        //make all modifications to CategoryHeader package
                         c.CategoryHeader.UIComponent = cb2;
                         c.CategoryHeader.ParentUIComponent = cb2;
                         c.CategoryHeader.TopParentUIComponent = cb2;
                         c.CategoryHeader.Packages = c.Packages;
-                        if (Settings.DarkUI)
-                            lsl.legacyTreeView.Background = System.Windows.Media.Brushes.Gray;
                         c.CategoryHeader.TreeViewItem.Header = c.CategoryHeader.UIComponent;
                         c.CategoryHeader.TreeViewItem.IsExpanded = Settings.ExpandAllLegacy ? true : false;
                         lsl.legacyTreeView.Items.Add(c.CategoryHeader.TreeViewItem);
-                        cb2.Click += OnWPFComponentCheck;
                         break;
                     case Settings.SelectionView.LegacyV2:
                         //make the treeview
@@ -437,22 +452,28 @@ namespace RelhaxModpack
                         Application.DoEvents();
                     }
                     AddPackage(m, c, c.CategoryHeader);
+                    if(Settings.SView == Settings.SelectionView.LegacyV2)
+                    {
+                        if (Settings.ExpandAllLegacy2)
+                        {
+                            m.TreeNode.ExpandAll();
+                        }
+                        else
+                        {
+                            m.TreeNode.Collapse();
+                        }
+                    }
+                }
+                if(Settings.SView == Settings.SelectionView.LegacyV2)
+                {
                     if (Settings.ExpandAllLegacy2)
                     {
-                        m.TreeNode.ExpandAll();
+                        c.CategoryHeader.TreeNode.Expand();
                     }
                     else
                     {
-                        m.TreeNode.Collapse();
+                        c.CategoryHeader.TreeNode.Collapse();
                     }
-                }
-                if(Settings.ExpandAllLegacy2)
-                {
-                    c.CategoryHeader.TreeNode.Expand();
-                }
-                else
-                {
-                    c.CategoryHeader.TreeNode.Collapse();
                 }
             }
             //end ui building
@@ -862,7 +883,7 @@ namespace RelhaxModpack
                     if (canBeEnabled && sp.Enabled && sp.Checked && Settings.EnableChildColorChangeDefaultView)
                         sp.ParentPanel.BackColor = Color.BlanchedAlmond;
                     else
-                        sp.ParentPanel.BackColor = Settings.getBackColor();
+                        sp.ParentPanel.BackColor = Settings.GetBackColorDefault();
                     //color change code
                     //start code for handlers tooltips and attaching
                     if ((sp.UIComponent != null) && (sp.UIComponent is Control cont))
@@ -887,6 +908,19 @@ namespace RelhaxModpack
                 case Settings.SelectionView.Legacy:
                     //in WPF underscores are only displayed when there's two of them
                     packageDisplayName = packageDisplayName.Replace(@"_", @"__");
+                    //start code for border and stackpanel
+                    if(sp.ChildBorder == null && sp.Packages.Count > 0)
+                    {
+                        sp.ChildStackPanel = new System.Windows.Controls.StackPanel();
+                        sp.ChildBorder = new System.Windows.Controls.Border()
+                        {
+                            BorderBrush = System.Windows.Media.Brushes.Black,
+                            BorderThickness = Settings.EnableBordersLegacyView ? new System.Windows.Thickness(3) : new System.Windows.Thickness(0),
+                            Child = sp.ChildStackPanel
+                        };
+                        sp.TreeViewItem.Items.Add(sp.ChildBorder);
+                    }
+                    //end code for border and stackpanel
                     switch(sp.Type)
                     {
                         case "single":
@@ -941,7 +975,8 @@ namespace RelhaxModpack
                                         sp.Parent.RelhaxWPFComboBoxList[0].SelectedIndex = 0;
                                 }
                                 sp.TreeViewItem.Header = sp.Parent.RelhaxWPFComboBoxList[0];
-                                sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
+                                //sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
+                                sp.Parent.ChildStackPanel.Children.Add(sp.TreeViewItem);
                             }
                             break;
                         case "single_dropdown2":
@@ -980,7 +1015,8 @@ namespace RelhaxModpack
                                         sp.Parent.RelhaxWPFComboBoxList[1].SelectedIndex = 0;
                                 }
                                 sp.TreeViewItem.Header = sp.Parent.RelhaxWPFComboBoxList[1];
-                                sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
+                                //sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
+                                sp.Parent.ChildStackPanel.Children.Add(sp.TreeViewItem);
                             }
                             break;
                         case "multi":
@@ -1022,14 +1058,16 @@ namespace RelhaxModpack
                             rb.Click += OnWPFComponentCheck;
                             sp.TreeViewItem.Header = sp.UIComponent;
                             sp.TreeViewItem.IsExpanded = Settings.ExpandAllLegacy ? true : false;
-                            sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
+                            sp.Parent.ChildStackPanel.Children.Add(sp.TreeViewItem);
+                            //sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
                         }
                         else if(sp.UIComponent is System.Windows.Controls.CheckBox cb)
                         {
                             cb.Click += OnWPFComponentCheck;
                             sp.TreeViewItem.Header = sp.UIComponent;
                             sp.TreeViewItem.IsExpanded = Settings.ExpandAllLegacy ? true : false;
-                            sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
+                            sp.Parent.ChildStackPanel.Children.Add(sp.TreeViewItem);
+                            //sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
                         }
                     }
                     break;
@@ -1322,7 +1360,7 @@ namespace RelhaxModpack
             //if (ParentPanel != null && !AnyPackagesChecked())
             //ParentPanel.BackColor = Settings.getBackColor();
             if (!Settings.EnableChildColorChangeDefaultView && spc.Level == -1 && spc.ParentPanel != null && !spc.AnyPackagesChecked())
-                spc.ParentPanel.BackColor = Settings.getBackColor();
+                spc.ParentPanel.BackColor = Settings.GetBackColorDefault();
         }
 
         //propagates the change back up the selection tree

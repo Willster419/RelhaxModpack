@@ -640,13 +640,19 @@ namespace RelhaxModpack
             else
                 return SystemColors.ControlText;
         }
-        public static Color getBackColor()
+        public static Color GetBackColorDefault()
         {
             if (DarkUI)
                 return SystemColors.ControlDark;
-
             else
                 return SystemColors.Control;
+        }
+        public static System.Windows.Media.Brush GetBackColorWPF()
+        {
+            if (DarkUI)
+                return System.Windows.Media.Brushes.Gray;
+            else
+                return System.Windows.Media.Brushes.White;
         }
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern IntPtr FindWindow(string strClassName, string strWindowName);

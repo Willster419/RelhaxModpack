@@ -18,13 +18,15 @@ namespace RelhaxModpack
             {
                 case Settings.SelectionView.Default:
                     RelhaxFormComboBoxList = new RelhaxFormComboBox[2];
-                    TreeNode = new RelhaxFormTreeNode();
                     break;
                 case Settings.SelectionView.Legacy:
                     RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
                     TreeViewItem = new System.Windows.Controls.TreeViewItem();
-                    ChildBorder = new System.Windows.Controls.Border();
-                    ChildStackPanel = new System.Windows.Controls.StackPanel();
+                    //ChildBorder = new System.Windows.Controls.Border();
+                    //ChildStackPanel = new System.Windows.Controls.StackPanel();
+                    break;
+                case Settings.SelectionView.LegacyV2:
+                    TreeNode = new RelhaxFormTreeNode();
                     break;
             }
 
@@ -36,7 +38,7 @@ namespace RelhaxModpack
             get {
                     return Name.Replace("{version}",Version);
                     //string replace takes much less time than replaceMacro
-                    //also nameFormatted currently only ever has {version} macro
+                    //also name property currently only ever has {version} macro
                     //Utils.ReplaceMacro(Name,"version",Version);
                 }
         }
@@ -79,24 +81,26 @@ namespace RelhaxModpack
                     UIComponent.OnCheckedChanged(value);
                 if ((Type.Equals("single_dropdown") || Type.Equals("single_dropdown1")) && Enabled)
                 {
-                    if (Parent.RelhaxFormComboBoxList[0] != null)
+                    switch(Settings.SView)
                     {
-                        Parent.RelhaxFormComboBoxList[0].OnDropDownSelectionChanged(this, value);
-                    }
-                    else
-                    {
-                        Parent.RelhaxWPFComboBoxList[0].OnDropDownSelectionChanged(this,value);
+                        case Settings.SelectionView.Default:
+                            Parent.RelhaxFormComboBoxList[0].OnDropDownSelectionChanged(this, value);
+                            break;
+                        case Settings.SelectionView.Legacy:
+                            Parent.RelhaxWPFComboBoxList[0].OnDropDownSelectionChanged(this, value);
+                            break;
                     }
                 }
                 else if (Type.Equals("single_dropdown2") && Enabled)
                 {
-                    if (Parent.RelhaxFormComboBoxList[1] != null)
+                    switch (Settings.SView)
                     {
-                        Parent.RelhaxFormComboBoxList[1].OnDropDownSelectionChanged(this,value);
-                    }
-                    else
-                    {
-                        Parent.RelhaxWPFComboBoxList[1].OnDropDownSelectionChanged(this,value);
+                        case Settings.SelectionView.Default:
+                            Parent.RelhaxFormComboBoxList[1].OnDropDownSelectionChanged(this, value);
+                            break;
+                        case Settings.SelectionView.Legacy:
+                            Parent.RelhaxWPFComboBoxList[1].OnDropDownSelectionChanged(this, value);
+                            break;
                     }
                 }
                 switch (Settings.SView)
@@ -120,7 +124,7 @@ namespace RelhaxModpack
                                 if (Settings.EnableChildColorChangeDefaultView)
                                 {
                                     if (ParentPanel != null && !AnyPackagesChecked())
-                                        ParentPanel.BackColor = Settings.getBackColor();
+                                        ParentPanel.BackColor = Settings.GetBackColorDefault();
                                 }
                                 break;
                         }
@@ -133,14 +137,18 @@ namespace RelhaxModpack
                                 //handle color change code
                                 if (Settings.EnableChildColorChangeLegacyView)
                                 {
-                                    
+                                    if(ChildBorder != null && ChildBorder.Background != System.Windows.Media.Brushes.BlanchedAlmond)
+                                    {
+                                        ChildBorder.Background = System.Windows.Media.Brushes.BlanchedAlmond;
+                                    }
                                 }
                                 break;
                             case false:
                                 //handle color change code
                                 if (Settings.EnableChildColorChangeLegacyView)
                                 {
-
+                                    if (ChildBorder != null && !AnyPackagesChecked())
+                                        ChildBorder.Background = Settings.GetBackColorWPF();
                                 }
                                 break;
                         }
