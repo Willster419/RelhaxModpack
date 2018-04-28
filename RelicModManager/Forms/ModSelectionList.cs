@@ -366,7 +366,7 @@ namespace RelhaxModpack
                         c.CategoryHeader.ChildBorder = new System.Windows.Controls.Border()
                         {
                             BorderBrush = System.Windows.Media.Brushes.Black,
-                            BorderThickness = Settings.EnableBordersLegacyView ? new System.Windows.Thickness(3) : new System.Windows.Thickness(0),
+                            BorderThickness = Settings.EnableBordersLegacyView ? new System.Windows.Thickness(1) : new System.Windows.Thickness(0),
                             Child = c.CategoryHeader.ChildStackPanel
                         };
                         //add the border (and thus the stackpanel) to the treeviewitem
@@ -915,7 +915,7 @@ namespace RelhaxModpack
                         sp.ChildBorder = new System.Windows.Controls.Border()
                         {
                             BorderBrush = System.Windows.Media.Brushes.Black,
-                            BorderThickness = Settings.EnableBordersLegacyView ? new System.Windows.Thickness(3) : new System.Windows.Thickness(0),
+                            BorderThickness = Settings.EnableBordersLegacyView ? new System.Windows.Thickness(1) : new System.Windows.Thickness(0),
                             Child = sp.ChildStackPanel
                         };
                         sp.TreeViewItem.Items.Add(sp.ChildBorder);
@@ -1359,8 +1359,10 @@ namespace RelhaxModpack
             //if it's the top level thing and the color change is enabled (disable is false), then tell it to check again for color change code
             //if (ParentPanel != null && !AnyPackagesChecked())
             //ParentPanel.BackColor = Settings.getBackColor();
-            if (!Settings.EnableChildColorChangeDefaultView && spc.Level == -1 && spc.ParentPanel != null && !spc.AnyPackagesChecked())
+            if (Settings.EnableChildColorChangeDefaultView && spc.Level == -1 && spc.ParentPanel != null && !spc.AnyPackagesChecked())
                 spc.ParentPanel.BackColor = Settings.GetBackColorDefault();
+            if (Settings.EnableChildColorChangeLegacyView && spc.Level == -1 && spc.ChildBorder != null && !spc.AnyPackagesChecked())
+                spc.ChildBorder.Background = Settings.GetBackColorWPF();
         }
 
         //propagates the change back up the selection tree
@@ -1642,22 +1644,21 @@ namespace RelhaxModpack
         #endregion
 
         #region selection code
-
         //unchecks all mods from memory
         public static void ClearSelectionMemory(List<Category> parsedCatagoryList, List<SelectablePackage> UserMods)
         {
             Logging.Manager("Unchecking all mods");
             foreach (Category c in parsedCatagoryList)
             {
-                if (c.CategoryHeader.Checked)
-                    c.CategoryHeader.Checked = false;
                 foreach (SelectablePackage m in c.Packages)
                 {
-                    if (m.Checked)
-                        m.Checked = false;
                     //no need to clobber over UI controls, that is now done for us
                     UncheckProcessConfigs(m.Packages);
+                    if (m.Checked)
+                        m.Checked = false;
                 }
+                if (c.CategoryHeader.Checked)
+                    c.CategoryHeader.Checked = false;
             }
             if (UserMods != null)
             {
@@ -1673,9 +1674,9 @@ namespace RelhaxModpack
         {
             foreach (SelectablePackage c in configList)
             {
+                UncheckProcessConfigs(c.Packages);
                 if (c.Checked)
                     c.Checked = false;
-                UncheckProcessConfigs(c.Packages);
             }
         }
 
@@ -2304,8 +2305,6 @@ namespace RelhaxModpack
             LoadingConfig = true;
             Logging.Manager("clearSelectionsButton pressed, clearing selections");
             ClearSelectionMemory(ParsedCatagoryList, UserMods);
-            //dispose of not needed stuff and reload the UI
-
             LoadingConfig = false;
             MessageBox.Show(Translations.getTranslatedString("selectionsCleared"));
             //ModSelectionList_SizeChanged(null, null);
