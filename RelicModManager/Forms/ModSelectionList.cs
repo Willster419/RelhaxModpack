@@ -2416,55 +2416,58 @@ namespace RelhaxModpack
         }
         private void ColapseAllButton_Click(object sender, EventArgs e)
         {
-            foreach (Control c in modTabGroups.SelectedTab.Controls)
+            switch(Settings.SView)
             {
-                if (c is ElementHost)
-                {
-                    ElementHost eh = (ElementHost)c;
-                    LegacySelectionList lsl = (LegacySelectionList)eh.Child;
-                    foreach (System.Windows.Controls.TreeViewItem tvi in lsl.legacyTreeView.Items)
+                case Settings.SelectionView.Legacy:
+                    foreach (Control c in modTabGroups.SelectedTab.Controls)
                     {
-                        tvi.IsExpanded = false;
-                        if (tvi.Items.Count > 0)
+                        if (c is ElementHost eh)
                         {
-                            processTreeViewItems(tvi.Items, false);
+                            LegacySelectionList lsl = (LegacySelectionList)eh.Child;
+                            foreach (System.Windows.Controls.TreeViewItem tvi in lsl.legacyTreeView.Items)
+                            {
+                                tvi.IsExpanded = false;
+                                System.Windows.Controls.Border b = (System.Windows.Controls.Border)tvi.Items[0];
+                                System.Windows.Controls.StackPanel st = (System.Windows.Controls.StackPanel)b.Child;
+                                if (st.Children.Count > 0)
+                                {
+                                    processTreeViewItems(st.Children, false);
+                                }
+                            }
                         }
                     }
-                }
+                    break;
             }
         }
 
         private void expandAllButton_Click(object sender, EventArgs e)
         {
-            if (Settings.SView == Settings.SelectionView.Legacy)
+            switch(Settings.SView)
             {
-                foreach (Control c in modTabGroups.SelectedTab.Controls)
-                {
-                    if (c is ElementHost)
+                case Settings.SelectionView.Legacy:
+                    foreach (Control c in modTabGroups.SelectedTab.Controls)
                     {
-                        ElementHost eh = (ElementHost)c;
-                        LegacySelectionList lsl = (LegacySelectionList)eh.Child;
-                        foreach (System.Windows.Controls.TreeViewItem tvi in lsl.legacyTreeView.Items)
+                        if (c is ElementHost)
                         {
-                            tvi.IsExpanded = true;
-                            if (tvi.Items.Count > 0)
+                            ElementHost eh = (ElementHost)c;
+                            LegacySelectionList lsl = (LegacySelectionList)eh.Child;
+                            foreach (System.Windows.Controls.TreeViewItem tvi in lsl.legacyTreeView.Items)
                             {
-                                processTreeViewItems(tvi.Items, true);
+                                tvi.IsExpanded = true;
+                                System.Windows.Controls.Border b = (System.Windows.Controls.Border)tvi.Items[0];
+                                System.Windows.Controls.StackPanel st = (System.Windows.Controls.StackPanel)b.Child;
+                                if (st.Children.Count > 0)
+                                {
+                                    processTreeViewItems(st.Children, true);
+                                }
                             }
                         }
                     }
-                }
-            }
-            else if (Settings.SView == Settings.SelectionView.LegacyV2)
-            {
-                foreach (Control c in modTabGroups.SelectedTab.Controls)
-                {
-
-                }
+                    break;
             }
         }
 
-        private void processTreeViewItems(System.Windows.Controls.ItemCollection ic, bool expand)
+        private void processTreeViewItems(System.Windows.Controls.UIElementCollection ic, bool expand)
         {
             foreach (System.Windows.Controls.TreeViewItem tvi in ic)
             {
@@ -2472,9 +2475,14 @@ namespace RelhaxModpack
                     tvi.IsExpanded = true;
                 else
                     tvi.IsExpanded = false;
-                if (tvi.Items.Count > 0)
+                if(tvi.Items.Count > 0)
                 {
-                    processTreeViewItems(tvi.Items, expand);
+                    System.Windows.Controls.Border b = (System.Windows.Controls.Border)tvi.Items[0];
+                    System.Windows.Controls.StackPanel st = (System.Windows.Controls.StackPanel)b.Child;
+                    if (st.Children.Count > 0)
+                    {
+                        processTreeViewItems(st.Children, expand);
+                    }
                 }
             }
         }
