@@ -26,14 +26,20 @@ namespace RelhaxModpack
         public static bool FirstLoad { get; set; }
         public static bool SaveLastConfig { get; set; }
         public static bool SaveUserData { get; set; }
+        //toggle a dark UI for using the modpack at night.
+        //TODO: after wpf move, change this to allow any coloring settings
         public static bool DarkUI { get; set; }
-        public static bool DisableBorders { get; set; }
+        //toggle for each view if the borders around the child selection options should show
+        public static bool EnableBordersDefaultView = false;
+        public static bool EnableBordersLegacyView = false;
+        //toggle for each view if the color change should occur when a child selection happends
+        public static bool EnableChildColorChangeDefaultView = false;
+        public static bool EnableChildColorChangeLegacyView = false;
         //toggle if the installation complete window will be shown
         public static bool ShowInstallCompleteWindow { get; set; }
         //toggle if the program will delete the WoT appdata cache
         public static bool ClearCache { get; set; }
         public static bool DeleteLogs { get; set; }
-        public static bool DisableColorChange { get; set; }
         //toggle if the program will create desktop shortcuts
         public static bool CreateShortcuts { get; set; }
         //toggle instant extraction
@@ -154,7 +160,7 @@ namespace RelhaxModpack
                 SaveLastConfig = false;
                 SaveUserData = false;
                 ClearCache = false;
-                DisableBorders = true;
+                EnableBordersDefaultView = true;
                 NotifyIfSameDatabase = false;
                 CreateShortcuts = false;
                 InstantExtraction = false;
@@ -162,6 +168,26 @@ namespace RelhaxModpack
                 ExportMode = false;
                 PreviewWidth = 450;
                 PreviewHeight = 550;
+                ModSelectionHeight = 480;
+                ModSelectionWidth = 800;
+                FontSizeforum = FontSize.Font100;
+                UninstallMode = UninstallModes.Quick;
+                ExpandAllLegacy = false;
+                ExpandAllLegacy2 = false;
+                ModSelectionFullscreen = false;
+                EnableChildColorChangeDefaultView = true;
+                DeleteLogs = false;
+                PreviewX = 0;
+                PreviewY = 0;
+                CustomModInfoPath = "";
+                FontSizeforum = FontSize.Font100;
+                SView = SelectionView.Default;
+                ShowInstallCompleteWindow = false;
+                UseAlternateUpdateMethod = false;
+                EnableBordersDefaultView = false;
+                EnableBordersLegacyView = false;
+                EnableChildColorChangeDefaultView = false;
+                EnableChildColorChangeLegacyView = false;
                 Logging.Manager("Language: " + CultureInfo.CurrentCulture.DisplayName);
                 string lang = CultureInfo.InstalledUICulture.Name.Split('-')[0].ToLower();
                 switch (lang)
@@ -179,22 +205,6 @@ namespace RelhaxModpack
                         Translations.language = Translations.Languages.English;
                         break;
                 }
-                ModSelectionHeight = 480;
-                ModSelectionWidth = 800;
-                FontSizeforum = FontSize.Font100;
-                UninstallMode = UninstallModes.Quick;
-                ExpandAllLegacy = false;
-                ExpandAllLegacy2 = false;
-                ModSelectionFullscreen = false;
-                DisableColorChange = true;
-                DeleteLogs = false;
-                PreviewX = 0;
-                PreviewY = 0;
-                CustomModInfoPath = "";
-                FontSizeforum = FontSize.Font100;
-                SView = SelectionView.Default;
-                ShowInstallCompleteWindow = false;
-                UseAlternateUpdateMethod = false;
             }
             else
             {
@@ -245,11 +255,17 @@ namespace RelhaxModpack
                         case "expandAllLegacy2":
                             ExpandAllLegacy2 = bool.Parse(n.InnerText);
                             break;
-                        case "disableBorders":
-                            DisableBorders = bool.Parse(n.InnerText);
+                        case "EnableBordersDefaultView":
+                            EnableBordersDefaultView = bool.Parse(n.InnerText);
                             break;
-                        case "disableColorChange":
-                            DisableColorChange = bool.Parse(n.InnerText);
+                        case "EnableBordersLegacyView":
+                            EnableBordersLegacyView = bool.Parse(n.InnerText);
+                            break;
+                        case "EnableChildColorChangeDefaultView":
+                            EnableChildColorChangeDefaultView = bool.Parse(n.InnerText);
+                            break;
+                        case "EnableChildColorChangeLegacyView":
+                            EnableChildColorChangeLegacyView = bool.Parse(n.InnerText);
                             break;
                         case "deleteLogs":
                             DeleteLogs = bool.Parse(n.InnerText);
@@ -346,18 +362,26 @@ namespace RelhaxModpack
             XmlElement xdarkUI = doc.CreateElement("darkUI");
             xdarkUI.InnerText = "" + DarkUI;
             settingsHolder.AppendChild(xdarkUI);
+            //modselectionlistUI options
             XmlElement xexpandAllLegacy = doc.CreateElement("expandAllLegacy");
             xexpandAllLegacy.InnerText = "" + ExpandAllLegacy;
             settingsHolder.AppendChild(xexpandAllLegacy);
             XmlElement xexpandAllLegacy2 = doc.CreateElement("expandAllLegacy2");
             xexpandAllLegacy2.InnerText = "" + ExpandAllLegacy2;
             settingsHolder.AppendChild(xexpandAllLegacy2);
-            XmlElement xdisableBorders = doc.CreateElement("disableBorders");
-            xdisableBorders.InnerText = "" + DisableBorders;
-            settingsHolder.AppendChild(xdisableBorders);
-            XmlElement xdisableColorChange = doc.CreateElement("disableColorChange");
-            xdisableColorChange.InnerText = "" + DisableColorChange;
-            settingsHolder.AppendChild(xdisableColorChange);
+            XmlElement xEnableBordersDefaultView = doc.CreateElement("EnableBordersDefaultView");
+            xEnableBordersDefaultView.InnerText = "" + EnableBordersDefaultView;
+            settingsHolder.AppendChild(xEnableBordersDefaultView);
+            XmlElement xEnableBordersLegacyView = doc.CreateElement("EnableBordersLegacyView");
+            xEnableBordersLegacyView.InnerText = "" + EnableBordersLegacyView;
+            settingsHolder.AppendChild(xEnableBordersLegacyView);
+            XmlElement xEnableChildColorChangeDefaultView = doc.CreateElement("EnableChildColorChangeDefaultView");
+            xEnableChildColorChangeDefaultView.InnerText = "" + EnableChildColorChangeDefaultView;
+            settingsHolder.AppendChild(xEnableChildColorChangeDefaultView);
+            XmlElement xEnableChildColorChangeLegacyView = doc.CreateElement("EnableChildColorChangeLegacyView");
+            xEnableChildColorChangeLegacyView.InnerText = "" + EnableChildColorChangeLegacyView;
+            settingsHolder.AppendChild(xEnableChildColorChangeLegacyView);
+            //installer settings
             XmlElement xdeleteLogs = doc.CreateElement("deleteLogs");
             xdeleteLogs.InnerText = "" + DeleteLogs;
             settingsHolder.AppendChild(xdeleteLogs);

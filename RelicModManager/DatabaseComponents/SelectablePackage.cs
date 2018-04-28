@@ -107,7 +107,7 @@ namespace RelhaxModpack
                         {
                             case true:
                                 //handle color change code
-                                if (!Settings.DisableColorChange)
+                                if (Settings.EnableChildColorChangeDefaultView)
                                 {
                                     if (ParentPanel != null && ParentPanel.BackColor != Color.BlanchedAlmond)
                                     {
@@ -117,7 +117,7 @@ namespace RelhaxModpack
                                 break;
                             case false:
                                 //handle color change code
-                                if (!Settings.DisableColorChange)
+                                if (Settings.EnableChildColorChangeDefaultView)
                                 {
                                     if (ParentPanel != null && !AnyPackagesChecked())
                                         ParentPanel.BackColor = Settings.getBackColor();
@@ -131,14 +131,14 @@ namespace RelhaxModpack
                         {
                             case true:
                                 //handle color change code
-                                if (!Settings.DisableColorChange)
+                                if (Settings.EnableChildColorChangeLegacyView)
                                 {
                                     
                                 }
                                 break;
                             case false:
                                 //handle color change code
-                                if (!Settings.DisableColorChange)
+                                if (Settings.EnableChildColorChangeLegacyView)
                                 {
 
                                 }

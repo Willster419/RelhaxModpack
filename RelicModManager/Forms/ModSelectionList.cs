@@ -322,7 +322,7 @@ namespace RelhaxModpack
                         c.CategoryHeader.Packages = c.Packages;
                         c.CategoryHeader.ParentPanel = new Panel()
                         {
-                            BorderStyle = Settings.DisableBorders ? BorderStyle.None : BorderStyle.FixedSingle,
+                            BorderStyle = Settings.EnableBordersDefaultView ? BorderStyle.None : BorderStyle.FixedSingle,
                             //autosize is true by default...?
                             Size = new Size(c.TabPage.Size.Width - 25, 60),
                             Location = new Point(5, GetYLocation(c.TabPage.Controls)),
@@ -733,7 +733,7 @@ namespace RelhaxModpack
                     {
                         sp.Parent.ChildPanel = new Panel()
                         {
-                            BorderStyle = Settings.DisableBorders ? BorderStyle.None : BorderStyle.FixedSingle,
+                            BorderStyle = Settings.EnableBordersDefaultView ? BorderStyle.FixedSingle : BorderStyle.None,
                             Size = new Size(c.TabPage.Size.Width - 35, 30),
                             AutoSize = true,
                             AutoSizeMode = AutoSizeMode.GrowOnly
@@ -787,7 +787,6 @@ namespace RelhaxModpack
                                 sp.Parent.RelhaxFormComboBoxList[0].Items.Add(cbi);
                                 if(sp.Checked)
                                 {
-                                    //sp.Parent.RelhaxFormComboBoxList[0].Enabled = true;
                                     sp.Parent.RelhaxFormComboBoxList[0].SelectedItem = cbi;
                                     DescriptionToolTip.SetToolTip(sp.Parent.RelhaxFormComboBoxList[0], tooltipString);
                                 }
@@ -850,7 +849,6 @@ namespace RelhaxModpack
                             sp.UIComponent = new RelhaxFormCheckBox()
                             {
                                 Location = new Point(3, GetYLocation(sp.ParentPanel.Controls)),
-                                //Size = new Size(150, 15),
                                 Text = packageDisplayName,
                                 Package = sp,
                                 Enabled = canBeEnabled,
@@ -861,7 +859,7 @@ namespace RelhaxModpack
                             break;
                     }
                     //color change code
-                    if (canBeEnabled && sp.Enabled && sp.Checked && !Settings.DisableColorChange)
+                    if (canBeEnabled && sp.Enabled && sp.Checked && Settings.EnableChildColorChangeDefaultView)
                         sp.ParentPanel.BackColor = Color.BlanchedAlmond;
                     else
                         sp.ParentPanel.BackColor = Settings.getBackColor();
@@ -1323,7 +1321,7 @@ namespace RelhaxModpack
             //if it's the top level thing and the color change is enabled (disable is false), then tell it to check again for color change code
             //if (ParentPanel != null && !AnyPackagesChecked())
             //ParentPanel.BackColor = Settings.getBackColor();
-            if (!Settings.DisableColorChange && spc.Level == -1 && spc.ParentPanel != null && !spc.AnyPackagesChecked())
+            if (!Settings.EnableChildColorChangeDefaultView && spc.Level == -1 && spc.ParentPanel != null && !spc.AnyPackagesChecked())
                 spc.ParentPanel.BackColor = Settings.getBackColor();
         }
 
@@ -2067,7 +2065,7 @@ namespace RelhaxModpack
             }
             if (shouldBeBA && panelRef != null)
             {
-                if (!Settings.DisableColorChange)
+                if (!Settings.EnableChildColorChangeDefaultView)
                     panelRef.BackColor = System.Drawing.Color.BlanchedAlmond;
             }
         }
