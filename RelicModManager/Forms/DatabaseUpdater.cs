@@ -10,8 +10,16 @@ using System.Xml.Linq;
 
 namespace RelhaxModpack
 {
-    public partial class DatabaseUpdater : Form
+    public partial class DatabaseUpdater : RelhaxForum
     {
+        private enum AuthLevel
+        {
+            None=0,
+            View=1,
+            UpdateDatabase=2,
+            Admin=3
+        }
+        private AuthLevel CurrentAuthLevel = AuthLevel.None;
         private WebClient downloader;
         private List<Dependency> globalDependencies;
         private List<Dependency> dependencies;
@@ -22,6 +30,12 @@ namespace RelhaxModpack
         StringBuilder logicalDependenciesSB = new StringBuilder();
         StringBuilder packagesSB = new StringBuilder();
         StringBuilder filesNotFoundSB = new StringBuilder();
+        private string level1Password = "RelhaxReadOnly2018";
+        private const string L2keyFileName = "L2Key.txt";
+        private const string L3keyFileName = "L3key.txt";
+        private const string L2KeyAddress = "aHR0cDovL3dvdG1vZHMucmVsaGF4bW9kcGFjay5jb20vUmVsaGF4TW9kcGFjay9SZXNvdXJjZXMvZXh0ZXJuYWwvTDJLZXkudHh0";
+        private const string L3KeyAddress = "aHR0cDovL3dvdG1vZHMucmVsaGF4bW9kcGFjay5jb20vUmVsaGF4TW9kcGFjay9SZXNvdXJjZXMvZXh0ZXJuYWwvTDNrZXkudHh0";
+        
         string serverInfo = "creating the manageInfo.dat file, containing the files: " +
             "\nmanager_version.xml\n" +
             "supported_clients.xml\n" +
@@ -41,22 +55,49 @@ namespace RelhaxModpack
             InitializeComponent();
         }
 
+        private void OnAuthLevelChange(AuthLevel al)
+        {
+            CurrentAuthLevel = al;
+            //disable everything first, then enable via falling case statements
+            foreach (Control c in UpdateDatabaseTab.Controls)
+                c.Enabled = false;
+            foreach (Control c in UpdateApplicationTab.Controls)
+                c.Enabled = false;
+            foreach (Control c in CleanOnlineFolders.Controls)
+                c.Enabled = false;
+            if((int)CurrentAuthLevel > 1)
+            {
+                foreach (Control c in UpdateDatabaseTab.Controls)
+                    c.Enabled = true;
+                UpdateDatabaseStep3Advanced.Enabled = false;
+            }
+            if((int)CurrentAuthLevel > 2)
+            {
+                UpdateDatabaseStep3Advanced.Enabled = true;
+                foreach (Control c in UpdateApplicationTab.Controls)
+                    c.Enabled = true;
+                foreach (Control c in CleanOnlineFolders.Controls)
+                    c.Enabled = true;
+            }
+            AuthStatusLabel.Text = CurrentAuthLevel.ToString();
+        }
+
         private void loadDatabaseButton_Click(object sender, EventArgs e)
         {
             if (loadDatabaseDialog.ShowDialog() == DialogResult.Cancel)
                 return;
-            databaseLocationTextBox.Text = loadDatabaseDialog.FileName;
+            DatabaseLocationTextBox.Text = loadDatabaseDialog.FileName;
         }
 
         private void updateDatabaseOnline_Click(object sender, EventArgs e)
         {
             // check for database
-            if (databaseLocationTextBox.Text.Equals("-none-"))
+            if (DatabaseLocationTextBox.Text.Equals("-none-"))
                 return;
             // read onlineFolder of the selected local modInfo.xml to get the right online database.xml
-            Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(databaseLocationTextBox.Text, "//modInfoAlpha.xml/@onlineFolder");
+            Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocationTextBox.Text, "//modInfoAlpha.xml/@onlineFolder");
             // read gameVersion of the selected local modInfo.xml
-            Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(databaseLocationTextBox.Text, "//modInfoAlpha.xml/@version");
+            Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocationTextBox.Text, "//modInfoAlpha.xml/@version");
             Logging.Manager(String.Format("working with game version: {0}, located at online Folder: {1}", Settings.TanksVersion, Settings.TanksOnlineFolderVersion));
             // download online database.xml
             try
@@ -86,7 +127,7 @@ namespace RelhaxModpack
             parsedCatagoryList = new List<Category>();
             dependencies = new List<Dependency>();
             logicalDependencies = new List<LogicalDependency>();
-            XMLUtils.CreateModStructure(databaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            XMLUtils.CreateModStructure(DatabaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             //check for duplicates
             int duplicatesCounter = 0;
             if (Utils.Duplicates(parsedCatagoryList) && Utils.DuplicatesPackageName(parsedCatagoryList, ref duplicatesCounter ))
@@ -95,7 +136,7 @@ namespace RelhaxModpack
                 Program.databaseUpdateOnline = false;
                 return;
             }
-            OnlineScriptOutput.Text = "Updating database...";
+            ScriptLogOutput.Text = "Updating database...";
             Application.DoEvents();
             filesNotFoundSB.Append("FILES NOT FOUND:\n");
             globalDepsSB.Append("\nGlobal Dependencies updated:\n");
@@ -208,9 +249,9 @@ namespace RelhaxModpack
             //update the CRC value
             //update the file size
             //save config file
-            XMLUtils.SaveDatabase(databaseLocationTextBox.Text, Settings.TanksVersion, Settings.TanksOnlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            XMLUtils.SaveDatabase(DatabaseLocationTextBox.Text, Settings.TanksVersion, Settings.TanksOnlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             //MessageBox.Show(filesNotFoundSB.ToString() + globalDepsSB.ToString() + dependenciesSB.ToString() + logicalDependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
-            OnlineScriptOutput.Text = filesNotFoundSB.ToString() + globalDepsSB.ToString() + dependenciesSB.ToString() + logicalDependenciesSB.ToString() + packagesSB.ToString();
+            ScriptLogOutput.Text = filesNotFoundSB.ToString() + globalDepsSB.ToString() + dependenciesSB.ToString() + logicalDependenciesSB.ToString() + packagesSB.ToString();
             Program.databaseUpdateOnline = false;
         }
 
@@ -305,14 +346,9 @@ namespace RelhaxModpack
 
         private void CRCFileSizeUpdate_Load(object sender, EventArgs e)
         {
-            //font scaling
-            this.AutoScaleMode = Settings.AppScalingMode;
-            this.Font = Settings.AppFont;
-            if (Settings.AppScalingMode == System.Windows.Forms.AutoScaleMode.Dpi)
-            {
-                this.Scale(new System.Drawing.SizeF(Settings.ScaleSize, Settings.ScaleSize));
-            }
             loadDatabaseDialog.InitialDirectory = Application.StartupPath;
+            //DEBUG ONLY
+            OnAuthLevelChange(AuthLevel.Admin);
         }
 
         private void CRCFileSizeUpdate_FormClosing(object sender, FormClosingEventArgs e)
@@ -323,7 +359,7 @@ namespace RelhaxModpack
         private void updateDatabaseOffline_Click(object sender, EventArgs e)
         {
             //check for database
-            if (databaseLocationTextBox.Text.Equals("-none-"))
+            if (DatabaseLocationTextBox.Text.Equals("-none-"))
                 return;
             //show file dialog
             if (addZipsDialog.ShowDialog() == DialogResult.Cancel)
@@ -336,9 +372,9 @@ namespace RelhaxModpack
             parsedCatagoryList = new List<Category>();
             dependencies = new List<Dependency>();
             logicalDependencies = new List<LogicalDependency>();
-            Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(databaseLocationTextBox.Text, "//modInfoAlpha.xml/@version");
-            Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(databaseLocationTextBox.Text, "//modInfoAlpha.xml/@onlineFolder");
-            XMLUtils.CreateModStructure(databaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocationTextBox.Text, "//modInfoAlpha.xml/@version");
+            Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocationTextBox.Text, "//modInfoAlpha.xml/@onlineFolder");
+            XMLUtils.CreateModStructure(DatabaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             int duplicatesCounter = 0;
             //check for duplicates
             if (Utils.Duplicates(parsedCatagoryList) && Utils.DuplicatesPackageName(parsedCatagoryList, ref duplicatesCounter))
@@ -346,7 +382,7 @@ namespace RelhaxModpack
                 MessageBox.Show(string.Format("{0} duplicates found !!!", duplicatesCounter));
                 return;
             }
-            OnlineScriptOutput.Text = "Updating database...";
+            ScriptLogOutput.Text = "Updating database...";
             Application.DoEvents();
             globalDepsSB.Append("Global Dependencies updated:\n");
             dependenciesSB.Append("Dependencies updated:\n");
@@ -402,9 +438,9 @@ namespace RelhaxModpack
             //update the CRC value
             //update the file size
             //save config file
-            XMLUtils.SaveDatabase(databaseLocationTextBox.Text, Settings.TanksVersion, Settings.TanksOnlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            XMLUtils.SaveDatabase(DatabaseLocationTextBox.Text, Settings.TanksVersion, Settings.TanksOnlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             //MessageBox.Show(globalDepsSB.ToString() + dependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
-            OnlineScriptOutput.Text = globalDepsSB.ToString() + dependenciesSB.ToString() + packagesSB.ToString();
+            ScriptLogOutput.Text = globalDepsSB.ToString() + dependenciesSB.ToString() + packagesSB.ToString();
         }
 
         private void processConfigsCRCUpdate_old(List<SelectablePackage> cfgList)
@@ -454,33 +490,33 @@ namespace RelhaxModpack
 
         private void RunOnlineScriptButton_Click(object sender, EventArgs e)
         {
-            OnlineScriptOutput.Text = "Running script CreateDatabase.php...";
+            ScriptLogOutput.Text = "Running script CreateDatabase.php...";
             Application.DoEvents();
             using (WebClient client = new WebClient())
             {
-                OnlineScriptOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateDatabase.php").Replace("<br />", "\n");
+                ScriptLogOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateDatabase.php").Replace("<br />", "\n");
             }
             Application.DoEvents();
         }
 
         private void RunCreateModInfoPHP_Click(object sender, EventArgs e)
         {
-            OnlineScriptOutput.Text = "Running script CreateModInfo.php...";
+            ScriptLogOutput.Text = "Running script CreateModInfo.php...";
             Application.DoEvents();
             using (WebClient client = new WebClient())
             {
-                OnlineScriptOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateModInfo.php").Replace("<br />", "\n");
+                ScriptLogOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateModInfo.php").Replace("<br />", "\n");
             }
             Application.DoEvents();
         }
 
         private void RunCreateServerInfoPHP_Click(object sender, EventArgs e)
         {
-            OnlineScriptOutput.Text = "Running script CreateServerInfo.php...";
+            ScriptLogOutput.Text = "Running script CreateServerInfo.php...";
             Application.DoEvents();
             using (WebClient client = new WebClient())
             {
-                OnlineScriptOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateManagerInfo.php").Replace("<br />", "\n");
+                ScriptLogOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateManagerInfo.php").Replace("<br />", "\n");
             }
             Application.DoEvents();
         }
@@ -507,11 +543,11 @@ namespace RelhaxModpack
 
         private void RunCreateOutdatedFilesList_Click(object sender, EventArgs e)
         {
-            OnlineScriptOutput.Text = "Running script CreateOutDatesFilesList.php...";
+            ScriptLogOutput.Text = "Running script CreateOutDatesFilesList.php...";
             Application.DoEvents();
             using (WebClient client = new WebClient())
             {
-                OnlineScriptOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateOutdatedFileList.php").Replace("<br />", "\n");
+                ScriptLogOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateOutdatedFileList.php").Replace("<br />", "\n");
             }
             Application.DoEvents();
         }
@@ -520,6 +556,107 @@ namespace RelhaxModpack
         {
             //todo
             InfoTB.Text = "Creates an xml list of files not linked in modInfo.xml, but still in the folder.";
+        }
+
+        private void DatabaseUpdateTabControl_Selected(object sender, TabControlEventArgs e)
+        {
+            if (CurrentAuthLevel == AuthLevel.None)
+                DatabaseUpdateTabControl.SelectedTab = AuthStatus;
+        }
+
+        private void RequestL1AuthButton_Click(object sender, EventArgs e)
+        {
+            ScriptLogOutput.Text = "Verifying...";
+            if (L1AuthPasswordAttempt.Text.Equals(level1Password))
+            {
+                MessageBox.Show("Success!");
+                OnAuthLevelChange(AuthLevel.View);
+            }
+            else
+            {
+                MessageBox.Show("Denied!");
+            }
+            ScriptLogOutput.Text = "";
+        }
+
+        private void RequestL2AuthButton_Click(object sender, EventArgs e)
+        {
+            ScriptLogOutput.Text = "Verifying...";
+            string downloadedKey = "";
+            using (downloader = new WebClient())
+            {
+                downloadedKey = Utils.Base64Decode(downloader.DownloadString(Utils.Base64Decode(L2KeyAddress)));
+            }
+            if(downloadedKey.Equals(L2PasswordAttempt.Text))
+            {
+                MessageBox.Show("Success!");
+                OnAuthLevelChange(AuthLevel.UpdateDatabase);
+            }
+            else
+            {
+                MessageBox.Show("Denied!");
+            }
+            ScriptLogOutput.Text = "";
+        }
+
+        private void RequestL3AuthButton_Click(object sender, EventArgs e)
+        {
+            ScriptLogOutput.Text = "Verifying...";
+            string downloadedKey = "";
+            using (downloader = new WebClient())
+            {
+                downloadedKey = Utils.Base64Decode(downloader.DownloadString(Utils.Base64Decode(L3KeyAddress)));
+            }
+            if (downloadedKey.Equals(L3PasswordAttempt.Text))
+            {
+                MessageBox.Show("Success!");
+                OnAuthLevelChange(AuthLevel.Admin);
+            }
+            else
+            {
+                MessageBox.Show("Denied!");
+            }
+            ScriptLogOutput.Text = "";
+        }
+
+        private void GenerateL2Password_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(L2keyFileName))
+                File.Delete(L2keyFileName);
+            File.WriteAllText(L2keyFileName, Utils.Base64Encode(L2TextPassword.Text));
+            L2GenerateOutput.Text = "Password key file saved to" + L2keyFileName;
+        }
+
+        private void GenerateL3Password_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(L3keyFileName))
+                File.Delete(L3keyFileName);
+            File.WriteAllText(L3keyFileName, Utils.Base64Encode(L3TextPassword.Text));
+            L3GenerateOutput.Text = "Password key file saved to " + L3keyFileName;
+        }
+
+        private void ReadbackL2Password_Click(object sender, EventArgs e)
+        {
+            if(!File.Exists(L2keyFileName))
+            {
+                L2GenerateOutput.Text = L2keyFileName + " does not exist!";
+            }
+            else
+            {
+                L2GenerateOutput.Text = "L2 Key read as " + Utils.Base64Decode(File.ReadAllText(L2keyFileName));
+            }
+        }
+
+        private void ReadbackL3Password_Click(object sender, EventArgs e)
+        {
+            if (!File.Exists(L3keyFileName))
+            {
+                L3GenerateOutput.Text = L3keyFileName + " does not exist!";
+            }
+            else
+            {
+                L3GenerateOutput.Text = "L3 Key read as " + Utils.Base64Decode(File.ReadAllText(L3keyFileName));
+            }
         }
     }
 }
