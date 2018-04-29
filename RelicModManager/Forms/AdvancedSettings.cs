@@ -36,6 +36,7 @@ namespace RelhaxModpack.Forms
             createShortcutsCB.Checked = Settings.CreateShortcuts;
             InstantExtractionCB.Checked = Settings.InstantExtraction;
             ExportModeCB.Checked = Settings.ExportMode;
+            UseAltUpdateMethodCB.Checked = Settings.UseAlternateUpdateMethod;
             switch (Settings.UninstallMode)
             {
                 case (Settings.UninstallModes.Smart):
@@ -77,6 +78,7 @@ namespace RelhaxModpack.Forms
             cleanInstallCB.Enabled = enableToggle;
             ShowInstallCompleteWindowCB.Enabled = enableToggle;
             ExportModeCB.Enabled = enableToggle;
+            UseAltUpdateMethodCB.Enabled = enableToggle;
         }
 
         #region Loading animations handlers
@@ -164,6 +166,11 @@ namespace RelhaxModpack.Forms
         {
             Settings.ExportMode = ExportModeCB.Checked;
             forceManuel.Enabled = !ExportModeCB.Checked;
+        }
+
+        private void UseAltUpdateMethodCB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.UseAlternateUpdateMethod = UseAltUpdateMethodCB.Checked;
         }
         #endregion
 

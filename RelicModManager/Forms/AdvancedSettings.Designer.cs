@@ -47,6 +47,7 @@
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.CleanUninstallModeRB = new System.Windows.Forms.RadioButton();
             this.SmartUninstallModeRB = new System.Windows.Forms.RadioButton();
+            this.UseAltUpdateMethodCB = new System.Windows.Forms.CheckBox();
             this.AdvancedSettingsLayout.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
             this.tableLayoutPanel8.SuspendLayout();
@@ -83,6 +84,7 @@
             this.AdvancedSettingsLayout.Controls.Add(this.InstantExtractionCB, 0, 3);
             this.AdvancedSettingsLayout.Controls.Add(this.clearCacheCB, 0, 2);
             this.AdvancedSettingsLayout.Controls.Add(this.AdvancedSettingsHeader, 0, 0);
+            this.AdvancedSettingsLayout.Controls.Add(this.UseAltUpdateMethodCB, 1, 4);
             this.AdvancedSettingsLayout.Location = new System.Drawing.Point(12, 12);
             this.AdvancedSettingsLayout.Name = "AdvancedSettingsLayout";
             this.AdvancedSettingsLayout.RowCount = 5;
@@ -341,6 +343,22 @@
             this.SmartUninstallModeRB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.SmartUninstallModeRB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
+            // UseAltUpdateMethodCB
+            // 
+            this.UseAltUpdateMethodCB.AutoSize = true;
+            this.UseAltUpdateMethodCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.UseAltUpdateMethodCB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.UseAltUpdateMethodCB.Location = new System.Drawing.Point(208, 133);
+            this.UseAltUpdateMethodCB.Name = "UseAltUpdateMethodCB";
+            this.UseAltUpdateMethodCB.Size = new System.Drawing.Size(198, 31);
+            this.UseAltUpdateMethodCB.TabIndex = 43;
+            this.UseAltUpdateMethodCB.Text = "Use alternative update method";
+            this.UseAltUpdateMethodCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.UseAltUpdateMethodCB.UseVisualStyleBackColor = true;
+            this.UseAltUpdateMethodCB.CheckedChanged += new System.EventHandler(this.UseAltUpdateMethodCB_CheckedChanged);
+            this.UseAltUpdateMethodCB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.UseAltUpdateMethodCB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
             // AdvancedSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -385,5 +403,6 @@
         private System.Windows.Forms.CheckBox ExportModeCB;
         private System.Windows.Forms.CheckBox cleanInstallCB;
         private System.Windows.Forms.CheckBox ShowInstallCompleteWindowCB;
+        private System.Windows.Forms.CheckBox UseAltUpdateMethodCB;
     }
 }

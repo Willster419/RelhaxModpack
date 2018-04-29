@@ -93,7 +93,7 @@ namespace RelhaxModpack
         {
             string managerVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString().IndexOf('.') + 1);
             if (Program.Version == Program.ProgramVersion.Beta)
-                managerVersion = managerVersion + "_BETA_final";
+                managerVersion = managerVersion + "_BETA_r1";
             return managerVersion;
         }
 
@@ -731,17 +731,19 @@ namespace RelhaxModpack
                 Application.Exit();
             }
 
-            //check for updates
-            wait.loadingDescBox.Text = Translations.getTranslatedString("checkForUpdates");
-            Application.DoEvents();
-            this.CheckmanagerUpdates();
-
             //load settings
             wait.loadingDescBox.Text = Translations.getTranslatedString("loadingSettings");
             Logging.Manager("Loading settings");
             Settings.LoadSettings();
             ApplyControlTranslations();
             ApplySettings();
+
+            //check for updates
+            wait.loadingDescBox.Text = Translations.getTranslatedString("checkForUpdates");
+            Application.DoEvents();
+            this.CheckmanagerUpdates();
+
+            //parse command line argeuemnts
             if (Program.testMode)
             {
                 Logging.Manager("Test Mode is ON, loading local modInfo.xml");
@@ -1870,6 +1872,10 @@ namespace RelhaxModpack
             notifyIfSameDatabaseCB.Checked = Settings.NotifyIfSameDatabase;
             SuperExtractionCB.Checked = Settings.SuperExtraction;
             expandNodesDefault2.Checked = Settings.ExpandAllLegacy2;
+            EnableBordersDefaultCB.Checked = Settings.EnableBordersDefaultView;
+            EnableBordersLegacyCB.Checked = Settings.EnableBordersLegacyView;
+            EnableColorChangeDefaultCB.Checked = Settings.EnableColorChangeDefaultView;
+            EnableColorChangeLegacyCB.Checked = Settings.EnableColorChangeLegacyView;
             LanguageComboBox.SelectedIndexChanged -= LanguageComboBox_SelectedIndexChanged;
             switch (Translations.language)
             {

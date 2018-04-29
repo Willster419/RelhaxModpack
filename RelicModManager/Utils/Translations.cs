@@ -1411,14 +1411,14 @@ namespace RelhaxModpack
 
             //Component: EnableBordersDefaultCB
             //
-            english.Add("EnableBordersDefaultCB", "Disable borders");
+            english.Add("EnableBordersDefaultCB", "Enable borders");
             german.Add("EnableBordersDefaultCB", "TODO");
             polish.Add("EnableBordersDefaultCB", "TODO");
             french.Add("EnableBordersDefaultCB", "TODO");
 
             //Component: EnableBordersLegacyCB
             //
-            english.Add("EnableBordersLegacyCB", "Disable borders");
+            english.Add("EnableBordersLegacyCB", "Enable borders");
             german.Add("EnableBordersLegacyCB", "TODO");
             polish.Add("EnableBordersLegacyCB", "TODO");
             french.Add("EnableBordersLegacyCB", "TODO");
@@ -2143,6 +2143,18 @@ namespace RelhaxModpack
             german.Add("AdvancedSettingsHeader", "TODO");
             polish.Add("AdvancedSettingsHeader", "TODO");
             french.Add("AdvancedSettingsHeader", "TODO");
+
+            //Component: UseAltUpdateMethodCB
+            english.Add("UseAltUpdateMethodCB", "Use alternative update method");
+            german.Add("UseAltUpdateMethodCB", "TODO");
+            polish.Add("UseAltUpdateMethodCB", "TODO");
+            french.Add("UseAltUpdateMethodCB", "TODO");
+
+            //Component: UseAltUpdateMethodCBDescription
+            english.Add("UseAltUpdateMethodCBDescription", "Use the alternative update method. Takes longer but should help with anti-virus software");
+            german.Add("UseAltUpdateMethodCBDescription", "TODO");
+            polish.Add("UseAltUpdateMethodCBDescription", "TODO");
+            french.Add("UseAltUpdateMethodCBDescription", "TODO");
             #endregion
         }
     }
