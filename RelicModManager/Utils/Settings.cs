@@ -33,8 +33,8 @@ namespace RelhaxModpack
         public static bool EnableBordersDefaultView = false;
         public static bool EnableBordersLegacyView = false;
         //toggle for each view if the color change should occur when a child selection happends
-        public static bool EnableChildColorChangeDefaultView = false;
-        public static bool EnableChildColorChangeLegacyView = false;
+        public static bool EnableColorChangeDefaultView = false;
+        public static bool EnableColorChangeLegacyView = false;
         //toggle if the installation complete window will be shown
         public static bool ShowInstallCompleteWindow { get; set; }
         //toggle if the program will delete the WoT appdata cache
@@ -175,7 +175,7 @@ namespace RelhaxModpack
                 ExpandAllLegacy = false;
                 ExpandAllLegacy2 = false;
                 ModSelectionFullscreen = false;
-                EnableChildColorChangeDefaultView = true;
+                EnableColorChangeDefaultView = true;
                 DeleteLogs = false;
                 PreviewX = 0;
                 PreviewY = 0;
@@ -186,8 +186,8 @@ namespace RelhaxModpack
                 UseAlternateUpdateMethod = false;
                 EnableBordersDefaultView = false;
                 EnableBordersLegacyView = false;
-                EnableChildColorChangeDefaultView = false;
-                EnableChildColorChangeLegacyView = false;
+                EnableColorChangeDefaultView = false;
+                EnableColorChangeLegacyView = false;
                 Logging.Manager("Language: " + CultureInfo.CurrentCulture.DisplayName);
                 string lang = CultureInfo.InstalledUICulture.Name.Split('-')[0].ToLower();
                 switch (lang)
@@ -262,10 +262,10 @@ namespace RelhaxModpack
                             EnableBordersLegacyView = bool.Parse(n.InnerText);
                             break;
                         case "EnableChildColorChangeDefaultView":
-                            EnableChildColorChangeDefaultView = bool.Parse(n.InnerText);
+                            EnableColorChangeDefaultView = bool.Parse(n.InnerText);
                             break;
                         case "EnableChildColorChangeLegacyView":
-                            EnableChildColorChangeLegacyView = bool.Parse(n.InnerText);
+                            EnableColorChangeLegacyView = bool.Parse(n.InnerText);
                             break;
                         case "deleteLogs":
                             DeleteLogs = bool.Parse(n.InnerText);
@@ -376,10 +376,10 @@ namespace RelhaxModpack
             xEnableBordersLegacyView.InnerText = "" + EnableBordersLegacyView;
             settingsHolder.AppendChild(xEnableBordersLegacyView);
             XmlElement xEnableChildColorChangeDefaultView = doc.CreateElement("EnableChildColorChangeDefaultView");
-            xEnableChildColorChangeDefaultView.InnerText = "" + EnableChildColorChangeDefaultView;
+            xEnableChildColorChangeDefaultView.InnerText = "" + EnableColorChangeDefaultView;
             settingsHolder.AppendChild(xEnableChildColorChangeDefaultView);
             XmlElement xEnableChildColorChangeLegacyView = doc.CreateElement("EnableChildColorChangeLegacyView");
-            xEnableChildColorChangeLegacyView.InnerText = "" + EnableChildColorChangeLegacyView;
+            xEnableChildColorChangeLegacyView.InnerText = "" + EnableColorChangeLegacyView;
             settingsHolder.AppendChild(xEnableChildColorChangeLegacyView);
             //installer settings
             XmlElement xdeleteLogs = doc.CreateElement("deleteLogs");

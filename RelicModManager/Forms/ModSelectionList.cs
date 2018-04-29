@@ -880,7 +880,7 @@ namespace RelhaxModpack
                             break;
                     }
                     //color change code
-                    if (canBeEnabled && sp.Enabled && sp.Checked && Settings.EnableChildColorChangeDefaultView)
+                    if (canBeEnabled && sp.Enabled && sp.Checked && Settings.EnableColorChangeDefaultView)
                         sp.ParentPanel.BackColor = Color.BlanchedAlmond;
                     else
                         sp.ParentPanel.BackColor = Settings.GetBackColorDefault();
@@ -1359,9 +1359,9 @@ namespace RelhaxModpack
             //if it's the top level thing and the color change is enabled (disable is false), then tell it to check again for color change code
             //if (ParentPanel != null && !AnyPackagesChecked())
             //ParentPanel.BackColor = Settings.getBackColor();
-            if (Settings.EnableChildColorChangeDefaultView && spc.Level == -1 && spc.ParentPanel != null && !spc.AnyPackagesChecked())
+            if (Settings.EnableColorChangeDefaultView && spc.Level == -1 && spc.ParentPanel != null && !spc.AnyPackagesChecked())
                 spc.ParentPanel.BackColor = Settings.GetBackColorDefault();
-            if (Settings.EnableChildColorChangeLegacyView && spc.Level == -1 && spc.ChildBorder != null && !spc.AnyPackagesChecked())
+            if (Settings.EnableColorChangeLegacyView && spc.Level == -1 && spc.ChildBorder != null && !spc.AnyPackagesChecked())
                 spc.ChildBorder.Background = Settings.GetBackColorWPF();
         }
 
@@ -2104,7 +2104,7 @@ namespace RelhaxModpack
             }
             if (shouldBeBA && panelRef != null)
             {
-                if (!Settings.EnableChildColorChangeDefaultView)
+                if (!Settings.EnableColorChangeDefaultView)
                     panelRef.BackColor = System.Drawing.Color.BlanchedAlmond;
             }
         }

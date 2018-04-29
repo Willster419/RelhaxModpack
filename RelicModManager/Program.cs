@@ -166,7 +166,7 @@ namespace RelhaxModpack
             Logging.Manager("Loading translation hashes");
             try
             {
-                Translations.loadHashes();
+                Translations.LoadHashes();
             }
             catch (Exception ex)
             {

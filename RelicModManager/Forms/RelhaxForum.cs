@@ -8,6 +8,7 @@ namespace RelhaxModpack
     {
         //option to apply form translations by itteration over controls
         public bool ApplyControlTranslationsOnLoad = false;
+
         protected override void OnLoad(EventArgs e)
         {
             SuspendLayout();
@@ -30,20 +31,36 @@ namespace RelhaxModpack
                 ApplyControlTranslations();
             OnPostLoad();
         }
+
         public virtual void OnPostLoad()
         {
             //stub, to be overridden
             //so that any code that should run after UI scaling can be done
         }
+
         private void ApplyControlTranslations()
         {
-            foreach(Control c in Controls)
+            foreach (Control c in Controls)
             {
                 //only apply for common controls
-                if(c is RadioButton || c is CheckBox || c is GroupBox || c is Label)
+                if (c is RadioButton || c is CheckBox || c is GroupBox || c is Label)
                     c.Text = Translations.getTranslatedString(c.Name);
+                if (c is Panel || c is GroupBox || c is TableLayoutPanel)
+                    ApplyControlTranslations(c.Controls);
             }
             Text = Translations.getTranslatedString(Name);
+        }
+
+        private void ApplyControlTranslations(Control.ControlCollection conts)
+        {
+            foreach (Control c in conts)
+            {
+                //only apply for common controls
+                if (c is RadioButton || c is CheckBox || c is GroupBox || c is Label)
+                    c.Text = Translations.getTranslatedString(c.Name);
+                if (c is Panel || c is GroupBox || c is TableLayoutPanel)
+                    ApplyControlTranslations(c.Controls);
+            }
         }
     }
 }

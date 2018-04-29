@@ -12,6 +12,7 @@ namespace RelhaxModpack.Forms
     public partial class AdvancedSettings : RelhaxForum
     {
         private LoadingGifPreview gp;
+        public int startX, startY;
 
         public AdvancedSettings()
         {
@@ -20,7 +21,9 @@ namespace RelhaxModpack.Forms
 
         private void AdvancedSettings_Load(object sender, EventArgs e)
         {
+            Logging.Manager(string.Format("AdvancedSettings: Loading window at location x={0}, y={1}",startX,startY));
             ApplySavedSettings();
+            Location = new Point(startX, startY);
         }
 
         //apply saved settings
@@ -77,8 +80,8 @@ namespace RelhaxModpack.Forms
         }
 
         #region Loading animations handlers
-        //handler for when the "standard" loading animation is clicked
-        private void standardImageRB_CheckedChanged(object sender, EventArgs e)
+        
+        private void ImageRB_CheckedChanged(object sender, EventArgs e)
         {
             if (standardImageRB.Checked)
             {
@@ -90,9 +93,9 @@ namespace RelhaxModpack.Forms
             }
         }
 
-        private void standardImageRB_MouseDown(object sender, MouseEventArgs e)
+        private void ImageRB_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button != System.Windows.Forms.MouseButtons.Right)
+            if (e.Button != MouseButtons.Right)
                 return;
             RadioButton rb = (RadioButton)sender;
             Settings.LoadingGifs backup = Settings.GIF;
@@ -107,9 +110,8 @@ namespace RelhaxModpack.Forms
             else
                 return;
             //create the preview
-            using (gp = new LoadingGifPreview(Location.X + Size.Width + 5, Location.Y))
+            using (gp = new LoadingGifPreview(Location.X, Location.Y + Size.Height + 5))
             {
-                gp.Hide();
                 gp.SetLoadingImage();
                 gp.ShowDialog();
             }

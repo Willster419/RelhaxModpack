@@ -23,7 +23,7 @@ namespace RelhaxModpack
         //all instance variables required to be up here
         private WebClient Downloader;
         private const int MBDivisor = 1048576;
-        //sample:  c:/games/World_of_Tanks
+        //sample:  C:/games/World_of_Tanks
         public string tanksLocation;
         //the location to pass into the installer
         private string tanksVersionForInstaller;
@@ -55,7 +55,6 @@ namespace RelhaxModpack
         public static List<string> usedFilesList;
         //counter for Utils.exception calls
         public static int errorCounter = 0;
-        // string tempOldDownload; => using userToken at Async download
         private List<SelectablePackage> userMods;
         string currentModDownloading;
         public Installer ins;
@@ -666,21 +665,14 @@ namespace RelhaxModpack
         //handler for before the window is displayed
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            //set window header text to current version so user knows
-            ApplicationVersionLabel.Text = "Application v" + ManagerVersion();
-            if (Program.testMode) this.Text = this.Text + " TEST MODE";
-            if (Program.betaDatabase) this.Text = this.Text + " (BETA DB)";
-            if (Program.Version == Program.ProgramVersion.Beta) this.Text = this.Text + " (BETA APP)";
-            if (Program.Version == Program.ProgramVersion.Alpha) this.Text = this.Text + " (ALPHA APP)";
+            Logging.Manager(string.Format("|RelHax Modpack {0} ({1})", ManagerVersion(), Program.Version == Program.ProgramVersion.Beta ? "beta" : Program.Version == Program.ProgramVersion.Alpha ? "alpha" : "stable"));
+            Logging.Manager(string.Format("|Built on {0}", compileTime()));
+            Logging.Manager(string.Format("|Running on {0}", System.Environment.OSVersion.ToString()));
             //show the wait screen
             PleaseWait wait = new PleaseWait();
             if(!Program.silentStart)
                 wait.Show();
-            //WebRequest.DefaultWebProxy = null;
             Application.DoEvents();
-            Logging.Manager(string.Format("|RelHax Modpack {0} ({1})", ManagerVersion(), Program.Version == Program.ProgramVersion.Beta ? "beta" : Program.Version == Program.ProgramVersion.Alpha ? "alpha" : "stable"));
-            Logging.Manager(string.Format("|Built on {0}", compileTime()));
-            Logging.Manager(string.Format("|Running on {0}", System.Environment.OSVersion.ToString()));
             /*
             //check for single instance
             Logging.Manager("Check for single instance");
@@ -701,37 +693,42 @@ namespace RelhaxModpack
                 Application.Exit();
             }
             */
-            //create directory structures
             wait.loadingDescBox.Text = Translations.getTranslatedString("verDirStructure");
             Application.DoEvents();
-            Logging.Manager("Verifying Directory Structure");
-            if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxDownloads"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxDownloads"));
-            if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxUserMods"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxUserMods"));
-            if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxModBackup"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxModBackup"));
-            if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxUserConfigs"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxUserConfigs"));
-            if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxTemp"))) Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxTemp"));
-            //check if old dll files can be deleted
+            Logging.Manager("Verifying File and Folder Structure");
+            //create directory structures
             try
             {
+                string[] foldersToCreate = { "RelHaxDownloads", "RelHaxUserMods", "RelHaxModBackup", "RelHaxUserConfigs", "RelHaxTemp" };
+                foreach (string s in foldersToCreate)
+                {
+                    string folder = Path.Combine(Application.StartupPath, s);
+                    if (!Directory.Exists(folder))
+                        Directory.CreateDirectory(folder);
+
+                }
+                //check if old dll files can be deleted
                 string[] filesToDelete = { "DotNetZip.dll", "Ionic.Zip.dll", "Newtonsoft.Json.dll", "NAudio.dll" };
                 foreach (string s in filesToDelete)
                     if (File.Exists(Path.Combine(Application.StartupPath, s)))
                         File.Delete(Path.Combine(Application.StartupPath, s));
             }
-            catch (Exception ex)
+            catch (Exception ex2)
             {
-                Utils.ExceptionLog(ex);
+                Utils.ExceptionLog(ex2);
             }
+            
 
-            //add method to disable the modpack for during patch day
+            //add ability to disable the modpack for during patch day
             //this will involve having a hard coded true or false, along with a command line arguement to over-ride
             //to disable from patch day set it to false.
             //to enable for patch day (prevent users to use it), set it to true.
+            //hopefully this will never have to be used
             if (false && !Program.patchDayTest)
             {
                 Logging.Manager("Patch day disable detected. Remember To override use /patchday");
                 MessageBox.Show(Translations.getTranslatedString("patchDayMessage"));
-                this.Close();
+                Application.Exit();
             }
 
             //check for updates
@@ -743,7 +740,8 @@ namespace RelhaxModpack
             wait.loadingDescBox.Text = Translations.getTranslatedString("loadingSettings");
             Logging.Manager("Loading settings");
             Settings.LoadSettings();
-            this.ApplySettings(true);
+            ApplyControlTranslations();
+            ApplySettings();
             if (Program.testMode)
             {
                 Logging.Manager("Test Mode is ON, loading local modInfo.xml");
@@ -753,19 +751,19 @@ namespace RelhaxModpack
                 Logging.Manager("Auto Install is ON, checking for config pref xml at " + Path.Combine(Application.StartupPath, "RelHaxUserConfigs", Program.configName));
                 if (!File.Exists(Path.Combine(Application.StartupPath, "RelHaxUserConfigs", Program.configName)))
                 {
-                    Logging.Manager(string.Format("ERROR: {0} does NOT exist, loading in fontRegular mode", Program.configName));
+                    Logging.Manager(string.Format("ERROR: {0} does NOT exist, loading in regular mode", Program.configName));
                     MessageBox.Show(string.Format(Translations.getTranslatedString("configNotExist"), Program.configName));
                     Program.autoInstall = false;
                 }
                 if (!Settings.CleanInstallation)
                 {
-                    Logging.Manager("ERROR: clean installation is set to false. This must be set to true for auto install to work. Loading in fontRegular mode.");
+                    Logging.Manager("ERROR: clean installation is set to false. This must be set to true for auto install to work. Loading in regular mode.");
                     MessageBox.Show(Translations.getTranslatedString("autoAndClean"));
                     Program.autoInstall = false;
                 }
                 if (Settings.FirstLoad)
                 {
-                    Logging.Manager("ERROR: First time loading cannot be an auto install mode, loading in fontRegular mode");
+                    Logging.Manager("ERROR: First time loading cannot be an auto install mode, loading in regular mode");
                     MessageBox.Show(Translations.getTranslatedString("autoAndFirst"));
                     Program.autoInstall = false;
                 }
@@ -775,16 +773,20 @@ namespace RelhaxModpack
             {
                 Logging.Manager("Program.autoInstall still true, loading in auto install mode");
                 wait.Close();
-                this.installRelhaxMod_Click(null, null);
+                this.InstallRelhaxMod_Click(null, null);
                 return;
             }
+            //apply text labels and custom command line properties
+            ApplicationVersionLabel.Text = "Application v" + ManagerVersion();
+            if (Program.testMode) this.Text = this.Text + " TEST MODE";
+            if (Program.betaDatabase) this.Text = this.Text + " (BETA DB)";
+            if (Program.Version == Program.ProgramVersion.Beta) this.Text = this.Text + " (BETA APP)";
+            if (Program.Version == Program.ProgramVersion.Alpha) this.Text = this.Text + " (ALPHA APP)";
+            DatabaseVersionLabel.Text = Translations.getTranslatedString("DatabaseVersionLabel") + " v" + Settings.DatabaseVersion;
             if (Settings.FirstLoad)
             {
-                //helper = new FirstLoadHelper(this.Location.X + this.Size.Width + 10, this.Location.Y);
-                //helperText = helper.helperText.Text;
-                //helper.Show();
-                //Settings.FirstLoad = false;
-                generic_MouseLeave(null, null);
+                //set the textbox to show the intro help message
+                Generic_MouseLeave(null, null);
             }
             if (!Program.silentStart)
                 wait.Close();
@@ -795,7 +797,7 @@ namespace RelhaxModpack
 
         //handler for when the install relhax modpack button is pressed
         //basicly the entire install process
-        private void installRelhaxMod_Click(object sender, EventArgs e)
+        private void InstallRelhaxMod_Click(object sender, EventArgs e)
         {
             Utils.TotallyNotStatPaddingForumPageViewCount();
             ToggleUIButtons(false);
@@ -1829,6 +1831,7 @@ namespace RelhaxModpack
                 ToggleUIButtons(true);
             }
         }
+
         private void ApplyControlTranslations()
         {
             foreach (Control c in Controls)
@@ -1836,96 +1839,103 @@ namespace RelhaxModpack
                 //only apply for common controls
                 if (c is RadioButton || c is CheckBox || c is GroupBox || c is Label)
                     c.Text = Translations.getTranslatedString(c.Name);
+                if (c is Panel || c is GroupBox || c is TableLayoutPanel)
+                    ApplyControlTranslations(c.Controls);
             }
-            Text = Translations.getTranslatedString(Name);
+        }
+
+        private void ApplyControlTranslations(Control.ControlCollection conts)
+        {
+            foreach (Control c in conts)
+            {
+                //only apply for common controls
+                if (c is RadioButton || c is CheckBox || c is GroupBox || c is Label)
+                    c.Text = Translations.getTranslatedString(c.Name);
+                if (c is Panel || c is GroupBox || c is TableLayoutPanel)
+                    ApplyControlTranslations(c.Controls);
+            }
         }
         //applies all settings from static settings class to this form
-        private void ApplySettings(bool init = false)
+        private void ApplySettings()
         {
-            viewTypeGB.Text = Translations.getTranslatedString("ModSelectionListViewSelection");
-            DatabaseVersionLabel.Text = Translations.getTranslatedString("DatabaseVersionLabel") + " v" + Settings.DatabaseVersion;
-            if (init)
+            //apply all checkmarks
+            ComicSansFontCB.Checked = Settings.ComicSans;
+            backupModsCheckBox.Checked = Settings.BackupModFolder;
+            saveLastInstallCB.Checked = Settings.SaveLastConfig;
+            saveUserDataCB.Checked = Settings.SaveUserData;
+            darkUICB.Checked = Settings.DarkUI;
+            expandNodesDefault.Checked = Settings.ExpandAllLegacy;
+            clearLogFilesCB.Checked = Settings.DeleteLogs;
+            Font = Settings.AppFont;
+            notifyIfSameDatabaseCB.Checked = Settings.NotifyIfSameDatabase;
+            SuperExtractionCB.Checked = Settings.SuperExtraction;
+            expandNodesDefault2.Checked = Settings.ExpandAllLegacy2;
+            LanguageComboBox.SelectedIndexChanged -= LanguageComboBox_SelectedIndexChanged;
+            switch (Translations.language)
             {
-                //apply all checkmarks
-                
-                cancerFontCB.Checked = Settings.ComicSans;
-                this.backupModsCheckBox.Checked = Settings.BackupModFolder;
-                this.saveLastInstallCB.Checked = Settings.SaveLastConfig;
-                this.saveUserDataCB.Checked = Settings.SaveUserData;
-                this.darkUICB.Checked = Settings.DarkUI;
-                this.expandNodesDefault.Checked = Settings.ExpandAllLegacy;
-                this.clearLogFilesCB.Checked = Settings.DeleteLogs;
-                this.Font = Settings.AppFont;
-                this.notifyIfSameDatabaseCB.Checked = Settings.NotifyIfSameDatabase;
-                this.SuperExtractionCB.Checked = Settings.SuperExtraction;
-                this.expandNodesDefault2.Checked = Settings.ExpandAllLegacy2;
-                LanguageComboBox.SelectedIndexChanged -= LanguageComboBox_SelectedIndexChanged;
-                switch (Translations.language)
-                {
-                    //english = 0, polish = 1, german = 2, french = 3
-                    case (Translations.Languages.English):
-                        LanguageComboBox.SelectedIndex = 0;
-                        break;
-                    case (Translations.Languages.German):
-                        LanguageComboBox.SelectedIndex = 2;
-                        break;
-                    case (Translations.Languages.Polish):
-                        LanguageComboBox.SelectedIndex = 1;
-                        break;
-                    case (Translations.Languages.French):
-                        LanguageComboBox.SelectedIndex = 3;
-                        break;
-                }
-                LanguageComboBox.SelectedIndexChanged += LanguageComboBox_SelectedIndexChanged;
-                switch (Settings.SView)
-                {
-                    case (Settings.SelectionView.Default):
-                        //set default button, but disable checkedChanged handler to prevent stack overflow
-                        selectionDefault.Checked = true;
-                        break;
-                    case (Settings.SelectionView.Legacy):
-                        selectionLegacy.Checked = true;
-                        break;
-                    case (Settings.SelectionView.LegacyV2):
-                        selectionLegacyV2.Checked = true;
-                        break;
-                }
-                switch (Settings.FontSizeforum)
-                {
-                    case (Settings.FontSize.Font100):
-                        fontSize100.Checked = true;
-                        break;
-                    case (Settings.FontSize.Font125):
-                        fontSize125.Checked = true;
-                        break;
-                    case (Settings.FontSize.Font175):
-                        fontSize175.Checked = true;
-                        break;
-                    case (Settings.FontSize.Font225):
-                        fontSize225.Checked = true;
-                        break;
-                    case (Settings.FontSize.Font275):
-                        fontSize275.Checked = true;
-                        break;
-                    case (Settings.FontSize.DPI100):
-                        DPI100.Checked = true;
-                        break;
-                    case (Settings.FontSize.DPI125):
-                        DPI125.Checked = true;
-                        break;
-                    case (Settings.FontSize.DPI175):
-                        DPI175.Checked = true;
-                        break;
-                    case (Settings.FontSize.DPI225):
-                        DPI225.Checked = true;
-                        break;
-                    case (Settings.FontSize.DPI275):
-                        DPI275.Checked = true;
-                        break;
-                    case (Settings.FontSize.DPIAUTO):
-                        DPIAUTO.Checked = true;
-                        break;
-                }
+                //english = 0, polish = 1, german = 2, french = 3
+                case (Translations.Languages.English):
+                    LanguageComboBox.SelectedIndex = 0;
+                    break;
+                case (Translations.Languages.German):
+                    LanguageComboBox.SelectedIndex = 2;
+                    break;
+                case (Translations.Languages.Polish):
+                    LanguageComboBox.SelectedIndex = 1;
+                    break;
+                case (Translations.Languages.French):
+                    LanguageComboBox.SelectedIndex = 3;
+                    break;
+            }
+            LanguageComboBox.SelectedIndexChanged += LanguageComboBox_SelectedIndexChanged;
+            switch (Settings.SView)
+            {
+                case (Settings.SelectionView.Default):
+                    //set default button, but disable checkedChanged handler to prevent stack overflow
+                    selectionDefault.Checked = true;
+                    break;
+                case (Settings.SelectionView.Legacy):
+                    selectionLegacy.Checked = true;
+                    break;
+                case (Settings.SelectionView.LegacyV2):
+                    selectionLegacyV2.Checked = true;
+                    break;
+            }
+            switch (Settings.FontSizeforum)
+            {
+                case (Settings.FontSize.Font100):
+                    fontSize100.Checked = true;
+                    break;
+                case (Settings.FontSize.Font125):
+                    fontSize125.Checked = true;
+                    break;
+                case (Settings.FontSize.Font175):
+                    fontSize175.Checked = true;
+                    break;
+                case (Settings.FontSize.Font225):
+                    fontSize225.Checked = true;
+                    break;
+                case (Settings.FontSize.Font275):
+                    fontSize275.Checked = true;
+                    break;
+                case (Settings.FontSize.DPI100):
+                    DPI100.Checked = true;
+                    break;
+                case (Settings.FontSize.DPI125):
+                    DPI125.Checked = true;
+                    break;
+                case (Settings.FontSize.DPI175):
+                    DPI175.Checked = true;
+                    break;
+                case (Settings.FontSize.DPI225):
+                    DPI225.Checked = true;
+                    break;
+                case (Settings.FontSize.DPI275):
+                    DPI275.Checked = true;
+                    break;
+                case (Settings.FontSize.DPIAUTO):
+                    DPIAUTO.Checked = true;
+                    break;
             }
         }
 
@@ -1950,7 +1960,7 @@ namespace RelhaxModpack
             saveLastInstallCB.Enabled = enableToggle;
             clearLogFilesCB.Enabled = enableToggle;
             notifyIfSameDatabaseCB.Enabled = enableToggle;
-            cancerFontCB.Enabled = enableToggle;
+            ComicSansFontCB.Enabled = enableToggle;
             SuperExtractionCB.Enabled = enableToggle;
             DPIAUTO.Enabled = enableToggle;
         }
@@ -1967,6 +1977,9 @@ namespace RelhaxModpack
             Logging.Manager("|------------------------------------------------------------------------------------------------|");
             Logging.Dispose();
         }
+
+        #region Scaling code
+
         public void ToggleScaleRBs(bool enableToggle)
         {
             float[] scales = new float[] { Settings.Scale100, Settings.Scale125, Settings.Scale175, Settings.Scale225, Settings.Scale275 };
@@ -1999,6 +2012,7 @@ namespace RelhaxModpack
                 return false;
             }
         }
+        #endregion
 
         #region LinkClicked Events
         private void donateLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -2016,169 +2030,62 @@ namespace RelhaxModpack
             System.Diagnostics.Process.Start("https://discord.gg/58fdPvK");
         }
         //when the "visit form page" link is clicked. the link clicked handler
-        private void formPageLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void FormPageNALink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
         }
+
+        private void FormPageEULink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/623269-");
+        }
+
+        private void FormPageEUGERLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/624499-");
+        }
+
+        private void ShowAdvancedSettingsLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            using (AdvancedSettings advset = new AdvancedSettings() { startX = Location.X + Size.Width + 3, startY = Location.Y, ApplyControlTranslationsOnLoad = true })
+            {
+                advset.ShowDialog();
+            }
+        }
+
+        private void VisitWebsiteLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://relhaxmodpack.com/");
+        }
+
+        private void SendEmailLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("mailto:info@relhaxmodpack.com");
+        }
+
+        private void ViewTwitterLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            //System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/624499-");
+        }
+
+        private void ViewFacebookLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            //System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/624499-");
+        }
         #endregion
 
-        #region MouseEnter/MouseLeave events
-        private void generic_MouseLeave(object sender, EventArgs e)
+        #region MouseEvents
+        private void Generic_MouseLeave(object sender, EventArgs e)
         {
             if (installRelhaxMod.Enabled && Settings.FirstLoad)
                 downloadProgress.Text = Translations.getTranslatedString("helperText");
             else
                 downloadProgress.Text = "";
         }
-
-        private void forceManuel_MouseEnter(object sender, EventArgs e)
+        private void Generic_MouseEnter(object sender, EventArgs e)
         {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("forceManuelDescription");
-        }
-
-        private void cleanInstallCB_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("cleanInstallDescription");
-        }
-
-        private void backupModsCheckBox_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("backupModsDescription");
-        }
-
-        private void cancerFontCB_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("comicSansDescription");
-        }
-
-        private void largerFontButton_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("enlargeFontDescription");
-        }
-
-        private void standardImageRB_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("selectGifDesc");
-        }
-
-        private void saveLastInstallCB_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("saveLastConfigInstall");
-        }
-
-        private void font_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("font_MouseEnter");
-        }
-
-        private void selectionView_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("selectionView_MouseEnter");
-        }
-
-        private void expandNodesDefault_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("expandAllDesc");
-        }
-
-        private void language_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("language_MouseEnter");
-        }
-
-        private void disableBordersCB_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("disableBordersDesc");
-
-        }
-        private void clearCacheCB_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("clearCachCBExplanation");
-        }
-
-        private void saveUserDataCB_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("saveUserDataDesc");
-        }
-
-        private void disableColorsCB_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("disableColorsCBExplanation");
-        }
-
-        private void clearLogFilesCB_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("clearLogFilesDescription");
-        }
-
-        private void darkUICB_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("darkUIDesc");
-        }
-
-        private void notifyIfSameDatabaseCB_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("notifyIfSameDatabaseCBExplanation");
-        }
-
-        private void ShowInstallCompleteWindowCB_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("ShowInstallCompleteWindowCBExplanation");
-        }
-
-        private void CreateShortcutsCB_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("CreateShortcutsCBExplanation");
-        }
-
-        private void InstantExtractionCB_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("InstantExtractionCBExplanation");
-        }
-
-        private void SuperExtractionCB_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("SuperExtractionCBExplanation");
-        }
-
-        private void SmartUninstallModeRB_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("SmartUninstallModeRBExplanation");
-        }
-
-        private void CleanUninstallModeRB_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("CleanUninstallModeRBExplanation");
-        }
-
-        private void ExportModeCB_MouseEnter(object sender, EventArgs e)
-        {
-            if (installRelhaxMod.Enabled)
-                downloadProgress.Text = Translations.getTranslatedString("ExportModeCBExplanation");
+            Control c = (Control)sender;
+            downloadProgress.Text = Translations.getTranslatedString(c.Name + "Description");
         }
         #endregion
 
@@ -2201,7 +2108,7 @@ namespace RelhaxModpack
                     Translations.language = Translations.Languages.French;
                     break;
             }
-            this.ApplySettings();
+            ApplyControlTranslations();
         }
         //handler for when the "backupResMods mods" checkbox is changed
         private void backupModsCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -2226,46 +2133,19 @@ namespace RelhaxModpack
             Settings.setUIColor(this);
         }
 
-        private void languageENG_CheckedChanged(object sender, EventArgs e)
-        {
-            Translations.language = Translations.Languages.English;
-            this.ApplySettings();
-        }
-
-        private void languageGER_CheckedChanged(object sender, EventArgs e)
-        {
-            Translations.language = Translations.Languages.German;
-            this.ApplySettings();
-        }
-
         private void selectionDefault_CheckedChanged(object sender, EventArgs e)
         {
             Settings.SView = Settings.SelectionView.Default;
-            this.ApplySettings();
         }
 
         private void selectionLegacy_CheckedChanged(object sender, EventArgs e)
         {
             Settings.SView = Settings.SelectionView.Legacy;
-            this.ApplySettings();
         }
 
         private void selectionLegacyV2_CheckedChanged(object sender, EventArgs e)
         {
             Settings.SView = Settings.SelectionView.LegacyV2;
-            this.ApplySettings();
-        }
-
-        private void languagePL_CheckedChanged(object sender, EventArgs e)
-        {
-            Translations.language = Translations.Languages.Polish;
-            this.ApplySettings();
-        }
-
-        private void languageFR_CheckedChanged(object sender, EventArgs e)
-        {
-            Translations.language = Translations.Languages.French;
-            this.ApplySettings();
         }
 
         private void expandNodesDefault_CheckedChanged(object sender, EventArgs e)
@@ -2526,7 +2406,7 @@ namespace RelhaxModpack
         //enalbes the user to use "comic sans" font for the 1 person that would ever want to do that
         private void cancerFontCB_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.ComicSans = cancerFontCB.Checked;
+            Settings.ComicSans = ComicSansFontCB.Checked;
             Settings.ApplInternalProperties();
             Font = Settings.AppFont;
         }
@@ -2543,6 +2423,26 @@ namespace RelhaxModpack
         private void SuperExtractionCB_CheckedChanged(object sender, EventArgs e)
         {
             Settings.SuperExtraction = SuperExtractionCB.Checked;
+        }
+
+        private void EnableBordersDefaultCB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.EnableBordersDefaultView = EnableBordersDefaultCB.Checked;
+        }
+
+        private void EnableBordersLegacyCB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.EnableBordersLegacyView = EnableBordersLegacyCB.Checked;
+        }
+
+        private void EnableColorChangeDefaultCB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.EnableColorChangeDefaultView = EnableColorChangeDefaultCB.Checked;
+        }
+
+        private void EnableColorChangeLegacyCB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.EnableColorChangeLegacyView = EnableColorChangeLegacyCB.Checked;
         }
         #endregion
 
@@ -2577,9 +2477,9 @@ namespace RelhaxModpack
         {
             ToggleUIButtons(false);
             //attempt to locate the tanks directory
-            if (Settings.ForceManuel || this.autoFindTanks() == null)
+            if (Settings.ForceManuel || autoFindTanks() == null)
             {
-                if (this.manuallyFindTanks() == null)
+                if (manuallyFindTanks() == null)
                 {
                     ToggleUIButtons(true);
                     return;
@@ -2590,7 +2490,7 @@ namespace RelhaxModpack
             Logging.Manager(string.Format("tanksLocation parsed as {0}", tanksLocation));
             using (Diagnostics d = new Diagnostics()
             {
-                TanksLocation = this.tanksLocation,
+                TanksLocation = tanksLocation,
                 AppStartupPath = Application.StartupPath,
                 ParentWindow = this
             })
@@ -2600,6 +2500,5 @@ namespace RelhaxModpack
             ToggleUIButtons(true);
         }
         #endregion
-        
     }
 }

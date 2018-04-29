@@ -111,7 +111,7 @@ namespace RelhaxModpack
                         {
                             case true:
                                 //handle color change code
-                                if (Settings.EnableChildColorChangeDefaultView)
+                                if (Settings.EnableColorChangeDefaultView)
                                 {
                                     if (ParentPanel != null && ParentPanel.BackColor != Color.BlanchedAlmond)
                                     {
@@ -121,7 +121,7 @@ namespace RelhaxModpack
                                 break;
                             case false:
                                 //handle color change code
-                                if (Settings.EnableChildColorChangeDefaultView)
+                                if (Settings.EnableColorChangeDefaultView)
                                 {
                                     if (ParentPanel != null && !AnyPackagesChecked())
                                         ParentPanel.BackColor = Settings.GetBackColorDefault();
@@ -135,7 +135,7 @@ namespace RelhaxModpack
                         {
                             case true:
                                 //handle color change code
-                                if (Settings.EnableChildColorChangeLegacyView)
+                                if (Settings.EnableColorChangeLegacyView)
                                 {
                                     if(ChildBorder != null && ChildBorder.Background != System.Windows.Media.Brushes.BlanchedAlmond)
                                     {
@@ -145,7 +145,7 @@ namespace RelhaxModpack
                                 break;
                             case false:
                                 //handle color change code
-                                if (Settings.EnableChildColorChangeLegacyView)
+                                if (Settings.EnableColorChangeLegacyView)
                                 {
                                     if (ChildBorder != null && !AnyPackagesChecked())
                                         ChildBorder.Background = Settings.GetBackColorWPF();
