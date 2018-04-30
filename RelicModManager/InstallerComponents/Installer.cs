@@ -371,6 +371,8 @@ namespace RelhaxModpack
             {
                 if(!Settings.ExportMode)
                 {
+                    if (Directory.Exists(Path.Combine(TanksLocation, "_readme")))
+                        Directory.Delete(Path.Combine(TanksLocation, "_readme"), true);
                     if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
                         Directory.Delete(Path.Combine(TanksLocation, "_patch"), true);
                     if (Directory.Exists(Path.Combine(TanksLocation, "_shortcuts")))
