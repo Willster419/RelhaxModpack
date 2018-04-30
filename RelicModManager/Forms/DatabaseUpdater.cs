@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,30 +26,26 @@ namespace RelhaxModpack
         private List<Dependency> dependencies;
         private List<LogicalDependency> logicalDependencies;
         private List<Category> parsedCatagoryList;
-        StringBuilder globalDepsSB = new StringBuilder();
-        StringBuilder dependenciesSB = new StringBuilder();
-        StringBuilder logicalDependenciesSB = new StringBuilder();
-        StringBuilder packagesSB = new StringBuilder();
-        StringBuilder filesNotFoundSB = new StringBuilder();
+        private StringBuilder globalDepsSB = new StringBuilder();
+        private StringBuilder dependenciesSB = new StringBuilder();
+        private StringBuilder logicalDependenciesSB = new StringBuilder();
+        private StringBuilder packagesSB = new StringBuilder();
+        private StringBuilder filesNotFoundSB = new StringBuilder();
+        private Hashtable HelpfullMessages = new Hashtable();
         private string level1Password = "RelhaxReadOnly2018";
         private const string L2keyFileName = "L2Key.txt";
         private const string L3keyFileName = "L3key.txt";
         private const string L2KeyAddress = "aHR0cDovL3dvdG1vZHMucmVsaGF4bW9kcGFjay5jb20vUmVsaGF4TW9kcGFjay9SZXNvdXJjZXMvZXh0ZXJuYWwvTDJLZXkudHh0";
         private const string L3KeyAddress = "aHR0cDovL3dvdG1vZHMucmVsaGF4bW9kcGFjay5jb20vUmVsaGF4TW9kcGFjay9SZXNvdXJjZXMvZXh0ZXJuYWwvTDNrZXkudHh0";
-        
-        string serverInfo = "creating the manageInfo.dat file, containing the files: " +
-            "\nmanager_version.xml\n" +
-            "supported_clients.xml\n" +
-            "databaseUpdate.txt\n" +
-            "releaseNotes.txt\n" +
-            "releaseNotes_beta.txt\n" +
-            "default_checked.xml";
-        string database = "creating the database.xml file at every online version folder of WoT, containing the filename, size and MD5Hash of " +
-            "the current folder, the script \"CreateMD5List.php\" is a needed subscript of CreateDatabase.php, \"relhax_db.sqlite\" is the needed sqlite database to " +
-            "be fast on parsing all files and only working on new or changed files";
-        string modInfo = "creating the modInfo.dat file at every online version folder  of WoT, added the onlineFolder name to the root element, " +
-            "added the \"selections\" (developerSelections) names, creation date and filenames to the modInfo.xml, adding all parsed develeoperSelection-Config " +
-            "files to the modInfo.dat archive";
+        private const string ModpackUsername = "modpack@wotmods.relhaxmodpack.com";
+        private const string ModpackPassword = "QjFZLi0zaGxsTStY";
+        private string ModpackPasswordDecoded = "";
+        private const string backupFoldersLocation = "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/modInfoBackups/";
+        private const string modInfosLocation = "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/modInfo/";
+        private const string ftpModpackRoot = "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/";
+        private const string ftpRoot = "ftp://wotmods.relhaxmodpack.com/";
+        private NetworkCredential credentials;
+        private string savedDatabaseVersion = "";
 
         public DatabaseUpdater()
         {
@@ -82,23 +79,46 @@ namespace RelhaxModpack
             AuthStatusLabel.Text = CurrentAuthLevel.ToString();
         }
 
-        private void loadDatabaseButton_Click(object sender, EventArgs e)
+        private void CRCFileSizeUpdate_Load(object sender, EventArgs e)
+        {
+            loadDatabaseDialog.InitialDirectory = Application.StartupPath;
+            ModpackPasswordDecoded = Utils.Base64Decode(ModpackPassword);
+            credentials = new NetworkCredential(ModpackUsername, ModpackPasswordDecoded);
+            FillHashTable();
+            //DEBUG ONLY
+            OnAuthLevelChange(AuthLevel.Admin);
+        }
+
+        #region Database Updating
+        private void UpdateDatabaseStep1_Click(object sender, EventArgs e)
         {
             if (loadDatabaseDialog.ShowDialog() == DialogResult.Cancel)
                 return;
             DatabaseLocationTextBox.Text = loadDatabaseDialog.FileName;
         }
 
-        private void updateDatabaseOnline_Click(object sender, EventArgs e)
+        private void UpdateDatabaseStep2_Click(object sender, EventArgs e)
+        {
+            ScriptLogOutput.Text = "Running script CreateDatabase.php...";
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadStringCompleted += Client_DownloadStringCompleted;
+                //ScriptLogOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateDatabase.php").Replace("<br />", "\n");
+                client.DownloadStringAsync(new Uri("http://wotmods.relhaxmodpack.com/scripts/CreateDatabase.php"));
+            }
+        }
+
+        private void UpdateDatabaseStep3_Click(object sender, EventArgs e)
         {
             // check for database
-            if (DatabaseLocationTextBox.Text.Equals("-none-"))
+            if (!File.Exists(DatabaseLocationTextBox.Text))
                 return;
             // read onlineFolder of the selected local modInfo.xml to get the right online database.xml
             Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocationTextBox.Text, "//modInfoAlpha.xml/@onlineFolder");
             // read gameVersion of the selected local modInfo.xml
             Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocationTextBox.Text, "//modInfoAlpha.xml/@version");
-            Logging.Manager(String.Format("working with game version: {0}, located at online Folder: {1}", Settings.TanksVersion, Settings.TanksOnlineFolderVersion));
+            Logging.Manager(string.Format("working with game version: {0}, located at online Folder: {1}", Settings.TanksVersion, Settings.TanksOnlineFolderVersion));
+            ScriptLogOutput.AppendText(string.Format("working with game version: {0}, located at online Folder: {1}\n", Settings.TanksVersion, Settings.TanksOnlineFolderVersion));
             // download online database.xml
             try
             {
@@ -115,6 +135,7 @@ namespace RelhaxModpack
                 MessageBox.Show("FAILED to download online file database");
                 Application.Exit();
             }
+            ScriptLogOutput.AppendText("database.xml downloaded\n");
             // set this flag, so getMd5Hash and getFileSize should parse downloaded online database.xml
             Program.databaseUpdateOnline = true;
             filesNotFoundSB.Clear();
@@ -136,7 +157,7 @@ namespace RelhaxModpack
                 Program.databaseUpdateOnline = false;
                 return;
             }
-            ScriptLogOutput.Text = "Updating database...";
+            ScriptLogOutput.AppendText("Updating database...\n");
             Application.DoEvents();
             filesNotFoundSB.Append("FILES NOT FOUND:\n");
             globalDepsSB.Append("\nGlobal Dependencies updated:\n");
@@ -251,115 +272,14 @@ namespace RelhaxModpack
             //save config file
             XMLUtils.SaveDatabase(DatabaseLocationTextBox.Text, Settings.TanksVersion, Settings.TanksOnlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             //MessageBox.Show(filesNotFoundSB.ToString() + globalDepsSB.ToString() + dependenciesSB.ToString() + logicalDependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
-            ScriptLogOutput.Text = filesNotFoundSB.ToString() + globalDepsSB.ToString() + dependenciesSB.ToString() + logicalDependenciesSB.ToString() + packagesSB.ToString();
+            ScriptLogOutput.AppendText(filesNotFoundSB.ToString() + globalDepsSB.ToString() + dependenciesSB.ToString() + logicalDependenciesSB.ToString() + packagesSB.ToString());
             Program.databaseUpdateOnline = false;
         }
 
-        private void processConfigsCRCUpdate(List<SelectablePackage> cfgList)
+        private void UpdateDatabaseStep3Advanced_Click(object sender, EventArgs e)
         {
-            string hash;
-            foreach (SelectablePackage cat in cfgList)
-            {
-                if (cat.ZipFile.Trim().Equals(""))
-                {
-                    cat.CRC = "";
-                }
-                else
-                {
-                    hash = XMLUtils.GetMd5Hash(cat.ZipFile);
-                    cat.Size = this.getFileSize(cat.ZipFile);
-                    if (cat.Size != 0)
-                    {
-                        if (!cat.CRC.Equals(hash))
-                        {
-                            cat.CRC = hash;
-                            if (!hash.Equals("f"))
-                            {
-                                packagesSB.Append(cat.ZipFile + "\n");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        cat.CRC = "f";
-                    }
-                    if (hash.Equals("f") | cat.CRC.Equals("f"))
-                    {
-                        filesNotFoundSB.Append(cat.ZipFile + "\n");
-                    }
-
-                }
-                if (cat.Packages.Count > 0)
-                {
-                    this.processConfigsCRCUpdate(cat.Packages);
-                }
-            }
-        }
-        
-        private Int64 getFileSize(string file)
-        {
-            Int64 fileSizeBytes = 0;
-            if (Program.databaseUpdateOnline)
-            {
-                try
-                {
-                    XDocument doc = XDocument.Load(Settings.OnlineDatabaseXmlFile);
-                    try
-                    {
-                        XElement element = doc.Descendants("file")
-                           .Where(arg => arg.Attribute("name").Value == file)
-                           .Single();
-                        Int64.TryParse(element.Attribute("size").Value, out fileSizeBytes);
-                    }
-                    catch (InvalidOperationException)
-                    {
-                        // catch the Exception if no entry is found
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Utils.ExceptionLog("getFileSize", "read from onlineDatabaseXml: " + file, ex);
-                }
-            }
-            else
-            {
-                try
-                {
-                    FileInfo fi = new FileInfo(file);
-                    fileSizeBytes = fi.Length;
-                }
-                catch (Exception ex)
-                {
-                    Utils.ExceptionLog("getFileSize", "FileInfo from local file: " + file, ex);
-                }
-            }
-            try
-            {
-                return fileSizeBytes;
-            }
-            catch (Exception ex)
-            {
-                Utils.ExceptionLog("getFileSize", "building format", ex);
-            }
-            return 0;
-        }
-
-        private void CRCFileSizeUpdate_Load(object sender, EventArgs e)
-        {
-            loadDatabaseDialog.InitialDirectory = Application.StartupPath;
-            //DEBUG ONLY
-            OnAuthLevelChange(AuthLevel.Admin);
-        }
-
-        private void CRCFileSizeUpdate_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Logging.Manager("|------------------------------------------------------------------------------------------------|");
-        }
-
-        private void updateDatabaseOffline_Click(object sender, EventArgs e)
-        {
-            //check for database
-            if (DatabaseLocationTextBox.Text.Equals("-none-"))
+            // check for database
+            if (!File.Exists(DatabaseLocationTextBox.Text))
                 return;
             //show file dialog
             if (addZipsDialog.ShowDialog() == DialogResult.Cancel)
@@ -443,105 +363,158 @@ namespace RelhaxModpack
             ScriptLogOutput.Text = globalDepsSB.ToString() + dependenciesSB.ToString() + packagesSB.ToString();
         }
 
-        private void processConfigsCRCUpdate_old(List<SelectablePackage> cfgList)
-        {
-            foreach (SelectablePackage cat in cfgList)
-            {
-                int cindex = this.getZipIndex(cat.ZipFile);
-                if (cindex != -1)
-                {
-                    cat.Size = this.getFileSize(addZipsDialog.FileNames[cindex]);
-                    if (cat.CRC == null || cat.CRC.Equals("") || cat.CRC.Equals("f"))
-                    {
-                        cat.CRC = Utils.CreateMd5Hash(addZipsDialog.FileNames[cindex]);
 
-                        packagesSB.Append(cat.ZipFile + "\n");
+        private void UpdateDatabaseStep4_Click(object sender, EventArgs e)
+        {
+            //for the folder version: //modInfoAlpha.xml/@version
+            Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocationTextBox.Text, "//modInfoAlpha.xml/@version");
+            //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
+            Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocationTextBox.Text, "//modInfoAlpha.xml/@onlineFolder");
+            Text = String.Format("DatabaseUpdateUtility      TanksVersion: {0}    OnlineFolder: {1}", Settings.TanksVersion, Settings.TanksOnlineFolderVersion);
+            using (downloader = new WebClient() { Credentials = credentials })
+            {
+                //check if folder exists first
+                //get the list of all the folders based on game version
+                ScriptLogOutput.AppendText("Checking if folder exists...");
+                string[] folders = ListFilesFolders(backupFoldersLocation);
+                if (!(folders.Contains(Settings.TanksVersion)))
+                {
+                    ScriptLogOutput.AppendText("Does NOT exist, creating\n");
+                    //create the folder
+                    MakeFTPFolder(backupFoldersLocation + Settings.TanksVersion);
+                }
+                else
+                    ScriptLogOutput.AppendText("DOES exists\n");
+                //check it for if multiple itterations in one day
+                //rename it to format to the new date
+                //MUST use EST timezone
+                ReportProgress("Making new filename with EST timezone, checking if currently on server");
+                int itteraton = 1;
+                DateTime dt = DateTime.UtcNow;
+                TimeZoneInfo EST = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+                DateTime realToday = TimeZoneInfo.ConvertTimeFromUtc(dt, EST);
+                string newModInfoFileName = "modInfo_" + Settings.TanksVersion + "_";
+                string dateTimeFormat = string.Format("{0:yyyy-MM-dd}", realToday);
+                string realNewModInfoFileName = newModInfoFileName + dateTimeFormat + "_" + itteraton + ".xml";
+                bool fileAlreadyExists = true;
+                while(fileAlreadyExists)
+                {
+                    ReportProgress(string.Format("Checking if filename '{0}' exists in backup folder...", realNewModInfoFileName));
+                    string[] modInfoBackups = ListFilesFolders(backupFoldersLocation + Settings.TanksVersion + "/");
+                    if(modInfoBackups.Contains(realNewModInfoFileName))
+                    {
+                        ReportProgress("Exists, trying higher itteration");
+                        realNewModInfoFileName = newModInfoFileName + dateTimeFormat + "_" + ++itteraton + ".xml";
+                    }
+                    else
+                    {
+                        ReportProgress("Does not exist!");
+                        fileAlreadyExists = false;
+                        savedDatabaseVersion = realNewModInfoFileName;
                     }
                 }
-                if (cat.Packages.Count > 0)
+                //download and rename the current one
+                ReportProgress("Downloading latest database");
+                string modInfoFileName = "modInfo_" + Settings.TanksVersion + ".xml";
+                downloader.DownloadFile(ftpModpackRoot + "Resources/modInfo/" + modInfoFileName, modInfoFileName);
+                ReportProgress("Reanimg file for backup...");
+                File.Move(modInfoFileName, realNewModInfoFileName);
+                //upload backup
+                downloader.UploadFile(backupFoldersLocation + Settings.TanksVersion + "/" + realNewModInfoFileName, realNewModInfoFileName);
+                File.Delete(realNewModInfoFileName);
+                //delete current modInfo?
+
+                //upload new modInfo
+                downloader.UploadFile(modInfosLocation + modInfoFileName, DatabaseLocationTextBox.Text);
+            }
+        }
+
+        private void UpdateDatabaseStep5_Click(object sender, EventArgs e)
+        {
+            if(string.IsNullOrWhiteSpace(Settings.TanksVersion))
+            {
+                ReportProgress("ERROR: Settings.TanksVersion is null or empty! (Did you run the previous processes first?)");
+                return;
+            }
+            if(string.IsNullOrWhiteSpace(savedDatabaseVersion))
+            {
+                ReportProgress("ERROR: savedDatabaseVersion is null or empty! (Did you run the previous processes first?)");
+                return;
+            }
+            string supportedClients = "supported_clients.xml";
+            string managerVersion = "manager_version.xml";
+            
+            using (downloader = new WebClient() { Credentials = credentials })
+            {
+                //check if supported clients needs to be updated
+                //download and check if update needed
+                ReportProgress("Checking if supported_clients.xml already has entry for tanks version " + Settings.TanksVersion);
+                if (File.Exists(supportedClients))
+                    File.Delete(supportedClients);
+                downloader.DownloadFile(ftpModpackRoot + "Resources/managerInfo/" + supportedClients, supportedClients);
+                XmlDocument doc = new XmlDocument();
+                doc.Load(supportedClients);
+                XmlNodeList supported_clients = doc.SelectNodes("//versions/version");
+                bool needsUpdate = true;
+                foreach(XmlNode supported_client in supported_clients)
                 {
-                    this.processConfigsCRCUpdate_old(cat.Packages);
+                    if(supported_client.InnerText.Equals(Settings.TanksVersion))
+                    {
+                        needsUpdate = false;
+                    }
                 }
+                if (needsUpdate)
+                {
+                    ReportProgress("Entry needed, creating and uploading...");
+                    XmlNode versionRoot = doc.SelectSingleNode("//versions");
+                    XmlElement supported_client = doc.CreateElement("version");
+                    supported_client.InnerText = Settings.TanksVersion;
+                    supported_client.SetAttribute("folder", Settings.TanksOnlineFolderVersion);
+                    versionRoot.AppendChild(supported_client);
+                    doc.Save(supportedClients);
+                    downloader.UploadFile(ftpModpackRoot + "Resources/managerInfo/" + supportedClients, supportedClients);
+                }
+                else
+                {
+                    ReportProgress("Entry already exists");
+                }
+                File.Delete(supportedClients);
+                //update manager_version.xml
+                ReportProgress("Updating manager_version.xml");
+                downloader.DownloadFile(ftpModpackRoot + "Resources/managerInfo/" + managerVersion, managerVersion);
+                doc = new XmlDocument();
+                doc.Load(managerVersion);
+                XmlNode database_version_text = doc.SelectSingleNode("//version/database");
+                string databaseString = savedDatabaseVersion.Substring(0, savedDatabaseVersion.Length - 4);
+                databaseString = databaseString.Substring(6);
+                database_version_text.InnerText = databaseString;
+                doc.Save(managerVersion);
+                downloader.UploadFile(ftpModpackRoot + "Resources/managerInfo/" + managerVersion, managerVersion);
+                File.Delete(managerVersion);
             }
         }
-
-        private float getFileSize_old(string file)
-        {
-            FileInfo fi = new FileInfo(file);
-            float fileSizeBytes = fi.Length;
-            float fileSizeKBytes = fileSizeBytes / 1024;
-            float fileSizeMBytes = fileSizeKBytes / 1024;
-            fileSizeMBytes = (float)Math.Round(fileSizeMBytes, 1);
-            if (fileSizeMBytes == 0.0)
-                fileSizeMBytes = 0.1f;
-            return fileSizeMBytes;
-        }
-
-        private int getZipIndex(string zipFile)
-        {
-            for (int i = 0; i < addZipsDialog.FileNames.Count(); i++)
-            {
-                string fileName = Path.GetFileName(addZipsDialog.FileNames[i]);
-                if (fileName.Equals(zipFile))
-                    return i;
-            }
-            return -1;
-        }
-
-        private void RunOnlineScriptButton_Click(object sender, EventArgs e)
-        {
-            ScriptLogOutput.Text = "Running script CreateDatabase.php...";
-            Application.DoEvents();
-            using (WebClient client = new WebClient())
-            {
-                ScriptLogOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateDatabase.php").Replace("<br />", "\n");
-            }
-            Application.DoEvents();
-        }
-
-        private void RunCreateModInfoPHP_Click(object sender, EventArgs e)
+        private void UpdateDatabaseStep6_Click(object sender, EventArgs e)
         {
             ScriptLogOutput.Text = "Running script CreateModInfo.php...";
-            Application.DoEvents();
             using (WebClient client = new WebClient())
             {
-                ScriptLogOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateModInfo.php").Replace("<br />", "\n");
+                //ScriptLogOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateModInfo.php").Replace("<br />", "\n");
+                client.DownloadStringAsync(new Uri("http://wotmods.relhaxmodpack.com/scripts/CreateModInfo.php"));
             }
-            Application.DoEvents();
         }
 
-        private void RunCreateServerInfoPHP_Click(object sender, EventArgs e)
+        private void UpdateDatabaseStep7_Click(object sender, EventArgs e)
         {
             ScriptLogOutput.Text = "Running script CreateServerInfo.php...";
-            Application.DoEvents();
             using (WebClient client = new WebClient())
             {
-                ScriptLogOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateManagerInfo.php").Replace("<br />", "\n");
+                //ScriptLogOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateManagerInfo.php").Replace("<br />", "\n");
+                client.DownloadStringAsync(new Uri("http://wotmods.relhaxmodpack.com/scripts/CreateManagerInfo.php"));
             }
-            Application.DoEvents();
         }
 
-        private void RunCreateDatabasePHP_MouseEnter(object sender, EventArgs e)
-        {
-            InfoTB.Text = database;
-        }
-
-        private void RunCreateModInfoPHP_MouseEnter(object sender, EventArgs e)
-        {
-            InfoTB.Text = modInfo;
-        }
-
-        private void RunCreateServerInfoPHP_MouseEnter(object sender, EventArgs e)
-        {
-            InfoTB.Text = serverInfo;
-        }
-
-        private void Generic_MouseLeave(object sender, EventArgs e)
-        {
-            InfoTB.Text = "";
-        }
-
-        private void RunCreateOutdatedFilesList_Click(object sender, EventArgs e)
+        /*
+        private void UpdateDatabaseStep7_Click(object sender, EventArgs e)
         {
             ScriptLogOutput.Text = "Running script CreateOutDatesFilesList.php...";
             Application.DoEvents();
@@ -551,19 +524,51 @@ namespace RelhaxModpack
             }
             Application.DoEvents();
         }
+        */
+        #endregion
 
-        private void RunCreateOutdatedFileList_MouseEnter(object sender, EventArgs e)
+        #region Application Updating
+
+        #endregion
+
+        #region Online Folder Cleaning
+        private void CleanFoldersStep1_Click(object sender, EventArgs e)
         {
-            //todo
-            InfoTB.Text = "Creates an xml list of files not linked in modInfo.xml, but still in the folder.";
+
         }
 
-        private void DatabaseUpdateTabControl_Selected(object sender, TabControlEventArgs e)
+        private void CleanFoldersStep2_Click(object sender, EventArgs e)
         {
-            if (CurrentAuthLevel == AuthLevel.None)
-                DatabaseUpdateTabControl.SelectedTab = AuthStatus;
+
+        }
+        #endregion
+
+        #region FTP methods
+        private void MakeFTPFolder(string addressWithDirectory)
+        {
+            WebRequest folderRequest = WebRequest.Create(addressWithDirectory);
+            folderRequest.Method = WebRequestMethods.Ftp.MakeDirectory;
+            folderRequest.Credentials = credentials;
+            using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
+            { }
         }
 
+        private string[] ListFilesFolders(string address)
+        {
+            WebRequest folderRequest = WebRequest.Create(address);
+            folderRequest.Method = WebRequestMethods.Ftp.ListDirectory;
+            folderRequest.Credentials = credentials;
+            using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
+            {
+                Stream responseStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(responseStream);
+                string temp = reader.ReadToEnd();
+                return temp.Split(new[] { "\r\n" }, StringSplitOptions.None);
+            }
+        }
+        #endregion
+
+        #region Authorization
         private void RequestL1AuthButton_Click(object sender, EventArgs e)
         {
             ScriptLogOutput.Text = "Verifying...";
@@ -658,5 +663,184 @@ namespace RelhaxModpack
                 L3GenerateOutput.Text = "L3 Key read as " + Utils.Base64Decode(File.ReadAllText(L3keyFileName));
             }
         }
+        #endregion
+
+        #region Boring methods
+        private void ReportProgress(string message)
+        {
+            //reports to the log file and the console otuptu
+            Logging.Manager(message);
+            ScriptLogOutput.AppendText(message + "\n");
+        }
+
+        private void DatabaseUpdateTabControl_Selected(object sender, TabControlEventArgs e)
+        {
+            if (CurrentAuthLevel == AuthLevel.None)
+                DatabaseUpdateTabControl.SelectedTab = AuthStatus;
+        }
+
+        private void Generic_MouseLeave(object sender, EventArgs e)
+        {
+            InfoTB.Text = "";
+        }
+
+        private void Generic_MouseEnter(object sender, EventArgs e)
+        {
+            Control c = (Control)sender;
+            InfoTB.Text = (string)HelpfullMessages[c.Name];
+        }
+
+        private void Client_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        {
+            ScriptLogOutput.Text = e.Result.Replace("<br />", "\n");
+        }
+
+        private void processConfigsCRCUpdate_old(List<SelectablePackage> cfgList)
+        {
+            foreach (SelectablePackage cat in cfgList)
+            {
+                int cindex = this.getZipIndex(cat.ZipFile);
+                if (cindex != -1)
+                {
+                    cat.Size = this.getFileSize(addZipsDialog.FileNames[cindex]);
+                    if (cat.CRC == null || cat.CRC.Equals("") || cat.CRC.Equals("f"))
+                    {
+                        cat.CRC = Utils.CreateMd5Hash(addZipsDialog.FileNames[cindex]);
+
+                        packagesSB.Append(cat.ZipFile + "\n");
+                    }
+                }
+                if (cat.Packages.Count > 0)
+                {
+                    this.processConfigsCRCUpdate_old(cat.Packages);
+                }
+            }
+        }
+
+        private int getZipIndex(string zipFile)
+        {
+            for (int i = 0; i < addZipsDialog.FileNames.Count(); i++)
+            {
+                string fileName = Path.GetFileName(addZipsDialog.FileNames[i]);
+                if (fileName.Equals(zipFile))
+                    return i;
+            }
+            return -1;
+        }
+
+        private void CRCFileSizeUpdate_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Logging.Manager("|------------------------------------------------------------------------------------------------|");
+        }
+
+        private void processConfigsCRCUpdate(List<SelectablePackage> cfgList)
+        {
+            string hash;
+            foreach (SelectablePackage cat in cfgList)
+            {
+                if (cat.ZipFile.Trim().Equals(""))
+                {
+                    cat.CRC = "";
+                }
+                else
+                {
+                    hash = XMLUtils.GetMd5Hash(cat.ZipFile);
+                    cat.Size = this.getFileSize(cat.ZipFile);
+                    if (cat.Size != 0)
+                    {
+                        if (!cat.CRC.Equals(hash))
+                        {
+                            cat.CRC = hash;
+                            if (!hash.Equals("f"))
+                            {
+                                packagesSB.Append(cat.ZipFile + "\n");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        cat.CRC = "f";
+                    }
+                    if (hash.Equals("f") | cat.CRC.Equals("f"))
+                    {
+                        filesNotFoundSB.Append(cat.ZipFile + "\n");
+                    }
+
+                }
+                if (cat.Packages.Count > 0)
+                {
+                    this.processConfigsCRCUpdate(cat.Packages);
+                }
+            }
+        }
+
+        private Int64 getFileSize(string file)
+        {
+            Int64 fileSizeBytes = 0;
+            if (Program.databaseUpdateOnline)
+            {
+                try
+                {
+                    XDocument doc = XDocument.Load(Settings.OnlineDatabaseXmlFile);
+                    try
+                    {
+                        XElement element = doc.Descendants("file")
+                           .Where(arg => arg.Attribute("name").Value == file)
+                           .Single();
+                        Int64.TryParse(element.Attribute("size").Value, out fileSizeBytes);
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        // catch the Exception if no entry is found
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Utils.ExceptionLog("getFileSize", "read from onlineDatabaseXml: " + file, ex);
+                }
+            }
+            else
+            {
+                try
+                {
+                    FileInfo fi = new FileInfo(file);
+                    fileSizeBytes = fi.Length;
+                }
+                catch (Exception ex)
+                {
+                    Utils.ExceptionLog("getFileSize", "FileInfo from local file: " + file, ex);
+                }
+            }
+            try
+            {
+                return fileSizeBytes;
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("getFileSize", "building format", ex);
+            }
+            return 0;
+        }
+
+        private void FillHashTable()
+        {
+            string serverInfo = "creating the manageInfo.dat file, containing the files: " +
+            "\nmanager_version.xml\n" +
+            "supported_clients.xml\n" +
+            "databaseUpdate.txt\n" +
+            "releaseNotes.txt\n" +
+            "releaseNotes_beta.txt\n" +
+            "default_checked.xml";
+            string database = "creating the database.xml file at every online version folder of WoT, containing the filename, size and MD5Hash of " +
+                "the current folder, the script \"CreateMD5List.php\" is a needed subscript of CreateDatabase.php, \"relhax_db.sqlite\" is the needed sqlite database to " +
+                "be fast on parsing all files and only working on new or changed files";
+            string modInfo = "creating the modInfo.dat file at every online version folder  of WoT, added the onlineFolder name to the root element, " +
+                "added the \"selections\" (developerSelections) names, creation date and filenames to the modInfo.xml, adding all parsed develeoperSelection-Config " +
+                "files to the modInfo.dat archive";
+            HelpfullMessages.Add(UpdateDatabaseStep2.Name, database);
+            HelpfullMessages.Add(UpdateDatabaseStep6.Name, modInfo);
+            HelpfullMessages.Add(UpdateDatabaseStep7.Name, serverInfo);
+        }
+        #endregion
     }
 }
