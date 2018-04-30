@@ -717,19 +717,6 @@ namespace RelhaxModpack
             {
                 Utils.ExceptionLog(ex2);
             }
-            
-
-            //add ability to disable the modpack for during patch day
-            //this will involve having a hard coded true or false, along with a command line arguement to over-ride
-            //to disable from patch day set it to false.
-            //to enable for patch day (prevent users to use it), set it to true.
-            //hopefully this will never have to be used
-            if (false && !Program.patchDayTest)
-            {
-                Logging.Manager("Patch day disable detected. Remember To override use /patchday");
-                MessageBox.Show(Translations.getTranslatedString("patchDayMessage"));
-                Application.Exit();
-            }
 
             //load settings
             wait.loadingDescBox.Text = Translations.getTranslatedString("loadingSettings");
@@ -742,6 +729,18 @@ namespace RelhaxModpack
             wait.loadingDescBox.Text = Translations.getTranslatedString("checkForUpdates");
             Application.DoEvents();
             this.CheckmanagerUpdates();
+
+            //add ability to disable the modpack for during patch day
+            //this will involve having a hard coded true or false, along with a command line arguement to over-ride
+            //to disable from patch day set it to false.
+            //to enable for patch day (prevent users to use it), set it to true.
+            //hopefully this will never have to be used
+            if (false && !Program.patchDayTest)
+            {
+                Logging.Manager("Patch day disable detected. Remember To override use /patchday");
+                MessageBox.Show(Translations.getTranslatedString("patchDayMessage"));
+                Application.Exit();
+            }
 
             //parse command line argeuemnts
             if (Program.testMode)
