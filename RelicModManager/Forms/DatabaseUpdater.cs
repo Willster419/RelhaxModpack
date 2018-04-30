@@ -308,10 +308,47 @@ namespace RelhaxModpack
                 Program.databaseUpdateOnline = false;
                 return;
             }
+
             //create the list for after the update for comparison
             ReportProgress("making comparisons for databaseUpdate.txt");
             allPackagesAfterUpdate = CreatePackageList(parsedCatagoryList, globalDependencies, dependencies, logicalDependencies);
             //used for disabled, removed, added mods
+            PackageComparer pc = new PackageComparer();
+            //if in before but not after = removed
+            removedPackages = allPackagesBeforeUpdate.Except(allPackagesAfterUpdate, pc).ToList();
+            //if not in before but after = added
+            addedPackages = allPackagesAfterUpdate.Except(allPackagesBeforeUpdate, pc).ToList();
+            //query to find any disabled in before and after
+            //list of disabed packages before
+            List<DatabasePackage> disabledBefore = (List<DatabasePackage>)allPackagesBeforeUpdate.Where(p => !p.Enabled);
+            //list of disabled packages after
+            List<DatabasePackage> disabledAfter = (List<DatabasePackage>)allPackagesAfterUpdate.Where(p => !p.Enabled);
+            //compare except with after.before
+            disabledPackages = disabledAfter.Except(disabledBefore, pc).ToList();
+
+            //make stringbuilder of databaseUpdate.text
+            databaseUpdateText.Clear();
+            databaseUpdateText.Append("Database Update!\n");
+            DateTime dt = DateTime.UtcNow;
+            TimeZoneInfo EST = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+            DateTime realToday = TimeZoneInfo.ConvertTimeFromUtc(dt, EST);
+            string dateTimeFormat = string.Format("{0:MM/dd/yy}", realToday);
+            databaseUpdateText.Append("Updated: ");
+            databaseUpdateText.Append(dateTimeFormat);
+            databaseUpdateText.Append(" v1\n\n");//TODO: need to check this to verify which itteration it should use, maybe use ftp check?
+            databaseUpdateText.Append("Added:\n");
+            foreach (DatabasePackage dp in addedPackages)
+                databaseUpdateText.Append("-" + dp.PackageName + "\n");
+            databaseUpdateText.Append("Updated:\n");
+            foreach (DatabasePackage dp in updatedPackages)
+                databaseUpdateText.Append("-" + dp.PackageName + "\n");
+            databaseUpdateText.Append("Disabled:\n");
+            foreach (DatabasePackage dp in disabledPackages)
+                databaseUpdateText.Append("-" + dp.PackageName + "\n");
+            databaseUpdateText.Append("Removed:\n");
+            foreach (DatabasePackage dp in removedPackages)
+                databaseUpdateText.Append("-" + dp.PackageName + "\n");
+            databaseUpdateText.Append("Notes:\n-\n\n--------------------------------------------------------------------------------------------------------------------------------------------");
 
             //save config file
             ReportProgress("saving database");

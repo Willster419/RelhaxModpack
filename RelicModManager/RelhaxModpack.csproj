@@ -117,6 +117,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DatabaseComponents\PackageComparer.cs" />
     <Compile Include="Forms\AddPicturesZip.cs">
       <SubType>Form</SubType>
     </Compile>
