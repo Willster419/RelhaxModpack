@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelhaxModpack.DatabaseComponents;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -26,12 +27,22 @@ namespace RelhaxModpack
         private List<Dependency> dependencies;
         private List<LogicalDependency> logicalDependencies;
         private List<Category> parsedCatagoryList;
+        private List<DatabasePackage> addedPackages = new List<DatabasePackage>();
+        private List<DatabasePackage> updatedPackages = new List<DatabasePackage>();
+        private List<DatabasePackage> disabledPackages = new List<DatabasePackage>();
+        private List<DatabasePackage> removedPackages = new List<DatabasePackage>();
+        private List<DatabasePackage> fileNotFoundPackages = new List<DatabasePackage>();
+        private List<DatabasePackage> allPackagesBeforeUpdate = new List<DatabasePackage>();
+        private List<DatabasePackage> allPackagesAfterUpdate = new List<DatabasePackage>();
         private StringBuilder globalDepsSB = new StringBuilder();
         private StringBuilder dependenciesSB = new StringBuilder();
         private StringBuilder logicalDependenciesSB = new StringBuilder();
         private StringBuilder packagesSB = new StringBuilder();
         private StringBuilder filesNotFoundSB = new StringBuilder();
+        private StringBuilder databaseUpdateText = new StringBuilder();
         private Hashtable HelpfullMessages = new Hashtable();
+        private const string databaseUpdateTxt = "databaseUpdate.txt";
+        private const string databaseUpdateBackupTxt = "databaseUpdate.txt.bak";
         private string level1Password = "RelhaxReadOnly2018";
         private const string L2keyFileName = "L2Key.txt";
         private const string L3keyFileName = "L3key.txt";
@@ -92,6 +103,7 @@ namespace RelhaxModpack
         #region Database Updating
         private void UpdateDatabaseStep1_Click(object sender, EventArgs e)
         {
+            ScriptLogOutput.Text = "";
             if (loadDatabaseDialog.ShowDialog() == DialogResult.Cancel)
                 return;
             DatabaseLocationTextBox.Text = loadDatabaseDialog.FileName;
@@ -110,45 +122,63 @@ namespace RelhaxModpack
 
         private void UpdateDatabaseStep3_Click(object sender, EventArgs e)
         {
+            ScriptLogOutput.Text = "";
             // check for database
             if (!File.Exists(DatabaseLocationTextBox.Text))
+            {
+                ReportProgress("ERROR: managerInfo xml not found! (did you run the previous steps?)");
                 return;
+            }
+            if (File.Exists(databaseUpdateBackupTxt))
+                File.Delete(databaseUpdateBackupTxt);
+            if(File.Exists(databaseUpdateTxt))
+            {
+                ReportProgress("databaseUpdate.txt exists, saving backup");
+                File.Move(databaseUpdateTxt, databaseUpdateBackupTxt);
+            }
             // read onlineFolder of the selected local modInfo.xml to get the right online database.xml
             Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocationTextBox.Text, "//modInfoAlpha.xml/@onlineFolder");
             // read gameVersion of the selected local modInfo.xml
             Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocationTextBox.Text, "//modInfoAlpha.xml/@version");
-            Logging.Manager(string.Format("working with game version: {0}, located at online Folder: {1}", Settings.TanksVersion, Settings.TanksOnlineFolderVersion));
-            ScriptLogOutput.AppendText(string.Format("working with game version: {0}, located at online Folder: {1}\n", Settings.TanksVersion, Settings.TanksOnlineFolderVersion));
+            ReportProgress(string.Format("working with game version: {0}, located at online Folder: {1}", Settings.TanksVersion, Settings.TanksOnlineFolderVersion));
             // download online database.xml
-            try
+            using (downloader = new WebClient())
             {
-                using (downloader = new WebClient())
-                {
-                    string address = string.Format("http://wotmods.relhaxmodpack.com/WoT/{0}/database.xml", Settings.TanksOnlineFolderVersion);
-                    string fileName = Path.Combine(Application.StartupPath, "RelHaxTemp", Settings.OnlineDatabaseXmlFile);
-                    downloader.DownloadFile(address, fileName);
-                }
+                string address = string.Format("http://wotmods.relhaxmodpack.com/WoT/{0}/database.xml", Settings.TanksOnlineFolderVersion);
+                string fileName = Path.Combine(Application.StartupPath, "RelHaxTemp", Settings.OnlineDatabaseXmlFile);
+                downloader.DownloadFile(address, fileName);
             }
-            catch (Exception ex)
-            {
-                Utils.ExceptionLog("loadZipFilesButton_Click", string.Format("http://wotmods.relhaxmodpack.com/WoT/{0}/database.xml", Settings.TanksOnlineFolderVersion), ex);
-                MessageBox.Show("FAILED to download online file database");
-                Application.Exit();
-            }
-            ScriptLogOutput.AppendText("database.xml downloaded\n");
+            ReportProgress("database.xml downloaded\n");
             // set this flag, so getMd5Hash and getFileSize should parse downloaded online database.xml
             Program.databaseUpdateOnline = true;
+            //prepare output stringBuilders
             filesNotFoundSB.Clear();
             globalDepsSB.Clear();
             dependenciesSB.Clear();
             logicalDependenciesSB.Clear();
             packagesSB.Clear();
+            databaseUpdateText.Clear();
+            filesNotFoundSB.Append("FILES NOT FOUND:\n");
+            globalDepsSB.Append("\nGlobal Dependencies updated:\n");
+            dependenciesSB.Append("\nDependencies updated:\n");
+            logicalDependenciesSB.Append("\nLogical Dependencies updated:\n");
+            packagesSB.Append("\nPackages updated:\n");
+            //prepare Lists of database changes
+            addedPackages.Clear();
+            updatedPackages.Clear();
+            disabledPackages.Clear();
+            removedPackages.Clear();
+            fileNotFoundPackages.Clear();
+            allPackagesBeforeUpdate.Clear();
+            allPackagesAfterUpdate.Clear();
             //load database
             globalDependencies = new List<Dependency>();
             parsedCatagoryList = new List<Category>();
             dependencies = new List<Dependency>();
             logicalDependencies = new List<LogicalDependency>();
             XMLUtils.CreateModStructure(DatabaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            //create first list
+            allPackagesBeforeUpdate = CreatePackageList(parsedCatagoryList, globalDependencies, dependencies, logicalDependencies);
             //check for duplicates
             int duplicatesCounter = 0;
             if (Utils.Duplicates(parsedCatagoryList) && Utils.DuplicatesPackageName(parsedCatagoryList, ref duplicatesCounter ))
@@ -157,15 +187,12 @@ namespace RelhaxModpack
                 Program.databaseUpdateOnline = false;
                 return;
             }
-            ScriptLogOutput.AppendText("Updating database...\n");
-            Application.DoEvents();
-            filesNotFoundSB.Append("FILES NOT FOUND:\n");
-            globalDepsSB.Append("\nGlobal Dependencies updated:\n");
-            dependenciesSB.Append("\nDependencies updated:\n");
-            logicalDependenciesSB.Append("\nLogical Dependencies updated:\n");
-            packagesSB.Append("\nPackages updated:\n");
+            ReportProgress("Updating database crc and filesize values...");
             string hash;
             //foreach zip file name
+            //update the CRC value
+            //update the file size
+            //can also use this section to specify updated mods
             foreach (Dependency d in globalDependencies)
             {
                 if (d.ZipFile.Trim().Equals(""))
@@ -181,11 +208,13 @@ namespace RelhaxModpack
                         if (!hash.Equals("f"))
                         {
                             globalDepsSB.Append(d.ZipFile + "\n");
+                            updatedPackages.Add(d);
                         }
                     }
                     if (hash.Equals("f"))
                     {
                         filesNotFoundSB.Append(d.ZipFile + "\n");
+                        fileNotFoundPackages.Add(d);
                     }
                 }
             }
@@ -204,11 +233,13 @@ namespace RelhaxModpack
                         if (!hash.Equals("f"))
                         {
                             dependenciesSB.Append(d.ZipFile + "\n");
+                            updatedPackages.Add(d);
                         }
                     }
                     if (hash.Equals("f"))
                     {
                         filesNotFoundSB.Append(d.ZipFile + "\n");
+                        fileNotFoundPackages.Add(d);
                     }
                 }
             }
@@ -227,11 +258,13 @@ namespace RelhaxModpack
                         if (!hash.Equals("f"))
                         {
                             logicalDependenciesSB.Append(d.ZipFile + "\n");
+                            updatedPackages.Add(d);
                         }
                     }
                     if (hash.Equals("f"))
                     {
                         filesNotFoundSB.Append(d.ZipFile + "\n");
+                        fileNotFoundPackages.Add(d);
                     }
                 }
             }
@@ -245,35 +278,51 @@ namespace RelhaxModpack
                     }
                     else
                     {
-                        m.Size = this.getFileSize(m.ZipFile);
+                        m.Size = getFileSize(m.ZipFile);
                         hash = XMLUtils.GetMd5Hash(m.ZipFile);
                         if (!m.CRC.Equals(hash))
                         {
                             m.CRC = hash;
-
                             if (!hash.Equals("f"))
                             {
                                 packagesSB.Append(m.ZipFile + "\n");
+                                updatedPackages.Add(m);
                             }
                         }
                         if (hash.Equals("f"))
                         {
                             filesNotFoundSB.Append(m.ZipFile + "\n");
+                            fileNotFoundPackages.Add(m);
                         }
                     }
                     if (m.Packages.Count > 0)
                     {
-                        this.processConfigsCRCUpdate(m.Packages);
+                        processConfigsCRCUpdate(m.Packages);
                     }
                 }
             }
-            //update the CRC value
-            //update the file size
+            //abort if missing files
+            if(fileNotFoundPackages.Count > 0)
+            {
+                ReportProgress("ERROR: " + fileNotFoundPackages.Count + " packages missing files!!");
+                Program.databaseUpdateOnline = false;
+                return;
+            }
+            //create the list for after the update for comparison
+            ReportProgress("making comparisons for databaseUpdate.txt");
+            allPackagesAfterUpdate = CreatePackageList(parsedCatagoryList, globalDependencies, dependencies, logicalDependencies);
+            //used for disabled, removed, added mods
+
             //save config file
-            XMLUtils.SaveDatabase(DatabaseLocationTextBox.Text, Settings.TanksVersion, Settings.TanksOnlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
-            //MessageBox.Show(filesNotFoundSB.ToString() + globalDepsSB.ToString() + dependenciesSB.ToString() + logicalDependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
+            ReportProgress("saving database");
+            XMLUtils.SaveDatabase(DatabaseLocationTextBox.Text, Settings.TanksVersion, Settings.TanksOnlineFolderVersion,
+                globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            //save databaseUpdate.txt
+
+            //output to text output
             ScriptLogOutput.AppendText(filesNotFoundSB.ToString() + globalDepsSB.ToString() + dependenciesSB.ToString() + logicalDependenciesSB.ToString() + packagesSB.ToString());
             Program.databaseUpdateOnline = false;
+            ReportProgress("Done");
         }
 
         private void UpdateDatabaseStep3Advanced_Click(object sender, EventArgs e)
@@ -366,6 +415,7 @@ namespace RelhaxModpack
 
         private void UpdateDatabaseStep4_Click(object sender, EventArgs e)
         {
+            ScriptLogOutput.Text = "";
             //for the folder version: //modInfoAlpha.xml/@version
             Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocationTextBox.Text, "//modInfoAlpha.xml/@version");
             //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
@@ -431,7 +481,8 @@ namespace RelhaxModpack
 
         private void UpdateDatabaseStep5_Click(object sender, EventArgs e)
         {
-            if(string.IsNullOrWhiteSpace(Settings.TanksVersion))
+            ScriptLogOutput.Text = "";
+            if (string.IsNullOrWhiteSpace(Settings.TanksVersion))
             {
                 ReportProgress("ERROR: Settings.TanksVersion is null or empty! (Did you run the previous processes first?)");
                 return;
@@ -526,6 +577,42 @@ namespace RelhaxModpack
         }
         */
         #endregion
+
+        //creates a single list of all packages, a de-leveled snapshot of all packages in the database
+        private List<DatabasePackage> CreatePackageList(List<Category> parsedCategoryList, List<Dependency> globalDependencies,
+            List<Dependency> dependencies, List<LogicalDependency> logicalDependencies)
+        {
+            List<DatabasePackage> ListToReturn = new List<DatabasePackage>();
+            //making a new list means no refrences, they are now new instances
+            List<Category> newParsedCategoryList = new List<Category>(parsedCatagoryList);
+            ListToReturn.AddRange(new List<DatabasePackage>(globalDependencies));
+            ListToReturn.AddRange(new List<DatabasePackage>(dependencies));
+            ListToReturn.AddRange(new List<DatabasePackage>(logicalDependencies));
+            foreach(Category c in newParsedCategoryList)
+            {
+                foreach(SelectablePackage package in c.Packages)
+                {
+                    ListToReturn.Add(package);
+                    if(package.Packages.Count > 0)
+                    {
+                        CreatePackageList(ListToReturn, package.Packages);
+                    }
+                }
+            }
+            return ListToReturn;
+        }
+
+        private void CreatePackageList(List<DatabasePackage> ListToReturn, List<SelectablePackage> packages)
+        {
+            foreach(SelectablePackage package in packages)
+            {
+                ListToReturn.Add(package);
+                if(package.Packages.Count > 0)
+                {
+                    CreatePackageList(ListToReturn, package.Packages);
+                }
+            }
+        }
 
         #region Application Updating
 
@@ -745,7 +832,7 @@ namespace RelhaxModpack
                 else
                 {
                     hash = XMLUtils.GetMd5Hash(cat.ZipFile);
-                    cat.Size = this.getFileSize(cat.ZipFile);
+                    cat.Size = getFileSize(cat.ZipFile);
                     if (cat.Size != 0)
                     {
                         if (!cat.CRC.Equals(hash))
@@ -754,6 +841,7 @@ namespace RelhaxModpack
                             if (!hash.Equals("f"))
                             {
                                 packagesSB.Append(cat.ZipFile + "\n");
+                                updatedPackages.Add(cat);
                             }
                         }
                     }
@@ -764,12 +852,13 @@ namespace RelhaxModpack
                     if (hash.Equals("f") | cat.CRC.Equals("f"))
                     {
                         filesNotFoundSB.Append(cat.ZipFile + "\n");
+                        fileNotFoundPackages.Add(cat);
                     }
 
                 }
                 if (cat.Packages.Count > 0)
                 {
-                    this.processConfigsCRCUpdate(cat.Packages);
+                    processConfigsCRCUpdate(cat.Packages);
                 }
             }
         }
