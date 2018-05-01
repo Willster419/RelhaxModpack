@@ -124,9 +124,9 @@
             // FormPageNALink
             // 
             this.FormPageNALink.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FormPageNALink.Location = new System.Drawing.Point(291, 130);
+            this.FormPageNALink.Location = new System.Drawing.Point(290, 130);
             this.FormPageNALink.Name = "FormPageNALink";
-            this.FormPageNALink.Size = new System.Drawing.Size(173, 20);
+            this.FormPageNALink.Size = new System.Drawing.Size(174, 20);
             this.FormPageNALink.TabIndex = 16;
             this.FormPageNALink.TabStop = true;
             this.FormPageNALink.Text = "WoT Form Page (NA, ENG)";
@@ -664,7 +664,7 @@
             this.InfoTable.ColumnCount = 3;
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 63.66782F));
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 36.33218F));
-            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 178F));
+            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 179F));
             this.InfoTable.Controls.Add(this.ViewFacebookLink, 1, 7);
             this.InfoTable.Controls.Add(this.ViewTwitterLink, 1, 6);
             this.InfoTable.Controls.Add(this.SendEmailLink, 1, 5);
@@ -705,7 +705,7 @@
             this.ViewFacebookLink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ViewFacebookLink.Location = new System.Drawing.Point(186, 190);
             this.ViewFacebookLink.Name = "ViewFacebookLink";
-            this.ViewFacebookLink.Size = new System.Drawing.Size(99, 20);
+            this.ViewFacebookLink.Size = new System.Drawing.Size(98, 20);
             this.ViewFacebookLink.TabIndex = 39;
             this.ViewFacebookLink.TabStop = true;
             this.ViewFacebookLink.Text = "Facebook Page";
@@ -717,7 +717,7 @@
             this.ViewTwitterLink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ViewTwitterLink.Location = new System.Drawing.Point(186, 170);
             this.ViewTwitterLink.Name = "ViewTwitterLink";
-            this.ViewTwitterLink.Size = new System.Drawing.Size(99, 20);
+            this.ViewTwitterLink.Size = new System.Drawing.Size(98, 20);
             this.ViewTwitterLink.TabIndex = 38;
             this.ViewTwitterLink.TabStop = true;
             this.ViewTwitterLink.Text = "Twitter Page";
@@ -729,7 +729,7 @@
             this.SendEmailLink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SendEmailLink.Location = new System.Drawing.Point(186, 150);
             this.SendEmailLink.Name = "SendEmailLink";
-            this.SendEmailLink.Size = new System.Drawing.Size(99, 20);
+            this.SendEmailLink.Size = new System.Drawing.Size(98, 20);
             this.SendEmailLink.TabIndex = 37;
             this.SendEmailLink.TabStop = true;
             this.SendEmailLink.Text = "Send us an email";
@@ -741,7 +741,7 @@
             this.VisitWebsiteLink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.VisitWebsiteLink.Location = new System.Drawing.Point(186, 130);
             this.VisitWebsiteLink.Name = "VisitWebsiteLink";
-            this.VisitWebsiteLink.Size = new System.Drawing.Size(99, 20);
+            this.VisitWebsiteLink.Size = new System.Drawing.Size(98, 20);
             this.VisitWebsiteLink.TabIndex = 36;
             this.VisitWebsiteLink.TabStop = true;
             this.VisitWebsiteLink.Text = "Visit our website";
@@ -787,9 +787,9 @@
             // 
             this.FormPageEULink.AutoSize = true;
             this.FormPageEULink.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FormPageEULink.Location = new System.Drawing.Point(291, 150);
+            this.FormPageEULink.Location = new System.Drawing.Point(290, 150);
             this.FormPageEULink.Name = "FormPageEULink";
-            this.FormPageEULink.Size = new System.Drawing.Size(173, 20);
+            this.FormPageEULink.Size = new System.Drawing.Size(174, 20);
             this.FormPageEULink.TabIndex = 40;
             this.FormPageEULink.TabStop = true;
             this.FormPageEULink.Text = "WoT Form Page (EU, ENG)";
@@ -799,9 +799,9 @@
             // 
             this.FormPageEUGERLink.AutoSize = true;
             this.FormPageEUGERLink.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FormPageEUGERLink.Location = new System.Drawing.Point(291, 170);
+            this.FormPageEUGERLink.Location = new System.Drawing.Point(290, 170);
             this.FormPageEUGERLink.Name = "FormPageEUGERLink";
-            this.FormPageEUGERLink.Size = new System.Drawing.Size(173, 20);
+            this.FormPageEUGERLink.Size = new System.Drawing.Size(174, 20);
             this.FormPageEUGERLink.TabIndex = 41;
             this.FormPageEUGERLink.TabStop = true;
             this.FormPageEUGERLink.Text = "WoT Form Page (EU, GER)";
@@ -893,6 +893,7 @@
             this.DPI100.TabStop = true;
             this.DPI100.Text = "DPI 1x";
             this.DPI100.UseVisualStyleBackColor = true;
+            this.DPI100.CheckedChanged += new System.EventHandler(this.DPI100_CheckedChanged);
             this.DPI100.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             // 
             // DPIAUTO
@@ -906,6 +907,7 @@
             this.DPIAUTO.TabStop = true;
             this.DPIAUTO.Text = "DPI AUTO";
             this.DPIAUTO.UseVisualStyleBackColor = true;
+            this.DPIAUTO.CheckedChanged += new System.EventHandler(this.DPIAUTO_CheckedChanged);
             this.DPIAUTO.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             // 
             // DPI275
@@ -919,6 +921,7 @@
             this.DPI275.TabStop = true;
             this.DPI275.Text = "DPI 2.75x";
             this.DPI275.UseVisualStyleBackColor = true;
+            this.DPI275.CheckedChanged += new System.EventHandler(this.DPI275_CheckedChanged);
             this.DPI275.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             // 
             // DPI125
@@ -932,6 +935,7 @@
             this.DPI125.TabStop = true;
             this.DPI125.Text = "DPI 1.25x";
             this.DPI125.UseVisualStyleBackColor = true;
+            this.DPI125.CheckedChanged += new System.EventHandler(this.DPI125_CheckedChanged);
             this.DPI125.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             // 
             // DPI225
@@ -945,6 +949,7 @@
             this.DPI225.TabStop = true;
             this.DPI225.Text = "DPI 2.25x";
             this.DPI225.UseVisualStyleBackColor = true;
+            this.DPI225.CheckedChanged += new System.EventHandler(this.DPI225_CheckedChanged);
             this.DPI225.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             // 
             // fontSize100
@@ -958,6 +963,7 @@
             this.fontSize100.TabStop = true;
             this.fontSize100.Text = "Font 1x";
             this.fontSize100.UseVisualStyleBackColor = true;
+            this.fontSize100.CheckedChanged += new System.EventHandler(this.fontSize100_CheckedChanged);
             this.fontSize100.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             // 
             // fontSize275
@@ -971,6 +977,7 @@
             this.fontSize275.TabStop = true;
             this.fontSize275.Text = "Font 2.75x";
             this.fontSize275.UseVisualStyleBackColor = true;
+            this.fontSize275.CheckedChanged += new System.EventHandler(this.fontSize275_CheckedChanged);
             this.fontSize275.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             // 
             // DPI175
@@ -984,6 +991,7 @@
             this.DPI175.TabStop = true;
             this.DPI175.Text = "DPI 1.75x";
             this.DPI175.UseVisualStyleBackColor = true;
+            this.DPI175.CheckedChanged += new System.EventHandler(this.DPI175_CheckedChanged);
             this.DPI175.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             // 
             // fontSize125
@@ -997,6 +1005,7 @@
             this.fontSize125.TabStop = true;
             this.fontSize125.Text = "Font 1.25x";
             this.fontSize125.UseVisualStyleBackColor = true;
+            this.fontSize125.CheckedChanged += new System.EventHandler(this.fontSize125_CheckedChanged);
             this.fontSize125.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             // 
             // fontSize225
@@ -1010,6 +1019,7 @@
             this.fontSize225.TabStop = true;
             this.fontSize225.Text = "Font 2.25x";
             this.fontSize225.UseVisualStyleBackColor = true;
+            this.fontSize225.CheckedChanged += new System.EventHandler(this.fontSize225_CheckedChanged);
             this.fontSize225.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             // 
             // fontSize175
@@ -1023,6 +1033,7 @@
             this.fontSize175.TabStop = true;
             this.fontSize175.Text = "Font 1.75x";
             this.fontSize175.UseVisualStyleBackColor = true;
+            this.fontSize175.CheckedChanged += new System.EventHandler(this.fontSize175_CheckedChanged);
             this.fontSize175.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             // 
             // MainWindow

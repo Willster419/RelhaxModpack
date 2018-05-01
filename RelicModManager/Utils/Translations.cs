@@ -2156,6 +2156,38 @@ namespace RelhaxModpack
             polish.Add("UseAltUpdateMethodCBDescription", "TODO");
             french.Add("UseAltUpdateMethodCBDescription", "TODO");
             #endregion
+
+            #region Scaling Verification Window
+            //Component: form name
+            english.Add("FontSettingsVerify", "Scaling");
+            german.Add("FontSettingsVerify", "TODO");
+            polish.Add("FontSettingsVerify", "TODO");
+            french.Add("FontSettingsVerify", "TODO");
+
+            //Component: SettingsChangedHeader
+            english.Add("SettingsChangedHeader", "Your Scaling Settings have changed. Would you like to keep them?");
+            german.Add("SettingsChangedHeader", "TODO");
+            polish.Add("SettingsChangedHeader", "TODO");
+            french.Add("SettingsChangedHeader", "TODO");
+
+            //Component: RevertingTimeoutText
+            english.Add("RevertingTimeoutText", "Reverting in {0} seconds");
+            german.Add("RevertingTimeoutText", "TODO");
+            polish.Add("RevertingTimeoutText", "TODO");
+            french.Add("RevertingTimeoutText", "TODO");
+
+            //Component: NoButton
+            english.Add("NoButton", "No");
+            german.Add("NoButton", "TODO");
+            polish.Add("NoButton", "TODO");
+            french.Add("NoButton", "TODO");
+
+            //Component: YesButton
+            english.Add("YesButton", "Yes");
+            german.Add("YesButton", "TODO");
+            polish.Add("YesButton", "TODO");
+            french.Add("YesButton", "TODO");
+            #endregion
         }
     }
 }

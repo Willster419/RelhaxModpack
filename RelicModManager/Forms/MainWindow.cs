@@ -56,22 +56,27 @@ namespace RelhaxModpack
         //counter for Utils.exception calls
         public static int errorCounter = 0;
         private List<SelectablePackage> userMods;
-        string currentModDownloading;
+        private string currentModDownloading;
         public Installer ins;
         private Installer unI;
         private string tanksVersion;//0.9.x.y
         private List<double> timeRemainArray;
         //the ETA variable for downlading
-        double actualTimeRemain = 0;
-        float previousTotalBytesDownloaded = 0;
-        float currentTotalBytesDownloaded = 0;
-        float differenceTotalBytesDownloaded = 0;
-        float sessionDownloadSpeed = 0;
+        private double actualTimeRemain = 0;
+        private float previousTotalBytesDownloaded = 0;
+        private float currentTotalBytesDownloaded = 0;
+        private float differenceTotalBytesDownloaded = 0;
+        private float sessionDownloadSpeed = 0;
         private int downloadCounter = -1;
         private object lockerMain = new object();
         private List<string> supportedVersions = new List<string>();
         private List<SelectablePackage> modsConfigsWithData;
         private float scale = 1.0f;
+        //the previous settings for scaling
+        private AutoScaleMode previousAutoScaleMode;
+        private Settings.FontSize previousFontSize;
+        private bool loading = false;
+        private bool revertingScaling = false;
 
         //  interpret the created CiInfo buildTag as an "us-US" or a "de-DE" timeformat and return it as a local time- and dateformat string
         public static string compileTime()//if getting build error, check windows date and time format settings https://puu.sh/xgCqO/e97e2e4a34.png
@@ -665,6 +670,7 @@ namespace RelhaxModpack
         //handler for before the window is displayed
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            loading = true;
             Logging.Manager(string.Format("|RelHax Modpack {0} ({1})", ManagerVersion(), Program.Version == Program.ProgramVersion.Beta ? "beta" : Program.Version == Program.ProgramVersion.Alpha ? "alpha" : "stable"));
             Logging.Manager(string.Format("|Built on {0}", compileTime()));
             Logging.Manager(string.Format("|Running on {0}", System.Environment.OSVersion.ToString()));
@@ -724,6 +730,7 @@ namespace RelhaxModpack
             Settings.LoadSettings();
             ApplyControlTranslations();
             ApplySettings();
+            loading = false;
 
             //check for updates
             wait.loadingDescBox.Text = Translations.getTranslatedString("checkForUpdates");
@@ -2017,6 +2024,61 @@ namespace RelhaxModpack
                 return false;
             }
         }
+
+        //uses the stored options from before applying the new scaling settings to revert back to the previous settings
+        private void RevertScalingSettings()
+        {
+            //first switch by scaling mode
+            //then switch by size
+            revertingScaling = true;
+            switch(previousAutoScaleMode)
+            {
+                case AutoScaleMode.Dpi:
+                    switch(previousFontSize)
+                    {
+                        case Settings.FontSize.DPI100:
+                            DPI100.Checked = true;
+                            break;
+                        case Settings.FontSize.DPI125:
+                            DPI125.Checked = true;
+                            break;
+                        case Settings.FontSize.DPI175:
+                            DPI175.Checked = true;
+                            break;
+                        case Settings.FontSize.DPI225:
+                            DPI225.Checked = true;
+                            break;
+                        case Settings.FontSize.DPI275:
+                            DPI275.Checked = true;
+                            break;
+                        case Settings.FontSize.DPIAUTO:
+                            DPIAUTO.Checked = true;
+                            break;
+                    }
+                    break;
+                case AutoScaleMode.Font:
+                    switch(previousFontSize)
+                    {
+                        case Settings.FontSize.Font100:
+                            fontSize100.Checked = true;
+                            break;
+                        case Settings.FontSize.Font125:
+                            fontSize125.Checked = true;
+                            break;
+                        case Settings.FontSize.Font175:
+                            fontSize175.Checked = true;
+                            break;
+                        case Settings.FontSize.Font225:
+                            fontSize225.Checked = true;
+                            break;
+                        case Settings.FontSize.Font275:
+                            fontSize275.Checked = true;
+                            break;
+                    }
+                    break;
+            }
+            revertingScaling = false;
+        }
         #endregion
 
         #region LinkClicked Events
@@ -2167,6 +2229,11 @@ namespace RelhaxModpack
         {
             if (fontSize100.Checked)
             {
+                if(!revertingScaling)
+                {
+                    previousAutoScaleMode = Settings.AppScalingMode;
+                    previousFontSize = Settings.FontSizeforum;
+                }
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Dpi)
                 {
                     Settings.FontSizeforum = Settings.FontSize.DPI100;
@@ -2185,7 +2252,23 @@ namespace RelhaxModpack
                 this.AutoScaleMode = Settings.AppScalingMode;
                 //get new font
                 this.Font = Settings.AppFont;
-                ToggleScaleRBs(true);
+                //null means it's the revert code
+                if (!revertingScaling && !loading)
+                {
+                    using (FontSettingsVerify fsv = new FontSettingsVerify()
+                    {
+                        ApplyControlTranslationsOnLoad = true,
+                        startX = Location.X,
+                        startY = Location.Y
+                    })
+                    {
+                        if(fsv.ShowDialog() == DialogResult.No)
+                        {
+                            RevertScalingSettings();
+                        }
+                    }
+                    ToggleScaleRBs(true);
+                }
             }
         }
 
@@ -2193,6 +2276,11 @@ namespace RelhaxModpack
         {
             if (fontSize125.Checked)
             {
+                if (!revertingScaling)
+                {
+                    previousAutoScaleMode = Settings.AppScalingMode;
+                    previousFontSize = Settings.FontSizeforum;
+                }
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Dpi)
                 {
                     Settings.FontSizeforum = Settings.FontSize.DPI100;
@@ -2207,7 +2295,22 @@ namespace RelhaxModpack
                 Settings.ApplInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 this.Font = Settings.AppFont;
-                ToggleScaleRBs(true);
+                if (!revertingScaling && !loading)
+                {
+                    using (FontSettingsVerify fsv = new FontSettingsVerify()
+                    {
+                        ApplyControlTranslationsOnLoad = true,
+                        startX = Location.X,
+                        startY = Location.Y
+                    })
+                    {
+                        if (fsv.ShowDialog() == DialogResult.No)
+                        {
+                            RevertScalingSettings();
+                        }
+                    }
+                    ToggleScaleRBs(true);
+                }
             }
         }
 
@@ -2215,6 +2318,11 @@ namespace RelhaxModpack
         {
             if (fontSize175.Checked)
             {
+                if (!revertingScaling)
+                {
+                    previousAutoScaleMode = Settings.AppScalingMode;
+                    previousFontSize = Settings.FontSizeforum;
+                }
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Dpi)
                 {
                     Settings.FontSizeforum = Settings.FontSize.DPI100;
@@ -2229,7 +2337,22 @@ namespace RelhaxModpack
                 Settings.ApplInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 this.Font = Settings.AppFont;
-                ToggleScaleRBs(true);
+                if (!revertingScaling && !loading)
+                {
+                    using (FontSettingsVerify fsv = new FontSettingsVerify()
+                    {
+                        ApplyControlTranslationsOnLoad = true,
+                        startX = Location.X,
+                        startY = Location.Y
+                    })
+                    {
+                        if (fsv.ShowDialog() == DialogResult.No)
+                        {
+                            RevertScalingSettings();
+                        }
+                    }
+                    ToggleScaleRBs(true);
+                }
             }
         }
 
@@ -2237,6 +2360,11 @@ namespace RelhaxModpack
         {
             if (fontSize225.Checked)
             {
+                if (!revertingScaling)
+                {
+                    previousAutoScaleMode = Settings.AppScalingMode;
+                    previousFontSize = Settings.FontSizeforum;
+                }
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Dpi)
                 {
                     Settings.FontSizeforum = Settings.FontSize.DPI100;
@@ -2251,7 +2379,22 @@ namespace RelhaxModpack
                 Settings.ApplInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 this.Font = Settings.AppFont;
-                ToggleScaleRBs(true);
+                if (!revertingScaling && !loading)
+                {
+                    using (FontSettingsVerify fsv = new FontSettingsVerify()
+                    {
+                        ApplyControlTranslationsOnLoad = true,
+                        startX = Location.X,
+                        startY = Location.Y
+                    })
+                    {
+                        if (fsv.ShowDialog() == DialogResult.No)
+                        {
+                            RevertScalingSettings();
+                        }
+                    }
+                    ToggleScaleRBs(true);
+                }
             }
         }
 
@@ -2259,6 +2402,11 @@ namespace RelhaxModpack
         {
             if (fontSize275.Checked)
             {
+                if (!revertingScaling)
+                {
+                    previousAutoScaleMode = Settings.AppScalingMode;
+                    previousFontSize = Settings.FontSizeforum;
+                }
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Dpi)
                 {
                     Settings.FontSizeforum = Settings.FontSize.DPI100;
@@ -2273,7 +2421,22 @@ namespace RelhaxModpack
                 Settings.ApplInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 this.Font = Settings.AppFont;
-                ToggleScaleRBs(true);
+                if (!revertingScaling && !loading)
+                {
+                    using (FontSettingsVerify fsv = new FontSettingsVerify()
+                    {
+                        ApplyControlTranslationsOnLoad = true,
+                        startX = Location.X,
+                        startY = Location.Y
+                    })
+                    {
+                        if (fsv.ShowDialog() == DialogResult.No)
+                        {
+                            RevertScalingSettings();
+                        }
+                    }
+                    ToggleScaleRBs(true);
+                }
             }
         }
 
@@ -2281,6 +2444,11 @@ namespace RelhaxModpack
         {
             if (DPI100.Checked)
             {
+                if (!revertingScaling)
+                {
+                    previousAutoScaleMode = Settings.AppScalingMode;
+                    previousFontSize = Settings.FontSizeforum;
+                }
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
                 {
                     Settings.FontSizeforum = Settings.FontSize.Font100;
@@ -2295,7 +2463,22 @@ namespace RelhaxModpack
                 this.Scale(new SizeF(temp, temp));
                 scale = Settings.Scale100;
                 this.Font = Settings.AppFont;
-                ToggleScaleRBs(true);
+                if (!revertingScaling && !loading)
+                {
+                    using (FontSettingsVerify fsv = new FontSettingsVerify()
+                    {
+                        ApplyControlTranslationsOnLoad = true,
+                        startX = Location.X,
+                        startY = Location.Y
+                    })
+                    {
+                        if (fsv.ShowDialog() == DialogResult.No)
+                        {
+                            RevertScalingSettings();
+                        }
+                    }
+                    ToggleScaleRBs(true);
+                }
             }
         }
 
@@ -2303,6 +2486,11 @@ namespace RelhaxModpack
         {
             if (DPI125.Checked)
             {
+                if (!revertingScaling)
+                {
+                    previousAutoScaleMode = Settings.AppScalingMode;
+                    previousFontSize = Settings.FontSizeforum;
+                }
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
                 {
                     Settings.FontSizeforum = Settings.FontSize.Font100;
@@ -2317,7 +2505,22 @@ namespace RelhaxModpack
                 this.Scale(new SizeF(temp, temp));
                 scale = Settings.Scale125;
                 this.Font = Settings.AppFont;
-                ToggleScaleRBs(true);
+                if (!revertingScaling && !loading)
+                {
+                    using (FontSettingsVerify fsv = new FontSettingsVerify()
+                    {
+                        ApplyControlTranslationsOnLoad = true,
+                        startX = Location.X,
+                        startY = Location.Y
+                    })
+                    {
+                        if (fsv.ShowDialog() == DialogResult.No)
+                        {
+                            RevertScalingSettings();
+                        }
+                    }
+                    ToggleScaleRBs(true);
+                }
             }
         }
 
@@ -2325,6 +2528,11 @@ namespace RelhaxModpack
         {
             if (DPI175.Checked)
             {
+                if (!revertingScaling)
+                {
+                    previousAutoScaleMode = Settings.AppScalingMode;
+                    previousFontSize = Settings.FontSizeforum;
+                }
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
                 {
                     Settings.FontSizeforum = Settings.FontSize.Font100;
@@ -2339,7 +2547,22 @@ namespace RelhaxModpack
                 this.Scale(new SizeF(temp, temp));
                 scale = Settings.Scale175;
                 this.Font = Settings.AppFont;
-                ToggleScaleRBs(true);
+                if (!revertingScaling && !loading)
+                {
+                    using (FontSettingsVerify fsv = new FontSettingsVerify()
+                    {
+                        ApplyControlTranslationsOnLoad = true,
+                        startX = Location.X,
+                        startY = Location.Y
+                    })
+                    {
+                        if (fsv.ShowDialog() == DialogResult.No)
+                        {
+                            RevertScalingSettings();
+                        }
+                    }
+                    ToggleScaleRBs(true);
+                }
             }
         }
 
@@ -2347,6 +2570,11 @@ namespace RelhaxModpack
         {
             if (DPI225.Checked)
             {
+                if (!revertingScaling)
+                {
+                    previousAutoScaleMode = Settings.AppScalingMode;
+                    previousFontSize = Settings.FontSizeforum;
+                }
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
                 {
                     Settings.FontSizeforum = Settings.FontSize.Font100;
@@ -2361,7 +2589,22 @@ namespace RelhaxModpack
                 this.Scale(new SizeF(temp, temp));
                 scale = Settings.Scale225;
                 this.Font = Settings.AppFont;
-                ToggleScaleRBs(true);
+                if (!revertingScaling && !loading)
+                {
+                    using (FontSettingsVerify fsv = new FontSettingsVerify()
+                    {
+                        ApplyControlTranslationsOnLoad = true,
+                        startX = Location.X,
+                        startY = Location.Y
+                    })
+                    {
+                        if (fsv.ShowDialog() == DialogResult.No)
+                        {
+                            RevertScalingSettings();
+                        }
+                    }
+                    ToggleScaleRBs(true);
+                }
             }
         }
 
@@ -2369,6 +2612,11 @@ namespace RelhaxModpack
         {
             if (DPI275.Checked)
             {
+                if (!revertingScaling)
+                {
+                    previousAutoScaleMode = Settings.AppScalingMode;
+                    previousFontSize = Settings.FontSizeforum;
+                }
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
                 {
                     Settings.FontSizeforum = Settings.FontSize.Font100;
@@ -2383,7 +2631,22 @@ namespace RelhaxModpack
                 this.Scale(new SizeF(temp, temp));
                 scale = Settings.Scale275;
                 this.Font = Settings.AppFont;
-                ToggleScaleRBs(true);
+                if (!revertingScaling && !loading)
+                {
+                    using (FontSettingsVerify fsv = new FontSettingsVerify()
+                    {
+                        ApplyControlTranslationsOnLoad = true,
+                        startX = Location.X,
+                        startY = Location.Y
+                    })
+                    {
+                        if (fsv.ShowDialog() == DialogResult.No)
+                        {
+                            RevertScalingSettings();
+                        }
+                    }
+                    ToggleScaleRBs(true);
+                }
             }
         }
 
@@ -2391,6 +2654,11 @@ namespace RelhaxModpack
         {
             if (DPIAUTO.Checked)
             {
+                if (!revertingScaling)
+                {
+                    previousAutoScaleMode = Settings.AppScalingMode;
+                    previousFontSize = Settings.FontSizeforum;
+                }
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
                 {
                     Settings.FontSizeforum = Settings.FontSize.Font100;
@@ -2405,7 +2673,22 @@ namespace RelhaxModpack
                 this.Scale(new SizeF(temp, temp));
                 scale = Settings.ScaleSize;
                 this.Font = Settings.AppFont;
-                ToggleScaleRBs(true);
+                if (!revertingScaling && !loading)
+                {
+                    using (FontSettingsVerify fsv = new FontSettingsVerify()
+                    {
+                        ApplyControlTranslationsOnLoad = true,
+                        startX = Location.X,
+                        startY = Location.Y
+                    })
+                    {
+                        if (fsv.ShowDialog() == DialogResult.No)
+                        {
+                            RevertScalingSettings();
+                        }
+                    }
+                    ToggleScaleRBs(true);
+                }
             }
         }
         //enalbes the user to use "comic sans" font for the 1 person that would ever want to do that
@@ -2452,7 +2735,6 @@ namespace RelhaxModpack
         #endregion
 
         #region Click events
-
         private void cancelDownloadButton_Click(object sender, EventArgs e)
         {
             Downloader.CancelAsync();
