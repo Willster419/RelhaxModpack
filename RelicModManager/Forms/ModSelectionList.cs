@@ -674,6 +674,8 @@ namespace RelhaxModpack
             }
         }
         #endregion
+
+        #region UI building logic
         //checks the crc of the zip file for each md and config
         private void CheckCRC(SelectablePackage m)
         {
@@ -1236,7 +1238,9 @@ namespace RelhaxModpack
                 }
             }
         }
+        #endregion
 
+        #region UI Interaction
         //generic handler to disable the auto check like in forms, but for WPF
         void OnWPFComponentCheck(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -1560,6 +1564,7 @@ namespace RelhaxModpack
             }
             return y;
         }
+        #endregion
 
         #region Preview Code
         //generic hander for when any mouse button is clicked for MouseDown Events

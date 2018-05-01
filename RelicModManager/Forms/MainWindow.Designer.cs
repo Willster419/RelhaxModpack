@@ -124,9 +124,9 @@
             // FormPageNALink
             // 
             this.FormPageNALink.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FormPageNALink.Location = new System.Drawing.Point(290, 130);
+            this.FormPageNALink.Location = new System.Drawing.Point(289, 130);
             this.FormPageNALink.Name = "FormPageNALink";
-            this.FormPageNALink.Size = new System.Drawing.Size(174, 20);
+            this.FormPageNALink.Size = new System.Drawing.Size(175, 20);
             this.FormPageNALink.TabIndex = 16;
             this.FormPageNALink.TabStop = true;
             this.FormPageNALink.Text = "WoT Form Page (NA, ENG)";
@@ -383,7 +383,7 @@
             this.findBugAddModLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.findBugAddModLabel.Location = new System.Drawing.Point(3, 130);
             this.findBugAddModLabel.Name = "findBugAddModLabel";
-            this.findBugAddModLabel.Size = new System.Drawing.Size(177, 20);
+            this.findBugAddModLabel.Size = new System.Drawing.Size(176, 20);
             this.findBugAddModLabel.TabIndex = 27;
             this.findBugAddModLabel.TabStop = true;
             this.findBugAddModLabel.Text = "Find a bug? Want a mod added?";
@@ -422,7 +422,7 @@
             // 
             this.SelectionLayout.ColumnCount = 3;
             this.SelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.SelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 161F));
+            this.SelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 153F));
             this.SelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8F));
             this.SelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.SelectionLayout.Controls.Add(this.selectionDefault, 0, 0);
@@ -453,7 +453,7 @@
             this.selectionDefault.Location = new System.Drawing.Point(1, 1);
             this.selectionDefault.Margin = new System.Windows.Forms.Padding(1);
             this.selectionDefault.Name = "selectionDefault";
-            this.selectionDefault.Size = new System.Drawing.Size(128, 21);
+            this.selectionDefault.Size = new System.Drawing.Size(136, 21);
             this.selectionDefault.TabIndex = 0;
             this.selectionDefault.TabStop = true;
             this.selectionDefault.Text = "Default";
@@ -466,11 +466,11 @@
             // 
             this.expandNodesDefault.AutoSize = true;
             this.expandNodesDefault.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.expandNodesDefault.Location = new System.Drawing.Point(131, 70);
+            this.expandNodesDefault.Location = new System.Drawing.Point(139, 70);
             this.expandNodesDefault.Margin = new System.Windows.Forms.Padding(1);
             this.expandNodesDefault.Name = "expandNodesDefault";
             this.expandNodesDefault.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.expandNodesDefault.Size = new System.Drawing.Size(159, 24);
+            this.expandNodesDefault.Size = new System.Drawing.Size(151, 24);
             this.expandNodesDefault.TabIndex = 2;
             this.expandNodesDefault.Text = "Expand all";
             this.expandNodesDefault.UseVisualStyleBackColor = true;
@@ -481,10 +481,10 @@
             // selectionLegacy
             // 
             this.selectionLegacy.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.selectionLegacy.Location = new System.Drawing.Point(131, 1);
+            this.selectionLegacy.Location = new System.Drawing.Point(139, 1);
             this.selectionLegacy.Margin = new System.Windows.Forms.Padding(1);
             this.selectionLegacy.Name = "selectionLegacy";
-            this.selectionLegacy.Size = new System.Drawing.Size(159, 21);
+            this.selectionLegacy.Size = new System.Drawing.Size(151, 21);
             this.selectionLegacy.TabIndex = 1;
             this.selectionLegacy.TabStop = true;
             this.selectionLegacy.Text = "Legacy";
@@ -535,7 +535,7 @@
             this.EnableBordersDefaultCB.Margin = new System.Windows.Forms.Padding(1);
             this.EnableBordersDefaultCB.Name = "EnableBordersDefaultCB";
             this.EnableBordersDefaultCB.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.EnableBordersDefaultCB.Size = new System.Drawing.Size(128, 21);
+            this.EnableBordersDefaultCB.Size = new System.Drawing.Size(136, 21);
             this.EnableBordersDefaultCB.TabIndex = 5;
             this.EnableBordersDefaultCB.Text = "Enable borders";
             this.EnableBordersDefaultCB.UseVisualStyleBackColor = true;
@@ -547,11 +547,11 @@
             // 
             this.EnableBordersLegacyCB.AutoSize = true;
             this.EnableBordersLegacyCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.EnableBordersLegacyCB.Location = new System.Drawing.Point(131, 24);
+            this.EnableBordersLegacyCB.Location = new System.Drawing.Point(139, 24);
             this.EnableBordersLegacyCB.Margin = new System.Windows.Forms.Padding(1);
             this.EnableBordersLegacyCB.Name = "EnableBordersLegacyCB";
             this.EnableBordersLegacyCB.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.EnableBordersLegacyCB.Size = new System.Drawing.Size(159, 21);
+            this.EnableBordersLegacyCB.Size = new System.Drawing.Size(151, 21);
             this.EnableBordersLegacyCB.TabIndex = 6;
             this.EnableBordersLegacyCB.Text = "Enable borders";
             this.EnableBordersLegacyCB.UseVisualStyleBackColor = true;
@@ -567,7 +567,7 @@
             this.EnableColorChangeDefaultCB.Margin = new System.Windows.Forms.Padding(1);
             this.EnableColorChangeDefaultCB.Name = "EnableColorChangeDefaultCB";
             this.EnableColorChangeDefaultCB.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.EnableColorChangeDefaultCB.Size = new System.Drawing.Size(128, 21);
+            this.EnableColorChangeDefaultCB.Size = new System.Drawing.Size(136, 21);
             this.EnableColorChangeDefaultCB.TabIndex = 7;
             this.EnableColorChangeDefaultCB.Text = "Enable color change";
             this.EnableColorChangeDefaultCB.UseVisualStyleBackColor = true;
@@ -579,11 +579,11 @@
             // 
             this.EnableColorChangeLegacyCB.AutoSize = true;
             this.EnableColorChangeLegacyCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.EnableColorChangeLegacyCB.Location = new System.Drawing.Point(131, 47);
+            this.EnableColorChangeLegacyCB.Location = new System.Drawing.Point(139, 47);
             this.EnableColorChangeLegacyCB.Margin = new System.Windows.Forms.Padding(1);
             this.EnableColorChangeLegacyCB.Name = "EnableColorChangeLegacyCB";
             this.EnableColorChangeLegacyCB.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.EnableColorChangeLegacyCB.Size = new System.Drawing.Size(159, 21);
+            this.EnableColorChangeLegacyCB.Size = new System.Drawing.Size(151, 21);
             this.EnableColorChangeLegacyCB.TabIndex = 8;
             this.EnableColorChangeLegacyCB.Text = "Enable color change";
             this.EnableColorChangeLegacyCB.UseVisualStyleBackColor = true;
@@ -596,7 +596,7 @@
             this.donateLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.donateLabel.Location = new System.Drawing.Point(3, 150);
             this.donateLabel.Name = "donateLabel";
-            this.donateLabel.Size = new System.Drawing.Size(177, 20);
+            this.donateLabel.Size = new System.Drawing.Size(176, 20);
             this.donateLabel.TabIndex = 32;
             this.donateLabel.TabStop = true;
             this.donateLabel.Text = "Donation for further development";
@@ -618,7 +618,7 @@
             this.DiscordServerLink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DiscordServerLink.Location = new System.Drawing.Point(3, 170);
             this.DiscordServerLink.Name = "DiscordServerLink";
-            this.DiscordServerLink.Size = new System.Drawing.Size(177, 20);
+            this.DiscordServerLink.Size = new System.Drawing.Size(176, 20);
             this.DiscordServerLink.TabIndex = 35;
             this.DiscordServerLink.TabStop = true;
             this.DiscordServerLink.Text = "Discord Server";
@@ -664,7 +664,7 @@
             this.InfoTable.ColumnCount = 3;
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 63.66782F));
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 36.33218F));
-            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 179F));
+            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
             this.InfoTable.Controls.Add(this.ViewFacebookLink, 1, 7);
             this.InfoTable.Controls.Add(this.ViewTwitterLink, 1, 6);
             this.InfoTable.Controls.Add(this.SendEmailLink, 1, 5);
@@ -703,7 +703,7 @@
             // 
             this.ViewFacebookLink.AutoSize = true;
             this.ViewFacebookLink.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ViewFacebookLink.Location = new System.Drawing.Point(186, 190);
+            this.ViewFacebookLink.Location = new System.Drawing.Point(185, 190);
             this.ViewFacebookLink.Name = "ViewFacebookLink";
             this.ViewFacebookLink.Size = new System.Drawing.Size(98, 20);
             this.ViewFacebookLink.TabIndex = 39;
@@ -715,7 +715,7 @@
             // 
             this.ViewTwitterLink.AutoSize = true;
             this.ViewTwitterLink.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ViewTwitterLink.Location = new System.Drawing.Point(186, 170);
+            this.ViewTwitterLink.Location = new System.Drawing.Point(185, 170);
             this.ViewTwitterLink.Name = "ViewTwitterLink";
             this.ViewTwitterLink.Size = new System.Drawing.Size(98, 20);
             this.ViewTwitterLink.TabIndex = 38;
@@ -727,7 +727,7 @@
             // 
             this.SendEmailLink.AutoSize = true;
             this.SendEmailLink.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SendEmailLink.Location = new System.Drawing.Point(186, 150);
+            this.SendEmailLink.Location = new System.Drawing.Point(185, 150);
             this.SendEmailLink.Name = "SendEmailLink";
             this.SendEmailLink.Size = new System.Drawing.Size(98, 20);
             this.SendEmailLink.TabIndex = 37;
@@ -739,7 +739,7 @@
             // 
             this.VisitWebsiteLink.AutoSize = true;
             this.VisitWebsiteLink.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.VisitWebsiteLink.Location = new System.Drawing.Point(186, 130);
+            this.VisitWebsiteLink.Location = new System.Drawing.Point(185, 130);
             this.VisitWebsiteLink.Name = "VisitWebsiteLink";
             this.VisitWebsiteLink.Size = new System.Drawing.Size(98, 20);
             this.VisitWebsiteLink.TabIndex = 36;
@@ -752,9 +752,9 @@
             this.DatabaseVersionLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.InfoTable.SetColumnSpan(this.DatabaseVersionLabel, 2);
             this.DatabaseVersionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DatabaseVersionLabel.Location = new System.Drawing.Point(186, 210);
+            this.DatabaseVersionLabel.Location = new System.Drawing.Point(185, 210);
             this.DatabaseVersionLabel.Name = "DatabaseVersionLabel";
-            this.DatabaseVersionLabel.Size = new System.Drawing.Size(278, 23);
+            this.DatabaseVersionLabel.Size = new System.Drawing.Size(279, 23);
             this.DatabaseVersionLabel.TabIndex = 0;
             this.DatabaseVersionLabel.Text = "Latest Database v{version}";
             this.DatabaseVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -765,7 +765,7 @@
             this.ApplicationVersionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ApplicationVersionLabel.Location = new System.Drawing.Point(3, 210);
             this.ApplicationVersionLabel.Name = "ApplicationVersionLabel";
-            this.ApplicationVersionLabel.Size = new System.Drawing.Size(177, 23);
+            this.ApplicationVersionLabel.Size = new System.Drawing.Size(176, 23);
             this.ApplicationVersionLabel.TabIndex = 1;
             this.ApplicationVersionLabel.Text = "Application v{version}";
             this.ApplicationVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -787,9 +787,9 @@
             // 
             this.FormPageEULink.AutoSize = true;
             this.FormPageEULink.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FormPageEULink.Location = new System.Drawing.Point(290, 150);
+            this.FormPageEULink.Location = new System.Drawing.Point(289, 150);
             this.FormPageEULink.Name = "FormPageEULink";
-            this.FormPageEULink.Size = new System.Drawing.Size(174, 20);
+            this.FormPageEULink.Size = new System.Drawing.Size(175, 20);
             this.FormPageEULink.TabIndex = 40;
             this.FormPageEULink.TabStop = true;
             this.FormPageEULink.Text = "WoT Form Page (EU, ENG)";
@@ -799,9 +799,9 @@
             // 
             this.FormPageEUGERLink.AutoSize = true;
             this.FormPageEUGERLink.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FormPageEUGERLink.Location = new System.Drawing.Point(290, 170);
+            this.FormPageEUGERLink.Location = new System.Drawing.Point(289, 170);
             this.FormPageEUGERLink.Name = "FormPageEUGERLink";
-            this.FormPageEUGERLink.Size = new System.Drawing.Size(174, 20);
+            this.FormPageEUGERLink.Size = new System.Drawing.Size(175, 20);
             this.FormPageEUGERLink.TabIndex = 41;
             this.FormPageEUGERLink.TabStop = true;
             this.FormPageEUGERLink.Text = "WoT Form Page (EU, GER)";
