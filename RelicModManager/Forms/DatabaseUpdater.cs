@@ -779,7 +779,7 @@ namespace RelhaxModpack
             doc.Load(trashXML);
             XmlNodeList trashFiles = doc.SelectNodes("//trash/filename");
             int totalFilesToDelete = trashFiles.Count;
-            int filesDeleted = 0;
+            int filesDeleted = 1;
             foreach(XmlNode file in trashFiles)
             {
                 ReportProgress(string.Format("Deleting file {0} of {1}, filename={2}", filesDeleted++, totalFilesToDelete, file.InnerText));
