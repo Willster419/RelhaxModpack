@@ -1,3 +1,13 @@
+Beta Application Version 28.1.1_r2
+-Fixed issues where scaling buttons were no longer working
+-Added feature: When changing scaling settings, the application will ask you with a timed window if you want to keep the changes. Similar to changing the screen resolution on windows. Prevents invalid scaling size issue preventing you from changing it back.
+-Fixed bug in legacy view where some disabled components would not show preview on right click
+-Fixed bug in legacy view where an enabled component on right click preview would send focus back to selection list, not staying on preview window
+-Fixed issues with the automated application update process
+-Added the ability to load the database editor with a txt keyfile rather than having to input the password every time
+-Added automation for process of cleaning the online wot folders
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Beta Application Version 28.1.1_r1
 -Added color change code and border code back to default and new to OMC view (request by popular demand)
 -Optimized OMC view during initial view creation

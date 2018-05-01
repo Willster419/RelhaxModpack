@@ -168,10 +168,10 @@
     <Compile Include="Forms\FontSettingsVerify.Designer.cs">
       <DependentUpon>FontSettingsVerify.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FTPClean.cs">
+    <Compile Include="LegacyComponents\FTPClean.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FTPClean.Designer.cs">
+    <Compile Include="LegacyComponents\FTPClean.Designer.cs">
       <DependentUpon>FTPClean.cs</DependentUpon>
     </Compile>
     <Compile Include="InstallerComponents\Atlas.cs" />
@@ -395,7 +395,7 @@
     <EmbeddedResource Include="Forms\FontSettingsVerify.resx">
       <DependentUpon>FontSettingsVerify.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FTPClean.resx">
+    <EmbeddedResource Include="LegacyComponents\FTPClean.resx">
       <DependentUpon>FTPClean.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LegacyComponents\CRCCheck.resx">

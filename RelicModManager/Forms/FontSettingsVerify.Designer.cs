@@ -97,7 +97,6 @@
             this.Controls.Add(this.YesButton);
             this.Controls.Add(this.NoButton);
             this.Controls.Add(this.SettingsChangedHeader);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(370, 130);
             this.Name = "FontSettingsVerify";
