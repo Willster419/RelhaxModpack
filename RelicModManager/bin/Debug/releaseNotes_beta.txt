@@ -1,11 +1,16 @@
-In celebration of 1 year of Relhax, we hosting a special give-away event! All you need to do is complete a 30 second survey, and you are entered for a chance to win GOLD!
-PLEASE NOTE that we can only give gold to the NA and EU servers.
-
-Read more about it here:
-https://relhaxmodpack.com/1-year-anniversary/
-
-URL for the survey give-away:
-https://docs.google.com/forms/d/e/1FAIpQLSefe80k4ApfzuVcgbha2VnyJJpBN9XP5XBQo370ur3xj1wpUg/viewform
+Beta Application Version 28.1.1_r1
+-Added color change code and border code back to default and new to OMC view (request by popular demand)
+-Optimized OMC view during initial view creation
+-Other UI code optimizations
+-Fixed bug where if single_dropdown2 item selected from parent selection, it would not be auto-selected when it should (applies to both views)
+-Added alternative application update method. It will take longer, but should be more compatible with anti-virus programs
+-Redesigned the main window. Moved several settings and options to the new "Advanced Settings" window.
+-Code cleanup in the main window
+-Organized the translations into groups based on where they are used
+-Rewrote entire backend tool to update the database, update the application, and clean the online zip folders
+-Automated the database update process. It now takes 15 seconds, rather than 15 mins manually
+-Finished automation of the databaseupdate text message (the "Database Update!" message) so it is made by the update process.
+-Added the "_readme" folder to be deleted during the installation process
 --------------------------------------------------------------------------------------------------------------------------------------------
 
 
