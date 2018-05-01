@@ -1607,6 +1607,11 @@ namespace RelhaxModpack
                     Medias = spc.PictureList
                 };
                 p.Show();
+                if(Settings.SView == Settings.SelectionView.Legacy)
+                {
+                    if (Program.Version == Program.ProgramVersion.Alpha)
+                        Logging.Manager(string.Format("DEBUG: from ModSelectionList: Legacy view, p.ContainsFocus={0}", p.ContainsFocus));
+                }
             }
         }
         
@@ -1638,10 +1643,21 @@ namespace RelhaxModpack
             {
                 if(cp.Content is IPackageUIComponent ipc)
                 {
-                    if(!(ipc.Package == null) && !ipc.Package.Enabled)
+                    if(ipc.Package != null)
                     {
-                        //disabled component, display via generic handler
-                        Generic_MouseDown(ipc, null);
+                        bool packageActuallyDisabled = false;
+                        SelectablePackage pack = ipc.Package;
+                        while(pack.Level > -1)
+                        {
+                            if (!pack.Enabled)
+                                packageActuallyDisabled = true;
+                            pack = pack.Parent;
+                        }
+                        if(packageActuallyDisabled)
+                        {
+                            //disabled component, display via generic handler
+                            Generic_MouseDown(ipc, null);
+                        }
                     }
                 }
             }

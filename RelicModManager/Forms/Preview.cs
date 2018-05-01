@@ -66,6 +66,12 @@ namespace RelhaxModpack
                 StartPosition = FormStartPosition.Manual;
                 Location = new Point(Settings.PreviewX, Settings.PreviewY);
             }
+            if (Settings.SView == Settings.SelectionView.Legacy)
+            {
+                if (Program.Version == Program.ProgramVersion.Alpha)
+                    Logging.Manager(string.Format("DEBUG: from Preview load: Legacy view, p.ContainsFocus={0}", this.ContainsFocus));
+                LegacyHotfixTimer.Start();
+            }
         }
         public override void OnPostLoad()
         {
@@ -297,6 +303,22 @@ namespace RelhaxModpack
                 Settings.PreviewX = Location.X;
                 Settings.PreviewY = Location.Y;
             }
+        }
+
+        private void LegacyHotfixTimer_Tick(object sender, EventArgs e)
+        {
+            if (Settings.SView == Settings.SelectionView.Legacy)
+            {
+                if (Program.Version == Program.ProgramVersion.Alpha)
+                    Logging.Manager(string.Format("DEBUG: from Preview timer: Legacy view, p.ContainsFocus={0}", this.ContainsFocus));
+                if(!this.ContainsFocus)
+                {
+                    if (Program.Version == Program.ProgramVersion.Alpha)
+                        Logging.Manager(string.Format("DEBUG: from Preview timer: Legacy view, forcing focus conatin"));
+                    this.Focus();
+                }
+            }
+            LegacyHotfixTimer.Stop();
         }
     }
 }

@@ -53,6 +53,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Preview));
             this.DescriptionBox = new System.Windows.Forms.RichTextBox();
             this.NextPicButton = new System.Windows.Forms.Button();
@@ -61,6 +62,7 @@
             this.DevLinkLabel = new System.Windows.Forms.LinkLabel();
             this.UpdateBox = new System.Windows.Forms.RichTextBox();
             this.PreviewPicture = new System.Windows.Forms.PictureBox();
+            this.LegacyHotfixTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.PreviewPicture)).BeginInit();
             this.SuspendLayout();
             // 
@@ -149,6 +151,11 @@
             this.PreviewPicture.TabStop = false;
             this.PreviewPicture.Click += new System.EventHandler(this.PreviewPicture_Click);
             // 
+            // LegacyHotfixTimer
+            // 
+            this.LegacyHotfixTimer.Interval = 10;
+            this.LegacyHotfixTimer.Tick += new System.EventHandler(this.LegacyHotfixTimer_Tick);
+            // 
             // Preview
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -183,5 +190,6 @@
         private System.Windows.Forms.Panel PictureCountPanel;
         private System.Windows.Forms.LinkLabel DevLinkLabel;
         private System.Windows.Forms.RichTextBox UpdateBox;
+        private System.Windows.Forms.Timer LegacyHotfixTimer;
     }
 }
