@@ -60,6 +60,7 @@ namespace RelhaxModpack
         private string ModpackPasswordDecoded = "";
         private string currentModInfoxml = "";
         private string backupModInfoxml = "";
+        private string parsedDBUpdateVersion = "";
 
         public DatabaseUpdater()
         {
@@ -76,19 +77,25 @@ namespace RelhaxModpack
                 c.Enabled = false;
             foreach (Control c in CleanOnlineFolders.Controls)
                 c.Enabled = false;
+            foreach (Control c in CreatePasswordTab.Controls)
+                c.Enabled = false;
             if((int)CurrentAuthLevel > 1)
             {
+                //ability to update database
                 foreach (Control c in UpdateDatabaseTab.Controls)
                     c.Enabled = true;
                 UpdateDatabaseStep3Advanced.Enabled = false;
             }
             if((int)CurrentAuthLevel > 2)
             {
+                //admin
                 UpdateDatabaseStep3Advanced.Enabled = true;
                 foreach (Control c in UpdateApplicationTab.Controls)
                     c.Enabled = true;
                 foreach (Control c in CleanOnlineFolders.Controls)
                     c.Enabled = true;
+                foreach (Control c in CreatePasswordTab.Controls)
+                    c.Enabled = false;
             }
             AuthStatusLabel.Text = CurrentAuthLevel.ToString();
         }
@@ -101,6 +108,7 @@ namespace RelhaxModpack
             FillHashTable();
             //DEBUG ONLY
             //OnAuthLevelChange(AuthLevel.Admin);
+            AuthStatusLabel.Text = CurrentAuthLevel.ToString();
         }
 
         #region Database Updating
@@ -137,6 +145,7 @@ namespace RelhaxModpack
             //clear variables for new update attempt
             currentModInfoxml = "";
             backupModInfoxml = "";
+            parsedDBUpdateVersion = "";
 
             // check for database
             if (!File.Exists(DatabaseLocationTextBox.Text))
@@ -153,7 +162,7 @@ namespace RelhaxModpack
                 string fileName = Path.Combine(Application.StartupPath, "RelHaxTemp", Settings.OnlineDatabaseXmlFile);
                 downloader.DownloadFile(address, fileName);
             }
-            ReportProgress("database.xml downloaded\n");
+            ReportProgress("database.xml downloaded");
 
             // set this flag, so getMd5Hash and getFileSize should parse downloaded online database.xml
             Program.databaseUpdateOnline = true;
@@ -218,7 +227,7 @@ namespace RelhaxModpack
 
             //check if online folder exists first
             //get the list of all the folders based on game version
-            ScriptLogOutput.AppendText("Checking if folder exists...");
+            ScriptLogOutput.AppendText("Checking if backup version folder exists...");
             string[] folders = FTPListFilesFolders(modInfoBackupsFolderLocation);
             if (!(folders.Contains(Settings.TanksVersion)))
             {
@@ -257,8 +266,16 @@ namespace RelhaxModpack
                     backupModInfoxml = realNewModInfoFileName;
                 }
             }
-            //update the crc and filesize values
-            ReportProgress("Updating database crc and filesize values...");
+            //create and the parsed database update version
+            parsedDBUpdateVersion = backupModInfoxml.Substring(0, backupModInfoxml.Length - 4);
+            parsedDBUpdateVersion = parsedDBUpdateVersion.Substring(8);
+            ReportProgress("Current Parsed Strings:");
+            ReportProgress("currentModInfoxml = " + currentModInfoxml);
+            ReportProgress("backupModInfoxml = " + backupModInfoxml);
+            ReportProgress("parsedDBUpdateVersion = " + parsedDBUpdateVersion);
+
+        //update the crc and filesize values
+        ReportProgress("Updating database crc and filesize values...");
             string hash;
             //foreach zip file name
             //update the CRC value
@@ -396,6 +413,10 @@ namespace RelhaxModpack
             List<DatabasePackage> disabledAfter = updated_modInfo.Where(p => !p.Enabled).ToList();
             //compare except with after.before
             disabledPackages = disabledAfter.Except(disabledBefore, pc).ToList();
+            //also need to remove and removed and added and disabled from updated
+            updatedPackages = updatedPackages.Except(removedPackages, pc).ToList();
+            updatedPackages = updatedPackages.Except(disabledPackages, pc).ToList();
+            updatedPackages = updatedPackages.Except(addedPackages, pc).ToList();
             Program.databaseUpdateOnline = false;
             ReportProgress(string.Format("Number of Added packages: {0}\nNumber of Updated packages: {1}\nNumber of Disabled packages: {2}\nNumber of Removed packages: {3}\n",
                 addedPackages.Count,updatedPackages.Count,disabledPackages.Count,removedPackages.Count));
@@ -412,9 +433,9 @@ namespace RelhaxModpack
                 ReportProgress("ERROR: managerInfo xml not found! (did you run the previous steps?)");
                 return;
             }
-            if(string.IsNullOrWhiteSpace(currentModInfoxml) || string.IsNullOrWhiteSpace(backupModInfoxml))
+            if(string.IsNullOrWhiteSpace(currentModInfoxml) || string.IsNullOrWhiteSpace(backupModInfoxml) || string.IsNullOrWhiteSpace(parsedDBUpdateVersion))
             {
-                ReportProgress("ERROR: currentModInfoxml or backupModInfoxml is blank! (did you run the previous steps?)");
+                ReportProgress("ERROR: currentModInfoxml or backupModInfoxml or parsedDBUpdateVersion is blank! (did you run the previous steps?)");
                 return;
             }
             if(!File.Exists(currentModInfoxml))
@@ -454,11 +475,9 @@ namespace RelhaxModpack
             }
 
             //make stringbuilder of databaseUpdate.text
-            string databaseString = backupModInfoxml.Substring(0, currentModInfoxml.Length - 4);
-            databaseString = databaseString.Substring(6);
             databaseUpdateText.Clear();
             databaseUpdateText.Append("Database Update!\n\n");
-            databaseUpdateText.Append("Updated: " + databaseString + "\n\n");
+            databaseUpdateText.Append("Updated: " + parsedDBUpdateVersion + "\n\n");
             databaseUpdateText.Append("Added:\n");
             foreach (DatabasePackage dp in addedPackages)
                 databaseUpdateText.Append("-" + dp.PackageName + "\n");
@@ -526,7 +545,7 @@ namespace RelhaxModpack
                 XmlDocument doc = new XmlDocument();
                 doc.Load(managerVersion);
                 XmlNode database_version_text = doc.SelectSingleNode("//version/database");
-                database_version_text.InnerText = databaseString;
+                database_version_text.InnerText = parsedDBUpdateVersion;
                 doc.Save(managerVersion);
                 downloader.UploadFile(ftpModpackRoot + "Resources/managerInfo/" + managerVersion, managerVersion);
                 File.Delete(managerVersion);
@@ -847,6 +866,7 @@ namespace RelhaxModpack
             //reports to the log file and the console otuptu
             Logging.Manager(message);
             ScriptLogOutput.AppendText(message + "\n");
+            Application.DoEvents();
         }
 
         private void DatabaseUpdateTabControl_Selected(object sender, TabControlEventArgs e)
@@ -991,18 +1011,18 @@ namespace RelhaxModpack
 
         private void FillHashTable()
         {
-            string serverInfo = "creating the manageInfo.dat file, containing the files: " +
-            "\nmanager_version.xml\n" +
+            string serverInfo = "creating the manageInfo.dat file, containing the files:\n" +
+            "manager_version.xml\n" +
             "supported_clients.xml\n" +
             "databaseUpdate.txt\n" +
             "releaseNotes.txt\n" +
             "releaseNotes_beta.txt\n" +
             "default_checked.xml";
-            string database = "creating the database.xml file at every online version folder of WoT, containing the filename, size and MD5Hash of " +
-                "the current folder, the script \"CreateMD5List.php\" is a needed subscript of CreateDatabase.php, \"relhax_db.sqlite\" is the needed sqlite database to " +
-                "be fast on parsing all files and only working on new or changed files";
-            string modInfo = "creating the modInfo.dat file at every online version folder  of WoT, added the onlineFolder name to the root element, " +
-                "added the \"selections\" (developerSelections) names, creation date and filenames to the modInfo.xml, adding all parsed develeoperSelection-Config " +
+            string database = "creating the database.xml file at every online version folder of WoT,\n containing the filename, size and MD5Hash of " +
+                "the current folder,\n the script \"CreateMD5List.php\" is a needed subscript of CreateDatabase.php,\n \"relhax_db.sqlite\" is the needed sqlite database to " +
+                "be fast on parsing\n all files and only working on new or changed files";
+            string modInfo = "creating the modInfo.dat file at every online version folder  of WoT,\n added the onlineFolder name to the root element,\n " +
+                "added the \"selections\" (developerSelections) names, creation date and\n filenames to the modInfo.xml, adding all parsed develeoperSelection-Config\n " +
                 "files to the modInfo.dat archive";
             HelpfullMessages.Add(UpdateDatabaseStep2.Name, database);
             ButtonInfo.SetToolTip(UpdateDatabaseStep2, database);
