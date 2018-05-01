@@ -2132,12 +2132,12 @@ namespace RelhaxModpack
 
         private void ViewTwitterLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            //System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/624499-");
+            System.Diagnostics.Process.Start("https://twitter.com/relhaxmodpack");
         }
 
         private void ViewFacebookLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            //System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/624499-");
+            System.Diagnostics.Process.Start("https://www.facebook.com/Relhax-Modpack-187224775238379/");
         }
         #endregion
 
