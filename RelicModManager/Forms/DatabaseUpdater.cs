@@ -109,6 +109,58 @@ namespace RelhaxModpack
             //DEBUG ONLY
             //OnAuthLevelChange(AuthLevel.Admin);
             AuthStatusLabel.Text = CurrentAuthLevel.ToString();
+            //if using a key file then open it and test for l1, then l2, then l3
+            if(Program.updateFileKey)
+            {
+                Logging.Manager("attempting to use key from file " + Program.updateKeyFile);
+                if(File.Exists(Program.updateKeyFile))
+                {
+                    string key = File.ReadAllText(Program.updateKeyFile);
+
+                    //attempt l1 key authorization
+                    Logging.Manager("Attempting l1 key authorization");
+                    if (key.Equals(level1Password))
+                    {
+                        Logging.Manager("success");
+                        OnAuthLevelChange(AuthLevel.View);
+                    }
+
+                    if(CurrentAuthLevel == AuthLevel.None)
+                    {
+                        Logging.Manager("failed, attempting l2");
+                        //attempt l2 key authorization
+                        string downloadedKey = "";
+                        using (downloader = new WebClient())
+                        {
+                            downloadedKey = Utils.Base64Decode(downloader.DownloadString(Utils.Base64Decode(L2KeyAddress)));
+                        }
+                        if (downloadedKey.Equals(key))
+                        {
+                            Logging.Manager("success");
+                            OnAuthLevelChange(AuthLevel.UpdateDatabase);
+                        }
+                        if(CurrentAuthLevel == AuthLevel.None)
+                        {
+                            Logging.Manager("failed, attempting l3");
+                            //attempt l3 key authorization
+                            downloadedKey = "";
+                            using (downloader = new WebClient())
+                            {
+                                downloadedKey = Utils.Base64Decode(downloader.DownloadString(Utils.Base64Decode(L3KeyAddress)));
+                            }
+                            if (downloadedKey.Equals(key))
+                            {
+                                Logging.Manager("success");
+                                OnAuthLevelChange(AuthLevel.Admin);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    Logging.Manager("key file does not exist, aborting");
+                }
+            }
         }
 
         #region Database Updating
@@ -652,7 +704,7 @@ namespace RelhaxModpack
 
         private void UpdateDatabaseStep6_Click(object sender, EventArgs e)
         {
-            ScriptLogOutput.Text = "Running script CreateServerInfo.php...";
+            ScriptLogOutput.Text = "Running script CreateManagerInfo.php...";
             using (WebClient client = new WebClient())
             {
                 client.DownloadStringCompleted += Client_DownloadStringCompleted;
@@ -663,24 +715,26 @@ namespace RelhaxModpack
         #endregion
 
         #region Application Updating
-        private void UpdateApplicationStep5_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void UpdateApplicationStep6_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void UpdateApplicationStep7_Click(object sender, EventArgs e)
         {
-
+            ScriptLogOutput.Text = "Running script CreateUpdatePackages.php...";
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadStringCompleted += Client_DownloadStringCompleted;
+                //ScriptLogOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateUpdatePackages.php").Replace("<br />", "\n");
+                client.DownloadStringAsync(new Uri("http://wotmods.relhaxmodpack.com/scripts/CreateUpdatePackages.php"));
+            }
         }
 
         private void UpdateApplicationStep8_Click(object sender, EventArgs e)
         {
-
+            ScriptLogOutput.Text = "Running script CreateManagerInfo.php...";
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadStringCompleted += Client_DownloadStringCompleted;
+                //ScriptLogOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateManagerInfo.php").Replace("<br />", "\n");
+                client.DownloadStringAsync(new Uri("http://wotmods.relhaxmodpack.com/scripts/CreateManagerInfo.php"));
+            }
         }
         #endregion
 
@@ -690,6 +744,7 @@ namespace RelhaxModpack
             ScriptLogOutput.Text = "Running script CreateOutDatesFilesList.php...";
             using (WebClient client = new WebClient())
             {
+                client.DownloadStringCompleted += Client_DownloadStringCompleted;
                 //ScriptLogOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateOutdatedFileList.php").Replace("<br />", "\n");
                 client.DownloadStringAsync(new Uri("http://wotmods.relhaxmodpack.com/scripts/CreateOutdatedFileList.php"));
             }

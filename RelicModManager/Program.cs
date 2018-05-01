@@ -25,6 +25,8 @@ namespace RelhaxModpack
         public static bool silentStart = false;
         public static bool forceVisible = false;
         public static bool forceEnabled = false;
+        public static bool updateFileKey = false;
+        public static string updateKeyFile = "";
         public static string configName = "";
         public enum ProgramVersion
         {
@@ -32,7 +34,7 @@ namespace RelhaxModpack
             Beta = 1,
             Alpha = 2
         }
-        public static ProgramVersion Version = ProgramVersion.Beta;
+        public static ProgramVersion Version = ProgramVersion.Alpha;
         [STAThread]
         static void Main()
         {
@@ -108,6 +110,12 @@ namespace RelhaxModpack
                     autoInstall = true;
                     //parse the config file and advance the counter
                     configName = commandArgs[++i];
+                }
+                else if(Regex.IsMatch(commandArgs[i], @"updateKeyFile$"))
+                {
+                    Logging.Manager("/updateKeyFile detected");
+                    updateFileKey = true;
+                    updateKeyFile = commandArgs[++i];
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"forceVisible$"))
                 {
