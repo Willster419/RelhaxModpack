@@ -750,10 +750,43 @@ namespace RelhaxModpack
             }
         }
 
-        private void CleanFoldersStep2_Click(object sender, EventArgs e)
+        private void CleanFoldersStep3_Click(object sender, EventArgs e)
         {
             ScriptLogOutput.Text = "";
-            //TODO
+            if(string.IsNullOrWhiteSpace(CleanFoldersStep2Input.Text))
+            {
+                ReportProgress("ERROR: text for folder is blank!");
+                return;
+            }
+            ReportProgress(string.Format("Checking if folder {0} exists...", CleanFoldersStep2Input.Text));
+            string[] onlineFolders = FTPListFilesFolders("ftp://wotmods.relhaxmodpack.com/WoT/");
+            if(!onlineFolders.Contains(CleanFoldersStep2Input.Text))
+            {
+                ReportProgress(string.Format("ERROR: folder {0} does not exist in WoT folder!", CleanFoldersStep2Input.Text));
+                return;
+            }
+            ReportProgress("Cleaning online folder " + CleanFoldersStep2Input.Text);
+            string onlineFolder = CleanFoldersStep2Input.Text;
+            string onlineFolderPath = "ftp://wotmods.relhaxmodpack.com/WoT/" + onlineFolder + "/";
+            string trashXML = "trash.xml";
+            ReportProgress("Downloading trash.xml from " + onlineFolder);
+            using (downloader = new WebClient() { Credentials = credentials })
+            {
+                downloader.DownloadFile(onlineFolderPath + trashXML, trashXML);
+            }
+            ReportProgress("Parsing " + trashXML);
+            XmlDocument doc = new XmlDocument();
+            doc.Load(trashXML);
+            XmlNodeList trashFiles = doc.SelectNodes("//trash/filename");
+            int totalFilesToDelete = trashFiles.Count;
+            int filesDeleted = 0;
+            foreach(XmlNode file in trashFiles)
+            {
+                ReportProgress(string.Format("Deleting file {0} of {1}, filename={2}", filesDeleted++, totalFilesToDelete, file.InnerText));
+                FTPDeleteFile(onlineFolderPath + file.InnerText);
+            }
+            ReportProgress("Complete");
+            File.Delete(trashXML);
         }
         #endregion
 
@@ -779,6 +812,15 @@ namespace RelhaxModpack
                 string temp = reader.ReadToEnd();
                 return temp.Split(new[] { "\r\n" }, StringSplitOptions.None);
             }
+        }
+
+        private void FTPDeleteFile(string address)
+        {
+            WebRequest folderRequest = WebRequest.Create(address);
+            folderRequest.Method = WebRequestMethods.Ftp.DeleteFile;
+            folderRequest.Credentials = credentials;
+            using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
+            { }
         }
         #endregion
 
