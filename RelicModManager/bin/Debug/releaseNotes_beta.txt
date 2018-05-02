@@ -1,3 +1,13 @@
+Beta Application Version 28.1.1_r3
+-Renamed Smart uninstall to default, made it the default uninstall method
+-Rewrote Default uninstall method, now optimized and actually uninstalls everything
+-Changed output of installer log file, now all file and folder entries are absolute
+-Improved Uninstall Message
+-Fixed bugs where buttons and links were not being translated
+-Added working facebook and twitter links
+-Added most french translations (waiting on german and polish)
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Beta Application Version 28.1.1_r2
 -Fixed issues where scaling buttons were no longer working
 -Added feature: When changing scaling settings, the application will ask you with a timed window if you want to keep the changes. Similar to changing the screen resolution on windows. Prevents invalid scaling size issue preventing you from changing it back.
