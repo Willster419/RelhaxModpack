@@ -64,6 +64,7 @@ namespace RelhaxModpack
         private string InstalledFilesLogPath = "";
         private object lockerInstaller = new object();
         private Hashtable zipMacros = new Hashtable();
+        private List<string> totalShortcuts;
 
         #region boring stuff
         //the event that it can hook into
@@ -185,11 +186,11 @@ namespace RelhaxModpack
             args.InstalProgress = InstallerEventArgs.InstallProgress.Uninstall;
             switch(Settings.UninstallMode)
             {
-                case Settings.UninstallModes.Smart:
-                    UninstallMods();
+                case Settings.UninstallModes.Default:
+                    UninstallModsDefault();
                     break;
                 case Settings.UninstallModes.Quick:
-                    DeleteMods();
+                    UninstallModsQuick();
                     break;
             }
             //put back the folders when done
@@ -239,11 +240,11 @@ namespace RelhaxModpack
             {
                 switch (Settings.UninstallMode)
                 {
-                    case Settings.UninstallModes.Smart:
-                        UninstallMods();
+                    case Settings.UninstallModes.Default:
+                        UninstallModsDefault();
                         break;
                     case Settings.UninstallModes.Quick:
-                        DeleteMods();
+                        UninstallModsQuick();
                         break;
                 }
             }
@@ -352,7 +353,7 @@ namespace RelhaxModpack
             Logging.Manager("Installation CreateShortscuts");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CreateShortcuts;
             if (Settings.CreateShortcuts)
-                CreateShortCuts();
+                CreateShortcuts();
             else
                 Logging.Manager("... skipped");
             ResetArgs();
@@ -479,176 +480,170 @@ namespace RelhaxModpack
             }
         }
 
-        private void DeleteFilesByList(List<string> list, bool reportProgress = false, TextWriter tw = null, bool suppressException = false)
+        public void UninstallModsDefault()
         {
-            foreach (string line in list)
-            {
-                if (reportProgress)
-                {
-                    args.currentFile = line;
-                    InstallWorker.ReportProgress(args.ChildProcessed++);
-                }
-                
-                if (line.EndsWith("/") | line.EndsWith(@"\"))
-                {
-                    try
-                    {
-                        if(Directory.Exists(line))
-                        {
-                            File.SetAttributes(line, FileAttributes.Normal);
-                            Directory.Delete(line);
-                        }
-                    }
-                    catch       // catch exception if folder is not empty
-                    { }
-                }
-                else
-                {
-                    try
-                    {
-                        //always try to solve the problem without throwing exceptions
-                        //https://stackoverflow.com/questions/1395205/better-way-to-check-if-a-path-is-a-file-or-a-directory
-                        if ((File.Exists(line)) || (Directory.Exists(line)))
-                        {
-                            File.SetAttributes(line, FileAttributes.Normal);
-                            FileAttributes attr = File.GetAttributes(line);
-                            if (attr.HasFlag(FileAttributes.Directory))
-                            {
-                                Directory.Delete(line);
-                            }
-                            else
-                            {
-                                File.Delete(line);
-                            }
-                        }
-                    }
-                    catch (Exception ex)    // here is another problem, so logging it
-                    {
-                        if (!suppressException)
-                            Utils.ExceptionLog("DeleteFilesByList", "delete file: " + line, ex);
-                    }
-                }
-                if (tw != null)
-                    tw.WriteLine(line);
-            }
-        }
+            List<string> linesFromLog = new List<string>();
+            List<string> filesFromLog = new List<string>();
+            List<string> foldersFromLog = new List<string>();
+            List<string> shortcutsFromLog = new List<string>();
+            List<string> linesFromParsing = new List<string>();
+            List<string> filesFromParsing = new List<string>();
+            List<string> foldersFromParsing = new List<string>();
+            List<string> shortcutsFromParsing = new List<string>();
+            List<string> totalFiles = new List<string>();
+            List<string> totalFolders = new List<string>();
+            totalShortcuts = new List<string>();//make this global later
 
-        public void UninstallMods()
-        {
-            try
+            string installLogFile = Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log");
+            if (File.Exists(installLogFile))
             {
-                List<string> lines = new List<string>();
-                string installLogFile = Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log");
-                if (File.Exists(installLogFile))
+                linesFromLog = File.ReadAllLines(installLogFile).ToList();
+            }
+            foreach(string s in linesFromLog)
+            {
+                //parse the lists so that only files are folders are saved
+                if(File.Exists(s))
                 {
-                    lines = File.ReadAllLines(installLogFile).ToList();
-                }
-                lines.Reverse();
-                while (args.ChildProcessed < lines.Count())
-                {
-                    try
+                    if(Path.GetExtension(s).Equals(".lnk"))
                     {
-                        if (!lines[args.ChildProcessed].Substring(0, 2).Equals("/*"))
-                        {
-                            if (lines[args.ChildProcessed].Length > 17)
-                            {
-                                if (lines[args.ChildProcessed].Substring(0, 17).Equals("Database Version:"))
-                                {
-                                    lines.RemoveAt(args.ChildProcessed);
-                                    continue;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            lines.RemoveAt(args.ChildProcessed);
-                            continue;
-                        }
-                        args.currentFile = lines[args.ChildProcessed].Replace("/",@"\");
-                        args.ChildProcessed++;
+                        shortcutsFromLog.Add(Path.GetFileName(s));
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        Utils.ExceptionLog("UninstallMods", string.Format("e\nChildProcessed: {0}\nChildTotalToProcess: {1}\nlines.Count(): {2}", args.ChildProcessed, args.ChildTotalToProcess, lines.Count()), ex);
+                        filesFromLog.Add(s);
                     }
                 }
-                InstallWorker.ReportProgress(0);
-                args.ChildProcessed = 0;
-                args.ChildTotalToProcess = lines.Count();
-                Logging.Manager(string.Format("Elements to delete (from logfile): {0}", lines.Count()));
-                try
+                else if (Directory.Exists(s))
                 {
-                    string logFile = Path.Combine(TanksLocation, "logs", "uninstallRelhaxFiles.log");
-                    // backup the last uninstall logfile
-                    TextWriter tw = null;
-                    if (File.Exists(logFile))
-                    {
-                        if (File.Exists(logFile + ".bak"))
-                            File.Delete(logFile + ".bak");
-                        File.Move(logFile, logFile + ".bak");
-                        tw = new StreamWriter(logFile);
-                        tw.WriteLine(string.Format(@"/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */", DateTime.Now));
-                        tw.WriteLine(@"/*  files and folders deleted from logfile  */");
-                    }
-                    try
-                    {
-                        DeleteFilesByList(lines, true, tw, true);
-                    }
-                    catch (Exception ex)
-                    {
-                        Utils.ExceptionLog("UninstallMods", "delete from logfile", ex);
-                    }
-                    lines = NumFilesToProcess(Path.Combine(TanksLocation, "res_mods"));
-                    lines.AddRange(NumFilesToProcess(Path.Combine(TanksLocation, "mods")));
-                    // reverse the parsed list, to delete files and folders from the lowest to the highest folder level
-                    lines.Reverse();
-                    InstallWorker.ReportProgress(0);
-                    Logging.Manager(string.Format("Elements to delete (from parsing): {0}", lines.Count()));
-                    if (lines.Count() > 0)
-                    {
-                        args.ChildProcessed = 0;
-                        args.ChildTotalToProcess = lines.Count();
-                        try
-                        {
-                            if (tw != null)
-                                tw.WriteLine("/*  files and folders deleted after parsing  */");
-                            DeleteFilesByList(lines, true, tw);
-                            //don't forget to delete the readme files
-                            if (Directory.Exists(Path.Combine(TanksLocation, "_readme")))
-                                Directory.Delete(Path.Combine(TanksLocation, "_readme"), true);
-                        }
-                        catch (Exception ex)
-                        {
-                            Utils.ExceptionLog("UninstallMods", "delete from parsing", ex);
-                        }
-                    }
-                    if (tw != null)
-                        tw.Close();
+                    foldersFromLog.Add(s);
                 }
-                catch (Exception ex)
+            }
+            //reverse folder list so that it deletes from most down to up the path
+            foldersFromLog.Reverse();
+            Logging.Manager(string.Format("Elements to delete (from logfile): {0}", filesFromLog.Count + foldersFromLog.Count + shortcutsFromLog.Count));
+
+            //get list of files from parsing the folders
+            linesFromParsing.AddRange(NumFilesToProcess(Path.Combine(TanksLocation, "res_mods")));
+            linesFromParsing.AddRange(NumFilesToProcess(Path.Combine(TanksLocation, "mods")));
+            foreach (string s in linesFromParsing)
+            {
+                //parse the lists so that only files are folders are saved
+                if (File.Exists(s))
                 {
-                    Utils.ExceptionLog("UninstallMods", "sw", ex);
+                    if (Path.GetExtension(s).Equals(".lnk"))
+                    {
+                        shortcutsFromParsing.Add(Path.GetFileName(s));
+                    }
+                    else
+                    {
+                        filesFromParsing.Add(s);
+                    }
                 }
-                try       // if the delete will raise an exception, it will be ignored
+                else if (Directory.Exists(s))
                 {
-                    if (File.Exists(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak")))
-                        File.Delete(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak"));
-                    if (File.Exists(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log")))
-                        File.Move(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"), Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak"));
+                    foldersFromParsing.Add(s);
                 }
-                catch (Exception ex)
+            }
+            foldersFromParsing.Reverse();
+            Logging.Manager(string.Format("Elements to delete (from parsing mods/res_mods): {0}", filesFromParsing.Count + foldersFromParsing.Count + shortcutsFromParsing.Count));
+
+            //merge list with total files to process from parsing the mods and res_mods directories
+            //assumes the paths from the log file are absolute (TODO)
+            totalFiles = new List<string>(filesFromParsing);
+            totalFiles.AddRange(new List<string>(filesFromLog));
+            totalFiles = totalFiles.Distinct().ToList();
+            totalFiles.Sort();
+
+            totalFolders = new List<string>(foldersFromParsing);
+            totalFolders.AddRange(new List<string>(foldersFromLog));
+            totalFolders = totalFolders.Distinct().ToList();
+            totalFolders.Sort();
+            totalFolders.Reverse();
+
+            totalShortcuts = new List<string>(shortcutsFromParsing);
+            totalShortcuts.AddRange(new List<string>(shortcutsFromLog));
+            totalShortcuts = totalShortcuts.Distinct().ToList();
+            //we now have a list of total valid files and folders to delte
+            //report the progress
+            args.ChildTotalToProcess = totalFiles.Count + totalFolders.Count + totalShortcuts.Count;
+            args.ChildProcessed = 0;
+            InstallWorker.ReportProgress(0);
+
+            //backup old uninstall log file
+            string logFile = Path.Combine(TanksLocation, "logs", "uninstallRelhaxFiles.log");
+            if (File.Exists(logFile))
+            {
+                if (File.Exists(logFile + ".bak"))
+                    File.Delete(logFile + ".bak");
+                File.Move(logFile, logFile + ".bak");
+            }
+
+            //create the uninstall log
+            TextWriter tw = new StreamWriter(logFile);
+            tw.WriteLine(string.Format(@"/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */", DateTime.Now));
+            tw.WriteLine(@"/*  files and folders deleted  */");
+
+            //delete all files and folders from the lists (not shortcuts)
+            foreach(string file in totalFiles)
+            {
+                args.currentFile = file;
+                File.SetAttributes(file, FileAttributes.Normal);
+                File.Delete(file);
+                InstallWorker.ReportProgress(args.ChildProcessed++);
+                tw.WriteLine(file);
+            }
+            if(Settings.CreateShortcuts)
+            {
+                //don't delete them for now...
+            }
+            else
+            {
+                foreach(string shortcut in totalShortcuts)
                 {
-                    Utils.ExceptionLog("UninstallMods", "Delete installedRelhaxFiles.log.bak", ex);
+                    File.SetAttributes(shortcut, FileAttributes.Normal);
+                    File.Delete(shortcut);
+                    tw.WriteLine(shortcut);
                 }
+            }
+            foreach (string folder in totalFolders)
+            {
+                if (Directory.GetFiles(folder).Count() == 0 && Directory.GetDirectories(folder).Count() == 0)
+                {
+                    args.currentFile = folder;
+                    Directory.Delete(folder);
+                    InstallWorker.ReportProgress(args.ChildProcessed++);
+                    tw.WriteLine(folder);
+                }
+            }
+            //wipe the final directories
+            if (Directory.Exists(Path.Combine(TanksLocation, "res_mods")))
+            {
+                Directory.Delete(Path.Combine(TanksLocation, "res_mods"), true);
+                Directory.CreateDirectory(Path.Combine(TanksLocation, "res_mods"));
+            }
+            tw.WriteLine("res_mods wiped");
+            if (Directory.Exists(Path.Combine(TanksLocation, "mods")))
+            {
+                Directory.Delete(Path.Combine(TanksLocation, "mods"), true);
+                Directory.CreateDirectory(Path.Combine(TanksLocation, "mods"));
+            }
+            tw.WriteLine("mods wiped");
+            tw.Close();
+            try       // if the delete will raise an exception, it will be ignored
+            {
+                if (File.Exists(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak")))
+                    File.Delete(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak"));
+                if (File.Exists(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log")))
+                    File.Move(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"), Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak"));
             }
             catch (Exception ex)
             {
-                Utils.ExceptionLog("UninstallMods", "ex", ex);
+                Utils.ExceptionLog("UninstallMods", "Delete installedRelhaxFiles.log.bak", ex);
             }
         }
-        
+
         //Step 3: Delete all mods
-        public void DeleteMods()
+        public void UninstallModsQuick()
         {
             try
             {
@@ -1869,7 +1864,7 @@ namespace RelhaxModpack
         }
 
         //Step 18: Create Shortcuts
-        private void CreateShortCuts()
+        private void CreateShortcuts()
         {
             try
             {
@@ -1903,6 +1898,30 @@ namespace RelhaxModpack
                 }
                 args.ParrentTotalToProcess = Shortcuts.Count;
                 args.ParrentProcessed = 0;
+                //create the new list of shortcuts by filename only
+                //compare with list of shortcuts from default uninstall
+                //if in default uninstall (before) but not in new list (after) then delete
+                //otherwise it will be updated below
+                if(Settings.UninstallMode == Settings.UninstallModes.Default)
+                {
+                    List<string> totalNewShortcuts = new List<string>();
+                    foreach (Shortcut sc in Shortcuts)
+                    {
+                        totalNewShortcuts.Add(Path.GetFileNameWithoutExtension(sc.Name) + ".lnk");
+                    }
+                    List<string> shortcutsToDelete = totalShortcuts.Except(totalNewShortcuts).ToList();
+                    if(shortcutsToDelete.Count > 0)
+                    {
+                        string desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+                        foreach (string s in shortcutsToDelete)
+                        {
+                            string completePath = Path.Combine(desktop, s + ".lnk");
+                            File.SetAttributes(completePath, FileAttributes.Normal);
+                            File.Delete(completePath);
+                        }
+                    }
+                }
+
                 foreach (Shortcut sc in Shortcuts)
                 {
                     if (sc.Enabled)
@@ -2701,14 +2720,17 @@ namespace RelhaxModpack
                             //save entry name modifications
                             zip[i].FileName = zipEntryName;
                             //put the entries on disk
+                            /*
                             if (sb == null)// write the the file entry / with the first call at the installation process, the logfile will be created including headline, ....
                                 Logging.Installer(zip[i].FileName);
                             else
                                 sb.Append(zip[i].FileName +"\n");
+                                */
                         }
                         zip.ExtractProgress += Zip_ExtractProgress;
                         //zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
                         //NEED TO TEST
+                        string completePath = "";
                         for(int i = 0; i < zip.Entries.Count; i++)
                         {
                             bool processed = false;
@@ -2721,6 +2743,8 @@ namespace RelhaxModpack
                                     zip[i].FileName = zip[i].FileName.Replace(s, "");
                                     if (!string.IsNullOrWhiteSpace(zip[i].FileName))
                                         zip[i].Extract((string)zipMacros[s], ExtractExistingFileAction.OverwriteSilently);
+                                    //write to disk
+                                    completePath = Path.Combine((string)zipMacros[s], zip[i].FileName.Replace(@"/",@"\"));
                                     //entry was processed, safe to move on
                                     break;
                                 }
@@ -2729,7 +2753,12 @@ namespace RelhaxModpack
                             {
                                 //default to extract to TanksLocation
                                 zip[i].Extract(TanksLocation, ExtractExistingFileAction.OverwriteSilently);
+                                completePath = Path.Combine(TanksLocation, zip[i].FileName.Replace(@"/", @"\"));
                             }
+                            if (sb == null)
+                                Logging.Installer(completePath);
+                            else
+                                sb.Append(completePath + "\n");
                             args.ChildProcessed++;
                         }
                         //we made it, set j to 1 to break out of the exception catch loop

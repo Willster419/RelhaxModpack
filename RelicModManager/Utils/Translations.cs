@@ -423,12 +423,12 @@ namespace RelhaxModpack
             polish.Add("SuperExtractionCB", "Wsparcie wielu rdzeni (eksperymentalne)");
             french.Add("SuperExtractionCB", "Mode d'extraction multicoeur (expérimental)");
 
-            //Componet: SmartUninstallModeRB
+            //Componet: DefaultUninstallModeRB
             //
-            english.Add("SmartUninstallModeRB", "Smart");
-            german.Add("SmartUninstallModeRB", "Intelligent");
-            polish.Add("SmartUninstallModeRB", "Sprytna");
-            french.Add("SmartUninstallModeRB", "Intelligent");
+            english.Add("DefaultUninstallModeRB", "Default");
+            german.Add("DefaultUninstallModeRB", "TODO");
+            polish.Add("DefaultUninstallModeRB", "TODO");
+            french.Add("DefaultUninstallModeRB", "TODO");
 
             //Componet: CleanUninstallModeRB
             //
@@ -824,10 +824,10 @@ namespace RelhaxModpack
 
             //Componet: 
             //
-            english.Add("startingSmartUninstall", "Starting smart uninstall");
-            german.Add("startingSmartUninstall", "Starten der intelligenten Deinstallation");
-            polish.Add("startingSmartUninstall", "Rozpoczynanie inteligentnej deinstalacji");
-            french.Add("startingSmartUninstall", "Lancement de la désinstallation intéligente");
+            english.Add("startingDefaultUninstall", "Starting default uninstall");
+            german.Add("startingDefaultUninstall", "TODO");
+            polish.Add("startingDefaultUninstall", "TODO");
+            french.Add("startingDefaultUninstall", "TODO");
 
             //Componet: 
             //
@@ -1069,10 +1069,10 @@ namespace RelhaxModpack
 
             //Componet: 
             //
-            english.Add("confirmUninstallMessage", "Confirm you wish to uninstall?");
-            german.Add("confirmUninstallMessage", "Möchtest du wirklich die Mods deinstallieren?");
-            polish.Add("confirmUninstallMessage", "Potwierdzić deinstalację?");
-            french.Add("confirmUninstallMessage", "Confirmez que vous voulez désinstaller?");
+            english.Add("confirmUninstallMessage", "Confirm you wish to uninstall mods from WoT installation\n{0}\nUsing uninstall method {1}?");
+            german.Add("confirmUninstallMessage", "TODO");
+            polish.Add("confirmUninstallMessage", "TODO");
+            french.Add("confirmUninstallMessage", "TODO");
 
             //Componet: 
             //
@@ -1235,19 +1235,19 @@ namespace RelhaxModpack
             french.Add("SuperExtractionCBDescription", "Lorsqu'il est activé, le programme d'installation utilise une méthode d'extraction parallèle. Il va extraire plusieurs fichiers" +
                 " zip en même temps, réduisant ainsi le temps d'installation. Pour les disques SSD SEULEMENT.");
 
-            //Component: SmartUninstallModeRBDescription
+            //Component: DefaultUninstallModeRBDescription
             //
-            english.Add("SmartUninstallModeRBDescription", "Smart Uninstall will remove all files installed by the modpack, including shortcuts and appdata cache files.");
-            german.Add("SmartUninstallModeRBDescription", "TODO");
-            polish.Add("SmartUninstallModeRBDescription", "TODO");
-            french.Add("SmartUninstallModeRBDescription", "Désinstallation intelligente vas suprimmer tout les fichiers créé par le modpack, y compris les raccourcis et les fichiers de cache Appdata");
+            english.Add("DefaultUninstallModeRBDescription", "Default Uninstall will remove all files in the game's mod directories, including shortcuts and appdata cache files.");
+            german.Add("DefaultUninstallModeRBDescription", "TODO");
+            polish.Add("DefaultUninstallModeRBDescription", "TODO");
+            french.Add("DefaultUninstallModeRBDescription", "TODO");
 
             //Component: CleanUninstallModeRBDescription
             //
-            english.Add("CleanUninstallModeRBDescription", "Quick Uninstall will remove all mod files in the game's mod directories only. It does not remove modpack created shortcuts or appdata cache files.");
+            english.Add("CleanUninstallModeRBDescription", "Quick Uninstall will only remove files in the game's mod directories. It does not remove modpack created shortcuts or appdata cache files.");
             german.Add("CleanUninstallModeRBDescription", "TODO");
             polish.Add("CleanUninstallModeRBDescription", "TODO");
-            french.Add("CleanUninstallModeRBDescription", "Désinstallation rapide vas suprimmer tout les fichiers dans les dossiers de mods seulement. Ceci n`efface pas les raccourcis ou les fichiers de cache Appdata");
+            french.Add("CleanUninstallModeRBDescription", "TODO");
 
             //Component: ExportModeCBDescription
             //Explaiing the export mode

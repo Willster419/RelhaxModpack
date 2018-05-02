@@ -1821,7 +1821,7 @@ namespace RelhaxModpack
             Logging.Manager(string.Format("tanksLocation parsed as {0}", tanksLocation));
             Logging.Manager(string.Format("customUserMods parsed as {0}", Path.Combine(Application.StartupPath, "RelHaxUserMods")));
             tanksVersion = this.getFolderVersion();
-            if (MessageBox.Show(string.Format("{0}\n\n{1}", Translations.getTranslatedString("confirmUninstallMessage"), tanksLocation), Translations.getTranslatedString("confirmUninstallHeader"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            if (MessageBox.Show(string.Format(Translations.getTranslatedString("confirmUninstallMessage"), tanksLocation, Settings.UninstallMode.ToString()), Translations.getTranslatedString("confirmUninstallHeader"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
                 unI = new Installer()
                 {

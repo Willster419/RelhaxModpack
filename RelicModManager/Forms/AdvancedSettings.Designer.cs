@@ -38,6 +38,7 @@
             this.createShortcutsCB = new System.Windows.Forms.CheckBox();
             this.InstantExtractionCB = new System.Windows.Forms.CheckBox();
             this.clearCacheCB = new System.Windows.Forms.CheckBox();
+            this.UseAltUpdateMethodCB = new System.Windows.Forms.CheckBox();
             this.AdvancedSettingsDescription = new System.Windows.Forms.RichTextBox();
             this.loadingImageGroupBox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
@@ -46,8 +47,7 @@
             this.UninstallModeGroupBox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.CleanUninstallModeRB = new System.Windows.Forms.RadioButton();
-            this.SmartUninstallModeRB = new System.Windows.Forms.RadioButton();
-            this.UseAltUpdateMethodCB = new System.Windows.Forms.CheckBox();
+            this.DefaultUninstallModeRB = new System.Windows.Forms.RadioButton();
             this.AdvancedSettingsLayout.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
             this.tableLayoutPanel8.SuspendLayout();
@@ -212,6 +212,22 @@
             this.clearCacheCB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.clearCacheCB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
+            // UseAltUpdateMethodCB
+            // 
+            this.UseAltUpdateMethodCB.AutoSize = true;
+            this.UseAltUpdateMethodCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.UseAltUpdateMethodCB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.UseAltUpdateMethodCB.Location = new System.Drawing.Point(208, 133);
+            this.UseAltUpdateMethodCB.Name = "UseAltUpdateMethodCB";
+            this.UseAltUpdateMethodCB.Size = new System.Drawing.Size(198, 31);
+            this.UseAltUpdateMethodCB.TabIndex = 43;
+            this.UseAltUpdateMethodCB.Text = "Use alternative update method";
+            this.UseAltUpdateMethodCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.UseAltUpdateMethodCB.UseVisualStyleBackColor = true;
+            this.UseAltUpdateMethodCB.CheckedChanged += new System.EventHandler(this.UseAltUpdateMethodCB_CheckedChanged);
+            this.UseAltUpdateMethodCB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.UseAltUpdateMethodCB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
             // AdvancedSettingsDescription
             // 
             this.AdvancedSettingsDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -302,7 +318,7 @@
             this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel7.Controls.Add(this.CleanUninstallModeRB, 0, 1);
-            this.tableLayoutPanel7.Controls.Add(this.SmartUninstallModeRB, 0, 0);
+            this.tableLayoutPanel7.Controls.Add(this.DefaultUninstallModeRB, 0, 0);
             this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel7.Location = new System.Drawing.Point(2, 15);
             this.tableLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
@@ -328,36 +344,20 @@
             this.CleanUninstallModeRB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.CleanUninstallModeRB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
-            // SmartUninstallModeRB
+            // DefaultUninstallModeRB
             // 
-            this.SmartUninstallModeRB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SmartUninstallModeRB.Location = new System.Drawing.Point(0, 0);
-            this.SmartUninstallModeRB.Margin = new System.Windows.Forms.Padding(0);
-            this.SmartUninstallModeRB.Name = "SmartUninstallModeRB";
-            this.SmartUninstallModeRB.Size = new System.Drawing.Size(200, 20);
-            this.SmartUninstallModeRB.TabIndex = 0;
-            this.SmartUninstallModeRB.TabStop = true;
-            this.SmartUninstallModeRB.Text = "Smart";
-            this.SmartUninstallModeRB.UseVisualStyleBackColor = true;
-            this.SmartUninstallModeRB.CheckedChanged += new System.EventHandler(this.SmartUninstallModeRB_CheckedChanged);
-            this.SmartUninstallModeRB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.SmartUninstallModeRB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
-            // 
-            // UseAltUpdateMethodCB
-            // 
-            this.UseAltUpdateMethodCB.AutoSize = true;
-            this.UseAltUpdateMethodCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.UseAltUpdateMethodCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.UseAltUpdateMethodCB.Location = new System.Drawing.Point(208, 133);
-            this.UseAltUpdateMethodCB.Name = "UseAltUpdateMethodCB";
-            this.UseAltUpdateMethodCB.Size = new System.Drawing.Size(198, 31);
-            this.UseAltUpdateMethodCB.TabIndex = 43;
-            this.UseAltUpdateMethodCB.Text = "Use alternative update method";
-            this.UseAltUpdateMethodCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.UseAltUpdateMethodCB.UseVisualStyleBackColor = true;
-            this.UseAltUpdateMethodCB.CheckedChanged += new System.EventHandler(this.UseAltUpdateMethodCB_CheckedChanged);
-            this.UseAltUpdateMethodCB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.UseAltUpdateMethodCB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            this.DefaultUninstallModeRB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DefaultUninstallModeRB.Location = new System.Drawing.Point(0, 0);
+            this.DefaultUninstallModeRB.Margin = new System.Windows.Forms.Padding(0);
+            this.DefaultUninstallModeRB.Name = "DefaultUninstallModeRB";
+            this.DefaultUninstallModeRB.Size = new System.Drawing.Size(200, 20);
+            this.DefaultUninstallModeRB.TabIndex = 0;
+            this.DefaultUninstallModeRB.TabStop = true;
+            this.DefaultUninstallModeRB.Text = "Default";
+            this.DefaultUninstallModeRB.UseVisualStyleBackColor = true;
+            this.DefaultUninstallModeRB.CheckedChanged += new System.EventHandler(this.SmartUninstallModeRB_CheckedChanged);
+            this.DefaultUninstallModeRB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.DefaultUninstallModeRB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
             // AdvancedSettings
             // 
@@ -395,7 +395,7 @@
         private System.Windows.Forms.GroupBox UninstallModeGroupBox;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
         private System.Windows.Forms.RadioButton CleanUninstallModeRB;
-        private System.Windows.Forms.RadioButton SmartUninstallModeRB;
+        private System.Windows.Forms.RadioButton DefaultUninstallModeRB;
         private System.Windows.Forms.CheckBox clearCacheCB;
         private System.Windows.Forms.CheckBox InstantExtractionCB;
         private System.Windows.Forms.CheckBox createShortcutsCB;

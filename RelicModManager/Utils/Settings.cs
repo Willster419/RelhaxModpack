@@ -102,10 +102,10 @@ namespace RelhaxModpack
         //enumeration for the type of uninstall mode
         public enum UninstallModes
         {
-            Smart = 0,
+            Default = 0,
             Quick = 1
         }
-        public static UninstallModes UninstallMode = UninstallModes.Quick;
+        public static UninstallModes UninstallMode = UninstallModes.Default;
         //enumeration for the type of mod selection list view
         public enum SelectionView
         {
@@ -171,7 +171,7 @@ namespace RelhaxModpack
                 ModSelectionHeight = 480;
                 ModSelectionWidth = 800;
                 FontSizeforum = FontSize.Font100;
-                UninstallMode = UninstallModes.Quick;
+                UninstallMode = UninstallModes.Default;
                 ExpandAllLegacy = false;
                 ExpandAllLegacy2 = false;
                 ModSelectionFullscreen = false;

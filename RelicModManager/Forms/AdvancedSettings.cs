@@ -39,8 +39,8 @@ namespace RelhaxModpack.Forms
             UseAltUpdateMethodCB.Checked = Settings.UseAlternateUpdateMethod;
             switch (Settings.UninstallMode)
             {
-                case (Settings.UninstallModes.Smart):
-                    SmartUninstallModeRB.Checked = true;
+                case (Settings.UninstallModes.Default):
+                    DefaultUninstallModeRB.Checked = true;
                     break;
                 case (Settings.UninstallModes.Quick):
                     CleanUninstallModeRB.Checked = true;
@@ -73,7 +73,7 @@ namespace RelhaxModpack.Forms
             clearCacheCB.Enabled = enableToggle;
             createShortcutsCB.Enabled = enableToggle;
             InstantExtractionCB.Enabled = enableToggle;
-            SmartUninstallModeRB.Enabled = enableToggle;
+            DefaultUninstallModeRB.Enabled = enableToggle;
             CleanUninstallModeRB.Enabled = enableToggle;
             cleanInstallCB.Enabled = enableToggle;
             ShowInstallCompleteWindowCB.Enabled = enableToggle;
@@ -148,8 +148,8 @@ namespace RelhaxModpack.Forms
 
         private void SmartUninstallModeRB_CheckedChanged(object sender, EventArgs e)
         {
-            if (SmartUninstallModeRB.Checked)
-                Settings.UninstallMode = Settings.UninstallModes.Smart;
+            if (DefaultUninstallModeRB.Checked)
+                Settings.UninstallMode = Settings.UninstallModes.Default;
         }
         //handler for what happends when the check box "clean install" is checked or not
         private void cleanInstallCB_CheckedChanged(object sender, EventArgs e)
