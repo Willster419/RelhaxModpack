@@ -26,8 +26,10 @@ namespace RelhaxModpack
         public static bool forceVisible = false;
         public static bool forceEnabled = false;
         public static bool updateFileKey = false;
+        public static bool editorAutoLoad = false;
         public static string updateKeyFile = "";
         public static string configName = "";
+        public static string editorDatabaseFile = "";
         public enum ProgramVersion
         {
             Stable = 0,
@@ -116,6 +118,12 @@ namespace RelhaxModpack
                     Logging.Manager("/updateKeyFile detected");
                     updateFileKey = true;
                     updateKeyFile = commandArgs[++i];
+                }
+                else if (Regex.IsMatch(commandArgs[i], @"editorAutoLoad$"))
+                {
+                    editorAutoLoad = true;
+                    editorDatabaseFile = commandArgs[++i];
+                    Logging.Manager("/editorAutoLoad detected, attempting to auto load database from " + editorDatabaseFile);
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"forceVisible$"))
                 {

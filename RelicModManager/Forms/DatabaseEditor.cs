@@ -61,8 +61,19 @@ namespace RelhaxModpack
         //hook into the database editor loading
         private void DatabaseEditor_Load(object sender, EventArgs e)
         {
-            DatabaseEditorMode = EditorMode.GlobalDependnecy;
             ResetUI(true,false);
+            if(Program.editorAutoLoad)
+            {
+                if(!File.Exists(Program.editorDatabaseFile))
+                {
+                    Logging.Manager("file does not exist, loading in regular mode: " + Program.editorDatabaseFile);
+                    Program.editorDatabaseFile = "";
+                    Program.editorAutoLoad = false;
+                }
+                Logging.Manager("Auto load xml file" + Program.editorDatabaseFile);
+                DatabaseLocation = Path.Combine(Application.StartupPath, Program.editorDatabaseFile);
+                LoadDatabase();
+            }
         }
         //loads the database depending on the mode of the radiobuttons
         private void DisplayDatabase(bool resetUI = true)
@@ -235,9 +246,13 @@ namespace RelhaxModpack
             }
             if (OpenDatabaseDialog.ShowDialog() == DialogResult.Cancel)
                 return;
-            DatabaseLocation = OpenDatabaseDialog.FileName;
-            if (!File.Exists(DatabaseLocation))
+            if (!File.Exists(OpenDatabaseDialog.FileName))
                 return;
+            DatabaseLocation = OpenDatabaseDialog.FileName;
+        }
+        //method for actually loading the database
+        private void LoadDatabase()
+        {
             //for the folder version: //modInfoAlpha.xml/@version
             Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocation, "//modInfoAlpha.xml/@version");
             //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
@@ -248,7 +263,22 @@ namespace RelhaxModpack
             LogicalDependencies = new List<LogicalDependency>();
             ParsedCategoryList = new List<Category>();
             XMLUtils.CreateModStructure(DatabaseLocation, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList);
-            DatabaseEditorMode = EditorMode.GlobalDependnecy;
+            if(GlobalDependencyRB.Checked)
+            {
+                DatabaseEditorMode = EditorMode.GlobalDependnecy;
+            }
+            else if (DependencyRB.Checked)
+            {
+                DatabaseEditorMode = EditorMode.Dependency;
+            }
+            else if (LogicalDependencyRB.Checked)
+            {
+                DatabaseEditorMode = EditorMode.LogicalDependency;
+            }
+            else
+            {
+                DatabaseEditorMode = EditorMode.DBO;
+            }
             DisplayDatabase();
         }
         //show the save database dialog and save the database
