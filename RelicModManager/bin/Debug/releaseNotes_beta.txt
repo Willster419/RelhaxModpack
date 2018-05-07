@@ -1,4 +1,9 @@
 Beta Application Version 28.1.1_r3
+-Added ability for database editor to auto load databse from command line
+-Updated most translations
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Beta Application Version 28.1.1_r3
 -Renamed Smart uninstall to default, made it the default uninstall method
 -Rewrote Default uninstall method, now optimized and actually uninstalls everything
 -Changed output of installer log file, now all file and folder entries are absolute
