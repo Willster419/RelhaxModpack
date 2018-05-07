@@ -249,6 +249,7 @@ namespace RelhaxModpack
             if (!File.Exists(OpenDatabaseDialog.FileName))
                 return;
             DatabaseLocation = OpenDatabaseDialog.FileName;
+            LoadDatabase();
         }
         //method for actually loading the database
         private void LoadDatabase()
