@@ -232,22 +232,22 @@ namespace RelhaxModpack
             //Componet: FormPageNALink
             //
             english.Add("FormPageNALink", "WoT forum page (NA, ENG)");
-            german.Add("FormPageNALink", "TODO");
-            polish.Add("FormPageNALink", "TODO");
+            german.Add("FormPageNALink", "WoT Forum (NA, ENG)");
+            polish.Add("FormPageNALink", "Forum WoT (NA, ENG)");
             french.Add("FormPageNALink", "Page des forums WoT (NA, ENG)");
 
             //Componet: FormPageEULink
             //
             english.Add("FormPageEULink", "WoT forum page (EU, ENG)");
-            german.Add("FormPageEULink", "TODO");
-            polish.Add("FormPageEULink", "TODO");
+            german.Add("FormPageEULink", "WoT Forum (EU, ENG)");
+            polish.Add("FormPageEULink", "Forum WoT (EU, ENG)");
             french.Add("FormPageEULink", "Page des forums WoT (EU, ENG)");
 
             //Componet: FormPageEUGERLink
             //
             english.Add("FormPageEUGERLink", "WoT forum page (EU, GER)");
-            german.Add("FormPageEUGERLink", "TODO");
-            polish.Add("FormPageEUGERLink", "TODO");
+            german.Add("FormPageEUGERLink", "WoT Forum (EU, DE)");
+            polish.Add("FormPageEUGERLink", "Forum WoT (EU, GER)");
             french.Add("FormPageEUGERLink", "Page des forums WoT (EU, GER)");
 
             //Componet: saveUserDataCB
@@ -384,15 +384,15 @@ namespace RelhaxModpack
             //Componet: EnableColorChangeDefaultCB
             //
             english.Add("EnableColorChangeDefaultCB", "Enable color change");
-            german.Add("EnableColorChangeDefaultCB", "TODO");
-            polish.Add("EnableColorChangeDefaultCB", "TODO");
+            german.Add("EnableColorChangeDefaultCB", "Farbwechsel");
+            polish.Add("EnableColorChangeDefaultCB", "Włącz zmianê kolorów");
             french.Add("EnableColorChangeDefaultCB", "Activer les changements de couleurs");
 
             //Componet: EnableColorChangeLegacyCB
             //
             english.Add("EnableColorChangeLegacyCB", "Enable color change");
-            german.Add("EnableColorChangeLegacyCB", "TODO");
-            polish.Add("EnableColorChangeLegacyCB", "TODO");
+            german.Add("EnableColorChangeLegacyCB", "Farbwechsel");
+            polish.Add("EnableColorChangeLegacyCB", "Włącz zmianê kolorów");
             french.Add("EnableColorChangeLegacyCB", "Activer les changements de couleurs");
 
             //Componet: clearLogFilesCB
@@ -426,9 +426,9 @@ namespace RelhaxModpack
             //Componet: DefaultUninstallModeRB
             //
             english.Add("DefaultUninstallModeRB", "Default");
-            german.Add("DefaultUninstallModeRB", "TODO");
-            polish.Add("DefaultUninstallModeRB", "TODO");
-            french.Add("DefaultUninstallModeRB", "TODO");
+            german.Add("DefaultUninstallModeRB", "Standard");
+            polish.Add("DefaultUninstallModeRB", "Standard");
+            french.Add("DefaultUninstallModeRB", "Défaut");
 
             //Componet: CleanUninstallModeRB
             //
@@ -486,8 +486,8 @@ namespace RelhaxModpack
 
             //Component: ShowAdvancedSettingsLink
             english.Add("ShowAdvancedSettingsLink", "Show advanced settings");
-            german.Add("ShowAdvancedSettingsLink", "TODO");
-            polish.Add("ShowAdvancedSettingsLink", "TODO");
+            german.Add("ShowAdvancedSettingsLink", "Erweiterte Einstellungen");
+            polish.Add("ShowAdvancedSettingsLink", "Pokaż ustawienia zaawansowane");
             french.Add("ShowAdvancedSettingsLink", "Afficher les paramètres avancé");
 
             //Component: ApplicationVersionLabel
@@ -821,14 +821,6 @@ namespace RelhaxModpack
             polish.Add("extractingUserMods", "Wypakowywanie modyfikacji użytkownika");
             french.Add("extractingUserMods", "Extraction des mods d'utilisateur");
 
-
-            //Componet: 
-            //
-            english.Add("startingDefaultUninstall", "Starting default uninstall");
-            german.Add("startingDefaultUninstall", "TODO");
-            polish.Add("startingDefaultUninstall", "TODO");
-            french.Add("startingDefaultUninstall", "TODO");
-
             //Componet: 
             //
             english.Add("copyingFile", "Copying file");
@@ -1069,10 +1061,10 @@ namespace RelhaxModpack
 
             //Componet: 
             //
-            english.Add("confirmUninstallMessage", "Confirm you wish to uninstall mods from WoT installation\n{0}\nUsing uninstall method {1}?");
+            english.Add("confirmUninstallMessage", "Confirm you wish to uninstall mods from WoT installation\n\n{0}\n\nUsing uninstall method '{1}'?");
             german.Add("confirmUninstallMessage", "TODO");
             polish.Add("confirmUninstallMessage", "TODO");
-            french.Add("confirmUninstallMessage", "TODO");
+            french.Add("confirmUninstallMessage", "Confirmer que vous voulez désinstaller les mods du dossier WoT\n\n{0}\n\nUsing la méthode de désinstallation '{1}'?");
 
             //Componet: 
             //
@@ -1179,15 +1171,15 @@ namespace RelhaxModpack
             //Component: EnableColorChangeDefaultCBDescription
             //
             english.Add("EnableColorChangeDefaultCBDescription", "Enable the changing of colors when toggling the selection of a mod or config.");
-            german.Add("EnableColorChangeDefaultCBDescription", "TODO");
-            polish.Add("EnableColorChangeDefaultCBDescription", "TODO");
+            german.Add("EnableColorChangeDefaultCBDescription", "Die Farbe ändert sich, wenn man eine Auswahl getroffen hat");
+            polish.Add("EnableColorChangeDefaultCBDescription", "Włącz zmianê kolorów podczas zmiany wyboru modyfikacji i ustawieñ.");
             french.Add("EnableColorChangeDefaultCBDescription", "Activer le changement de les couleurs lors de la selection d'un mod ou d'une config");
 
             //Component: EnableColorChangeLegacyCBDescription
             //
             english.Add("EnableColorChangeLegacyCBDescription", "Enable the changing of colors when toggling the selection of a mod or config.");
-            german.Add("EnableColorChangeLegacyCBDescription", "TODO");
-            polish.Add("EnableColorChangeLegacyCBDescription", "TODO");
+            german.Add("EnableColorChangeLegacyCBDescription", "Die Farbe ändert sich, wenn man eine Auswahl getroffen hat");
+            polish.Add("EnableColorChangeLegacyCBDescription", "Włącz zmianê kolorów podczas zmiany wyboru modyfikacji i ustawieñ.");
             french.Add("EnableColorChangeLegacyCBDescription", "Activer le changement de les couleurs lors de la selection d'un mod ou d'une config");
 
             //Component: notifyIfSameDatabaseCBDescription
@@ -1240,14 +1232,14 @@ namespace RelhaxModpack
             english.Add("DefaultUninstallModeRBDescription", "Default Uninstall will remove all files in the game's mod directories, including shortcuts and appdata cache files.");
             german.Add("DefaultUninstallModeRBDescription", "TODO");
             polish.Add("DefaultUninstallModeRBDescription", "TODO");
-            french.Add("DefaultUninstallModeRBDescription", "TODO");
+            french.Add("DefaultUninstallModeRBDescription", "La méthode de désinstallation par défaut vas supprimer tout les fichiers dans le dossier du jeu, incluant les raccourcies et le fichers de cache appdata");
 
             //Component: CleanUninstallModeRBDescription
             //
             english.Add("CleanUninstallModeRBDescription", "Quick Uninstall will only remove files in the game's mod directories. It does not remove modpack created shortcuts or appdata cache files.");
             german.Add("CleanUninstallModeRBDescription", "TODO");
             polish.Add("CleanUninstallModeRBDescription", "TODO");
-            french.Add("CleanUninstallModeRBDescription", "TODO");
+            french.Add("CleanUninstallModeRBDescription", "La méthode de désinstallation rapide vas uniquement supprimer les fichiers dans le dossier \"mod\" du jeu. Ceci ne supprimeras pas les raccourcis ou les fichiers de cache appdata créé par le modpack");
 
             //Component: ExportModeCBDescription
             //Explaiing the export mode
@@ -1412,29 +1404,29 @@ namespace RelhaxModpack
             //Component: EnableBordersDefaultCB
             //
             english.Add("EnableBordersDefaultCB", "Enable borders");
-            german.Add("EnableBordersDefaultCB", "TODO");
-            polish.Add("EnableBordersDefaultCB", "TODO");
+            german.Add("EnableBordersDefaultCB", "Einrahmen");
+            polish.Add("EnableBordersDefaultCB", "Włącz granice");
             french.Add("EnableBordersDefaultCB", "Activer les bordures");
 
             //Component: EnableBordersLegacyCB
             //
             english.Add("EnableBordersLegacyCB", "Enable borders");
-            german.Add("EnableBordersLegacyCB", "TODO");
-            polish.Add("EnableBordersLegacyCB", "TODO");
+            german.Add("EnableBordersLegacyCB", "Einrahmen");
+            polish.Add("EnableBordersLegacyCB", "Włącz granice");
             french.Add("EnableBordersLegacyCB", "Activer les bordures");
 
             //Component: EnableBordersDefaultCBDescription
             //
             english.Add("EnableBordersDefaultCBDescription", "Enable the black borders around each mod and config sublevel.");
-            german.Add("EnableBordersDefaultCBDescription", "TODO");
-            polish.Add("EnableBordersDefaultCBDescription", "TODO");
+            german.Add("EnableBordersDefaultCBDescription", "Jede Auswahl schwarz einrahmen");
+            polish.Add("EnableBordersDefaultCBDescription", "Włącz czarne obramowanie modyfikacji i opcji konfiguracji");
             french.Add("EnableBordersDefaultCBDescription", "Activer les bordures noires autour de chaque mod et selections de configuration.");
 
             //Component: EnableBordersLegacyCBDescription
             //
             english.Add("EnableBordersLegacyCBDescription", "Enable the black borders around each mod and config sublevel.");
-            german.Add("EnableBordersLegacyCBDescription", "TODO");
-            polish.Add("EnableBordersLegacyCBDescription", "TODO");
+            german.Add("EnableBordersLegacyCBDescription", "Jede Auswahl schwarz einrahmen");
+            polish.Add("EnableBordersLegacyCBDescription", "Włącz czarne obramowanie modyfikacji i opcji konfiguracji");
             french.Add("EnableBordersLegacyCBDescription", "Activer les bordures noires autour de chaque mod et selections de configuration.");
 
             //Component: moveOutOfTanksLocation
@@ -1542,8 +1534,8 @@ namespace RelhaxModpack
             //Componet: ShowAdvancedSettingsLinkDescription
             //
             english.Add("ShowAdvancedSettingsLinkDescription", "Show the advanced settings window");
-            german.Add("ShowAdvancedSettingsLinkDescription", "TODO");
-            polish.Add("ShowAdvancedSettingsLinkDescription", "TODO");
+            german.Add("ShowAdvancedSettingsLinkDescription", "Erweiterte Einstellungen anzeigen");
+            polish.Add("ShowAdvancedSettingsLinkDescription", "Pokaż okno ustawieñ zaawansowanych");
             french.Add("ShowAdvancedSettingsLinkDescription", "Afficher le panneau de configurations avancé");
             #endregion
 
@@ -2110,70 +2102,70 @@ namespace RelhaxModpack
             #region Advanced Settings View
             //Component: form name
             english.Add("AdvancedSettings", "Advanced Settings");
-            german.Add("AdvancedSettings", "TODO");
-            polish.Add("AdvancedSettings", "TODO");
+            german.Add("AdvancedSettings", "Erweiterte Einstellungen");
+            polish.Add("AdvancedSettings", "Ustawienia Zaawansowane");
             french.Add("AdvancedSettings", "Configurations avancé");
 
             //Component: ViewFacebookLink
             english.Add("ViewFacebookLink", "Facebook page");
-            german.Add("ViewFacebookLink", "TODO");
-            polish.Add("ViewFacebookLink", "TODO");
+            german.Add("ViewFacebookLink", "Facebook");
+            polish.Add("ViewFacebookLink", "Strona FB");
             french.Add("ViewFacebookLink", "Page Facebook");
 
             //Component: ViewTwitterLink
             english.Add("ViewTwitterLink", "Twitter page");
-            german.Add("ViewTwitterLink", "TODO");
-            polish.Add("ViewTwitterLink", "TODO");
+            german.Add("ViewTwitterLink", "Twitter");
+            polish.Add("ViewTwitterLink", "Strona TT");
             french.Add("ViewTwitterLink", "Page Twitter");
 
             //Component: SendEmailLink
             english.Add("SendEmailLink", "Send us an Email");
-            german.Add("SendEmailLink", "TODO");
-            polish.Add("SendEmailLink", "TODO");
+            german.Add("SendEmailLink", "Schick uns eine Email");
+            polish.Add("SendEmailLink", "Przeœlij nam wiadomoœæ e-mail");
             french.Add("SendEmailLink", "Nous envoyer un Email");
 
             //Component: VisitWebsiteLink
             english.Add("VisitWebsiteLink", "Visit our Website");
-            german.Add("VisitWebsiteLink", "TODO");
-            polish.Add("VisitWebsiteLink", "TODO");
+            german.Add("VisitWebsiteLink", "Zu unserer Website");
+            polish.Add("VisitWebsiteLink", "Odwiedz nasza strone");
             french.Add("VisitWebsiteLink", "Visiter notre site web");
 
             //Component: AdvancedSettingsHeader
             english.Add("AdvancedSettingsHeader", "Hover over a setting to see its description");
-            german.Add("AdvancedSettingsHeader", "TODO");
-            polish.Add("AdvancedSettingsHeader", "TODO");
+            german.Add("AdvancedSettingsHeader", "Mit der Maus über die Einstellungen fahren um die Beschreibungen einzublenden");
+            polish.Add("AdvancedSettingsHeader", "NajedŸ kursorem, aby zobaczyæ opis");
             french.Add("AdvancedSettingsHeader", "Survoler un paramètre pour voire sa description");
 
             //Component: UseAltUpdateMethodCB
             english.Add("UseAltUpdateMethodCB", "Use alternative update method");
-            german.Add("UseAltUpdateMethodCB", "TODO");
-            polish.Add("UseAltUpdateMethodCB", "TODO");
+            german.Add("UseAltUpdateMethodCB", "Eine alternative Updatemethode verwenden");
+            polish.Add("UseAltUpdateMethodCB", "Użyj alternatywnej metody aktualizacji");
             french.Add("UseAltUpdateMethodCB", "Utiliser la methode alternative de mise à jour");
 
             //Component: UseAltUpdateMethodCBDescription
             english.Add("UseAltUpdateMethodCBDescription", "Use the alternative update method. Takes longer but should help with anti-virus software");
-            german.Add("UseAltUpdateMethodCBDescription", "TODO");
-            polish.Add("UseAltUpdateMethodCBDescription", "TODO");
+            german.Add("UseAltUpdateMethodCBDescription", "Die alternative Updatemethode dauert länger, hilft aber bei Problemen (bspw. Fehlalarm) mit Anti-Virus-Programmen");
+            polish.Add("UseAltUpdateMethodCBDescription", "U¿yj alternatywnej metody aktualizacji. Wyd³u¿y to potrzebny czas, ale pomo¿e przy problemach z oprogramowaniem antywirusowym");
             french.Add("UseAltUpdateMethodCBDescription", "Utiliser la methode alternative de mise à jour. Plus long mais devrais aider avec les applications anti-virus");
             #endregion
 
             #region Scaling Verification Window
             //Component: form name
             english.Add("FontSettingsVerify", "Scaling");
-            german.Add("FontSettingsVerify", "TODO");
-            polish.Add("FontSettingsVerify", "TODO");
+            german.Add("FontSettingsVerify", "Skalierung");
+            polish.Add("FontSettingsVerify", "Skalowanie");
             french.Add("FontSettingsVerify", "Mise à l'échelle");
 
             //Component: SettingsChangedHeader
             english.Add("SettingsChangedHeader", "Your Scaling Settings have changed. Would you like to keep them?");
-            german.Add("SettingsChangedHeader", "TODO");
-            polish.Add("SettingsChangedHeader", "TODO");
+            german.Add("SettingsChangedHeader", "Deine Skalierungseinstellungen wurden geändert, willst du sie behalten?");
+            polish.Add("SettingsChangedHeader", "Twoje opcje skalowania siê zmieni³y. Czy chcia³byœ je zachowaæ?");
             french.Add("SettingsChangedHeader", "Vos paramètres de mise a l'échelle ont changé. Voulez-vous les garders?");
 
             //Component: RevertingTimeoutText
             english.Add("RevertingTimeoutText", "Reverting in {0} seconds");
-            german.Add("RevertingTimeoutText", "TODO");
-            polish.Add("RevertingTimeoutText", "TODO");
+            german.Add("RevertingTimeoutText", "In {0} Sekunden werden sie zurückgesetzt");
+            polish.Add("RevertingTimeoutText", "Powrót do poprzednich ustawieñ za {0}s.");
             french.Add("RevertingTimeoutText", "Rétablissement dans {0} secondes");
 
             //Component: NoButton
