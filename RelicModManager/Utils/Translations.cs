@@ -1063,7 +1063,7 @@ namespace RelhaxModpack
             //
             english.Add("confirmUninstallMessage", "Confirm you wish to uninstall mods from WoT installation\n\n{0}\n\nUsing uninstall method '{1}'?");
             german.Add("confirmUninstallMessage", "TODO");
-            polish.Add("confirmUninstallMessage", "TODO");
+            polish.Add("confirmUninstallMessage", "Potwierdź usunięcie modyfikacji\n\n{0}\n\nPotwierdź metodę '{1}'");
             french.Add("confirmUninstallMessage", "Confirmer que vous voulez désinstaller les mods du dossier WoT\n\n{0}\n\nUsing la méthode de désinstallation '{1}'?");
 
             //Componet: 
@@ -1231,14 +1231,14 @@ namespace RelhaxModpack
             //
             english.Add("DefaultUninstallModeRBDescription", "Default Uninstall will remove all files in the game's mod directories, including shortcuts and appdata cache files.");
             german.Add("DefaultUninstallModeRBDescription", "TODO");
-            polish.Add("DefaultUninstallModeRBDescription", "TODO");
+            polish.Add("DefaultUninstallModeRBDescription", "Domyślna deinstalacja usunie wszystkie pliki w folderze modyfikacji i pliki z nimi związane, włączając skróty i pliki cache aplikacji.");
             french.Add("DefaultUninstallModeRBDescription", "La méthode de désinstallation par défaut vas supprimer tout les fichiers dans le dossier du jeu, incluant les raccourcies et le fichers de cache appdata");
 
             //Component: CleanUninstallModeRBDescription
             //
             english.Add("CleanUninstallModeRBDescription", "Quick Uninstall will only remove files in the game's mod directories. It does not remove modpack created shortcuts or appdata cache files.");
             german.Add("CleanUninstallModeRBDescription", "TODO");
-            polish.Add("CleanUninstallModeRBDescription", "TODO");
+            polish.Add("CleanUninstallModeRBDescription", "Szybka deinstalacja usunie tylko pliki w folderze modyfikacji. Nie usunie skrótów i plików cache związanych z modpackiem.");
             french.Add("CleanUninstallModeRBDescription", "La méthode de désinstallation rapide vas uniquement supprimer les fichiers dans le dossier \"mod\" du jeu. Ceci ne supprimeras pas les raccourcis ou les fichiers de cache appdata créé par le modpack");
 
             //Component: ExportModeCBDescription

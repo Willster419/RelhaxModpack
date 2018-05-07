@@ -1,6 +1,7 @@
-Beta Application Version 28.1.1_r4
+Beta Application Version 28.1.1_r4.1
 -Added ability for database editor to auto load databse from command line
 -Updated most translations
+-Fixed bugs with the database update script
 --------------------------------------------------------------------------------------------------------------------------------------------
 
 Beta Application Version 28.1.1_r3

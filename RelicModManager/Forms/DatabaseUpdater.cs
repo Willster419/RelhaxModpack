@@ -57,10 +57,17 @@ namespace RelhaxModpack
         private StringBuilder filesNotFoundSB = new StringBuilder();
         private StringBuilder databaseUpdateText = new StringBuilder();
         private Hashtable HelpfullMessages = new Hashtable();
+        //for decoding the password upon application load
         private string ModpackPasswordDecoded = "";
+        //the current latest version of the modpack database file. formed in step 3
         private string currentModInfoxml = "";
-        private string backupModInfoxml = "";
+        //the "version" used for the new database update
         private string parsedDBUpdateVersion = "";
+        //the parsed name for the backup file for backing up the old modinfo database file
+        private string backupModInfoxmlToServer = "";
+        //the modInfoxml downloaded and uesd for before and after comparison
+        private string compareModInfoXml = "";
+        
 
         public DatabaseUpdater()
         {
@@ -167,6 +174,7 @@ namespace RelhaxModpack
         private void UpdateDatabaseStep1_Click(object sender, EventArgs e)
         {
             ScriptLogOutput.Text = "";
+            ReportProgress("Starting Update database step 1...");
             if (loadDatabaseDialog.ShowDialog() == DialogResult.Cancel)
                 return;
             DatabaseLocationTextBox.Text = loadDatabaseDialog.FileName;
@@ -175,13 +183,15 @@ namespace RelhaxModpack
             //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
             Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocationTextBox.Text, "//modInfoAlpha.xml/@onlineFolder");
             Text = String.Format("DatabaseUpdateUtility      TanksVersion: {0}    OnlineFolder: {1}", Settings.TanksVersion, Settings.TanksOnlineFolderVersion);
-            ReportProgress(string.Format("Settings.TanksVersion (current game version): {0}, Settings.TanksOnlineFolderVersion (online zip folder): {1}",
-                Settings.TanksVersion, Settings.TanksOnlineFolderVersion));
+            ReportProgress("Settings.TanksVersion (current game version): " + Settings.TanksVersion);
+            ReportProgress("Settings.TanksOnlineFolderVersion (online zip folder): " + Settings.TanksOnlineFolderVersion);
         }
 
         private void UpdateDatabaseStep2_Click(object sender, EventArgs e)
         {
-            ScriptLogOutput.Text = "Running script CreateDatabase.php...";
+            ScriptLogOutput.Text = "";
+            ReportProgress("Starting Update database step 2...");
+            ReportProgress("Running script CreateDatabase.php...");
             using (WebClient client = new WebClient())
             {
                 client.DownloadStringCompleted += Client_DownloadStringCompleted;
@@ -193,11 +203,13 @@ namespace RelhaxModpack
         private void UpdateDatabaseStep3_Click(object sender, EventArgs e)
         {
             ScriptLogOutput.Text = "";
+            ReportProgress("Starting Update database step 3...");
 
             //clear variables for new update attempt
             currentModInfoxml = "";
-            backupModInfoxml = "";
+            backupModInfoxmlToServer = "";
             parsedDBUpdateVersion = "";
+            compareModInfoXml = "";
 
             // check for database
             if (!File.Exists(DatabaseLocationTextBox.Text))
@@ -250,13 +262,30 @@ namespace RelhaxModpack
 
             //download current online modInfo.xml for list comparison
             ReportProgress("loading current modInfo.xml for later comparison");
-            currentModInfoxml = "modInfo_" + Settings.TanksVersion + ".xml";//server name
+            //make the current "to be supported" modinfo database file
+            currentModInfoxml = "modInfo_" + Settings.TanksVersion + ".xml";
+            string lastTanksVersion = "";
             using (downloader = new WebClient() { Credentials = credentials })
             {
-                downloader.DownloadFile(modInfosLocation + currentModInfoxml, currentModInfoxml);
+                ReportProgress("download supported_clients.xml for latest database names");
+                //need to get the latest supported version from supported_clients.xml
+                if (File.Exists(supportedClients))
+                    File.Delete(supportedClients);
+                downloader.DownloadFile(ftpModpackRoot + "Resources/managerInfo/" + supportedClients, supportedClients);
+                XmlDocument doc = new XmlDocument();
+                doc.Load(supportedClients);
+                XmlNodeList supported_clients = doc.SelectNodes("//versions/version");
+                //last version is most recent supported
+                XmlNode lastSupportred = supported_clients[supported_clients.Count - 1];
+                //innerText is tanks version
+                lastTanksVersion = lastSupportred.InnerText;
+                compareModInfoXml = "modInfo_" + lastTanksVersion + ".xml";
+                ReportProgress("compareModInfoXml= " + compareModInfoXml);
+                downloader.DownloadFile(modInfosLocation + compareModInfoXml, compareModInfoXml);
+                File.Delete(supportedClients);
             }
             //load live database to memory
-            XMLUtils.CreateModStructure(currentModInfoxml, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            XMLUtils.CreateModStructure(compareModInfoXml, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             //create first list for comparison
             live_modInfo = CreatePackageList(parsedCatagoryList, globalDependencies, dependencies, logicalDependencies);
 
@@ -265,7 +294,7 @@ namespace RelhaxModpack
             parsedCatagoryList.Clear();
             dependencies.Clear();
             logicalDependencies.Clear();
-            //load actuall database to memory
+            //load actuall new database to memory
             XMLUtils.CreateModStructure(DatabaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
 
             //check for duplicates
@@ -281,14 +310,16 @@ namespace RelhaxModpack
             //get the list of all the folders based on game version
             ScriptLogOutput.AppendText("Checking if backup version folder exists...");
             string[] folders = FTPListFilesFolders(modInfoBackupsFolderLocation);
-            if (!(folders.Contains(Settings.TanksVersion)))
+            if (!(folders.Contains(lastTanksVersion)))
             {
                 ScriptLogOutput.AppendText("Does NOT exist, creating\n");
                 //create the folder
-                FTPMakeFolder(modInfoBackupsFolderLocation + Settings.TanksVersion);
+                FTPMakeFolder(modInfoBackupsFolderLocation + lastTanksVersion);
             }
             else
+            {
                 ScriptLogOutput.AppendText("DOES exists\n");
+            }
 
             //check it for if multiple itterations in one day
             //rename it to format to the new date
@@ -298,36 +329,76 @@ namespace RelhaxModpack
             DateTime dt = DateTime.UtcNow;
             TimeZoneInfo EST = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
             DateTime realToday = TimeZoneInfo.ConvertTimeFromUtc(dt, EST);
-            string newModInfoFileName = "modInfo_" + Settings.TanksVersion + "_";
+            //create the filename for the backup mod info
+            string newBackupModInfoFileName = "modInfo_" + lastTanksVersion + "_";
             string dateTimeFormat = string.Format("{0:yyyy-MM-dd}", realToday);
-            string realNewModInfoFileName = newModInfoFileName + dateTimeFormat + "_" + itteraton + ".xml";
+            string realNewBackupModInfoFileName = newBackupModInfoFileName + dateTimeFormat + "_" + itteraton + ".xml";
             bool fileAlreadyExists = true;
             while (fileAlreadyExists)
             {
-                ReportProgress(string.Format("Checking if filename '{0}' exists in backup folder...", realNewModInfoFileName));
-                string[] modInfoBackups = FTPListFilesFolders(modInfoBackupsFolderLocation + Settings.TanksVersion + "/");
-                if (modInfoBackups.Contains(realNewModInfoFileName))
+                ReportProgress(string.Format("Checking if filename '{0}' exists in backup folder...", realNewBackupModInfoFileName));
+                string[] modInfoBackups = FTPListFilesFolders(modInfoBackupsFolderLocation + lastTanksVersion + "/");
+                if (modInfoBackups.Contains(realNewBackupModInfoFileName))
                 {
                     ReportProgress("Exists, trying higher itteration");
-                    realNewModInfoFileName = newModInfoFileName + dateTimeFormat + "_" + ++itteraton + ".xml";
+                    realNewBackupModInfoFileName = newBackupModInfoFileName + dateTimeFormat + "_" + ++itteraton + ".xml";
                 }
                 else
                 {
                     ReportProgress("Does not exist!");
                     fileAlreadyExists = false;
-                    backupModInfoxml = realNewModInfoFileName;
+                    //actually update the global value here
+                    backupModInfoxmlToServer = realNewBackupModInfoFileName;
                 }
             }
-            //create and the parsed database update version
-            parsedDBUpdateVersion = backupModInfoxml.Substring(0, backupModInfoxml.Length - 4);
-            parsedDBUpdateVersion = parsedDBUpdateVersion.Substring(8);
-            ReportProgress("Current Parsed Strings:");
-            ReportProgress("currentModInfoxml = " + currentModInfoxml);
-            ReportProgress("backupModInfoxml = " + backupModInfoxml);
-            ReportProgress("parsedDBUpdateVersion = " + parsedDBUpdateVersion);
+            //create and the parsed database update version. needs to be made seperate from the backup above
+            ReportProgress("Creating current database update version string");
+            ReportProgress("Checking if folder exists for updated  tanks version");
+            string[] newVersionFolders = FTPListFilesFolders(modInfoBackupsFolderLocation);
+            if(!newVersionFolders.Contains(Settings.TanksVersion))
+            {
+                ReportProgress(Settings.TanksVersion + "backup folder does not exist on server, creating");
+                FTPMakeFolder(modInfoBackupsFolderLocation + Settings.TanksVersion);
+            }
+            else
+            {
+                ReportProgress(Settings.TanksVersion + "backup folder DOES exist");
 
-        //update the crc and filesize values
-        ReportProgress("Updating database crc and filesize values...");
+            }
+            //create the string for the datbase update version
+            itteraton = 1;
+            string newCurrentModInfoFileName = "modInfo_" + Settings.TanksVersion + "_";
+            string realNewCurrentModInfoFileName = newCurrentModInfoFileName + dateTimeFormat + "_" + itteraton + ".xml";
+            fileAlreadyExists = true;
+            while (fileAlreadyExists)
+            {
+                ReportProgress(string.Format("Checking if filename '{0}' exists in backup folder...", realNewCurrentModInfoFileName));
+                string[] modInfoBackups = FTPListFilesFolders(modInfoBackupsFolderLocation + lastTanksVersion + "/");
+                if (modInfoBackups.Contains(realNewCurrentModInfoFileName))
+                {
+                    ReportProgress("Exists, trying higher itteration");
+                    realNewCurrentModInfoFileName = newCurrentModInfoFileName + dateTimeFormat + "_" + ++itteraton + ".xml";
+                }
+                else
+                {
+                    ReportProgress("Does not exist!");
+                    fileAlreadyExists = false;
+                    //actually update the global value here
+                    parsedDBUpdateVersion = realNewCurrentModInfoFileName;
+                }
+            }
+            parsedDBUpdateVersion = parsedDBUpdateVersion.Substring("modInfo_".Length);
+            parsedDBUpdateVersion = parsedDBUpdateVersion.Substring(0, parsedDBUpdateVersion.Length - ".xml".Length);
+
+            //report output
+            ReportProgress("Current Global Parsed Strings:");
+            ReportProgress("currentModInfoxml = " + currentModInfoxml);
+            ReportProgress("backupModInfoxml = " + backupModInfoxmlToServer);
+            ReportProgress("parsedDBUpdateVersion = " + parsedDBUpdateVersion);
+            ReportProgress("compareModInfoXml = " + compareModInfoXml);
+
+            //update the crc and filesize values
+            ReportProgress("Updating database crc and filesize values...");
             string hash;
             //foreach zip file name
             //update the CRC value
@@ -444,7 +515,16 @@ namespace RelhaxModpack
             //abort if missing files
             if(fileNotFoundPackages.Count > 0)
             {
-                ReportProgress("ERROR: " + fileNotFoundPackages.Count + " packages missing files!!");
+                ReportProgress("ERROR: " + fileNotFoundPackages.Count + " packages missing files!! (saved to missingPackages.txt)");
+                string missingPackagesText = "missingPackages.txt";
+                if (File.Exists(missingPackagesText))
+                    File.Delete(missingPackagesText);
+                StringBuilder missingPackagesSB = new StringBuilder();
+                foreach(SelectablePackage sp in fileNotFoundPackages)
+                {
+                    missingPackagesSB.AppendLine(sp.ZipFile);
+                }
+                File.WriteAllText(missingPackagesText, missingPackagesSB.ToString());
                 Program.databaseUpdateOnline = false;
                 return;
             }
@@ -478,19 +558,21 @@ namespace RelhaxModpack
         private void UpdateDatabaseStep4_Click(object sender, EventArgs e)
         {
             ScriptLogOutput.Text = "";
+            ReportProgress("Starting Update database step 4...");
             //check if previous steps have been run
             // check for database
             if (!File.Exists(DatabaseLocationTextBox.Text))
             {
-                ReportProgress("ERROR: managerInfo xml not found! (did you run the previous steps?)");
+                ReportProgress("ERROR: managerInfo xml (to update to server) not found! (did you run the previous steps?)");
                 return;
             }
-            if(string.IsNullOrWhiteSpace(currentModInfoxml) || string.IsNullOrWhiteSpace(backupModInfoxml) || string.IsNullOrWhiteSpace(parsedDBUpdateVersion))
+            if(string.IsNullOrWhiteSpace(parsedDBUpdateVersion))
             {
-                ReportProgress("ERROR: currentModInfoxml or backupModInfoxml or parsedDBUpdateVersion is blank! (did you run the previous steps?)");
+                ReportProgress("ERROR: parsedDBUpdateVersion is blank! (did you run the previous steps?)");
                 return;
             }
-            if(!File.Exists(currentModInfoxml))
+            //at this point compareModInfoXml is the old databsae to backup
+            if(!File.Exists(compareModInfoXml))
             {
                 ReportProgress("ERROR: currentModInfoxml does not exist! (did you run the previous steps?)");
                 return;
@@ -500,10 +582,10 @@ namespace RelhaxModpack
             ReportProgress("backing up current live modInfo.xml...");
             using (downloader = new WebClient() { Credentials = credentials })
             {
-                File.Move(currentModInfoxml, backupModInfoxml);
+                File.Move(compareModInfoXml, backupModInfoxmlToServer);
                 //upload backup
-                downloader.UploadFile(modInfoBackupsFolderLocation + Settings.TanksVersion + "/" + backupModInfoxml, backupModInfoxml);
-                File.Delete(backupModInfoxml);
+                downloader.UploadFile(modInfoBackupsFolderLocation + Settings.TanksVersion + "/" + backupModInfoxmlToServer, backupModInfoxmlToServer);
+                File.Delete(backupModInfoxmlToServer);
             }
 
             //save and upload new modInfo file
@@ -512,7 +594,7 @@ namespace RelhaxModpack
                 globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
             using (downloader = new WebClient() { Credentials = credentials })
             {
-                //upload backup
+                //upload new modInfo
                 downloader.UploadFile(modInfosLocation + currentModInfoxml, DatabaseLocationTextBox.Text);
             }
 
@@ -607,6 +689,8 @@ namespace RelhaxModpack
 
         private void UpdateDatabaseStep3Advanced_Click(object sender, EventArgs e)
         {
+            ScriptLogOutput.Text = "";
+            ReportProgress("Starting Update database step 3 advanced...");
             // check for database
             if (!File.Exists(DatabaseLocationTextBox.Text))
                 return;
@@ -693,7 +777,9 @@ namespace RelhaxModpack
 
         private void UpdateDatabaseStep5_Click(object sender, EventArgs e)
         {
-            ScriptLogOutput.Text = "Running script CreateModInfo.php...";
+            ScriptLogOutput.Text = "";
+            ReportProgress("Starting Update database step 5...");
+            ReportProgress("Running script CreateModInfo.php...");
             using (WebClient client = new WebClient())
             {
                 client.DownloadStringCompleted += Client_DownloadStringCompleted;
@@ -704,7 +790,9 @@ namespace RelhaxModpack
 
         private void UpdateDatabaseStep6_Click(object sender, EventArgs e)
         {
-            ScriptLogOutput.Text = "Running script CreateManagerInfo.php...";
+            ScriptLogOutput.Text = "";
+            ReportProgress("Starting Update database step 6...");
+            ReportProgress("Running script CreateManagerInfo.php...");
             using (WebClient client = new WebClient())
             {
                 client.DownloadStringCompleted += Client_DownloadStringCompleted;
