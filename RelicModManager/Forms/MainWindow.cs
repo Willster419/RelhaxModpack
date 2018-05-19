@@ -1966,15 +1966,11 @@ namespace RelhaxModpack
         {
             installRelhaxMod.Enabled = enableToggle;
             uninstallRelhaxMod.Enabled = enableToggle;
-            backupModsCheckBox.Enabled = enableToggle;
-            darkUICB.Enabled = enableToggle;
-            saveUserDataCB.Enabled = enableToggle;
-            saveLastInstallCB.Enabled = enableToggle;
-            clearLogFilesCB.Enabled = enableToggle;
-            notifyIfSameDatabaseCB.Enabled = enableToggle;
-            ComicSansFontCB.Enabled = enableToggle;
-            SuperExtractionCB.Enabled = enableToggle;
-            DPIAUTO.Enabled = enableToggle;
+            settingsGroupBox.Enabled = enableToggle;
+            SelectionViewGB.Enabled = enableToggle;
+            fontSizeGB.Enabled = enableToggle;
+            languageSelectionGB.Enabled = enableToggle;
+            DiagnosticUtilitiesButton.Enabled = enableToggle;
         }
 
         //handler for when the window is goingto be closed
