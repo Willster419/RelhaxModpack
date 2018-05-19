@@ -1,3 +1,10 @@
+Beta Application Version 28.1.1_r5
+-Fixed bugs with default uninstall mode failing if a file explorer was open to it
+-Fixed bug in default selection view where when selecting a mod in a category view, when scrolling down to preview another, after closing the preview window the selection list jumps back up to that first mod you selected
+-Fixed bugs where some UI components would not disable during an install
+-Added ability to mark log output statemetns as debug so that they will only show in alpha or beta builds
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Beta Application Version 28.1.1_r4.1
 -Added ability for database editor to auto load databse from command line
 -Updated most translations
