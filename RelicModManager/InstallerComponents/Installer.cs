@@ -570,6 +570,7 @@ namespace RelhaxModpack
             InstallWorker.ReportProgress(0);
 
             //backup old uninstall log file
+            Logging.Manager("backing up old uninstall log file",true);
             string logFile = Path.Combine(TanksLocation, "logs", "uninstallRelhaxFiles.log");
             if (File.Exists(logFile))
             {
@@ -579,12 +580,14 @@ namespace RelhaxModpack
             }
 
             //create the uninstall log
+            Logging.Manager("creating uninstall log file", true);
             TextWriter tw = new StreamWriter(logFile);
             tw.WriteLine(string.Format(@"/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */", DateTime.Now));
             tw.WriteLine(@"/*  files and folders deleted  */");
 
             //delete all files and folders from the lists (not shortcuts)
-            foreach(string file in totalFiles)
+            Logging.Manager("deleting files and folders from totalFiles list", true);
+            foreach (string file in totalFiles)
             {
                 args.currentFile = file;
                 File.SetAttributes(file, FileAttributes.Normal);
@@ -598,13 +601,15 @@ namespace RelhaxModpack
             }
             else
             {
-                foreach(string shortcut in totalShortcuts)
+                Logging.Manager("Settings.CreateShortcuts false, deleting totalShortcuts", true);
+                foreach (string shortcut in totalShortcuts)
                 {
                     File.SetAttributes(shortcut, FileAttributes.Normal);
                     File.Delete(shortcut);
                     tw.WriteLine(shortcut);
                 }
             }
+            Logging.Manager("deleting leftover folders", true);
             foreach (string folder in totalFolders)
             {
                 if (Directory.GetFiles(folder).Count() == 0 && Directory.GetDirectories(folder).Count() == 0)
@@ -616,12 +621,14 @@ namespace RelhaxModpack
                 }
             }
             //wipe the final directories
+            Logging.Manager("wiping res_mods", true);
             if (Directory.Exists(Path.Combine(TanksLocation, "res_mods")))
             {
                 Directory.Delete(Path.Combine(TanksLocation, "res_mods"), true);
                 Directory.CreateDirectory(Path.Combine(TanksLocation, "res_mods"));
             }
             tw.WriteLine("res_mods wiped");
+            Logging.Manager("wiping mods", true);
             if (Directory.Exists(Path.Combine(TanksLocation, "mods")))
             {
                 Directory.Delete(Path.Combine(TanksLocation, "mods"), true);
@@ -629,17 +636,11 @@ namespace RelhaxModpack
             }
             tw.WriteLine("mods wiped");
             tw.Close();
-            try       // if the delete will raise an exception, it will be ignored
-            {
-                if (File.Exists(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak")))
-                    File.Delete(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak"));
-                if (File.Exists(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log")))
-                    File.Move(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"), Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak"));
-            }
-            catch (Exception ex)
-            {
-                Utils.ExceptionLog("UninstallMods", "Delete installedRelhaxFiles.log.bak", ex);
-            }
+            Logging.Manager("deleting old relhaxinstalledfileslog stuffs", true);
+            if (File.Exists(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak")))
+                File.Delete(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak"));
+            if (File.Exists(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log")))
+                File.Move(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"), Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak"));
         }
 
         //Step 3: Delete all mods
