@@ -604,8 +604,21 @@ namespace RelhaxModpack
                 Logging.Manager("Settings.CreateShortcuts false, deleting totalShortcuts", true);
                 foreach (string shortcut in totalShortcuts)
                 {
-                    File.SetAttributes(shortcut, FileAttributes.Normal);
-                    File.Delete(shortcut);
+                    int retry = 3;
+                    while(retry > 0)
+                    {
+                        try
+                        {
+                            File.SetAttributes(shortcut, FileAttributes.Normal);
+                            File.Delete(shortcut);
+                            retry = 0;
+                        }
+                        catch
+                        {
+                            Logging.Manager(string.Format("EXCEPTION CAUGHT at deleting shortcuts, user prolly has the window open, retry={0}, trying again in 100ms...",retry--));
+                            System.Threading.Thread.Sleep(100);
+                        }
+                    }
                     tw.WriteLine(shortcut);
                 }
             }
@@ -615,7 +628,8 @@ namespace RelhaxModpack
                 if (Directory.GetFiles(folder).Count() == 0 && Directory.GetDirectories(folder).Count() == 0)
                 {
                     args.currentFile = folder;
-                    Directory.Delete(folder);
+                    //Directory.Delete(folder);
+                    DirectoryDeleteNoProgress(folder, false);
                     InstallWorker.ReportProgress(args.ChildProcessed++);
                     tw.WriteLine(folder);
                 }
@@ -624,14 +638,16 @@ namespace RelhaxModpack
             Logging.Manager("wiping res_mods", true);
             if (Directory.Exists(Path.Combine(TanksLocation, "res_mods")))
             {
-                Directory.Delete(Path.Combine(TanksLocation, "res_mods"), true);
+                //Directory.Delete(Path.Combine(TanksLocation, "res_mods"), true);
+                DirectoryDeleteNoProgress(Path.Combine(TanksLocation, "res_mods"),true);
                 Directory.CreateDirectory(Path.Combine(TanksLocation, "res_mods"));
             }
             tw.WriteLine("res_mods wiped");
             Logging.Manager("wiping mods", true);
             if (Directory.Exists(Path.Combine(TanksLocation, "mods")))
             {
-                Directory.Delete(Path.Combine(TanksLocation, "mods"), true);
+                //Directory.Delete(Path.Combine(TanksLocation, "mods"), true);
+                DirectoryDeleteNoProgress(Path.Combine(TanksLocation, "mods"),true);
                 Directory.CreateDirectory(Path.Combine(TanksLocation, "mods"));
             }
             tw.WriteLine("mods wiped");
@@ -2661,6 +2677,26 @@ namespace RelhaxModpack
                 {
                     string temppath = Path.Combine(destDirName, subdir.Name);
                     _DirectoryMove(subdir.FullName, temppath, copySubDirs,overwrite,reportProgress);
+                }
+            }
+        }
+
+        //uses the build in microsoft Directory.Delete, but attemps to itterate multiple times in case the user is in the directory
+        private void DirectoryDeleteNoProgress(string sourceDir, bool recursive)
+        {
+            int num_retries = 3;
+            while(num_retries > 0)
+            {
+                try
+                {
+                    Directory.Delete(sourceDir, recursive);
+                    num_retries = 0;
+                }
+                catch(Exception e)
+                {
+                    Utils.ExceptionLog(e);
+                    Logging.Manager("DirectoryDeleteNoProgerss EXCEPTION CAUGHT, trying again in 100ms, num_retries=" + num_retries--, true);
+                    System.Threading.Thread.Sleep(100);
                 }
             }
         }
