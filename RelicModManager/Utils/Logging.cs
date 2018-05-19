@@ -24,10 +24,17 @@ namespace RelhaxModpack
         // - and write "fileheader" 
         // - check once if the file exceeds a certain size 
         // by default, write the given string to file 
-        public static void Manager(string s)
+        public static void Manager(string s, bool debug=false)
         {
             try
             {
+                if (debug)
+                {
+                    //if debug is true (message should not be output of stable releases) AND current release is stable, then don't put it out!
+                    if (Program.Version == Program.ProgramVersion.Stable)
+                        return;
+                    s = "DEBUG: " + s;
+                }
                 lock (_locker)              // avoid that 2 or more threads calling the Log function and writing lines in a mess
                 {
                     //the method should automaticly make the file if it's not there
