@@ -336,6 +336,16 @@ namespace RelhaxModpack
             return returnVal;
         }
 
+        public static string ConvertByteArrayToString(byte[] arr)
+        {
+            return BitConverter.ToString(arr).Replace("-", "").ToLowerInvariant(); ;
+        }
+
+        public static bool CompareByteArray(byte[] a1, byte[] a2)
+        {
+            return a1.SequenceEqual(a2);
+        }
+
         public class CheckStorage
         {
             public string PackageName { get; set; }
