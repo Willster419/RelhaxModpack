@@ -25,6 +25,8 @@ namespace RelhaxModpack
         private List<LogicalDependency> LogicalDependencies;
         //other stuff
         private string DatabaseLocation = "";
+        private byte[] DatabaseLocationMD5Hash = new byte[] { 0x0 };
+        private byte[] LoadedDatabaseMD5Hash = new byte[] { 0x0 };
         private Dependency SelectedGlobalDependency;
         private Dependency SelectedDependency;
         private LogicalDependency SelectedLogicalDependency;
@@ -254,6 +256,9 @@ namespace RelhaxModpack
         //method for actually loading the database
         private void LoadDatabase()
         {
+            //Save this key data for later queries and comparisons 
+            LoadedDatabaseMD5Hash = GetDatabaseMD5Hash(DatabaseLocation);
+            DatabaseLocationMD5Hash = GetDatabaseLocationMD5Hash(DatabaseLocation);
             //for the folder version: //modInfoAlpha.xml/@version
             Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocation, "//modInfoAlpha.xml/@version");
             //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
@@ -282,6 +287,26 @@ namespace RelhaxModpack
             }
             DisplayDatabase();
         }
+        //calculate the MD5 of the selected file
+        private byte[] GetDatabaseMD5Hash(string filename)
+        {
+            using (var md5 = System.Security.Cryptography.MD5.Create())
+            {
+                using (var stream = File.OpenRead(filename))
+                {
+                    return md5.ComputeHash(stream);
+                }
+            }
+        }
+        //calculate the MD5 of the selected filepath
+        private byte[] GetDatabaseLocationMD5Hash(string filename)
+        {
+            using (var md5 = System.Security.Cryptography.MD5.Create())
+            {
+                //now calculate the value, but first lower all string elements to avoid wrong results for the non "case sensitive" windows system
+                return md5.ComputeHash(Encoding.UTF8.GetBytes(filename.ToLower()));
+            }
+        }
         //show the save database dialog and save the database
         private void SaveDatabaseButton_Click(object sender, EventArgs e)
         {
@@ -293,8 +318,18 @@ namespace RelhaxModpack
             if (SaveDatabaseDialog.ShowDialog() == DialogResult.Cancel)
                 return;
             DatabaseLocation = SaveDatabaseDialog.FileName;
+            if (Utils.CompareByteArray(DatabaseLocationMD5Hash, GetDatabaseLocationMD5Hash(DatabaseLocation)))
+            {
+                if (!Utils.CompareByteArray(LoadedDatabaseMD5Hash, GetDatabaseMD5Hash(DatabaseLocation)))
+                {
+                    if (MessageBox.Show("The database file has already been changed since the last loading!\n\nContinue SAVING and OVERWRITE all changes of the file?", "CRITICAL", MessageBoxButtons.OKCancel, MessageBoxIcon.Stop) == DialogResult.Cancel) return;
+                }
+            }
             XMLUtils.SaveDatabase(DatabaseLocation, Settings.TanksVersion, Settings.TanksOnlineFolderVersion, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList);
             UnsavedModifications = false;
+            //Save this key data for later queries and comparisons 
+            LoadedDatabaseMD5Hash = GetDatabaseMD5Hash(DatabaseLocation);
+            DatabaseLocationMD5Hash = GetDatabaseLocationMD5Hash(DatabaseLocation);
         }
         //Apply all changes from the form
         private void ApplyChangesButton_Click(object sender, EventArgs e)
