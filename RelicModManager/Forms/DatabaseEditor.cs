@@ -70,7 +70,7 @@ namespace RelhaxModpack
                     Program.editorDatabaseFile = "";
                     Program.editorAutoLoad = false;
                 }
-                Logging.Manager("Auto load xml file" + Program.editorDatabaseFile);
+                Logging.Manager("Auto load xml file: " + Program.editorDatabaseFile);
                 DatabaseLocation = Path.Combine(Application.StartupPath, Program.editorDatabaseFile);
                 LoadDatabase();
             }
