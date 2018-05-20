@@ -2420,7 +2420,6 @@ namespace RelhaxModpack
             }
 
             string MapFile = Path.Combine(args.tempAltasPresentDirectory, args.mapFile);
-            //Installer.args.currentFile = Path.GetFileNameWithoutExtension(args.atlasFile);
 
             if (!File.Exists(MapFile))
             {
@@ -2428,13 +2427,8 @@ namespace RelhaxModpack
                 return;
             }
 
-            //if (Directory.Exists(workingFolder))
-            //    Directory.Delete(workingFolder, true);
-            //Directory.CreateDirectory(workingFolder);
-
             Bitmap atlasImage = new Bitmap(ImageFile);
             Bitmap CroppedImage = null;
-            //List<Texture> textureList = new List<Texture>();
             try
             {
                 try
