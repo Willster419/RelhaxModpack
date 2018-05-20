@@ -47,7 +47,7 @@
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -117,6 +117,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AtlasesCreator\Exporters\DdsImageExporter.cs" />
     <Compile Include="AtlasesCreator\Importers\BmpImageImporter.cs" />
     <Compile Include="AtlasesCreator\Importers\DdsImageImporter.cs" />
     <Compile Include="AtlasesCreator\Importers\DDSReader\DDS.cs" />
