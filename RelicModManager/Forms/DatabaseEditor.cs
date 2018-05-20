@@ -325,6 +325,7 @@ namespace RelhaxModpack
                 if (!Utils.CompareByteArray(LoadedDatabaseMD5Hash, GetDatabaseMD5Hash(DatabaseLocation)))
                 {
                     if (MessageBox.Show("The database file has already been changed since the last loading!\n\nContinue SAVING and OVERWRITE all changes of the file?", "CRITICAL", MessageBoxButtons.OKCancel, MessageBoxIcon.Stop) == DialogResult.Cancel) return;
+                    Logging.Manager(string.Format("Database file '{0}' was overwritten by user against MD5 check-result-warning (MD5 file overwritten: {1})", DatabaseLocation, Utils.ConvertByteArrayToString(GetDatabaseMD5Hash(DatabaseLocation))));
                 }
             }
             XMLUtils.SaveDatabase(DatabaseLocation, Settings.TanksVersion, Settings.TanksOnlineFolderVersion, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList);
