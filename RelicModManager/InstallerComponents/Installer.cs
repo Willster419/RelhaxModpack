@@ -2335,7 +2335,12 @@ namespace RelhaxModpack
                     {
                         File.SetAttributes(r, FileAttributes.Normal);
                         //get every png file in the folder
-                        FileInfo[] fi = new DirectoryInfo(r).GetFiles(@"*.png", SearchOption.TopDirectoryOnly);
+                        // FileInfo[] fi = new DirectoryInfo(r).GetFiles(@"*.png", SearchOption.TopDirectoryOnly);
+                        //get every image file in the folder (i bet, this could done be faster!)
+                        FileInfo[] fi = new string[] { "*.jpg", "*.png", "*.bmp", "*.gif" }
+                            .SelectMany(i => new DirectoryInfo(r).GetFiles(i, SearchOption.TopDirectoryOnly))
+                            .ToArray();
+
                         foreach (FileInfo f in fi)
                         {
                             //collectiveList.Add(Path.Combine(r, f.Name));
@@ -2403,6 +2408,14 @@ namespace RelhaxModpack
             return textureList;
         }
 
+        private static IEnumerable<FileInfo> GetFilesByExtensions(DirectoryInfo dir, params string[] extensions)
+        {
+            if (extensions == null)
+                throw new ArgumentNullException("extensions");
+            IEnumerable<FileInfo> files = dir.EnumerateFiles();
+            return files.Where(f => extensions.Contains(f.Extension));
+        }
+
         private void ExtractAtlases_run(Atlas args)
         {
             Logging.Manager("extracting Atlas: " + args.atlasFile);
@@ -2413,9 +2426,32 @@ namespace RelhaxModpack
             string ImageFile = Path.Combine(args.tempAltasPresentDirectory, args.atlasFile);
             //string workingFolder = Path.Combine(Application.StartupPath, "RelHaxTemp", Path.GetFileNameWithoutExtension(ImageFile));
 
+            // make sure we have our list of importers
+            AtlasesCreator.Importers.Load();
+
+            // try to find matching importers
+            AtlasesCreator.IImageImporter imageImporter = null;
+
             if (!File.Exists(ImageFile))
             {
                 Logging.Manager("ERROR. Atlas file not found: " + ImageFile);
+                return;
+            }
+
+            // checked if fileformat is supported
+            string imageExtension = Path.GetExtension(ImageFile).Substring(1).ToLower();
+            foreach (var importer in AtlasesCreator.Importers.ImageImporters)
+            {
+                if (importer.ImageExtension.ToLower() == imageExtension)
+                {
+                    imageImporter = importer;
+                    break;
+                }
+            }
+
+            if (imageImporter == null)
+            {
+                Logging.Manager(string.Format("Failed to find image importers for specified image type: {0}", ImageFile));
                 return;
             }
 
@@ -2427,7 +2463,20 @@ namespace RelhaxModpack
                 return;
             }
 
-            Bitmap atlasImage = new Bitmap(ImageFile);
+            // Bitmap atlasImage = new Bitmap(ImageFile);
+            Bitmap atlasImage = null;
+
+            try
+            {
+                // Load bitmap with the propper importer
+                atlasImage = (Bitmap)imageImporter.Load(ImageFile);
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("ExtractAtlases_run", "imageImporter: " + ImageFile, ex);
+                return;
+            }
+
             Bitmap CroppedImage = null;
             try
             {
@@ -2474,7 +2523,6 @@ namespace RelhaxModpack
                                     Utils.ExceptionLog("ExtractAtlases_run", "switch", ex);
                                 }
                             }
-                            //textureList.Add(t);
                             args.TextureList.Add(t);
                         }
                         catch (Exception ex)
@@ -2489,7 +2537,6 @@ namespace RelhaxModpack
                 }
                 Logging.Manager("Parsed Textures for " + args.atlasFile + ": " + args.TextureList.Count);
 
-                //Installer.args.ChildTotalToProcess = args.TextureList.Count;
                 PixelFormat pixelFormat = atlasImage.PixelFormat;
                 int c = 0;
                 foreach (Texture t in args.TextureList)
@@ -2505,9 +2552,6 @@ namespace RelhaxModpack
                         //why save to disk when you can save to memory?
                         //CroppedImage.Save(Path.Combine(workingFolder, t.name + ".png"), ImageFormat.Png);
                         t.AtlasImage = new Bitmap(CroppedImage);
-                        //Installer.args.ChildProcessed = c++;
-                        //Installer.args.currentSubFile = t.name;
-                        //InstallWorker.ReportProgress(0);
                         c++;
                     }
                     catch (Exception ex)
@@ -2521,10 +2565,8 @@ namespace RelhaxModpack
             {
                 ImageFile = null;
                 MapFile = null;
-                //textureList = null;
                 atlasImage.Dispose();
                 CroppedImage.Dispose();
-                //stopWatch.Stop();
                 sw.Stop();
             }
             Logging.Manager("Extraction for " + args.atlasFile + " completed in " + sw.Elapsed.TotalSeconds.ToString("N3", System.Globalization.CultureInfo.InvariantCulture) + " seconds.");
@@ -2757,8 +2799,8 @@ namespace RelhaxModpack
                             else
                                 sb.Append(zip[i].FileName +"\n");
                                 */
-                        }
-                        zip.ExtractProgress += Zip_ExtractProgress;
+        }
+        zip.ExtractProgress += Zip_ExtractProgress;
                         //zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
                         //NEED TO TEST
                         string completePath = "";
