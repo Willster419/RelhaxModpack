@@ -117,6 +117,10 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AtlasesCreator\DDSReader\DDSImage.cs" />
+    <Compile Include="AtlasesCreator\DDSReader\Decompressor.cs" />
+    <Compile Include="AtlasesCreator\DDSReader\Utils.cs" />
+    <Compile Include="AtlasesCreator\DDSReader\DDS.cs" />
     <Compile Include="DatabaseComponents\PackageComparer.cs" />
     <Compile Include="Forms\AddPicturesZip.cs">
       <SubType>Form</SubType>
