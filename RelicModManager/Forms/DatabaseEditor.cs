@@ -318,8 +318,10 @@ namespace RelhaxModpack
             if (SaveDatabaseDialog.ShowDialog() == DialogResult.Cancel)
                 return;
             DatabaseLocation = SaveDatabaseDialog.FileName;
+            //Is the current selected database file, the same file that was selected at loading? If "yes", go to the next check
             if (Utils.CompareByteArray(DatabaseLocationMD5Hash, GetDatabaseLocationMD5Hash(DatabaseLocation)))
             {
+                //If the currently selected database file does not have the same MD5 value as at the time of loading, display the warning message. 
                 if (!Utils.CompareByteArray(LoadedDatabaseMD5Hash, GetDatabaseMD5Hash(DatabaseLocation)))
                 {
                     if (MessageBox.Show("The database file has already been changed since the last loading!\n\nContinue SAVING and OVERWRITE all changes of the file?", "CRITICAL", MessageBoxButtons.OKCancel, MessageBoxIcon.Stop) == DialogResult.Cancel) return;
