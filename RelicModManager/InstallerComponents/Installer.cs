@@ -570,6 +570,7 @@ namespace RelhaxModpack
             InstallWorker.ReportProgress(0);
 
             //backup old uninstall log file
+            Logging.Manager("backing up old uninstall log file",true);
             string logFile = Path.Combine(TanksLocation, "logs", "uninstallRelhaxFiles.log");
             if (File.Exists(logFile))
             {
@@ -579,12 +580,14 @@ namespace RelhaxModpack
             }
 
             //create the uninstall log
+            Logging.Manager("creating uninstall log file", true);
             TextWriter tw = new StreamWriter(logFile);
             tw.WriteLine(string.Format(@"/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */", DateTime.Now));
             tw.WriteLine(@"/*  files and folders deleted  */");
 
             //delete all files and folders from the lists (not shortcuts)
-            foreach(string file in totalFiles)
+            Logging.Manager("deleting files and folders from totalFiles list", true);
+            foreach (string file in totalFiles)
             {
                 args.currentFile = file;
                 File.SetAttributes(file, FileAttributes.Normal);
@@ -598,48 +601,62 @@ namespace RelhaxModpack
             }
             else
             {
-                foreach(string shortcut in totalShortcuts)
+                Logging.Manager("Settings.CreateShortcuts false, deleting totalShortcuts", true);
+                foreach (string shortcut in totalShortcuts)
                 {
-                    File.SetAttributes(shortcut, FileAttributes.Normal);
-                    File.Delete(shortcut);
+                    int retry = 3;
+                    while(retry > 0)
+                    {
+                        try
+                        {
+                            File.SetAttributes(shortcut, FileAttributes.Normal);
+                            File.Delete(shortcut);
+                            retry = 0;
+                        }
+                        catch
+                        {
+                            Logging.Manager(string.Format("EXCEPTION CAUGHT at deleting shortcuts, user prolly has the window open, retry={0}, trying again in 100ms...",retry--));
+                            System.Threading.Thread.Sleep(100);
+                        }
+                    }
                     tw.WriteLine(shortcut);
                 }
             }
+            Logging.Manager("deleting leftover folders", true);
             foreach (string folder in totalFolders)
             {
                 if (Directory.GetFiles(folder).Count() == 0 && Directory.GetDirectories(folder).Count() == 0)
                 {
                     args.currentFile = folder;
-                    Directory.Delete(folder);
+                    //Directory.Delete(folder);
+                    DirectoryDeleteNoProgress(folder, false);
                     InstallWorker.ReportProgress(args.ChildProcessed++);
                     tw.WriteLine(folder);
                 }
             }
             //wipe the final directories
+            Logging.Manager("wiping res_mods", true);
             if (Directory.Exists(Path.Combine(TanksLocation, "res_mods")))
             {
-                Directory.Delete(Path.Combine(TanksLocation, "res_mods"), true);
+                //Directory.Delete(Path.Combine(TanksLocation, "res_mods"), true);
+                DirectoryDeleteNoProgress(Path.Combine(TanksLocation, "res_mods"),true);
                 Directory.CreateDirectory(Path.Combine(TanksLocation, "res_mods"));
             }
             tw.WriteLine("res_mods wiped");
+            Logging.Manager("wiping mods", true);
             if (Directory.Exists(Path.Combine(TanksLocation, "mods")))
             {
-                Directory.Delete(Path.Combine(TanksLocation, "mods"), true);
+                //Directory.Delete(Path.Combine(TanksLocation, "mods"), true);
+                DirectoryDeleteNoProgress(Path.Combine(TanksLocation, "mods"),true);
                 Directory.CreateDirectory(Path.Combine(TanksLocation, "mods"));
             }
             tw.WriteLine("mods wiped");
             tw.Close();
-            try       // if the delete will raise an exception, it will be ignored
-            {
-                if (File.Exists(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak")))
-                    File.Delete(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak"));
-                if (File.Exists(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log")))
-                    File.Move(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"), Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak"));
-            }
-            catch (Exception ex)
-            {
-                Utils.ExceptionLog("UninstallMods", "Delete installedRelhaxFiles.log.bak", ex);
-            }
+            Logging.Manager("deleting old relhaxinstalledfileslog stuffs", true);
+            if (File.Exists(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak")))
+                File.Delete(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak"));
+            if (File.Exists(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log")))
+                File.Move(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"), Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak"));
         }
 
         //Step 3: Delete all mods
@@ -2660,6 +2677,26 @@ namespace RelhaxModpack
                 {
                     string temppath = Path.Combine(destDirName, subdir.Name);
                     _DirectoryMove(subdir.FullName, temppath, copySubDirs,overwrite,reportProgress);
+                }
+            }
+        }
+
+        //uses the build in microsoft Directory.Delete, but attemps to itterate multiple times in case the user is in the directory
+        private void DirectoryDeleteNoProgress(string sourceDir, bool recursive)
+        {
+            int num_retries = 3;
+            while(num_retries > 0)
+            {
+                try
+                {
+                    Directory.Delete(sourceDir, recursive);
+                    num_retries = 0;
+                }
+                catch(Exception e)
+                {
+                    Utils.ExceptionLog(e);
+                    Logging.Manager("DirectoryDeleteNoProgerss EXCEPTION CAUGHT, trying again in 100ms, num_retries=" + num_retries--, true);
+                    System.Threading.Thread.Sleep(100);
                 }
             }
         }

@@ -1600,6 +1600,15 @@ namespace RelhaxModpack
                     p = null;
                     GC.Collect();
                 }
+                //if it's the default view, focus the right clicked component
+                if(Settings.SView == Settings.SelectionView.Default)
+                {
+                    if(ipc is Control ctrl)
+                    {
+                        Logging.Manager("right click in legacy view, focus the control before showing preview...", true);
+                        ctrl.Focus();
+                    }
+                }
                 p = new Preview()
                 {
                     LastUpdated = LastUpdated,
@@ -1609,12 +1618,11 @@ namespace RelhaxModpack
                 p.Show();
                 if(Settings.SView == Settings.SelectionView.Legacy)
                 {
-                    if (Program.Version == Program.ProgramVersion.Alpha)
-                        Logging.Manager(string.Format("DEBUG: from ModSelectionList: Legacy view, p.ContainsFocus={0}", p.ContainsFocus));
+                    Logging.Manager(string.Format("from ModSelectionList: Legacy view, p.ContainsFocus={0}", p.ContainsFocus),true);
                 }
             }
         }
-        
+        //Handler for allowing right click of disabled mods (default)
         private void DisabledComponent_MouseDown(object sender, MouseEventArgs e)
         {
             if (LoadingConfig)
@@ -1629,7 +1637,7 @@ namespace RelhaxModpack
             }
         }
         
-        //Handler for allowing right click of disabled mods
+        //Handler for allowing right click of disabled mods (WPF)
         private void Lsl_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (LoadingConfig)
