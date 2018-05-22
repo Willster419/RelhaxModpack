@@ -516,10 +516,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\FreeImage32.dll" />
-    <EmbeddedResource Include="Resources\nvtt32.dll" />
-    <EmbeddedResource Include="Resources\TeximpNet.dll" />
-    <EmbeddedResource Include="Resources\TeximpNet.xml" />
     <EmbeddedResource Include="Resources\DotNetZip.dll" />
     <Content Include="3rdPartyLicences\NAudio.txt" />
     <Content Include="3rdPartyLicences\SpriteSheetPacker.txt" />
