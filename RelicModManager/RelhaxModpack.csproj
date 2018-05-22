@@ -35,6 +35,8 @@
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -113,6 +115,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="TeximpNet, Version=1.3.0.0, Culture=neutral, PublicKeyToken=7c35138f0d61254b, processorArchitecture=MSIL">
+      <HintPath>..\packages\TeximpNet.1.3.0\lib\net40\TeximpNet.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
@@ -474,6 +479,7 @@
     <EmbeddedResource Include="Forms\ViewUpdates.resx">
       <DependentUpon>ViewUpdates.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\app.config" />
     <None Include="Properties\packages.config" />
     <None Include="Properties\app.manifest" />
@@ -510,6 +516,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\FreeImage32.dll" />
+    <EmbeddedResource Include="Resources\nvtt32.dll" />
+    <EmbeddedResource Include="Resources\TeximpNet.dll" />
+    <EmbeddedResource Include="Resources\TeximpNet.xml" />
     <EmbeddedResource Include="Resources\DotNetZip.dll" />
     <Content Include="3rdPartyLicences\NAudio.txt" />
     <Content Include="3rdPartyLicences\SpriteSheetPacker.txt" />
@@ -557,6 +567,13 @@ echo     } &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
 echo } &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
 </PreBuildEvent>
   </PropertyGroup>
+  <Import Project="..\packages\TeximpNet.1.3.0\build\TeximpNet.targets" Condition="Exists('..\packages\TeximpNet.1.3.0\build\TeximpNet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Dieses Projekt verweist auf mindestens ein NuGet-Paket, das auf diesem Computer fehlt. Verwenden Sie die Wiederherstellung von NuGet-Paketen, um die fehlenden Dateien herunterzuladen. Weitere Informationen finden Sie unter "http://go.microsoft.com/fwlink/?LinkID=322105". Die fehlende Datei ist "{0}".</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\TeximpNet.1.3.0\build\TeximpNet.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\TeximpNet.1.3.0\build\TeximpNet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
