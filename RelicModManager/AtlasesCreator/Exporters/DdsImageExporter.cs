@@ -15,6 +15,18 @@ namespace RelhaxModpack.AtlasesCreator
 
         public void Save(string filename, Bitmap image)
         {
+            image.Save(Path.ChangeExtension(filename, ".png"), System.Drawing.Imaging.ImageFormat.Png);
+
+            Logging.Manager("The code to create DDS images is not integrated, so a PNG image is generated instead.");
+
+            /*
+            libaries needed to make this code work:
+            FreeImage32.dll
+            FreeImage64.dll
+            nvtt32.dll
+            nvtt64.dll
+            TeximpNet.dll
+            TeximpNet.xml
 
             try
             {
@@ -57,6 +69,7 @@ namespace RelhaxModpack.AtlasesCreator
             {
                 image.Dispose();
             }
+            */
         }
     }
 }
