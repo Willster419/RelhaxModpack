@@ -31,11 +31,11 @@ using System.IO;
 namespace RelhaxModpack.AtlasesCreator
 {
     // writes out an XML file ready to be put into a Wargaming Atlases folder.
-    public class XmlWGMapExporter : IMapExporter
+    public class WgXmlMapExporter : IMapExporter
     {
         public string MapExtension
         {
-            get { return "xml"; }
+            get { return "WgXml"; }
         }
 
         public void Save(string filename, Dictionary<string, Rectangle> map)
