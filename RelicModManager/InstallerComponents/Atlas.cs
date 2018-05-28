@@ -8,15 +8,15 @@ namespace RelhaxModpack
     public class Atlas
     {
         //a single string with the filename of the processingNativeFile (needed for tracing work instructions after installation)
-        public string nativeProcessingFile { get; set; } = "";
+        public string NativeProcessingFile { get; set; } = "";
         //the actual name of the original file before processed
-        public string actualPatchName { get; set; } = "";
+        public string ActualPatchName { get; set; } = "";
         // path and name to the package file
-        public string pkg { get; set; } = "";
+        public string Pkg { get; set; } = "";
         // fileName of the atlas file to extract
-        public string atlasFile { get; set; } = "";
+        public string AtlasFile { get; set; } = "";
         // fileName of the atlas map file to extract
-        public string mapFile { get; set; } = "";
+        public string MapFile { get; set; } = "";
         // path inside the pkg file to the filename to process
         public string directoryInArchive { get; set; } = "";
         // path to atlas file outside the archive (after extraction located here)
@@ -48,12 +48,12 @@ namespace RelhaxModpack
         //for the tostring thing
         public override string ToString()
         {
-            return string.Format("nativeProcessingFile: {0}\nactualPatchName: {1}\npkg: {2}\ndirectoryInArchive: {3}\natlasFile: {4}\natlasSaveDirectory: {5}\naltas width: {6}\naltas hight: {7}\npadding: {8}\npowOf2: {9}\nsquare: {10}\nfastImagePacker: {11}\ngenerateMap: {12}\nMapTypeName: {13}\nimageFolderList: {14}",
-                nativeProcessingFile.Equals("") ? "(empty)" : nativeProcessingFile,
-                actualPatchName.Equals("") ? "(empty)" : actualPatchName,
-                pkg.Equals("") ? "(empty)" : pkg,
+            return string.Format("NativeProcessingFile: {0}\nActualPatchName: {1}\nPkg: {2}\ndirectoryInArchive: {3}\nAtlasFile: {4}\natlasSaveDirectory: {5}\naltas width: {6}\naltas hight: {7}\npadding: {8}\npowOf2: {9}\nsquare: {10}\nfastImagePacker: {11}\ngenerateMap: {12}\nMapTypeName: {13}\nimageFolderList: {14}",
+                NativeProcessingFile.Equals("") ? "(empty)" : NativeProcessingFile,
+                ActualPatchName.Equals("") ? "(empty)" : ActualPatchName,
+                Pkg.Equals("") ? "(empty)" : Pkg,
                 directoryInArchive.Equals("") ? "(empty)" : directoryInArchive,
-                atlasFile.Equals("") ? "(empty)" : atlasFile,
+                AtlasFile.Equals("") ? "(empty)" : AtlasFile,
                 atlasSaveDirectory.Equals("") ? "(empty)" : atlasSaveDirectory,
                 atlasWidth == 0 ? "(empty)" : "" + atlasWidth,
                 atlasHeight == 0 ? "(empty)" : "" + atlasHeight,

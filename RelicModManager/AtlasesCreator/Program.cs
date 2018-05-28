@@ -72,14 +72,14 @@ namespace RelhaxModpack.AtlasesCreator
             if (result != 0)
                 ShowBuildError("Error packing images: " + SpaceErrorCode((FailCode)result));
             else
-                Logging.Installer("Build for " + Path.GetFileName(args.atlasFile) + " completed in " + sw.Elapsed.TotalSeconds.ToString("N3", System.Globalization.CultureInfo.InvariantCulture) + " seconds.");
+                Logging.Installer("Build for " + Path.GetFileName(args.AtlasFile) + " completed in " + sw.Elapsed.TotalSeconds.ToString("N3", System.Globalization.CultureInfo.InvariantCulture) + " seconds.");
             return;
         }
 
         // private static int Launch(AtlasesArgs args)
         private static int Launch(Atlas args)
         {
-            if (args.atlasFile.Equals(""))
+            if (args.AtlasFile.Equals(""))
             {
                 return (int)FailCode.FailedParsingArguments;
             }
@@ -92,7 +92,7 @@ namespace RelhaxModpack.AtlasesCreator
                 IImageExporter imageExporter = null;
                 IMapExporter mapExporter = null;
 
-                string imageExtension = Path.GetExtension(args.atlasFile).Substring(1).ToLower();
+                string imageExtension = Path.GetExtension(args.AtlasFile).Substring(1).ToLower();
                 foreach (var exporter in Exporters.ImageExporters)
                 {
                     if (exporter.ImageExtension.ToLower() == imageExtension)
@@ -108,9 +108,9 @@ namespace RelhaxModpack.AtlasesCreator
                     return (int)FailCode.ImageExporter;
                 }
 
-                if (!string.IsNullOrEmpty(args.mapFile))
+                if (!string.IsNullOrEmpty(args.MapFile))
                 {
-                    string mapExtension = Path.GetExtension(args.mapFile).Substring(1).ToLower();
+                    string mapExtension = Path.GetExtension(args.MapFile).Substring(1).ToLower();
                     foreach (var exporter in Exporters.MapExporters)
                     {
                         if (exporter.MapExtension.ToLower() == Atlas.MapTypeName(args.mapType).ToLower())
@@ -171,19 +171,19 @@ namespace RelhaxModpack.AtlasesCreator
                 }
                 else
                 {
-                    Logging.Manager(string.Format("Packing '{0}' to {1} x {2} pixel", Path.GetFileName(args.atlasFile), outputImage.Height, outputImage.Width));
+                    Logging.Manager(string.Format("Packing '{0}' to {1} x {2} pixel", Path.GetFileName(args.AtlasFile), outputImage.Height, outputImage.Width));
                 }
 
                 // try to save using our exporters
                 try
                 {
-                    if (File.Exists(args.atlasFile))
-                        File.Delete(args.atlasFile);
-                    imageExporter.Save(args.atlasFile, outputImage);
+                    if (File.Exists(args.AtlasFile))
+                        File.Delete(args.AtlasFile);
+                    imageExporter.Save(args.AtlasFile, outputImage);
                     // Utils.AppendToInstallLog(@"/*  created Atlases  */");
                     // Utils.AppendToInstallLog(args.ImageFile);
                     Logging.InstallerGroup("created Atlases");         // write comment
-                    Logging.Installer(Utils.ReplaceDirectorySeparatorChar(args.atlasFile));                 // write created filename with path
+                    Logging.Installer(Utils.ReplaceDirectorySeparatorChar(args.AtlasFile));                 // write created filename with path
                 }
                 catch (Exception e)
                 {
@@ -195,10 +195,10 @@ namespace RelhaxModpack.AtlasesCreator
                 {
                     try
                     {
-                        if (File.Exists(args.mapFile))
-                            File.Delete(args.mapFile);
-                        mapExporter.Save(args.mapFile, outputMap);
-                        Logging.Installer(Utils.ReplaceDirectorySeparatorChar(args.mapFile));                 // write created filename with path
+                        if (File.Exists(args.MapFile))
+                            File.Delete(args.MapFile);
+                        mapExporter.Save(args.MapFile, outputMap);
+                        Logging.Installer(Utils.ReplaceDirectorySeparatorChar(args.MapFile));                 // write created filename with path
                     }
                     catch (Exception e)
                     {
