@@ -53,7 +53,7 @@ namespace RelhaxModpack.AtlasesCreator
     {
         private static readonly Stopwatch stopWatch = new Stopwatch();
 
-        public static void Run(AtlasesArgs args)
+        public static void Run(Atlas args)
         {
             Stopwatch sw = new Stopwatch();
             sw.Reset();
@@ -72,13 +72,14 @@ namespace RelhaxModpack.AtlasesCreator
             if (result != 0)
                 ShowBuildError("Error packing images: " + SpaceErrorCode((FailCode)result));
             else
-                Logging.Manager("Build for " + Path.GetFileName(args.ImageFile) + " completed in " + sw.Elapsed.TotalSeconds.ToString("N3", System.Globalization.CultureInfo.InvariantCulture) + " seconds.");
+                Logging.Installer("Build for " + Path.GetFileName(args.atlasFile) + " completed in " + sw.Elapsed.TotalSeconds.ToString("N3", System.Globalization.CultureInfo.InvariantCulture) + " seconds.");
             return;
         }
 
-        private static int Launch(AtlasesArgs args)
+        // private static int Launch(AtlasesArgs args)
+        private static int Launch(Atlas args)
         {
-            if (args.ImageFile.Equals(""))
+            if (args.atlasFile.Equals(""))
             {
                 return (int)FailCode.FailedParsingArguments;
             }
@@ -91,7 +92,7 @@ namespace RelhaxModpack.AtlasesCreator
                 IImageExporter imageExporter = null;
                 IMapExporter mapExporter = null;
 
-                string imageExtension = Path.GetExtension(args.ImageFile).Substring(1).ToLower();
+                string imageExtension = Path.GetExtension(args.atlasFile).Substring(1).ToLower();
                 foreach (var exporter in Exporters.ImageExporters)
                 {
                     if (exporter.ImageExtension.ToLower() == imageExtension)
@@ -107,12 +108,12 @@ namespace RelhaxModpack.AtlasesCreator
                     return (int)FailCode.ImageExporter;
                 }
 
-                if (!string.IsNullOrEmpty(args.MapFile))
+                if (!string.IsNullOrEmpty(args.mapFile))
                 {
-                    string mapExtension = Path.GetExtension(args.MapFile).Substring(1).ToLower();
+                    string mapExtension = Path.GetExtension(args.mapFile).Substring(1).ToLower();
                     foreach (var exporter in Exporters.MapExporters)
                     {
-                        if (exporter.MapExtension.ToLower() == mapExtension)
+                        if (exporter.MapExtension.ToLower() == Atlas.MapTypeName(args.mapType).ToLower())
                         {
                             mapExporter = exporter;
                             break;
@@ -127,7 +128,7 @@ namespace RelhaxModpack.AtlasesCreator
                 }
 
                 // make sure we found some images
-                if (args.Images.Count == 0)
+                if (args.TextureList.Count == 0)
                 {
                     Logging.Manager("No images to pack.");
                     return (int)FailCode.NoImages;
@@ -161,24 +162,28 @@ namespace RelhaxModpack.AtlasesCreator
                 Dictionary<string, Rectangle> outputMap;
 
                 // pack the image, generating a map only if desired
-                int result = imagePacker.PackImage(args.Images, args.PowOf2, args.Square, args.MaxWidth, args.MaxHeight, args.Padding, mapExporter != null, out Bitmap outputImage, out outputMap);
+                int result = imagePacker.PackImage(args.TextureList, args.powOf2, args.square, args.fastImagePacker, args.atlasWidth, args.atlasHeight, args.padding, mapExporter != null, out Bitmap outputImage, out outputMap);
                 if (result != 0)
                 {
                     Logging.Manager("There was an error making the image sheet.");
                     //error result 7 = "failed to pack image" most likely it won't fit
                     return result;
                 }
+                else
+                {
+                    Logging.Manager(string.Format("Packing '{0}' to {1} x {2} pixel", Path.GetFileName(args.atlasFile), outputImage.Height, outputImage.Width));
+                }
 
                 // try to save using our exporters
                 try
                 {
-                    if (File.Exists(args.ImageFile))
-                        File.Delete(args.ImageFile);
-                    imageExporter.Save(args.ImageFile, outputImage);
+                    if (File.Exists(args.atlasFile))
+                        File.Delete(args.atlasFile);
+                    imageExporter.Save(args.atlasFile, outputImage);
                     // Utils.AppendToInstallLog(@"/*  created Atlases  */");
                     // Utils.AppendToInstallLog(args.ImageFile);
                     Logging.InstallerGroup("created Atlases");         // write comment
-                    Logging.Installer(Utils.ReplaceDirectorySeparatorChar(args.ImageFile));                 // write created filename with path
+                    Logging.Installer(Utils.ReplaceDirectorySeparatorChar(args.atlasFile));                 // write created filename with path
                 }
                 catch (Exception e)
                 {
@@ -190,11 +195,10 @@ namespace RelhaxModpack.AtlasesCreator
                 {
                     try
                     {
-                        if (File.Exists(args.MapFile))
-                            File.Delete(args.MapFile);
-                        mapExporter.Save(args.MapFile, outputMap);
-                        // Utils.AppendToInstallLog(args.MapFile);
-                        Logging.Installer(Utils.ReplaceDirectorySeparatorChar(args.MapFile));                 // write created filename with path
+                        if (File.Exists(args.mapFile))
+                            File.Delete(args.mapFile);
+                        mapExporter.Save(args.mapFile, outputMap);
+                        Logging.Installer(Utils.ReplaceDirectorySeparatorChar(args.mapFile));                 // write created filename with path
                     }
                     catch (Exception e)
                     {
