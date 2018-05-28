@@ -26,13 +26,15 @@ namespace RelhaxModpack
         // width of the new atlases file
         public int atlasWidth { get; set; } = 0;   // -1 = get from original atlas file
         // hight of the new atlases file
-        public int atlasHight { get; set; } = 0;   // -1 = get from original atlas file
+        public int atlasHeight { get; set; } = 0;   // -1 = get from original atlas file
         // padding of the new atlases file
-        public int padding { get; set; } = 0;
+        public int padding { get; set; } = 1;
         // positioning optimation with PowOf2
         public State powOf2 { get; set; } = State.Null;
         // positioning optimation with Square
         public State square { get; set; } = State.Null;
+        // allow to accept first successfull image optimazion layout
+        public bool fastImagePacker { get; set; } = true;
         // generate map file
         public State generateMap { get; set; } = State.Null;
         // map file type
@@ -46,7 +48,7 @@ namespace RelhaxModpack
         //for the tostring thing
         public override string ToString()
         {
-            return string.Format("nativeProcessingFile: {0}\nactualPatchName: {1}\npkg: {2}\ndirectoryInArchive: {3}\natlasFile: {4}\natlasSaveDirectory: {5}\naltas width: {6}\naltas hight: {7}\npadding: {8}\npowOf2: {9}\nsquare: {10}\ngenerateMap: {11}\nMapTypeName: {12}\nimageFolderList: {13}",
+            return string.Format("nativeProcessingFile: {0}\nactualPatchName: {1}\npkg: {2}\ndirectoryInArchive: {3}\natlasFile: {4}\natlasSaveDirectory: {5}\naltas width: {6}\naltas hight: {7}\npadding: {8}\npowOf2: {9}\nsquare: {10}\nfastImagePacker: {11}\ngenerateMap: {12}\nMapTypeName: {13}\nimageFolderList: {14}",
                 nativeProcessingFile.Equals("") ? "(empty)" : nativeProcessingFile,
                 actualPatchName.Equals("") ? "(empty)" : actualPatchName,
                 pkg.Equals("") ? "(empty)" : pkg,
@@ -54,10 +56,11 @@ namespace RelhaxModpack
                 atlasFile.Equals("") ? "(empty)" : atlasFile,
                 atlasSaveDirectory.Equals("") ? "(empty)" : atlasSaveDirectory,
                 atlasWidth == 0 ? "(empty)" : "" + atlasWidth,
-                atlasHight == 0 ? "(empty)" : "" + atlasHight,
+                atlasHeight == 0 ? "(empty)" : "" + atlasHeight,
                 padding == 0 ? "(empty)" : "" + padding,
                 powOf2 == State.Null ? "(empty)" : powOf2 == State.True ? "True" : "False",
                 square == State.Null ? "(empty)" : square == State.True ? "True" : "False",
+                fastImagePacker ? "True" : "False",
                 generateMap == State.Null ? "(empty)" : generateMap == State.True ? "True" : "False",
                 mapType == MapType.None ? "(none selected)" : MapTypeName(mapType),
                 imageFolderList.Count == 0 ? "(empty)" : imageFolderList.ToString());
@@ -65,14 +68,14 @@ namespace RelhaxModpack
 
         public enum MapType
         {
-            WGXmlMap = 1,
+            WGXmlMap,
             XmlMap,
             TxtMap,
             IMap,
             None
         }
 
-        public string MapTypeName(MapType mt)
+        public static string MapTypeName(MapType mt)
         {
             switch (mt)
             {

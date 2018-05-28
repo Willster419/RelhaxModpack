@@ -140,8 +140,7 @@
     <Compile Include="Forms\AddPicturesZip.Designer.cs">
       <DependentUpon>AddPicturesZip.cs</DependentUpon>
     </Compile>
-    <Compile Include="AtlasesCreator\AtlasesArgs.cs" />
-    <Compile Include="AtlasesCreator\Exporters\XmlWGMapExporter.cs" />
+    <Compile Include="AtlasesCreator\Exporters\WgXmlMapExporter.cs" />
     <Compile Include="AtlasesCreator\Settings.cs" />
     <Compile Include="AtlasesCreator\Constants.cs" />
     <Compile Include="AtlasesCreator\Exporters\BmpImageExporter.cs" />
