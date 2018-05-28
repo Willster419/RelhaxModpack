@@ -1645,32 +1645,35 @@ namespace RelhaxModpack
             CreateAtlasesAsync(a);
         }
 
+        //Step 18: Create Atlases
         private void CreateAtlasesAsync(Atlas a)
         {
             ExtractAtlases_run(a);
             args.ChildProcessed++;
             InstallWorker.ReportProgress(0);
-            AtlasesCreator.AtlasesArgs atlasesArgs = new AtlasesCreator.AtlasesArgs
+            Atlas atlasesArgs = new Atlas
             {
-                MaxHeight = 4096,
-                ImageFile = Path.Combine(a.atlasSaveDirectory, a.atlasFile),
-                MapFile = Path.Combine(a.atlasSaveDirectory, a.mapFile),
-                PowOf2 = true,
-                Square = false,
-                GenerateMap = true,
-                Padding = 1
+                atlasHeight = a.atlasHeight,
+                atlasWidth = a.atlasWidth,
+                atlasFile = Path.Combine(a.atlasSaveDirectory, a.atlasFile),
+                mapFile = Path.Combine(a.atlasSaveDirectory, a.mapFile),
+                generateMap = a.generateMap,
+                mapType = a.mapType,
+                powOf2 = a.powOf2,
+                square = a.square,
+                fastImagePacker = a.fastImagePacker,
+                padding = a.padding
             };
 
             List<string> fl = new List<string>();
-            //fl.Add(a.workingFolder);
             fl.AddRange(a.imageFolderList);
 
             //temp to get working proof of concept
             //only pass in the same bitmaps
 
             //CHANGE THIS TO LIST OF TEXTURES WITH MODS
-            atlasesArgs.Images = ParseFilesForAtlasList(a.TextureList, fl.ToArray(), a.atlasFile);
-            //atlasesArgs.Images = a.TextureList;
+            atlasesArgs.TextureList = ParseFilesForAtlasList(a.TextureList, fl.ToArray(), a.atlasFile);
+
             AtlasesCreator.Program.Run(atlasesArgs);
             lock (lockerInstaller)
             {
@@ -1680,20 +1683,20 @@ namespace RelhaxModpack
             }
         }
 
-        //Step 18: Create Atlases
-        private void CreateAtlases()
+        private void depricated_CreateAtlases()
         {
             foreach (Atlas a in atlasesList)
             {
-                AtlasesCreator.AtlasesArgs atlasesArgs = new AtlasesCreator.AtlasesArgs
+                Atlas atlasesArgs = new Atlas
                 {
-                    MaxHeight = 2048,
-                    ImageFile = Path.Combine(a.atlasSaveDirectory, a.atlasFile),
-                    MapFile = Path.Combine(a.atlasSaveDirectory, a.mapFile),
-                    PowOf2 = true,
-                    Square = false,
-                    GenerateMap = true,
-                    Padding = 1
+                    atlasHeight = 2048,
+                    atlasFile = Path.Combine(a.atlasSaveDirectory, a.atlasFile),
+                    mapFile = Path.Combine(a.atlasSaveDirectory, a.mapFile),
+                    powOf2 = a.powOf2,
+                    square = a.square,
+                    generateMap = a.generateMap,
+                    fastImagePacker = a.fastImagePacker,
+                    padding = a.padding,
                 };
 
                 List<string> fl = new List<string>();
@@ -2134,6 +2137,37 @@ namespace RelhaxModpack
                                         break;
                                     case "atlasSaveDirectory":
                                         atlases.atlasSaveDirectory = Utils.ReplaceMacro(item.Value.ToString().Trim());
+                                        break;
+                                    case "atlasWidth":
+                                        atlases.atlasWidth = int.Parse(item.Value.ToString().Trim());
+                                        break;
+                                    case "atlasHeight":
+                                        atlases.atlasHeight = int.Parse(item.Value.ToString().Trim());
+                                        break;
+                                    case "padding":
+                                        atlases.padding = int.Parse(item.Value.ToString().Trim());
+                                        break;
+                                    case "powOf2":
+                                        atlases.powOf2 = Utils.ParseBool(item.Value, atlases.powOf2 == Atlas.State.True) ? Atlas.State.True : Atlas.State.False;
+                                        break;
+                                    case "square":
+                                        atlases.square = Utils.ParseBool(item.Value, atlases.square == Atlas.State.True) ? Atlas.State.True : Atlas.State.False;
+                                        break;
+                                    case "fastImagePacker":
+                                        atlases.fastImagePacker = Utils.ParseBool(item.Value, atlases.fastImagePacker);
+                                        break;
+                                    case "generateMap":
+                                        atlases.generateMap = Utils.ParseBool(item.Value, atlases.generateMap == Atlas.State.True) ? Atlas.State.True : Atlas.State.False;
+                                        break;
+                                    case "mapType":
+                                        foreach (Atlas.MapType mt in Enum.GetValues(typeof(Atlas.MapType)))
+                                        {
+                                            if (item.Value.ToLower().Trim() == Atlas.MapTypeName(mt).ToLower())
+                                            {
+                                                atlases.mapType = mt;
+                                                break;
+                                            }
+                                        }
                                         break;
                                     case "imageFolders":
                                         foreach (XElement image in item.Elements())
