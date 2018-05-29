@@ -26,7 +26,6 @@ namespace RelhaxModpack
         public List<LogicalDependency> LogicalDependencies;
         public List<SelectablePackage> CompleteModSearchList;
         private bool LoadingConfig = false;
-        private bool TaskBarHidden = false;
         public string TanksVersion { get; set; }
         public string TanksLocation { get; set; }
         public int MainWindowStartX { get; set; }
@@ -609,14 +608,6 @@ namespace RelhaxModpack
             //set label properties
             TanksVersionLabel.Text = TanksVersionLabel.Text + TanksVersion;
             TanksPath.Text = string.Format(Translations.getTranslatedString("InstallingTo"), TanksLocation);
-            //if the task bar was set to auto hide, set it to always on top
-            //it will be set back to auto hide when this window closes
-            Settings.AppBarStates currentState = Settings.GetTaskbarState();
-            if (currentState == Settings.AppBarStates.AutoHide)
-            {
-                TaskBarHidden = true;
-                Settings.SetTaskbarState(Settings.AppBarStates.AlwaysOnTop);
-            }
             //force a resize
             ModSelectionList_SizeChanged(null, null);
             if (Settings.SView == SelectionView.Default)
@@ -2367,9 +2358,6 @@ namespace RelhaxModpack
         //handler for when the close button is pressed
         private void ModSelectionList_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //put the taskbar back if we need to
-            if (TaskBarHidden)
-                Settings.SetTaskbarState(Settings.AppBarStates.AutoHide);
             //save wether the window was in fullscreen mode before closing
             //also only save the size if the window is normal
             switch (WindowState)
