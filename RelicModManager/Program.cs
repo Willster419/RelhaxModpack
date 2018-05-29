@@ -46,12 +46,44 @@ namespace RelhaxModpack
             Logging.Manager("Main Entry point launched");
             //loading embeded dlls from the application
             //https://www.codeproject.com/articles/528178/load-dll-from-embedded-resource
-            string resource1 = "RelhaxModpack.Resources.DotNetZip.dll";
-            string resource2 = "RelhaxModpack.Resources.Newtonsoft.Json.dll";
-            string resource3 = "RelhaxModpack.Resources.NAudio.dll";
-            EmbeddedAssembly.Load(resource1, "DotNetZip.dll");
-            EmbeddedAssembly.Load(resource2, "Newtonsoft.Json.dll");
-            EmbeddedAssembly.Load(resource3, "NAudio.dll");
+            string defaultResourcePath = "RelhaxModpack.Resources.";
+            string[] librariesMultiPlatform = new string[]
+            {
+                "DotNetZip.dll",
+                "Newtonsoft.Json.dll",
+                "NAudio.dll",
+                //"TeximpNet.dll"
+            };/*
+            string[] libraries32Platform = new string[]
+            {
+                "FreeImage32.dll",
+                "nvtt32.dll"
+            };
+            string[] libraries64Platform = new string[]
+            {
+                "FreeImage64.dll",
+                "nvtt64.dll"
+            };*/
+            //load multiplatform
+            foreach(string s in librariesMultiPlatform)
+            {
+                EmbeddedAssembly.Load(defaultResourcePath + s, s);
+            }
+            /*
+            if(Environment.Is64BitOperatingSystem)
+            {
+                foreach (string s in libraries64Platform)
+                {
+                    EmbeddedAssembly.Load(defaultResourcePath + s, s);
+                }
+            }
+            else
+            {
+                foreach (string s in libraries32Platform)
+                {
+                    EmbeddedAssembly.Load(defaultResourcePath + s, s);
+                }
+            }*/
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
             // delete RelicCopyUpdate.bat at start (it is only needed at updates, so kill it)
             try
