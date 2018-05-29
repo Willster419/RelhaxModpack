@@ -32,7 +32,7 @@ namespace RelhaxModpack
             updateQuestionLabel.Text = Translations.getTranslatedString(updateQuestionLabel.Name);
             problemsUpdatingLabel.Text = Translations.getTranslatedString(problemsUpdatingLabel.Name);
             clickHereUpdateLabel.Text = Translations.getTranslatedString(clickHereUpdateLabel.Name);
-            downloadedVersionInfo.Text = Program.betaApplication ? Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "releaseNotes_beta.txt") : Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "releaseNotes.txt");
+            downloadedVersionInfo.Text = Settings.BetaApplication ? Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "releaseNotes_beta.txt") : Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "releaseNotes.txt");
         }
 
         private void clickHereUpdateLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

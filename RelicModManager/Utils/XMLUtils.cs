@@ -72,7 +72,7 @@ namespace RelhaxModpack
                 {
                     Logging.Manager("loading dat config file");
                     string xmlString = Utils.GetStringFromZip(Settings.ModInfoDatFile, "modInfo.xml");
-                    if (!Program.betaDatabase && !Program.testMode)
+                    if (!Settings.BetaDatabase && !Program.testMode)
                     {
                         Settings.TanksOnlineFolderVersion = GetXMLElementAttributeFromString(xmlString, "//modInfoAlpha.xml/@onlineFolder");
                     }

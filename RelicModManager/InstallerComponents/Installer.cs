@@ -360,7 +360,7 @@ namespace RelhaxModpack
             //Step 18: CheckDatabase and delete outdated or no more needed files
             Logging.Manager("Installation CheckDatabase");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CheckDatabase;
-            if ((!Program.testMode) && (!Program.betaDatabase) && (Program.Version != Program.ProgramVersion.Alpha))
+            if ((!Program.testMode) && (!Settings.BetaDatabase) && (Program.Version != Program.ProgramVersion.Alpha))
                 checkForOldZipFiles();
             else
                 Logging.Manager("... skipped");

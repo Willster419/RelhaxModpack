@@ -155,7 +155,7 @@ namespace RelhaxModpack
                 }
                 Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(databaseURL, "//modInfoAlpha.xml/@onlineFolder");
             }
-            else if (Program.betaDatabase)
+            else if (Settings.BetaDatabase)
             {
                 Logging.Manager("downloading modInfo.dat (betaDatabase url)");
                 string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
@@ -1735,7 +1735,7 @@ namespace RelhaxModpack
             //create saved config xml layout
             XDocument doc = new XDocument(
                 new XDeclaration("1.0", "utf-8", "yes"),
-                new XElement("mods", new XAttribute("ver", Settings.ConfigFileVersion), new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")), new XAttribute("dbVersion", Program.betaDatabase ? "beta" : (String)Settings.DatabaseVersion)));
+                new XElement("mods", new XAttribute("ver", Settings.ConfigFileVersion), new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")), new XAttribute("dbVersion", Settings.BetaDatabase ? "beta" : (String)Settings.DatabaseVersion)));
 
             //relhax mods root
             doc.Element("mods").Add(new XElement("relhaxMods"));

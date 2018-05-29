@@ -346,10 +346,12 @@ namespace RelhaxModpack
                             UseAlternateUpdateMethod = bool.Parse(n.InnerText);
                             break;
                         case "BetaApplication":
-                            BetaApplication = bool.Parse(n.InnerText);
+                            if(!Program.betaAppSetFromCommandLine)
+                                BetaApplication = bool.Parse(n.InnerText);
                             break;
                         case "BetaDatabase":
-                            BetaDatabase = bool.Parse(n.InnerText);
+                            if(!Program.betaDBSetFromCommandLine)
+                                BetaDatabase = bool.Parse(n.InnerText);
                             break;
                     }
                 }

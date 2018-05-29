@@ -20,13 +20,13 @@ namespace RelhaxModpack
         public static bool ignoreResourseVersionFail = false;
         public static bool saveSettings = false;
         public static bool databaseUpdateOnline = false;
-        public static bool betaDatabase = false;
-        public static bool betaApplication = false;
         public static bool silentStart = false;
         public static bool forceVisible = false;
         public static bool forceEnabled = false;
         public static bool updateFileKey = false;
         public static bool editorAutoLoad = false;
+        public static bool betaAppSetFromCommandLine = false;
+        public static bool betaDBSetFromCommandLine = false;
         public static string updateKeyFile = "";
         public static string configName = "";
         public static string editorDatabaseFile = "";
@@ -94,12 +94,14 @@ namespace RelhaxModpack
                 else if (Regex.IsMatch(commandArgs[i], @"beta-database$"))
                 {
                     Logging.Manager("/beta-database detected, welcome beta tester");
-                    betaDatabase = true;
+                    Settings.BetaDatabase = true;
+                    betaDBSetFromCommandLine = true;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"beta-application"))
                 {
                     Logging.Manager("/beta-application detected, welcome beta tester");
-                    betaApplication = true;
+                    Settings.BetaApplication = true;
+                    betaAppSetFromCommandLine = true;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"silent-start"))
                 {

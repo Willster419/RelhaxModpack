@@ -332,7 +332,7 @@ namespace RelhaxModpack
                 Settings.DatabaseVersion = databaseVersion.Value;
                 //parse the manager version
                 
-                var applicationVersion = Program.betaApplication ? doc.XPathSelectElement("//version/manager_beta") : doc.XPathSelectElement("//version/manager");
+                var applicationVersion = Settings.BetaApplication ? doc.XPathSelectElement("//version/manager_beta") : doc.XPathSelectElement("//version/manager");
                 version = applicationVersion.Value;
                 Logging.Manager(string.Format("Local application is {0}, current online is {1}", ManagerVersion(), version));
 
@@ -377,9 +377,9 @@ namespace RelhaxModpack
                         //using new attemp at an update method. Application now downloads a zip file of itself, rather than an exe. Maybe it will help antivirus issues
                         string modpackExeURL = null;
                         if(Settings.UseAlternateUpdateMethod)
-                            modpackExeURL = Program.betaApplication ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.zip" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";
+                            modpackExeURL = Settings.BetaApplication ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.zip" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";
                         else
-                            modpackExeURL = Program.betaApplication ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.exe" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe";
+                            modpackExeURL = Settings.BetaApplication ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.exe" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe";
                         updater.DownloadFileAsync(new Uri(modpackExeURL), newExeName);
                         Logging.Manager("New application download started, UseAlternateUpdateMethod=" + Settings.UseAlternateUpdateMethod);
                         currentModDownloading = "update ";
@@ -787,7 +787,7 @@ namespace RelhaxModpack
             //apply text labels and custom command line properties
             ApplicationVersionLabel.Text = "Application v" + ManagerVersion();
             if (Program.testMode) this.Text = this.Text + " TEST MODE";
-            if (Program.betaDatabase) this.Text = this.Text + " (BETA DB)";
+            if (Settings.BetaDatabase) this.Text = this.Text + " (BETA DB)";
             if (Program.Version == Program.ProgramVersion.Beta) this.Text = this.Text + " (BETA APP)";
             if (Program.Version == Program.ProgramVersion.Alpha) this.Text = this.Text + " (ALPHA APP)";
             DatabaseVersionLabel.Text = Translations.getTranslatedString("DatabaseVersionLabel") + " v" + Settings.DatabaseVersion;
@@ -2740,7 +2740,7 @@ namespace RelhaxModpack
         {
             int xloc = this.Location.X + this.Size.Width + 10;
             int yloc = this.Location.Y;
-            using (ViewUpdates vu = new ViewUpdates(xloc, yloc, Settings.ManagerInfoDatFile, Program.betaApplication ? "releaseNotes_beta.txt" : "releaseNotes.txt"))
+            using (ViewUpdates vu = new ViewUpdates(xloc, yloc, Settings.ManagerInfoDatFile, Settings.BetaApplication ? "releaseNotes_beta.txt" : "releaseNotes.txt"))
             {
                 vu.ShowDialog();
             }

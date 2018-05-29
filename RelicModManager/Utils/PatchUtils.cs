@@ -410,7 +410,7 @@ namespace RelhaxModpack
             catch (JsonReaderException j)
             {
                 Logging.Manager(string.Format("JsonReader Exception: Failed to patch {0}, the file is not valid json (run test or beta application to get more details)", p.completePath));
-                if (Program.testMode || Program.betaApplication)
+                if (Program.testMode || Settings.BetaApplication)
                 {
                     //in test mode this is worthy of an EXCEPTION message
                     //throw new JsonReaderException(j.Message);
