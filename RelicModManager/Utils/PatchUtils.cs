@@ -837,7 +837,8 @@ namespace RelhaxModpack
             toWrite = toWrite.Replace(@"""[dollar]", @"$").Replace(@"[lbracket]", @"{").Replace(@"[quote]", @"""").Replace(@"[colon]",@":").Replace(@"[rbracket]""", @"}");
             File.WriteAllText(p.completePath, toWrite);
         }
-
+        #region old patching system to be replaced
+        //generic version of xvm patch (without bootfile)?
         public static void PMODPatch(Patch p, bool testMods = false, string testXVMBootLoc = "")
         {
             NumByteReads = 0;
@@ -861,7 +862,7 @@ namespace RelhaxModpack
             NumByteReads = 0;
             ReadInside(pathArray, p.completePath, p.replace, p.search, p.mode, p.path);
         }
-
+        //xvm version of xvm patch
         public static void XVMPatch(Patch p, bool testMods = false, string testXVMBootLoc = "")
         {
             NumByteReads = 0;
@@ -1528,6 +1529,7 @@ namespace RelhaxModpack
             }
             return temp;
         }
+        #endregion
         //returns the folder(s) to get to the xvm config folder directory
         public static string GetXVMBootLoc(string tanksLocation, string customBootFileLoc = null, bool writeToLog = true)
         {
