@@ -47,22 +47,51 @@ namespace RelhaxModpack
     #endregion
     public static class Settings
     {
-        ////general settings
-        //toggle if the program should notify the user if the database version is the same as the last installed version
+        //#region general settings
+        /// <summary>
+        /// toggle if the program should notify the user if the database version is the same as the last installed version
+        /// </summary>
         public static bool NotifyIfSameDatabase = false;
-        //toggle if the program will backup the current mod installation
+        /// <summary>
+        /// toggle if the program will backup the current mod installation
+        /// </summary>
         public static bool BackupModFolder = false;
-        //toggle if the program will clean the mods and res_mods folders before installation
+        /// <summary>
+        /// toggle if the program will clean the mods and res_mods folders before installation
+        /// </summary>
         public static bool CleanInstallation = true;
+        /// <summary>
+        /// toggle if the program should force the user to manually point to the WoT location
+        /// </summary>
         public static bool ForceManuel = false;
-        public static bool ExpandAllLegacy = false;
+        /// <summary>
+        /// toggle if the OMC legacy view options should be expanded by default
+        /// </summary>
+        public static bool ExpandAllLegacy = true;
+        /// <summary>
+        /// toggle if the OMC legacy V2 view options should be expanded by default
+        /// </summary>
         public static bool ExpandAllLegacy2 = false;
+        /// <summary>
+        /// toggle if comic sans font should be the default font. true=comic sans, false=microsoft sans serif (default in most applications)
+        /// </summary>
         public static bool ComicSans = false;
+        /// <summary>
+        /// flag for if it is the first time loading the application (determined if RelHaxSettings.xml exists or not)
+        /// </summary>
         public static bool FirstLoad = false;
+        /// <summary>
+        /// toggle if the application should automatically save the last selected config to also be automatically loaded upon selection load
+        /// </summary>
         public static bool SaveLastConfig = false;
+        /// <summary>
+        /// toggle if the application should save user cache save data like session stats, or auto equip configs
+        /// </summary>
         public static bool SaveUserData = false;
-        //toggle a dark UI for using the modpack at night.
-        //TODO: after wpf move, change this to allow any coloring settings
+        /// <summary>
+        /// toggle a dark UI for using the modpack at night.
+        /// TODO: after wpf move, change this to allow any coloring settings
+        /// </summary>
         public static bool DarkUI = false;
         //toggle for each view if the borders around the child selection options should show
         public static bool EnableBordersDefaultView = false;
@@ -93,27 +122,50 @@ namespace RelhaxModpack
         /// toggle for if the user wants to use the beta application (note it won't happen until application restart)
         /// </summary>
         public static bool BetaApplication = false;
-        //file and folder locations
-        public static string SettingsXmlFile = Path.Combine(Application.StartupPath, "RelHaxSettings.xml");
-        public static string RelhaxDownloadsFolder = Path.Combine(Application.StartupPath, "RelHaxDownloads");
-        public static string MD5HashDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "MD5HashDatabase.xml");
-        public static string OnlineDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "onlineDatabase.xml");
-        public static string RelhaxTempFolder = Path.Combine(Application.StartupPath, "RelHaxTemp");
-        public static string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, "managerInfo.dat");
-        public static string ModInfoDatFile = Path.Combine(RelhaxTempFolder, "modInfo.dat");
-        public const string DefaultStartAddress = @"http://wotmods.relhaxmodpack.com/WoT/{onlineFolder}/";
-        public const string DefaultEndAddress = @"";
-        //file and folder macro locations
-        public static string AppDataFolder = "";
-        public static string TanksLocation = "";
-        //macro locations
-        public static string TanksVersion = "";
-        public static string TanksOnlineFolderVersion = "";
-        //needed to create to first line to installedRelhaxFiles.log
-        public static string DatabaseVersion = "";
-        //the config file version for saving the user's selection prefrences
-        public static string ConfigFileVersion = "2.0";     // for later imports of this files, we need a better identification
+        //ModSelectionlist window settigns
+        /// <summary>
+        /// the height, in pixels, of the ModSelectionView window
+        /// </summary>
+        public static int ModSelectionHeight = 480;
+        /// <summary>
+        /// the width, in pixels, of the ModSelectionView window
+        /// </summary>
+        public static int ModSelectionWidth = 800;
+        /// <summary>
+        /// toggle for if the ModSelectionView window should be shown in fullscreen mode
+        /// </summary>
+        public static bool ModSelectionFullscreen = false;
+        //Preview widnow settings
+        /// <summary>
+        /// the x-coordinate location, in pixels, of the Preview window
+        /// </summary>
+        public static int PreviewX = 0;
+        /// <summary>
+        /// the y-coordinate location, in pixels, of the Preview window
+        /// </summary>
+        public static int PreviewY = 0;
+        /// <summary>
+        /// toggle for if the Preview window should be shown in fullscreen mode
+        /// </summary>
+        public static bool PreviewFullscreen = false;
+        /// <summary>
+        /// the height, in pixels, of the Preview window
+        /// </summary>
+        public static int PreviewHeight = 550;
+        /// <summary>
+        /// the width, in pixels, of the Preview window
+        /// </summary>
+        public static int PreviewWidth = 450;
+        /// <summary>
+        /// toggle for if the application should use the alternate updating method. Should be friendlier with antivirus applications.
+        /// </summary>
+        public static bool UseAlternateUpdateMethod = false;
+        //loading gif settings
         public static LoadingGifs GIF = LoadingGifs.Standard;
+        public static UninstallModes UninstallMode = UninstallModes.Default;
+        public static SelectionView SView = SelectionView.Default;
+        public static FontSize FontSizeforum = FontSize.Font100;
+        public static AutoScaleMode AppScalingMode = AutoScaleMode.Font;
         //font settings
         public const float FontSize100 = 8.25F;//1.0 font scaling
         public const float FontSize125 = 10.25F;//1.25 font scaling
@@ -127,23 +179,27 @@ namespace RelhaxModpack
         public const float Scale275 = 2.75f;//2.75 font scaling
         public const string DefaultFontType = "Microsoft Sans Serif";
         public const string ComicSansFontType = "Comic Sans MS";
-        //ModSelectionlist window settigns
-        public static int ModSelectionHeight = 480;
-        public static int ModSelectionWidth = 800;
-        public static bool ModSelectionFullscreen = false;
-        //Preview widnow settings
-        public static int PreviewX = 0;
-        public static int PreviewY = 0;
-        public static bool PreviewFullscreen = false;
-        public static int PreviewHeight = 550;
-        public static int PreviewWidth = 450;
-        //default is to not use it, only use it when issues with normal method
-        public static bool UseAlternateUpdateMethod = false;
+        //file and folder locations
+        public readonly static string SettingsXmlFile = Path.Combine(Application.StartupPath, "RelHaxSettings.xml");
+        public static string RelhaxDownloadsFolder = Path.Combine(Application.StartupPath, "RelHaxDownloads");
+        public static string MD5HashDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "MD5HashDatabase.xml");
+        public static string OnlineDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "onlineDatabase.xml");
+        public static string RelhaxTempFolder = Path.Combine(Application.StartupPath, "RelHaxTemp");
+        public static string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, "managerInfo.dat");
+        public static string ModInfoDatFile = Path.Combine(RelhaxTempFolder, "modInfo.dat");
+        public const string DefaultStartAddress = @"http://wotmods.relhaxmodpack.com/WoT/{onlineFolder}/";
+        public const string DefaultEndAddress = @"";
+        //file and folder macro locations
+        public static string AppDataFolder = "";
+        public static string TanksLocation = "";
+        ////version informations
+        public static string TanksVersion = "";
+        public static string TanksOnlineFolderVersion = "";
+        //needed to create to first line to installedRelhaxFiles.log
+        public static string DatabaseVersion = "";
+        //the config file version for saving the user's selection prefrences
+        public static string ConfigFileVersion = "2.0";     // for later imports of this files, we need a better identification
         public static string CustomModInfoPath = "";
-        public static UninstallModes UninstallMode = UninstallModes.Default;
-        public static SelectionView SView = SelectionView.Default;
-        public static FontSize FontSizeforum = FontSize.Font100;
-        public static AutoScaleMode AppScalingMode = AutoScaleMode.Font;
         public static Font AppFont = new Font(DefaultFontType, FontSize100);
         //loads settings from xml file
         public static void LoadSettings()
@@ -296,11 +352,11 @@ namespace RelhaxModpack
                     }
                 }
             }
-            ApplInternalProperties();
+            ApplyInternalProperties();
             Logging.Manager("Settings loaded successfully");
         }
         //saves settings to xml file
-        public static void saveSettings()
+        public static void SaveSettings()
         {
             Logging.Manager("Saving application settings");
             if (File.Exists(SettingsXmlFile)) File.Delete(SettingsXmlFile);
@@ -440,7 +496,7 @@ namespace RelhaxModpack
             }
             return null;
         }
-        public static void ApplInternalProperties()
+        public static void ApplyInternalProperties()
         {
             if (ComicSans)
             {
