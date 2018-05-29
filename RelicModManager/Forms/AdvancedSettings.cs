@@ -172,6 +172,16 @@ namespace RelhaxModpack.Forms
         {
             Settings.UseAlternateUpdateMethod = UseAltUpdateMethodCB.Checked;
         }
+
+        private void UseBetaDatabaseCB_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void UseBetaApplication_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
         #endregion
 
         private void Generic_MouseEnter(object sender, EventArgs e)
