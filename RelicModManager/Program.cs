@@ -70,7 +70,7 @@ namespace RelhaxModpack
                 EmbeddedAssembly.Load(defaultResourcePath + s, s);
             }
             /*
-            if(Environment.Is64BitOperatingSystem)
+            if(Environment.Is64BitProcess)
             {
                 foreach (string s in libraries64Platform)
                 {
