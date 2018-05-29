@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Globalization;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -122,7 +121,6 @@ namespace RelhaxModpack
         /// toggle for if the user wants to use the beta application (note it won't happen until application restart)
         /// </summary>
         public static bool BetaApplication = false;
-        //ModSelectionlist window settigns
         /// <summary>
         /// the height, in pixels, of the ModSelectionView window
         /// </summary>
@@ -135,7 +133,6 @@ namespace RelhaxModpack
         /// toggle for if the ModSelectionView window should be shown in fullscreen mode
         /// </summary>
         public static bool ModSelectionFullscreen = false;
-        //Preview widnow settings
         /// <summary>
         /// the x-coordinate location, in pixels, of the Preview window
         /// </summary>
@@ -160,7 +157,6 @@ namespace RelhaxModpack
         /// toggle for if the application should use the alternate updating method. Should be friendlier with antivirus applications.
         /// </summary>
         public static bool UseAlternateUpdateMethod = false;
-        //loading gif settings
         public static LoadingGifs GIF = LoadingGifs.Standard;
         public static UninstallModes UninstallMode = UninstallModes.Default;
         public static SelectionView SView = SelectionView.Default;
@@ -349,6 +345,12 @@ namespace RelhaxModpack
                         case "UseAlternateUpdateMethod":
                             UseAlternateUpdateMethod = bool.Parse(n.InnerText);
                             break;
+                        case "BetaApplication":
+                            BetaApplication = bool.Parse(n.InnerText);
+                            break;
+                        case "BetaDatabase":
+                            BetaDatabase = bool.Parse(n.InnerText);
+                            break;
                     }
                 }
             }
@@ -475,13 +477,19 @@ namespace RelhaxModpack
             XmlElement xUseAlternateUpdateMethod = doc.CreateElement("UseAlternateUpdateMethod");
             xUseAlternateUpdateMethod.InnerText = "" + UseAlternateUpdateMethod;
             settingsHolder.AppendChild(xUseAlternateUpdateMethod);
+            XmlElement xBetaApplication = doc.CreateElement("BetaApplication");
+            xBetaApplication.InnerText = "" + BetaApplication;
+            settingsHolder.AppendChild(xBetaApplication);
+            XmlElement xBetaDatabase = doc.CreateElement("BetaDatabase");
+            xBetaDatabase.InnerText = "" + BetaDatabase;
+            settingsHolder.AppendChild(xBetaDatabase);
 
             doc.Save(SettingsXmlFile);
             Logging.Manager("Settings saved successfully");
         }
         //returns the loading image for the picture viewer, based on
         //which loading image the user specified
-        public static Image getLoadingImage()
+        public static Image GetLoadingImage()
         {
             switch (GIF)
             {

@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace RelhaxModpack.Forms
@@ -13,6 +8,7 @@ namespace RelhaxModpack.Forms
     {
         private LoadingGifPreview gp;
         public int startX, startY;
+        private bool WindowLoading = false;
 
         public AdvancedSettings()
         {
@@ -21,9 +17,11 @@ namespace RelhaxModpack.Forms
 
         private void AdvancedSettings_Load(object sender, EventArgs e)
         {
+            WindowLoading = true;
             Logging.Manager(string.Format("AdvancedSettings: Loading window at location x={0}, y={1}",startX,startY));
             ApplySavedSettings();
             Location = new Point(startX, startY);
+            WindowLoading = false;
         }
 
         //apply saved settings
@@ -37,6 +35,8 @@ namespace RelhaxModpack.Forms
             InstantExtractionCB.Checked = Settings.InstantExtraction;
             ExportModeCB.Checked = Settings.ExportMode;
             UseAltUpdateMethodCB.Checked = Settings.UseAlternateUpdateMethod;
+            UseBetaApplicationCB.Checked = Settings.BetaApplication;
+            UseBetaDatabaseCB.Checked = Settings.BetaDatabase;
             switch (Settings.UninstallMode)
             {
                 case (UninstallModes.Default):
@@ -59,30 +59,11 @@ namespace RelhaxModpack.Forms
                         break;
                     }
             }
-            
             if (Settings.ExportMode)
                 forceManuel.Enabled = false;
         }
-        //toggle UI buttons to be Enabled or disabled
-        public void ToggleUIButtons(bool enableToggle)
-        {
-            if (ExportModeCB.Checked)
-                forceManuel.Enabled = false;
-            else
-                forceManuel.Enabled = enableToggle;
-            clearCacheCB.Enabled = enableToggle;
-            createShortcutsCB.Enabled = enableToggle;
-            InstantExtractionCB.Enabled = enableToggle;
-            DefaultUninstallModeRB.Enabled = enableToggle;
-            CleanUninstallModeRB.Enabled = enableToggle;
-            cleanInstallCB.Enabled = enableToggle;
-            ShowInstallCompleteWindowCB.Enabled = enableToggle;
-            ExportModeCB.Enabled = enableToggle;
-            UseAltUpdateMethodCB.Enabled = enableToggle;
-        }
 
         #region Loading animations handlers
-        
         private void ImageRB_CheckedChanged(object sender, EventArgs e)
         {
             if (standardImageRB.Checked)
@@ -156,6 +137,7 @@ namespace RelhaxModpack.Forms
         {
             Settings.CleanInstallation = cleanInstallCB.Checked;
         }
+
         private void CleanUninstallModeRB_CheckedChanged(object sender, EventArgs e)
         {
             if (CleanUninstallModeRB.Checked)
@@ -175,12 +157,20 @@ namespace RelhaxModpack.Forms
 
         private void UseBetaDatabaseCB_CheckedChanged(object sender, EventArgs e)
         {
-
+            Settings.BetaDatabase = UseBetaDatabaseCB.Checked;
+            if(Settings.BetaDatabase && !WindowLoading)
+            {
+                MessageBox.Show(Translations.getTranslatedString("noChangeUntilRestart"));
+            }
         }
 
         private void UseBetaApplication_CheckedChanged(object sender, EventArgs e)
         {
-
+            Settings.BetaApplication = UseBetaApplicationCB.Checked;
+            if (Settings.BetaApplication && !WindowLoading)
+            {
+                MessageBox.Show(Translations.getTranslatedString("noChangeUntilRestart"));
+            }
         }
         #endregion
 

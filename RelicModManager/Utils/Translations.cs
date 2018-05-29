@@ -2147,6 +2147,36 @@ namespace RelhaxModpack
             german.Add("UseAltUpdateMethodCBDescription", "Die alternative Updatemethode dauert länger, hilft aber bei Problemen (bspw. Fehlalarm) mit Anti-Virus-Programmen");
             polish.Add("UseAltUpdateMethodCBDescription", "U¿yj alternatywnej metody aktualizacji. Wyd³u¿y to potrzebny czas, ale pomo¿e przy problemach z oprogramowaniem antywirusowym");
             french.Add("UseAltUpdateMethodCBDescription", "Utiliser la methode alternative de mise à jour. Plus long mais devrais aider avec les applications anti-virus");
+
+            //Component: UseBetaDatabaseCB
+            english.Add("UseBetaDatabaseCB", "Use beta database");
+            german.Add("UseBetaDatabaseCB", "TODO");
+            polish.Add("UseBetaDatabaseCB", "TODO");
+            french.Add("UseBetaDatabaseCB", "TODO");
+
+            //Component: UseBetaApplicationCB
+            english.Add("UseBetaApplicationCB", "Use beta application");
+            german.Add("UseBetaApplicationCB", "TODO");
+            polish.Add("UseBetaApplicationCB", "TODO");
+            french.Add("UseBetaApplicationCB", "TODO");
+
+            //Component: UseBetaDatabaseCBDescription
+            english.Add("UseBetaDatabaseCBDescription", "Use the latest beta database. Mod stability is not guaranteed");
+            german.Add("UseBetaDatabaseCBDescription", "TODO");
+            polish.Add("UseBetaDatabaseCBDescription", "TODO");
+            french.Add("UseBetaDatabaseCBDescription", "TODO");
+
+            //Component: UseBetaApplicationCBDescription
+            english.Add("UseBetaApplicationCBDescription", "Use the latest beta application. Translations and stability are not guaranteed");
+            german.Add("UseBetaApplicationCBDescription", "TODO");
+            polish.Add("UseBetaApplicationCBDescription", "TODO");
+            french.Add("UseBetaApplicationCBDescription", "TODO");
+
+            //Component: notifying the user the change won't take effect until application restart
+            english.Add("noChangeUntilRestart", "This change won't take effect until application restart");
+            german.Add("noChangeUntilRestart", "TODO");
+            polish.Add("noChangeUntilRestart", "TODO");
+            french.Add("noChangeUntilRestart", "TODO");
             #endregion
 
             #region Scaling Verification Window
