@@ -16,6 +16,7 @@ https://www.virustotal.com/#/file/28f729992c099f75626229634fda85c1249df0c45e1941
 -Added alternative application update method. It will take longer, but should be more compatible with anti-virus programs
 
 --other changes:
+-Added ability to use the beta application and beta database from the advanced settings page. (Command-line versions still work)
 -Organized the translations into groups based on where they are used
 -Rewrote entire backend tool to update the database, update the application, and clean the online zip folders
 -Automated the database update process. It now takes 15 seconds, rather than 15 mins manually

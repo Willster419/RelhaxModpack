@@ -16,6 +16,7 @@ https://www.virustotal.com/#/file/28f729992c099f75626229634fda85c1249df0c45e1941
 -Added alternative application update method. It will take longer, but should be more compatible with anti-virus programs
 
 --other changes:
+-Added ability to use the beta application and beta database from the advanced settings page. (Command-line versions still work)
 -Organized the translations into groups based on where they are used
 -Rewrote entire backend tool to update the database, update the application, and clean the online zip folders
 -Automated the database update process. It now takes 15 seconds, rather than 15 mins manually
@@ -34,7 +35,6 @@ https://www.virustotal.com/#/file/28f729992c099f75626229634fda85c1249df0c45e1941
 -Changed output of installer log file, now all file and folder entries are absolute
 -Improved Uninstall Message
 --------------------------------------------------------------------------------------------------------------------------------------------
-
 
 Version 28.0.4 (04/17/2018)
 https://www.virustotal.com/#/file/f4e7b13d8e188fff7e604802a96acc43842394cf5d7d94ad82ffce0d20e86b6e/detection
