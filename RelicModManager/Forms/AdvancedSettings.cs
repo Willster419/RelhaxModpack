@@ -39,21 +39,21 @@ namespace RelhaxModpack.Forms
             UseAltUpdateMethodCB.Checked = Settings.UseAlternateUpdateMethod;
             switch (Settings.UninstallMode)
             {
-                case (Settings.UninstallModes.Default):
+                case (UninstallModes.Default):
                     DefaultUninstallModeRB.Checked = true;
                     break;
-                case (Settings.UninstallModes.Quick):
+                case (UninstallModes.Quick):
                     CleanUninstallModeRB.Checked = true;
                     break;
             }
             switch (Settings.GIF)
             {
-                case (Settings.LoadingGifs.Standard):
+                case (LoadingGifs.Standard):
                     {
                         standardImageRB.Checked = true;
                         break;
                     }
-                case (Settings.LoadingGifs.ThirdGuards):
+                case (LoadingGifs.ThirdGuards):
                     {
                         thirdGuardsLoadingImageRB.Checked = true;
                         break;
@@ -87,11 +87,11 @@ namespace RelhaxModpack.Forms
         {
             if (standardImageRB.Checked)
             {
-                Settings.GIF = Settings.LoadingGifs.Standard;
+                Settings.GIF = LoadingGifs.Standard;
             }
             else if (thirdGuardsLoadingImageRB.Checked)
             {
-                Settings.GIF = Settings.LoadingGifs.ThirdGuards;
+                Settings.GIF = LoadingGifs.ThirdGuards;
             }
         }
 
@@ -100,14 +100,14 @@ namespace RelhaxModpack.Forms
             if (e.Button != MouseButtons.Right)
                 return;
             RadioButton rb = (RadioButton)sender;
-            Settings.LoadingGifs backup = Settings.GIF;
+            LoadingGifs backup = Settings.GIF;
             if (rb.Name.Equals("standardImageRB"))
             {
-                Settings.GIF = Settings.LoadingGifs.Standard;
+                Settings.GIF = LoadingGifs.Standard;
             }
             else if (rb.Name.Equals("thirdGuardsLoadingImageRB"))
             {
-                Settings.GIF = Settings.LoadingGifs.ThirdGuards;
+                Settings.GIF = LoadingGifs.ThirdGuards;
             }
             else
                 return;
@@ -149,7 +149,7 @@ namespace RelhaxModpack.Forms
         private void SmartUninstallModeRB_CheckedChanged(object sender, EventArgs e)
         {
             if (DefaultUninstallModeRB.Checked)
-                Settings.UninstallMode = Settings.UninstallModes.Default;
+                Settings.UninstallMode = UninstallModes.Default;
         }
         //handler for what happends when the check box "clean install" is checked or not
         private void cleanInstallCB_CheckedChanged(object sender, EventArgs e)
@@ -159,7 +159,7 @@ namespace RelhaxModpack.Forms
         private void CleanUninstallModeRB_CheckedChanged(object sender, EventArgs e)
         {
             if (CleanUninstallModeRB.Checked)
-                Settings.UninstallMode = Settings.UninstallModes.Quick;
+                Settings.UninstallMode = UninstallModes.Quick;
         }
 
         private void ExportModeCB_CheckedChanged(object sender, EventArgs e)

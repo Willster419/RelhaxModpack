@@ -16,16 +16,16 @@ namespace RelhaxModpack
             //save memory by only enabling the components we need
             switch (Settings.SView)
             {
-                case Settings.SelectionView.Default:
+                case SelectionView.Default:
                     RelhaxFormComboBoxList = new RelhaxFormComboBox[2];
                     break;
-                case Settings.SelectionView.Legacy:
+                case SelectionView.Legacy:
                     RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
                     TreeViewItem = new System.Windows.Controls.TreeViewItem();
                     //ChildBorder = new System.Windows.Controls.Border();
                     //ChildStackPanel = new System.Windows.Controls.StackPanel();
                     break;
-                case Settings.SelectionView.LegacyV2:
+                case SelectionView.LegacyV2:
                     TreeNode = new RelhaxFormTreeNode();
                     break;
             }
@@ -83,10 +83,10 @@ namespace RelhaxModpack
                 {
                     switch(Settings.SView)
                     {
-                        case Settings.SelectionView.Default:
+                        case SelectionView.Default:
                             Parent.RelhaxFormComboBoxList[0].OnDropDownSelectionChanged(this, value);
                             break;
-                        case Settings.SelectionView.Legacy:
+                        case SelectionView.Legacy:
                             Parent.RelhaxWPFComboBoxList[0].OnDropDownSelectionChanged(this, value);
                             break;
                     }
@@ -95,10 +95,10 @@ namespace RelhaxModpack
                 {
                     switch (Settings.SView)
                     {
-                        case Settings.SelectionView.Default:
+                        case SelectionView.Default:
                             Parent.RelhaxFormComboBoxList[1].OnDropDownSelectionChanged(this, value);
                             break;
-                        case Settings.SelectionView.Legacy:
+                        case SelectionView.Legacy:
                             Parent.RelhaxWPFComboBoxList[1].OnDropDownSelectionChanged(this, value);
                             break;
                     }
@@ -106,7 +106,7 @@ namespace RelhaxModpack
                 switch (Settings.SView)
                 {
                     //default view UI selection code
-                    case Settings.SelectionView.Default:
+                    case SelectionView.Default:
                         switch (_Checked)
                         {
                             case true:
@@ -130,7 +130,7 @@ namespace RelhaxModpack
                         }
                         break;
                     //WPF treeview is done with treeviewItem
-                    case Settings.SelectionView.Legacy:
+                    case SelectionView.Legacy:
                         switch (_Checked)
                         {
                             case true:
