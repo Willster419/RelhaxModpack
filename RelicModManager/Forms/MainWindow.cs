@@ -74,7 +74,7 @@ namespace RelhaxModpack
         private float scale = 1.0f;
         //the previous settings for scaling
         private AutoScaleMode previousAutoScaleMode;
-        private Settings.FontSize previousFontSize;
+        private FontSize previousFontSize;
         private bool loading = false;
         private bool revertingScaling = false;
 
@@ -332,7 +332,7 @@ namespace RelhaxModpack
                 Settings.DatabaseVersion = databaseVersion.Value;
                 //parse the manager version
                 
-                var applicationVersion = Program.betaApplication ? doc.XPathSelectElement("//version/manager_beta") : doc.XPathSelectElement("//version/manager");
+                var applicationVersion = Settings.BetaApplication ? doc.XPathSelectElement("//version/manager_beta") : doc.XPathSelectElement("//version/manager");
                 version = applicationVersion.Value;
                 Logging.Manager(string.Format("Local application is {0}, current online is {1}", ManagerVersion(), version));
 
@@ -377,9 +377,9 @@ namespace RelhaxModpack
                         //using new attemp at an update method. Application now downloads a zip file of itself, rather than an exe. Maybe it will help antivirus issues
                         string modpackExeURL = null;
                         if(Settings.UseAlternateUpdateMethod)
-                            modpackExeURL = Program.betaApplication ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.zip" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";
+                            modpackExeURL = Settings.BetaApplication ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.zip" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";
                         else
-                            modpackExeURL = Program.betaApplication ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.exe" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe";
+                            modpackExeURL = Settings.BetaApplication ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.exe" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe";
                         updater.DownloadFileAsync(new Uri(modpackExeURL), newExeName);
                         Logging.Manager("New application download started, UseAlternateUpdateMethod=" + Settings.UseAlternateUpdateMethod);
                         currentModDownloading = "update ";
@@ -787,7 +787,7 @@ namespace RelhaxModpack
             //apply text labels and custom command line properties
             ApplicationVersionLabel.Text = "Application v" + ManagerVersion();
             if (Program.testMode) this.Text = this.Text + " TEST MODE";
-            if (Program.betaDatabase) this.Text = this.Text + " (BETA DB)";
+            if (Settings.BetaDatabase) this.Text = this.Text + " (BETA DB)";
             if (Program.Version == Program.ProgramVersion.Beta) this.Text = this.Text + " (BETA APP)";
             if (Program.Version == Program.ProgramVersion.Alpha) this.Text = this.Text + " (ALPHA APP)";
             DatabaseVersionLabel.Text = Translations.getTranslatedString("DatabaseVersionLabel") + " v" + Settings.DatabaseVersion;
@@ -1902,50 +1902,50 @@ namespace RelhaxModpack
             LanguageComboBox.SelectedIndexChanged += LanguageComboBox_SelectedIndexChanged;
             switch (Settings.SView)
             {
-                case (Settings.SelectionView.Default):
+                case (SelectionView.Default):
                     //set default button, but disable checkedChanged handler to prevent stack overflow
                     selectionDefault.Checked = true;
                     break;
-                case (Settings.SelectionView.Legacy):
+                case (SelectionView.Legacy):
                     selectionLegacy.Checked = true;
                     break;
-                case (Settings.SelectionView.LegacyV2):
+                case (SelectionView.LegacyV2):
                     selectionLegacyV2.Checked = true;
                     break;
             }
             switch (Settings.FontSizeforum)
             {
-                case (Settings.FontSize.Font100):
+                case (FontSize.Font100):
                     fontSize100.Checked = true;
                     break;
-                case (Settings.FontSize.Font125):
+                case (FontSize.Font125):
                     fontSize125.Checked = true;
                     break;
-                case (Settings.FontSize.Font175):
+                case (FontSize.Font175):
                     fontSize175.Checked = true;
                     break;
-                case (Settings.FontSize.Font225):
+                case (FontSize.Font225):
                     fontSize225.Checked = true;
                     break;
-                case (Settings.FontSize.Font275):
+                case (FontSize.Font275):
                     fontSize275.Checked = true;
                     break;
-                case (Settings.FontSize.DPI100):
+                case (FontSize.DPI100):
                     DPI100.Checked = true;
                     break;
-                case (Settings.FontSize.DPI125):
+                case (FontSize.DPI125):
                     DPI125.Checked = true;
                     break;
-                case (Settings.FontSize.DPI175):
+                case (FontSize.DPI175):
                     DPI175.Checked = true;
                     break;
-                case (Settings.FontSize.DPI225):
+                case (FontSize.DPI225):
                     DPI225.Checked = true;
                     break;
-                case (Settings.FontSize.DPI275):
+                case (FontSize.DPI275):
                     DPI275.Checked = true;
                     break;
-                case (Settings.FontSize.DPIAUTO):
+                case (FontSize.DPIAUTO):
                     DPIAUTO.Checked = true;
                     break;
             }
@@ -1977,7 +1977,7 @@ namespace RelhaxModpack
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             //save settings
-            if (Program.saveSettings) Settings.saveSettings();
+            if (Program.saveSettings) Settings.SaveSettings();
             Logging.Manager("cleaning \"RelHaxTemp\" folder");
             Utils.DirectoryDelete(Path.Combine(Application.StartupPath, "RelHaxTemp"), true);
             Logging.Manager(string.Format("Exception counted: {0}", errorCounter));
@@ -2032,22 +2032,22 @@ namespace RelhaxModpack
                 case AutoScaleMode.Dpi:
                     switch(previousFontSize)
                     {
-                        case Settings.FontSize.DPI100:
+                        case FontSize.DPI100:
                             DPI100.Checked = true;
                             break;
-                        case Settings.FontSize.DPI125:
+                        case FontSize.DPI125:
                             DPI125.Checked = true;
                             break;
-                        case Settings.FontSize.DPI175:
+                        case FontSize.DPI175:
                             DPI175.Checked = true;
                             break;
-                        case Settings.FontSize.DPI225:
+                        case FontSize.DPI225:
                             DPI225.Checked = true;
                             break;
-                        case Settings.FontSize.DPI275:
+                        case FontSize.DPI275:
                             DPI275.Checked = true;
                             break;
-                        case Settings.FontSize.DPIAUTO:
+                        case FontSize.DPIAUTO:
                             DPIAUTO.Checked = true;
                             break;
                     }
@@ -2055,19 +2055,19 @@ namespace RelhaxModpack
                 case AutoScaleMode.Font:
                     switch(previousFontSize)
                     {
-                        case Settings.FontSize.Font100:
+                        case FontSize.Font100:
                             fontSize100.Checked = true;
                             break;
-                        case Settings.FontSize.Font125:
+                        case FontSize.Font125:
                             fontSize125.Checked = true;
                             break;
-                        case Settings.FontSize.Font175:
+                        case FontSize.Font175:
                             fontSize175.Checked = true;
                             break;
-                        case Settings.FontSize.Font225:
+                        case FontSize.Font225:
                             fontSize225.Checked = true;
                             break;
-                        case Settings.FontSize.Font275:
+                        case FontSize.Font275:
                             fontSize275.Checked = true;
                             break;
                     }
@@ -2198,17 +2198,17 @@ namespace RelhaxModpack
 
         private void selectionDefault_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.SView = Settings.SelectionView.Default;
+            Settings.SView = SelectionView.Default;
         }
 
         private void selectionLegacy_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.SView = Settings.SelectionView.Legacy;
+            Settings.SView = SelectionView.Legacy;
         }
 
         private void selectionLegacyV2_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.SView = Settings.SelectionView.LegacyV2;
+            Settings.SView = SelectionView.LegacyV2;
         }
 
         private void expandNodesDefault_CheckedChanged(object sender, EventArgs e)
@@ -2232,8 +2232,8 @@ namespace RelhaxModpack
                 }
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Dpi)
                 {
-                    Settings.FontSizeforum = Settings.FontSize.DPI100;
-                    Settings.ApplInternalProperties();
+                    Settings.FontSizeforum = FontSize.DPI100;
+                    Settings.ApplyInternalProperties();
                     this.AutoScaleMode = Settings.AppScalingMode;
                     float temp = 1.0f / scale;
                     this.Scale(new SizeF(temp, temp));
@@ -2241,9 +2241,9 @@ namespace RelhaxModpack
                     this.Font = Settings.AppFont;
                 }
                 //change settings enum
-                Settings.FontSizeforum = Settings.FontSize.Font100;
+                Settings.FontSizeforum = FontSize.Font100;
                 //apply change of settings enum
-                Settings.ApplInternalProperties();
+                Settings.ApplyInternalProperties();
                 //get new scalingMode (or no change, get it anyway)
                 this.AutoScaleMode = Settings.AppScalingMode;
                 //get new font
@@ -2279,16 +2279,16 @@ namespace RelhaxModpack
                 }
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Dpi)
                 {
-                    Settings.FontSizeforum = Settings.FontSize.DPI100;
-                    Settings.ApplInternalProperties();
+                    Settings.FontSizeforum = FontSize.DPI100;
+                    Settings.ApplyInternalProperties();
                     this.AutoScaleMode = Settings.AppScalingMode;
                     float temp = 1.0f / scale;
                     this.Scale(new SizeF(temp, temp));
                     scale = 1.0f;
                     this.Font = Settings.AppFont;
                 }
-                Settings.FontSizeforum = Settings.FontSize.Font125;
-                Settings.ApplInternalProperties();
+                Settings.FontSizeforum = FontSize.Font125;
+                Settings.ApplyInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 this.Font = Settings.AppFont;
                 if (!revertingScaling && !loading)
@@ -2321,16 +2321,16 @@ namespace RelhaxModpack
                 }
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Dpi)
                 {
-                    Settings.FontSizeforum = Settings.FontSize.DPI100;
-                    Settings.ApplInternalProperties();
+                    Settings.FontSizeforum = FontSize.DPI100;
+                    Settings.ApplyInternalProperties();
                     this.AutoScaleMode = Settings.AppScalingMode;
                     float temp = 1.0f / scale;
                     this.Scale(new SizeF(temp, temp));
                     scale = 1.0f;
                     this.Font = Settings.AppFont;
                 }
-                Settings.FontSizeforum = Settings.FontSize.Font175;
-                Settings.ApplInternalProperties();
+                Settings.FontSizeforum = FontSize.Font175;
+                Settings.ApplyInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 this.Font = Settings.AppFont;
                 if (!revertingScaling && !loading)
@@ -2363,16 +2363,16 @@ namespace RelhaxModpack
                 }
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Dpi)
                 {
-                    Settings.FontSizeforum = Settings.FontSize.DPI100;
-                    Settings.ApplInternalProperties();
+                    Settings.FontSizeforum = FontSize.DPI100;
+                    Settings.ApplyInternalProperties();
                     this.AutoScaleMode = Settings.AppScalingMode;
                     float temp = 1.0f / scale;
                     this.Scale(new SizeF(temp, temp));
                     scale = 1.0f;
                     this.Font = Settings.AppFont;
                 }
-                Settings.FontSizeforum = Settings.FontSize.Font225;
-                Settings.ApplInternalProperties();
+                Settings.FontSizeforum = FontSize.Font225;
+                Settings.ApplyInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 this.Font = Settings.AppFont;
                 if (!revertingScaling && !loading)
@@ -2405,16 +2405,16 @@ namespace RelhaxModpack
                 }
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Dpi)
                 {
-                    Settings.FontSizeforum = Settings.FontSize.DPI100;
-                    Settings.ApplInternalProperties();
+                    Settings.FontSizeforum = FontSize.DPI100;
+                    Settings.ApplyInternalProperties();
                     this.AutoScaleMode = Settings.AppScalingMode;
                     float temp = 1.0f / scale;
                     this.Scale(new SizeF(temp, temp));
                     scale = 1.0f;
                     this.Font = Settings.AppFont;
                 }
-                Settings.FontSizeforum = Settings.FontSize.Font275;
-                Settings.ApplInternalProperties();
+                Settings.FontSizeforum = FontSize.Font275;
+                Settings.ApplyInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 this.Font = Settings.AppFont;
                 if (!revertingScaling && !loading)
@@ -2447,13 +2447,13 @@ namespace RelhaxModpack
                 }
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
                 {
-                    Settings.FontSizeforum = Settings.FontSize.Font100;
-                    Settings.ApplInternalProperties();
+                    Settings.FontSizeforum = FontSize.Font100;
+                    Settings.ApplyInternalProperties();
                     this.AutoScaleMode = Settings.AppScalingMode;
                     this.Font = Settings.AppFont;
                 }
-                Settings.FontSizeforum = Settings.FontSize.DPI100;
-                Settings.ApplInternalProperties();
+                Settings.FontSizeforum = FontSize.DPI100;
+                Settings.ApplyInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 float temp = Settings.Scale100 / scale;
                 this.Scale(new SizeF(temp, temp));
@@ -2489,13 +2489,13 @@ namespace RelhaxModpack
                 }
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
                 {
-                    Settings.FontSizeforum = Settings.FontSize.Font100;
-                    Settings.ApplInternalProperties();
+                    Settings.FontSizeforum = FontSize.Font100;
+                    Settings.ApplyInternalProperties();
                     this.AutoScaleMode = Settings.AppScalingMode;
                     this.Font = Settings.AppFont;
                 }
-                Settings.FontSizeforum = Settings.FontSize.DPI125;
-                Settings.ApplInternalProperties();
+                Settings.FontSizeforum = FontSize.DPI125;
+                Settings.ApplyInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 float temp = Settings.Scale125 / scale;
                 this.Scale(new SizeF(temp, temp));
@@ -2531,13 +2531,13 @@ namespace RelhaxModpack
                 }
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
                 {
-                    Settings.FontSizeforum = Settings.FontSize.Font100;
-                    Settings.ApplInternalProperties();
+                    Settings.FontSizeforum = FontSize.Font100;
+                    Settings.ApplyInternalProperties();
                     this.AutoScaleMode = Settings.AppScalingMode;
                     this.Font = Settings.AppFont;
                 }
-                Settings.FontSizeforum = Settings.FontSize.DPI175;
-                Settings.ApplInternalProperties();
+                Settings.FontSizeforum = FontSize.DPI175;
+                Settings.ApplyInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 float temp = Settings.Scale175 / scale;
                 this.Scale(new SizeF(temp, temp));
@@ -2573,13 +2573,13 @@ namespace RelhaxModpack
                 }
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
                 {
-                    Settings.FontSizeforum = Settings.FontSize.Font100;
-                    Settings.ApplInternalProperties();
+                    Settings.FontSizeforum = FontSize.Font100;
+                    Settings.ApplyInternalProperties();
                     this.AutoScaleMode = Settings.AppScalingMode;
                     this.Font = Settings.AppFont;
                 }
-                Settings.FontSizeforum = Settings.FontSize.DPI225;
-                Settings.ApplInternalProperties();
+                Settings.FontSizeforum = FontSize.DPI225;
+                Settings.ApplyInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 float temp = Settings.Scale225 / scale;
                 this.Scale(new SizeF(temp, temp));
@@ -2615,13 +2615,13 @@ namespace RelhaxModpack
                 }
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
                 {
-                    Settings.FontSizeforum = Settings.FontSize.Font100;
-                    Settings.ApplInternalProperties();
+                    Settings.FontSizeforum = FontSize.Font100;
+                    Settings.ApplyInternalProperties();
                     this.AutoScaleMode = Settings.AppScalingMode;
                     this.Font = Settings.AppFont;
                 }
-                Settings.FontSizeforum = Settings.FontSize.DPI275;
-                Settings.ApplInternalProperties();
+                Settings.FontSizeforum = FontSize.DPI275;
+                Settings.ApplyInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 float temp = Settings.Scale275 / scale;
                 this.Scale(new SizeF(temp, temp));
@@ -2657,13 +2657,13 @@ namespace RelhaxModpack
                 }
                 if (this.AutoScaleMode == System.Windows.Forms.AutoScaleMode.Font)
                 {
-                    Settings.FontSizeforum = Settings.FontSize.Font100;
-                    Settings.ApplInternalProperties();
+                    Settings.FontSizeforum = FontSize.Font100;
+                    Settings.ApplyInternalProperties();
                     this.AutoScaleMode = Settings.AppScalingMode;
                     this.Font = Settings.AppFont;
                 }
-                Settings.FontSizeforum = Settings.FontSize.DPIAUTO;
-                Settings.ApplInternalProperties();
+                Settings.FontSizeforum = FontSize.DPIAUTO;
+                Settings.ApplyInternalProperties();
                 this.AutoScaleMode = Settings.AppScalingMode;
                 float temp = Settings.ScaleSize / scale;
                 this.Scale(new SizeF(temp, temp));
@@ -2691,7 +2691,7 @@ namespace RelhaxModpack
         private void cancerFontCB_CheckedChanged(object sender, EventArgs e)
         {
             Settings.ComicSans = ComicSansFontCB.Checked;
-            Settings.ApplInternalProperties();
+            Settings.ApplyInternalProperties();
             Font = Settings.AppFont;
         }
         private void clearLogFilesCB_CheckedChanged(object sender, EventArgs e)
@@ -2740,7 +2740,7 @@ namespace RelhaxModpack
         {
             int xloc = this.Location.X + this.Size.Width + 10;
             int yloc = this.Location.Y;
-            using (ViewUpdates vu = new ViewUpdates(xloc, yloc, Settings.ManagerInfoDatFile, Program.betaApplication ? "releaseNotes_beta.txt" : "releaseNotes.txt"))
+            using (ViewUpdates vu = new ViewUpdates(xloc, yloc, Settings.ManagerInfoDatFile, Settings.BetaApplication ? "releaseNotes_beta.txt" : "releaseNotes.txt"))
             {
                 vu.ShowDialog();
             }

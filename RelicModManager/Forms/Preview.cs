@@ -44,7 +44,7 @@ namespace RelhaxModpack
             //set default loading images and image properties
             LoadingImage = RelhaxModpack.Properties.Resources.loading;
             PreviewPicture.WaitOnLoad = false;
-            PreviewPicture.InitialImage = Settings.getLoadingImage();
+            PreviewPicture.InitialImage = Settings.GetLoadingImage();
             Text = DBO.NameFormatted;
             for (int i = 0; i < Medias.Count; i++)
             {
@@ -66,7 +66,7 @@ namespace RelhaxModpack
                 StartPosition = FormStartPosition.Manual;
                 Location = new Point(Settings.PreviewX, Settings.PreviewY);
             }
-            if (Settings.SView == Settings.SelectionView.Legacy)
+            if (Settings.SView == SelectionView.Legacy)
             {
                 if (Program.Version == Program.ProgramVersion.Alpha)
                     Logging.Manager(string.Format("DEBUG: from Preview load: Legacy view, p.ContainsFocus={0}", this.ContainsFocus));
@@ -137,7 +137,7 @@ namespace RelhaxModpack
                     };
                     PreviewPicture.Click += PreviewPicture_Click;
                     Controls.Add(PreviewPicture);
-                    PreviewPicture.Image = Settings.getLoadingImage();
+                    PreviewPicture.Image = Settings.GetLoadingImage();
                     PreviewPicture.LoadAsync(m.URL);
                     Text = DBO.NameFormatted + " - " + CurrentlySelected;
                     Logging.Manager("Preview: started loading of picture '" + DBO.NameFormatted + "' at URL '" + m.URL + "'");
@@ -307,7 +307,7 @@ namespace RelhaxModpack
 
         private void LegacyHotfixTimer_Tick(object sender, EventArgs e)
         {
-            if (Settings.SView == Settings.SelectionView.Legacy)
+            if (Settings.SView == SelectionView.Legacy)
             {
                 if (Program.Version == Program.ProgramVersion.Alpha)
                     Logging.Manager(string.Format("DEBUG: from Preview timer: Legacy view, p.ContainsFocus={0}", this.ContainsFocus));

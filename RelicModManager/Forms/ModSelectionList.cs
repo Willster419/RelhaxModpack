@@ -26,7 +26,6 @@ namespace RelhaxModpack
         public List<LogicalDependency> LogicalDependencies;
         public List<SelectablePackage> CompleteModSearchList;
         private bool LoadingConfig = false;
-        private bool TaskBarHidden = false;
         public string TanksVersion { get; set; }
         public string TanksLocation { get; set; }
         public int MainWindowStartX { get; set; }
@@ -156,7 +155,7 @@ namespace RelhaxModpack
                 }
                 Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(databaseURL, "//modInfoAlpha.xml/@onlineFolder");
             }
-            else if (Program.betaDatabase)
+            else if (Settings.BetaDatabase)
             {
                 Logging.Manager("downloading modInfo.dat (betaDatabase url)");
                 string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
@@ -308,7 +307,7 @@ namespace RelhaxModpack
                 LegacySelectionList lsl = null;
                 switch(Settings.SView)
                 {
-                    case Settings.SelectionView.Default:
+                    case SelectionView.Default:
                         RelhaxFormCheckBox cb = new RelhaxFormCheckBox()
                         {
                             Package = c.CategoryHeader,
@@ -333,7 +332,7 @@ namespace RelhaxModpack
                         c.TabPage.Controls.Add(c.CategoryHeader.ParentPanel);
                         cb.Click += OnMultiPackageClick;
                         break;
-                    case Settings.SelectionView.Legacy:
+                    case SelectionView.Legacy:
                         //create the WPF host for this tabPage
                         //lsl = new LegacySelectionList();
                         ElementHost host = new ElementHost()
@@ -380,7 +379,7 @@ namespace RelhaxModpack
                         c.CategoryHeader.TreeViewItem.IsExpanded = Settings.ExpandAllLegacy ? true : false;
                         lsl.legacyTreeView.Items.Add(c.CategoryHeader.TreeViewItem);
                         break;
-                    case Settings.SelectionView.LegacyV2:
+                    case SelectionView.LegacyV2:
                         //make the treeview
                         tv = new TreeView()
                         {
@@ -452,7 +451,7 @@ namespace RelhaxModpack
                         Application.DoEvents();
                     }
                     AddPackage(m, c, c.CategoryHeader);
-                    if(Settings.SView == Settings.SelectionView.LegacyV2)
+                    if(Settings.SView == SelectionView.LegacyV2)
                     {
                         if (Settings.ExpandAllLegacy2)
                         {
@@ -464,7 +463,7 @@ namespace RelhaxModpack
                         }
                     }
                 }
-                if(Settings.SView == Settings.SelectionView.LegacyV2)
+                if(Settings.SView == SelectionView.LegacyV2)
                 {
                     if (Settings.ExpandAllLegacy2)
                     {
@@ -609,17 +608,9 @@ namespace RelhaxModpack
             //set label properties
             TanksVersionLabel.Text = TanksVersionLabel.Text + TanksVersion;
             TanksPath.Text = string.Format(Translations.getTranslatedString("InstallingTo"), TanksLocation);
-            //if the task bar was set to auto hide, set it to always on top
-            //it will be set back to auto hide when this window closes
-            Settings.AppBarStates currentState = Settings.GetTaskbarState();
-            if (currentState == Settings.AppBarStates.AutoHide)
-            {
-                TaskBarHidden = true;
-                Settings.SetTaskbarState(Settings.AppBarStates.AlwaysOnTop);
-            }
             //force a resize
             ModSelectionList_SizeChanged(null, null);
-            if (Settings.SView == Settings.SelectionView.Default)
+            if (Settings.SView == SelectionView.Default)
             {
                 colapseAllButton.Enabled = false;
                 colapseAllButton.Visible = false;
@@ -750,7 +741,7 @@ namespace RelhaxModpack
             //special code for each type of view
             switch (Settings.SView)
             {
-                case Settings.SelectionView.Default:
+                case SelectionView.Default:
                     //start code for dealing with panels
                     if (sp.Parent.ChildPanel == null)
                     {
@@ -907,7 +898,7 @@ namespace RelhaxModpack
                     }
                     //end code for handlers tooltips and attaching
                     break;
-                case Settings.SelectionView.Legacy:
+                case SelectionView.Legacy:
                     //in WPF underscores are only displayed when there's two of them
                     packageDisplayName = packageDisplayName.Replace(@"_", @"__");
                     //start code for border and stackpanel
@@ -1041,16 +1032,16 @@ namespace RelhaxModpack
                     {
                         switch (Settings.FontSizeforum)
                         {
-                            case Settings.FontSize.Font125:
+                            case FontSize.Font125:
                                 cont2.FontSize = cont2.FontSize + 4;
                                 break;
-                            case Settings.FontSize.Font175:
+                            case FontSize.Font175:
                                 cont2.FontSize = cont2.FontSize + 8;
                                 break;
-                            case Settings.FontSize.Font225:
+                            case FontSize.Font225:
                                 cont2.FontSize = cont2.FontSize + 12;
                                 break;
-                            case Settings.FontSize.Font275:
+                            case FontSize.Font275:
                                 cont2.FontSize = cont2.FontSize + 16;
                                 break;
                         }
@@ -1073,7 +1064,7 @@ namespace RelhaxModpack
                         }
                     }
                     break;
-                case Settings.SelectionView.LegacyV2:
+                case SelectionView.LegacyV2:
                     sp.TreeNode.Category = c;
                     switch (sp.Type)
                     {
@@ -1531,32 +1522,32 @@ namespace RelhaxModpack
                 {
                     switch (Settings.FontSizeforum)
                     {
-                        case Settings.FontSize.Font100:
+                        case FontSize.Font100:
                             break;
-                        case Settings.FontSize.Font125:
+                        case FontSize.Font125:
                             y += 3;
                             break;
-                        case Settings.FontSize.Font175:
+                        case FontSize.Font175:
                             y += 6;
                             break;
-                        case Settings.FontSize.Font225:
+                        case FontSize.Font225:
                             y += 9;
                             break;
-                        case Settings.FontSize.Font275:
+                        case FontSize.Font275:
                             y += 12;
                             break;
-                        case Settings.FontSize.DPI100:
+                        case FontSize.DPI100:
                             break;
-                        case Settings.FontSize.DPI125:
+                        case FontSize.DPI125:
                             y += 3;
                             break;
-                        case Settings.FontSize.DPI175:
+                        case FontSize.DPI175:
                             y += 6;
                             break;
-                        case Settings.FontSize.DPI225:
+                        case FontSize.DPI225:
                             y += 9;
                             break;
-                        case Settings.FontSize.DPI275:
+                        case FontSize.DPI275:
                             y += 12;
                             break;
                     }
@@ -1601,7 +1592,7 @@ namespace RelhaxModpack
                     GC.Collect();
                 }
                 //if it's the default view, focus the right clicked component
-                if(Settings.SView == Settings.SelectionView.Default)
+                if(Settings.SView == SelectionView.Default)
                 {
                     if(ipc is Control ctrl)
                     {
@@ -1616,7 +1607,7 @@ namespace RelhaxModpack
                     Medias = spc.PictureList
                 };
                 p.Show();
-                if(Settings.SView == Settings.SelectionView.Legacy)
+                if(Settings.SView == SelectionView.Legacy)
                 {
                     Logging.Manager(string.Format("from ModSelectionList: Legacy view, p.ContainsFocus={0}", p.ContainsFocus),true);
                 }
@@ -1744,7 +1735,7 @@ namespace RelhaxModpack
             //create saved config xml layout
             XDocument doc = new XDocument(
                 new XDeclaration("1.0", "utf-8", "yes"),
-                new XElement("mods", new XAttribute("ver", Settings.ConfigFileVersion), new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")), new XAttribute("dbVersion", Program.betaDatabase ? "beta" : (String)Settings.DatabaseVersion)));
+                new XElement("mods", new XAttribute("ver", Settings.ConfigFileVersion), new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")), new XAttribute("dbVersion", Settings.BetaDatabase ? "beta" : (String)Settings.DatabaseVersion)));
 
             //relhax mods root
             doc.Element("mods").Add(new XElement("relhaxMods"));
@@ -2367,9 +2358,6 @@ namespace RelhaxModpack
         //handler for when the close button is pressed
         private void ModSelectionList_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //put the taskbar back if we need to
-            if (TaskBarHidden)
-                Settings.SetTaskbarState(Settings.AppBarStates.AutoHide);
             //save wether the window was in fullscreen mode before closing
             //also only save the size if the window is normal
             switch (WindowState)
@@ -2447,7 +2435,7 @@ namespace RelhaxModpack
         {
             switch(Settings.SView)
             {
-                case Settings.SelectionView.Legacy:
+                case SelectionView.Legacy:
                     foreach (Control c in modTabGroups.SelectedTab.Controls)
                     {
                         if (c is ElementHost eh)
@@ -2473,7 +2461,7 @@ namespace RelhaxModpack
         {
             switch(Settings.SView)
             {
-                case Settings.SelectionView.Legacy:
+                case SelectionView.Legacy:
                     foreach (Control c in modTabGroups.SelectedTab.Controls)
                     {
                         if (c is ElementHost)
@@ -2564,7 +2552,7 @@ namespace RelhaxModpack
             {
                 return;
             }
-            if (Settings.SView == Settings.SelectionView.Default)
+            if (Settings.SView == SelectionView.Default)
             {
                 if (sendah.SelectedItem is SelectablePackage c)
                 {
@@ -2580,7 +2568,7 @@ namespace RelhaxModpack
                     }
                 }
             }
-            else if (Settings.SView == Settings.SelectionView.Legacy)
+            else if (Settings.SView == SelectionView.Legacy)
             {
                 if (sendah.SelectedItem is SelectablePackage m)
                 {

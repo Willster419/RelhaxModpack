@@ -186,10 +186,10 @@ namespace RelhaxModpack
             args.InstalProgress = InstallerEventArgs.InstallProgress.Uninstall;
             switch(Settings.UninstallMode)
             {
-                case Settings.UninstallModes.Default:
+                case UninstallModes.Default:
                     UninstallModsDefault();
                     break;
-                case Settings.UninstallModes.Quick:
+                case UninstallModes.Quick:
                     UninstallModsQuick();
                     break;
             }
@@ -241,10 +241,10 @@ namespace RelhaxModpack
             {
                 switch (Settings.UninstallMode)
                 {
-                    case Settings.UninstallModes.Default:
+                    case UninstallModes.Default:
                         UninstallModsDefault();
                         break;
-                    case Settings.UninstallModes.Quick:
+                    case UninstallModes.Quick:
                         UninstallModsQuick();
                         break;
                 }
@@ -361,7 +361,7 @@ namespace RelhaxModpack
             //Step 18: CheckDatabase and delete outdated or no more needed files
             Logging.Manager("Installation CheckDatabase");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CheckDatabase;
-            if ((!Program.testMode) && (!Program.betaDatabase) && (Program.Version != Program.ProgramVersion.Alpha))
+            if ((!Program.testMode) && (!Settings.BetaDatabase) && (Program.Version != Program.ProgramVersion.Alpha))
                 checkForOldZipFiles();
             else
                 Logging.Manager("... skipped");
@@ -1943,7 +1943,7 @@ namespace RelhaxModpack
                 //compare with list of shortcuts from default uninstall
                 //if in default uninstall (before) but not in new list (after) then delete
                 //otherwise it will be updated below
-                if(Settings.UninstallMode == Settings.UninstallModes.Default)
+                if(Settings.UninstallMode == UninstallModes.Default)
                 {
                     List<string> totalNewShortcuts = new List<string>();
                     foreach (Shortcut sc in Shortcuts)

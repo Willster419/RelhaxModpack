@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Globalization;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -10,25 +9,89 @@ namespace RelhaxModpack
 {
     //all of the settings for the modpack. kept in a static class
     //so all the forms have access to a single version of the settings
+    #region cool enums
+    //enumeration for the font size for the application
+    public enum FontSize
+    {
+        Font100 = 0,
+        Font125 = 1,
+        Font175 = 2,
+        DPI100 = 3,
+        DPI125 = 4,
+        DPI175 = 5,
+        Font225 = 6,
+        Font275 = 7,
+        DPI225 = 8,
+        DPI275 = 9,
+        DPIAUTO = 10
+    };
+    //enumeration for the type of mod selection list view
+    public enum SelectionView
+    {
+        Default = 0,
+        Legacy = 1,
+        LegacyV2 = 2
+    };
+    public enum LoadingGifs
+    {
+        Standard = 0,
+        ThirdGuards = 1
+    };
+    //enumeration for the type of uninstall mode
+    public enum UninstallModes
+    {
+        Default = 0,
+        Quick = 1
+    }
+    #endregion
     public static class Settings
     {
-        ////general settings
-        //toggle if the program should notify the user if the database version is the same as the last installed version
-        public static bool NotifyIfSameDatabase { get; set; }
-        //toggle if the program will backup the current mod installation
-        public static bool BackupModFolder { get; set; }
-        //toggle if the program will clean the mods and res_mods folders before installation
-        public static bool CleanInstallation { get; set; }
-        public static bool ForceManuel { get; set; }
-        public static bool ExpandAllLegacy { get; set; }
-        public static bool ExpandAllLegacy2 { get; set; }
-        public static bool ComicSans { get; set; }
-        public static bool FirstLoad { get; set; }
-        public static bool SaveLastConfig { get; set; }
-        public static bool SaveUserData { get; set; }
-        //toggle a dark UI for using the modpack at night.
-        //TODO: after wpf move, change this to allow any coloring settings
-        public static bool DarkUI { get; set; }
+        //#region general settings
+        /// <summary>
+        /// toggle if the program should notify the user if the database version is the same as the last installed version
+        /// </summary>
+        public static bool NotifyIfSameDatabase = false;
+        /// <summary>
+        /// toggle if the program will backup the current mod installation
+        /// </summary>
+        public static bool BackupModFolder = false;
+        /// <summary>
+        /// toggle if the program will clean the mods and res_mods folders before installation
+        /// </summary>
+        public static bool CleanInstallation = true;
+        /// <summary>
+        /// toggle if the program should force the user to manually point to the WoT location
+        /// </summary>
+        public static bool ForceManuel = false;
+        /// <summary>
+        /// toggle if the OMC legacy view options should be expanded by default
+        /// </summary>
+        public static bool ExpandAllLegacy = true;
+        /// <summary>
+        /// toggle if the OMC legacy V2 view options should be expanded by default
+        /// </summary>
+        public static bool ExpandAllLegacy2 = false;
+        /// <summary>
+        /// toggle if comic sans font should be the default font. true=comic sans, false=microsoft sans serif (default in most applications)
+        /// </summary>
+        public static bool ComicSans = false;
+        /// <summary>
+        /// flag for if it is the first time loading the application (determined if RelHaxSettings.xml exists or not)
+        /// </summary>
+        public static bool FirstLoad = false;
+        /// <summary>
+        /// toggle if the application should automatically save the last selected config to also be automatically loaded upon selection load
+        /// </summary>
+        public static bool SaveLastConfig = false;
+        /// <summary>
+        /// toggle if the application should save user cache save data like session stats, or auto equip configs
+        /// </summary>
+        public static bool SaveUserData = false;
+        /// <summary>
+        /// toggle a dark UI for using the modpack at night.
+        /// TODO: after wpf move, change this to allow any coloring settings
+        /// </summary>
+        public static bool DarkUI = false;
         //toggle for each view if the borders around the child selection options should show
         public static bool EnableBordersDefaultView = false;
         public static bool EnableBordersLegacyView = false;
@@ -36,42 +99,69 @@ namespace RelhaxModpack
         public static bool EnableColorChangeDefaultView = false;
         public static bool EnableColorChangeLegacyView = false;
         //toggle if the installation complete window will be shown
-        public static bool ShowInstallCompleteWindow { get; set; }
+        public static bool ShowInstallCompleteWindow = false;
         //toggle if the program will delete the WoT appdata cache
-        public static bool ClearCache { get; set; }
-        public static bool DeleteLogs { get; set; }
+        public static bool ClearCache = false;
+        public static bool DeleteLogs = false;
         //toggle if the program will create desktop shortcuts
-        public static bool CreateShortcuts { get; set; }
+        public static bool CreateShortcuts = false;
         //toggle instant extraction
-        public static bool InstantExtraction { get; set; }
+        public static bool InstantExtraction = false;
         //toggle super extraction
-        public static bool SuperExtraction { get; set; }
-        public static string FontName { get; set; }
-        public static float ScaleSize { get; set; }
+        public static bool SuperExtraction = false;
+        public static string FontName;
+        public static float ScaleSize;
         //turn on export mode
-        public static bool ExportMode { get; set; }
-        //file and folder locations
-        public static string SettingsXmlFile = Path.Combine(Application.StartupPath, "RelHaxSettings.xml");
-        public static string RelhaxDownloadsFolder = Path.Combine(Application.StartupPath, "RelHaxDownloads");
-        public static string MD5HashDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "MD5HashDatabase.xml");
-        public static string OnlineDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "onlineDatabase.xml");
-        public static string RelhaxTempFolder = Path.Combine(Application.StartupPath, "RelHaxTemp");
-        public static string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, "managerInfo.dat");
-        public static string ModInfoDatFile = Path.Combine(RelhaxTempFolder, "modInfo.dat");
-        public const string DefaultStartAddress = @"http://wotmods.relhaxmodpack.com/WoT/{onlineFolder}/";
-        public const string DefaultEndAddress = @"";
-        //file and folder macro locations
-        public static string AppDataFolder = "";
-        public static string TanksLocation = "";
-        //macro locations
-        public static string TanksVersion = "";
-        public static string TanksOnlineFolderVersion = "";
-        //needed to create to first line to installedRelhaxFiles.log
-        public static string DatabaseVersion = "";
-        //
-        public static string ConfigFileVersion = "2.0";     // for later imports of this files, we need a better identification
-        public enum LoadingGifs { Standard = 0, ThirdGuards = 1 };
-        public static LoadingGifs GIF;
+        public static bool ExportMode = false;
+        /// <summary>
+        /// toggle for if the user wants to use the beta database
+        /// </summary>
+        public static bool BetaDatabase = false;
+        /// <summary>
+        /// toggle for if the user wants to use the beta application (note it won't happen until application restart)
+        /// </summary>
+        public static bool BetaApplication = false;
+        /// <summary>
+        /// the height, in pixels, of the ModSelectionView window
+        /// </summary>
+        public static int ModSelectionHeight = 480;
+        /// <summary>
+        /// the width, in pixels, of the ModSelectionView window
+        /// </summary>
+        public static int ModSelectionWidth = 800;
+        /// <summary>
+        /// toggle for if the ModSelectionView window should be shown in fullscreen mode
+        /// </summary>
+        public static bool ModSelectionFullscreen = false;
+        /// <summary>
+        /// the x-coordinate location, in pixels, of the Preview window
+        /// </summary>
+        public static int PreviewX = 0;
+        /// <summary>
+        /// the y-coordinate location, in pixels, of the Preview window
+        /// </summary>
+        public static int PreviewY = 0;
+        /// <summary>
+        /// toggle for if the Preview window should be shown in fullscreen mode
+        /// </summary>
+        public static bool PreviewFullscreen = false;
+        /// <summary>
+        /// the height, in pixels, of the Preview window
+        /// </summary>
+        public static int PreviewHeight = 550;
+        /// <summary>
+        /// the width, in pixels, of the Preview window
+        /// </summary>
+        public static int PreviewWidth = 450;
+        /// <summary>
+        /// toggle for if the application should use the alternate updating method. Should be friendlier with antivirus applications.
+        /// </summary>
+        public static bool UseAlternateUpdateMethod = false;
+        public static LoadingGifs GIF = LoadingGifs.Standard;
+        public static UninstallModes UninstallMode = UninstallModes.Default;
+        public static SelectionView SView = SelectionView.Default;
+        public static FontSize FontSizeforum = FontSize.Font100;
+        public static AutoScaleMode AppScalingMode = AutoScaleMode.Font;
         //font settings
         public const float FontSize100 = 8.25F;//1.0 font scaling
         public const float FontSize125 = 10.25F;//1.25 font scaling
@@ -85,109 +175,40 @@ namespace RelhaxModpack
         public const float Scale275 = 2.75f;//2.75 font scaling
         public const string DefaultFontType = "Microsoft Sans Serif";
         public const string ComicSansFontType = "Comic Sans MS";
-        //ModSelectionlist window settigns
-        public static int ModSelectionHeight { get; set; }
-        public static int ModSelectionWidth { get; set; }
-        public static bool ModSelectionFullscreen = false;
-        //Preview widnow settings
-        public static int PreviewX = 0;
-        public static int PreviewY = 0;
-        public static bool PreviewFullscreen { get; set; }
-        public static int PreviewHeight { get; set; }
-        public static int PreviewWidth { get; set; }
-        //default is to not use it, only use it when issues with normal method
-        public static bool UseAlternateUpdateMethod = false;
-        //
+        //file and folder locations
+        public readonly static string SettingsXmlFile = Path.Combine(Application.StartupPath, "RelHaxSettings.xml");
+        public static string RelhaxDownloadsFolder = Path.Combine(Application.StartupPath, "RelHaxDownloads");
+        public static string MD5HashDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "MD5HashDatabase.xml");
+        public static string OnlineDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "onlineDatabase.xml");
+        public static string RelhaxTempFolder = Path.Combine(Application.StartupPath, "RelHaxTemp");
+        public static string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, "managerInfo.dat");
+        public static string ModInfoDatFile = Path.Combine(RelhaxTempFolder, "modInfo.dat");
+        public const string DefaultStartAddress = @"http://wotmods.relhaxmodpack.com/WoT/{onlineFolder}/";
+        public const string DefaultEndAddress = @"";
+        //file and folder macro locations
+        public static string AppDataFolder = "";
+        public static string TanksLocation = "";
+        ////version informations
+        public static string TanksVersion = "";
+        public static string TanksOnlineFolderVersion = "";
+        //needed to create to first line to installedRelhaxFiles.log
+        public static string DatabaseVersion = "";
+        //the config file version for saving the user's selection prefrences
+        public static string ConfigFileVersion = "2.0";     // for later imports of this files, we need a better identification
         public static string CustomModInfoPath = "";
-        //enumeration for the type of uninstall mode
-        public enum UninstallModes
-        {
-            Default = 0,
-            Quick = 1
-        }
-        public static UninstallModes UninstallMode = UninstallModes.Default;
-        //enumeration for the type of mod selection list view
-        public enum SelectionView
-        {
-            Default = 0,
-            Legacy = 1,
-            LegacyV2 = 2
-        };
-        public static SelectionView SView = SelectionView.Default;
-        public enum FontSize
-        {
-            Font100 = 0,
-            Font125 = 1,
-            Font175 = 2,
-            DPI100 = 3,
-            DPI125 = 4,
-            DPI175 = 5,
-            Font225 = 6,
-            Font275 = 7,
-            DPI225 = 8,
-            DPI275 = 9,
-            DPIAUTO = 10
-        };
-        public static FontSize FontSizeforum = FontSize.Font100;
-        public static AutoScaleMode AppScalingMode = AutoScaleMode.Font;
         public static Font AppFont = new Font(DefaultFontType, FontSize100);
         //loads settings from xml file
         public static void LoadSettings()
         {
             //Settings declared here are set for what their default values should be, then later modified in the settings xml file
             //i.e. when new features are added
-            InstantExtraction = false;
             FirstLoad = false;
-            CreateShortcuts = true;
-            CleanInstallation = true;
-            SuperExtraction = false;
-            PreviewFullscreen = false;
-            PreviewWidth = 450;
-            PreviewHeight = 550;
-            UseAlternateUpdateMethod = false;
             Logging.Manager("Loading application settings");
             if (!File.Exists(SettingsXmlFile))
             {
-                Logging.Manager("WARNING:Settings xml not found, loading defaults");
-                //could also use this to determine if first load or not
-                //default is to turn all features off
-                ComicSans = false;
-                BackupModFolder = false;
-                CleanInstallation = true;
-                ForceManuel = false;
-                GIF = LoadingGifs.Standard;
+                Logging.Manager("WARNING:Settings xml not found, defaults used");
+                //also specify that this is the first load
                 FirstLoad = true;
-                SaveLastConfig = false;
-                SaveUserData = false;
-                ClearCache = false;
-                EnableBordersDefaultView = true;
-                NotifyIfSameDatabase = false;
-                CreateShortcuts = false;
-                InstantExtraction = false;
-                PreviewFullscreen = false;
-                ExportMode = false;
-                PreviewWidth = 450;
-                PreviewHeight = 550;
-                ModSelectionHeight = 480;
-                ModSelectionWidth = 800;
-                FontSizeforum = FontSize.Font100;
-                UninstallMode = UninstallModes.Default;
-                ExpandAllLegacy = false;
-                ExpandAllLegacy2 = false;
-                ModSelectionFullscreen = false;
-                EnableColorChangeDefaultView = true;
-                DeleteLogs = false;
-                PreviewX = 0;
-                PreviewY = 0;
-                CustomModInfoPath = "";
-                FontSizeforum = FontSize.Font100;
-                SView = SelectionView.Default;
-                ShowInstallCompleteWindow = false;
-                UseAlternateUpdateMethod = false;
-                EnableBordersDefaultView = false;
-                EnableBordersLegacyView = false;
-                EnableColorChangeDefaultView = false;
-                EnableColorChangeLegacyView = false;
                 Logging.Manager("Language: " + CultureInfo.CurrentCulture.DisplayName);
                 string lang = CultureInfo.InstalledUICulture.Name.Split('-')[0].ToLower();
                 switch (lang)
@@ -324,14 +345,22 @@ namespace RelhaxModpack
                         case "UseAlternateUpdateMethod":
                             UseAlternateUpdateMethod = bool.Parse(n.InnerText);
                             break;
+                        case "BetaApplication":
+                            if(!Program.betaAppSetFromCommandLine)
+                                BetaApplication = bool.Parse(n.InnerText);
+                            break;
+                        case "BetaDatabase":
+                            if(!Program.betaDBSetFromCommandLine)
+                                BetaDatabase = bool.Parse(n.InnerText);
+                            break;
                     }
                 }
             }
-            ApplInternalProperties();
+            ApplyInternalProperties();
             Logging.Manager("Settings loaded successfully");
         }
         //saves settings to xml file
-        public static void saveSettings()
+        public static void SaveSettings()
         {
             Logging.Manager("Saving application settings");
             if (File.Exists(SettingsXmlFile)) File.Delete(SettingsXmlFile);
@@ -450,13 +479,19 @@ namespace RelhaxModpack
             XmlElement xUseAlternateUpdateMethod = doc.CreateElement("UseAlternateUpdateMethod");
             xUseAlternateUpdateMethod.InnerText = "" + UseAlternateUpdateMethod;
             settingsHolder.AppendChild(xUseAlternateUpdateMethod);
+            XmlElement xBetaApplication = doc.CreateElement("BetaApplication");
+            xBetaApplication.InnerText = "" + BetaApplication;
+            settingsHolder.AppendChild(xBetaApplication);
+            XmlElement xBetaDatabase = doc.CreateElement("BetaDatabase");
+            xBetaDatabase.InnerText = "" + BetaDatabase;
+            settingsHolder.AppendChild(xBetaDatabase);
 
             doc.Save(SettingsXmlFile);
             Logging.Manager("Settings saved successfully");
         }
         //returns the loading image for the picture viewer, based on
         //which loading image the user specified
-        public static Image getLoadingImage()
+        public static Image GetLoadingImage()
         {
             switch (GIF)
             {
@@ -471,7 +506,7 @@ namespace RelhaxModpack
             }
             return null;
         }
-        public static void ApplInternalProperties()
+        public static void ApplyInternalProperties()
         {
             if (ComicSans)
             {
@@ -653,68 +688,6 @@ namespace RelhaxModpack
                 return System.Windows.Media.Brushes.Gray;
             else
                 return System.Windows.Media.Brushes.White;
-        }
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        public static extern IntPtr FindWindow(string strClassName, string strWindowName);
-
-        [DllImport("shell32.dll")]
-        public static extern UInt32 SHAppBarMessage(UInt32 dwMessage, ref APPBARDATA pData);
-
-        public enum AppBarMessages
-        {
-            New = 0x00,
-            Remove = 0x01,
-            QueryPos = 0x02,
-            SetPos = 0x03,
-            GetState = 0x04,
-            GetTaskBarPos = 0x05,
-            Activate = 0x06,
-            GetAutoHideBar = 0x07,
-            SetAutoHideBar = 0x08,
-            WindowPosChanged = 0x09,
-            SetState = 0x0a
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct APPBARDATA
-        {
-            public UInt32 cbSize;
-            public IntPtr hWnd;
-            public UInt32 uCallbackMessage;
-            public UInt32 uEdge;
-            public Rectangle rc;
-            public Int32 lParam;
-        }
-
-        public enum AppBarStates
-        {
-            AutoHide = 0x01,
-            AlwaysOnTop = 0x02
-        }
-
-        /// <summary>
-        /// Set the Taskbar State option
-        /// </summary>
-        /// <param name="option">AppBarState to activate</param>
-        public static void SetTaskbarState(AppBarStates option)
-        {
-            APPBARDATA msgData = new APPBARDATA();
-            msgData.cbSize = (UInt32)Marshal.SizeOf(msgData);
-            msgData.hWnd = FindWindow("System_TrayWnd", null);
-            msgData.lParam = (Int32)(option);
-            SHAppBarMessage((UInt32)AppBarMessages.SetState, ref msgData);
-        }
-
-        /// <summary>
-        /// Gets the current Taskbar state
-        /// </summary>
-        /// <returns>current Taskbar state</returns>
-        public static AppBarStates GetTaskbarState()
-        {
-            APPBARDATA msgData = new APPBARDATA();
-            msgData.cbSize = (UInt32)Marshal.SizeOf(msgData);
-            msgData.hWnd = FindWindow("System_TrayWnd", null);
-            return (AppBarStates)SHAppBarMessage((UInt32)AppBarMessages.GetState, ref msgData);
         }
     }
 }

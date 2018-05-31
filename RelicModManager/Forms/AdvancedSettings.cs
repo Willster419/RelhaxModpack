@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace RelhaxModpack.Forms
@@ -13,6 +8,7 @@ namespace RelhaxModpack.Forms
     {
         private LoadingGifPreview gp;
         public int startX, startY;
+        private bool WindowLoading = false;
 
         public AdvancedSettings()
         {
@@ -21,9 +17,11 @@ namespace RelhaxModpack.Forms
 
         private void AdvancedSettings_Load(object sender, EventArgs e)
         {
+            WindowLoading = true;
             Logging.Manager(string.Format("AdvancedSettings: Loading window at location x={0}, y={1}",startX,startY));
             ApplySavedSettings();
             Location = new Point(startX, startY);
+            WindowLoading = false;
         }
 
         //apply saved settings
@@ -37,61 +35,44 @@ namespace RelhaxModpack.Forms
             InstantExtractionCB.Checked = Settings.InstantExtraction;
             ExportModeCB.Checked = Settings.ExportMode;
             UseAltUpdateMethodCB.Checked = Settings.UseAlternateUpdateMethod;
+            UseBetaApplicationCB.Checked = Settings.BetaApplication;
+            UseBetaDatabaseCB.Checked = Settings.BetaDatabase;
             switch (Settings.UninstallMode)
             {
-                case (Settings.UninstallModes.Default):
+                case (UninstallModes.Default):
                     DefaultUninstallModeRB.Checked = true;
                     break;
-                case (Settings.UninstallModes.Quick):
+                case (UninstallModes.Quick):
                     CleanUninstallModeRB.Checked = true;
                     break;
             }
             switch (Settings.GIF)
             {
-                case (Settings.LoadingGifs.Standard):
+                case (LoadingGifs.Standard):
                     {
                         standardImageRB.Checked = true;
                         break;
                     }
-                case (Settings.LoadingGifs.ThirdGuards):
+                case (LoadingGifs.ThirdGuards):
                     {
                         thirdGuardsLoadingImageRB.Checked = true;
                         break;
                     }
             }
-            
             if (Settings.ExportMode)
                 forceManuel.Enabled = false;
         }
-        //toggle UI buttons to be Enabled or disabled
-        public void ToggleUIButtons(bool enableToggle)
-        {
-            if (ExportModeCB.Checked)
-                forceManuel.Enabled = false;
-            else
-                forceManuel.Enabled = enableToggle;
-            clearCacheCB.Enabled = enableToggle;
-            createShortcutsCB.Enabled = enableToggle;
-            InstantExtractionCB.Enabled = enableToggle;
-            DefaultUninstallModeRB.Enabled = enableToggle;
-            CleanUninstallModeRB.Enabled = enableToggle;
-            cleanInstallCB.Enabled = enableToggle;
-            ShowInstallCompleteWindowCB.Enabled = enableToggle;
-            ExportModeCB.Enabled = enableToggle;
-            UseAltUpdateMethodCB.Enabled = enableToggle;
-        }
 
         #region Loading animations handlers
-        
         private void ImageRB_CheckedChanged(object sender, EventArgs e)
         {
             if (standardImageRB.Checked)
             {
-                Settings.GIF = Settings.LoadingGifs.Standard;
+                Settings.GIF = LoadingGifs.Standard;
             }
             else if (thirdGuardsLoadingImageRB.Checked)
             {
-                Settings.GIF = Settings.LoadingGifs.ThirdGuards;
+                Settings.GIF = LoadingGifs.ThirdGuards;
             }
         }
 
@@ -100,14 +81,14 @@ namespace RelhaxModpack.Forms
             if (e.Button != MouseButtons.Right)
                 return;
             RadioButton rb = (RadioButton)sender;
-            Settings.LoadingGifs backup = Settings.GIF;
+            LoadingGifs backup = Settings.GIF;
             if (rb.Name.Equals("standardImageRB"))
             {
-                Settings.GIF = Settings.LoadingGifs.Standard;
+                Settings.GIF = LoadingGifs.Standard;
             }
             else if (rb.Name.Equals("thirdGuardsLoadingImageRB"))
             {
-                Settings.GIF = Settings.LoadingGifs.ThirdGuards;
+                Settings.GIF = LoadingGifs.ThirdGuards;
             }
             else
                 return;
@@ -149,17 +130,18 @@ namespace RelhaxModpack.Forms
         private void SmartUninstallModeRB_CheckedChanged(object sender, EventArgs e)
         {
             if (DefaultUninstallModeRB.Checked)
-                Settings.UninstallMode = Settings.UninstallModes.Default;
+                Settings.UninstallMode = UninstallModes.Default;
         }
         //handler for what happends when the check box "clean install" is checked or not
         private void cleanInstallCB_CheckedChanged(object sender, EventArgs e)
         {
             Settings.CleanInstallation = cleanInstallCB.Checked;
         }
+
         private void CleanUninstallModeRB_CheckedChanged(object sender, EventArgs e)
         {
             if (CleanUninstallModeRB.Checked)
-                Settings.UninstallMode = Settings.UninstallModes.Quick;
+                Settings.UninstallMode = UninstallModes.Quick;
         }
 
         private void ExportModeCB_CheckedChanged(object sender, EventArgs e)
@@ -171,6 +153,24 @@ namespace RelhaxModpack.Forms
         private void UseAltUpdateMethodCB_CheckedChanged(object sender, EventArgs e)
         {
             Settings.UseAlternateUpdateMethod = UseAltUpdateMethodCB.Checked;
+        }
+
+        private void UseBetaDatabaseCB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.BetaDatabase = UseBetaDatabaseCB.Checked;
+            if(Settings.BetaDatabase && !WindowLoading)
+            {
+                MessageBox.Show(Translations.getTranslatedString("noChangeUntilRestart"));
+            }
+        }
+
+        private void UseBetaApplication_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.BetaApplication = UseBetaApplicationCB.Checked;
+            if (Settings.BetaApplication && !WindowLoading)
+            {
+                MessageBox.Show(Translations.getTranslatedString("noChangeUntilRestart"));
+            }
         }
         #endregion
 

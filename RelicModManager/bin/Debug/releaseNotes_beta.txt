@@ -1,51 +1,40 @@
-Beta Application Version 28.1.1_r5
--Fixed bugs with default uninstall mode failing if a file explorer was open to it
+Version 28.1.2 (05/29/2018)
+https://www.virustotal.com/#/file/28f729992c099f75626229634fda85c1249df0c45e194176ae25c34b5c67421a/detection
+--UI changes:
+-Added color change code and border code back to default and new to OMC view (request by popular demand)
+-Fixed bug where if single_dropdown2 item selected by parent selection, it would not be auto-selected when it should (applies to both views)
+-Optimized OMC view during initial view creation
+-Redesigned and cleaned up the main window. Moved several settings and options to the new "Advanced Settings" window
+-Added feature: When changing scaling settings, the application will ask you with a timed window if you want to keep the changes. Similar to changing the screen resolution on windows. Prevents invalid scaling size issue preventing you from changing it back.
+-Fixed bug in legacy view where some disabled components would not show preview on right click
+-Fixed bug in legacy view where an enabled component on right click preview would send focus back to selection list, not staying on preview window
+-Re-wrote code for how UI controls are translated so that it is modular
+-Added working facebook and twitter links
+-Other UI code optimizations
+
+--Updater changes:
+-Added alternative application update method. It will take longer, but should be more compatible with anti-virus programs
+
+--other changes:
+-Added ability to use the beta application and beta database from the advanced settings page. (Command-line versions still work)
+-Organized the translations into groups based on where they are used
+-Rewrote entire backend tool to update the database, update the application, and clean the online zip folders
+-Automated the database update process. It now takes 15 seconds, rather than 15 mins manually
+-Added automation of the databaseupdate text message (the "Database Update!" message) so it is made by the update process. Helps to speed up the update process
+-Added automation for process of cleaning the online wot folders
 -Fixed bug in default selection view where when selecting a mod in a category view, when scrolling down to preview another, after closing the preview window the selection list jumps back up to that first mod you selected
 -Fixed bugs where some UI components would not disable during an install
 -Added ability to mark log output statemetns as debug so that they will only show in alpha or beta builds
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Beta Application Version 28.1.1_r4.1
 -Added ability for database editor to auto load databse from command line
 -Updated most translations
--Fixed bugs with the database update script
---------------------------------------------------------------------------------------------------------------------------------------------
 
-Beta Application Version 28.1.1_r3
+--Installer changes:
+-Added the "_readme" folder to be deleted during the installation process
 -Renamed Smart uninstall to default, made it the default uninstall method
 -Rewrote Default uninstall method, now optimized and actually uninstalls everything
 -Changed output of installer log file, now all file and folder entries are absolute
 -Improved Uninstall Message
--Fixed bugs where buttons and links were not being translated
--Added working facebook and twitter links
--Added most french translations (waiting on german and polish)
 --------------------------------------------------------------------------------------------------------------------------------------------
-
-Beta Application Version 28.1.1_r2
--Fixed issues where scaling buttons were no longer working
--Added feature: When changing scaling settings, the application will ask you with a timed window if you want to keep the changes. Similar to changing the screen resolution on windows. Prevents invalid scaling size issue preventing you from changing it back.
--Fixed bug in legacy view where some disabled components would not show preview on right click
--Fixed bug in legacy view where an enabled component on right click preview would send focus back to selection list, not staying on preview window
--Fixed issues with the automated application update process
--Added the ability to load the database editor with a txt keyfile rather than having to input the password every time
--Added automation for process of cleaning the online wot folders
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Beta Application Version 28.1.1_r1
--Added color change code and border code back to default and new to OMC view (request by popular demand)
--Optimized OMC view during initial view creation
--Other UI code optimizations
--Fixed bug where if single_dropdown2 item selected from parent selection, it would not be auto-selected when it should (applies to both views)
--Added alternative application update method. It will take longer, but should be more compatible with anti-virus programs
--Redesigned the main window. Moved several settings and options to the new "Advanced Settings" window.
--Code cleanup in the main window
--Organized the translations into groups based on where they are used
--Rewrote entire backend tool to update the database, update the application, and clean the online zip folders
--Automated the database update process. It now takes 15 seconds, rather than 15 mins manually
--Finished automation of the databaseupdate text message (the "Database Update!" message) so it is made by the update process.
--Added the "_readme" folder to be deleted during the installation process
---------------------------------------------------------------------------------------------------------------------------------------------
-
 
 Version 28.0.4 (04/17/2018)
 https://www.virustotal.com/#/file/f4e7b13d8e188fff7e604802a96acc43842394cf5d7d94ad82ffce0d20e86b6e/detection

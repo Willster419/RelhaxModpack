@@ -31,7 +31,7 @@ namespace RelhaxModpack
         //sets the loading image
         public void SetLoadingImage()
         {
-            gifPreviewBox.Image = Settings.getLoadingImage();
+            gifPreviewBox.Image = Settings.GetLoadingImage();
         }
     }
 }
