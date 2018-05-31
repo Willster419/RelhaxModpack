@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace RelhaxModpack
 {
@@ -20,13 +22,13 @@ namespace RelhaxModpack
         // path inside the pkg file to the filename to process
         public string directoryInArchive { get; set; } = "";
         // path to atlas file outside the archive (after extraction located here)
-        public string tempAltasPresentDirectory { get; set; } = "";
+        public string tempAltasPresentDirectory { get; set; } = Path.Combine(Application.StartupPath, "RelHaxTemp");
         // path to place the finished file
         public string atlasSaveDirectory { get; set; } = "";
         // width of the new atlases file
-        public int atlasWidth { get; set; } = 0;   // -1 = get from original atlas file
-        // hight of the new atlases file
-        public int atlasHeight { get; set; } = 0;   // -1 = get from original atlas file
+        public int atlasWidth { get; set; } = 0;   // 0 or empty = get from original atlas file
+        // height of the new atlases file
+        public int atlasHeight { get; set; } = 0;   // 0 or empty = get from original atlas file
         // padding of the new atlases file
         public int padding { get; set; } = 1;
         // positioning optimation with PowOf2
