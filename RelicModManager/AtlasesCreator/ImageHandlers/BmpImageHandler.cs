@@ -25,24 +25,35 @@
 #endregion
 
 using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace RelhaxModpack.AtlasesCreator
 {
-    /// <summary>
-    /// An object able to save a sprite sheet image.
-    /// </summary>
-    public interface IImageExporter
+    public class BmpImageHandler : IImageHandler
     {
-        /// <summary>
-        /// Gets the extension for the image file type.
-        /// </summary>
-        string ImageExtension { get; }
+        public string ImageExtension
+        {
+            get { return "bmp"; }
+        }
 
-        /// <summary>
-        /// Saves the image to a file.
-        /// </summary>
-        /// <param name="filename">The file to which the image should be saved.</param>
-        /// <param name="image">The image to save to the file.</param>
-        void Save(string filename, Bitmap image);
+        public Bitmap Load(string filename)
+        {
+            return new Bitmap(filename);
+        }
+
+        public void Save(string filename, Bitmap image)
+        {
+            image.Save(filename, ImageFormat.Bmp);
+        }
+
+        public Size GetImageSize(string filename)
+        {
+            Size size = new Size
+            {
+                Height = 0,
+                Width = 0
+            };
+            return size;
+        }
     }
 }

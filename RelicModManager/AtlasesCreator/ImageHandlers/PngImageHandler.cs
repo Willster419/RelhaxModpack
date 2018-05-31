@@ -29,16 +29,31 @@ using System.Drawing.Imaging;
 
 namespace RelhaxModpack.AtlasesCreator
 {
-    public class PngImageExporter : IImageExporter
+    public class PngImageHandler : IImageHandler
     {
         public string ImageExtension
         {
             get { return "png"; }
         }
 
+        public Bitmap Load(string filename)
+        {
+            return new Bitmap(filename);
+        }
+
         public void Save(string filename, Bitmap image)
         {
             image.Save(filename, ImageFormat.Png);
+        }
+
+        public Size GetImageSize(string filename)
+        {
+            Size size = new Size
+            {
+                Height = 0,
+                Width = 0
+            };
+            return size;
         }
     }
 }

@@ -59,7 +59,7 @@ namespace RelhaxModpack.Properties {
                 resourceCulture = value;
             }
         }
-        
+
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
@@ -69,7 +69,7 @@ namespace RelhaxModpack.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        
+
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>

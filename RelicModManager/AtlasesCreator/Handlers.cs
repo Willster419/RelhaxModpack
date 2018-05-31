@@ -32,35 +32,37 @@ using System.Reflection;
 
 namespace RelhaxModpack.AtlasesCreator
 {
-    public static class Exporters
+    public static class Handlers
     {
-        private static List<IImageExporter> imageExporters = new List<IImageExporter>();
+        private static List<IImageHandler> imageHandlers = new List<IImageHandler>();
         private static List<IMapExporter> mapExporters = new List<IMapExporter>();
 
-        public static ReadOnlyCollection<IImageExporter> ImageExporters { get; private set; }
+        public static ReadOnlyCollection<IImageHandler> ImageHandlers { get; private set; }
         public static ReadOnlyCollection<IMapExporter> MapExporters { get; private set; }
 
         public static void Load() { /* invokes static constructor */ }
 
-        static Exporters()
+        static Handlers()
         {
-            ImageExporters = new ReadOnlyCollection<IImageExporter>(imageExporters);
+            ImageHandlers = new ReadOnlyCollection<IImageHandler>(imageHandlers);
             MapExporters = new ReadOnlyCollection<IMapExporter>(mapExporters);
 
-            // find built in exporters
-            FindExporters(Assembly.GetExecutingAssembly());
+            // find built in handlers
+            FindHandlers(Assembly.GetExecutingAssembly());
 
+            /*
             // find exporters in any DLLs in the directory with sspack.exe
             string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             string[] dlls = Directory.GetFiles(dir, "*.dll", SearchOption.TopDirectoryOnly);
             foreach (string file in dlls)
             {
-            try { FindExporters(Assembly.LoadFile(file)); }
+            try { FindHandlers(Assembly.LoadFile(file)); }
                 catch {  }
             }
+            */
         }
 
-        private static void FindExporters(Assembly assembly)
+        private static void FindHandlers(Assembly assembly)
         {
             string Namespace = MethodBase.GetCurrentMethod().DeclaringType.Namespace;
             
@@ -70,10 +72,10 @@ namespace RelhaxModpack.AtlasesCreator
                 {
                     try
                     {
-                        IImageExporter imageExporter = Activator.CreateInstance(type) as IImageExporter;
-                        if (imageExporter != null)
+                        IImageHandler imageHandler = Activator.CreateInstance(type) as IImageHandler;
+                        if (imageHandler != null)
                         {
-                            imageExporters.Add(imageExporter);
+                            imageHandlers.Add(imageHandler);
                         }
 
                         IMapExporter mapExporter = Activator.CreateInstance(type) as IMapExporter;
