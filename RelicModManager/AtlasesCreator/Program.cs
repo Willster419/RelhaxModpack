@@ -76,7 +76,6 @@ namespace RelhaxModpack.AtlasesCreator
             return;
         }
 
-        // private static int Launch(AtlasesArgs args)
         private static int Launch(Atlas args)
         {
             if (args.AtlasFile.Equals(""))
@@ -86,23 +85,23 @@ namespace RelhaxModpack.AtlasesCreator
             else
             {
                 // make sure we have our list of exporters
-                Exporters.Load();
+                Handlers.Load();
 
                 // try to find matching exporters
-                IImageExporter imageExporter = null;
+                IImageHandler imageHandler = null;
                 IMapExporter mapExporter = null;
 
                 string imageExtension = Path.GetExtension(args.AtlasFile).Substring(1).ToLower();
-                foreach (var exporter in Exporters.ImageExporters)
+                foreach (var handler in Handlers.ImageHandlers)
                 {
-                    if (exporter.ImageExtension.ToLower() == imageExtension)
+                    if (handler.ImageExtension.ToLower() == imageExtension)
                     {
-                        imageExporter = exporter;
+                        imageHandler = handler;
                         break;
                     }
                 }
 
-                if (imageExporter == null)
+                if (imageHandler == null)
                 {
                     Logging.Manager("Failed to find exporters for specified image type.");
                     return (int)FailCode.ImageExporter;
@@ -111,7 +110,7 @@ namespace RelhaxModpack.AtlasesCreator
                 if (!string.IsNullOrEmpty(args.MapFile))
                 {
                     string mapExtension = Path.GetExtension(args.MapFile).Substring(1).ToLower();
-                    foreach (var exporter in Exporters.MapExporters)
+                    foreach (var exporter in Handlers.MapExporters)
                     {
                         if (exporter.MapExtension.ToLower() == Atlas.MapTypeName(args.mapType).ToLower())
                         {
@@ -179,10 +178,8 @@ namespace RelhaxModpack.AtlasesCreator
                 {
                     if (File.Exists(args.AtlasFile))
                         File.Delete(args.AtlasFile);
-                    imageExporter.Save(args.AtlasFile, outputImage);
-                    // Utils.AppendToInstallLog(@"/*  created Atlases  */");
-                    // Utils.AppendToInstallLog(args.ImageFile);
-                    Logging.InstallerGroup("created Atlases");         // write comment
+                    imageHandler.Save(args.AtlasFile, outputImage);
+                    Logging.InstallerGroup("created Atlases");                                              // write comment
                     Logging.Installer(Utils.ReplaceDirectorySeparatorChar(args.AtlasFile));                 // write created filename with path
                 }
                 catch (Exception e)
