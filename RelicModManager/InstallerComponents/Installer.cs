@@ -203,7 +203,7 @@ namespace RelhaxModpack
             Logging.Manager("Uninstallation process finished");
             MessageBox.Show(Translations.getTranslatedString("uninstallFinished"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-        //Start the installation on the Wokrer thread
+        //Start the installation on the Worker thread
         public void ActuallyStartInstallation(object sender, DoWorkEventArgs e)
         {
             Stopwatch installTimer = new Stopwatch();
@@ -215,6 +215,7 @@ namespace RelhaxModpack
             //fill the hashtable
             zipMacros.Add("WoTAppData", AppDataFolder);
             zipMacros.Add("_AppData", AppDataFolder);
+            zipMacros.Add("_RelHaxLibraries", Application.StartupPath);
             ResetArgs();
             InstalledFilesLogPath = Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log");
             //Step 1: do a backup if requested
@@ -1558,7 +1559,7 @@ namespace RelhaxModpack
 
                         if (!a.Pkg.Equals(""))
                         {
-                            a.tempAltasPresentDirectory = Path.Combine(Application.StartupPath, "RelHaxTemp");
+                            // a.tempAltasPresentDirectory = Path.Combine(Application.StartupPath, "RelHaxTemp"); => moved to Atlas class definition
                             //get file from the zip archive
                             using (ZipFile zip = new ZipFile(a.Pkg))
                             {
@@ -1630,7 +1631,7 @@ namespace RelhaxModpack
                         System.Threading.Thread.Sleep(20);
                     }
                     sw.Stop();
-                    Logging.Manager("All atlas files created in (msec): " + sw.ElapsedMilliseconds);
+                    Logging.Manager("All atlas images created in (msec): " + sw.ElapsedMilliseconds);
                 }
             }
             catch (Exception ex)
@@ -1648,7 +1649,7 @@ namespace RelhaxModpack
         //Step 18: Create Atlases
         private void CreateAtlasesAsync(Atlas a)
         {
-            ExtractAtlases_run(a);
+            Size os = ExtractAtlases_run(a);        // os = original size of the extracted Bitmap
             args.ChildProcessed++;
             InstallWorker.ReportProgress(0);
             Atlas atlasesArgs = new Atlas
@@ -1664,6 +1665,26 @@ namespace RelhaxModpack
                 fastImagePacker = a.fastImagePacker,
                 padding = a.padding
             };
+
+            // if the arguments in width and/or height of the atlases-creator-config-xml-file are 0 (or below) or not given, work with the original file dimensions to get working width and height
+            if ((atlasesArgs.atlasHeight < 1) | (atlasesArgs.atlasWidth < 1))
+            {
+                if (atlasesArgs.atlasWidth < 1)
+                    atlasesArgs.atlasWidth = os.Width;
+
+                if (atlasesArgs.atlasHeight < 1)
+                    atlasesArgs.atlasHeight = os.Height;
+
+                if ((os.Height * os.Width) == (atlasesArgs.atlasWidth * atlasesArgs.atlasHeight))
+                {
+                    atlasesArgs.atlasHeight = atlasesArgs.atlasHeight * 2;
+                }
+                else
+                {
+                    while ((os.Height * os.Width) > (atlasesArgs.atlasWidth * atlasesArgs.atlasHeight))
+                        atlasesArgs.atlasHeight = atlasesArgs.atlasHeight * 2;
+                }
+            }
 
             List<string> fl = new List<string>();
             fl.AddRange(a.imageFolderList);
@@ -2139,13 +2160,13 @@ namespace RelhaxModpack
                                         atlases.atlasSaveDirectory = Utils.ReplaceMacro(item.Value.ToString().Trim());
                                         break;
                                     case "atlasWidth":
-                                        atlases.atlasWidth = int.Parse(item.Value.ToString().Trim());
+                                        atlases.atlasWidth = int.Parse("0" + item.Value.ToString().Trim());
                                         break;
                                     case "atlasHeight":
-                                        atlases.atlasHeight = int.Parse(item.Value.ToString().Trim());
+                                        atlases.atlasHeight = int.Parse("0" + item.Value.ToString().Trim());
                                         break;
                                     case "padding":
-                                        atlases.padding = int.Parse(item.Value.ToString().Trim());
+                                        atlases.padding = int.Parse("0" + item.Value.ToString().Trim());
                                         break;
                                     case "powOf2":
                                         atlases.powOf2 = Utils.ParseBool(item.Value, atlases.powOf2 == Atlas.State.True) ? Atlas.State.True : Atlas.State.False;
@@ -2450,43 +2471,46 @@ namespace RelhaxModpack
             return files.Where(f => extensions.Contains(f.Extension));
         }
 
-        private void ExtractAtlases_run(Atlas args)
+        private Size ExtractAtlases_run(Atlas args)
         {
+            Size originalAtlasSize = new Size();
+            originalAtlasSize.Height = 0;
+            originalAtlasSize.Width = 0;
+
             Logging.Manager("extracting Atlas: " + args.AtlasFile);
             Stopwatch sw = new Stopwatch();
             sw.Reset();
             sw.Start();
 
             string ImageFile = Path.Combine(args.tempAltasPresentDirectory, args.AtlasFile);
-            //string workingFolder = Path.Combine(Application.StartupPath, "RelHaxTemp", Path.GetFileNameWithoutExtension(ImageFile));
 
             // make sure we have our list of importers
-            AtlasesCreator.Importers.Load();
+            AtlasesCreator.Handlers.Load();
 
             // try to find matching importers
-            AtlasesCreator.IImageImporter imageImporter = null;
+            AtlasesCreator.IImageHandler imageHandler = null;
 
             if (!File.Exists(ImageFile))
             {
                 Logging.Manager("ERROR. Atlas file not found: " + ImageFile);
-                return;
+                return originalAtlasSize;
             }
 
             // checked if fileformat is supported
             string imageExtension = Path.GetExtension(ImageFile).Substring(1).ToLower();
-            foreach (var importer in AtlasesCreator.Importers.ImageImporters)
+            foreach (var handler in AtlasesCreator.Handlers.ImageHandlers)
             {
-                if (importer.ImageExtension.ToLower() == imageExtension)
+                if (handler.ImageExtension.ToLower() == imageExtension)
                 {
-                    imageImporter = importer;
+                    imageHandler = handler;
                     break;
                 }
             }
 
-            if (imageImporter == null)
+            if (imageHandler == null)
             {
                 Logging.Manager(string.Format("Failed to find image importers for specified image type: {0}", ImageFile));
-                return;
+                return originalAtlasSize;
             }
 
             string MapFile = Path.Combine(args.tempAltasPresentDirectory, args.MapFile);
@@ -2494,7 +2518,7 @@ namespace RelhaxModpack
             if (!File.Exists(MapFile))
             {
                 Logging.Manager("ERROR. Map file not found: " + MapFile);
-                return;
+                return originalAtlasSize;
             }
 
             // Bitmap atlasImage = new Bitmap(ImageFile);
@@ -2503,12 +2527,13 @@ namespace RelhaxModpack
             try
             {
                 // Load bitmap with the propper importer
-                atlasImage = (Bitmap)imageImporter.Load(ImageFile);
+                atlasImage = (Bitmap)imageHandler.Load(ImageFile);
+                originalAtlasSize = atlasImage.Size;
             }
             catch (Exception ex)
             {
-                Utils.ExceptionLog("ExtractAtlases_run", "imageImporter: " + ImageFile, ex);
-                return;
+                Utils.ExceptionLog("ExtractAtlases_run", "imageHandler: " + ImageFile, ex);
+                return originalAtlasSize;
             }
 
             Bitmap CroppedImage = null;
@@ -2604,6 +2629,7 @@ namespace RelhaxModpack
                 sw.Stop();
             }
             Logging.Manager("Extraction for " + args.AtlasFile + " completed in " + sw.Elapsed.TotalSeconds.ToString("N3", System.Globalization.CultureInfo.InvariantCulture) + " seconds.");
+            return originalAtlasSize;
         }
         #region File IO Methods
         //recursivly deletes every file from one place to another
