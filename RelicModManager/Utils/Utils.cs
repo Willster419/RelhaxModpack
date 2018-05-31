@@ -1137,6 +1137,26 @@ namespace RelhaxModpack
             }
         }
 
+        public static byte[] ReadByteArrayFromFile(string filename, int chunkSize)
+        {
+            byte[] chunk = null;
+
+            try
+            {
+                using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
+                {
+                    using (BinaryReader br = new BinaryReader(fs, new ASCIIEncoding()))
+                    {
+                        chunk = br.ReadBytes(chunkSize);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("ReadByteArrayFromFile", "File: " + filename, ex);
+            }
+            return chunk;
+        }
 
         public static string Truncate(TextBox text)
         {
