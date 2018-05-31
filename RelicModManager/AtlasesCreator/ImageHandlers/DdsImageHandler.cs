@@ -22,10 +22,6 @@ namespace RelhaxModpack.AtlasesCreator
 
         public void Save(string filename, Bitmap image)
         {
-            // image.Save(Path.ChangeExtension(filename, ".png"), System.Drawing.Imaging.ImageFormat.Png);
-
-            // Logging.Manager("The code to create DDS images is not integrated, so a PNG image is generated instead.");
-
             /*
             libaries needed to make this code work:
             FreeImage32.dll
@@ -35,15 +31,16 @@ namespace RelhaxModpack.AtlasesCreator
             TeximpNet.dll
             TeximpNet.xml
             */
+            System.Drawing.Imaging.BitmapData bmpData = null;
+
             try
             {
                 // Lock the bitmap's bits. 
                 Rectangle rect = new Rectangle(0, 0, image.Width, image.Height);
-                System.Drawing.Imaging.BitmapData bmpData = image.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadOnly, image.PixelFormat);
+                bmpData = image.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadOnly, image.PixelFormat);
 
                 // Get the address of the first line.
                 IntPtr ptr = bmpData.Scan0;
-                image.UnlockBits(bmpData);
 
                 Surface surfaceFromRawData = null;
                 try
@@ -72,6 +69,7 @@ namespace RelhaxModpack.AtlasesCreator
             }
             finally
             {
+                image.UnlockBits(bmpData);
                 image.Dispose();
             }
         }
