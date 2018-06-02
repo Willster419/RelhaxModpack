@@ -1734,15 +1734,12 @@ namespace RelhaxModpack
                 };
 
                 List<string> fl = new List<string>();
-                //fl.Add(a.workingFolder);
                 fl.AddRange(a.imageFolderList);
 
                 //temp to get working proof of concept
                 //only pass in the same bitmaps
 
                 //CHANGE THIS TO LIST OF TEXTURES WITH MODS
-                //atlasesArgs.Images = ParseFilesForAtlasList(a.TextureList, fl.ToArray());
-                //atlasesArgs.Images = a.TextureList;
                 AtlasesCreator.Program.Run(atlasesArgs);
             }
         }
