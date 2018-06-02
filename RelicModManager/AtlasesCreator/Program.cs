@@ -91,35 +91,11 @@ namespace RelhaxModpack.AtlasesCreator
                     return (int)FailCode.NoImages;
                 }
 
-                //NOT NEEDED
-                /*
-                // make sure no images have the same name if we're building a map
-                if (mapExporter != null)
-                {
-                    for (int i = 0; i < args.Images.Count; i++)
-                    {
-                        string str1 = Path.GetFileNameWithoutExtension(args.Images[i]);
-
-                        for (int j = i + 1; j < args.Images.Count; j++)
-                        {
-                            string str2 = Path.GetFileNameWithoutExtension(args.Images[j]);
-
-                            if (str1 == str2)
-                            {
-                                Logging.Manager(string.Format("Two images have the same name: {0} = {1}", args.Images[i], args.Images[j]));
-                                return (int)FailCode.ImageNameCollision;
-                            }
-                        }
-                    }
-                }
-                */
-
                 // generate our output
                 ImagePacker imagePacker = new ImagePacker();
-                Dictionary<string, Rectangle> outputMap;
 
                 // pack the image, generating a map only if desired
-                int result = imagePacker.PackImage(args.TextureList, args.powOf2, args.square, args.fastImagePacker, args.atlasWidth, args.atlasHeight, args.padding, args.mapExporter != null, out Bitmap outputImage, out outputMap);
+                int result = imagePacker.PackImage(args.TextureList, args.PowOf2, args.Square, args.FastImagePacker, args.AtlasWidth, args.AtlasHeight, args.Padding, args.mapExporter != null, out Bitmap outputImage, out Dictionary<string, Rectangle> outputMap);
                 if (result != 0)
                 {
                     Logging.Manager("There was an error making the image sheet.");
