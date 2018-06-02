@@ -13,8 +13,6 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 using Newtonsoft.Json.Linq;
 using System.Collections;
-using System.Windows;
-using System.Windows.Interop;
 using IWshRuntimeLibrary;
 
 namespace RelhaxModpack

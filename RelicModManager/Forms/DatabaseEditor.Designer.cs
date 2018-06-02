@@ -734,7 +734,7 @@
             this.ObjectDevURLTB.Name = "ObjectDevURLTB";
             this.ObjectDevURLTB.Size = new System.Drawing.Size(447, 20);
             this.ObjectDevURLTB.TabIndex = 15;
-            this.ObjectDevURLTB.DoubleClick += new System.EventHandler(this.callTextBoxURL_DoubleClick);
+            this.ObjectDevURLTB.DoubleClick += new System.EventHandler(this.CallTextBoxURL_DoubleClick);
             // 
             // ObjectDevURL
             // 
