@@ -1,10 +1,7 @@
 ﻿using System.Drawing;
-using System.IO;
 using System;
 using TeximpNet;
 using TeximpNet.DDS;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 namespace RelhaxModpack.AtlasesCreator
 {
@@ -74,7 +71,7 @@ namespace RelhaxModpack.AtlasesCreator
             }
         }
 
-        private static readonly int CHUNK_SIZE = 32;
+        private static readonly int CHUNK_SIZE = 0x20;
         public Size GetImageSize(string filename)
         {
             byte[] chunk = null;
@@ -88,7 +85,7 @@ namespace RelhaxModpack.AtlasesCreator
 
             if (chunk.Length < CHUNK_SIZE)
             {
-                Logging.Manager(filename + " is corrupted and NOT a valid " + ImageExtension.ToUpper() + " image");
+                Logging.Manager(filename + " is maybe a corrupted file (to short to be an image)");
             }
             else
             {
@@ -108,8 +105,7 @@ namespace RelhaxModpack.AtlasesCreator
 
         private static bool IsDDS(byte[] buffer)
         {
-            // Logging.Manager(Utils.ConvertByteArrayToString(buffer));
-            int stamp = buffer[0] | buffer[1] << 8 | buffer[2] << 16 | buffer[3] << 24;
+            Int64 stamp = buffer[0x0] | (((Int64)buffer[0x1]) << 8) | (((Int64)buffer[0x2]) << 16) | (((Int64)buffer[0x3]) << 24);
             return stamp == 0x20534444;
         }
     }

@@ -24,6 +24,7 @@
 
 #endregion
 
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 
@@ -46,14 +47,43 @@ namespace RelhaxModpack.AtlasesCreator
             image.Save(filename, ImageFormat.Bmp);
         }
 
+        private static readonly int CHUNK_SIZE = 0x20;
         public Size GetImageSize(string filename)
         {
+            byte[] chunk = null;
             Size size = new Size
             {
                 Height = 0,
                 Width = 0
             };
+
+            chunk = Utils.ReadByteArrayFromFile(filename, CHUNK_SIZE);
+
+            if (chunk.Length < CHUNK_SIZE)
+            {
+                Logging.Manager(filename + " is maybe a corrupted file (to short to be an image)");
+            }
+            else
+            {
+                if (!IsBMP(chunk))
+                {
+                    Logging.Manager(filename + " is NOT a valid " + ImageExtension.ToUpper() + " image");
+                }
+                else
+                {
+                    size.Height = chunk[0x16] | chunk[0x17] << 8 | chunk[0x18] << 16 | chunk[0x19] << 24;
+                    size.Height = System.Math.Abs(size.Height);
+                    size.Width = chunk[0x12] | chunk[0x13] << 8 | chunk[0x14] << 16 | chunk[0x15] << 24;
+                }
+            }
+            // Logging.Manager(filename + " is: " + size.Height.ToString() + " height and " + size.Width.ToString() + " width.");
             return size;
+        }
+
+        private static bool IsBMP(byte[] buffer)
+        {
+            Int64 stamp = (((Int64)buffer[0x0]) << 8) | buffer[0x1];
+            return stamp == 0x424d;
         }
     }
 }
