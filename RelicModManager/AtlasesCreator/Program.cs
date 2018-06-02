@@ -84,48 +84,6 @@ namespace RelhaxModpack.AtlasesCreator
             }
             else
             {
-                // make sure we have our list of exporters
-                Handlers.Load();
-
-                // try to find matching exporters
-                IImageHandler imageHandler = null;
-                IMapExporter mapExporter = null;
-
-                string imageExtension = Path.GetExtension(args.AtlasFile).Substring(1).ToLower();
-                foreach (var handler in Handlers.ImageHandlers)
-                {
-                    if (handler.ImageExtension.ToLower() == imageExtension)
-                    {
-                        imageHandler = handler;
-                        break;
-                    }
-                }
-
-                if (imageHandler == null)
-                {
-                    Logging.Manager("Failed to find exporters for specified image type.");
-                    return (int)FailCode.ImageExporter;
-                }
-
-                if (!string.IsNullOrEmpty(args.MapFile))
-                {
-                    string mapExtension = Path.GetExtension(args.MapFile).Substring(1).ToLower();
-                    foreach (var exporter in Handlers.MapExporters)
-                    {
-                        if (exporter.MapType.Equals(args.mapType))
-                        {
-                            mapExporter = exporter;
-                            break;
-                        }
-                    }
-
-                    if (mapExporter == null)
-                    {
-                        Logging.Manager("Failed to find exporters for specified map type.");
-                        return (int)FailCode.MapExporter;
-                    }
-                }
-
                 // make sure we found some images
                 if (args.TextureList.Count == 0)
                 {
@@ -161,7 +119,7 @@ namespace RelhaxModpack.AtlasesCreator
                 Dictionary<string, Rectangle> outputMap;
 
                 // pack the image, generating a map only if desired
-                int result = imagePacker.PackImage(args.TextureList, args.powOf2, args.square, args.fastImagePacker, args.atlasWidth, args.atlasHeight, args.padding, mapExporter != null, out Bitmap outputImage, out outputMap);
+                int result = imagePacker.PackImage(args.TextureList, args.powOf2, args.square, args.fastImagePacker, args.atlasWidth, args.atlasHeight, args.padding, args.mapExporter != null, out Bitmap outputImage, out outputMap);
                 if (result != 0)
                 {
                     Logging.Manager("There was an error making the image sheet.");
@@ -178,7 +136,7 @@ namespace RelhaxModpack.AtlasesCreator
                 {
                     if (File.Exists(args.AtlasFile))
                         File.Delete(args.AtlasFile);
-                    imageHandler.Save(args.AtlasFile, outputImage);
+                    args.imageHandler.Save(args.AtlasFile, outputImage);
                     Logging.InstallerGroup("created Atlases");                                              // write comment
                     Logging.Installer(Utils.ReplaceDirectorySeparatorChar(args.AtlasFile));                 // write created filename with path
                 }
@@ -188,13 +146,13 @@ namespace RelhaxModpack.AtlasesCreator
                     return (int)FailCode.FailedToSaveImage;
                 }
 
-                if (mapExporter != null)
+                if (args.mapExporter != null)
                 {
                     try
                     {
                         if (File.Exists(args.MapFile))
                             File.Delete(args.MapFile);
-                        mapExporter.Save(args.MapFile, outputMap);
+                        args.mapExporter.Save(args.MapFile, outputMap);
                         Logging.Installer(Utils.ReplaceDirectorySeparatorChar(args.MapFile));                 // write created filename with path
                     }
                     catch (Exception e)

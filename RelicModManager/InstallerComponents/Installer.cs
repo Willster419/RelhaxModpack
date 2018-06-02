@@ -1529,7 +1529,7 @@ namespace RelhaxModpack
                 AtlasesCreator.Handlers.Load();
 
                 // try to find matching mapExporter
-                AtlasesCreator.IMapExporter mapExporter = null;
+                // AtlasesCreator.IMapExporter mapExporter = null;
 
                 foreach (Atlas a in atlasesList)
                 {
@@ -1543,12 +1543,24 @@ namespace RelhaxModpack
                         //workingFolder example: "F:\\Tanks Stuff\\RelicModManager\\RelicModManager\\bin\\Debug\\RelHaxTemp\\battleAtlas"
                         //if (!Directory.Exists(a.workingFolder)) Directory.CreateDirectory(a.workingFolder); 
 
+                        // get the right imageHandler for this atlas
+                        string imageExtension = Path.GetExtension(a.AtlasFile).Substring(1).ToLower();
+                        foreach (var handler in AtlasesCreator.Handlers.ImageHandlers)
+                        {
+                            if (handler.ImageExtension.ToLower() == imageExtension)
+                            {
+                                a.imageHandler = handler;
+                                break;
+                            }
+                        }
+
+                        // get the right imageHandler for this atlas
                         foreach (var exporter in AtlasesCreator.Handlers.MapExporters)
                         {
                             if (exporter.MapType.Equals(a.mapType))
                             {
-                                mapExporter = exporter;
-                                a.MapFile = Path.GetFileNameWithoutExtension(a.AtlasFile) + "." + mapExporter.MapExtension.ToLower();
+                                a.mapExporter = exporter;
+                                a.MapFile = Path.GetFileNameWithoutExtension(a.AtlasFile) + "." + a.mapExporter.MapExtension.ToLower();
                                 break;
                             }
                         }
@@ -1669,7 +1681,9 @@ namespace RelhaxModpack
                 atlasHeight = a.atlasHeight,
                 atlasWidth = a.atlasWidth,
                 AtlasFile = Path.Combine(a.atlasSaveDirectory, a.AtlasFile),
+                imageHandler = a.imageHandler,
                 MapFile = Path.Combine(a.atlasSaveDirectory, a.MapFile),
+                mapExporter = a.mapExporter,
                 atlasSaveDirectory = a.atlasSaveDirectory,
                 generateMap = a.generateMap,
                 mapType = a.mapType,
@@ -2467,7 +2481,7 @@ namespace RelhaxModpack
             */
 
             // files to be added, after deleting needless base files (last file added is winning): 
-            Logging.Manager("total files to be added for " + atlasName + ": " + textureList.Count);
+            Logging.Manager("total files to be merged for " + atlasName + ": " + textureList.Count);
             return textureList;
         }
 
@@ -2490,13 +2504,9 @@ namespace RelhaxModpack
             sw.Reset();
             sw.Start();
 
+
             string ImageFile = Path.Combine(args.tempAltasPresentDirectory, args.AtlasFile);
 
-            // make sure we have our list of importers
-            AtlasesCreator.Handlers.Load();
-
-            // try to find matching importers
-            AtlasesCreator.IImageHandler imageHandler = null;
 
             if (!File.Exists(ImageFile))
             {
@@ -2504,18 +2514,8 @@ namespace RelhaxModpack
                 return originalAtlasSize;
             }
 
-            // checked if fileformat is supported
-            string imageExtension = Path.GetExtension(ImageFile).Substring(1).ToLower();
-            foreach (var handler in AtlasesCreator.Handlers.ImageHandlers)
-            {
-                if (handler.ImageExtension.ToLower() == imageExtension)
-                {
-                    imageHandler = handler;
-                    break;
-                }
-            }
 
-            if (imageHandler == null)
+            if (args.imageHandler == null)
             {
                 Logging.Manager(string.Format("Failed to find image importers for specified image type: {0}", ImageFile));
                 return originalAtlasSize;
@@ -2529,13 +2529,12 @@ namespace RelhaxModpack
                 return originalAtlasSize;
             }
 
-            // Bitmap atlasImage = new Bitmap(ImageFile);
             Bitmap atlasImage = null;
 
             try
             {
                 // Load bitmap with the propper importer
-                atlasImage = (Bitmap)imageHandler.Load(ImageFile);
+                atlasImage = (Bitmap)args.imageHandler.Load(ImageFile);
                 originalAtlasSize = atlasImage.Size;
             }
             catch (Exception ex)
@@ -2544,66 +2543,20 @@ namespace RelhaxModpack
                 return originalAtlasSize;
             }
 
+            //just in case
+            args.TextureList.Clear();
+            args.TextureList = args.mapExporter.Load(MapFile);
+            if (args.TextureList.Count == 0)
+            {
+                Logging.Manager("Failt to read map file: " + MapFile);
+                return originalAtlasSize;
+            }
+
+            Logging.Manager("Parsed Textures for " + args.AtlasFile + ": " + args.TextureList.Count);
+
             Bitmap CroppedImage = null;
             try
             {
-                try
-                {
-                    //just in case
-                    args.TextureList.Clear();
-                    XDocument doc = null;
-                    Texture t = null;
-                    doc = XDocument.Load(MapFile, LoadOptions.SetLineInfo);
-                    foreach (XElement texture in doc.XPathSelectElements("/root/SubTexture"))
-                    {
-                        try
-                        {
-                            t = new Texture();
-                            foreach (XElement item in texture.Elements())
-                            {
-                                try
-                                {
-                                    switch (item.Name.ToString().ToLower())
-                                    {
-                                        case "name":
-                                            t.name = item.Value.ToString().Trim();
-                                            break;
-                                        case "x":
-                                            t.x = int.Parse("0" + item.Value.ToString().Trim());
-                                            break;
-                                        case "y":
-                                            t.y = int.Parse("0" + item.Value.ToString().Trim());
-                                            break;
-                                        case "width":
-                                            t.width = int.Parse("0" + item.Value.ToString().Trim());
-                                            break;
-                                        case "height":
-                                            t.height = int.Parse("0" + item.Value.ToString().Trim());
-                                            break;
-                                        default:
-                                            Logging.Manager(string.Format("unexpected Item found. Name: {0}  Value: {1}", item.Name.ToString(), item.Value));
-                                            break;
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    Utils.ExceptionLog("ExtractAtlases_run", "switch", ex);
-                                }
-                            }
-                            args.TextureList.Add(t);
-                        }
-                        catch (Exception ex)
-                        {
-                            Utils.ExceptionLog("ExtractAtlases_run", "foreach item", ex);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Utils.ExceptionLog("ExtractAtlases_run", "foreach root", ex);
-                }
-                Logging.Manager("Parsed Textures for " + args.AtlasFile + ": " + args.TextureList.Count);
-
                 PixelFormat pixelFormat = atlasImage.PixelFormat;
                 int c = 0;
                 foreach (Texture t in args.TextureList)
@@ -2617,7 +2570,6 @@ namespace RelhaxModpack
                             for (int y = 0; y < t.height; y++)
                                 CroppedImage.SetPixel(x, y, atlasImage.GetPixel(t.x + x, t.y + y));
                         //why save to disk when you can save to memory?
-                        //CroppedImage.Save(Path.Combine(workingFolder, t.name + ".png"), ImageFormat.Png);
                         t.AtlasImage = new Bitmap(CroppedImage);
                         c++;
                     }
@@ -2650,7 +2602,6 @@ namespace RelhaxModpack
             FileInfo[] files = dir.GetFiles();
             foreach (FileInfo file in files)
             {
-                //string temppath = Path.Combine(sourceDirName, file.Name);
                 bool tryAgain = true;
                 while (tryAgain)
                 {
