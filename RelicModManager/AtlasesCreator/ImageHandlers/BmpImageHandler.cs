@@ -57,7 +57,7 @@ namespace RelhaxModpack.AtlasesCreator
                 }
                 b.Save(filename, ImageFormat.Bmp);
             }
-            image.Save(filename, ImageFormat.Bmp);
+            // image.Save(filename, ImageFormat.Bmp);
         }
 
         private static readonly int CHUNK_SIZE = 0x20;
