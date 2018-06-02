@@ -49,7 +49,7 @@ namespace RelhaxModpack
                 Depricated_WriteToFile(filePath, string.Format("{0:yyyy-MM-dd HH:mm:ss.fff}   {1}", DateTime.Now, info));
             }
         }
-        public static void AppendToInstallLog(string info)
+        public static void Depricated_AppendToInstallLog(string info)
         {
             try
             {
