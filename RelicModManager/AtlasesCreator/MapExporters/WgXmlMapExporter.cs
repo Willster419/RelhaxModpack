@@ -24,9 +24,12 @@
 
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace RelhaxModpack.AtlasesCreator
 {
@@ -41,6 +44,67 @@ namespace RelhaxModpack.AtlasesCreator
         public Atlas.MapType MapType
         {
             get { return Atlas.MapType.WGXmlMap; }
+        }
+
+        // parses a xmlAtlasesFile to the process queue
+        public List<Texture> Load(string MapFile)
+        {
+            List<Texture> TextureList = new List<Texture>();
+            try
+            {
+                //just in case
+                XDocument doc = null;
+                Texture t = null;
+                doc = XDocument.Load(MapFile, LoadOptions.SetLineInfo);
+                foreach (XElement texture in doc.XPathSelectElements("/root/SubTexture"))
+                {
+                    try
+                    {
+                        t = new Texture();
+                        foreach (XElement item in texture.Elements())
+                        {
+                            try
+                            {
+                                switch (item.Name.ToString().ToLower())
+                                {
+                                    case "name":
+                                        t.name = item.Value.ToString().Trim();
+                                        break;
+                                    case "x":
+                                        t.x = int.Parse("0" + item.Value.ToString().Trim());
+                                        break;
+                                    case "y":
+                                        t.y = int.Parse("0" + item.Value.ToString().Trim());
+                                        break;
+                                    case "width":
+                                        t.width = int.Parse("0" + item.Value.ToString().Trim());
+                                        break;
+                                    case "height":
+                                        t.height = int.Parse("0" + item.Value.ToString().Trim());
+                                        break;
+                                    default:
+                                        Logging.Manager(string.Format("unexpected Item found. Name: {0}  Value: {1}", item.Name.ToString(), item.Value));
+                                        break;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Utils.ExceptionLog("WgXmlMapExporter", "switch", ex);
+                            }
+                        }
+                        TextureList.Add(t);
+                    }
+                    catch (Exception ex)
+                    {
+                        Utils.ExceptionLog("WgXmlMapExporter", "foreach item", ex);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("WgXmlMapExporter", "foreach texture", ex);
+            }
+            return TextureList;
         }
 
         public void Save(string filename, Dictionary<string, Rectangle> map)
