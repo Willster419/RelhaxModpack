@@ -36,7 +36,8 @@ namespace RelhaxModpack.AtlasesCreator
 {
     public enum FailCode
     {
-        FailedParsingArguments = 1,
+        None = 0,
+        FailedParsingArguments,
         ImageExporter,
         MapExporter,
         NoImages,

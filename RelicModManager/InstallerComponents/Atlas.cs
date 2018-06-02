@@ -36,13 +36,13 @@ namespace RelhaxModpack
         // padding of the new atlases file
         public int Padding { get; set; } = 1;
         // positioning optimation with PowOf2
-        public State PowOf2 { get; set; } = State.Null;
+        public State PowOf2 { get; set; } = State.None;
         // positioning optimation with Square
-        public State Square { get; set; } = State.Null;
+        public State Square { get; set; } = State.None;
         // allow to accept first successfull image optimazion layout
         public bool FastImagePacker { get; set; } = true;
         // generate map file
-        public State GenerateMap { get; set; } = State.Null;
+        public State GenerateMap { get; set; } = State.None;
         // map file type
         public MapType mapType { get; set; } = MapType.None;
         // maybe new fileName
@@ -62,21 +62,21 @@ namespace RelhaxModpack
                 AtlasWidth == 0 ? "(empty)" : "" + AtlasWidth,
                 AtlasHeight == 0 ? "(empty)" : "" + AtlasHeight,
                 Padding == 0 ? "(empty)" : "" + Padding,
-                PowOf2 == State.Null ? "(empty)" : PowOf2 == State.True ? "True" : "False",
-                Square == State.Null ? "(empty)" : Square == State.True ? "True" : "False",
+                PowOf2 == State.None ? "(empty)" : PowOf2 == State.True ? "True" : "False",
+                Square == State.None ? "(empty)" : Square == State.True ? "True" : "False",
                 FastImagePacker ? "True" : "False",
-                GenerateMap == State.Null ? "(empty)" : GenerateMap == State.True ? "True" : "False",
+                GenerateMap == State.None ? "(empty)" : GenerateMap == State.True ? "True" : "False",
                 mapType == MapType.None ? "(none selected)" : MapTypeName(mapType),
                 ImageFolderList.Count == 0 ? "(empty)" : ImageFolderList.ToString());
         }
 
         public enum MapType
         {
+            None,
             WGXmlMap,
             XmlMap,
             TxtMap,
             IMap,
-            None
         }
 
         public static string MapTypeName(MapType mt)
@@ -98,7 +98,7 @@ namespace RelhaxModpack
 
         public enum State
         {
-            Null = 1,
+            None = 0,
             True,
             False
         }
