@@ -17,8 +17,12 @@ namespace RelhaxModpack
         public string Pkg { get; set; } = "";
         // fileName of the atlas file to extract
         public string AtlasFile { get; set; } = "";
+        // imageHandler for this atlas
+        public AtlasesCreator.IImageHandler imageHandler = null;
         // fileName of the atlas map file to extract
         public string MapFile { get; set; } = "";
+        // mapHandler for this atlas
+        public AtlasesCreator.IMapExporter mapExporter = null;
         // path inside the pkg file to the filename to process
         public string directoryInArchive { get; set; } = "";
         // path to atlas file outside the archive (after extraction located here)
