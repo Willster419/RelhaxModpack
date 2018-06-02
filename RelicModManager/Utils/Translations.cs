@@ -162,6 +162,18 @@ namespace RelhaxModpack
             french.Add("playPause", "Jouer/Pauser");
             #endregion
 
+            #region General Messages
+            english.Add("conflictBetaDBTestMode", "The command line options BetaDatabase and Test should not be used together, the application may be unstable. Continue anyway?");
+            german.Add("conflictBetaDBTestMode", "TODO");
+            polish.Add("conflictBetaDBTestMode", "TODO");
+            french.Add("conflictBetaDBTestMode", "TODO");
+
+            english.Add("conflictsCommandlineHeader", "Command-Line option conflicts");
+            german.Add("conflictsCommandlineHeader", "TODO");
+            polish.Add("conflictsCommandlineHeader", "TODO");
+            french.Add("conflictsCommandlineHeader", "TODO");
+            #endregion
+
             #region BackgroundForum
             //Component: MenuItemRestore
             //The menu item for restoring the application
@@ -2167,13 +2179,13 @@ namespace RelhaxModpack
             french.Add("UseBetaDatabaseCBDescription", "TODO");
 
             //Component: UseBetaApplicationCBDescription
-            english.Add("UseBetaApplicationCBDescription", "Use the latest beta application. Translations and stability are not guaranteed");
+            english.Add("UseBetaApplicationCBDescription", "Use the latest beta application. Translations and application stability are not guaranteed");
             german.Add("UseBetaApplicationCBDescription", "TODO");
             polish.Add("UseBetaApplicationCBDescription", "TODO");
             french.Add("UseBetaApplicationCBDescription", "TODO");
 
             //Component: notifying the user the change won't take effect until application restart
-            english.Add("noChangeUntilRestart", "This change won't take effect until application restart");
+            english.Add("noChangeUntilRestart", "This option won't take effect until application restart");
             german.Add("noChangeUntilRestart", "TODO");
             polish.Add("noChangeUntilRestart", "TODO");
             french.Add("noChangeUntilRestart", "TODO");
