@@ -112,7 +112,7 @@ namespace RelhaxModpack.AtlasesCreator
                     string mapExtension = Path.GetExtension(args.MapFile).Substring(1).ToLower();
                     foreach (var exporter in Handlers.MapExporters)
                     {
-                        if (exporter.MapExtension.ToLower() == Atlas.MapTypeName(args.mapType).ToLower())
+                        if (exporter.MapType.Equals(args.mapType))
                         {
                             mapExporter = exporter;
                             break;
@@ -129,7 +129,7 @@ namespace RelhaxModpack.AtlasesCreator
                 // make sure we found some images
                 if (args.TextureList.Count == 0)
                 {
-                    Logging.Manager("No images to pack.");
+                    Logging.Manager("No images to pack for " + args.AtlasFile);
                     return (int)FailCode.NoImages;
                 }
 
