@@ -44,6 +44,19 @@ namespace RelhaxModpack.AtlasesCreator
 
         public void Save(string filename, Bitmap image)
         {
+            // change the "black/transparent" background to white
+            // https://stackoverflow.com/questions/6513633/convert-transparent-png-to-jpg-with-non-black-background-color
+            using (var b = new Bitmap(image.Width, image.Height))
+            {
+                b.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+                using (var g = Graphics.FromImage(b))
+                {
+                    g.Clear(Color.White);
+                    g.DrawImageUnscaled(image, 0, 0);
+                }
+                b.Save(filename, ImageFormat.Bmp);
+            }
             image.Save(filename, ImageFormat.Bmp);
         }
 
