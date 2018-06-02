@@ -1524,27 +1524,13 @@ namespace RelhaxModpack
                     CreateAtlasesList(diArr[i].FullName);
                 }
                 Installer.args.ParrentTotalToProcess = atlasesList.Count;
-                //extract the atlas image and map to the temp directory
-                //but clean it first
-                //before extracting atlases, check if temp atlas files exist. if they do, delete them
-                try
-                {
-                    foreach (Atlas a in atlasesList)
-                    {
-                        string atlasPictures = Path.Combine(a.workingFolder, a.AtlasFile);
-                        string atlasMap = Path.Combine(a.workingFolder, a.MapFile);
-                        if (Directory.Exists(a.workingFolder))
-                            Directory.Delete(a.workingFolder, true);
-                        if (File.Exists(atlasPictures))
-                            File.Delete(atlasPictures);
-                        if (File.Exists(atlasMap))
-                            File.Delete(atlasMap);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Utils.ExceptionLog("ExtractAtlases", "before extracting atlases, check if temp atlas files exist. if they do, delete them", ex);
-                }
+
+                // make sure we have our list of importers
+                AtlasesCreator.Handlers.Load();
+
+                // try to find matching mapExporter
+                AtlasesCreator.IMapExporter mapExporter = null;
+
                 foreach (Atlas a in atlasesList)
                 {
                     try
@@ -1557,6 +1543,17 @@ namespace RelhaxModpack
                         //workingFolder example: "F:\\Tanks Stuff\\RelicModManager\\RelicModManager\\bin\\Debug\\RelHaxTemp\\battleAtlas"
                         //if (!Directory.Exists(a.workingFolder)) Directory.CreateDirectory(a.workingFolder); 
 
+                        foreach (var exporter in AtlasesCreator.Handlers.MapExporters)
+                        {
+                            if (exporter.MapType.Equals(a.mapType))
+                            {
+                                mapExporter = exporter;
+                                a.MapFile = Path.GetFileNameWithoutExtension(a.AtlasFile) + "." + mapExporter.MapExtension.ToLower();
+                                break;
+                            }
+                        }
+
+                        string[] fileList = new string[] { a.AtlasFile, a.MapFile };
                         if (!a.Pkg.Equals(""))
                         {
                             // a.tempAltasPresentDirectory = Path.Combine(Application.StartupPath, "RelHaxTemp"); => moved to Atlas class definition
@@ -1566,7 +1563,6 @@ namespace RelhaxModpack
                                 int numFound = 0;
                                 for (int i = 0; i < zip.Entries.Count; i++)
                                 {
-                                    string[] fileList = new string[] { a.AtlasFile, a.MapFile };
                                     foreach (string fl in fileList)
                                     {
                                         if (Regex.IsMatch(zip[i].FileName, Path.Combine(a.directoryInArchive, fl).Replace(@"\", @"/")))
@@ -1587,6 +1583,22 @@ namespace RelhaxModpack
                                     //finishing early saves not needed cpu processing
                                     if (numFound == fileList.Count())
                                         break;
+                                }
+                            }
+                        }
+                        else                  // if no pkg file, then the image is accessable directly, so simple copy it
+                        {
+                            foreach (string fl in fileList)
+                            {
+                                string source = Path.Combine(a.directoryInArchive, fl);
+                                string target = Path.Combine(a.tempAltasPresentDirectory, fl);
+                                try
+                                {
+                                    File.Copy(source, target, true);        // overwrite existing file if needed
+                                }
+                                catch (Exception ex)
+                                {
+                                    Utils.ExceptionLog("ExtractAtlases", string.Format("copy file {0} to location {1}", source, target), ex);
                                 }
                             }
                         }
@@ -1658,6 +1670,7 @@ namespace RelhaxModpack
                 atlasWidth = a.atlasWidth,
                 AtlasFile = Path.Combine(a.atlasSaveDirectory, a.AtlasFile),
                 MapFile = Path.Combine(a.atlasSaveDirectory, a.MapFile),
+                atlasSaveDirectory = a.atlasSaveDirectory,
                 generateMap = a.generateMap,
                 mapType = a.mapType,
                 powOf2 = a.powOf2,
@@ -2222,11 +2235,9 @@ namespace RelhaxModpack
                         }
                         if (atlases.directoryInArchive.Equals("") || atlases.AtlasFile.Equals("") || atlases.atlasSaveDirectory.Equals(""))
                         {
-                            Logging.Manager(string.Format("ERROR. xmlAtlases file {0} is not valid and has empty (but important) nodes", atlases.ActualPatchName));
+                            Logging.Manager(string.Format("ERROR. {0}-Atlases file {1} is not valid and has empty (but important) nodes", Atlas.MapTypeName(atlases.mapType).ToLower(), atlases.ActualPatchName));
                             break;
                         }
-                        atlases.workingFolder = Path.Combine(Application.StartupPath, "RelHaxTemp", Path.GetFileNameWithoutExtension(atlases.AtlasFile));
-                        if (atlases.MapFile.Equals("")) atlases.MapFile = Path.GetFileNameWithoutExtension(atlases.AtlasFile) + ".xml";
                         bool duplicateFound = false;
                         foreach (Atlas check in atlasesList)
                         {
@@ -2859,8 +2870,8 @@ namespace RelhaxModpack
                             else
                                 sb.Append(zip[i].FileName +"\n");
                                 */
-        }
-        zip.ExtractProgress += Zip_ExtractProgress;
+                        }
+                        zip.ExtractProgress += Zip_ExtractProgress;
                         //zip.ExtractAll(extractFolder, ExtractExistingFileAction.OverwriteSilently);
                         //NEED TO TEST
                         string completePath = "";

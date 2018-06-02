@@ -43,8 +43,7 @@ namespace RelhaxModpack
         public MapType mapType { get; set; } = MapType.None;
         // maybe new fileName
         public List<string> imageFolderList { get; set; } = new List<string>();
-        // temp workingFolder
-        public string workingFolder { get; set; } = "";
+
         //the list of textures in each atlas
         public List<Texture> TextureList { get; set; } = new List<Texture>();
         //for the tostring thing
