@@ -1528,9 +1528,6 @@ namespace RelhaxModpack
                 // make sure we have our list of importers
                 AtlasesCreator.Handlers.Load();
 
-                // try to find matching mapExporter
-                // AtlasesCreator.IMapExporter mapExporter = null;
-
                 foreach (Atlas a in atlasesList)
                 {
                     try
@@ -1568,7 +1565,6 @@ namespace RelhaxModpack
                         string[] fileList = new string[] { a.AtlasFile, a.MapFile };
                         if (!a.Pkg.Equals(""))
                         {
-                            // a.tempAltasPresentDirectory = Path.Combine(Application.StartupPath, "RelHaxTemp"); => moved to Atlas class definition
                             //get file from the zip archive
                             using (ZipFile zip = new ZipFile(a.Pkg))
                             {
@@ -2504,16 +2500,13 @@ namespace RelhaxModpack
             sw.Reset();
             sw.Start();
 
-
             string ImageFile = Path.Combine(args.tempAltasPresentDirectory, args.AtlasFile);
-
 
             if (!File.Exists(ImageFile))
             {
                 Logging.Manager("ERROR. Atlas file not found: " + ImageFile);
                 return originalAtlasSize;
             }
-
 
             if (args.imageHandler == null)
             {
@@ -2545,6 +2538,7 @@ namespace RelhaxModpack
 
             //just in case
             args.TextureList.Clear();
+
             args.TextureList = args.mapExporter.Load(MapFile);
             if (args.TextureList.Count == 0)
             {
