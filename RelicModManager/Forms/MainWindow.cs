@@ -749,6 +749,14 @@ namespace RelhaxModpack
                 Application.Exit();
             }
 
+            //check for any conflicting program arguements
+            if(Settings.BetaDatabase && Program.testMode)
+            {
+                if(MessageBox.Show("conflictBetaDBTestMode", "conflictsCommandlineHeader", MessageBoxButtons.OKCancel,MessageBoxIcon.Warning) == DialogResult.Cancel)
+                {
+                    Application.Exit();
+                }
+            }
             //parse command line argeuemnts
             if (Program.testMode)
             {
