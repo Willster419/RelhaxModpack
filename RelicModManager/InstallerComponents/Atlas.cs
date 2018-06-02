@@ -24,51 +24,50 @@ namespace RelhaxModpack
         // mapHandler for this atlas
         public AtlasesCreator.IMapExporter mapExporter = null;
         // path inside the pkg file to the filename to process
-        public string directoryInArchive { get; set; } = "";
+        public string DirectoryInArchive { get; set; } = "";
         // path to atlas file outside the archive (after extraction located here)
-        public string tempAltasPresentDirectory { get; set; } = Path.Combine(Application.StartupPath, "RelHaxTemp");
+        public string TempAltasPresentDirectory { get; set; } = Path.Combine(Application.StartupPath, "RelHaxTemp");
         // path to place the finished file
-        public string atlasSaveDirectory { get; set; } = "";
+        public string AtlasSaveDirectory { get; set; } = "";
         // width of the new atlases file
-        public int atlasWidth { get; set; } = 0;   // 0 or empty = get from original atlas file
+        public int AtlasWidth { get; set; } = 0;   // 0 or empty = get from original atlas file
         // height of the new atlases file
-        public int atlasHeight { get; set; } = 0;   // 0 or empty = get from original atlas file
+        public int AtlasHeight { get; set; } = 0;   // 0 or empty = get from original atlas file
         // padding of the new atlases file
-        public int padding { get; set; } = 1;
+        public int Padding { get; set; } = 1;
         // positioning optimation with PowOf2
-        public State powOf2 { get; set; } = State.Null;
+        public State PowOf2 { get; set; } = State.Null;
         // positioning optimation with Square
-        public State square { get; set; } = State.Null;
+        public State Square { get; set; } = State.Null;
         // allow to accept first successfull image optimazion layout
-        public bool fastImagePacker { get; set; } = true;
+        public bool FastImagePacker { get; set; } = true;
         // generate map file
-        public State generateMap { get; set; } = State.Null;
+        public State GenerateMap { get; set; } = State.Null;
         // map file type
         public MapType mapType { get; set; } = MapType.None;
         // maybe new fileName
-        public List<string> imageFolderList { get; set; } = new List<string>();
-
+        public List<string> ImageFolderList { get; set; } = new List<string>();
         //the list of textures in each atlas
         public List<Texture> TextureList { get; set; } = new List<Texture>();
         //for the tostring thing
         public override string ToString()
         {
-            return string.Format("NativeProcessingFile: {0}\nActualPatchName: {1}\nPkg: {2}\ndirectoryInArchive: {3}\nAtlasFile: {4}\natlasSaveDirectory: {5}\naltas width: {6}\naltas hight: {7}\npadding: {8}\npowOf2: {9}\nsquare: {10}\nfastImagePacker: {11}\ngenerateMap: {12}\nMapTypeName: {13}\nimageFolderList: {14}",
+            return string.Format("NativeProcessingFile: {0}\nActualPatchName: {1}\nPkg: {2}\nDirectoryInArchive: {3}\nAtlasFile: {4}\nStlasSaveDirectory: {5}\nSltas width: {6}\nSltas hight: {7}\nPadding: {8}\nPowOf2: {9}\nSquare: {10}\nFastImagePacker: {11}\nGenerateMap: {12}\nMapTypeName: {13}\nImageFolderList: {14}",
                 NativeProcessingFile.Equals("") ? "(empty)" : NativeProcessingFile,
                 ActualPatchName.Equals("") ? "(empty)" : ActualPatchName,
                 Pkg.Equals("") ? "(empty)" : Pkg,
-                directoryInArchive.Equals("") ? "(empty)" : directoryInArchive,
+                DirectoryInArchive.Equals("") ? "(empty)" : DirectoryInArchive,
                 AtlasFile.Equals("") ? "(empty)" : AtlasFile,
-                atlasSaveDirectory.Equals("") ? "(empty)" : atlasSaveDirectory,
-                atlasWidth == 0 ? "(empty)" : "" + atlasWidth,
-                atlasHeight == 0 ? "(empty)" : "" + atlasHeight,
-                padding == 0 ? "(empty)" : "" + padding,
-                powOf2 == State.Null ? "(empty)" : powOf2 == State.True ? "True" : "False",
-                square == State.Null ? "(empty)" : square == State.True ? "True" : "False",
-                fastImagePacker ? "True" : "False",
-                generateMap == State.Null ? "(empty)" : generateMap == State.True ? "True" : "False",
+                AtlasSaveDirectory.Equals("") ? "(empty)" : AtlasSaveDirectory,
+                AtlasWidth == 0 ? "(empty)" : "" + AtlasWidth,
+                AtlasHeight == 0 ? "(empty)" : "" + AtlasHeight,
+                Padding == 0 ? "(empty)" : "" + Padding,
+                PowOf2 == State.Null ? "(empty)" : PowOf2 == State.True ? "True" : "False",
+                Square == State.Null ? "(empty)" : Square == State.True ? "True" : "False",
+                FastImagePacker ? "True" : "False",
+                GenerateMap == State.Null ? "(empty)" : GenerateMap == State.True ? "True" : "False",
                 mapType == MapType.None ? "(none selected)" : MapTypeName(mapType),
-                imageFolderList.Count == 0 ? "(empty)" : imageFolderList.ToString());
+                ImageFolderList.Count == 0 ? "(empty)" : ImageFolderList.ToString());
         }
 
         public enum MapType
