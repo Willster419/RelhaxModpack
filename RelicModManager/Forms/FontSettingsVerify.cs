@@ -17,12 +17,12 @@ namespace RelhaxModpack.Forms
         {
             timer1.Start();
             Location = new System.Drawing.Point(startX, startY);
-            RevertingTimeoutText.Text = string.Format(Translations.getTranslatedString(RevertingTimeoutText.Name), scalingTimeout--);
+            RevertingTimeoutText.Text = string.Format(Translations.GetTranslatedString(RevertingTimeoutText.Name), scalingTimeout--);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            RevertingTimeoutText.Text = string.Format(Translations.getTranslatedString(RevertingTimeoutText.Name), scalingTimeout--);
+            RevertingTimeoutText.Text = string.Format(Translations.GetTranslatedString(RevertingTimeoutText.Name), scalingTimeout--);
             if (scalingTimeout < 0)
             {
                 timer1.Stop();

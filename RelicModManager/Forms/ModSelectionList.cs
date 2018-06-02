@@ -33,8 +33,8 @@ namespace RelhaxModpack
         bool FirstLoad = true;
         bool IgnoreSelections = true;
         bool IgnoreSearchBoxFocus = false;
-        private string NoDescriptionAvailable = Translations.getTranslatedString("noDescription");
-        private string LastUpdated = Translations.getTranslatedString("lastUpdated");
+        private string NoDescriptionAvailable = Translations.GetTranslatedString("noDescription");
+        private string LastUpdated = Translations.GetTranslatedString("lastUpdated");
         private string Md5DatabaseFile = "";
         private XDocument ModInfoDocument;
         int Prog = 0;
@@ -66,7 +66,7 @@ namespace RelhaxModpack
             Prog = 0;
             //apply the translations
             ApplyTranslations();
-            pw.loadingDescBox.Text = Translations.getTranslatedString("readingDatabase");
+            pw.loadingDescBox.Text = Translations.GetTranslatedString("readingDatabase");
             Application.DoEvents();
             //init the database
             string databaseLocation = InitDatabase(Settings.ModInfoDatFile);
@@ -82,7 +82,7 @@ namespace RelhaxModpack
                 if (Utils.Duplicates(ParsedCatagoryList))
                 {
                     Logging.Manager("WARNING: Duplicate mod name detected!!");
-                    MessageBox.Show(Translations.getTranslatedString("duplicateMods"), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(Translations.GetTranslatedString("duplicateMods"), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     Application.Exit();
                 }
                 int duplicatesCounter = 0;
@@ -93,7 +93,7 @@ namespace RelhaxModpack
                     Application.Exit();
                 }
             }
-            pw.loadingDescBox.Text = Translations.getTranslatedString("buildingUI");
+            pw.loadingDescBox.Text = Translations.GetTranslatedString("buildingUI");
             Application.DoEvents();
             //check if databse exists and if not, create it
             if (!File.Exists(Md5DatabaseFile))
@@ -128,17 +128,17 @@ namespace RelhaxModpack
 
         private void ApplyTranslations()
         {
-            continueButton.Text = Translations.getTranslatedString(continueButton.Name);
-            cancelButton.Text = Translations.getTranslatedString(cancelButton.Name);
-            helpLabel.Text = Translations.getTranslatedString(helpLabel.Name);
-            loadConfigButton.Text = Translations.getTranslatedString(loadConfigButton.Name);
-            saveConfigButton.Text = Translations.getTranslatedString(saveConfigButton.Name);
-            clearSelectionsButton.Text = Translations.getTranslatedString(clearSelectionsButton.Name);
-            colapseAllButton.Text = Translations.getTranslatedString(colapseAllButton.Name);
-            expandAllButton.Text = Translations.getTranslatedString(expandAllButton.Name);
-            searchTB.Text = Translations.getTranslatedString(searchTB.Name);
-            SearchToolTip.SetToolTip(searchCB, Translations.getTranslatedString("searchToolTip"));
-            SearchToolTip.SetToolTip(searchTB, Translations.getTranslatedString("searchToolTip"));
+            continueButton.Text = Translations.GetTranslatedString(continueButton.Name);
+            cancelButton.Text = Translations.GetTranslatedString(cancelButton.Name);
+            helpLabel.Text = Translations.GetTranslatedString(helpLabel.Name);
+            loadConfigButton.Text = Translations.GetTranslatedString(loadConfigButton.Name);
+            saveConfigButton.Text = Translations.GetTranslatedString(saveConfigButton.Name);
+            clearSelectionsButton.Text = Translations.GetTranslatedString(clearSelectionsButton.Name);
+            colapseAllButton.Text = Translations.GetTranslatedString(colapseAllButton.Name);
+            expandAllButton.Text = Translations.GetTranslatedString(expandAllButton.Name);
+            searchTB.Text = Translations.GetTranslatedString(searchTB.Name);
+            SearchToolTip.SetToolTip(searchCB, Translations.GetTranslatedString("searchToolTip"));
+            SearchToolTip.SetToolTip(searchTB, Translations.GetTranslatedString("searchToolTip"));
         }
 
         private string InitDatabase(string databaseURL)
@@ -150,7 +150,7 @@ namespace RelhaxModpack
                 if (!File.Exists(databaseURL))
                 {
                     Logging.Manager("Databasefile not found: " + databaseURL);
-                    MessageBox.Show(string.Format(Translations.getTranslatedString("testModeDatabaseNotFound"), databaseURL));
+                    MessageBox.Show(string.Format(Translations.GetTranslatedString("testModeDatabaseNotFound"), databaseURL));
                     Application.Exit();
                 }
                 Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(databaseURL, "//modInfoAlpha.xml/@onlineFolder");
@@ -177,7 +177,7 @@ namespace RelhaxModpack
                     catch (Exception ex)
                     {
                         Utils.ExceptionLog("ModSelectionList_Load", string.Format(@"Tried to access {0}", databaseURL), ex);
-                        MessageBox.Show(string.Format("{0} modInfo.dat", Translations.getTranslatedString("failedToDownload_1")));
+                        MessageBox.Show(string.Format("{0} modInfo.dat", Translations.GetTranslatedString("failedToDownload_1")));
                         Application.Exit();
                     }
                 }
@@ -197,7 +197,7 @@ namespace RelhaxModpack
                     catch (Exception ex)
                     {
                         Utils.ExceptionLog(string.Format("ModSelectionList_Load", @"Tried to access {0}", dlURL), ex);
-                        MessageBox.Show(string.Format("{0} modInfo.dat", Translations.getTranslatedString("failedToDownload_1")));
+                        MessageBox.Show(string.Format("{0} modInfo.dat", Translations.GetTranslatedString("failedToDownload_1")));
                         Application.Exit();
                     }
                 }
@@ -427,7 +427,7 @@ namespace RelhaxModpack
                     {
                         if (pw != null)
                         {
-                            pw.loadingDescBox.Text = string.Format("{0} {1}", Translations.getTranslatedString("checkingCache"), m.NameFormatted);
+                            pw.loadingDescBox.Text = string.Format("{0} {1}", Translations.GetTranslatedString("checkingCache"), m.NameFormatted);
                             pw.SetProgress(Prog++);
                             Application.DoEvents();
                         }
@@ -446,7 +446,7 @@ namespace RelhaxModpack
                 {
                     if (pw != null)
                     {
-                        pw.loadingDescBox.Text = string.Format("{0} {1}", Translations.getTranslatedString("loading"), m.NameFormatted);
+                        pw.loadingDescBox.Text = string.Format("{0} {1}", Translations.GetTranslatedString("loading"), m.NameFormatted);
                         pw.SetProgress(Prog++);
                         Application.DoEvents();
                     }
@@ -607,7 +607,7 @@ namespace RelhaxModpack
             pw.Dispose();
             //set label properties
             TanksVersionLabel.Text = TanksVersionLabel.Text + TanksVersion;
-            TanksPath.Text = string.Format(Translations.getTranslatedString("InstallingTo"), TanksLocation);
+            TanksPath.Text = string.Format(Translations.GetTranslatedString("InstallingTo"), TanksLocation);
             //force a resize
             ModSelectionList_SizeChanged(null, null);
             if (Settings.SView == SelectionView.Default)
@@ -721,7 +721,7 @@ namespace RelhaxModpack
             {
                 if (sp.DownloadFlag)
                 {
-                    packageDisplayName = string.Format("{0} ({1})", packageDisplayName, Translations.getTranslatedString("updated"));
+                    packageDisplayName = string.Format("{0} ({1})", packageDisplayName, Translations.GetTranslatedString("updated"));
                     if ((sp.Size > 0))
                         packageDisplayName = string.Format("{0} ({1})", packageDisplayName, Utils.SizeSuffix(sp.Size, 1, true));
                 }
@@ -1710,7 +1710,7 @@ namespace RelhaxModpack
                 DefaultExt = ".xml",
                 Filter = "*.xml|*.xml",
                 InitialDirectory = Path.Combine(Application.StartupPath, "RelHaxUserConfigs"),
-                Title = Translations.getTranslatedString("selectWhereToSave")
+                Title = Translations.GetTranslatedString("selectWhereToSave")
             };
             if (fromButton)
             {
@@ -1773,7 +1773,7 @@ namespace RelhaxModpack
             doc.Save(savePath);
             if (fromButton)
             {
-                MessageBox.Show(Translations.getTranslatedString("configSaveSuccess"));
+                MessageBox.Show(Translations.GetTranslatedString("configSaveSuccess"));
             }
         }
 
@@ -1851,7 +1851,7 @@ namespace RelhaxModpack
                             if (m == null)
                             {
                                 Logging.Manager(string.Format("WARNING: mod \"{0}\" not found", nn.InnerText));
-                                MessageBox.Show(string.Format(Translations.getTranslatedString("modNotFound"), nn.InnerText));
+                                MessageBox.Show(string.Format(Translations.GetTranslatedString("modNotFound"), nn.InnerText));
                                 continue;
                             }
                             if (m.Enabled)
@@ -1905,7 +1905,7 @@ namespace RelhaxModpack
             Logging.Manager("Finished loading mod selections v1.0");
             if (fromButton)
             {
-                DialogResult result = MessageBox.Show(Translations.getTranslatedString("oldSavedConfigFile"), Translations.getTranslatedString("information"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult result = MessageBox.Show(Translations.GetTranslatedString("oldSavedConfigFile"), Translations.GetTranslatedString("information"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (result == DialogResult.Yes)
                 {
                     // create Path to UserConfigs Backup
@@ -1950,8 +1950,8 @@ namespace RelhaxModpack
                             savedConfigList.Remove(m.PackageName);
                             if (!m.Enabled && !defaultChecked && !Program.forceEnabled)
                             {
-                                MessageBox.Show(string.Format(Translations.getTranslatedString("modDeactivated"),
-                                    m.NameFormatted), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                MessageBox.Show(string.Format(Translations.GetTranslatedString("modDeactivated"),
+                                    m.NameFormatted), Translations.GetTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
                             else
                             {
@@ -2004,7 +2004,7 @@ namespace RelhaxModpack
                     modsNotFoundList += "\n" + s;
                 }
                 if (!defaultChecked)
-                    MessageBox.Show(string.Format(Translations.getTranslatedString("modsNotFoundTechnical"), modsNotFoundList), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(string.Format(Translations.GetTranslatedString("modsNotFoundTechnical"), modsNotFoundList), Translations.GetTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             //check for structure issues
             if (!defaultChecked)
@@ -2020,7 +2020,7 @@ namespace RelhaxModpack
                         sb.Append(string.Format("Name: {0}, Parent: {1}, Category: {2}\n", sp.NameFormatted, sp.Parent.NameFormatted, sp.ParentCategory.Name));
                     }
                     Logging.Manager("Broken selections: " + string.Join(", ", brokenPackages));
-                    MessageBox.Show(Translations.getTranslatedString("modsBrokenStructure") + sb.ToString());
+                    MessageBox.Show(Translations.GetTranslatedString("modsBrokenStructure") + sb.ToString());
                 }
             }
             Logging.Manager("Finished loading mod selections v2.0");
@@ -2065,7 +2065,7 @@ namespace RelhaxModpack
                             if (c == null)
                             {
                                 Logging.Manager(string.Format("WARNING: config \"{0}\" not found for mod/config \"{1}\"", nnnn.InnerText, holder.InnerText));
-                                MessageBox.Show(string.Format(Translations.getTranslatedString("configNotFound"), nnnn.InnerText, holder.InnerText));
+                                MessageBox.Show(string.Format(Translations.GetTranslatedString("configNotFound"), nnnn.InnerText, holder.InnerText));
                                 continue;
                             }
                             if (c.Enabled)
@@ -2103,7 +2103,7 @@ namespace RelhaxModpack
                         savedConfigList.Remove(c.PackageName);
                         if (!c.Enabled && !defaultChecked)
                         {
-                            MessageBox.Show(string.Format(Translations.getTranslatedString("configDeactivated"), c.NameFormatted, parentName), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show(string.Format(Translations.GetTranslatedString("configDeactivated"), c.NameFormatted, parentName), Translations.GetTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         else
                         {
@@ -2143,7 +2143,7 @@ namespace RelhaxModpack
                     if (!File.Exists(filePathArray[0]))
                     {
                         Logging.Manager(string.Format("ERROR: {0} not found, not loading configs", filePathArray[0]));
-                        MessageBox.Show(Translations.getTranslatedString("configLoadFailed"), Translations.getTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        MessageBox.Show(Translations.GetTranslatedString("configLoadFailed"), Translations.GetTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Stop);
                         LoadingConfig = false;
                         return;
                     }
@@ -2182,7 +2182,7 @@ namespace RelhaxModpack
                                 DefaultExt = ".xml",
                                 Filter = "*.xml|*.xml",
                                 InitialDirectory = Path.Combine(Application.StartupPath, "RelHaxUserConfigs"),
-                                Title = Translations.getTranslatedString("selectConfigFile")
+                                Title = Translations.GetTranslatedString("selectConfigFile")
                             })
                             {
                                 if (!(loadLocation.ShowDialog().Equals(DialogResult.OK)))
@@ -2203,7 +2203,7 @@ namespace RelhaxModpack
             if (LoadMode == LoadConfigMode.FromButton)
             {
                 if (LoadMode == LoadConfigMode.FromButton)
-                    MessageBox.Show(Translations.getTranslatedString("prefrencesSet"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(Translations.GetTranslatedString("prefrencesSet"), Translations.GetTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 ModSelectionList_SizeChanged(null, null);
             }
             //set this back to false so the user can interact
@@ -2326,7 +2326,7 @@ namespace RelhaxModpack
             Logging.Manager("clearSelectionsButton pressed, clearing selections");
             ClearSelectionMemory(ParsedCatagoryList, UserMods);
             LoadingConfig = false;
-            MessageBox.Show(Translations.getTranslatedString("selectionsCleared"));
+            MessageBox.Show(Translations.GetTranslatedString("selectionsCleared"));
             //ModSelectionList_SizeChanged(null, null);
         }
         //handler to set the cancel bool to false

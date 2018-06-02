@@ -9,7 +9,7 @@ namespace RelhaxModpack
 {
     public partial class Diagnostics : RelhaxForum
     {
-        private string MainWindowHeader = Translations.getTranslatedString("MainTextBox");
+        private string MainWindowHeader = Translations.GetTranslatedString("MainTextBox");
         public string TanksLocation { get; set; }
         public string AppStartupPath { get; set; }
         public MainWindow ParentWindow { get; set; }
@@ -24,10 +24,10 @@ namespace RelhaxModpack
             MainTextBox.Text = MainWindowHeader;
             if (TanksLocation == null  || TanksLocation.Equals(""))
                 TanksLocation = "none";
-            SelectedInstallation.Text = Translations.getTranslatedString(SelectedInstallation.Name) + TanksLocation;
-            LaunchWoTLauncher.Text = Translations.getTranslatedString(LaunchWoTLauncher.Name);
-            CollectLogInfo.Text = Translations.getTranslatedString(CollectLogInfo.Name);
-            ChangeInstall.Text = Translations.getTranslatedString(ChangeInstall.Name);
+            SelectedInstallation.Text = Translations.GetTranslatedString(SelectedInstallation.Name) + TanksLocation;
+            LaunchWoTLauncher.Text = Translations.GetTranslatedString(LaunchWoTLauncher.Name);
+            CollectLogInfo.Text = Translations.GetTranslatedString(CollectLogInfo.Name);
+            ChangeInstall.Text = Translations.GetTranslatedString(ChangeInstall.Name);
         }
 
         private void LaunchWoTLauncher_Click(object sender, System.EventArgs e)
@@ -35,7 +35,7 @@ namespace RelhaxModpack
             if (TanksLocation.Equals("none"))
                 return;
             Logging.Manager("Starting WoTLauncher with argument \"-integrity_default_client\"");
-            StartWoTLauncherResult.Text = Translations.getTranslatedString("startingLauncherRepairMode");
+            StartWoTLauncherResult.Text = Translations.GetTranslatedString("startingLauncherRepairMode");
             string filename = Path.Combine(TanksLocation, "WoTLauncher.exe");
             string formattedArguement = "-integrity_default_client";
             Logging.Manager("Complete Command line: " + filename + " " + formattedArguement);
@@ -46,11 +46,11 @@ namespace RelhaxModpack
             catch(Exception ex)
             {
                 Utils.ExceptionLog("LaunchWoTLauncher_Click", ex);
-                System.Windows.Forms.MessageBox.Show(Translations.getTranslatedString("failedStartLauncherRepairMode"));
+                System.Windows.Forms.MessageBox.Show(Translations.GetTranslatedString("failedStartLauncherRepairMode"));
                 StartWoTLauncherResult.Text = "";
                 return;
             }
-            StartWoTLauncherResult.Text = Translations.getTranslatedString("launcherRepairModeStarted");
+            StartWoTLauncherResult.Text = Translations.GetTranslatedString("launcherRepairModeStarted");
         }
 
         private void CollectLogInfo_Click(object sender, System.EventArgs e)
@@ -58,7 +58,7 @@ namespace RelhaxModpack
             if (TanksLocation.Equals("none"))
                 return;
             Logging.Manager("Collecting log files...");
-            CollectLogInfoResult.Text = Translations.getTranslatedString("collectionLogInfo");
+            CollectLogInfoResult.Text = Translations.GetTranslatedString("collectionLogInfo");
             using (ZipFile zip = new ZipFile())
             {
                 string newZipFileName = "";
@@ -113,11 +113,11 @@ namespace RelhaxModpack
                 catch (Exception ex)
                 {
                     Utils.ExceptionLog(ex);
-                    CollectLogInfoResult.Text = Translations.getTranslatedString("failedCreateZipfile");
+                    CollectLogInfoResult.Text = Translations.GetTranslatedString("failedCreateZipfile");
                     return;
                 }
                 Logging.Manager("Zip file saved to" + newZipFileName);
-                CollectLogInfoResult.Text = Translations.getTranslatedString("zipSavedTo") + newZipFileName;
+                CollectLogInfoResult.Text = Translations.GetTranslatedString("zipSavedTo") + newZipFileName;
             }
         }
 
@@ -132,7 +132,7 @@ namespace RelhaxModpack
             //parse all strings
             ParentWindow.tanksLocation = ParentWindow.tanksLocation.Substring(0, ParentWindow.tanksLocation.Length - 17);
             TanksLocation = ParentWindow.tanksLocation;
-            SelectedInstallation.Text = Translations.getTranslatedString(SelectedInstallation.Name) + TanksLocation;
+            SelectedInstallation.Text = Translations.GetTranslatedString(SelectedInstallation.Name) + TanksLocation;
             Logging.Manager(string.Format("tanksLocation parsed as {0}", ParentWindow.tanksLocation));
         }
     }

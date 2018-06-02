@@ -22,11 +22,11 @@ namespace RelhaxModpack
         private void InstallFinished_Load(object sender, EventArgs e)
         {
             //apply translations
-            InstallCompleteLabel.Text = Translations.getTranslatedString(InstallCompleteLabel.Name);
-            StartTanksButton.Text = Translations.getTranslatedString(StartTanksButton.Name);
-            StartWoTLauncherButton.Text = Translations.getTranslatedString(StartWoTLauncherButton.Name);
-            StartXVMStatButton.Text = Translations.getTranslatedString(StartXVMStatButton.Name);
-            CloseApplicationButton.Text = Translations.getTranslatedString(CloseApplicationButton.Name);
+            InstallCompleteLabel.Text = Translations.GetTranslatedString(InstallCompleteLabel.Name);
+            StartTanksButton.Text = Translations.GetTranslatedString(StartTanksButton.Name);
+            StartWoTLauncherButton.Text = Translations.GetTranslatedString(StartWoTLauncherButton.Name);
+            StartXVMStatButton.Text = Translations.GetTranslatedString(StartXVMStatButton.Name);
+            CloseApplicationButton.Text = Translations.GetTranslatedString(CloseApplicationButton.Name);
             //check if files are available to launch before actually displaying them
             WoTEXELocation = Path.Combine(TanksLocation, "WorldOfTanks.exe");
             WoTLauncherLocation = Path.Combine(TanksLocation, "WoTLauncher.exe");
@@ -58,7 +58,7 @@ namespace RelhaxModpack
 
         private void StartXVMStatButton_Click(object sender, EventArgs e)
         {
-            Process.Start(string.Format(XVMURL, Translations.getTranslatedString("xvmUrlLocalisation")));
+            Process.Start(string.Format(XVMURL, Translations.GetTranslatedString("xvmUrlLocalisation")));
             DialogResult = DialogResult.OK;
         }
 

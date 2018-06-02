@@ -15,7 +15,7 @@ namespace RelhaxModpack
         public static Hashtable french = new Hashtable();
         //load hashes on application startup
 
-        public static string getTranslatedString(string componetName)
+        public static string GetTranslatedString(string componetName)
         {
             try
             {

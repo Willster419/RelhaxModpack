@@ -160,7 +160,7 @@ namespace RelhaxModpack.Forms
             Settings.BetaDatabase = UseBetaDatabaseCB.Checked;
             if(Settings.BetaDatabase && !WindowLoading)
             {
-                MessageBox.Show(Translations.getTranslatedString("noChangeUntilRestart"));
+                MessageBox.Show(Translations.GetTranslatedString("noChangeUntilRestart"));
             }
         }
 
@@ -169,7 +169,7 @@ namespace RelhaxModpack.Forms
             Settings.BetaApplication = UseBetaApplicationCB.Checked;
             if (Settings.BetaApplication && !WindowLoading)
             {
-                MessageBox.Show(Translations.getTranslatedString("noChangeUntilRestart"));
+                MessageBox.Show(Translations.GetTranslatedString("noChangeUntilRestart"));
             }
         }
         #endregion
@@ -177,7 +177,7 @@ namespace RelhaxModpack.Forms
         private void Generic_MouseEnter(object sender, EventArgs e)
         {
             Control c = (Control)sender;
-            AdvancedSettingsDescription.Text = Translations.getTranslatedString(c.Name + "Description");
+            AdvancedSettingsDescription.Text = Translations.GetTranslatedString(c.Name + "Description");
         }
 
         private void Generic_MouseLeave(object sender, EventArgs e)

@@ -39,9 +39,9 @@ namespace RelhaxModpack.Forms
             if (e.Button != MouseButtons.Right)
                 return;
             //bring up the right click menu
-            MenuItemAppClose.Text = Translations.getTranslatedString(MenuItemAppClose.Name);
-            MenuItemRestore.Text = Translations.getTranslatedString(MenuItemRestore.Name);
-            MenuItemCheckUpdates.Text = Translations.getTranslatedString(MenuItemCheckUpdates.Name);
+            MenuItemAppClose.Text = Translations.GetTranslatedString(MenuItemAppClose.Name);
+            MenuItemRestore.Text = Translations.GetTranslatedString(MenuItemRestore.Name);
+            MenuItemCheckUpdates.Text = Translations.GetTranslatedString(MenuItemCheckUpdates.Name);
         }
 
         private void MenuItemRestore_Click(object sender, EventArgs e)
@@ -60,7 +60,7 @@ namespace RelhaxModpack.Forms
                     string oldDatabaseVersion = Settings.DatabaseVersion;
                     HostWindow.Hide();
                     wait.Show();
-                    wait.loadingDescBox.Text = Translations.getTranslatedString("checkForUpdates");
+                    wait.loadingDescBox.Text = Translations.GetTranslatedString("checkForUpdates");
                     Application.DoEvents();
                     HostWindow.CheckmanagerUpdates();
                     wait.Close();
@@ -69,7 +69,7 @@ namespace RelhaxModpack.Forms
                     if(!Settings.DatabaseVersion.Equals(oldDatabaseVersion))
                     {
                         //TODO: translate
-                        MessageBox.Show(Translations.getTranslatedString("newDBApplied"));
+                        MessageBox.Show(Translations.GetTranslatedString("newDBApplied"));
                     }
                 }
             }
@@ -84,9 +84,9 @@ namespace RelhaxModpack.Forms
         {
             //apply translations for menu
             //TODO: get translations
-            MenuItemAppClose.Text = Translations.getTranslatedString(MenuItemAppClose.Name);
-            MenuItemRestore.Text = Translations.getTranslatedString(MenuItemRestore.Name);
-            MenuItemCheckUpdates.Text = Translations.getTranslatedString(MenuItemCheckUpdates.Name);
+            MenuItemAppClose.Text = Translations.GetTranslatedString(MenuItemAppClose.Name);
+            MenuItemRestore.Text = Translations.GetTranslatedString(MenuItemRestore.Name);
+            MenuItemCheckUpdates.Text = Translations.GetTranslatedString(MenuItemCheckUpdates.Name);
         }
     }
 }

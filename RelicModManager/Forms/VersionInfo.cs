@@ -26,12 +26,12 @@ namespace RelhaxModpack
         //handler for before the window is displayed
         private void VersionInfo_Load(object sender, EventArgs e)
         {
-            updateAcceptButton.Text = Translations.getTranslatedString(updateAcceptButton.Name);
-            updateDeclineButton.Text = Translations.getTranslatedString(updateDeclineButton.Name);
-            newVersionAvailableLabel.Text = Translations.getTranslatedString(newVersionAvailableLabel.Name);
-            updateQuestionLabel.Text = Translations.getTranslatedString(updateQuestionLabel.Name);
-            problemsUpdatingLabel.Text = Translations.getTranslatedString(problemsUpdatingLabel.Name);
-            clickHereUpdateLabel.Text = Translations.getTranslatedString(clickHereUpdateLabel.Name);
+            updateAcceptButton.Text = Translations.GetTranslatedString(updateAcceptButton.Name);
+            updateDeclineButton.Text = Translations.GetTranslatedString(updateDeclineButton.Name);
+            newVersionAvailableLabel.Text = Translations.GetTranslatedString(newVersionAvailableLabel.Name);
+            updateQuestionLabel.Text = Translations.GetTranslatedString(updateQuestionLabel.Name);
+            problemsUpdatingLabel.Text = Translations.GetTranslatedString(problemsUpdatingLabel.Name);
+            clickHereUpdateLabel.Text = Translations.GetTranslatedString(clickHereUpdateLabel.Name);
             downloadedVersionInfo.Text = Settings.BetaApplication ? Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "releaseNotes_beta.txt") : Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "releaseNotes.txt");
         }
 

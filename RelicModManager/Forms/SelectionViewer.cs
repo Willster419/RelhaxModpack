@@ -23,14 +23,14 @@ namespace RelhaxModpack
         private void SelectionViewer_Load(object sender, EventArgs e)
         {
             this.Location = new Point(x, y);
-            SelectConfigLabel.Text = Translations.getTranslatedString(SelectConfigLabel.Name);
-            SelectButton.Text = Translations.getTranslatedString("select");
-            CancelCloseButton.Text = Translations.getTranslatedString("cancel");
+            SelectConfigLabel.Text = Translations.GetTranslatedString(SelectConfigLabel.Name);
+            SelectButton.Text = Translations.GetTranslatedString("select");
+            CancelCloseButton.Text = Translations.GetTranslatedString("cancel");
 
             SelectionRadioButton b = new SelectionRadioButton
             {
                 XMLURL = "localFile",
-                Text = Translations.getTranslatedString("localFile")
+                Text = Translations.GetTranslatedString("localFile")
             };
             b.Location = new Point(6, (SelectConfigPanel.Controls.Count * (b.Size.Height-3)));
             SelectConfigPanel.Controls.Add(b);
@@ -55,7 +55,7 @@ namespace RelhaxModpack
                 string cultureDate = "";
                 Utils.ConvertDateToLocalCultureFormat(node.date, out cultureDate);
                 // Set up the ToolTip text for the Button and Checkbox.
-                rbToolTip.SetToolTip(bb, string.Format(Translations.getTranslatedString("createdAt"), cultureDate));
+                rbToolTip.SetToolTip(bb, string.Format(Translations.GetTranslatedString("createdAt"), cultureDate));
                 SelectConfigPanel.Controls.Add(bb);
             }
         }

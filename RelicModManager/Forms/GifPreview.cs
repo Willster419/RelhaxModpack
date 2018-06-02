@@ -18,7 +18,7 @@ namespace RelhaxModpack
         {
             Logging.Manager("GifPreview: opening at x: " + x + ", y: " + y);
             this.Location = new Point(x, y);
-            this.Text = Translations.getTranslatedString("loadingGifpreview");
+            this.Text = Translations.GetTranslatedString("loadingGifpreview");
             SetLoadingImage();
         }
 
