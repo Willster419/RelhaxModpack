@@ -37,6 +37,11 @@ namespace RelhaxModpack.AtlasesCreator
             get { return "txt"; }
         }
 
+        public Atlas.MapType MapType
+        {
+            get { return Atlas.MapType.TxtMap; }
+        }
+
         public void Save(string filename, Dictionary<string, Rectangle> map)
         {
             // copy the files list and sort alphabetically

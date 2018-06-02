@@ -39,6 +39,11 @@ namespace RelhaxModpack.AtlasesCreator
             get { return "xml"; }
         }
 
+        public Atlas.MapType MapType
+        {
+            get { return Atlas.MapType.XmlMap; }
+        }
+
         public void Save(string filename, Dictionary<string, Rectangle> map)
         {
             using (StreamWriter writer = new StreamWriter(filename))

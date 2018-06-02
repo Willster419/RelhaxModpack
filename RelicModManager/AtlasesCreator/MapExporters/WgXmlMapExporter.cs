@@ -35,7 +35,12 @@ namespace RelhaxModpack.AtlasesCreator
     {
         public string MapExtension
         {
-            get { return "WgXml"; }
+            get { return "xml"; }
+        }
+
+        public Atlas.MapType MapType
+        {
+            get { return Atlas.MapType.WGXmlMap; }
         }
 
         public void Save(string filename, Dictionary<string, Rectangle> map)
