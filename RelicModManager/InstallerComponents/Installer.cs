@@ -2477,7 +2477,7 @@ namespace RelhaxModpack
             */
 
             // files to be added, after deleting needless base files (last file added is winning): 
-            Logging.Manager("total files to be merged for " + atlasName + ": " + textureList.Count);
+            Logging.Manager("total files to be added for " + atlasName + ": " + textureList.Count);
             return textureList;
         }
 
