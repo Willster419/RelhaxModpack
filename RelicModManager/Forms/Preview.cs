@@ -32,9 +32,9 @@ namespace RelhaxModpack
             if (Medias == null)
                 Medias = new List<Media>();
             //update for translations
-            NextPicButton.Text = Translations.getTranslatedString(NextPicButton.Name);
-            PreviousPicButton.Text = Translations.getTranslatedString(PreviousPicButton.Name);
-            DevLinkLabel.Text = Translations.getTranslatedString(DevLinkLabel.Name);
+            NextPicButton.Text = Translations.GetTranslatedString(NextPicButton.Name);
+            PreviousPicButton.Text = Translations.GetTranslatedString(PreviousPicButton.Name);
+            DevLinkLabel.Text = Translations.GetTranslatedString(DevLinkLabel.Name);
             //check if devURL should be visable or not
             if (DBO.DevURL == null || DBO.DevURL.Equals(""))
             {
@@ -56,9 +56,9 @@ namespace RelhaxModpack
                 if (Medias.Count > 0)
                     DisplayMedia(Medias[CurrentlySelected]);
             }
-            DescriptionBox.Text = (DBO.Description == null || DBO.Description.Equals(""))? Translations.getTranslatedString("noDescription"): DBO.Description;
+            DescriptionBox.Text = (DBO.Description == null || DBO.Description.Equals(""))? Translations.GetTranslatedString("noDescription"): DBO.Description;
             DateFormat = DBO.Timestamp == 0 ? "" : Utils.ConvertFiletimeTimestampToDate(DBO.Timestamp);
-            UpdateBox.Text = (DBO.UpdateComment == null || DBO.UpdateComment.Equals("")) ? Translations.getTranslatedString("noUpdateInfo") : DBO.UpdateComment;
+            UpdateBox.Text = (DBO.UpdateComment == null || DBO.UpdateComment.Equals("")) ? Translations.GetTranslatedString("noUpdateInfo") : DBO.UpdateComment;
             UpdateBox.Text = UpdateBox.Text + "\n" + LastUpdated + DateFormat;
             //specify the start location
             if (Utils.PointWithinScreen(Settings.PreviewX, Settings.PreviewY))
@@ -165,8 +165,8 @@ namespace RelhaxModpack
                             Location = PreviewComponentLocation,
                             //BackColor = PreviewComponentBackColor,
                             MediaURL = m.URL,
-                            StopText = Translations.getTranslatedString("stop"),
-                            PlayPauseText = Translations.getTranslatedString("playPause"),
+                            StopText = Translations.GetTranslatedString("stop"),
+                            PlayPauseText = Translations.GetTranslatedString("playPause"),
                             Anchor = (AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Left)
                         };
                         Controls.Add(player);

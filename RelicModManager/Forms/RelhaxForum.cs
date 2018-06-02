@@ -44,11 +44,11 @@ namespace RelhaxModpack
             {
                 //only apply for common controls
                 if (c is RadioButton || c is CheckBox || c is GroupBox || c is Label || c is LinkLabel || c is Button)
-                    c.Text = Translations.getTranslatedString(c.Name);
+                    c.Text = Translations.GetTranslatedString(c.Name);
                 if (c is Panel || c is GroupBox || c is TableLayoutPanel)
                     ApplyControlTranslations(c.Controls);
             }
-            Text = Translations.getTranslatedString(Name);
+            Text = Translations.GetTranslatedString(Name);
         }
 
         private void ApplyControlTranslations(Control.ControlCollection conts)
@@ -57,7 +57,7 @@ namespace RelhaxModpack
             {
                 //only apply for common controls
                 if (c is RadioButton || c is CheckBox || c is GroupBox || c is Label || c is LinkLabel || c is Button)
-                    c.Text = Translations.getTranslatedString(c.Name);
+                    c.Text = Translations.GetTranslatedString(c.Name);
                 if (c is Panel || c is GroupBox || c is TableLayoutPanel)
                     ApplyControlTranslations(c.Controls);
             }

@@ -201,7 +201,7 @@ namespace RelhaxModpack
             args.InstalProgress = InstallerEventArgs.InstallProgress.UninstallDone;
             InstallWorker.ReportProgress(0);
             Logging.Manager("Uninstallation process finished");
-            MessageBox.Show(Translations.getTranslatedString("uninstallFinished"), Translations.getTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(Translations.GetTranslatedString("uninstallFinished"), Translations.GetTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         //Start the installation on the Worker thread
         public void ActuallyStartInstallation(object sender, DoWorkEventArgs e)
@@ -832,7 +832,7 @@ namespace RelhaxModpack
                             //append the exception to the log
                             Utils.ExceptionLog("ExtractDatabaseObjects", "unzip GlobalDependencies", ex);
                             //show the error message
-                            MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.ZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
+                            MessageBox.Show(Translations.GetTranslatedString("zipReadingErrorMessage1") + ", " + d.ZipFile + " " + Translations.GetTranslatedString("zipReadingErrorMessage3"), "");
                             //exit the application
                             Application.Exit();
                         }
@@ -864,7 +864,7 @@ namespace RelhaxModpack
                             //append the exception to the log
                             Utils.ExceptionLog("ExtractDatabaseObjects", "unzip Dependencies", ex);
                             //show the error message
-                            MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.ZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
+                            MessageBox.Show(Translations.GetTranslatedString("zipReadingErrorMessage1") + ", " + d.ZipFile + " " + Translations.GetTranslatedString("zipReadingErrorMessage3"), "");
                             //exit the application
                             Application.Exit();
                         }
@@ -898,7 +898,7 @@ namespace RelhaxModpack
                             //append the exception to the log
                             Utils.ExceptionLog("ExtractDatabaseObjects", "unzip LogicalDependencies", ex);
                             //show the error message
-                            MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.ZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
+                            MessageBox.Show(Translations.GetTranslatedString("zipReadingErrorMessage1") + ", " + d.ZipFile + " " + Translations.GetTranslatedString("zipReadingErrorMessage3"), "");
                             //exit the application
                             Application.Exit();
                         }
@@ -962,7 +962,7 @@ namespace RelhaxModpack
                                 //append the exception to the log
                                 Utils.ExceptionLog("ExtractDatabaseObjects", "unzip dbo.ZipFile", ex);
                                 //show the error message
-                                MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + dbo.ZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
+                                MessageBox.Show(Translations.GetTranslatedString("zipReadingErrorMessage1") + ", " + dbo.ZipFile + " " + Translations.GetTranslatedString("zipReadingErrorMessage3"), "");
                                 //exit the application
                                 Application.Exit();
                             }
@@ -997,7 +997,7 @@ namespace RelhaxModpack
                             //append the exception to the log
                             Utils.ExceptionLog("ExtractDatabaseObjects", "unzip AppendedDependencies", ex);
                             //show the error message
-                            MessageBox.Show(Translations.getTranslatedString("zipReadingErrorMessage1") + ", " + d.ZipFile + " " + Translations.getTranslatedString("zipReadingErrorMessage3"), "");
+                            MessageBox.Show(Translations.GetTranslatedString("zipReadingErrorMessage1") + ", " + d.ZipFile + " " + Translations.GetTranslatedString("zipReadingErrorMessage3"), "");
                             //exit the application
                             Application.Exit();
                         }
@@ -1357,7 +1357,7 @@ namespace RelhaxModpack
                     catch (UnauthorizedAccessException e)
                     {
                         Utils.ExceptionLog("PatchFiles", e);
-                        DialogResult res = MessageBox.Show(Translations.getTranslatedString("patchingSystemDeneidAccessMessage"), Translations.getTranslatedString("patchingSystemDeneidAccessHeader"), MessageBoxButtons.RetryCancel);
+                        DialogResult res = MessageBox.Show(Translations.GetTranslatedString("patchingSystemDeneidAccessMessage"), Translations.GetTranslatedString("patchingSystemDeneidAccessHeader"), MessageBoxButtons.RetryCancel);
                         if (res == DialogResult.Cancel)
                         {
                             Application.Exit();
@@ -1819,7 +1819,7 @@ namespace RelhaxModpack
                     }
                     else
                     {
-                        dr = MessageBox.Show(Translations.getTranslatedString("fontsPromptInstallText"), Translations.getTranslatedString("fontsPromptInstallHeader"), MessageBoxButtons.YesNo);
+                        dr = MessageBox.Show(Translations.GetTranslatedString("fontsPromptInstallText"), Translations.GetTranslatedString("fontsPromptInstallHeader"), MessageBoxButtons.YesNo);
                     }
                     if (dr == DialogResult.Yes)
                     {
@@ -1846,7 +1846,7 @@ namespace RelhaxModpack
                                 catch (WebException ex)
                                 {
                                     Utils.ExceptionLog("InstallFonts()", "download FontReg.exe", ex);
-                                    MessageBox.Show(string.Format("{0} FontReg.exe", Translations.getTranslatedString("failedToDownload_1")));
+                                    MessageBox.Show(string.Format("{0} FontReg.exe", Translations.GetTranslatedString("failedToDownload_1")));
                                 }
                             }
                         }
@@ -1869,7 +1869,7 @@ namespace RelhaxModpack
                         catch (Exception e)
                         {
                             Utils.ExceptionLog("InstallFonts", "could not start font installer", e);
-                            MessageBox.Show(Translations.getTranslatedString("fontsPromptError_1") + TanksLocation + Translations.getTranslatedString("fontsPromptError_2"));
+                            MessageBox.Show(Translations.GetTranslatedString("fontsPromptError_1") + TanksLocation + Translations.GetTranslatedString("fontsPromptError_2"));
                             Logging.Manager("Installation done, but fonts install failed");
                             return;
                         }
@@ -2022,7 +2022,7 @@ namespace RelhaxModpack
                 catch (Exception ex)
                 {
                     Utils.ExceptionLog("checkForOldZipFiles", "parse RelHaxDownloads folder", ex);
-                    MessageBox.Show(string.Format(Translations.getTranslatedString("parseDownloadFolderFailed"), "RelHaxDownloads"));
+                    MessageBox.Show(string.Format(Translations.GetTranslatedString("parseDownloadFolderFailed"), "RelHaxDownloads"));
                 }
                 args.ParrentProcessed = 2;
                 if (fi != null)
@@ -2074,7 +2074,7 @@ namespace RelhaxModpack
                                     {
                                         retry = true;
                                         Utils.ExceptionLog("checkForOldZipFiles", "delete", e);
-                                        DialogResult res = MessageBox.Show(string.Format("{0} {1}", Translations.getTranslatedString("fileDeleteFailed"), s), "", MessageBoxButtons.RetryCancel);
+                                        DialogResult res = MessageBox.Show(string.Format("{0} {1}", Translations.GetTranslatedString("fileDeleteFailed"), s), "", MessageBoxButtons.RetryCancel);
                                         if (res == DialogResult.Cancel)
                                         {
                                             breakOut = true;
@@ -2608,7 +2608,7 @@ namespace RelhaxModpack
                     catch (Exception e)
                     {
                         Utils.ExceptionLog("DirectoryDelete", file.FullName, e);
-                        DialogResult res = MessageBox.Show(Translations.getTranslatedString("extractionErrorMessage"), Translations.getTranslatedString("extractionErrorHeader"), MessageBoxButtons.RetryCancel);
+                        DialogResult res = MessageBox.Show(Translations.GetTranslatedString("extractionErrorMessage"), Translations.GetTranslatedString("extractionErrorHeader"), MessageBoxButtons.RetryCancel);
                         if (res == DialogResult.Retry)
                         {
                             tryAgain = true;
@@ -2641,7 +2641,7 @@ namespace RelhaxModpack
                         catch (Exception ex)
                         {
                             Utils.ExceptionLog("DirectoryDelete","deleteSubDirs", ex);
-                            DialogResult result = MessageBox.Show(Translations.getTranslatedString("deleteErrorMessage"), Translations.getTranslatedString("deleteErrorHeader"), MessageBoxButtons.RetryCancel);
+                            DialogResult result = MessageBox.Show(Translations.GetTranslatedString("deleteErrorMessage"), Translations.GetTranslatedString("deleteErrorHeader"), MessageBoxButtons.RetryCancel);
                             if (result == DialogResult.Cancel)
                                 Application.Exit();
                         }
@@ -2858,7 +2858,7 @@ namespace RelhaxModpack
                         //append the exception to the log
                         Utils.ExceptionLog("Unzip", "ZipFile: " + zipFile, e);
                         //show the error message
-                        MessageBox.Show(string.Format("{0}, {1} {2} {3}", Translations.getTranslatedString("zipReadingErrorMessage1"), Path.GetFileName(zipFile), Translations.getTranslatedString("zipReadingErrorMessage2"), Translations.getTranslatedString("zipReadingErrorHeader")));
+                        MessageBox.Show(string.Format("{0}, {1} {2} {3}", Translations.GetTranslatedString("zipReadingErrorMessage1"), Path.GetFileName(zipFile), Translations.GetTranslatedString("zipReadingErrorMessage2"), Translations.GetTranslatedString("zipReadingErrorHeader")));
                         //(try to)delete the file from the filesystem
                         if (File.Exists(zipFile))
                         {

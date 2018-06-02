@@ -89,14 +89,14 @@ namespace RelhaxModpack
             catch (XmlException ex)
             {
                 Logging.Manager(string.Format("CRITICAL: Failed to read database: {0}\nMessage: {1}", databaseURL, ex.Message));
-                MessageBox.Show(Translations.getTranslatedString("databaseReadFailed"));
+                MessageBox.Show(Translations.GetTranslatedString("databaseReadFailed"));
                 Application.Exit();
                 return;
             }
             catch (Exception ex)
             {
                 Utils.ExceptionLog("createModStructure", string.Format("tried to access {0}", databaseURL), ex);
-                MessageBox.Show(Translations.getTranslatedString("databaseNotFound"));
+                MessageBox.Show(Translations.GetTranslatedString("databaseNotFound"));
                 Application.Exit();
                 return;
             }

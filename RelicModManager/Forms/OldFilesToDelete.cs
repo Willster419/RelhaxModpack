@@ -10,15 +10,15 @@ namespace RelhaxModpack
         public OldFilesToDelete()
         {
             InitializeComponent();
-            this.Text = Translations.getTranslatedString("foundOldFilesHeader");
+            this.Text = Translations.GetTranslatedString("foundOldFilesHeader");
         }
 
         private void OldFilesToDelete_Load(object sender, EventArgs e)
         {
-            deleteFilesHeader.Text = Translations.getTranslatedString("foundOldFilesDelete1");
-            deleteFilesQuestion.Text = Translations.getTranslatedString("foundOldFilesDelete2");
-            noDeleteButton.Text = Translations.getTranslatedString("no");
-            yesDeleteButton.Text = Translations.getTranslatedString("yes");
+            deleteFilesHeader.Text = Translations.GetTranslatedString("foundOldFilesDelete1");
+            deleteFilesQuestion.Text = Translations.GetTranslatedString("foundOldFilesDelete2");
+            noDeleteButton.Text = Translations.GetTranslatedString("no");
+            yesDeleteButton.Text = Translations.GetTranslatedString("yes");
             if (Program.autoInstall)
                 yesDeleteButton_Click(null, null);
         }

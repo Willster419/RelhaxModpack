@@ -38,7 +38,7 @@ namespace RelhaxModpack
         {
             if (startY != -1 && startX != -1)
                 this.Location = new System.Drawing.Point(startX + 10, startY);
-            label1.Text = Translations.getTranslatedString(label1.Name);
+            label1.Text = Translations.GetTranslatedString(label1.Name);
             //align the text box to the middle of the forum
             label1.Location = new System.Drawing.Point((this.Size.Width / 2) - (label1.Size.Width/2), label1.Location.Y);
             PGMAX = forgroundPanel.Size.Width;

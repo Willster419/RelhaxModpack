@@ -25,10 +25,10 @@ namespace RelhaxModpack.Forms
         private void ExportSelectWoTVersion_Load(object sender, EventArgs e)
         {
             //load translations
-            Name = Translations.getTranslatedString("ExportModeCB");
-            ExportWindowDesctiption.Text = Translations.getTranslatedString(ExportWindowDesctiption.Name);
-            CancelButtonn.Text = Translations.getTranslatedString("cancel");
-            SelectButton.Text = Translations.getTranslatedString("select");
+            Name = Translations.GetTranslatedString("ExportModeCB");
+            ExportWindowDesctiption.Text = Translations.GetTranslatedString(ExportWindowDesctiption.Name);
+            CancelButtonn.Text = Translations.GetTranslatedString("cancel");
+            SelectButton.Text = Translations.GetTranslatedString("select");
             //load panel with stuff
             foreach(ExportModeRadioButton rb in SupportedWoTVersions)
             {
