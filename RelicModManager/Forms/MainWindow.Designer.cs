@@ -382,7 +382,7 @@
             // 
             this.findBugAddModLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.findBugAddModLabel.Image = global::RelhaxModpack.Properties.Resources.report;
-            this.findBugAddModLabel.Location = new System.Drawing.Point(440, 174);
+            this.findBugAddModLabel.Location = new System.Drawing.Point(408, 174);
             this.findBugAddModLabel.Name = "findBugAddModLabel";
             this.InfoTable.SetRowSpan(this.findBugAddModLabel, 2);
             this.findBugAddModLabel.Size = new System.Drawing.Size(26, 35);
@@ -598,7 +598,7 @@
             // 
             this.donateLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.donateLabel.Image = global::RelhaxModpack.Properties.Resources.donation;
-            this.donateLabel.Location = new System.Drawing.Point(408, 174);
+            this.donateLabel.Location = new System.Drawing.Point(376, 174);
             this.donateLabel.Name = "donateLabel";
             this.InfoTable.SetRowSpan(this.donateLabel, 2);
             this.donateLabel.Size = new System.Drawing.Size(26, 35);
@@ -623,7 +623,7 @@
             // 
             this.DiscordServerLink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DiscordServerLink.Image = global::RelhaxModpack.Properties.Resources.discord_brand;
-            this.DiscordServerLink.Location = new System.Drawing.Point(280, 174);
+            this.DiscordServerLink.Location = new System.Drawing.Point(248, 174);
             this.DiscordServerLink.Name = "DiscordServerLink";
             this.InfoTable.SetRowSpan(this.DiscordServerLink, 2);
             this.DiscordServerLink.Size = new System.Drawing.Size(26, 35);
@@ -681,20 +681,20 @@
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.InfoTable.Controls.Add(this.ViewFacebookLink, 2, 7);
-            this.InfoTable.Controls.Add(this.ViewTwitterLink, 3, 7);
-            this.InfoTable.Controls.Add(this.SendEmailLink, 7, 7);
-            this.InfoTable.Controls.Add(this.VisitWebsiteLink, 6, 7);
+            this.InfoTable.Controls.Add(this.ViewFacebookLink, 1, 7);
+            this.InfoTable.Controls.Add(this.ViewTwitterLink, 2, 7);
+            this.InfoTable.Controls.Add(this.SendEmailLink, 6, 7);
+            this.InfoTable.Controls.Add(this.VisitWebsiteLink, 5, 7);
             this.InfoTable.Controls.Add(this.DatabaseVersionLabel, 1, 9);
             this.InfoTable.Controls.Add(this.ApplicationVersionLabel, 0, 9);
             this.InfoTable.Controls.Add(this.downloadProgress, 0, 0);
             this.InfoTable.Controls.Add(this.totalProgressBar, 0, 1);
             this.InfoTable.Controls.Add(this.parrentProgressBar, 0, 2);
             this.InfoTable.Controls.Add(this.childProgressBar, 0, 3);
-            this.InfoTable.Controls.Add(this.findBugAddModLabel, 9, 7);
+            this.InfoTable.Controls.Add(this.findBugAddModLabel, 8, 7);
             this.InfoTable.Controls.Add(this.FormPageNALink, 0, 5);
-            this.InfoTable.Controls.Add(this.donateLabel, 8, 7);
-            this.InfoTable.Controls.Add(this.DiscordServerLink, 4, 7);
+            this.InfoTable.Controls.Add(this.donateLabel, 7, 7);
+            this.InfoTable.Controls.Add(this.DiscordServerLink, 3, 7);
             this.InfoTable.Controls.Add(this.FormPageEULink, 0, 6);
             this.InfoTable.Controls.Add(this.FormPageEUGERLink, 0, 7);
             this.InfoTable.Location = new System.Drawing.Point(13, 410);
@@ -720,7 +720,7 @@
             this.ViewFacebookLink.AutoSize = true;
             this.ViewFacebookLink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ViewFacebookLink.Image = global::RelhaxModpack.Properties.Resources.facebook_brand;
-            this.ViewFacebookLink.Location = new System.Drawing.Point(216, 174);
+            this.ViewFacebookLink.Location = new System.Drawing.Point(184, 174);
             this.ViewFacebookLink.Name = "ViewFacebookLink";
             this.InfoTable.SetRowSpan(this.ViewFacebookLink, 2);
             this.ViewFacebookLink.Size = new System.Drawing.Size(26, 35);
@@ -735,7 +735,7 @@
             this.ViewTwitterLink.AutoSize = true;
             this.ViewTwitterLink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ViewTwitterLink.Image = global::RelhaxModpack.Properties.Resources.twitter_brand;
-            this.ViewTwitterLink.Location = new System.Drawing.Point(248, 174);
+            this.ViewTwitterLink.Location = new System.Drawing.Point(216, 174);
             this.ViewTwitterLink.Name = "ViewTwitterLink";
             this.InfoTable.SetRowSpan(this.ViewTwitterLink, 2);
             this.ViewTwitterLink.Size = new System.Drawing.Size(26, 35);
@@ -750,7 +750,7 @@
             this.SendEmailLink.AutoSize = true;
             this.SendEmailLink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SendEmailLink.Image = global::RelhaxModpack.Properties.Resources.EMail;
-            this.SendEmailLink.Location = new System.Drawing.Point(376, 174);
+            this.SendEmailLink.Location = new System.Drawing.Point(344, 174);
             this.SendEmailLink.Name = "SendEmailLink";
             this.InfoTable.SetRowSpan(this.SendEmailLink, 2);
             this.SendEmailLink.Size = new System.Drawing.Size(26, 35);
@@ -765,7 +765,7 @@
             this.VisitWebsiteLink.AutoSize = true;
             this.VisitWebsiteLink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.VisitWebsiteLink.Image = global::RelhaxModpack.Properties.Resources.Home;
-            this.VisitWebsiteLink.Location = new System.Drawing.Point(344, 174);
+            this.VisitWebsiteLink.Location = new System.Drawing.Point(312, 174);
             this.VisitWebsiteLink.Name = "VisitWebsiteLink";
             this.InfoTable.SetRowSpan(this.VisitWebsiteLink, 2);
             this.VisitWebsiteLink.Size = new System.Drawing.Size(26, 35);
