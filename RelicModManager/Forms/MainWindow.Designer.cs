@@ -72,6 +72,13 @@
             this.downloadProgress = new System.Windows.Forms.RichTextBox();
             this.FormPageEULink = new System.Windows.Forms.LinkLabel();
             this.FormPageEUGERLink = new System.Windows.Forms.LinkLabel();
+            this.FacebookPictureBox = new System.Windows.Forms.PictureBox();
+            this.TwitterPictureBox = new System.Windows.Forms.PictureBox();
+            this.DiscordPictureBox = new System.Windows.Forms.PictureBox();
+            this.HomepagePictureBox = new System.Windows.Forms.PictureBox();
+            this.SendEmailPictureBox = new System.Windows.Forms.PictureBox();
+            this.DonatePictureBox = new System.Windows.Forms.PictureBox();
+            this.FindBugAddModPictureBox = new System.Windows.Forms.PictureBox();
             this.DiagnosticUtilitiesButton = new System.Windows.Forms.Button();
             this.ButtonTable = new System.Windows.Forms.TableLayoutPanel();
             this.ExportModeBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
@@ -88,22 +95,12 @@
             this.fontSize125 = new System.Windows.Forms.RadioButton();
             this.fontSize225 = new System.Windows.Forms.RadioButton();
             this.fontSize175 = new System.Windows.Forms.RadioButton();
-            this.FacebookPictureBox = new System.Windows.Forms.PictureBox();
-            this.TwitterPictureBox = new System.Windows.Forms.PictureBox();
-            this.DiscordPictureBox = new System.Windows.Forms.PictureBox();
-            this.HomepagePictureBox = new System.Windows.Forms.PictureBox();
-            this.SendEmailPictureBox = new System.Windows.Forms.PictureBox();
-            this.DonatePictureBox = new System.Windows.Forms.PictureBox();
-            this.FindBugAddModPictureBox = new System.Windows.Forms.PictureBox();
             this.settingsGroupBox.SuspendLayout();
             this.SettingsTable.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
             this.SelectionViewGB.SuspendLayout();
             this.SelectionLayout.SuspendLayout();
             this.InfoTable.SuspendLayout();
-            this.ButtonTable.SuspendLayout();
-            this.fontSizeGB.SuspendLayout();
-            this.FontLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FacebookPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TwitterPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DiscordPictureBox)).BeginInit();
@@ -111,6 +108,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.SendEmailPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DonatePictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FindBugAddModPictureBox)).BeginInit();
+            this.ButtonTable.SuspendLayout();
+            this.fontSizeGB.SuspendLayout();
+            this.FontLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // childProgressBar
@@ -130,6 +130,7 @@
             // 
             // FormPageNALink
             // 
+            this.FormPageNALink.AutoSize = true;
             this.FormPageNALink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.FormPageNALink.Location = new System.Drawing.Point(3, 134);
             this.FormPageNALink.Name = "FormPageNALink";
@@ -137,7 +138,7 @@
             this.FormPageNALink.TabIndex = 16;
             this.FormPageNALink.TabStop = true;
             this.FormPageNALink.Text = "WoT Form Page (NA, ENG)";
-            this.FormPageNALink.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.FormPageNALink.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             this.FormPageNALink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.FormPageNALink_LinkClicked);
             // 
             // parrentProgressBar
@@ -723,6 +724,7 @@
             this.FormPageEULink.TabIndex = 40;
             this.FormPageEULink.TabStop = true;
             this.FormPageEULink.Text = "WoT Form Page (EU, ENG)";
+            this.FormPageEULink.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.FormPageEULink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.FormPageEULink_LinkClicked);
             // 
             // FormPageEUGERLink
@@ -736,6 +738,111 @@
             this.FormPageEUGERLink.TabStop = true;
             this.FormPageEUGERLink.Text = "WoT Form Page (EU, GER)";
             this.FormPageEUGERLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.FormPageEUGERLink_LinkClicked);
+            // 
+            // FacebookPictureBox
+            // 
+            this.FacebookPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.FacebookPictureBox.Image = global::RelhaxModpack.Properties.Resources.facebook_brand;
+            this.FacebookPictureBox.Location = new System.Drawing.Point(184, 174);
+            this.FacebookPictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.FacebookPictureBox.Name = "FacebookPictureBox";
+            this.InfoTable.SetRowSpan(this.FacebookPictureBox, 2);
+            this.FacebookPictureBox.Size = new System.Drawing.Size(32, 35);
+            this.FacebookPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.FacebookPictureBox.TabIndex = 42;
+            this.FacebookPictureBox.TabStop = false;
+            this.FacebookPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ViewFacebookLink_MouseDown);
+            this.FacebookPictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.FacebookPictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
+            // TwitterPictureBox
+            // 
+            this.TwitterPictureBox.Image = global::RelhaxModpack.Properties.Resources.twitter_brand;
+            this.TwitterPictureBox.Location = new System.Drawing.Point(222, 174);
+            this.TwitterPictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.TwitterPictureBox.Name = "TwitterPictureBox";
+            this.InfoTable.SetRowSpan(this.TwitterPictureBox, 2);
+            this.TwitterPictureBox.Size = new System.Drawing.Size(32, 35);
+            this.TwitterPictureBox.TabIndex = 43;
+            this.TwitterPictureBox.TabStop = false;
+            this.TwitterPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ViewTwitterLink_MouseDown);
+            this.TwitterPictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.TwitterPictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
+            // DiscordPictureBox
+            // 
+            this.DiscordPictureBox.Image = global::RelhaxModpack.Properties.Resources.discord_brand;
+            this.DiscordPictureBox.Location = new System.Drawing.Point(260, 174);
+            this.DiscordPictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.DiscordPictureBox.Name = "DiscordPictureBox";
+            this.InfoTable.SetRowSpan(this.DiscordPictureBox, 2);
+            this.DiscordPictureBox.Size = new System.Drawing.Size(32, 35);
+            this.DiscordPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.DiscordPictureBox.TabIndex = 44;
+            this.DiscordPictureBox.TabStop = false;
+            this.DiscordPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DiscordServerLink_MouseDown);
+            this.DiscordPictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.DiscordPictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
+            // HomepagePictureBox
+            // 
+            this.HomepagePictureBox.Image = global::RelhaxModpack.Properties.Resources.Home;
+            this.HomepagePictureBox.Location = new System.Drawing.Point(369, 174);
+            this.HomepagePictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.HomepagePictureBox.Name = "HomepagePictureBox";
+            this.InfoTable.SetRowSpan(this.HomepagePictureBox, 2);
+            this.HomepagePictureBox.Size = new System.Drawing.Size(20, 35);
+            this.HomepagePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.HomepagePictureBox.TabIndex = 45;
+            this.HomepagePictureBox.TabStop = false;
+            this.HomepagePictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.VisitWebsiteLink_MouseDown);
+            this.HomepagePictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.HomepagePictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
+            // SendEmailPictureBox
+            // 
+            this.SendEmailPictureBox.Image = global::RelhaxModpack.Properties.Resources.EMail;
+            this.SendEmailPictureBox.Location = new System.Drawing.Point(395, 174);
+            this.SendEmailPictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.SendEmailPictureBox.Name = "SendEmailPictureBox";
+            this.InfoTable.SetRowSpan(this.SendEmailPictureBox, 2);
+            this.SendEmailPictureBox.Size = new System.Drawing.Size(20, 35);
+            this.SendEmailPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.SendEmailPictureBox.TabIndex = 46;
+            this.SendEmailPictureBox.TabStop = false;
+            this.SendEmailPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.SendEmailLink_MouseDown);
+            this.SendEmailPictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.SendEmailPictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
+            // DonatePictureBox
+            // 
+            this.DonatePictureBox.Image = global::RelhaxModpack.Properties.Resources.donation;
+            this.DonatePictureBox.Location = new System.Drawing.Point(421, 174);
+            this.DonatePictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.DonatePictureBox.Name = "DonatePictureBox";
+            this.InfoTable.SetRowSpan(this.DonatePictureBox, 2);
+            this.DonatePictureBox.Size = new System.Drawing.Size(20, 35);
+            this.DonatePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.DonatePictureBox.TabIndex = 47;
+            this.DonatePictureBox.TabStop = false;
+            this.DonatePictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.donateLabel_MouseDown);
+            this.DonatePictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.DonatePictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
+            // FindBugAddModPictureBox
+            // 
+            this.FindBugAddModPictureBox.Image = global::RelhaxModpack.Properties.Resources.report;
+            this.FindBugAddModPictureBox.Location = new System.Drawing.Point(447, 174);
+            this.FindBugAddModPictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.FindBugAddModPictureBox.Name = "FindBugAddModPictureBox";
+            this.InfoTable.SetRowSpan(this.FindBugAddModPictureBox, 2);
+            this.FindBugAddModPictureBox.Size = new System.Drawing.Size(20, 35);
+            this.FindBugAddModPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.FindBugAddModPictureBox.TabIndex = 48;
+            this.FindBugAddModPictureBox.TabStop = false;
+            this.FindBugAddModPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.findBugAddModLabel_MouseDown);
+            this.FindBugAddModPictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.FindBugAddModPictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
             // DiagnosticUtilitiesButton
             // 
@@ -966,111 +1073,6 @@
             this.fontSize175.CheckedChanged += new System.EventHandler(this.fontSize175_CheckedChanged);
             this.fontSize175.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             // 
-            // FacebookPictureBox
-            // 
-            this.FacebookPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FacebookPictureBox.Image = global::RelhaxModpack.Properties.Resources.facebook_brand;
-            this.FacebookPictureBox.Location = new System.Drawing.Point(184, 174);
-            this.FacebookPictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.FacebookPictureBox.Name = "FacebookPictureBox";
-            this.InfoTable.SetRowSpan(this.FacebookPictureBox, 2);
-            this.FacebookPictureBox.Size = new System.Drawing.Size(32, 35);
-            this.FacebookPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.FacebookPictureBox.TabIndex = 42;
-            this.FacebookPictureBox.TabStop = false;
-            this.FacebookPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ViewFacebookLink_MouseDown);
-            this.FacebookPictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.FacebookPictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
-            // 
-            // TwitterPictureBox
-            // 
-            this.TwitterPictureBox.Image = global::RelhaxModpack.Properties.Resources.twitter_brand;
-            this.TwitterPictureBox.Location = new System.Drawing.Point(222, 174);
-            this.TwitterPictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.TwitterPictureBox.Name = "TwitterPictureBox";
-            this.InfoTable.SetRowSpan(this.TwitterPictureBox, 2);
-            this.TwitterPictureBox.Size = new System.Drawing.Size(32, 35);
-            this.TwitterPictureBox.TabIndex = 43;
-            this.TwitterPictureBox.TabStop = false;
-            this.TwitterPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ViewTwitterLink_MouseDown);
-            this.TwitterPictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.TwitterPictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
-            // 
-            // DiscordPictureBox
-            // 
-            this.DiscordPictureBox.Image = global::RelhaxModpack.Properties.Resources.discord_brand;
-            this.DiscordPictureBox.Location = new System.Drawing.Point(260, 174);
-            this.DiscordPictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.DiscordPictureBox.Name = "DiscordPictureBox";
-            this.InfoTable.SetRowSpan(this.DiscordPictureBox, 2);
-            this.DiscordPictureBox.Size = new System.Drawing.Size(32, 35);
-            this.DiscordPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.DiscordPictureBox.TabIndex = 44;
-            this.DiscordPictureBox.TabStop = false;
-            this.DiscordPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DiscordServerLink_MouseDown);
-            this.DiscordPictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.DiscordPictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
-            // 
-            // HomepagePictureBox
-            // 
-            this.HomepagePictureBox.Image = global::RelhaxModpack.Properties.Resources.Home;
-            this.HomepagePictureBox.Location = new System.Drawing.Point(369, 174);
-            this.HomepagePictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.HomepagePictureBox.Name = "HomepagePictureBox";
-            this.InfoTable.SetRowSpan(this.HomepagePictureBox, 2);
-            this.HomepagePictureBox.Size = new System.Drawing.Size(20, 35);
-            this.HomepagePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.HomepagePictureBox.TabIndex = 45;
-            this.HomepagePictureBox.TabStop = false;
-            this.HomepagePictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.VisitWebsiteLink_MouseDown);
-            this.HomepagePictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.HomepagePictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
-            // 
-            // SendEmailPictureBox
-            // 
-            this.SendEmailPictureBox.Image = global::RelhaxModpack.Properties.Resources.EMail;
-            this.SendEmailPictureBox.Location = new System.Drawing.Point(395, 174);
-            this.SendEmailPictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.SendEmailPictureBox.Name = "SendEmailPictureBox";
-            this.InfoTable.SetRowSpan(this.SendEmailPictureBox, 2);
-            this.SendEmailPictureBox.Size = new System.Drawing.Size(20, 35);
-            this.SendEmailPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.SendEmailPictureBox.TabIndex = 46;
-            this.SendEmailPictureBox.TabStop = false;
-            this.SendEmailPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.SendEmailLink_MouseDown);
-            this.SendEmailPictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.SendEmailPictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
-            // 
-            // DonatePictureBox
-            // 
-            this.DonatePictureBox.Image = global::RelhaxModpack.Properties.Resources.donation;
-            this.DonatePictureBox.Location = new System.Drawing.Point(421, 174);
-            this.DonatePictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.DonatePictureBox.Name = "DonatePictureBox";
-            this.InfoTable.SetRowSpan(this.DonatePictureBox, 2);
-            this.DonatePictureBox.Size = new System.Drawing.Size(20, 35);
-            this.DonatePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.DonatePictureBox.TabIndex = 47;
-            this.DonatePictureBox.TabStop = false;
-            this.DonatePictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.donateLabel_MouseDown);
-            this.DonatePictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.DonatePictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
-            // 
-            // FindBugAddModPictureBox
-            // 
-            this.FindBugAddModPictureBox.Image = global::RelhaxModpack.Properties.Resources.report;
-            this.FindBugAddModPictureBox.Location = new System.Drawing.Point(447, 174);
-            this.FindBugAddModPictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.FindBugAddModPictureBox.Name = "FindBugAddModPictureBox";
-            this.InfoTable.SetRowSpan(this.FindBugAddModPictureBox, 2);
-            this.FindBugAddModPictureBox.Size = new System.Drawing.Size(20, 35);
-            this.FindBugAddModPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.FindBugAddModPictureBox.TabIndex = 48;
-            this.FindBugAddModPictureBox.TabStop = false;
-            this.FindBugAddModPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.findBugAddModLabel_MouseDown);
-            this.FindBugAddModPictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.FindBugAddModPictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1103,9 +1105,6 @@
             this.SelectionLayout.PerformLayout();
             this.InfoTable.ResumeLayout(false);
             this.InfoTable.PerformLayout();
-            this.ButtonTable.ResumeLayout(false);
-            this.fontSizeGB.ResumeLayout(false);
-            this.FontLayoutPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.FacebookPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TwitterPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DiscordPictureBox)).EndInit();
@@ -1113,6 +1112,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.SendEmailPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DonatePictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.FindBugAddModPictureBox)).EndInit();
+            this.ButtonTable.ResumeLayout(false);
+            this.fontSizeGB.ResumeLayout(false);
+            this.FontLayoutPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
