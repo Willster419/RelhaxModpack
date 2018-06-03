@@ -112,7 +112,7 @@
             this.childProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.childProgressBar.Location = new System.Drawing.Point(3, 113);
             this.childProgressBar.Name = "childProgressBar";
-            this.childProgressBar.Size = new System.Drawing.Size(463, 14);
+            this.childProgressBar.Size = new System.Drawing.Size(464, 14);
             this.childProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.childProgressBar.TabIndex = 11;
             // 
@@ -139,7 +139,7 @@
             this.parrentProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.parrentProgressBar.Location = new System.Drawing.Point(3, 93);
             this.parrentProgressBar.Name = "parrentProgressBar";
-            this.parrentProgressBar.Size = new System.Drawing.Size(463, 14);
+            this.parrentProgressBar.Size = new System.Drawing.Size(464, 14);
             this.parrentProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.parrentProgressBar.TabIndex = 17;
             // 
@@ -382,10 +382,10 @@
             // 
             this.findBugAddModLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.findBugAddModLabel.Image = global::RelhaxModpack.Properties.Resources.report;
-            this.findBugAddModLabel.Location = new System.Drawing.Point(408, 174);
+            this.findBugAddModLabel.Location = new System.Drawing.Point(438, 174);
             this.findBugAddModLabel.Name = "findBugAddModLabel";
             this.InfoTable.SetRowSpan(this.findBugAddModLabel, 2);
-            this.findBugAddModLabel.Size = new System.Drawing.Size(26, 35);
+            this.findBugAddModLabel.Size = new System.Drawing.Size(29, 35);
             this.findBugAddModLabel.TabIndex = 27;
             this.findBugAddModLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.findBugAddModLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.findBugAddModLabel_LinkClicked);
@@ -598,10 +598,10 @@
             // 
             this.donateLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.donateLabel.Image = global::RelhaxModpack.Properties.Resources.donation;
-            this.donateLabel.Location = new System.Drawing.Point(376, 174);
+            this.donateLabel.Location = new System.Drawing.Point(403, 174);
             this.donateLabel.Name = "donateLabel";
             this.InfoTable.SetRowSpan(this.donateLabel, 2);
-            this.donateLabel.Size = new System.Drawing.Size(26, 35);
+            this.donateLabel.Size = new System.Drawing.Size(29, 35);
             this.donateLabel.TabIndex = 32;
             this.donateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.donateLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.donateLabel_LinkClicked);
@@ -615,7 +615,7 @@
             this.totalProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.totalProgressBar.Location = new System.Drawing.Point(3, 73);
             this.totalProgressBar.Name = "totalProgressBar";
-            this.totalProgressBar.Size = new System.Drawing.Size(463, 14);
+            this.totalProgressBar.Size = new System.Drawing.Size(464, 14);
             this.totalProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.totalProgressBar.TabIndex = 34;
             // 
@@ -623,10 +623,10 @@
             // 
             this.DiscordServerLink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DiscordServerLink.Image = global::RelhaxModpack.Properties.Resources.discord_brand;
-            this.DiscordServerLink.Location = new System.Drawing.Point(248, 174);
+            this.DiscordServerLink.Location = new System.Drawing.Point(260, 174);
             this.DiscordServerLink.Name = "DiscordServerLink";
             this.InfoTable.SetRowSpan(this.DiscordServerLink, 2);
-            this.DiscordServerLink.Size = new System.Drawing.Size(26, 35);
+            this.DiscordServerLink.Size = new System.Drawing.Size(32, 35);
             this.DiscordServerLink.TabIndex = 35;
             this.DiscordServerLink.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.DiscordServerLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.DiscordServerLink_LinkClicked);
@@ -672,14 +672,14 @@
             // 
             this.InfoTable.ColumnCount = 10;
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 181F));
-            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 38F));
+            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 38F));
+            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 38F));
+            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.InfoTable.Controls.Add(this.ViewFacebookLink, 1, 7);
             this.InfoTable.Controls.Add(this.ViewTwitterLink, 2, 7);
@@ -723,7 +723,7 @@
             this.ViewFacebookLink.Location = new System.Drawing.Point(184, 174);
             this.ViewFacebookLink.Name = "ViewFacebookLink";
             this.InfoTable.SetRowSpan(this.ViewFacebookLink, 2);
-            this.ViewFacebookLink.Size = new System.Drawing.Size(26, 35);
+            this.ViewFacebookLink.Size = new System.Drawing.Size(32, 35);
             this.ViewFacebookLink.TabIndex = 39;
             this.ViewFacebookLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ViewFacebookLink_LinkClicked);
             this.ViewFacebookLink.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ViewFacebookLink_MouseDown);
@@ -735,10 +735,10 @@
             this.ViewTwitterLink.AutoSize = true;
             this.ViewTwitterLink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ViewTwitterLink.Image = global::RelhaxModpack.Properties.Resources.twitter_brand;
-            this.ViewTwitterLink.Location = new System.Drawing.Point(216, 174);
+            this.ViewTwitterLink.Location = new System.Drawing.Point(222, 174);
             this.ViewTwitterLink.Name = "ViewTwitterLink";
             this.InfoTable.SetRowSpan(this.ViewTwitterLink, 2);
-            this.ViewTwitterLink.Size = new System.Drawing.Size(26, 35);
+            this.ViewTwitterLink.Size = new System.Drawing.Size(32, 35);
             this.ViewTwitterLink.TabIndex = 38;
             this.ViewTwitterLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ViewTwitterLink_LinkClicked);
             this.ViewTwitterLink.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ViewTwitterLink_MouseDown);
@@ -750,10 +750,10 @@
             this.SendEmailLink.AutoSize = true;
             this.SendEmailLink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SendEmailLink.Image = global::RelhaxModpack.Properties.Resources.EMail;
-            this.SendEmailLink.Location = new System.Drawing.Point(344, 174);
+            this.SendEmailLink.Location = new System.Drawing.Point(368, 174);
             this.SendEmailLink.Name = "SendEmailLink";
             this.InfoTable.SetRowSpan(this.SendEmailLink, 2);
-            this.SendEmailLink.Size = new System.Drawing.Size(26, 35);
+            this.SendEmailLink.Size = new System.Drawing.Size(29, 35);
             this.SendEmailLink.TabIndex = 37;
             this.SendEmailLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.SendEmailLink_LinkClicked);
             this.SendEmailLink.MouseDown += new System.Windows.Forms.MouseEventHandler(this.SendEmailLink_MouseDown);
@@ -765,10 +765,10 @@
             this.VisitWebsiteLink.AutoSize = true;
             this.VisitWebsiteLink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.VisitWebsiteLink.Image = global::RelhaxModpack.Properties.Resources.Home;
-            this.VisitWebsiteLink.Location = new System.Drawing.Point(312, 174);
+            this.VisitWebsiteLink.Location = new System.Drawing.Point(333, 174);
             this.VisitWebsiteLink.Name = "VisitWebsiteLink";
             this.InfoTable.SetRowSpan(this.VisitWebsiteLink, 2);
-            this.VisitWebsiteLink.Size = new System.Drawing.Size(26, 35);
+            this.VisitWebsiteLink.Size = new System.Drawing.Size(29, 35);
             this.VisitWebsiteLink.TabIndex = 36;
             this.VisitWebsiteLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.VisitWebsiteLink_LinkClicked);
             this.VisitWebsiteLink.MouseDown += new System.Windows.Forms.MouseEventHandler(this.VisitWebsiteLink_MouseDown);
@@ -782,7 +782,7 @@
             this.DatabaseVersionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DatabaseVersionLabel.Location = new System.Drawing.Point(184, 209);
             this.DatabaseVersionLabel.Name = "DatabaseVersionLabel";
-            this.DatabaseVersionLabel.Size = new System.Drawing.Size(282, 24);
+            this.DatabaseVersionLabel.Size = new System.Drawing.Size(283, 24);
             this.DatabaseVersionLabel.TabIndex = 0;
             this.DatabaseVersionLabel.Text = "Latest Database v{version}";
             this.DatabaseVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -807,7 +807,7 @@
             this.downloadProgress.Name = "downloadProgress";
             this.downloadProgress.ReadOnly = true;
             this.downloadProgress.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.downloadProgress.Size = new System.Drawing.Size(463, 64);
+            this.downloadProgress.Size = new System.Drawing.Size(464, 64);
             this.downloadProgress.TabIndex = 29;
             this.downloadProgress.Text = "";
             // 

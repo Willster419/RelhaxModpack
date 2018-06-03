@@ -2792,39 +2792,41 @@ namespace RelhaxModpack
         }
         #endregion
 
+        #region MouseDown events
         private void ViewFacebookLink_MouseDown(object sender, MouseEventArgs e)
         {
-
+            VisitWebsiteLink_LinkClicked(sender, null);
         }
 
         private void ViewTwitterLink_MouseDown(object sender, MouseEventArgs e)
         {
-
+            ViewTwitterLink_LinkClicked(sender, null);
         }
 
         private void DiscordServerLink_MouseDown(object sender, MouseEventArgs e)
         {
-
+            DiscordServerLink_LinkClicked(sender, null);
         }
 
         private void VisitWebsiteLink_MouseDown(object sender, MouseEventArgs e)
         {
-
+            VisitWebsiteLink_LinkClicked(sender, null);
         }
 
         private void SendEmailLink_MouseDown(object sender, MouseEventArgs e)
         {
-
+            SendEmailLink_LinkClicked(sender, null);
         }
 
         private void donateLabel_MouseDown(object sender, MouseEventArgs e)
         {
-
+            donateLabel_LinkClicked(sender, null);
         }
 
         private void findBugAddModLabel_MouseDown(object sender, MouseEventArgs e)
         {
-
+            findBugAddModLabel_LinkClicked(sender, null);
         }
+        #endregion
     }
 }

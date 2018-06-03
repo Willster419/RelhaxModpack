@@ -58,6 +58,7 @@ namespace RelhaxModpack
                 //only apply for common controls
                 if (c is RadioButton || c is CheckBox || c is GroupBox || c is Label || c is LinkLabel || c is Button)
                     c.Text = Translations.GetTranslatedString(c.Name);
+
                 if (c is Panel || c is GroupBox || c is TableLayoutPanel)
                     ApplyControlTranslations(c.Controls);
             }

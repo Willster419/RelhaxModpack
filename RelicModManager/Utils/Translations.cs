@@ -25,17 +25,17 @@ namespace RelhaxModpack
                     case (Languages.English):
                         if (english.Contains(componetName))
                         {
-                            return (string)english[componetName];
+                            return (string)"" + english[componetName];
                         }
                         break;
                     case (Languages.German):
                         if (german.Contains(componetName))
                         {
-                            s = (string)german[componetName];
+                            s = (string)"" + german[componetName];
                             if (s.ToUpper().Equals("TODO"))
                             {
                                 Logging.Manager(string.Format("WARNING: german translation for \"{0}\" is missing.", componetName));
-                                s = (string)english[componetName];
+                                s = (string)"" + english[componetName];
                             }
                             return s;
                         }
@@ -343,13 +343,6 @@ namespace RelhaxModpack
             //
             AddToAll("thirdGuardsLoadingImageRB", "3rdguards");
 
-            //Componet: findBugAddModLabel
-            //
-            english.Add("findBugAddModLabel", "Find a bug? Want a mod added?");
-            german.Add("findBugAddModLabel", "Fehler gefunden? Willst Du einen Mod hinzufügen?");
-            polish.Add("findBugAddModLabel", "Znalazłeś błąd? Chcesz dodać mod?");
-            french.Add("findBugAddModLabel", "Trouvé un bug? Recommandation de mod?");
-
             //Componet: cancelDownloadButton
             //
             english.Add("cancelDownloadButton", "Cancel download");
@@ -371,13 +364,6 @@ namespace RelhaxModpack
             german.Add("appDataFolderNotExist", "Der Installer konnte den WoT-Cache-Ordner nicht erkennen. Installation fortsetzen ohne den WoT-Cache zu löschen?");
             polish.Add("appDataFolderNotExist", "Instalato nie wykrył foldera cache. Czy kontynuować bez czyszczenia folderu cache?");
             french.Add("appDataFolderNotExist", "L'installateur n'as pas pus détecter le dossier de cache WoT. Continuer l'installation sans nettoyer le cache?");
-
-            //Componet: DiscordServerLink
-            //
-            english.Add("DiscordServerLink", "Discord server");
-            german.Add("DiscordServerLink", "Discord server");
-            polish.Add("DiscordServerLink", "Serwer Discorda");
-            french.Add("DiscordServerLink", "Serveur Discord");
 
             //Componet: viewAppUpdates
             //
@@ -477,12 +463,6 @@ namespace RelhaxModpack
                 " Kliknik PPM na opcji, by wyświetlić opis. Nie zobaczysz tej wiadomości ponownie, dopóki nie usuniesz pliku ustawień xml.");
             french.Add("helperText", "Bienvenue au Modpack Relhax! J'ai aissayé de faire le modpack le plus simple possible, mais des questions peuvent survenir." +
                 " Survolez un paramètre pour voire une explication. Vous n'allez plus voire cette boite, sauf si vous supprimez le fichier de configuration xml ");
-
-            //Component: donateLabel
-            english.Add("donateLabel", "Donation for further development");
-            german.Add("donateLabel", "Spende für die Weiterentwicklung");
-            polish.Add("donateLabel", "Dotacja na dalszy rozwój");
-            french.Add("donateLabel", "Donation pour aider au développement");
 
             //Component: notifyIfSameDatabaseCB
             english.Add("notifyIfSameDatabaseCB", "Inform if no new database available");
@@ -1549,6 +1529,90 @@ namespace RelhaxModpack
             german.Add("ShowAdvancedSettingsLinkDescription", "Erweiterte Einstellungen anzeigen");
             polish.Add("ShowAdvancedSettingsLinkDescription", "Pokaż okno ustawieñ zaawansowanych");
             french.Add("ShowAdvancedSettingsLinkDescription", "Afficher le panneau de configurations avancé");
+
+            //Component: ViewFacebookLink
+            english.Add("ViewFacebookLink", "f");
+            german.Add("ViewFacebookLink", "f");
+            polish.Add("ViewFacebookLink", "f");
+            french.Add("ViewFacebookLink", "f");
+
+            //Component: ViewFacebookLinkDescription
+            english.Add("ViewFacebookLinkDescription", "go to our Facebook page");
+            german.Add("ViewFacebookLinkDescription", "unsere Facebook Seite aufrufen");
+            polish.Add("ViewFacebookLinkDescription", "TODO");
+            french.Add("ViewFacebookLinkDescription", "TODO");
+
+            //Componet: DiscordServerLink
+            english.Add("DiscordServerLink", "d");
+            german.Add("DiscordServerLink", "d");
+            polish.Add("DiscordServerLink", "d");
+            french.Add("DiscordServerLink", "d");
+
+            //Componet: DiscordServerLinkDescription
+            english.Add("DiscordServerLinkDescription", "go to Discord server");
+            german.Add("DiscordServerLinkDescription", "zum Discord Server");
+            polish.Add("DiscordServerLinkDescription", "Serwer Discorda");
+            french.Add("DiscordServerLinkDescription", "Serveur Discord");
+
+            //Component: ViewTwitterLink
+            english.Add("ViewTwitterLink", "t");
+            german.Add("ViewTwitterLink", "t");
+            polish.Add("ViewTwitterLink", "t");
+            french.Add("ViewTwitterLink", "t");
+
+            //Component: ViewTwitterLinkDescription
+            english.Add("ViewTwitterLinkDescription", "go to our Twitter page");
+            german.Add("ViewTwitterLinkDescription", "unsere Twitter Seite aufrufen");
+            polish.Add("ViewTwitterLinkDescription", "TODO");
+            french.Add("ViewTwitterLinkDescription", "TODO");
+
+            //Component: SendEmailLink
+            english.Add("SendEmailLink", "s");
+            german.Add("SendEmailLink", "s");
+            polish.Add("SendEmailLink", "s");
+            french.Add("SendEmailLink", "s");
+
+            //Component: SendEmailLinkDescription
+            english.Add("SendEmailLinkDescription", "Send us an Email");
+            german.Add("SendEmailLinkDescription", "Schick uns eine Email");
+            polish.Add("SendEmailLinkDescription", "Przeœlij nam wiadomoœæ e-mail");
+            french.Add("SendEmailLinkDescription", "Nous envoyer un Email");
+
+            //Component: VisitWebsiteLink
+            english.Add("VisitWebsiteLink", "a");
+            german.Add("VisitWebsiteLink", "a");
+            polish.Add("VisitWebsiteLink", "a");
+            french.Add("VisitWebsiteLink", "a");
+
+            //Component: VisitWebsiteLinkDescription
+            english.Add("VisitWebsiteLinkDescription", "Visit our Website");
+            german.Add("VisitWebsiteLinkDescription", "Zu unserer Homepage");
+            polish.Add("VisitWebsiteLinkDescription", "Odwiedz nasza strone");
+            french.Add("VisitWebsiteLinkDescription", "Visiter notre site web");
+
+            //Component: donateLabel
+            english.Add("donateLabel", "e");
+            german.Add("donateLabel", "e");
+            polish.Add("donateLabel", "e");
+            french.Add("donateLabel", "e");
+
+            //Component: donateLabelDescription
+            english.Add("donateLabelDescription", "Donation for further development");
+            german.Add("donateLabelDescription", "Spende für die Weiterentwicklung");
+            polish.Add("donateLabelDescription", "Dotacja na dalszy rozwój");
+            french.Add("donateLabelDescription", "Donation pour aider au développement");
+
+            //Componet: findBugAddModLabel
+            english.Add("findBugAddModLabel", "f");
+            german.Add("findBugAddModLabel", "f");
+            polish.Add("findBugAddModLabel", "f");
+            french.Add("findBugAddModLabel", "f");
+
+            //Componet: findBugAddModLabelDescription
+            english.Add("findBugAddModLabelDescription", "Find a bug? Want a mod added? Report here please!");
+            german.Add("findBugAddModLabelDescription", "Fehler gefunden? Willst Du einen Mod hinzufügen? Bitte hier melden!");
+            polish.Add("findBugAddModLabelDescription", "Znalazłeś błąd? Chcesz dodać mod?");
+            french.Add("findBugAddModLabelDescription", "Trouvé un bug? Recommandation de mod?");
             #endregion
 
             #region Messages from ModSelectionList
@@ -2117,30 +2181,6 @@ namespace RelhaxModpack
             german.Add("AdvancedSettings", "Erweiterte Einstellungen");
             polish.Add("AdvancedSettings", "Ustawienia Zaawansowane");
             french.Add("AdvancedSettings", "Configurations avancé");
-
-            //Component: ViewFacebookLink
-            english.Add("ViewFacebookLink", "Facebook page");
-            german.Add("ViewFacebookLink", "Facebook");
-            polish.Add("ViewFacebookLink", "Strona FB");
-            french.Add("ViewFacebookLink", "Page Facebook");
-
-            //Component: ViewTwitterLink
-            english.Add("ViewTwitterLink", "Twitter page");
-            german.Add("ViewTwitterLink", "Twitter");
-            polish.Add("ViewTwitterLink", "Strona TT");
-            french.Add("ViewTwitterLink", "Page Twitter");
-
-            //Component: SendEmailLink
-            english.Add("SendEmailLink", "Send us an Email");
-            german.Add("SendEmailLink", "Schick uns eine Email");
-            polish.Add("SendEmailLink", "Przeœlij nam wiadomoœæ e-mail");
-            french.Add("SendEmailLink", "Nous envoyer un Email");
-
-            //Component: VisitWebsiteLink
-            english.Add("VisitWebsiteLink", "Visit our Website");
-            german.Add("VisitWebsiteLink", "Zu unserer Website");
-            polish.Add("VisitWebsiteLink", "Odwiedz nasza strone");
-            french.Add("VisitWebsiteLink", "Visiter notre site web");
 
             //Component: AdvancedSettingsHeader
             english.Add("AdvancedSettingsHeader", "Hover over a setting to see its description");
