@@ -509,10 +509,19 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\MainForm icons\discord brand.png" />
+    <Resource Include="Resources\MainForm icons\report.png" />
+    <Resource Include="Resources\MainForm icons\twitter brand.png" />
+    <Resource Include="Resources\MainForm icons\twitter.png" />
     <EmbeddedResource Include="Resources\DotNetZip.dll" />
     <Content Include="3rdPartyLicences\DDS-Reader.txt" />
     <Content Include="3rdPartyLicences\NAudio.txt" />
     <Content Include="3rdPartyLicences\SpriteSheetPacker.txt" />
+    <Resource Include="Resources\MainForm icons\donation.png" />
+    <Resource Include="Resources\MainForm icons\EMail.png" />
+    <Resource Include="Resources\MainForm icons\facebook brand.png" />
+    <Resource Include="Resources\MainForm icons\facebook.png" />
+    <Resource Include="Resources\MainForm icons\Home.png" />
     <Content Include="Resources\loading.gif" />
     <Content Include="Resources\loading_3rdguards.gif" />
     <EmbeddedResource Include="Resources\Newtonsoft.Json.dll" />
