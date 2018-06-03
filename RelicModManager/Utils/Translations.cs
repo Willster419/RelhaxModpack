@@ -166,12 +166,12 @@ namespace RelhaxModpack
             english.Add("conflictBetaDBTestMode", "The command line options BetaDatabase and Test should not be used together, the application may be unstable. Continue anyway?");
             german.Add("conflictBetaDBTestMode", "TODO");
             polish.Add("conflictBetaDBTestMode", "TODO");
-            french.Add("conflictBetaDBTestMode", "TODO");
+            french.Add("conflictBetaDBTestMode", "Les options de ligne de commande \"base de données beta\" et \"Test\" ne doivent pas être utilisées ensemble, l'application peut être instable. Continuer quand même?");
 
             english.Add("conflictsCommandlineHeader", "Command-Line option conflicts");
             german.Add("conflictsCommandlineHeader", "TODO");
             polish.Add("conflictsCommandlineHeader", "TODO");
-            french.Add("conflictsCommandlineHeader", "TODO");
+            french.Add("conflictsCommandlineHeader", "Conflits d'options de ligne de commande");
             #endregion
 
             #region BackgroundForum
@@ -1074,7 +1074,7 @@ namespace RelhaxModpack
             //Componet: 
             //
             english.Add("confirmUninstallMessage", "Confirm you wish to uninstall mods from WoT installation\n\n{0}\n\nUsing uninstall method '{1}'?");
-            german.Add("confirmUninstallMessage", "TODO");
+            german.Add("confirmUninstallMessage", "Bitte bestätige das du alle Mods von Deinem WoT deinstalliert haben möchtest\n\n{0}\n\nVerwendung von Deinstallationsmethode '{1}'?");
             polish.Add("confirmUninstallMessage", "Potwierdź usunięcie modyfikacji\n\n{0}\n\nPotwierdź metodę '{1}'");
             french.Add("confirmUninstallMessage", "Confirmer que vous voulez désinstaller les mods du dossier WoT\n\n{0}\n\nUsing la méthode de désinstallation '{1}'?");
 
@@ -1242,14 +1242,14 @@ namespace RelhaxModpack
             //Component: DefaultUninstallModeRBDescription
             //
             english.Add("DefaultUninstallModeRBDescription", "Default Uninstall will remove all files in the game's mod directories, including shortcuts and appdata cache files.");
-            german.Add("DefaultUninstallModeRBDescription", "TODO");
+            german.Add("DefaultUninstallModeRBDescription", "Die Standard Deinstallation wird alle Dateien in den Mod-Verzeichnissen des Spieles löschen, inklusive der Verknüpfungen und Dateien im 'AppData' Speicher.");
             polish.Add("DefaultUninstallModeRBDescription", "Domyślna deinstalacja usunie wszystkie pliki w folderze modyfikacji i pliki z nimi związane, włączając skróty i pliki cache aplikacji.");
             french.Add("DefaultUninstallModeRBDescription", "La méthode de désinstallation par défaut vas supprimer tout les fichiers dans le dossier du jeu, incluant les raccourcies et le fichers de cache appdata");
 
             //Component: CleanUninstallModeRBDescription
             //
             english.Add("CleanUninstallModeRBDescription", "Quick Uninstall will only remove files in the game's mod directories. It does not remove modpack created shortcuts or appdata cache files.");
-            german.Add("CleanUninstallModeRBDescription", "TODO");
+            german.Add("CleanUninstallModeRBDescription", "Die schnelle Deinstallation wird nur Dateien in den Mod-Verzeichnissen der Spieles löschen. Es werden keine vom ModPack erstellten Verknüpfungen oder Dateien im 'AppData' Speicher gelöscht.");
             polish.Add("CleanUninstallModeRBDescription", "Szybka deinstalacja usunie tylko pliki w folderze modyfikacji. Nie usunie skrótów i plików cache związanych z modpackiem.");
             french.Add("CleanUninstallModeRBDescription", "La méthode de désinstallation rapide vas uniquement supprimer les fichiers dans le dossier \"mod\" du jeu. Ceci ne supprimeras pas les raccourcis ou les fichiers de cache appdata créé par le modpack");
 
@@ -2164,31 +2164,31 @@ namespace RelhaxModpack
             english.Add("UseBetaDatabaseCB", "Use beta database");
             german.Add("UseBetaDatabaseCB", "TODO");
             polish.Add("UseBetaDatabaseCB", "TODO");
-            french.Add("UseBetaDatabaseCB", "TODO");
+            french.Add("UseBetaDatabaseCB", "Utiliser la base de données beta");
 
             //Component: UseBetaApplicationCB
             english.Add("UseBetaApplicationCB", "Use beta application");
             german.Add("UseBetaApplicationCB", "TODO");
             polish.Add("UseBetaApplicationCB", "TODO");
-            french.Add("UseBetaApplicationCB", "TODO");
+            french.Add("UseBetaApplicationCB", "Utiliser l'application beta");
 
             //Component: UseBetaDatabaseCBDescription
             english.Add("UseBetaDatabaseCBDescription", "Use the latest beta database. Mod stability is not guaranteed");
             german.Add("UseBetaDatabaseCBDescription", "TODO");
             polish.Add("UseBetaDatabaseCBDescription", "TODO");
-            french.Add("UseBetaDatabaseCBDescription", "TODO");
+            french.Add("UseBetaDatabaseCBDescription", "Utiliser la dernière base de données beta. La stabilité des mods n'est pas garantie");
 
             //Component: UseBetaApplicationCBDescription
             english.Add("UseBetaApplicationCBDescription", "Use the latest beta application. Translations and application stability are not guaranteed");
             german.Add("UseBetaApplicationCBDescription", "TODO");
             polish.Add("UseBetaApplicationCBDescription", "TODO");
-            french.Add("UseBetaApplicationCBDescription", "TODO");
+            french.Add("UseBetaApplicationCBDescription", "Utiliser la dernière version beta. Les traductions et la stabilité de l'application ne sont pas garanties");
 
             //Component: notifying the user the change won't take effect until application restart
             english.Add("noChangeUntilRestart", "This option won't take effect until application restart");
             german.Add("noChangeUntilRestart", "TODO");
             polish.Add("noChangeUntilRestart", "TODO");
-            french.Add("noChangeUntilRestart", "TODO");
+            french.Add("noChangeUntilRestart", "Cette option ne prendra effet qu'au redémarrage de l'application");
             #endregion
 
             #region Scaling Verification Window
