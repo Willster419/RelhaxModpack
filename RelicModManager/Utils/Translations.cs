@@ -1530,89 +1530,48 @@ namespace RelhaxModpack
             polish.Add("ShowAdvancedSettingsLinkDescription", "Pokaż okno ustawieñ zaawansowanych");
             french.Add("ShowAdvancedSettingsLinkDescription", "Afficher le panneau de configurations avancé");
 
-            //Component: ViewFacebookLink
-            english.Add("ViewFacebookLink", "f");
-            german.Add("ViewFacebookLink", "f");
-            polish.Add("ViewFacebookLink", "f");
-            french.Add("ViewFacebookLink", "f");
+            //Component: FacebookPictureBoxDescription
+            english.Add("FacebookPictureBoxDescription", "go to our Facebook page");
+            german.Add("FacebookPictureBoxDescription", "unsere Facebook Seite aufrufen");
+            polish.Add("FacebookPictureBoxDescription", "TODO");
+            french.Add("FacebookPictureBoxDescription", "TODO");
 
-            //Component: ViewFacebookLinkDescription
-            english.Add("ViewFacebookLinkDescription", "go to our Facebook page");
-            german.Add("ViewFacebookLinkDescription", "unsere Facebook Seite aufrufen");
-            polish.Add("ViewFacebookLinkDescription", "TODO");
-            french.Add("ViewFacebookLinkDescription", "TODO");
+            //Componet: DiscordPictureBoxDescription
+            english.Add("DiscordPictureBoxDescription", "go to Discord server");
+            german.Add("DiscordPictureBoxDescription", "zum Discord Server");
+            polish.Add("DiscordPictureBoxDescription", "Serwer Discorda");
+            french.Add("DiscordPictureBoxDescription", "Serveur Discord");
 
-            //Componet: DiscordServerLink
-            english.Add("DiscordServerLink", "d");
-            german.Add("DiscordServerLink", "d");
-            polish.Add("DiscordServerLink", "d");
-            french.Add("DiscordServerLink", "d");
+            //Component: TwitterPictureBoxDescription
+            english.Add("TwitterPictureBoxDescription", "go to our Twitter page");
+            german.Add("TwitterPictureBoxDescription", "unsere Twitter Seite aufrufen");
+            polish.Add("TwitterPictureBoxDescription", "TODO");
+            french.Add("TwitterPictureBoxDescription", "TODO");
 
-            //Componet: DiscordServerLinkDescription
-            english.Add("DiscordServerLinkDescription", "go to Discord server");
-            german.Add("DiscordServerLinkDescription", "zum Discord Server");
-            polish.Add("DiscordServerLinkDescription", "Serwer Discorda");
-            french.Add("DiscordServerLinkDescription", "Serveur Discord");
+            //Component: SendEmailPictureBoxDescription
+            english.Add("SendEmailPictureBoxDescription", "Send us an Email");
+            german.Add("SendEmailPictureBoxDescription", "Schicke uns eine Email");
+            polish.Add("SendEmailPictureBoxDescription", "Przeœlij nam wiadomoœæ e-mail");
+            french.Add("SendEmailPictureBoxDescription", "Nous envoyer un Email");
 
-            //Component: ViewTwitterLink
-            english.Add("ViewTwitterLink", "t");
-            german.Add("ViewTwitterLink", "t");
-            polish.Add("ViewTwitterLink", "t");
-            french.Add("ViewTwitterLink", "t");
 
-            //Component: ViewTwitterLinkDescription
-            english.Add("ViewTwitterLinkDescription", "go to our Twitter page");
-            german.Add("ViewTwitterLinkDescription", "unsere Twitter Seite aufrufen");
-            polish.Add("ViewTwitterLinkDescription", "TODO");
-            french.Add("ViewTwitterLinkDescription", "TODO");
+            //Component: HomepagePictureBoxDescription
+            english.Add("HomepagePictureBoxDescription", "Visit our Website");
+            german.Add("HomepagePictureBoxDescription", "Zu unserer Homepage");
+            polish.Add("HomepagePictureBoxDescription", "Odwiedz nasza strone");
+            french.Add("HomepagePictureBoxDescription", "Visiter notre site web");
 
-            //Component: SendEmailLink
-            english.Add("SendEmailLink", "s");
-            german.Add("SendEmailLink", "s");
-            polish.Add("SendEmailLink", "s");
-            french.Add("SendEmailLink", "s");
+            //Component: DonatePictureBoxDescription
+            english.Add("DonatePictureBoxDescription", "Donation for further development");
+            german.Add("DonatePictureBoxDescription", "Spende für die Weiterentwicklung");
+            polish.Add("DonatePictureBoxDescription", "Dotacja na dalszy rozwój");
+            french.Add("DonatePictureBoxDescription", "Donation pour aider au développement");
 
-            //Component: SendEmailLinkDescription
-            english.Add("SendEmailLinkDescription", "Send us an Email");
-            german.Add("SendEmailLinkDescription", "Schick uns eine Email");
-            polish.Add("SendEmailLinkDescription", "Przeœlij nam wiadomoœæ e-mail");
-            french.Add("SendEmailLinkDescription", "Nous envoyer un Email");
-
-            //Component: VisitWebsiteLink
-            english.Add("VisitWebsiteLink", "a");
-            german.Add("VisitWebsiteLink", "a");
-            polish.Add("VisitWebsiteLink", "a");
-            french.Add("VisitWebsiteLink", "a");
-
-            //Component: VisitWebsiteLinkDescription
-            english.Add("VisitWebsiteLinkDescription", "Visit our Website");
-            german.Add("VisitWebsiteLinkDescription", "Zu unserer Homepage");
-            polish.Add("VisitWebsiteLinkDescription", "Odwiedz nasza strone");
-            french.Add("VisitWebsiteLinkDescription", "Visiter notre site web");
-
-            //Component: donateLabel
-            english.Add("donateLabel", "e");
-            german.Add("donateLabel", "e");
-            polish.Add("donateLabel", "e");
-            french.Add("donateLabel", "e");
-
-            //Component: donateLabelDescription
-            english.Add("donateLabelDescription", "Donation for further development");
-            german.Add("donateLabelDescription", "Spende für die Weiterentwicklung");
-            polish.Add("donateLabelDescription", "Dotacja na dalszy rozwój");
-            french.Add("donateLabelDescription", "Donation pour aider au développement");
-
-            //Componet: findBugAddModLabel
-            english.Add("findBugAddModLabel", "f");
-            german.Add("findBugAddModLabel", "f");
-            polish.Add("findBugAddModLabel", "f");
-            french.Add("findBugAddModLabel", "f");
-
-            //Componet: findBugAddModLabelDescription
-            english.Add("findBugAddModLabelDescription", "Find a bug? Want a mod added? Report here please!");
-            german.Add("findBugAddModLabelDescription", "Fehler gefunden? Willst Du einen Mod hinzufügen? Bitte hier melden!");
-            polish.Add("findBugAddModLabelDescription", "Znalazłeś błąd? Chcesz dodać mod?");
-            french.Add("findBugAddModLabelDescription", "Trouvé un bug? Recommandation de mod?");
+            //Componet: FindBugAddModPictureBoxDescription
+            english.Add("FindBugAddModPictureBoxDescription", "Find a bug? Want a mod added? Report here please!");
+            german.Add("FindBugAddModPictureBoxDescription", "Fehler gefunden? Willst Du einen Mod hinzufügen? Bitte hier melden!");
+            polish.Add("FindBugAddModPictureBoxDescription", "Znalazłeś błąd? Chcesz dodać mod?");
+            french.Add("FindBugAddModPictureBoxDescription", "Trouvé un bug? Recommandation de mod?");
             #endregion
 
             #region Messages from ModSelectionList

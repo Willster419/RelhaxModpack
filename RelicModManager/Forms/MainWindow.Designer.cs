@@ -49,7 +49,6 @@
             this.ShowAdvancedSettingsLink = new System.Windows.Forms.LinkLabel();
             this.languageSelectionGB = new System.Windows.Forms.GroupBox();
             this.LanguageComboBox = new System.Windows.Forms.ComboBox();
-            this.findBugAddModLabel = new System.Windows.Forms.LinkLabel();
             this.cancelDownloadButton = new System.Windows.Forms.Button();
             this.DownloadTimer = new System.Windows.Forms.Timer(this.components);
             this.SelectionViewGB = new System.Windows.Forms.GroupBox();
@@ -63,17 +62,11 @@
             this.EnableBordersLegacyCB = new System.Windows.Forms.CheckBox();
             this.EnableColorChangeDefaultCB = new System.Windows.Forms.CheckBox();
             this.EnableColorChangeLegacyCB = new System.Windows.Forms.CheckBox();
-            this.donateLabel = new System.Windows.Forms.LinkLabel();
             this.totalProgressBar = new System.Windows.Forms.ProgressBar();
-            this.DiscordServerLink = new System.Windows.Forms.LinkLabel();
             this.viewAppUpdates = new System.Windows.Forms.Button();
             this.viewDBUpdates = new System.Windows.Forms.Button();
             this.ErrorCounterLabel = new System.Windows.Forms.Label();
             this.InfoTable = new System.Windows.Forms.TableLayoutPanel();
-            this.ViewFacebookLink = new System.Windows.Forms.LinkLabel();
-            this.ViewTwitterLink = new System.Windows.Forms.LinkLabel();
-            this.SendEmailLink = new System.Windows.Forms.LinkLabel();
-            this.VisitWebsiteLink = new System.Windows.Forms.LinkLabel();
             this.DatabaseVersionLabel = new System.Windows.Forms.Label();
             this.ApplicationVersionLabel = new System.Windows.Forms.Label();
             this.downloadProgress = new System.Windows.Forms.RichTextBox();
@@ -95,6 +88,13 @@
             this.fontSize125 = new System.Windows.Forms.RadioButton();
             this.fontSize225 = new System.Windows.Forms.RadioButton();
             this.fontSize175 = new System.Windows.Forms.RadioButton();
+            this.FacebookPictureBox = new System.Windows.Forms.PictureBox();
+            this.TwitterPictureBox = new System.Windows.Forms.PictureBox();
+            this.DiscordPictureBox = new System.Windows.Forms.PictureBox();
+            this.HomepagePictureBox = new System.Windows.Forms.PictureBox();
+            this.SendEmailPictureBox = new System.Windows.Forms.PictureBox();
+            this.DonatePictureBox = new System.Windows.Forms.PictureBox();
+            this.FindBugAddModPictureBox = new System.Windows.Forms.PictureBox();
             this.settingsGroupBox.SuspendLayout();
             this.SettingsTable.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
@@ -104,6 +104,13 @@
             this.ButtonTable.SuspendLayout();
             this.fontSizeGB.SuspendLayout();
             this.FontLayoutPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.FacebookPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TwitterPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DiscordPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.HomepagePictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SendEmailPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DonatePictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.FindBugAddModPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // childProgressBar
@@ -378,21 +385,6 @@
             this.LanguageComboBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.LanguageComboBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
-            // findBugAddModLabel
-            // 
-            this.findBugAddModLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.findBugAddModLabel.Image = global::RelhaxModpack.Properties.Resources.report;
-            this.findBugAddModLabel.Location = new System.Drawing.Point(438, 174);
-            this.findBugAddModLabel.Name = "findBugAddModLabel";
-            this.InfoTable.SetRowSpan(this.findBugAddModLabel, 2);
-            this.findBugAddModLabel.Size = new System.Drawing.Size(29, 35);
-            this.findBugAddModLabel.TabIndex = 27;
-            this.findBugAddModLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.findBugAddModLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.findBugAddModLabel_LinkClicked);
-            this.findBugAddModLabel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.findBugAddModLabel_MouseDown);
-            this.findBugAddModLabel.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.findBugAddModLabel.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
-            // 
             // cancelDownloadButton
             // 
             this.cancelDownloadButton.Enabled = false;
@@ -594,21 +586,6 @@
             this.EnableColorChangeLegacyCB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.EnableColorChangeLegacyCB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
-            // donateLabel
-            // 
-            this.donateLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.donateLabel.Image = global::RelhaxModpack.Properties.Resources.donation;
-            this.donateLabel.Location = new System.Drawing.Point(403, 174);
-            this.donateLabel.Name = "donateLabel";
-            this.InfoTable.SetRowSpan(this.donateLabel, 2);
-            this.donateLabel.Size = new System.Drawing.Size(29, 35);
-            this.donateLabel.TabIndex = 32;
-            this.donateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.donateLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.donateLabel_LinkClicked);
-            this.donateLabel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.donateLabel_MouseDown);
-            this.donateLabel.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.donateLabel.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
-            // 
             // totalProgressBar
             // 
             this.InfoTable.SetColumnSpan(this.totalProgressBar, 10);
@@ -618,21 +595,6 @@
             this.totalProgressBar.Size = new System.Drawing.Size(464, 14);
             this.totalProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.totalProgressBar.TabIndex = 34;
-            // 
-            // DiscordServerLink
-            // 
-            this.DiscordServerLink.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DiscordServerLink.Image = global::RelhaxModpack.Properties.Resources.discord_brand;
-            this.DiscordServerLink.Location = new System.Drawing.Point(260, 174);
-            this.DiscordServerLink.Name = "DiscordServerLink";
-            this.InfoTable.SetRowSpan(this.DiscordServerLink, 2);
-            this.DiscordServerLink.Size = new System.Drawing.Size(32, 35);
-            this.DiscordServerLink.TabIndex = 35;
-            this.DiscordServerLink.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.DiscordServerLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.DiscordServerLink_LinkClicked);
-            this.DiscordServerLink.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DiscordServerLink_MouseDown);
-            this.DiscordServerLink.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.DiscordServerLink.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
             // viewAppUpdates
             // 
@@ -675,28 +637,28 @@
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 38F));
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 38F));
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 38F));
-            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 71F));
+            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.InfoTable.Controls.Add(this.ViewFacebookLink, 1, 7);
-            this.InfoTable.Controls.Add(this.ViewTwitterLink, 2, 7);
-            this.InfoTable.Controls.Add(this.SendEmailLink, 6, 7);
-            this.InfoTable.Controls.Add(this.VisitWebsiteLink, 5, 7);
             this.InfoTable.Controls.Add(this.DatabaseVersionLabel, 1, 9);
             this.InfoTable.Controls.Add(this.ApplicationVersionLabel, 0, 9);
             this.InfoTable.Controls.Add(this.downloadProgress, 0, 0);
             this.InfoTable.Controls.Add(this.totalProgressBar, 0, 1);
             this.InfoTable.Controls.Add(this.parrentProgressBar, 0, 2);
             this.InfoTable.Controls.Add(this.childProgressBar, 0, 3);
-            this.InfoTable.Controls.Add(this.findBugAddModLabel, 8, 7);
             this.InfoTable.Controls.Add(this.FormPageNALink, 0, 5);
-            this.InfoTable.Controls.Add(this.donateLabel, 7, 7);
-            this.InfoTable.Controls.Add(this.DiscordServerLink, 3, 7);
             this.InfoTable.Controls.Add(this.FormPageEULink, 0, 6);
             this.InfoTable.Controls.Add(this.FormPageEUGERLink, 0, 7);
+            this.InfoTable.Controls.Add(this.FacebookPictureBox, 1, 7);
+            this.InfoTable.Controls.Add(this.TwitterPictureBox, 2, 7);
+            this.InfoTable.Controls.Add(this.DiscordPictureBox, 3, 7);
+            this.InfoTable.Controls.Add(this.HomepagePictureBox, 5, 7);
+            this.InfoTable.Controls.Add(this.SendEmailPictureBox, 6, 7);
+            this.InfoTable.Controls.Add(this.DonatePictureBox, 7, 7);
+            this.InfoTable.Controls.Add(this.FindBugAddModPictureBox, 8, 7);
             this.InfoTable.Location = new System.Drawing.Point(13, 410);
             this.InfoTable.MaximumSize = new System.Drawing.Size(500, 233);
             this.InfoTable.MinimumSize = new System.Drawing.Size(450, 200);
@@ -714,66 +676,6 @@
             this.InfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.InfoTable.Size = new System.Drawing.Size(467, 233);
             this.InfoTable.TabIndex = 39;
-            // 
-            // ViewFacebookLink
-            // 
-            this.ViewFacebookLink.AutoSize = true;
-            this.ViewFacebookLink.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ViewFacebookLink.Image = global::RelhaxModpack.Properties.Resources.facebook_brand;
-            this.ViewFacebookLink.Location = new System.Drawing.Point(184, 174);
-            this.ViewFacebookLink.Name = "ViewFacebookLink";
-            this.InfoTable.SetRowSpan(this.ViewFacebookLink, 2);
-            this.ViewFacebookLink.Size = new System.Drawing.Size(32, 35);
-            this.ViewFacebookLink.TabIndex = 39;
-            this.ViewFacebookLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ViewFacebookLink_LinkClicked);
-            this.ViewFacebookLink.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ViewFacebookLink_MouseDown);
-            this.ViewFacebookLink.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.ViewFacebookLink.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
-            // 
-            // ViewTwitterLink
-            // 
-            this.ViewTwitterLink.AutoSize = true;
-            this.ViewTwitterLink.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ViewTwitterLink.Image = global::RelhaxModpack.Properties.Resources.twitter_brand;
-            this.ViewTwitterLink.Location = new System.Drawing.Point(222, 174);
-            this.ViewTwitterLink.Name = "ViewTwitterLink";
-            this.InfoTable.SetRowSpan(this.ViewTwitterLink, 2);
-            this.ViewTwitterLink.Size = new System.Drawing.Size(32, 35);
-            this.ViewTwitterLink.TabIndex = 38;
-            this.ViewTwitterLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ViewTwitterLink_LinkClicked);
-            this.ViewTwitterLink.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ViewTwitterLink_MouseDown);
-            this.ViewTwitterLink.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.ViewTwitterLink.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
-            // 
-            // SendEmailLink
-            // 
-            this.SendEmailLink.AutoSize = true;
-            this.SendEmailLink.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SendEmailLink.Image = global::RelhaxModpack.Properties.Resources.EMail;
-            this.SendEmailLink.Location = new System.Drawing.Point(368, 174);
-            this.SendEmailLink.Name = "SendEmailLink";
-            this.InfoTable.SetRowSpan(this.SendEmailLink, 2);
-            this.SendEmailLink.Size = new System.Drawing.Size(29, 35);
-            this.SendEmailLink.TabIndex = 37;
-            this.SendEmailLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.SendEmailLink_LinkClicked);
-            this.SendEmailLink.MouseDown += new System.Windows.Forms.MouseEventHandler(this.SendEmailLink_MouseDown);
-            this.SendEmailLink.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.SendEmailLink.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
-            // 
-            // VisitWebsiteLink
-            // 
-            this.VisitWebsiteLink.AutoSize = true;
-            this.VisitWebsiteLink.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.VisitWebsiteLink.Image = global::RelhaxModpack.Properties.Resources.Home;
-            this.VisitWebsiteLink.Location = new System.Drawing.Point(333, 174);
-            this.VisitWebsiteLink.Name = "VisitWebsiteLink";
-            this.InfoTable.SetRowSpan(this.VisitWebsiteLink, 2);
-            this.VisitWebsiteLink.Size = new System.Drawing.Size(29, 35);
-            this.VisitWebsiteLink.TabIndex = 36;
-            this.VisitWebsiteLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.VisitWebsiteLink_LinkClicked);
-            this.VisitWebsiteLink.MouseDown += new System.Windows.Forms.MouseEventHandler(this.VisitWebsiteLink_MouseDown);
-            this.VisitWebsiteLink.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.VisitWebsiteLink.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
             // DatabaseVersionLabel
             // 
@@ -1064,6 +966,111 @@
             this.fontSize175.CheckedChanged += new System.EventHandler(this.fontSize175_CheckedChanged);
             this.fontSize175.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             // 
+            // FacebookPictureBox
+            // 
+            this.FacebookPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.FacebookPictureBox.Image = global::RelhaxModpack.Properties.Resources.facebook_brand;
+            this.FacebookPictureBox.Location = new System.Drawing.Point(184, 174);
+            this.FacebookPictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.FacebookPictureBox.Name = "FacebookPictureBox";
+            this.InfoTable.SetRowSpan(this.FacebookPictureBox, 2);
+            this.FacebookPictureBox.Size = new System.Drawing.Size(32, 35);
+            this.FacebookPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.FacebookPictureBox.TabIndex = 42;
+            this.FacebookPictureBox.TabStop = false;
+            this.FacebookPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ViewFacebookLink_MouseDown);
+            this.FacebookPictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.FacebookPictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
+            // TwitterPictureBox
+            // 
+            this.TwitterPictureBox.Image = global::RelhaxModpack.Properties.Resources.twitter_brand;
+            this.TwitterPictureBox.Location = new System.Drawing.Point(222, 174);
+            this.TwitterPictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.TwitterPictureBox.Name = "TwitterPictureBox";
+            this.InfoTable.SetRowSpan(this.TwitterPictureBox, 2);
+            this.TwitterPictureBox.Size = new System.Drawing.Size(32, 35);
+            this.TwitterPictureBox.TabIndex = 43;
+            this.TwitterPictureBox.TabStop = false;
+            this.TwitterPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ViewTwitterLink_MouseDown);
+            this.TwitterPictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.TwitterPictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
+            // DiscordPictureBox
+            // 
+            this.DiscordPictureBox.Image = global::RelhaxModpack.Properties.Resources.discord_brand;
+            this.DiscordPictureBox.Location = new System.Drawing.Point(260, 174);
+            this.DiscordPictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.DiscordPictureBox.Name = "DiscordPictureBox";
+            this.InfoTable.SetRowSpan(this.DiscordPictureBox, 2);
+            this.DiscordPictureBox.Size = new System.Drawing.Size(32, 35);
+            this.DiscordPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.DiscordPictureBox.TabIndex = 44;
+            this.DiscordPictureBox.TabStop = false;
+            this.DiscordPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DiscordServerLink_MouseDown);
+            this.DiscordPictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.DiscordPictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
+            // HomepagePictureBox
+            // 
+            this.HomepagePictureBox.Image = global::RelhaxModpack.Properties.Resources.Home;
+            this.HomepagePictureBox.Location = new System.Drawing.Point(369, 174);
+            this.HomepagePictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.HomepagePictureBox.Name = "HomepagePictureBox";
+            this.InfoTable.SetRowSpan(this.HomepagePictureBox, 2);
+            this.HomepagePictureBox.Size = new System.Drawing.Size(20, 35);
+            this.HomepagePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.HomepagePictureBox.TabIndex = 45;
+            this.HomepagePictureBox.TabStop = false;
+            this.HomepagePictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.VisitWebsiteLink_MouseDown);
+            this.HomepagePictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.HomepagePictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
+            // SendEmailPictureBox
+            // 
+            this.SendEmailPictureBox.Image = global::RelhaxModpack.Properties.Resources.EMail;
+            this.SendEmailPictureBox.Location = new System.Drawing.Point(395, 174);
+            this.SendEmailPictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.SendEmailPictureBox.Name = "SendEmailPictureBox";
+            this.InfoTable.SetRowSpan(this.SendEmailPictureBox, 2);
+            this.SendEmailPictureBox.Size = new System.Drawing.Size(20, 35);
+            this.SendEmailPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.SendEmailPictureBox.TabIndex = 46;
+            this.SendEmailPictureBox.TabStop = false;
+            this.SendEmailPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.SendEmailLink_MouseDown);
+            this.SendEmailPictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.SendEmailPictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
+            // DonatePictureBox
+            // 
+            this.DonatePictureBox.Image = global::RelhaxModpack.Properties.Resources.donation;
+            this.DonatePictureBox.Location = new System.Drawing.Point(421, 174);
+            this.DonatePictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.DonatePictureBox.Name = "DonatePictureBox";
+            this.InfoTable.SetRowSpan(this.DonatePictureBox, 2);
+            this.DonatePictureBox.Size = new System.Drawing.Size(20, 35);
+            this.DonatePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.DonatePictureBox.TabIndex = 47;
+            this.DonatePictureBox.TabStop = false;
+            this.DonatePictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.donateLabel_MouseDown);
+            this.DonatePictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.DonatePictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
+            // FindBugAddModPictureBox
+            // 
+            this.FindBugAddModPictureBox.Image = global::RelhaxModpack.Properties.Resources.report;
+            this.FindBugAddModPictureBox.Location = new System.Drawing.Point(447, 174);
+            this.FindBugAddModPictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.FindBugAddModPictureBox.Name = "FindBugAddModPictureBox";
+            this.InfoTable.SetRowSpan(this.FindBugAddModPictureBox, 2);
+            this.FindBugAddModPictureBox.Size = new System.Drawing.Size(20, 35);
+            this.FindBugAddModPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.FindBugAddModPictureBox.TabIndex = 48;
+            this.FindBugAddModPictureBox.TabStop = false;
+            this.FindBugAddModPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.findBugAddModLabel_MouseDown);
+            this.FindBugAddModPictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.FindBugAddModPictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1099,6 +1106,13 @@
             this.ButtonTable.ResumeLayout(false);
             this.fontSizeGB.ResumeLayout(false);
             this.FontLayoutPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.FacebookPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TwitterPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DiscordPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.HomepagePictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SendEmailPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DonatePictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.FindBugAddModPictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1112,7 +1126,6 @@
         private System.Windows.Forms.Button uninstallRelhaxMod;
         private System.Windows.Forms.CheckBox backupModsCheckBox;
         private System.Windows.Forms.GroupBox settingsGroupBox;
-        private System.Windows.Forms.LinkLabel findBugAddModLabel;
         private System.Windows.Forms.Button cancelDownloadButton;
         private System.Windows.Forms.CheckBox saveUserDataCB;
         private System.Windows.Forms.Timer DownloadTimer;
@@ -1120,10 +1133,8 @@
         private System.Windows.Forms.GroupBox SelectionViewGB;
         private System.Windows.Forms.RadioButton selectionLegacy;
         private System.Windows.Forms.RadioButton selectionDefault;
-        private System.Windows.Forms.LinkLabel donateLabel;
         private System.Windows.Forms.CheckBox expandNodesDefault;
         private System.Windows.Forms.ProgressBar totalProgressBar;
-        private System.Windows.Forms.LinkLabel DiscordServerLink;
         private System.Windows.Forms.Button viewAppUpdates;
         private System.Windows.Forms.Button viewDBUpdates;
         private System.Windows.Forms.CheckBox clearLogFilesCB;
@@ -1163,12 +1174,15 @@
         private System.Windows.Forms.RadioButton fontSize175;
         private System.Windows.Forms.CheckBox ComicSansFontCB;
         private System.Windows.Forms.LinkLabel ShowAdvancedSettingsLink;
-        private System.Windows.Forms.LinkLabel VisitWebsiteLink;
-        private System.Windows.Forms.LinkLabel SendEmailLink;
-        private System.Windows.Forms.LinkLabel ViewTwitterLink;
-        private System.Windows.Forms.LinkLabel ViewFacebookLink;
         private System.Windows.Forms.LinkLabel FormPageEULink;
         private System.Windows.Forms.LinkLabel FormPageEUGERLink;
+        private System.Windows.Forms.PictureBox FacebookPictureBox;
+        private System.Windows.Forms.PictureBox TwitterPictureBox;
+        private System.Windows.Forms.PictureBox DiscordPictureBox;
+        private System.Windows.Forms.PictureBox HomepagePictureBox;
+        private System.Windows.Forms.PictureBox SendEmailPictureBox;
+        private System.Windows.Forms.PictureBox DonatePictureBox;
+        private System.Windows.Forms.PictureBox FindBugAddModPictureBox;
     }
 }
 

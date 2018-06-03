@@ -97,6 +97,9 @@
       <HintPath>..\packages\DotNetZip.1.10.1\lib\net20\DotNetZip.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="KellermanSoftware.Compare-NET-Objects, Version=4.53.0.0, Culture=neutral, PublicKeyToken=d970ace04cc85217, processorArchitecture=MSIL">
+      <HintPath>..\packages\CompareNETObjects.4.53.0.0\lib\net40\KellermanSoftware.Compare-NET-Objects.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="NAudio, Version=1.8.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NAudio.1.8.4\lib\net35\NAudio.dll</HintPath>
@@ -522,6 +525,7 @@
     <Resource Include="Resources\MainForm icons\facebook brand.png" />
     <Resource Include="Resources\MainForm icons\facebook.png" />
     <Resource Include="Resources\MainForm icons\Home.png" />
+    <Content Include="App_Readme\Compare-NET-Objects-Help.txt" />
     <Content Include="Resources\loading.gif" />
     <Content Include="Resources\loading_3rdguards.gif" />
     <EmbeddedResource Include="Resources\Newtonsoft.Json.dll" />
