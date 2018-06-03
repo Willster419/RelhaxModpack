@@ -2791,5 +2791,40 @@ namespace RelhaxModpack
             ToggleUIButtons(true);
         }
         #endregion
+
+        private void ViewFacebookLink_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void ViewTwitterLink_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void DiscordServerLink_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void VisitWebsiteLink_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void SendEmailLink_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void donateLabel_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void findBugAddModLabel_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
     }
 }
