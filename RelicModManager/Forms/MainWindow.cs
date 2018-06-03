@@ -15,6 +15,7 @@ using RelhaxModpack.DatabaseComponents;
 using RelhaxModpack.InstallerComponents;
 using RelhaxModpack.Forms;
 using RelhaxModpack.UIComponents;
+using System.Globalization;
 
 namespace RelhaxModpack
 {
@@ -2088,7 +2089,16 @@ namespace RelhaxModpack
         #region LinkClicked Events
         private void donateLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            /*      de_DE           DE
+                    pl_PL           PL
+                    fr_FR           FR
+                    en_US           US
+                    en_GB           GB */
+
+            // Logging.Manager("language: " + CultureInfo.CurrentUICulture.Name);
+            // Logging.Manager("TwoLetterISOLanguageName: " + CultureInfo.CurrentUICulture.TwoLetterISOLanguageName);            
             System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2");
+            // https://www.paypal.com/paypalme/grab?country.x=IN&locale.x=en_IN
         }
 
         private void findBugAddModLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
