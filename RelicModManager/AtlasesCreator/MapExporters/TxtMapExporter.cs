@@ -37,6 +37,18 @@ namespace RelhaxModpack.AtlasesCreator
             get { return "txt"; }
         }
 
+        public Atlas.MapType MapType
+        {
+            get { return Atlas.MapType.TxtMap; }
+        }
+
+        public List<Texture> Load(string MapFile)
+        {
+            List<Texture> TextureList = new List<Texture>();
+            Logging.Manager("Import function for Txt map Import has still to be written");
+            return TextureList;
+        }
+
         public void Save(string filename, Dictionary<string, Rectangle> map)
         {
             // copy the files list and sort alphabetically

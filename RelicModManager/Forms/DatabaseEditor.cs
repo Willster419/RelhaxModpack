@@ -33,8 +33,6 @@ namespace RelhaxModpack
         private SelectablePackage SelectedDatabaseObject;
         private Category SelectedCategory;
         private int currentSelectedIndex = -1;
-        // string GameVersion = ""; => changed to Settings.TanksVersion => could be accessed from ANY place of code
-        // string OnlineFolderVersion = ""; => changed to Settings.tanksOnlineFolderVersion => could be accessed from ANY place of code
         private StringBuilder InUseSB;
         private List<SelectablePackage> ListThatContainsPackage;
         private bool UnsavedModifications = false;
@@ -290,13 +288,25 @@ namespace RelhaxModpack
         //calculate the MD5 of the selected file
         private byte[] GetDatabaseMD5Hash(string filename)
         {
-            using (var md5 = System.Security.Cryptography.MD5.Create())
+            if (File.Exists(filename))
             {
-                using (var stream = File.OpenRead(filename))
+                try
                 {
-                    return md5.ComputeHash(stream);
+                    using (var md5 = System.Security.Cryptography.MD5.Create())
+                    {
+                        using (var stream = File.OpenRead(filename))
+                        {
+                            return md5.ComputeHash(stream);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Utils.ExceptionLog("GetDatabaseMD5Hash", "filename: " + filename, ex);
+                    MessageBox.Show("File access error occurs.\n\nFor your safty, try to safe your work and restart the DatabaseEditor again.", "CRITICAL", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+            return new byte[] { 0x0 };
         }
         //calculate the MD5 of the selected filepath
         private byte[] GetDatabaseLocationMD5Hash(string filename)
@@ -334,6 +344,28 @@ namespace RelhaxModpack
             LoadedDatabaseMD5Hash = GetDatabaseMD5Hash(DatabaseLocation);
             DatabaseLocationMD5Hash = GetDatabaseLocationMD5Hash(DatabaseLocation);
         }
+
+        private void CheckModInfoChanged()
+        {
+            byte[] fileHash = GetDatabaseMD5Hash(DatabaseLocation);
+            if (!Utils.CompareByteArray(fileHash, new byte[] { 0x0 }) &&  !Utils.CompareByteArray(LoadedDatabaseMD5Hash, fileHash))
+            {
+                DialogResult result = MessageBox.Show("File location: " + Path.GetDirectoryName(DatabaseLocation) + "\n\nThe last loaded " + Path.GetFileName(DatabaseLocation) + " was modified from another program. Maybe a merge or pull with github!?\n\nThe last changes are NOT at this DatabaseEditor session.\n\nOK (recommended):\nreload the modified " + Path.GetFileName(DatabaseLocation) + " file and discard all changes since last load/save at this DatabaseEditor session?\n\nCANCEL (NOT recommended):\nignore the changes at the " + Path.GetFileName(DatabaseLocation) + " file?\nWARNING! You maybe delete work of another member!" , "CRITICAL", MessageBoxButtons.OKCancel, MessageBoxIcon.Stop);
+                if (result == DialogResult.Cancel)
+                {
+                    LoadedDatabaseMD5Hash = fileHash;
+                }
+                if (result == DialogResult.OK)
+                {
+                    LoadDatabase();
+                }
+            }
+            else
+            {
+                UnsavedModifications = true;
+            }
+        }
+
         //Apply all changes from the form
         private void ApplyChangesButton_Click(object sender, EventArgs e)
         {
@@ -466,7 +498,7 @@ namespace RelhaxModpack
                 
             }
             this.DisplayDatabase(false);
-            UnsavedModifications = true;
+            CheckModInfoChanged();
         }
         private void ListContainsPackage(SelectablePackage sp)
         {
@@ -982,7 +1014,7 @@ namespace RelhaxModpack
                 
             }
             this.DisplayDatabase(false);
-            UnsavedModifications = true;
+            CheckModInfoChanged();
         }
 
         private void AddEntryButton_Click(object sender, EventArgs e)
@@ -1112,7 +1144,7 @@ namespace RelhaxModpack
                 }
             }
             this.DisplayDatabase(false);
-            UnsavedModifications = true;
+            CheckModInfoChanged();
         }
 
         private void RemoveEntryButton_Click(object sender, EventArgs e)
@@ -1163,7 +1195,7 @@ namespace RelhaxModpack
                 ListThatContainsPackage.Remove(SelectedDatabaseObject);
             }
             DisplayDatabase(false);
-            UnsavedModifications = true;
+            CheckModInfoChanged();
         }
 
         private bool DependencyInUse(string packageName, bool isDependency)
@@ -1262,7 +1294,7 @@ namespace RelhaxModpack
                 ObjectDependenciesList.Items.Clear();
                 ObjectDependenciesList.DataSource = SelectedDatabaseObject.Dependencies;
             }
-            UnsavedModifications = true;
+            CheckModInfoChanged();
         }
 
         private void RemoveDependencyButton_Click(object sender, EventArgs e)
@@ -1283,7 +1315,7 @@ namespace RelhaxModpack
                 ObjectDependenciesList.Items.Clear();
                 ObjectDependenciesList.DataSource = SelectedDatabaseObject.Dependencies;
             }
-            UnsavedModifications = true;
+            CheckModInfoChanged();
         }
 
         private void AddLogicalDependencyButton_Click(object sender, EventArgs e)
@@ -1312,7 +1344,7 @@ namespace RelhaxModpack
                 ObjectLogicalDependenciesList.Items.Clear();
                 ObjectLogicalDependenciesList.DataSource = SelectedDatabaseObject.LogicalDependencies;
             }
-            UnsavedModifications = true;
+            CheckModInfoChanged();
         }
 
         private void RemoveLogicalDependencyButton_Click(object sender, EventArgs e)
@@ -1333,7 +1365,7 @@ namespace RelhaxModpack
                 ObjectLogicalDependenciesList.Items.Clear();
                 ObjectLogicalDependenciesList.DataSource = SelectedDatabaseObject.LogicalDependencies;
             }
-            UnsavedModifications = true;
+            CheckModInfoChanged();
         }
 
         private void MovePictureButton_Click(object sender, EventArgs e)
@@ -1360,7 +1392,7 @@ namespace RelhaxModpack
             ObjectPicturesList.DataSource = null;
             ObjectPicturesList.Items.Clear();
             ObjectPicturesList.DataSource = SelectedDatabaseObject.PictureList;
-            UnsavedModifications = true;
+            CheckModInfoChanged();
         }
 
         private void AddPictureButton_Click(object sender, EventArgs e)
@@ -1406,7 +1438,7 @@ namespace RelhaxModpack
             ObjectPicturesList.DataSource = null;
             ObjectPicturesList.Items.Clear();
             ObjectPicturesList.DataSource = SelectedDatabaseObject.PictureList;
-            UnsavedModifications = true;
+            CheckModInfoChanged();
         }
 
         private void RemovePictureButton_Click(object sender, EventArgs e)
@@ -1418,7 +1450,7 @@ namespace RelhaxModpack
             ObjectPicturesList.DataSource = null;
             ObjectPicturesList.Items.Clear();
             ObjectPicturesList.DataSource = SelectedDatabaseObject.PictureList;
-            UnsavedModifications = true;
+            CheckModInfoChanged();
         }
 
         private void ApplyPictureEditButton_Click(object sender, EventArgs e)
@@ -1451,7 +1483,7 @@ namespace RelhaxModpack
             ObjectPicturesList.DataSource = null;
             ObjectPicturesList.Items.Clear();
             ObjectPicturesList.DataSource = SelectedDatabaseObject.PictureList;
-            UnsavedModifications = true;
+            CheckModInfoChanged();
         }
 
         private void ObjectLogicalDependenciesList_SelectedIndexChanged(object sender, EventArgs e)
@@ -1493,7 +1525,7 @@ namespace RelhaxModpack
                 ObjectLogicalDependenciesList.Items.Clear();
                 ObjectLogicalDependenciesList.DataSource = SelectedDatabaseObject.LogicalDependencies;
             }
-            UnsavedModifications = true;
+            CheckModInfoChanged();
         }
 
         private void ObjectDependenciesList_SelectedIndexChanged(object sender, EventArgs e)
@@ -1539,7 +1571,7 @@ namespace RelhaxModpack
             ObjectUserdatasList.DataSource = null;
             ObjectUserdatasList.Items.Clear();
             ObjectUserdatasList.DataSource = SelectedDatabaseObject.UserFiles;
-            UnsavedModifications = true;
+            CheckModInfoChanged();
         }
 
         private void RemoveUserdatasButton_Click(object sender, EventArgs e)
@@ -1551,7 +1583,7 @@ namespace RelhaxModpack
             ObjectUserdatasList.DataSource = null;
             ObjectUserdatasList.Items.Clear();
             ObjectUserdatasList.DataSource = SelectedDatabaseObject.UserFiles;
-            UnsavedModifications = true;
+            CheckModInfoChanged();
         }
 
         private void ObjectUserdatasList_SelectedIndexChanged(object sender, EventArgs e)
@@ -1570,7 +1602,7 @@ namespace RelhaxModpack
             ObjectUserdatasList.DataSource = null;
             ObjectUserdatasList.Items.Clear();
             ObjectUserdatasList.DataSource = SelectedDatabaseObject.UserFiles;
-            UnsavedModifications = true;
+            CheckModInfoChanged();
         }
 
         private void ObjectDependenciesList_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -1901,7 +1933,7 @@ namespace RelhaxModpack
             return packageName;
         }
 
-        private void callTextBoxURL_DoubleClick(object sender, EventArgs e)
+        private void CallTextBoxURL_DoubleClick(object sender, EventArgs e)
         {
             if (sender is TextBox)
             {

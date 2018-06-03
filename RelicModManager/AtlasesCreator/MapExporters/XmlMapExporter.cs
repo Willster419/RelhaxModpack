@@ -39,6 +39,18 @@ namespace RelhaxModpack.AtlasesCreator
             get { return "xml"; }
         }
 
+        public Atlas.MapType MapType
+        {
+            get { return Atlas.MapType.XmlMap; }
+        }
+
+        public List<Texture> Load(string MapFile)
+        {
+            List<Texture> TextureList = new List<Texture>();
+            Logging.Manager("Import function for 'default' xml map Import has still to be written");
+            return TextureList;
+        }
+
         public void Save(string filename, Dictionary<string, Rectangle> map)
         {
             using (StreamWriter writer = new StreamWriter(filename))

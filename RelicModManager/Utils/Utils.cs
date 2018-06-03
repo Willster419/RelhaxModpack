@@ -13,8 +13,6 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 using Newtonsoft.Json.Linq;
 using System.Collections;
-using System.Windows;
-using System.Windows.Interop;
 using IWshRuntimeLibrary;
 
 namespace RelhaxModpack
@@ -49,7 +47,7 @@ namespace RelhaxModpack
                 Depricated_WriteToFile(filePath, string.Format("{0:yyyy-MM-dd HH:mm:ss.fff}   {1}", DateTime.Now, info));
             }
         }
-        public static void AppendToInstallLog(string info)
+        public static void Depricated_AppendToInstallLog(string info)
         {
             try
             {
@@ -334,6 +332,11 @@ namespace RelhaxModpack
                 returnVal = defaultValue;
             }
             return returnVal;
+        }
+
+        public static string ByteArrayToString(this byte[] arr)
+        {
+            return ConvertByteArrayToString(arr);
         }
 
         public static string ConvertByteArrayToString(byte[] arr)
@@ -1156,6 +1159,47 @@ namespace RelhaxModpack
                 Utils.ExceptionLog("ReadByteArrayFromFile", "File: " + filename, ex);
             }
             return chunk;
+        }
+
+        // https://stackoverflow.com/questions/283456/byte-array-pattern-search
+        static readonly int[] Empty = new int[0];
+        public static int[] FindBytePatternInByteArray(this byte[] self, byte[] candidate)
+        {
+            if (FindBytePatternInByteArrayIsEmptyLocate(self, candidate))
+                return Empty;
+
+            var list = new List<int>();
+
+            for (int i = 0; i < self.Length; i++)
+            {
+                if (!FindBytePatternInByteArrayIsMatch(self, i, candidate))
+                    continue;
+
+                list.Add(i);
+            }
+
+            return list.Count == 0 ? Empty : list.ToArray();
+        }
+
+        static bool FindBytePatternInByteArrayIsMatch(byte[] array, int position, byte[] candidate)
+        {
+            if (candidate.Length > (array.Length - position))
+                return false;
+
+            for (int i = 0; i < candidate.Length; i++)
+                if (array[position + i] != candidate[i])
+                    return false;
+
+            return true;
+        }
+
+        static bool FindBytePatternInByteArrayIsEmptyLocate(byte[] array, byte[] candidate)
+        {
+            return array == null
+                || candidate == null
+                || array.Length == 0
+                || candidate.Length == 0
+                || candidate.Length > array.Length;
         }
 
         public static string Truncate(TextBox text)

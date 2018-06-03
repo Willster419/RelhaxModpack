@@ -24,6 +24,7 @@
 
 #endregion
 
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 
@@ -46,14 +47,49 @@ namespace RelhaxModpack.AtlasesCreator
             image.Save(filename, ImageFormat.Png);
         }
 
+        private static readonly int CHUNK_SIZE = 0x100;
         public Size GetImageSize(string filename)
         {
+            byte[] chunk = null;
             Size size = new Size
             {
                 Height = 0,
                 Width = 0
             };
+
+            chunk = Utils.ReadByteArrayFromFile(filename, CHUNK_SIZE);
+
+            if (chunk.Length < CHUNK_SIZE)
+            {
+                Logging.Manager(filename + " is maybe a corrupted file (to short to be an image)");
+            }
+            else
+            {
+                if (!IsPNG(chunk))
+                {
+                    Logging.Manager(filename + " is NOT a valid " + ImageExtension.ToUpper() + " image");
+                }
+                else
+                {
+                    var pattern = new byte[] { 0x49, 0x48, 0x44, 0x52 };
+                    int IHDR_ptr = 0;
+                    foreach (var position in chunk.FindBytePatternInByteArray(pattern))
+                    {
+                        IHDR_ptr = position;
+                        // Logging.Manager("IHDR_ptr: " + position.ToString());
+                    }
+                    size.Height = chunk[IHDR_ptr + 0x08] << 24 | chunk[IHDR_ptr + 0x09] << 16 | chunk[IHDR_ptr + 0x0a] << 8 | chunk[IHDR_ptr + 0x0b];
+                    size.Width = chunk[IHDR_ptr + 0x04] << 24 | chunk[IHDR_ptr + 0x05] << 16 | chunk[IHDR_ptr + 0x06] << 8 | chunk[IHDR_ptr + 0x07];
+                }
+            }
+            // Logging.Manager(filename + " is: " + size.Height.ToString() + " height and " + size.Width.ToString() + " width.");
             return size;
+        }
+
+        private static bool IsPNG(byte[] buffer)
+        {
+            Int64 stamp = (((Int64)buffer[0x0]) << 40) | (((Int64)buffer[0x1]) << 32) | (((Int64)buffer[0x2]) << 24) | (((Int64)buffer[0x3]) << 16) | (((Int64)buffer[0x4]) << 8) | buffer[0x5];
+            return stamp == 0x89504e470d0a;
         }
     }
 }
