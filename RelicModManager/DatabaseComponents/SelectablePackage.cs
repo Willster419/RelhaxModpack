@@ -196,6 +196,32 @@ namespace RelhaxModpack
         public List<Dependency> Dependencies = new List<Dependency>();
         //list of media preview items associated with this package
         public List<Media> PictureList = new List<Media>();
+        //provides a nice complete path that is more human readable than a packagePath
+        public override string CompletePath
+        {
+            get
+            {
+                if(ParentCategory == null)
+                {
+                    return base.CompletePath;
+                }
+                string _CompletePath = ParentCategory.Name + "->";
+                List<string> parentPackages = new List<string>();
+                SelectablePackage packageToIterate = Parent;
+                while(!packageToIterate.Equals(TopParent))
+                {
+                    parentPackages.Add(packageToIterate.NameFormatted);
+                }
+                parentPackages.Add(TopParent.NameFormatted);
+                parentPackages.Reverse();
+                foreach (string s in parentPackages)
+                {
+                    _CompletePath = _CompletePath + s + "->";
+                }
+                _CompletePath = _CompletePath + NameFormatted;
+                return _CompletePath;
+            }
+        }
         //sorts the mods
         public static int CompareMods(SelectablePackage x, SelectablePackage y)
         {
