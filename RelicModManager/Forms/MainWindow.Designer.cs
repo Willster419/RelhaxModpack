@@ -178,6 +178,7 @@
             // 
             // backupModsCheckBox
             // 
+            this.backupModsCheckBox.BackColor = System.Drawing.Color.Transparent;
             this.backupModsCheckBox.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.backupModsCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.backupModsCheckBox.Location = new System.Drawing.Point(1, 41);
@@ -187,13 +188,14 @@
             this.backupModsCheckBox.TabIndex = 24;
             this.backupModsCheckBox.Text = "Backup current mods folder";
             this.backupModsCheckBox.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.backupModsCheckBox.UseVisualStyleBackColor = true;
+            this.backupModsCheckBox.UseVisualStyleBackColor = false;
             this.backupModsCheckBox.CheckedChanged += new System.EventHandler(this.backupModsCheckBox_CheckedChanged);
             this.backupModsCheckBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.backupModsCheckBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
             // settingsGroupBox
             // 
+            this.settingsGroupBox.BackColor = System.Drawing.Color.Transparent;
             this.settingsGroupBox.Controls.Add(this.SettingsTable);
             this.settingsGroupBox.Location = new System.Drawing.Point(12, 103);
             this.settingsGroupBox.MaximumSize = new System.Drawing.Size(502, 210);
@@ -232,6 +234,7 @@
             // 
             // ComicSansFontCB
             // 
+            this.ComicSansFontCB.BackColor = System.Drawing.Color.Transparent;
             this.ComicSansFontCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.ComicSansFontCB.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ComicSansFontCB.Location = new System.Drawing.Point(232, 76);
@@ -241,7 +244,7 @@
             this.ComicSansFontCB.TabIndex = 38;
             this.ComicSansFontCB.Text = "Comic Sans Font";
             this.ComicSansFontCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.ComicSansFontCB.UseVisualStyleBackColor = true;
+            this.ComicSansFontCB.UseVisualStyleBackColor = false;
             this.ComicSansFontCB.CheckedChanged += new System.EventHandler(this.cancerFontCB_CheckedChanged);
             this.ComicSansFontCB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.ComicSansFontCB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
@@ -345,6 +348,7 @@
             // ShowAdvancedSettingsLink
             // 
             this.ShowAdvancedSettingsLink.AutoSize = true;
+            this.ShowAdvancedSettingsLink.BackColor = System.Drawing.Color.Transparent;
             this.ShowAdvancedSettingsLink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ShowAdvancedSettingsLink.Location = new System.Drawing.Point(234, 95);
             this.ShowAdvancedSettingsLink.Name = "ShowAdvancedSettingsLink";
@@ -352,12 +356,14 @@
             this.ShowAdvancedSettingsLink.TabIndex = 39;
             this.ShowAdvancedSettingsLink.TabStop = true;
             this.ShowAdvancedSettingsLink.Text = "View Advanced Settings";
+            this.ShowAdvancedSettingsLink.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.ShowAdvancedSettingsLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ShowAdvancedSettingsLink_LinkClicked);
             this.ShowAdvancedSettingsLink.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.ShowAdvancedSettingsLink.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
             // languageSelectionGB
             // 
+            this.languageSelectionGB.BackColor = System.Drawing.Color.Transparent;
             this.languageSelectionGB.Controls.Add(this.LanguageComboBox);
             this.languageSelectionGB.Location = new System.Drawing.Point(12, 358);
             this.languageSelectionGB.Margin = new System.Windows.Forms.Padding(1);
@@ -405,6 +411,7 @@
             // 
             // SelectionViewGB
             // 
+            this.SelectionViewGB.BackColor = System.Drawing.Color.Transparent;
             this.SelectionViewGB.Controls.Add(this.SelectionLayout);
             this.SelectionViewGB.Location = new System.Drawing.Point(12, 242);
             this.SelectionViewGB.Margin = new System.Windows.Forms.Padding(1);
@@ -416,6 +423,7 @@
             // 
             // SelectionLayout
             // 
+            this.SelectionLayout.BackColor = System.Drawing.Color.Transparent;
             this.SelectionLayout.ColumnCount = 3;
             this.SelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.SelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 153F));
@@ -623,6 +631,7 @@
             // 
             // ErrorCounterLabel
             // 
+            this.ErrorCounterLabel.BackColor = System.Drawing.Color.Transparent;
             this.ErrorCounterLabel.Location = new System.Drawing.Point(320, 387);
             this.ErrorCounterLabel.Name = "ErrorCounterLabel";
             this.ErrorCounterLabel.Size = new System.Drawing.Size(160, 20);
@@ -633,6 +642,8 @@
             // 
             // InfoTable
             // 
+            this.InfoTable.BackColor = System.Drawing.Color.Transparent;
+            this.InfoTable.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.InfoTable.ColumnCount = 10;
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 181F));
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 38F));
@@ -677,6 +688,7 @@
             this.InfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.InfoTable.Size = new System.Drawing.Size(467, 233);
             this.InfoTable.TabIndex = 39;
+            this.InfoTable.Paint += new System.Windows.Forms.PaintEventHandler(this.InfoTable_Paint);
             // 
             // DatabaseVersionLabel
             // 
@@ -858,6 +870,7 @@
             // 
             // ButtonTable
             // 
+            this.ButtonTable.BackColor = System.Drawing.Color.Transparent;
             this.ButtonTable.ColumnCount = 2;
             this.ButtonTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.ButtonTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -879,6 +892,7 @@
             // 
             // fontSizeGB
             // 
+            this.fontSizeGB.BackColor = System.Drawing.Color.Transparent;
             this.fontSizeGB.Controls.Add(this.FontLayoutPanel);
             this.fontSizeGB.Location = new System.Drawing.Point(319, 241);
             this.fontSizeGB.Margin = new System.Windows.Forms.Padding(1);
@@ -1078,6 +1092,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
+            this.BackgroundImage = global::RelhaxModpack.Properties.Resources.WoT_brand___light_grey;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(490, 654);
             this.Controls.Add(this.fontSizeGB);
             this.Controls.Add(this.InfoTable);

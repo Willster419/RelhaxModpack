@@ -530,6 +530,8 @@
     <Content Include="Resources\loading_3rdguards.gif" />
     <EmbeddedResource Include="Resources\Newtonsoft.Json.dll" />
     <EmbeddedResource Include="Resources\NAudio.dll" />
+    <Resource Include="Resources\MainForm icons\WoT brand.png" />
+    <Content Include="Resources\MainForm icons\WoT brand - light grey.png" />
     <Content Include="Resources\relicbanner_for_ico.ico" />
   </ItemGroup>
   <ItemGroup>
