@@ -688,7 +688,6 @@
             this.InfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.InfoTable.Size = new System.Drawing.Size(467, 233);
             this.InfoTable.TabIndex = 39;
-            this.InfoTable.Paint += new System.Windows.Forms.PaintEventHandler(this.InfoTable_Paint);
             // 
             // DatabaseVersionLabel
             // 
