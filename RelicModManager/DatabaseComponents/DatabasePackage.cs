@@ -43,5 +43,12 @@ namespace RelhaxModpack.DatabaseComponents
         public List<Shortcut> ShortCuts = new List<Shortcut>();
         public int CheckDatabaseListIndex = 0;
         public abstract override string ToString();
+        public virtual string CompletePath
+        {
+            get
+            {
+                return PackageName;
+            }
+        }
     }
 }

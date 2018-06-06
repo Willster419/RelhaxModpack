@@ -13,6 +13,7 @@ namespace RelhaxModpack
         public static Hashtable german = new Hashtable();
         public static Hashtable polish = new Hashtable();
         public static Hashtable french = new Hashtable();
+        public const string TranslationNeeded = "TODO";
         //load hashes on application startup
 
         public static string GetTranslatedString(string componetName)
@@ -32,7 +33,7 @@ namespace RelhaxModpack
                         if (german.Contains(componetName))
                         {
                             s = (string)"" + german[componetName];
-                            if (s.ToUpper().Equals("TODO"))
+                            if (s.ToUpper().Equals(TranslationNeeded))
                             {
                                 Logging.Manager(string.Format("WARNING: german translation for \"{0}\" is missing.", componetName));
                                 s = (string)"" + english[componetName];
@@ -44,7 +45,7 @@ namespace RelhaxModpack
                         if (polish.Contains(componetName))
                         {
                             s = (string)polish[componetName];
-                            if (s.ToUpper().Equals("TODO"))
+                            if (s.ToUpper().Equals(TranslationNeeded))
                             {
                                 Logging.Manager(string.Format("WARNING: polish translation for \"{0}\" is missing.", componetName));
                                 s = (string)english[componetName];
@@ -56,7 +57,7 @@ namespace RelhaxModpack
                         if (french.Contains(componetName))
                         {
                             s = (string)french[componetName];
-                            if (s.ToUpper().Equals("TODO"))
+                            if (s.ToUpper().Equals(TranslationNeeded))
                             {
                                 Logging.Manager(string.Format("WARNING: french translation for \"{0}\" is missing.", componetName));
                                 s = (string)english[componetName];
@@ -163,13 +164,13 @@ namespace RelhaxModpack
             #endregion
 
             #region General Messages
-            english.Add("conflictBetaDBTestMode", "The command line options BetaDatabase and Test should not be used together, the application may be unstable. Continue anyway?");
-            german.Add("conflictBetaDBTestMode", "TODO");
+            english.Add("conflictBetaDBTestMode", "The command line options '/BetaDatabase' and '/Test' should not be used together, the application may be unstable. Continue anyway?");
+            german.Add("conflictBetaDBTestMode", "Die Kommandozeilen Befehle '/BetaDatabase' und '/Test' sollten nicht zusammen verwendet werden, da sonst der ModPack Manager instabil werden könnte. Trotzdem fortfahren?");
             polish.Add("conflictBetaDBTestMode", "TODO");
-            french.Add("conflictBetaDBTestMode", "Les options de ligne de commande \"base de données beta\" et \"Test\" ne doivent pas être utilisées ensemble, l'application peut être instable. Continuer quand même?");
+            french.Add("conflictBetaDBTestMode", "Les options de ligne de commande '/BetaDatabase' et '/Test' ne doivent pas être utilisées ensemble, l'application peut être instable. Continuer quand même?");
 
             english.Add("conflictsCommandlineHeader", "Command-Line option conflicts");
-            german.Add("conflictsCommandlineHeader", "TODO");
+            german.Add("conflictsCommandlineHeader", "Konflikte in den Kommandozeilen Befehlen");
             polish.Add("conflictsCommandlineHeader", "TODO");
             french.Add("conflictsCommandlineHeader", "Conflits d'options de ligne de commande");
             #endregion
@@ -2161,31 +2162,31 @@ namespace RelhaxModpack
 
             //Component: UseBetaDatabaseCB
             english.Add("UseBetaDatabaseCB", "Use beta database");
-            german.Add("UseBetaDatabaseCB", "TODO");
+            german.Add("UseBetaDatabaseCB", "Die Beta-Version der Datenbank verwenden");
             polish.Add("UseBetaDatabaseCB", "TODO");
             french.Add("UseBetaDatabaseCB", "Utiliser la base de données beta");
 
             //Component: UseBetaApplicationCB
             english.Add("UseBetaApplicationCB", "Use beta application");
-            german.Add("UseBetaApplicationCB", "TODO");
+            german.Add("UseBetaApplicationCB", "Die Beta-Version des ModPack Managers verwenden");
             polish.Add("UseBetaApplicationCB", "TODO");
             french.Add("UseBetaApplicationCB", "Utiliser l'application beta");
 
             //Component: UseBetaDatabaseCBDescription
             english.Add("UseBetaDatabaseCBDescription", "Use the latest beta database. Mod stability is not guaranteed");
-            german.Add("UseBetaDatabaseCBDescription", "TODO");
+            german.Add("UseBetaDatabaseCBDescription", "Verwende die letzte Beta-Version des ModPack Datenbank. Die Stabilität der Mods kann nicht garantiert werden, jedoch werden hier auch Fehlerbehebungen als erstes getestet und implementiert.");
             polish.Add("UseBetaDatabaseCBDescription", "TODO");
             french.Add("UseBetaDatabaseCBDescription", "Utiliser la dernière base de données beta. La stabilité des mods n'est pas garantie");
 
             //Component: UseBetaApplicationCBDescription
             english.Add("UseBetaApplicationCBDescription", "Use the latest beta application. Translations and application stability are not guaranteed");
-            german.Add("UseBetaApplicationCBDescription", "TODO");
+            german.Add("UseBetaApplicationCBDescription", "Verwende die letzte Beta-Version des ModPack Managers. Fehlerfreie Übersetzungen und Programmstabilität können nicht garantiert werden.");
             polish.Add("UseBetaApplicationCBDescription", "TODO");
             french.Add("UseBetaApplicationCBDescription", "Utiliser la dernière version beta. Les traductions et la stabilité de l'application ne sont pas garanties");
 
             //Component: notifying the user the change won't take effect until application restart
             english.Add("noChangeUntilRestart", "This option won't take effect until application restart");
-            german.Add("noChangeUntilRestart", "TODO");
+            german.Add("noChangeUntilRestart", "Diese Option hat keine Auswirkungen bis das Programm neu gestartet wurde");
             polish.Add("noChangeUntilRestart", "TODO");
             french.Add("noChangeUntilRestart", "Cette option ne prendra effet qu'au redémarrage de l'application");
             #endregion

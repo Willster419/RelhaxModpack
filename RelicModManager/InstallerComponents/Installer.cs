@@ -481,6 +481,7 @@ namespace RelhaxModpack
             }
         }
 
+        //Step 3: Delete all mods (default)
         public void UninstallModsDefault()
         {
             List<string> linesFromLog = new List<string>();
@@ -660,7 +661,7 @@ namespace RelhaxModpack
                 File.Move(Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"), Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log.bak"));
         }
 
-        //Step 3: Delete all mods
+        //Step 3: Delete all mods (quick)
         public void UninstallModsQuick()
         {
             try
@@ -679,6 +680,7 @@ namespace RelhaxModpack
                 Utils.ExceptionLog("DeleteMods", ex);
             }
         }
+
         //Step 4: Clear WoT program cache
         public void ClearWoTCache()
         {
@@ -758,8 +760,8 @@ namespace RelhaxModpack
                 Utils.ExceptionLog("ClearWoTCache", "ex", ex);
             }
         }
-        
-        //Step 5-10: Extract All DatabaseObjects
+
+        //Step 5-10: Extract All DatabasePackages
         public void ExtractDatabaseObjects()
         {
             try
@@ -922,7 +924,7 @@ namespace RelhaxModpack
                     {
                         using (BackgroundWorker bg = new BackgroundWorker())
                         {
-                            bg.DoWork += SuperExtract;
+                            bg.DoWork += MulticoreExtract;
                             bg.RunWorkerCompleted += Bg_RunWorkerCompleted;
                             StringBuilder sb = new StringBuilder();
                             object[] args = new object[] { sb, ig.Categories };
@@ -1054,7 +1056,8 @@ namespace RelhaxModpack
             }
         }
 
-        private void SuperExtract(object sender, DoWorkEventArgs e)
+        //method for each thread if using multicore extract method
+        private void MulticoreExtract(object sender, DoWorkEventArgs e)
         {
             string downloadedFilesDir = Settings.RelhaxDownloadsFolder;
             object[] args = (object[])e.Argument;
@@ -1088,7 +1091,7 @@ namespace RelhaxModpack
                         }
                         if(m.Packages.Count > 0)
                         {
-                            SuperExtractConfigs(m.Packages,downloadedFilesDir, sender, sb, ref superPatchNum);
+                            MulticoreExtractConfigs(m.Packages,downloadedFilesDir, sender, sb, ref superPatchNum);
                         }
                     }
                 }
@@ -1096,7 +1099,9 @@ namespace RelhaxModpack
                 sb.Clear();
             }
         }
-        private void SuperExtractConfigs(List<SelectablePackage> configsToExtract, string downloadedFilesDir, object sender, StringBuilder sb, ref int superPatchNum)
+
+        //method like above, but is for the next (and all) levels down the tree for each package inside a package
+        private void MulticoreExtractConfigs(List<SelectablePackage> configsToExtract, string downloadedFilesDir, object sender, StringBuilder sb, ref int superPatchNum)
         {
             foreach (SelectablePackage config in configsToExtract)
             {
@@ -1116,7 +1121,7 @@ namespace RelhaxModpack
                     }
                     if(config.Packages.Count > 0)
                     {
-                        SuperExtractConfigs(config.Packages,downloadedFilesDir, sender, sb, ref superPatchNum);
+                        MulticoreExtractConfigs(config.Packages,downloadedFilesDir, sender, sb, ref superPatchNum);
                     }
                 }
             }
@@ -1644,7 +1649,7 @@ namespace RelhaxModpack
                             using (BackgroundWorker bg = new BackgroundWorker())
                             {
                                 bg.WorkerReportsProgress = true;
-                                bg.DoWork += Bg_DoWork;
+                                bg.DoWork += CreateAtlasesAsync;
                                 bg.RunWorkerAsync(a);
                             }
                         }
@@ -1667,14 +1672,14 @@ namespace RelhaxModpack
             }
         }
 
-        private void Bg_DoWork(object sender, DoWorkEventArgs e)
+        private void CreateAtlasesAsync(object sender, DoWorkEventArgs e)
         {
             Atlas a = (Atlas)e.Argument;
-            CreateAtlasesAsync(a);
+            ActuallyCreateAtlasesAsync(a);
         }
 
         //Step 18: Create Atlases
-        private void CreateAtlasesAsync(Atlas a)
+        private void ActuallyCreateAtlasesAsync(Atlas a)
         {
             Size os = ExtractAtlases_run(a);        // os = original size of the extracted Bitmap
             args.ChildProcessed++;
@@ -2579,6 +2584,7 @@ namespace RelhaxModpack
             Logging.Manager("Extraction for " + args.AtlasFile + " completed in " + sw.Elapsed.TotalSeconds.ToString("N3", System.Globalization.CultureInfo.InvariantCulture) + " seconds.");
             return originalAtlasSize;
         }
+
         #region File IO Methods
         //recursivly deletes every file from one place to another
         private void DirectoryDelete(string sourceDirName, bool deleteSubDirs)
@@ -2744,6 +2750,7 @@ namespace RelhaxModpack
             }
         }
         #endregion
+
         //main unzip worker method
         private void Unzip(string zipFile, StringBuilder sb, int categoryGroup, ref int superPatchNum)
         {
