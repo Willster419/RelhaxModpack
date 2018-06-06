@@ -2805,7 +2805,7 @@ namespace RelhaxModpack
         #region MouseDown events
         private void ViewFacebookLink_MouseDown(object sender, MouseEventArgs e)
         {
-            VisitWebsiteLink_LinkClicked(sender, null);
+            ViewFacebookLink_LinkClicked(sender, null);
         }
 
         private void ViewTwitterLink_MouseDown(object sender, MouseEventArgs e)

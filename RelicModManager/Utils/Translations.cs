@@ -21,7 +21,7 @@ namespace RelhaxModpack
             return GetTranslatedString(componetName, language);
         }
 
-        public static string GetTranslatedString(string componetName, Languages lang)
+        private static string GetTranslatedString(string componetName, Languages lang)
         {
             try
             {
