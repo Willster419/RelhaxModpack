@@ -532,6 +532,7 @@
     <EmbeddedResource Include="Resources\NAudio.dll" />
     <Resource Include="Resources\MainForm icons\WoT brand.png" />
     <Content Include="Resources\MainForm icons\WoT brand - light grey.png" />
+    <Content Include="Resources\MainForm icons\WoT brand - light grey_2.png" />
     <Content Include="Resources\relicbanner_for_ico.ico" />
   </ItemGroup>
   <ItemGroup>
