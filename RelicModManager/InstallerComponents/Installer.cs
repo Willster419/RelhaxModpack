@@ -1562,6 +1562,12 @@ namespace RelhaxModpack
                             }
                         }
 
+                        if (a.mapExporter == null)
+                        {
+                            Logging.Manager("Error: no mapExporter found for " + a.AtlasFile);
+                            break;
+                        }
+
                         string[] fileList = new string[] { a.AtlasFile, a.MapFile };
                         if (!a.Pkg.Equals(""))
                         {
@@ -1584,7 +1590,7 @@ namespace RelhaxModpack
                                             }
                                             catch (Exception ex)
                                             {
-                                                Utils.ExceptionLog("ExtractAtlases", string.Format("extration: {0}", Path.Combine(a.TempAltasPresentDirectory, zip[i].FileName)), ex);
+                                                Utils.ExceptionLog("ExtractAtlases", string.Format("extraction: {0}", Path.Combine(a.TempAltasPresentDirectory, zip[i].FileName)), ex);
                                             }
                                         }
                                     }
@@ -1602,7 +1608,8 @@ namespace RelhaxModpack
                                 string target = Path.Combine(a.TempAltasPresentDirectory, fl);
                                 try
                                 {
-                                    File.Copy(source, target, true);        // overwrite existing file if needed
+                                    if (File.Exists(source))
+                                        File.Copy(source, target, true);        // overwrite existing file if needed
                                 }
                                 catch (Exception ex)
                                 {
@@ -2203,7 +2210,7 @@ namespace RelhaxModpack
                                     case "mapType":
                                         foreach (Atlas.MapType mt in Enum.GetValues(typeof(Atlas.MapType)))
                                         {
-                                            if (item.Value.ToLower().Trim() == Atlas.MapTypeName(mt).ToLower())
+                                            if (item.Value.ToLower().Trim() == Atlas.MapTypeName(mt).ToLower() && mt != Atlas.MapType.None)
                                             {
                                                 atlases.mapType = mt;
                                                 break;

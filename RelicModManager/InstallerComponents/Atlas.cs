@@ -76,7 +76,6 @@ namespace RelhaxModpack
             WGXmlMap,
             XmlMap,
             TxtMap,
-            IMap,
         }
 
         public static string MapTypeName(MapType mt)
@@ -89,8 +88,6 @@ namespace RelhaxModpack
                     return "Xml";
                 case MapType.TxtMap:
                     return "Txt";
-                case MapType.IMap:
-                    return "IMap";
                 default:
                     return MapTypeName(MapType.WGXmlMap);
             }
