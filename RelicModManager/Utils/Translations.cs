@@ -255,8 +255,8 @@ namespace RelhaxModpack
             french.Add("FormPageNALink", "Page des forums WoT (NA, ENG)");
 
             //Componet: RegionNaFlagPictureBoxDescription
-            english.Add("RegionNaFlagPictureBoxDescription", "go to 'World of Tanks' forum page for NA server");
-            german.Add("RegionNaFlagPictureBoxDescription", "gehe zur 'World of Tanks' Forum Seite für den NA Server");
+            english.Add("RegionNaFlagPictureBoxDescription", "go to the English-speaking 'World of Tanks' forum page for the NA server");
+            german.Add("RegionNaFlagPictureBoxDescription", "gehe zur englischsprachigen 'World of Tanks' Forum Seite für den NA Server");
             polish.Add("RegionNaFlagPictureBoxDescription", TranslationNeeded);
             french.Add("RegionNaFlagPictureBoxDescription", TranslationNeeded);
             
@@ -267,8 +267,8 @@ namespace RelhaxModpack
             french.Add("FormPageEULink", "Page des forums WoT (EU, ENG)");
 
             //Componet: RegionEuEngFlagPictureBoxDescription
-            english.Add("RegionEuEngFlagPictureBoxDescription", "go to 'World of Tanks' forum page for EU server in english language");
-            german.Add("RegionEuEngFlagPictureBoxDescription", "gehe zur 'World of Tanks' Forum Seite für den EU Server in englischer Sprache");
+            english.Add("RegionEuEngFlagPictureBoxDescription", "go to the English-speaking 'World of Tanks' forum page for the EU server");
+            german.Add("RegionEuEngFlagPictureBoxDescription", "gehe zur englischsprachigen 'World of Tanks' Forum Seite für den EU Server");
             polish.Add("RegionEuEngFlagPictureBoxDescription", TranslationNeeded);
             french.Add("RegionEuEngFlagPictureBoxDescription", TranslationNeeded);
 
@@ -279,8 +279,8 @@ namespace RelhaxModpack
             french.Add("RegionEuEngLanguagePictureBoxDescription", GetTranslatedString("RegionEuEngFlagPictureBoxDescription", Languages.French));
 
             //Componet: RegionEuGerFlagPictureBoxDescription
-            english.Add("RegionEuGerFlagPictureBoxDescription", "go to 'World of Tanks' forum page for EU server in german language");
-            german.Add("RegionEuGerFlagPictureBoxDescription", "gehe zur 'World of Tanks' Forum Seite für den EU Server in deutscher Sprache");
+            english.Add("RegionEuGerFlagPictureBoxDescription", "go to the German-speaking 'World of Tanks' forum page for the EU server");
+            german.Add("RegionEuGerFlagPictureBoxDescription", "gehe zur deutschsprachigen 'World of Tanks' Forum Seite für den EU Server");
             polish.Add("RegionEuGerFlagPictureBoxDescription", TranslationNeeded);
             french.Add("RegionEuGerFlagPictureBoxDescription", TranslationNeeded);
 
