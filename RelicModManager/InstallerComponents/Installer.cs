@@ -1562,7 +1562,7 @@ namespace RelhaxModpack
                             }
                         }
 
-                        if (a.mapExporter == null)
+                        if (a.mapExporter == null && a.mapType != Atlas.MapType.None)
                         {
                             Logging.Manager("Error: no mapExporter found for " + a.AtlasFile);
                             break;
