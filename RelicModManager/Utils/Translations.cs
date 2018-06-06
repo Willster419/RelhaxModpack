@@ -18,10 +18,15 @@ namespace RelhaxModpack
 
         public static string GetTranslatedString(string componetName)
         {
+            return GetTranslatedString(componetName, language);
+        }
+
+        public static string GetTranslatedString(string componetName, Languages lang)
+        {
             try
             {
                 string s = "";
-                switch (language)
+                switch (lang)
                 {
                     case (Languages.English):
                         if (english.Contains(componetName))
@@ -66,7 +71,7 @@ namespace RelhaxModpack
                         }
                         break;
                 }
-                Logging.Manager(string.Format("ERROR: no value in language hash for key: {0}  Language: {1}", componetName, language));
+                Logging.Manager(string.Format("ERROR: no value in language hash for key: {0}  Language: {1}", componetName, lang));
                 return componetName;
             }
             catch (Exception ex)
@@ -249,12 +254,48 @@ namespace RelhaxModpack
             polish.Add("FormPageNALink", "Forum WoT (NA, ENG)");
             french.Add("FormPageNALink", "Page des forums WoT (NA, ENG)");
 
+            //Componet: RegionNaFlagPictureBoxDescription
+            english.Add("RegionNaFlagPictureBoxDescription", "go to 'World of Tanks' forum page for NA server");
+            german.Add("RegionNaFlagPictureBoxDescription", "gehe zur 'World of Tanks' Forum Seite für den NA Server");
+            polish.Add("RegionNaFlagPictureBoxDescription", TranslationNeeded);
+            french.Add("RegionNaFlagPictureBoxDescription", TranslationNeeded);
+            
             //Componet: FormPageEULink
-            //
             english.Add("FormPageEULink", "WoT forum page (EU, ENG)");
             german.Add("FormPageEULink", "WoT Forum (EU, ENG)");
             polish.Add("FormPageEULink", "Forum WoT (EU, ENG)");
             french.Add("FormPageEULink", "Page des forums WoT (EU, ENG)");
+
+            //Componet: RegionEuEngFlagPictureBoxDescription
+            english.Add("RegionEuEngFlagPictureBoxDescription", "go to 'World of Tanks' forum page for EU server in english language");
+            german.Add("RegionEuEngFlagPictureBoxDescription", "gehe zur 'World of Tanks' Forum Seite für den EU Server in englischer Sprache");
+            polish.Add("RegionEuEngFlagPictureBoxDescription", TranslationNeeded);
+            french.Add("RegionEuEngFlagPictureBoxDescription", TranslationNeeded);
+
+            //Componet: RegionEuEngLanguagePictureBoxDescription
+            english.Add("RegionEuEngLanguagePictureBoxDescription", GetTranslatedString("RegionEuEngFlagPictureBoxDescription", Languages.English));
+            german.Add("RegionEuEngLanguagePictureBoxDescription", GetTranslatedString("RegionEuEngFlagPictureBoxDescription", Languages.German));
+            polish.Add("RegionEuEngLanguagePictureBoxDescription", GetTranslatedString("RegionEuEngFlagPictureBoxDescription", Languages.Polish));
+            french.Add("RegionEuEngLanguagePictureBoxDescription", GetTranslatedString("RegionEuEngFlagPictureBoxDescription", Languages.French));
+
+            //Componet: RegionEuGerFlagPictureBoxDescription
+            english.Add("RegionEuGerFlagPictureBoxDescription", "go to 'World of Tanks' forum page for EU server in german language");
+            german.Add("RegionEuGerFlagPictureBoxDescription", "gehe zur 'World of Tanks' Forum Seite für den EU Server in deutscher Sprache");
+            polish.Add("RegionEuGerFlagPictureBoxDescription", TranslationNeeded);
+            french.Add("RegionEuGerFlagPictureBoxDescription", TranslationNeeded);
+
+            //Componet: RegionEuGerLanguagePictureBoxDescription
+            english.Add("RegionEuGerLanguagePictureBoxDescription", GetTranslatedString("RegionEuGerFlagPictureBoxDescription", Languages.English));
+            german.Add("RegionEuGerLanguagePictureBoxDescription", GetTranslatedString("RegionEuGerFlagPictureBoxDescription", Languages.German));
+            polish.Add("RegionEuGerLanguagePictureBoxDescription", GetTranslatedString("RegionEuGerFlagPictureBoxDescription", Languages.Polish));
+            french.Add("RegionEuGerLanguagePictureBoxDescription", GetTranslatedString("RegionEuGerFlagPictureBoxDescription", Languages.French));
+
+            //Componet: ForumBackgroundPictureBoxDescription
+            english.Add("ForumBackgroundPictureBoxDescription", "Here we group up the Relhax Manager forum threads on the different 'Word of Tanks' region servers. Select region on the flags to the right.");
+            german.Add("ForumBackgroundPictureBoxDescription", "Hier haben wir die Forum Threads, der verschiedenen Regionalserver, die sich um den Relhax Modpack Manager drehen, zusammengefasst. Wähle die Region (und Sprache) auf den Fahnen hier rechts.");
+            polish.Add("ForumBackgroundPictureBoxDescription", TranslationNeeded);
+            french.Add("ForumBackgroundPictureBoxDescription", TranslationNeeded);
+
 
             //Componet: FormPageEUGERLink
             //
