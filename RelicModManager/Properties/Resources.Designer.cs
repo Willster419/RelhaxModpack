@@ -63,6 +63,16 @@ namespace RelhaxModpack.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap chat {
+            get {
+                object obj = ResourceManager.GetObject("chat", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap discord_brand {
             get {
                 object obj = ResourceManager.GetObject("discord_brand", resourceCulture);
@@ -106,6 +116,46 @@ namespace RelhaxModpack.Properties {
         internal static System.Drawing.Bitmap facebook_brand {
             get {
                 object obj = ResourceManager.GetObject("facebook_brand", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap flag_de {
+            get {
+                object obj = ResourceManager.GetObject("flag_de", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap flag_eu {
+            get {
+                object obj = ResourceManager.GetObject("flag_eu", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap flag_gb {
+            get {
+                object obj = ResourceManager.GetObject("flag_gb", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap flag_us {
+            get {
+                object obj = ResourceManager.GetObject("flag_us", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

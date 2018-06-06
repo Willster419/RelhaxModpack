@@ -32,7 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.childProgressBar = new System.Windows.Forms.ProgressBar();
             this.FindWotExe = new System.Windows.Forms.OpenFileDialog();
-            this.FormPageNALink = new System.Windows.Forms.LinkLabel();
             this.parrentProgressBar = new System.Windows.Forms.ProgressBar();
             this.installRelhaxMod = new System.Windows.Forms.Button();
             this.uninstallRelhaxMod = new System.Windows.Forms.Button();
@@ -70,8 +69,6 @@
             this.DatabaseVersionLabel = new System.Windows.Forms.Label();
             this.ApplicationVersionLabel = new System.Windows.Forms.Label();
             this.downloadProgress = new System.Windows.Forms.RichTextBox();
-            this.FormPageEULink = new System.Windows.Forms.LinkLabel();
-            this.FormPageEUGERLink = new System.Windows.Forms.LinkLabel();
             this.FacebookPictureBox = new System.Windows.Forms.PictureBox();
             this.TwitterPictureBox = new System.Windows.Forms.PictureBox();
             this.DiscordPictureBox = new System.Windows.Forms.PictureBox();
@@ -79,6 +76,13 @@
             this.SendEmailPictureBox = new System.Windows.Forms.PictureBox();
             this.DonatePictureBox = new System.Windows.Forms.PictureBox();
             this.FindBugAddModPictureBox = new System.Windows.Forms.PictureBox();
+            this.RegionEuEngFlagPictureBox = new System.Windows.Forms.PictureBox();
+            this.ForumBackgroundPictureBox = new System.Windows.Forms.PictureBox();
+            this.RegionNaFlagPictureBox = new System.Windows.Forms.PictureBox();
+            this.RegionNaLanguagePictureBox = new System.Windows.Forms.PictureBox();
+            this.RegionEuEngLanguagePictureBox = new System.Windows.Forms.PictureBox();
+            this.RegionEuGerFlagPictureBox = new System.Windows.Forms.PictureBox();
+            this.RegionEuGerLanguagePictureBox = new System.Windows.Forms.PictureBox();
             this.DiagnosticUtilitiesButton = new System.Windows.Forms.Button();
             this.ButtonTable = new System.Windows.Forms.TableLayoutPanel();
             this.ExportModeBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
@@ -108,6 +112,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.SendEmailPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DonatePictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FindBugAddModPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RegionEuEngFlagPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ForumBackgroundPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RegionNaFlagPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RegionNaLanguagePictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RegionEuEngLanguagePictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RegionEuGerFlagPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RegionEuGerLanguagePictureBox)).BeginInit();
             this.ButtonTable.SuspendLayout();
             this.fontSizeGB.SuspendLayout();
             this.FontLayoutPanel.SuspendLayout();
@@ -115,11 +126,12 @@
             // 
             // childProgressBar
             // 
-            this.InfoTable.SetColumnSpan(this.childProgressBar, 10);
+            this.InfoTable.SetColumnSpan(this.childProgressBar, 12);
             this.childProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.childProgressBar.Location = new System.Drawing.Point(3, 113);
+            this.childProgressBar.Location = new System.Drawing.Point(0, 113);
+            this.childProgressBar.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.childProgressBar.Name = "childProgressBar";
-            this.childProgressBar.Size = new System.Drawing.Size(464, 14);
+            this.childProgressBar.Size = new System.Drawing.Size(466, 14);
             this.childProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.childProgressBar.TabIndex = 11;
             // 
@@ -128,26 +140,14 @@
             this.FindWotExe.Filter = "WorldOfTanks.exe|WorldOfTanks.exe";
             this.FindWotExe.Title = "Find WorldOfTanks.exe";
             // 
-            // FormPageNALink
-            // 
-            this.FormPageNALink.AutoSize = true;
-            this.FormPageNALink.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FormPageNALink.Location = new System.Drawing.Point(3, 134);
-            this.FormPageNALink.Name = "FormPageNALink";
-            this.FormPageNALink.Size = new System.Drawing.Size(175, 20);
-            this.FormPageNALink.TabIndex = 16;
-            this.FormPageNALink.TabStop = true;
-            this.FormPageNALink.Text = "WoT Form Page (NA, ENG)";
-            this.FormPageNALink.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.FormPageNALink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.FormPageNALink_LinkClicked);
-            // 
             // parrentProgressBar
             // 
-            this.InfoTable.SetColumnSpan(this.parrentProgressBar, 10);
+            this.InfoTable.SetColumnSpan(this.parrentProgressBar, 12);
             this.parrentProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.parrentProgressBar.Location = new System.Drawing.Point(3, 93);
+            this.parrentProgressBar.Location = new System.Drawing.Point(0, 93);
+            this.parrentProgressBar.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.parrentProgressBar.Name = "parrentProgressBar";
-            this.parrentProgressBar.Size = new System.Drawing.Size(464, 14);
+            this.parrentProgressBar.Size = new System.Drawing.Size(466, 14);
             this.parrentProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.parrentProgressBar.TabIndex = 17;
             // 
@@ -597,11 +597,12 @@
             // 
             // totalProgressBar
             // 
-            this.InfoTable.SetColumnSpan(this.totalProgressBar, 10);
+            this.InfoTable.SetColumnSpan(this.totalProgressBar, 12);
             this.totalProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.totalProgressBar.Location = new System.Drawing.Point(3, 73);
+            this.totalProgressBar.Location = new System.Drawing.Point(0, 73);
+            this.totalProgressBar.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.totalProgressBar.Name = "totalProgressBar";
-            this.totalProgressBar.Size = new System.Drawing.Size(464, 14);
+            this.totalProgressBar.Size = new System.Drawing.Size(466, 14);
             this.totalProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.totalProgressBar.TabIndex = 34;
             // 
@@ -644,34 +645,42 @@
             // 
             this.InfoTable.BackColor = System.Drawing.Color.Transparent;
             this.InfoTable.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.InfoTable.ColumnCount = 10;
-            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 181F));
+            this.InfoTable.ColumnCount = 13;
+            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 38F));
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 38F));
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 38F));
-            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 71F));
+            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 63F));
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.InfoTable.Controls.Add(this.DatabaseVersionLabel, 1, 9);
+            this.InfoTable.Controls.Add(this.DatabaseVersionLabel, 4, 9);
             this.InfoTable.Controls.Add(this.ApplicationVersionLabel, 0, 9);
             this.InfoTable.Controls.Add(this.downloadProgress, 0, 0);
             this.InfoTable.Controls.Add(this.totalProgressBar, 0, 1);
             this.InfoTable.Controls.Add(this.parrentProgressBar, 0, 2);
             this.InfoTable.Controls.Add(this.childProgressBar, 0, 3);
-            this.InfoTable.Controls.Add(this.FormPageNALink, 0, 5);
-            this.InfoTable.Controls.Add(this.FormPageEULink, 0, 6);
-            this.InfoTable.Controls.Add(this.FormPageEUGERLink, 0, 7);
-            this.InfoTable.Controls.Add(this.FacebookPictureBox, 1, 7);
-            this.InfoTable.Controls.Add(this.TwitterPictureBox, 2, 7);
-            this.InfoTable.Controls.Add(this.DiscordPictureBox, 3, 7);
-            this.InfoTable.Controls.Add(this.HomepagePictureBox, 5, 7);
-            this.InfoTable.Controls.Add(this.SendEmailPictureBox, 6, 7);
-            this.InfoTable.Controls.Add(this.DonatePictureBox, 7, 7);
-            this.InfoTable.Controls.Add(this.FindBugAddModPictureBox, 8, 7);
+            this.InfoTable.Controls.Add(this.FacebookPictureBox, 4, 6);
+            this.InfoTable.Controls.Add(this.TwitterPictureBox, 5, 6);
+            this.InfoTable.Controls.Add(this.DiscordPictureBox, 6, 6);
+            this.InfoTable.Controls.Add(this.HomepagePictureBox, 8, 6);
+            this.InfoTable.Controls.Add(this.SendEmailPictureBox, 9, 6);
+            this.InfoTable.Controls.Add(this.DonatePictureBox, 10, 6);
+            this.InfoTable.Controls.Add(this.FindBugAddModPictureBox, 11, 6);
+            this.InfoTable.Controls.Add(this.RegionEuEngFlagPictureBox, 1, 6);
+            this.InfoTable.Controls.Add(this.ForumBackgroundPictureBox, 0, 5);
+            this.InfoTable.Controls.Add(this.RegionNaFlagPictureBox, 1, 5);
+            this.InfoTable.Controls.Add(this.RegionNaLanguagePictureBox, 2, 5);
+            this.InfoTable.Controls.Add(this.RegionEuEngLanguagePictureBox, 2, 6);
+            this.InfoTable.Controls.Add(this.RegionEuGerFlagPictureBox, 1, 7);
+            this.InfoTable.Controls.Add(this.RegionEuGerLanguagePictureBox, 2, 7);
             this.InfoTable.Location = new System.Drawing.Point(13, 410);
+            this.InfoTable.Margin = new System.Windows.Forms.Padding(0);
             this.InfoTable.MaximumSize = new System.Drawing.Size(500, 233);
             this.InfoTable.MinimumSize = new System.Drawing.Size(450, 200);
             this.InfoTable.Name = "InfoTable";
@@ -684,19 +693,19 @@
             this.InfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.InfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.InfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.InfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
+            this.InfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 2F));
             this.InfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.InfoTable.Size = new System.Drawing.Size(467, 233);
+            this.InfoTable.Size = new System.Drawing.Size(467, 220);
             this.InfoTable.TabIndex = 39;
             // 
             // DatabaseVersionLabel
             // 
             this.DatabaseVersionLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.InfoTable.SetColumnSpan(this.DatabaseVersionLabel, 9);
+            this.InfoTable.SetColumnSpan(this.DatabaseVersionLabel, 8);
             this.DatabaseVersionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DatabaseVersionLabel.Location = new System.Drawing.Point(184, 209);
+            this.DatabaseVersionLabel.Location = new System.Drawing.Point(191, 196);
             this.DatabaseVersionLabel.Name = "DatabaseVersionLabel";
-            this.DatabaseVersionLabel.Size = new System.Drawing.Size(283, 24);
+            this.DatabaseVersionLabel.Size = new System.Drawing.Size(275, 24);
             this.DatabaseVersionLabel.TabIndex = 0;
             this.DatabaseVersionLabel.Text = "Latest Database v{version}";
             this.DatabaseVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -704,57 +713,35 @@
             // ApplicationVersionLabel
             // 
             this.ApplicationVersionLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.InfoTable.SetColumnSpan(this.ApplicationVersionLabel, 4);
             this.ApplicationVersionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ApplicationVersionLabel.Location = new System.Drawing.Point(3, 209);
+            this.ApplicationVersionLabel.Location = new System.Drawing.Point(0, 196);
+            this.ApplicationVersionLabel.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.ApplicationVersionLabel.Name = "ApplicationVersionLabel";
-            this.ApplicationVersionLabel.Size = new System.Drawing.Size(175, 24);
+            this.ApplicationVersionLabel.Size = new System.Drawing.Size(185, 24);
             this.ApplicationVersionLabel.TabIndex = 1;
             this.ApplicationVersionLabel.Text = "Application v{version}";
             this.ApplicationVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // downloadProgress
             // 
-            this.InfoTable.SetColumnSpan(this.downloadProgress, 10);
+            this.InfoTable.SetColumnSpan(this.downloadProgress, 12);
             this.downloadProgress.DetectUrls = false;
             this.downloadProgress.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.downloadProgress.Location = new System.Drawing.Point(3, 3);
+            this.downloadProgress.Location = new System.Drawing.Point(0, 3);
+            this.downloadProgress.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.downloadProgress.Name = "downloadProgress";
             this.downloadProgress.ReadOnly = true;
             this.downloadProgress.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.downloadProgress.Size = new System.Drawing.Size(464, 64);
+            this.downloadProgress.Size = new System.Drawing.Size(466, 64);
             this.downloadProgress.TabIndex = 29;
             this.downloadProgress.Text = "";
             // 
-            // FormPageEULink
-            // 
-            this.FormPageEULink.AutoSize = true;
-            this.FormPageEULink.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FormPageEULink.Location = new System.Drawing.Point(3, 154);
-            this.FormPageEULink.Name = "FormPageEULink";
-            this.FormPageEULink.Size = new System.Drawing.Size(175, 20);
-            this.FormPageEULink.TabIndex = 40;
-            this.FormPageEULink.TabStop = true;
-            this.FormPageEULink.Text = "WoT Form Page (EU, ENG)";
-            this.FormPageEULink.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.FormPageEULink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.FormPageEULink_LinkClicked);
-            // 
-            // FormPageEUGERLink
-            // 
-            this.FormPageEUGERLink.AutoSize = true;
-            this.FormPageEUGERLink.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FormPageEUGERLink.Location = new System.Drawing.Point(3, 174);
-            this.FormPageEUGERLink.Name = "FormPageEUGERLink";
-            this.FormPageEUGERLink.Size = new System.Drawing.Size(175, 20);
-            this.FormPageEUGERLink.TabIndex = 41;
-            this.FormPageEUGERLink.TabStop = true;
-            this.FormPageEUGERLink.Text = "WoT Form Page (EU, GER)";
-            this.FormPageEUGERLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.FormPageEUGERLink_LinkClicked);
-            // 
             // FacebookPictureBox
             // 
-            this.FacebookPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.FacebookPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.FacebookPictureBox.Image = global::RelhaxModpack.Properties.Resources.facebook_brand;
-            this.FacebookPictureBox.Location = new System.Drawing.Point(184, 174);
+            this.FacebookPictureBox.Location = new System.Drawing.Point(191, 159);
             this.FacebookPictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.FacebookPictureBox.Name = "FacebookPictureBox";
             this.InfoTable.SetRowSpan(this.FacebookPictureBox, 2);
@@ -768,8 +755,9 @@
             // 
             // TwitterPictureBox
             // 
+            this.TwitterPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.TwitterPictureBox.Image = global::RelhaxModpack.Properties.Resources.twitter_brand;
-            this.TwitterPictureBox.Location = new System.Drawing.Point(222, 174);
+            this.TwitterPictureBox.Location = new System.Drawing.Point(229, 159);
             this.TwitterPictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.TwitterPictureBox.Name = "TwitterPictureBox";
             this.InfoTable.SetRowSpan(this.TwitterPictureBox, 2);
@@ -782,8 +770,9 @@
             // 
             // DiscordPictureBox
             // 
+            this.DiscordPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.DiscordPictureBox.Image = global::RelhaxModpack.Properties.Resources.discord_brand;
-            this.DiscordPictureBox.Location = new System.Drawing.Point(260, 174);
+            this.DiscordPictureBox.Location = new System.Drawing.Point(267, 159);
             this.DiscordPictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.DiscordPictureBox.Name = "DiscordPictureBox";
             this.InfoTable.SetRowSpan(this.DiscordPictureBox, 2);
@@ -797,12 +786,13 @@
             // 
             // HomepagePictureBox
             // 
+            this.HomepagePictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.HomepagePictureBox.Image = global::RelhaxModpack.Properties.Resources.Home;
-            this.HomepagePictureBox.Location = new System.Drawing.Point(369, 174);
+            this.HomepagePictureBox.Location = new System.Drawing.Point(368, 174);
             this.HomepagePictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.HomepagePictureBox.Name = "HomepagePictureBox";
             this.InfoTable.SetRowSpan(this.HomepagePictureBox, 2);
-            this.HomepagePictureBox.Size = new System.Drawing.Size(20, 35);
+            this.HomepagePictureBox.Size = new System.Drawing.Size(20, 20);
             this.HomepagePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.HomepagePictureBox.TabIndex = 45;
             this.HomepagePictureBox.TabStop = false;
@@ -812,12 +802,13 @@
             // 
             // SendEmailPictureBox
             // 
+            this.SendEmailPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.SendEmailPictureBox.Image = global::RelhaxModpack.Properties.Resources.EMail;
-            this.SendEmailPictureBox.Location = new System.Drawing.Point(395, 174);
+            this.SendEmailPictureBox.Location = new System.Drawing.Point(394, 174);
             this.SendEmailPictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.SendEmailPictureBox.Name = "SendEmailPictureBox";
             this.InfoTable.SetRowSpan(this.SendEmailPictureBox, 2);
-            this.SendEmailPictureBox.Size = new System.Drawing.Size(20, 35);
+            this.SendEmailPictureBox.Size = new System.Drawing.Size(20, 20);
             this.SendEmailPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.SendEmailPictureBox.TabIndex = 46;
             this.SendEmailPictureBox.TabStop = false;
@@ -827,12 +818,13 @@
             // 
             // DonatePictureBox
             // 
+            this.DonatePictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.DonatePictureBox.Image = global::RelhaxModpack.Properties.Resources.donation;
-            this.DonatePictureBox.Location = new System.Drawing.Point(421, 174);
+            this.DonatePictureBox.Location = new System.Drawing.Point(420, 174);
             this.DonatePictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.DonatePictureBox.Name = "DonatePictureBox";
             this.InfoTable.SetRowSpan(this.DonatePictureBox, 2);
-            this.DonatePictureBox.Size = new System.Drawing.Size(20, 35);
+            this.DonatePictureBox.Size = new System.Drawing.Size(20, 20);
             this.DonatePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.DonatePictureBox.TabIndex = 47;
             this.DonatePictureBox.TabStop = false;
@@ -842,18 +834,136 @@
             // 
             // FindBugAddModPictureBox
             // 
+            this.FindBugAddModPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.FindBugAddModPictureBox.Image = global::RelhaxModpack.Properties.Resources.report;
-            this.FindBugAddModPictureBox.Location = new System.Drawing.Point(447, 174);
+            this.FindBugAddModPictureBox.Location = new System.Drawing.Point(446, 174);
             this.FindBugAddModPictureBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.FindBugAddModPictureBox.Name = "FindBugAddModPictureBox";
             this.InfoTable.SetRowSpan(this.FindBugAddModPictureBox, 2);
-            this.FindBugAddModPictureBox.Size = new System.Drawing.Size(20, 35);
+            this.FindBugAddModPictureBox.Size = new System.Drawing.Size(20, 20);
             this.FindBugAddModPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.FindBugAddModPictureBox.TabIndex = 48;
             this.FindBugAddModPictureBox.TabStop = false;
             this.FindBugAddModPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.findBugAddModLabel_MouseDown);
             this.FindBugAddModPictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.FindBugAddModPictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
+            // RegionEuEngFlagPictureBox
+            // 
+            this.RegionEuEngFlagPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.RegionEuEngFlagPictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.RegionEuEngFlagPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.RegionEuEngFlagPictureBox.Image = global::RelhaxModpack.Properties.Resources.flag_eu;
+            this.RegionEuEngFlagPictureBox.Location = new System.Drawing.Point(50, 154);
+            this.RegionEuEngFlagPictureBox.Margin = new System.Windows.Forms.Padding(0);
+            this.RegionEuEngFlagPictureBox.Name = "RegionEuEngFlagPictureBox";
+            this.RegionEuEngFlagPictureBox.Size = new System.Drawing.Size(24, 20);
+            this.RegionEuEngFlagPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.RegionEuEngFlagPictureBox.TabIndex = 50;
+            this.RegionEuEngFlagPictureBox.TabStop = false;
+            this.RegionEuEngFlagPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.RegionEuEngPictureBox_MouseDown);
+            this.RegionEuEngFlagPictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.RegionEuEngFlagPictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
+            // ForumBackgroundPictureBox
+            // 
+            this.ForumBackgroundPictureBox.BackgroundImage = global::RelhaxModpack.Properties.Resources.chat;
+            this.ForumBackgroundPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ForumBackgroundPictureBox.Image = global::RelhaxModpack.Properties.Resources.chat;
+            this.ForumBackgroundPictureBox.Location = new System.Drawing.Point(3, 137);
+            this.ForumBackgroundPictureBox.Name = "ForumBackgroundPictureBox";
+            this.InfoTable.SetRowSpan(this.ForumBackgroundPictureBox, 3);
+            this.ForumBackgroundPictureBox.Size = new System.Drawing.Size(44, 54);
+            this.ForumBackgroundPictureBox.TabIndex = 49;
+            this.ForumBackgroundPictureBox.TabStop = false;
+            this.ForumBackgroundPictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.ForumBackgroundPictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
+            // RegionNaFlagPictureBox
+            // 
+            this.RegionNaFlagPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.RegionNaFlagPictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.RegionNaFlagPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.RegionNaFlagPictureBox.Image = global::RelhaxModpack.Properties.Resources.flag_us;
+            this.RegionNaFlagPictureBox.Location = new System.Drawing.Point(50, 134);
+            this.RegionNaFlagPictureBox.Margin = new System.Windows.Forms.Padding(0);
+            this.RegionNaFlagPictureBox.Name = "RegionNaFlagPictureBox";
+            this.RegionNaFlagPictureBox.Size = new System.Drawing.Size(24, 20);
+            this.RegionNaFlagPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.RegionNaFlagPictureBox.TabIndex = 51;
+            this.RegionNaFlagPictureBox.TabStop = false;
+            this.RegionNaFlagPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.RegionNaPictureBox_MouseDown);
+            this.RegionNaFlagPictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.RegionNaFlagPictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
+            // RegionNaLanguagePictureBox
+            // 
+            this.RegionNaLanguagePictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.RegionNaLanguagePictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.RegionNaLanguagePictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.RegionNaLanguagePictureBox.Image = global::RelhaxModpack.Properties.Resources.flag_gb;
+            this.RegionNaLanguagePictureBox.Location = new System.Drawing.Point(74, 134);
+            this.RegionNaLanguagePictureBox.Margin = new System.Windows.Forms.Padding(0);
+            this.RegionNaLanguagePictureBox.Name = "RegionNaLanguagePictureBox";
+            this.RegionNaLanguagePictureBox.Size = new System.Drawing.Size(24, 20);
+            this.RegionNaLanguagePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.RegionNaLanguagePictureBox.TabIndex = 52;
+            this.RegionNaLanguagePictureBox.TabStop = false;
+            this.RegionNaLanguagePictureBox.Visible = false;
+            this.RegionNaLanguagePictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.RegionNaPictureBox_MouseDown);
+            this.RegionNaLanguagePictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.RegionNaLanguagePictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
+            // RegionEuEngLanguagePictureBox
+            // 
+            this.RegionEuEngLanguagePictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.RegionEuEngLanguagePictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.RegionEuEngLanguagePictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.RegionEuEngLanguagePictureBox.Image = global::RelhaxModpack.Properties.Resources.flag_gb;
+            this.RegionEuEngLanguagePictureBox.Location = new System.Drawing.Point(74, 154);
+            this.RegionEuEngLanguagePictureBox.Margin = new System.Windows.Forms.Padding(0);
+            this.RegionEuEngLanguagePictureBox.Name = "RegionEuEngLanguagePictureBox";
+            this.RegionEuEngLanguagePictureBox.Size = new System.Drawing.Size(24, 20);
+            this.RegionEuEngLanguagePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.RegionEuEngLanguagePictureBox.TabIndex = 53;
+            this.RegionEuEngLanguagePictureBox.TabStop = false;
+            this.RegionEuEngLanguagePictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.RegionEuEngPictureBox_MouseDown);
+            this.RegionEuEngLanguagePictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.RegionEuEngLanguagePictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
+            // RegionEuGerFlagPictureBox
+            // 
+            this.RegionEuGerFlagPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.RegionEuGerFlagPictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.RegionEuGerFlagPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.RegionEuGerFlagPictureBox.Image = global::RelhaxModpack.Properties.Resources.flag_eu;
+            this.RegionEuGerFlagPictureBox.Location = new System.Drawing.Point(50, 174);
+            this.RegionEuGerFlagPictureBox.Margin = new System.Windows.Forms.Padding(0);
+            this.RegionEuGerFlagPictureBox.Name = "RegionEuGerFlagPictureBox";
+            this.RegionEuGerFlagPictureBox.Size = new System.Drawing.Size(24, 20);
+            this.RegionEuGerFlagPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.RegionEuGerFlagPictureBox.TabIndex = 54;
+            this.RegionEuGerFlagPictureBox.TabStop = false;
+            this.RegionEuGerFlagPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.RegionEuGerPictureBox_MouseDown);
+            this.RegionEuGerFlagPictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.RegionEuGerFlagPictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
+            // RegionEuGerLanguagePictureBox
+            // 
+            this.RegionEuGerLanguagePictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.RegionEuGerLanguagePictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.RegionEuGerLanguagePictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.RegionEuGerLanguagePictureBox.Image = global::RelhaxModpack.Properties.Resources.flag_de;
+            this.RegionEuGerLanguagePictureBox.Location = new System.Drawing.Point(74, 174);
+            this.RegionEuGerLanguagePictureBox.Margin = new System.Windows.Forms.Padding(0);
+            this.RegionEuGerLanguagePictureBox.Name = "RegionEuGerLanguagePictureBox";
+            this.RegionEuGerLanguagePictureBox.Size = new System.Drawing.Size(24, 20);
+            this.RegionEuGerLanguagePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.RegionEuGerLanguagePictureBox.TabIndex = 55;
+            this.RegionEuGerLanguagePictureBox.TabStop = false;
+            this.RegionEuGerLanguagePictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.RegionEuGerPictureBox_MouseDown);
+            this.RegionEuGerLanguagePictureBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.RegionEuGerLanguagePictureBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
             // DiagnosticUtilitiesButton
             // 
@@ -1093,7 +1203,7 @@
             this.AutoSize = true;
             this.BackgroundImage = global::RelhaxModpack.Properties.Resources.WoT_brand___light_grey_2;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(490, 654);
+            this.ClientSize = new System.Drawing.Size(490, 641);
             this.Controls.Add(this.fontSizeGB);
             this.Controls.Add(this.InfoTable);
             this.Controls.Add(this.SelectionViewGB);
@@ -1119,7 +1229,6 @@
             this.SelectionLayout.ResumeLayout(false);
             this.SelectionLayout.PerformLayout();
             this.InfoTable.ResumeLayout(false);
-            this.InfoTable.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FacebookPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TwitterPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DiscordPictureBox)).EndInit();
@@ -1127,6 +1236,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.SendEmailPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DonatePictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.FindBugAddModPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RegionEuEngFlagPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ForumBackgroundPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RegionNaFlagPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RegionNaLanguagePictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RegionEuEngLanguagePictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RegionEuGerFlagPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RegionEuGerLanguagePictureBox)).EndInit();
             this.ButtonTable.ResumeLayout(false);
             this.fontSizeGB.ResumeLayout(false);
             this.FontLayoutPanel.ResumeLayout(false);
@@ -1137,7 +1253,6 @@
         #endregion
         private System.Windows.Forms.ProgressBar childProgressBar;
         private System.Windows.Forms.OpenFileDialog FindWotExe;
-        private System.Windows.Forms.LinkLabel FormPageNALink;
         private System.Windows.Forms.ProgressBar parrentProgressBar;
         private System.Windows.Forms.Button installRelhaxMod;
         private System.Windows.Forms.Button uninstallRelhaxMod;
@@ -1191,8 +1306,6 @@
         private System.Windows.Forms.RadioButton fontSize175;
         private System.Windows.Forms.CheckBox ComicSansFontCB;
         private System.Windows.Forms.LinkLabel ShowAdvancedSettingsLink;
-        private System.Windows.Forms.LinkLabel FormPageEULink;
-        private System.Windows.Forms.LinkLabel FormPageEUGERLink;
         private System.Windows.Forms.PictureBox FacebookPictureBox;
         private System.Windows.Forms.PictureBox TwitterPictureBox;
         private System.Windows.Forms.PictureBox DiscordPictureBox;
@@ -1200,6 +1313,13 @@
         private System.Windows.Forms.PictureBox SendEmailPictureBox;
         private System.Windows.Forms.PictureBox DonatePictureBox;
         private System.Windows.Forms.PictureBox FindBugAddModPictureBox;
+        private System.Windows.Forms.PictureBox ForumBackgroundPictureBox;
+        private System.Windows.Forms.PictureBox RegionEuEngFlagPictureBox;
+        private System.Windows.Forms.PictureBox RegionNaFlagPictureBox;
+        private System.Windows.Forms.PictureBox RegionNaLanguagePictureBox;
+        private System.Windows.Forms.PictureBox RegionEuEngLanguagePictureBox;
+        private System.Windows.Forms.PictureBox RegionEuGerFlagPictureBox;
+        private System.Windows.Forms.PictureBox RegionEuGerLanguagePictureBox;
     }
 }
 

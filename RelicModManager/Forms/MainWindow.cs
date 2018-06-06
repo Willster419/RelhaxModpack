@@ -2837,6 +2837,18 @@ namespace RelhaxModpack
         {
             findBugAddModLabel_LinkClicked(sender, null);
         }
+        private void RegionNaPictureBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            FormPageNALink_LinkClicked(sender, null);
+        }
+        private void RegionEuEngPictureBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            FormPageEULink_LinkClicked(sender, null);
+        }
+        private void RegionEuGerPictureBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            FormPageEUGERLink_LinkClicked(sender, null);
+        }
         #endregion
     }
 }
