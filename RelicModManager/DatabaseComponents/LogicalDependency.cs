@@ -12,7 +12,7 @@ namespace RelhaxModpack
         //acts as a NOT flag
         public bool NegateFlag;
         //handle linked dependencies as AND or OR logic
-        public AndOrFlag AndOrLogic = AndOrFlag.OR;
+        public AndOrFlag AndOrLogic = AndOrFlag.AND;
         public LogicalDependency() {}
         //for the tostring thing
         public override string ToString()
