@@ -958,9 +958,6 @@
             // AndOrLogicComboBox
             // 
             this.AndOrLogicComboBox.FormattingEnabled = true;
-            this.AndOrLogicComboBox.Items.AddRange(new object[] {
-            "AND",
-            "OR"});
             this.AndOrLogicComboBox.Location = new System.Drawing.Point(170, 120);
             this.AndOrLogicComboBox.MaxDropDownItems = 2;
             this.AndOrLogicComboBox.Name = "AndOrLogicComboBox";

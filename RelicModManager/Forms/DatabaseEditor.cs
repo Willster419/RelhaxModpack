@@ -45,6 +45,7 @@ namespace RelhaxModpack
         {
             InitializeComponent();
             ObjectDependenciesListOriginalHeight = ObjectDependenciesList.Height;
+            AndOrLogicComboBox.DataSource = new List <String>{ LogicalDependency.GetAndOrString(LogicalDependency.AndOrFlag.AND), LogicalDependency.GetAndOrString(LogicalDependency.AndOrFlag.OR)};
             Settings.LoadSettings();
         }
 
@@ -190,7 +191,7 @@ namespace RelhaxModpack
             DependenciesTabPage.Enabled = false;
             MediaTabPage.Enabled = false;
             UserDatasTabPage.Enabled = false;
-            if(hardReset)
+            if (hardReset)
             {
                 // Description tab
                 ObjectDescTB.Text = "";
@@ -458,6 +459,7 @@ namespace RelhaxModpack
                     ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(SelectedLogicalDependency.Timestamp));
                 }
                 SelectedLogicalDependency.Enabled = ObjectEnabledCheckBox.Checked;
+                SelectedLogicalDependency.AndOrLogic = LogicalDependency.GetAndOrID(AndOrLogicComboBox.Text);
                 LogicalDependencies[index] = SelectedLogicalDependency;
             }
             else if (SelectedCategory != null)
@@ -806,6 +808,7 @@ namespace RelhaxModpack
                     CurrentDependenciesCB.Visible = false;
                     AndOrLogicLabel.Visible = true;
                     AndOrLogicComboBox.Visible = true;
+                    AndOrLogicComboBox.Text = LogicalDependency.GetAndOrString(SelectedLogicalDependency.AndOrLogic);
                     AddDependencyButton.Visible = false;
                     RemoveDependencyButton.Visible = false;
                 }
@@ -972,6 +975,8 @@ namespace RelhaxModpack
                     CurrentDependenciesCB.DataSource = Dependencies;
                     CurrentDependenciesCB.SelectedIndex = -1;
                     CurrentDependenciesCB.Visible = true;
+                    AndOrLogicLabel.Visible = false;
+                    AndOrLogicComboBox.Visible = false;
                     AddDependencyButton.Visible = true;
                     RemoveDependencyButton.Visible = true;
                 }
