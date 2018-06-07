@@ -855,7 +855,7 @@ namespace RelhaxModpack
                 if (ExportModeBrowserDialog.ShowDialog() != DialogResult.OK)
                 {
                     if (Program.Version != Program.ProgramVersion.Stable)
-                        Logging.Manager("DEBUG: user cancled export mode");
+                        Logging.Manager("DEBUG: user canceled export mode");
                     ToggleUIButtons(true);
                     return;
                 }
@@ -1176,35 +1176,82 @@ namespace RelhaxModpack
                 {
                     //idea is that if all mod/config/dependency are to be installed, then install the logical dependency
                     //and factor in the negate flag
-                    bool addIt = true;
-                    foreach (DatabaseLogic dl in ld.DatabasePackageLogic)
+                    bool addIt;
+                    int continueCount;
+                    if (ld.AndOrLogic.Equals(LogicalDependency.AndOrFlag.AND))
                     {
-                        if(!dl.Enabled)
+                        // this is the logic for "AND" condition
+                        // a element in the logical section "could" only be added, i at least one element could be checked. Other wise nothing to add and addIt will be "false" directly
+                        addIt = ld.DatabasePackageLogic.Count > 0;
+                        continueCount = 0;
+                        foreach (DatabaseLogic dl in ld.DatabasePackageLogic)
                         {
-                            //if the package that trigered it is not enabled, then do not add the logicalDependnecy
-                            addIt = false;
-                            break;
-                        }
-                        if (dl.NotFlag)
-                        {
-                            //package must NOT be checked for it to be included
-                            //Enabled must = true, checked must = false
-                            //otherwise break and don't add
-                            if (dl.Enabled && dl.Checked)
+                            if (!dl.Enabled)
                             {
-                                addIt = false;
-                                break;
+                                //if the package that triggered it is not enabled, thengo to the next element
+                                continueCount++;
+                                // if all elements at ld.DatabasePackageLogic are disabled and non element is regulary checked, do not add the element
+                                if (continueCount == ld.DatabasePackageLogic.Count)
+                                    addIt = false;
+                                continue;
+                            }
+                            if (dl.NotFlag)
+                            {
+                                //package must NOT be checked for it to be included
+                                //Enabled must = true, checked must = false
+                                //otherwise break and don't add
+                                if (dl.Enabled && dl.Checked)
+                                {
+                                    addIt = false;
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                //package MUST be checked for it to be included
+                                //Enabled must = true, checked must = true
+                                //otherwise break and don't add
+                                if (dl.Enabled && !dl.Checked)
+                                {
+                                    addIt = false;
+                                    break;
+                                }
                             }
                         }
-                        else
+                    }
+                    else
+                    {
+                        // this is the logic for "OR" condition
+                        addIt = false;
+                        continueCount = 0;
+                        foreach (DatabaseLogic dl in ld.DatabasePackageLogic)
                         {
-                            //package MUST be checked for it to be included
-                            //Enabled must = true, checked must = true
-                            //otherwise break and don't add
-                            if (dl.Enabled && !dl.Checked)
+                            if (!dl.Enabled)
                             {
-                                addIt = false;
-                                break;
+                                //if the package that triggered it is not enabled, then do go to the next logicalDependnecy element
+                                continue;
+                            }
+                            if (dl.NotFlag)
+                            {
+                                //package must NOT be checked for it to be included
+                                //Enabled must = true, checked must = false
+                                //if so, add the logicalDependnecy and break, because more then installing once is wasted ;-)
+                                if (dl.Enabled && !dl.Checked)
+                                {
+                                    addIt = true;
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                //package MUST be checked for it to be included
+                                //Enabled must = true, checked must = true
+                                //if so, add the logicalDependnecy and break, because more then installing once is wasted ;-)
+                                if (dl.Enabled && dl.Checked)
+                                {
+                                    addIt = true;
+                                    break;
+                                }
                             }
                         }
                     }
@@ -1379,15 +1426,15 @@ namespace RelhaxModpack
             //reset the download counter
             downloadCounter = -1;
             //create the download list
-            foreach (Dependency d in globalDependenciesToInstall)
+            foreach (Dependency gd in globalDependenciesToInstall)
             {
-                if (d.DownloadFlag)
+                if (gd.DownloadFlag)
                 {
-                    d.ReadyForInstall = false;
-                    DatabasePackagesToDownload.Add(d);
+                    gd.ReadyForInstall = false;
+                    DatabasePackagesToDownload.Add(gd);
                 }
                 else
-                    d.ReadyForInstall = true;
+                    gd.ReadyForInstall = true;
             }
             foreach (Dependency d in dependenciesToInstall)
             {
@@ -1399,15 +1446,15 @@ namespace RelhaxModpack
                 else
                     d.ReadyForInstall = true;
             }
-            foreach (Dependency d in appendedDependenciesToInstall)
+            foreach (Dependency ad in appendedDependenciesToInstall)
             {
-                if (d.DownloadFlag)
+                if (ad.DownloadFlag)
                 {
-                    d.ReadyForInstall = false;
-                    DatabasePackagesToDownload.Add(d);
+                    ad.ReadyForInstall = false;
+                    DatabasePackagesToDownload.Add(ad);
                 }
                 else
-                    d.ReadyForInstall = true;
+                    ad.ReadyForInstall = true;
             }
             foreach (LogicalDependency ld in logicalDependenciesToInstall)
             {
