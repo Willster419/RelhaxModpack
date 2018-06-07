@@ -112,6 +112,8 @@
             this.MoveButton = new System.Windows.Forms.Button();
             this.SearchBox = new System.Windows.Forms.ComboBox();
             this.ObjectUserdatasToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.AndOrLogicComboBox = new System.Windows.Forms.ComboBox();
+            this.AndOrLogicLabel = new System.Windows.Forms.Label();
             this.DatabasePanelTree.SuspendLayout();
             this.DatabaseEditPanel.SuspendLayout();
             this.ObjectPropertiesTabControl.SuspendLayout();
@@ -409,6 +411,8 @@
             // DependencyPanel
             // 
             this.DependencyPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.DependencyPanel.Controls.Add(this.AndOrLogicLabel);
+            this.DependencyPanel.Controls.Add(this.AndOrLogicComboBox);
             this.DependencyPanel.Controls.Add(this.AddDependencyButton);
             this.DependencyPanel.Controls.Add(this.CurrentDependenciesCB);
             this.DependencyPanel.Controls.Add(this.ObjectDependenciesList);
@@ -451,7 +455,7 @@
             // ObjectDependenciesLabel
             // 
             this.ObjectDependenciesLabel.AutoSize = true;
-            this.ObjectDependenciesLabel.Location = new System.Drawing.Point(0, 3);
+            this.ObjectDependenciesLabel.Location = new System.Drawing.Point(3, 3);
             this.ObjectDependenciesLabel.Name = "ObjectDependenciesLabel";
             this.ObjectDependenciesLabel.Size = new System.Drawing.Size(137, 13);
             this.ObjectDependenciesLabel.TabIndex = 22;
@@ -951,6 +955,30 @@
             this.SearchBox.SelectionChangeCommitted += new System.EventHandler(this.SearchBox_SelectionChangeCommitted);
             this.SearchBox.TextUpdate += new System.EventHandler(this.SearchBox_TextUpdate);
             // 
+            // AndOrLogicComboBox
+            // 
+            this.AndOrLogicComboBox.FormattingEnabled = true;
+            this.AndOrLogicComboBox.Items.AddRange(new object[] {
+            "AND",
+            "OR"});
+            this.AndOrLogicComboBox.Location = new System.Drawing.Point(170, 120);
+            this.AndOrLogicComboBox.MaxDropDownItems = 2;
+            this.AndOrLogicComboBox.Name = "AndOrLogicComboBox";
+            this.AndOrLogicComboBox.Size = new System.Drawing.Size(58, 21);
+            this.AndOrLogicComboBox.TabIndex = 40;
+            this.AndOrLogicComboBox.Text = "OR";
+            this.AndOrLogicComboBox.Visible = false;
+            // 
+            // AndOrLogicLabel
+            // 
+            this.AndOrLogicLabel.AutoSize = true;
+            this.AndOrLogicLabel.Location = new System.Drawing.Point(5, 124);
+            this.AndOrLogicLabel.Name = "AndOrLogicLabel";
+            this.AndOrLogicLabel.Size = new System.Drawing.Size(161, 13);
+            this.AndOrLogicLabel.TabIndex = 41;
+            this.AndOrLogicLabel.Text = "logic behavior for dependencies:";
+            this.AndOrLogicLabel.Visible = false;
+            // 
             // DatabaseEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1078,5 +1106,7 @@
         private System.Windows.Forms.ToolTip ObjectUserdatasToolTip;
         private System.Windows.Forms.Label ObjectLevelLabel;
         private System.Windows.Forms.Label ObjectLevel;
+        private System.Windows.Forms.ComboBox AndOrLogicComboBox;
+        private System.Windows.Forms.Label AndOrLogicLabel;
     }
 }

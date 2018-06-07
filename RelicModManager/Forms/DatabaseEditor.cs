@@ -657,6 +657,8 @@ namespace RelhaxModpack
 
                     DependenciesTabPage.Enabled = false;
                     ObjectDependenciesLabel.Text = "dependencies (click to edit)";
+                    AndOrLogicLabel.Visible = false;
+                    AndOrLogicComboBox.Visible = false;
                     MediaTabPage.Enabled = false;
                     UserDatasTabPage.Enabled = false;
                 }
@@ -716,9 +718,11 @@ namespace RelhaxModpack
                     ObjectDependenciesList.Enabled = true;
                     ObjectDependenciesList.DataSource = BuildDatabaseLogic(SelectedDependency);
 
-                    ObjectDependenciesList.Height = CurrentDependenciesCB.Height + CurrentDependenciesCB.Top;
+                    ObjectDependenciesList.Height = CurrentDependenciesCB.Height + CurrentDependenciesCB.Top - ObjectDependenciesList.Top;
                     DependencyPackageNameLabel.Visible = false;
                     CurrentDependenciesCB.Visible = false;
+                    AndOrLogicLabel.Visible = false;
+                    AndOrLogicComboBox.Visible = false;
                     AddDependencyButton.Visible = false;
                     RemoveDependencyButton.Visible = false;
 
@@ -797,9 +801,11 @@ namespace RelhaxModpack
                     ObjectDependenciesList.DataSource = null;
                     ObjectDependenciesList.Items.Clear();
                     ObjectDependenciesList.DataSource = SelectedLogicalDependency.DatabasePackageLogic;
-                    ObjectDependenciesList.Height = CurrentDependenciesCB.Height + CurrentDependenciesCB.Top;
+                    ObjectDependenciesList.Height = CurrentDependenciesCB.Height + CurrentDependenciesCB.Top - ObjectDependenciesList.Top;
                     DependencyPackageNameLabel.Visible = false;
                     CurrentDependenciesCB.Visible = false;
+                    AndOrLogicLabel.Visible = true;
+                    AndOrLogicComboBox.Visible = true;
                     AddDependencyButton.Visible = false;
                     RemoveDependencyButton.Visible = false;
                 }
@@ -899,6 +905,8 @@ namespace RelhaxModpack
                     CurrentDependenciesCB.Visible = true;
                     CurrentDependenciesCB.DataSource = Dependencies;
                     CurrentDependenciesCB.SelectedIndex = -1;
+                    AndOrLogicLabel.Visible = false;
+                    AndOrLogicComboBox.Visible = false;
                     AddDependencyButton.Visible = true;
                     RemoveDependencyButton.Visible = true;
 
