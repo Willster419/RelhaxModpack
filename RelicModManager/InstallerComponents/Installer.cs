@@ -1922,7 +1922,7 @@ namespace RelhaxModpack
                 {
                     if (m.Enabled && m.Checked)
                     {
-                        Logging.Manager("Exracting " + Path.GetFileName(m.ZipFile));
+                        Logging.Manager("Extracting " + Path.GetFileName(m.ZipFile));
                         Unzip(Path.Combine(downloadedFilesDir, Path.GetFileName(m.ZipFile)), null,99,ref tempPatchNum);
                         tempPatchNum++;
                         InstallWorker.ReportProgress(0);
