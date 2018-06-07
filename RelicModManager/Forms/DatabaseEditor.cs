@@ -36,6 +36,7 @@ namespace RelhaxModpack
         private StringBuilder InUseSB;
         private List<SelectablePackage> ListThatContainsPackage;
         private bool UnsavedModifications = false;
+        private int ObjectDependenciesListOriginalHeight = 0;
         List<string> allPackageNames = new List<string>();
 
         private EditorMode DatabaseEditorMode;
@@ -43,6 +44,7 @@ namespace RelhaxModpack
         public DatabaseEditor()
         {
             InitializeComponent();
+            ObjectDependenciesListOriginalHeight = ObjectDependenciesList.Height;
             Settings.LoadSettings();
         }
 
@@ -714,6 +716,12 @@ namespace RelhaxModpack
                     ObjectDependenciesList.Enabled = true;
                     ObjectDependenciesList.DataSource = BuildDatabaseLogic(SelectedDependency);
 
+                    ObjectDependenciesList.Height = CurrentDependenciesCB.Height + CurrentDependenciesCB.Top;
+                    DependencyPackageNameLabel.Visible = false;
+                    CurrentDependenciesCB.Visible = false;
+                    AddDependencyButton.Visible = false;
+                    RemoveDependencyButton.Visible = false;
+
                     LogicalDependencyPanel.Enabled = true;
                     ObjectLogicalDependenciesList.DataSource = null;
                     ObjectLogicalDependenciesList.Items.Clear();
@@ -779,14 +787,21 @@ namespace RelhaxModpack
 
                     DependenciesTabPage.Enabled = true;
                     DependencyPanel.Enabled = true;
+                    LogicalDependencyPanel.Enabled = false;
+                    MediaTabPage.Enabled = false;
+                    UserDatasTabPage.Enabled = false;
+
                     ObjectDependenciesLabel.Text = "Objects that use this logical dependency...";
                     SelectedLogicalDependency.DatabasePackageLogic.Clear();
                     BuildDatabaseLogic(SelectedLogicalDependency);
                     ObjectDependenciesList.DataSource = null;
                     ObjectDependenciesList.Items.Clear();
                     ObjectDependenciesList.DataSource = SelectedLogicalDependency.DatabasePackageLogic;
-                    MediaTabPage.Enabled = false;
-                    UserDatasTabPage.Enabled = false;
+                    ObjectDependenciesList.Height = CurrentDependenciesCB.Height + CurrentDependenciesCB.Top;
+                    DependencyPackageNameLabel.Visible = false;
+                    CurrentDependenciesCB.Visible = false;
+                    AddDependencyButton.Visible = false;
+                    RemoveDependencyButton.Visible = false;
                 }
                 else if (node.DatabaseObject != null)
                 {
@@ -879,8 +894,13 @@ namespace RelhaxModpack
                     //dependencies
                     ObjectDependenciesLabel.Text = "dependencies (click to edit)";
                     ObjectDependenciesList.DataSource = SelectedDatabaseObject.Dependencies;
+                    ObjectDependenciesList.Height = ObjectDependenciesListOriginalHeight;
+                    DependencyPackageNameLabel.Visible = true;
+                    CurrentDependenciesCB.Visible = true;
                     CurrentDependenciesCB.DataSource = Dependencies;
                     CurrentDependenciesCB.SelectedIndex = -1;
+                    AddDependencyButton.Visible = true;
+                    RemoveDependencyButton.Visible = true;
 
                     //pictures
                     ObjectPicturesList.DataSource = SelectedDatabaseObject.PictureList;
@@ -934,14 +954,18 @@ namespace RelhaxModpack
                     DependenciesTabPage.Enabled = true;
                     DependencyPanel.Enabled = true;
                     LogicalDependencyPanel.Enabled = false;
+                    MediaTabPage.Enabled = false;
+                    UserDatasTabPage.Enabled = false;
 
                     ObjectDependenciesLabel.Text = "dependencies (click to edit)";
                     ObjectDependenciesList.DataSource = SelectedCategory.Dependencies;
+                    ObjectDependenciesList.Height = ObjectDependenciesListOriginalHeight;
+                    DependencyPackageNameLabel.Visible = true;
                     CurrentDependenciesCB.DataSource = Dependencies;
                     CurrentDependenciesCB.SelectedIndex = -1;
-
-                    MediaTabPage.Enabled = false;
-                    UserDatasTabPage.Enabled = false;
+                    CurrentDependenciesCB.Visible = true;
+                    AddDependencyButton.Visible = true;
+                    RemoveDependencyButton.Visible = true;
                 }
             }
             catch (Exception ex)
