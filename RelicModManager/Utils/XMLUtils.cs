@@ -302,7 +302,7 @@ namespace RelhaxModpack
             //add the logicalDependencies
             foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/logicalDependencies/logicalDependency"))
             {
-                List<string> depNodeList = new List<string>() { "zipFile", "crc", "enabled", "packageName", };
+                List<string> depNodeList = new List<string>() { "zipFile", "crc", "enabled", "packageName", "logic"};
                 List<string> optionalDepNodList = new List<string>() { "startAddress", "endAddress", "devURL", "timestamp" };
                 List<string> unknownNodeList = new List<string>() { };
                 LogicalDependency d = new LogicalDependency();
@@ -330,6 +330,9 @@ namespace RelhaxModpack
                             break;
                         case "enabled":
                             d.Enabled = Utils.ParseBool(globs.Value, false);
+                            break;
+                        case "logic":
+                            d.AndOrLogic = LogicalDependency.GetAndOrID(globs.Value);
                             break;
                         case "packageName":
                             d.PackageName = globs.Value.Trim();
@@ -1231,8 +1234,12 @@ namespace RelhaxModpack
                 if (!d.ZipFile.Trim().Equals(""))
                     logicalDepPackageName.InnerText = d.PackageName.Trim();
                 logicalDependencyRoot.AppendChild(logicalDepPackageName);
+
+                XmlElement logicalDepLogic = doc.CreateElement("logic");
+                logicalDepLogic.InnerText = LogicalDependency.GetAndOrString(d.AndOrLogic);
+                logicalDependencyRoot.AppendChild(logicalDepLogic);
                 //optional
-                if(d.Timestamp > 0)
+                if (d.Timestamp > 0)
                 {
                     XmlElement logicalDepTimestamp = doc.CreateElement("timestamp");
                     logicalDepTimestamp.InnerText = d.Timestamp.ToString();
