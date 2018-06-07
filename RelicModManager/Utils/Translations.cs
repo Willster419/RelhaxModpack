@@ -2204,31 +2204,31 @@ namespace RelhaxModpack
             //Component: UseBetaDatabaseCB
             english.Add("UseBetaDatabaseCB", "Use beta database");
             german.Add("UseBetaDatabaseCB", "Die Beta-Version der Datenbank verwenden");
-            polish.Add("UseBetaDatabaseCB", "TODO");
+            polish.Add("UseBetaDatabaseCB", "Użyj wersji beta bazy danych");
             french.Add("UseBetaDatabaseCB", "Utiliser la base de données beta");
 
             //Component: UseBetaApplicationCB
             english.Add("UseBetaApplicationCB", "Use beta application");
             german.Add("UseBetaApplicationCB", "Die Beta-Version des ModPack Managers verwenden");
-            polish.Add("UseBetaApplicationCB", "TODO");
+            polish.Add("UseBetaApplicationCB", "Użyj wersji beta bazy aplikacji");
             french.Add("UseBetaApplicationCB", "Utiliser l'application beta");
 
             //Component: UseBetaDatabaseCBDescription
             english.Add("UseBetaDatabaseCBDescription", "Use the latest beta database. Mod stability is not guaranteed");
             german.Add("UseBetaDatabaseCBDescription", "Verwende die letzte Beta-Version des ModPack Datenbank. Die Stabilität der Mods kann nicht garantiert werden, jedoch werden hier auch Fehlerbehebungen als erstes getestet und implementiert.");
-            polish.Add("UseBetaDatabaseCBDescription", "TODO");
+            polish.Add("UseBetaDatabaseCBDescription", "Użyj ostatniej wersji beta bazy danych. Nie gwarantujemy stabilności modyfikacji.");
             french.Add("UseBetaDatabaseCBDescription", "Utiliser la dernière base de données beta. La stabilité des mods n'est pas garantie");
 
             //Component: UseBetaApplicationCBDescription
             english.Add("UseBetaApplicationCBDescription", "Use the latest beta application. Translations and application stability are not guaranteed");
             german.Add("UseBetaApplicationCBDescription", "Verwende die letzte Beta-Version des ModPack Managers. Fehlerfreie Übersetzungen und Programmstabilität können nicht garantiert werden.");
-            polish.Add("UseBetaApplicationCBDescription", "TODO");
+            polish.Add("UseBetaApplicationCBDescription", "Użyj ostatniej wersji beta aplikacji. Nie gwarantujemy stabilności ani tłumaczenia aplikacji.");
             french.Add("UseBetaApplicationCBDescription", "Utiliser la dernière version beta. Les traductions et la stabilité de l'application ne sont pas garanties");
 
             //Component: notifying the user the change won't take effect until application restart
             english.Add("noChangeUntilRestart", "This option won't take effect until application restart");
             german.Add("noChangeUntilRestart", "Diese Option hat keine Auswirkungen bis das Programm neu gestartet wurde");
-            polish.Add("noChangeUntilRestart", "TODO");
+            polish.Add("noChangeUntilRestart", "Aby zastosować tą opcję należy zrestartować aplikację");
             french.Add("noChangeUntilRestart", "Cette option ne prendra effet qu'au redémarrage de l'application");
             #endregion
 
