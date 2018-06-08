@@ -59,7 +59,6 @@ namespace RelhaxModpack
         private int NumAtlasCreatorsComplete = 0;
         //https://stackoverflow.com/questions/9280054/c-sharp-hashtable-sorted-by-keys
         private SortedDictionary<string, string> originalSortedPatchNames;
-        // private FileStream fs;
         private string InstalledFilesLogPath = "";
         private object lockerInstaller = new object();
         private Hashtable zipMacros = new Hashtable();
