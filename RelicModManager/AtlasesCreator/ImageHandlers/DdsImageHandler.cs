@@ -1,7 +1,6 @@
 ﻿using System.Drawing;
 using System;
 using TeximpNet;
-using TeximpNet.DDS;
 
 namespace RelhaxModpack.AtlasesCreator
 {
@@ -29,7 +28,7 @@ namespace RelhaxModpack.AtlasesCreator
             TeximpNet.xml
             */
             System.Drawing.Imaging.BitmapData bmpData = null;
-
+            Compressor compressor = null;
             try
             {
                 // Lock the bitmap's bits. 
@@ -55,9 +54,16 @@ namespace RelhaxModpack.AtlasesCreator
                     Logging.Manager("Failed to get surfaceFromRawData");
                     return;
                 }
+
                 try
                 {
-                    DDSFile.Write(filename, surfaceFromRawData, TextureDimension.Two, DDSFlags.None);
+                    // DDSFile.Write(filename, surfaceFromRawData, TextureDimension.Two, DDSFlags.None);
+                    compressor = new Compressor();
+                    compressor.Compression.Format = CompressionFormat.DXT5;
+                    compressor.Input.AlphaMode = AlphaMode.None;
+                    compressor.Input.GenerateMipmaps = false;
+                    compressor.Input.ConvertToNormalMap = false;
+                    compressor.Input.SetData(surfaceFromRawData);
                 }
                 catch (Exception ex)
                 {
