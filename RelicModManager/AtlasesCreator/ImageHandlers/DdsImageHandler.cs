@@ -65,6 +65,7 @@ namespace RelhaxModpack.AtlasesCreator
                     compressor.Input.GenerateMipmaps = false;
                     compressor.Input.ConvertToNormalMap = false;
                     compressor.Input.SetData(surfaceFromRawData);
+                    compressor.Process(filename);
                 }
                 catch (Exception ex)
                 {
@@ -73,6 +74,7 @@ namespace RelhaxModpack.AtlasesCreator
             }
             finally
             {
+                compressor.Dispose();
                 image.UnlockBits(bmpData);
                 image.Dispose();
             }
