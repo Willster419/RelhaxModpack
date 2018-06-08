@@ -113,7 +113,8 @@ namespace RelhaxModpack.AtlasesCreator
                 {
                     if (File.Exists(args.AtlasFile))
                         File.Delete(args.AtlasFile);
-                    args.imageHandler.Save(args.AtlasFile, outputImage);
+                    if (args.imageHandler.Save(args.AtlasFile, outputImage))
+                        Logging.Manager("successfully created Atlas image: " + args.AtlasFile);
                     Logging.InstallerGroup("created Atlases");                                              // write comment
                     Logging.Installer(Utils.ReplaceDirectorySeparatorChar(args.AtlasFile));                 // write created filename with path
                 }

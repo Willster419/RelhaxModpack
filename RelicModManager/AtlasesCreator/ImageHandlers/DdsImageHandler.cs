@@ -17,7 +17,7 @@ namespace RelhaxModpack.AtlasesCreator
             return DDSReader.DDS.LoadImage(filename);
         }
 
-        public void Save(string filename, Bitmap image)
+        public bool Save(string filename, Bitmap image)
         {
             /*
             libaries needed to make this code work:
@@ -46,14 +46,14 @@ namespace RelhaxModpack.AtlasesCreator
                 }
                 catch (Exception ex)
                 {
-                    Utils.ExceptionLog("DssImageExporter", "LoadFromRawData", ex);
-                    return;
+                    Utils.ExceptionLog("DssImageHandler", "LoadFromRawData", ex);
+                    return false;
                 }
 
                 if (surfaceFromRawData == null)
                 {
                     Logging.Manager("Failed to get surfaceFromRawData");
-                    return;
+                    return false;
                 }
 
                 try
@@ -69,7 +69,8 @@ namespace RelhaxModpack.AtlasesCreator
                 }
                 catch (Exception ex)
                 {
-                    Utils.ExceptionLog("DssImageExporter", "Write", ex);
+                    Utils.ExceptionLog("DssImageHandler", "Compressor", ex);
+                    return false;
                 }
             }
             finally
@@ -78,6 +79,7 @@ namespace RelhaxModpack.AtlasesCreator
                 image.UnlockBits(bmpData);
                 image.Dispose();
             }
+            return true;
         }
 
         private static readonly int CHUNK_SIZE = 0x20;

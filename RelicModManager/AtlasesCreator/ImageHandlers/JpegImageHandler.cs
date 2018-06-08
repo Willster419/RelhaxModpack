@@ -42,9 +42,18 @@ namespace RelhaxModpack.AtlasesCreator
             return new Bitmap(filename);
         }
 
-        public void Save(string filename, Bitmap image)
+        public bool Save(string filename, Bitmap image)
         {
-            image.Save(filename, ImageFormat.Jpeg);
+            try
+            {
+                image.Save(filename, ImageFormat.Jpeg);
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("JpgImageHandler", "Save", ex);
+                return false;
+            }
+            return true;
         }
 
         private static readonly int CHUNK_SIZE = 0x200;
