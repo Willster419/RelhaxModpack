@@ -2150,7 +2150,7 @@ namespace RelhaxModpack
 
         private void findBugAddModLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://docs.google.com/spreadsheets/d/1LmPCMAx0RajW4lVYAnguHjjd8jArtWuZIGciFN76AI4/edit?usp=sharing");
+            System.Diagnostics.Process.Start("http://forums.relhaxmodpack.com/");
         }
 
         private void DiscordServerLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
