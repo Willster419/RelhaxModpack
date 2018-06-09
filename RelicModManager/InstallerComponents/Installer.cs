@@ -57,10 +57,8 @@ namespace RelhaxModpack
         private int patchNum = 0;
         private int NumExtractorsCompleted = 0;
         private int NumAtlasCreatorsComplete = 0;
-        private List<Bitmap> SavedBitmapsFromAtlas = new List<Bitmap>();
         //https://stackoverflow.com/questions/9280054/c-sharp-hashtable-sorted-by-keys
         private SortedDictionary<string, string> originalSortedPatchNames;
-        // private FileStream fs;
         private string InstalledFilesLogPath = "";
         private object lockerInstaller = new object();
         private Hashtable zipMacros = new Hashtable();
@@ -2913,9 +2911,7 @@ namespace RelhaxModpack
                     PatchList = null;
                     args = null;
                     InstallGroups = null;
-                    //originalPatchNames = null;
                     originalSortedPatchNames = null;
-                    SavedBitmapsFromAtlas = null;
                     lockerInstaller = null;
                     originalSortedPatchNames = null;
                     InstallProgressChanged = null;

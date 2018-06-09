@@ -42,7 +42,7 @@ namespace RelhaxModpack.AtlasesCreator
             return new Bitmap(filename);
         }
 
-        public void Save(string filename, Bitmap image)
+        public bool Save(string filename, Bitmap image)
         {
             // change the "black/transparent" background to white
             // https://stackoverflow.com/questions/6513633/convert-transparent-png-to-jpg-with-non-black-background-color
@@ -55,9 +55,17 @@ namespace RelhaxModpack.AtlasesCreator
                     g.Clear(Color.White);
                     g.DrawImageUnscaled(image, 0, 0);
                 }
-                b.Save(filename, ImageFormat.Bmp);
+                try
+                {
+                    b.Save(filename, ImageFormat.Bmp);
+                }
+                catch (Exception ex)
+                {
+                    Utils.ExceptionLog("JpgImageHandler", "Save", ex);
+                    return false;
+                }
             }
-            // image.Save(filename, ImageFormat.Bmp);
+            return true;
         }
 
         private static readonly int CHUNK_SIZE = 0x20;

@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System;
 using TeximpNet;
-using TeximpNet.DDS;
+using TeximpNet.Compression;
 
 namespace RelhaxModpack.AtlasesCreator
 {
@@ -17,7 +17,7 @@ namespace RelhaxModpack.AtlasesCreator
             return DDSReader.DDS.LoadImage(filename);
         }
 
-        public void Save(string filename, Bitmap image)
+        public bool Save(string filename, Bitmap image)
         {
             /*
             libaries needed to make this code work:
@@ -29,7 +29,7 @@ namespace RelhaxModpack.AtlasesCreator
             TeximpNet.xml
             */
             System.Drawing.Imaging.BitmapData bmpData = null;
-
+            Compressor compressor = null;
             try
             {
                 // Lock the bitmap's bits. 
@@ -46,29 +46,40 @@ namespace RelhaxModpack.AtlasesCreator
                 }
                 catch (Exception ex)
                 {
-                    Utils.ExceptionLog("DssImageExporter", "LoadFromRawData", ex);
-                    return;
+                    Utils.ExceptionLog("DssImageHandler", "LoadFromRawData", ex);
+                    return false;
                 }
 
                 if (surfaceFromRawData == null)
                 {
                     Logging.Manager("Failed to get surfaceFromRawData");
-                    return;
+                    return false;
                 }
+
                 try
                 {
-                    DDSFile.Write(filename, surfaceFromRawData, TextureDimension.Two, DDSFlags.None);
+                    // DDSFile.Write(filename, surfaceFromRawData, TextureDimension.Two, DDSFlags.None);
+                    compressor = new Compressor();
+                    compressor.Compression.Format = CompressionFormat.DXT5;
+                    compressor.Input.AlphaMode = AlphaMode.None;
+                    compressor.Input.GenerateMipmaps = false;
+                    compressor.Input.ConvertToNormalMap = false;
+                    compressor.Input.SetData(surfaceFromRawData);
+                    compressor.Process(filename);
                 }
                 catch (Exception ex)
                 {
-                    Utils.ExceptionLog("DssImageExporter", "Write", ex);
+                    Utils.ExceptionLog("DssImageHandler", "Compressor", ex);
+                    return false;
                 }
             }
             finally
             {
+                compressor.Dispose();
                 image.UnlockBits(bmpData);
                 image.Dispose();
             }
+            return true;
         }
 
         private static readonly int CHUNK_SIZE = 0x20;
