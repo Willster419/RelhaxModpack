@@ -35,6 +35,9 @@ namespace RelhaxModpack.AtlasesCreator
 {
     public class ImagePacker
     {
+        // here is an advance packing algorithm. maybe implement this: http://wiki.unity3d.com/index.php/MaxRectsBinPack
+
+
         // various properties of the resulting image
         private bool requirePow2, requireSquare, acceptFirstPass;
         private int padding;
@@ -373,6 +376,7 @@ namespace RelhaxModpack.AtlasesCreator
 
                 bool foundPixel = false;
 
+                /*
                 // Find xMin
                 for (int x = 0; x < data.Width; x++)
                 {
@@ -395,7 +399,7 @@ namespace RelhaxModpack.AtlasesCreator
                 // Image is empty...
                 if (!foundPixel)
                     return null;
-
+                
                 // Find yMin
                 for (int y = 0; y < data.Height; y++)
                 {
@@ -412,7 +416,7 @@ namespace RelhaxModpack.AtlasesCreator
                     }
                     if (stop)
                         break;
-                }
+                }*/
 
                 // Find xMax
                 for (int x = data.Width - 1; x >= xMin; x--)
@@ -425,12 +429,17 @@ namespace RelhaxModpack.AtlasesCreator
                         {
                             xMax = x;
                             stop = true;
+                            foundPixel = true;
                             break;
                         }
                     }
                     if (stop)
                         break;
                 }
+
+                // Image is empty...
+                if (!foundPixel)
+                    return null;
 
                 // Find yMax
                 for (int y = data.Height - 1; y >= yMin; y--)
@@ -450,7 +459,7 @@ namespace RelhaxModpack.AtlasesCreator
                         break;
                 }
 
-                srcRect = Rectangle.FromLTRB(xMin, yMin, xMax, yMax);
+                srcRect = Rectangle.FromLTRB(0, 0, xMax+1, yMax+1);
             }
             finally
             {
