@@ -573,7 +573,10 @@ namespace RelhaxModpack
 
             //backup old uninstall log file
             Logging.Manager("backing up old uninstall log file",true);
-            string logFile = Path.Combine(TanksLocation, "logs", "uninstallRelhaxFiles.log");
+            string logFile = Path.Combine(TanksLocation, "logs");
+            if (!Directory.Exists(logFile))
+                Directory.CreateDirectory(logFile);
+            logFile = Path.Combine(logFile, "uninstallRelhaxFiles.log");
             if (File.Exists(logFile))
             {
                 if (File.Exists(logFile + ".bak"))
