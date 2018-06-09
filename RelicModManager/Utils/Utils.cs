@@ -26,6 +26,7 @@ namespace RelhaxModpack
         private static object _locker = new object();
 
         private static Hashtable macroList;
+        private static Hashtable macroSymbolList;
 
         //logs string info to the log output
         // public static void AppendToLog(string info)
@@ -1004,6 +1005,28 @@ namespace RelhaxModpack
                 { "temp", Settings.RelhaxTempFolder },
                 { "desktop", Environment.GetFolderPath(Environment.SpecialFolder.Desktop) }
             };
+            macroSymbolList = new Hashtable
+            {
+                // http://www.theasciicode.com.ar/
+
+                { "dollar", "$" },
+                { "lbraces", "{" },
+                { "rbraces", "}" },
+                { "quote", "\u0022" },
+                { "colon", ":" },
+                { "lsquarebracket", "[" },
+                { "rsquarebracket", "]" },
+                { "lbracket", "(" },
+                { "rbracket", ")" },
+                { "ampersand", "&" },
+                { "Percent", "%" },
+                { "number", "#" },
+                { "slash", "/" },
+                { "backslash", @"\" },
+                { "lessthan", "<" },
+                { "greaterthan", ">" },
+                { "at", "@" }
+            };
         }
         public static string ReplaceMacro(string text)
         {
@@ -1018,6 +1041,22 @@ namespace RelhaxModpack
             {
                 ExceptionLog("ReplaceMacro", string.Format("Result string: {0}", text), ex);
                 DumbObjectToLog("macroList", macroList);
+            }
+            return text;
+        }
+        public static string ReplaceSymbol(string text)
+        {
+            try
+            {
+                foreach (DictionaryEntry macro in macroSymbolList)
+                {
+                    text = System.Text.RegularExpressions.Regex.Replace(text, @"{" + @macro.Key.ToString() + @"}", @macro.Value.ToString(), System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionLog("ReplacSymbol", string.Format("Result string: {0}", text), ex);
+                DumbObjectToLog("macroSymbolList", macroSymbolList);
             }
             return text;
         }
