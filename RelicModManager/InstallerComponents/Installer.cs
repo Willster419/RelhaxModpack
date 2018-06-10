@@ -1372,9 +1372,11 @@ namespace RelhaxModpack
                 PatchList = new List<Patch>();
                 for (int i = 0; i < diArr.Count(); i++)
                 {
-                    //set the attributes to normall
+                    // if the file is NotFiniteNumberException an xml file, skip it
+                    if (!Path.GetExtension(diArr[i].FullName).ToLower().Equals(".xml".ToLower())) continue;
+                    //set the attributes to normal
                     File.SetAttributes(diArr[i].FullName, FileAttributes.Normal);
-                    //add patches to patchList
+                    // add patches to patchList
                     // modify the xml filename for logging purpose
                     string nativeProcessingFile = Path.GetFileNameWithoutExtension(diArr[i].Name);
                     string actualPatchName = originalSortedPatchNames[nativeProcessingFile];
