@@ -1009,23 +1009,23 @@ namespace RelhaxModpack
             {
                 // http://www.theasciicode.com.ar/
 
-                { "dollar", "$" },
-                { "lbraces", "{" },
-                { "rbraces", "}" },
-                { "quote", "\u0022" },
-                { "colon", ":" },
-                { "lsquarebracket", "[" },
-                { "rsquarebracket", "]" },
-                { "lbracket", "(" },
-                { "rbracket", ")" },
-                { "ampersand", "&" },
-                { "Percent", "%" },
-                { "number", "#" },
-                { "slash", "/" },
+                { @"""[dollar]", @"$" },
+                { @"[lbracket]", "{" },
+                { @"[rbracket]""", "}" },
+                { "[quote]", @"""" },
+                { "[colon]", ":" },
+                // { "lroundbracket", "(" },
+                // { "rroundbracket", ")" },
+                // { "ampersand", "&" },
+                // { "Percent", "%" },
+                // { "number", "#" },
+                { "sl", "/" },
                 { "backslash", @"\" },
                 { "lessthan", "<" },
                 { "greaterthan", ">" },
                 { "at", "@" }
+                // { "lbracket", "[" },
+                // { "rbracket", "]" }
             };
         }
         public static string ReplaceMacro(string text)
@@ -1044,13 +1044,17 @@ namespace RelhaxModpack
             }
             return text;
         }
-        public static string ReplaceSymbol(string text)
+        // the flag decode must be set true, if the string is containing the macros to be converted to the regular wanted string
+        public static string ReplaceSymbol(string text, bool decode = false)
         {
             try
             {
                 foreach (DictionaryEntry macro in macroSymbolList)
                 {
-                    text = System.Text.RegularExpressions.Regex.Replace(text, @"{" + @macro.Key.ToString() + @"}", @macro.Value.ToString(), System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                    if (decode)
+                        text = System.Text.RegularExpressions.Regex.Replace(text, @"[" + @macro.Key.ToString() + @"]", @macro.Value.ToString(), System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                    else
+                        text = System.Text.RegularExpressions.Regex.Replace(text, @macro.Value.ToString(), @"[" + @macro.Key.ToString() + @"]", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
                 }
             }
             catch (Exception ex)
