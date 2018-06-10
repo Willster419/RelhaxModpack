@@ -942,7 +942,7 @@ namespace RelhaxModpack
             string toWrite = rebuilder.ToString();
 
             //unescape the macros
-            toWrite = toWrite.Replace(@"""[dollar]", @"$").Replace(@"[lbracket]", @"{").Replace(@"[quote]", @"""").Replace(@"[colon]",@":").Replace(@"[rbracket]""", @"}");
+            toWrite = toWrite.Replace(@"""[dollar]", @"$").Replace(@"[lbracket]", @"{").Replace(@"[quote]", @"""").Replace(@"[colon]",@":").Replace(@"[rbracket]""", @"}").Replace(@"[rbracket]", @"}");
             File.WriteAllText(p.completePath, toWrite);
         }
         #region old patching system to be replaced
