@@ -2449,7 +2449,14 @@ namespace RelhaxModpack
                 else
                     Logging.Manager(string.Format("Directory {0} is not existing", r));
             }
-            Logging.Manager("mod textures collected for " + atlasName + ": " + modTextures.Count);
+            if (modTextures.Count > 0)
+                Logging.Manager("mod textures collected for " + atlasName + ": " + modTextures.Count);
+            else
+            {
+                Logging.Manager("NO mod textures collected for " + atlasName + "!\n... skipped to create Atlas image");
+                return modTextures;
+            }
+
             
             //for every mod texture
             for(int i = 0; i < modTextures.Count; i++)
