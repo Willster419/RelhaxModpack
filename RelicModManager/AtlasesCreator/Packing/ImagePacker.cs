@@ -327,7 +327,7 @@ namespace RelhaxModpack.AtlasesCreator
         {
             try
             {
-                Bitmap outputImage = new Bitmap(outputWidth, outputHeight, PixelFormat.Format32bppArgb);
+                Bitmap outputImage = new Bitmap(outputWidth + padding, outputHeight + padding, PixelFormat.Format32bppArgb);
 
                 // draw all the images into the output image
                 foreach (var image in files)
