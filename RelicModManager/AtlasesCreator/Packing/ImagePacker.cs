@@ -199,104 +199,117 @@ namespace RelhaxModpack.AtlasesCreator
                 smallestHeight = Math.Min(smallestHeight, size.Value.Height);
             }
 
+            // values to control loop
+            int whileLoops = 0;
+            int ready = int.MaxValue;
+
             // we need a couple values for testing
             int testWidth = outputWidth;
             int testHeight = outputHeight;
 
             bool shrinkVertical = false;
 
-            // used for detection of the optimization phase
-            // just keep looping...
-            while (true)
+            try
             {
-                // make sure our test dictionary is empty
-                testImagePlacement.Clear();
-
-                // try to pack the images into our current test size
-                if (!TestPackingImages(testWidth, testHeight, testImagePlacement))
+                // used for detection of the optimization phase
+                // just keep looping...
+                while (whileLoops < ready)
                 {
-                    // if that failed...
+                    whileLoops++;
+                    // make sure our test dictionary is empty
+                    testImagePlacement.Clear();
 
-                    // if we have no images in imagePlacement, i.e. we've never succeeded at PackImages,
-                    // show an error and return false since there is no way to fit the images into our
-                    // maximum size texture
-                    if (imagePlacement.Count == 0)
+                    // try to pack the images into our current test size
+                    if (!TestPackingImages(testWidth, testHeight, testImagePlacement))
                     {
-                        return false;
+                        // if that failed...
+
+                        // if we have no images in imagePlacement, i.e. we've never succeeded at PackImages,
+                        // show an error and return false since there is no way to fit the images into our
+                        // maximum size texture
+                        if (imagePlacement.Count == 0)
+                        {
+                            return false;
+                        }
+
+                        // otherwise return true to use our last good results
+                        if (shrinkVertical)
+                            return true;
+
+                        shrinkVertical = true;
+                        testWidth += smallestWidth + padding + padding;
+                        testHeight += smallestHeight + padding + padding;
+                        continue;
+                    }
+                    else
+                    {
+                        // is the packing result true: is fastImagePacker enabled?
+                        if (acceptFirstPass)
+                            quit = true;
                     }
 
-                    // otherwise return true to use our last good results
-                    if (shrinkVertical)
+                    // clear the imagePlacement dictionary and add our test results in
+                    imagePlacement.Clear();
+                    foreach (var pair in testImagePlacement)
+                        imagePlacement.Add(pair.Key, pair.Value);
+
+                    // figure out the smallest bitmap that will hold all the images
+                    testWidth = testHeight = 0;
+                    foreach (var pair in imagePlacement)
+                    {
+                        testWidth = Math.Max(testWidth, pair.Value.Right);
+                        testHeight = Math.Max(testHeight, pair.Value.Bottom);
+                    }
+
+                    // subtract the extra padding on the right and bottom
+                    if (!shrinkVertical)
+                        testWidth -= padding;
+                    testHeight -= padding;
+
+                    // if we require a power of two texture, find the next power of two that can fit this image
+                    if (requirePow2)
+                    {
+                        testWidth = FindNextPowerOfTwo(testWidth);
+                        testHeight = FindNextPowerOfTwo(testHeight);
+                    }
+
+                    // if we require a square texture, set the width and height to the larger of the two
+                    if (requireSquare)
+                    {
+                        int max = Math.Max(testWidth, testHeight);
+                        testWidth = testHeight = max;
+                    }
+
+                    // if the test results are the same as our last output results, we've reached an optimal size,
+                    // so we can just be done
+                    if (testWidth == outputWidth && testHeight == outputHeight)
+                    {
+                        if (shrinkVertical)
+                            return true;
+
+                        shrinkVertical = true;
+                    }
+
+                    // save the test results as our last known good results
+                    outputWidth = testWidth;
+                    outputHeight = testHeight;
+
+                    // option for faster finishing
+                    if (quit)
+                    {
                         return true;
+                    }
 
-                    shrinkVertical = true;
-                    testWidth += smallestWidth + padding + padding;
-                    testHeight += smallestHeight + padding + padding;
-                    continue;
+                    // subtract the smallest image size out for the next test iteration
+                    if (!shrinkVertical)
+                        testWidth -= smallestWidth;
+                    testHeight -= smallestHeight;
                 }
-                else
-                {
-                    // is the packing result true: is fastImagePacker enabled?
-                    if (acceptFirstPass)
-                        quit = true;
-                }
-
-                // clear the imagePlacement dictionary and add our test results in
-                imagePlacement.Clear();
-                foreach (var pair in testImagePlacement)
-                    imagePlacement.Add(pair.Key, pair.Value);
-
-                // figure out the smallest bitmap that will hold all the images
-                testWidth = testHeight = 0;
-                foreach (var pair in imagePlacement)
-                {
-                    testWidth = Math.Max(testWidth, pair.Value.Right);
-                    testHeight = Math.Max(testHeight, pair.Value.Bottom);
-                }
-
-                // subtract the extra padding on the right and bottom
-                if (!shrinkVertical)
-                    testWidth -= padding;
-                testHeight -= padding;
-
-                // if we require a power of two texture, find the next power of two that can fit this image
-                if (requirePow2)
-                {
-                    testWidth = FindNextPowerOfTwo(testWidth);
-                    testHeight = FindNextPowerOfTwo(testHeight);
-                }
-
-                // if we require a square texture, set the width and height to the larger of the two
-                if (requireSquare)
-                {
-                    int max = Math.Max(testWidth, testHeight);
-                    testWidth = testHeight = max;
-                }
-
-                // if the test results are the same as our last output results, we've reached an optimal size,
-                // so we can just be done
-                if (testWidth == outputWidth && testHeight == outputHeight)
-                {
-                    if (shrinkVertical)
-                        return true;
-
-                    shrinkVertical = true;
-                }
-
-                // save the test results as our last known good results
-                outputWidth = testWidth;
-                outputHeight = testHeight;
-
-                // option for faster finishing
-                if (quit)
-                {
-                    return true;
-                }
-
-                // subtract the smallest image size out for the next test iteration
-                if (!shrinkVertical)
-                    testWidth -= smallestWidth;
-                testHeight -= smallestHeight;
+                return false;
+            }
+            finally
+            {
+                Logging.Manager(string.Format("{0} loop(s) done for packing", whileLoops));
             }
         }
 
