@@ -1840,6 +1840,13 @@ namespace RelhaxModpack
                     childProgressBar.Maximum = 1;
                     childProgressBar.Value = childProgressBar.Maximum;
                     break;
+                case InstallerEventArgs.InstallProgress.Error:
+                    //a mistake has been made.
+                    message = Translations.GetTranslatedString("error");
+                    totalProgressBar.Value = totalProgressBar.Minimum;
+                    parrentProgressBar.Value = parrentProgressBar.Minimum;
+                    childProgressBar.Value = childProgressBar.Minimum;
+                    break;
                 default:
                     Logging.Manager("Invalid state: " + e.InstalProgress);
                     break;

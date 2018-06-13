@@ -121,9 +121,21 @@ namespace RelhaxModpack
 
         public void WorkerReportComplete(object sender, AsyncCompletedEventArgs e)
         {
-            Logging.Manager("Installation Done");
-            args.InstalProgress = InstallerEventArgs.InstallProgress.Done;
-            OnInstallProgressChanged();
+            //a successfull install means that there was no error, thus error property is null
+            if(e.Error == null)
+            {
+                Logging.Manager("Installation Done");
+                args.InstalProgress = InstallerEventArgs.InstallProgress.Done;
+                OnInstallProgressChanged();
+            }
+            else
+            {
+                //an error occured
+                Utils.ExceptionLog(e.Error);
+                Logging.Manager("ERROR: the install failed");
+                args.InstalProgress = InstallerEventArgs.InstallProgress.Error;
+                OnInstallProgressChanged();
+            }
         }
         //reset the args
         public void ResetArgs()
