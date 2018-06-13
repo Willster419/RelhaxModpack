@@ -1,0 +1,23 @@
+﻿<Window x:Class="RelhaxWPFConvert.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RelhaxWPFConvert"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid Background="#FF0C0CE6">
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="131" Margin="10,10,0,0" VerticalAlignment="Top" Width="357">
+            <StackPanel>
+                <CheckBox Content="CheckBox"/>
+                <CheckBox Content="CheckBox"/>
+                <Border BorderBrush="Black" BorderThickness="2" Height="100" Padding="3">
+                    <StackPanel>
+                        <CheckBox Content="CheckBox"/>
+                        <CheckBox Content="CheckBox"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
