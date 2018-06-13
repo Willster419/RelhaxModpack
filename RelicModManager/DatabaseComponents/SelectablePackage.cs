@@ -115,6 +115,7 @@ namespace RelhaxModpack
                                 {
                                     if (ParentPanel != null && ParentPanel.BackColor != Color.BlanchedAlmond)
                                     {
+                                        //set the panel color; the checkboxes and stuff are all transparent backgorund
                                         ParentPanel.BackColor = Color.BlanchedAlmond;
                                     }
                                     //special user CB code
@@ -131,12 +132,16 @@ namespace RelhaxModpack
                                 if (Settings.EnableColorChangeDefaultView)
                                 {
                                     if (ParentPanel != null && !AnyPackagesChecked())
+                                    {
                                         ParentPanel.BackColor = Settings.GetBackColorWinForms();
+                                    }
                                     else if (UIComponent is RelhaxUserCheckBox rucb)
                                     {
                                         rucb.BackColor = Settings.GetBackColorWinForms();
                                         if (Settings.DarkUI)
+                                        {
                                             rucb.ForeColor = Settings.GetTextColorWinForms();
+                                        }
                                     }
 
                                 }

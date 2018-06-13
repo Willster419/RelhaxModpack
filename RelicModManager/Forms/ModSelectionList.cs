@@ -331,6 +331,7 @@ namespace RelhaxModpack
                             AutoSizeMode = AutoSizeMode.GrowOnly,
                             BackColor = Settings.GetBackColorWinForms()
                         };
+                        c.CategoryHeader.ParentPanel.BackColorChanged += OnPanelBackColorChange;
                         c.CategoryHeader.ParentPanel.Controls.Add(cb);
                         c.TabPage.Controls.Add(c.CategoryHeader.ParentPanel);
                         cb.Click += OnMultiPackageClick;
@@ -479,6 +480,24 @@ namespace RelhaxModpack
                 }
             }
             //end ui building
+        }
+
+        //occures when the panel back color is changed, used for when the color change code is used
+        private void OnPanelBackColorChange(object sender, EventArgs e)
+        {
+            if(Settings.EnableColorChangeDefaultView && Settings.DarkUI)
+            {
+                Panel p = (Panel)sender;
+                //check if the panel has enabled elements by color change
+                //change text to black
+                foreach(Control c in p.Controls)
+                {
+                    if(c is RelhaxFormCheckBox || c is RelhaxFormRadioButton)
+                    {
+                        c.ForeColor = (p.BackColor.Equals(Color.BlanchedAlmond)) ? SystemColors.ControlText : Settings.GetTextColorWinForms();
+                    }
+                }
+            }
         }
 
         #region Legacy V2 code
@@ -760,6 +779,7 @@ namespace RelhaxModpack
                             AutoSize = true,
                             AutoSizeMode = AutoSizeMode.GrowOnly
                         };
+                        sp.Parent.ChildPanel.BackColorChanged += OnPanelBackColorChange;
                         sp.Parent.ChildPanel.Location = new Point(13, GetYLocation(sp.Parent.ParentPanel.Controls));
                         sp.Parent.ChildPanel.MouseDown += DisabledComponent_MouseDown;
                         sp.Parent.ParentPanel.Controls.Add(sp.Parent.ChildPanel);
