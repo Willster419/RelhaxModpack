@@ -588,8 +588,8 @@ namespace RelhaxModpack
         //sets a form to have a dark UI
         public static void SetUIColorsWinForms(Form form)
         {
-            /*current color apply settings
-            *   Form back = requested color
+            #region current color apply settings
+            /*  Form back = requested color
             *   
             *   panel back = transparent
             *   groupbox back = transparent
@@ -610,6 +610,7 @@ namespace RelhaxModpack
             *   all text is forcolor->textColor
             *   **KEEP THESE SETTINGS CONSISTANT!!**
             */
+            #endregion
             Color backColor = (DarkUI) ? SystemColors.ControlDark : SystemColors.Control;
             Color textColor = (DarkUI) ? Color.White : SystemColors.ControlText;
             form.BackColor = backColor;
@@ -636,13 +637,7 @@ namespace RelhaxModpack
                         SetUIColorsWinForms(gb.Controls, backColor, textColor);
                     }
                 }
-                else if
-                    (c is CheckBox ||
-                     c is RadioButton ||
-                     c is Label ||
-                     c is TabControl ||
-                     c is TabPage ||
-                     c is PictureBox)
+                else if (c is CheckBox || c is RadioButton || c is Label || c is TabControl || c is TabPage || c is PictureBox)
                 {
                     c.ForeColor = textColor;
                     c.BackColor = Color.Transparent;
