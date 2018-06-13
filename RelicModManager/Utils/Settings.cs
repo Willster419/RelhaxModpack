@@ -637,7 +637,7 @@ namespace RelhaxModpack
                         SetUIColorsWinForms(gb.Controls, backColor, textColor);
                     }
                 }
-                else if (c is CheckBox || c is RadioButton || c is Label || c is TabControl || c is TabPage || c is PictureBox)
+                else if (c is CheckBox || c is RadioButton || c is Label || c is PictureBox)
                 {
                     c.ForeColor = textColor;
                     c.BackColor = Color.Transparent;
@@ -652,6 +652,10 @@ namespace RelhaxModpack
         public static Color GetBackColorWinForms()
         {
             return (DarkUI) ? SystemColors.ControlDark : SystemColors.Control;
+        }
+        public static Color GetTextColorWinForms()
+        {
+            return (DarkUI) ? Color.White : SystemColors.ControlText;
         }
         public static System.Windows.Media.Brush GetBackColorWPF()
         {
