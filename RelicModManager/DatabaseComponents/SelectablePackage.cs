@@ -117,6 +117,13 @@ namespace RelhaxModpack
                                     {
                                         ParentPanel.BackColor = Color.BlanchedAlmond;
                                     }
+                                    //special user CB code
+                                    else if (UIComponent is RelhaxUserCheckBox rucb)
+                                    {
+                                        rucb.BackColor = Color.BlanchedAlmond;
+                                        if (Settings.DarkUI)
+                                            rucb.ForeColor = SystemColors.ControlText;
+                                    }
                                 }
                                 break;
                             case false:
@@ -125,6 +132,13 @@ namespace RelhaxModpack
                                 {
                                     if (ParentPanel != null && !AnyPackagesChecked())
                                         ParentPanel.BackColor = Settings.GetBackColorWinForms();
+                                    else if (UIComponent is RelhaxUserCheckBox rucb)
+                                    {
+                                        rucb.BackColor = Settings.GetBackColorWinForms();
+                                        if (Settings.DarkUI)
+                                            rucb.ForeColor = Settings.GetTextColorWinForms();
+                                    }
+
                                 }
                                 break;
                         }

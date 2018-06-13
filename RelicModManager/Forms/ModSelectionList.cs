@@ -285,6 +285,7 @@ namespace RelhaxModpack
                     AutoScroll = true,
                     //link the names of catagory and tab so eithor can be searched for
                     Name = c.Name,
+                    BackColor = Settings.GetBackColorWinForms()
                 };
                 c.TabPage = t;
                 //matched the catagory to tab
@@ -313,7 +314,8 @@ namespace RelhaxModpack
                             Package = c.CategoryHeader,
                             Text = c.CategoryHeader.NameFormatted,
                             AutoSize = true,
-                            AutoCheck = false
+                            AutoCheck = false,
+                            ForeColor = Settings.GetTextColorWinForms()
                         };
                         c.CategoryHeader.UIComponent = cb;
                         c.CategoryHeader.ParentUIComponent = cb;
@@ -326,7 +328,8 @@ namespace RelhaxModpack
                             Size = new Size(c.TabPage.Size.Width - 25, 60),
                             Location = new Point(5, GetYLocation(c.TabPage.Controls)),
                             AutoSize = true,
-                            AutoSizeMode = AutoSizeMode.GrowOnly
+                            AutoSizeMode = AutoSizeMode.GrowOnly,
+                            BackColor = Settings.GetBackColorWinForms()
                         };
                         c.CategoryHeader.ParentPanel.Controls.Add(cb);
                         c.TabPage.Controls.Add(c.CategoryHeader.ParentPanel);
@@ -478,6 +481,7 @@ namespace RelhaxModpack
             //end ui building
         }
 
+        #region Legacy V2 code
         private void Tv_BeforeCollapse(object sender, TreeViewCancelEventArgs e)
         {
             if(e.Node is RelhaxFormTreeNode node)
@@ -550,6 +554,7 @@ namespace RelhaxModpack
                 }
             }
         }
+        #endregion
 
         //adds all usermods to thier own userMods tab
         private void AddUserMods(bool forceUnchecked)
@@ -557,7 +562,8 @@ namespace RelhaxModpack
             //make the new tab
             TabPage tb = new TabPage("User Mods")
             {
-                AutoScroll = true
+                AutoScroll = true,
+                BackColor = Settings.GetBackColorWinForms()
             };
             //add all mods to the tab page
             for (int i = 0; i < UserMods.Count; i++)
@@ -567,7 +573,9 @@ namespace RelhaxModpack
                 {
                     Package = UserMods[i],
                     AutoCheck = false,
-                    AutoSize = true
+                    AutoSize = true,
+                    BackColor = Settings.GetBackColorWinForms(),
+                    ForeColor = Settings.GetTextColorWinForms()
                 };
                 int yLocation = 3 + (UserPackage.Size.Height * (i));
                 UserPackage.Location = new Point(3, yLocation);
@@ -772,7 +780,8 @@ namespace RelhaxModpack
                                 Enabled = canBeEnabled,
                                 Checked = (canBeEnabled && sp.Checked) ? true : false,
                                 AutoCheck = false,
-                                AutoSize = true
+                                AutoSize = true,
+                                ForeColor = Settings.GetTextColorWinForms()
                             };
                             break;
                         case "single_dropdown":
@@ -787,7 +796,8 @@ namespace RelhaxModpack
                                     Size = new Size((int)(225 * DPISCALE), 15),
                                     Enabled = false,
                                     Name = "notAddedYet",
-                                    DropDownStyle = ComboBoxStyle.DropDownList
+                                    DropDownStyle = ComboBoxStyle.DropDownList,
+                                    ForeColor = Settings.GetTextColorWinForms()
                                 };
                                 //https://stackoverflow.com/questions/1882993/c-sharp-how-do-i-prevent-mousewheel-scrolling-in-my-combobox
                                 sp.Parent.RelhaxFormComboBoxList[0].MouseWheel += (o, e) => ((HandledMouseEventArgs)e).Handled = true;
@@ -828,7 +838,8 @@ namespace RelhaxModpack
                                     Size = new Size((int)(225 * DPISCALE), 15),
                                     Enabled = false,
                                     Name = "notAddedYet",
-                                    DropDownStyle = ComboBoxStyle.DropDownList
+                                    DropDownStyle = ComboBoxStyle.DropDownList,
+                                    ForeColor = Settings.GetTextColorWinForms()
                                 };
                                 //https://stackoverflow.com/questions/1882993/c-sharp-how-do-i-prevent-mousewheel-scrolling-in-my-combobox
                                 sp.Parent.RelhaxFormComboBoxList[1].MouseWheel += (o, e) => ((HandledMouseEventArgs)e).Handled = true;
@@ -868,7 +879,8 @@ namespace RelhaxModpack
                                 Enabled = canBeEnabled,
                                 Checked = (canBeEnabled && sp.Checked) ? true : false,
                                 AutoSize = true,
-                                AutoCheck = false
+                                AutoCheck = false,
+                                ForeColor = Settings.GetTextColorWinForms()
                             };
                             break;
                     }
