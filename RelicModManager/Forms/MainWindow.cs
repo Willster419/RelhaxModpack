@@ -2265,7 +2265,7 @@ namespace RelhaxModpack
         {
             //set the thing
             Settings.DarkUI = darkUICB.Checked;
-            Settings.setUIColor(this);
+            Settings.SetUIColorsWinForms(this);
         }
 
         private void selectionDefault_CheckedChanged(object sender, EventArgs e)

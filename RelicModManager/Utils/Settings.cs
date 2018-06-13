@@ -586,108 +586,81 @@ namespace RelhaxModpack
             }
         }
         //sets a form to have a dark UI
-        public static void setUIColor(Form window)
+        public static void SetUIColorsWinForms(Form form)
         {
-            Color backColor;
-            Color textColor;
-            if (DarkUI)
+            /*current color apply settings
+            *   Form back = requested color
+            *   
+            *   panel back = transparent
+            *   groupbox back = transparent
+            *   tablelayoutpanel back = transparent
+            *   
+            *   checkbox back = transparent
+            *   radiobutton back = transparent
+            *   label back = transparent
+            *   tabcontrol back = transparent
+            *   picturebox back = transparent
+            *   tabpage back = transparent
+            *   elementhost back = transparent
+            *   
+            *   button back = requested color
+            *   textbox back = requested color
+            *   richtextbox back = requested color
+            *   
+            *   all text is forcolor->textColor
+            *   **KEEP THESE SETTINGS CONSISTANT!!**
+            */
+            Color backColor = (DarkUI) ? SystemColors.ControlDark : SystemColors.Control;
+            Color textColor = (DarkUI) ? Color.White : SystemColors.ControlText;
+            form.BackColor = backColor;
+            SetUIColorsWinForms(form.Controls, backColor, textColor);
+        }
+        public static void SetUIColorsWinForms(Control.ControlCollection controls, Color backColor, Color textColor)
+        {
+            foreach (Control c in controls)
             {
-                backColor = SystemColors.ControlDarkDark;
-                textColor = Color.White;
-            }
-            else
-            {
-                backColor = SystemColors.Control;
-                textColor = SystemColors.ControlText;
-            }
-            window.BackColor = backColor;
-            foreach (Control c in window.Controls)
-            {
-                if (c is CheckBox || c is RadioButton || c is Label)
+                if (c is TableLayoutPanel || c is Panel)
                 {
-                    c.ForeColor = textColor;
+                    Panel p = (Panel)c;
+                    p.ForeColor = textColor;
+                    p.BackColor = Color.Transparent;
+                    if (p.Controls.Count > 0)
+                        SetUIColorsWinForms(p.Controls, backColor, textColor);
                 }
-                else if (c is Panel || c is GroupBox)
+                else if (c is GroupBox gb)
                 {
-                    c.BackColor = backColor;
-                    c.ForeColor = textColor;
-                    foreach (Control subC in c.Controls)
+                    gb.ForeColor = textColor;
+                    gb.BackColor = Color.Transparent;
+                    if(gb.Controls.Count > 0)
                     {
-                        if (subC is CheckBox || subC is RadioButton || subC is Label)
-                        {
-                            subC.ForeColor = textColor;
-                        }
-                        else if (subC is Panel || subC is GroupBox)
-                        {
-                            subC.BackColor = backColor;
-                            subC.ForeColor = textColor;
-                            foreach (Control subC2 in subC.Controls)
-                            {
-                                if (subC2 is CheckBox || subC2 is RadioButton || subC2 is Label)
-                                {
-                                    subC2.ForeColor = textColor;
-                                }
-                                else if (subC2 is Panel || subC2 is GroupBox)
-                                {
-                                    subC2.BackColor = backColor;
-                                    subC2.ForeColor = textColor;
-                                    foreach (Control subC3 in subC2.Controls)
-                                    {
-                                        if (subC3 is CheckBox || subC3 is RadioButton || subC3 is Label)
-                                        {
-                                            subC3.ForeColor = textColor;
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        SetUIColorsWinForms(gb.Controls, backColor, textColor);
                     }
                 }
-                else if (c is PictureBox)
+                else if
+                    (c is CheckBox ||
+                     c is RadioButton ||
+                     c is Label ||
+                     c is TabControl ||
+                     c is TabPage ||
+                     c is PictureBox)
                 {
-                    c.BackColor = backColor;
+                    c.ForeColor = textColor;
+                    c.BackColor = Color.Transparent;
                 }
-                else if (c is TabControl)
+                else if (c is Button || c is TextBox || c is RichTextBox || c is ComboBox)
                 {
+                    c.ForeColor = textColor;
                     c.BackColor = backColor;
-                    foreach (TabPage t in c.Controls)
-                    {
-                        t.BackColor = backColor;
-                        foreach (Control subC in t.Controls)
-                        {
-                            foreach (Control subC2 in subC.Controls)
-                            {
-                                if (subC2 is CheckBox)
-                                {
-                                    subC2.ForeColor = textColor;
-                                }
-                            }
-                        }
-                    }
                 }
             }
         }
-        public static Color getTextColor()
+        public static Color GetBackColorWinForms()
         {
-            if (DarkUI)
-                return Color.White;
-
-            else
-                return SystemColors.ControlText;
-        }
-        public static Color GetBackColorDefault()
-        {
-            if (DarkUI)
-                return SystemColors.ControlDark;
-            else
-                return SystemColors.Control;
+            return (DarkUI) ? SystemColors.ControlDark : SystemColors.Control;
         }
         public static System.Windows.Media.Brush GetBackColorWPF()
         {
-            if (DarkUI)
-                return System.Windows.Media.Brushes.Gray;
-            else
-                return System.Windows.Media.Brushes.White;
+            return (DarkUI) ? System.Windows.Media.Brushes.Gray : System.Windows.Media.Brushes.White;
         }
     }
 }

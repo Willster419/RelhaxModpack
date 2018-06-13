@@ -24,7 +24,7 @@ namespace RelhaxModpack
             Logging.Manager("FirstLoadHelper: startup location is x: " + x + ", y: " + y);
             this.Location = new Point(x, y);
             //setting UI color
-            Settings.setUIColor(this);
+            Settings.SetUIColorsWinForms(this);
             //font scaling
             this.AutoScaleMode = Settings.AppScalingMode;
             helperText.Font = Settings.AppFont;

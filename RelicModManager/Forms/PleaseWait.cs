@@ -32,7 +32,7 @@ namespace RelhaxModpack
             }
             Font = Settings.AppFont;
             //set the UI colors
-            Settings.setUIColor(this);
+            Settings.SetUIColorsWinForms(this);
         }
         private void PleaseWait_Load(object sender, EventArgs e)
         {

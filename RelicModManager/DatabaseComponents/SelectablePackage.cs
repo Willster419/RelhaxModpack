@@ -124,7 +124,7 @@ namespace RelhaxModpack
                                 if (Settings.EnableColorChangeDefaultView)
                                 {
                                     if (ParentPanel != null && !AnyPackagesChecked())
-                                        ParentPanel.BackColor = Settings.GetBackColorDefault();
+                                        ParentPanel.BackColor = Settings.GetBackColorWinForms();
                                 }
                                 break;
                         }

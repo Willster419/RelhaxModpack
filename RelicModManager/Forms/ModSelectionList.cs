@@ -876,7 +876,7 @@ namespace RelhaxModpack
                     if (canBeEnabled && sp.Enabled && sp.Checked && Settings.EnableColorChangeDefaultView)
                         sp.ParentPanel.BackColor = Color.BlanchedAlmond;
                     else
-                        sp.ParentPanel.BackColor = Settings.GetBackColorDefault();
+                        sp.ParentPanel.BackColor = Settings.GetBackColorWinForms();
                     //color change code
                     //start code for handlers tooltips and attaching
                     if ((sp.UIComponent != null) && (sp.UIComponent is Control cont))
@@ -1355,7 +1355,7 @@ namespace RelhaxModpack
             //if (ParentPanel != null && !AnyPackagesChecked())
             //ParentPanel.BackColor = Settings.getBackColor();
             if (Settings.EnableColorChangeDefaultView && spc.Level == -1 && spc.ParentPanel != null && !spc.AnyPackagesChecked())
-                spc.ParentPanel.BackColor = Settings.GetBackColorDefault();
+                spc.ParentPanel.BackColor = Settings.GetBackColorWinForms();
             if (Settings.EnableColorChangeLegacyView && spc.Level == -1 && spc.ChildBorder != null && !spc.AnyPackagesChecked())
                 spc.ChildBorder.Background = Settings.GetBackColorWPF();
         }
