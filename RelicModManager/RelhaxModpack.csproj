@@ -193,6 +193,11 @@
     <Compile Include="DatabaseComponents\Category.cs" />
     <Compile Include="LegacyComponents\Config.cs" />
     <Compile Include="LegacyComponents\Mod.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="UIComponents\ExportModeRadioButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -358,11 +363,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="UIComponents\SelectionRadioButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -538,6 +538,8 @@
     <Content Include="Resources\MainForm icons\flag us.png" />
     <Content Include="Resources\MainForm icons\WoT brand - light grey.png" />
     <Content Include="Resources\MainForm icons\WoT brand - light grey_2.png" />
+    <Content Include="Resources\MediaPlayerIcons\play_pause.png" />
+    <Content Include="Resources\MediaPlayerIcons\stop2.png" />
     <Content Include="Resources\relicbanner_for_ico.ico" />
   </ItemGroup>
   <ItemGroup>

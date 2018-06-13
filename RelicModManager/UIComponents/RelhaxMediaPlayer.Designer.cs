@@ -28,37 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.Stop = new System.Windows.Forms.Button();
-            this.PlayPause = new System.Windows.Forms.Button();
             this.Volume = new System.Windows.Forms.TrackBar();
             this.FileName = new System.Windows.Forms.Label();
             this.Seekbar = new System.Windows.Forms.TrackBar();
+            this.StopButton = new System.Windows.Forms.Button();
+            this.PlayPause = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Volume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Seekbar)).BeginInit();
             this.SuspendLayout();
-            // 
-            // Stop
-            // 
-            this.Stop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Stop.Location = new System.Drawing.Point(3, 58);
-            this.Stop.Name = "Stop";
-            this.Stop.Size = new System.Drawing.Size(94, 23);
-            this.Stop.TabIndex = 0;
-            this.Stop.Text = "stop";
-            this.Stop.UseVisualStyleBackColor = true;
-            this.Stop.Click += new System.EventHandler(this.Stop_Click);
-            // 
-            // PlayPause
-            // 
-            this.PlayPause.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.PlayPause.Location = new System.Drawing.Point(103, 58);
-            this.PlayPause.Name = "PlayPause";
-            this.PlayPause.Size = new System.Drawing.Size(94, 23);
-            this.PlayPause.TabIndex = 3;
-            this.PlayPause.Text = "play/pause";
-            this.PlayPause.UseVisualStyleBackColor = true;
-            this.PlayPause.Click += new System.EventHandler(this.PlayPause_Click);
             // 
             // Volume
             // 
@@ -87,6 +64,27 @@
             this.Seekbar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Seekbar_MouseMove);
             this.Seekbar.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Seekbar_MouseMove);
             // 
+            // StopButton
+            // 
+            this.StopButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.StopButton.Location = new System.Drawing.Point(3, 58);
+            this.StopButton.Name = "StopButton";
+            this.StopButton.Size = new System.Drawing.Size(40, 30);
+            this.StopButton.TabIndex = 0;
+            this.StopButton.UseVisualStyleBackColor = true;
+            this.StopButton.Click += new System.EventHandler(this.Stop_Click);
+            // 
+            // PlayPause
+            // 
+            this.PlayPause.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.PlayPause.Location = new System.Drawing.Point(49, 57);
+            this.PlayPause.Name = "PlayPause";
+            this.PlayPause.Size = new System.Drawing.Size(40, 30);
+            this.PlayPause.TabIndex = 3;
+            this.PlayPause.UseVisualStyleBackColor = true;
+            this.PlayPause.Click += new System.EventHandler(this.PlayPause_Click);
+            // 
             // RelhaxMediaPlayer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -94,7 +92,7 @@
             this.AutoSize = true;
             this.Controls.Add(this.Volume);
             this.Controls.Add(this.PlayPause);
-            this.Controls.Add(this.Stop);
+            this.Controls.Add(this.StopButton);
             this.Controls.Add(this.Seekbar);
             this.Controls.Add(this.FileName);
             this.MaximumSize = new System.Drawing.Size(400, 90);
@@ -111,7 +109,7 @@
 
         #endregion
         private System.Windows.Forms.TrackBar Volume;
-        private System.Windows.Forms.Button Stop;
+        private System.Windows.Forms.Button StopButton;
         private System.Windows.Forms.Button PlayPause;
         private System.Windows.Forms.Label FileName;
         private System.Windows.Forms.TrackBar Seekbar;

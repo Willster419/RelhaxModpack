@@ -165,8 +165,6 @@ namespace RelhaxModpack
                             Location = PreviewComponentLocation,
                             //BackColor = PreviewComponentBackColor,
                             MediaURL = m.URL,
-                            StopText = Translations.GetTranslatedString("stop"),
-                            PlayPauseText = Translations.GetTranslatedString("playPause"),
                             Anchor = (AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Left)
                         };
                         Controls.Add(player);
