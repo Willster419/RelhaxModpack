@@ -137,6 +137,11 @@ namespace RelhaxModpack
             polish.Add("abort", "Anulować");
             french.Add("abort", "Annuler");
 
+            english.Add("error", "Error");
+            german.Add("error", "Fehler");
+            polish.Add("error", "Błąd");
+            french.Add("error", "Erreur");
+
             english.Add("retry", "Retry");
             german.Add("retry", "Wiederholen");
             polish.Add("retry", "Spróbować ponownie");
