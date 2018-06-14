@@ -335,7 +335,7 @@ namespace RelhaxModpack
                         c.TabPage.Controls.Add(c.CategoryHeader.ParentPanel);
                         cb.Click += OnMultiPackageClick;
                         break;
-                    case SelectionView.Legacy:
+                    case SelectionView.DefaultV2:
                         //create the WPF host for this tabPage
                         System.Windows.Controls.StackPanel TopPanel = new System.Windows.Controls.StackPanel();
                         System.Windows.Controls.Border TopBorder = new System.Windows.Controls.Border()
@@ -398,7 +398,7 @@ namespace RelhaxModpack
                         c.CategoryHeader.TopParentUIComponent = cb2;
                         c.CategoryHeader.Packages = c.Packages;
                         break;
-                    case SelectionView.LegacyV2:
+                    case SelectionView.Legacy:
                         //make the treeview
                         tv = new TreeView()
                         {
@@ -470,7 +470,7 @@ namespace RelhaxModpack
                         Application.DoEvents();
                     }
                     AddPackage(m, c, c.CategoryHeader);
-                    if(Settings.SView == SelectionView.LegacyV2)
+                    if(Settings.SView == SelectionView.Legacy)
                     {
                         if (Settings.ExpandAllLegacy2)
                         {
@@ -482,7 +482,7 @@ namespace RelhaxModpack
                         }
                     }
                 }
-                if(Settings.SView == SelectionView.LegacyV2)
+                if(Settings.SView == SelectionView.Legacy)
                 {
                     if (Settings.ExpandAllLegacy2)
                     {
@@ -660,13 +660,13 @@ namespace RelhaxModpack
                     expandAllButton.Enabled = false;
                     expandAllButton.Visible = false;
                     break;
-                case SelectionView.Legacy:
+                case SelectionView.DefaultV2:
                     colapseAllButton.Enabled = false;
                     colapseAllButton.Visible = false;
                     expandAllButton.Enabled = false;
                     expandAllButton.Visible = false;
                     break;
-                case SelectionView.LegacyV2:
+                case SelectionView.Legacy:
                     colapseAllButton.Enabled = true;
                     colapseAllButton.Visible = true;
                     expandAllButton.Enabled = true;
@@ -952,7 +952,7 @@ namespace RelhaxModpack
                     }
                     //end code for handlers tooltips and attaching
                     break;
-                case SelectionView.Legacy:
+                case SelectionView.DefaultV2:
                     //in WPF underscores are only displayed when there's two of them
                     packageDisplayName = packageDisplayName.Replace(@"_", @"__");
                     //link the parent panel and border to the parent's child versions
@@ -1128,7 +1128,7 @@ namespace RelhaxModpack
                         }
                     }
                     break;
-                case SelectionView.LegacyV2:
+                case SelectionView.Legacy:
                     sp.TreeNode.Category = c;
                     switch (sp.Type)
                     {
@@ -1287,7 +1287,7 @@ namespace RelhaxModpack
             }
             if(sp.Packages.Count > 0)
             {
-                if(Settings.SView == SelectionView.Legacy)
+                if(Settings.SView == SelectionView.DefaultV2)
                 {
                     sp.ParentStackPanel.Children.Add(sp.ChildBorder);
                 }
@@ -1675,7 +1675,7 @@ namespace RelhaxModpack
                     Medias = spc.PictureList
                 };
                 p.Show();
-                if(Settings.SView == SelectionView.Legacy)
+                if(Settings.SView == SelectionView.DefaultV2)
                 {
                     Logging.Manager(string.Format("from ModSelectionList: Legacy view, p.ContainsFocus={0}", p.ContainsFocus),true);
                 }
@@ -2576,7 +2576,7 @@ namespace RelhaxModpack
                     }
                 }
             }
-            else if (Settings.SView == SelectionView.Legacy)
+            else if (Settings.SView == SelectionView.DefaultV2)
             {
                 if (sendah.SelectedItem is SelectablePackage m)
                 {

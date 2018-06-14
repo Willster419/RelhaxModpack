@@ -19,14 +19,14 @@ namespace RelhaxModpack
                 case SelectionView.Default:
                     RelhaxFormComboBoxList = new RelhaxFormComboBox[2];
                     break;
-                case SelectionView.Legacy:
+                case SelectionView.DefaultV2:
                     RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
                     //TreeViewItem = new System.Windows.Controls.TreeViewItem();
                     //ChildBorder = new System.Windows.Controls.Border();
                     //ChildStackPanel = new System.Windows.Controls.StackPanel();
                     ContentControl = new System.Windows.Controls.ContentControl();
                     break;
-                case SelectionView.LegacyV2:
+                case SelectionView.Legacy:
                     TreeNode = new RelhaxFormTreeNode();
                     break;
             }
@@ -87,7 +87,7 @@ namespace RelhaxModpack
                         case SelectionView.Default:
                             Parent.RelhaxFormComboBoxList[0].OnDropDownSelectionChanged(this, value);
                             break;
-                        case SelectionView.Legacy:
+                        case SelectionView.DefaultV2:
                             Parent.RelhaxWPFComboBoxList[0].OnDropDownSelectionChanged(this, value);
                             break;
                     }
@@ -99,7 +99,7 @@ namespace RelhaxModpack
                         case SelectionView.Default:
                             Parent.RelhaxFormComboBoxList[1].OnDropDownSelectionChanged(this, value);
                             break;
-                        case SelectionView.Legacy:
+                        case SelectionView.DefaultV2:
                             Parent.RelhaxWPFComboBoxList[1].OnDropDownSelectionChanged(this, value);
                             break;
                     }
@@ -150,7 +150,7 @@ namespace RelhaxModpack
                         }
                         break;
                     //WPF treeview is done with treeviewItem
-                    case SelectionView.Legacy:
+                    case SelectionView.DefaultV2:
                         switch (_Checked)
                         {
                             case true:

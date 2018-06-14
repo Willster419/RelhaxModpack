@@ -66,7 +66,7 @@ namespace RelhaxModpack
                 StartPosition = FormStartPosition.Manual;
                 Location = new Point(Settings.PreviewX, Settings.PreviewY);
             }
-            if (Settings.SView == SelectionView.Legacy)
+            if (Settings.SView == SelectionView.DefaultV2)
             {
                 if (Program.Version == Program.ProgramVersion.Alpha)
                     Logging.Manager(string.Format("DEBUG: from Preview load: Legacy view, p.ContainsFocus={0}", this.ContainsFocus));
@@ -305,7 +305,7 @@ namespace RelhaxModpack
 
         private void LegacyHotfixTimer_Tick(object sender, EventArgs e)
         {
-            if (Settings.SView == SelectionView.Legacy)
+            if (Settings.SView == SelectionView.DefaultV2)
             {
                 if (Program.Version == Program.ProgramVersion.Alpha)
                     Logging.Manager(string.Format("DEBUG: from Preview timer: Legacy view, p.ContainsFocus={0}", this.ContainsFocus));

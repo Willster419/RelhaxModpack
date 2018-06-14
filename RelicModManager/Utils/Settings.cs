@@ -30,7 +30,7 @@ namespace RelhaxModpack
     {
         Default = 0,
         Legacy = 1,
-        LegacyV2 = 2
+        DefaultV2 = 2
     };
     public enum LoadingGifs
     {

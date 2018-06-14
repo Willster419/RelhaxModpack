@@ -1968,10 +1968,10 @@ namespace RelhaxModpack
                     //set default button, but disable checkedChanged handler to prevent stack overflow
                     selectionDefault.Checked = true;
                     break;
-                case (SelectionView.Legacy):
+                case (SelectionView.DefaultV2):
                     selectionLegacy.Checked = true;
                     break;
-                case (SelectionView.LegacyV2):
+                case (SelectionView.Legacy):
                     selectionLegacyV2.Checked = true;
                     break;
             }
@@ -2274,12 +2274,12 @@ namespace RelhaxModpack
 
         private void selectionLegacy_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.SView = SelectionView.Legacy;
+            Settings.SView = SelectionView.DefaultV2;
         }
 
         private void selectionLegacyV2_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.SView = SelectionView.LegacyV2;
+            Settings.SView = SelectionView.Legacy;
         }
 
         private void expandNodesDefault2_CheckedChanged(object sender, EventArgs e)
