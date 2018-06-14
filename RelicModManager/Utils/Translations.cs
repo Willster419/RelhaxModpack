@@ -260,8 +260,8 @@ namespace RelhaxModpack
             french.Add("FormPageNALink", "Page des forums WoT (NA, ENG)");
 
             //Componet: RegionNaFlagPictureBoxDescription
-            english.Add("RegionNaFlagPictureBoxDescription", "go to the English-speaking 'World of Tanks' forum page for the NA server");
-            german.Add("RegionNaFlagPictureBoxDescription", "gehe zur englischsprachigen 'World of Tanks' Forum Seite für den NA Server");
+            english.Add("RegionNaFlagPictureBoxDescription", "Go to the English-speaking 'World of Tanks' forum page for the NA server");
+            german.Add("RegionNaFlagPictureBoxDescription", "Gehe zur englischsprachigen 'World of Tanks' Forum Seite für den NA Server");
             polish.Add("RegionNaFlagPictureBoxDescription", TranslationNeeded);
             french.Add("RegionNaFlagPictureBoxDescription", TranslationNeeded);
             
@@ -272,8 +272,8 @@ namespace RelhaxModpack
             french.Add("FormPageEULink", "Page des forums WoT (EU, ENG)");
 
             //Componet: RegionEuEngFlagPictureBoxDescription
-            english.Add("RegionEuEngFlagPictureBoxDescription", "go to the English-speaking 'World of Tanks' forum page for the EU server");
-            german.Add("RegionEuEngFlagPictureBoxDescription", "gehe zur englischsprachigen 'World of Tanks' Forum Seite für den EU Server");
+            english.Add("RegionEuEngFlagPictureBoxDescription", "Go to the English-speaking 'World of Tanks' forum page for the EU server");
+            german.Add("RegionEuEngFlagPictureBoxDescription", "Gehe zur englischsprachigen 'World of Tanks' Forum Seite für den EU Server");
             polish.Add("RegionEuEngFlagPictureBoxDescription", TranslationNeeded);
             french.Add("RegionEuEngFlagPictureBoxDescription", TranslationNeeded);
 
@@ -284,8 +284,8 @@ namespace RelhaxModpack
             french.Add("RegionEuEngLanguagePictureBoxDescription", GetTranslatedString("RegionEuEngFlagPictureBoxDescription", Languages.French));
 
             //Componet: RegionEuGerFlagPictureBoxDescription
-            english.Add("RegionEuGerFlagPictureBoxDescription", "go to the German-speaking 'World of Tanks' forum page for the EU server");
-            german.Add("RegionEuGerFlagPictureBoxDescription", "gehe zur deutschsprachigen 'World of Tanks' Forum Seite für den EU Server");
+            english.Add("RegionEuGerFlagPictureBoxDescription", "Go to the German-speaking 'World of Tanks' forum page for the EU server");
+            german.Add("RegionEuGerFlagPictureBoxDescription", "Gehe zur deutschsprachigen 'World of Tanks' Forum Seite für den EU Server");
             polish.Add("RegionEuGerFlagPictureBoxDescription", TranslationNeeded);
             french.Add("RegionEuGerFlagPictureBoxDescription", TranslationNeeded);
 
@@ -296,7 +296,7 @@ namespace RelhaxModpack
             french.Add("RegionEuGerLanguagePictureBoxDescription", GetTranslatedString("RegionEuGerFlagPictureBoxDescription", Languages.French));
 
             //Componet: ForumBackgroundPictureBoxDescription
-            english.Add("ForumBackgroundPictureBoxDescription", "Here we group up the Relhax Manager forum threads on the different 'Word of Tanks' region servers. Select region on the flags to the right.");
+            english.Add("ForumBackgroundPictureBoxDescription", "Here we group the modpack forum threads on the different 'Word of Tanks' region servers. Select region on the flags to the right.");
             german.Add("ForumBackgroundPictureBoxDescription", "Hier haben wir die Forum Threads, der verschiedenen Regionalserver, die sich um den Relhax Modpack Manager drehen, zusammengefasst. Wähle die Region (und Sprache) auf den Fahnen hier rechts.");
             polish.Add("ForumBackgroundPictureBoxDescription", TranslationNeeded);
             french.Add("ForumBackgroundPictureBoxDescription", TranslationNeeded);
@@ -432,6 +432,13 @@ namespace RelhaxModpack
             german.Add("EnableColorChangeDefaultCB", "Farbwechsel");
             polish.Add("EnableColorChangeDefaultCB", "Włącz zmianê kolorów");
             french.Add("EnableColorChangeDefaultCB", "Activer les changements de couleurs");
+
+            //Componet: EnableColorChangeDefaultV2CB
+            //
+            english.Add("EnableColorChangeDefaultV2CB", "Enable color change");
+            german.Add("EnableColorChangeDefaultV2CB", "Farbwechsel");
+            polish.Add("EnableColorChangeDefaultV2CB", "Włącz zmianê kolorów");
+            french.Add("EnableColorChangeDefaultV2CB", "Activer les changements de couleurs");
 
             //Componet: EnableColorChangeLegacyCB
             //
@@ -1214,6 +1221,13 @@ namespace RelhaxModpack
             polish.Add("EnableColorChangeDefaultCBDescription", "Włącz zmianê kolorów podczas zmiany wyboru modyfikacji i ustawieñ.");
             french.Add("EnableColorChangeDefaultCBDescription", "Activer le changement de les couleurs lors de la selection d'un mod ou d'une config");
 
+            //Component: EnableColorChangeDefaultV2CBDescription
+            //
+            english.Add("EnableColorChangeDefaultV2CBDescription", "Enable the changing of colors when toggling the selection of a mod or config.");
+            german.Add("EnableColorChangeDefaultV2CBDescription", "Die Farbe ändert sich, wenn man eine Auswahl getroffen hat");
+            polish.Add("EnableColorChangeDefaultV2CBDescription", "Włącz zmianê kolorów podczas zmiany wyboru modyfikacji i ustawieñ.");
+            french.Add("EnableColorChangeDefaultV2CBDescription", "Activer le changement de les couleurs lors de la selection d'un mod ou d'une config");
+
             //Component: EnableColorChangeLegacyCBDescription
             //
             english.Add("EnableColorChangeLegacyCBDescription", "Enable the changing of colors when toggling the selection of a mod or config.");
@@ -1447,6 +1461,13 @@ namespace RelhaxModpack
             polish.Add("EnableBordersDefaultCB", "Włącz granice");
             french.Add("EnableBordersDefaultCB", "Activer les bordures");
 
+            //Component: EnableBordersDefaultV2CB
+            //
+            english.Add("EnableBordersDefaultV2CB", "Enable borders");
+            german.Add("EnableBordersDefaultV2CB", "Einrahmen");
+            polish.Add("EnableBordersDefaultV2CB", "Włącz granice");
+            french.Add("EnableBordersDefaultV2CB", "Activer les bordures");
+
             //Component: EnableBordersLegacyCB
             //
             english.Add("EnableBordersLegacyCB", "Enable borders");
@@ -1460,6 +1481,13 @@ namespace RelhaxModpack
             german.Add("EnableBordersDefaultCBDescription", "Jede Auswahl schwarz einrahmen");
             polish.Add("EnableBordersDefaultCBDescription", "Włącz czarne obramowanie modyfikacji i opcji konfiguracji");
             french.Add("EnableBordersDefaultCBDescription", "Activer les bordures noires autour de chaque mod et selections de configuration.");
+
+            //Component: EnableBordersDefaultCBDescription
+            //
+            english.Add("EnableBordersDefaultV2CBDescription", "Enable the black borders around each mod and config sublevel.");
+            german.Add("EnableBordersDefaultV2CBDescription", "Jede Auswahl schwarz einrahmen");
+            polish.Add("EnableBordersDefaultV2CBDescription", "Włącz czarne obramowanie modyfikacji i opcji konfiguracji");
+            french.Add("EnableBordersDefaultV2CBDescription", "Activer les bordures noires autour de chaque mod et selections de configuration.");
 
             //Component: EnableBordersLegacyCBDescription
             //
@@ -1509,24 +1537,24 @@ namespace RelhaxModpack
 
             //Componet: Mod selection view default (relhax)
             //
-            english.Add("selectionDefault", "Default");
-            german.Add("selectionDefault", "Standard");
-            polish.Add("selectionDefault", "Domyślne");
-            french.Add("selectionDefault", "Normal");
+            english.Add("SelectionDefault", "Default");
+            german.Add("SelectionDefault", "Standard");
+            polish.Add("SelectionDefault", "Domyślne");
+            french.Add("SelectionDefault", "Normal");
 
-            //Componet: Mod selection view default (OMC V2)
+            //Componet: Mod selection view default (relhax) [WPF VERSION]
             //
-            english.Add("selectionLegacyV2", "OMC Legacy V2");
-            german.Add("selectionLegacyV2", "OMC Legacy V2");
-            polish.Add("selectionLegacyV2", "OMC Legacy V2");
-            french.Add("selectionLegacyV2", "OMC Legacy V2");
+            english.Add("SelectionDefaultV2", "Default V2");
+            german.Add("SelectionDefaultV2", "Standard V2");
+            polish.Add("SelectionDefaultV2", "Domyślne V2");
+            french.Add("SelectionDefaultV2", "Normal V2");
 
             //Componet: Mod selection view legacy (OMC)
             //
-            english.Add("selectionLegacy", "OMC Legacy");
-            german.Add("selectionLegacy", "OMC Legacy");
-            polish.Add("selectionLegacy", "OMC Legacy");
-            french.Add("selectionLegacy", "OMC Legacy");
+            english.Add("SelectionLegacy", "OMC Legacy");
+            german.Add("SelectionLegacy", "OMC Legacy");
+            polish.Add("SelectionLegacy", "OMC Legacy");
+            french.Add("SelectionLegacy", "OMC Legacy");
 
             //Componet: Mod selection Description
             //
@@ -1537,17 +1565,24 @@ namespace RelhaxModpack
 
             //Componet: Mod selection Description
             //
-            english.Add("selectionDefaultDescription", "Select a mod selection list view mode\nDefault: Relhax list view mode\nLegacy: OMC tree list view mode");
-            german.Add("selectionDefaultDescription", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nalternativ: OMC Baumstruktur");
-            polish.Add("selectionDefaultDescription", "Wybierz tryb widoku wyborów modyfikacji\nDomyślnie: Tryb widoku listy RelHax\nSpuścizna: Tryb widoku listy OMC");
-            french.Add("selectionDefaultDescription", "Sélectionnez un style de liste pour la sélection\nNormal: Liste de sélection Relhax\nLegacy: Liste de vue arbre OMC");
+            english.Add("SelectionDefaultDescription", "Select a mod selection list view mode\nDefault: Relhax list view mode\nLegacy: OMC tree list view mode");
+            german.Add("SelectionDefaultDescription", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nalternativ: OMC Baumstruktur");
+            polish.Add("SelectionDefaultDescription", "Wybierz tryb widoku wyborów modyfikacji\nDomyślnie: Tryb widoku listy RelHax\nSpuścizna: Tryb widoku listy OMC");
+            french.Add("SelectionDefaultDescription", "Sélectionnez un style de liste pour la sélection\nNormal: Liste de sélection Relhax\nLegacy: Liste de vue arbre OMC");
 
             //Componet: Mod selection Description
             //
-            english.Add("selectionLegacyDescription", "Select a mod selection list view mode\nDefault: Relhax list view mode\nLegacy: OMC tree list view mode");
-            german.Add("selectionLegacyDescription", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nalternativ: OMC Baumstruktur");
-            polish.Add("selectionLegacyDescription", "Wybierz tryb widoku wyborów modyfikacji\nDomyślnie: Tryb widoku listy RelHax\nSpuścizna: Tryb widoku listy OMC");
-            french.Add("selectionLegacyDescription", "Sélectionnez un style de liste pour la sélection\nNormal: Liste de sélection Relhax\nLegacy: Liste de vue arbre OMC");
+            english.Add("SelectionDefaultV2Description", "Select a mod selection list view mode\nDefault: Relhax list view mode\nLegacy: OMC tree list view mode");
+            german.Add("SelectionDefaultV2Description", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nalternativ: OMC Baumstruktur");
+            polish.Add("SelectionDefaultV2Description", "Wybierz tryb widoku wyborów modyfikacji\nDomyślnie: Tryb widoku listy RelHax\nSpuścizna: Tryb widoku listy OMC");
+            french.Add("SelectionDefaultV2Description", "Sélectionnez un style de liste pour la sélection\nNormal: Liste de sélection Relhax\nLegacy: Liste de vue arbre OMC");
+
+            //Componet: Mod selection Description
+            //
+            english.Add("SelectionLegacyDescription", "Select a mod selection list view mode\nDefault: Relhax list view mode\nLegacy: OMC tree list view mode");
+            german.Add("SelectionLegacyDescription", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nalternativ: OMC Baumstruktur");
+            polish.Add("SelectionLegacyDescription", "Wybierz tryb widoku wyborów modyfikacji\nDomyślnie: Tryb widoku listy RelHax\nSpuścizna: Tryb widoku listy OMC");
+            french.Add("SelectionLegacyDescription", "Sélectionnez un style de liste pour la sélection\nNormal: Liste de sélection Relhax\nLegacy: Liste de vue arbre OMC");
 
             //Componet: Detected client version
             //
@@ -1578,20 +1613,20 @@ namespace RelhaxModpack
             french.Add("ShowAdvancedSettingsLinkDescription", "Afficher le panneau de configurations avancé");
 
             //Component: FacebookPictureBoxDescription
-            english.Add("FacebookPictureBoxDescription", "go to our Facebook page");
-            german.Add("FacebookPictureBoxDescription", "unsere Facebook Seite aufrufen");
+            english.Add("FacebookPictureBoxDescription", "Go to our Facebook page");
+            german.Add("FacebookPictureBoxDescription", "Unsere Facebook Seite aufrufen");
             polish.Add("FacebookPictureBoxDescription", "TODO");
             french.Add("FacebookPictureBoxDescription", "TODO");
 
             //Componet: DiscordPictureBoxDescription
-            english.Add("DiscordPictureBoxDescription", "go to Discord server");
-            german.Add("DiscordPictureBoxDescription", "zum Discord Server");
+            english.Add("DiscordPictureBoxDescription", "Go to Discord server");
+            german.Add("DiscordPictureBoxDescription", "Zum Discord Server");
             polish.Add("DiscordPictureBoxDescription", "Serwer Discorda");
             french.Add("DiscordPictureBoxDescription", "Serveur Discord");
 
             //Component: TwitterPictureBoxDescription
-            english.Add("TwitterPictureBoxDescription", "go to our Twitter page");
-            german.Add("TwitterPictureBoxDescription", "unsere Twitter Seite aufrufen");
+            english.Add("TwitterPictureBoxDescription", "Go to our Twitter page");
+            german.Add("TwitterPictureBoxDescription", "Unsere Twitter Seite aufrufen");
             polish.Add("TwitterPictureBoxDescription", "TODO");
             french.Add("TwitterPictureBoxDescription", "TODO");
 

@@ -98,9 +98,11 @@ namespace RelhaxModpack
         //toggle for each view if the borders around the child selection options should show
         public static bool EnableBordersDefaultView = false;
         public static bool EnableBordersLegacyView = false;
+        public static bool EnableBordersDefaultV2View = false;
         //toggle for each view if the color change should occur when a child selection happends
         public static bool EnableColorChangeDefaultView = false;
         public static bool EnableColorChangeLegacyView = false;
+        public static bool EnableColorChangeDefaultV2View = false;
         //toggle if the installation complete window will be shown
         public static bool ShowInstallCompleteWindow = false;
         //toggle if the program will delete the WoT appdata cache
@@ -279,11 +281,17 @@ namespace RelhaxModpack
                         case "EnableBordersLegacyView":
                             EnableBordersLegacyView = bool.Parse(n.InnerText);
                             break;
+                        case "EnableBordersDefaultV2View":
+                            EnableBordersDefaultV2View = bool.Parse(n.InnerText);
+                            break;
                         case "EnableChildColorChangeDefaultView":
                             EnableColorChangeDefaultView = bool.Parse(n.InnerText);
                             break;
                         case "EnableChildColorChangeLegacyView":
                             EnableColorChangeLegacyView = bool.Parse(n.InnerText);
+                            break;
+                        case "EnableChildColorChangeDefaultV2View":
+                            EnableColorChangeDefaultV2View = bool.Parse(n.InnerText);
                             break;
                         case "deleteLogs":
                             DeleteLogs = bool.Parse(n.InnerText);
@@ -392,12 +400,18 @@ namespace RelhaxModpack
             XmlElement xEnableBordersDefaultView = doc.CreateElement("EnableBordersDefaultView");
             xEnableBordersDefaultView.InnerText = "" + EnableBordersDefaultView;
             settingsHolder.AppendChild(xEnableBordersDefaultView);
+            XmlElement xEnableBordersDefaultV2View = doc.CreateElement("EnableBordersDefaultV2View");
+            xEnableBordersDefaultV2View.InnerText = "" + EnableBordersDefaultV2View;
+            settingsHolder.AppendChild(xEnableBordersDefaultV2View);
             XmlElement xEnableBordersLegacyView = doc.CreateElement("EnableBordersLegacyView");
             xEnableBordersLegacyView.InnerText = "" + EnableBordersLegacyView;
             settingsHolder.AppendChild(xEnableBordersLegacyView);
             XmlElement xEnableChildColorChangeDefaultView = doc.CreateElement("EnableChildColorChangeDefaultView");
             xEnableChildColorChangeDefaultView.InnerText = "" + EnableColorChangeDefaultView;
             settingsHolder.AppendChild(xEnableChildColorChangeDefaultView);
+            XmlElement xEnableChildColorChangeDefaultV2View = doc.CreateElement("EnableChildColorChangeDefaultV2View");
+            xEnableChildColorChangeDefaultV2View.InnerText = "" + EnableColorChangeDefaultV2View;
+            settingsHolder.AppendChild(xEnableChildColorChangeDefaultV2View);
             XmlElement xEnableChildColorChangeLegacyView = doc.CreateElement("EnableChildColorChangeLegacyView");
             xEnableChildColorChangeLegacyView.InnerText = "" + EnableColorChangeLegacyView;
             settingsHolder.AppendChild(xEnableChildColorChangeLegacyView);
