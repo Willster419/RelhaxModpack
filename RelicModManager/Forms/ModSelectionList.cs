@@ -341,7 +341,8 @@ namespace RelhaxModpack
                         System.Windows.Controls.Border TopBorder = new System.Windows.Controls.Border()
                         {
                             Background = Settings.GetBackColorWPF(),
-                            Child = TopPanel
+                            Child = TopPanel,
+                            Padding = new System.Windows.Thickness(2)
                         };
                         //create the scroll view
                         System.Windows.Controls.ScrollViewer scrollViewer = new System.Windows.Controls.ScrollViewer()
@@ -362,7 +363,8 @@ namespace RelhaxModpack
                         c.CategoryHeader.ParentStackPanel = TopPanel;
                         //add the host to the tab control
                         t.Controls.Add(host);
-                        TopBorder.MouseDown += Lsl_MouseDown;
+                        //TopPanel.MouseDown += Lsl_MouseDown;
+                        scrollViewer.MouseDown += Lsl_MouseDown;
                         //set the color if darkUI
                         if (Settings.DarkUI)
                             TopBorder.Background = System.Windows.Media.Brushes.Gray;
@@ -370,7 +372,9 @@ namespace RelhaxModpack
                         RelhaxWPFCheckBox cb2 = new RelhaxWPFCheckBox()
                         {
                             Package = c.CategoryHeader,
-                            Content = c.CategoryHeader.NameFormatted
+                            Content = c.CategoryHeader.NameFormatted,
+                            Foreground = Settings.GetTextColorWPF(),
+                            HorizontalAlignment = System.Windows.HorizontalAlignment.Left
                         };
                         cb2.Click += OnWPFComponentCheck;
                         //create the border and stackpanels
@@ -985,7 +989,8 @@ namespace RelhaxModpack
                                 Content = packageDisplayName,
                                 IsEnabled = canBeEnabled,
                                 IsChecked = (canBeEnabled && sp.Checked) ? true : false,
-                                Foreground = Settings.GetTextColorWPF()
+                                Foreground = Settings.GetTextColorWPF(),
+                                HorizontalAlignment = System.Windows.HorizontalAlignment.Left
                             };
                             break;
                         case "single_dropdown":
@@ -1082,7 +1087,8 @@ namespace RelhaxModpack
                                 Content = packageDisplayName,
                                 IsEnabled = canBeEnabled,
                                 IsChecked = (canBeEnabled && sp.Checked) ? true : false,
-                                Foreground = Settings.GetTextColorWPF()
+                                Foreground = Settings.GetTextColorWPF(),
+                                HorizontalAlignment = System.Windows.HorizontalAlignment.Left
                             };
                             break;
                     }
@@ -1698,27 +1704,36 @@ namespace RelhaxModpack
             {
                 return;
             }
-            LegacySelectionList lsl = (LegacySelectionList)sender;
+            IPackageUIComponent pkg = null;
             if (e.OriginalSource is System.Windows.Controls.ContentPresenter cp)
             {
                 if(cp.Content is IPackageUIComponent ipc)
                 {
-                    if(ipc.Package != null)
-                    {
-                        bool packageActuallyDisabled = false;
-                        SelectablePackage pack = ipc.Package;
-                        while(pack.Level > -1)
-                        {
-                            if (!pack.Enabled)
-                                packageActuallyDisabled = true;
-                            pack = pack.Parent;
-                        }
-                        if(packageActuallyDisabled)
-                        {
-                            //disabled component, display via generic handler
-                            Generic_MouseDown(ipc, null);
-                        }
-                    }
+                    pkg = ipc;
+                }
+            }
+            else if (e.Source is IPackageUIComponent ipc)
+            {
+                pkg = ipc;
+            }
+            else if (e.Source is System.Windows.Controls.StackPanel sp)
+            {
+                
+            }
+            if ((pkg != null) && (pkg.Package != null))
+            {
+                bool packageActuallyDisabled = false;
+                SelectablePackage pack = pkg.Package;
+                while (pack.Level > -1)
+                {
+                    if (!pack.Enabled)
+                        packageActuallyDisabled = true;
+                    pack = pack.Parent;
+                }
+                if (packageActuallyDisabled)
+                {
+                    //disabled component, display via generic handler
+                    Generic_MouseDown(pkg, null);
                 }
             }
         }
