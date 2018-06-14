@@ -54,8 +54,7 @@
             this.SelectionLayout = new System.Windows.Forms.TableLayoutPanel();
             this.selectionDefault = new System.Windows.Forms.RadioButton();
             this.selectionLegacy = new System.Windows.Forms.RadioButton();
-            this.selectionLegacyV2 = new System.Windows.Forms.RadioButton();
-            this.expandNodesDefault2 = new System.Windows.Forms.CheckBox();
+            this.selectionDefaultV2 = new System.Windows.Forms.RadioButton();
             this.EnableBordersDefaultCB = new System.Windows.Forms.CheckBox();
             this.EnableBordersLegacyCB = new System.Windows.Forms.CheckBox();
             this.EnableColorChangeDefaultCB = new System.Windows.Forms.CheckBox();
@@ -98,6 +97,8 @@
             this.fontSize125 = new System.Windows.Forms.RadioButton();
             this.fontSize225 = new System.Windows.Forms.RadioButton();
             this.fontSize175 = new System.Windows.Forms.RadioButton();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.settingsGroupBox.SuspendLayout();
             this.SettingsTable.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
@@ -424,26 +425,25 @@
             // 
             this.SelectionLayout.BackColor = System.Drawing.Color.Transparent;
             this.SelectionLayout.ColumnCount = 3;
-            this.SelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.SelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 153F));
-            this.SelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8F));
-            this.SelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.SelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
+            this.SelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
+            this.SelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.34F));
             this.SelectionLayout.Controls.Add(this.selectionDefault, 0, 0);
             this.SelectionLayout.Controls.Add(this.selectionLegacy, 1, 0);
-            this.SelectionLayout.Controls.Add(this.selectionLegacyV2, 2, 0);
-            this.SelectionLayout.Controls.Add(this.expandNodesDefault2, 2, 1);
+            this.SelectionLayout.Controls.Add(this.selectionDefaultV2, 2, 0);
             this.SelectionLayout.Controls.Add(this.EnableBordersDefaultCB, 0, 1);
             this.SelectionLayout.Controls.Add(this.EnableBordersLegacyCB, 1, 1);
             this.SelectionLayout.Controls.Add(this.EnableColorChangeDefaultCB, 0, 2);
             this.SelectionLayout.Controls.Add(this.EnableColorChangeLegacyCB, 1, 2);
+            this.SelectionLayout.Controls.Add(this.checkBox1, 2, 1);
+            this.SelectionLayout.Controls.Add(this.checkBox2, 2, 2);
             this.SelectionLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SelectionLayout.Location = new System.Drawing.Point(3, 16);
             this.SelectionLayout.Name = "SelectionLayout";
-            this.SelectionLayout.RowCount = 4;
-            this.SelectionLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.SelectionLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.SelectionLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.SelectionLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.SelectionLayout.RowCount = 3;
+            this.SelectionLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.SelectionLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.SelectionLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.SelectionLayout.Size = new System.Drawing.Size(299, 95);
             this.SelectionLayout.TabIndex = 5;
             this.SelectionLayout.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
@@ -455,7 +455,7 @@
             this.selectionDefault.Location = new System.Drawing.Point(1, 1);
             this.selectionDefault.Margin = new System.Windows.Forms.Padding(1);
             this.selectionDefault.Name = "selectionDefault";
-            this.selectionDefault.Size = new System.Drawing.Size(136, 21);
+            this.selectionDefault.Size = new System.Drawing.Size(97, 18);
             this.selectionDefault.TabIndex = 0;
             this.selectionDefault.TabStop = true;
             this.selectionDefault.Text = "Default";
@@ -467,10 +467,10 @@
             // selectionLegacy
             // 
             this.selectionLegacy.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.selectionLegacy.Location = new System.Drawing.Point(139, 1);
+            this.selectionLegacy.Location = new System.Drawing.Point(100, 1);
             this.selectionLegacy.Margin = new System.Windows.Forms.Padding(1);
             this.selectionLegacy.Name = "selectionLegacy";
-            this.selectionLegacy.Size = new System.Drawing.Size(151, 21);
+            this.selectionLegacy.Size = new System.Drawing.Size(97, 18);
             this.selectionLegacy.TabIndex = 1;
             this.selectionLegacy.TabStop = true;
             this.selectionLegacy.Text = "Legacy";
@@ -479,49 +479,32 @@
             this.selectionLegacy.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.selectionLegacy.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
-            // selectionLegacyV2
+            // selectionDefaultV2
             // 
-            this.selectionLegacyV2.AutoSize = true;
-            this.selectionLegacyV2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.selectionLegacyV2.Location = new System.Drawing.Point(292, 1);
-            this.selectionLegacyV2.Margin = new System.Windows.Forms.Padding(1);
-            this.selectionLegacyV2.Name = "selectionLegacyV2";
-            this.selectionLegacyV2.Size = new System.Drawing.Size(6, 21);
-            this.selectionLegacyV2.TabIndex = 3;
-            this.selectionLegacyV2.TabStop = true;
-            this.selectionLegacyV2.Text = "Legacy V2";
-            this.selectionLegacyV2.UseVisualStyleBackColor = true;
-            this.selectionLegacyV2.Visible = false;
-            this.selectionLegacyV2.CheckedChanged += new System.EventHandler(this.selectionLegacyV2_CheckedChanged);
-            this.selectionLegacyV2.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.selectionLegacyV2.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
-            // 
-            // expandNodesDefault2
-            // 
-            this.expandNodesDefault2.AutoSize = true;
-            this.expandNodesDefault2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.expandNodesDefault2.Location = new System.Drawing.Point(292, 24);
-            this.expandNodesDefault2.Margin = new System.Windows.Forms.Padding(1);
-            this.expandNodesDefault2.Name = "expandNodesDefault2";
-            this.expandNodesDefault2.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.expandNodesDefault2.Size = new System.Drawing.Size(6, 21);
-            this.expandNodesDefault2.TabIndex = 4;
-            this.expandNodesDefault2.Text = "Expand all";
-            this.expandNodesDefault2.UseVisualStyleBackColor = true;
-            this.expandNodesDefault2.Visible = false;
-            this.expandNodesDefault2.CheckedChanged += new System.EventHandler(this.expandNodesDefault2_CheckedChanged);
-            this.expandNodesDefault2.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.expandNodesDefault2.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            this.selectionDefaultV2.AutoSize = true;
+            this.selectionDefaultV2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.selectionDefaultV2.Location = new System.Drawing.Point(199, 1);
+            this.selectionDefaultV2.Margin = new System.Windows.Forms.Padding(1);
+            this.selectionDefaultV2.Name = "selectionDefaultV2";
+            this.selectionDefaultV2.Size = new System.Drawing.Size(99, 18);
+            this.selectionDefaultV2.TabIndex = 3;
+            this.selectionDefaultV2.TabStop = true;
+            this.selectionDefaultV2.Text = "Legacy V2";
+            this.selectionDefaultV2.UseVisualStyleBackColor = true;
+            this.selectionDefaultV2.Visible = false;
+            this.selectionDefaultV2.CheckedChanged += new System.EventHandler(this.selectionLegacyV2_CheckedChanged);
+            this.selectionDefaultV2.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.selectionDefaultV2.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
             // EnableBordersDefaultCB
             // 
             this.EnableBordersDefaultCB.AutoSize = true;
             this.EnableBordersDefaultCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.EnableBordersDefaultCB.Location = new System.Drawing.Point(1, 24);
+            this.EnableBordersDefaultCB.Location = new System.Drawing.Point(1, 21);
             this.EnableBordersDefaultCB.Margin = new System.Windows.Forms.Padding(1);
             this.EnableBordersDefaultCB.Name = "EnableBordersDefaultCB";
             this.EnableBordersDefaultCB.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.EnableBordersDefaultCB.Size = new System.Drawing.Size(136, 21);
+            this.EnableBordersDefaultCB.Size = new System.Drawing.Size(97, 35);
             this.EnableBordersDefaultCB.TabIndex = 5;
             this.EnableBordersDefaultCB.Text = "Enable borders";
             this.EnableBordersDefaultCB.UseVisualStyleBackColor = true;
@@ -533,11 +516,11 @@
             // 
             this.EnableBordersLegacyCB.AutoSize = true;
             this.EnableBordersLegacyCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.EnableBordersLegacyCB.Location = new System.Drawing.Point(139, 24);
+            this.EnableBordersLegacyCB.Location = new System.Drawing.Point(100, 21);
             this.EnableBordersLegacyCB.Margin = new System.Windows.Forms.Padding(1);
             this.EnableBordersLegacyCB.Name = "EnableBordersLegacyCB";
             this.EnableBordersLegacyCB.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.EnableBordersLegacyCB.Size = new System.Drawing.Size(151, 21);
+            this.EnableBordersLegacyCB.Size = new System.Drawing.Size(97, 35);
             this.EnableBordersLegacyCB.TabIndex = 6;
             this.EnableBordersLegacyCB.Text = "Enable borders";
             this.EnableBordersLegacyCB.UseVisualStyleBackColor = true;
@@ -549,11 +532,11 @@
             // 
             this.EnableColorChangeDefaultCB.AutoSize = true;
             this.EnableColorChangeDefaultCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.EnableColorChangeDefaultCB.Location = new System.Drawing.Point(1, 47);
+            this.EnableColorChangeDefaultCB.Location = new System.Drawing.Point(1, 58);
             this.EnableColorChangeDefaultCB.Margin = new System.Windows.Forms.Padding(1);
             this.EnableColorChangeDefaultCB.Name = "EnableColorChangeDefaultCB";
             this.EnableColorChangeDefaultCB.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.EnableColorChangeDefaultCB.Size = new System.Drawing.Size(136, 21);
+            this.EnableColorChangeDefaultCB.Size = new System.Drawing.Size(97, 36);
             this.EnableColorChangeDefaultCB.TabIndex = 7;
             this.EnableColorChangeDefaultCB.Text = "Enable color change";
             this.EnableColorChangeDefaultCB.UseVisualStyleBackColor = true;
@@ -565,11 +548,11 @@
             // 
             this.EnableColorChangeLegacyCB.AutoSize = true;
             this.EnableColorChangeLegacyCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.EnableColorChangeLegacyCB.Location = new System.Drawing.Point(139, 47);
+            this.EnableColorChangeLegacyCB.Location = new System.Drawing.Point(100, 58);
             this.EnableColorChangeLegacyCB.Margin = new System.Windows.Forms.Padding(1);
             this.EnableColorChangeLegacyCB.Name = "EnableColorChangeLegacyCB";
             this.EnableColorChangeLegacyCB.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.EnableColorChangeLegacyCB.Size = new System.Drawing.Size(151, 21);
+            this.EnableColorChangeLegacyCB.Size = new System.Drawing.Size(97, 36);
             this.EnableColorChangeLegacyCB.TabIndex = 8;
             this.EnableColorChangeLegacyCB.Text = "Enable color change";
             this.EnableColorChangeLegacyCB.UseVisualStyleBackColor = true;
@@ -1178,6 +1161,28 @@
             this.fontSize175.CheckedChanged += new System.EventHandler(this.fontSize175_CheckedChanged);
             this.fontSize175.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox1.Location = new System.Drawing.Point(201, 23);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(95, 31);
+            this.checkBox1.TabIndex = 9;
+            this.checkBox1.Text = "Enable borders";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox2.Location = new System.Drawing.Point(201, 60);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(95, 32);
+            this.checkBox2.TabIndex = 10;
+            this.checkBox2.Text = "Enable color change";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1263,8 +1268,7 @@
         private System.Windows.Forms.TableLayoutPanel SelectionLayout;
         private System.Windows.Forms.RichTextBox downloadProgress;
         private System.Windows.Forms.FolderBrowserDialog ExportModeBrowserDialog;
-        private System.Windows.Forms.RadioButton selectionLegacyV2;
-        private System.Windows.Forms.CheckBox expandNodesDefault2;
+        private System.Windows.Forms.RadioButton selectionDefaultV2;
         private System.Windows.Forms.CheckBox EnableBordersDefaultCB;
         private System.Windows.Forms.CheckBox EnableBordersLegacyCB;
         private System.Windows.Forms.CheckBox EnableColorChangeDefaultCB;
@@ -1301,6 +1305,8 @@
         private System.Windows.Forms.PictureBox RegionEuEngLanguagePictureBox;
         private System.Windows.Forms.PictureBox RegionEuGerFlagPictureBox;
         private System.Windows.Forms.PictureBox RegionEuGerLanguagePictureBox;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox checkBox2;
     }
 }
 

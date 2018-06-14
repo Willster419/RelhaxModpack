@@ -276,7 +276,6 @@ namespace RelhaxModpack
         //must be only one catagory
         private void AddAllMods()
         {
-            TreeView tv = null;
             //start build category selections
             foreach (Category c in ParsedCatagoryList)
             {
@@ -399,38 +398,7 @@ namespace RelhaxModpack
                         c.CategoryHeader.Packages = c.Packages;
                         break;
                     case SelectionView.Legacy:
-                        //make the treeview
-                        tv = new TreeView()
-                        {
-                            Location = new Point(5, 5),
-                            Size = new Size(t.Size.Width - 5 - 5, t.Size.Height - 5 - 5),
-                            Dock = DockStyle.Fill,
-                            DrawMode = TreeViewDrawMode.OwnerDrawText
-                        };
-                        tv.DrawNode += Tv_DrawNode;
-                        tv.BeforeCollapse += Tv_BeforeCollapse;
-                        c.TreeView = tv;
-                        RelhaxFormCheckBox cbv2 = new RelhaxFormCheckBox()
-                        {
-                            Package = c.CategoryHeader,
-                            Text = c.CategoryHeader.NameFormatted,
-                            AutoSize = true,
-                            AutoCheck = false
-                        };
-                        c.CategoryHeader.UIComponent = cbv2;
-                        c.CategoryHeader.ParentUIComponent = cbv2;
-                        c.CategoryHeader.TopParentUIComponent = cbv2;
-                        c.CategoryHeader.Packages = c.Packages;
-                        c.CategoryHeader.TreeNode.Category = c;
-                        //add to the tree
-                        c.CategoryHeader.TreeNode.Component = c.CategoryHeader.UIComponent;
-                        cbv2.Click += OnMultiPackageClick;
-                        tv.Nodes.Add(c.CategoryHeader.TreeNode);
-                        c.TreeNodes.Add(c.CategoryHeader.TreeNode);
-                        Control cont = (Control)c.CategoryHeader.UIComponent;
-                        tv.Controls.Add(cont);
-                        cont.Show();
-                        t.Controls.Add(tv);
+                        
                         break;
                 }
                 modTabGroups.TabPages.Add(t);
@@ -470,28 +438,6 @@ namespace RelhaxModpack
                         Application.DoEvents();
                     }
                     AddPackage(m, c, c.CategoryHeader);
-                    if(Settings.SView == SelectionView.Legacy)
-                    {
-                        if (Settings.ExpandAllLegacy2)
-                        {
-                            m.TreeNode.ExpandAll();
-                        }
-                        else
-                        {
-                            m.TreeNode.Collapse();
-                        }
-                    }
-                }
-                if(Settings.SView == SelectionView.Legacy)
-                {
-                    if (Settings.ExpandAllLegacy2)
-                    {
-                        c.CategoryHeader.TreeNode.Expand();
-                    }
-                    else
-                    {
-                        c.CategoryHeader.TreeNode.Collapse();
-                    }
                 }
             }
             //end ui building
@@ -514,81 +460,6 @@ namespace RelhaxModpack
                 }
             }
         }
-
-        #region Legacy V2 code
-        private void Tv_BeforeCollapse(object sender, TreeViewCancelEventArgs e)
-        {
-            if(e.Node is RelhaxFormTreeNode node)
-            {
-                foreach(RelhaxFormTreeNode subNode in node.Nodes)
-                {
-                    if(subNode.Component is Control c)
-                    {
-                        c.Hide();
-                    }
-                    if (subNode.Nodes.Count > 0)
-                        BeforeCollapseSubNodes(subNode.Nodes);
-                }
-            }
-        }
-
-        private void BeforeCollapseSubNodes(TreeNodeCollection tnc)
-        {
-            foreach(RelhaxFormTreeNode subNode in tnc)
-            {
-                if(subNode.Component is Control c)
-                {
-                    c.Hide();
-                }
-                if (subNode.Nodes.Count > 0)
-                    BeforeCollapseSubNodes(subNode.Nodes);
-            }
-        }
-
-        //actually update UI bounds for legacy tree view
-        //assumes the first one passed into the stack in the top view
-        private void UpdateUIBounds(List<RelhaxFormTreeNode> nodes)
-        {
-            if (LoadingConfig)
-                return;
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                if(nodes[i].Component != null)
-                {
-                    Control cont = (Control)nodes[i].Component;
-                    RelhaxFormTreeNode node = nodes[i];
-                    cont.SetBounds(node.Bounds.X, node.Bounds.Y, node.Bounds.Width, node.Bounds.Height);
-                }
-            }
-        }
-
-        private void Tv_DrawNode(object sender, DrawTreeNodeEventArgs e)
-        {
-            if (LoadingConfig)
-                return;
-            if(e.Node is RelhaxFormTreeNode tn)
-            {
-                int index = tn.Category.TreeNodes.IndexOf(tn);
-                List<RelhaxFormTreeNode> nodesList = tn.Category.TreeNodes;
-                if ((index + 1 < nodesList.Count) && (!nodesList[index + 1].IsVisible))
-                {
-                    UpdateUIBounds(nodesList);
-                }
-                else if ((index - 1 > -1) && (!nodesList[index - 1].IsVisible))
-                {
-                    UpdateUIBounds(nodesList);
-                }
-                else if (index == 0)
-                {
-                    UpdateUIBounds(nodesList);
-                }
-                else if (index == nodesList.Count - 1)
-                {
-                    UpdateUIBounds(nodesList);
-                }
-            }
-        }
-        #endregion
 
         //adds all usermods to thier own userMods tab
         private void AddUserMods(bool forceUnchecked)
@@ -1129,160 +1000,7 @@ namespace RelhaxModpack
                     }
                     break;
                 case SelectionView.Legacy:
-                    sp.TreeNode.Category = c;
-                    switch (sp.Type)
-                    {
-                        case "single":
-                        case "single1":
-                            sp.UIComponent = new RelhaxFormRadioButton()
-                            {
-                                Text = packageDisplayName,
-                                Package = sp,
-                                Enabled = canBeEnabled,
-                                Checked = (canBeEnabled && sp.Checked) ? true : false,
-                                AutoCheck = false,
-                                AutoSize = true
-                            };
-                            break;
-                        case "single_dropdown":
-                        case "single_dropdown1":
-                            //sp.TreeNode.Bounds.Inflate(0, 25);
-                            if (sp.Parent.RelhaxFormComboBoxList[0] == null)
-                            {
-                                sp.Parent.RelhaxFormComboBoxList[0] = new RelhaxFormComboBox()
-                                {
-                                    //autosize should be true...
-                                    Size = new Size((int)(225 * DPISCALE), 15),
-                                    Enabled = false,
-                                    Name = "notAddedYet",
-                                    DropDownStyle = ComboBoxStyle.DropDownList
-                                };
-                                //https://stackoverflow.com/questions/1882993/c-sharp-how-do-i-prevent-mousewheel-scrolling-in-my-combobox
-                                sp.Parent.RelhaxFormComboBoxList[0].MouseWheel += (o, e) => ((HandledMouseEventArgs)e).Handled = true;
-                                sp.Parent.RelhaxFormComboBoxList[0].MouseDown += Generic_MouseDown;
-                                sp.Parent.RelhaxFormComboBoxList[0].SelectedIndexChanged += OnSingleDDPackageClick;
-                                sp.Parent.RelhaxFormComboBoxList[0].handler = OnSingleDDPackageClick;
-                            }
-                            if (sp.Enabled)
-                            {
-                                ComboBoxItem cbi = new ComboBoxItem(sp, packageDisplayName);
-                                sp.Parent.RelhaxFormComboBoxList[0].Items.Add(cbi);
-                                if (sp.Checked)
-                                {
-                                    //sp.Parent.RelhaxFormComboBoxList[0].Enabled = true;
-                                    sp.Parent.RelhaxFormComboBoxList[0].SelectedItem = cbi;
-                                    DescriptionToolTip.SetToolTip(sp.Parent.RelhaxFormComboBoxList[0], tooltipString);
-                                }
-                            }
-                            if (sp.Parent.RelhaxFormComboBoxList[0].Name.Equals("notAddedYet"))
-                            {
-                                if (sp.Parent.RelhaxFormComboBoxList[0].Items.Count > 0)
-                                {
-                                    sp.Parent.RelhaxFormComboBoxList[0].Enabled = true;
-                                    if (sp.Parent.RelhaxFormComboBoxList[0].SelectedIndex == -1)
-                                        sp.Parent.RelhaxFormComboBoxList[0].SelectedIndex = 0;
-                                }
-                                sp.Parent.RelhaxFormComboBoxList[0].Name = "added";
-                                sp.TreeNode.Component = sp.Parent.RelhaxFormComboBoxList[0];
-                                
-                                sp.Parent.TreeNode.Nodes.Add(sp.TreeNode);
-                                //also add the control
-                                Control CBCONT1 = sp.Parent.RelhaxFormComboBoxList[0];
-                                sp.ParentCategory.TreeView.Controls.Add(CBCONT1);
-                                CBCONT1.Show();
-                                sp.ParentCategory.TreeNodes.Add(sp.TreeNode);
-                                //sp.ParentPanel.Controls.Add(sp.Parent.RelhaxFormComboBoxList[0]);
-                            }
-                            break;
-                        case "single_dropdown2":
-                            //sp.TreeNode.Bounds.Inflate(0, 5);
-                            if (sp.Parent.RelhaxFormComboBoxList[1] == null)
-                            {
-                                sp.Parent.RelhaxFormComboBoxList[1] = new RelhaxFormComboBox()
-                                {
-                                    //autosize should be true...
-                                    Size = new Size((int)(225 * DPISCALE), 15),
-                                    Enabled = false,
-                                    Name = "notAddedYet",
-                                    DropDownStyle = ComboBoxStyle.DropDownList
-                                };
-                                //https://stackoverflow.com/questions/1882993/c-sharp-how-do-i-prevent-mousewheel-scrolling-in-my-combobox
-                                sp.Parent.RelhaxFormComboBoxList[1].MouseWheel += (o, e) => ((HandledMouseEventArgs)e).Handled = true;
-                                sp.Parent.RelhaxFormComboBoxList[1].MouseDown += Generic_MouseDown;
-                                sp.Parent.RelhaxFormComboBoxList[1].SelectedIndexChanged += OnSingleDDPackageClick;
-                                sp.Parent.RelhaxFormComboBoxList[1].handler = OnSingleDDPackageClick;
-                            }
-                            if (sp.Enabled)
-                            {
-                                ComboBoxItem cbi = new ComboBoxItem(sp, packageDisplayName);
-                                sp.Parent.RelhaxFormComboBoxList[1].Items.Add(cbi);
-                                if (sp.Checked)
-                                {
-                                    //sp.Parent.RelhaxFormComboBoxList[1].Enabled = true;
-                                    sp.Parent.RelhaxFormComboBoxList[1].SelectedItem = cbi;
-                                    DescriptionToolTip.SetToolTip(sp.Parent.RelhaxFormComboBoxList[1], tooltipString);
-                                }
-                            }
-                            if (sp.Parent.RelhaxFormComboBoxList[1].Name.Equals("notAddedYet"))
-                            {
-                                if (sp.Parent.RelhaxFormComboBoxList[1].Items.Count > 0)
-                                {
-                                    sp.Parent.RelhaxFormComboBoxList[1].Enabled = true;
-                                    if (sp.Parent.RelhaxFormComboBoxList[1].SelectedIndex == -1)
-                                        sp.Parent.RelhaxFormComboBoxList[1].SelectedIndex = 0;
-                                }
-                                sp.Parent.RelhaxFormComboBoxList[1].Name = "added";
-                                sp.TreeNode.Component = sp.Parent.RelhaxFormComboBoxList[1];
-                                sp.Parent.TreeNode.Nodes.Add(sp.TreeNode);
-                                //also add the control
-                                Control CBCONT = sp.Parent.RelhaxFormComboBoxList[1];
-                                sp.ParentCategory.TreeView.Controls.Add(CBCONT);
-                                CBCONT.Show();
-                                sp.ParentCategory.TreeNodes.Add(sp.TreeNode);
-                                //sp.ParentPanel.Controls.Add(sp.Parent.RelhaxFormComboBoxList[1]);
-                            }
-                            break;
-                        case "multi":
-                            sp.UIComponent = new RelhaxFormCheckBox()
-                            {
-                                Text = packageDisplayName,
-                                Package = sp,
-                                Enabled = canBeEnabled,
-                                Checked = (canBeEnabled && sp.Checked) ? true : false,
-                                AutoSize = true,
-                                AutoCheck = false
-                            };
-                            break;
-                    }
-                    //color change code
-                    
-                    //color change code
-                    //start code for handlers tooltips and attaching
-                    if ((sp.UIComponent != null) && (sp.UIComponent is Control cont3))
-                    {
-                        //add tooltip
-                        DescriptionToolTip.SetToolTip(cont3, tooltipString);
-                        //take care of spacing and handlers
-                        cont3.MouseDown += Generic_MouseDown;
-                        //ADD HANDLERS HERE
-                        if (cont3 is RelhaxFormCheckBox FormCheckBox)
-                        {
-                            FormCheckBox.Click += OnMultiPackageClick;
-                        }
-                        else if (cont3 is RelhaxFormRadioButton FormRadioButton)
-                        {
-                            FormRadioButton.Click += OnSinglePackageClick;
-                        }
-                        //attach to treeview
-                        sp.TreeNode.Component = sp.UIComponent;
-                        sp.Parent.TreeNode.Nodes.Add(sp.TreeNode);
-                        //attach as control
-                        Control MULSINCONT = (Control) sp.UIComponent;
-                        sp.ParentCategory.TreeView.Controls.Add(MULSINCONT);
-                        MULSINCONT.Show();
-                        sp.ParentCategory.TreeNodes.Add(sp.TreeNode);
-                    }
-                    //end code for handlers tooltips and attaching
+
                     break;
             }
             if(sp.Packages.Count > 0)

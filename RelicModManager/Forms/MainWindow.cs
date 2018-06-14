@@ -1939,7 +1939,6 @@ namespace RelhaxModpack
             Font = Settings.AppFont;
             notifyIfSameDatabaseCB.Checked = Settings.NotifyIfSameDatabase;
             SuperExtractionCB.Checked = Settings.SuperExtraction;
-            expandNodesDefault2.Checked = Settings.ExpandAllLegacy2;
             EnableBordersDefaultCB.Checked = Settings.EnableBordersDefaultView;
             EnableBordersLegacyCB.Checked = Settings.EnableBordersLegacyView;
             EnableColorChangeDefaultCB.Checked = Settings.EnableColorChangeDefaultView;
@@ -1972,7 +1971,7 @@ namespace RelhaxModpack
                     selectionLegacy.Checked = true;
                     break;
                 case (SelectionView.Legacy):
-                    selectionLegacyV2.Checked = true;
+                    selectionDefaultV2.Checked = true;
                     break;
             }
             switch (Settings.FontSizeforum)
@@ -2280,11 +2279,6 @@ namespace RelhaxModpack
         private void selectionLegacyV2_CheckedChanged(object sender, EventArgs e)
         {
             Settings.SView = SelectionView.Legacy;
-        }
-
-        private void expandNodesDefault2_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.ExpandAllLegacy2 = expandNodesDefault2.Checked;
         }
 
         private void fontSize100_CheckedChanged(object sender, EventArgs e)

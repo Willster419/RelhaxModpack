@@ -25,11 +25,22 @@ namespace RelhaxModpack
         DPI275 = 9,
         DPIAUTO = 10
     };
-    //enumeration for the type of mod selection list view
+    /// <summary>
+    /// The type of selection view for how to display the selection tree
+    /// </summary>
     public enum SelectionView
     {
+        /// <summary>
+        /// Default Winforms style
+        /// </summary>
         Default = 0,
+        /// <summary>
+        /// OMC style
+        /// </summary>
         Legacy = 1,
+        /// <summary>
+        /// Default WPF V2 style
+        /// </summary>
         DefaultV2 = 2
     };
     public enum LoadingGifs
@@ -63,14 +74,6 @@ namespace RelhaxModpack
         /// toggle if the program should force the user to manually point to the WoT location
         /// </summary>
         public static bool ForceManuel = false;
-        /// <summary>
-        /// toggle if the OMC legacy view options should be expanded by default
-        /// </summary>
-        public static bool ExpandAllLegacy = true;
-        /// <summary>
-        /// toggle if the OMC legacy V2 view options should be expanded by default
-        /// </summary>
-        public static bool ExpandAllLegacy2 = false;
         /// <summary>
         /// toggle if comic sans font should be the default font. true=comic sans, false=microsoft sans serif (default in most applications)
         /// </summary>
@@ -270,12 +273,6 @@ namespace RelhaxModpack
                         case "darkUI":
                             DarkUI = bool.Parse(n.InnerText);
                             break;
-                        case "expandAllLegacy":
-                            ExpandAllLegacy = bool.Parse(n.InnerText);
-                            break;
-                        case "expandAllLegacy2":
-                            ExpandAllLegacy2 = bool.Parse(n.InnerText);
-                            break;
                         case "EnableBordersDefaultView":
                             EnableBordersDefaultView = bool.Parse(n.InnerText);
                             break;
@@ -392,12 +389,6 @@ namespace RelhaxModpack
             xdarkUI.InnerText = "" + DarkUI;
             settingsHolder.AppendChild(xdarkUI);
             //modselectionlistUI options
-            XmlElement xexpandAllLegacy = doc.CreateElement("expandAllLegacy");
-            xexpandAllLegacy.InnerText = "" + ExpandAllLegacy;
-            settingsHolder.AppendChild(xexpandAllLegacy);
-            XmlElement xexpandAllLegacy2 = doc.CreateElement("expandAllLegacy2");
-            xexpandAllLegacy2.InnerText = "" + ExpandAllLegacy2;
-            settingsHolder.AppendChild(xexpandAllLegacy2);
             XmlElement xEnableBordersDefaultView = doc.CreateElement("EnableBordersDefaultView");
             xEnableBordersDefaultView.InnerText = "" + EnableBordersDefaultView;
             settingsHolder.AppendChild(xEnableBordersDefaultView);

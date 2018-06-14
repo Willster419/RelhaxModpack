@@ -21,13 +21,11 @@ namespace RelhaxModpack
                     break;
                 case SelectionView.DefaultV2:
                     RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
-                    //TreeViewItem = new System.Windows.Controls.TreeViewItem();
-                    //ChildBorder = new System.Windows.Controls.Border();
-                    //ChildStackPanel = new System.Windows.Controls.StackPanel();
                     ContentControl = new System.Windows.Controls.ContentControl();
                     break;
                 case SelectionView.Legacy:
-                    TreeNode = new RelhaxFormTreeNode();
+                    //TreeViewItem = new System.Windows.Controls.TreeViewItem();
+                    //ChildBorder = new System.Windows.Controls.Border();
                     break;
             }
 
@@ -239,8 +237,6 @@ namespace RelhaxModpack
         //Components for FORMS
         //the list of all dropDown options for each package type
         public RelhaxFormComboBox[] RelhaxFormComboBoxList;
-        //the TreeViewItem for winForms
-        public RelhaxFormTreeNode TreeNode;
         //the panel that this package sits in
         public Panel ParentPanel = null;
         public Panel ChildPanel = null;
