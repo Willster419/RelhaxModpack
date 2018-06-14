@@ -13,11 +13,11 @@ namespace RelhaxModpack
         {
             get
             {
-                return Stop.Text;
+                return StopButton.Text;
             }
             set
             {
-                Stop.Text = value;
+                StopButton.Text = value;
             }
         }
         public string PlayPauseText

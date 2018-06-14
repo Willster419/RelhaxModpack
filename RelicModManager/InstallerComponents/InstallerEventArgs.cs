@@ -8,6 +8,7 @@ namespace RelhaxModpack
         //the current "status" of the modpack installer
         public enum InstallProgress
         {
+            Error = -1,
             Idle = 0,
             BackupMods = 1,
             BackupUserData = 2,

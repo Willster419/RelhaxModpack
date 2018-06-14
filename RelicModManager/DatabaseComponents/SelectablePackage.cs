@@ -19,14 +19,13 @@ namespace RelhaxModpack
                 case SelectionView.Default:
                     RelhaxFormComboBoxList = new RelhaxFormComboBox[2];
                     break;
-                case SelectionView.Legacy:
+                case SelectionView.DefaultV2:
                     RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
-                    TreeViewItem = new System.Windows.Controls.TreeViewItem();
-                    //ChildBorder = new System.Windows.Controls.Border();
-                    //ChildStackPanel = new System.Windows.Controls.StackPanel();
+                    ContentControl = new System.Windows.Controls.ContentControl();
                     break;
-                case SelectionView.LegacyV2:
-                    TreeNode = new RelhaxFormTreeNode();
+                case SelectionView.Legacy:
+                    //TreeViewItem = new System.Windows.Controls.TreeViewItem();
+                    //ChildBorder = new System.Windows.Controls.Border();
                     break;
             }
 
@@ -86,7 +85,7 @@ namespace RelhaxModpack
                         case SelectionView.Default:
                             Parent.RelhaxFormComboBoxList[0].OnDropDownSelectionChanged(this, value);
                             break;
-                        case SelectionView.Legacy:
+                        case SelectionView.DefaultV2:
                             Parent.RelhaxWPFComboBoxList[0].OnDropDownSelectionChanged(this, value);
                             break;
                     }
@@ -98,7 +97,7 @@ namespace RelhaxModpack
                         case SelectionView.Default:
                             Parent.RelhaxFormComboBoxList[1].OnDropDownSelectionChanged(this, value);
                             break;
-                        case SelectionView.Legacy:
+                        case SelectionView.DefaultV2:
                             Parent.RelhaxWPFComboBoxList[1].OnDropDownSelectionChanged(this, value);
                             break;
                     }
@@ -115,7 +114,15 @@ namespace RelhaxModpack
                                 {
                                     if (ParentPanel != null && ParentPanel.BackColor != Color.BlanchedAlmond)
                                     {
+                                        //set the panel color; the checkboxes and stuff are all transparent backgorund
                                         ParentPanel.BackColor = Color.BlanchedAlmond;
+                                    }
+                                    //special user CB code
+                                    else if (UIComponent is RelhaxUserCheckBox rucb)
+                                    {
+                                        rucb.BackColor = Color.BlanchedAlmond;
+                                        if (Settings.DarkUI)
+                                            rucb.ForeColor = SystemColors.ControlText;
                                     }
                                 }
                                 break;
@@ -124,22 +131,55 @@ namespace RelhaxModpack
                                 if (Settings.EnableColorChangeDefaultView)
                                 {
                                     if (ParentPanel != null && !AnyPackagesChecked())
-                                        ParentPanel.BackColor = Settings.GetBackColorDefault();
+                                    {
+                                        ParentPanel.BackColor = Settings.GetBackColorWinForms();
+                                    }
+                                    else if (UIComponent is RelhaxUserCheckBox rucb)
+                                    {
+                                        rucb.BackColor = Settings.GetBackColorWinForms();
+                                        if (Settings.DarkUI)
+                                        {
+                                            rucb.ForeColor = Settings.GetTextColorWinForms();
+                                        }
+                                    }
+
                                 }
                                 break;
                         }
                         break;
                     //WPF treeview is done with treeviewItem
-                    case SelectionView.Legacy:
+                    case SelectionView.DefaultV2:
                         switch (_Checked)
                         {
                             case true:
                                 //handle color change code
                                 if (Settings.EnableColorChangeLegacyView)
                                 {
-                                    if(ChildBorder != null && ChildBorder.Background != System.Windows.Media.Brushes.BlanchedAlmond)
+                                    if(ParentBorder != null && ParentBorder.Background != System.Windows.Media.Brushes.BlanchedAlmond)
                                     {
-                                        ChildBorder.Background = System.Windows.Media.Brushes.BlanchedAlmond;
+                                        ParentBorder.Background = System.Windows.Media.Brushes.BlanchedAlmond;
+                                    }
+                                    if (Settings.DarkUI)
+                                    {
+                                        //need to go through every contentpresenter of a stackpanel and parse
+                                        foreach (System.Windows.UIElement ele in ParentStackPanel.Children)
+                                        {
+                                            if (ele is System.Windows.Controls.ContentControl ctrl)
+                                            {
+                                                if(ctrl.Content is System.Windows.Controls.Control ctrl3 && !(ele is RelhaxWPFComboBox))
+                                                {
+                                                    ctrl3.Foreground = System.Windows.Media.Brushes.Black;
+                                                }
+                                                else if (ele is System.Windows.Controls.Control topHeader)
+                                                {
+                                                    topHeader.Foreground = System.Windows.Media.Brushes.Black;
+                                                }
+                                            }
+                                            else if (ele is System.Windows.Controls.Control ctrl2 && !(ele is RelhaxWPFComboBox))
+                                            {
+                                                ctrl2.Foreground = System.Windows.Media.Brushes.Black;
+                                            }
+                                        }
                                     }
                                 }
                                 break;
@@ -147,8 +187,33 @@ namespace RelhaxModpack
                                 //handle color change code
                                 if (Settings.EnableColorChangeLegacyView)
                                 {
-                                    if (ChildBorder != null && !AnyPackagesChecked())
-                                        ChildBorder.Background = Settings.GetBackColorWPF();
+                                    if (ParentBorder != null && !AnyPackagesChecked())
+                                        ParentBorder.Background = Settings.GetBackColorWPF();
+                                    if (Settings.DarkUI)
+                                    {
+                                        //need to go through every contentpresenter of a stackpanel and parse
+                                        if (!AnyPackagesChecked())
+                                        {
+                                            foreach (System.Windows.UIElement ele in ParentStackPanel.Children)
+                                            {
+                                                if (ele is System.Windows.Controls.ContentControl ctrl)
+                                                {
+                                                    if (ctrl.Content is System.Windows.Controls.Control ctrl3 && !(ele is RelhaxWPFComboBox))
+                                                    {
+                                                        ctrl3.Foreground = Settings.GetTextColorWPF();
+                                                    }
+                                                    else if (ele is System.Windows.Controls.Control topHeader)
+                                                    {
+                                                        topHeader.Foreground = Settings.GetTextColorWPF();
+                                                    }
+                                                }
+                                                else if (ele is System.Windows.Controls.Control ctrl2 && !(ele is RelhaxWPFComboBox))
+                                                {
+                                                    ctrl2.Foreground = Settings.GetTextColorWPF();
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                                 break;
                         }
@@ -172,21 +237,19 @@ namespace RelhaxModpack
         //Components for FORMS
         //the list of all dropDown options for each package type
         public RelhaxFormComboBox[] RelhaxFormComboBoxList;
-        //the TreeViewItem for winForms
-        public RelhaxFormTreeNode TreeNode;
         //the panel that this package sits in
         public Panel ParentPanel = null;
         public Panel ChildPanel = null;
 
         //Components for WPF
         public RelhaxWPFComboBox[] RelhaxWPFComboBoxList;
-        //the TreeViewItem for WPF
-        public System.Windows.Controls.TreeViewItem @TreeViewItem;
         //the border for the legacy view to allow for putting all subchilderen in the border. sits inside treeviewitem
         public System.Windows.Controls.Border ChildBorder;
         //the stackpanel to allow the child treeviewitems to stack upon each other. sits inside the border
         public System.Windows.Controls.StackPanel ChildStackPanel;
-        
+        public System.Windows.Controls.Border ParentBorder;
+        public System.Windows.Controls.StackPanel ParentStackPanel;
+        public System.Windows.Controls.ContentControl @ContentControl;
         //the list of cache files that should be backed up before wiping the directory
         public List<string> UserFiles = new List<string>();
         //the list of SelectablePackage entries within this instance of SelectablePackages

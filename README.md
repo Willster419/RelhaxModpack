@@ -5,11 +5,11 @@ The fastest WoT modpack installer in the world. A refresh of OMC modpack
 
 **[Virustotal scan](https://www.virustotal.com/#/file/f4e7b13d8e188fff7e604802a96acc43842394cf5d7d94ad82ffce0d20e86b6e/detection)**
 
-[Visit our Website!](http://relhaxmodpack.com/)
+[Visit our Website!](https://relhaxmodpack.com/)
 
 [License Information](https://github.com/Willster419/RelhaxModpack/blob/master/LICENSE)
 
-Support Teamspeak Server: tna.dyndns.org
+[Discord Support Server](https://discordapp.com/invite/58fdPvK)
 
 ### Description and reason for development
   This project is in dedication of the RELIC Gaming Community, as well as the OMC modpack dev team (which includes me, :)). A big thank you to them and their original work, especially to grumpelumpf. He gave the idea and design of the database driver approach, and is the reason why this modpack is where it is today. His work done on the OMC modpack over the years will not be forgotten.
@@ -61,13 +61,10 @@ https://i.imgur.com/rycNyvS.png
   
 **If you come across a bug or feature request please take one of these actions:**
 - Record it here:
-https://docs.google.com/spreadsheets/d/1LmPCMAx0RajW4lVYAnguHjjd8jArtWuZIGciFN76AI4/edit?usp=sharing (quickest)
-- (if you're in relic gaming community) send me a slack message (quickest)
+http://forums.relhaxmodpack.com/
 - (If you have a github account) open an issue.
 
 **When you do, please attach the diagnostic zip file you create by clicking diagnostic utilities->create zip file**
-
-Fell free to leave feedback, tell me what you think, what should change, etc.
 
 If you want to help develop the modpack, I would be glad for the help and will help set you up with an environment.
 
@@ -80,6 +77,8 @@ You can download the modpack from this link:
 http://adf.ly/1l28oP (donate link)
 
 http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe (direct link)
+
+https://wgmods.net/392/ (WG mods link)
 
 If you can spare a few dollars and like the Modpack, please consider donating:
 https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2
@@ -133,11 +132,6 @@ Mod Selection: Zoom 100m patch, Relhax Sound Mod (or equivalent)
   
   Relhax: 4 seconds - **Time reduced by 60% from OMC and 56% from Aslains
   
-##### Time from program execution to mod selection on an SSD:
-TODO
-
-##### Time from mod selection to install completion (installing the same number or similar mods) on an SSD:
-TODO
   
 ---
 The Relhax Modpack ~ *"Would you rather spend time on your mods, or your gameplay?"* ~

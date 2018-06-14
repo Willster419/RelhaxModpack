@@ -1840,6 +1840,13 @@ namespace RelhaxModpack
                     childProgressBar.Maximum = 1;
                     childProgressBar.Value = childProgressBar.Maximum;
                     break;
+                case InstallerEventArgs.InstallProgress.Error:
+                    //a mistake has been made.
+                    message = Translations.GetTranslatedString("error");
+                    totalProgressBar.Value = totalProgressBar.Minimum;
+                    parrentProgressBar.Value = parrentProgressBar.Minimum;
+                    childProgressBar.Value = childProgressBar.Minimum;
+                    break;
                 default:
                     Logging.Manager("Invalid state: " + e.InstalProgress);
                     break;
@@ -1928,12 +1935,10 @@ namespace RelhaxModpack
             saveLastInstallCB.Checked = Settings.SaveLastConfig;
             saveUserDataCB.Checked = Settings.SaveUserData;
             darkUICB.Checked = Settings.DarkUI;
-            expandNodesDefault.Checked = Settings.ExpandAllLegacy;
             clearLogFilesCB.Checked = Settings.DeleteLogs;
             Font = Settings.AppFont;
             notifyIfSameDatabaseCB.Checked = Settings.NotifyIfSameDatabase;
             SuperExtractionCB.Checked = Settings.SuperExtraction;
-            expandNodesDefault2.Checked = Settings.ExpandAllLegacy2;
             EnableBordersDefaultCB.Checked = Settings.EnableBordersDefaultView;
             EnableBordersLegacyCB.Checked = Settings.EnableBordersLegacyView;
             EnableColorChangeDefaultCB.Checked = Settings.EnableColorChangeDefaultView;
@@ -1962,11 +1967,11 @@ namespace RelhaxModpack
                     //set default button, but disable checkedChanged handler to prevent stack overflow
                     selectionDefault.Checked = true;
                     break;
-                case (SelectionView.Legacy):
+                case (SelectionView.DefaultV2):
                     selectionLegacy.Checked = true;
                     break;
-                case (SelectionView.LegacyV2):
-                    selectionLegacyV2.Checked = true;
+                case (SelectionView.Legacy):
+                    selectionDefaultV2.Checked = true;
                     break;
             }
             switch (Settings.FontSizeforum)
@@ -2258,7 +2263,7 @@ namespace RelhaxModpack
         {
             //set the thing
             Settings.DarkUI = darkUICB.Checked;
-            Settings.setUIColor(this);
+            Settings.SetUIColorsWinForms(this);
         }
 
         private void selectionDefault_CheckedChanged(object sender, EventArgs e)
@@ -2268,22 +2273,12 @@ namespace RelhaxModpack
 
         private void selectionLegacy_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.SView = SelectionView.Legacy;
+            Settings.SView = SelectionView.DefaultV2;
         }
 
         private void selectionLegacyV2_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.SView = SelectionView.LegacyV2;
-        }
-
-        private void expandNodesDefault_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.ExpandAllLegacy = expandNodesDefault.Checked;
-        }
-
-        private void expandNodesDefault2_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.ExpandAllLegacy2 = expandNodesDefault2.Checked;
+            Settings.SView = SelectionView.Legacy;
         }
 
         private void fontSize100_CheckedChanged(object sender, EventArgs e)

@@ -25,7 +25,7 @@ namespace RelhaxModpack
             }
             Font = Settings.AppFont;
             //set the UI colors
-            Settings.setUIColor(this);
+            Settings.SetUIColorsWinForms(this);
             ResumeLayout(false);
             if (ApplyControlTranslationsOnLoad)
                 ApplyControlTranslations();
