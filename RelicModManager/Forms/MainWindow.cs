@@ -1965,13 +1965,13 @@ namespace RelhaxModpack
             {
                 case (SelectionView.Default):
                     //set default button, but disable checkedChanged handler to prevent stack overflow
-                    selectionDefault.Checked = true;
+                    SelectionDefault.Checked = true;
                     break;
                 case (SelectionView.DefaultV2):
-                    selectionLegacy.Checked = true;
+                    SelectionLegacy.Checked = true;
                     break;
                 case (SelectionView.Legacy):
-                    selectionDefaultV2.Checked = true;
+                    SelectionDefaultV2.Checked = true;
                     break;
             }
             switch (Settings.FontSizeforum)
@@ -2267,19 +2267,19 @@ namespace RelhaxModpack
             Settings.SetUIColorsWinForms(this);
         }
 
-        private void selectionDefault_CheckedChanged(object sender, EventArgs e)
+        private void SelectionDefault_CheckedChanged(object sender, EventArgs e)
         {
             Settings.SView = SelectionView.Default;
         }
 
-        private void selectionLegacy_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.SView = SelectionView.DefaultV2;
-        }
-
-        private void selectionLegacyV2_CheckedChanged(object sender, EventArgs e)
+        private void SelectionLegacy_CheckedChanged(object sender, EventArgs e)
         {
             Settings.SView = SelectionView.Legacy;
+        }
+
+        private void SelectionLegacyV2_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.SView = SelectionView.DefaultV2;
         }
 
         private void fontSize100_CheckedChanged(object sender, EventArgs e)
@@ -2788,6 +2788,16 @@ namespace RelhaxModpack
         private void EnableColorChangeLegacyCB_CheckedChanged(object sender, EventArgs e)
         {
             Settings.EnableColorChangeLegacyView = EnableColorChangeLegacyCB.Checked;
+        }
+
+        private void EnableBordersDefaultV2CB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.EnableBordersDefaultV2View = EnableBordersDefaultV2CB.Checked;
+        }
+
+        private void EnableColorChangeDefaultV2CB_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.EnableColorChangeDefaultV2View = EnableColorChangeDefaultV2CB.Checked;
         }
         #endregion
 

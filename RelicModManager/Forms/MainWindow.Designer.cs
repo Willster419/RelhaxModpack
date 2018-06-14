@@ -41,27 +41,27 @@
             this.ComicSansFontCB = new System.Windows.Forms.CheckBox();
             this.saveUserDataCB = new System.Windows.Forms.CheckBox();
             this.notifyIfSameDatabaseCB = new System.Windows.Forms.CheckBox();
-            this.ErrorCounterLabel = new System.Windows.Forms.Label();
             this.darkUICB = new System.Windows.Forms.CheckBox();
             this.saveLastInstallCB = new System.Windows.Forms.CheckBox();
             this.SuperExtractionCB = new System.Windows.Forms.CheckBox();
             this.clearLogFilesCB = new System.Windows.Forms.CheckBox();
             this.ShowAdvancedSettingsLink = new System.Windows.Forms.LinkLabel();
+            this.ErrorCounterLabel = new System.Windows.Forms.Label();
             this.languageSelectionGB = new System.Windows.Forms.GroupBox();
             this.LanguageComboBox = new System.Windows.Forms.ComboBox();
             this.cancelDownloadButton = new System.Windows.Forms.Button();
             this.DownloadTimer = new System.Windows.Forms.Timer(this.components);
             this.SelectionViewGB = new System.Windows.Forms.GroupBox();
             this.SelectionLayout = new System.Windows.Forms.TableLayoutPanel();
-            this.selectionDefault = new System.Windows.Forms.RadioButton();
-            this.selectionLegacy = new System.Windows.Forms.RadioButton();
-            this.selectionDefaultV2 = new System.Windows.Forms.RadioButton();
+            this.SelectionDefault = new System.Windows.Forms.RadioButton();
+            this.SelectionLegacy = new System.Windows.Forms.RadioButton();
+            this.SelectionDefaultV2 = new System.Windows.Forms.RadioButton();
             this.EnableBordersDefaultCB = new System.Windows.Forms.CheckBox();
             this.EnableBordersLegacyCB = new System.Windows.Forms.CheckBox();
             this.EnableColorChangeDefaultCB = new System.Windows.Forms.CheckBox();
             this.EnableColorChangeLegacyCB = new System.Windows.Forms.CheckBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.EnableBordersDefaultV2CB = new System.Windows.Forms.CheckBox();
+            this.EnableColorChangeDefaultV2CB = new System.Windows.Forms.CheckBox();
             this.totalProgressBar = new System.Windows.Forms.ProgressBar();
             this.viewAppUpdates = new System.Windows.Forms.Button();
             this.viewDBUpdates = new System.Windows.Forms.Button();
@@ -283,18 +283,6 @@
             this.notifyIfSameDatabaseCB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.notifyIfSameDatabaseCB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
-            // ErrorCounterLabel
-            // 
-            this.ErrorCounterLabel.BackColor = System.Drawing.Color.Transparent;
-            this.InfoTable.SetColumnSpan(this.ErrorCounterLabel, 4);
-            this.ErrorCounterLabel.Location = new System.Drawing.Point(305, 134);
-            this.ErrorCounterLabel.Name = "ErrorCounterLabel";
-            this.ErrorCounterLabel.Size = new System.Drawing.Size(135, 20);
-            this.ErrorCounterLabel.TabIndex = 38;
-            this.ErrorCounterLabel.Text = "Error counter: 0";
-            this.ErrorCounterLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ErrorCounterLabel.Visible = false;
-            // 
             // darkUICB
             // 
             this.darkUICB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -375,6 +363,18 @@
             this.ShowAdvancedSettingsLink.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.ShowAdvancedSettingsLink.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
+            // ErrorCounterLabel
+            // 
+            this.ErrorCounterLabel.BackColor = System.Drawing.Color.Transparent;
+            this.InfoTable.SetColumnSpan(this.ErrorCounterLabel, 4);
+            this.ErrorCounterLabel.Location = new System.Drawing.Point(305, 134);
+            this.ErrorCounterLabel.Name = "ErrorCounterLabel";
+            this.ErrorCounterLabel.Size = new System.Drawing.Size(135, 20);
+            this.ErrorCounterLabel.TabIndex = 38;
+            this.ErrorCounterLabel.Text = "Error counter: 0";
+            this.ErrorCounterLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.ErrorCounterLabel.Visible = false;
+            // 
             // languageSelectionGB
             // 
             this.languageSelectionGB.BackColor = System.Drawing.Color.Transparent;
@@ -442,15 +442,15 @@
             this.SelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
             this.SelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
             this.SelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.34F));
-            this.SelectionLayout.Controls.Add(this.selectionDefault, 0, 0);
-            this.SelectionLayout.Controls.Add(this.selectionLegacy, 1, 0);
-            this.SelectionLayout.Controls.Add(this.selectionDefaultV2, 2, 0);
+            this.SelectionLayout.Controls.Add(this.SelectionDefault, 0, 0);
+            this.SelectionLayout.Controls.Add(this.SelectionLegacy, 1, 0);
+            this.SelectionLayout.Controls.Add(this.SelectionDefaultV2, 2, 0);
             this.SelectionLayout.Controls.Add(this.EnableBordersDefaultCB, 0, 1);
             this.SelectionLayout.Controls.Add(this.EnableBordersLegacyCB, 1, 1);
             this.SelectionLayout.Controls.Add(this.EnableColorChangeDefaultCB, 0, 2);
             this.SelectionLayout.Controls.Add(this.EnableColorChangeLegacyCB, 1, 2);
-            this.SelectionLayout.Controls.Add(this.checkBox1, 2, 1);
-            this.SelectionLayout.Controls.Add(this.checkBox2, 2, 2);
+            this.SelectionLayout.Controls.Add(this.EnableBordersDefaultV2CB, 2, 1);
+            this.SelectionLayout.Controls.Add(this.EnableColorChangeDefaultV2CB, 2, 2);
             this.SelectionLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SelectionLayout.Location = new System.Drawing.Point(3, 16);
             this.SelectionLayout.Name = "SelectionLayout";
@@ -464,51 +464,51 @@
             this.SelectionLayout.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.SelectionLayout.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
-            // selectionDefault
+            // SelectionDefault
             // 
-            this.selectionDefault.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.selectionDefault.Location = new System.Drawing.Point(1, 1);
-            this.selectionDefault.Margin = new System.Windows.Forms.Padding(1);
-            this.selectionDefault.Name = "selectionDefault";
-            this.selectionDefault.Size = new System.Drawing.Size(102, 32);
-            this.selectionDefault.TabIndex = 0;
-            this.selectionDefault.TabStop = true;
-            this.selectionDefault.Text = "Default";
-            this.selectionDefault.UseVisualStyleBackColor = true;
-            this.selectionDefault.CheckedChanged += new System.EventHandler(this.selectionDefault_CheckedChanged);
-            this.selectionDefault.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.selectionDefault.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            this.SelectionDefault.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SelectionDefault.Location = new System.Drawing.Point(1, 1);
+            this.SelectionDefault.Margin = new System.Windows.Forms.Padding(1);
+            this.SelectionDefault.Name = "SelectionDefault";
+            this.SelectionDefault.Size = new System.Drawing.Size(102, 32);
+            this.SelectionDefault.TabIndex = 0;
+            this.SelectionDefault.TabStop = true;
+            this.SelectionDefault.Text = "Default";
+            this.SelectionDefault.UseVisualStyleBackColor = true;
+            this.SelectionDefault.CheckedChanged += new System.EventHandler(this.SelectionDefault_CheckedChanged);
+            this.SelectionDefault.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.SelectionDefault.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
-            // selectionLegacy
+            // SelectionLegacy
             // 
-            this.selectionLegacy.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.selectionLegacy.Location = new System.Drawing.Point(105, 1);
-            this.selectionLegacy.Margin = new System.Windows.Forms.Padding(1);
-            this.selectionLegacy.Name = "selectionLegacy";
-            this.selectionLegacy.Size = new System.Drawing.Size(102, 32);
-            this.selectionLegacy.TabIndex = 1;
-            this.selectionLegacy.TabStop = true;
-            this.selectionLegacy.Text = "Legacy";
-            this.selectionLegacy.UseVisualStyleBackColor = true;
-            this.selectionLegacy.CheckedChanged += new System.EventHandler(this.selectionLegacy_CheckedChanged);
-            this.selectionLegacy.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.selectionLegacy.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            this.SelectionLegacy.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SelectionLegacy.Location = new System.Drawing.Point(105, 1);
+            this.SelectionLegacy.Margin = new System.Windows.Forms.Padding(1);
+            this.SelectionLegacy.Name = "SelectionLegacy";
+            this.SelectionLegacy.Size = new System.Drawing.Size(102, 32);
+            this.SelectionLegacy.TabIndex = 1;
+            this.SelectionLegacy.TabStop = true;
+            this.SelectionLegacy.Text = "Legacy";
+            this.SelectionLegacy.UseVisualStyleBackColor = true;
+            this.SelectionLegacy.CheckedChanged += new System.EventHandler(this.SelectionLegacy_CheckedChanged);
+            this.SelectionLegacy.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.SelectionLegacy.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
-            // selectionDefaultV2
+            // SelectionDefaultV2
             // 
-            this.selectionDefaultV2.AutoSize = true;
-            this.selectionDefaultV2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.selectionDefaultV2.Location = new System.Drawing.Point(209, 1);
-            this.selectionDefaultV2.Margin = new System.Windows.Forms.Padding(1);
-            this.selectionDefaultV2.Name = "selectionDefaultV2";
-            this.selectionDefaultV2.Size = new System.Drawing.Size(104, 32);
-            this.selectionDefaultV2.TabIndex = 3;
-            this.selectionDefaultV2.TabStop = true;
-            this.selectionDefaultV2.Text = "Default V2";
-            this.selectionDefaultV2.UseVisualStyleBackColor = true;
-            this.selectionDefaultV2.CheckedChanged += new System.EventHandler(this.selectionLegacyV2_CheckedChanged);
-            this.selectionDefaultV2.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.selectionDefaultV2.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            this.SelectionDefaultV2.AutoSize = true;
+            this.SelectionDefaultV2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SelectionDefaultV2.Location = new System.Drawing.Point(209, 1);
+            this.SelectionDefaultV2.Margin = new System.Windows.Forms.Padding(1);
+            this.SelectionDefaultV2.Name = "SelectionDefaultV2";
+            this.SelectionDefaultV2.Size = new System.Drawing.Size(104, 32);
+            this.SelectionDefaultV2.TabIndex = 3;
+            this.SelectionDefaultV2.TabStop = true;
+            this.SelectionDefaultV2.Text = "Default V2";
+            this.SelectionDefaultV2.UseVisualStyleBackColor = true;
+            this.SelectionDefaultV2.CheckedChanged += new System.EventHandler(this.SelectionLegacyV2_CheckedChanged);
+            this.SelectionDefaultV2.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.SelectionDefaultV2.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
             // EnableBordersDefaultCB
             // 
@@ -574,31 +574,37 @@
             this.EnableColorChangeLegacyCB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.EnableColorChangeLegacyCB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
-            // checkBox1
+            // EnableBordersDefaultV2CB
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkBox1.Location = new System.Drawing.Point(209, 35);
-            this.checkBox1.Margin = new System.Windows.Forms.Padding(1);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.checkBox1.Size = new System.Drawing.Size(104, 32);
-            this.checkBox1.TabIndex = 9;
-            this.checkBox1.Text = "Enable borders";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.EnableBordersDefaultV2CB.AutoSize = true;
+            this.EnableBordersDefaultV2CB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.EnableBordersDefaultV2CB.Location = new System.Drawing.Point(209, 35);
+            this.EnableBordersDefaultV2CB.Margin = new System.Windows.Forms.Padding(1);
+            this.EnableBordersDefaultV2CB.Name = "EnableBordersDefaultV2CB";
+            this.EnableBordersDefaultV2CB.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.EnableBordersDefaultV2CB.Size = new System.Drawing.Size(104, 32);
+            this.EnableBordersDefaultV2CB.TabIndex = 9;
+            this.EnableBordersDefaultV2CB.Text = "Enable borders";
+            this.EnableBordersDefaultV2CB.UseVisualStyleBackColor = true;
+            this.EnableBordersDefaultV2CB.CheckedChanged += new System.EventHandler(this.EnableBordersDefaultV2CB_CheckedChanged);
+            this.EnableBordersDefaultV2CB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.EnableBordersDefaultV2CB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
-            // checkBox2
+            // EnableColorChangeDefaultV2CB
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkBox2.Location = new System.Drawing.Point(209, 69);
-            this.checkBox2.Margin = new System.Windows.Forms.Padding(1);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.checkBox2.Size = new System.Drawing.Size(104, 32);
-            this.checkBox2.TabIndex = 10;
-            this.checkBox2.Text = "Enable color change";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.EnableColorChangeDefaultV2CB.AutoSize = true;
+            this.EnableColorChangeDefaultV2CB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.EnableColorChangeDefaultV2CB.Location = new System.Drawing.Point(209, 69);
+            this.EnableColorChangeDefaultV2CB.Margin = new System.Windows.Forms.Padding(1);
+            this.EnableColorChangeDefaultV2CB.Name = "EnableColorChangeDefaultV2CB";
+            this.EnableColorChangeDefaultV2CB.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.EnableColorChangeDefaultV2CB.Size = new System.Drawing.Size(104, 32);
+            this.EnableColorChangeDefaultV2CB.TabIndex = 10;
+            this.EnableColorChangeDefaultV2CB.Text = "Enable color change";
+            this.EnableColorChangeDefaultV2CB.UseVisualStyleBackColor = true;
+            this.EnableColorChangeDefaultV2CB.CheckedChanged += new System.EventHandler(this.EnableColorChangeDefaultV2CB_CheckedChanged);
+            this.EnableColorChangeDefaultV2CB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.EnableColorChangeDefaultV2CB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
             // totalProgressBar
             // 
@@ -653,7 +659,7 @@
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26F));
-            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 38F));
             this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.InfoTable.Controls.Add(this.DatabaseVersionLabel, 4, 9);
             this.InfoTable.Controls.Add(this.ApplicationVersionLabel, 0, 9);
@@ -1263,8 +1269,8 @@
         private System.Windows.Forms.Timer DownloadTimer;
         private System.Windows.Forms.GroupBox languageSelectionGB;
         private System.Windows.Forms.GroupBox SelectionViewGB;
-        private System.Windows.Forms.RadioButton selectionLegacy;
-        private System.Windows.Forms.RadioButton selectionDefault;
+        private System.Windows.Forms.RadioButton SelectionLegacy;
+        private System.Windows.Forms.RadioButton SelectionDefault;
         private System.Windows.Forms.ProgressBar totalProgressBar;
         private System.Windows.Forms.Button viewAppUpdates;
         private System.Windows.Forms.Button viewDBUpdates;
@@ -1281,7 +1287,7 @@
         private System.Windows.Forms.TableLayoutPanel SelectionLayout;
         private System.Windows.Forms.RichTextBox downloadProgress;
         private System.Windows.Forms.FolderBrowserDialog ExportModeBrowserDialog;
-        private System.Windows.Forms.RadioButton selectionDefaultV2;
+        private System.Windows.Forms.RadioButton SelectionDefaultV2;
         private System.Windows.Forms.CheckBox EnableBordersDefaultCB;
         private System.Windows.Forms.CheckBox EnableBordersLegacyCB;
         private System.Windows.Forms.CheckBox EnableColorChangeDefaultCB;
@@ -1318,8 +1324,8 @@
         private System.Windows.Forms.PictureBox RegionEuEngLanguagePictureBox;
         private System.Windows.Forms.PictureBox RegionEuGerFlagPictureBox;
         private System.Windows.Forms.PictureBox RegionEuGerLanguagePictureBox;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox EnableBordersDefaultV2CB;
+        private System.Windows.Forms.CheckBox EnableColorChangeDefaultV2CB;
     }
 }
 
