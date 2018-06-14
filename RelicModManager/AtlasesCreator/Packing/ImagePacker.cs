@@ -133,7 +133,7 @@ namespace RelhaxModpack.AtlasesCreator
             Installer.InstallWorker.ReportProgress(0);
 
             // make our output image
-            outputImage = CreateOutputImage.generateImage(files, imagePlacement, outputWidth, outputHeight, padding);
+            outputImage = CreateOutputImage.generateImage(files, imagePlacement, outputWidth, outputHeight);
             if (outputImage == null)
                 return (int)FailCode.FailedToSaveImage;
 
@@ -199,7 +199,7 @@ namespace RelhaxModpack.AtlasesCreator
                         // if we have no images in imagePlacement, i.e. we've never succeeded at PackImages,
                         // show an error and return false since there is no way to fit the images into our
                         // maximum size texture
-                        if (imagePlacement.Count == 0)
+                        if (testImagePlacement.Count == 0)
                         {
                             return false;
                         }
@@ -269,6 +269,11 @@ namespace RelhaxModpack.AtlasesCreator
                     // option for faster finishing
                     if (quit)
                     {
+                        if (!(requireSquare || requirePow2))
+                        {
+                            outputWidth += padding;
+                            outputHeight += padding;
+                        }
                         return true;
                     }
 

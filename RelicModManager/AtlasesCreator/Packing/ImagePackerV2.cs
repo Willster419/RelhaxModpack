@@ -160,7 +160,7 @@ namespace RelhaxModpack.AtlasesCreator
 
             // make our output image
             // outputImage = CreateOutputImage();
-            outputImage = CreateOutputImage.generateImage(files, imagePlacement, TextureWidth, TextureHeight, imagePadding);
+            outputImage = CreateOutputImage.generateImage(files, imagePlacement, TextureWidth, TextureHeight);
             if (outputImage == null)
                 return (int)FailCode.FailedToSaveImage;
 

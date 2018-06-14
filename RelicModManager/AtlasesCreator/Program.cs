@@ -95,6 +95,8 @@ namespace RelhaxModpack.AtlasesCreator
                 // generate our output
                 ImagePacker imagePacker = new ImagePacker();
 
+                // Logging.Manager("try to add " + args.TextureList.Count + " images to atlas file " + args.AtlasFile);
+                
                 // pack the image, generating a map only if desired
                 int result = imagePacker.PackImage(args.TextureList, args.PowOf2, args.Square, args.FastImagePacker, args.AtlasWidth, args.AtlasHeight, args.Padding, args.mapExporter != null, out Bitmap outputImage, out Dictionary<string, Rectangle> outputMap);
                 if (result != 0)

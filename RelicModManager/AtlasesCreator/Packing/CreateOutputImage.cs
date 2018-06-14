@@ -6,11 +6,11 @@ namespace RelhaxModpack.AtlasesCreator
 {
     public class CreateOutputImage
     {
-        public static Bitmap generateImage(List<Texture> files, Dictionary<Texture, Rectangle> imagePlacement, int outputWidth, int outputHeight, int padding)
+        public static Bitmap generateImage(List<Texture> files, Dictionary<Texture, Rectangle> imagePlacement, int outputWidth, int outputHeight)
         {
             try
             {
-                Bitmap outputImage = new Bitmap(outputWidth + padding, outputHeight + padding, PixelFormat.Format32bppArgb);
+                Bitmap outputImage = new Bitmap(outputWidth, outputHeight, PixelFormat.Format32bppArgb);
 
                 // draw all the images into the output image
                 foreach (var image in files)
