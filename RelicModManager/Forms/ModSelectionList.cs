@@ -364,7 +364,7 @@ namespace RelhaxModpack
                         //add the host to the tab control
                         t.Controls.Add(host);
                         //TopPanel.MouseDown += Lsl_MouseDown;
-                        scrollViewer.MouseDown += Lsl_MouseDown;
+                        //scrollViewer.MouseDown += Lsl_MouseDown;
                         //set the color if darkUI
                         if (Settings.DarkUI)
                             TopBorder.Background = System.Windows.Media.Brushes.Gray;
@@ -1114,16 +1114,16 @@ namespace RelhaxModpack
                         if(sp.UIComponent is System.Windows.Controls.RadioButton rb)
                         {
                             rb.Click += OnWPFComponentCheck;
-                            //sp.TreeViewItem.Header = sp.UIComponent;
-                            sp.Parent.ChildStackPanel.Children.Add((System.Windows.Controls.Control)sp.UIComponent);
-                            //sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
+                            sp.ContentControl.MouseRightButtonUp += Lsl_MouseDown;
+                            sp.ContentControl.Content = sp.UIComponent;
+                            sp.Parent.ChildStackPanel.Children.Add(sp.ContentControl);
                         }
                         else if(sp.UIComponent is System.Windows.Controls.CheckBox cb)
                         {
                             cb.Click += OnWPFComponentCheck;
-                            //sp.TreeViewItem.Header = sp.UIComponent;
-                            sp.Parent.ChildStackPanel.Children.Add((System.Windows.Controls.Control)sp.UIComponent);
-                            //sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
+                            sp.ContentControl.MouseRightButtonUp += Lsl_MouseDown;
+                            sp.ContentControl.Content = sp.UIComponent;
+                            sp.Parent.ChildStackPanel.Children.Add(sp.ContentControl);
                         }
                     }
                     break;
@@ -1700,10 +1700,6 @@ namespace RelhaxModpack
         {
             if (LoadingConfig)
                 return;
-            if (e.RightButton != System.Windows.Input.MouseButtonState.Pressed)
-            {
-                return;
-            }
             IPackageUIComponent pkg = null;
             if (e.OriginalSource is System.Windows.Controls.ContentPresenter cp)
             {
@@ -1711,14 +1707,6 @@ namespace RelhaxModpack
                 {
                     pkg = ipc;
                 }
-            }
-            else if (e.Source is IPackageUIComponent ipc)
-            {
-                pkg = ipc;
-            }
-            else if (e.Source is System.Windows.Controls.StackPanel sp)
-            {
-                
             }
             if ((pkg != null) && (pkg.Package != null))
             {

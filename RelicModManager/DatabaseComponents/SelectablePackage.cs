@@ -24,6 +24,7 @@ namespace RelhaxModpack
                     //TreeViewItem = new System.Windows.Controls.TreeViewItem();
                     //ChildBorder = new System.Windows.Controls.Border();
                     //ChildStackPanel = new System.Windows.Controls.StackPanel();
+                    ContentControl = new System.Windows.Controls.ContentControl();
                     break;
                 case SelectionView.LegacyV2:
                     TreeNode = new RelhaxFormTreeNode();
@@ -205,6 +206,7 @@ namespace RelhaxModpack
         public System.Windows.Controls.StackPanel ChildStackPanel;
         public System.Windows.Controls.Border ParentBorder;
         public System.Windows.Controls.StackPanel ParentStackPanel;
+        public System.Windows.Controls.ContentControl @ContentControl;
         //the list of cache files that should be backed up before wiping the directory
         public List<string> UserFiles = new List<string>();
         //the list of SelectablePackage entries within this instance of SelectablePackages
