@@ -304,7 +304,9 @@ namespace RelhaxModpack
                 };
                 c.CategoryHeader.Parent = c.CategoryHeader;
                 c.CategoryHeader.TopParent = c.CategoryHeader;
-                switch(Settings.SView)
+                //shared component
+                ElementHost host;
+                switch (Settings.SView)
                 {
                     case SelectionView.Default:
                         RelhaxFormCheckBox cb = new RelhaxFormCheckBox()
@@ -349,7 +351,7 @@ namespace RelhaxModpack
                             Background = Settings.GetBackColorWPF(),
                             Content = TopBorder
                         };
-                        ElementHost host = new ElementHost()
+                        host = new ElementHost()
                         {
                             Location = new Point(5, 5),
                             Size = new Size(t.Size.Width - 5 - 5, t.Size.Height - 5 - 5),
@@ -398,7 +400,53 @@ namespace RelhaxModpack
                         c.CategoryHeader.Packages = c.Packages;
                         break;
                     case SelectionView.Legacy:
-                        
+                        //create the WPF host for this tabPage
+                        System.Windows.Controls.TreeView tv = new System.Windows.Controls.TreeView();
+                        host = new ElementHost()
+                        {
+                            Location = new Point(5, 5),
+                            Size = new Size(t.Size.Width - 5 - 5, t.Size.Height - 5 - 5),
+                            BackColorTransparent = false,
+                            BackColor = Color.White,
+                            Child = tv,
+                            Dock = DockStyle.Fill
+                        };
+                        //add the host to the tab control
+                        t.Controls.Add(host);
+                        //link treeview control to parent item
+                        c.CategoryHeader.TreeView = tv;
+                        //create legacyselectionlist for inside host
+                        if (tv.HasItems)
+                            tv.Items.Clear();
+                        tv.MouseDown += Lsl_MouseDown;
+                        if (Settings.DarkUI)
+                            tv.Background = System.Windows.Media.Brushes.Gray;
+                        //create checkbox header for inside selecteionlist (treeView)
+                        cb2 = new RelhaxWPFCheckBox()
+                        {
+                            Package = c.CategoryHeader,
+                            Content = c.CategoryHeader.NameFormatted
+                        };
+                        cb2.Click += OnWPFComponentCheck;
+                        //create the border and stackpanels
+                        c.CategoryHeader.ChildStackPanel = new System.Windows.Controls.StackPanel();
+                        c.CategoryHeader.ChildBorder = new System.Windows.Controls.Border()
+                        {
+                            BorderBrush = System.Windows.Media.Brushes.Black,
+                            BorderThickness = Settings.EnableBordersLegacyView ? new System.Windows.Thickness(1) : new System.Windows.Thickness(0),
+                            Child = c.CategoryHeader.ChildStackPanel,
+                            Margin = new System.Windows.Thickness(-25, 0, 0, 0)
+                        };
+                        //add the border (and thus the stackpanel) to the treeviewitem
+                        c.CategoryHeader.TreeViewItem.Items.Add(c.CategoryHeader.ChildBorder);
+                        //make all modifications to CategoryHeader package
+                        c.CategoryHeader.TreeViewItem.IsExpanded = true;
+                        c.CategoryHeader.UIComponent = cb2;
+                        c.CategoryHeader.ParentUIComponent = cb2;
+                        c.CategoryHeader.TopParentUIComponent = cb2;
+                        c.CategoryHeader.Packages = c.Packages;
+                        c.CategoryHeader.TreeViewItem.Header = c.CategoryHeader.UIComponent;
+                        tv.Items.Add(c.CategoryHeader.TreeViewItem);
                         break;
                 }
                 modTabGroups.TabPages.Add(t);
@@ -827,10 +875,8 @@ namespace RelhaxModpack
                     //in WPF underscores are only displayed when there's two of them
                     packageDisplayName = packageDisplayName.Replace(@"_", @"__");
                     //link the parent panel and border to the parent's child versions
-                    
-                        sp.ParentBorder = sp.Parent.ChildBorder;
-                        sp.ParentStackPanel = sp.Parent.ChildStackPanel;
-                    
+                    sp.ParentBorder = sp.Parent.ChildBorder;
+                    sp.ParentStackPanel = sp.Parent.ChildStackPanel;
                     //start code for border and stackpanel
                     if(sp.ChildBorder == null && sp.Packages.Count > 0)
                     {
@@ -1000,7 +1046,171 @@ namespace RelhaxModpack
                     }
                     break;
                 case SelectionView.Legacy:
-
+                    //in WPF underscores are only displayed when there's two of them
+                    packageDisplayName = packageDisplayName.Replace(@"_", @"__");
+                    //start code for border and stackpanel
+                    if (sp.ChildBorder == null && sp.Packages.Count > 0)
+                    {
+                        sp.ChildStackPanel = new System.Windows.Controls.StackPanel();
+                        sp.ChildBorder = new System.Windows.Controls.Border()
+                        {
+                            BorderBrush = System.Windows.Media.Brushes.Black,
+                            BorderThickness = Settings.EnableBordersLegacyView ? new System.Windows.Thickness(1) : new System.Windows.Thickness(0),
+                            Child = sp.ChildStackPanel,
+                            Margin = new System.Windows.Thickness(-25, 0, 0, 0)
+                        };
+                        sp.TreeViewItem.Items.Add(sp.ChildBorder);
+                    }
+                    //end code for border and stackpanel
+                    switch (sp.Type)
+                    {
+                        case "single":
+                        case "single1":
+                            sp.UIComponent = new RelhaxWPFRadioButton()
+                            {
+                                ToolTip = tooltipString,
+                                Package = sp,
+                                FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
+                                HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left,
+                                VerticalContentAlignment = System.Windows.VerticalAlignment.Center,
+                                FontWeight = Settings.DarkUI ? System.Windows.FontWeights.Bold : System.Windows.FontWeights.Normal,
+                                Content = packageDisplayName,
+                                IsEnabled = canBeEnabled,
+                                IsChecked = (canBeEnabled && sp.Checked) ? true : false
+                            };
+                            break;
+                        case "single_dropdown":
+                        case "single_dropdown1":
+                            if (sp.Parent.RelhaxWPFComboBoxList[0] == null)
+                                sp.Parent.RelhaxWPFComboBoxList[0] = new RelhaxWPFComboBox()
+                                {
+                                    IsEditable = false,
+                                    Name = "notAddedYet",
+                                    IsEnabled = false,
+                                    FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
+                                    FontWeight = Settings.DarkUI ? System.Windows.FontWeights.Bold : System.Windows.FontWeights.Normal,
+                                    MinWidth = 100
+                                };
+                            //here means the entry index is not null
+                            if (sp.Enabled)
+                            {
+                                ComboBoxItem cbi = new ComboBoxItem(sp, sp.NameFormatted);
+                                sp.Parent.RelhaxWPFComboBoxList[0].Items.Add(cbi);
+                                if (sp.Checked)
+                                {
+                                    sp.Parent.RelhaxWPFComboBoxList[0].SelectedItem = cbi;
+                                    sp.Parent.RelhaxWPFComboBoxList[0].ToolTip = tooltipString;
+                                }
+                            }
+                            if (sp.Parent.RelhaxWPFComboBoxList[0].Name.Equals("notAddedYet"))
+                            {
+                                sp.Parent.RelhaxWPFComboBoxList[0].Name = "added";
+                                sp.Parent.RelhaxWPFComboBoxList[0].PreviewMouseRightButtonDown += Generic_MouseDown;
+                                sp.Parent.RelhaxWPFComboBoxList[0].SelectionChanged += OnSingleDDPackageClick;
+                                sp.Parent.RelhaxWPFComboBoxList[0].handler = OnSingleDDPackageClick;
+                                //ADD HANDLER HERE
+                                if (sp.Parent.RelhaxWPFComboBoxList[0].Items.Count > 0)
+                                {
+                                    sp.Parent.RelhaxWPFComboBoxList[0].IsEnabled = true;
+                                    if (sp.Parent.RelhaxWPFComboBoxList[0].SelectedIndex == -1)
+                                        sp.Parent.RelhaxWPFComboBoxList[0].SelectedIndex = 0;
+                                }
+                                sp.TreeViewItem.Header = sp.Parent.RelhaxWPFComboBoxList[0];
+                                //sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
+                                sp.Parent.ChildStackPanel.Children.Add(sp.TreeViewItem);
+                            }
+                            break;
+                        case "single_dropdown2":
+                            if (sp.Parent.RelhaxWPFComboBoxList[1] == null)
+                                sp.Parent.RelhaxWPFComboBoxList[1] = new RelhaxWPFComboBox()
+                                {
+                                    IsEditable = false,
+                                    Name = "notAddedYet",
+                                    IsEnabled = false,
+                                    FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
+                                    FontWeight = Settings.DarkUI ? System.Windows.FontWeights.Bold : System.Windows.FontWeights.Normal,
+                                    MinWidth = 100
+                                };
+                            //here means the entry index is not null
+                            if (sp.Enabled)
+                            {
+                                ComboBoxItem cbi = new ComboBoxItem(sp, sp.NameFormatted);
+                                sp.Parent.RelhaxWPFComboBoxList[1].Items.Add(cbi);
+                                if (sp.Checked)
+                                {
+                                    sp.Parent.RelhaxWPFComboBoxList[1].SelectedItem = cbi;
+                                    sp.Parent.RelhaxWPFComboBoxList[1].ToolTip = tooltipString;
+                                }
+                            }
+                            if (sp.Parent.RelhaxWPFComboBoxList[1].Name.Equals("notAddedYet"))
+                            {
+                                sp.Parent.RelhaxWPFComboBoxList[1].Name = "added";
+                                sp.Parent.RelhaxWPFComboBoxList[1].PreviewMouseRightButtonDown += Generic_MouseDown;
+                                sp.Parent.RelhaxWPFComboBoxList[1].SelectionChanged += OnSingleDDPackageClick;
+                                sp.Parent.RelhaxWPFComboBoxList[1].handler = OnSingleDDPackageClick;
+                                //ADD HANDLER HERE
+                                if (sp.Parent.RelhaxWPFComboBoxList[1].Items.Count > 0)
+                                {
+                                    sp.Parent.RelhaxWPFComboBoxList[1].IsEnabled = true;
+                                    if (sp.Parent.RelhaxWPFComboBoxList[1].SelectedIndex == -1)
+                                        sp.Parent.RelhaxWPFComboBoxList[1].SelectedIndex = 0;
+                                }
+                                sp.TreeViewItem.Header = sp.Parent.RelhaxWPFComboBoxList[1];
+                                //sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
+                                sp.Parent.ChildStackPanel.Children.Add(sp.TreeViewItem);
+                            }
+                            break;
+                        case "multi":
+                            sp.UIComponent = new RelhaxWPFCheckBox()
+                            {
+                                ToolTip = tooltipString,
+                                Package = sp,
+                                FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
+                                HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left,
+                                VerticalContentAlignment = System.Windows.VerticalAlignment.Center,
+                                FontWeight = Settings.DarkUI ? System.Windows.FontWeights.Bold : System.Windows.FontWeights.Normal,
+                                Content = packageDisplayName,
+                                IsEnabled = canBeEnabled,
+                                IsChecked = (canBeEnabled && sp.Checked) ? true : false,
+                            };
+                            break;
+                    }
+                    //set the font size
+                    if ((sp.UIComponent != null) && (sp.UIComponent is System.Windows.Controls.Control cont3))
+                    {
+                        switch (Settings.FontSizeforum)
+                        {
+                            case FontSize.Font125:
+                                cont3.FontSize = cont3.FontSize + 4;
+                                break;
+                            case FontSize.Font175:
+                                cont3.FontSize = cont3.FontSize + 8;
+                                break;
+                            case FontSize.Font225:
+                                cont3.FontSize = cont3.FontSize + 12;
+                                break;
+                            case FontSize.Font275:
+                                cont3.FontSize = cont3.FontSize + 16;
+                                break;
+                        }
+                        cont3.MouseDown += Generic_MouseDown;
+                        if (sp.UIComponent is System.Windows.Controls.RadioButton rb)
+                        {
+                            rb.Click += OnWPFComponentCheck;
+                            sp.TreeViewItem.Header = sp.UIComponent;
+                            sp.TreeViewItem.IsExpanded = true;
+                            sp.Parent.ChildStackPanel.Children.Add(sp.TreeViewItem);
+                            //sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
+                        }
+                        else if (sp.UIComponent is System.Windows.Controls.CheckBox cb)
+                        {
+                            cb.Click += OnWPFComponentCheck;
+                            sp.TreeViewItem.Header = sp.UIComponent;
+                            sp.TreeViewItem.IsExpanded = true;
+                            sp.Parent.ChildStackPanel.Children.Add(sp.TreeViewItem);
+                            //sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
+                        }
+                    }
                     break;
             }
             if(sp.Packages.Count > 0)

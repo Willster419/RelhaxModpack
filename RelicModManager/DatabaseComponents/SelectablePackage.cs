@@ -24,8 +24,8 @@ namespace RelhaxModpack
                     ContentControl = new System.Windows.Controls.ContentControl();
                     break;
                 case SelectionView.Legacy:
-                    //TreeViewItem = new System.Windows.Controls.TreeViewItem();
-                    //ChildBorder = new System.Windows.Controls.Border();
+                    TreeViewItem = new System.Windows.Controls.TreeViewItem();
+                    RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
                     break;
             }
 
@@ -234,6 +234,7 @@ namespace RelhaxModpack
         }
         //keeping track of the level in the tree where it is. 0 is topmost level
         public int Level = -2;
+
         //Components for FORMS
         //the list of all dropDown options for each package type
         public RelhaxFormComboBox[] RelhaxFormComboBoxList;
@@ -241,15 +242,22 @@ namespace RelhaxModpack
         public Panel ParentPanel = null;
         public Panel ChildPanel = null;
 
-        //Components for WPF
+        //Components for WPF (BOTH)
         public RelhaxWPFComboBox[] RelhaxWPFComboBoxList;
         //the border for the legacy view to allow for putting all subchilderen in the border. sits inside treeviewitem
         public System.Windows.Controls.Border ChildBorder;
         //the stackpanel to allow the child treeviewitems to stack upon each other. sits inside the border
         public System.Windows.Controls.StackPanel ChildStackPanel;
+
+        //only for DEFAULT V2
         public System.Windows.Controls.Border ParentBorder;
         public System.Windows.Controls.StackPanel ParentStackPanel;
         public System.Windows.Controls.ContentControl @ContentControl;
+
+        //only for LEGACY
+        public System.Windows.Controls.TreeViewItem @TreeViewItem;
+        public System.Windows.Controls.TreeView @TreeView;
+
         //the list of cache files that should be backed up before wiping the directory
         public List<string> UserFiles = new List<string>();
         //the list of SelectablePackage entries within this instance of SelectablePackages

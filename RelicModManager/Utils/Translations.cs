@@ -536,7 +536,7 @@ namespace RelhaxModpack
             AddToAll("ErrorCounterLabel", "Error Counter: ");
 
             //Component: DPIAUTO
-            AddToAll("DPIAUTO", "DPI AUTO");
+            AddToAll("DPIAUTO", "AUTO");
 
             //Component: DPI100
             AddToAll("DPI100", "DPI 1.0x");

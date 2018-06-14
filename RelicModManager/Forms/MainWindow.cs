@@ -2010,6 +2010,7 @@ namespace RelhaxModpack
                     DPIAUTO.Checked = true;
                     break;
             }
+            ToggleScaleRBs(true);
         }
 
         //for when downloads are started, a timer to keep track of the download speed and ETA
