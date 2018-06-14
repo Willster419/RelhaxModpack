@@ -16,5 +16,26 @@ namespace RelhaxModpack
         public int height { get; set; }
         //the actual bitmap in memory of the image
         public Bitmap AtlasImage { get; set; }
+
+        public Rectangle Rect;
+        // internal Rectangle rect
+        private Rectangle rect
+        {
+            get
+            {
+                Rect.X = x;
+                Rect.Y = y;
+                Rect.Width = width;
+                Rect.Height = height;
+                return Rect;
+            }
+            set
+            {
+                Rect.X = value.X;
+                Rect.Y = value.Y;
+                Rect.Width = value.Width;
+                Rect.Height = value.Height;
+            }
+        }
     }
 }
