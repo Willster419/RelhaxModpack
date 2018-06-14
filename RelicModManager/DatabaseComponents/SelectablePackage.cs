@@ -21,7 +21,7 @@ namespace RelhaxModpack
                     break;
                 case SelectionView.Legacy:
                     RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
-                    TreeViewItem = new System.Windows.Controls.TreeViewItem();
+                    //TreeViewItem = new System.Windows.Controls.TreeViewItem();
                     //ChildBorder = new System.Windows.Controls.Border();
                     //ChildStackPanel = new System.Windows.Controls.StackPanel();
                     break;
@@ -199,13 +199,12 @@ namespace RelhaxModpack
 
         //Components for WPF
         public RelhaxWPFComboBox[] RelhaxWPFComboBoxList;
-        //the TreeViewItem for WPF
-        public System.Windows.Controls.TreeViewItem @TreeViewItem;
         //the border for the legacy view to allow for putting all subchilderen in the border. sits inside treeviewitem
         public System.Windows.Controls.Border ChildBorder;
         //the stackpanel to allow the child treeviewitems to stack upon each other. sits inside the border
         public System.Windows.Controls.StackPanel ChildStackPanel;
-        
+        public System.Windows.Controls.Border ParentBorder;
+        public System.Windows.Controls.StackPanel ParentStackPanel;
         //the list of cache files that should be backed up before wiping the directory
         public List<string> UserFiles = new List<string>();
         //the list of SelectablePackage entries within this instance of SelectablePackages

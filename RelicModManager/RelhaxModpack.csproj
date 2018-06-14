@@ -319,7 +319,7 @@
     <Compile Include="Forms\InstallFinished.Designer.cs">
       <DependentUpon>InstallFinished.cs</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\LegacySelectionList.xaml.cs">
+    <Compile Include="LegacyComponents\LegacySelectionList.xaml.cs">
       <DependentUpon>LegacySelectionList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\MainWindow.cs">
@@ -543,7 +543,7 @@
     <Content Include="Resources\relicbanner_for_ico.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="UIComponents\LegacySelectionList.xaml">
+    <Page Include="LegacyComponents\LegacySelectionList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

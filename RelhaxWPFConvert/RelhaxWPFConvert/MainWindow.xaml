@@ -6,18 +6,28 @@
         xmlns:local="clr-namespace:RelhaxWPFConvert"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid Background="#FF0C0CE6">
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="131" Margin="10,10,0,0" VerticalAlignment="Top" Width="357">
+    <ScrollViewer HorizontalScrollBarVisibility="Visible">
+    <Grid Background="#FF0C0CE6" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible">
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="600" Margin="10,10,0,0" VerticalAlignment="Top" Width="772">
             <StackPanel>
                 <CheckBox Content="CheckBox"/>
                 <CheckBox Content="CheckBox"/>
-                <Border BorderBrush="Black" BorderThickness="2" Height="100" Padding="3">
+                <Border BorderBrush="Black" BorderThickness="2" Height="300" Padding="13,0,0,0">
                     <StackPanel>
                         <CheckBox Content="CheckBox"/>
                         <CheckBox Content="CheckBox"/>
+                        <CheckBox Content="CheckBox"/>
+                        <CheckBox Content="CheckBox"/>
+                        <CheckBox Content="CheckBox"/>
+                        <CheckBox Content="CheckBox"/>
+                        <CheckBox Content="CheckBox"/>
+                        <CheckBox Content="CheckBox"/>
+                        <CheckBox Content="CheckBox" Foreground="BlanchedAlmond"/>
+                        <ComboBox MaxWidth="200" HorizontalAlignment="Left"/>
                     </StackPanel>
                 </Border>
             </StackPanel>
         </Border>
     </Grid>
+    </ScrollViewer>
 </Window>

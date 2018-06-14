@@ -661,5 +661,9 @@ namespace RelhaxModpack
         {
             return (DarkUI) ? System.Windows.Media.Brushes.Gray : System.Windows.Media.Brushes.White;
         }
+        public static System.Windows.Media.Brush GetTextColorWPF()
+        {
+            return (DarkUI) ? System.Windows.Media.Brushes.White : System.Windows.Media.Brushes.Black;
+        }
     }
 }
