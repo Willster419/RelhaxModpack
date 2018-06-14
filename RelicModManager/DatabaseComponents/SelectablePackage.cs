@@ -157,9 +157,31 @@ namespace RelhaxModpack
                                 //handle color change code
                                 if (Settings.EnableColorChangeLegacyView)
                                 {
-                                    if(ChildBorder != null && ChildBorder.Background != System.Windows.Media.Brushes.BlanchedAlmond)
+                                    if(ParentBorder != null && ParentBorder.Background != System.Windows.Media.Brushes.BlanchedAlmond)
                                     {
-                                        ChildBorder.Background = System.Windows.Media.Brushes.BlanchedAlmond;
+                                        ParentBorder.Background = System.Windows.Media.Brushes.BlanchedAlmond;
+                                    }
+                                    if (Settings.DarkUI)
+                                    {
+                                        //need to go through every contentpresenter of a stackpanel and parse
+                                        foreach (System.Windows.UIElement ele in ParentStackPanel.Children)
+                                        {
+                                            if (ele is System.Windows.Controls.ContentControl ctrl)
+                                            {
+                                                if(ctrl.Content is System.Windows.Controls.Control ctrl3 && !(ele is RelhaxWPFComboBox))
+                                                {
+                                                    ctrl3.Foreground = System.Windows.Media.Brushes.Black;
+                                                }
+                                                else if (ele is System.Windows.Controls.Control topHeader)
+                                                {
+                                                    topHeader.Foreground = System.Windows.Media.Brushes.Black;
+                                                }
+                                            }
+                                            else if (ele is System.Windows.Controls.Control ctrl2 && !(ele is RelhaxWPFComboBox))
+                                            {
+                                                ctrl2.Foreground = System.Windows.Media.Brushes.Black;
+                                            }
+                                        }
                                     }
                                 }
                                 break;
@@ -167,8 +189,33 @@ namespace RelhaxModpack
                                 //handle color change code
                                 if (Settings.EnableColorChangeLegacyView)
                                 {
-                                    if (ChildBorder != null && !AnyPackagesChecked())
-                                        ChildBorder.Background = Settings.GetBackColorWPF();
+                                    if (ParentBorder != null && !AnyPackagesChecked())
+                                        ParentBorder.Background = Settings.GetBackColorWPF();
+                                    if (Settings.DarkUI)
+                                    {
+                                        //need to go through every contentpresenter of a stackpanel and parse
+                                        if (!AnyPackagesChecked())
+                                        {
+                                            foreach (System.Windows.UIElement ele in ParentStackPanel.Children)
+                                            {
+                                                if (ele is System.Windows.Controls.ContentControl ctrl)
+                                                {
+                                                    if (ctrl.Content is System.Windows.Controls.Control ctrl3 && !(ele is RelhaxWPFComboBox))
+                                                    {
+                                                        ctrl3.Foreground = Settings.GetTextColorWPF();
+                                                    }
+                                                    else if (ele is System.Windows.Controls.Control topHeader)
+                                                    {
+                                                        topHeader.Foreground = Settings.GetTextColorWPF();
+                                                    }
+                                                }
+                                                else if (ele is System.Windows.Controls.Control ctrl2 && !(ele is RelhaxWPFComboBox))
+                                                {
+                                                    ctrl2.Foreground = Settings.GetTextColorWPF();
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                                 break;
                         }

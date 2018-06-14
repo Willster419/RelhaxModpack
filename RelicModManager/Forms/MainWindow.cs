@@ -1935,7 +1935,6 @@ namespace RelhaxModpack
             saveLastInstallCB.Checked = Settings.SaveLastConfig;
             saveUserDataCB.Checked = Settings.SaveUserData;
             darkUICB.Checked = Settings.DarkUI;
-            expandNodesDefault.Checked = Settings.ExpandAllLegacy;
             clearLogFilesCB.Checked = Settings.DeleteLogs;
             Font = Settings.AppFont;
             notifyIfSameDatabaseCB.Checked = Settings.NotifyIfSameDatabase;
@@ -2281,11 +2280,6 @@ namespace RelhaxModpack
         private void selectionLegacyV2_CheckedChanged(object sender, EventArgs e)
         {
             Settings.SView = SelectionView.LegacyV2;
-        }
-
-        private void expandNodesDefault_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.ExpandAllLegacy = expandNodesDefault.Checked;
         }
 
         private void expandNodesDefault2_CheckedChanged(object sender, EventArgs e)

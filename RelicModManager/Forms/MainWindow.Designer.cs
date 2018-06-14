@@ -53,7 +53,6 @@
             this.SelectionViewGB = new System.Windows.Forms.GroupBox();
             this.SelectionLayout = new System.Windows.Forms.TableLayoutPanel();
             this.selectionDefault = new System.Windows.Forms.RadioButton();
-            this.expandNodesDefault = new System.Windows.Forms.CheckBox();
             this.selectionLegacy = new System.Windows.Forms.RadioButton();
             this.selectionLegacyV2 = new System.Windows.Forms.RadioButton();
             this.expandNodesDefault2 = new System.Windows.Forms.CheckBox();
@@ -430,7 +429,6 @@
             this.SelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8F));
             this.SelectionLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.SelectionLayout.Controls.Add(this.selectionDefault, 0, 0);
-            this.SelectionLayout.Controls.Add(this.expandNodesDefault, 1, 3);
             this.SelectionLayout.Controls.Add(this.selectionLegacy, 1, 0);
             this.SelectionLayout.Controls.Add(this.selectionLegacyV2, 2, 0);
             this.SelectionLayout.Controls.Add(this.expandNodesDefault2, 2, 1);
@@ -465,22 +463,6 @@
             this.selectionDefault.CheckedChanged += new System.EventHandler(this.selectionDefault_CheckedChanged);
             this.selectionDefault.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.selectionDefault.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
-            // 
-            // expandNodesDefault
-            // 
-            this.expandNodesDefault.AutoSize = true;
-            this.expandNodesDefault.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.expandNodesDefault.Location = new System.Drawing.Point(139, 70);
-            this.expandNodesDefault.Margin = new System.Windows.Forms.Padding(1);
-            this.expandNodesDefault.Name = "expandNodesDefault";
-            this.expandNodesDefault.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.expandNodesDefault.Size = new System.Drawing.Size(151, 24);
-            this.expandNodesDefault.TabIndex = 2;
-            this.expandNodesDefault.Text = "Expand all";
-            this.expandNodesDefault.UseVisualStyleBackColor = true;
-            this.expandNodesDefault.CheckedChanged += new System.EventHandler(this.expandNodesDefault_CheckedChanged);
-            this.expandNodesDefault.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.expandNodesDefault.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
             // selectionLegacy
             // 
@@ -1265,7 +1247,6 @@
         private System.Windows.Forms.GroupBox SelectionViewGB;
         private System.Windows.Forms.RadioButton selectionLegacy;
         private System.Windows.Forms.RadioButton selectionDefault;
-        private System.Windows.Forms.CheckBox expandNodesDefault;
         private System.Windows.Forms.ProgressBar totalProgressBar;
         private System.Windows.Forms.Button viewAppUpdates;
         private System.Windows.Forms.Button viewDBUpdates;

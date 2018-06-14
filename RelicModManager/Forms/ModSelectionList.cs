@@ -969,7 +969,8 @@ namespace RelhaxModpack
                             BorderBrush = System.Windows.Media.Brushes.Black,
                             BorderThickness = Settings.EnableBordersLegacyView ? new System.Windows.Thickness(1) : new System.Windows.Thickness(0),
                             Child = sp.ChildStackPanel,
-                            Padding = new System.Windows.Thickness(15, 0, 0, 0)
+                            Padding = new System.Windows.Thickness(15, 0, 0, 0),
+                            Background = Settings.GetBackColorWPF()
                         };
                         //sp.TreeViewItem.Items.Add(sp.ChildBorder);
                         //sp.ParentStackPanel.Children.Add(sp.ChildBorder);
