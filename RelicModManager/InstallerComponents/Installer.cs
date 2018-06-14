@@ -605,8 +605,16 @@ namespace RelhaxModpack
             foreach (string file in totalFiles)
             {
                 args.currentFile = file;
-                File.SetAttributes(file, FileAttributes.Normal);
-                File.Delete(file);
+                try
+                {
+                    File.SetAttributes(file, FileAttributes.Normal);
+                    File.Delete(file);
+                }
+                catch (Exception ex)
+                {
+                    ex = ex.GetBaseException();
+                    Logging.Manager(string.Format("failed to delete: {0} ({1})", file, ex.Message));
+                }
                 InstallWorker.ReportProgress(args.ChildProcessed++);
                 tw.WriteLine(file);
             }
