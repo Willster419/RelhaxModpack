@@ -23,5 +23,26 @@ namespace RelhaxWPFConvert
         {
             InitializeComponent();
         }
+
+        private void CheckBox_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void CheckBox_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void ScrollViewer_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Point pt = e.GetPosition((UIElement)sender);
+            HitTestResult result = VisualTreeHelper.HitTest((UIElement)sender,pt);
+        }
+
+        private void ContentControl_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

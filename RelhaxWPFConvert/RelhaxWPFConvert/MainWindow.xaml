@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RelhaxWPFConvert"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <ScrollViewer HorizontalScrollBarVisibility="Visible">
+    <ScrollViewer HorizontalScrollBarVisibility="Visible" MouseRightButtonUp="ScrollViewer_MouseRightButtonUp">
     <Grid Background="#FF0C0CE6" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible">
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="600" Margin="10,10,0,0" VerticalAlignment="Top" Width="772">
             <StackPanel>
@@ -15,15 +15,11 @@
                 <Border BorderBrush="Black" BorderThickness="2" Height="300" Padding="13,0,0,0">
                     <StackPanel>
                         <CheckBox Content="CheckBox"/>
-                        <CheckBox Content="CheckBox"/>
-                        <CheckBox Content="CheckBox"/>
-                        <CheckBox Content="CheckBox"/>
-                        <CheckBox Content="CheckBox"/>
-                        <CheckBox Content="CheckBox"/>
-                        <CheckBox Content="CheckBox"/>
-                        <CheckBox Content="CheckBox"/>
-                        <CheckBox Content="CheckBox" Foreground="BlanchedAlmond"/>
-                        <ComboBox MaxWidth="200" HorizontalAlignment="Left"/>
+                        <CheckBox Content="CheckBox" HorizontalAlignment="Left"/>
+                        <ContentControl HorizontalAlignment="Left" MouseRightButtonUp="ContentControl_MouseRightButtonUp">
+                            <CheckBox Content="CheckBox" Foreground="BlanchedAlmond" HorizontalAlignment="Left" IsEnabled="False" MouseDown="CheckBox_MouseDown" PreviewMouseRightButtonDown="CheckBox_PreviewMouseRightButtonDown"/>
+                        </ContentControl>
+                            <ComboBox MaxWidth="200" HorizontalAlignment="Left" MinWidth="100"/>
                     </StackPanel>
                 </Border>
             </StackPanel>
