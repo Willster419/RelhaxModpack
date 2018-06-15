@@ -130,6 +130,9 @@
     <Compile Include="AtlasesCreator\ImageHandlers\DDSReader\DDSImage.cs" />
     <Compile Include="AtlasesCreator\ImageHandlers\DDSReader\Decompressor.cs" />
     <Compile Include="AtlasesCreator\ImageHandlers\DDSReader\Utils.cs" />
+    <Compile Include="AtlasesCreator\Packing\CreateOutputImage.cs" />
+    <Compile Include="AtlasesCreator\Packing\CreateOutputMapData.cs" />
+    <Compile Include="AtlasesCreator\Packing\ImagePackerV2.cs" />
     <Compile Include="DatabaseComponents\PackageComparer.cs" />
     <Compile Include="Forms\AddPicturesZip.cs">
       <SubType>Form</SubType>

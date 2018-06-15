@@ -28,7 +28,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
 using System.Runtime.InteropServices;
 
 namespace RelhaxModpack.AtlasesCreator
@@ -134,7 +133,7 @@ namespace RelhaxModpack.AtlasesCreator
             Installer.InstallWorker.ReportProgress(0);
 
             // make our output image
-            outputImage = CreateOutputImage();
+            outputImage = CreateOutputImage.generateImage(files, imagePlacement, outputWidth, outputHeight);
             if (outputImage == null)
                 return (int)FailCode.FailedToSaveImage;
 
@@ -142,35 +141,8 @@ namespace RelhaxModpack.AtlasesCreator
             Installer.InstallWorker.ReportProgress(0);
 
             if (generateMap)
-            {
-                // go through our image placements and replace the width/height found in there with
-                // each image's actual width/height (since the ones in imagePlacement will have padding)
-                Texture[] keys = new Texture[imagePlacement.Keys.Count];
-                imagePlacement.Keys.CopyTo(keys, 0);
+                outputMap = CreateOutputMapData.generateMapData(imagePlacement, imageSizes);
 
-                foreach (var k in keys)
-                {
-                    // get the actual size
-                    Size s = imageSizes[k];
-
-                    // get the placement rectangle
-                    Rectangle r = imagePlacement[k];
-
-                    // set the proper size
-                    r.Width = s.Width;
-                    r.Height = s.Height;
-
-                    // insert back into the dictionary
-                    imagePlacement[k] = r;
-                }
-
-                // copy the placement dictionary to the output
-                outputMap = new Dictionary<string, Rectangle>();
-                foreach (var pair in imagePlacement)
-                {
-                    outputMap.Add(pair.Key.name, pair.Value);
-                }
-            }
 
             Installer.InstallWorker.ReportProgress(0);
 
@@ -227,7 +199,7 @@ namespace RelhaxModpack.AtlasesCreator
                         // if we have no images in imagePlacement, i.e. we've never succeeded at PackImages,
                         // show an error and return false since there is no way to fit the images into our
                         // maximum size texture
-                        if (imagePlacement.Count == 0)
+                        if (testImagePlacement.Count == 0)
                         {
                             return false;
                         }
@@ -297,6 +269,11 @@ namespace RelhaxModpack.AtlasesCreator
                     // option for faster finishing
                     if (quit)
                     {
+                        if (!(requireSquare || requirePow2))
+                        {
+                            outputWidth += padding;
+                            outputHeight += padding;
+                        }
                         return true;
                     }
 
@@ -334,32 +311,6 @@ namespace RelhaxModpack.AtlasesCreator
                 testImagePlacement.Add(image, new Rectangle(origin.X, origin.Y, size.Width + padding, size.Height + padding));
             }
             return true;
-        }
-
-        private Bitmap CreateOutputImage()
-        {
-            try
-            {
-                Bitmap outputImage = new Bitmap(outputWidth + padding, outputHeight + padding, PixelFormat.Format32bppArgb);
-
-                // draw all the images into the output image
-                foreach (var image in files)
-                {
-                    Rectangle location = imagePlacement[image];
-
-                    // copy pixels over to avoid antialiasing or any other side effects of drawing
-                    // the subimages to the output image using Graphics
-                    for (int x = 0; x < image.AtlasImage.Width; x++)
-                        for (int y = 0; y < image.AtlasImage.Height; y++)
-                            outputImage.SetPixel(location.X + x, location.Y + y, image.AtlasImage.GetPixel(x, y));
-                }
-                
-                return outputImage;
-            }
-            catch
-            {
-                return null;
-            }
         }
 
         // stolen from http://en.wikipedia.org/wiki/Power_of_two#Algorithm_to_find_the_next-highest_power_of_two

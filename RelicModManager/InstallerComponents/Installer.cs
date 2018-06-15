@@ -605,8 +605,16 @@ namespace RelhaxModpack
             foreach (string file in totalFiles)
             {
                 args.currentFile = file;
-                File.SetAttributes(file, FileAttributes.Normal);
-                File.Delete(file);
+                try
+                {
+                    File.SetAttributes(file, FileAttributes.Normal);
+                    File.Delete(file);
+                }
+                catch (Exception ex)
+                {
+                    ex = ex.GetBaseException();
+                    Logging.Manager(string.Format("failed to delete: {0} ({1})", file, ex.Message));
+                }
                 InstallWorker.ReportProgress(args.ChildProcessed++);
                 tw.WriteLine(file);
             }
@@ -1725,16 +1733,22 @@ namespace RelhaxModpack
                 if (atlasesArgs.AtlasHeight < 1)
                     atlasesArgs.AtlasHeight = os.Height;
 
+                
                 if ((os.Height * os.Width) == (atlasesArgs.AtlasWidth * atlasesArgs.AtlasHeight))
                 {
-                    atlasesArgs.AtlasHeight = atlasesArgs.AtlasHeight * 2;
+                    atlasesArgs.AtlasHeight = (int)(atlasesArgs.AtlasHeight * 1.5);
                 }
                 else
                 {
+                    // this is to be shure that the image size that will be created, is at least the original size
                     while ((os.Height * os.Width) > (atlasesArgs.AtlasWidth * atlasesArgs.AtlasHeight))
-                        atlasesArgs.AtlasHeight = atlasesArgs.AtlasHeight * 2;
+                        atlasesArgs.AtlasHeight = (int)(atlasesArgs.AtlasHeight * 1.2);
                 }
             }
+            if ((os.Height * os.Width) > (atlasesArgs.AtlasWidth * atlasesArgs.AtlasHeight))
+                Logging.Manager(string.Format("WARNING! definied {0} size is smaller then original size\noriginal h x w: {1} x {2}\ndefinied h x w: {3} x {4}", a.AtlasFile, os.Height, os.Width, atlasesArgs.AtlasHeight, atlasesArgs.AtlasWidth));
+            else
+                Logging.Manager(string.Format("defined max size of {0} with: {1} (h) x {2} (w)", a.AtlasFile, atlasesArgs.AtlasHeight, atlasesArgs.AtlasWidth));
 
             List<string> fl = new List<string>();
             fl.AddRange(a.ImageFolderList);
