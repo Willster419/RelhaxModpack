@@ -147,7 +147,6 @@ namespace RelhaxModpack
                                 break;
                         }
                         break;
-                    //WPF treeview is done with treeviewItem
                     case SelectionView.DefaultV2:
                         switch (_Checked)
                         {
@@ -214,6 +213,30 @@ namespace RelhaxModpack
                                             }
                                         }
                                     }
+                                }
+                                break;
+                        }
+                        break;
+                    //WPF treeview is done with treeviewItem
+                    case SelectionView.Legacy:
+                        switch (_Checked)
+                        {
+                            case true:
+                                //handle color change code
+                                if (Settings.EnableColorChangeLegacyView)
+                                {
+                                    if (ChildBorder != null && ChildBorder.Background != System.Windows.Media.Brushes.BlanchedAlmond)
+                                    {
+                                        ChildBorder.Background = System.Windows.Media.Brushes.BlanchedAlmond;
+                                    }
+                                }
+                                break;
+                            case false:
+                                //handle color change code
+                                if (Settings.EnableColorChangeLegacyView)
+                                {
+                                    if (ChildBorder != null && !AnyPackagesChecked())
+                                        ChildBorder.Background = Settings.GetBackColorWPF();
                                 }
                                 break;
                         }
