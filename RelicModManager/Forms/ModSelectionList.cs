@@ -1073,10 +1073,10 @@ namespace RelhaxModpack
                                 FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
                                 HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left,
                                 VerticalContentAlignment = System.Windows.VerticalAlignment.Center,
-                                FontWeight = Settings.DarkUI ? System.Windows.FontWeights.Bold : System.Windows.FontWeights.Normal,
                                 Content = packageDisplayName,
                                 IsEnabled = canBeEnabled,
-                                IsChecked = (canBeEnabled && sp.Checked) ? true : false
+                                IsChecked = (canBeEnabled && sp.Checked) ? true : false,
+                                Foreground = Settings.GetTextColorWPF()
                             };
                             break;
                         case "single_dropdown":
@@ -1088,8 +1088,8 @@ namespace RelhaxModpack
                                     Name = "notAddedYet",
                                     IsEnabled = false,
                                     FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
-                                    FontWeight = Settings.DarkUI ? System.Windows.FontWeights.Bold : System.Windows.FontWeights.Normal,
-                                    MinWidth = 100
+                                    MinWidth = 100,
+                                    Foreground = Settings.GetTextColorWPF()
                                 };
                             //here means the entry index is not null
                             if (sp.Enabled)
@@ -1128,8 +1128,8 @@ namespace RelhaxModpack
                                     Name = "notAddedYet",
                                     IsEnabled = false,
                                     FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
-                                    FontWeight = Settings.DarkUI ? System.Windows.FontWeights.Bold : System.Windows.FontWeights.Normal,
-                                    MinWidth = 100
+                                    MinWidth = 100,
+                                    Foreground = Settings.GetTextColorWPF()
                                 };
                             //here means the entry index is not null
                             if (sp.Enabled)
@@ -1168,10 +1168,10 @@ namespace RelhaxModpack
                                 FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
                                 HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left,
                                 VerticalContentAlignment = System.Windows.VerticalAlignment.Center,
-                                FontWeight = Settings.DarkUI ? System.Windows.FontWeights.Bold : System.Windows.FontWeights.Normal,
                                 Content = packageDisplayName,
                                 IsEnabled = canBeEnabled,
                                 IsChecked = (canBeEnabled && sp.Checked) ? true : false,
+                                Foreground = Settings.GetTextColorWPF()
                             };
                             break;
                     }
@@ -1200,7 +1200,6 @@ namespace RelhaxModpack
                             sp.TreeViewItem.Header = sp.UIComponent;
                             sp.TreeViewItem.IsExpanded = true;
                             sp.Parent.ChildStackPanel.Children.Add(sp.TreeViewItem);
-                            //sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
                         }
                         else if (sp.UIComponent is System.Windows.Controls.CheckBox cb)
                         {
@@ -1208,7 +1207,6 @@ namespace RelhaxModpack
                             sp.TreeViewItem.Header = sp.UIComponent;
                             sp.TreeViewItem.IsExpanded = true;
                             sp.Parent.ChildStackPanel.Children.Add(sp.TreeViewItem);
-                            //sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
                         }
                     }
                     break;

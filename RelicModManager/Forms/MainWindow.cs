@@ -816,6 +816,7 @@ namespace RelhaxModpack
             ApplicationVersionLabel.Text = "Application v" + ManagerVersion();
             //database version (bottom right)
             DatabaseVersionLabel.Text = Translations.GetTranslatedString("DatabaseVersionLabel") + " v" + Settings.DatabaseVersion;
+            //The title of the main form
             Text = "Relhax";
             if (Program.testMode)
                 Text = Text + " TEST MODE";
