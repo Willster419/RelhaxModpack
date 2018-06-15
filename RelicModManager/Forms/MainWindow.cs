@@ -1968,10 +1968,10 @@ namespace RelhaxModpack
                     SelectionDefault.Checked = true;
                     break;
                 case (SelectionView.DefaultV2):
-                    SelectionLegacy.Checked = true;
+                    SelectionDefaultV2.Checked = true;
                     break;
                 case (SelectionView.Legacy):
-                    SelectionDefaultV2.Checked = true;
+                    SelectionLegacy.Checked = true;
                     break;
             }
             switch (Settings.FontSizeforum)
@@ -2277,7 +2277,7 @@ namespace RelhaxModpack
             Settings.SView = SelectionView.Legacy;
         }
 
-        private void SelectionLegacyV2_CheckedChanged(object sender, EventArgs e)
+        private void SelectionDefaultV2_CheckedChanged(object sender, EventArgs e)
         {
             Settings.SView = SelectionView.DefaultV2;
         }

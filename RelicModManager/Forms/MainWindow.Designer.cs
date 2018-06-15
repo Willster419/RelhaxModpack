@@ -506,7 +506,7 @@
             this.SelectionDefaultV2.TabStop = true;
             this.SelectionDefaultV2.Text = "Default V2";
             this.SelectionDefaultV2.UseVisualStyleBackColor = true;
-            this.SelectionDefaultV2.CheckedChanged += new System.EventHandler(this.SelectionLegacyV2_CheckedChanged);
+            this.SelectionDefaultV2.CheckedChanged += new System.EventHandler(this.SelectionDefaultV2_CheckedChanged);
             this.SelectionDefaultV2.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.SelectionDefaultV2.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
