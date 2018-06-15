@@ -1345,7 +1345,7 @@ namespace RelhaxModpack
                 if (ipc is RelhaxUserCheckBox)
                     return;
                 //up then down
-                PropagateUpNotChecked(spc);
+                //PropagateUpNotChecked(spc);
                 PropagateDownNotChecked(spc);
             }
             //if it's the top level thing and the color change is enabled (disable is false), then tell it to check again for color change code
