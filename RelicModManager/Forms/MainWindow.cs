@@ -729,7 +729,7 @@ namespace RelhaxModpack
             wait.loadingDescBox.Text = Translations.GetTranslatedString("loadingSettings");
             Logging.Manager("Loading settings");
             Settings.LoadSettings();
-            ApplyControlTranslations();
+            ApplyControlTranslations(Controls);
             ApplySettings();
             loading = false;
 
@@ -793,13 +793,10 @@ namespace RelhaxModpack
                 this.InstallRelhaxMod_Click(null, null);
                 return;
             }
+
             //apply text labels and custom command line properties
-            ApplicationVersionLabel.Text = "Application v" + ManagerVersion();
-            if (Program.testMode) this.Text = this.Text + " TEST MODE";
-            if (Settings.BetaDatabase) this.Text = this.Text + " (BETA DB)";
-            if (Program.Version == Program.ProgramVersion.Beta) this.Text = this.Text + " (BETA APP)";
-            if (Program.Version == Program.ProgramVersion.Alpha) this.Text = this.Text + " (ALPHA APP)";
-            DatabaseVersionLabel.Text = Translations.GetTranslatedString("DatabaseVersionLabel") + " v" + Settings.DatabaseVersion;
+            ApplyVersionTextLabels();
+
             if (Settings.FirstLoad)
             {
                 //set the textbox to show the intro help message
@@ -810,6 +807,24 @@ namespace RelhaxModpack
             ToggleUIButtons(true);
             Application.DoEvents();
             Program.saveSettings = true;
+        }
+
+        //applies the additional version information for the database and application
+        private void ApplyVersionTextLabels()
+        {
+            //aplication version (bottom left)
+            ApplicationVersionLabel.Text = "Application v" + ManagerVersion();
+            //database version (bottom right)
+            DatabaseVersionLabel.Text = Translations.GetTranslatedString("DatabaseVersionLabel") + " v" + Settings.DatabaseVersion;
+            Text = "Relhax";
+            if (Program.testMode)
+                Text = Text + " TEST MODE";
+            if (Settings.BetaDatabase)
+                Text = Text + " (BETA DB)";
+            if (Program.Version == Program.ProgramVersion.Beta)
+                Text = Text + " (BETA APP)";
+            else if (Program.Version == Program.ProgramVersion.Alpha)
+                Text = Text + " (ALPHA APP)";
         }
 
         //handler for when the install relhax modpack button is pressed
@@ -1903,18 +1918,6 @@ namespace RelhaxModpack
             }
         }
 
-        private void ApplyControlTranslations()
-        {
-            foreach (Control c in Controls)
-            {
-                //only apply for common controls
-                if (c is RadioButton || c is CheckBox || c is GroupBox || c is Label || c is LinkLabel || c is Button)
-                    c.Text = Translations.GetTranslatedString(c.Name);
-                if (c is Panel || c is GroupBox || c is TableLayoutPanel)
-                    ApplyControlTranslations(c.Controls);
-            }
-        }
-
         private void ApplyControlTranslations(Control.ControlCollection conts)
         {
             foreach (Control c in conts)
@@ -2242,7 +2245,8 @@ namespace RelhaxModpack
                     Translations.language = Translations.Languages.French;
                     break;
             }
-            ApplyControlTranslations();
+            ApplyControlTranslations(Controls);
+            ApplyVersionTextLabels();
         }
         //handler for when the "backupResMods mods" checkbox is changed
         private void backupModsCheckBox_CheckedChanged(object sender, EventArgs e)

@@ -537,7 +537,7 @@ namespace RelhaxModpack
             french.Add("ShowAdvancedSettingsLink", "Afficher les paramètres avancé");
 
             //Component: ApplicationVersionLabel
-            AddToAll("ApplicationVersionLabel", "Application Version");
+            AddToAll("ApplicationVersionLabel", "Application");
 
             //Component: ErrorCounterLabel
             AddToAll("ErrorCounterLabel", "Error Counter: ");
