@@ -2426,15 +2426,76 @@ namespace RelhaxModpack
         {
             switch(Settings.SView)
             {
-                
+                case SelectionView.Legacy:
+                    foreach (Control c in modTabGroups.SelectedTab.Controls)
+                    {
+                        if (c is ElementHost eh)
+                        {
+                            System.Windows.Controls.TreeView tv = (System.Windows.Controls.TreeView)eh.Child;
+                            foreach (System.Windows.Controls.TreeViewItem tvi in tv.Items)
+                            {
+                                tvi.IsExpanded = false;
+                                System.Windows.Controls.Border b = (System.Windows.Controls.Border)tvi.Items[0];
+                                System.Windows.Controls.StackPanel st = (System.Windows.Controls.StackPanel)b.Child;
+                                if (st.Children.Count > 0)
+                                {
+                                    processTreeViewItems(st.Children, false);
+                                }
+                            }
+                        }
+                    }
+                    break;
             }
         }
 
-        private void expandAllButton_Click(object sender, EventArgs e)
+        private void ExpandAllButton_Click(object sender, EventArgs e)
         {
             switch(Settings.SView)
             {
-                
+                case SelectionView.Legacy:
+                    foreach (Control c in modTabGroups.SelectedTab.Controls)
+                    {
+                        if (c is ElementHost eh)
+                        {
+                            System.Windows.Controls.TreeView tv = (System.Windows.Controls.TreeView)eh.Child;
+                            foreach (System.Windows.Controls.TreeViewItem tvi in tv.Items)
+                            {
+                                tvi.IsExpanded = true;
+                                System.Windows.Controls.Border b = (System.Windows.Controls.Border)tvi.Items[0];
+                                System.Windows.Controls.StackPanel st = (System.Windows.Controls.StackPanel)b.Child;
+                                if (st.Children.Count > 0)
+                                {
+                                    processTreeViewItems(st.Children, true);
+                                }
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
+
+        private void processTreeViewItems(System.Windows.Controls.UIElementCollection ic, bool expand)
+        {
+            switch(Settings.SView)
+            {
+                case SelectionView.Legacy:
+                    foreach (System.Windows.Controls.TreeViewItem tvi in ic)
+                    {
+                        if (expand)
+                            tvi.IsExpanded = true;
+                        else
+                            tvi.IsExpanded = false;
+                        if (tvi.Items.Count > 0)
+                        {
+                            System.Windows.Controls.Border b = (System.Windows.Controls.Border)tvi.Items[0];
+                            System.Windows.Controls.StackPanel st = (System.Windows.Controls.StackPanel)b.Child;
+                            if (st.Children.Count > 0)
+                            {
+                                processTreeViewItems(st.Children, expand);
+                            }
+                        }
+                    }
+                    break;
             }
         }
         #endregion
