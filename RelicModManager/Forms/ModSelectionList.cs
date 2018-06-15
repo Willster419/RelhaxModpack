@@ -1048,6 +1048,9 @@ namespace RelhaxModpack
                 case SelectionView.Legacy:
                     //in WPF underscores are only displayed when there's two of them
                     packageDisplayName = packageDisplayName.Replace(@"_", @"__");
+                    //link the parent border and stackpanel to the child package
+                    sp.ParentBorder = sp.Parent.ChildBorder;
+                    sp.ParentStackPanel = sp.Parent.ChildStackPanel;
                     //start code for border and stackpanel
                     if (sp.ChildBorder == null && sp.Packages.Count > 0)
                     {
@@ -1346,12 +1349,12 @@ namespace RelhaxModpack
                 PropagateDownNotChecked(spc);
             }
             //if it's the top level thing and the color change is enabled (disable is false), then tell it to check again for color change code
-            //if (ParentPanel != null && !AnyPackagesChecked())
-            //ParentPanel.BackColor = Settings.getBackColor();
-            if (Settings.EnableColorChangeDefaultView && spc.Level == -1 && spc.ParentPanel != null && !spc.AnyPackagesChecked())
+            if (Settings.SView == SelectionView.Default && Settings.EnableColorChangeDefaultView && spc.Level == -1 && spc.ParentPanel != null && !spc.AnyPackagesChecked())
                 spc.ParentPanel.BackColor = Settings.GetBackColorWinForms();
-            if (Settings.EnableColorChangeLegacyView && spc.Level == -1 && spc.ChildBorder != null && !spc.AnyPackagesChecked())
-                spc.ChildBorder.Background = Settings.GetBackColorWPF();
+            if (Settings.SView == SelectionView.Legacy && Settings.EnableColorChangeLegacyView && spc.Level == -1 && !spc.AnyPackagesChecked())
+                spc.TreeView.Background = Settings.GetBackColorWPF();
+            if (Settings.SView == SelectionView.DefaultV2 && Settings.EnableColorChangeDefaultV2View && spc.Level == -1 && !spc.AnyPackagesChecked())
+                spc.ParentBorder.Background = Settings.GetBackColorWPF();
         }
 
         //propagates the change back up the selection tree

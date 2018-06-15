@@ -152,7 +152,7 @@ namespace RelhaxModpack
                         {
                             case true:
                                 //handle color change code
-                                if (Settings.EnableColorChangeLegacyView)
+                                if (Settings.EnableBordersDefaultV2View)
                                 {
                                     if(ParentBorder != null && ParentBorder.Background != System.Windows.Media.Brushes.BlanchedAlmond)
                                     {
@@ -184,7 +184,7 @@ namespace RelhaxModpack
                                 break;
                             case false:
                                 //handle color change code
-                                if (Settings.EnableColorChangeLegacyView)
+                                if (Settings.EnableBordersDefaultV2View)
                                 {
                                     if (ParentBorder != null && !AnyPackagesChecked())
                                         ParentBorder.Background = Settings.GetBackColorWPF();
@@ -225,9 +225,13 @@ namespace RelhaxModpack
                                 //handle color change code
                                 if (Settings.EnableColorChangeLegacyView)
                                 {
-                                    if (ChildBorder != null && ChildBorder.Background != System.Windows.Media.Brushes.BlanchedAlmond)
+                                    if (ParentBorder != null && ParentBorder.Background != System.Windows.Media.Brushes.BlanchedAlmond)
                                     {
-                                        ChildBorder.Background = System.Windows.Media.Brushes.BlanchedAlmond;
+                                        ParentBorder.Background = System.Windows.Media.Brushes.BlanchedAlmond;
+                                    }
+                                    else if (Level == -1 && TreeView.Background != System.Windows.Media.Brushes.BlanchedAlmond)
+                                    {
+                                        TreeView.Background = System.Windows.Media.Brushes.BlanchedAlmond;
                                     }
                                 }
                                 break;
@@ -235,8 +239,14 @@ namespace RelhaxModpack
                                 //handle color change code
                                 if (Settings.EnableColorChangeLegacyView)
                                 {
-                                    if (ChildBorder != null && !AnyPackagesChecked())
-                                        ChildBorder.Background = Settings.GetBackColorWPF();
+                                    if (ParentBorder != null && !AnyPackagesChecked())
+                                    {
+                                        ParentBorder.Background = Settings.GetBackColorWPF();
+                                    }
+                                    else if (Level == -1 && !AnyPackagesChecked())
+                                    {
+                                        TreeView.Background = Settings.GetBackColorWPF();
+                                    }
                                 }
                                 break;
                         }
@@ -271,10 +281,11 @@ namespace RelhaxModpack
         public System.Windows.Controls.Border ChildBorder;
         //the stackpanel to allow the child treeviewitems to stack upon each other. sits inside the border
         public System.Windows.Controls.StackPanel ChildStackPanel;
-
-        //only for DEFAULT V2
+        //they are both used, but used differently
         public System.Windows.Controls.Border ParentBorder;
         public System.Windows.Controls.StackPanel ParentStackPanel;
+
+        //only for DEFAULT V2
         public System.Windows.Controls.ContentControl @ContentControl;
 
         //only for LEGACY
