@@ -425,7 +425,8 @@ namespace RelhaxModpack
                         cb2 = new RelhaxWPFCheckBox()
                         {
                             Package = c.CategoryHeader,
-                            Content = c.CategoryHeader.NameFormatted
+                            Content = c.CategoryHeader.NameFormatted,
+                            Foreground = Settings.GetTextColorWPF(),
                         };
                         cb2.Click += OnWPFComponentCheck;
                         //create the border and stackpanels
@@ -1349,12 +1350,25 @@ namespace RelhaxModpack
                 PropagateDownNotChecked(spc);
             }
             //if it's the top level thing and the color change is enabled (disable is false), then tell it to check again for color change code
+            //but only do if it's moving to a not checked state
             if (Settings.SView == SelectionView.Default && Settings.EnableColorChangeDefaultView && spc.Level == -1 && spc.ParentPanel != null && !spc.AnyPackagesChecked())
-                spc.ParentPanel.BackColor = Settings.GetBackColorWinForms();
-            if (Settings.SView == SelectionView.Legacy && Settings.EnableColorChangeLegacyView && spc.Level == -1 && !spc.AnyPackagesChecked())
-                spc.TreeView.Background = Settings.GetBackColorWPF();
-            if (Settings.SView == SelectionView.DefaultV2 && Settings.EnableColorChangeDefaultV2View && spc.Level == -1 && !spc.AnyPackagesChecked())
-                spc.ParentBorder.Background = Settings.GetBackColorWPF();
+            {
+                RelhaxFormCheckBox r = (RelhaxFormCheckBox)spc.UIComponent;
+                if(!r.Checked)
+                    spc.ParentPanel.BackColor = Settings.GetBackColorWinForms();
+            }
+            else if (Settings.SView == SelectionView.Legacy && Settings.EnableColorChangeLegacyView && spc.Level == -1 && !spc.AnyPackagesChecked())
+            {
+                RelhaxWPFCheckBox r = (RelhaxWPFCheckBox)spc.UIComponent;
+                if(!(bool)r.IsChecked)
+                    spc.TreeView.Background = Settings.GetBackColorWPF();
+            }
+            else if (Settings.SView == SelectionView.DefaultV2 && Settings.EnableColorChangeDefaultV2View && spc.Level == -1 && !spc.AnyPackagesChecked())
+            {
+                RelhaxWPFCheckBox r = (RelhaxWPFCheckBox)spc.UIComponent;
+                if (!(bool)r.IsChecked)
+                    spc.ParentBorder.Background = Settings.GetBackColorWPF();
+            }
         }
 
         //propagates the change back up the selection tree
