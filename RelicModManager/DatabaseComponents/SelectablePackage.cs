@@ -212,6 +212,11 @@ namespace RelhaxModpack
                                                 }
                                             }
                                         }
+                                        else if (Level == -1)
+                                        {
+                                            RelhaxWPFCheckBox r = (RelhaxWPFCheckBox)UIComponent;
+                                            r.Foreground = Settings.GetTextColorWPF();
+                                        }
                                     }
                                 }
                                 break;
