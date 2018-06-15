@@ -1945,8 +1945,10 @@ namespace RelhaxModpack
             SuperExtractionCB.Checked = Settings.SuperExtraction;
             EnableBordersDefaultCB.Checked = Settings.EnableBordersDefaultView;
             EnableBordersLegacyCB.Checked = Settings.EnableBordersLegacyView;
+            EnableBordersDefaultV2CB.Checked = Settings.EnableBordersDefaultV2View;
             EnableColorChangeDefaultCB.Checked = Settings.EnableColorChangeDefaultView;
             EnableColorChangeLegacyCB.Checked = Settings.EnableColorChangeLegacyView;
+            EnableColorChangeDefaultV2CB.Checked = Settings.EnableBordersDefaultV2View;
             LanguageComboBox.SelectedIndexChanged -= LanguageComboBox_SelectedIndexChanged;
             switch (Translations.language)
             {
