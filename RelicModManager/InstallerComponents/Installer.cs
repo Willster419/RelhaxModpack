@@ -279,8 +279,16 @@ namespace RelhaxModpack
                 {
                     foreach (string file in logsToDelete)
                     {
-                        if (File.Exists(file))
-                            File.Delete(file);
+                        try
+                        {
+                            if (File.Exists(file))
+                                File.Delete(file);
+                        }
+                        catch (Exception ex)
+                        {
+                            ex = ex.GetBaseException();
+                            Logging.Manager(string.Format("failed to delete: {0} ({1})", file, ex.Message));
+                        }
                     }
                 }
                 catch (Exception ex)
