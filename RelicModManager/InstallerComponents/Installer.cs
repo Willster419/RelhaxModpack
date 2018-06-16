@@ -391,6 +391,7 @@ namespace RelhaxModpack
             {
                 if(!Settings.ExportMode)
                 {
+                    /*
                     if (Directory.Exists(Path.Combine(TanksLocation, "_readme")))
                         Directory.Delete(Path.Combine(TanksLocation, "_readme"), true);
                     if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
@@ -402,7 +403,21 @@ namespace RelhaxModpack
                     if (Directory.Exists(Path.Combine(TanksLocation, "_atlases")))
                         Directory.Delete(Path.Combine(TanksLocation, "_atlases"), true);
                     if (Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
-                        Directory.Delete(Path.Combine(TanksLocation, "_fonts"), true);
+                        Directory.Delete(Path.Combine(TanksLocation, "_fonts"), true); */
+                    List<string> folder = new List<string> { "_readme", "_patch", "_shortcuts", "_xmlUnPack", "_atlases", "_fonts" };
+                    foreach (string f in folder)
+                    {
+                        try
+                        {
+                            if (Directory.Exists(Path.Combine(TanksLocation, f)))
+                                Directory.Delete(Path.Combine(TanksLocation, f), true);
+                        }
+                        catch (Exception ex)
+                        {
+                            ex = ex.GetBaseException();
+                            Logging.Manager(string.Format("error at folder delete: {0} ({1})", f, ex.Message));
+                        }
+                    }
                 }
             }
             catch (Exception ex)
