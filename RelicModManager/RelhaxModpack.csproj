@@ -127,7 +127,6 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AtlasesCreator\ImageHandlers\DdsImageHandlerNvtt.cs" />
     <Compile Include="AtlasesCreator\ImageHandlers\DdsImageHandler.cs" />
     <Compile Include="AtlasesCreator\ImageHandlers\DDSReader\DDS.cs" />
     <Compile Include="AtlasesCreator\ImageHandlers\DDSReader\DDSImage.cs" />
@@ -222,6 +221,7 @@
     <Compile Include="DatabaseComponents\Category.cs" />
     <Compile Include="LegacyComponents\Config.cs" />
     <Compile Include="LegacyComponents\Mod.cs" />
+    <Compile Include="MemoryInterop.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -554,6 +554,7 @@
     <Resource Include="Resources\MainForm icons\facebook brand.png" />
     <Resource Include="Resources\MainForm icons\facebook.png" />
     <Resource Include="Resources\MainForm icons\Home.png" />
+    <Content Include="3rdPartyLicences\TeximpNet.txt" />
     <Content Include="App_Readme\Compare-NET-Objects-Help.txt" />
     <Content Include="Resources\loading.gif" />
     <Content Include="Resources\loading_3rdguards.gif" />
@@ -615,7 +616,9 @@ echo } &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
       <ErrorText>Dieses Projekt verweist auf mindestens ein NuGet-Paket, das auf diesem Computer fehlt. Verwenden Sie die Wiederherstellung von NuGet-Paketen, um die fehlenden Dateien herunterzuladen. Weitere Informationen finden Sie unter "http://go.microsoft.com/fwlink/?LinkID=322105". Die fehlende Datei ist "{0}".</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\TeximpNet.1.3.0\build\TeximpNet.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\TeximpNet.1.3.0\build\TeximpNet.targets'))" />
+    <Error Condition="!Exists('..\packages\MemoryInterop.ILPatcher.2.0.0\build\MemoryInterop.ILPatcher.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MemoryInterop.ILPatcher.2.0.0\build\MemoryInterop.ILPatcher.targets'))" />
   </Target>
+  <Import Project="..\packages\MemoryInterop.ILPatcher.2.0.0\build\MemoryInterop.ILPatcher.targets" Condition="Exists('..\packages\MemoryInterop.ILPatcher.2.0.0\build\MemoryInterop.ILPatcher.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
