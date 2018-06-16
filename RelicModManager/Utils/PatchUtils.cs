@@ -940,9 +940,29 @@ namespace RelhaxModpack
                 return;
             }
             string toWrite = rebuilder.ToString();
-
+            try
+            {
+                JObject @object = JObject.Parse(toWrite);
+            }
+            catch (JsonReaderException e)
+            {
+                Logging.Manager(string.Format("Failed to write file {0}: there was an error with it's json syntax", p.completePath));
+                Logging.Manager(e.ToString(), true);
+                return;
+            }
             //unescape the macros
-            toWrite = toWrite.Replace(@"""[dollar]", @"$").Replace(@"[lbracket]", @"{").Replace(@"[quote]", @"""").Replace(@"[colon]",@":").Replace(@"[rbracket]""", @"}").Replace(@"[rbracket]", @"}");
+            //unescaped string looks like this (sample)
+            //"[dollar][lbracket][quote]battle.xc[quote][colon][quote]expertPanel[quote][rbracket]"
+            //^quotes included
+            toWrite = toWrite
+                //first replace the refrences (the ones with the quotes to remove the quotes)
+                .Replace(@"""[dollar]", @"$")//start of refrence with dollar
+                .Replace(@"[rbracket]""", @"}")//end of refrence with colon
+                .Replace(@"[lbracket]", @"{")
+                .Replace(@"[quote]", @"""")
+                .Replace(@"[colon]",@":")
+                .Replace(@"[dollar]", @"$")
+                .Replace(@"[rbracket]", @"}");
             File.WriteAllText(p.completePath, toWrite);
         }
         #region old patching system to be replaced
