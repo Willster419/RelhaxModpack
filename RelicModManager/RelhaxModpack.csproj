@@ -125,11 +125,35 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AtlasesCreator\ImageHandlers\DdsImageHandlerNvtt.cs" />
     <Compile Include="AtlasesCreator\ImageHandlers\DdsImageHandler.cs" />
     <Compile Include="AtlasesCreator\ImageHandlers\DDSReader\DDS.cs" />
     <Compile Include="AtlasesCreator\ImageHandlers\DDSReader\DDSImage.cs" />
     <Compile Include="AtlasesCreator\ImageHandlers\DDSReader\Decompressor.cs" />
     <Compile Include="AtlasesCreator\ImageHandlers\DDSReader\Utils.cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\TeximpException.cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\Surface.cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\StreamTransferBuffer.cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\StreamHelper.cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\RGBAQuad.cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\MemoryHelper.cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\ImageHelper.cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\Enums.cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\ColorOrder..cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\Compression\ImageInfo.cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\Compression\Enums.cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\Compression\Compressor.cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\DDS\MipData.cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\DDS\FourCC.cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\DDS\DDSTypes.cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\DDS\Enums.cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\DDS\FormatConverter.cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\DDS\DDSFile.cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\DDS\DDSContainer.cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\Unmanaged\FreeImageLibrary.cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\Unmanaged\PlatformHelper.cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\Unmanaged\UnmanagedLibrary.cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\Unmanaged\NvTextureToolsLibrary.cs" />
     <Compile Include="AtlasesCreator\Packing\CreateOutputImage.cs" />
     <Compile Include="AtlasesCreator\Packing\CreateOutputMapData.cs" />
     <Compile Include="AtlasesCreator\Packing\ImagePackerV2.cs" />
