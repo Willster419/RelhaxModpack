@@ -222,7 +222,6 @@ namespace RelhaxModpack
                                 break;
                         }
                         break;
-                    //WPF treeview is done with treeviewItem
                     case SelectionView.Legacy:
                         switch (_Checked)
                         {

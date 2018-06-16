@@ -176,12 +176,12 @@ namespace RelhaxModpack
             #region General Messages
             english.Add("conflictBetaDBTestMode", "The command line options '/BetaDatabase' and '/Test' should not be used together, the application may be unstable. Continue anyway?");
             german.Add("conflictBetaDBTestMode", "Die Kommandozeilen Befehle '/BetaDatabase' und '/Test' sollten nicht zusammen verwendet werden, da sonst der ModPack Manager instabil werden könnte. Trotzdem fortfahren?");
-            polish.Add("conflictBetaDBTestMode", "TODO");
+            polish.Add("conflictBetaDBTestMode", "Opcje Beta wiersza poleceń dotyczące Bazy Danych i Testu nie powinny być używane jednocześnie, aplikacja może nie być stabilna. Czy kontynuować mimo wszystko?");
             french.Add("conflictBetaDBTestMode", "Les options de ligne de commande '/BetaDatabase' et '/Test' ne doivent pas être utilisées ensemble, l'application peut être instable. Continuer quand même?");
 
             english.Add("conflictsCommandlineHeader", "Command-Line option conflicts");
             german.Add("conflictsCommandlineHeader", "Konflikte in den Kommandozeilen Befehlen");
-            polish.Add("conflictsCommandlineHeader", "TODO");
+            polish.Add("conflictsCommandlineHeader", "Konflikt opcji wiersza poleceń.");
             french.Add("conflictsCommandlineHeader", "Conflits d'options de ligne de commande");
             #endregion
 
@@ -1615,8 +1615,8 @@ namespace RelhaxModpack
             //Component: FacebookPictureBoxDescription
             english.Add("FacebookPictureBoxDescription", "Go to our Facebook page");
             german.Add("FacebookPictureBoxDescription", "Unsere Facebook Seite aufrufen");
-            polish.Add("FacebookPictureBoxDescription", "TODO");
-            french.Add("FacebookPictureBoxDescription", "TODO");
+            polish.Add("FacebookPictureBoxDescription", "Strona FB");
+            french.Add("FacebookPictureBoxDescription", "Page Facebook");
 
             //Componet: DiscordPictureBoxDescription
             english.Add("DiscordPictureBoxDescription", "Go to Discord server");
@@ -1627,8 +1627,8 @@ namespace RelhaxModpack
             //Component: TwitterPictureBoxDescription
             english.Add("TwitterPictureBoxDescription", "Go to our Twitter page");
             german.Add("TwitterPictureBoxDescription", "Unsere Twitter Seite aufrufen");
-            polish.Add("TwitterPictureBoxDescription", "TODO");
-            french.Add("TwitterPictureBoxDescription", "TODO");
+            polish.Add("TwitterPictureBoxDescription", "Strona TT");
+            french.Add("TwitterPictureBoxDescription", "Page Twitter");
 
             //Component: SendEmailPictureBoxDescription
             english.Add("SendEmailPictureBoxDescription", "Send us an Email");
