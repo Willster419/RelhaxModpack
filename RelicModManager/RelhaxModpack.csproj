@@ -99,9 +99,6 @@
       <HintPath>..\packages\DotNetZip.1.10.1\lib\net20\DotNetZip.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="KellermanSoftware.Compare-NET-Objects, Version=4.53.0.0, Culture=neutral, PublicKeyToken=d970ace04cc85217, processorArchitecture=MSIL">
-      <HintPath>..\packages\CompareNETObjects.4.53.0.0\lib\net40\KellermanSoftware.Compare-NET-Objects.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="NAudio, Version=1.8.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NAudio.1.8.4\lib\net35\NAudio.dll</HintPath>
@@ -120,9 +117,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="TeximpNet, Version=1.3.0.0, Culture=neutral, PublicKeyToken=7c35138f0d61254b, processorArchitecture=MSIL">
-      <HintPath>..\packages\TeximpNet.1.3.0\lib\net40\TeximpNet.dll</HintPath>
-    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
@@ -555,7 +549,6 @@
     <Resource Include="Resources\MainForm icons\facebook.png" />
     <Resource Include="Resources\MainForm icons\Home.png" />
     <Content Include="3rdPartyLicences\TeximpNet.txt" />
-    <Content Include="App_Readme\Compare-NET-Objects-Help.txt" />
     <Content Include="Resources\loading.gif" />
     <Content Include="Resources\loading_3rdguards.gif" />
     <EmbeddedResource Include="Resources\Newtonsoft.Json.dll" />
@@ -610,12 +603,10 @@ echo     } &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
 echo } &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
 </PreBuildEvent>
   </PropertyGroup>
-  <Import Project="..\packages\TeximpNet.1.3.0\build\TeximpNet.targets" Condition="Exists('..\packages\TeximpNet.1.3.0\build\TeximpNet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>Dieses Projekt verweist auf mindestens ein NuGet-Paket, das auf diesem Computer fehlt. Verwenden Sie die Wiederherstellung von NuGet-Paketen, um die fehlenden Dateien herunterzuladen. Weitere Informationen finden Sie unter "http://go.microsoft.com/fwlink/?LinkID=322105". Die fehlende Datei ist "{0}".</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\TeximpNet.1.3.0\build\TeximpNet.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\TeximpNet.1.3.0\build\TeximpNet.targets'))" />
     <Error Condition="!Exists('..\packages\MemoryInterop.ILPatcher.2.0.0\build\MemoryInterop.ILPatcher.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MemoryInterop.ILPatcher.2.0.0\build\MemoryInterop.ILPatcher.targets'))" />
   </Target>
   <Import Project="..\packages\MemoryInterop.ILPatcher.2.0.0\build\MemoryInterop.ILPatcher.targets" Condition="Exists('..\packages\MemoryInterop.ILPatcher.2.0.0\build\MemoryInterop.ILPatcher.targets')" />
