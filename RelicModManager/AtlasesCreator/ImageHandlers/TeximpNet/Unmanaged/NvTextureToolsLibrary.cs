@@ -2,7 +2,6 @@
 using RelhaxModpack.AtlasesCreator.ImageHandlers.TeximpNet.Unmanaged;
 using System;
 using System.Runtime.InteropServices;
-// using TeximpNet.Compression;
 
 namespace RelhaxModpack.AtlasesCreator.ImageHandlers.TeximpNet
 {

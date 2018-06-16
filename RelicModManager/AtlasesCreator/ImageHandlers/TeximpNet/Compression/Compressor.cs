@@ -25,8 +25,6 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.IO;
 using RelhaxModpack.AtlasesCreator.ImageHandlers.TeximpNet.DDS;
-// using TeximpNet.Unmanaged;
-// using TeximpNet.DDS;
 
 namespace RelhaxModpack.AtlasesCreator.ImageHandlers.TeximpNet.Compression
 {
