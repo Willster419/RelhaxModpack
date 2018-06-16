@@ -221,7 +221,7 @@
     <Compile Include="DatabaseComponents\Category.cs" />
     <Compile Include="LegacyComponents\Config.cs" />
     <Compile Include="LegacyComponents\Mod.cs" />
-    <Compile Include="Utils\MemoryInterop.cs" />
+    <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\MemoryInterop.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
