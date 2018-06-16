@@ -1093,8 +1093,7 @@ namespace RelhaxModpack
                                     Name = "notAddedYet",
                                     IsEnabled = false,
                                     FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
-                                    MinWidth = 100,
-                                    Foreground = Settings.GetTextColorWPF()
+                                    MinWidth = 100
                                 };
                             //here means the entry index is not null
                             if (sp.Enabled)
@@ -1133,8 +1132,7 @@ namespace RelhaxModpack
                                     Name = "notAddedYet",
                                     IsEnabled = false,
                                     FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
-                                    MinWidth = 100,
-                                    Foreground = Settings.GetTextColorWPF()
+                                    MinWidth = 100
                                 };
                             //here means the entry index is not null
                             if (sp.Enabled)
