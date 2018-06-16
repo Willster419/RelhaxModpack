@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System;
-using TeximpNet;
-using TeximpNet.Compression;
+using RelhaxModpack.AtlasesCreator.ImageHandlers.TeximpNet.Compression;
+using RelhaxModpack.AtlasesCreator.ImageHandlers.TeximpNet;
 
 namespace RelhaxModpack.AtlasesCreator
 {
