@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -30,6 +31,14 @@ namespace RelhaxModpack
         public static string updateKeyFile = "";
         public static string configName = "";
         public static string editorDatabaseFile = "";
+
+        public enum Compressed
+        {
+            None = 0,
+            Yes,
+            No
+        }
+
         public enum ProgramVersion
         {
             Stable = 0,
@@ -37,6 +46,7 @@ namespace RelhaxModpack
             Alpha = 2
         }
         public static ProgramVersion Version = ProgramVersion.Alpha;
+
         [STAThread]
         static void Main()
         {
@@ -47,43 +57,43 @@ namespace RelhaxModpack
             //loading embeded dlls from the application
             //https://www.codeproject.com/articles/528178/load-dll-from-embedded-resource
             string defaultResourcePath = "RelhaxModpack.Resources.";
-            string[] librariesMultiPlatform = new string[]
+            Dictionary<string, Compressed> librariesMultiPlatform = new Dictionary<string, Compressed>()
             {
-                "DotNetZip.dll",
-                "Newtonsoft.Json.dll",
-                "NAudio.dll",
-                //"TeximpNet.dll"
-            };/*
-            string[] libraries32Platform = new string[]
-            {
-                "FreeImage32.dll",
-                "nvtt32.dll"
+                { "DotNetZip.dll", Compressed.No },
+                { "Newtonsoft.Json.dll", Compressed.No },
+                { "NAudio.dll", Compressed.No },
+                { "nvtt32.zip", Compressed.Yes },
+                { "nvtt64.zip", Compressed.Yes },
+                { "FreeImage32.zip", Compressed.Yes },
+                { "FreeImage64.zip", Compressed.Yes }
             };
-            string[] libraries64Platform = new string[]
-            {
-                "FreeImage64.dll",
-                "nvtt64.dll"
-            };*/
             //load multiplatform
-            foreach(string s in librariesMultiPlatform)
+            foreach (var s in librariesMultiPlatform)
             {
-                EmbeddedAssembly.Load(defaultResourcePath + s, s);
-            }
-            /*
-            if(Environment.Is64BitProcess)
-            {
-                foreach (string s in libraries64Platform)
+                string resourcePath = defaultResourcePath + s.Key;
+                try
                 {
-                    EmbeddedAssembly.Load(defaultResourcePath + s, s);
+                    EmbeddedAssembly.Load(resourcePath, s.Key);
+                    Logging.Manager("loading managed library: " + s.Key);
+                    AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
+                    continue;
                 }
-            }
-            else
-            {
-                foreach (string s in libraries32Platform)
+                catch
                 {
-                    EmbeddedAssembly.Load(defaultResourcePath + s, s);
+                    // if EmbeddedAssembly.Load failes, it should be an unmanaged dll
+                    try
+                    {
+                        EmbeddedUnmanagedDll.ExtractEmbeddedDlls(resourcePath, s.Key, s.Value == Compressed.Yes, out string filename);
+                        AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
+                        Logging.Manager(string.Format("extracted unmanaged library: {0}{1}", s.Key, s.Value == Compressed.Yes ? " (" + filename + ")" : ""));
+                        continue;
+                    }
+                    catch
+                    { }
                 }
-            }*/
+                Logging.Manager("failed to handle library: " + s.Key);
+            }
+
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
              // delete RelicCopyUpdate.bat at start (it is only needed at updates, so kill it)
             try

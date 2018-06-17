@@ -335,6 +335,11 @@ namespace RelhaxModpack
             return returnVal;
         }
 
+        public static byte[] ToByteArray(this string s)
+        {
+            return Encoding.ASCII.GetBytes(s);
+        }
+
         public static string ByteArrayToString(this byte[] arr)
         {
             return ConvertByteArrayToString(arr);
@@ -886,6 +891,21 @@ namespace RelhaxModpack
                 Logging.Manager(string.Format("ERROR: {0} not found", zipFilename));
             }
             return textStr;
+        }
+
+        // functionality to extract with 'zipFilename' spezified single file has still to be implemented
+        public static void GetByteArryFromZip(ref byte[] zippedArray, out string filename, string zipFilename = "", string password = null)
+        {
+            MemoryStream ms = new MemoryStream(zippedArray);
+            using (ZipFile zout = ZipFile.Read(ms))
+            {
+                ZipEntry entry = zout.FirstOrDefault();
+                MemoryStream zos = new MemoryStream();
+                entry.Extract(zos);
+                filename = entry.FileName;
+                zippedArray = zos.ToArray();
+                return;
+            }
         }
 
         public static bool ConvertDateToLocalCultureFormat(string date, out string dateOut)

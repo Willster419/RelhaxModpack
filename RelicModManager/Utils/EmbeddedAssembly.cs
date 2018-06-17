@@ -26,9 +26,9 @@ public class EmbeddedAssembly
 
         byte[] ba = null;
         Assembly asm = null;
-        Assembly curAsm = Assembly.GetExecutingAssembly();
+        Assembly assem = Assembly.GetExecutingAssembly();
 
-        using (Stream stm = curAsm.GetManifestResourceStream(embeddedResource))
+        using (Stream stm = assem.GetManifestResourceStream(embeddedResource))
         {
             // Either the file is not existed or it is not mark as embedded resource
             if (stm == null)
@@ -101,6 +101,8 @@ public class EmbeddedAssembly
 
         // Add the loaded DLL/assembly into dictionary
         dic.Add(asm.FullName, asm);
+
+        return;
     }
 
     /// <summary>
