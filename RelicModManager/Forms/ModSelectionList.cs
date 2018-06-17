@@ -2564,40 +2564,27 @@ namespace RelhaxModpack
             {
                 return;
             }
-            if (Settings.SView == SelectionView.Default)
+            if (sendah.SelectedItem is SelectablePackage sp)
             {
-                if (sendah.SelectedItem is SelectablePackage c)
+                if (modTabGroups.TabPages.Contains(sp.TopParent.TabIndex))
                 {
-                    if (modTabGroups.TabPages.Contains(c.TopParent.TabIndex))
-                    {
-                        modTabGroups.SelectedTab = c.TopParent.TabIndex;
-                    }
-                    if (c.UIComponent is Control cont)
+                    //change the selected tab to the one that has the mod in it
+                    modTabGroups.SelectedTab = sp.TopParent.TabIndex;
+                    if (sp.UIComponent is Control cont)
                     {
                         IgnoreSearchBoxFocus = true;
                         cont.Focus();
                         IgnoreSearchBoxFocus = false;
                     }
-                }
-            }
-            else if (Settings.SView == SelectionView.DefaultV2)
-            {
-                if (sendah.SelectedItem is SelectablePackage m)
-                {
-                    if (modTabGroups.TabPages.Contains(m.TabIndex))
-                    {
-                        modTabGroups.SelectedTab = m.TabIndex;
-                    }
-                    if(m.UIComponent is System.Windows.Controls.Control c)
+                    else if (sp.UIComponent is System.Windows.Controls.Control c)
                     {
                         IgnoreSearchBoxFocus = true;
                         c.Focus();
                         IgnoreSearchBoxFocus = false;
                     }
-                    
-                    //this.ModSelectionList_SizeChanged(null, null);
                 }
             }
+            
         }
 
         private void searchCB_KeyDown(object sender, KeyEventArgs e)
