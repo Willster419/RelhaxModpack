@@ -59,7 +59,7 @@ namespace RelhaxModpack
             Graphics graphics = this.CreateGraphics();
             DPISCALE = graphics.DpiX;
             DPISCALE = DPISCALE / 96F;
-            Md5DatabaseFile = Path.Combine(Application.StartupPath, "RelHaxDownloads", "MD5HashDatabase.xml");
+            Md5DatabaseFile = Path.Combine(Settings.RelhaxDownloadsFolder, "MD5HashDatabase.xml");
             //create the loading window
             pw = new PleaseWait(MainWindowStartX, MainWindowStartY);
             pw.Show();
@@ -163,7 +163,8 @@ namespace RelhaxModpack
                 //parse the database version
                 databaseURL = doc.XPathSelectElement("//version/database_beta_url").Value;
                 Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(databaseURL, "//modInfoAlpha.xml/@onlineFolder");
-                string localDest = Path.Combine(Application.StartupPath, "RelHaxTemp", "modInfo_beta.xml");
+                // string localDest = Path.Combine(Application.StartupPath, "RelHaxTemp", "modInfo_beta.xml");
+                string localDest = Path.Combine(Settings.RelhaxTempFolder , "modInfo_beta.xml");
                 //always delete the file before redownloading
                 if (File.Exists(localDest))
                     File.Delete(localDest);

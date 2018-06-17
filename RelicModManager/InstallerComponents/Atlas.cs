@@ -26,7 +26,8 @@ namespace RelhaxModpack
         // path inside the pkg file to the filename to process
         public string DirectoryInArchive { get; set; } = "";
         // path to atlas file outside the archive (after extraction located here)
-        public string TempAltasPresentDirectory { get; set; } = Path.Combine(Application.StartupPath, "RelHaxTemp");
+        // public string TempAltasPresentDirectory { get; set; } = Path.Combine(Application.StartupPath, "RelHaxTemp");
+        public string TempAltasPresentDirectory { get; set; } = Settings.RelhaxTempFolder;
         // path to place the finished file
         public string AtlasSaveDirectory { get; set; } = "";
         // width of the new atlases file

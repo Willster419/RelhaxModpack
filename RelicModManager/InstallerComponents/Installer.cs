@@ -32,7 +32,7 @@ namespace RelhaxModpack
         */
         //everything that it needs to install
         public string TanksLocation { get; set; }
-        public string AppPath { get; set; }
+        // public string AppPath { get; set; }
         public List<Dependency> GlobalDependencies { get; set; }
         public List<Dependency> Dependencies { get; set; }
         public List<LogicalDependency> LogicalDependencies { get; set; }
@@ -480,7 +480,8 @@ namespace RelhaxModpack
                                 string[] fileList = Directory.GetFiles(folderPath, Path.GetFileName(correctedPath));   // use the GetFileName(correctedPath) as a search pattern, to only get wanted files
                                 foreach (string startLoc in fileList)
                                 {
-                                    string destLoc = Path.Combine(Application.StartupPath, "RelHaxTemp", Utils.GetValidFilename(dbo.Name + "_") + Path.GetFileName(startLoc));
+                                    // string destLoc = Path.Combine(Application.StartupPath, "RelHaxTemp", Utils.GetValidFilename(dbo.Name + "_") + Path.GetFileName(startLoc));
+                                    string destLoc = Path.Combine(Settings.RelhaxTempFolder, Utils.GetValidFilename(dbo.Name + "_") + Path.GetFileName(startLoc));
                                     try
                                     {
                                         if (File.Exists(@startLoc))
@@ -741,7 +742,8 @@ namespace RelhaxModpack
                 Logging.Manager("Started clearing of WoT cache files");
 
                 string[] fileFolderNames = { "preferences.xml", "preferences_ct.xml", "modsettings.dat", "xvm", "pmod" };
-                string AppPathTempFolder = Path.Combine(AppPath, "RelHaxTemp", "AppDataBackup");
+                // string AppPathTempFolder = Path.Combine(AppPath, "RelHaxTemp", "AppDataBackup");
+                string AppPathTempFolder = Path.Combine(Settings.RelhaxTempFolder, "AppDataBackup");
 
                 //1 - Move out prefrences.xml, prefrences_ct.xml, and xvm folder
                 try
@@ -832,7 +834,7 @@ namespace RelhaxModpack
 
                 //extract RelHax Mods
                 Logging.Manager("Starting Relhax Modpack Extraction");
-                string downloadedFilesDir = Path.Combine(Application.StartupPath, "RelHaxDownloads");
+                string downloadedFilesDir = Settings.RelhaxDownloadsFolder;
                 //calculate the total number of zip files to install
                 foreach (Dependency d in GlobalDependencies)
                     if (!d.ZipFile.Equals(""))
@@ -1193,7 +1195,8 @@ namespace RelhaxModpack
                                 InstallWorker.ReportProgress(0);
                                 string filenamePrefix = Utils.GetValidFilename(dbo.Name + "_");
                                 //find the files with the specified pattern
-                                string[] fileList = Directory.GetFiles(Path.Combine(Application.StartupPath, "RelHaxTemp"), filenamePrefix + Path.GetFileName(correctedUserFiles));
+                                // string[] fileList = Directory.GetFiles(Path.Combine(Application.StartupPath, "RelHaxTemp"), filenamePrefix + Path.GetFileName(correctedUserFiles));
+                                string[] fileList = Directory.GetFiles(Settings.RelhaxTempFolder, filenamePrefix + Path.GetFileName(correctedUserFiles));
                                 //if no results, go on with the next entry
                                 if (fileList.Length == 0) continue;
                                 foreach (string ss in fileList)
@@ -1209,7 +1212,8 @@ namespace RelhaxModpack
                                         }
                                         if (File.Exists(Path.Combine(TanksLocation, targetDir, targetFilename)))
                                             File.Delete(Path.Combine(TanksLocation, targetDir, targetFilename));
-                                        File.Move(Path.Combine(Application.StartupPath, "RelHaxTemp", Path.GetFileName(ss)), Path.Combine(TanksLocation, targetDir, targetFilename));
+                                        // File.Move(Path.Combine(Application.StartupPath, "RelHaxTemp", Path.GetFileName(ss)), Path.Combine(TanksLocation, targetDir, targetFilename));
+                                        File.Move(Path.Combine(Settings.RelhaxTempFolder, Path.GetFileName(ss)), Path.Combine(TanksLocation, targetDir, targetFilename));
                                         Logging.Installer(Path.Combine(TanksLocation, targetDir, targetFilename));
                                         Logging.Manager(string.Format("RestoredUserData: {0}", Path.Combine(targetDir, targetFilename)));
                                     }
@@ -2078,8 +2082,8 @@ namespace RelhaxModpack
                 FileInfo[] fi = null;
                 try
                 {
-                    File.SetAttributes(Path.Combine(Application.StartupPath, "RelHaxDownloads"), FileAttributes.Normal);
-                    DirectoryInfo di = new DirectoryInfo(Path.Combine(Application.StartupPath, "RelHaxDownloads"));
+                    File.SetAttributes(Settings.RelhaxDownloadsFolder, FileAttributes.Normal);
+                    DirectoryInfo di = new DirectoryInfo(Settings.RelhaxDownloadsFolder);
                     //get every zip file in the folder
                     fi = di.GetFiles(@"*.zip", SearchOption.TopDirectoryOnly);
                 }
@@ -2125,7 +2129,7 @@ namespace RelhaxModpack
                                     //for each zip file, verify it exists, set properties to normal, delete it
                                     try
                                     {
-                                        string file = Path.Combine(Application.StartupPath, "RelHaxDownloads", s);
+                                        string file = Path.Combine(Settings.RelhaxDownloadsFolder, s);
                                         args.currentFile = s;
                                         File.SetAttributes(file, FileAttributes.Normal);
                                         File.Delete(file);

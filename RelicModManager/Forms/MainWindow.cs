@@ -265,7 +265,7 @@ namespace RelhaxModpack
                 {
                     ins = new Installer()
                     {
-                        AppPath = Application.StartupPath,
+                        // AppPath = Application.StartupPath,
                         GlobalDependencies = this.globalDependenciesToInstall,
                         Dependencies = this.dependenciesToInstall,
                         LogicalDependencies = this.logicalDependenciesToInstall,
@@ -1888,7 +1888,7 @@ namespace RelhaxModpack
             {
                 unI = new Installer()
                 {
-                    AppPath = Application.StartupPath,
+                    // AppPath = Application.StartupPath,
                     TanksLocation = tanksLocation,
                     TanksVersion = tanksVersion
                 };
@@ -2041,7 +2041,8 @@ namespace RelhaxModpack
             //save settings
             if (Program.saveSettings) Settings.SaveSettings();
             Logging.Manager("cleaning \"RelHaxTemp\" folder");
-            Utils.DirectoryDelete(Path.Combine(Application.StartupPath, "RelHaxTemp"), true);
+            // Utils.DirectoryDelete(Path.Combine(Application.StartupPath, "RelHaxTemp"), true);
+            Utils.DirectoryDelete(Settings.RelhaxTempFolder, true);
             Logging.Manager(string.Format("Exception counted: {0}", errorCounter));
             Logging.Manager("Application Closing");
             Logging.Manager("|------------------------------------------------------------------------------------------------|");
