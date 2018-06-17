@@ -54,6 +54,7 @@ namespace RelhaxModpack
             Application.SetCompatibleTextRenderingDefault(false);
             Logging.Manager("|------------------------------------------------------------------------------------------------|");
             Logging.Manager("Main Entry point launched");
+            
             //loading embeded dlls from the application
             //https://www.codeproject.com/articles/528178/load-dll-from-embedded-resource
             string defaultResourcePath = "RelhaxModpack.Resources.";
@@ -84,14 +85,16 @@ namespace RelhaxModpack
                     try
                     {
                         EmbeddedUnmanagedDll.ExtractEmbeddedDlls(resourcePath, s.Key, s.Value == Compressed.Yes, out string filename);
-                        AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
+                        // AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
                         Logging.Manager(string.Format("extracted unmanaged library: {0}{1}", s.Key, s.Value == Compressed.Yes ? " (" + filename + ")" : ""));
                         continue;
                     }
-                    catch
-                    { }
+                    catch (Exception ex)
+                    {
+                        MainWindow.errorCounter++;
+                        Logging.Manager(string.Format("failed to handle library: {0} ({1})", s.Key, ex.Message));
+                    }
                 }
-                Logging.Manager("failed to handle library: " + s.Key);
             }
 
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
