@@ -241,15 +241,15 @@ namespace RelhaxModpack.AtlasesCreator
                     // if we require a power of two texture, find the next power of two that can fit this image
                     if (requirePow2)
                     {
-                        testWidth = FindNextPowerOfTwo(testWidth);
-                        testHeight = FindNextPowerOfTwo(testHeight);
+                        testWidth = FindNextPowerOfTwo(testWidth + padding + padding);
+                        testHeight = FindNextPowerOfTwo(testHeight + padding + padding);
                     }
 
                     // if we require a square texture, set the width and height to the larger of the two
                     if (requireSquare)
                     {
                         int max = Math.Max(testWidth, testHeight);
-                        testWidth = testHeight = max;
+                        testWidth = testHeight = (max + padding + padding);
                     }
 
                     // if the test results are the same as our last output results, we've reached an optimal size,
@@ -272,7 +272,7 @@ namespace RelhaxModpack.AtlasesCreator
                         if (!(requireSquare || requirePow2))
                         {
                             outputWidth += padding;
-                            outputHeight += padding;
+                            outputHeight += padding + padding;
                         }
                         return true;
                     }
