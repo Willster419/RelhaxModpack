@@ -56,6 +56,7 @@ namespace RelhaxModpack
         public static List<string> usedFilesList;
         //counter for Utils.exception calls
         public static int errorCounter = 0;
+        public static Int64 backupFolderSize = 0;
         private List<SelectablePackage> userMods;
         private string currentModDownloading;
         public Installer ins;
@@ -115,6 +116,34 @@ namespace RelhaxModpack
               ControlStyles.DoubleBuffer, true
               );
             Logging.Manager("Style settings applied");
+        }
+
+        //parse the ModBackup folder to check current size
+        void parse_RelHaxModBackupFolder()
+        {
+            DirectoryInfo di = null;
+            FileInfo[] fiArr = null;        // files to pare in current folder
+            string[] foArr = new string[1];        // folders to parse
+
+            di = new DirectoryInfo(Settings.RelHaxModBackupFolder);
+            //get every patch file in the folder
+            fiArr = di.GetFiles("*.*", System.IO.SearchOption.TopDirectoryOnly);
+            foArr[0] = "";
+            int folderCount = 0;
+            while (folderCount < 0)
+            {
+                int c = 0;
+                while (c < fiArr.Length)
+                {
+                    if (fiArr[c].Attributes == FileAttributes.Directory)
+                    {
+
+                    }
+                }
+            }
+            //             if (false == true && backupFolderSize > 100000000 )
+            //                  this.backupModsCheckBox.Text = Translations.GetTranslatedString("backupModsCheckBox") + "\n" + Utils.SizeSuffix(backupFolderSize);
+
         }
 
         //handler for the mod download file progress
@@ -715,7 +744,7 @@ namespace RelhaxModpack
 
                 }
                 //check if old dll files can be deleted
-                string[] filesToDelete = { "DotNetZip.dll", "Ionic.Zip.dll", "Newtonsoft.Json.dll", "NAudio.dll" };
+                string[] filesToDelete = { "DotNetZip.dll", "Ionic.Zip.dll", "Newtonsoft.Json.dll", "NAudio.dll", "nvtt32.dll", "nvtt64.dll", "FreeImage32.dll", "FreeImage64.dll", "TeximpNet.dll", "TeximpNet.xml" };
                 foreach (string s in filesToDelete)
                     if (File.Exists(Path.Combine(Application.StartupPath, s)))
                         File.Delete(Path.Combine(Application.StartupPath, s));
