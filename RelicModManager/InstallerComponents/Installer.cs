@@ -439,21 +439,21 @@ namespace RelhaxModpack
             try
             {
                 //backupResMods the mods folder
-                if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxModBackup")))
-                    Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxModBackup"));
+                if (!Directory.Exists(Settings.RelHaxModBackupFolder))
+                    Directory.CreateDirectory(Settings.RelHaxModBackupFolder);
                 //create a new mods folder based on date and time
                 //yyyy-MM-dd-HH-mm-ss
                 DateTime now = DateTime.Now;
                 string folderDateName = String.Format("{0:yyyy-MM-dd-HH-mm-ss}", now);
-                if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "res_mods")))
-                    Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "res_mods"));
-                if (!Directory.Exists(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "mods")))
-                    Directory.CreateDirectory(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "mods"));
-                NumFilesToProcess(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "mods"));
-                NumFilesToProcess(Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "res_mods"));
+                if (!Directory.Exists(Path.Combine(Settings.RelHaxModBackupFolder, folderDateName, "res_mods")))
+                    Directory.CreateDirectory(Path.Combine(Settings.RelHaxModBackupFolder, folderDateName, "res_mods"));
+                if (!Directory.Exists(Path.Combine(Settings.RelHaxModBackupFolder, folderDateName, "mods")))
+                    Directory.CreateDirectory(Path.Combine(Settings.RelHaxModBackupFolder, folderDateName, "mods"));
+                NumFilesToProcess(Path.Combine(Settings.RelHaxModBackupFolder, folderDateName, "mods"));
+                NumFilesToProcess(Path.Combine(Settings.RelHaxModBackupFolder, folderDateName, "res_mods"));
                 InstallWorker.ReportProgress(0);
-                DirectoryCopy(Path.Combine(TanksLocation, "res_mods"), Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "res_mods"), true);
-                DirectoryCopy(Path.Combine(TanksLocation, "mods"), Path.Combine(Application.StartupPath, "RelHaxModBackup", folderDateName, "mods"), true);
+                DirectoryCopy(Path.Combine(TanksLocation, "res_mods"), Path.Combine(Settings.RelHaxModBackupFolder, folderDateName, "res_mods"), true);
+                DirectoryCopy(Path.Combine(TanksLocation, "mods"), Path.Combine(Settings.RelHaxModBackupFolder, folderDateName, "mods"), true);
             }
             catch (Exception ex)
             {

@@ -183,6 +183,7 @@ namespace RelhaxModpack
         //file and folder locations
         public readonly static string SettingsXmlFile = Path.Combine(Application.StartupPath, "RelHaxSettings.xml");
         public static string RelhaxDownloadsFolder = Path.Combine(Application.StartupPath, "RelHaxDownloads");
+        public static string RelHaxModBackupFolder = Path.Combine(Application.StartupPath, "RelHaxModBackup");
         public static string RelHaxLibrariesFolder = Path.Combine(Application.StartupPath, "RelHaxLibraries"); 
         public static string MD5HashDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "MD5HashDatabase.xml");
         public static string OnlineDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "onlineDatabase.xml");
