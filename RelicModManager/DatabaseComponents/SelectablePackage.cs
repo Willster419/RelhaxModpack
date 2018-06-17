@@ -147,13 +147,12 @@ namespace RelhaxModpack
                                 break;
                         }
                         break;
-                    //WPF treeview is done with treeviewItem
                     case SelectionView.DefaultV2:
                         switch (_Checked)
                         {
                             case true:
                                 //handle color change code
-                                if (Settings.EnableColorChangeLegacyView)
+                                if (Settings.EnableBordersDefaultV2View)
                                 {
                                     if(ParentBorder != null && ParentBorder.Background != System.Windows.Media.Brushes.BlanchedAlmond)
                                     {
@@ -185,7 +184,7 @@ namespace RelhaxModpack
                                 break;
                             case false:
                                 //handle color change code
-                                if (Settings.EnableColorChangeLegacyView)
+                                if (Settings.EnableBordersDefaultV2View)
                                 {
                                     if (ParentBorder != null && !AnyPackagesChecked())
                                         ParentBorder.Background = Settings.GetBackColorWPF();
@@ -212,6 +211,80 @@ namespace RelhaxModpack
                                                     ctrl2.Foreground = Settings.GetTextColorWPF();
                                                 }
                                             }
+                                        }
+                                        else if (Level == -1)
+                                        {
+                                            RelhaxWPFCheckBox r = (RelhaxWPFCheckBox)UIComponent;
+                                            r.Foreground = Settings.GetTextColorWPF();
+                                        }
+                                    }
+                                }
+                                break;
+                        }
+                        break;
+                    case SelectionView.Legacy:
+                        switch (_Checked)
+                        {
+                            case true:
+                                //handle color change code
+                                if (Settings.EnableColorChangeLegacyView)
+                                {
+                                    if (ParentBorder != null && ParentBorder.Background != System.Windows.Media.Brushes.BlanchedAlmond)
+                                    {
+                                        ParentBorder.Background = System.Windows.Media.Brushes.BlanchedAlmond;
+                                    }
+                                    else if (Level == -1 && TreeView.Background != System.Windows.Media.Brushes.BlanchedAlmond)
+                                    {
+                                        TreeView.Background = System.Windows.Media.Brushes.BlanchedAlmond;
+                                    }
+                                    if(Settings.DarkUI && (ParentStackPanel != null))
+                                    {
+                                        //need to go through every treviewitem and parse
+                                        foreach(System.Windows.Controls.TreeViewItem tview in ParentStackPanel.Children)
+                                        {
+                                            if(tview.Header is RelhaxWPFCheckBox  || tview.Header is RelhaxWPFRadioButton )
+                                            {
+                                                System.Windows.Controls.Control c = (System.Windows.Controls.Control)tview.Header;
+                                                c.Foreground = System.Windows.Media.Brushes.Black;
+                                            }
+                                        }
+                                    }
+                                    if (Settings.DarkUI && Level == -1)
+                                    {
+                                        RelhaxWPFCheckBox r = (RelhaxWPFCheckBox)UIComponent;
+                                        r.Foreground = System.Windows.Media.Brushes.Black;
+                                    }
+                                }
+                                break;
+                            case false:
+                                //handle color change code
+                                if (Settings.EnableColorChangeLegacyView)
+                                {
+                                    if (ParentBorder != null && !AnyPackagesChecked())
+                                    {
+                                        ParentBorder.Background = Settings.GetBackColorWPF();
+                                    }
+                                    else if (Level == -1 && !AnyPackagesChecked())
+                                    {
+                                        TreeView.Background = Settings.GetBackColorWPF();
+                                    }
+                                    if(Settings.DarkUI)
+                                    {
+                                        if(!AnyPackagesChecked() && (ParentStackPanel != null))
+                                        {
+                                            foreach (System.Windows.Controls.TreeViewItem tview in ParentStackPanel.Children)
+                                            {
+                                                if (tview.Header is RelhaxWPFCheckBox || tview.Header is RelhaxWPFRadioButton)
+                                                {
+                                                    System.Windows.Controls.Control c = (System.Windows.Controls.Control)tview.Header;
+                                                    c.Foreground = Settings.GetTextColorWPF();
+                                                }
+                                            }
+                                        }
+                                        else if (Level == -1)
+                                        {
+                                            RelhaxWPFCheckBox r = (RelhaxWPFCheckBox)UIComponent;
+                                            r.Foreground = Settings.GetTextColorWPF();
                                         }
                                     }
                                 }
@@ -248,10 +321,11 @@ namespace RelhaxModpack
         public System.Windows.Controls.Border ChildBorder;
         //the stackpanel to allow the child treeviewitems to stack upon each other. sits inside the border
         public System.Windows.Controls.StackPanel ChildStackPanel;
-
-        //only for DEFAULT V2
+        //they are both used, but used differently
         public System.Windows.Controls.Border ParentBorder;
         public System.Windows.Controls.StackPanel ParentStackPanel;
+
+        //only for DEFAULT V2
         public System.Windows.Controls.ContentControl @ContentControl;
 
         //only for LEGACY

@@ -217,7 +217,7 @@ namespace RelhaxModpack
             this.expandAllButton.TabIndex = 16;
             this.expandAllButton.Text = "Expand Current Tab";
             this.expandAllButton.UseVisualStyleBackColor = true;
-            this.expandAllButton.Click += new System.EventHandler(this.expandAllButton_Click);
+            this.expandAllButton.Click += new System.EventHandler(this.ExpandAllButton_Click);
             // 
             // colapseAllButton
             // 

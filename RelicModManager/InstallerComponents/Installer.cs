@@ -633,14 +633,15 @@ namespace RelhaxModpack
                 {
                     File.SetAttributes(file, FileAttributes.Normal);
                     File.Delete(file);
+                    tw.WriteLine(file);
                 }
                 catch (Exception ex)
                 {
                     ex = ex.GetBaseException();
+                    tw.WriteLine(string.Format(@"/* failed to delete: {0} */",file));
                     Logging.Manager(string.Format("failed to delete: {0} ({1})", file, ex.Message));
                 }
                 InstallWorker.ReportProgress(args.ChildProcessed++);
-                tw.WriteLine(file);
             }
             if(Settings.CreateShortcuts)
             {

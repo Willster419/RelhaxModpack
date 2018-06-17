@@ -426,7 +426,8 @@ namespace RelhaxModpack
                         cb2 = new RelhaxWPFCheckBox()
                         {
                             Package = c.CategoryHeader,
-                            Content = c.CategoryHeader.NameFormatted
+                            Content = c.CategoryHeader.NameFormatted,
+                            Foreground = Settings.GetTextColorWPF(),
                         };
                         cb2.Click += OnWPFComponentCheck;
                         //create the border and stackpanels
@@ -1049,6 +1050,9 @@ namespace RelhaxModpack
                 case SelectionView.Legacy:
                     //in WPF underscores are only displayed when there's two of them
                     packageDisplayName = packageDisplayName.Replace(@"_", @"__");
+                    //link the parent border and stackpanel to the child package
+                    sp.ParentBorder = sp.Parent.ChildBorder;
+                    sp.ParentStackPanel = sp.Parent.ChildStackPanel;
                     //start code for border and stackpanel
                     if (sp.ChildBorder == null && sp.Packages.Count > 0)
                     {
@@ -1058,7 +1062,8 @@ namespace RelhaxModpack
                             BorderBrush = System.Windows.Media.Brushes.Black,
                             BorderThickness = Settings.EnableBordersLegacyView ? new System.Windows.Thickness(1) : new System.Windows.Thickness(0),
                             Child = sp.ChildStackPanel,
-                            Margin = new System.Windows.Thickness(-25, 0, 0, 0)
+                            Margin = new System.Windows.Thickness(-25, 0, 0, 0),
+                            Background = Settings.GetBackColorWPF()
                         };
                         sp.TreeViewItem.Items.Add(sp.ChildBorder);
                     }
@@ -1074,10 +1079,10 @@ namespace RelhaxModpack
                                 FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
                                 HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left,
                                 VerticalContentAlignment = System.Windows.VerticalAlignment.Center,
-                                FontWeight = Settings.DarkUI ? System.Windows.FontWeights.Bold : System.Windows.FontWeights.Normal,
                                 Content = packageDisplayName,
                                 IsEnabled = canBeEnabled,
-                                IsChecked = (canBeEnabled && sp.Checked) ? true : false
+                                IsChecked = (canBeEnabled && sp.Checked) ? true : false,
+                                Foreground = Settings.GetTextColorWPF()
                             };
                             break;
                         case "single_dropdown":
@@ -1089,7 +1094,6 @@ namespace RelhaxModpack
                                     Name = "notAddedYet",
                                     IsEnabled = false,
                                     FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
-                                    FontWeight = Settings.DarkUI ? System.Windows.FontWeights.Bold : System.Windows.FontWeights.Normal,
                                     MinWidth = 100
                                 };
                             //here means the entry index is not null
@@ -1129,7 +1133,6 @@ namespace RelhaxModpack
                                     Name = "notAddedYet",
                                     IsEnabled = false,
                                     FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
-                                    FontWeight = Settings.DarkUI ? System.Windows.FontWeights.Bold : System.Windows.FontWeights.Normal,
                                     MinWidth = 100
                                 };
                             //here means the entry index is not null
@@ -1169,10 +1172,10 @@ namespace RelhaxModpack
                                 FontFamily = new System.Windows.Media.FontFamily(Settings.FontName),
                                 HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left,
                                 VerticalContentAlignment = System.Windows.VerticalAlignment.Center,
-                                FontWeight = Settings.DarkUI ? System.Windows.FontWeights.Bold : System.Windows.FontWeights.Normal,
                                 Content = packageDisplayName,
                                 IsEnabled = canBeEnabled,
                                 IsChecked = (canBeEnabled && sp.Checked) ? true : false,
+                                Foreground = Settings.GetTextColorWPF()
                             };
                             break;
                     }
@@ -1201,7 +1204,6 @@ namespace RelhaxModpack
                             sp.TreeViewItem.Header = sp.UIComponent;
                             sp.TreeViewItem.IsExpanded = true;
                             sp.Parent.ChildStackPanel.Children.Add(sp.TreeViewItem);
-                            //sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
                         }
                         else if (sp.UIComponent is System.Windows.Controls.CheckBox cb)
                         {
@@ -1209,7 +1211,6 @@ namespace RelhaxModpack
                             sp.TreeViewItem.Header = sp.UIComponent;
                             sp.TreeViewItem.IsExpanded = true;
                             sp.Parent.ChildStackPanel.Children.Add(sp.TreeViewItem);
-                            //sp.Parent.TreeViewItem.Items.Add(sp.TreeViewItem);
                         }
                     }
                     break;
@@ -1345,16 +1346,29 @@ namespace RelhaxModpack
                 if (ipc is RelhaxUserCheckBox)
                     return;
                 //up then down
-                PropagateUpNotChecked(spc);
+                //PropagateUpNotChecked(spc);
                 PropagateDownNotChecked(spc);
             }
             //if it's the top level thing and the color change is enabled (disable is false), then tell it to check again for color change code
-            //if (ParentPanel != null && !AnyPackagesChecked())
-            //ParentPanel.BackColor = Settings.getBackColor();
-            if (Settings.EnableColorChangeDefaultView && spc.Level == -1 && spc.ParentPanel != null && !spc.AnyPackagesChecked())
-                spc.ParentPanel.BackColor = Settings.GetBackColorWinForms();
-            if (Settings.EnableColorChangeLegacyView && spc.Level == -1 && spc.ChildBorder != null && !spc.AnyPackagesChecked())
-                spc.ChildBorder.Background = Settings.GetBackColorWPF();
+            //but only do if it's moving to a not checked state
+            if (Settings.SView == SelectionView.Default && Settings.EnableColorChangeDefaultView && spc.Level == -1 && spc.ParentPanel != null && !spc.AnyPackagesChecked())
+            {
+                RelhaxFormCheckBox r = (RelhaxFormCheckBox)spc.UIComponent;
+                if(!r.Checked)
+                    spc.ParentPanel.BackColor = Settings.GetBackColorWinForms();
+            }
+            else if (Settings.SView == SelectionView.Legacy && Settings.EnableColorChangeLegacyView && spc.Level == -1 && !spc.AnyPackagesChecked())
+            {
+                RelhaxWPFCheckBox r = (RelhaxWPFCheckBox)spc.UIComponent;
+                if(!(bool)r.IsChecked)
+                    spc.TreeView.Background = Settings.GetBackColorWPF();
+            }
+            else if (Settings.SView == SelectionView.DefaultV2 && Settings.EnableColorChangeDefaultV2View && spc.Level == -1 && !spc.AnyPackagesChecked())
+            {
+                RelhaxWPFCheckBox r = (RelhaxWPFCheckBox)spc.UIComponent;
+                if (!(bool)r.IsChecked)
+                    spc.ParentBorder.Background = Settings.GetBackColorWPF();
+            }
         }
 
         //propagates the change back up the selection tree
@@ -2429,15 +2443,76 @@ namespace RelhaxModpack
         {
             switch(Settings.SView)
             {
-                
+                case SelectionView.Legacy:
+                    foreach (Control c in modTabGroups.SelectedTab.Controls)
+                    {
+                        if (c is ElementHost eh)
+                        {
+                            System.Windows.Controls.TreeView tv = (System.Windows.Controls.TreeView)eh.Child;
+                            foreach (System.Windows.Controls.TreeViewItem tvi in tv.Items)
+                            {
+                                tvi.IsExpanded = false;
+                                System.Windows.Controls.Border b = (System.Windows.Controls.Border)tvi.Items[0];
+                                System.Windows.Controls.StackPanel st = (System.Windows.Controls.StackPanel)b.Child;
+                                if (st.Children.Count > 0)
+                                {
+                                    processTreeViewItems(st.Children, false);
+                                }
+                            }
+                        }
+                    }
+                    break;
             }
         }
 
-        private void expandAllButton_Click(object sender, EventArgs e)
+        private void ExpandAllButton_Click(object sender, EventArgs e)
         {
             switch(Settings.SView)
             {
-                
+                case SelectionView.Legacy:
+                    foreach (Control c in modTabGroups.SelectedTab.Controls)
+                    {
+                        if (c is ElementHost eh)
+                        {
+                            System.Windows.Controls.TreeView tv = (System.Windows.Controls.TreeView)eh.Child;
+                            foreach (System.Windows.Controls.TreeViewItem tvi in tv.Items)
+                            {
+                                tvi.IsExpanded = true;
+                                System.Windows.Controls.Border b = (System.Windows.Controls.Border)tvi.Items[0];
+                                System.Windows.Controls.StackPanel st = (System.Windows.Controls.StackPanel)b.Child;
+                                if (st.Children.Count > 0)
+                                {
+                                    processTreeViewItems(st.Children, true);
+                                }
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
+
+        private void processTreeViewItems(System.Windows.Controls.UIElementCollection ic, bool expand)
+        {
+            switch(Settings.SView)
+            {
+                case SelectionView.Legacy:
+                    foreach (System.Windows.Controls.TreeViewItem tvi in ic)
+                    {
+                        if (expand)
+                            tvi.IsExpanded = true;
+                        else
+                            tvi.IsExpanded = false;
+                        if (tvi.Items.Count > 0)
+                        {
+                            System.Windows.Controls.Border b = (System.Windows.Controls.Border)tvi.Items[0];
+                            System.Windows.Controls.StackPanel st = (System.Windows.Controls.StackPanel)b.Child;
+                            if (st.Children.Count > 0)
+                            {
+                                processTreeViewItems(st.Children, expand);
+                            }
+                        }
+                    }
+                    break;
             }
         }
         #endregion
