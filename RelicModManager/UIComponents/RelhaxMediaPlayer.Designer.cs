@@ -67,9 +67,10 @@
             // StopButton
             // 
             this.StopButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.StopButton.Location = new System.Drawing.Point(3, 58);
+            this.StopButton.Image = global::RelhaxModpack.Properties.Resources.stop2;
+            this.StopButton.Location = new System.Drawing.Point(3, 50);
             this.StopButton.Name = "StopButton";
-            this.StopButton.Size = new System.Drawing.Size(40, 30);
+            this.StopButton.Size = new System.Drawing.Size(40, 37);
             this.StopButton.TabIndex = 0;
             this.StopButton.UseVisualStyleBackColor = true;
             this.StopButton.Click += new System.EventHandler(this.Stop_Click);
@@ -78,9 +79,10 @@
             // 
             this.PlayPause.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.PlayPause.Location = new System.Drawing.Point(49, 57);
+            this.PlayPause.Image = global::RelhaxModpack.Properties.Resources.play_pause;
+            this.PlayPause.Location = new System.Drawing.Point(49, 50);
             this.PlayPause.Name = "PlayPause";
-            this.PlayPause.Size = new System.Drawing.Size(40, 30);
+            this.PlayPause.Size = new System.Drawing.Size(40, 37);
             this.PlayPause.TabIndex = 3;
             this.PlayPause.UseVisualStyleBackColor = true;
             this.PlayPause.Click += new System.EventHandler(this.PlayPause_Click);
