@@ -45,7 +45,8 @@ namespace RelhaxModpack.AtlasesCreator.ImageHandlers.TeximpNet.Unmanaged
     {
         public static String GetAppBaseDirectory()
         {
-            return AppDomain.CurrentDomain.BaseDirectory;
+            return RelhaxModpack.Settings.RelHaxLibrariesFolder;
+            // return AppDomain.CurrentDomain.BaseDirectory;
         }
 
         public static bool IsAssignable(Type baseType, Type subType)
