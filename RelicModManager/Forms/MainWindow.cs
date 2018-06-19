@@ -56,7 +56,7 @@ namespace RelhaxModpack
         public static List<string> usedFilesList;
         //counter for Utils.exception calls
         public static int errorCounter = 0;
-        public static Int64 backupFolderSize = 0;
+        public static UInt64 backupFolderSize = 0;
         private List<SelectablePackage> userMods;
         private string currentModDownloading;
         public Installer ins;
@@ -119,31 +119,67 @@ namespace RelhaxModpack
         }
 
         //parse the ModBackup folder to check current size
-        void parse_RelHaxModBackupFolder()
+        private void ScanningRelHaxModBackupFolder()
         {
-            DirectoryInfo di = null;
-            FileInfo[] fiArr = null;        // files to pare in current folder
-            string[] foArr = new string[1];        // folders to parse
-
-            di = new DirectoryInfo(Settings.RelHaxModBackupFolder);
-            //get every patch file in the folder
-            fiArr = di.GetFiles("*.*", System.IO.SearchOption.TopDirectoryOnly);
-            foArr[0] = "";
-            int folderCount = 0;
-            while (folderCount < 0)
+            using (BackgroundWorker worker = new BackgroundWorker())
             {
-                int c = 0;
-                while (c < fiArr.Length)
-                {
-                    if (fiArr[c].Attributes == FileAttributes.Directory)
-                    {
+                worker.DoWork += worker_ScanningRelHaxModBackupFolder;
+                worker.RunWorkerAsync();
+            }
+        }
 
-                    }
+        private void worker_ScanningRelHaxModBackupFolder(object sender, DoWorkEventArgs args)
+        {
+            try
+            {
+                uint filesCount = 0;
+                backupFolderSize = 0;
+                DirectoryInfo di = new DirectoryInfo(Settings.RelHaxModBackupFolder);
+                Dictionary<DirectoryInfo, List<string>> backupDirContent = new Dictionary<DirectoryInfo, List<string>>();    // this dict will hold ALL directories and files after parsing     
+                List<DirectoryInfo> folderList = null;
+                folderList = di.GetDirectories().ToList();      // parsed top folders
+                foreach (var fL in folderList)
+                {
+                    List<string> fileList = new List<string>();
+                    fileList = NumFilesToProcess(Path.Combine(fL.FullName), ref filesCount, ref backupFolderSize);
+                    backupDirContent.Add(fL, fileList);
+                    this.backupModsCheckBox.Text = Translations.GetTranslatedString("backupModsCheckBox") + "\nBackups: " + backupDirContent.Count + " Complete size: " + Utils.SizeSuffix(backupFolderSize, 2, true);
+                }
+                Logging.Manager(string.Format("parsed backups in BackupFolder: {0}, with a total size of {1}.", backupDirContent.Count, Utils.SizeSuffix(backupFolderSize, 2, true)));
+            }
+            catch (Exception ex)
+            {
+                Logging.Manager(string.Format("Error at scanning '{0}' ({1})", Settings.RelHaxModBackupFolder, ex.Message));
+            }
+        }
+
+        private List<string> NumFilesToProcess(string folder, ref uint filesCount, ref UInt64 filesSize)
+        {
+            List<string> list = new List<string>();
+            try
+            {
+                // Get the subdirectories for the specified directory.
+                DirectoryInfo dir = new DirectoryInfo(folder);
+                DirectoryInfo[] dirs = dir.GetDirectories();
+                // Get the files in the directory
+                FileInfo[] files = dir.GetFiles();
+                foreach (FileInfo file in files)
+                {
+                    list.Add(file.FullName);
+                    filesCount++;
+                    filesSize += (ulong)file.Length;
+                }
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    list.Add(subdir.FullName + @"\");
+                    list.AddRange(NumFilesToProcess(subdir.FullName, ref filesCount, ref filesSize));
                 }
             }
-            //             if (false == true && backupFolderSize > 100000000 )
-            //                  this.backupModsCheckBox.Text = Translations.GetTranslatedString("backupModsCheckBox") + "\n" + Utils.SizeSuffix(backupFolderSize);
-
+            catch (Exception ex)
+            {
+                Logging.Manager(string.Format("Error at scanning '{0}' ({1})", folder, ex.Message));
+            }
+            return list;
         }
 
         //handler for the mod download file progress
@@ -825,6 +861,10 @@ namespace RelhaxModpack
 
             //apply text labels and custom command line properties
             ApplyVersionTextLabels();
+
+            //scan Backupfolder and show it on MainForm
+            if (Program.testMode)
+                ScanningRelHaxModBackupFolder();
 
             if (Settings.FirstLoad)
             {
