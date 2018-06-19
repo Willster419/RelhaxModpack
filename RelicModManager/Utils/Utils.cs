@@ -784,6 +784,10 @@ namespace RelhaxModpack
         public static string SizeSuffix(Int64 value, int decimalPlaces = 1, bool sizeSuffix = false)
         {
             if (value < 0) { return "-" + SizeSuffix(-value); }
+            return SizeSuffix((UInt64)value, decimalPlaces, sizeSuffix);
+        }
+        public static string SizeSuffix(UInt64 value, int decimalPlaces = 1, bool sizeSuffix = false)
+        {
             if (value == 0) { if (sizeSuffix) return "0.0 bytes"; else return "0.0"; }
             if (value < 1000) { if (sizeSuffix) return string.Format("{0:n" + decimalPlaces + "} {1}", 0.1, SizeSuffixes[1]); else return string.Format("{0:n" + decimalPlaces + "}", 0.1); }
 
