@@ -34,6 +34,8 @@ namespace RelhaxModpack
         private string databaseVersionString;
         //timer to measure download speed
         private Stopwatch sw = new Stopwatch();
+        // this dict will hold ALL directories and files of the backupFolder after parsing
+        private Dictionary<DirectoryInfo, List<string>> backupDirContent;
         //The list of all mods
         private List<Category> parsedCatagoryLists;
         //queue for downloading mods
@@ -135,7 +137,7 @@ namespace RelhaxModpack
                 uint filesCount = 0;
                 backupFolderSize = 0;
                 DirectoryInfo di = new DirectoryInfo(Settings.RelHaxModBackupFolder);
-                Dictionary<DirectoryInfo, List<string>> backupDirContent = new Dictionary<DirectoryInfo, List<string>>();    // this dict will hold ALL directories and files after parsing     
+                backupDirContent = new Dictionary<DirectoryInfo, List<string>>();    // this dict will hold ALL directories and files after parsing     
                 List<DirectoryInfo> folderList = null;
                 folderList = di.GetDirectories().ToList();      // parsed top folders
                 foreach (var fL in folderList)
