@@ -387,43 +387,24 @@ namespace RelhaxModpack
             //Step 19: Cleanup
             Logging.Manager("Intallation CleanUp");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CleanUp;
-            try
+            if(!Settings.ExportMode)
             {
-                if(!Settings.ExportMode)
+                List<string> folder = new List<string> { "_readme", "_patch", "_shortcuts", "_xmlUnPack", "_atlases", "_fonts" };
+                foreach (string f in folder)
                 {
-                    /*
-                    if (Directory.Exists(Path.Combine(TanksLocation, "_readme")))
-                        Directory.Delete(Path.Combine(TanksLocation, "_readme"), true);
-                    if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
-                        Directory.Delete(Path.Combine(TanksLocation, "_patch"), true);
-                    if (Directory.Exists(Path.Combine(TanksLocation, "_shortcuts")))
-                        Directory.Delete(Path.Combine(TanksLocation, "_shortcuts"), true);
-                    if (Directory.Exists(Path.Combine(TanksLocation, "_xmlUnPack")))
-                        Directory.Delete(Path.Combine(TanksLocation, "_xmlUnPack"), true);
-                    if (Directory.Exists(Path.Combine(TanksLocation, "_atlases")))
-                        Directory.Delete(Path.Combine(TanksLocation, "_atlases"), true);
-                    if (Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
-                        Directory.Delete(Path.Combine(TanksLocation, "_fonts"), true); */
-                    List<string> folder = new List<string> { "_readme", "_patch", "_shortcuts", "_xmlUnPack", "_atlases", "_fonts" };
-                    foreach (string f in folder)
+                    try
                     {
-                        try
-                        {
-                            if (Directory.Exists(Path.Combine(TanksLocation, f)))
-                                Directory.Delete(Path.Combine(TanksLocation, f), true);
-                        }
-                        catch (Exception ex)
-                        {
-                            ex = ex.GetBaseException();
-                            Logging.Manager(string.Format("error at folder delete: {0} ({1})", f, ex.Message));
-                        }
+                        if (Directory.Exists(Path.Combine(TanksLocation, f)))
+                            Directory.Delete(Path.Combine(TanksLocation, f), true);
+                    }
+                    catch (Exception ex)
+                    {
+                        ex = ex.GetBaseException();
+                        Logging.Manager(string.Format("error at folder delete: {0} ({1})", f, ex.Message));
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                Utils.ExceptionLog("ActuallyStartInstallation", "Cleanup _folders", ex);
-            }
+
             InstallWorker.ReportProgress(0);
             Logging.InstallerFinished();                                      // installation is finished. logfile will be flushed and filestream will be disposed
             afterExtraction = installTimer.ElapsedMilliseconds - duringExtraction - beforeExtraction;
@@ -798,7 +779,7 @@ namespace RelhaxModpack
                 }
                 catch (Exception ex)
                 {
-                    Utils.ExceptionLog("ClearWoTCache, step 3", ex);
+                    Utils.ExceptionLog("ClearWoTCache", "step 3", ex);
                 }
                 Logging.Manager("Finished clearing of WoT cache files");
             }
