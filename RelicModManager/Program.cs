@@ -218,14 +218,10 @@ namespace RelhaxModpack
                 Utils.ExceptionLog("Main", "loadHashes", ex);
             }
             //start the background taskbar form
-            Logging.Manager("Attempting to load taskbar form and main window");
-            BackgroundForm bf = new BackgroundForm();
-            bf.Show();
-            bf.HostWindow = new MainWindow();
+            MainWindow mw = new MainWindow();
             if (silentStart)
-                bf.HostWindow.WindowState = FormWindowState.Minimized;
-            Logging.Manager("Loading of taskbar form and main window complete");
-            Application.Run(bf.HostWindow);
+                mw.WindowState = FormWindowState.Minimized;
+            Application.Run(mw);
         }
 
         static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)

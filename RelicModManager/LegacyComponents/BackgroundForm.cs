@@ -83,7 +83,6 @@ namespace RelhaxModpack.Forms
         private void BackgroundForm_Load(object sender, EventArgs e)
         {
             //apply translations for menu
-            //TODO: get translations
             MenuItemAppClose.Text = Translations.GetTranslatedString(MenuItemAppClose.Name);
             MenuItemRestore.Text = Translations.GetTranslatedString(MenuItemRestore.Name);
             MenuItemCheckUpdates.Text = Translations.GetTranslatedString(MenuItemCheckUpdates.Name);

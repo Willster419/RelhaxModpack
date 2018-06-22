@@ -184,12 +184,6 @@
     <Compile Include="Forms\AdvancedSettings.Designer.cs">
       <DependentUpon>AdvancedSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\BackgroundForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\BackgroundForm.Designer.cs">
-      <DependentUpon>BackgroundForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\ExportSelectWoTVersion.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -379,9 +373,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AdvancedSettings.resx">
       <DependentUpon>AdvancedSettings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\BackgroundForm.resx">
-      <DependentUpon>BackgroundForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Diagnostics.resx">
       <DependentUpon>Diagnostics.cs</DependentUpon>

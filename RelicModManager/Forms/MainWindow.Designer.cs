@@ -99,6 +99,11 @@
             this.fontSize125 = new System.Windows.Forms.RadioButton();
             this.fontSize225 = new System.Windows.Forms.RadioButton();
             this.fontSize175 = new System.Windows.Forms.RadioButton();
+            this.RelhaxMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.MenuItemRestore = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemCheckUpdates = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemAppClose = new System.Windows.Forms.ToolStripMenuItem();
+            this.RMIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.settingsGroupBox.SuspendLayout();
             this.SettingsTable.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
@@ -122,6 +127,7 @@
             this.ButtonTable.SuspendLayout();
             this.fontSizeGB.SuspendLayout();
             this.FontLayoutPanel.SuspendLayout();
+            this.RelhaxMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // childProgressBar
@@ -1203,6 +1209,45 @@
             this.fontSize175.CheckedChanged += new System.EventHandler(this.fontSize175_CheckedChanged);
             this.fontSize175.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             // 
+            // RelhaxMenuStrip
+            // 
+            this.RelhaxMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuItemRestore,
+            this.MenuItemCheckUpdates,
+            this.MenuItemAppClose});
+            this.RelhaxMenuStrip.Name = "RelhaxMenuStrip";
+            this.RelhaxMenuStrip.Size = new System.Drawing.Size(172, 70);
+            this.RelhaxMenuStrip.Text = "Test";
+            // 
+            // MenuItemRestore
+            // 
+            this.MenuItemRestore.Name = "MenuItemRestore";
+            this.MenuItemRestore.Size = new System.Drawing.Size(171, 22);
+            this.MenuItemRestore.Text = "Restore";
+            this.MenuItemRestore.Click += new System.EventHandler(this.MenuItemRestore_Click);
+            // 
+            // MenuItemCheckUpdates
+            // 
+            this.MenuItemCheckUpdates.Name = "MenuItemCheckUpdates";
+            this.MenuItemCheckUpdates.Size = new System.Drawing.Size(171, 22);
+            this.MenuItemCheckUpdates.Text = "Check for Updates";
+            this.MenuItemCheckUpdates.Click += new System.EventHandler(this.MenuItemCheckUpdates_Click);
+            // 
+            // MenuItemAppClose
+            // 
+            this.MenuItemAppClose.Name = "MenuItemAppClose";
+            this.MenuItemAppClose.Size = new System.Drawing.Size(171, 22);
+            this.MenuItemAppClose.Text = "Close";
+            this.MenuItemAppClose.Click += new System.EventHandler(this.MenuItemAppClose_Click);
+            // 
+            // RMIcon
+            // 
+            this.RMIcon.ContextMenuStrip = this.RelhaxMenuStrip;
+            this.RMIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("RMIcon.Icon")));
+            this.RMIcon.Text = "Relhax Modpack";
+            this.RMIcon.Visible = true;
+            this.RMIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.RMIcon_MouseClick);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1252,6 +1297,7 @@
             this.ButtonTable.ResumeLayout(false);
             this.fontSizeGB.ResumeLayout(false);
             this.FontLayoutPanel.ResumeLayout(false);
+            this.RelhaxMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1326,6 +1372,11 @@
         private System.Windows.Forms.PictureBox RegionEuGerLanguagePictureBox;
         private System.Windows.Forms.CheckBox EnableBordersDefaultV2CB;
         private System.Windows.Forms.CheckBox EnableColorChangeDefaultV2CB;
+        private System.Windows.Forms.ContextMenuStrip RelhaxMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemRestore;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemCheckUpdates;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemAppClose;
+        private System.Windows.Forms.NotifyIcon RMIcon;
     }
 }
 

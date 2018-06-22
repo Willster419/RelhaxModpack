@@ -817,8 +817,13 @@ namespace RelhaxModpack
                 Application.Exit();
             }
 
+            //apply translations for menu
+            MenuItemAppClose.Text = Translations.GetTranslatedString(MenuItemAppClose.Name);
+            MenuItemRestore.Text = Translations.GetTranslatedString(MenuItemRestore.Name);
+            MenuItemCheckUpdates.Text = Translations.GetTranslatedString(MenuItemCheckUpdates.Name);
+
             //check for any conflicting program arguements
-            if(Settings.BetaDatabase && Program.testMode)
+            if (Settings.BetaDatabase && Program.testMode)
             {
                 if(MessageBox.Show("conflictBetaDBTestMode", "conflictsCommandlineHeader", MessageBoxButtons.OKCancel,MessageBoxIcon.Warning) == DialogResult.Cancel)
                 {
@@ -2982,5 +2987,63 @@ namespace RelhaxModpack
             FormPageEUGERLink_LinkClicked(sender, null);
         }
         #endregion
+
+        #region Context menu stuff
+        /// <summary>
+        /// Occures when the taskbar icon is right clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RMIcon_MouseClick(object sender, MouseEventArgs e)
+        {
+            switch(e.Button)
+            {
+                case MouseButtons.Right:
+
+                    break;
+                case MouseButtons.Left:
+                    //if the application is not displayed on the screen (minimized, for example), then show it.
+                    if (WindowState != FormWindowState.Normal)
+                        WindowState = FormWindowState.Normal;
+                    break;
+            }            
+        }
+        #endregion
+
+        private void MenuItemAppClose_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void MenuItemCheckUpdates_Click(object sender, EventArgs e)
+        {
+            if (ins != null)
+                return;
+            using (PleaseWait wait = new PleaseWait())
+            {
+                //save the last old database version
+                string oldDatabaseVersion = Settings.DatabaseVersion;
+                Hide();
+                wait.Show();
+                wait.loadingDescBox.Text = Translations.GetTranslatedString("checkForUpdates");
+                Application.DoEvents();
+                CheckmanagerUpdates();
+                wait.Close();
+                Show();
+                //get the new database version and compare. if new, inform the user
+                if (!Settings.DatabaseVersion.Equals(oldDatabaseVersion))
+                {
+                    //TODO: translate
+                    MessageBox.Show(Translations.GetTranslatedString("newDBApplied"));
+                }
+            }
+        }
+
+        private void MenuItemRestore_Click(object sender, EventArgs e)
+        {
+            //if the application is not displayed on the screen (minimized, for example), then show it.
+            if (WindowState != FormWindowState.Normal)
+                WindowState = FormWindowState.Normal;
+        }
     }
 }
