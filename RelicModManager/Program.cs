@@ -182,18 +182,6 @@ namespace RelhaxModpack
                     Logging.Manager("/forceEnabled detected, loading all visible mods as enabled");
                     forceEnabled = true;
                 }
-                else if (Regex.IsMatch(commandArgs[i], @"crccheck2$"))
-                {
-                    Logging.Manager("(DEPRECATED) /crccheck2 detected, loading in crccheck2 mode");
-                    Application.Run(new CRCCHECK2());
-                    return;
-                }
-                else if (Regex.IsMatch(commandArgs[i], @"crccheck$"))
-                {
-                    Logging.Manager("(DEPRECATED) /crccheck detected, loading in crccheck mode");
-                    Application.Run(new CRCCheck());
-                    return;
-                }
                 else if (Regex.IsMatch(commandArgs[i], @"patchcheck$"))
                 {
                     Logging.Manager("/patchcheck detected, loading in patch design mode");
@@ -216,12 +204,6 @@ namespace RelhaxModpack
                 {
                     Logging.Manager("/databaseedit detected, loading in database edit mode");
                     Application.Run(new DatabaseEditor());
-                    return;
-                }
-                else if (Regex.IsMatch(commandArgs[i], @"ftpclean$"))
-                {
-                    Logging.Manager("/ftpclean detected, loading ftpclean window");
-                    Application.Run(new FTPClean());
                     return;
                 }
             }

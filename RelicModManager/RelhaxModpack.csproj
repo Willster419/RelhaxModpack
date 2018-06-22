@@ -202,19 +202,11 @@
     <Compile Include="Forms\FontSettingsVerify.Designer.cs">
       <DependentUpon>FontSettingsVerify.cs</DependentUpon>
     </Compile>
-    <Compile Include="LegacyComponents\FTPClean.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LegacyComponents\FTPClean.Designer.cs">
-      <DependentUpon>FTPClean.cs</DependentUpon>
-    </Compile>
     <Compile Include="InstallerComponents\Atlas.cs" />
     <Compile Include="InstallerComponents\InstallGroup.cs" />
     <Compile Include="InstallerComponents\Shortcut.cs" />
     <Compile Include="InstallerComponents\Texture.cs" />
     <Compile Include="DatabaseComponents\Category.cs" />
-    <Compile Include="LegacyComponents\Config.cs" />
-    <Compile Include="LegacyComponents\Mod.cs" />
     <Compile Include="AtlasesCreator\ImageHandlers\TeximpNet\MemoryInterop.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -268,26 +260,7 @@
     <Compile Include="Utils\NativeMethods.cs" />
     <Compile Include="Utils\PatchUtils.cs" />
     <Compile Include="UIComponents\DeveloperSelections.cs" />
-    <Compile Include="LegacyComponents\CompleteModSearchList.cs" />
     <Compile Include="UIComponents\ComboBoxItem.cs" />
-    <Compile Include="LegacyComponents\ConfigFormCheckBox.cs" />
-    <Compile Include="LegacyComponents\ConfigFormComboBox.cs" />
-    <Compile Include="LegacyComponents\ConfigFormRadioButton.cs" />
-    <Compile Include="LegacyComponents\ConfigWPFCheckBox.cs" />
-    <Compile Include="LegacyComponents\ConfigWPFComboBox.cs" />
-    <Compile Include="LegacyComponents\ConfigWPFRadioButton.cs" />
-    <Compile Include="LegacyComponents\CRCCheck.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LegacyComponents\CRCCheck.Designer.cs">
-      <DependentUpon>CRCCheck.cs</DependentUpon>
-    </Compile>
-    <Compile Include="LegacyComponents\CRCCHECK2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LegacyComponents\CRCCHECK2.Designer.cs">
-      <DependentUpon>CRCCHECK2.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\DatabaseUpdater.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -323,12 +296,6 @@
     <Compile Include="UIComponents\DatabaseTreeNode.cs" />
     <Compile Include="DatabaseComponents\Dependency.cs" />
     <Compile Include="Utils\EmbeddedAssembly.cs" />
-    <Compile Include="LegacyComponents\FirstLoadHelper.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LegacyComponents\FirstLoadHelper.Designer.cs">
-      <DependentUpon>FirstLoadHelper.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\GifPreview.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -343,23 +310,18 @@
     <Compile Include="Forms\InstallFinished.Designer.cs">
       <DependentUpon>InstallFinished.cs</DependentUpon>
     </Compile>
-    <Compile Include="LegacyComponents\LegacySelectionList.xaml.cs">
-      <DependentUpon>LegacySelectionList.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Forms\MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="LegacyComponents\ModFormCheckBox.cs" />
     <Compile Include="Forms\ModSelectionList.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ModSelectionList.Designer.cs">
       <DependentUpon>ModSelectionList.cs</DependentUpon>
     </Compile>
-    <Compile Include="LegacyComponents\ModWPFCheckBox.cs" />
     <Compile Include="Forms\OldFilesToDelete.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -399,7 +361,6 @@
     <Compile Include="Utils\Settings.cs" />
     <Compile Include="InstallerComponents\StringSave.cs" />
     <Compile Include="Utils\Translations.cs" />
-    <Compile Include="LegacyComponents\UIComponent.cs" />
     <Compile Include="Utils\Utils.cs" />
     <Compile Include="Forms\VersionInfo.cs">
       <SubType>Form</SubType>
@@ -431,15 +392,6 @@
     <EmbeddedResource Include="Forms\FontSettingsVerify.resx">
       <DependentUpon>FontSettingsVerify.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LegacyComponents\FTPClean.resx">
-      <DependentUpon>FTPClean.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LegacyComponents\CRCCheck.resx">
-      <DependentUpon>CRCCheck.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LegacyComponents\CRCCHECK2.resx">
-      <DependentUpon>CRCCHECK2.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\DatabaseUpdater.resx">
       <DependentUpon>DatabaseUpdater.cs</DependentUpon>
     </EmbeddedResource>
@@ -454,9 +406,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DatabaseListGenerater.resx">
       <DependentUpon>DatabaseListGenerater.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LegacyComponents\FirstLoadHelper.resx">
-      <DependentUpon>FirstLoadHelper.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\GifPreview.resx">
       <DependentUpon>GifPreview.cs</DependentUpon>
@@ -569,12 +518,6 @@
     <Content Include="Resources\MediaPlayerIcons\play_pause.png" />
     <Content Include="Resources\MediaPlayerIcons\stop2.png" />
     <Content Include="Resources\relicbanner_for_ico.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="LegacyComponents\LegacySelectionList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
