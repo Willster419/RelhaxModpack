@@ -688,15 +688,8 @@ namespace RelhaxModpack
                 //if is array, remove it
                 //else if is value, remove parent property
                 //else if is object, remove it
-                JToken cont = null;
-                try
-                {
-                    cont = root.SelectToken(p.path);
-                }
-                catch (Exception remove)
-                {
-                    Utils.ExceptionLog("JSONPatch", "remove.cont\np.path: " + p.path, remove);
-                }
+                JToken cont = root.SelectToken(p.path);
+                
                 if (cont == null)
                 {
                     Logging.Manager(string.Format("ERROR: path \"{0}\" returns null", p.path));
@@ -731,15 +724,8 @@ namespace RelhaxModpack
                     Logging.Manager("ERROR: invalid syntax of p.replace (more than 2 items detected)");
                     return;
                 }
-                JToken newObject = null;
-                try
-                {
-                    newObject = root.SelectToken(p.path);
-                }
-                catch (Exception exNewObject)
-                {
-                    Utils.ExceptionLog("JSONPatch", "arrayAdd.newObject\np.path: " + p.path, exNewObject);
-                }
+                JToken newObject = root.SelectToken(p.path);
+                
                 //pull out if it failed to get the selection
                 if (newObject == null)
                 {
@@ -824,15 +810,8 @@ namespace RelhaxModpack
                 //get to array from p.path
                 //foreach item.ToString in the array
                 //if regex match the first one, remove and break
-                JToken newObject = null;
-                try
-                {
-                    newObject = root.SelectToken(p.path);
-                }
-                catch (Exception exNewObject)
-                {
-                    Utils.ExceptionLog("JSONPatch", "arrayRemove.newObject\np.path: " + p.path, exNewObject);
-                }
+                JToken newObject = root.SelectToken(p.path);
+                
                 //pull out if it failed to get the selection
                 if (newObject == null)
                 {
@@ -872,15 +851,8 @@ namespace RelhaxModpack
                 //get to array from p.path
                 //foreach item.ToString in the array
                 //if regex match from p.search, remove
-                JToken newObject = null;
-                try
-                {
-                    newObject = root.SelectToken(p.path);
-                }
-                catch (Exception exNewObject)
-                {
-                    Utils.ExceptionLog("JSONPatch", "arrayClear.newObject\np.path: " + p.path, exNewObject);
-                }
+                JToken newObject = root.SelectToken(p.path);
+                
                 //pull out if it failed to get the selection
                 if (newObject == null)
                 {
