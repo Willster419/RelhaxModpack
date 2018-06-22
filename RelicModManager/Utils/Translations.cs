@@ -252,62 +252,32 @@ namespace RelhaxModpack
             polish.Add("languageSelectionGB", "Wybór języka");
             french.Add("languageSelectionGB", "Choix de langue");
 
-            //Componet: FormPageNALink
-            //
-            english.Add("FormPageNALink", "WoT forum page (NA, ENG)");
-            german.Add("FormPageNALink", "WoT Forum (NA, ENG)");
-            polish.Add("FormPageNALink", "Forum WoT (NA, ENG)");
-            french.Add("FormPageNALink", "Page des forums WoT (NA, ENG)");
+            //Component: Forms_ENG_NAButton
+            AddToAll("Forms_ENG_NAButton", "");
 
-            //Componet: RegionNaFlagPictureBoxDescription
-            english.Add("RegionNaFlagPictureBoxDescription", "Go to the English-speaking 'World of Tanks' forum page for the NA server");
-            german.Add("RegionNaFlagPictureBoxDescription", "Gehe zur englischsprachigen 'World of Tanks' Forum Seite für den NA Server");
-            polish.Add("RegionNaFlagPictureBoxDescription", TranslationNeeded);
-            french.Add("RegionNaFlagPictureBoxDescription", TranslationNeeded);
-            
-            //Componet: FormPageEULink
-            english.Add("FormPageEULink", "WoT forum page (EU, ENG)");
-            german.Add("FormPageEULink", "WoT Forum (EU, ENG)");
-            polish.Add("FormPageEULink", "Forum WoT (EU, ENG)");
-            french.Add("FormPageEULink", "Page des forums WoT (EU, ENG)");
+            //Componet: Forms_ENG_NAButtonDescription
+            english.Add("Forms_ENG_NAButtonDescription", "Go to the English-speaking 'World of Tanks' forum page for the NA server");
+            german.Add("Forms_ENG_NAButtonDescription", "Gehe zur englischsprachigen 'World of Tanks' Forum Seite für den NA Server");
+            polish.Add("Forms_ENG_NAButtonDescription", TranslationNeeded);
+            french.Add("Forms_ENG_NAButtonDescription", TranslationNeeded);
 
-            //Componet: RegionEuEngFlagPictureBoxDescription
-            english.Add("RegionEuEngFlagPictureBoxDescription", "Go to the English-speaking 'World of Tanks' forum page for the EU server");
-            german.Add("RegionEuEngFlagPictureBoxDescription", "Gehe zur englischsprachigen 'World of Tanks' Forum Seite für den EU Server");
-            polish.Add("RegionEuEngFlagPictureBoxDescription", TranslationNeeded);
-            french.Add("RegionEuEngFlagPictureBoxDescription", TranslationNeeded);
+            //Component: FormsENG_EUButton
+            AddToAll("FormsENG_EUButton", "");
 
-            //Componet: RegionEuEngLanguagePictureBoxDescription
-            english.Add("RegionEuEngLanguagePictureBoxDescription", GetTranslatedString("RegionEuEngFlagPictureBoxDescription", Languages.English));
-            german.Add("RegionEuEngLanguagePictureBoxDescription", GetTranslatedString("RegionEuEngFlagPictureBoxDescription", Languages.German));
-            polish.Add("RegionEuEngLanguagePictureBoxDescription", GetTranslatedString("RegionEuEngFlagPictureBoxDescription", Languages.Polish));
-            french.Add("RegionEuEngLanguagePictureBoxDescription", GetTranslatedString("RegionEuEngFlagPictureBoxDescription", Languages.French));
+            //Componet: FormsENG_EUButtonDescription
+            english.Add("FormsENG_EUButtonDescription", "Go to the English-speaking 'World of Tanks' forum page for the EU server");
+            german.Add("FormsENG_EUButtonDescription", "Gehe zur englischsprachigen 'World of Tanks' Forum Seite für den EU Server");
+            polish.Add("FormsENG_EUButtonDescription", TranslationNeeded);
+            french.Add("FormsENG_EUButtonDescription", TranslationNeeded);
 
-            //Componet: RegionEuGerFlagPictureBoxDescription
-            english.Add("RegionEuGerFlagPictureBoxDescription", "Go to the German-speaking 'World of Tanks' forum page for the EU server");
-            german.Add("RegionEuGerFlagPictureBoxDescription", "Gehe zur deutschsprachigen 'World of Tanks' Forum Seite für den EU Server");
-            polish.Add("RegionEuGerFlagPictureBoxDescription", TranslationNeeded);
-            french.Add("RegionEuGerFlagPictureBoxDescription", TranslationNeeded);
+            //Component: FormsENG_GERButton
+            AddToAll("FormsENG_GERButton", "");
 
-            //Componet: RegionEuGerLanguagePictureBoxDescription
-            english.Add("RegionEuGerLanguagePictureBoxDescription", GetTranslatedString("RegionEuGerFlagPictureBoxDescription", Languages.English));
-            german.Add("RegionEuGerLanguagePictureBoxDescription", GetTranslatedString("RegionEuGerFlagPictureBoxDescription", Languages.German));
-            polish.Add("RegionEuGerLanguagePictureBoxDescription", GetTranslatedString("RegionEuGerFlagPictureBoxDescription", Languages.Polish));
-            french.Add("RegionEuGerLanguagePictureBoxDescription", GetTranslatedString("RegionEuGerFlagPictureBoxDescription", Languages.French));
-
-            //Componet: ForumBackgroundPictureBoxDescription
-            english.Add("ForumBackgroundPictureBoxDescription", "Here we group the modpack forum threads on the different 'Word of Tanks' region servers. Select region on the flags to the right.");
-            german.Add("ForumBackgroundPictureBoxDescription", "Hier haben wir die Forum Threads, der verschiedenen Regionalserver, die sich um den Relhax Modpack Manager drehen, zusammengefasst. Wähle die Region (und Sprache) auf den Fahnen hier rechts.");
-            polish.Add("ForumBackgroundPictureBoxDescription", TranslationNeeded);
-            french.Add("ForumBackgroundPictureBoxDescription", TranslationNeeded);
-
-
-            //Componet: FormPageEUGERLink
-            //
-            english.Add("FormPageEUGERLink", "WoT forum page (EU, GER)");
-            german.Add("FormPageEUGERLink", "WoT Forum (EU, DE)");
-            polish.Add("FormPageEUGERLink", "Forum WoT (EU, GER)");
-            french.Add("FormPageEUGERLink", "Page des forums WoT (EU, GER)");
+            //Componet: FormsENG_GERButtonDescription
+            english.Add("FormsENG_GERButtonDescription", "Go to the German-speaking 'World of Tanks' forum page for the EU server");
+            german.Add("FormsENG_GERButtonDescription", "Gehe zur deutschsprachigen 'World of Tanks' Forum Seite für den EU Server");
+            polish.Add("FormsENG_GERButtonDescription", TranslationNeeded);
+            french.Add("FormsENG_GERButtonDescription", TranslationNeeded);
 
             //Componet: saveUserDataCB
             //
@@ -1612,48 +1582,68 @@ namespace RelhaxModpack
             polish.Add("ShowAdvancedSettingsLinkDescription", "Pokaż okno ustawieñ zaawansowanych");
             french.Add("ShowAdvancedSettingsLinkDescription", "Afficher le panneau de configurations avancé");
 
-            //Component: FacebookPictureBoxDescription
-            english.Add("FacebookPictureBoxDescription", "Go to our Facebook page");
-            german.Add("FacebookPictureBoxDescription", "Unsere Facebook Seite aufrufen");
-            polish.Add("FacebookPictureBoxDescription", "Strona FB");
-            french.Add("FacebookPictureBoxDescription", "Page Facebook");
+            //Component: FacebookButton
+            AddToAll("FacebookButton", "");
 
-            //Componet: DiscordPictureBoxDescription
-            english.Add("DiscordPictureBoxDescription", "Go to Discord server");
-            german.Add("DiscordPictureBoxDescription", "Zum Discord Server");
-            polish.Add("DiscordPictureBoxDescription", "Serwer Discorda");
-            french.Add("DiscordPictureBoxDescription", "Serveur Discord");
+            //Component: FacebookButtonDescription
+            english.Add("FacebookButtonDescription", "Go to our Facebook page");
+            german.Add("FacebookButtonDescription", "Unsere Facebook Seite aufrufen");
+            polish.Add("FacebookButtonDescription", "Strona FB");
+            french.Add("FacebookButtonDescription", "Page Facebook");
 
-            //Component: TwitterPictureBoxDescription
-            english.Add("TwitterPictureBoxDescription", "Go to our Twitter page");
-            german.Add("TwitterPictureBoxDescription", "Unsere Twitter Seite aufrufen");
-            polish.Add("TwitterPictureBoxDescription", "Strona TT");
-            french.Add("TwitterPictureBoxDescription", "Page Twitter");
+            //Component: DiscordButton
+            AddToAll("DiscordButton", "");
 
-            //Component: SendEmailPictureBoxDescription
-            english.Add("SendEmailPictureBoxDescription", "Send us an Email");
-            german.Add("SendEmailPictureBoxDescription", "Schicke uns eine Email");
-            polish.Add("SendEmailPictureBoxDescription", "Przeœlij nam wiadomoœæ e-mail");
-            french.Add("SendEmailPictureBoxDescription", "Nous envoyer un Email");
+            //Componet: DiscordButtonDescription
+            english.Add("DiscordButtonDescription", "Go to Discord server");
+            german.Add("DiscordButtonDescription", "Zum Discord Server");
+            polish.Add("DiscordButtonDescription", "Serwer Discorda");
+            french.Add("DiscordButtonDescription", "Serveur Discord");
 
+            //Component: TwitterButton
+            AddToAll("TwitterButton", "");
 
-            //Component: HomepagePictureBoxDescription
-            english.Add("HomepagePictureBoxDescription", "Visit our Website");
-            german.Add("HomepagePictureBoxDescription", "Zu unserer Homepage");
-            polish.Add("HomepagePictureBoxDescription", "Odwiedz nasza strone");
-            french.Add("HomepagePictureBoxDescription", "Visiter notre site web");
+            //Component: TwitterButtonDescription
+            english.Add("TwitterButtonDescription", "Go to our Twitter page");
+            german.Add("TwitterButtonDescription", "Unsere Twitter Seite aufrufen");
+            polish.Add("TwitterButtonDescription", "Strona TT");
+            french.Add("TwitterButtonDescription", "Page Twitter");
 
-            //Component: DonatePictureBoxDescription
-            english.Add("DonatePictureBoxDescription", "Donation for further development");
-            german.Add("DonatePictureBoxDescription", "Spende für die Weiterentwicklung");
-            polish.Add("DonatePictureBoxDescription", "Dotacja na dalszy rozwój");
-            french.Add("DonatePictureBoxDescription", "Donation pour aider au développement");
+            //Component: SendEmailButton
+            AddToAll("SendEmailButton", "");
 
-            //Componet: FindBugAddModPictureBoxDescription
-            english.Add("FindBugAddModPictureBoxDescription", "Find a bug? Want a mod added? Report here please!");
-            german.Add("FindBugAddModPictureBoxDescription", "Fehler gefunden? Willst Du einen Mod hinzufügen? Bitte hier melden!");
-            polish.Add("FindBugAddModPictureBoxDescription", "Znalazłeś błąd? Chcesz dodać mod?");
-            french.Add("FindBugAddModPictureBoxDescription", "Trouvé un bug? Recommandation de mod?");
+            //Component: SendEmailButtonDescription
+            english.Add("SendEmailButtonDescription", "Send us an Email");
+            german.Add("SendEmailButtonDescription", "Schicke uns eine Email");
+            polish.Add("SendEmailButtonDescription", "Przeœlij nam wiadomoœæ e-mail");
+            french.Add("SendEmailButtonDescription", "Nous envoyer un Email");
+
+            //Component: HomepageButton
+            AddToAll("HomepageButton", "");
+
+            //Component: HomepageButtonDescription
+            english.Add("HomepageButtonDescription", "Visit our Website");
+            german.Add("HomepageButtonDescription", "Zu unserer Homepage");
+            polish.Add("HomepageButtonDescription", "Odwiedz nasza strone");
+            french.Add("HomepageButtonDescription", "Visiter notre site web");
+
+            //Component: DonateButton
+            AddToAll("DonateButton", "");
+
+            //Component: DonateButtonDescription
+            english.Add("DonateButtonDescription", "Donation for further development");
+            german.Add("DonateButtonDescription", "Spende für die Weiterentwicklung");
+            polish.Add("DonateButtonDescription", "Dotacja na dalszy rozwój");
+            french.Add("DonateButtonDescription", "Donation pour aider au développement");
+
+            //Component: FindBugAddModButton
+            AddToAll("FindBugAddModButton", "");
+
+            //Componet: FindBugAddModButtonDescription
+            english.Add("FindBugAddModButtonDescription", "Find a bug? Want a mod added? Report here please!");
+            german.Add("FindBugAddModButtonDescription", "Fehler gefunden? Willst Du einen Mod hinzufügen? Bitte hier melden!");
+            polish.Add("FindBugAddModButtonDescription", "Znalazłeś błąd? Chcesz dodać mod?");
+            french.Add("FindBugAddModButtonDescription", "Trouvé un bug? Recommandation de mod?");
             #endregion
 
             #region Messages from ModSelectionList
