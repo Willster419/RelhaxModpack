@@ -3008,7 +3008,6 @@ namespace RelhaxModpack
                     break;
             }            
         }
-        #endregion
 
         private void MenuItemAppClose_Click(object sender, EventArgs e)
         {
@@ -3045,5 +3044,6 @@ namespace RelhaxModpack
             if (WindowState != FormWindowState.Normal)
                 WindowState = FormWindowState.Normal;
         }
+        #endregion
     }
 }
