@@ -209,14 +209,8 @@ namespace RelhaxModpack
             }
             //load the translations
             Logging.Manager("Loading translation hashes");
-            try
-            {
-                Translations.LoadHashes();
-            }
-            catch (Exception ex)
-            {
-                Utils.ExceptionLog("Main", "loadHashes", ex);
-            }
+            Translations.LoadHashes();
+
             //start the background taskbar form
             MainWindow mw = new MainWindow();
             if (silentStart)
