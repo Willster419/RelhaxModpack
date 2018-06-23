@@ -2223,71 +2223,12 @@ namespace RelhaxModpack
         #endregion
 
         #region LinkClicked Events
-        private void donateLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            /*      de_DE           DE
-                    pl_PL           PL
-                    fr_FR           FR
-                    en_US           US
-                    en_GB           GB */
-
-            // Logging.Manager("language: " + CultureInfo.CurrentUICulture.Name);
-            // Logging.Manager("TwoLetterISOLanguageName: " + CultureInfo.CurrentUICulture.TwoLetterISOLanguageName);            
-            System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2");
-            // https://www.paypal.com/paypalme/grab?country.x=IN&locale.x=en_IN
-        }
-
-        private void findBugAddModLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://forums.relhaxmodpack.com/");
-        }
-
-        private void DiscordServerLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://discord.gg/58fdPvK");
-        }
-        //when the "visit form page" link is clicked. the link clicked handler
-        private void FormPageNALink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
-        }
-
-        private void FormPageEULink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/623269-");
-        }
-
-        private void FormPageEUGERLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/624499-");
-        }
-
         private void ShowAdvancedSettingsLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             using (AdvancedSettings advset = new AdvancedSettings() { startX = Location.X + Size.Width + 3, startY = Location.Y, ApplyControlTranslationsOnLoad = true })
             {
                 advset.ShowDialog();
             }
-        }
-
-        private void VisitWebsiteLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://relhaxmodpack.com/");
-        }
-
-        private void SendEmailLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("mailto:info@relhaxmodpack.com");
-        }
-
-        private void ViewTwitterLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://twitter.com/relhaxmodpack");
-        }
-
-        private void ViewFacebookLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://www.facebook.com/Relhax-Modpack-187224775238379/");
         }
         #endregion
 
@@ -2348,7 +2289,9 @@ namespace RelhaxModpack
         {
             //set the thing
             Settings.DarkUI = darkUICB.Checked;
+            SuspendLayout();
             Settings.SetUIColorsWinForms(this);
+            ResumeLayout(false);
         }
 
         private void SelectionDefault_CheckedChanged(object sender, EventArgs e)
@@ -2937,54 +2880,64 @@ namespace RelhaxModpack
             }
             ToggleUIButtons(true);
         }
-        #endregion
 
-        #region MouseDown events
-        private void ViewFacebookLink_MouseDown(object sender, MouseEventArgs e)
+        private void donateLabel_Click(object sender, EventArgs e)
         {
-            ViewFacebookLink_LinkClicked(sender, null);
-        }
+            /*      de_DE           DE
+                    pl_PL           PL
+                    fr_FR           FR
+                    en_US           US
+                    en_GB           GB */
 
-        private void ViewTwitterLink_MouseDown(object sender, MouseEventArgs e)
-        {
-            ViewTwitterLink_LinkClicked(sender, null);
-        }
-
-        private void DiscordServerLink_MouseDown(object sender, MouseEventArgs e)
-        {
-            DiscordServerLink_LinkClicked(sender, null);
+            // Logging.Manager("language: " + CultureInfo.CurrentUICulture.Name);
+            // Logging.Manager("TwoLetterISOLanguageName: " + CultureInfo.CurrentUICulture.TwoLetterISOLanguageName);            
+            System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2");
+            // https://www.paypal.com/paypalme/grab?country.x=IN&locale.x=en_IN
         }
 
-        private void VisitWebsiteLink_MouseDown(object sender, MouseEventArgs e)
+        private void findBugAddModLabel_Click(object sender, EventArgs e)
         {
-            VisitWebsiteLink_LinkClicked(sender, null);
+            System.Diagnostics.Process.Start("http://forums.relhaxmodpack.com/");
         }
 
-        private void SendEmailLink_MouseDown(object sender, MouseEventArgs e)
+        private void DiscordServerLink_Click(object sender, EventArgs e)
         {
-            SendEmailLink_LinkClicked(sender, null);
+            System.Diagnostics.Process.Start("https://discord.gg/58fdPvK");
+        }
+        //when the "visit form page" link is clicked. the link clicked handler
+        private void FormPageNALink_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
         }
 
-        private void donateLabel_MouseDown(object sender, MouseEventArgs e)
+        private void FormPageEULink_Click(object sender, EventArgs e)
         {
-            donateLabel_LinkClicked(sender, null);
+            System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/623269-");
         }
 
-        private void findBugAddModLabel_MouseDown(object sender, MouseEventArgs e)
+        private void FormPageEUGERLink_Click(object sender, EventArgs e)
         {
-            findBugAddModLabel_LinkClicked(sender, null);
+            System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/624499-");
         }
-        private void RegionNaPictureBox_MouseDown(object sender, MouseEventArgs e)
+
+        private void VisitWebsiteLink_Click(object sender, EventArgs e)
         {
-            FormPageNALink_LinkClicked(sender, null);
+            System.Diagnostics.Process.Start("https://relhaxmodpack.com/");
         }
-        private void RegionEuEngPictureBox_MouseDown(object sender, MouseEventArgs e)
+
+        private void SendEmailLink_Click(object sender, EventArgs e)
         {
-            FormPageEULink_LinkClicked(sender, null);
+            System.Diagnostics.Process.Start("mailto:info@relhaxmodpack.com");
         }
-        private void RegionEuGerPictureBox_MouseDown(object sender, MouseEventArgs e)
+
+        private void ViewTwitterLink_Click(object sender, EventArgs e)
         {
-            FormPageEUGERLink_LinkClicked(sender, null);
+            System.Diagnostics.Process.Start("https://twitter.com/relhaxmodpack");
+        }
+
+        private void ViewFacebookLink_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://www.facebook.com/Relhax-Modpack-187224775238379/");
         }
         #endregion
 
