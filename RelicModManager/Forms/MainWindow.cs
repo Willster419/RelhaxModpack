@@ -142,6 +142,17 @@ namespace RelhaxModpack
                 folderList = di.GetDirectories().ToList();      // parsed top folders
                 foreach (var fL in folderList)
                 {
+                    // search ModSelectionList Form. If found, user already startet the selection and the BackUpFolder cleanup will be not realy interesting
+                    foreach (Form frm in Application.OpenForms)
+                    {
+                        if (frm.Name.Equals("ModSelectionList"))
+                        {
+                            this.backupModsCheckBox.Text = Translations.GetTranslatedString("backupModsCheckBox");
+                            Logging.Manager("Scanning RelHaxModBackup folder stopped, because ModSelectionList is already started");
+                            backupDirContent = null;
+                            return;
+                        }
+                    }
                     List<string> fileList = new List<string>();
                     fileList = NumFilesToProcess(Path.Combine(fL.FullName), ref filesCount, ref backupFolderSize);
                     backupDirContent.Add(fL, fileList);
