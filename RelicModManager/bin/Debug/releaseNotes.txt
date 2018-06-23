@@ -1,3 +1,30 @@
+Version 28.2.0 (06/23/2018)
+https://www.virustotal.com/#/file/b632b62c09faf9a02ecb60e1e970f9c5bec685a451fc4e0df4a7735cfd1c3bc3/detection
+--UI changes:
+-The main form has been completely re-designed so that it uses more pictures and less links
+-The media player now has start/stop/pause images instead of translated text
+-The Color change code has been completely re-written to be modular and therefore apply to every window without any special patches being required
+-The translation code has been completely re-written to be modular and therefore apply to every window without any special patches being required
+-Bugs with the color change and border code have been fixed
+-A new selection view has appeared: "Default V2". Is is essentially a WPF (new UI engine vs. winforms) version of the default view. This marks the completion of phase 1 of our two phase process to move the application to a new UI engine.
+-The margins and padding of the "OMC legacy" view have been changed so that each sub-section does not extend so far to the right (it looked weird)
+-The Taskbar icon code has been re-implemented correctly so that it works off of the main window rather than a "backgroundForm" that many people saw
+-The parsing of the scaling buttons has been fixed
+-Fixed other bugs with selection handling in all views
+-Translations have been updated
+
+--Installer changes
+-We have written a hotfix for a nasty bug in the uninstaller that would cause the installation to fail. It will be fully fixed when we change UI engines
+-Handling of the installer thread is been correctly implemented, it will now say if there was an exception level error during installation
+-The json patching process has been minorly re-worked so that it is logged better and will not write invalid json to disk
+-Other bugs fixed with the backing up of the current mods directory
+
+--Other changes
+-Removed lots of not needed code and embedded resources to free up space and save CPU time
+-Re-implemented the saving of atlas files now that WG has moved to DDS images
+-The logicalDependency class for using dependencies with boolean logic now can be specified for OR and AND logic, for when other packages are tied to it
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 28.1.2 (05/29/2018)
 https://www.virustotal.com/#/file/28f729992c099f75626229634fda85c1249df0c45e194176ae25c34b5c67421a/detection
 --UI changes:
