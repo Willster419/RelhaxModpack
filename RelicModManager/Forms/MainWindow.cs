@@ -828,8 +828,13 @@ namespace RelhaxModpack
                 Application.Exit();
             }
 
+            //apply translations for menu
+            MenuItemAppClose.Text = Translations.GetTranslatedString(MenuItemAppClose.Name);
+            MenuItemRestore.Text = Translations.GetTranslatedString(MenuItemRestore.Name);
+            MenuItemCheckUpdates.Text = Translations.GetTranslatedString(MenuItemCheckUpdates.Name);
+
             //check for any conflicting program arguements
-            if(Settings.BetaDatabase && Program.testMode)
+            if (Settings.BetaDatabase && Program.testMode)
             {
                 if(MessageBox.Show("conflictBetaDBTestMode", "conflictsCommandlineHeader", MessageBoxButtons.OKCancel,MessageBoxIcon.Warning) == DialogResult.Cancel)
                 {
@@ -2229,71 +2234,12 @@ namespace RelhaxModpack
         #endregion
 
         #region LinkClicked Events
-        private void donateLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            /*      de_DE           DE
-                    pl_PL           PL
-                    fr_FR           FR
-                    en_US           US
-                    en_GB           GB */
-
-            // Logging.Manager("language: " + CultureInfo.CurrentUICulture.Name);
-            // Logging.Manager("TwoLetterISOLanguageName: " + CultureInfo.CurrentUICulture.TwoLetterISOLanguageName);            
-            System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2");
-            // https://www.paypal.com/paypalme/grab?country.x=IN&locale.x=en_IN
-        }
-
-        private void findBugAddModLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://forums.relhaxmodpack.com/");
-        }
-
-        private void DiscordServerLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://discord.gg/58fdPvK");
-        }
-        //when the "visit form page" link is clicked. the link clicked handler
-        private void FormPageNALink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
-        }
-
-        private void FormPageEULink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/623269-");
-        }
-
-        private void FormPageEUGERLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/624499-");
-        }
-
         private void ShowAdvancedSettingsLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             using (AdvancedSettings advset = new AdvancedSettings() { startX = Location.X + Size.Width + 3, startY = Location.Y, ApplyControlTranslationsOnLoad = true })
             {
                 advset.ShowDialog();
             }
-        }
-
-        private void VisitWebsiteLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://relhaxmodpack.com/");
-        }
-
-        private void SendEmailLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("mailto:info@relhaxmodpack.com");
-        }
-
-        private void ViewTwitterLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://twitter.com/relhaxmodpack");
-        }
-
-        private void ViewFacebookLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://www.facebook.com/Relhax-Modpack-187224775238379/");
         }
         #endregion
 
@@ -2354,7 +2300,9 @@ namespace RelhaxModpack
         {
             //set the thing
             Settings.DarkUI = darkUICB.Checked;
+            SuspendLayout();
             Settings.SetUIColorsWinForms(this);
+            ResumeLayout(false);
         }
 
         private void SelectionDefault_CheckedChanged(object sender, EventArgs e)
@@ -2943,54 +2891,122 @@ namespace RelhaxModpack
             }
             ToggleUIButtons(true);
         }
+
+        private void donateLabel_Click(object sender, EventArgs e)
+        {
+            /*      de_DE           DE
+                    pl_PL           PL
+                    fr_FR           FR
+                    en_US           US
+                    en_GB           GB */
+
+            // Logging.Manager("language: " + CultureInfo.CurrentUICulture.Name);
+            // Logging.Manager("TwoLetterISOLanguageName: " + CultureInfo.CurrentUICulture.TwoLetterISOLanguageName);            
+            System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2");
+            // https://www.paypal.com/paypalme/grab?country.x=IN&locale.x=en_IN
+        }
+
+        private void findBugAddModLabel_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://forums.relhaxmodpack.com/");
+        }
+
+        private void DiscordServerLink_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://discord.gg/58fdPvK");
+        }
+        //when the "visit form page" link is clicked. the link clicked handler
+        private void FormPageNALink_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
+        }
+
+        private void FormPageEULink_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/623269-");
+        }
+
+        private void FormPageEUGERLink_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/624499-");
+        }
+
+        private void VisitWebsiteLink_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://relhaxmodpack.com/");
+        }
+
+        private void SendEmailLink_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("mailto:info@relhaxmodpack.com");
+        }
+
+        private void ViewTwitterLink_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://twitter.com/relhaxmodpack");
+        }
+
+        private void ViewFacebookLink_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://www.facebook.com/Relhax-Modpack-187224775238379/");
+        }
         #endregion
 
-        #region MouseDown events
-        private void ViewFacebookLink_MouseDown(object sender, MouseEventArgs e)
+        #region Context menu stuff
+        /// <summary>
+        /// Occures when the taskbar icon is right clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RMIcon_MouseClick(object sender, MouseEventArgs e)
         {
-            ViewFacebookLink_LinkClicked(sender, null);
+            switch(e.Button)
+            {
+                case MouseButtons.Right:
+
+                    break;
+                case MouseButtons.Left:
+                    //if the application is not displayed on the screen (minimized, for example), then show it.
+                    if (WindowState != FormWindowState.Normal)
+                        WindowState = FormWindowState.Normal;
+                    break;
+            }            
         }
 
-        private void ViewTwitterLink_MouseDown(object sender, MouseEventArgs e)
+        private void MenuItemAppClose_Click(object sender, EventArgs e)
         {
-            ViewTwitterLink_LinkClicked(sender, null);
+            Application.Exit();
         }
 
-        private void DiscordServerLink_MouseDown(object sender, MouseEventArgs e)
+        private void MenuItemCheckUpdates_Click(object sender, EventArgs e)
         {
-            DiscordServerLink_LinkClicked(sender, null);
+            if (ins != null)
+                return;
+            using (PleaseWait wait = new PleaseWait())
+            {
+                //save the last old database version
+                string oldDatabaseVersion = Settings.DatabaseVersion;
+                Hide();
+                wait.Show();
+                wait.loadingDescBox.Text = Translations.GetTranslatedString("checkForUpdates");
+                Application.DoEvents();
+                CheckmanagerUpdates();
+                wait.Close();
+                Show();
+                //get the new database version and compare. if new, inform the user
+                if (!Settings.DatabaseVersion.Equals(oldDatabaseVersion))
+                {
+                    //TODO: translate
+                    MessageBox.Show(Translations.GetTranslatedString("newDBApplied"));
+                }
+            }
         }
 
-        private void VisitWebsiteLink_MouseDown(object sender, MouseEventArgs e)
+        private void MenuItemRestore_Click(object sender, EventArgs e)
         {
-            VisitWebsiteLink_LinkClicked(sender, null);
-        }
-
-        private void SendEmailLink_MouseDown(object sender, MouseEventArgs e)
-        {
-            SendEmailLink_LinkClicked(sender, null);
-        }
-
-        private void donateLabel_MouseDown(object sender, MouseEventArgs e)
-        {
-            donateLabel_LinkClicked(sender, null);
-        }
-
-        private void findBugAddModLabel_MouseDown(object sender, MouseEventArgs e)
-        {
-            findBugAddModLabel_LinkClicked(sender, null);
-        }
-        private void RegionNaPictureBox_MouseDown(object sender, MouseEventArgs e)
-        {
-            FormPageNALink_LinkClicked(sender, null);
-        }
-        private void RegionEuEngPictureBox_MouseDown(object sender, MouseEventArgs e)
-        {
-            FormPageEULink_LinkClicked(sender, null);
-        }
-        private void RegionEuGerPictureBox_MouseDown(object sender, MouseEventArgs e)
-        {
-            FormPageEUGERLink_LinkClicked(sender, null);
+            //if the application is not displayed on the screen (minimized, for example), then show it.
+            if (WindowState != FormWindowState.Normal)
+                WindowState = FormWindowState.Normal;
         }
         #endregion
     }

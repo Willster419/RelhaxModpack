@@ -63,16 +63,6 @@ namespace RelhaxModpack.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap chat {
-            get {
-                object obj = ResourceManager.GetObject("chat", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap discord_brand {
             get {
                 object obj = ResourceManager.GetObject("discord_brand", resourceCulture);
@@ -103,16 +93,6 @@ namespace RelhaxModpack.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap facebook {
-            get {
-                object obj = ResourceManager.GetObject("facebook", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap facebook_brand {
             get {
                 object obj = ResourceManager.GetObject("facebook_brand", resourceCulture);
@@ -126,16 +106,6 @@ namespace RelhaxModpack.Properties {
         internal static System.Drawing.Bitmap flag_de {
             get {
                 object obj = ResourceManager.GetObject("flag_de", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap flag_eu {
-            get {
-                object obj = ResourceManager.GetObject("flag_eu", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -223,39 +193,9 @@ namespace RelhaxModpack.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap twitter {
-            get {
-                object obj = ResourceManager.GetObject("twitter", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap twitter_brand {
             get {
                 object obj = ResourceManager.GetObject("twitter_brand", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap WoT_brand {
-            get {
-                object obj = ResourceManager.GetObject("WoT_brand", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap WoT_brand___light_grey {
-            get {
-                object obj = ResourceManager.GetObject("WoT_brand___light_grey", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -45,7 +45,7 @@ namespace RelhaxModpack
             Beta = 1,
             Alpha = 2
         }
-        public static ProgramVersion Version = ProgramVersion.Alpha;
+        public static ProgramVersion Version = ProgramVersion.Stable;
 
         [STAThread]
         static void Main()
@@ -182,18 +182,6 @@ namespace RelhaxModpack
                     Logging.Manager("/forceEnabled detected, loading all visible mods as enabled");
                     forceEnabled = true;
                 }
-                else if (Regex.IsMatch(commandArgs[i], @"crccheck2$"))
-                {
-                    Logging.Manager("(DEPRECATED) /crccheck2 detected, loading in crccheck2 mode");
-                    Application.Run(new CRCCHECK2());
-                    return;
-                }
-                else if (Regex.IsMatch(commandArgs[i], @"crccheck$"))
-                {
-                    Logging.Manager("(DEPRECATED) /crccheck detected, loading in crccheck mode");
-                    Application.Run(new CRCCheck());
-                    return;
-                }
                 else if (Regex.IsMatch(commandArgs[i], @"patchcheck$"))
                 {
                     Logging.Manager("/patchcheck detected, loading in patch design mode");
@@ -218,32 +206,16 @@ namespace RelhaxModpack
                     Application.Run(new DatabaseEditor());
                     return;
                 }
-                else if (Regex.IsMatch(commandArgs[i], @"ftpclean$"))
-                {
-                    Logging.Manager("/ftpclean detected, loading ftpclean window");
-                    Application.Run(new FTPClean());
-                    return;
-                }
             }
             //load the translations
             Logging.Manager("Loading translation hashes");
-            try
-            {
-                Translations.LoadHashes();
-            }
-            catch (Exception ex)
-            {
-                Utils.ExceptionLog("Main", "loadHashes", ex);
-            }
+            Translations.LoadHashes();
+
             //start the background taskbar form
-            Logging.Manager("Attempting to load taskbar form and main window");
-            BackgroundForm bf = new BackgroundForm();
-            bf.Show();
-            bf.HostWindow = new MainWindow();
+            MainWindow mw = new MainWindow();
             if (silentStart)
-                bf.HostWindow.WindowState = FormWindowState.Minimized;
-            Logging.Manager("Loading of taskbar form and main window complete");
-            Application.Run(bf.HostWindow);
+                mw.WindowState = FormWindowState.Minimized;
+            Application.Run(mw);
         }
 
         static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
