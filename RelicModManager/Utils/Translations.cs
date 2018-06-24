@@ -1995,6 +1995,20 @@ namespace RelhaxModpack
 
             //Componet:
             //
+            english.Add("KillRunningWoTHeader", "Problem ??");
+            german.Add("KillRunningWoTHeader", TranslationNeeded);
+            polish.Add("KillRunningWoTHeader", TranslationNeeded);
+            french.Add("KillRunningWoTHeader", TranslationNeeded);
+
+            //Componet:
+            //
+            english.Add("KillRunningWoTMessage", "You where trying to go on now {0}x times, but the game is still not closed.\n\nIn some conditions, the game was closed by user, but is still running in the background (visible via the TaskManager)\n\nShould we try to kill the task for you?");
+            german.Add("KillRunningWoTMessage", TranslationNeeded);
+            polish.Add("KillRunningWoTMessage", TranslationNeeded);
+            french.Add("KillRunningWoTMessage", TranslationNeeded);
+
+            //Componet:
+            //
             english.Add("zipReadingErrorHeader", "Incomplete Download");
             german.Add("zipReadingErrorHeader", "Unvollständiger Download");
             polish.Add("zipReadingErrorHeader", "Ściąganie niekompletne");
