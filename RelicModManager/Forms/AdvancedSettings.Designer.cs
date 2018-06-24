@@ -409,7 +409,6 @@
             this.Controls.Add(this.loadingImageGroupBox);
             this.Controls.Add(this.AdvancedSettingsDescription);
             this.Controls.Add(this.AdvancedSettingsLayout);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
