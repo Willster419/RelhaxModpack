@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using RelhaxModpack.Forms;
 
 namespace RelhaxModpack
 {
@@ -98,7 +97,7 @@ namespace RelhaxModpack
             }
 
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
-             // delete RelicCopyUpdate.bat at start (it is only needed at updates, so kill it)
+            // delete RelicCopyUpdate.bat at start (it is only needed at updates, so kill it)
             try
             {
                 string updateBatPath = Path.Combine(Application.StartupPath, "RelicCopyUpdate.bat");
