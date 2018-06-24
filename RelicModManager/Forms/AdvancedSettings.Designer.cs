@@ -39,6 +39,8 @@
             this.InstantExtractionCB = new System.Windows.Forms.CheckBox();
             this.clearCacheCB = new System.Windows.Forms.CheckBox();
             this.UseAltUpdateMethodCB = new System.Windows.Forms.CheckBox();
+            this.UseBetaDatabaseCB = new System.Windows.Forms.CheckBox();
+            this.UseBetaApplicationCB = new System.Windows.Forms.CheckBox();
             this.AdvancedSettingsDescription = new System.Windows.Forms.RichTextBox();
             this.loadingImageGroupBox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
@@ -48,8 +50,6 @@
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.CleanUninstallModeRB = new System.Windows.Forms.RadioButton();
             this.DefaultUninstallModeRB = new System.Windows.Forms.RadioButton();
-            this.UseBetaDatabaseCB = new System.Windows.Forms.CheckBox();
-            this.UseBetaApplicationCB = new System.Windows.Forms.CheckBox();
             this.AdvancedSettingsLayout.SuspendLayout();
             this.loadingImageGroupBox.SuspendLayout();
             this.tableLayoutPanel8.SuspendLayout();
@@ -223,9 +223,10 @@
             this.UseAltUpdateMethodCB.AutoSize = true;
             this.UseAltUpdateMethodCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.UseAltUpdateMethodCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.UseAltUpdateMethodCB.Location = new System.Drawing.Point(208, 143);
+            this.UseAltUpdateMethodCB.Location = new System.Drawing.Point(206, 141);
+            this.UseAltUpdateMethodCB.Margin = new System.Windows.Forms.Padding(1);
             this.UseAltUpdateMethodCB.Name = "UseAltUpdateMethodCB";
-            this.UseAltUpdateMethodCB.Size = new System.Drawing.Size(198, 29);
+            this.UseAltUpdateMethodCB.Size = new System.Drawing.Size(202, 33);
             this.UseAltUpdateMethodCB.TabIndex = 43;
             this.UseAltUpdateMethodCB.Text = "Use alternative update method";
             this.UseAltUpdateMethodCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -233,6 +234,40 @@
             this.UseAltUpdateMethodCB.CheckedChanged += new System.EventHandler(this.UseAltUpdateMethodCB_CheckedChanged);
             this.UseAltUpdateMethodCB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.UseAltUpdateMethodCB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
+            // UseBetaDatabaseCB
+            // 
+            this.UseBetaDatabaseCB.AutoSize = true;
+            this.UseBetaDatabaseCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.UseBetaDatabaseCB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.UseBetaDatabaseCB.Location = new System.Drawing.Point(2, 177);
+            this.UseBetaDatabaseCB.Margin = new System.Windows.Forms.Padding(1);
+            this.UseBetaDatabaseCB.Name = "UseBetaDatabaseCB";
+            this.UseBetaDatabaseCB.Size = new System.Drawing.Size(201, 33);
+            this.UseBetaDatabaseCB.TabIndex = 44;
+            this.UseBetaDatabaseCB.Text = "Use beta database";
+            this.UseBetaDatabaseCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.UseBetaDatabaseCB.UseVisualStyleBackColor = true;
+            this.UseBetaDatabaseCB.CheckedChanged += new System.EventHandler(this.UseBetaDatabaseCB_CheckedChanged);
+            this.UseBetaDatabaseCB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.UseBetaDatabaseCB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
+            // UseBetaApplicationCB
+            // 
+            this.UseBetaApplicationCB.AutoSize = true;
+            this.UseBetaApplicationCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.UseBetaApplicationCB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.UseBetaApplicationCB.Location = new System.Drawing.Point(206, 177);
+            this.UseBetaApplicationCB.Margin = new System.Windows.Forms.Padding(1);
+            this.UseBetaApplicationCB.Name = "UseBetaApplicationCB";
+            this.UseBetaApplicationCB.Size = new System.Drawing.Size(202, 33);
+            this.UseBetaApplicationCB.TabIndex = 45;
+            this.UseBetaApplicationCB.Text = "Use beta application";
+            this.UseBetaApplicationCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.UseBetaApplicationCB.UseVisualStyleBackColor = true;
+            this.UseBetaApplicationCB.CheckedChanged += new System.EventHandler(this.UseBetaApplication_CheckedChanged);
+            this.UseBetaApplicationCB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.UseBetaApplicationCB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
             // AdvancedSettingsDescription
             // 
@@ -365,38 +400,6 @@
             this.DefaultUninstallModeRB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.DefaultUninstallModeRB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
-            // UseBetaDatabaseCB
-            // 
-            this.UseBetaDatabaseCB.AutoSize = true;
-            this.UseBetaDatabaseCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.UseBetaDatabaseCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.UseBetaDatabaseCB.Location = new System.Drawing.Point(4, 179);
-            this.UseBetaDatabaseCB.Name = "UseBetaDatabaseCB";
-            this.UseBetaDatabaseCB.Size = new System.Drawing.Size(197, 29);
-            this.UseBetaDatabaseCB.TabIndex = 44;
-            this.UseBetaDatabaseCB.Text = "Use beta database";
-            this.UseBetaDatabaseCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.UseBetaDatabaseCB.UseVisualStyleBackColor = true;
-            this.UseBetaDatabaseCB.CheckedChanged += new System.EventHandler(this.UseBetaDatabaseCB_CheckedChanged);
-            this.UseBetaDatabaseCB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.UseBetaDatabaseCB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
-            // 
-            // UseBetaApplicationCB
-            // 
-            this.UseBetaApplicationCB.AutoSize = true;
-            this.UseBetaApplicationCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.UseBetaApplicationCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.UseBetaApplicationCB.Location = new System.Drawing.Point(208, 179);
-            this.UseBetaApplicationCB.Name = "UseBetaApplicationCB";
-            this.UseBetaApplicationCB.Size = new System.Drawing.Size(198, 29);
-            this.UseBetaApplicationCB.TabIndex = 45;
-            this.UseBetaApplicationCB.Text = "Use beta application";
-            this.UseBetaApplicationCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.UseBetaApplicationCB.UseVisualStyleBackColor = true;
-            this.UseBetaApplicationCB.CheckedChanged += new System.EventHandler(this.UseBetaApplication_CheckedChanged);
-            this.UseBetaApplicationCB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
-            this.UseBetaApplicationCB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
-            // 
             // AdvancedSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -406,6 +409,7 @@
             this.Controls.Add(this.loadingImageGroupBox);
             this.Controls.Add(this.AdvancedSettingsDescription);
             this.Controls.Add(this.AdvancedSettingsLayout);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
