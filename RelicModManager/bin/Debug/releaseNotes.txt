@@ -1,3 +1,12 @@
+Version 28.2.1 (06/24/2018)
+https://www.virustotal.com/#/file/5f31ebe71f5a1525f1a0e58da6a3bc7cbabdfc7bdcbeaedd8585ff23b7fc72cb/detection
+-UI Placement fixes of components in the Advanced Settings Window
+-Fixed bugs in DefaultV2 view where borders would not respond to the correct settings
+-Database updater fixes
+-Added ability to detect and kill the WoT process before the installation takes place
+-Other code optimizations
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 28.2.0 (06/23/2018)
 https://www.virustotal.com/#/file/b632b62c09faf9a02ecb60e1e970f9c5bec685a451fc4e0df4a7735cfd1c3bc3/detection
 --UI changes:
