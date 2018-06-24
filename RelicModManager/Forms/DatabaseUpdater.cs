@@ -515,17 +515,17 @@ namespace RelhaxModpack
             //abort if missing files
             if(fileNotFoundPackages.Count > 0)
             {
-                ReportProgress("ERROR: " + fileNotFoundPackages.Count + " packages missing files!! (saved to missingPackages.txt)");
                 string missingPackagesText = "missingPackages.txt";
                 if (File.Exists(missingPackagesText))
                     File.Delete(missingPackagesText);
                 StringBuilder missingPackagesSB = new StringBuilder();
-                foreach(SelectablePackage sp in fileNotFoundPackages)
+                foreach(DatabasePackage sp in fileNotFoundPackages)
                 {
                     missingPackagesSB.AppendLine(sp.ZipFile);
                 }
                 File.WriteAllText(missingPackagesText, missingPackagesSB.ToString());
                 Program.databaseUpdateOnline = false;
+                ReportProgress("ERROR: " + fileNotFoundPackages.Count + " packages missing files!! (saved to missingPackages.txt)");
                 return;
             }
 
