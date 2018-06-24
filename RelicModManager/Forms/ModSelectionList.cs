@@ -384,7 +384,7 @@ namespace RelhaxModpack
                         c.CategoryHeader.ChildBorder = new System.Windows.Controls.Border()
                         {
                             BorderBrush = System.Windows.Media.Brushes.Black,
-                            BorderThickness = Settings.EnableBordersLegacyView ? new System.Windows.Thickness(1) : new System.Windows.Thickness(0),
+                            BorderThickness = Settings.EnableBordersDefaultV2View ? new System.Windows.Thickness(1) : new System.Windows.Thickness(0),
                             Child = c.CategoryHeader.ChildStackPanel,
                             Padding = new System.Windows.Thickness(15, 0, 0, 0)
                         };
@@ -886,7 +886,7 @@ namespace RelhaxModpack
                         sp.ChildBorder = new System.Windows.Controls.Border()
                         {
                             BorderBrush = System.Windows.Media.Brushes.Black,
-                            BorderThickness = Settings.EnableBordersLegacyView ? new System.Windows.Thickness(1) : new System.Windows.Thickness(0),
+                            BorderThickness = Settings.EnableBordersDefaultV2View ? new System.Windows.Thickness(1) : new System.Windows.Thickness(0),
                             Child = sp.ChildStackPanel,
                             Padding = new System.Windows.Thickness(15, 0, 0, 0),
                             Background = Settings.GetBackColorWPF()
