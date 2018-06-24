@@ -1096,17 +1096,51 @@ namespace RelhaxModpack
             }
             //check to see if WoT is running
             bool WoTRunning = true;
+            int retryCount = 0;
             while (WoTRunning)
             {
-                WoTRunning = false;
-                foreach (Process p in Process.GetProcesses())
+                try
                 {
-                    if (p.MainWindowTitle.Equals("WoT Client"))
-                        WoTRunning = true;
+                    WoTRunning = false;
+                    foreach (Process p in Process.GetProcesses())
+                    {
+                        if (p.ProcessName.ToLower().Equals("WorldOfTanks".ToLower()))
+                        {
+                            if (p.MainModule.FileName.ToLower().Equals(Path.Combine(tanksLocation, "worldoftanks.exe").ToLower()))
+                            {
+                                WoTRunning = true;
+                                MessageBox.Show(Translations.GetTranslatedString("WoTRunningMessage"), Translations.GetTranslatedString("WoTRunningHeader"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                retryCount++;
+                                if (retryCount > 5)
+                                {
+                                    if (MessageBox.Show(string.Format(Translations.GetTranslatedString("KillRunningWoTMessage"), retryCount), Translations.GetTranslatedString("KillRunningWoTHeader"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                                    {
+                                        try
+                                        {
+                                            p.Kill();
+                                            int waitingExited = 0;
+                                            while (p.HasExited)
+                                            {
+                                                System.Threading.Thread.Sleep(5);
+                                                waitingExited++;
+                                                // the time to wait for finishing/killing the taask is 5 sec
+                                                if (waitingExited > 1000) break;
+                                            }
+                                            Logging.Manager("Successfully killed " + p.ProcessName + " Id: " + p.Id);
+                                        }
+                                        catch
+                                        {
+                                            Logging.Manager("Failed to kill " + p.ProcessName + " Id: " + p.Id);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (!WoTRunning)
+                        break;
                 }
-                if (!WoTRunning)
-                    break;
-                MessageBox.Show(Translations.GetTranslatedString("WoTRunningMessage"), Translations.GetTranslatedString("WoTRunningHeader"));
+                catch { }
             }
             //have the application display that it is loading. it is actually doing installation calculations
             downloadProgress.Text = Translations.GetTranslatedString("loading");
