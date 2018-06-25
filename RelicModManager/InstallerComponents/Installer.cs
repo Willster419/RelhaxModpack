@@ -521,7 +521,15 @@ namespace RelhaxModpack
                 //parse the lists so that only files are folders are saved
                 if(File.Exists(s))
                 {
-                    if(Path.GetExtension(s).Equals(".lnk"))
+                    // workaround to prevent damaged WoT after uninstall xvm
+                    if (Path.GetExtension(s).Equals(".dll") && Path.GetDirectoryName(s).Equals(TanksLocation))
+                    {
+                        Logging.Manager("Skip deleting dll in WoT root folder (" + s + ")", true);
+                        continue;
+                    }
+
+
+                    if (Path.GetExtension(s).Equals(".lnk"))
                     {
                         shortcutsFromLog.Add(Path.GetFileName(s));
                     }
@@ -547,6 +555,13 @@ namespace RelhaxModpack
                 //parse the lists so that only files are folders are saved
                 if (File.Exists(s))
                 {
+                    // workaround to prevent damaged WoT after uninstall xvm
+                    if (Path.GetExtension(s).Equals(".dll") && Path.GetDirectoryName(s).Equals(TanksLocation))
+                    {
+                        Logging.Manager("Skip deleting dll in WoT root folder (" + s + ")", true);
+                        continue;
+                    }
+
                     if (Path.GetExtension(s).Equals(".lnk"))
                     {
                         shortcutsFromParsing.Add(Path.GetFileName(s));
@@ -587,7 +602,7 @@ namespace RelhaxModpack
             InstallWorker.ReportProgress(0);
 
             //backup old uninstall log file
-            Logging.Manager("backing up old uninstall log file",true);
+            Logging.Manager("backing up old uninstall log file", true);
             string logFile = Path.Combine(TanksLocation, "logs");
             if (!Directory.Exists(logFile))
                 Directory.CreateDirectory(logFile);
@@ -610,6 +625,12 @@ namespace RelhaxModpack
             foreach (string file in totalFiles)
             {
                 args.currentFile = file;
+                // workaround to prevent damaged WoT after uninstall xvm
+                if (Path.GetExtension(file).Equals(".dll") && Path.GetDirectoryName(file).Equals(TanksLocation))
+                {
+                    Logging.Manager("Skip deleting dll in WoT root folder (" + file + ")", true);
+                    continue;
+                }
                 try
                 {
                     File.SetAttributes(file, FileAttributes.Normal);
@@ -654,10 +675,10 @@ namespace RelhaxModpack
             Logging.Manager("deleting leftover folders", true);
             foreach (string folder in totalFolders)
             {
-                if (Directory.GetFiles(folder).Count() == 0 && Directory.GetDirectories(folder).Count() == 0)
+                // fix for uninstall bug 
+                if (Directory.Exists(folder) && Directory.GetFiles(folder).Count() == 0 && Directory.GetDirectories(folder).Count() == 0)
                 {
                     args.currentFile = folder;
-                    //Directory.Delete(folder);
                     DirectoryDeleteNoProgress(folder, false);
                     InstallWorker.ReportProgress(args.ChildProcessed++);
                     tw.WriteLine(folder);
