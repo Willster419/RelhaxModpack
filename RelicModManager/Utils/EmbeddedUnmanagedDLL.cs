@@ -76,7 +76,7 @@ namespace RelhaxModpack
                 Environment.SetEnvironmentVariable("PATH", tempFolder + ";" + path);
             }
 
-            bool fileOk = false;
+            // bool fileOk = false;
             string tempFile = "";
             Assembly curAsm = Assembly.GetExecutingAssembly();
             byte[] resourceBytes = null;
@@ -111,20 +111,20 @@ namespace RelhaxModpack
                     if (fileHash == fileHash2)
                     {
                         // Same file
-                        fileOk = true;
+                        // fileOk = true;
                         return;
                     }
-                    else
-                    {
-                        // Not same
-                        fileOk = false;
-                    }
+                    // else
+                    // {
+                    // Not same
+                    // fileOk = false;
+                    // }
                 }
-                else
-                {
-                    // The DLL/assembly is not existed yet
-                    fileOk = false;
-                }
+                // else
+                // {
+                // The DLL/assembly is not existed yet
+                // fileOk = false;
+                // }
             }
 
             if (compressed)
