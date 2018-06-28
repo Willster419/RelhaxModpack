@@ -126,44 +126,51 @@ namespace RelhaxModpack
             using (BackgroundWorker worker = new BackgroundWorker())
             {
                 worker.DoWork += worker_ScanningRelHaxModBackupFolder;
+                worker.RunWorkerCompleted += OnModBackupFolderCompleted;
                 worker.RunWorkerAsync();
+            }
+        }
+
+        private void OnModBackupFolderCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if(e.Error != null)
+            {
+                //an exception occured!
+                Logging.Manager(string.Format("Error at scanning '{0}' ({1})", Settings.RelHaxModBackupFolder, e.Error.Message));
+            }
+            else
+            {
+
             }
         }
 
         private void worker_ScanningRelHaxModBackupFolder(object sender, DoWorkEventArgs args)
         {
-            try
+            uint filesCount = 0;
+            backupFolderSize = 0;
+            DirectoryInfo di = new DirectoryInfo(Settings.RelHaxModBackupFolder);
+            backupDirContent = new Dictionary<DirectoryInfo, List<string>>();    // this dict will hold ALL directories and files after parsing     
+            List<DirectoryInfo> folderList = null;
+            folderList = di.GetDirectories().ToList();      // parsed top folders
+            foreach (var fL in folderList)
             {
-                uint filesCount = 0;
-                backupFolderSize = 0;
-                DirectoryInfo di = new DirectoryInfo(Settings.RelHaxModBackupFolder);
-                backupDirContent = new Dictionary<DirectoryInfo, List<string>>();    // this dict will hold ALL directories and files after parsing     
-                List<DirectoryInfo> folderList = null;
-                folderList = di.GetDirectories().ToList();      // parsed top folders
-                foreach (var fL in folderList)
+                // search ModSelectionList Form. If found, user already startet the selection and the BackUpFolder cleanup will be not realy interesting
+                foreach (Form frm in Application.OpenForms)
                 {
-                    // search ModSelectionList Form. If found, user already startet the selection and the BackUpFolder cleanup will be not realy interesting
-                    foreach (Form frm in Application.OpenForms)
+                    if (frm.Name.Equals("ModSelectionList"))
                     {
-                        if (frm.Name.Equals("ModSelectionList"))
-                        {
-                            this.backupModsCheckBox.Text = Translations.GetTranslatedString("backupModsCheckBox");
-                            Logging.Manager("Scanning RelHaxModBackup folder stopped, because ModSelectionList is already started");
-                            backupDirContent = null;
-                            return;
-                        }
+                        this.backupModsCheckBox.Text = Translations.GetTranslatedString("backupModsCheckBox");
+                        Logging.Manager("Scanning RelHaxModBackup folder stopped, because ModSelectionList is already started");
+                        backupDirContent = null;
+                        return;
                     }
-                    List<string> fileList = new List<string>();
-                    fileList = NumFilesToProcess(Path.Combine(fL.FullName), ref filesCount, ref backupFolderSize);
-                    backupDirContent.Add(fL, fileList);
-                    this.backupModsCheckBox.Text = Translations.GetTranslatedString("backupModsCheckBox") + "\nBackups: " + backupDirContent.Count + " Complete size: " + Utils.SizeSuffix(backupFolderSize, 2, true);
                 }
-                Logging.Manager(string.Format("parsed backups in BackupFolder: {0}, with a total size of {1}.", backupDirContent.Count, Utils.SizeSuffix(backupFolderSize, 2, true)));
+                List<string> fileList = new List<string>();
+                fileList = NumFilesToProcess(Path.Combine(fL.FullName), ref filesCount, ref backupFolderSize);
+                backupDirContent.Add(fL, fileList);
+                this.backupModsCheckBox.Text = Translations.GetTranslatedString("backupModsCheckBox") + "\nBackups: " + backupDirContent.Count + " Complete size: " + Utils.SizeSuffix(backupFolderSize, 2, true);
             }
-            catch (Exception ex)
-            {
-                Logging.Manager(string.Format("Error at scanning '{0}' ({1})", Settings.RelHaxModBackupFolder, ex.Message));
-            }
+            Logging.Manager(string.Format("parsed backups in BackupFolder: {0}, with a total size of {1}.", backupDirContent.Count, Utils.SizeSuffix(backupFolderSize, 2, true)));
         }
 
         private List<string> NumFilesToProcess(string folder, ref uint filesCount, ref UInt64 filesSize)
