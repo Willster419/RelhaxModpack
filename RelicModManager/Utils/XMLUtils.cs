@@ -126,6 +126,9 @@ namespace RelhaxModpack
                         case "endAddress":
                             d.EndAddress = globs.Value;
                             break;
+                        case "logAtInstall":
+                            d.LogAtInstall = Utils.ParseBool(globs.Value,true);
+                            break;
                         case "devURL":
                             d.DevURL = globs.Value;
                             break;
@@ -202,6 +205,9 @@ namespace RelhaxModpack
                             break;
                         case "endAddress":
                             d.EndAddress = globs.Value;
+                            break;
+                        case "logAtInstall":
+                            d.LogAtInstall = Utils.ParseBool(globs.Value, true);
                             break;
                         case "devURL":
                             d.DevURL = globs.Value;
@@ -325,6 +331,9 @@ namespace RelhaxModpack
                         case "endAddress":
                             d.EndAddress = globs.Value;
                             break;
+                        case "logAtInstall":
+                            d.LogAtInstall = Utils.ParseBool(globs.Value, true);
+                            break;
                         case "devURL":
                             d.DevURL = globs.Value;
                             break;
@@ -427,6 +436,9 @@ namespace RelhaxModpack
                                                     break;
                                                 case "endAddress":
                                                     m.EndAddress = modNode.Value;
+                                                    break;
+                                                case "logAtInstall":
+                                                    m.LogAtInstall = Utils.ParseBool(modNode.Value, true);
                                                     break;
                                                 case "crc":
                                                     m.CRC = modNode.Value;
@@ -793,6 +805,9 @@ namespace RelhaxModpack
                                 case "endAddress":
                                     c.EndAddress = configNode.Value;
                                     break;
+                                case "logAtInstall":
+                                    c.LogAtInstall = Utils.ParseBool(configNode.Value, true);
+                                    break;
                                 case "crc":
                                     c.CRC = configNode.Value;
                                     break;
@@ -1124,6 +1139,12 @@ namespace RelhaxModpack
                     globalDepURL.InnerText = d.DevURL.Trim();
                     globalDependencyRoot.AppendChild(globalDepURL);
                 }
+                if (!d.LogAtInstall)
+                {
+                    XmlElement globalDepLogAtInstall = doc.CreateElement("logAtInstall");
+                    globalDepLogAtInstall.InnerText = d.LogAtInstall.ToString();
+                    globalDependencyRoot.AppendChild(globalDepLogAtInstall);
+                }
                 //attach dependency root
                 globalDependenciesXml.AppendChild(globalDependencyRoot);
             }
@@ -1183,6 +1204,12 @@ namespace RelhaxModpack
                     XmlElement depdevURL = doc.CreateElement("devURL");
                     depdevURL.InnerText = d.DevURL.Trim();
                     dependencyRoot.AppendChild(depdevURL);
+                }
+                if (!d.LogAtInstall)
+                {
+                    XmlElement depLogAtInstall = doc.CreateElement("logAtInstall");
+                    depLogAtInstall.InnerText = d.LogAtInstall.ToString();
+                    dependencyRoot.AppendChild(depLogAtInstall);
                 }
 
                 //logicalDependencies for the configs
@@ -1262,6 +1289,12 @@ namespace RelhaxModpack
                     XmlElement logicalDepdevURL = doc.CreateElement("devURL");
                     logicalDepdevURL.InnerText = d.DevURL.Trim();
                     logicalDependencyRoot.AppendChild(logicalDepdevURL);
+                }
+                if (!d.LogAtInstall)
+                {
+                    XmlElement logicalDepLogAtInstall = doc.CreateElement("logAtInstall");
+                    logicalDepLogAtInstall.InnerText = d.LogAtInstall.ToString();
+                    logicalDependencyRoot.AppendChild(logicalDepLogAtInstall);
                 }
                 //attach dependency root
                 logicalDependenciesXml.AppendChild(logicalDependencyRoot);
@@ -1357,7 +1390,13 @@ namespace RelhaxModpack
                         modZipSize.InnerText = "" + m.Size;
                         modRoot.AppendChild(modZipSize);
                     }
-                    if(!string.IsNullOrWhiteSpace(m.UpdateComment))
+                    if (!m.LogAtInstall)
+                    {
+                        XmlElement modLogAtInstall = doc.CreateElement("logAtInstall");
+                        modLogAtInstall.InnerText = m.LogAtInstall.ToString();
+                        modRoot.AppendChild(modLogAtInstall);
+                    }
+                    if (!string.IsNullOrWhiteSpace(m.UpdateComment))
                     {
                         XmlElement modUpdateComment = doc.CreateElement("updateComment");
                         modUpdateComment.InnerText = ConvertToXmlSaveFormat(m.UpdateComment);
@@ -1532,7 +1571,13 @@ namespace RelhaxModpack
                     configSize.InnerText = "" + cc.Size;
                     configRoot.AppendChild(configSize);
                 }
-                if(!string.IsNullOrWhiteSpace(cc.UpdateComment))
+                if (!cc.LogAtInstall)
+                {
+                    XmlElement configLogAtInstall = doc.CreateElement("logAtInstall");
+                    configLogAtInstall.InnerText = cc.LogAtInstall.ToString();
+                    configRoot.AppendChild(configLogAtInstall);
+                }
+                if (!string.IsNullOrWhiteSpace(cc.UpdateComment))
                 {
                     XmlElement configComment = doc.CreateElement("updateComment");
                     configComment.InnerText = ConvertToXmlSaveFormat(cc.UpdateComment);

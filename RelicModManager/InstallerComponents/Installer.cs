@@ -874,7 +874,7 @@ namespace RelhaxModpack
                                 while (!d.ReadyForInstall)
                                     System.Threading.Thread.Sleep(20);
                             }
-                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), null,-3,ref patchCounter);
+                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), null,-3,ref patchCounter,d.LogAtInstall);
                             patchCounter++;
                             args.ParrentProcessed++;
                         }
@@ -906,7 +906,7 @@ namespace RelhaxModpack
                                 while (!d.ReadyForInstall)
                                     System.Threading.Thread.Sleep(20);
                             }
-                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), null,-2,ref patchCounter);
+                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), null,-2,ref patchCounter,d.LogAtInstall);
                             patchCounter++;
                             args.ParrentProcessed++;
                         }
@@ -940,7 +940,7 @@ namespace RelhaxModpack
                                 while (!d.ReadyForInstall)
                                     System.Threading.Thread.Sleep(20);
                             }
-                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), null,-1,ref patchCounter);
+                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), null,-1,ref patchCounter,d.LogAtInstall);
                             patchCounter++;
                             args.ParrentProcessed++;
                         }
@@ -1005,7 +1005,7 @@ namespace RelhaxModpack
                                         System.Threading.Thread.Sleep(20);
                                 }
                                 int wtf = 0;
-                                Unzip(Path.Combine(downloadedFilesDir, dbo.ZipFile), null,0, ref wtf);
+                                Unzip(Path.Combine(downloadedFilesDir, dbo.ZipFile), null,0, ref wtf,dbo.LogAtInstall);
                                 args.ParrentProcessed++;
                             }
                             catch (Exception ex)
@@ -1039,7 +1039,7 @@ namespace RelhaxModpack
                                 while (!d.ReadyForInstall)
                                     System.Threading.Thread.Sleep(20);
                             }
-                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), null,TotalCategories,ref patchCounter);
+                            Unzip(Path.Combine(downloadedFilesDir, d.ZipFile), null,TotalCategories,ref patchCounter, d.LogAtInstall);
                             patchCounter++;
                             args.ParrentProcessed++;
                         }
@@ -1135,7 +1135,7 @@ namespace RelhaxModpack
                             Logging.Manager("Extraction started  of file " + m.ZipFile + ", superPatchNum=" + superPatchNum);
                             //https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/ref
                             //because multi-threading and recursion wern't hard enough...
-                            Unzip(Path.Combine(downloadedFilesDir, m.ZipFile), sb, m.ParentCategory.InstallGroup, ref superPatchNum);
+                            Unzip(Path.Combine(downloadedFilesDir, m.ZipFile), sb, m.ParentCategory.InstallGroup, ref superPatchNum, m.LogAtInstall);
                             Logging.Manager("Extraction finished of file " + m.ZipFile + ", superPatchNum=" + superPatchNum);
                         }
                         if(m.Packages.Count > 0)
@@ -1165,7 +1165,7 @@ namespace RelhaxModpack
                                 System.Threading.Thread.Sleep(20);
                         }
                         Logging.Manager("Extraction started  of file " + config.ZipFile + ", superPatchNum=" + superPatchNum);
-                        Unzip(Path.Combine(downloadedFilesDir, config.ZipFile), sb, config.ParentCategory.InstallGroup, ref superPatchNum);
+                        Unzip(Path.Combine(downloadedFilesDir, config.ZipFile), sb, config.ParentCategory.InstallGroup, ref superPatchNum, config.LogAtInstall);
                         Logging.Manager("Extraction finished of file " + config.ZipFile + ", superPatchNum=" + superPatchNum);
                     }
                     if(config.Packages.Count > 0)
@@ -1982,7 +1982,7 @@ namespace RelhaxModpack
                     if (m.Enabled && m.Checked)
                     {
                         Logging.Manager("Extracting " + Path.GetFileName(m.ZipFile));
-                        Unzip(Path.Combine(downloadedFilesDir, Path.GetFileName(m.ZipFile)), null,99,ref tempPatchNum);
+                        Unzip(Path.Combine(downloadedFilesDir, Path.GetFileName(m.ZipFile)), null,99,ref tempPatchNum,m.LogAtInstall);
                         tempPatchNum++;
                         InstallWorker.ReportProgress(0);
                     }
@@ -2818,7 +2818,7 @@ namespace RelhaxModpack
         #endregion
 
         //main unzip worker method
-        private void Unzip(string zipFile, StringBuilder sb, int categoryGroup, ref int superPatchNum)
+        private void Unzip(string zipFile, StringBuilder sb, int categoryGroup, ref int superPatchNum, bool fileLogging)
         {
             //write a formated comment line if in regular extraction mode
             if(sb==null)
@@ -2908,10 +2908,13 @@ namespace RelhaxModpack
                                 zip[i].Extract(TanksLocation, ExtractExistingFileAction.OverwriteSilently);
                                 completePath = Path.Combine(TanksLocation, zip[i].FileName.Replace(@"/", @"\"));
                             }
-                            if (sb == null)
-                                Logging.Installer(completePath);
-                            else
-                                sb.Append(completePath + "\n");
+                            if (fileLogging)
+                            {
+                                if (sb == null)
+                                    Logging.Installer(completePath);
+                                else
+                                    sb.Append(completePath + "\n");
+                            }
                             args.ChildProcessed++;
                         }
                         //we made it, set j to 1 to break out of the exception catch loop

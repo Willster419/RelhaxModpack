@@ -59,6 +59,11 @@ namespace RelhaxModpack.DatabaseComponents
         /// </summary>
         public bool AppendExtraction = false;
         /// <summary>
+        /// determine if the files from the package should be logged for uninstallation
+        /// only set this to false if absolutly necessary!
+        /// </summary>
+        public bool LogAtInstall = true;
+        /// <summary>
         /// the URL link of where you can view the webpage of the mod
         /// </summary>
         public string DevURL = "";
