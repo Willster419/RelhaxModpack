@@ -35,6 +35,7 @@
             this.ObjectNameTB = new System.Windows.Forms.TextBox();
             this.DatabasePanelTree = new System.Windows.Forms.Panel();
             this.DatabaseEditPanel = new System.Windows.Forms.Panel();
+            this.ObjectLogAtInstallCB = new System.Windows.Forms.CheckBox();
             this.ObjectLevelLabel = new System.Windows.Forms.Label();
             this.ObjectLevel = new System.Windows.Forms.Label();
             this.ObjectLastUpdatedLabel = new System.Windows.Forms.Label();
@@ -48,14 +49,6 @@
             this.ObjectUpdateNotesTB = new System.Windows.Forms.RichTextBox();
             this.ObjectUpdateNotes = new System.Windows.Forms.Label();
             this.DependenciesTabPage = new System.Windows.Forms.TabPage();
-            this.LogicalDependencyPanel = new System.Windows.Forms.Panel();
-            this.AddLogicalDependencyButton = new System.Windows.Forms.Button();
-            this.CurrentLogicalDependenciesCB = new System.Windows.Forms.ComboBox();
-            this.ObjectLogicalDependenciesLabel = new System.Windows.Forms.Label();
-            this.RemoveLogicalDependencyButton = new System.Windows.Forms.Button();
-            this.LogicalDependencyPackageNameLabel = new System.Windows.Forms.Label();
-            this.LogicalDependnecyNegateFlagCB = new System.Windows.Forms.CheckBox();
-            this.ObjectLogicalDependenciesList = new System.Windows.Forms.ListBox();
             this.DependencyPanel = new System.Windows.Forms.Panel();
             this.AndOrLogicLabel = new System.Windows.Forms.Label();
             this.AndOrLogicComboBox = new System.Windows.Forms.ComboBox();
@@ -65,6 +58,15 @@
             this.ObjectDependenciesLabel = new System.Windows.Forms.Label();
             this.RemoveDependencyButton = new System.Windows.Forms.Button();
             this.DependencyPackageNameLabel = new System.Windows.Forms.Label();
+            this.LogicalDependenciesTabPage = new System.Windows.Forms.TabPage();
+            this.LogicalDependencyPanel = new System.Windows.Forms.Panel();
+            this.AddLogicalDependencyButton = new System.Windows.Forms.Button();
+            this.CurrentLogicalDependenciesCB = new System.Windows.Forms.ComboBox();
+            this.ObjectLogicalDependenciesLabel = new System.Windows.Forms.Label();
+            this.RemoveLogicalDependencyButton = new System.Windows.Forms.Button();
+            this.LogicalDependencyPackageNameLabel = new System.Windows.Forms.Label();
+            this.LogicalDependnecyNegateFlagCB = new System.Windows.Forms.CheckBox();
+            this.ObjectLogicalDependenciesList = new System.Windows.Forms.ListBox();
             this.MediaTabPage = new System.Windows.Forms.TabPage();
             this.AddPictureTB = new System.Windows.Forms.TextBox();
             this.MovePictureTB = new System.Windows.Forms.TextBox();
@@ -119,8 +121,9 @@
             this.ObjectPropertiesTabControl.SuspendLayout();
             this.DescriptionTabPage.SuspendLayout();
             this.DependenciesTabPage.SuspendLayout();
-            this.LogicalDependencyPanel.SuspendLayout();
             this.DependencyPanel.SuspendLayout();
+            this.LogicalDependenciesTabPage.SuspendLayout();
+            this.LogicalDependencyPanel.SuspendLayout();
             this.MediaTabPage.SuspendLayout();
             this.UserDatasTabPage.SuspendLayout();
             this.SuspendLayout();
@@ -170,6 +173,7 @@
             // 
             this.DatabaseEditPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.DatabaseEditPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.DatabaseEditPanel.Controls.Add(this.ObjectLogAtInstallCB);
             this.DatabaseEditPanel.Controls.Add(this.ObjectLevelLabel);
             this.DatabaseEditPanel.Controls.Add(this.ObjectLevel);
             this.DatabaseEditPanel.Controls.Add(this.ObjectLastUpdatedLabel);
@@ -200,6 +204,16 @@
             this.DatabaseEditPanel.Size = new System.Drawing.Size(547, 600);
             this.DatabaseEditPanel.TabIndex = 4;
             // 
+            // ObjectLogAtInstallCB
+            // 
+            this.ObjectLogAtInstallCB.AutoSize = true;
+            this.ObjectLogAtInstallCB.Location = new System.Drawing.Point(210, 135);
+            this.ObjectLogAtInstallCB.Name = "ObjectLogAtInstallCB";
+            this.ObjectLogAtInstallCB.Size = new System.Drawing.Size(77, 17);
+            this.ObjectLogAtInstallCB.TabIndex = 36;
+            this.ObjectLogAtInstallCB.Text = "logAtInstall";
+            this.ObjectLogAtInstallCB.UseVisualStyleBackColor = true;
+            // 
             // ObjectLevelLabel
             // 
             this.ObjectLevelLabel.AutoSize = true;
@@ -221,7 +235,7 @@
             // ObjectLastUpdatedLabel
             // 
             this.ObjectLastUpdatedLabel.AutoSize = true;
-            this.ObjectLastUpdatedLabel.Location = new System.Drawing.Point(297, 136);
+            this.ObjectLastUpdatedLabel.Location = new System.Drawing.Point(296, 136);
             this.ObjectLastUpdatedLabel.Name = "ObjectLastUpdatedLabel";
             this.ObjectLastUpdatedLabel.Size = new System.Drawing.Size(71, 13);
             this.ObjectLastUpdatedLabel.TabIndex = 33;
@@ -242,7 +256,7 @@
             // 
             this.ObjectVersionTB.Location = new System.Drawing.Point(91, 133);
             this.ObjectVersionTB.Name = "ObjectVersionTB";
-            this.ObjectVersionTB.Size = new System.Drawing.Size(194, 20);
+            this.ObjectVersionTB.Size = new System.Drawing.Size(113, 20);
             this.ObjectVersionTB.TabIndex = 31;
             // 
             // ObjectVersionLabel
@@ -258,6 +272,7 @@
             // 
             this.ObjectPropertiesTabControl.Controls.Add(this.DescriptionTabPage);
             this.ObjectPropertiesTabControl.Controls.Add(this.DependenciesTabPage);
+            this.ObjectPropertiesTabControl.Controls.Add(this.LogicalDependenciesTabPage);
             this.ObjectPropertiesTabControl.Controls.Add(this.MediaTabPage);
             this.ObjectPropertiesTabControl.Controls.Add(this.UserDatasTabPage);
             this.ObjectPropertiesTabControl.Location = new System.Drawing.Point(3, 241);
@@ -316,7 +331,6 @@
             // 
             // DependenciesTabPage
             // 
-            this.DependenciesTabPage.Controls.Add(this.LogicalDependencyPanel);
             this.DependenciesTabPage.Controls.Add(this.DependencyPanel);
             this.DependenciesTabPage.Location = new System.Drawing.Point(4, 22);
             this.DependenciesTabPage.Name = "DependenciesTabPage";
@@ -325,88 +339,6 @@
             this.DependenciesTabPage.TabIndex = 2;
             this.DependenciesTabPage.Text = "Dependencies";
             this.DependenciesTabPage.UseVisualStyleBackColor = true;
-            // 
-            // LogicalDependencyPanel
-            // 
-            this.LogicalDependencyPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.LogicalDependencyPanel.Controls.Add(this.AddLogicalDependencyButton);
-            this.LogicalDependencyPanel.Controls.Add(this.CurrentLogicalDependenciesCB);
-            this.LogicalDependencyPanel.Controls.Add(this.ObjectLogicalDependenciesLabel);
-            this.LogicalDependencyPanel.Controls.Add(this.RemoveLogicalDependencyButton);
-            this.LogicalDependencyPanel.Controls.Add(this.LogicalDependencyPackageNameLabel);
-            this.LogicalDependencyPanel.Controls.Add(this.LogicalDependnecyNegateFlagCB);
-            this.LogicalDependencyPanel.Controls.Add(this.ObjectLogicalDependenciesList);
-            this.LogicalDependencyPanel.Location = new System.Drawing.Point(6, 162);
-            this.LogicalDependencyPanel.Name = "LogicalDependencyPanel";
-            this.LogicalDependencyPanel.Size = new System.Drawing.Size(519, 160);
-            this.LogicalDependencyPanel.TabIndex = 28;
-            // 
-            // AddLogicalDependencyButton
-            // 
-            this.AddLogicalDependencyButton.Location = new System.Drawing.Point(401, 133);
-            this.AddLogicalDependencyButton.Name = "AddLogicalDependencyButton";
-            this.AddLogicalDependencyButton.Size = new System.Drawing.Size(48, 23);
-            this.AddLogicalDependencyButton.TabIndex = 40;
-            this.AddLogicalDependencyButton.Text = "add";
-            this.AddLogicalDependencyButton.UseVisualStyleBackColor = true;
-            this.AddLogicalDependencyButton.Click += new System.EventHandler(this.AddLogicalDependencyButton_Click);
-            // 
-            // CurrentLogicalDependenciesCB
-            // 
-            this.CurrentLogicalDependenciesCB.FormattingEnabled = true;
-            this.CurrentLogicalDependenciesCB.Location = new System.Drawing.Point(3, 108);
-            this.CurrentLogicalDependenciesCB.Name = "CurrentLogicalDependenciesCB";
-            this.CurrentLogicalDependenciesCB.Size = new System.Drawing.Size(511, 21);
-            this.CurrentLogicalDependenciesCB.TabIndex = 39;
-            // 
-            // ObjectLogicalDependenciesLabel
-            // 
-            this.ObjectLogicalDependenciesLabel.AutoSize = true;
-            this.ObjectLogicalDependenciesLabel.Location = new System.Drawing.Point(3, 4);
-            this.ObjectLogicalDependenciesLabel.Name = "ObjectLogicalDependenciesLabel";
-            this.ObjectLogicalDependenciesLabel.Size = new System.Drawing.Size(170, 13);
-            this.ObjectLogicalDependenciesLabel.TabIndex = 24;
-            this.ObjectLogicalDependenciesLabel.Text = "logical dependencies (click to edit)";
-            // 
-            // RemoveLogicalDependencyButton
-            // 
-            this.RemoveLogicalDependencyButton.Location = new System.Drawing.Point(455, 133);
-            this.RemoveLogicalDependencyButton.Name = "RemoveLogicalDependencyButton";
-            this.RemoveLogicalDependencyButton.Size = new System.Drawing.Size(59, 23);
-            this.RemoveLogicalDependencyButton.TabIndex = 38;
-            this.RemoveLogicalDependencyButton.Text = "remove";
-            this.RemoveLogicalDependencyButton.UseVisualStyleBackColor = true;
-            this.RemoveLogicalDependencyButton.Click += new System.EventHandler(this.RemoveLogicalDependencyButton_Click);
-            // 
-            // LogicalDependencyPackageNameLabel
-            // 
-            this.LogicalDependencyPackageNameLabel.AutoSize = true;
-            this.LogicalDependencyPackageNameLabel.Location = new System.Drawing.Point(3, 90);
-            this.LogicalDependencyPackageNameLabel.Name = "LogicalDependencyPackageNameLabel";
-            this.LogicalDependencyPackageNameLabel.Size = new System.Drawing.Size(78, 13);
-            this.LogicalDependencyPackageNameLabel.TabIndex = 28;
-            this.LogicalDependencyPackageNameLabel.Text = "PackageName";
-            // 
-            // LogicalDependnecyNegateFlagCB
-            // 
-            this.LogicalDependnecyNegateFlagCB.AutoSize = true;
-            this.LogicalDependnecyNegateFlagCB.Location = new System.Drawing.Point(314, 137);
-            this.LogicalDependnecyNegateFlagCB.Name = "LogicalDependnecyNegateFlagCB";
-            this.LogicalDependnecyNegateFlagCB.Size = new System.Drawing.Size(81, 17);
-            this.LogicalDependnecyNegateFlagCB.TabIndex = 34;
-            this.LogicalDependnecyNegateFlagCB.Text = "NegateFlag";
-            this.LogicalDependnecyNegateFlagCB.UseVisualStyleBackColor = true;
-            this.LogicalDependnecyNegateFlagCB.CheckedChanged += new System.EventHandler(this.LogicalDependnecyNegateFlagCB_CheckedChanged);
-            // 
-            // ObjectLogicalDependenciesList
-            // 
-            this.ObjectLogicalDependenciesList.FormattingEnabled = true;
-            this.ObjectLogicalDependenciesList.Location = new System.Drawing.Point(3, 20);
-            this.ObjectLogicalDependenciesList.Name = "ObjectLogicalDependenciesList";
-            this.ObjectLogicalDependenciesList.Size = new System.Drawing.Size(511, 69);
-            this.ObjectLogicalDependenciesList.TabIndex = 26;
-            this.ObjectLogicalDependenciesList.SelectedIndexChanged += new System.EventHandler(this.ObjectLogicalDependenciesList_SelectedIndexChanged);
-            this.ObjectLogicalDependenciesList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ObjectLogicalDependenciesList_MouseDoubleClick);
             // 
             // DependencyPanel
             // 
@@ -421,13 +353,14 @@
             this.DependencyPanel.Controls.Add(this.DependencyPackageNameLabel);
             this.DependencyPanel.Location = new System.Drawing.Point(6, 6);
             this.DependencyPanel.Name = "DependencyPanel";
-            this.DependencyPanel.Size = new System.Drawing.Size(519, 150);
+            this.DependencyPanel.Size = new System.Drawing.Size(519, 316);
             this.DependencyPanel.TabIndex = 28;
             // 
             // AndOrLogicLabel
             // 
+            this.AndOrLogicLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.AndOrLogicLabel.AutoSize = true;
-            this.AndOrLogicLabel.Location = new System.Drawing.Point(5, 124);
+            this.AndOrLogicLabel.Location = new System.Drawing.Point(5, 290);
             this.AndOrLogicLabel.Name = "AndOrLogicLabel";
             this.AndOrLogicLabel.Size = new System.Drawing.Size(161, 13);
             this.AndOrLogicLabel.TabIndex = 41;
@@ -436,8 +369,9 @@
             // 
             // AndOrLogicComboBox
             // 
+            this.AndOrLogicComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.AndOrLogicComboBox.FormattingEnabled = true;
-            this.AndOrLogicComboBox.Location = new System.Drawing.Point(170, 120);
+            this.AndOrLogicComboBox.Location = new System.Drawing.Point(170, 286);
             this.AndOrLogicComboBox.MaxDropDownItems = 2;
             this.AndOrLogicComboBox.Name = "AndOrLogicComboBox";
             this.AndOrLogicComboBox.Size = new System.Drawing.Size(58, 21);
@@ -447,7 +381,8 @@
             // 
             // AddDependencyButton
             // 
-            this.AddDependencyButton.Location = new System.Drawing.Point(401, 120);
+            this.AddDependencyButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.AddDependencyButton.Location = new System.Drawing.Point(401, 286);
             this.AddDependencyButton.Name = "AddDependencyButton";
             this.AddDependencyButton.Size = new System.Drawing.Size(48, 23);
             this.AddDependencyButton.TabIndex = 39;
@@ -457,18 +392,22 @@
             // 
             // CurrentDependenciesCB
             // 
+            this.CurrentDependenciesCB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.CurrentDependenciesCB.FormattingEnabled = true;
-            this.CurrentDependenciesCB.Location = new System.Drawing.Point(3, 93);
+            this.CurrentDependenciesCB.Location = new System.Drawing.Point(3, 259);
             this.CurrentDependenciesCB.Name = "CurrentDependenciesCB";
             this.CurrentDependenciesCB.Size = new System.Drawing.Size(511, 21);
             this.CurrentDependenciesCB.TabIndex = 38;
             // 
             // ObjectDependenciesList
             // 
+            this.ObjectDependenciesList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.ObjectDependenciesList.FormattingEnabled = true;
             this.ObjectDependenciesList.Location = new System.Drawing.Point(3, 18);
             this.ObjectDependenciesList.Name = "ObjectDependenciesList";
-            this.ObjectDependenciesList.Size = new System.Drawing.Size(511, 56);
+            this.ObjectDependenciesList.Size = new System.Drawing.Size(511, 212);
             this.ObjectDependenciesList.TabIndex = 23;
             this.ObjectDependenciesList.SelectedIndexChanged += new System.EventHandler(this.ObjectDependenciesList_SelectedIndexChanged);
             this.ObjectDependenciesList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ObjectDependenciesList_MouseDoubleClick);
@@ -484,7 +423,8 @@
             // 
             // RemoveDependencyButton
             // 
-            this.RemoveDependencyButton.Location = new System.Drawing.Point(455, 120);
+            this.RemoveDependencyButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.RemoveDependencyButton.Location = new System.Drawing.Point(455, 286);
             this.RemoveDependencyButton.Name = "RemoveDependencyButton";
             this.RemoveDependencyButton.Size = new System.Drawing.Size(59, 23);
             this.RemoveDependencyButton.TabIndex = 37;
@@ -494,12 +434,109 @@
             // 
             // DependencyPackageNameLabel
             // 
+            this.DependencyPackageNameLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.DependencyPackageNameLabel.AutoSize = true;
-            this.DependencyPackageNameLabel.Location = new System.Drawing.Point(3, 77);
+            this.DependencyPackageNameLabel.Location = new System.Drawing.Point(3, 243);
             this.DependencyPackageNameLabel.Name = "DependencyPackageNameLabel";
             this.DependencyPackageNameLabel.Size = new System.Drawing.Size(78, 13);
             this.DependencyPackageNameLabel.TabIndex = 35;
             this.DependencyPackageNameLabel.Text = "PackageName";
+            // 
+            // LogicalDependenciesTabPage
+            // 
+            this.LogicalDependenciesTabPage.Controls.Add(this.LogicalDependencyPanel);
+            this.LogicalDependenciesTabPage.Location = new System.Drawing.Point(4, 22);
+            this.LogicalDependenciesTabPage.Name = "LogicalDependenciesTabPage";
+            this.LogicalDependenciesTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.LogicalDependenciesTabPage.Size = new System.Drawing.Size(531, 328);
+            this.LogicalDependenciesTabPage.TabIndex = 5;
+            this.LogicalDependenciesTabPage.Text = "LogicalDependencies";
+            this.LogicalDependenciesTabPage.UseVisualStyleBackColor = true;
+            // 
+            // LogicalDependencyPanel
+            // 
+            this.LogicalDependencyPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.LogicalDependencyPanel.Controls.Add(this.AddLogicalDependencyButton);
+            this.LogicalDependencyPanel.Controls.Add(this.CurrentLogicalDependenciesCB);
+            this.LogicalDependencyPanel.Controls.Add(this.ObjectLogicalDependenciesLabel);
+            this.LogicalDependencyPanel.Controls.Add(this.RemoveLogicalDependencyButton);
+            this.LogicalDependencyPanel.Controls.Add(this.LogicalDependencyPackageNameLabel);
+            this.LogicalDependencyPanel.Controls.Add(this.LogicalDependnecyNegateFlagCB);
+            this.LogicalDependencyPanel.Controls.Add(this.ObjectLogicalDependenciesList);
+            this.LogicalDependencyPanel.Location = new System.Drawing.Point(6, 6);
+            this.LogicalDependencyPanel.Name = "LogicalDependencyPanel";
+            this.LogicalDependencyPanel.Size = new System.Drawing.Size(519, 316);
+            this.LogicalDependencyPanel.TabIndex = 29;
+            // 
+            // AddLogicalDependencyButton
+            // 
+            this.AddLogicalDependencyButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.AddLogicalDependencyButton.Location = new System.Drawing.Point(401, 287);
+            this.AddLogicalDependencyButton.Name = "AddLogicalDependencyButton";
+            this.AddLogicalDependencyButton.Size = new System.Drawing.Size(48, 23);
+            this.AddLogicalDependencyButton.TabIndex = 40;
+            this.AddLogicalDependencyButton.Text = "add";
+            this.AddLogicalDependencyButton.UseVisualStyleBackColor = true;
+            // 
+            // CurrentLogicalDependenciesCB
+            // 
+            this.CurrentLogicalDependenciesCB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.CurrentLogicalDependenciesCB.FormattingEnabled = true;
+            this.CurrentLogicalDependenciesCB.Location = new System.Drawing.Point(3, 262);
+            this.CurrentLogicalDependenciesCB.Name = "CurrentLogicalDependenciesCB";
+            this.CurrentLogicalDependenciesCB.Size = new System.Drawing.Size(511, 21);
+            this.CurrentLogicalDependenciesCB.TabIndex = 39;
+            // 
+            // ObjectLogicalDependenciesLabel
+            // 
+            this.ObjectLogicalDependenciesLabel.AutoSize = true;
+            this.ObjectLogicalDependenciesLabel.Location = new System.Drawing.Point(3, 4);
+            this.ObjectLogicalDependenciesLabel.Name = "ObjectLogicalDependenciesLabel";
+            this.ObjectLogicalDependenciesLabel.Size = new System.Drawing.Size(170, 13);
+            this.ObjectLogicalDependenciesLabel.TabIndex = 24;
+            this.ObjectLogicalDependenciesLabel.Text = "logical dependencies (click to edit)";
+            // 
+            // RemoveLogicalDependencyButton
+            // 
+            this.RemoveLogicalDependencyButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.RemoveLogicalDependencyButton.Location = new System.Drawing.Point(455, 287);
+            this.RemoveLogicalDependencyButton.Name = "RemoveLogicalDependencyButton";
+            this.RemoveLogicalDependencyButton.Size = new System.Drawing.Size(59, 23);
+            this.RemoveLogicalDependencyButton.TabIndex = 38;
+            this.RemoveLogicalDependencyButton.Text = "remove";
+            this.RemoveLogicalDependencyButton.UseVisualStyleBackColor = true;
+            // 
+            // LogicalDependencyPackageNameLabel
+            // 
+            this.LogicalDependencyPackageNameLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.LogicalDependencyPackageNameLabel.AutoSize = true;
+            this.LogicalDependencyPackageNameLabel.Location = new System.Drawing.Point(3, 244);
+            this.LogicalDependencyPackageNameLabel.Name = "LogicalDependencyPackageNameLabel";
+            this.LogicalDependencyPackageNameLabel.Size = new System.Drawing.Size(78, 13);
+            this.LogicalDependencyPackageNameLabel.TabIndex = 28;
+            this.LogicalDependencyPackageNameLabel.Text = "PackageName";
+            // 
+            // LogicalDependnecyNegateFlagCB
+            // 
+            this.LogicalDependnecyNegateFlagCB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.LogicalDependnecyNegateFlagCB.AutoSize = true;
+            this.LogicalDependnecyNegateFlagCB.Location = new System.Drawing.Point(314, 291);
+            this.LogicalDependnecyNegateFlagCB.Name = "LogicalDependnecyNegateFlagCB";
+            this.LogicalDependnecyNegateFlagCB.Size = new System.Drawing.Size(81, 17);
+            this.LogicalDependnecyNegateFlagCB.TabIndex = 34;
+            this.LogicalDependnecyNegateFlagCB.Text = "NegateFlag";
+            this.LogicalDependnecyNegateFlagCB.UseVisualStyleBackColor = true;
+            // 
+            // ObjectLogicalDependenciesList
+            // 
+            this.ObjectLogicalDependenciesList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ObjectLogicalDependenciesList.FormattingEnabled = true;
+            this.ObjectLogicalDependenciesList.Location = new System.Drawing.Point(3, 20);
+            this.ObjectLogicalDependenciesList.Name = "ObjectLogicalDependenciesList";
+            this.ObjectLogicalDependenciesList.Size = new System.Drawing.Size(511, 212);
+            this.ObjectLogicalDependenciesList.TabIndex = 26;
             // 
             // MediaTabPage
             // 
@@ -785,9 +822,9 @@
             this.ObjectEnabledCheckBox.AutoSize = true;
             this.ObjectEnabledCheckBox.Location = new System.Drawing.Point(423, 185);
             this.ObjectEnabledCheckBox.Name = "ObjectEnabledCheckBox";
-            this.ObjectEnabledCheckBox.Size = new System.Drawing.Size(65, 17);
+            this.ObjectEnabledCheckBox.Size = new System.Drawing.Size(64, 17);
             this.ObjectEnabledCheckBox.TabIndex = 12;
-            this.ObjectEnabledCheckBox.Text = "Enabled";
+            this.ObjectEnabledCheckBox.Text = "enabled";
             this.ObjectEnabledCheckBox.UseVisualStyleBackColor = true;
             // 
             // ObjectZipFileTB
@@ -948,7 +985,7 @@
             // 
             // OpenDatabaseDialog
             // 
-            this.OpenDatabaseDialog.Title = "Open Database";
+            this.OpenDatabaseDialog.Title = "Load Database";
             // 
             // SaveDatabaseDialog
             // 
@@ -1006,10 +1043,11 @@
             this.DescriptionTabPage.ResumeLayout(false);
             this.DescriptionTabPage.PerformLayout();
             this.DependenciesTabPage.ResumeLayout(false);
-            this.LogicalDependencyPanel.ResumeLayout(false);
-            this.LogicalDependencyPanel.PerformLayout();
             this.DependencyPanel.ResumeLayout(false);
             this.DependencyPanel.PerformLayout();
+            this.LogicalDependenciesTabPage.ResumeLayout(false);
+            this.LogicalDependencyPanel.ResumeLayout(false);
+            this.LogicalDependencyPanel.PerformLayout();
             this.MediaTabPage.ResumeLayout(false);
             this.MediaTabPage.PerformLayout();
             this.UserDatasTabPage.ResumeLayout(false);
@@ -1057,20 +1095,12 @@
         private System.Windows.Forms.CheckBox ObjectVisibleCheckBox;
         private System.Windows.Forms.ComboBox ObjectTypeComboBox;
         private System.Windows.Forms.Label ObjectType;
-        private System.Windows.Forms.ListBox ObjectLogicalDependenciesList;
-        private System.Windows.Forms.Label ObjectLogicalDependenciesLabel;
         private System.Windows.Forms.CheckBox ObjectAppendExtractionCB;
         private System.Windows.Forms.Panel DependencyPanel;
         private System.Windows.Forms.Button AddDependencyButton;
         private System.Windows.Forms.ComboBox CurrentDependenciesCB;
         private System.Windows.Forms.Button RemoveDependencyButton;
         private System.Windows.Forms.Label DependencyPackageNameLabel;
-        private System.Windows.Forms.Panel LogicalDependencyPanel;
-        private System.Windows.Forms.Button AddLogicalDependencyButton;
-        private System.Windows.Forms.ComboBox CurrentLogicalDependenciesCB;
-        private System.Windows.Forms.Button RemoveLogicalDependencyButton;
-        private System.Windows.Forms.Label LogicalDependencyPackageNameLabel;
-        private System.Windows.Forms.CheckBox LogicalDependnecyNegateFlagCB;
         private System.Windows.Forms.Button MoveButton;
         private System.Windows.Forms.TabControl ObjectPropertiesTabControl;
         private System.Windows.Forms.TabPage DescriptionTabPage;
@@ -1105,5 +1135,15 @@
         private System.Windows.Forms.Label ObjectLevel;
         private System.Windows.Forms.ComboBox AndOrLogicComboBox;
         private System.Windows.Forms.Label AndOrLogicLabel;
+        private System.Windows.Forms.CheckBox ObjectLogAtInstallCB;
+        private System.Windows.Forms.TabPage LogicalDependenciesTabPage;
+        private System.Windows.Forms.Panel LogicalDependencyPanel;
+        private System.Windows.Forms.Button AddLogicalDependencyButton;
+        private System.Windows.Forms.ComboBox CurrentLogicalDependenciesCB;
+        private System.Windows.Forms.Label ObjectLogicalDependenciesLabel;
+        private System.Windows.Forms.Button RemoveLogicalDependencyButton;
+        private System.Windows.Forms.Label LogicalDependencyPackageNameLabel;
+        private System.Windows.Forms.CheckBox LogicalDependnecyNegateFlagCB;
+        private System.Windows.Forms.ListBox ObjectLogicalDependenciesList;
     }
 }

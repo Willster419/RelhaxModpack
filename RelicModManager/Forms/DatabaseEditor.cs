@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using System.Text.RegularExpressions;
-using System.Globalization;
 
 namespace RelhaxModpack
 {
@@ -176,6 +174,9 @@ namespace RelhaxModpack
             ObjectTypeComboBox.Enabled = false;
             ObjectTypeComboBox.SelectedIndex = 0;
 
+            ObjectLogAtInstallCB.Enabled = false;
+            ObjectLogAtInstallCB.Checked = false;
+
             ObjectEnabledCheckBox.Enabled = false;
             ObjectEnabledCheckBox.Checked = false;
 
@@ -260,9 +261,9 @@ namespace RelhaxModpack
             //Save this key data for later queries and comparisons 
             LoadedDatabaseMD5Hash = GetDatabaseMD5Hash(DatabaseLocation);
             DatabaseLocationMD5Hash = GetDatabaseLocationMD5Hash(DatabaseLocation);
-            //for the folder version: //modInfoAlpha.xml/@version
+            //Xpath for the folder version: //modInfoAlpha.xml/@version
             Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocation, "//modInfoAlpha.xml/@version");
-            //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
+            //Xpath for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
             Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocation, "//modInfoAlpha.xml/@onlineFolder");
             Text = String.Format("DatabaseEditor      GameVersion: {0}    OnlineFolder: {1}", Settings.TanksVersion, Settings.TanksOnlineFolderVersion);
             GlobalDependencies = new List<Dependency>();
@@ -424,6 +425,7 @@ namespace RelhaxModpack
                 }
                 SelectedGlobalDependency.Enabled = ObjectEnabledCheckBox.Checked;
                 SelectedGlobalDependency.AppendExtraction = ObjectAppendExtractionCB.Checked;
+                SelectedGlobalDependency.LogAtInstall = ObjectLogAtInstallCB.Checked;
                 GlobalDependencies[index] = SelectedGlobalDependency;
             }
             else if (DatabaseEditorMode == EditorMode.Dependency)
@@ -442,6 +444,7 @@ namespace RelhaxModpack
                 }
                 SelectedDependency.Enabled = ObjectEnabledCheckBox.Checked;
                 SelectedDependency.AppendExtraction = ObjectAppendExtractionCB.Checked;
+                SelectedDependency.LogAtInstall = ObjectLogAtInstallCB.Checked;
                 Dependencies[index] = SelectedDependency;
             }
             else if (DatabaseEditorMode == EditorMode.LogicalDependency)
@@ -459,6 +462,7 @@ namespace RelhaxModpack
                     ObjectLastUpdatedLabel.Text = string.Format("last updated: {0}", Utils.ConvertFiletimeTimestampToDate(SelectedLogicalDependency.Timestamp));
                 }
                 SelectedLogicalDependency.Enabled = ObjectEnabledCheckBox.Checked;
+                SelectedLogicalDependency.LogAtInstall = ObjectLogAtInstallCB.Checked;
                 SelectedLogicalDependency.AndOrLogic = LogicalDependency.GetAndOrID(AndOrLogicComboBox.Text);
                 LogicalDependencies[index] = SelectedLogicalDependency;
             }
@@ -496,6 +500,7 @@ namespace RelhaxModpack
                 SelectedDatabaseObject.Type = (string)ObjectTypeComboBox.SelectedItem;
                 SelectedDatabaseObject.Enabled = ObjectEnabledCheckBox.Checked;
                 SelectedDatabaseObject.Visible = ObjectVisibleCheckBox.Checked;
+                SelectedDatabaseObject.LogAtInstall = ObjectLogAtInstallCB.Checked;
                 SelectedDatabaseObject.Description = ObjectDescTB.Text;
                 SelectedDatabaseObject.UpdateComment = ObjectUpdateNotesTB.Text;
                 ListThatContainsPackage[index] = SelectedDatabaseObject;
@@ -627,6 +632,9 @@ namespace RelhaxModpack
                     ObjectEndAddressTB.Enabled = true;
                     ObjectEndAddressTB.Text = node.GlobalDependency.EndAddress;
 
+                    ObjectLogAtInstallCB.Enabled = true;
+                    ObjectLogAtInstallCB.Checked = node.GlobalDependency.LogAtInstall;
+
                     ObjectZipFileTB.Enabled = true;
                     ObjectZipFileTB.Text = node.GlobalDependency.ZipFile;
 
@@ -682,6 +690,9 @@ namespace RelhaxModpack
 
                     ObjectEndAddressTB.Enabled = true;
                     ObjectEndAddressTB.Text = SelectedDependency.EndAddress;
+
+                    ObjectLogAtInstallCB.Enabled = true;
+                    ObjectLogAtInstallCB.Checked = SelectedDependency.LogAtInstall;
 
                     ObjectZipFileTB.Enabled = true;
                     ObjectZipFileTB.Text = SelectedDependency.ZipFile;
@@ -762,6 +773,9 @@ namespace RelhaxModpack
                     ObjectEndAddressTB.Enabled = true;
                     ObjectEndAddressTB.Text = SelectedLogicalDependency.EndAddress;
 
+                    ObjectLogAtInstallCB.Enabled = true;
+                    ObjectLogAtInstallCB.Checked = SelectedLogicalDependency.LogAtInstall;
+
                     ObjectZipFileTB.Enabled = true;
                     ObjectZipFileTB.Text = SelectedLogicalDependency.ZipFile;
 
@@ -831,6 +845,9 @@ namespace RelhaxModpack
 
                     ObjectEndAddressTB.Enabled = true;
                     ObjectEndAddressTB.Text = SelectedDatabaseObject.EndAddress;
+
+                    ObjectLogAtInstallCB.Enabled = true;
+                    ObjectLogAtInstallCB.Checked = SelectedDatabaseObject.LogAtInstall;
 
                     ObjectZipFileTB.Enabled = true;
                     ObjectZipFileTB.Text = SelectedDatabaseObject.ZipFile;
@@ -937,6 +954,8 @@ namespace RelhaxModpack
                     ObjectStartAddressTB.Enabled = false;
 
                     ObjectEndAddressTB.Enabled = false;
+
+                    ObjectLogAtInstallCB.Enabled = false;
 
                     ObjectZipFileTB.Enabled = false;
 

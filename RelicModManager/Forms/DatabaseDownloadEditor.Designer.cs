@@ -40,6 +40,8 @@
             // 
             // DownloadingLabel
             // 
+            this.DownloadingLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.DownloadingLabel.Location = new System.Drawing.Point(12, 9);
             this.DownloadingLabel.Name = "DownloadingLabel";
             this.DownloadingLabel.Size = new System.Drawing.Size(316, 61);
@@ -48,6 +50,7 @@
             // 
             // OpenFileButton
             // 
+            this.OpenFileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.OpenFileButton.Enabled = false;
             this.OpenFileButton.Location = new System.Drawing.Point(253, 123);
             this.OpenFileButton.Name = "OpenFileButton";
@@ -59,6 +62,7 @@
             // 
             // OpenFolderButton
             // 
+            this.OpenFolderButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.OpenFolderButton.Enabled = false;
             this.OpenFolderButton.Location = new System.Drawing.Point(172, 123);
             this.OpenFolderButton.Name = "OpenFolderButton";
@@ -70,6 +74,8 @@
             // 
             // DownloadProgressBar
             // 
+            this.DownloadProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.DownloadProgressBar.Location = new System.Drawing.Point(12, 73);
             this.DownloadProgressBar.Name = "DownloadProgressBar";
             this.DownloadProgressBar.Size = new System.Drawing.Size(316, 23);
@@ -83,6 +89,7 @@
             // 
             // CancelButtonn
             // 
+            this.CancelButtonn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.CancelButtonn.Location = new System.Drawing.Point(91, 123);
             this.CancelButtonn.Name = "CancelButtonn";
             this.CancelButtonn.Size = new System.Drawing.Size(75, 23);
@@ -93,6 +100,8 @@
             // 
             // SizeToDownload
             // 
+            this.SizeToDownload.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.SizeToDownload.AutoSize = true;
             this.SizeToDownload.Location = new System.Drawing.Point(12, 99);
             this.SizeToDownload.Name = "SizeToDownload";
