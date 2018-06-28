@@ -125,7 +125,7 @@ namespace RelhaxModpack
         {
             using (BackgroundWorker worker = new BackgroundWorker())
             {
-                worker.DoWork += worker_ScanningRelHaxModBackupFolder;
+                worker.DoWork += ScanRelHaxModBackupFolder;
                 worker.RunWorkerCompleted += OnModBackupFolderCompleted;
                 worker.RunWorkerAsync();
             }
@@ -144,7 +144,7 @@ namespace RelhaxModpack
             }
         }
 
-        private void worker_ScanningRelHaxModBackupFolder(object sender, DoWorkEventArgs args)
+        private void ScanRelHaxModBackupFolder(object sender, DoWorkEventArgs args)
         {
             uint filesCount = 0;
             backupFolderSize = 0;
