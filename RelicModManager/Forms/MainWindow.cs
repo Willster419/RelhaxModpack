@@ -2263,6 +2263,8 @@ namespace RelhaxModpack
         #region MouseEvents
         private void Generic_MouseLeave(object sender, EventArgs e)
         {
+            if (DownloadTimer.Enabled)
+                return;
             if (installRelhaxMod.Enabled && Settings.FirstLoad)
                 downloadProgress.Text = Translations.GetTranslatedString("helperText");
             else
@@ -2270,6 +2272,8 @@ namespace RelhaxModpack
         }
         private void Generic_MouseEnter(object sender, EventArgs e)
         {
+            if (DownloadTimer.Enabled)
+                return;
             Control c = (Control)sender;
             downloadProgress.Text = Translations.GetTranslatedString(c.Name + "Description");
         }
