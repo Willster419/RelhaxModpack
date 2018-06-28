@@ -1211,7 +1211,7 @@ namespace RelhaxModpack
                                 modsConfigsWithData.Add(m);
 
                             //if it has shortcuts to create, add them to the list here
-                            if (m.ShortCuts.Count > 0)
+                            if (m.Shortcuts.Count > 0)
                                 ModsWithShortcuts.Add(m);
 
                             //check for configs
@@ -1396,9 +1396,9 @@ namespace RelhaxModpack
             {
                 foreach (Dependency d in globalDependenciesToInstall)
                 {
-                    if (d.Enabled && d.ShortCuts.Count > 0)
+                    if (d.Enabled && d.Shortcuts.Count > 0)
                     {
-                        foreach (Shortcut sc in d.ShortCuts)
+                        foreach (Shortcut sc in d.Shortcuts)
                         {
                             if (sc.Enabled)
                             {
@@ -1409,9 +1409,9 @@ namespace RelhaxModpack
                 }
                 foreach (Dependency d in dependenciesToInstall)
                 {
-                    if (d.Enabled && d.ShortCuts.Count > 0)
+                    if (d.Enabled && d.Shortcuts.Count > 0)
                     {
-                        foreach (Shortcut sc in d.ShortCuts)
+                        foreach (Shortcut sc in d.Shortcuts)
                         {
                             if (sc.Enabled)
                             {
@@ -1422,9 +1422,9 @@ namespace RelhaxModpack
                 }
                 foreach (LogicalDependency ld in logicalDependenciesToInstall)
                 {
-                    if (ld.Enabled && ld.ShortCuts.Count > 0)
+                    if (ld.Enabled && ld.Shortcuts.Count > 0)
                     {
-                        foreach (Shortcut sc in ld.ShortCuts)
+                        foreach (Shortcut sc in ld.Shortcuts)
                         {
                             if (sc.Enabled)
                             {
@@ -1435,9 +1435,9 @@ namespace RelhaxModpack
                 }
                 foreach (SelectablePackage dbo in modsConfigsToInstall)
                 {
-                    if (dbo.Enabled && dbo.ShortCuts.Count > 0)
+                    if (dbo.Enabled && dbo.Shortcuts.Count > 0)
                     {
-                        foreach (Shortcut sc in dbo.ShortCuts)
+                        foreach (Shortcut sc in dbo.Shortcuts)
                         {
                             if (sc.Enabled)
                             {
@@ -1631,7 +1631,7 @@ namespace RelhaxModpack
                         modsConfigsWithData.Add(config);
 
                     //check for shortcuts
-                    if (config.ShortCuts.Count > 0)
+                    if (config.Shortcuts.Count > 0)
                         ModsWithShortcuts.Add(config);
 
                     //check for configs
