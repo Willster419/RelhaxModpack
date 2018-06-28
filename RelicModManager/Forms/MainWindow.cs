@@ -758,26 +758,8 @@ namespace RelhaxModpack
             if(!Program.silentStart)
                 wait.Show();
             Application.DoEvents();
-            /*
-            //check for single instance
-            Logging.Manager("Check for single instance");
-            wait.loadingDescBox.Text = Translations.getTranslatedString("appSingleInstance");
-            Application.DoEvents();
-            int numberInstances = 0;
-            foreach (Process p in Process.GetProcesses())
-            {
-                string s = p.MainWindowTitle;
-                if(s.Contains("Relhax"))
-                {
-                    numberInstances++;
-                }
-            }
-            if(numberInstances > 2)
-            {
-                MessageBox.Show(Translations.getTranslatedString("anotherInstanceRunning"));
-                Application.Exit();
-            }
-            */
+
+            //directory structure
             wait.loadingDescBox.Text = Translations.GetTranslatedString("verDirStructure");
             Application.DoEvents();
             Logging.Manager("Verifying File and Folder Structure");
