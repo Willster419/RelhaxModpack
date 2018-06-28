@@ -833,7 +833,8 @@ namespace RelhaxModpack
             MenuItemRestore.Text = Translations.GetTranslatedString(MenuItemRestore.Name);
             MenuItemCheckUpdates.Text = Translations.GetTranslatedString(MenuItemCheckUpdates.Name);
 
-            //check for any conflicting program arguements
+            //parsing command line arguements
+            //first check for arguement conflicts
             if (Settings.BetaDatabase && Program.testMode)
             {
                 if(MessageBox.Show("conflictBetaDBTestMode", "conflictsCommandlineHeader", MessageBoxButtons.OKCancel,MessageBoxIcon.Warning) == DialogResult.Cancel)
@@ -841,7 +842,7 @@ namespace RelhaxModpack
                     Application.Exit();
                 }
             }
-            //parse command line argeuemnts
+            //next parse them
             if (Program.testMode)
             {
                 Logging.Manager("Test Mode is ON, loading local modInfo.xml");

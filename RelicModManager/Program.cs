@@ -17,7 +17,6 @@ namespace RelhaxModpack
         public static bool autoInstall = false;
         public static bool skipUpdate = false;
         public static bool patchDayTest = false;
-        public static bool ignoreResourseVersionFail = false;
         public static bool saveSettings = false;
         public static bool databaseUpdateOnline = false;
         public static bool silentStart = false;
@@ -130,11 +129,6 @@ namespace RelhaxModpack
                     Logging.Manager("/patchday detected, welcome database manager");
                     patchDayTest = true;
                 }
-                else if (Regex.IsMatch(commandArgs[i], @"ignoreresourseversionfail$"))
-                {
-                    Logging.Manager("/ignoreResourseVersionFail detected, welcome developer");
-                    ignoreResourseVersionFail = true;
-                }
                 else if (Regex.IsMatch(commandArgs[i], @"beta-database$"))
                 {
                     Logging.Manager("/beta-database detected, welcome beta tester");
@@ -211,6 +205,7 @@ namespace RelhaxModpack
             Translations.LoadHashes();
 
             //start the background taskbar form
+            Logging.Manager("Loading main window");
             MainWindow mw = new MainWindow();
             if (silentStart)
                 mw.WindowState = FormWindowState.Minimized;
