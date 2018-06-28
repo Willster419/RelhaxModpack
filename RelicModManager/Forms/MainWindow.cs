@@ -826,7 +826,7 @@ namespace RelhaxModpack
             //first check for arguement conflicts
             if (Settings.BetaDatabase && Program.testMode)
             {
-                if(MessageBox.Show("conflictBetaDBTestMode", "conflictsCommandlineHeader", MessageBoxButtons.OKCancel,MessageBoxIcon.Warning) == DialogResult.Cancel)
+                if(MessageBox.Show(Translations.GetTranslatedString("conflictBetaDBTestMode"), Translations.GetTranslatedString("conflictsCommandlineHeader"), MessageBoxButtons.OKCancel,MessageBoxIcon.Warning) == DialogResult.Cancel)
                 {
                     Application.Exit();
                 }
