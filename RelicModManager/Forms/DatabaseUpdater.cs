@@ -715,16 +715,16 @@ namespace RelhaxModpack
             databaseUpdateText.Append("Updated: " + parsedDBUpdateVersion + "\n\n");
             databaseUpdateText.Append("Added:\n");
             foreach (DatabasePackage dp in addedPackages)
-                databaseUpdateText.Append("-" + dp.PackageName + "\n");
+                databaseUpdateText.Append("-" + dp.CompletePath + "\n");
             databaseUpdateText.Append("\nUpdated:\n");
             foreach (DatabasePackage dp in updatedPackages)
-                databaseUpdateText.Append("-" + dp.PackageName + "\n");
+                databaseUpdateText.Append("-" + dp.CompletePath + "\n");
             databaseUpdateText.Append("\nDisabled:\n");
             foreach (DatabasePackage dp in disabledPackages)
-                databaseUpdateText.Append("-" + dp.PackageName + "\n");
+                databaseUpdateText.Append("-" + dp.CompletePath + "\n");
             databaseUpdateText.Append("\nRemoved:\n");
             foreach (DatabasePackage dp in removedPackages)
-                databaseUpdateText.Append("-" + dp.PackageName + "\n");
+                databaseUpdateText.Append("-" + dp.CompletePath + "\n");
             databaseUpdateText.Append("\nNotes:\n-\n\n--------------------------------------------------------------------------------------------------------------------------------------------");
 
             //save and upload databaseUpdate.txt
