@@ -67,7 +67,20 @@ namespace RelhaxModpack
         private string backupModInfoxmlToServer = "";
         //the modInfoxml downloaded and uesd for before and after comparison
         private string compareModInfoXml = "";
-        
+
+        //from databaseListGenerator
+        //create and reset internal variables
+        StringBuilder sb = new StringBuilder();
+        string packageDisplayName = "";
+        string category = "";
+        string packageName = "N/A";
+        string notApplicatable = "n/a";
+        string zipfile = "";
+        bool enabled = false;
+        bool visible = false;
+        string devURL = "";
+        string header;
+
 
         public DatabaseUpdater()
         {
@@ -886,6 +899,202 @@ namespace RelhaxModpack
         }
         #endregion
 
+        #region Database Output
+        private void DatabaseOutputStep1_Click(object sender, EventArgs e)
+        {
+            ScriptLogOutput.Text = "";
+            ReportProgress("Starting Update output step 1...");
+            if (loadDatabaseDialog.ShowDialog() == DialogResult.Cancel)
+                return;
+            DatabaseOutputStep1Location.Text = loadDatabaseDialog.FileName;
+            //for the folder version: //modInfoAlpha.xml/@version
+            Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocationTextBox.Text, "//modInfoAlpha.xml/@version");
+            //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
+            Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocationTextBox.Text, "//modInfoAlpha.xml/@onlineFolder");
+            Text = String.Format("DatabaseUpdateUtility      TanksVersion: {0}    OnlineFolder: {1}", Settings.TanksVersion, Settings.TanksOnlineFolderVersion);
+            ReportProgress("Settings.TanksVersion (current game version): " + Settings.TanksVersion);
+            ReportProgress("Settings.TanksOnlineFolderVersion (online zip folder): " + Settings.TanksOnlineFolderVersion);
+        }
+
+        private void DatabaseOutputStep2b_Click(object sender, EventArgs e)
+        {
+            //init
+            ScriptLogOutput.Text = "";
+            ReportProgress("Starting Update database step 3...");
+
+            // check for database
+            if (!File.Exists(DatabaseOutputStep1Location.Text))
+            {
+                ReportProgress("ERROR: managerInfo xml not found! (did you run the previous steps?)");
+                return;
+            }
+
+            //reset everything
+            header = "Category\tMod\tDevURL";
+            sb = new StringBuilder();
+            packageName = "";
+            category = "";
+            packageDisplayName = "";
+            packageName = "";
+            zipfile = "";
+            devURL = "";
+            enabled = false;
+            string saveLocation = Path.Combine(Application.StartupPath, "database_user.csv");
+
+            //save it
+            sb.Append(header + "\n");
+            foreach (Category cat in parsedCatagoryList)
+            {
+                category = cat.Name;
+                foreach (SelectablePackage m in cat.Packages)
+                {
+                    //remove the old devURL value if there
+                    devURL = "";
+                    packageDisplayName = m.Name;
+                    devURL = string.IsNullOrWhiteSpace(m.DevURL) ? "" : "=HYPERLINK(\"" + m.DevURL + "\",\"link\")";
+                    sb.Append(category + "\t" + packageDisplayName + "\t" + devURL + "\n");
+                    if (m.Packages.Count > 0)
+                        processConfigsSpreadsheetGenerateUser(m.Packages);
+                }
+            }
+            try
+            {
+                File.WriteAllText(saveLocation, sb.ToString());
+                ReportProgress("Saved in " + saveLocation);
+            }
+            catch (IOException)
+            {
+                ReportProgress("Failed to save in " + saveLocation + " (IOException, probably file open in another window)");
+            }
+        }
+
+        private void DatabaseOutputStep2a_Click(object sender, EventArgs e)
+        {
+            //init
+            ScriptLogOutput.Text = "";
+            ReportProgress("Starting Update database step 3...");
+
+            // check for database
+            if (!File.Exists(DatabaseOutputStep1Location.Text))
+            {
+                ReportProgress("ERROR: managerInfo xml not found! (did you run the previous steps?)");
+                return;
+            }
+
+            //create and reset internal variables
+            sb = new StringBuilder();
+            packageDisplayName = "";
+            category = "";
+            packageName = "N/A";
+            notApplicatable = "n/a";
+            zipfile = "";
+            enabled = false;
+            visible = false;
+            devURL = "";
+            string saveLocation = Path.Combine(Application.StartupPath, "database_internal.csv");
+            globalDependencies.Clear();
+            dependencies.Clear();
+            logicalDependencies.Clear();
+            parsedCatagoryList.Clear();
+
+            //create database list
+            XMLUtils.CreateModStructure(DatabaseOutputStep1Location.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+
+            //save it
+            header = "PackageName\tCategory\tPackage\tLevel\tZip\tDevURL\tEnabled\tVisible";
+            sb.Append(header + "\n");
+            //first save globaldependencies
+            category = "globalDependencies";
+            foreach (Dependency d in globalDependencies)
+            {
+                packageName = d.PackageName;
+                zipfile = string.IsNullOrWhiteSpace(d.ZipFile) ? notApplicatable : d.ZipFile;
+                devURL = string.IsNullOrWhiteSpace(d.DevURL) ? "" : "=HYPERLINK(\"" + d.DevURL + "\",\"link\")";
+                enabled = d.Enabled;
+                sb.Append(packageName + "\t" + category + "\t" + packageDisplayName + "\t" + 0 + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
+            }
+            //next save depenedneices
+            category = "dependencies";
+            foreach (Dependency d in dependencies)
+            {
+                packageName = d.PackageName;
+                zipfile = string.IsNullOrWhiteSpace(d.ZipFile) ? notApplicatable : d.ZipFile;
+                devURL = string.IsNullOrWhiteSpace(d.DevURL) ? "" : "=HYPERLINK(\"" + d.DevURL + "\",\"link\")";
+                enabled = d.Enabled;
+                sb.Append(packageName + "\t" + category + "\t" + packageDisplayName + "\t" + 0 + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
+            }
+            //next save logicaldepenedneices
+            category = "logicalDependencies";
+            foreach (LogicalDependency d in logicalDependencies)
+            {
+                packageName = d.PackageName;
+                zipfile = string.IsNullOrWhiteSpace(d.ZipFile) ? notApplicatable : d.ZipFile;
+                devURL = string.IsNullOrWhiteSpace(d.DevURL) ? "" : "=HYPERLINK(\"" + d.DevURL + "\",\"link\")";
+                enabled = d.Enabled;
+                sb.Append(packageName + "\t" + category + "\t" + packageDisplayName + "\t" + 0 + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\n");
+            }
+            foreach (Category cat in parsedCatagoryList)
+            {
+                category = cat.Name;
+                foreach (SelectablePackage m in cat.Packages)
+                {
+                    packageName = m.PackageName;
+                    packageDisplayName = m.Name;
+                    zipfile = string.IsNullOrWhiteSpace(m.ZipFile) ? notApplicatable : m.ZipFile;
+                    enabled = m.Enabled;
+                    visible = m.Visible;
+                    devURL = string.IsNullOrWhiteSpace(m.DevURL) ? "" : "=HYPERLINK(\"" + m.DevURL + "\",\"link\")";
+                    //header = "Index,Category,Mod,Config,Level,Zip,Enabled";
+                    sb.Append(packageName + "\t" + category + "\t" + packageDisplayName + "\t" + m.Level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\t" + visible + "\n");
+                    if (m.Packages.Count > 0)
+                        processConfigsSpreadsheetGenerate(m.Packages);
+                }
+            }
+            try
+            {
+                File.WriteAllText(saveLocation, sb.ToString());
+                ReportProgress("Saved in " + saveLocation);
+            }
+            catch (IOException)
+            {
+                ReportProgress("Failed to save in " + saveLocation + " (IOException, probably file open in another window)");
+            }
+        }
+        private void processConfigsSpreadsheetGenerate(List<SelectablePackage> configList)
+        {
+            foreach (SelectablePackage con in configList)
+            {
+                packageName = con.PackageName;
+                packageDisplayName = con.Name;
+                zipfile = string.IsNullOrWhiteSpace(con.ZipFile) ? notApplicatable : con.ZipFile;
+                enabled = con.Enabled;
+                visible = con.Visible;
+                devURL = string.IsNullOrWhiteSpace(con.DevURL) ? "" : "=HYPERLINK(\"" + con.DevURL + "\",\"link\")";
+                sb.Append(packageName + "\t" + category + "\t" + packageDisplayName + "\t" + con.Level + "\t" + zipfile + "\t" + devURL + "\t" + enabled + "\t" + visible + "\n");
+                if (con.Packages.Count > 0)
+                    processConfigsSpreadsheetGenerate(con.Packages);
+            }
+        }
+        private void processConfigsSpreadsheetGenerateUser(List<SelectablePackage> configList)
+        {
+            foreach (SelectablePackage con in configList)
+            {
+                //remove the old devURL value if there
+                devURL = "";
+                packageName = "";
+                for (int i = 0; i <= con.Level; i++)
+                {
+                    packageName = packageName + "--";
+                }
+                packageName = packageName + con.Name;
+                devURL = string.IsNullOrWhiteSpace(con.DevURL) ? "" : "=HYPERLINK(\"" + con.DevURL + "\",\"link\")";
+                sb.Append(category + "\t" + packageName + "\t" + devURL + "\n");
+                if (con.Packages.Count > 0)
+                    processConfigsSpreadsheetGenerateUser(con.Packages);
+            }
+        }
+        #endregion
+
         #region FTP methods
         private void FTPMakeFolder(string addressWithDirectory)
         {
@@ -1238,6 +1447,6 @@ namespace RelhaxModpack
         {
             System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
         }
-        #endregion
+        #endregion  
     }
 }

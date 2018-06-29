@@ -279,12 +279,6 @@
     <Compile Include="Forms\DatabaseEditor.Designer.cs">
       <DependentUpon>DatabaseEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\DatabaseListGenerater.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\DatabaseListGenerater.Designer.cs">
-      <DependentUpon>DatabaseListGenerater.cs</DependentUpon>
-    </Compile>
     <Compile Include="DatabaseComponents\DatabaseLogic.cs" />
     <Compile Include="DatabaseComponents\SelectablePackage.cs" />
     <Compile Include="UIComponents\DatabaseTreeNode.cs" />
@@ -394,9 +388,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DatabaseEditor.resx">
       <DependentUpon>DatabaseEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\DatabaseListGenerater.resx">
-      <DependentUpon>DatabaseListGenerater.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\GifPreview.resx">
       <DependentUpon>GifPreview.cs</DependentUpon>

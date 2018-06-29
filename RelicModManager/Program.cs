@@ -187,12 +187,6 @@ namespace RelhaxModpack
                     Application.Run(new DatabaseUpdater());
                     return;
                 }
-                else if (Regex.IsMatch(commandArgs[i], @"databaseoutput$"))
-                {
-                    Logging.Manager("/databaseoutput detected, loading in database output mode");
-                    Application.Run(new DatabaseListGenerater());
-                    return;
-                }
                 else if (Regex.IsMatch(commandArgs[i], @"databaseedit$"))
                 {
                     Logging.Manager("/databaseedit detected, loading in database edit mode");
