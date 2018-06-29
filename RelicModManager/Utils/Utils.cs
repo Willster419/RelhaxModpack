@@ -20,9 +20,6 @@ namespace RelhaxModpack
     //a static utility class with usefull methods that all other forms can use if they need it
     public static class Utils
     {
-        private static List<string> ParsedZips;
-        private static int iMaxLogLength = 1500000; // Probably should be bigger, say 2,000,000
-        private static int iTrimmedLogLength = -300000; // minimum of how much of the old log to leave
         private static object _locker = new object();
 
         private static Hashtable macroList;
@@ -132,6 +129,8 @@ namespace RelhaxModpack
             }
         }
         #endregion
+
+        #region crc hash checking
         //returns the md5 hash of the file based on the input file string location
         public static string CreateMd5Hash(string inputFile)
         {
@@ -156,6 +155,19 @@ namespace RelhaxModpack
             return sBuilder.ToString();
         }
 
+        //returns true if the CRC's of each file match, false otherwise
+        public static bool CRCsMatch(string localFile, string remoteCRC)
+        {
+            if (!System.IO.File.Exists(localFile))
+                return false;
+            string crc = XMLUtils.GetMd5Hash(localFile);
+            if (crc.Equals(remoteCRC))
+                return true;
+            return false;
+        }
+        #endregion
+
+        #region data type from string processing/parsing
         public static bool ParseBool(string input, bool defaultValue)
         {
             bool returnVal;
@@ -197,26 +209,7 @@ namespace RelhaxModpack
             }
             return returnVal;
         }
-
-        public static byte[] ToByteArray(this string s)
-        {
-            return Encoding.ASCII.GetBytes(s);
-        }
-
-        public static string ByteArrayToString(this byte[] arr)
-        {
-            return ConvertByteArrayToString(arr);
-        }
-
-        public static string ConvertByteArrayToString(byte[] arr)
-        {
-            return BitConverter.ToString(arr).Replace("-", "").ToLowerInvariant(); ;
-        }
-
-        public static bool CompareByteArray(byte[] a1, byte[] a2)
-        {
-            return a1.SequenceEqual(a2);
-        }
+        #endregion
 
         public class CheckStorage
         {
@@ -402,6 +395,7 @@ namespace RelhaxModpack
         }
         #endregion
 
+        #region legacy (v1 config) selecting of packages
         //returns the mod based and mod name
         public static SelectablePackage LinkMod(string modName, List<Category> parsedCatagoryList)
         {
@@ -431,6 +425,9 @@ namespace RelhaxModpack
             }
             return null;
         }
+        #endregion
+
+        #region sorting
         //sorts a list of mods alphabetaicaly
         public static void SortModsList(List<SelectablePackage> modList)
         {
@@ -442,7 +439,9 @@ namespace RelhaxModpack
         {
             catagoryList.Sort(Category.CompareCatagories);
         }
+        #endregion
 
+        #region used zip files list?
         public static List<string> CreateUsedFilesList(List<Category> parsedCatagoryList,
             List<Dependency> globalDependencies, List<Dependency> dependencies, List<LogicalDependency> logicalDependencies)
         {
@@ -497,32 +496,8 @@ namespace RelhaxModpack
             }
             currentZipFilesOut = currentZipFiles;
         }
-        
-        //deletes all empty directories from a given start location
-        public static void ProcessDirectory(string startLocation, bool reportToLog = true)
-        {
-            foreach (var directory in Directory.GetDirectories(startLocation))
-            {
-                ProcessDirectory(directory);
-                if (Directory.GetFiles(directory).Length == 0 &&
-                    Directory.GetDirectories(directory).Length == 0)
-                {
-                    if (reportToLog)
-                        Logging.Manager(string.Format("Deleting empty directory {0}", directory));
-                    Directory.Delete(directory, false);
-                }
-            }
-        }
-        //returns true if the CRC's of each file match, false otherwise
-        public static bool CRCsMatch(string localFile, string remoteCRC)
-        {
-            if (!System.IO.File.Exists(localFile))
-                return false;
-            string crc = XMLUtils.GetMd5Hash(localFile);
-            if (crc.Equals(remoteCRC))
-                return true;
-            return false;
-        }
+        #endregion
+
         //Downloads the forum page. Totally not stat padding
         public static void TotallyNotStatPaddingForumPageViewCount()
         {
@@ -555,48 +530,8 @@ namespace RelhaxModpack
                 worker.RunWorkerAsync();
             }
         }
-        // https://stackoverflow.com/questions/14488796/does-net-provide-an-easy-way-convert-bytes-to-kb-mb-gb-etc
-        static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
-        public static string SizeSuffix(Int64 value, int decimalPlaces = 1, bool sizeSuffix = false)
-        {
-            if (value < 0) { return "-" + SizeSuffix(-value); }
-            return SizeSuffix((UInt64)value, decimalPlaces, sizeSuffix);
-        }
-        public static string SizeSuffix(UInt64 value, int decimalPlaces = 1, bool sizeSuffix = false)
-        {
-            if (value == 0) { if (sizeSuffix) return "0.0 bytes"; else return "0.0"; }
-            if (value < 1000) { if (sizeSuffix) return string.Format("{0:n" + decimalPlaces + "} {1}", 0.1, SizeSuffixes[1]); else return string.Format("{0:n" + decimalPlaces + "}", 0.1); }
 
-            // mag is 0 for bytes, 1 for KB, 2, for MB, etc.
-            int mag = (int)Math.Log(value, 1024);
-
-            // 1L << (mag * 10) == 2 ^ (10 * mag) 
-            // [i.e. the number of bytes in the unit corresponding to mag]
-            decimal adjustedSize = (decimal)value / (1L << (mag * 10));
-
-            // make adjustment when the value is large enough that
-            // it would round up to 1000 or more
-            if (Math.Round(adjustedSize, decimalPlaces) >= 1000)
-            {
-                mag += 1;
-                adjustedSize /= 1024;
-            }
-
-            if (sizeSuffix)
-                return string.Format("{0:n" + decimalPlaces + "} {1}", adjustedSize, SizeSuffixes[mag]);
-            else
-                return string.Format("{0:n" + decimalPlaces + "}", adjustedSize);
-        }
-
-        public static string GetValidFilename(String fileName)
-        {
-            foreach (char c in Path.GetInvalidFileNameChars())
-            {
-                fileName = fileName.Replace(c, '_');
-            }
-            return fileName;
-        }
-
+        #region random (literally) stuff)
         private static Random random = new Random();
         /// <summary>
         /// https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings-in-c
@@ -609,6 +544,9 @@ namespace RelhaxModpack
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
+        #endregion
+
+        #region display scalling stuff
         //https://stackoverflow.com/questions/5977445/how-to-get-windows-display-settings
         public static float GetDisplayScale(Graphics graphics)
         {
@@ -642,6 +580,114 @@ namespace RelhaxModpack
             float ScreenScalingFactor = (float)PhysicalScreenHeight / (float)LogicalScreenHeight;
 
             return ScreenScalingFactor; // 1.25 = 125%
+        }
+        /// <summary>Checks if a point is inside the possible monitor space</summary>
+        /// <param name="p">The point to check</param>
+        public static bool PointWithinScreen(System.Drawing.Point p)
+        {
+            //if eithor x or y are negative it's an invalid location
+            if (p.X < 0 || p.Y < 0)
+                return false;
+            int totalWidth = 0, totalHeight = 0;
+            foreach (Screen s in Screen.AllScreens)
+            {
+                totalWidth += s.Bounds.Width;
+                totalHeight += s.Bounds.Height;
+            }
+            if (totalWidth > p.X && totalHeight > p.Y)
+                return true;
+            return false;
+        }
+
+        /// <summary>Checks if a point is inside the possible monitor space</summary>
+        /// <param name="x">The x cordinate of the point</param>
+        /// <param name="y">The y cordinate of the point</param>
+        public static bool PointWithinScreen(int x, int y)
+        {
+            return PointWithinScreen(new System.Drawing.Point(x, y));
+        }
+        #endregion
+
+        #region zip file stuff
+        public static byte[] ToByteArray(this string s)
+        {
+            return Encoding.ASCII.GetBytes(s);
+        }
+
+        public static string ByteArrayToString(this byte[] arr)
+        {
+            return ConvertByteArrayToString(arr);
+        }
+
+        public static string ConvertByteArrayToString(byte[] arr)
+        {
+            return BitConverter.ToString(arr).Replace("-", "").ToLowerInvariant(); ;
+        }
+
+        public static bool CompareByteArray(byte[] a1, byte[] a2)
+        {
+            return a1.SequenceEqual(a2);
+        }
+        public static byte[] ReadByteArrayFromFile(string filename, int chunkSize)
+        {
+            byte[] chunk = null;
+
+            try
+            {
+                using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
+                {
+                    using (BinaryReader br = new BinaryReader(fs, new ASCIIEncoding()))
+                    {
+                        chunk = br.ReadBytes(chunkSize);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("ReadByteArrayFromFile", "File: " + filename, ex);
+            }
+            return chunk;
+        }
+
+        // https://stackoverflow.com/questions/283456/byte-array-pattern-search
+        static readonly int[] Empty = new int[0];
+        public static int[] FindBytePatternInByteArray(this byte[] self, byte[] candidate)
+        {
+            if (FindBytePatternInByteArrayIsEmptyLocate(self, candidate))
+                return Empty;
+
+            var list = new List<int>();
+
+            for (int i = 0; i < self.Length; i++)
+            {
+                if (!FindBytePatternInByteArrayIsMatch(self, i, candidate))
+                    continue;
+
+                list.Add(i);
+            }
+
+            return list.Count == 0 ? Empty : list.ToArray();
+        }
+
+        static bool FindBytePatternInByteArrayIsMatch(byte[] array, int position, byte[] candidate)
+        {
+            if (candidate.Length > (array.Length - position))
+                return false;
+
+            for (int i = 0; i < candidate.Length; i++)
+                if (array[position + i] != candidate[i])
+                    return false;
+
+            return true;
+        }
+
+        static bool FindBytePatternInByteArrayIsEmptyLocate(byte[] array, byte[] candidate)
+        {
+            return array == null
+                || candidate == null
+                || array.Length == 0
+                || candidate.Length == 0
+                || candidate.Length > array.Length;
         }
         // https://social.msdn.microsoft.com/Forums/vstudio/en-US/92a36534-0f01-4425-ab63-c5f8830d64ae/help-please-with-dotnetzip-extracting-data-form-ziped-file?forum=csharpgeneral
         public static string GetStringFromZip(string zipFilename, string archivedFilename, string password = null)
@@ -687,22 +733,65 @@ namespace RelhaxModpack
                 return;
             }
         }
+        #endregion
 
-        public static bool ConvertDateToLocalCultureFormat(string date, out string dateOut)
+        #region file IO stuff
+        //deletes all empty directories from a given start location
+        public static void ProcessDirectory(string startLocation, bool reportToLog = true)
         {
-            DateTimeFormatInfo myDTFI = new CultureInfo("en-US").DateTimeFormat;
-            dateOut = date;
-            string[] mask = new string[] { "dd.MM.yyyy  h:mm:ss,ff", "dd.MM.yyyy HH:mm:ss,ff", "YYYY-MM-DD  h:mm:ss", "YYYY-MM-DD HH:mm:ss", "YYYY-MM-DD HH:mm:ss.ff", "YYYY-MM-DD  h:mm:ss.ff", "MM/DD/YYYY  h:mm:ss.ff",
-                "MM/DD/YYYY HH:mm:ss.ff", "ddd MM/DD/YYYY  h:mm:ss.ff", "ddd MM/DD/YYYY HH:mm:ss.ff","ddd M/d/yyyy h:mm:ss.ff","ddd M/d/yyyy H:mm:ss.ff", "yyyy-MM-dd HH:mm:ss"};
-            foreach (var m in mask)
+            foreach (var directory in Directory.GetDirectories(startLocation))
             {
-                if (DateTime.TryParseExact(date, m, System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.AllowInnerWhite | DateTimeStyles.AllowLeadingWhite | DateTimeStyles.AllowTrailingWhite, out DateTime dateValue))
+                ProcessDirectory(directory);
+                if (Directory.GetFiles(directory).Length == 0 &&
+                    Directory.GetDirectories(directory).Length == 0)
                 {
-                    dateOut = dateValue.ToString();
-                    return true;
+                    if (reportToLog)
+                        Logging.Manager(string.Format("Deleting empty directory {0}", directory));
+                    Directory.Delete(directory, false);
                 }
             }
-            return false;
+        }
+
+        // https://stackoverflow.com/questions/14488796/does-net-provide-an-easy-way-convert-bytes-to-kb-mb-gb-etc
+        static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+        public static string SizeSuffix(Int64 value, int decimalPlaces = 1, bool sizeSuffix = false)
+        {
+            if (value < 0) { return "-" + SizeSuffix(-value); }
+            return SizeSuffix((UInt64)value, decimalPlaces, sizeSuffix);
+        }
+        public static string SizeSuffix(UInt64 value, int decimalPlaces = 1, bool sizeSuffix = false)
+        {
+            if (value == 0) { if (sizeSuffix) return "0.0 bytes"; else return "0.0"; }
+            if (value < 1000) { if (sizeSuffix) return string.Format("{0:n" + decimalPlaces + "} {1}", 0.1, SizeSuffixes[1]); else return string.Format("{0:n" + decimalPlaces + "}", 0.1); }
+
+            // mag is 0 for bytes, 1 for KB, 2, for MB, etc.
+            int mag = (int)Math.Log(value, 1024);
+
+            // 1L << (mag * 10) == 2 ^ (10 * mag) 
+            // [i.e. the number of bytes in the unit corresponding to mag]
+            decimal adjustedSize = (decimal)value / (1L << (mag * 10));
+
+            // make adjustment when the value is large enough that
+            // it would round up to 1000 or more
+            if (Math.Round(adjustedSize, decimalPlaces) >= 1000)
+            {
+                mag += 1;
+                adjustedSize /= 1024;
+            }
+
+            if (sizeSuffix)
+                return string.Format("{0:n" + decimalPlaces + "} {1}", adjustedSize, SizeSuffixes[mag]);
+            else
+                return string.Format("{0:n" + decimalPlaces + "}", adjustedSize);
+        }
+
+        public static string GetValidFilename(String fileName)
+        {
+            foreach (char c in Path.GetInvalidFileNameChars())
+            {
+                fileName = fileName.Replace(c, '_');
+            }
+            return fileName;
         }
 
         public static void DirectoryDelete(string folderPath, bool doSubfolder = false, bool deleteTopfolder = false)
@@ -743,6 +832,7 @@ namespace RelhaxModpack
                 Utils.ExceptionLog("DirectoryDelete", "Folder=" + folderPath, ex);
             }
         }
+        #endregion
 
         // https://stackoverflow.com/questions/30494/compare-version-identifiers
         /// <summary>
@@ -769,11 +859,34 @@ namespace RelhaxModpack
             return vA.CompareTo(vB);
         }
 
+        #region date/time stuff
+        public static bool ConvertDateToLocalCultureFormat(string date, out string dateOut)
+        {
+            DateTimeFormatInfo myDTFI = new CultureInfo("en-US").DateTimeFormat;
+            dateOut = date;
+            string[] mask = new string[] { "dd.MM.yyyy  h:mm:ss,ff", "dd.MM.yyyy HH:mm:ss,ff", "YYYY-MM-DD  h:mm:ss", "YYYY-MM-DD HH:mm:ss", "YYYY-MM-DD HH:mm:ss.ff", "YYYY-MM-DD  h:mm:ss.ff", "MM/DD/YYYY  h:mm:ss.ff",
+                "MM/DD/YYYY HH:mm:ss.ff", "ddd MM/DD/YYYY  h:mm:ss.ff", "ddd MM/DD/YYYY HH:mm:ss.ff","ddd M/d/yyyy h:mm:ss.ff","ddd M/d/yyyy H:mm:ss.ff", "yyyy-MM-dd HH:mm:ss"};
+            foreach (var m in mask)
+            {
+                if (DateTime.TryParseExact(date, m, System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.AllowInnerWhite | DateTimeStyles.AllowLeadingWhite | DateTimeStyles.AllowTrailingWhite, out DateTime dateValue))
+                {
+                    dateOut = dateValue.ToString();
+                    return true;
+                }
+            }
+            return false;
+        }
         public static long GetCurrentUniversalFiletimeTimestamp()
         {
             return DateTime.Now.ToUniversalTime().ToFileTime();
         }
-        
+        public static string ConvertFiletimeTimestampToDate(long timestamp)
+        {
+            return DateTime.FromFileTime(timestamp).ToString();
+        }
+        #endregion
+
+        #region Macro stuff
         public static string ReplaceMacro(string text, string macro, string macrotext)
         {
             bool search = true;
@@ -878,38 +991,9 @@ namespace RelhaxModpack
         {
             return !s.Last().ToString().Equals(@"\") || !s.Last().ToString().Equals(@"/") ? s + @"\" : s;
         }
+        #endregion
 
-        public static string ConvertFiletimeTimestampToDate(long timestamp)
-        {
-            return DateTime.FromFileTime(timestamp).ToString();
-        }
-
-        /// <summary>Checks if a point is inside the possible monitor space</summary>
-        /// <param name="p">The point to check</param>
-        public static bool PointWithinScreen(System.Drawing.Point p)
-        {
-            //if eithor x or y are negative it's an invalid location
-            if (p.X < 0 || p.Y < 0)
-                return false;
-            int totalWidth = 0, totalHeight = 0;
-            foreach(Screen s in Screen.AllScreens)
-            {
-                totalWidth += s.Bounds.Width;
-                totalHeight += s.Bounds.Height;
-            }
-            if (totalWidth > p.X && totalHeight > p.Y)
-                return true;
-            return false;
-        }
-
-        /// <summary>Checks if a point is inside the possible monitor space</summary>
-        /// <param name="x">The x cordinate of the point</param>
-        /// <param name="y">The y cordinate of the point</param>
-        public static bool PointWithinScreen(int x, int y)
-        {
-            return PointWithinScreen(new System.Drawing.Point(x, y));
-        }
-
+        #region not gross shortcut stuff
         // https://stackoverflow.com/questions/4897655/create-shortcut-on-desktop-c-sharp
         /// <summary>Creates or removes a shortcut at the specified pathname.</summary> 
         /// <param name="shortcutTarget">The path where the original file is located.</param> 
@@ -982,69 +1066,9 @@ namespace RelhaxModpack
                 }
             }
         }
+        #endregion
 
-        public static byte[] ReadByteArrayFromFile(string filename, int chunkSize)
-        {
-            byte[] chunk = null;
-
-            try
-            {
-                using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
-                {
-                    using (BinaryReader br = new BinaryReader(fs, new ASCIIEncoding()))
-                    {
-                        chunk = br.ReadBytes(chunkSize);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Utils.ExceptionLog("ReadByteArrayFromFile", "File: " + filename, ex);
-            }
-            return chunk;
-        }
-
-        // https://stackoverflow.com/questions/283456/byte-array-pattern-search
-        static readonly int[] Empty = new int[0];
-        public static int[] FindBytePatternInByteArray(this byte[] self, byte[] candidate)
-        {
-            if (FindBytePatternInByteArrayIsEmptyLocate(self, candidate))
-                return Empty;
-
-            var list = new List<int>();
-
-            for (int i = 0; i < self.Length; i++)
-            {
-                if (!FindBytePatternInByteArrayIsMatch(self, i, candidate))
-                    continue;
-
-                list.Add(i);
-            }
-
-            return list.Count == 0 ? Empty : list.ToArray();
-        }
-
-        static bool FindBytePatternInByteArrayIsMatch(byte[] array, int position, byte[] candidate)
-        {
-            if (candidate.Length > (array.Length - position))
-                return false;
-
-            for (int i = 0; i < candidate.Length; i++)
-                if (array[position + i] != candidate[i])
-                    return false;
-
-            return true;
-        }
-
-        static bool FindBytePatternInByteArrayIsEmptyLocate(byte[] array, byte[] candidate)
-        {
-            return array == null
-                || candidate == null
-                || array.Length == 0
-                || candidate.Length == 0
-                || candidate.Length > array.Length;
-        }
-
+        #region Text display
         public static string Truncate(TextBox text)
         {
             return Truncate(text.Text, text.Font, text.Width);
@@ -1104,7 +1128,9 @@ namespace RelhaxModpack
             return preText + midText + trailingText;
         }
         //You can implement more methods such as receiving a string with font,... and returning the truncated/trimmed version.
+        #endregion
 
+        #region string base64 converting
         //https://stackoverflow.com/questions/11743160/how-do-i-encode-and-decode-a-base64-string
         public static string Base64Encode(string plainText)
         {
@@ -1117,8 +1143,10 @@ namespace RelhaxModpack
             var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
             return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
         }
+        #endregion
 
     }
+    #region gross shortcut stuff
     // needed for CreateShortcut
     [ComImport]
     [Guid("00021401-0000-0000-C000-000000000046")]
@@ -1150,4 +1178,5 @@ namespace RelhaxModpack
         void Resolve(IntPtr hwnd, int fFlags);
         void SetPath([MarshalAs(UnmanagedType.LPWStr)] string pszFile);
     }
+    #endregion
 }
