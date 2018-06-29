@@ -528,29 +528,31 @@ namespace RelhaxModpack
         {
             using (BackgroundWorker worker = new BackgroundWorker())
             {
-                worker.DoWork += worker_TotallyNotStatPaddingForumPageViewCount;
-                worker.RunWorkerAsync();
-            }
-        }
-        //Downloads the forum page. Totally not stat padding
-        public static void worker_TotallyNotStatPaddingForumPageViewCount(object sender, DoWorkEventArgs args)
-        {
-            //create a new downloader to download the modpack forum page on a new thread
-            using (WebClient client = new WebClient())
-            {
-                string[] pages = { "http://forum.worldoftanks.eu/index.php?/topic/623269-", "http://forum.worldoftanks.com/index.php?/topic/535868-", "http://forum.worldoftanks.eu/index.php?/topic/624499-" };
-                foreach (string r in pages)
+                //worker.DoWork += worker_TotallyNotStatPaddingForumPageViewCount;
+                worker.DoWork += (sender, args) =>
                 {
-                    try
+                    string[] pages =
+                    { "http://forum.worldoftanks.eu/index.php?/topic/623269-",
+                        "http://forum.worldoftanks.com/index.php?/topic/535868-",
+                        "http://forum.worldoftanks.eu/index.php?/topic/624499-"
+                    };
+                    //create a new downloader to download the modpack forum page on a new thread
+                    using (WebClient client = new WebClient())
                     {
-                        client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
-                        client.DownloadString(r);
+                        foreach (string r in pages)
+                        {
+                            client.DownloadString(r);
+                        }
                     }
-                    catch (Exception e)
+                };
+                worker.RunWorkerCompleted += (sender, args) =>
+                {
+                    if(args.Error != null)
                     {
-                        Utils.ExceptionLog("Forum access", e);
+                        Logging.Manager("An error occured while loading forum page(s)");
                     }
-                }
+                };
+                worker.RunWorkerAsync();
             }
         }
         // https://stackoverflow.com/questions/14488796/does-net-provide-an-easy-way-convert-bytes-to-kb-mb-gb-etc
