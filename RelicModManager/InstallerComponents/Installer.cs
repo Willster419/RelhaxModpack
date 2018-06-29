@@ -521,15 +521,7 @@ namespace RelhaxModpack
                 //parse the lists so that only files are folders are saved
                 if(File.Exists(s))
                 {
-                    // workaround to prevent damaged WoT after uninstall xvm
-                    if (Path.GetExtension(s).Equals(".dll") && Path.GetDirectoryName(s).Equals(TanksLocation))
-                    {
-                        Logging.Manager("Skip deleting dll in WoT root folder (" + s + ")", true);
-                        continue;
-                    }
-
-
-                    if (Path.GetExtension(s).Equals(".lnk"))
+                    if(Path.GetExtension(s).Equals(".lnk"))
                     {
                         shortcutsFromLog.Add(Path.GetFileName(s));
                     }
@@ -555,13 +547,6 @@ namespace RelhaxModpack
                 //parse the lists so that only files are folders are saved
                 if (File.Exists(s))
                 {
-                    // workaround to prevent damaged WoT after uninstall xvm
-                    if (Path.GetExtension(s).Equals(".dll") && Path.GetDirectoryName(s).Equals(TanksLocation))
-                    {
-                        Logging.Manager("Skip deleting dll in WoT root folder (" + s + ")", true);
-                        continue;
-                    }
-
                     if (Path.GetExtension(s).Equals(".lnk"))
                     {
                         shortcutsFromParsing.Add(Path.GetFileName(s));
@@ -625,12 +610,6 @@ namespace RelhaxModpack
             foreach (string file in totalFiles)
             {
                 args.currentFile = file;
-                // workaround to prevent damaged WoT after uninstall xvm
-                if (Path.GetExtension(file).Equals(".dll") && Path.GetDirectoryName(file).Equals(TanksLocation))
-                {
-                    Logging.Manager("Skip deleting dll in WoT root folder (" + file + ")", true);
-                    continue;
-                }
                 try
                 {
                     File.SetAttributes(file, FileAttributes.Normal);
