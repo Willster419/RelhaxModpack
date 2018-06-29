@@ -28,6 +28,7 @@ namespace RelhaxModpack
         private static Hashtable macroList;
         private static Hashtable macroSymbolList;
 
+        #region logging methods
         public static void DumbObjectToLog(string objectName, object n)
         {
             DumbObjectToLog("", objectName, n);
@@ -130,6 +131,7 @@ namespace RelhaxModpack
                 Logging.Manager(msg);
             }
         }
+        #endregion
         //returns the md5 hash of the file based on the input file string location
         public static string CreateMd5Hash(string inputFile)
         {
@@ -225,6 +227,7 @@ namespace RelhaxModpack
             public CheckStorage() { }
         }
 
+        #region duplicates checking
         public static void DuplicatesPackageName_dependencyCheck(List<Dependency> dependencyList, List<CheckStorage> checkStorageList, ref int duplicatesCounter)
         {
             foreach (Dependency d in dependencyList)
@@ -397,22 +400,8 @@ namespace RelhaxModpack
             //making it here means there are no duplicates
             return false;
         }
-        //returns the mod based on catagory and mod name
-        public static SelectablePackage LinkMod(string modName, string catagoryName, List<Category> parsedCatagoryList)
-        {
-            foreach (Category c in parsedCatagoryList)
-            {
-                foreach (SelectablePackage m in c.Packages)
-                {
-                    if (c.Name.Equals(catagoryName) && m.Name.Equals(modName))
-                    {
-                        //found it
-                        return m;
-                    }
-                }
-            }
-            return null;
-        }
+        #endregion
+
         //returns the mod based and mod name
         public static SelectablePackage LinkMod(string modName, List<Category> parsedCatagoryList)
         {
@@ -429,15 +418,7 @@ namespace RelhaxModpack
             }
             return null;
         }
-        //returns the catagory based on the catagory name
-        public static Category GetCatagory(string catName, List<Category> parsedCatagoryList)
-        {
-            foreach (Category c in parsedCatagoryList)
-            {
-                if (c.Name.Equals(catName)) return c;
-            }
-            return null;
-        }
+
         //gets the user mod based on it's name
         public static SelectablePackage GetUserMod(string modName, List<SelectablePackage> userMods)
         {
@@ -460,13 +441,6 @@ namespace RelhaxModpack
         public static void SortCatagoryList(List<Category> catagoryList)
         {
             catagoryList.Sort(Category.CompareCatagories);
-        }
-        //sorts a list of pictures by mod or config, then name
-        public static List<Media> SortPictureList(List<Media> pictureList)
-        {
-            //don't actually sort them anymore
-            //they will not apprea in the order of which they were loaded from the xml file
-            return pictureList;
         }
 
         public static List<string> CreateUsedFilesList(List<Category> parsedCatagoryList,
@@ -523,68 +497,7 @@ namespace RelhaxModpack
             }
             currentZipFilesOut = currentZipFiles;
         }
-        //moved to ModSelectionList.cs
-        public static List<string> Depricated_createDownloadedOldZipsList(List<string> currentZipFiles, List<Category> parsedCatagoryList,
-            List<Dependency> globalDependencies, List<Dependency> currentDependencies, List<LogicalDependency> currentLogicalDependencies)
-        {
-            ParsedZips = new List<string>();
-            foreach (Dependency d in globalDependencies)
-            {
-                if (!d.ZipFile.Equals("") && !ParsedZips.Contains(d.ZipFile))
-                {
-                    ParsedZips.Add(d.ZipFile);
-                }
-            }
-            foreach (Dependency d in currentDependencies)
-            {
-                if (!d.ZipFile.Equals("") && !ParsedZips.Contains(d.ZipFile))
-                {
-                    ParsedZips.Add(d.ZipFile);
-                }
-            }
-            foreach (LogicalDependency d in currentLogicalDependencies)
-            {
-                if (!d.ZipFile.Equals("") && !ParsedZips.Contains(d.ZipFile))
-                {
-                    ParsedZips.Add(d.ZipFile);
-                }
-            }
-            foreach (Category cat in parsedCatagoryList)
-            {
-                foreach (SelectablePackage m in cat.Packages)
-                {
-
-                    if (!m.ZipFile.Equals("") && !ParsedZips.Contains(m.ZipFile))
-                    {
-                        ParsedZips.Add(m.ZipFile);
-                    }
-                    if (m.Packages.Count > 0)
-                        Depricated_ParseZipFileConfigs(m.Packages);
-                }
-            }
-            //now parsedZips has every single possible ZipFile in the database
-            //for each zipfile in it, remove it in currentZipFiles if it exists
-            foreach (string s in ParsedZips)
-            {
-                if (currentZipFiles.Contains(s))
-                    currentZipFiles.Remove(s);
-            }
-            return currentZipFiles;
-        }
-
-        public static void Depricated_ParseZipFileConfigs(List<SelectablePackage> configList)
-        {
-            foreach (SelectablePackage c in configList)
-            {
-
-                if (!c.ZipFile.Equals("") && !ParsedZips.Contains(c.ZipFile))
-                {
-                    ParsedZips.Add(c.ZipFile);
-                }
-                if (c.Packages.Count > 0)
-                    Depricated_ParseZipFileConfigs(c.Packages);
-            }
-        }
+        
         //deletes all empty directories from a given start location
         public static void ProcessDirectory(string startLocation, bool reportToLog = true)
         {
