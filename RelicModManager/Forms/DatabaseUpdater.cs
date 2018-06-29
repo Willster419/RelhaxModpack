@@ -908,9 +908,9 @@ namespace RelhaxModpack
                 return;
             DatabaseOutputStep1Location.Text = loadDatabaseDialog.FileName;
             //for the folder version: //modInfoAlpha.xml/@version
-            Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocationTextBox.Text, "//modInfoAlpha.xml/@version");
+            Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseOutputStep1Location.Text, "//modInfoAlpha.xml/@version");
             //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
-            Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocationTextBox.Text, "//modInfoAlpha.xml/@onlineFolder");
+            Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseOutputStep1Location.Text, "//modInfoAlpha.xml/@onlineFolder");
             Text = String.Format("DatabaseUpdateUtility      TanksVersion: {0}    OnlineFolder: {1}", Settings.TanksVersion, Settings.TanksOnlineFolderVersion);
             ReportProgress("Settings.TanksVersion (current game version): " + Settings.TanksVersion);
             ReportProgress("Settings.TanksOnlineFolderVersion (online zip folder): " + Settings.TanksOnlineFolderVersion);
