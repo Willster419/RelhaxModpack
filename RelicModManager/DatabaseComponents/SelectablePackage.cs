@@ -7,7 +7,9 @@ using System.Windows.Forms;
 
 namespace RelhaxModpack
 {
-    //a selectable package could be a mod or a config
+    /// <summary>
+    /// A package that has UI elements, and is eithor a mod or config that can be selected in the UI
+    /// </summary>
     public class SelectablePackage : DatabasePackage
     {
         //constructor

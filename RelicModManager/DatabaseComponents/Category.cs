@@ -4,8 +4,9 @@ using RelhaxModpack.UIComponents;
 
 namespace RelhaxModpack
 {
-    //the catagory class. a catagory is what makes up each tab in
-    //the mod selection dislpay window
+    /// <summary>
+    /// a catagory is what makes up each tab in the mod selection dislpay window. It holds the first level of list of SelectablePackages
+    /// </summary>
     public class Category
     {
         public string Name = "";
