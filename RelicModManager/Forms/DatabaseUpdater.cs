@@ -298,7 +298,7 @@ namespace RelhaxModpack
                 File.Delete(supportedClients);
             }
             //load live database to memory
-            XMLUtils.CreateModStructure(compareModInfoXml, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            XMLUtils.CreateModStructure(compareModInfoXml, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList,true);
             //create first list for comparison
             live_modInfo = CreatePackageList(parsedCatagoryList, globalDependencies, dependencies, logicalDependencies);
 
@@ -308,7 +308,7 @@ namespace RelhaxModpack
             dependencies.Clear();
             logicalDependencies.Clear();
             //load actuall new database to memory
-            XMLUtils.CreateModStructure(DatabaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            XMLUtils.CreateModStructure(DatabaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList,true);
 
             //check for duplicates
             int duplicatesCounter = 0;
@@ -588,7 +588,7 @@ namespace RelhaxModpack
             logicalDependencies = new List<LogicalDependency>();
             Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocationTextBox.Text, "//modInfoAlpha.xml/@version");
             Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocationTextBox.Text, "//modInfoAlpha.xml/@onlineFolder");
-            XMLUtils.CreateModStructure(DatabaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            XMLUtils.CreateModStructure(DatabaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList,true);
             int duplicatesCounter = 0;
             //check for duplicates
             if (Utils.Duplicates(parsedCatagoryList) && Utils.DuplicatesPackageName(parsedCatagoryList, ref duplicatesCounter))
@@ -998,7 +998,7 @@ namespace RelhaxModpack
             parsedCatagoryList.Clear();
 
             //create database list
-            XMLUtils.CreateModStructure(DatabaseOutputStep1Location.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
+            XMLUtils.CreateModStructure(DatabaseOutputStep1Location.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList,true);
 
             //save it
             header = "PackageName\tCategory\tPackage\tLevel\tZip\tDevURL\tEnabled\tVisible";

@@ -1145,6 +1145,41 @@ namespace RelhaxModpack
         }
         #endregion
 
+        #region List refrence linking
+        /// <summary>
+        /// Links all the refrences (like parent, etc) for each class object making it possible to traverse the list tree in memory
+        /// </summary>
+        /// <param name="ParsedCategoryList">The List of categories</param>
+        public static void BuildLinksRefrence(List<Category> ParsedCategoryList)
+        {
+            foreach(Category cat in ParsedCategoryList)
+            {
+                foreach(SelectablePackage sp in cat.Packages)
+                {
+                    BuildLinksRefrence(sp, cat, cat.CategoryHeader);
+                }
+            }
+        }
+        /// <summary>
+        /// Links all the refrences (like parent, etc) for each class object making it possible to traverse the list tree in memory
+        /// </summary>
+        /// <param name="sp">The package to perform linking on</param>
+        /// <param name="cat">The category that the SelectablePackagesp belongs to</param>
+        /// <param name="parent">The tree parent of sp</param>
+        public static void BuildLinksRefrence(SelectablePackage sp, Category cat, SelectablePackage parent)
+        {
+            sp.Parent = parent;
+            sp.TopParent = cat.CategoryHeader;
+            sp.ParentCategory = cat;
+            if(sp.Packages.Count > 0)
+            {
+                foreach(SelectablePackage sp2 in sp.Packages)
+                {
+                    BuildLinksRefrence(sp2, cat, sp);
+                }
+            }
+        }
+        #endregion
     }
     #region gross shortcut stuff
     // needed for CreateShortcut

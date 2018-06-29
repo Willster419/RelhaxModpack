@@ -270,7 +270,7 @@ namespace RelhaxModpack
             Dependencies = new List<Dependency>();
             LogicalDependencies = new List<LogicalDependency>();
             ParsedCategoryList = new List<Category>();
-            XMLUtils.CreateModStructure(DatabaseLocation, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList);
+            XMLUtils.CreateModStructure(DatabaseLocation, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCategoryList,true);
             if(GlobalDependencyRB.Checked)
             {
                 DatabaseEditorMode = EditorMode.GlobalDependnecy;

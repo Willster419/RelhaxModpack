@@ -76,7 +76,7 @@ namespace RelhaxModpack
             Dependencies = new List<Dependency>();
             LogicalDependencies = new List<LogicalDependency>();
             //actually parse the mod structure
-            XMLUtils.CreateModStructure(databaseLocation, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCatagoryList);
+            XMLUtils.CreateModStructure(databaseLocation, GlobalDependencies, Dependencies, LogicalDependencies, ParsedCatagoryList,false);
             if (Program.testMode)
             {
                 if (Utils.Duplicates(ParsedCatagoryList))

@@ -61,7 +61,7 @@ namespace RelhaxModpack
         //parses the xml mod info into the memory database (change XML reader from XMLDocument to XDocument)
         // https://www.google.de/search?q=c%23+xdocument+get+line+number&oq=c%23+xdocument+get+line+number&aqs=chrome..69i57j69i58.11773j0j7&sourceid=chrome&ie=UTF-8
         public static void CreateModStructure(string databaseURL, List<Dependency> globalDependencies, List<Dependency> dependencies,
-            List<LogicalDependency> logicalDependencies, List<Category> parsedCatagoryList)
+            List<LogicalDependency> logicalDependencies, List<Category> parsedCatagoryList, bool buildRefrences)
         {
             developerSelections.Clear();
             TotalModConfigComponents = 0;
@@ -765,6 +765,8 @@ namespace RelhaxModpack
                 }
                 parsedCatagoryList.Add(cat);
             }
+            if (buildRefrences)
+                Utils.BuildLinksRefrence(parsedCatagoryList);
         }
         //recursivly processes the configs
         public static void ProcessConfigs(XElement holder, SelectablePackage m, bool parentIsMod, int level, SelectablePackage con = null)
