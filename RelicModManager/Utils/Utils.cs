@@ -507,7 +507,8 @@ namespace RelhaxModpack
                 worker.DoWork += (sender, args) =>
                 {
                     string[] pages =
-                    { "http://forum.worldoftanks.eu/index.php?/topic/623269-",
+                    {
+                        "http://forum.worldoftanks.eu/index.php?/topic/623269-",
                         "http://forum.worldoftanks.com/index.php?/topic/535868-",
                         "http://forum.worldoftanks.eu/index.php?/topic/624499-"
                     };

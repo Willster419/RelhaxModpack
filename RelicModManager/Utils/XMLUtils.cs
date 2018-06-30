@@ -103,7 +103,7 @@ namespace RelhaxModpack
             //add the global dependencies
             foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/globaldependencies/globaldependency"))
             {
-                List<string> depNodeList = new List<string>() { "zipFile", "crc", "enabled", "packageName", "appendExtraction" };
+                List<string> depNodeList = new List<string>() { "zipFile", "crc", "enabled", "packageName", "appendExtraction", "logAtInstall" };
                 List<string> optionalDepNodList = new List<string>() { "startAddress", "endAddress", "devURL", "timestamp" };
                 List<string> unknownNodeList = new List<string>() { };
                 Dependency d = new Dependency();
@@ -183,7 +183,7 @@ namespace RelhaxModpack
             //add the dependencies
             foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/dependencies/dependency"))
             {
-                List<string> depNodeList = new List<string>() { "zipFile", "crc", "enabled", "packageName", "appendExtraction" };
+                List<string> depNodeList = new List<string>() { "zipFile", "crc", "enabled", "packageName", "appendExtraction", "logAtInstall" };
                 List<string> optionalDepNodList = new List<string>() { "startAddress", "endAddress", "devURL", "timestamp" , "logicalDependencies" };
                 List<string> unknownNodeList = new List<string>() { };
                 Dependency d = new Dependency();
@@ -308,7 +308,7 @@ namespace RelhaxModpack
             //add the logicalDependencies
             foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/logicalDependencies/logicalDependency"))
             {
-                List<string> depNodeList = new List<string>() { "zipFile", "crc", "enabled", "packageName", "logic"};
+                List<string> depNodeList = new List<string>() { "zipFile", "crc", "enabled", "packageName", "logic", "logAtInstall" };
                 List<string> optionalDepNodList = new List<string>() { "startAddress", "endAddress", "devURL", "timestamp" };
                 List<string> unknownNodeList = new List<string>() { };
                 LogicalDependency d = new LogicalDependency();
