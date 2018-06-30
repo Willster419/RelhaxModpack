@@ -1,3 +1,15 @@
+Version 28.2.3 (06/29/2018)
+https://www.virustotal.com/#/file/f173b760fa2e32f0136666aaa99b258b13317083caa8281d1f602d19f3dfd19b/detection
+-Added new property to packages "logUninstall" for packages that should not be logged to the uninstall logfile. This fixes the bug where the game would not start after XVM install and uninstall
+-Fixed issue where translated messages were not being shown for command line parsing errors
+-Fixed bug where the UI would flicker the tooltip information when updating the application
+-Optimizations to the database parsing
+-Removed lots of unused and deprecated code
+-Other minor code organizational changes and optimizations
+-Database Updater: moved database output text function into its own tab inside database updater
+-Database Editor: added support for "logUninstall" property, moved logicalDependencies to its own configuration tab
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 28.2.1 (06/24/2018)
 https://www.virustotal.com/#/file/5f31ebe71f5a1525f1a0e58da6a3bc7cbabdfc7bdcbeaedd8585ff23b7fc72cb/detection
 -UI Placement fixes of components in the Advanced Settings Window
