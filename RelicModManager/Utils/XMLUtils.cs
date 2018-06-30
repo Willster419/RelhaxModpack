@@ -103,8 +103,8 @@ namespace RelhaxModpack
             //add the global dependencies
             foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/globaldependencies/globaldependency"))
             {
-                List<string> depNodeList = new List<string>() { "zipFile", "crc", "enabled", "packageName", "appendExtraction", "logAtInstall" };
-                List<string> optionalDepNodList = new List<string>() { "startAddress", "endAddress", "devURL", "timestamp" };
+                List<string> depNodeList = new List<string>() { "zipFile", "crc", "enabled", "packageName", "appendExtraction" };
+                List<string> optionalDepNodList = new List<string>() { "startAddress", "endAddress", "devURL", "timestamp", "logAtInstall" };
                 List<string> unknownNodeList = new List<string>() { };
                 Dependency d = new Dependency();
                 foreach (XElement globs in dependencyNode.Elements())
@@ -183,8 +183,8 @@ namespace RelhaxModpack
             //add the dependencies
             foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/dependencies/dependency"))
             {
-                List<string> depNodeList = new List<string>() { "zipFile", "crc", "enabled", "packageName", "appendExtraction", "logAtInstall" };
-                List<string> optionalDepNodList = new List<string>() { "startAddress", "endAddress", "devURL", "timestamp" , "logicalDependencies" };
+                List<string> depNodeList = new List<string>() { "zipFile", "crc", "enabled", "packageName", "appendExtraction" };
+                List<string> optionalDepNodList = new List<string>() { "startAddress", "endAddress", "devURL", "timestamp" , "logicalDependencies", "logAtInstall" };
                 List<string> unknownNodeList = new List<string>() { };
                 Dependency d = new Dependency();
                 foreach (XElement globs in dependencyNode.Elements())
@@ -308,8 +308,8 @@ namespace RelhaxModpack
             //add the logicalDependencies
             foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/logicalDependencies/logicalDependency"))
             {
-                List<string> depNodeList = new List<string>() { "zipFile", "crc", "enabled", "packageName", "logic", "logAtInstall" };
-                List<string> optionalDepNodList = new List<string>() { "startAddress", "endAddress", "devURL", "timestamp" };
+                List<string> depNodeList = new List<string>() { "zipFile", "crc", "enabled", "packageName", "logic" };
+                List<string> optionalDepNodList = new List<string>() { "startAddress", "endAddress", "devURL", "timestamp", "logAtInstall" };
                 List<string> unknownNodeList = new List<string>() { };
                 LogicalDependency d = new LogicalDependency();
                 foreach (XElement globs in dependencyNode.Elements())
