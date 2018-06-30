@@ -779,7 +779,7 @@ namespace RelhaxModpack
                     case "package":
                         List<string> packageNodeList = new List<string>() { "name", "zipFile", "crc", "enabled", "visible", "packageName", "type" };
                         List<string> optionalPackageNodeList = new List<string>() { "version", "timestamp", "startAddress", "endAddress", "size",
-                            "description", "updateComment", "devURL", "userDatas", "medias", "dependencies", "logicalDependencies", "packages" };
+                            "description", "updateComment", "devURL", "userDatas", "medias", "dependencies", "logicalDependencies", "packages", "logAtInstall" };
                         List<string> unknownNodeList = new List<string>() { };
                         SelectablePackage c = new SelectablePackage()
                         {
