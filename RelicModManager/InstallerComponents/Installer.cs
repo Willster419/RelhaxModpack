@@ -2887,13 +2887,10 @@ namespace RelhaxModpack
                                 zip[i].Extract(TanksLocation, ExtractExistingFileAction.OverwriteSilently);
                                 completePath = Path.Combine(TanksLocation, zip[i].FileName.Replace(@"/", @"\"));
                             }
-                            if (fileLogging)
-                            {
-                                if (sb == null)
-                                    Logging.Installer(completePath);
-                                else
-                                    sb.Append(completePath + "\n");
-                            }
+                            if (sb == null)
+                                Logging.Installer((fileLogging ? "": "# ") + completePath);
+                            else
+                                sb.Append((fileLogging ? "": "# ") + completePath + "\n");
                             args.ChildProcessed++;
                         }
                         //we made it, set j to 1 to break out of the exception catch loop
