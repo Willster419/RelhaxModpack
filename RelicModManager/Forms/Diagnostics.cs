@@ -124,7 +124,7 @@ namespace RelhaxModpack
         private void ChangeInstallation_Click(object sender, EventArgs e)
         {
             //attempt to locate the tanks directory
-            if (ParentWindow.manuallyFindTanks() == null)
+            if (ParentWindow.ManuallyFindTanks() == null)
             {
                 //ParentWindow.ToggleUIButtons(true);
                 return;

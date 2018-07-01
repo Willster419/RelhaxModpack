@@ -15,7 +15,7 @@ using RelhaxModpack.DatabaseComponents;
 using RelhaxModpack.InstallerComponents;
 using RelhaxModpack.Forms;
 using RelhaxModpack.UIComponents;
-using System.Globalization;
+using System.Runtime.InteropServices;
 
 namespace RelhaxModpack
 {
@@ -83,7 +83,7 @@ namespace RelhaxModpack
         private bool revertingScaling = false;
 
         //  interpret the created CiInfo buildTag as an "us-US" or a "de-DE" timeformat and return it as a local time- and dateformat string
-        public static string compileTime()//if getting build error, check windows date and time format settings https://puu.sh/xgCqO/e97e2e4a34.png
+        public static string CompileTime()//if getting build error, check windows date and time format settings https://puu.sh/xgCqO/e97e2e4a34.png
         {
             string date = CiInfo.BuildTag;
             if (Utils.ConvertDateToLocalCultureFormat(date, out date))
@@ -147,7 +147,20 @@ namespace RelhaxModpack
         private void ScanRelHaxModBackupFolder(object sender, DoWorkEventArgs args)
         {
             uint filesCount = 0;
+            uint BytesPerCluster = 1;
+
             backupFolderSize = 0;
+
+            if (GetDiskFreeSpace(Settings.RelHaxModBackupFolder, out uint lpSectorsPerCluster, out uint lpBytesPerSector, out uint lpNumberOfFreeClusters, out uint lpTotalNumberOfClusters))
+            {
+                BytesPerCluster = lpSectorsPerCluster * lpBytesPerSector;
+                Logging.Manager("The cluster size was determined for drive " + Path.GetPathRoot(Settings.RelHaxModBackupFolder) + " (" + BytesPerCluster + " bytes)" );
+            }
+            else
+            {
+                Logging.Manager("failed to determine cluster size for drive " + Path.GetPathRoot(Settings.RelHaxModBackupFolder));
+            }
+
             DirectoryInfo di = new DirectoryInfo(Settings.RelHaxModBackupFolder);
             backupDirContent = new Dictionary<DirectoryInfo, List<string>>();    // this dict will hold ALL directories and files after parsing     
             List<DirectoryInfo> folderList = null;
@@ -166,14 +179,21 @@ namespace RelhaxModpack
                     }
                 }
                 List<string> fileList = new List<string>();
-                fileList = NumFilesToProcess(Path.Combine(fL.FullName), ref filesCount, ref backupFolderSize);
+                fileList = NumFilesToProcess(Path.Combine(fL.FullName), ref filesCount, ref backupFolderSize, BytesPerCluster);
                 backupDirContent.Add(fL, fileList);
-                this.backupModsCheckBox.Text = Translations.GetTranslatedString("backupModsCheckBox") + "\nBackups: " + backupDirContent.Count + " Complete size: " + Utils.SizeSuffix(backupFolderSize, 2, true);
+                this.backupModsCheckBox.Text = Translations.GetTranslatedString("backupModsCheckBox") + "\nBackups: " + backupDirContent.Count + " Size on Disk: " + Utils.SizeSuffix(backupFolderSize, 2, true);
             }
-            Logging.Manager(string.Format("parsed backups in BackupFolder: {0}, with a total size of {1}.", backupDirContent.Count, Utils.SizeSuffix(backupFolderSize, 2, true)));
+            Logging.Manager(string.Format("parsed backups in BackupFolder: {0}, with a total size on disk of {1} ({2} bytes) (files and folders: {3}).", backupDirContent.Count, Utils.SizeSuffix(backupFolderSize, 2, true), backupFolderSize, filesCount));
         }
 
-        private List<string> NumFilesToProcess(string folder, ref uint filesCount, ref UInt64 filesSize)
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        static extern bool GetDiskFreeSpace(string lpRootPathName,
+           out uint lpSectorsPerCluster,
+           out uint lpBytesPerSector,
+           out uint lpNumberOfFreeClusters,
+           out uint lpTotalNumberOfClusters);
+
+        private List<string> NumFilesToProcess(string folder, ref uint filesCount, ref UInt64 filesSize, uint BytesPerCluster = 1)
         {
             List<string> list = new List<string>();
             try
@@ -187,12 +207,13 @@ namespace RelhaxModpack
                 {
                     list.Add(file.FullName);
                     filesCount++;
-                    filesSize += (ulong)file.Length;
+                    // calculate the effective size on disk of this file and add it
+                    filesSize += (ulong)(BytesPerCluster * ((ulong)((ulong)file.Length + BytesPerCluster - 1) / BytesPerCluster));
                 }
                 foreach (DirectoryInfo subdir in dirs)
                 {
                     list.Add(subdir.FullName + @"\");
-                    list.AddRange(NumFilesToProcess(subdir.FullName, ref filesCount, ref filesSize));
+                    list.AddRange(NumFilesToProcess(subdir.FullName, ref filesCount, ref filesSize, BytesPerCluster));
                 }
             }
             catch (Exception ex)
@@ -203,7 +224,7 @@ namespace RelhaxModpack
         }
 
         //handler for the mod download file progress
-        void downloader_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        void Downloader_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             if (Settings.InstantExtraction)
                 return;
@@ -258,7 +279,7 @@ namespace RelhaxModpack
         }
 
         //handler for the mod download file complete event
-        void downloader_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        void Downloader_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
             DownloadTimer.Enabled = false;
             //check to see if the user cancled the download
@@ -310,8 +331,8 @@ namespace RelhaxModpack
                 if (Downloader != null)
                     Downloader.Dispose();
                 Downloader = new WebClient();
-                Downloader.DownloadProgressChanged += downloader_DownloadProgressChanged;
-                Downloader.DownloadFileCompleted += downloader_DownloadFileCompleted;
+                Downloader.DownloadProgressChanged += Downloader_DownloadProgressChanged;
+                Downloader.DownloadFileCompleted += Downloader_DownloadFileCompleted;
                 //Downloader.Proxy = null;
                 Downloader.DownloadFileAsync(args.url, args.zipFile, args);
                 Logging.Manager("downloading " + Path.GetFileName(args.zipFile));
@@ -436,8 +457,8 @@ namespace RelhaxModpack
                         sw.Reset();
                         sw.Start();
                         string newExeName = Settings.UseAlternateUpdateMethod? Path.Combine(Application.StartupPath, "RelhaxModpack_update.zip"):Path.Combine(Application.StartupPath, "RelhaxModpack_update.exe");
-                        updater.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloader_DownloadProgressChanged);
-                        updater.DownloadFileCompleted += new AsyncCompletedEventHandler(updater_DownloadFileCompleted);
+                        updater.DownloadProgressChanged += new DownloadProgressChangedEventHandler(Downloader_DownloadProgressChanged);
+                        updater.DownloadFileCompleted += new AsyncCompletedEventHandler(Updater_DownloadFileCompleted);
 
                         // check if manager instance is already running and ask user to close it
                         bool loop = true;
@@ -488,7 +509,7 @@ namespace RelhaxModpack
 
         }
         //handler for when the update download is complete
-        void updater_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        void Updater_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
             DownloadTimer.Enabled = false;
             if (e.Error != null && e.Error.Message.Equals("The remote server returned an error: (404) Not Found."))
@@ -598,7 +619,7 @@ namespace RelhaxModpack
 
         //gets the version of tanks that this is, in the format
         //of the res_mods version folder i.e. 0.9.17.0.3
-        private string getFolderVersion()
+        private string GetFolderVersion()
         {
             if (!File.Exists(Path.Combine(tanksLocation, "version.xml")))
                 return null;
@@ -612,7 +633,7 @@ namespace RelhaxModpack
         }
 
         //check to see if the supplied version of tanks is on the list of supported client versions
-        private bool isClientVersionSupported(string detectedVersion)
+        private bool IsClientVersionSupported(string detectedVersion)
         {
             supportedVersions.Clear();
             string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "supported_clients.xml");  //xml doc name can change
@@ -645,7 +666,7 @@ namespace RelhaxModpack
 
         #region Tanks Install Auto/Manuel Search Code
         //checks the registry to get the location of where WoT is installed
-        private string autoFindTanks()
+        private string AutoFindTanks()
         {
             List<string> searchPathWoT = new List<string>();
             string[] registryPathArray = new string[] { };
@@ -735,10 +756,10 @@ namespace RelhaxModpack
 
         //prompts the user to specify where the "WorldOfTanks.exe" file is
         //return the file path and name of "WorldOfTanks.exe"
-        public string manuallyFindTanks()
+        public string ManuallyFindTanks()
         {
             // try to give an untrained user a littlebit support
-            if (autoFindTanks() != null)
+            if (AutoFindTanks() != null)
             {
                 FindWotExe.InitialDirectory = Path.GetDirectoryName(tanksLocation);
             }
@@ -758,7 +779,7 @@ namespace RelhaxModpack
         {
             loading = true;
             Logging.Manager(string.Format("|RelHax Modpack {0} ({1})", ManagerVersion(), Program.Version == Program.ProgramVersion.Beta ? "beta" : Program.Version == Program.ProgramVersion.Alpha ? "alpha" : "stable"));
-            Logging.Manager(string.Format("|Built on {0}", compileTime()));
+            Logging.Manager(string.Format("|Built on {0}", CompileTime()));
             Logging.Manager(string.Format("|Running on {0}", System.Environment.OSVersion.ToString()));
             //show the wait screen
             PleaseWait wait = new PleaseWait();
@@ -1001,9 +1022,9 @@ namespace RelhaxModpack
             {
                 //attempt to locate the tanks directory automatically
                 //if it fails, it will prompt the user to return the world of tanks exe
-                if (Settings.ForceManuel || this.autoFindTanks() == null)
+                if (Settings.ForceManuel || this.AutoFindTanks() == null)
                 {
-                    if (this.manuallyFindTanks() == null)
+                    if (this.ManuallyFindTanks() == null)
                     {
                         Logging.Manager("user stopped installation");
                         ToggleUIButtons(true);
@@ -1022,12 +1043,12 @@ namespace RelhaxModpack
                     ToggleUIButtons(true);
                     return;
                 }
-                tanksVersion = this.getFolderVersion();
+                tanksVersion = this.GetFolderVersion();
                 tanksVersionForInstaller = tanksVersion;
                 Settings.TanksVersion = tanksVersion;
                 Logging.Manager("tanksVersion parsed as " + tanksVersion);
                 //determine if the tanks client version is supported
-                if (!Program.testMode && !isClientVersionSupported(tanksVersion))
+                if (!Program.testMode && !IsClientVersionSupported(tanksVersion))
                 {
                     //log and inform the user
                     Logging.Manager("WARNING: Detected client version is " + tanksVersion + ", not supported");
@@ -1038,7 +1059,7 @@ namespace RelhaxModpack
                     // select the last public modpack version
                     tanksVersion = publicVersions.Split('\n').Last();
                     // go to Client check again, because the online folder must be set correct
-                    isClientVersionSupported(tanksVersion);
+                    IsClientVersionSupported(tanksVersion);
                     Logging.Manager(string.Format("Version selected: {0}  OnlineFolder: {1}", tanksVersion, Settings.TanksOnlineFolderVersion));
                 }
                 //if the user wants to, check if the database has actually changed
@@ -1608,7 +1629,7 @@ namespace RelhaxModpack
             parrentProgressBar.Maximum = DatabasePackagesToDownload.Count;
             //at this point, there may be user mods selected,
             //and there is at least one mod to extract
-            downloader_DownloadFileCompleted(null, null);
+            Downloader_DownloadFileCompleted(null, null);
             //release no longer needed rescources and end the installation process
             list.Dispose();
             list = null;
@@ -1729,7 +1750,7 @@ namespace RelhaxModpack
 
         #region progress reporting
 
-        private string createExtractionMsgBoxProgressOutput(string[] s)
+        private string CreateExtractionMsgBoxProgressOutput(string[] s)
         {
             return string.Format("{0} {1} {2} {3}\n{4}\n{5}: {6} MB",
                 Translations.GetTranslatedString("extractingPackage"),
@@ -1800,7 +1821,7 @@ namespace RelhaxModpack
                         if (e.ChildProcessed > 0)
                             if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
                                 childProgressBar.Value = e.ChildProcessed;
-                        message = createExtractionMsgBoxProgressOutput(new string[] { e.ParrentProcessed.ToString(), e.ParrentTotalToProcess.ToString(),
+                        message = CreateExtractionMsgBoxProgressOutput(new string[] { e.ParrentProcessed.ToString(), e.ParrentTotalToProcess.ToString(),
                         e.currentFile, Math.Round(e.currentFileSizeProcessed / MBDivisor, 2).ToString() });
                     }
                     break;
@@ -1843,7 +1864,7 @@ namespace RelhaxModpack
                     childProgressBar.Maximum = e.ChildTotalToProcess;
                     if (e.ChildProcessed > 0)
                         childProgressBar.Value = e.ChildProcessed;
-                    message = createExtractionMsgBoxProgressOutput(new string[] { e.ParrentProcessed.ToString(), e.ParrentTotalToProcess.ToString(), e.currentFile,
+                    message = CreateExtractionMsgBoxProgressOutput(new string[] { e.ParrentProcessed.ToString(), e.ParrentTotalToProcess.ToString(), e.currentFile,
                         Math.Round(e.currentFileSizeProcessed / MBDivisor, 2).ToString() });
                     break;
                 case InstallerEventArgs.InstallProgress.PatchUserMods:
@@ -1998,9 +2019,9 @@ namespace RelhaxModpack
             //reset the interface
             this.downloadProgress.Text = "";
             //attempt to locate the tanks directory
-            if (Settings.ForceManuel || this.autoFindTanks() == null)
+            if (Settings.ForceManuel || this.AutoFindTanks() == null)
             {
-                if (this.manuallyFindTanks() == null)
+                if (this.ManuallyFindTanks() == null)
                 {
                     ToggleUIButtons(true);
                     return;
@@ -2010,7 +2031,7 @@ namespace RelhaxModpack
             tanksLocation = tanksLocation.Substring(0, tanksLocation.Length - 17);
             Logging.Manager(string.Format("tanksLocation parsed as {0}", tanksLocation));
             Logging.Manager(string.Format("customUserMods parsed as {0}", Path.Combine(Application.StartupPath, "RelHaxUserMods")));
-            tanksVersion = this.getFolderVersion();
+            tanksVersion = this.GetFolderVersion();
             if (MessageBox.Show(string.Format(Translations.GetTranslatedString("confirmUninstallMessage"), tanksLocation, Settings.UninstallMode.ToString()), Translations.GetTranslatedString("confirmUninstallHeader"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
                 unI = new Installer()
@@ -2309,7 +2330,7 @@ namespace RelhaxModpack
             ApplyVersionTextLabels();
         }
         //handler for when the "backupResMods mods" checkbox is changed
-        private void backupModsCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void BackupModsCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Settings.BackupModFolder = backupModsCheckBox.Checked;
         }
@@ -2897,9 +2918,9 @@ namespace RelhaxModpack
         {
             ToggleUIButtons(false);
             //attempt to locate the tanks directory
-            if (Settings.ForceManuel || autoFindTanks() == null)
+            if (Settings.ForceManuel || AutoFindTanks() == null)
             {
-                if (manuallyFindTanks() == null)
+                if (ManuallyFindTanks() == null)
                 {
                     ToggleUIButtons(true);
                     return;

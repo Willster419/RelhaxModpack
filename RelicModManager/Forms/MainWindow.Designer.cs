@@ -173,7 +173,7 @@
             this.backupModsCheckBox.Text = "Backup current mods folder";
             this.backupModsCheckBox.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.backupModsCheckBox.UseVisualStyleBackColor = false;
-            this.backupModsCheckBox.CheckedChanged += new System.EventHandler(this.backupModsCheckBox_CheckedChanged);
+            this.backupModsCheckBox.CheckedChanged += new System.EventHandler(this.BackupModsCheckBox_CheckedChanged);
             this.backupModsCheckBox.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.backupModsCheckBox.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
