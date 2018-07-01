@@ -35,7 +35,7 @@ namespace RelhaxModpack
         //timer to measure download speed
         private Stopwatch sw = new Stopwatch();
         // this dict will hold ALL directories and files of the backupFolder after parsing
-        private Dictionary<DirectoryInfo, List<string>> backupDirContent;
+        private List<BackupFolder> backupFolderContent;
         //The list of all mods
         private List<Category> parsedCatagoryLists;
         //queue for downloading mods
@@ -58,7 +58,6 @@ namespace RelhaxModpack
         public static List<string> usedFilesList;
         //counter for Utils.exception calls
         public static int errorCounter = 0;
-        public static UInt64 backupFolderSize = 0;
         private List<SelectablePackage> userMods;
         private string currentModDownloading;
         public Installer ins;
@@ -144,12 +143,24 @@ namespace RelhaxModpack
             }
         }
 
+        /// <summary>
+        /// this "calculation is very simple and not 100% correct. To safe time and speed up, the process is not checking the effectiv size on disk.
+        /// more information about 0-size files with data see here:
+        /// https://blogs.technet.microsoft.com/askcore/2009/10/16/the-four-stages-of-ntfs-file-growth/
+        /// </summary>
+        /// <returns></returns>
         private void ScanRelHaxModBackupFolder(object sender, DoWorkEventArgs args)
         {
-            uint filesCount = 0;
+            uint fileCount = 0;
+            uint completeFileCount = 0;
+            uint completeFileFolderCount = 0;
             uint BytesPerCluster = 1;
+            UInt64 filesSize = 0;
+            UInt64 filesSizeOnDisk = 0;
+            UInt64 completeFolderSize = 0;
+            UInt64 completeFolderSizeOnDisk = 0;
 
-            backupFolderSize = 0;
+            BackupFolder bf;
 
             if (GetDiskFreeSpace(Settings.RelHaxModBackupFolder, out uint lpSectorsPerCluster, out uint lpBytesPerSector, out uint lpNumberOfFreeClusters, out uint lpTotalNumberOfClusters))
             {
@@ -162,9 +173,8 @@ namespace RelhaxModpack
             }
 
             DirectoryInfo di = new DirectoryInfo(Settings.RelHaxModBackupFolder);
-            backupDirContent = new Dictionary<DirectoryInfo, List<string>>();    // this dict will hold ALL directories and files after parsing     
-            List<DirectoryInfo> folderList = null;
-            folderList = di.GetDirectories().ToList();      // parsed top folders
+            backupFolderContent = new List<BackupFolder>();                         // this list will hold ALL directories and files after parsing
+            List<DirectoryInfo> folderList = di.GetDirectories().ToList();          // parsed top folders
             foreach (var fL in folderList)
             {
                 // search ModSelectionList Form. If found, user already startet the selection and the BackUpFolder cleanup will be not realy interesting
@@ -174,16 +184,30 @@ namespace RelhaxModpack
                     {
                         this.backupModsCheckBox.Text = Translations.GetTranslatedString("backupModsCheckBox");
                         Logging.Manager("Scanning RelHaxModBackup folder stopped, because ModSelectionList is already started");
-                        backupDirContent = null;
+                        backupFolderContent = null;
                         return;
                     }
                 }
-                List<string> fileList = new List<string>();
-                fileList = NumFilesToProcess(Path.Combine(fL.FullName), ref filesCount, ref backupFolderSize, BytesPerCluster);
-                backupDirContent.Add(fL, fileList);
-                this.backupModsCheckBox.Text = Translations.GetTranslatedString("backupModsCheckBox") + "\nBackups: " + backupDirContent.Count + " Size on Disk: " + Utils.SizeSuffix(backupFolderSize, 2, true);
+                fileCount = 0;
+                filesSize = 0;
+                filesSizeOnDisk = 0;
+                bf = new BackupFolder
+                {
+                    FullnameList = new List<string>(NumFilesToProcess(fL.FullName, ref fileCount, ref filesSize, ref filesSizeOnDisk, BytesPerCluster)),
+                    TopfolderName = fL.FullName,
+                    FileCount = fileCount,
+                    FilesSize = filesSize,
+                    FilesSizeOnDisk = filesSizeOnDisk
+                };
+                bf.FolderCount = (uint)bf.FullnameList.Count - fileCount;
+                backupFolderContent.Add(bf);
+                completeFileCount += fileCount;
+                completeFileFolderCount += bf.FileCount + bf.FolderCount;
+                completeFolderSize += filesSize;
+                completeFolderSizeOnDisk += filesSizeOnDisk;
+                this.backupModsCheckBox.Text = Translations.GetTranslatedString("backupModsCheckBox") + "\nBackups: " + backupFolderContent.Count + " Size: " + Utils.SizeSuffix(completeFolderSize, 2, true);
             }
-            Logging.Manager(string.Format("parsed backups in BackupFolder: {0}, with a total size on disk of {1} ({2} bytes) (files and folders: {3}).", backupDirContent.Count, Utils.SizeSuffix(backupFolderSize, 2, true), backupFolderSize, filesCount));
+            Logging.Manager(string.Format("parsed backups in BackupFolder: {0}, with a total size of {1} ({2} bytes) (files and folders: {3}).", backupFolderContent.Count, Utils.SizeSuffix(completeFolderSize, 2, true), completeFolderSize, completeFileFolderCount + backupFolderContent.Count));
         }
 
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
@@ -193,27 +217,28 @@ namespace RelhaxModpack
            out uint lpNumberOfFreeClusters,
            out uint lpTotalNumberOfClusters);
 
-        private List<string> NumFilesToProcess(string folder, ref uint filesCount, ref UInt64 filesSize, uint BytesPerCluster = 1)
+        private List<string> NumFilesToProcess(string folder, ref uint filesCount, ref UInt64 filesSize, ref UInt64 filesSizeOnDisk, uint BytesPerCluster = 1)
         {
             List<string> list = new List<string>();
             try
             {
                 // Get the subdirectories for the specified directory.
                 DirectoryInfo dir = new DirectoryInfo(folder);
-                DirectoryInfo[] dirs = dir.GetDirectories();
                 // Get the files in the directory
                 FileInfo[] files = dir.GetFiles();
                 foreach (FileInfo file in files)
                 {
                     list.Add(file.FullName);
                     filesCount++;
+                    filesSize += (ulong)file.Length;
                     // calculate the effective size on disk of this file and add it
-                    filesSize += (ulong)(BytesPerCluster * ((ulong)((ulong)file.Length + BytesPerCluster - 1) / BytesPerCluster));
+                    filesSizeOnDisk += (BytesPerCluster * (((ulong)file.Length + BytesPerCluster - 1) / BytesPerCluster));
                 }
+                DirectoryInfo[] dirs = dir.GetDirectories();
                 foreach (DirectoryInfo subdir in dirs)
                 {
                     list.Add(subdir.FullName + @"\");
-                    list.AddRange(NumFilesToProcess(subdir.FullName, ref filesCount, ref filesSize, BytesPerCluster));
+                    list.AddRange(NumFilesToProcess(subdir.FullName, ref filesCount, ref filesSize, ref filesSizeOnDisk, BytesPerCluster));
                 }
             }
             catch (Exception ex)
