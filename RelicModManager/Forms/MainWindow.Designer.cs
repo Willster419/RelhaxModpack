@@ -231,7 +231,7 @@
             this.ComicSansFontCB.Text = "Comic Sans Font";
             this.ComicSansFontCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.ComicSansFontCB.UseVisualStyleBackColor = false;
-            this.ComicSansFontCB.CheckedChanged += new System.EventHandler(this.cancerFontCB_CheckedChanged);
+            this.ComicSansFontCB.CheckedChanged += new System.EventHandler(this.CancerFontCB_CheckedChanged);
             this.ComicSansFontCB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.ComicSansFontCB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
@@ -247,7 +247,7 @@
             this.saveUserDataCB.Text = "Save User created data";
             this.saveUserDataCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.saveUserDataCB.UseVisualStyleBackColor = true;
-            this.saveUserDataCB.CheckedChanged += new System.EventHandler(this.saveUserDataCB_CheckedChanged);
+            this.saveUserDataCB.CheckedChanged += new System.EventHandler(this.SaveUserDataCB_CheckedChanged);
             this.saveUserDataCB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.saveUserDataCB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
@@ -263,7 +263,7 @@
             this.notifyIfSameDatabaseCB.Text = "Inform if no new database available";
             this.notifyIfSameDatabaseCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.notifyIfSameDatabaseCB.UseVisualStyleBackColor = true;
-            this.notifyIfSameDatabaseCB.CheckedChanged += new System.EventHandler(this.notifyIfSameDatabaseCB_CheckedChanged);
+            this.notifyIfSameDatabaseCB.CheckedChanged += new System.EventHandler(this.NotifyIfSameDatabaseCB_CheckedChanged);
             this.notifyIfSameDatabaseCB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.notifyIfSameDatabaseCB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
@@ -279,7 +279,7 @@
             this.darkUICB.Text = "Dark UI";
             this.darkUICB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.darkUICB.UseVisualStyleBackColor = true;
-            this.darkUICB.CheckedChanged += new System.EventHandler(this.darkUICB_CheckedChanged);
+            this.darkUICB.CheckedChanged += new System.EventHandler(this.DarkUICB_CheckedChanged);
             this.darkUICB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.darkUICB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
@@ -295,7 +295,7 @@
             this.saveLastInstallCB.Text = "Save selection of last install";
             this.saveLastInstallCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.saveLastInstallCB.UseVisualStyleBackColor = true;
-            this.saveLastInstallCB.CheckedChanged += new System.EventHandler(this.saveLastInstallCB_CheckedChanged);
+            this.saveLastInstallCB.CheckedChanged += new System.EventHandler(this.SaveLastInstallCB_CheckedChanged);
             this.saveLastInstallCB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.saveLastInstallCB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
@@ -327,7 +327,7 @@
             this.clearLogFilesCB.Text = "Clear log files";
             this.clearLogFilesCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.clearLogFilesCB.UseVisualStyleBackColor = true;
-            this.clearLogFilesCB.CheckedChanged += new System.EventHandler(this.clearLogFilesCB_CheckedChanged);
+            this.clearLogFilesCB.CheckedChanged += new System.EventHandler(this.ClearLogFilesCB_CheckedChanged);
             this.clearLogFilesCB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.clearLogFilesCB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
@@ -399,7 +399,7 @@
             this.cancelDownloadButton.Text = "Cancel Download";
             this.cancelDownloadButton.UseVisualStyleBackColor = true;
             this.cancelDownloadButton.Visible = false;
-            this.cancelDownloadButton.Click += new System.EventHandler(this.cancelDownloadButton_Click);
+            this.cancelDownloadButton.Click += new System.EventHandler(this.CancelDownloadButton_Click);
             // 
             // DownloadTimer
             // 
@@ -608,7 +608,7 @@
             this.viewAppUpdates.TabIndex = 36;
             this.viewAppUpdates.Text = "View latest application updates";
             this.viewAppUpdates.UseVisualStyleBackColor = true;
-            this.viewAppUpdates.Click += new System.EventHandler(this.viewAppUpdates_Click);
+            this.viewAppUpdates.Click += new System.EventHandler(this.ViewAppUpdates_Click);
             // 
             // viewDBUpdates
             // 
@@ -620,7 +620,7 @@
             this.viewDBUpdates.TabIndex = 37;
             this.viewDBUpdates.Text = "View latest database updates";
             this.viewDBUpdates.UseVisualStyleBackColor = true;
-            this.viewDBUpdates.Click += new System.EventHandler(this.viewDBUpdates_Click);
+            this.viewDBUpdates.Click += new System.EventHandler(this.ViewDBUpdates_Click);
             // 
             // downloadProgress
             // 
@@ -796,7 +796,7 @@
             this.fontSize100.TabStop = true;
             this.fontSize100.Text = "Font 1x";
             this.fontSize100.UseVisualStyleBackColor = true;
-            this.fontSize100.CheckedChanged += new System.EventHandler(this.fontSize100_CheckedChanged);
+            this.fontSize100.CheckedChanged += new System.EventHandler(this.FontSize100_CheckedChanged);
             this.fontSize100.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             // 
             // fontSize275
@@ -810,7 +810,7 @@
             this.fontSize275.TabStop = true;
             this.fontSize275.Text = "Font 2.75x";
             this.fontSize275.UseVisualStyleBackColor = true;
-            this.fontSize275.CheckedChanged += new System.EventHandler(this.fontSize275_CheckedChanged);
+            this.fontSize275.CheckedChanged += new System.EventHandler(this.FontSize275_CheckedChanged);
             this.fontSize275.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             // 
             // DPI175
@@ -838,7 +838,7 @@
             this.fontSize125.TabStop = true;
             this.fontSize125.Text = "Font 1.25x";
             this.fontSize125.UseVisualStyleBackColor = true;
-            this.fontSize125.CheckedChanged += new System.EventHandler(this.fontSize125_CheckedChanged);
+            this.fontSize125.CheckedChanged += new System.EventHandler(this.FontSize125_CheckedChanged);
             this.fontSize125.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             // 
             // fontSize225
@@ -852,7 +852,7 @@
             this.fontSize225.TabStop = true;
             this.fontSize225.Text = "Font 2.25x";
             this.fontSize225.UseVisualStyleBackColor = true;
-            this.fontSize225.CheckedChanged += new System.EventHandler(this.fontSize225_CheckedChanged);
+            this.fontSize225.CheckedChanged += new System.EventHandler(this.FontSize225_CheckedChanged);
             this.fontSize225.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             // 
             // fontSize175
@@ -866,7 +866,7 @@
             this.fontSize175.TabStop = true;
             this.fontSize175.Text = "Font 1.75x";
             this.fontSize175.UseVisualStyleBackColor = true;
-            this.fontSize175.CheckedChanged += new System.EventHandler(this.fontSize175_CheckedChanged);
+            this.fontSize175.CheckedChanged += new System.EventHandler(this.FontSize175_CheckedChanged);
             this.fontSize175.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             // 
             // RelhaxMenuStrip
@@ -917,7 +917,7 @@
             this.DonateButton.Size = new System.Drawing.Size(38, 38);
             this.DonateButton.TabIndex = 45;
             this.DonateButton.UseVisualStyleBackColor = true;
-            this.DonateButton.Click += new System.EventHandler(this.donateLabel_Click);
+            this.DonateButton.Click += new System.EventHandler(this.DonateLabel_Click);
             this.DonateButton.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.DonateButton.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
@@ -1021,7 +1021,7 @@
             this.FindBugAddModButton.Size = new System.Drawing.Size(38, 38);
             this.FindBugAddModButton.TabIndex = 54;
             this.FindBugAddModButton.UseVisualStyleBackColor = true;
-            this.FindBugAddModButton.Click += new System.EventHandler(this.findBugAddModLabel_Click);
+            this.FindBugAddModButton.Click += new System.EventHandler(this.FindBugAddModLabel_Click);
             this.FindBugAddModButton.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.FindBugAddModButton.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 

@@ -2335,17 +2335,17 @@ namespace RelhaxModpack
             Settings.BackupModFolder = backupModsCheckBox.Checked;
         }
 
-        private void saveLastInstallCB_CheckedChanged(object sender, EventArgs e)
+        private void SaveLastInstallCB_CheckedChanged(object sender, EventArgs e)
         {
             Settings.SaveLastConfig = saveLastInstallCB.Checked;
         }
 
-        private void saveUserDataCB_CheckedChanged(object sender, EventArgs e)
+        private void SaveUserDataCB_CheckedChanged(object sender, EventArgs e)
         {
             Settings.SaveUserData = saveUserDataCB.Checked;
         }
 
-        private void darkUICB_CheckedChanged(object sender, EventArgs e)
+        private void DarkUICB_CheckedChanged(object sender, EventArgs e)
         {
             //set the thing
             Settings.DarkUI = darkUICB.Checked;
@@ -2369,7 +2369,7 @@ namespace RelhaxModpack
             Settings.SView = SelectionView.DefaultV2;
         }
 
-        private void fontSize100_CheckedChanged(object sender, EventArgs e)
+        private void FontSize100_CheckedChanged(object sender, EventArgs e)
         {
             if (fontSize100.Checked)
             {
@@ -2416,7 +2416,7 @@ namespace RelhaxModpack
             }
         }
 
-        private void fontSize125_CheckedChanged(object sender, EventArgs e)
+        private void FontSize125_CheckedChanged(object sender, EventArgs e)
         {
             if (fontSize125.Checked)
             {
@@ -2458,7 +2458,7 @@ namespace RelhaxModpack
             }
         }
 
-        private void fontSize175_CheckedChanged(object sender, EventArgs e)
+        private void FontSize175_CheckedChanged(object sender, EventArgs e)
         {
             if (fontSize175.Checked)
             {
@@ -2500,7 +2500,7 @@ namespace RelhaxModpack
             }
         }
 
-        private void fontSize225_CheckedChanged(object sender, EventArgs e)
+        private void FontSize225_CheckedChanged(object sender, EventArgs e)
         {
             if (fontSize225.Checked)
             {
@@ -2542,7 +2542,7 @@ namespace RelhaxModpack
             }
         }
 
-        private void fontSize275_CheckedChanged(object sender, EventArgs e)
+        private void FontSize275_CheckedChanged(object sender, EventArgs e)
         {
             if (fontSize275.Checked)
             {
@@ -2836,18 +2836,18 @@ namespace RelhaxModpack
             }
         }
         //enalbes the user to use "comic sans" font for the 1 person that would ever want to do that
-        private void cancerFontCB_CheckedChanged(object sender, EventArgs e)
+        private void CancerFontCB_CheckedChanged(object sender, EventArgs e)
         {
             Settings.ComicSans = ComicSansFontCB.Checked;
             Settings.ApplyInternalProperties();
             Font = Settings.AppFont;
         }
-        private void clearLogFilesCB_CheckedChanged(object sender, EventArgs e)
+        private void ClearLogFilesCB_CheckedChanged(object sender, EventArgs e)
         {
             Settings.DeleteLogs = clearLogFilesCB.Checked;
         }
 
-        private void notifyIfSameDatabaseCB_CheckedChanged(object sender, EventArgs e)
+        private void NotifyIfSameDatabaseCB_CheckedChanged(object sender, EventArgs e)
         {
             Settings.NotifyIfSameDatabase = notifyIfSameDatabaseCB.Checked;
         }
@@ -2889,12 +2889,12 @@ namespace RelhaxModpack
         #endregion
 
         #region Click events
-        private void cancelDownloadButton_Click(object sender, EventArgs e)
+        private void CancelDownloadButton_Click(object sender, EventArgs e)
         {
             Downloader.CancelAsync();
         }
 
-        private void viewAppUpdates_Click(object sender, EventArgs e)
+        private void ViewAppUpdates_Click(object sender, EventArgs e)
         {
             int xloc = this.Location.X + this.Size.Width + 10;
             int yloc = this.Location.Y;
@@ -2904,7 +2904,7 @@ namespace RelhaxModpack
             }
         }
 
-        private void viewDBUpdates_Click(object sender, EventArgs e)
+        private void ViewDBUpdates_Click(object sender, EventArgs e)
         {
             int xloc = this.Location.X + this.Size.Width + 10;
             int yloc = this.Location.Y;
@@ -2941,7 +2941,7 @@ namespace RelhaxModpack
             ToggleUIButtons(true);
         }
 
-        private void donateLabel_Click(object sender, EventArgs e)
+        private void DonateLabel_Click(object sender, EventArgs e)
         {
             /*      de_DE           DE
                     pl_PL           PL
@@ -2955,7 +2955,7 @@ namespace RelhaxModpack
             // https://www.paypal.com/paypalme/grab?country.x=IN&locale.x=en_IN
         }
 
-        private void findBugAddModLabel_Click(object sender, EventArgs e)
+        private void FindBugAddModLabel_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("http://forums.relhaxmodpack.com/");
         }
