@@ -77,9 +77,9 @@ namespace RelhaxModpack.XmlBinary
             try
             {
                 reader.ReadSByte();
-                List<string> dictionary = PS.readDictionary(reader);
+                List<string> dictionary = PS.ReadDictionary(reader);
                 XmlNode xmlroot = xDoc.CreateNode(XmlNodeType.Element, PackedFileName, "");
-                PS.readElement(reader, xmlroot, xDoc, dictionary);
+                PS.ReadElement(reader, xmlroot, xDoc, dictionary);
                 xDoc.AppendChild(xmlroot);
                 DecodedXML.Append(FormatXml(xDoc.OuterXml));
                 return true;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
+using System.Text;
 using System.Xml;
 
 namespace RelhaxModpack.XmlBinary
@@ -63,7 +63,7 @@ namespace RelhaxModpack.XmlBinary
             }
         }
 
-        public string readStringTillZero(BinaryReader reader)
+        public string ReadStringTillZero(BinaryReader reader)
         {
             char[] work = new char[MAX_LENGTH];
 
@@ -78,59 +78,59 @@ namespace RelhaxModpack.XmlBinary
             return new string(work, 0, i);
         }
 
-        public List<string> readDictionary(BinaryReader reader)
+        public List<string> ReadDictionary(BinaryReader reader)
         {
             List<string> dictionary = new List<string>();
             int counter = 0;
-            string text = readStringTillZero(reader);
+            string text = ReadStringTillZero(reader);
 
             while (!(text.Length == 0))
             {
                 dictionary.Add(text);
-                text = readStringTillZero(reader);
+                text = ReadStringTillZero(reader);
                 counter++;
             }
             return dictionary;
         }
 
-        public int readLittleEndianShort(BinaryReader reader)
+        public int ReadLittleEndianShort(BinaryReader reader)
         {
             int LittleEndianShort = reader.ReadInt16();
             return LittleEndianShort;
         }
 
-        public int readLittleEndianInt(BinaryReader reader)
+        public int ReadLittleEndianInt(BinaryReader reader)
         {
             int LittleEndianInt = reader.ReadInt32();
             return LittleEndianInt;
         }
 
-        public DataDescriptor readDataDescriptor(BinaryReader reader)
+        public DataDescriptor ReadDataDescriptor(BinaryReader reader)
         {
-            int selfEndAndType = readLittleEndianInt(reader);
+            int selfEndAndType = ReadLittleEndianInt(reader);
             return new DataDescriptor(selfEndAndType & 0x0fffffff, selfEndAndType >> 28, (int)reader.BaseStream.Position);
         }
 
-        public ElementDescriptor[] readElementDescriptors(BinaryReader reader, int number)
+        public ElementDescriptor[] ReadElementDescriptors(BinaryReader reader, int number)
         {
             ElementDescriptor[] elements = new ElementDescriptor[number];
             for (int i = 0; i < number; i++)
             {
-                int nameIndex = readLittleEndianShort(reader);
-                DataDescriptor dataDescriptor = readDataDescriptor(reader);
+                int nameIndex = ReadLittleEndianShort(reader);
+                DataDescriptor dataDescriptor = ReadDataDescriptor(reader);
                 elements[i] = new ElementDescriptor(nameIndex, dataDescriptor);
             }
             return elements;
         }
 
-        public string readString(BinaryReader reader, int lengthInBytes)
+        public string ReadString(BinaryReader reader, int lengthInBytes)
         {
             string rString = new string(reader.ReadChars(lengthInBytes), 0, lengthInBytes);
 
             return rString;
         }
 
-        public string readNumber(BinaryReader reader, int lengthInBytes)
+        public string ReadNumber(BinaryReader reader, int lengthInBytes)
         {
             string Number = "";
             switch (lengthInBytes)
@@ -139,10 +139,10 @@ namespace RelhaxModpack.XmlBinary
                     Number = Convert.ToString(reader.ReadSByte());
                     break;
                 case 2:
-                    Number = Convert.ToString(readLittleEndianShort(reader));
+                    Number = Convert.ToString(ReadLittleEndianShort(reader));
                     break;
                 case 4:
-                    Number = Convert.ToString(readLittleEndianInt(reader));
+                    Number = Convert.ToString(ReadLittleEndianInt(reader));
                     break;
                 default:
                     Number = "0";
@@ -152,13 +152,13 @@ namespace RelhaxModpack.XmlBinary
 
         }
 
-        public float readLittleEndianFloat(BinaryReader reader)
+        public float ReadLittleEndianFloat(BinaryReader reader)
         {
             float LittleEndianFloat = reader.ReadSingle();
             return LittleEndianFloat;
         }
 
-        public string readFloats(BinaryReader reader, int lengthInBytes)
+        public string ReadFloats(BinaryReader reader, int lengthInBytes)
         {
             int n = lengthInBytes / 4;
 
@@ -170,14 +170,14 @@ namespace RelhaxModpack.XmlBinary
                 {
                     sb.Append(" ");
                 }
-                float rFloat = readLittleEndianFloat(reader);
+                float rFloat = ReadLittleEndianFloat(reader);
                 sb.Append(rFloat.ToString("0.000000"));
             }
             return sb.ToString();
         }
 
 
-        public bool readBoolean(BinaryReader reader, int lengthInBytes)
+        public bool ReadBoolean(BinaryReader reader, int lengthInBytes)
         {
             bool @bool = lengthInBytes == 1;
             if (@bool)
@@ -191,7 +191,7 @@ namespace RelhaxModpack.XmlBinary
             return @bool;
         }
 
-        private static string byteArrayToBase64(sbyte[] a)
+        private static string ByteArrayToBase64(sbyte[] a)
         {
             int aLen = a.Length;
             int numFullGroups = aLen / 3;
@@ -232,17 +232,17 @@ namespace RelhaxModpack.XmlBinary
             return result.ToString();
         }
 
-        public string readBase64(BinaryReader reader, int lengthInBytes)
+        public string ReadBase64(BinaryReader reader, int lengthInBytes)
         {
             sbyte[] bytes = new sbyte[lengthInBytes];
             for (int i = 0; i < lengthInBytes; i++)
             {
                 bytes[i] = reader.ReadSByte();
             }
-            return byteArrayToBase64(bytes);
+            return ByteArrayToBase64(bytes);
         }
 
-        public string readAndToHex(BinaryReader reader, int lengthInBytes)
+        public string ReadAndToHex(BinaryReader reader, int lengthInBytes)
         {
             sbyte[] bytes = new sbyte[lengthInBytes];
             for (int i = 0; i < lengthInBytes; i++)
@@ -261,29 +261,29 @@ namespace RelhaxModpack.XmlBinary
             return sb.ToString();
         }
 
-        public int readData(BinaryReader reader, List<string> dictionary, XmlNode element, XmlDocument xDoc, int offset, DataDescriptor dataDescriptor)
+        public int ReadData(BinaryReader reader, List<string> dictionary, XmlNode element, XmlDocument xDoc, int offset, DataDescriptor dataDescriptor)
         {
             int lengthInBytes = dataDescriptor.end - offset;
             if (dataDescriptor.type == 0x0)
             {
                 // Element                
-                readElement(reader, element, xDoc, dictionary);
+                ReadElement(reader, element, xDoc, dictionary);
             }
             else if (dataDescriptor.type == 0x1)
             {
                 // String
-                element.InnerText = readString(reader, lengthInBytes);
+                element.InnerText = ReadString(reader, lengthInBytes);
 
             }
             else if (dataDescriptor.type == 0x2)
             {
                 // Integer number
-                element.InnerText = "\t" + readNumber(reader, lengthInBytes) + "\t";
+                element.InnerText = "\t" + ReadNumber(reader, lengthInBytes) + "\t";
             }
             else if (dataDescriptor.type == 0x3)
             {
                 // Floats
-                string str = readFloats(reader, lengthInBytes);
+                string str = ReadFloats(reader, lengthInBytes);
 
                 string[] strData = str.Split(' ');
                 if (strData.Length == 12)
@@ -310,7 +310,7 @@ namespace RelhaxModpack.XmlBinary
             {
                 // Boolean
 
-                if (readBoolean(reader, lengthInBytes))
+                if (ReadBoolean(reader, lengthInBytes))
                 {
                     element.InnerText = "\ttrue\t";
                 }
@@ -323,28 +323,28 @@ namespace RelhaxModpack.XmlBinary
             else if (dataDescriptor.type == 0x5)
             {
                 // Base64
-                element.InnerText = "\t" + readBase64(reader, lengthInBytes) + "\t";
+                element.InnerText = "\t" + ReadBase64(reader, lengthInBytes) + "\t";
             }
             else
             {
-                Logging.Manager("ERROR: Unknown type of \"" + element.Name + ": " + dataDescriptor.ToString() + " " + readAndToHex(reader, lengthInBytes));
+                Logging.Manager("ERROR: Unknown type of \"" + element.Name + ": " + dataDescriptor.ToString() + " " + ReadAndToHex(reader, lengthInBytes));
             }
 
             return dataDescriptor.end;
         }
 
-        public void readElement(BinaryReader reader, XmlNode element, XmlDocument xDoc, List<string> dictionary)
+        public void ReadElement(BinaryReader reader, XmlNode element, XmlDocument xDoc, List<string> dictionary)
         {
-            int childrenNmber = readLittleEndianShort(reader);
-            DataDescriptor selfDataDescriptor = readDataDescriptor(reader);
-            ElementDescriptor[] children = readElementDescriptors(reader, childrenNmber);
+            int childrenNmber = ReadLittleEndianShort(reader);
+            DataDescriptor selfDataDescriptor = ReadDataDescriptor(reader);
+            ElementDescriptor[] children = ReadElementDescriptors(reader, childrenNmber);
 
-            int offset = readData(reader, dictionary, element, xDoc, 0, selfDataDescriptor);
+            int offset = ReadData(reader, dictionary, element, xDoc, 0, selfDataDescriptor);
 
             foreach (ElementDescriptor elementDescriptor in children)
             {
                 XmlNode child = xDoc.CreateElement(dictionary[elementDescriptor.nameIndex]);
-                offset = readData(reader, dictionary, child, xDoc, offset, elementDescriptor.dataDescriptor);
+                offset = ReadData(reader, dictionary, child, xDoc, offset, elementDescriptor.dataDescriptor);
                 element.AppendChild(child);
             }
 
