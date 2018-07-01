@@ -1263,70 +1263,70 @@ namespace RelhaxModpack
                 args.ChildProcessed = 0;
                 foreach (XmlUnpack r in XmlUnpackList)
                 {
-                    string fn = r.newFileName.Equals("") ? r.fileName : r.newFileName;
+                    string fn = r.NewFileName.Equals("") ? r.FileName : r.NewFileName;
                     args.currentFile = fn;
                     try
                     {
-                        if (!Directory.Exists(r.extractDirectory)) Directory.CreateDirectory(r.extractDirectory);
-                        if (r.pkg.Equals(""))
+                        if (!Directory.Exists(r.ExtractDirectory)) Directory.CreateDirectory(r.ExtractDirectory);
+                        if (r.Pkg.Equals(""))
                         {
                             try
                             {
                                 // if value of pkg is empty, it is not contained in an archive
-                                if (File.Exists(Path.Combine(r.directoryInArchive, r.fileName)))
+                                if (File.Exists(Path.Combine(r.DirectoryInArchive, r.FileName)))
                                 {
-                                    File.Copy(Path.Combine(r.directoryInArchive, r.fileName), Path.Combine(r.extractDirectory, fn), false);     // no overwrite of an exsisting file !!
+                                    File.Copy(Path.Combine(r.DirectoryInArchive, r.FileName), Path.Combine(r.ExtractDirectory, fn), false);     // no overwrite of an exsisting file !!
                                 }
                                 else
                                 {
                                     if (Settings.ExportMode)
                                     {
-                                        Logging.Manager(string.Format("WARNING: file {0} not found, but most likley expected due to export mode", Path.Combine(r.directoryInArchive, r.fileName)));
+                                        Logging.Manager(string.Format("WARNING: file {0} not found, but most likley expected due to export mode", Path.Combine(r.DirectoryInArchive, r.FileName)));
                                     }
                                     else
                                     {
-                                        Logging.Manager(string.Format("ERROR: file {0} not found!", Path.Combine(r.directoryInArchive, r.fileName)));
+                                        Logging.Manager(string.Format("ERROR: file {0} not found!", Path.Combine(r.DirectoryInArchive, r.FileName)));
                                     }
                                 }
                                     // Utils.AppendToInstallLog(Path.Combine(r.extractDirectory, fn));
-                                    Logging.Installer(Path.Combine(r.extractDirectory, fn));            // write created file with path
-                                Logging.Manager(string.Format("{0} moved", r.fileName));
+                                    Logging.Installer(Path.Combine(r.ExtractDirectory, fn));            // write created file with path
+                                Logging.Manager(string.Format("{0} moved", r.FileName));
                             }
                             catch (Exception ex)
                             {
-                                Utils.ExceptionLog("UnpackXmlFiles", string.Format("copy: {0}", Path.Combine(r.extractDirectory, fn)), ex);
+                                Utils.ExceptionLog("UnpackXmlFiles", string.Format("copy: {0}", Path.Combine(r.ExtractDirectory, fn)), ex);
                             }
                         }
                         else
                         {
                             //get file from the zip archive
-                            if(File.Exists(r.pkg))
+                            if(File.Exists(r.Pkg))
                             {
-                                using (ZipFile zip = new ZipFile(r.pkg))
+                                using (ZipFile zip = new ZipFile(r.Pkg))
                                 {
                                     for (int i = 0; i < zip.Entries.Count; i++)
                                     {
-                                        if (Regex.IsMatch(zip[i].FileName, Path.Combine(r.directoryInArchive, r.fileName).Replace(@"\", @"/")))
+                                        if (Regex.IsMatch(zip[i].FileName, Path.Combine(r.DirectoryInArchive, r.FileName).Replace(@"\", @"/")))
                                         {
                                             try
                                             {
                                                 zip[i].FileName = fn;
-                                                if (File.Exists(Path.Combine(r.extractDirectory, zip[i].FileName)))
+                                                if (File.Exists(Path.Combine(r.ExtractDirectory, zip[i].FileName)))
                                                 {
-                                                    Logging.Manager(string.Format("File {0} already exists, so no extraction/overwrite", Path.Combine(r.extractDirectory, zip[i].FileName)));
+                                                    Logging.Manager(string.Format("File {0} already exists, so no extraction/overwrite", Path.Combine(r.ExtractDirectory, zip[i].FileName)));
                                                 }
                                                 else
                                                 {
                                                     //when possible please use other methods than throwing exceptions
-                                                    zip.ExtractSelectedEntries(zip[i].FileName, null, r.extractDirectory, ExtractExistingFileAction.DoNotOverwrite);  // no overwrite of an exsisting file !!
-                                                    Logging.Installer(Path.Combine(r.extractDirectory, fn));
+                                                    zip.ExtractSelectedEntries(zip[i].FileName, null, r.ExtractDirectory, ExtractExistingFileAction.DoNotOverwrite);  // no overwrite of an exsisting file !!
+                                                    Logging.Installer(Path.Combine(r.ExtractDirectory, fn));
                                                     Logging.Manager(string.Format("{0} extracted", zip[i].FileName));
                                                     // break;
                                                 }
                                             }
                                             catch (Exception ex)
                                             {
-                                                Utils.ExceptionLog("UnpackXmlFiles", string.Format("extration: {0}", Path.Combine(r.extractDirectory, zip[i].FileName)), ex);
+                                                Utils.ExceptionLog("UnpackXmlFiles", string.Format("extration: {0}", Path.Combine(r.ExtractDirectory, zip[i].FileName)), ex);
                                             }
                                         }
                                     }
@@ -1336,27 +1336,27 @@ namespace RelhaxModpack
                             {
                                 if (Settings.ExportMode)
                                 {
-                                    Logging.Manager(string.Format("WARNING: package {0} not found, but most likley expected due to export mode", r.pkg));
+                                    Logging.Manager(string.Format("WARNING: package {0} not found, but most likley expected due to export mode", r.Pkg));
                                 }
                                 else
                                 {
-                                    Logging.Manager(string.Format("ERROR: package {0} not found!", r.pkg));
+                                    Logging.Manager(string.Format("ERROR: package {0} not found!", r.Pkg));
                                 }
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Utils.ExceptionLog(string.Format("UnpackXmlFiles", "extract file from archive\ndirectoryInArchive: {0}\nfileName: {1}\nextractDirectory: {2}\nnewFileName: {3}", r.directoryInArchive, r.fileName, r.extractDirectory, r.newFileName), ex);
+                        Utils.ExceptionLog(string.Format("UnpackXmlFiles", "extract file from archive\ndirectoryInArchive: {0}\nfileName: {1}\nextractDirectory: {2}\nnewFileName: {3}", r.DirectoryInArchive, r.FileName, r.ExtractDirectory, r.NewFileName), ex);
                     }
                     try
                     {
                         XmlBinary.XmlBinaryHandler xmlUnPack = new XmlBinary.XmlBinaryHandler();
-                        xmlUnPack.unPack(Path.Combine(r.extractDirectory, fn));
+                        xmlUnPack.unPack(Path.Combine(r.ExtractDirectory, fn));
                     }
                     catch (Exception ex)
                     {
-                        Utils.ExceptionLog(string.Format("UnpackXmlFiles", "xmlUnPack\nfileName: {0}", Path.Combine(r.extractDirectory, fn)), ex);
+                        Utils.ExceptionLog(string.Format("UnpackXmlFiles", "xmlUnPack\nfileName: {0}", Path.Combine(r.ExtractDirectory, fn)), ex);
                     }
                     args.ChildProcessed++;
                     InstallWorker.ReportProgress(0);
@@ -2159,24 +2159,24 @@ namespace RelhaxModpack
                     {
                         XmlUnpack xup = new XmlUnpack
                         {
-                            pkg = @r["pkg"],
-                            directoryInArchive = @r["directoryInArchive"],
-                            fileName = @r["fileName"],
-                            extractDirectory = @r["extractDirectory"],
-                            newFileName = @r["newFileName"],
-                            actualPatchName = Path.GetFileName(xmlFile)
+                            Pkg = @r["pkg"],
+                            DirectoryInArchive = @r["directoryInArchive"],
+                            FileName = @r["fileName"],
+                            ExtractDirectory = @r["extractDirectory"],
+                            NewFileName = @r["newFileName"],
+                            ActualPatchName = Path.GetFileName(xmlFile)
                         };
                         if (r["directoryInArchive"].Equals("") || r["extractDirectory"].Equals("") || r["fileName"].Equals(""))
                         {
-                            Logging.Manager(string.Format("ERROR. XmlUnPackFile '{0}' has an empty but needed node ('fileName', 'directoryInArchive' and 'extractDirectory' MUST be set\n----- dump of object ------\n{1}\n----- end of dump ------", xup.actualPatchName.ToString(), xup.ToString()));
+                            Logging.Manager(string.Format("ERROR. XmlUnPackFile '{0}' has an empty but needed node ('fileName', 'directoryInArchive' and 'extractDirectory' MUST be set\n----- dump of object ------\n{1}\n----- end of dump ------", xup.ActualPatchName.ToString(), xup.ToString()));
                         }
                         else
                         {
-                            xup.pkg = Utils.ReplaceMacro(xup.pkg);
-                            xup.directoryInArchive = Utils.ReplaceMacro(xup.directoryInArchive);
-                            xup.fileName = Utils.ReplaceMacro(xup.fileName);
-                            xup.extractDirectory = Utils.ReplaceMacro(xup.extractDirectory);
-                            xup.newFileName = Utils.ReplaceMacro(xup.newFileName);
+                            xup.Pkg = Utils.ReplaceMacro(xup.Pkg);
+                            xup.DirectoryInArchive = Utils.ReplaceMacro(xup.DirectoryInArchive);
+                            xup.FileName = Utils.ReplaceMacro(xup.FileName);
+                            xup.ExtractDirectory = Utils.ReplaceMacro(xup.ExtractDirectory);
+                            xup.NewFileName = Utils.ReplaceMacro(xup.NewFileName);
                             XmlUnpackList.Add(xup);
                         }
                     }

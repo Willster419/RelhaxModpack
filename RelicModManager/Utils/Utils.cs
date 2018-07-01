@@ -86,9 +86,8 @@ namespace RelhaxModpack
                 string data = "";
                 try { data = string.Format("Data: {0}\n", e.Data == null ? "(null)" : e.Data.Equals("") ? "(empty)" : e.Data.ToString()); } catch { };
 
-                if (e is WebException)
+                if (e is WebException we)
                 {
-                    WebException we = (WebException)e;
                     errorType = "WebException";
                     type = "";
                     if (we.Status == WebExceptionStatus.ProtocolError)
@@ -265,11 +264,14 @@ namespace RelhaxModpack
         {
             foreach (Dependency d in dependencyList)
             {
-                CheckStorage cs = new CheckStorage();
-                cs.PackageName = d.PackageName;
-                cs.ZipFile = d.ZipFile;
-                cs.Dependency = true;
-                cs.CheckDatabaseListIndex = checkStorageList.Count;
+                CheckStorage cs = new CheckStorage
+                {
+                    PackageName = d.PackageName,
+                    ZipFile = d.ZipFile,
+                    Dependency = true,
+                    CheckDatabaseListIndex = checkStorageList.Count,
+
+                };
                 d.CheckDatabaseListIndex = cs.CheckDatabaseListIndex;
                 checkStorageList.Add(cs);
             }
@@ -279,11 +281,13 @@ namespace RelhaxModpack
         {
             foreach (SelectablePackage c in subConfigList)
             {
-                CheckStorage cs = new CheckStorage();
-                cs.PackageName = c.PackageName;
-                cs.ZipFile = c.ZipFile;
-                cs.Dependency = false;
-                cs.CheckDatabaseListIndex = checkStorageList.Count;
+                CheckStorage cs = new CheckStorage
+                {
+                    PackageName = c.PackageName,
+                    ZipFile = c.ZipFile,
+                    Dependency = false,
+                    CheckDatabaseListIndex = checkStorageList.Count
+                };
                 c.CheckDatabaseListIndex = cs.CheckDatabaseListIndex;
                 checkStorageList.Add(cs);
                 if (c.Packages.Count > 0)
@@ -309,11 +313,13 @@ namespace RelhaxModpack
                 }
                 foreach (SelectablePackage m in c.Packages)
                 {
-                    CheckStorage cs = new CheckStorage();
-                    cs.PackageName = m.PackageName;
-                    cs.ZipFile = m.ZipFile;
-                    cs.Dependency = false;
-                    cs.CheckDatabaseListIndex = checkStorageList.Count;
+                    CheckStorage cs = new CheckStorage
+                    {
+                        PackageName = m.PackageName,
+                        ZipFile = m.ZipFile,
+                        Dependency = false,
+                        CheckDatabaseListIndex = checkStorageList.Count
+                    };
                     m.CheckDatabaseListIndex = cs.CheckDatabaseListIndex;
                     checkStorageList.Add(cs);
                     if (m.Packages.Count > 0)
