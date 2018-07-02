@@ -20,7 +20,7 @@ namespace RelhaxModpack.XmlBinary
         {
             if (FileNameLoad.Length != 0 && File.Exists(FileNameLoad))
             {
-                if (openFile(FileNameLoad))
+                if (OpenFile(FileNameLoad))
                 {
                     if (FileNameSave.Length == 0)
                         FileNameSave = FileNameLoad;
@@ -53,10 +53,12 @@ namespace RelhaxModpack.XmlBinary
             try
             {
                 //point the xtw at the StringWriter
-                xtw = new XmlTextWriter(sw);
+                xtw = new XmlTextWriter(sw)
+                {
 
-                //we want the output formatted
-                xtw.Formatting = Formatting.Indented;
+                    //we want the output formatted
+                    Formatting = Formatting.Indented
+                };
 
                 //get the dom to dump its contents into the xtw 
                 xd.WriteTo(xtw);
@@ -117,7 +119,7 @@ namespace RelhaxModpack.XmlBinary
             }
         }
 
-        private bool openFile(string filename)
+        private bool OpenFile(string filename)
         {
             bool result = false;
             xDoc = new XmlDocument();
