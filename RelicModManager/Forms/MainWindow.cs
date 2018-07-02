@@ -99,10 +99,11 @@ namespace RelhaxModpack
         /// <returns></returns>
         public string ManagerVersion()
         {
-            string managerVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString().IndexOf('.') + 1);
-            if (Program.Version == Program.ProgramVersion.Beta)
-                managerVersion = managerVersion + "_BETA_final";
-            return managerVersion;
+            // string managerVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString().IndexOf('.') + 1);
+            // if (Program.Version == Program.ProgramVersion.Beta)
+            //    managerVersion = managerVersion + "_BETA_final";
+            // return managerVersion;
+            return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
         //The constructur for the application
@@ -452,7 +453,7 @@ namespace RelhaxModpack
             {
                 MessageBox.Show(Translations.GetTranslatedString("skipUpdateWarning"));
             }
-            string version = "";
+            // string version = "";
             string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
             if (!xmlString.Equals(""))
             {
@@ -463,12 +464,14 @@ namespace RelhaxModpack
                 DatabaseVersionLabel.Text = Translations.GetTranslatedString("DatabaseVersionLabel") + " v" + databaseVersion.Value;
                 Settings.DatabaseVersion = databaseVersion.Value;
                 //parse the manager version
-                
-                var applicationVersion = Settings.BetaApplication ? doc.XPathSelectElement("//version/manager_beta") : doc.XPathSelectElement("//version/manager");
-                version = applicationVersion.Value;
+
+                // var applicationVersion = Settings.BetaApplication ? doc.XPathSelectElement("//version/manager_beta_v2") : doc.XPathSelectElement("//version/manager_v2");
+                // version = applicationVersion.Value;
+                string version = Settings.BetaApplication ? doc.XPathSelectElement("//version/manager_beta_v2").Value : doc.XPathSelectElement("//version/manager_v2").Value;
                 Logging.Manager(string.Format("Local application is {0}, current online is {1}", ManagerVersion(), version));
 
-                if (!Program.skipUpdate && !version.Equals(ManagerVersion()))
+                // if (!Program.skipUpdate && !version.Equals(ManagerVersion()))
+                if (!Program.skipUpdate && Utils.CompareVersions(ManagerVersion(), version) == -1)
                 {
                     Logging.Manager("exe is out of date. displaying user update window");
                     //out of date

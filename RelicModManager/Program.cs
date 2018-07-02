@@ -184,12 +184,22 @@ namespace RelhaxModpack
                 else if (Regex.IsMatch(commandArgs[i], @"databaseupdate$"))
                 {
                     Logging.Manager("/databaseupdate detected, loading in database update mode");
+                    if (skipUpdate)
+                    {
+                        Logging.Manager("if calling databaseupdate, /skip-update will be ignored");
+                        skipUpdate = false;
+                    }
                     Application.Run(new DatabaseUpdater());
                     return;
                 }
                 else if (Regex.IsMatch(commandArgs[i], @"databaseedit$"))
                 {
                     Logging.Manager("/databaseedit detected, loading in database edit mode");
+                    if (skipUpdate)
+                    {
+                        Logging.Manager("if calling databaseedit, /skip-update will be ignored");
+                        skipUpdate = false;
+                    }
                     Application.Run(new DatabaseEditor());
                     return;
                 }
