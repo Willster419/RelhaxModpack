@@ -188,7 +188,7 @@ namespace RelhaxModpack
         public static string MD5HashDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "MD5HashDatabase.xml");
         public static string OnlineDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "onlineDatabase.xml");
         public static string RelhaxTempFolder = Path.Combine(Application.StartupPath, "RelHaxTemp");
-        public static string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, "managerInfo.dat");
+        public static string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, Path.GetRandomFileName() + "_managerInfo.dat");
         public static string ModInfoDatFile = Path.Combine(RelhaxTempFolder, "modInfo.dat");
         public const string DefaultStartAddress = @"http://wotmods.relhaxmodpack.com/WoT/{onlineFolder}/";
         public const string DefaultEndAddress = @"";
