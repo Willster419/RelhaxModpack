@@ -10,7 +10,7 @@ using System.Resources;
 [assembly: AssemblyDescription("Fastest WoT modpack installer in the world")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("RELIC Gaming Community")]
-[assembly: AssemblyProduct("Relhax Modpack")]
+[assembly: AssemblyProduct(RelhaxModpack.CiInfo.ProductName)]
 [assembly: AssemblyCopyright("Copyright ©  2018 Willard Wider")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
