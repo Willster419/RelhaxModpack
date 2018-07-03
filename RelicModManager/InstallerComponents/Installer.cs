@@ -2788,9 +2788,11 @@ namespace RelhaxModpack
                 }
                 catch(Exception e)
                 {
-                    Utils.ExceptionLog(e);
-                    Logging.Manager("DirectoryDeleteNoProgerss EXCEPTION CAUGHT, trying again in 100ms, num_retries=" + num_retries--, true);
-                    System.Threading.Thread.Sleep(100);
+                    Logging.Manager(string.Format("DirectoryDeleteNoProgerss EXCEPTION CAUGHT, trying again in 100ms, num_retries={0} ({1})", num_retries--, e.Message), true);
+                    if (num_retries == 0)
+                        Utils.ExceptionLog(e);
+                    else
+                        System.Threading.Thread.Sleep(100);
                 }
             }
         }
