@@ -114,6 +114,12 @@ namespace RelhaxModpack
             for (int i = 0; i < commandArgs.Count(); i++)
             {
                 //check what type of arg each one is
+                if (Regex.IsMatch(commandArgs[i], @"restart-wait$"))
+                {
+                    Logging.Manager("/restart-wait detected, sleep 1000ms");
+                    System.Threading.Thread.Sleep(1000);
+                    continue;
+                }
                 if (Regex.IsMatch(commandArgs[i], @"test$"))
                 {
                     Logging.Manager("/test detected, loading in test mode");

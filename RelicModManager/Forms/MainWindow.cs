@@ -534,8 +534,8 @@ namespace RelhaxModpack
                 //close the application
                 this.Close();
             }
-
         }
+
         //handler for when the update download is complete
         void Updater_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
@@ -3067,7 +3067,7 @@ namespace RelhaxModpack
                 wait.Show();
                 wait.loadingDescBox.Text = Translations.GetTranslatedString("checkForUpdates");
                 Application.DoEvents();
-                CheckmanagerUpdates();
+                this.CheckmanagerUpdates();
                 wait.Close();
                 Show();
                 //get the new database version and compare. if new, inform the user
