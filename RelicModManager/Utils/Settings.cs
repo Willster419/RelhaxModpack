@@ -195,7 +195,7 @@ namespace RelhaxModpack
         //file and folder macro locations
         public static string AppDataFolder = "";
         public static string TanksLocation = "";
-        ////version informations
+        //version informations
         public static string TanksVersion = "";
         public static string TanksOnlineFolderVersion = "";
         //needed to create to first line to installedRelhaxFiles.log
