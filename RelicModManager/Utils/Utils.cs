@@ -14,6 +14,9 @@ using System.Drawing;
 using Newtonsoft.Json.Linq;
 using System.Collections;
 using IWshRuntimeLibrary;
+using System.Xml.Linq;
+using System.Xml.XPath;
+using System.Diagnostics;
 
 namespace RelhaxModpack
 {
@@ -1187,7 +1190,59 @@ namespace RelhaxModpack
             }
         }
         #endregion
+
+        //method to check for updates to the application on startup
+        public static bool TinyManagerUpdateCheck()
+        {
+            Logging.Manager("Starting tiny check for application updates");
+            //download the updates
+            WebClient updater = new WebClient();
+            try
+            {
+                updater.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat", Settings.ManagerInfoDatFile);
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("TinyCheckmanagerUpdates", @"Tried to access http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat", ex);
+                MessageBox.Show(string.Format("{0} managerInfo.dat", Translations.GetTranslatedString("failed_To_Download_1")));
+                Application.Exit();
+            }
+            string LocalManagerVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
+            if (!xmlString.Equals(""))
+            {
+                XDocument doc = XDocument.Parse(xmlString);
+    
+                //parse the minimum editor version
+                string version = doc.XPathSelectElement("//version/minimum_editor").Value;
+                Logging.Manager(string.Format("Local application is {0}, minimum version to edit database is {1}", LocalManagerVersion, version));
+
+                if (!Program.skipUpdate && Utils.CompareVersions(LocalManagerVersion, version) == -1)
+                {
+                    Logging.Manager("exe is out able to create valid database files.");
+                    //out of date
+                    if (MessageBox.Show(string.Format("This Manager is version: {0}\nat least to edit database: {1}\n\nWe will restart the application now and update it!", LocalManagerVersion, version), Translations.GetTranslatedString("critical"), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                    {
+                        Logging.Manager("User has chosen: restart application");
+                        Process.Start(Application.ExecutablePath, "/restart-wait"); // to start new instance of application
+                    }
+                    else
+                    {
+                        Logging.Manager("User canceled ro restart the application");
+                    }
+                    return false;
+                }
+            }
+            else
+            {
+                Logging.Manager("ERROR. Failed to get 'manager_version.xml'");
+                MessageBox.Show(Translations.GetTranslatedString("failedManager_version"), Translations.GetTranslatedString("critical"), MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return false;
+            }
+            return true;
+        }
     }
+
     #region gross shortcut stuff
     // needed for CreateShortcut
     [ComImport]

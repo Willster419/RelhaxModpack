@@ -45,6 +45,8 @@ namespace RelhaxModpack
             ObjectDependenciesListOriginalHeight = ObjectDependenciesList.Height;
             AndOrLogicComboBox.DataSource = new List <String>{ LogicalDependency.GetAndOrString(LogicalDependency.AndOrFlag.AND), LogicalDependency.GetAndOrString(LogicalDependency.AndOrFlag.OR)};
             Settings.LoadSettings();
+            if (!Utils.TinyManagerUpdateCheck())
+                this.Close();
         }
 
         private void DatabaseEditor_FormClosing(object sender, FormClosingEventArgs e)
@@ -1593,9 +1595,8 @@ namespace RelhaxModpack
                 return;
             if (lb.SelectedItem is string)
                 return;
-            if (lb.SelectedItem is Dependency)
+            if (lb.SelectedItem is Dependency ld)
             {
-                Dependency ld = (Dependency)lb.SelectedItem;
                 foreach (Dependency d in Dependencies)
                 {
                     if (d.PackageName.Equals(ld.PackageName))
