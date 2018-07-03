@@ -208,6 +208,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="UIComponents\BackupFolder.cs" />
+    <Compile Include="UIComponents\VersionInfoHolder.cs" />
     <Compile Include="UIComponents\ExportModeRadioButton.cs">
       <SubType>Component</SubType>
     </Compile>
