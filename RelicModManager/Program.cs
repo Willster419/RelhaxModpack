@@ -43,7 +43,7 @@ namespace RelhaxModpack
             Beta = 1,
             Alpha = 2
         }
-        public static ProgramVersion Version = ProgramVersion.Stable;
+        public static ProgramVersion Version = ProgramVersion.Alpha;
 
         [STAThread]
         static void Main()
@@ -118,9 +118,8 @@ namespace RelhaxModpack
                 {
                     Logging.Manager("/restart-wait detected, sleep 1000ms");
                     System.Threading.Thread.Sleep(1000);
-                    continue;
                 }
-                if (Regex.IsMatch(commandArgs[i], @"test$"))
+                else if (Regex.IsMatch(commandArgs[i], @"test$"))
                 {
                     Logging.Manager("/test detected, loading in test mode");
                     testMode = true;
