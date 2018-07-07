@@ -1464,8 +1464,10 @@ namespace RelhaxModpack
                         if (s != null)
                             p.completePath = p.completePath.Replace("xvmConfigFolderName", s);
                     }
+                    string patchParameters = string.Format("mode={0}, filePathMacro={1}, filePath={2}, search={3}, replace={4}", p.mode, p.patchPath, p.file, p.search, p.replace);
                     if (p.type.Equals("regx") || p.type.Equals("regex"))
                     {
+                        patchParameters = patchParameters + string.Format(", lines={0}", string.Join(",", p.lines));
                         string temp = null;
                         int tempp = 0;
                         if (p.lines != null)
@@ -1476,13 +1478,13 @@ namespace RelhaxModpack
                         if (p.lines == null)
                         {
                             //perform regex patch on entire file, line by line
-                            Logging.Manager("Regex patch, all lines, line by line, " + p.patchPath + ", " + p.file + ", " + p.search + ", " + p.replace);
+                            Logging.Manager("Regex patch, all lines, line by line, " + patchParameters);
                             PatchUtils.RegxPatch(p);
                         }
                         else if (p.lines.Count() == 1 && tempp == -1)
                         {
                             //perform regex patch on entire file, as one whole string
-                            Logging.Manager("Regex patch, all lines, whole file, " + p.patchPath + ", " + p.file + ", " + p.search + ", " + p.replace);
+                            Logging.Manager("Regex patch, all lines, whole file, " + patchParameters);
                             PatchUtils.RegxPatch(p, -1);
                         }
                         else
@@ -1491,33 +1493,37 @@ namespace RelhaxModpack
                             {
                                 //perform regex patch on specific file lines
                                 //will need to be a standard for loop BTW
-                                Logging.Manager("Regex patch, line " + s + ", " + p.patchPath + ", " + p.file + ", " + p.search + ", " + p.replace);
+                                Logging.Manager("Regex patch, line " + s + ", " + patchParameters);
                                 PatchUtils.RegxPatch(p, int.Parse(s));
                             }
                         }
                     }
                     else if (p.type.Equals("xml"))
                     {
+                        patchParameters = patchParameters + string.Format(", path={0}", string.Join(",", p.path));
                         //perform xml patch
-                        Logging.Manager("Xml patch, " + p.patchPath + ", " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
+                        Logging.Manager("Xml patch, " + patchParameters);
                         PatchUtils.XMLPatch(p);
                     }
                     else if (p.type.Equals("json"))
                     {
+                        patchParameters = patchParameters + string.Format(", path={0}", string.Join(",", p.path));
                         //perform json patch
-                        Logging.Manager("Json patch, " + p.patchPath + ", " + p.file + ", " + p.path + ", " + p.replace);
+                        Logging.Manager("Json patch, " + patchParameters);
                         PatchUtils.JSONPatch(p);
                     }
                     else if (p.type.Equals("xvm"))
                     {
+                        patchParameters = patchParameters + string.Format(", path={0}", string.Join(",", p.path));
                         //perform xvm style json patch
-                        Logging.Manager("XVM patch, " + p.patchPath + ", " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
+                        Logging.Manager("XVM patch, " + patchParameters);
                         PatchUtils.XVMPatch(p);
                     }
                     else if (p.type.Equals("pmod"))
                     {
+                        patchParameters = patchParameters + string.Format(", path={0}", string.Join(",", p.path));
                         //perform pmod/generic style json patch
-                        Logging.Manager("PMOD/Generic patch, " + p.patchPath + ", " + p.file + ", " + p.path + ", " + p.mode + ", " + p.search + ", " + p.replace);
+                        Logging.Manager("PMOD/Generic patch, " + patchParameters);
                         PatchUtils.PMODPatch(p);
                     }
                     args.ParrentProcessed++;
