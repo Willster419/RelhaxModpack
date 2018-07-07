@@ -460,18 +460,84 @@ namespace RelhaxModpack
                 XDocument doc = XDocument.Parse(xmlString);
 
                 //parse the database version
-                var databaseVersion = doc.XPathSelectElement("//version/database");
-                DatabaseVersionLabel.Text = Translations.GetTranslatedString("DatabaseVersionLabel") + " v" + databaseVersion.Value;
-                Settings.DatabaseVersion = databaseVersion.Value;
+                Settings.DatabaseVersion = doc.XPathSelectElement("//version/database").Value;
+                DatabaseVersionLabel.Text = Translations.GetTranslatedString("DatabaseVersionLabel") + " v" + Settings.DatabaseVersion;
+
+                string version = "";
+                bool startUpdate = false;
+                bool tempManagerVersionStable = false;
+                bool tempManagerVersionBeta = false;
                 //parse the manager version
+                string onlineManager = doc.XPathSelectElement("//version/manager_v2").Value;
+                string onlineManagerBeta = doc.XPathSelectElement("//version/manager_beta_v2").Value;
+                
+                // check if current alpha version number is valid. Only valid is the alpha version number is higher then stable and beta version
+                if (Program.Version == Program.ProgramVersion.Alpha)
+                {
+                    // check if online beta is not higher then online stable version
+                    if (Utils.CompareVersions(onlineManager, onlineManagerBeta) != -1)
+                    {
+                        // check if local alpha is not higher then online stable version
+                        if (Utils.CompareVersions(ManagerVersion(), onlineManager) != 1)
+                        {
+                            version = onlineManager + " (stable)";
+                            tempManagerVersionStable = true;
+                            tempManagerVersionBeta = false;
+                            startUpdate = true;
+                        }
+                    }
+                    else
+                    {
+                        // check if local alpha is not higher then online beta version
+                        if (Utils.CompareVersions(ManagerVersion(), onlineManagerBeta) != 1)
+                        {
+                            version = onlineManagerBeta + " (beta)";
+                            tempManagerVersionBeta = true;
+                            startUpdate = true;
+                        }
+                    }
+                }
+                
+                // check if current beta version is still higher then onlineManager (not beta) version. that means is "updat-to-date"
+                if ((Program.Version == Program.ProgramVersion.Beta || Settings.BetaApplication) && Utils.CompareVersions(onlineManager, onlineManagerBeta) == -1)
+                {
+                    version = onlineManager + " (beta)";
+                    // check if online beta version is higher then local beta version, then update
+                    if (Utils.CompareVersions(ManagerVersion(), onlineManagerBeta) == -1)
+                    {
+                        startUpdate = true;         // update
+                    }
+                    
+                    // check if the online version (not beta) is higher then the local beta version, then update to stable channel
+                    if (Utils.CompareVersions(ManagerVersion(), onlineManager) == -1)
+                    {
+                        version = onlineManager + " (stable)";
+                        tempManagerVersionStable = true;
+                        startUpdate = true;
+                    }
+                }
+                // check if online beta version is outdated and online stable version (not beta) must be used (beta and stable version with same version number = beta is outdated)
+                else if ((Program.Version == Program.ProgramVersion.Beta || Settings.BetaApplication) && Utils.CompareVersions(onlineManager, onlineManagerBeta) != -1)
+                {
+                    // beta is outdated and current stable must be used
+                    version = onlineManager + " (stable)";
+                    tempManagerVersionStable = true;
+                    startUpdate = true;
+                }
 
-                // var applicationVersion = Settings.BetaApplication ? doc.XPathSelectElement("//version/manager_beta_v2") : doc.XPathSelectElement("//version/manager_v2");
-                // version = applicationVersion.Value;
-                string version = Settings.BetaApplication ? doc.XPathSelectElement("//version/manager_beta_v2").Value : doc.XPathSelectElement("//version/manager_v2").Value;
-                Logging.Manager(string.Format("Local application is {0}, current online is {1}", ManagerVersion(), version));
+                // if stable online Manager is higher then local, then update
+                if (Program.Version == Program.ProgramVersion.Stable && Utils.CompareVersions(ManagerVersion(), onlineManager) == -1)
+                {
+                    version = onlineManager + " (stable)";
+                    startUpdate = true;
+                }
 
-                // if (!Program.skipUpdate && !version.Equals(ManagerVersion()))
-                if (!Program.skipUpdate && Utils.CompareVersions(ManagerVersion(), version) == -1)
+                if (Program.Version == Program.ProgramVersion.Alpha && !startUpdate)
+                    Logging.Manager(string.Format("Local application is {0} alpha and no stable ({1}) or beta ({2}) version is newer", ManagerVersion(), onlineManager, onlineManagerBeta));
+                else
+                    Logging.Manager(string.Format("Local application is {0} ({1}), current online is {2}", ManagerVersion(), Program.Version == Program.ProgramVersion.Beta ? "beta" : Program.Version == Program.ProgramVersion.Alpha ? "alpha" : "stable", version));
+
+                if (!Program.skipUpdate && startUpdate)
                 {
                     Logging.Manager("exe is out of date. displaying user update window");
                     //out of date
@@ -489,20 +555,25 @@ namespace RelhaxModpack
                         updater.DownloadFileCompleted += new AsyncCompletedEventHandler(Updater_DownloadFileCompleted);
 
                         // check if manager instance is already running and ask user to close it
-                        bool loop = true;
-                        while (loop)
+                        // bool loop = true;
+                        // while (loop)
+                        while (true)
                         {
                             System.Threading.Thread.Sleep(500);
-                            loop = Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1;
-                            if (!loop)
-                                break;
-                            result = MessageBox.Show(Translations.GetTranslatedString("closeInstanceRunningForUpdate"), Translations.GetTranslatedString("critical"), MessageBoxButtons.RetryCancel, MessageBoxIcon.Stop);
-                            if (result == DialogResult.Cancel)
+                            // loop = Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1;
+                            // if (loop)
+                            if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1)
                             {
-                                Logging.Manager("User canceled update, because he does not want to end the parallel running Relhax instance.");
-                                Application.Exit();
-                                return;
+                                result = MessageBox.Show(Translations.GetTranslatedString("closeInstanceRunningForUpdate"), Translations.GetTranslatedString("critical"), MessageBoxButtons.RetryCancel, MessageBoxIcon.Stop);
+                                if (result == DialogResult.Cancel)
+                                {
+                                    Logging.Manager("User canceled update, because he does not want to end the parallel running Relhax instance.");
+                                    Application.Exit();
+                                    return;
+                                }
                             }
+                            else
+                                break;
                         }
                         //check if the application is windowState normal
                         if (WindowState != FormWindowState.Normal)
@@ -512,16 +583,16 @@ namespace RelhaxModpack
                         //using new attemp at an update method. Application now downloads a zip file of itself, rather than an exe. Maybe it will help antivirus issues
                         string modpackExeURL = null;
                         if(Settings.UseAlternateUpdateMethod)
-                            modpackExeURL = Settings.BetaApplication ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.zip" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";
+                            modpackExeURL = (Settings.BetaApplication || tempManagerVersionBeta) && !tempManagerVersionStable ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.zip" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";
                         else
-                            modpackExeURL = Settings.BetaApplication ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.exe" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe";
+                            modpackExeURL = (Settings.BetaApplication || tempManagerVersionBeta) && !tempManagerVersionStable ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.exe" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe";
                         updater.DownloadFileAsync(new Uri(modpackExeURL), newExeName);
                         Logging.Manager("New application download started, UseAlternateUpdateMethod=" + Settings.UseAlternateUpdateMethod);
                         currentModDownloading = "update ";
                     }
                     else
                     {
-                        Logging.Manager("User declined downlading new version");
+                        Logging.Manager("User declined downloading new version");
                         //close the application
                         Application.Exit();
                     }
@@ -939,7 +1010,7 @@ namespace RelhaxModpack
         private void ApplyVersionTextLabels()
         {
             //aplication version (bottom left)
-            ApplicationVersionLabel.Text = "Application v" + ManagerVersion();
+            ApplicationVersionLabel.Text = string.Format("{0} v{1} {2}", Translations.GetTranslatedString("ApplicationVersionLabel"), ManagerVersion(), Program.Version == Program.ProgramVersion.Beta ? " (beta)" : Program.Version == Program.ProgramVersion.Alpha ? " (alpha)" : "");
             //database version (bottom right)
             DatabaseVersionLabel.Text = Translations.GetTranslatedString("DatabaseVersionLabel") + " v" + Settings.DatabaseVersion;
             //The title of the main form
