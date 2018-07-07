@@ -953,12 +953,19 @@ namespace RelhaxModpack
             polish.Add("failed_To_Download_2", "Jeśli wiesz który to mod, odznacz go i wszystko powinno byćw porządku. Wkrótce naprawimy błąd. Zrestartuj, jeśli problem pojawia się ponownie.");
             french.Add("failed_To_Download_2", "Si vous savez quel mod est la cause, déséléectionnez celui-ci. Un corrigé vas être disponible bientôt. Redémarrez ceci a la fermeture");
 
+            //Component: update check against online app version
+            //
+            english.Add("failedManager_version", "Current Beta application is outdated and must be updated against stable channel. No new Beta version online now.");
+            german.Add("failedManager_version", TranslationNeeded);
+            polish.Add("failedManager_version", TranslationNeeded);
+            french.Add("failedManager_version", TranslationNeeded);
+
             //Component: initial download managerInfo.dat
             //
-            english.Add("failedManager_version", "Failed to get 'manager_version.xml'\n\nApplication will be terminated.");
-            german.Add("failedManager_version", "Fehler beim lesen der 'manager_version.xml' Datei.\n\nProgramm wird abgebrochen.");
-            polish.Add("failedManager_version", "Nie udało się uzyskać 'manager_version.xml'\n\nApplication zostanie zakończona.");
-            french.Add("failedManager_version", "Impossible d'obtenir 'manager_version.xml'\n\nL'application sera terminée.");
+            english.Add("currentBetaAppOutdated", "Failed to get 'manager_version.xml'\n\nApplication will be terminated.");
+            german.Add("currentBetaAppOutdated", "Fehler beim lesen der 'manager_version.xml' Datei.\n\nProgramm wird abgebrochen.");
+            polish.Add("currentBetaAppOutdated", "Nie udało się uzyskać 'manager_version.xml'\n\nApplication zostanie zakończona.");
+            french.Add("currentBetaAppOutdated", "Impossible d'obtenir 'manager_version.xml'\n\nL'application sera terminée.");
 
             //Componet: 
             //
