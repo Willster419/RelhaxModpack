@@ -44,16 +44,17 @@ namespace RelhaxModpack
                 };
                 bb.Location = new Point(6, (SelectConfigPanel.Controls.Count * (b.Size.Height-3)));
                 // add ToolTip to the develeopersSelections
-                ToolTip rbToolTip = new ToolTip();
-                // Set up the delays for the ToolTip.
-                rbToolTip.AutoPopDelay = 5000;
-                rbToolTip.InitialDelay = 1000;
-                rbToolTip.ReshowDelay = 500;
-                // Force the ToolTip text to be displayed whether or not the form is active.
-                rbToolTip.ShowAlways = true;
+                ToolTip rbToolTip = new ToolTip
+                {
+                    // Set up the delays for the ToolTip.
+                    AutoPopDelay = 5000,
+                    InitialDelay = 1000,
+                    ReshowDelay = 500,
+                    // Force the ToolTip text to be displayed whether or not the form is active.
+                    ShowAlways = true
+                };
                 // create Date and Time with local syntax
-                string cultureDate = "";
-                Utils.ConvertDateToLocalCultureFormat(node.date, out cultureDate);
+                Utils.ConvertDateToLocalCultureFormat(node.date, out string cultureDate);
                 // Set up the ToolTip text for the Button and Checkbox.
                 rbToolTip.SetToolTip(bb, string.Format(Translations.GetTranslatedString("createdAt"), cultureDate));
                 SelectConfigPanel.Controls.Add(bb);
@@ -62,7 +63,7 @@ namespace RelhaxModpack
 
         private void SelectButton_Click(object sender, EventArgs e)
         {
-            SelectedDocument = this.getSelectedXMLDoc();
+            SelectedDocument = this.GetSelectedXMLDoc();
             if(SelectedDocument.Equals("-1"))
             {
                 //error
@@ -88,14 +89,13 @@ namespace RelhaxModpack
             this.Close();
         }
 
-        private string getSelectedXMLDoc()
+        private string GetSelectedXMLDoc()
         {
             foreach(Control c in SelectConfigPanel.Controls)
             {
-                if(c is SelectionRadioButton)
+                if (c is SelectionRadioButton serb)
                 {
-                    SelectionRadioButton serb = (SelectionRadioButton)c;
-                    if(serb.Checked)
+                    if (serb.Checked)
                     {
                         return serb.XMLURL;
                     }

@@ -2169,18 +2169,26 @@ namespace RelhaxModpack
                     //use a selection viewer for selecting a dev config or a user config (local file)
                     using (SelectionViewer sv = new SelectionViewer(this.Location.X + 100, this.Location.Y + 100, Settings.ModInfoDatFile))
                     {
-                        if (!(sv.ShowDialog() == DialogResult.OK))
+                        if (XMLUtils.developerSelections.Count == 0)
                         {
-                            LoadingConfig = false;
-                            return;
+                            Logging.Manager("skip show dialog for Selection viewer, because the only element is local file");
+                            filePathArray[0] = "localFile";
                         }
-                        //from preset:
-                        //"F:\\Tanks Stuff\\RelicModManager\\RelicModManager\\bin\\Debug\\RelHaxTemp\\modInfo.dat,dirty20067.xml"
-                        filePathArray[0] = sv.SelectedXML.Split(',')[0];//the path to modInfoDat
-                        if (!filePathArray[0].Equals("localFile"))
-                            filePathArray[1] = sv.SelectedXML.Split(',')[1];//the actual fileName
                         else
-                            filePathArray[1] = "";
+                        {
+                            if (!(sv.ShowDialog() == DialogResult.OK))
+                            {
+                                LoadingConfig = false;
+                                return;
+                            }
+                            //from preset:
+                            //"F:\\Tanks Stuff\\RelicModManager\\RelicModManager\\bin\\Debug\\RelHaxTemp\\modInfo.dat,dirty20067.xml"
+                            filePathArray[0] = sv.SelectedXML.Split(',')[0];//the path to modInfoDat
+                            if (!filePathArray[0].Equals("localFile"))
+                                filePathArray[1] = sv.SelectedXML.Split(',')[1];//the actual fileName
+                            else
+                                filePathArray[1] = "";
+                        }
                         if (filePathArray[0].Equals("localFile"))
                         {
                             //user wants to load a personal custom config from file
@@ -2406,7 +2414,7 @@ namespace RelhaxModpack
                     if (c is Panel p)
                     {
                         //resizePanel(p, t, 0);//PAD
-                        resizePanel(p, t, 25);//SIZE
+                        ResizePanel(p, t, 25);//SIZE
                     }
                     else if (c is ElementHost eh)
                     {
@@ -2416,7 +2424,7 @@ namespace RelhaxModpack
             }
         }
         //recursive resize of the control panals
-        private void resizePanel(Panel current, TabPage tp, int shrinkFactor)
+        private void ResizePanel(Panel current, TabPage tp, int shrinkFactor)
         {
             current.Size = new Size(tp.Size.Width - shrinkFactor, current.Size.Height);//SIZE
             //current.Padding = new Padding(shrinkFactor, current.Padding.Top, shrinkFactor, current.Padding.Bottom);//PAD
@@ -2425,17 +2433,17 @@ namespace RelhaxModpack
                 if (controfds is Panel subpp)
                 {
                     //resizePanel(subpp, tp, 5);//PAD
-                    resizePanel(subpp, tp, shrinkFactor + 25);//SIZE
+                    ResizePanel(subpp, tp, shrinkFactor + 25);//SIZE
                 }
             }
         }
         //handler for when a new tab page is selected
-        private void modTabGroups_Selected(object sender, TabControlEventArgs e)
+        private void ModTabGroups_Selected(object sender, TabControlEventArgs e)
         {
             this.ModSelectionList_SizeChanged(null, null);
         }
         //handler for when a mod tab group is clicked on
-        private void modTabGroups_Click(object sender, EventArgs e)
+        private void ModTabGroups_Click(object sender, EventArgs e)
         {
             this.ModSelectionList_SizeChanged(null, null);
         }
@@ -2456,7 +2464,7 @@ namespace RelhaxModpack
                                 System.Windows.Controls.StackPanel st = (System.Windows.Controls.StackPanel)b.Child;
                                 if (st.Children.Count > 0)
                                 {
-                                    processTreeViewItems(st.Children, false);
+                                    ProcessTreeViewItems(st.Children, false);
                                 }
                             }
                         }
@@ -2482,7 +2490,7 @@ namespace RelhaxModpack
                                 System.Windows.Controls.StackPanel st = (System.Windows.Controls.StackPanel)b.Child;
                                 if (st.Children.Count > 0)
                                 {
-                                    processTreeViewItems(st.Children, true);
+                                    ProcessTreeViewItems(st.Children, true);
                                 }
                             }
                         }
@@ -2491,7 +2499,7 @@ namespace RelhaxModpack
             }
         }
 
-        private void processTreeViewItems(System.Windows.Controls.UIElementCollection ic, bool expand)
+        private void ProcessTreeViewItems(System.Windows.Controls.UIElementCollection ic, bool expand)
         {
             switch(Settings.SView)
             {
@@ -2508,7 +2516,7 @@ namespace RelhaxModpack
                             System.Windows.Controls.StackPanel st = (System.Windows.Controls.StackPanel)b.Child;
                             if (st.Children.Count > 0)
                             {
-                                processTreeViewItems(st.Children, expand);
+                                ProcessTreeViewItems(st.Children, expand);
                             }
                         }
                     }
@@ -2518,7 +2526,7 @@ namespace RelhaxModpack
         #endregion
 
         #region Search box code
-        private void searchComboBox_TextUpdate(object sender, EventArgs e)
+        private void SearchComboBox_TextUpdate(object sender, EventArgs e)
         {
             ComboBox searchComboBox = (ComboBox)sender;
             string filter_param = searchComboBox.Text;
@@ -2557,7 +2565,7 @@ namespace RelhaxModpack
             searchComboBox.SelectionLength = 0;
         }
 
-        private void searchCB_SelectionChangeCommitted(object sender, EventArgs e)
+        private void SearchCB_SelectionChangeCommitted(object sender, EventArgs e)
         {
             ComboBox sendah = (ComboBox)sender;
             if (sendah.SelectedIndex == -1 || IgnoreSelections)
@@ -2587,11 +2595,11 @@ namespace RelhaxModpack
             
         }
 
-        private void searchCB_KeyDown(object sender, KeyEventArgs e)
+        private void SearchCB_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                searchCB_SelectionChangeCommitted(sender, null);
+                SearchCB_SelectionChangeCommitted(sender, null);
             }
         }
         #endregion

@@ -205,8 +205,8 @@ namespace RelhaxModpack
             this.modTabGroups.SelectedIndex = 0;
             this.modTabGroups.Size = new System.Drawing.Size(766, 312);
             this.modTabGroups.TabIndex = 4;
-            this.modTabGroups.Selected += new System.Windows.Forms.TabControlEventHandler(this.modTabGroups_Selected);
-            this.modTabGroups.Click += new System.EventHandler(this.modTabGroups_Click);
+            this.modTabGroups.Selected += new System.Windows.Forms.TabControlEventHandler(this.ModTabGroups_Selected);
+            this.modTabGroups.Click += new System.EventHandler(this.ModTabGroups_Click);
             // 
             // expandAllButton
             // 
@@ -238,9 +238,9 @@ namespace RelhaxModpack
             this.searchCB.Size = new System.Drawing.Size(304, 21);
             this.searchCB.TabIndex = 18;
             this.SearchToolTip.SetToolTip(this.searchCB, "custom ToolTip Text");
-            this.searchCB.SelectionChangeCommitted += new System.EventHandler(this.searchCB_SelectionChangeCommitted);
-            this.searchCB.TextUpdate += new System.EventHandler(this.searchComboBox_TextUpdate);
-            this.searchCB.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchCB_KeyDown);
+            this.searchCB.SelectionChangeCommitted += new System.EventHandler(this.SearchCB_SelectionChangeCommitted);
+            this.searchCB.TextUpdate += new System.EventHandler(this.SearchComboBox_TextUpdate);
+            this.searchCB.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SearchCB_KeyDown);
             // 
             // searchTB
             // 
