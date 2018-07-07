@@ -524,7 +524,7 @@ echo     public static class CiInfo &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
 echo     { &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
 echo         ///^&lt;summary^&gt;String of the build number and build date/time, and other useful info.^&lt;/summary^&gt; &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
 echo         public const string BuildTag = "%25DATE%25 %25TIME%25"; &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
-findstr /m "Version\ =\ ProgramVersion.Stable" $(ProjectDir)\Program.cs
+findstr /m "Version\ =\ ProgramVersion.Stable" "$(ProjectDir)\Program.cs"
 if %25errorlevel%25==0 (
 echo         public const string ProductName = "Relhax Modpack"; &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
 )
