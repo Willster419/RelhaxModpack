@@ -108,6 +108,7 @@
             this.clickHereUpdateLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.clickHereUpdateLabel.AutoSize = true;
             this.clickHereUpdateLabel.Location = new System.Drawing.Point(217, 204);
+            this.clickHereUpdateLabel.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.clickHereUpdateLabel.Name = "clickHereUpdateLabel";
             this.clickHereUpdateLabel.Size = new System.Drawing.Size(56, 13);
             this.clickHereUpdateLabel.TabIndex = 6;
