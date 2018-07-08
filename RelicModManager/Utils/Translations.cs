@@ -111,6 +111,11 @@ namespace RelhaxModpack
             polish.Add("cancel", "Anuluj");
             french.Add("cancel", "Anuler");
 
+            english.Add("delete", "Delete");
+            german.Add("delete", "Löschen");
+            polish.Add("delete", TranslationNeeded);
+            french.Add("delete", TranslationNeeded);
+
             english.Add("warning", "WARNING");
             german.Add("warning", "WARNUNG");
             polish.Add("warning", "OSTRZEŻENIE");
