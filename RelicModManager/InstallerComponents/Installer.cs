@@ -1782,33 +1782,6 @@ namespace RelhaxModpack
                 InstallWorker.ReportProgress(0);
             }
         }
-
-        private void depricated_CreateAtlases()
-        {
-            foreach (Atlas a in AtlasesList)
-            {
-                Atlas atlasesArgs = new Atlas
-                {
-                    AtlasHeight = 2048,
-                    AtlasFile = Path.Combine(a.AtlasSaveDirectory, a.AtlasFile),
-                    MapFile = Path.Combine(a.AtlasSaveDirectory, a.MapFile),
-                    PowOf2 = a.PowOf2,
-                    Square = a.Square,
-                    GenerateMap = a.GenerateMap,
-                    FastImagePacker = a.FastImagePacker,
-                    Padding = a.Padding,
-                };
-
-                List<string> fl = new List<string>();
-                fl.AddRange(a.ImageFolderList);
-
-                //temp to get working proof of concept
-                //only pass in the same bitmaps
-
-                //CHANGE THIS TO LIST OF TEXTURES WITH MODS
-                AtlasesCreator.Program.Run(atlasesArgs);
-            }
-        }
         
         //Step 19: Install Fonts
         public void InstallFonts()
