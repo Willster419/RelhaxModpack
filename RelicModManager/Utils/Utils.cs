@@ -804,6 +804,51 @@ namespace RelhaxModpack
             return fileName;
         }
 
+        public static void FileDelete(List<string> sl, bool proceedListReverse = true)
+        {
+            int pos = 0;
+            int ecounter = 0;
+            int ecounterlimit = 10;
+            while (ecounter < ecounterlimit && sl.Count > 0)
+            {
+                try
+                {
+                    while (sl.Count > 0)
+                    {
+                        if (proceedListReverse)
+                            pos = sl.Count - 1;
+                        else
+                            pos = 0;
+                        if (System.IO.File.Exists(sl.ElementAt(pos)))
+                        {
+                            System.IO.File.Delete(sl.ElementAt(pos));
+                        }
+                        else
+                        {
+                            if (Directory.Exists(sl.ElementAt(pos)))
+                                Directory.Delete(sl.ElementAt(pos));
+                        }
+                        ecounter = 0;
+                        if (proceedListReverse)
+                            sl.RemoveAt(sl.Count - 1);
+                        else
+                            sl.RemoveAt(0);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ecounter++;
+                    System.Threading.Thread.Sleep(20);
+                    if (ecounter < ecounterlimit)
+                        Logging.Manager(string.Format("Error at FileDelete: {0}", ex.Message));
+
+                }
+                if (sl.Count == 0) return;
+            }
+            MainWindow.errorCounter++;
+            Logging.Manager("too many errors at FileDelete (more then " + ecounterlimit + ")");
+        }
+
         public static void DirectoryDelete(string folderPath, bool doSubfolder = false, bool deleteTopfolder = false)
         {
             foreach (string file in Directory.GetFiles(folderPath))
@@ -814,7 +859,8 @@ namespace RelhaxModpack
                 }
                 catch (Exception ex)
                 {
-                    Utils.ExceptionLog("DirectoryDelete", "Filename=" + file, ex);
+                    // Utils.ExceptionLog("DirectoryDelete", "Filename=" + file, ex);
+                    Logging.Manager("Error at DirectoryDelete, Filename: " + file + " (" + ex.Message + ")");
                 }
             }
 
@@ -828,7 +874,8 @@ namespace RelhaxModpack
                     }
                     catch (Exception ex)
                     {
-                        Utils.ExceptionLog("DirectoryDelete", "Folder=" + dir, ex);
+                        // Utils.ExceptionLog("DirectoryDelete", "Folder=" + dir, ex);
+                        Logging.Manager("Error at DirectoryDelete, Folder: " + dir + " (" + ex.Message + ")");
                     }
                 }
             }
@@ -839,7 +886,8 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Utils.ExceptionLog("DirectoryDelete", "Folder=" + folderPath, ex);
+                // Utils.ExceptionLog("DirectoryDelete", "Folder=" + folderPath, ex);
+                Logging.Manager("Error at DirectoryDelete, Folder: " + folderPath + " (" + ex.Message + ")");
             }
         }
         #endregion
@@ -874,7 +922,7 @@ namespace RelhaxModpack
         {
             DateTimeFormatInfo myDTFI = new CultureInfo("en-US").DateTimeFormat;
             dateOut = date;
-            string[] mask = new string[] { "dd.MM.yyyy  H:mm:ss,ff", "dd.MM.yyyy HH:mm:ss,ff", "dd.MM.yyyy  h:mm:ss,ff", "YYYY-MM-DD  h:mm:ss", "YYYY-MM-DD HH:mm:ss", "YYYY-MM-DD HH:mm:ss.ff", "YYYY-MM-DD  h:mm:ss.ff", "MM/DD/YYYY  h:mm:ss.ff",
+            string[] mask = new string[] { "yyyy-MM-dd-HH-mm-ss", "dd.MM.yyyy  H:mm:ss,ff", "dd.MM.yyyy HH:mm:ss,ff", "dd.MM.yyyy  h:mm:ss,ff", "YYYY-MM-DD  h:mm:ss", "YYYY-MM-DD HH:mm:ss", "YYYY-MM-DD HH:mm:ss.ff", "YYYY-MM-DD  h:mm:ss.ff", "MM/DD/YYYY  h:mm:ss.ff",
                 "MM/DD/YYYY HH:mm:ss.ff", "ddd MM/DD/YYYY  h:mm:ss.ff", "ddd MM/DD/YYYY HH:mm:ss.ff","ddd M/d/yyyy h:mm:ss.ff","ddd M/d/yyyy H:mm:ss.ff", "yyyy-MM-dd HH:mm:ss"};
             foreach (var m in mask)
             {
