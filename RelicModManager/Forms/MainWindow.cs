@@ -183,7 +183,6 @@ namespace RelhaxModpack
                 {
                     if (frm.Name.Equals("ModSelectionList"))
                     {
-                        this.backupModsCheckBox.Text = Translations.GetTranslatedString("backupModsCheckBox");
                         Logging.Manager("Scanning RelHaxModBackup folder stopped, because ModSelectionList is already started");
                         backupFolderContent = null;
                         return;
@@ -206,7 +205,7 @@ namespace RelhaxModpack
                 completeFileFolderCount += bf.FileCount + bf.FolderCount;
                 completeFolderSize += filesSize;
                 completeFolderSizeOnDisk += filesSizeOnDisk;
-                this.backupModsCheckBox.Text = Translations.GetTranslatedString("backupModsCheckBox") + "\nBackups: " + backupFolderContent.Count + " Size: " + Utils.SizeSuffix(completeFolderSize, 2, true);
+                this.backupModsSizeLabel.Text = "Backups: " + backupFolderContent.Count + " Size: " + Utils.SizeSuffix(completeFolderSize, 2, true);
             }
             Logging.Manager(string.Format("parsed backups in BackupFolder: {0}, with a total size of {1} ({2} bytes) (files and folders: {3}).", backupFolderContent.Count, Utils.SizeSuffix(completeFolderSize, 2, true), completeFolderSize, completeFileFolderCount + backupFolderContent.Count));
         }

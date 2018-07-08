@@ -100,6 +100,7 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.ApplicationVersionLabel = new System.Windows.Forms.Label();
             this.DatabaseVersionLabel = new System.Windows.Forms.Label();
+            this.backupModsSizeLabel = new System.Windows.Forms.Label();
             this.settingsGroupBox.SuspendLayout();
             this.SettingsTable.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
@@ -202,10 +203,11 @@
             this.SettingsTable.Controls.Add(this.notifyIfSameDatabaseCB, 1, 2);
             this.SettingsTable.Controls.Add(this.darkUICB, 1, 0);
             this.SettingsTable.Controls.Add(this.saveLastInstallCB, 1, 1);
-            this.SettingsTable.Controls.Add(this.SuperExtractionCB, 0, 3);
+            this.SettingsTable.Controls.Add(this.SuperExtractionCB, 0, 4);
             this.SettingsTable.Controls.Add(this.clearLogFilesCB, 0, 0);
             this.SettingsTable.Controls.Add(this.backupModsCheckBox, 0, 2);
             this.SettingsTable.Controls.Add(this.ShowAdvancedSettingsLink, 1, 4);
+            this.SettingsTable.Controls.Add(this.backupModsSizeLabel, 0, 3);
             this.SettingsTable.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SettingsTable.Location = new System.Drawing.Point(3, 16);
             this.SettingsTable.Name = "SettingsTable";
@@ -303,10 +305,10 @@
             // 
             this.SuperExtractionCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.SuperExtractionCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SuperExtractionCB.Location = new System.Drawing.Point(1, 76);
+            this.SuperExtractionCB.Location = new System.Drawing.Point(1, 96);
             this.SuperExtractionCB.Margin = new System.Windows.Forms.Padding(1);
             this.SuperExtractionCB.Name = "SuperExtractionCB";
-            this.SuperExtractionCB.Size = new System.Drawing.Size(236, 18);
+            this.SuperExtractionCB.Size = new System.Drawing.Size(236, 19);
             this.SuperExtractionCB.TabIndex = 37;
             this.SuperExtractionCB.Text = "Super extraction mode (Experimental)";
             this.SuperExtractionCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -1075,6 +1077,16 @@
             this.DatabaseVersionLabel.Text = "Database Version {version}";
             this.DatabaseVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // backupModsSizeLabel
+            // 
+            this.backupModsSizeLabel.AutoSize = true;
+            this.backupModsSizeLabel.Location = new System.Drawing.Point(16, 75);
+            this.backupModsSizeLabel.Margin = new System.Windows.Forms.Padding(16, 0, 3, 0);
+            this.backupModsSizeLabel.Name = "backupModsSizeLabel";
+            this.backupModsSizeLabel.Size = new System.Drawing.Size(35, 13);
+            this.backupModsSizeLabel.TabIndex = 40;
+            this.backupModsSizeLabel.Text = "label1";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1202,6 +1214,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label ApplicationVersionLabel;
         private System.Windows.Forms.Label DatabaseVersionLabel;
+        private System.Windows.Forms.Label backupModsSizeLabel;
     }
 }
 
