@@ -307,6 +307,14 @@ namespace RelhaxModpack
             polish.Add("backupModsCheckBox", "Zrób kopię zapasową obecnego pliku z modyfikacjami");
             french.Add("backupModsCheckBox", "Sauvegarder le dossier de mods");
 
+            //Componet: backupModsCheckBox
+            //
+            english.Add("backupModsSizeLabel", "");
+            german.Add("backupModsSizeLabel", "");
+            polish.Add("backupModsSizeLabel", "");
+            french.Add("backupModsSizeLabel", "");
+
+            
             //Componet: settingsGroupBox
             //
             english.Add("settingsGroupBox", "Settings");
