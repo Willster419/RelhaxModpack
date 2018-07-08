@@ -46,6 +46,7 @@
             this.SuperExtractionCB = new System.Windows.Forms.CheckBox();
             this.clearLogFilesCB = new System.Windows.Forms.CheckBox();
             this.ShowAdvancedSettingsLink = new System.Windows.Forms.LinkLabel();
+            this.backupModsSizeLabel = new System.Windows.Forms.Label();
             this.ErrorCounterLabel = new System.Windows.Forms.Label();
             this.languageSelectionGB = new System.Windows.Forms.GroupBox();
             this.LanguageComboBox = new System.Windows.Forms.ComboBox();
@@ -100,7 +101,6 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.ApplicationVersionLabel = new System.Windows.Forms.Label();
             this.DatabaseVersionLabel = new System.Windows.Forms.Label();
-            this.backupModsSizeLabel = new System.Windows.Forms.Label();
             this.settingsGroupBox.SuspendLayout();
             this.SettingsTable.SuspendLayout();
             this.languageSelectionGB.SuspendLayout();
@@ -348,6 +348,18 @@
             this.ShowAdvancedSettingsLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ShowAdvancedSettingsLink_LinkClicked);
             this.ShowAdvancedSettingsLink.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.ShowAdvancedSettingsLink.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
+            // 
+            // backupModsSizeLabel
+            // 
+            this.backupModsSizeLabel.AutoSize = true;
+            this.backupModsSizeLabel.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.backupModsSizeLabel.Location = new System.Drawing.Point(16, 75);
+            this.backupModsSizeLabel.Margin = new System.Windows.Forms.Padding(16, 0, 3, 0);
+            this.backupModsSizeLabel.Name = "backupModsSizeLabel";
+            this.backupModsSizeLabel.Size = new System.Drawing.Size(111, 14);
+            this.backupModsSizeLabel.TabIndex = 40;
+            this.backupModsSizeLabel.Text = "Backups: 0 Size: 0 kb";
+            this.backupModsSizeLabel.Click += new System.EventHandler(this.BackupModsSizeLabel_Click);
             // 
             // ErrorCounterLabel
             // 
@@ -1076,16 +1088,6 @@
             this.DatabaseVersionLabel.TabIndex = 1;
             this.DatabaseVersionLabel.Text = "Database Version {version}";
             this.DatabaseVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // backupModsSizeLabel
-            // 
-            this.backupModsSizeLabel.AutoSize = true;
-            this.backupModsSizeLabel.Location = new System.Drawing.Point(16, 75);
-            this.backupModsSizeLabel.Margin = new System.Windows.Forms.Padding(16, 0, 3, 0);
-            this.backupModsSizeLabel.Name = "backupModsSizeLabel";
-            this.backupModsSizeLabel.Size = new System.Drawing.Size(35, 13);
-            this.backupModsSizeLabel.TabIndex = 40;
-            this.backupModsSizeLabel.Text = "label1";
             // 
             // MainWindow
             // 

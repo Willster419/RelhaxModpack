@@ -35,7 +35,7 @@ namespace RelhaxModpack
         //timer to measure download speed
         private Stopwatch sw = new Stopwatch();
         // this dict will hold ALL directories and files of the backupFolder after parsing
-        private List<BackupFolder> backupFolderContent;
+        public List<BackupFolder> backupFolderContent;
         //The list of all mods
         private List<Category> parsedCatagoryLists;
         //queue for downloading mods
@@ -121,7 +121,7 @@ namespace RelhaxModpack
         }
 
         //parse the ModBackup folder to check current size
-        private void ScanningRelHaxModBackupFolder()
+        public void ScanningRelHaxModBackupFolder()
         {
             using (BackgroundWorker worker = new BackgroundWorker())
             {
@@ -199,6 +199,7 @@ namespace RelhaxModpack
                     FilesSize = filesSize,
                     FilesSizeOnDisk = filesSizeOnDisk
                 };
+                bf.FullnameList.Insert(0, fL.FullName);
                 bf.FolderCount = (uint)bf.FullnameList.Count - fileCount;
                 backupFolderContent.Add(bf);
                 completeFileCount += fileCount;
@@ -3156,5 +3157,14 @@ namespace RelhaxModpack
                 WindowState = FormWindowState.Normal;
         }
         #endregion
+
+        private void BackupModsSizeLabel_Click(object sender, EventArgs e)
+        {
+            DeleteBackupFolder dbf = new DeleteBackupFolder(backupFolderContent)
+            {
+                MyParent = this
+            };
+            dbf.Show();
+        }
     }
 }
