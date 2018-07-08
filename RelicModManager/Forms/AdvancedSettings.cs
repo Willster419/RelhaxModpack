@@ -103,12 +103,12 @@ namespace RelhaxModpack.Forms
 
         #region CheckedChanged Handlers
         //handler for when the "force manuel" checkbox is checked
-        private void forceManuel_CheckedChanged(object sender, EventArgs e)
+        private void ForceManuel_CheckedChanged(object sender, EventArgs e)
         {
             Settings.ForceManuel = forceManuel.Checked;
         }
 
-        private void clearCacheCB_CheckedChanged(object sender, EventArgs e)
+        private void ClearCacheCB_CheckedChanged(object sender, EventArgs e)
         {
             Settings.ClearCache = clearCacheCB.Checked;
         }
@@ -133,7 +133,7 @@ namespace RelhaxModpack.Forms
                 Settings.UninstallMode = UninstallModes.Default;
         }
         //handler for what happends when the check box "clean install" is checked or not
-        private void cleanInstallCB_CheckedChanged(object sender, EventArgs e)
+        private void CleanInstallCB_CheckedChanged(object sender, EventArgs e)
         {
             Settings.CleanInstallation = cleanInstallCB.Checked;
         }

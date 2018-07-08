@@ -133,7 +133,7 @@
             this.cleanInstallCB.Text = "Clean installation (Recommended)";
             this.cleanInstallCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.cleanInstallCB.UseVisualStyleBackColor = true;
-            this.cleanInstallCB.CheckedChanged += new System.EventHandler(this.cleanInstallCB_CheckedChanged);
+            this.cleanInstallCB.CheckedChanged += new System.EventHandler(this.CleanInstallCB_CheckedChanged);
             this.cleanInstallCB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.cleanInstallCB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
@@ -166,7 +166,7 @@
             this.forceManuel.Text = "Force manual game detection";
             this.forceManuel.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.forceManuel.UseVisualStyleBackColor = true;
-            this.forceManuel.CheckedChanged += new System.EventHandler(this.forceManuel_CheckedChanged);
+            this.forceManuel.CheckedChanged += new System.EventHandler(this.ForceManuel_CheckedChanged);
             this.forceManuel.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.forceManuel.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
@@ -214,7 +214,7 @@
             this.clearCacheCB.Text = "Clear WoT cache data";
             this.clearCacheCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.clearCacheCB.UseVisualStyleBackColor = true;
-            this.clearCacheCB.CheckedChanged += new System.EventHandler(this.clearCacheCB_CheckedChanged);
+            this.clearCacheCB.CheckedChanged += new System.EventHandler(this.ClearCacheCB_CheckedChanged);
             this.clearCacheCB.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
             this.clearCacheCB.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
