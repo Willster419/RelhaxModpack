@@ -214,6 +214,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="UIComponents\BackupFolder.cs" />
+    <Compile Include="UIComponents\SelectionCheckBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UIComponents\ExportModeRadioButton.cs">
       <SubType>Component</SubType>
     </Compile>
