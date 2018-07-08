@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace RelhaxModpack
 {
-    class BackupFolder
+    public class BackupFolder
     {
         public string TopfolderName { get; set; } = "";
         public List<string> FullnameList { get; set; }
