@@ -18,7 +18,7 @@ namespace RelhaxModpack.Forms
         private void AdvancedSettings_Load(object sender, EventArgs e)
         {
             WindowLoading = true;
-            Logging.Manager(string.Format("AdvancedSettings: Loading window at location x={0}, y={1}",startX,startY));
+            Logging.Manager(string.Format("AdvancedSettings: Loading window at location x={0}, y={1}", startX, startY));
             ApplySavedSettings();
             Location = new Point(startX, startY);
             WindowLoading = false;
@@ -158,7 +158,7 @@ namespace RelhaxModpack.Forms
         private void UseBetaDatabaseCB_CheckedChanged(object sender, EventArgs e)
         {
             Settings.BetaDatabase = UseBetaDatabaseCB.Checked;
-            if(Settings.BetaDatabase && !WindowLoading)
+            if (Settings.BetaDatabase && !WindowLoading)
             {
                 MessageBox.Show(Translations.GetTranslatedString("noChangeUntilRestart"));
             }
@@ -178,6 +178,35 @@ namespace RelhaxModpack.Forms
         {
             Control c = (Control)sender;
             AdvancedSettingsDescription.Text = Translations.GetTranslatedString(c.Name + "Description");
+        }
+
+        private void AdvancedSettingsHeader_Paint(object sender, PaintEventArgs e)
+        {
+            Color backColor = SystemColors.ControlDark;       // default values for "normal" UI (not dark)
+            Color textColor = Color.White;                          // default values for "normal" UI (not dark)
+            RectangleF rec = e.ClipRectangle;
+            rec.X = rec.X + ((Label)sender).Margin.Left + ((Label)sender).Padding.Left;
+            rec.Y = rec.Y + ((Label)sender).Margin.Top + ((Label)sender).Padding.Top;
+            rec.Width = rec.Width - ((Label)sender).Margin.Left - ((Label)sender).Margin.Right - (((Label)sender).Padding.Left - ((Label)sender).Padding.Right);
+            rec.Height = rec.Height - ((Label)sender).Margin.Top - ((Label)sender).Margin.Bottom - (((Label)sender).Padding.Top - ((Label)sender).Padding.Bottom);
+            if (Settings.DarkUI)
+            {
+                backColor = SystemColors.Control;
+                textColor = SystemColors.ControlText;
+            }
+            using (SolidBrush brush = new SolidBrush(backColor))
+            {
+                e.Graphics.FillRectangle(brush, rec);
+            }
+            // https://www.neowin.net/forum/topic/1060552-c-tip-converting-contentalignment-to-stringalignment/
+            StringFormat sf = StringFormat.GenericDefault;
+            Int32 lNum = (Int32)Math.Log((Double)((Label)sender).TextAlign, 2);
+            sf.LineAlignment = (StringAlignment)(lNum / 4);
+            sf.Alignment = (StringAlignment)(lNum % 4);
+            using (SolidBrush brush = new SolidBrush(textColor))
+            {
+                e.Graphics.DrawString(((Label)sender).Text, ((Label)sender).Font, brush, rec, sf);
+            }
         }
 
         private void Generic_MouseLeave(object sender, EventArgs e)

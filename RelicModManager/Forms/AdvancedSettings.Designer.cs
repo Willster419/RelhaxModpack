@@ -60,21 +60,22 @@
             // AdvancedSettingsHeader
             // 
             this.AdvancedSettingsHeader.AutoSize = true;
-            this.AdvancedSettingsHeader.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.AdvancedSettingsHeader.BackColor = System.Drawing.SystemColors.HotTrack;
             this.AdvancedSettingsLayout.SetColumnSpan(this.AdvancedSettingsHeader, 2);
             this.AdvancedSettingsHeader.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.AdvancedSettingsHeader.Location = new System.Drawing.Point(4, 1);
+            this.AdvancedSettingsHeader.Location = new System.Drawing.Point(0, 0);
+            this.AdvancedSettingsHeader.Margin = new System.Windows.Forms.Padding(0);
             this.AdvancedSettingsHeader.Name = "AdvancedSettingsHeader";
-            this.AdvancedSettingsHeader.Size = new System.Drawing.Size(402, 30);
+            this.AdvancedSettingsHeader.Size = new System.Drawing.Size(410, 30);
             this.AdvancedSettingsHeader.TabIndex = 0;
             this.AdvancedSettingsHeader.Text = "Hover over a setting to see its description";
             this.AdvancedSettingsHeader.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.AdvancedSettingsHeader.Paint += new System.Windows.Forms.PaintEventHandler(this.AdvancedSettingsHeader_Paint);
             // 
             // AdvancedSettingsLayout
             // 
             this.AdvancedSettingsLayout.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.AdvancedSettingsLayout.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
             this.AdvancedSettingsLayout.ColumnCount = 2;
             this.AdvancedSettingsLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.AdvancedSettingsLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -107,10 +108,10 @@
             this.ShowInstallCompleteWindowCB.AutoSize = true;
             this.ShowInstallCompleteWindowCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.ShowInstallCompleteWindowCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ShowInstallCompleteWindowCB.Location = new System.Drawing.Point(2, 141);
+            this.ShowInstallCompleteWindowCB.Location = new System.Drawing.Point(1, 136);
             this.ShowInstallCompleteWindowCB.Margin = new System.Windows.Forms.Padding(1);
             this.ShowInstallCompleteWindowCB.Name = "ShowInstallCompleteWindowCB";
-            this.ShowInstallCompleteWindowCB.Size = new System.Drawing.Size(201, 33);
+            this.ShowInstallCompleteWindowCB.Size = new System.Drawing.Size(203, 33);
             this.ShowInstallCompleteWindowCB.TabIndex = 42;
             this.ShowInstallCompleteWindowCB.Text = "Show install complete window";
             this.ShowInstallCompleteWindowCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -125,10 +126,10 @@
             this.cleanInstallCB.Checked = true;
             this.cleanInstallCB.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cleanInstallCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cleanInstallCB.Location = new System.Drawing.Point(206, 69);
+            this.cleanInstallCB.Location = new System.Drawing.Point(206, 66);
             this.cleanInstallCB.Margin = new System.Windows.Forms.Padding(1);
             this.cleanInstallCB.Name = "cleanInstallCB";
-            this.cleanInstallCB.Size = new System.Drawing.Size(202, 33);
+            this.cleanInstallCB.Size = new System.Drawing.Size(203, 33);
             this.cleanInstallCB.TabIndex = 41;
             this.cleanInstallCB.Text = "Clean installation (Recommended)";
             this.cleanInstallCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -142,10 +143,10 @@
             this.ExportModeCB.AutoSize = true;
             this.ExportModeCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.ExportModeCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ExportModeCB.Location = new System.Drawing.Point(206, 33);
+            this.ExportModeCB.Location = new System.Drawing.Point(206, 31);
             this.ExportModeCB.Margin = new System.Windows.Forms.Padding(1);
             this.ExportModeCB.Name = "ExportModeCB";
-            this.ExportModeCB.Size = new System.Drawing.Size(202, 33);
+            this.ExportModeCB.Size = new System.Drawing.Size(203, 33);
             this.ExportModeCB.TabIndex = 40;
             this.ExportModeCB.Text = "Export mode";
             this.ExportModeCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -158,10 +159,10 @@
             // 
             this.forceManuel.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.forceManuel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.forceManuel.Location = new System.Drawing.Point(2, 33);
+            this.forceManuel.Location = new System.Drawing.Point(1, 31);
             this.forceManuel.Margin = new System.Windows.Forms.Padding(1);
             this.forceManuel.Name = "forceManuel";
-            this.forceManuel.Size = new System.Drawing.Size(201, 33);
+            this.forceManuel.Size = new System.Drawing.Size(203, 33);
             this.forceManuel.TabIndex = 39;
             this.forceManuel.Text = "Force manual game detection";
             this.forceManuel.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -174,10 +175,10 @@
             // 
             this.createShortcutsCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.createShortcutsCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.createShortcutsCB.Location = new System.Drawing.Point(206, 105);
+            this.createShortcutsCB.Location = new System.Drawing.Point(206, 101);
             this.createShortcutsCB.Margin = new System.Windows.Forms.Padding(1);
             this.createShortcutsCB.Name = "createShortcutsCB";
-            this.createShortcutsCB.Size = new System.Drawing.Size(202, 33);
+            this.createShortcutsCB.Size = new System.Drawing.Size(203, 33);
             this.createShortcutsCB.TabIndex = 38;
             this.createShortcutsCB.Text = "Create shortcuts";
             this.createShortcutsCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -190,10 +191,10 @@
             // 
             this.InstantExtractionCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.InstantExtractionCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.InstantExtractionCB.Location = new System.Drawing.Point(2, 105);
+            this.InstantExtractionCB.Location = new System.Drawing.Point(1, 101);
             this.InstantExtractionCB.Margin = new System.Windows.Forms.Padding(1);
             this.InstantExtractionCB.Name = "InstantExtractionCB";
-            this.InstantExtractionCB.Size = new System.Drawing.Size(201, 33);
+            this.InstantExtractionCB.Size = new System.Drawing.Size(203, 33);
             this.InstantExtractionCB.TabIndex = 37;
             this.InstantExtractionCB.Text = "Instant extraction mode (Experimental)";
             this.InstantExtractionCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -206,10 +207,10 @@
             // 
             this.clearCacheCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.clearCacheCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.clearCacheCB.Location = new System.Drawing.Point(2, 69);
+            this.clearCacheCB.Location = new System.Drawing.Point(1, 66);
             this.clearCacheCB.Margin = new System.Windows.Forms.Padding(1);
             this.clearCacheCB.Name = "clearCacheCB";
-            this.clearCacheCB.Size = new System.Drawing.Size(201, 33);
+            this.clearCacheCB.Size = new System.Drawing.Size(203, 33);
             this.clearCacheCB.TabIndex = 32;
             this.clearCacheCB.Text = "Clear WoT cache data";
             this.clearCacheCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -223,10 +224,10 @@
             this.UseAltUpdateMethodCB.AutoSize = true;
             this.UseAltUpdateMethodCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.UseAltUpdateMethodCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.UseAltUpdateMethodCB.Location = new System.Drawing.Point(206, 141);
+            this.UseAltUpdateMethodCB.Location = new System.Drawing.Point(206, 136);
             this.UseAltUpdateMethodCB.Margin = new System.Windows.Forms.Padding(1);
             this.UseAltUpdateMethodCB.Name = "UseAltUpdateMethodCB";
-            this.UseAltUpdateMethodCB.Size = new System.Drawing.Size(202, 33);
+            this.UseAltUpdateMethodCB.Size = new System.Drawing.Size(203, 33);
             this.UseAltUpdateMethodCB.TabIndex = 43;
             this.UseAltUpdateMethodCB.Text = "Use alternative update method";
             this.UseAltUpdateMethodCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -240,10 +241,10 @@
             this.UseBetaDatabaseCB.AutoSize = true;
             this.UseBetaDatabaseCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.UseBetaDatabaseCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.UseBetaDatabaseCB.Location = new System.Drawing.Point(2, 177);
+            this.UseBetaDatabaseCB.Location = new System.Drawing.Point(1, 171);
             this.UseBetaDatabaseCB.Margin = new System.Windows.Forms.Padding(1);
             this.UseBetaDatabaseCB.Name = "UseBetaDatabaseCB";
-            this.UseBetaDatabaseCB.Size = new System.Drawing.Size(201, 33);
+            this.UseBetaDatabaseCB.Size = new System.Drawing.Size(203, 33);
             this.UseBetaDatabaseCB.TabIndex = 44;
             this.UseBetaDatabaseCB.Text = "Use beta database";
             this.UseBetaDatabaseCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -257,10 +258,10 @@
             this.UseBetaApplicationCB.AutoSize = true;
             this.UseBetaApplicationCB.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.UseBetaApplicationCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.UseBetaApplicationCB.Location = new System.Drawing.Point(206, 177);
+            this.UseBetaApplicationCB.Location = new System.Drawing.Point(206, 171);
             this.UseBetaApplicationCB.Margin = new System.Windows.Forms.Padding(1);
             this.UseBetaApplicationCB.Name = "UseBetaApplicationCB";
-            this.UseBetaApplicationCB.Size = new System.Drawing.Size(202, 33);
+            this.UseBetaApplicationCB.Size = new System.Drawing.Size(203, 33);
             this.UseBetaApplicationCB.TabIndex = 45;
             this.UseBetaApplicationCB.Text = "Use beta application";
             this.UseBetaApplicationCB.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -409,6 +410,7 @@
             this.Controls.Add(this.loadingImageGroupBox);
             this.Controls.Add(this.AdvancedSettingsDescription);
             this.Controls.Add(this.AdvancedSettingsLayout);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
