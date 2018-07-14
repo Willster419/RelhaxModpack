@@ -1889,8 +1889,10 @@ namespace RelhaxModpack
                         };
                         try
                         {
-                            Process installFontss = new Process();
-                            installFontss.StartInfo = info;
+                            Process installFontss = new Process
+                            {
+                                StartInfo = info
+                            };
                             installFontss.Start();
                             installFontss.WaitForExit();
                             Logging.Manager("FontReg.exe ExitCode: " + installFontss.ExitCode);

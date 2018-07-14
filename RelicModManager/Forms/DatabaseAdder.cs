@@ -53,7 +53,7 @@ namespace RelhaxModpack
                 Category selectedCat = (Category)cb.SelectedItem;
                 ModPanel.Enabled = true;
                 PackageList = new List<SelectablePackage>();
-                processConfigs(selectedCat.Packages);
+                ProcessConfigs(selectedCat.Packages);
                 PackageCB.SelectedIndexChanged -= PackageCB_SelectedIndexChanged;
                 PackageCB.DataSource = PackageList;
                 PackageCB.SelectedIndex = -1;
@@ -80,12 +80,12 @@ namespace RelhaxModpack
             SelectedDatabaseObject = selectedMod;
         }
 
-        private void processConfigs(List<SelectablePackage> cfgList)
+        private void ProcessConfigs(List<SelectablePackage> cfgList)
         {
             foreach(SelectablePackage c in cfgList)
             {
                 PackageList.Add(c);
-                processConfigs(c.Packages);
+                ProcessConfigs(c.Packages);
             }
         }
 
@@ -99,7 +99,7 @@ namespace RelhaxModpack
             }
         }
 
-        private void applyButton_Click(object sender, EventArgs e)
+        private void ApplyButton_Click(object sender, EventArgs e)
         {
             ignoreResult = false;
             DialogResult = DialogResult.OK;
