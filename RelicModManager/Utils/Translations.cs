@@ -301,7 +301,7 @@ namespace RelhaxModpack
             //Componet: cancerFontCB
             //
             english.Add("ComicSansFontCB", "Comic Sans font");
-            german.Add("ComicSansFontCB", "Comic Sans schriftart");
+            german.Add("ComicSansFontCB", " Schriftart Comic Sans");
             polish.Add("ComicSansFontCB", "Czcionka Comic Sans");
             french.Add("ComicSansFontCB", "Police Comic Sans");
 
