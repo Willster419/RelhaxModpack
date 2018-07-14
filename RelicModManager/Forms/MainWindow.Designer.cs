@@ -394,7 +394,7 @@
             "English",
             "Polski",
             "Deutsch",
-            "Francais"});
+            "Français"});
             this.LanguageComboBox.Location = new System.Drawing.Point(2, 15);
             this.LanguageComboBox.Name = "LanguageComboBox";
             this.LanguageComboBox.Size = new System.Drawing.Size(156, 21);
