@@ -1468,11 +1468,11 @@ namespace RelhaxModpack
                     if (p.type.Equals("regx") || p.type.Equals("regex"))
                     {
                         Logging.Manager("regex section", true);
-                        patchParameters = patchParameters + string.Format(", lines={0}", string.Join(",", p.lines));
                         string temp = null;
                         int tempp = 0;
                         if (p.lines != null)
                         {
+                            patchParameters = patchParameters + string.Format(", lines={0}", string.Join(",", p.lines));
                             temp = p.lines[0];
                             tempp = int.Parse(temp);
                         }
