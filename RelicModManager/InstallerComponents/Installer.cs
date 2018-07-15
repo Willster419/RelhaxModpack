@@ -1467,6 +1467,7 @@ namespace RelhaxModpack
                     string patchParameters = string.Format("mode={0}, filePathMacro={1}, filePath={2}, search={3}, replace={4}", p.mode, p.patchPath, p.file, p.search, p.replace);
                     if (p.type.Equals("regx") || p.type.Equals("regex"))
                     {
+                        Logging.Manager("regex section", true);
                         patchParameters = patchParameters + string.Format(", lines={0}", string.Join(",", p.lines));
                         string temp = null;
                         int tempp = 0;
@@ -1500,6 +1501,7 @@ namespace RelhaxModpack
                     }
                     else if (p.type.Equals("xml"))
                     {
+                        Logging.Manager("xml section", true);
                         patchParameters = patchParameters + string.Format(", path={0}", string.Join(",", p.path));
                         //perform xml patch
                         Logging.Manager("Xml patch, " + patchParameters);
@@ -1507,6 +1509,7 @@ namespace RelhaxModpack
                     }
                     else if (p.type.Equals("json"))
                     {
+                        Logging.Manager("json section", true);
                         patchParameters = patchParameters + string.Format(", path={0}", string.Join(",", p.path));
                         //perform json patch
                         Logging.Manager("Json patch, " + patchParameters);
@@ -1514,6 +1517,7 @@ namespace RelhaxModpack
                     }
                     else if (p.type.Equals("xvm"))
                     {
+                        Logging.Manager("xvm section", true);
                         patchParameters = patchParameters + string.Format(", path={0}", string.Join(",", p.path));
                         //perform xvm style json patch
                         Logging.Manager("XVM patch, " + patchParameters);
@@ -1521,6 +1525,7 @@ namespace RelhaxModpack
                     }
                     else if (p.type.Equals("pmod"))
                     {
+                        Logging.Manager("pmod section", true);
                         patchParameters = patchParameters + string.Format(", path={0}", string.Join(",", p.path));
                         //perform pmod/generic style json patch
                         Logging.Manager("PMOD/Generic patch, " + patchParameters);
