@@ -88,5 +88,11 @@ namespace RelhaxModpack
             this.MyParent.ScanningRelHaxModBackupFolder();
             this.Dispose();
         }
+
+        private void DeleteBackupFolder_Resize(object sender, System.EventArgs e)
+        {
+            // this.SelectBackupFolderPanel.Width = ((Form)sender).Width - 40;
+            // this.SelectBackupFolderPanel.Height = ((Form)sender).Width - 105;
+        }
     }
 }

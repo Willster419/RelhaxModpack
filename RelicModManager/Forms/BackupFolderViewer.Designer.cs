@@ -39,13 +39,13 @@
             this.SelectBackupFolderPanel.AutoScroll = true;
             this.SelectBackupFolderPanel.Location = new System.Drawing.Point(12, 25);
             this.SelectBackupFolderPanel.Name = "SelectBackupFolderPanel";
-            this.SelectBackupFolderPanel.Size = new System.Drawing.Size(301, 201);
+            this.SelectBackupFolderPanel.Size = new System.Drawing.Size(301, 273);
             this.SelectBackupFolderPanel.TabIndex = 0;
             // 
             // CancelCloseButton
             // 
             this.CancelCloseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.CancelCloseButton.Location = new System.Drawing.Point(12, 232);
+            this.CancelCloseButton.Location = new System.Drawing.Point(12, 304);
             this.CancelCloseButton.Name = "CancelCloseButton";
             this.CancelCloseButton.Size = new System.Drawing.Size(75, 23);
             this.CancelCloseButton.TabIndex = 3;
@@ -56,7 +56,7 @@
             // DeleteButton
             // 
             this.DeleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.DeleteButton.Location = new System.Drawing.Point(238, 232);
+            this.DeleteButton.Location = new System.Drawing.Point(238, 304);
             this.DeleteButton.Name = "DeleteButton";
             this.DeleteButton.Size = new System.Drawing.Size(75, 23);
             this.DeleteButton.TabIndex = 4;
@@ -68,16 +68,19 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(325, 267);
+            this.ClientSize = new System.Drawing.Size(325, 339);
             this.Controls.Add(this.DeleteButton);
             this.Controls.Add(this.CancelCloseButton);
             this.Controls.Add(this.SelectBackupFolderPanel);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(300, 300);
+            this.MaximumSize = new System.Drawing.Size(341, 378);
+            this.MinimumSize = new System.Drawing.Size(341, 378);
             this.Name = "DeleteBackupFolder";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Form1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DeleteBackupFolder_FormClosing);
+            this.Resize += new System.EventHandler(this.DeleteBackupFolder_Resize);
             this.ResumeLayout(false);
 
         }
