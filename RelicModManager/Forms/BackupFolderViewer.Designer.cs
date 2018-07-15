@@ -72,7 +72,6 @@
             this.Controls.Add(this.DeleteButton);
             this.Controls.Add(this.CancelCloseButton);
             this.Controls.Add(this.SelectBackupFolderPanel);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(341, 378);
             this.MinimumSize = new System.Drawing.Size(341, 378);
