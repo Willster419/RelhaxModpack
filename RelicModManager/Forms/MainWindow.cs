@@ -176,6 +176,9 @@ namespace RelhaxModpack
             DirectoryInfo di = new DirectoryInfo(Settings.RelHaxModBackupFolder);
             backupFolderContent = new List<BackupFolder>();                         // this list will hold ALL directories and files after parsing
             List<DirectoryInfo> folderList = di.GetDirectories().ToList();          // parsed top folders
+
+            this.backupModsSizeLabel.Enabled = false;
+
             foreach (var fL in folderList)
             {
                 // search ModSelectionList Form. If found, user already startet the selection and the BackUpFolder cleanup will be not realy interesting
@@ -185,6 +188,7 @@ namespace RelhaxModpack
                     {
                         Logging.Manager("Scanning RelHaxModBackup folder stopped, because ModSelectionList is already started");
                         backupFolderContent = null;
+                        this.backupModsSizeLabel.Text = "";
                         return;
                     }
                 }
@@ -208,6 +212,7 @@ namespace RelhaxModpack
                 completeFolderSizeOnDisk += filesSizeOnDisk;
                 this.backupModsSizeLabel.Text = "Backups: " + backupFolderContent.Count + " Size: " + Utils.SizeSuffix(completeFolderSize, 2, true);
             }
+            this.backupModsSizeLabel.Enabled = true;
             Logging.Manager(string.Format("parsed backups in BackupFolder: {0}, with a total size of {1} ({2} bytes) (files and folders: {3}).", backupFolderContent.Count, Utils.SizeSuffix(completeFolderSize, 2, true), completeFolderSize, completeFileFolderCount + backupFolderContent.Count));
         }
 
