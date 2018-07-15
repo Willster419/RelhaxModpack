@@ -2086,6 +2086,13 @@ namespace RelhaxModpack
             german.Add("fileDeleteFailed", "Löschen der Datei fehlgeschlagen");
             polish.Add("fileDeleteFailed", "Próba usunięcia pliku zakończona niepowodzeniem");
             french.Add("fileDeleteFailed", "Échec de la supression du fichier");
+
+            //Component: DeleteBackupFolder
+            //
+            english.Add("DeleteBackupFolder", "Backups");
+            german.Add("DeleteBackupFolder", "Sicherungen");
+            polish.Add("DeleteBackupFolder", TranslationNeeded);
+            french.Add("DeleteBackupFolder", TranslationNeeded);
             #endregion
 
             #region Install finished window

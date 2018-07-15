@@ -13,6 +13,7 @@ namespace RelhaxModpack
         public DeleteBackupFolder(List<BackupFolder> bfl)
         {
             InitializeComponent();
+            this.Text = Translations.GetTranslatedString("DeleteBackupFolder"); 
             CancelCloseButton.Text = Translations.GetTranslatedString("cancel");
             DeleteButton.Text = Translations.GetTranslatedString("delete");
             DeleteBackupFolder_Load(bfl);

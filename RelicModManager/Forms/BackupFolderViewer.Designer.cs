@@ -39,7 +39,7 @@
             this.SelectBackupFolderPanel.AutoScroll = true;
             this.SelectBackupFolderPanel.Location = new System.Drawing.Point(12, 25);
             this.SelectBackupFolderPanel.Name = "SelectBackupFolderPanel";
-            this.SelectBackupFolderPanel.Size = new System.Drawing.Size(301, 273);
+            this.SelectBackupFolderPanel.Size = new System.Drawing.Size(301, 269);
             this.SelectBackupFolderPanel.TabIndex = 0;
             // 
             // CancelCloseButton
