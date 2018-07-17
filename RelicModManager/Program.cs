@@ -43,7 +43,7 @@ namespace RelhaxModpack
             Beta = 1,
             Alpha = 2
         }
-        public static ProgramVersion Version = ProgramVersion.Alpha;
+        public static ProgramVersion Version = ProgramVersion.Beta;
 
         [STAThread]
         static void Main()
