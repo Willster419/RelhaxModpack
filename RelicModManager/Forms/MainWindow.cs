@@ -996,8 +996,8 @@ namespace RelhaxModpack
             ApplyVersionTextLabels();
 
             //scan Backupfolder and show it on MainForm
-            if (Program.testMode)
-                ScanningRelHaxModBackupFolder();
+            // if (Program.testMode)
+            ScanningRelHaxModBackupFolder();
 
             if (Settings.FirstLoad)
             {
