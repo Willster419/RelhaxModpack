@@ -211,7 +211,15 @@ namespace RelhaxModpack
             }
             //load the translations
             Logging.Manager("Loading translation hashes");
-            Translations.LoadHashes();
+            try
+            {
+                Translations.LoadHashes();
+            }
+            catch (Exception ex)
+            {
+                MainWindow.errorCounter++;
+                Logging.Manager(string.Format("failed to load hash tables: {0}", ex.Message));
+            }
 
             //start the background taskbar form
             Logging.Manager("Loading main window");
