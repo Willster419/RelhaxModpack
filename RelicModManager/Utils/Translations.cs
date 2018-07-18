@@ -318,8 +318,11 @@ namespace RelhaxModpack
             german.Add("backupModsSizeLabel", "");
             polish.Add("backupModsSizeLabel", "");
             french.Add("backupModsSizeLabel", "");
+            english.Add("backupModsSizeLabelUsed", "Backups: {0}  Size: {1}");
+            german.Add("backupModsSizeLabelUsed", "Sicherungen: {0}  Größe: {1}");
+            polish.Add("backupModsSizeLabelUsed", TranslationNeeded);
+            french.Add("backupModsSizeLabelUsed", TranslationNeeded);
 
-            
             //Componet: settingsGroupBox
             //
             english.Add("settingsGroupBox", "Settings");

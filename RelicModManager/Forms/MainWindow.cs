@@ -36,6 +36,8 @@ namespace RelhaxModpack
         private Stopwatch sw = new Stopwatch();
         // this dict will hold ALL directories and files of the backupFolder after parsing
         public List<BackupFolder> backupFolderContent;
+        // size of all parsed backup folder files
+        public UInt64 completeFolderSize = 0;
         //The list of all mods
         private List<Category> parsedCatagoryLists;
         //queue for downloading mods
@@ -158,7 +160,7 @@ namespace RelhaxModpack
             uint BytesPerCluster = 1;
             UInt64 filesSize = 0;
             UInt64 filesSizeOnDisk = 0;
-            UInt64 completeFolderSize = 0;
+            completeFolderSize = 0;
             UInt64 completeFolderSizeOnDisk = 0;
 
             BackupFolder bf;
@@ -210,10 +212,18 @@ namespace RelhaxModpack
                 completeFileFolderCount += bf.FileCount + bf.FolderCount;
                 completeFolderSize += filesSize;
                 completeFolderSizeOnDisk += filesSizeOnDisk;
-                this.backupModsSizeLabel.Text = "Backups: " + backupFolderContent.Count + " Size: " + Utils.SizeSuffix(completeFolderSize, 2, true);
+                UpdateBackupModsSizeLabel();
             }
             this.backupModsSizeLabel.Enabled = true;
             Logging.Manager(string.Format("parsed backups in BackupFolder: {0}, with a total size of {1} ({2} bytes) (files and folders: {3}).", backupFolderContent.Count, Utils.SizeSuffix(completeFolderSize, 2, true), completeFolderSize, completeFileFolderCount + backupFolderContent.Count));
+        }
+
+        private void UpdateBackupModsSizeLabel()
+        {
+            if (backupFolderContent != null)
+                this.backupModsSizeLabel.Text = string.Format(Translations.GetTranslatedString("backupModsSizeLabelUsed"), backupFolderContent.Count, Utils.SizeSuffix(completeFolderSize, 2, true));
+            else
+                this.backupModsSizeLabel.Text = "";
         }
 
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
@@ -2432,6 +2442,7 @@ namespace RelhaxModpack
             }
             ApplyControlTranslations(Controls);
             ApplyVersionTextLabels();
+            UpdateBackupModsSizeLabel();
         }
         //handler for when the "backupResMods mods" checkbox is changed
         private void BackupModsCheckBox_CheckedChanged(object sender, EventArgs e)
