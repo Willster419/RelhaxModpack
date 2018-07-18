@@ -356,10 +356,12 @@
             this.backupModsSizeLabel.Location = new System.Drawing.Point(16, 75);
             this.backupModsSizeLabel.Margin = new System.Windows.Forms.Padding(16, 0, 3, 0);
             this.backupModsSizeLabel.Name = "backupModsSizeLabel";
-            this.backupModsSizeLabel.Size = new System.Drawing.Size(111, 14);
+            this.backupModsSizeLabel.Size = new System.Drawing.Size(111, 13);
             this.backupModsSizeLabel.TabIndex = 40;
             this.backupModsSizeLabel.Text = "Backups: 0 Size: 0 kb";
             this.backupModsSizeLabel.Click += new System.EventHandler(this.BackupModsSizeLabel_Click);
+            this.backupModsSizeLabel.MouseEnter += new System.EventHandler(this.Generic_MouseEnter);
+            this.backupModsSizeLabel.MouseLeave += new System.EventHandler(this.Generic_MouseLeave);
             // 
             // ErrorCounterLabel
             // 

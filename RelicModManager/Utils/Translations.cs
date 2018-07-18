@@ -312,7 +312,7 @@ namespace RelhaxModpack
             polish.Add("backupModsCheckBox", "Zrób kopię zapasową obecnego pliku z modyfikacjami");
             french.Add("backupModsCheckBox", "Sauvegarder le dossier de mods");
 
-            //Componet: backupModsCheckBox
+            //Componet: backupModsSizeLabel
             //
             english.Add("backupModsSizeLabel", "");
             german.Add("backupModsSizeLabel", "");
@@ -322,6 +322,11 @@ namespace RelhaxModpack
             german.Add("backupModsSizeLabelUsed", "Sicherungen: {0}  Größe: {1}");
             polish.Add("backupModsSizeLabelUsed", TranslationNeeded);
             french.Add("backupModsSizeLabelUsed", TranslationNeeded);
+
+            english.Add("backupModsSizeLabelDescription", "Here you see the number and size of created backup folders during the last installation with activated backup option.\nClick on it to open the Backup folder viwer and you are able to delete folders by your selection.");
+            german.Add("backupModsSizeLabelDescription", TranslationNeeded);
+            polish.Add("backupModsSizeLabelDescription", TranslationNeeded);
+            french.Add("backupModsSizeLabelDescription", TranslationNeeded);
 
             //Componet: settingsGroupBox
             //
