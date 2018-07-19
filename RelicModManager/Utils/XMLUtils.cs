@@ -15,6 +15,7 @@ namespace RelhaxModpack
         public static int TotalModConfigComponents = 0;
         //DeveloperSelections namelist
         public static List<DeveloperSelections> developerSelections = new List<DeveloperSelections>();
+        
         //check to make sure an xml file is valid
         public static bool IsValidXml(string xmlString)
         {
@@ -36,14 +37,29 @@ namespace RelhaxModpack
         public static string GetXMLElementAttributeFromFile(string file, string xpath)
         {
             XmlDocument doc = new XmlDocument();
-            doc.Load(file);
+            try
+            {
+                doc.Load(file);
+            }
+            catch
+            {
+                return null;
+            }
             return GetXMLElementAttributeMain(doc, xpath);
         }
         //allows one to get an xml element or attribute from an xml file
         public static string GetXMLElementAttributeFromString(string xmlString, string xpath)
         {
             XmlDocument doc = new XmlDocument();
-            doc.LoadXml(xmlString);
+            try
+            {
+                doc.LoadXml(xmlString);
+            }
+            catch
+            {
+                Logging.Manager("no valid XML string: " + xmlString);
+                return null;
+            }
             return GetXMLElementAttributeMain(doc, xpath);
         }
         //allows one to get an xml element or attribute value from the above methods
