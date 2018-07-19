@@ -1263,13 +1263,13 @@ namespace RelhaxModpack
     
                 //parse the minimum editor version
                 string version = doc.XPathSelectElement("//version/minimum_editor").Value;
-                Logging.Manager(string.Format("Local application is {0}, minimum version to edit database is {1}", LocalManagerVersion, version));
+                Logging.Manager(string.Format("Local application is {0} ({1}), minimum version to edit database is {2}", LocalManagerVersion, Program.Version == Program.ProgramVersion.Beta ? "beta" : Program.Version == Program.ProgramVersion.Alpha ? "alpha" : "stable", version));
 
                 if (!Program.skipUpdate && Utils.CompareVersions(LocalManagerVersion, version) == -1)
                 {
                     Logging.Manager("exe is out able to create valid database files.");
                     //out of date
-                    if (MessageBox.Show(string.Format("This Manager is version: {0}\nat least to edit database: {1}\n\nWe will restart the application now and update it!", LocalManagerVersion, version), Translations.GetTranslatedString("critical"), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                    if (MessageBox.Show(string.Format("This Manager is version: {0} ({1})\nat least to edit database: {2}\n\nWe will restart the application now and update it!", LocalManagerVersion, Program.Version == Program.ProgramVersion.Beta ? "beta" : Program.Version == Program.ProgramVersion.Alpha ? "alpha" : "stable", version), Translations.GetTranslatedString("critical"), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                     {
                         Logging.Manager("User has chosen: restart application");
                         Process.Start(Application.ExecutablePath, "/restart-wait"); // to start new instance of application
