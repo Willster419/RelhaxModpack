@@ -513,8 +513,15 @@ namespace RelhaxModpack
                     }
                 }
                 
+                // check if current version is beta version and beta selection is not selected, force to download stable
+                if (Program.Version == Program.ProgramVersion.Beta && !Settings.BetaApplication)
+                {
+                    version = onlineManager + " (stable)";
+                    startUpdate = true;
+                    tempManagerVersionStable = true;
+                }
                 // check if current beta version is still higher then onlineManager (not beta) version. that means is "updat-to-date"
-                if ((Program.Version == Program.ProgramVersion.Beta || Settings.BetaApplication) && Utils.CompareVersions(onlineManager, onlineManagerBeta) == -1)
+                else if ((Program.Version == Program.ProgramVersion.Beta || Settings.BetaApplication) && Utils.CompareVersions(onlineManager, onlineManagerBeta) == -1)
                 {
                     version = onlineManager + " (beta)";
                     // check if online beta version is higher then local beta version, then update
