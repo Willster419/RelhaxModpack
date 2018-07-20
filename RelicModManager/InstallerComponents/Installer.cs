@@ -274,7 +274,7 @@ namespace RelhaxModpack
                     Path.Combine(TanksLocation, "WoTLauncher.log"),
                     Path.Combine(TanksLocation, "cef.log")
                 };
-                Logging.Manager("deleteLogs selected: deleting wot, xvm, and pmod logs");
+                Logging.Manager("deleteLogs selected: deleting wot, xvm and pmod logs");
                 try
                 {
                     foreach (string file in logsToDelete)
@@ -456,12 +456,21 @@ namespace RelhaxModpack
                             try
                             {
                                 string correctedPath = s.TrimStart('\x005c').Replace(@"\\", @"\");
-                                string folderPath = Path.Combine(TanksLocation, Path.GetDirectoryName(correctedPath));
+                                string folderPath = "";
+                                if (correctedPath[0].Equals("{"))
+                                {
+                                    correctedPath = Utils.ReplaceMacro(correctedPath);
+                                    folderPath = correctedPath;
+                                }
+                                else
+                                {
+                                    correctedPath = Utils.ReplaceMacro(correctedPath);
+                                    folderPath = Path.Combine(TanksLocation, Path.GetDirectoryName(correctedPath));
+                                }
                                 if (!Directory.Exists(folderPath)) continue;
                                 string[] fileList = Directory.GetFiles(folderPath, Path.GetFileName(correctedPath));   // use the GetFileName(correctedPath) as a search pattern, to only get wanted files
                                 foreach (string startLoc in fileList)
                                 {
-                                    // string destLoc = Path.Combine(Application.StartupPath, "RelHaxTemp", Utils.GetValidFilename(dbo.Name + "_") + Path.GetFileName(startLoc));
                                     string destLoc = Path.Combine(Settings.RelhaxTempFolder, Utils.GetValidFilename(dbo.Name + "_") + Path.GetFileName(startLoc));
                                     try
                                     {
@@ -1172,12 +1181,21 @@ namespace RelhaxModpack
                         {
                             try {
                                 string correctedUserFiles = s.TrimStart('\x005c').Replace(@"\\", @"\");
-                                string targetDir = Path.GetDirectoryName(correctedUserFiles);
+                                string targetDir = "";
+                                if (correctedUserFiles[0].Equals("{"))
+                                {
+                                    correctedUserFiles = Utils.ReplaceMacro(correctedUserFiles);
+                                    targetDir = Path.GetDirectoryName(correctedUserFiles);
+                                }
+                                else
+                                {
+                                    correctedUserFiles = Utils.ReplaceMacro(correctedUserFiles);
+                                    targetDir = Path.Combine(TanksLocation, Path.GetDirectoryName(correctedUserFiles));
+                                }
                                 args.currentFile = correctedUserFiles;
                                 InstallWorker.ReportProgress(0);
                                 string filenamePrefix = Utils.GetValidFilename(dbo.Name + "_");
                                 //find the files with the specified pattern
-                                // string[] fileList = Directory.GetFiles(Path.Combine(Application.StartupPath, "RelHaxTemp"), filenamePrefix + Path.GetFileName(correctedUserFiles));
                                 string[] fileList = Directory.GetFiles(Settings.RelhaxTempFolder, filenamePrefix + Path.GetFileName(correctedUserFiles));
                                 //if no results, go on with the next entry
                                 if (fileList.Length == 0) continue;
@@ -1187,16 +1205,15 @@ namespace RelhaxModpack
                                     try
                                     {
                                         //the file has been found in the temp directory
-                                        if (!Directory.Exists(Path.Combine(TanksLocation, targetDir)))
+                                        if (!Directory.Exists(targetDir))
                                         {
-                                            Directory.CreateDirectory(Path.Combine(TanksLocation, targetDir));
-                                            Logging.Installer(Path.Combine(TanksLocation, targetDir));
+                                            Directory.CreateDirectory(targetDir);
+                                            Logging.Installer(targetDir);
                                         }
-                                        if (File.Exists(Path.Combine(TanksLocation, targetDir, targetFilename)))
-                                            File.Delete(Path.Combine(TanksLocation, targetDir, targetFilename));
-                                        // File.Move(Path.Combine(Application.StartupPath, "RelHaxTemp", Path.GetFileName(ss)), Path.Combine(TanksLocation, targetDir, targetFilename));
-                                        File.Move(Path.Combine(Settings.RelhaxTempFolder, Path.GetFileName(ss)), Path.Combine(TanksLocation, targetDir, targetFilename));
-                                        Logging.Installer(Path.Combine(TanksLocation, targetDir, targetFilename));
+                                        if (File.Exists(Path.Combine(targetDir, targetFilename)))
+                                            File.Delete(Path.Combine(targetDir, targetFilename));
+                                        File.Move(Path.Combine(Settings.RelhaxTempFolder, Path.GetFileName(ss)), Path.Combine(targetDir, targetFilename));
+                                        Logging.Installer(Path.Combine(targetDir, targetFilename));
                                         Logging.Manager(string.Format("RestoredUserData: {0}", Path.Combine(targetDir, targetFilename)));
                                     }
                                     catch (Exception p)
