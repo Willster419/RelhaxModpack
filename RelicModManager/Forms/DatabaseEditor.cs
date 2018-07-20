@@ -57,7 +57,7 @@ namespace RelhaxModpack
             string txt = this.ObjectUserdatasToolTip.GetToolTip(this.ObjectUserdatasTB);
             foreach (DictionaryEntry macro in Utils.macroList)
             {
-                txt += "\n{" + macro.Key + "} = " + macro.Value;
+                txt += string.Format("\n{{0}} = {1}", macro.Key, macro.Value);
             }
             this.ObjectUserdatasToolTip.SetToolTip(this.ObjectUserdatasTB, txt);
         }
