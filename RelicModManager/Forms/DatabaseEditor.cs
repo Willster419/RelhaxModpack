@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Collections;
 
 namespace RelhaxModpack
 {
@@ -44,9 +45,21 @@ namespace RelhaxModpack
             InitializeComponent();
             ObjectDependenciesListOriginalHeight = ObjectDependenciesList.Height;
             AndOrLogicComboBox.DataSource = new List <String>{ LogicalDependency.GetAndOrString(LogicalDependency.AndOrFlag.AND), LogicalDependency.GetAndOrString(LogicalDependency.AndOrFlag.OR)};
+            SetExtendedToolTipUserDatas();
             Settings.LoadSettings();
             if (!Utils.TinyManagerUpdateCheck())
                 this.Close();
+        }
+
+        private void SetExtendedToolTipUserDatas()
+        {
+            Utils.BuildMacroHash(true);
+            string txt = this.ObjectUserdatasToolTip.GetToolTip(this.ObjectUserdatasTB);
+            foreach (DictionaryEntry macro in Utils.macroList)
+            {
+                txt += "\n{" + macro.Key + "} = " + macro.Value;
+            }
+            this.ObjectUserdatasToolTip.SetToolTip(this.ObjectUserdatasTB, txt);
         }
 
         private void DatabaseEditor_FormClosing(object sender, FormClosingEventArgs e)

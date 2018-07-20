@@ -1013,6 +1013,12 @@
             this.SearchBox.SelectionChangeCommitted += new System.EventHandler(this.SearchBox_SelectionChangeCommitted);
             this.SearchBox.TextUpdate += new System.EventHandler(this.SearchBox_TextUpdate);
             // 
+            // ObjectUserdatasToolTip
+            // 
+            this.ObjectUserdatasToolTip.AutoPopDelay = 50000;
+            this.ObjectUserdatasToolTip.InitialDelay = 500;
+            this.ObjectUserdatasToolTip.ReshowDelay = 100;
+            // 
             // DatabaseEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
