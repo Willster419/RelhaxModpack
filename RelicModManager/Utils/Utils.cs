@@ -25,7 +25,7 @@ namespace RelhaxModpack
     {
         private static object _locker = new object();
 
-        private static Hashtable macroList;
+        public static Hashtable macroList;
         private static Hashtable macroSymbolList;
 
         #region logging methods
@@ -846,7 +846,7 @@ namespace RelhaxModpack
                 if (sl.Count == 0) return;
             }
             MainWindow.errorCounter++;
-            Logging.Manager("too many errors at FileDelete (more then " + ecounterlimit + ")");
+            Logging.Manager(string.Format("too many errors at FileDelete (more then {0})", ecounterlimit));
         }
 
         public static void DirectoryDelete(string folderPath, bool doSubfolder = false, bool deleteTopfolder = false)
@@ -859,8 +859,7 @@ namespace RelhaxModpack
                 }
                 catch (Exception ex)
                 {
-                    // Utils.ExceptionLog("DirectoryDelete", "Filename=" + file, ex);
-                    Logging.Manager("Error at DirectoryDelete, Filename: " + file + " (" + ex.Message + ")");
+                    Logging.Manager(string.Format("Error at DirectoryDelete, Filename: {0} ({1})", file, ex.Message));
                 }
             }
 
@@ -874,8 +873,7 @@ namespace RelhaxModpack
                     }
                     catch (Exception ex)
                     {
-                        // Utils.ExceptionLog("DirectoryDelete", "Folder=" + dir, ex);
-                        Logging.Manager("Error at DirectoryDelete, Folder: " + dir + " (" + ex.Message + ")");
+                        Logging.Manager(string.Format("Error at DirectoryDelete, Folder: {0} ({1})", dir, ex.Message));
                     }
                 }
             }
@@ -886,8 +884,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                // Utils.ExceptionLog("DirectoryDelete", "Folder=" + folderPath, ex);
-                Logging.Manager("Error at DirectoryDelete, Folder: " + folderPath + " (" + ex.Message + ")");
+                Logging.Manager(string.Format("Error at DirectoryDelete, Folder: {0} ({1})", folderPath, ex.Message));
             }
         }
         #endregion
@@ -964,13 +961,13 @@ namespace RelhaxModpack
         }
 
         //builds the hashtable once rather than each time we want to use it
-        public static void BuildMacroHash()
+        public static void BuildMacroHash(bool sample = false)
         {
             macroList = new Hashtable
             {
-                { "app", Settings.TanksLocation },
-                { "onlineFolder", Settings.TanksOnlineFolderVersion },
-                { "versiondir", Settings.TanksVersion },
+                { "app", sample ? @"e.g. C:\Games\Worold_of_Tanks\" : Settings.TanksLocation },
+                { "onlineFolder", sample ? @"1.0.2" : Settings.TanksOnlineFolderVersion },
+                { "versiondir", sample ? @"1.0.2.3" : Settings.TanksVersion },
                 { "appData", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) },
                 { "relhax", Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) },
                 { "temp", Settings.RelhaxTempFolder },
