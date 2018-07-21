@@ -1895,7 +1895,8 @@ namespace RelhaxModpack
                         childProgressBar.Value = e.ChildProcessed;
                     totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.BackupMods;
                     parrentProgressBar.Value = 0;
-                    message = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("backupModFile"), e.ChildProcessed, Translations.GetTranslatedString("of"), e.ChildTotalToProcess);
+                    // message = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("backupModFile"), e.ChildProcessed, Translations.GetTranslatedString("of"), e.ChildTotalToProcess);
+                    message = string.Format("{0} {1}", Translations.GetTranslatedString("backupModFile"), e.ChildProcessed);
                     break;
                 case InstallerEventArgs.InstallProgress.BackupUserData:
                     childProgressBar.Maximum = e.ChildTotalToProcess;
@@ -1903,7 +1904,7 @@ namespace RelhaxModpack
                         childProgressBar.Value = e.ChildProcessed;
                     totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.BackupUserData;
                     parrentProgressBar.Value = 0;
-                    message = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("backupUserdatas"), e.ChildProcessed, Translations.GetTranslatedString("of"), e.ChildTotalToProcess);
+                    message = string.Format("{0} {1} {2} {3}\n{4} {5} {6} {7}", Translations.GetTranslatedString("backupUserdatas"), e.ChildProcessed, Translations.GetTranslatedString("of"), e.ChildTotalToProcess, Translations.GetTranslatedString("file"), e.Filecounter, Translations.GetTranslatedString("of"), e.FilesToDo);
                     break;
                 case InstallerEventArgs.InstallProgress.DeleteMods:
                     childProgressBar.Maximum = e.ChildTotalToProcess;
@@ -1952,7 +1953,7 @@ namespace RelhaxModpack
                     childProgressBar.Maximum = e.ChildTotalToProcess;
                     if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
                         childProgressBar.Value = e.ChildProcessed;
-                    message = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("restoringUserData"), e.ChildProcessed, Translations.GetTranslatedString("of"), e.ChildTotalToProcess);
+                    message = string.Format("{0} {1} {2} {3}\n{4} {5} {6} {7}", Translations.GetTranslatedString("restoringUserData"), e.ChildProcessed, Translations.GetTranslatedString("of"), e.ChildTotalToProcess, Translations.GetTranslatedString("file"), e.Filecounter, Translations.GetTranslatedString("of"), e.FilesToDo);
                     break;
                 case InstallerEventArgs.InstallProgress.UnpackXmlFiles:
                     totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.UnpackXmlFiles;
