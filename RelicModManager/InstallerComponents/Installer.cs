@@ -447,10 +447,14 @@ namespace RelhaxModpack
         {
             try
             {
+                args.ChildTotalToProcess = ModsConfigsWithData.Count();
                 foreach (SelectablePackage dbo in ModsConfigsWithData)
                 {
+                    args.ChildProcessed++;
+                    InstallWorker.ReportProgress(0);
                     try
                     {
+                        int c = 0;
                         foreach (string s in dbo.UserFiles)
                         {
                             try
@@ -467,17 +471,22 @@ namespace RelhaxModpack
                                     correctedPath = Utils.ReplaceMacro(correctedPath);
                                     folderPath = Path.Combine(TanksLocation, Path.GetDirectoryName(correctedPath));
                                 }
+                                string filenamePrefix = Utils.GetValidFilename(dbo.Name + "_" + c + "_");
+                                c++;
                                 if (!Directory.Exists(folderPath)) continue;
                                 string[] fileList = Directory.GetFiles(folderPath, Path.GetFileName(correctedPath));   // use the GetFileName(correctedPath) as a search pattern, to only get wanted files
+                                int fc = 0;
+                                args.FilesToDo = fileList.Length;
                                 foreach (string startLoc in fileList)
                                 {
-                                    string destLoc = Path.Combine(Settings.RelhaxTempFolder, Utils.GetValidFilename(dbo.Name + "_") + Path.GetFileName(startLoc));
+                                    string destLoc = Path.Combine(Settings.RelhaxTempFolder, filenamePrefix + Path.GetFileName(startLoc));
                                     try
                                     {
                                         if (File.Exists(@startLoc))
                                         {
                                             File.Move(startLoc, destLoc);
-                                            Logging.Manager(string.Format("BackupUserData: {0} ({1})", Path.Combine(Path.GetDirectoryName(correctedPath), Path.GetFileName(startLoc)), Path.GetFileName(correctedPath)));
+                                            fc++;
+                                            if (fileList.Length < 5) Logging.Manager(string.Format("BackupUserData: {0} ({1})", Path.Combine(Path.GetDirectoryName(correctedPath), Path.GetFileName(startLoc)), Path.GetFileName(correctedPath)));
                                         }
                                     }
                                     catch
@@ -485,7 +494,10 @@ namespace RelhaxModpack
                                         if (Program.testMode) { MessageBox.Show(string.Format("Error: can not move file.\nstartLoc: \"{0}\"\ndestLoc: \"{1}\"", startLoc, destLoc)); };
                                         Logging.Manager(string.Format("Error: can not move file. startLoc: \"{0}\" destLoc: \"{1}\"", startLoc, destLoc));
                                     }
+                                    args.Filecounter = fc;
+                                    InstallWorker.ReportProgress(0);
                                 }
+                                if (!(fileList.Length < 5)) Logging.Manager(string.Format("BackupUserData: {0} files ({1})", fc, correctedPath));
                             }
                             catch (Exception exStartLoc)
                             {
@@ -1177,6 +1189,7 @@ namespace RelhaxModpack
                     try
                     {
                         args.ChildTotalToProcess = dbo.UserFiles.Count;
+                        int c = 0;
                         foreach (string s in dbo.UserFiles)
                         {
                             try {
@@ -1192,35 +1205,51 @@ namespace RelhaxModpack
                                     correctedUserFiles = Utils.ReplaceMacro(correctedUserFiles);
                                     targetDir = Path.Combine(TanksLocation, Path.GetDirectoryName(correctedUserFiles));
                                 }
+                                try
+                                {
+                                    // check if target dir is existing. if not, create it
+                                    if (!Directory.Exists(targetDir))
+                                    {
+                                        Directory.CreateDirectory(targetDir);
+                                        Logging.Installer(targetDir);
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    Logging.Manager(string.Format("failed to create folder: {0} ({1})", targetDir, ex.Message));
+                                }
                                 args.currentFile = correctedUserFiles;
                                 InstallWorker.ReportProgress(0);
-                                string filenamePrefix = Utils.GetValidFilename(dbo.Name + "_");
+                                string filenamePrefix = Utils.GetValidFilename(dbo.Name + "_" + c + "_");
+                                c++;
                                 //find the files with the specified pattern
                                 string[] fileList = Directory.GetFiles(Settings.RelhaxTempFolder, filenamePrefix + Path.GetFileName(correctedUserFiles));
                                 //if no results, go on with the next entry
                                 if (fileList.Length == 0) continue;
+                                args.Filecounter = 0;
+                                args.FilesToDo = fileList.Length;
                                 foreach (string ss in fileList)
                                 {
-                                    string targetFilename = Path.GetFileName(ss).Replace(filenamePrefix, "");
+                                    args.Filecounter++;
+                                    string targetFilename = Path.Combine(targetDir, Path.GetFileName(ss).Replace(filenamePrefix, ""));
                                     try
                                     {
                                         //the file has been found in the temp directory
-                                        if (!Directory.Exists(targetDir))
-                                        {
-                                            Directory.CreateDirectory(targetDir);
-                                            Logging.Installer(targetDir);
-                                        }
-                                        if (File.Exists(Path.Combine(targetDir, targetFilename)))
-                                            File.Delete(Path.Combine(targetDir, targetFilename));
-                                        File.Move(Path.Combine(Settings.RelhaxTempFolder, Path.GetFileName(ss)), Path.Combine(targetDir, targetFilename));
-                                        Logging.Installer(Path.Combine(targetDir, targetFilename));
-                                        Logging.Manager(string.Format("RestoredUserData: {0}", Path.Combine(targetDir, targetFilename)));
+                                        if (File.Exists(targetFilename))
+                                            File.Delete(targetFilename);
+                                        File.Move(Path.Combine(Settings.RelhaxTempFolder, Path.GetFileName(ss)), targetFilename);
+                                        Logging.Installer(targetFilename);
+                                        // do not log files if count is greater then 5
+                                        if (fileList.Length < 5) Logging.Manager(string.Format("RestoredUserData: {0}", targetFilename));
                                     }
                                     catch (Exception p)
                                     {
                                         Utils.ExceptionLog("RestoreUserData", "p\n" + ss, p);
                                     }
+                                    InstallWorker.ReportProgress(0);
                                 }
+                                // log proceeded files if count is greater then 5
+                                if (!(fileList.Length < 5)) Logging.Manager(string.Format("RestoredUserData: {0} files ({1})", args.Filecounter, correctedUserFiles));
                                 args.ChildProcessed++;
                                 InstallWorker.ReportProgress(0);
                             }

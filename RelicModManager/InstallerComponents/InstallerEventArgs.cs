@@ -52,5 +52,9 @@ namespace RelhaxModpack
         public string currentSubFile;
         //the size of the current file being processed
         public float currentFileSizeProcessed;
+        //the filecounter
+        public int Filecounter;
+        //files to do
+        public int FilesToDo;
     }
 }
