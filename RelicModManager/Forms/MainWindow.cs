@@ -2301,7 +2301,7 @@ namespace RelhaxModpack
             //save settings
             if (Program.saveSettings) Settings.SaveSettings();
             Logging.Manager("cleaning \"RelHaxTemp\" folder");
-            // Utils.DirectoryDelete(Path.Combine(Application.StartupPath, "RelHaxTemp"), true);
+            Hide();                                                                         // if delete the temp folder take smore time (many files to delete), hide the MainForm instead to be "not responding"
             Utils.DirectoryDelete(Settings.RelhaxTempFolder, true);
             Logging.Manager(string.Format("Exception counted: {0}", errorCounter));
             Logging.Manager("Application Closing");
