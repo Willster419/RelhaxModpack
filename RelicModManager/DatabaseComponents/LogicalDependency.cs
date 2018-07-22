@@ -17,7 +17,7 @@ namespace RelhaxModpack
         //for the tostring thing
         public override string ToString()
         {
-            return NegateFlag? "(Not) " + PackageName : "" + PackageName;
+            return NegateFlag ? "(Not) " + PackageName : "" + PackageName;
         }
 
         public enum AndOrFlag
