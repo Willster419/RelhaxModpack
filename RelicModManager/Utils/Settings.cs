@@ -188,7 +188,12 @@ namespace RelhaxModpack
         public static string MD5HashDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "MD5HashDatabase.xml");
         public static string OnlineDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "onlineDatabase.xml");
         public static string RelhaxTempFolder = Path.Combine(Application.StartupPath, "RelHaxTemp");
-        public static string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, Path.GetRandomFileName() + "_managerInfo.dat");
+        // this element creates the randowm session tag (to use with backup of user data and other temporary files and folders in the temp folder)
+        private static string sT { get { return Path.GetRandomFileName(); } }
+        // this element stored the random created Tag during the complete runtime of the exe
+        public static string SessionTag = sT;
+        // public static string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, Path.GetRandomFileName() + "_managerInfo.dat");
+        public static string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, SessionTag + "_managerInfo.dat");
         public static string ModInfoDatFile = Path.Combine(RelhaxTempFolder, "modInfo.dat");
         public const string DefaultStartAddress = @"http://wotmods.relhaxmodpack.com/WoT/{onlineFolder}/";
         public const string DefaultEndAddress = @"";
