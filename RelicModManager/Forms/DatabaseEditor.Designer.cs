@@ -81,6 +81,7 @@
             this.PicturesTypeLabel = new System.Windows.Forms.Label();
             this.PicturesTypeCBox = new System.Windows.Forms.ComboBox();
             this.UserDatasTabPage = new System.Windows.Forms.TabPage();
+            this.placeBeforeExtractionCheckBox = new System.Windows.Forms.CheckBox();
             this.EditUserdatasButton = new System.Windows.Forms.Button();
             this.ObjectUserdatasTB = new System.Windows.Forms.TextBox();
             this.AddUserdatasButton = new System.Windows.Forms.Button();
@@ -537,6 +538,8 @@
             this.ObjectLogicalDependenciesList.Name = "ObjectLogicalDependenciesList";
             this.ObjectLogicalDependenciesList.Size = new System.Drawing.Size(511, 212);
             this.ObjectLogicalDependenciesList.TabIndex = 26;
+            this.ObjectLogicalDependenciesList.SelectedIndexChanged += new System.EventHandler(this.ObjectLogicalDependenciesList_SelectedIndexChanged);
+            this.ObjectLogicalDependenciesList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ObjectLogicalDependenciesList_MouseDoubleClick);
             // 
             // MediaTabPage
             // 
@@ -676,6 +679,7 @@
             // 
             // UserDatasTabPage
             // 
+            this.UserDatasTabPage.Controls.Add(this.placeBeforeExtractionCheckBox);
             this.UserDatasTabPage.Controls.Add(this.EditUserdatasButton);
             this.UserDatasTabPage.Controls.Add(this.ObjectUserdatasTB);
             this.UserDatasTabPage.Controls.Add(this.AddUserdatasButton);
@@ -689,6 +693,19 @@
             this.UserDatasTabPage.TabIndex = 4;
             this.UserDatasTabPage.Text = "Userdatas";
             this.UserDatasTabPage.UseVisualStyleBackColor = true;
+            // 
+            // placeBeforeExtractionCheckBox
+            // 
+            this.placeBeforeExtractionCheckBox.AutoSize = true;
+            this.placeBeforeExtractionCheckBox.Location = new System.Drawing.Point(9, 119);
+            this.placeBeforeExtractionCheckBox.Name = "placeBeforeExtractionCheckBox";
+            this.placeBeforeExtractionCheckBox.Size = new System.Drawing.Size(262, 17);
+            this.placeBeforeExtractionCheckBox.TabIndex = 46;
+            this.placeBeforeExtractionCheckBox.Text = "execute restore BEFORE extraction process starts";
+            this.ObjectUserdatasToolTip.SetToolTip(this.placeBeforeExtractionCheckBox, "Checking this option, will make possible to move the complete backup UserData fol" +
+        "der to the mod installation. Very usefull for extrem large backups e.g. ClanIcon" +
+        "s)");
+            this.placeBeforeExtractionCheckBox.UseVisualStyleBackColor = true;
             // 
             // EditUserdatasButton
             // 
@@ -1151,5 +1168,6 @@
         private System.Windows.Forms.Label LogicalDependencyPackageNameLabel;
         private System.Windows.Forms.CheckBox LogicalDependnecyNegateFlagCB;
         private System.Windows.Forms.ListBox ObjectLogicalDependenciesList;
+        private System.Windows.Forms.CheckBox placeBeforeExtractionCheckBox;
     }
 }

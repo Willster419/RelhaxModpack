@@ -502,7 +502,11 @@ namespace RelhaxModpack
                                                                     continue;
                                                                 if (innerText.Equals(""))
                                                                     continue;
-                                                                m.UserFiles.Add(innerText);
+                                                                UserFiles uf = new UserFiles();
+                                                                uf.Pattern = innerText;
+                                                                if (userDataNode.Attribute("before") != null)
+                                                                    uf.placeBeforeExtraction = Utils.ParseBool(userDataNode.Attribute("before").Value, false);
+                                                                m.UserFiles.Add(uf);
                                                                 break;
                                                             default:
                                                                 Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => userDatas => expected node: userData (line {3})",
@@ -875,7 +879,11 @@ namespace RelhaxModpack
                                                     continue;
                                                 if (innerText.Equals(""))
                                                     continue;
-                                                c.UserFiles.Add(innerText);
+                                                UserFiles uf = new UserFiles();
+                                                uf.Pattern = innerText;
+                                                if (userDataNode.Attribute("before") != null)
+                                                    uf.placeBeforeExtraction = Utils.ParseBool(userDataNode.Attribute("before").Value, false);
+                                                c.UserFiles.Add(uf);
                                                 break;
                                             default:
                                                 Logging.Manager(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) => userDatas => expected nodes: userData (line {3})",
@@ -1436,10 +1444,11 @@ namespace RelhaxModpack
                     if(m.UserFiles.Count > 0)
                     {
                         XmlElement modDatas = doc.CreateElement("userDatas");
-                        foreach (string s in m.UserFiles)
+                        foreach (UserFiles us in m.UserFiles)
                         {
                             XmlElement userData = doc.CreateElement("userData");
-                            userData.InnerText = s.Trim();
+                            userData.InnerText = us.Pattern.Trim();
+                            userData.SetAttribute("before", "" + us.placeBeforeExtraction);
                             modDatas.AppendChild(userData);
                         }
                         modRoot.AppendChild(modDatas);
@@ -1617,10 +1626,11 @@ namespace RelhaxModpack
                 if(cc.UserFiles.Count > 0)
                 {
                     XmlElement configDatas = doc.CreateElement("userDatas");
-                    foreach (string s in cc.UserFiles)
+                    foreach (UserFiles us in cc.UserFiles)
                     {
                         XmlElement userData = doc.CreateElement("userData");
-                        userData.InnerText = s.Trim();
+                        userData.InnerText = us.Pattern.Trim();
+                        userData.SetAttribute("before", "" + us.placeBeforeExtraction);
                         configDatas.AppendChild(userData);
                     }
                     configRoot.AppendChild(configDatas);

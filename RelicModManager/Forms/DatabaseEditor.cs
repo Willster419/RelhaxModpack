@@ -239,6 +239,7 @@ namespace RelhaxModpack
                 ObjectUserdatasList.DataSource = null;
                 ObjectUserdatasList.Items.Clear();
                 ObjectUserdatasTB.Text = "";
+                EditUserdatasButton.Enabled = false;
             }
         }
 
@@ -952,6 +953,7 @@ namespace RelhaxModpack
 
                     //userdatas
                     ObjectUserdatasList.DataSource = SelectedDatabaseObject.UserFiles;
+                    EditUserdatasButton.Enabled = SelectedDatabaseObject.UserFiles.Count > 0;
                 }
                 else if (node.Category != null)
                 {
@@ -1635,12 +1637,38 @@ namespace RelhaxModpack
 
         private void AddUserdatasButton_Click(object sender, EventArgs e)
         {
+            if (ObjectUserdatasTB.Text.Trim().Equals("")) return;
             if (MessageBox.Show("Confirm you wish to add userdata entry", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
-            SelectedDatabaseObject.UserFiles.Add(ObjectUserdatasTB.Text);
+            UserFiles uf = new UserFiles
+            {
+                Pattern = ObjectUserdatasTB.Text,
+                placeBeforeExtraction = placeBeforeExtractionCheckBox.Checked
+            };
+            SelectedDatabaseObject.UserFiles.Add(uf);
             ObjectUserdatasList.DataSource = null;
             ObjectUserdatasList.Items.Clear();
             ObjectUserdatasList.DataSource = SelectedDatabaseObject.UserFiles;
+            EditUserdatasButton.Enabled = SelectedDatabaseObject.UserFiles.Count > 0;
+            CheckModInfoChanged();
+        }
+
+        private void EditUserdatasButton_Click(object sender, EventArgs e)
+        {
+            if (ObjectUserdatasTB.Text.Trim().Equals(""))
+            {
+                MessageBox.Show("Empty entries are not allowed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
+            }
+            if (MessageBox.Show("Confirm you wish to edit userdata entry", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                return;
+            int index = SelectedDatabaseObject.UserFiles.IndexOf((UserFiles)ObjectUserdatasList.SelectedItem);
+            SelectedDatabaseObject.UserFiles[index].Pattern = ObjectUserdatasTB.Text;
+            SelectedDatabaseObject.UserFiles[index].placeBeforeExtraction = placeBeforeExtractionCheckBox.Checked;
+            ObjectUserdatasList.DataSource = null;
+            ObjectUserdatasList.Items.Clear();
+            ObjectUserdatasList.DataSource = SelectedDatabaseObject.UserFiles;
+            EditUserdatasButton.Enabled = SelectedDatabaseObject.UserFiles.Count > 0;
             CheckModInfoChanged();
         }
 
@@ -1648,31 +1676,36 @@ namespace RelhaxModpack
         {
             if (MessageBox.Show("Confirm you wish to remove userdata entry", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return;
-            int index = SelectedDatabaseObject.UserFiles.IndexOf((string)ObjectUserdatasList.SelectedItem);
-            SelectedDatabaseObject.UserFiles.RemoveAt(index);
+            if (SelectedDatabaseObject.UserFiles == null) return;
+
+            SelectedDatabaseObject.UserFiles.Remove((UserFiles)ObjectUserdatasList.SelectedItem);
             ObjectUserdatasList.DataSource = null;
             ObjectUserdatasList.Items.Clear();
             ObjectUserdatasList.DataSource = SelectedDatabaseObject.UserFiles;
+            EditUserdatasButton.Enabled = SelectedDatabaseObject.UserFiles.Count > 0;
             CheckModInfoChanged();
         }
 
         private void ObjectUserdatasList_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (ObjectUserdatasList.DataSource == null)
+            {
+                EditUserdatasButton.Enabled = SelectedDatabaseObject.UserFiles.Count > 0;
                 return;
-            ObjectUserdatasTB.Text = ObjectUserdatasList.SelectedItem.ToString();
-        }
+            }
 
-        private void EditUserdatasButton_Click(object sender, EventArgs e)
-        {
-            if (MessageBox.Show("Confirm you wish to edit userdata entry", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+            ListBox lb = (ListBox)sender;
+            if (lb.DataSource == null)
                 return;
-            int index = SelectedDatabaseObject.UserFiles.IndexOf((string)ObjectUserdatasList.SelectedItem);
-            SelectedDatabaseObject.UserFiles[index] = ObjectUserdatasTB.Text;
-            ObjectUserdatasList.DataSource = null;
-            ObjectUserdatasList.Items.Clear();
-            ObjectUserdatasList.DataSource = SelectedDatabaseObject.UserFiles;
-            CheckModInfoChanged();
+            foreach (UserFiles uf in SelectedDatabaseObject.UserFiles)
+            {
+                if (uf.Pattern.Equals(lb.SelectedItem.ToString()))
+                {
+                    ObjectUserdatasTB.Text = uf.Pattern;
+                    placeBeforeExtractionCheckBox.Checked = uf.placeBeforeExtraction;
+                    break;
+                }
+            }
         }
 
         private void ObjectDependenciesList_MouseDoubleClick(object sender, MouseEventArgs e)

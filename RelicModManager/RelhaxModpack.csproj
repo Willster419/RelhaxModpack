@@ -152,6 +152,7 @@
     <Compile Include="AtlasesCreator\Packing\CreateOutputImage.cs" />
     <Compile Include="AtlasesCreator\Packing\CreateOutputMapData.cs" />
     <Compile Include="AtlasesCreator\Packing\ImagePackerV2.cs" />
+    <Compile Include="DatabaseComponents\UserFiles.cs" />
     <Compile Include="DatabaseComponents\PackageComparer.cs" />
     <Compile Include="Forms\AddPicturesZip.cs">
       <SubType>Form</SubType>
