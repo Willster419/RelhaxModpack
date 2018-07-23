@@ -1205,96 +1205,102 @@ namespace RelhaxModpack
                             try {
                                 string tempStorageFolder = Path.Combine(Settings.RelhaxTempFolder, Utils.GetValidFilename(dbo.PackageName + "__" + c++));
                                 // if beforeExtraction flag is set and filerestore should not be done before extracting, go on with the next entry
-                                if (beforeExtraction && !us.placeBeforeExtraction) continue;
-                                string correctedUserFiles = us.Pattern.TrimStart('\x005c').Replace(@"\\", @"\");
-                                string targetDir = "";
-                                if (correctedUserFiles[0].Equals("{"))
+                                if (beforeExtraction && !us.placeBeforeExtraction)
                                 {
-                                    correctedUserFiles = Utils.ReplaceMacro(correctedUserFiles);
-                                    targetDir = Path.GetDirectoryName(correctedUserFiles);
+                                    // do nothing this round
                                 }
                                 else
                                 {
-                                    correctedUserFiles = Utils.ReplaceMacro(correctedUserFiles);
-                                    targetDir = Path.Combine(TanksLocation, Path.GetDirectoryName(correctedUserFiles));
-                                }
-                                try
-                                {
-                                    // check if target dir is existing. if not, create it
-                                    if (!Directory.Exists(targetDir) && !beforeExtraction)
+                                    string correctedUserFiles = us.Pattern.TrimStart('\x005c').Replace(@"\\", @"\");
+                                    string targetDir = "";
+                                    if (correctedUserFiles[0].Equals("{"))
                                     {
-                                        Directory.CreateDirectory(targetDir);
-                                        Logging.Installer(targetDir);
+                                        correctedUserFiles = Utils.ReplaceMacro(correctedUserFiles);
+                                        targetDir = Path.GetDirectoryName(correctedUserFiles);
                                     }
-                                    else if (beforeExtraction)
+                                    else
                                     {
-                                        // to be able to move folder with MoveFileEx, the folder 1 step lower the one to be created must be existing
-                                        string beforeExtractionBaseFolder = string.Join(Path.DirectorySeparatorChar.ToString(), targetDir.Split(Path.DirectorySeparatorChar).Take(targetDir.Split(Path.DirectorySeparatorChar).Count() - 1).ToArray());
-                                        if (!Directory.Exists(beforeExtractionBaseFolder))
+                                        correctedUserFiles = Utils.ReplaceMacro(correctedUserFiles);
+                                        targetDir = Path.Combine(TanksLocation, Path.GetDirectoryName(correctedUserFiles));
+                                    }
+                                    try
+                                    {
+                                        // check if target dir is existing. if not, create it
+                                        if (!Directory.Exists(targetDir) && !beforeExtraction)
                                         {
-                                            Directory.CreateDirectory(beforeExtractionBaseFolder);
-                                            Logging.Installer(beforeExtractionBaseFolder);
+                                            Directory.CreateDirectory(targetDir);
+                                            Logging.Installer(targetDir);
+                                        }
+                                        else if (beforeExtraction)
+                                        {
+                                            // to be able to move folder with MoveFileEx, the folder 1 step lower the one to be created must be existing
+                                            string beforeExtractionBaseFolder = string.Join(Path.DirectorySeparatorChar.ToString(), targetDir.Split(Path.DirectorySeparatorChar).Take(targetDir.Split(Path.DirectorySeparatorChar).Count() - 1).ToArray());
+                                            if (!Directory.Exists(beforeExtractionBaseFolder))
+                                            {
+                                                Directory.CreateDirectory(beforeExtractionBaseFolder);
+                                                Logging.Installer(beforeExtractionBaseFolder);
+                                            }
                                         }
                                     }
-                                }
-                                catch (Exception ex)
-                                {
-                                    Logging.Manager(string.Format("failed to create folder: {0} ({1})", targetDir, ex.Message));
-                                }
-                                args.currentFile = correctedUserFiles;
-                                InstallWorker.ReportProgress(0);
-
-                                if (Directory.Exists(tempStorageFolder))
-                                {
-                                    //find the files with the specified pattern
-                                    string[] fileList = Directory.GetFiles(tempStorageFolder, Path.GetFileName(correctedUserFiles));
-                                    args.Filecounter = 0;
-                                    args.FilesToDo = fileList.Length;
-
-                                    if (us.placeBeforeExtraction && beforeExtraction)
+                                    catch (Exception ex)
                                     {
-                                        if (NativeMethods.MoveFileEx(Utils.AddTrailingBackslashChar(@"\\?\" + tempStorageFolder), Utils.AddTrailingBackslashChar(@"\\?\" + targetDir), true))
+                                        Logging.Manager(string.Format("failed to create folder: {0} ({1})", targetDir, ex.Message));
+                                    }
+                                    args.currentFile = correctedUserFiles;
+                                    InstallWorker.ReportProgress(0);
+
+                                    if (Directory.Exists(tempStorageFolder))
+                                    {
+                                        //find the files with the specified pattern
+                                        string[] fileList = Directory.GetFiles(tempStorageFolder, Path.GetFileName(correctedUserFiles));
+                                        args.Filecounter = 0;
+                                        args.FilesToDo = fileList.Length;
+
+                                        // to move the folder, the target folder may not exist!
+                                        if (us.placeBeforeExtraction && beforeExtraction && !Directory.Exists(targetDir))
                                         {
-                                            Logging.Manager(string.Format("RestoredUserData: {0} files ({1})", fileList.Length, correctedUserFiles));
+                                            if (NativeMethods.MoveFileEx(Utils.AddTrailingBackslashChar(@"\\?\" + tempStorageFolder), Utils.AddTrailingBackslashChar(@"\\?\" + targetDir), true))
+                                            {
+                                                Logging.Manager(string.Format("RestoredUserData: {0} files ({1})", fileList.Length, correctedUserFiles));
+                                                foreach (string ss in fileList)
+                                                {
+                                                    args.Filecounter++;
+                                                    Logging.Installer(Path.Combine(targetDir, Path.GetFileName(ss)));
+                                                    InstallWorker.ReportProgress(0);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                Logging.Manager(string.Format("fail at RestoredUserData: {0} ({1})", correctedUserFiles, NativeMethods.GetLastError()));
+                                            }
+                                        }
+                                        //if no results, go on with the next entry
+                                        else if (fileList.Length > 0 && !beforeExtraction)
+                                        {
                                             foreach (string ss in fileList)
                                             {
                                                 args.Filecounter++;
-                                                Logging.Installer(Path.Combine(targetDir, Path.GetFileName(ss)));
+                                                string targetFilename = Path.Combine(targetDir, Path.GetFileName(ss));
+                                                try
+                                                {
+                                                    //the file has been found in the temp directory
+                                                    if (File.Exists(targetFilename))
+                                                         File.Delete(targetFilename);
+                                                    File.Move(Path.Combine(tempStorageFolder, Path.GetFileName(ss)), targetFilename); 
+                                                    Logging.Installer(targetFilename);
+                                                    // do not log single files if count is 5 or higher 
+                                                    if (fileList.Length < 20) Logging.Manager(string.Format("RestoredUserData: {0}", targetFilename));
+                                                }
+                                                catch (Exception p)
+                                                {
+                                                    Utils.ExceptionLog("RestoreUserData", "p\n" + ss, p);
+                                                }
                                                 InstallWorker.ReportProgress(0);
                                             }
+                                            // log proceeded sum of files if count is 5 or higher
+                                            if (!(fileList.Length < 20)) Logging.Manager(string.Format("RestoredUserData: {0} files ({1})", args.Filecounter, correctedUserFiles));
+                                            DirectoryDelete(tempStorageFolder, false);
                                         }
-                                        else
-                                        {
-                                            Logging.Manager(string.Format("fail at RestoredUserData: {0} ({1})", correctedUserFiles, NativeMethods.GetLastError()));
-                                        }
-
-                                    }
-                                    //if no results, go on with the next entry
-                                    else if (fileList.Length > 0 && !beforeExtraction)
-                                    {
-                                        foreach (string ss in fileList)
-                                        {
-                                            args.Filecounter++;
-                                            string targetFilename = Path.Combine(targetDir, Path.GetFileName(ss));
-                                            try
-                                            {
-                                                //the file has been found in the temp directory
-                                                if (File.Exists(targetFilename))
-                                                     File.Delete(targetFilename);
-                                                File.Move(Path.Combine(tempStorageFolder, Path.GetFileName(ss)), targetFilename); 
-                                                Logging.Installer(targetFilename);
-                                                // do not log single files if count is 5 or higher 
-                                                if (fileList.Length < 20) Logging.Manager(string.Format("RestoredUserData: {0}", targetFilename));
-                                            }
-                                            catch (Exception p)
-                                            {
-                                                Utils.ExceptionLog("RestoreUserData", "p\n" + ss, p);
-                                            }
-                                            InstallWorker.ReportProgress(0);
-                                        }
-                                        // log proceeded sum of files if count is 5 or higher
-                                        if (!(fileList.Length < 20)) Logging.Manager(string.Format("RestoredUserData: {0} files ({1})", args.Filecounter, correctedUserFiles));
-                                        DirectoryDelete(tempStorageFolder, false);
                                     }
                                 }
                                 args.ChildProcessed++;
