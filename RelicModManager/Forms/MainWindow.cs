@@ -165,7 +165,7 @@ namespace RelhaxModpack
 
             BackupFolder bf;
 
-            if (GetDiskFreeSpace(Settings.RelHaxModBackupFolder, out uint lpSectorsPerCluster, out uint lpBytesPerSector, out uint lpNumberOfFreeClusters, out uint lpTotalNumberOfClusters))
+            if (NativeMethods.GetDiskFreeSpace(Settings.RelHaxModBackupFolder, out uint lpSectorsPerCluster, out uint lpBytesPerSector, out uint lpNumberOfFreeClusters, out uint lpTotalNumberOfClusters))
             {
                 BytesPerCluster = lpSectorsPerCluster * lpBytesPerSector;
                 Logging.Manager("The cluster size was determined for drive " + Path.GetPathRoot(Settings.RelHaxModBackupFolder) + " (" + BytesPerCluster + " bytes)" );
@@ -225,14 +225,7 @@ namespace RelhaxModpack
             else
                 this.backupModsSizeLabel.Text = "";
         }
-
-        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        static extern bool GetDiskFreeSpace(string lpRootPathName,
-           out uint lpSectorsPerCluster,
-           out uint lpBytesPerSector,
-           out uint lpNumberOfFreeClusters,
-           out uint lpTotalNumberOfClusters);
-
+        
         private List<string> NumFilesToProcess(string folder, ref uint filesCount, ref UInt64 filesSize, ref UInt64 filesSizeOnDisk, uint BytesPerCluster = 1)
         {
             List<string> list = new List<string>();

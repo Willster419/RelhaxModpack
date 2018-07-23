@@ -76,7 +76,6 @@ namespace RelhaxModpack
                 Environment.SetEnvironmentVariable("PATH", tempFolder + ";" + path);
             }
 
-            // bool fileOk = false;
             string tempFile = "";
             Assembly curAsm = Assembly.GetExecutingAssembly();
             byte[] resourceBytes = null;
@@ -111,20 +110,9 @@ namespace RelhaxModpack
                     if (fileHash == fileHash2)
                     {
                         // Same file
-                        // fileOk = true;
                         return;
                     }
-                    // else
-                    // {
-                    // Not same
-                    // fileOk = false;
-                    // }
                 }
-                // else
-                // {
-                // The DLL/assembly is not existed yet
-                // fileOk = false;
-                // }
             }
 
             if (compressed)
@@ -157,9 +145,6 @@ namespace RelhaxModpack
             return;
         }
 
-        [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
-        static extern IntPtr LoadLibrary(string lpFileName);
-
         /// <summary>
         /// managed wrapper around LoadLibrary
         /// </summary>
@@ -170,7 +155,7 @@ namespace RelhaxModpack
             {
                 throw new Exception("Please call ExtractEmbeddedDlls before LoadDll");
             }
-            IntPtr h = LoadLibrary(dllName);
+            IntPtr h = NativeMethods.LoadLibrary(dllName);
             if (h == IntPtr.Zero)
             {
                 Exception e = new Win32Exception();

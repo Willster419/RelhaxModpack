@@ -208,7 +208,6 @@ namespace RelhaxModpack.AtlasesCreator.ImageHandlers.TeximpNet.Unmanaged
 
                 return true;
             }
-
             return false;
         }
 
@@ -228,7 +227,6 @@ namespace RelhaxModpack.AtlasesCreator.ImageHandlers.TeximpNet.Unmanaged
 
                 return true;
             }
-
             return false;
         }
 
@@ -303,7 +301,6 @@ namespace RelhaxModpack.AtlasesCreator.ImageHandlers.TeximpNet.Unmanaged
         }
 
         #region Base Implementation
-
         internal abstract class UnmanagedLibraryImplementation : IDisposable
         {
             private String m_default32Path;
@@ -377,8 +374,7 @@ namespace RelhaxModpack.AtlasesCreator.ImageHandlers.TeximpNet.Unmanaged
                 if (String.IsNullOrEmpty(functionName))
                     return null;
 
-                Delegate function;
-                if (!m_nameToUnmanagedFunction.TryGetValue(functionName, out function))
+                if (!m_nameToUnmanagedFunction.TryGetValue(functionName, out Delegate function))
                     return null;
 
                 Object obj = (Object)function;
@@ -415,7 +411,6 @@ namespace RelhaxModpack.AtlasesCreator.ImageHandlers.TeximpNet.Unmanaged
 
                     return true;
                 }
-
                 return false;
             }
 
@@ -437,8 +432,7 @@ namespace RelhaxModpack.AtlasesCreator.ImageHandlers.TeximpNet.Unmanaged
                         continue;
                     }
 
-                    Delegate function;
-                    if (!m_nameToUnmanagedFunction.TryGetValue(funcName, out function))
+                    if (!m_nameToUnmanagedFunction.TryGetValue(funcName, out Delegate function))
                     {
                         function = PlatformHelper.GetDelegateForFunctionPointer(procAddr, funcType);
                         m_nameToUnmanagedFunction.Add(funcName, function);
@@ -454,7 +448,6 @@ namespace RelhaxModpack.AtlasesCreator.ImageHandlers.TeximpNet.Unmanaged
                     if (attr is UnmanagedFunctionNameAttribute)
                         return (attr as UnmanagedFunctionNameAttribute).UnmanagedFunctionName;
                 }
-
                 return null;
             }
 
@@ -479,11 +472,9 @@ namespace RelhaxModpack.AtlasesCreator.ImageHandlers.TeximpNet.Unmanaged
                 }
             }
         }
-
         #endregion
 
         #region Windows Implementation
-
         internal sealed class UnmanagedWindowsLibraryImplementation : UnmanagedLibraryImplementation
         {
             public override String DllExtension
@@ -501,7 +492,7 @@ namespace RelhaxModpack.AtlasesCreator.ImageHandlers.TeximpNet.Unmanaged
 
             protected override IntPtr NativeLoadLibrary(String path)
             {
-                IntPtr libraryHandle = WinLoadLibrary(path);
+                IntPtr libraryHandle = NativeMethods.WinLoadLibrary(path);
 
                 if (libraryHandle == IntPtr.Zero)
                 {
@@ -513,39 +504,22 @@ namespace RelhaxModpack.AtlasesCreator.ImageHandlers.TeximpNet.Unmanaged
                     else
                         Logging.Manager(String.Format("Error loading unmanaged library from path: {0}", path));
                 }
-
                 return libraryHandle;
             }
 
             protected override IntPtr NativeGetProcAddress(IntPtr handle, String functionName)
             {
-                return GetProcAddress(handle, functionName);
+                return NativeMethods.GetProcAddress(handle, functionName);
             }
 
             protected override void NativeFreeLibrary(IntPtr handle)
             {
-                FreeLibrary(handle);
+                NativeMethods.FreeLibrary(handle);
             }
-
-            #region Native Methods
-
-            [DllImport("kernel32.dll", CharSet = CharSet.Ansi, BestFitMapping = false, SetLastError = true, EntryPoint = "LoadLibrary")]
-            private static extern IntPtr WinLoadLibrary(String fileName);
-
-            [DllImport("kernel32.dll", SetLastError = true)]
-            [return: MarshalAs(UnmanagedType.Bool)]
-            private static extern bool FreeLibrary(IntPtr hModule);
-
-            [DllImport("kernel32.dll")]
-            private static extern IntPtr GetProcAddress(IntPtr hModule, String procName);
-
-            #endregion
         }
-
         #endregion
 
         #region Linux Implementation
-
         internal sealed class UnmanagedLinuxLibraryImplementation : UnmanagedLibraryImplementation
         {
             public override String DllExtension
@@ -582,7 +556,6 @@ namespace RelhaxModpack.AtlasesCreator.ImageHandlers.TeximpNet.Unmanaged
                     else
                         Logging.Manager(String.Format("Error loading unmanaged library from path: {0}", path));
                 }
-
                 return libraryHandle;
             }
 
@@ -597,7 +570,6 @@ namespace RelhaxModpack.AtlasesCreator.ImageHandlers.TeximpNet.Unmanaged
             }
 
             #region Native Methods
-
             [DllImport("libdl.so")]
             private static extern IntPtr dlopen(String fileName, int flags);
 
@@ -611,14 +583,11 @@ namespace RelhaxModpack.AtlasesCreator.ImageHandlers.TeximpNet.Unmanaged
             private static extern IntPtr dlerror();
 
             private const int RTLD_NOW = 2;
-
             #endregion
         }
-
         #endregion
 
         #region Mac Implementation
-
         internal sealed class UnmanagedMacLibraryImplementation : UnmanagedLibraryImplementation
         {
             public override String DllExtension
@@ -655,7 +624,6 @@ namespace RelhaxModpack.AtlasesCreator.ImageHandlers.TeximpNet.Unmanaged
                     else
                         Logging.Manager(String.Format("Error loading unmanaged library from path: {0}", path));
                 }
-
                 return libraryHandle;
             }
 
@@ -670,7 +638,6 @@ namespace RelhaxModpack.AtlasesCreator.ImageHandlers.TeximpNet.Unmanaged
             }
 
             #region Native Methods
-
             [DllImport("libSystem.B.dylib")]
             private static extern IntPtr dlopen(String fileName, int flags);
 
@@ -684,10 +651,8 @@ namespace RelhaxModpack.AtlasesCreator.ImageHandlers.TeximpNet.Unmanaged
             private static extern IntPtr dlerror();
 
             private const int RTLD_NOW = 2;
-
             #endregion
         }
-
         #endregion
     }
 }

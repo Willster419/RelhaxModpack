@@ -47,6 +47,9 @@ namespace RelhaxModpack
             public Int32 Flags;
         }
 
+        [DllImport("gdi32.dll")]
+        public static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+
         [DllImport("kernel32.dll")]
         private static extern uint GetLastError();
 
@@ -57,16 +60,33 @@ namespace RelhaxModpack
             return errorMessage;
         }
 
-        public static bool MoveFileEx(string existingFileName, string newFileName, bool overwrite)
+        public static bool MoveFileEx(string existingFileName, string newFileName, bool overwrite, bool waitTillFinished = true)
         {
-            if (overwrite)
-                return MoveFileEx(existingFileName, newFileName, MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH);
-            else
-                return MoveFileEx(existingFileName, newFileName, 0);
+            return MoveFileEx(existingFileName, newFileName, MOVEFILE_COPY_ALLOWED | (overwrite ? MOVEFILE_REPLACE_EXISTING : 0) | (waitTillFinished ? MOVEFILE_WRITE_THROUGH : 0));
         }
 
         [return: MarshalAs(UnmanagedType.Bool)]                 // https://stackoverflow.com/questions/5920882/file-move-does-not-work-file-already-exists
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         private static extern bool MoveFileEx(string existingFileName, string newFileName, int flags);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Ansi, BestFitMapping = false, SetLastError = true, EntryPoint = "LoadLibrary")]
+        public static extern IntPtr WinLoadLibrary(String fileName);
+
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern IntPtr LoadLibrary(string lpFileName);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool FreeLibrary(IntPtr hModule);
+
+        [DllImport("kernel32.dll")]
+        public static extern IntPtr GetProcAddress(IntPtr hModule, String procName);
+
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        public static extern bool GetDiskFreeSpace(string lpRootPathName,
+           out uint lpSectorsPerCluster,
+           out uint lpBytesPerSector,
+           out uint lpNumberOfFreeClusters,
+           out uint lpTotalNumberOfClusters);
     }
 }
