@@ -1947,6 +1947,7 @@ namespace RelhaxModpack
                         e.currentFile, Math.Round(e.currentFileSizeProcessed / MBDivisor, 2).ToString() });
                     }
                     break;
+                case InstallerEventArgs.InstallProgress.RestoreUserDataBefore:
                 case InstallerEventArgs.InstallProgress.RestoreUserData:
                     totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.RestoreUserData;
                     parrentProgressBar.Value = 0;

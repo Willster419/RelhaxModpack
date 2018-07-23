@@ -14,28 +14,29 @@ namespace RelhaxModpack
             BackupUserData = 2,
             DeleteMods = 3,
             DeleteWoTCache = 4,
-            ExtractGlobalDependencies = 5,
-            ExtractDependencies = 6,
-            ExtractLogicalDependencies = 7,
-            ExtractMods = 8,
-            ExtractConfigs = 9,
-            ExtractAppendedDependencies = 10,
-            RestoreUserData = 11,
-            UnpackXmlFiles = 12,
-            PatchMods = 13,//no longer used
-            InstallFonts = 14,//no longer used
-            ExtractUserMods = 15,
-            PatchUserMods = 16,
-            ExtractAtlases = 17,
-            CreateAtlases = 18,//no longer used
-            InstallUserFonts = 19,
-            CreateShortcuts = 20,
-            CheckDatabase = 21,
-            CleanUp = 22,
-            Done = 23,
+            RestoreUserDataBefore = 5,
+            ExtractGlobalDependencies = 6,
+            ExtractDependencies = 7,
+            ExtractLogicalDependencies = 8,
+            ExtractMods = 9,
+            ExtractConfigs = 10,
+            ExtractAppendedDependencies = 11,
+            RestoreUserData = 12,
+            UnpackXmlFiles = 13,
+            PatchMods = 14,//no longer used
+            InstallFonts = 15,//no longer used
+            ExtractUserMods = 16,
+            PatchUserMods = 17,
+            ExtractAtlases = 18,
+            CreateAtlases = 19,//no longer used
+            InstallUserFonts = 20,
+            CreateShortcuts = 21,
+            CheckDatabase = 22,
+            CleanUp = 23,
+            Done = 24,
             //kept after done because it's not part of the install process
-            Uninstall = 24,
-            UninstallDone = 25
+            Uninstall = 25,
+            UninstallDone = 26
         };
         public InstallProgress InstalProgress { get; set; }
         //the total parrent processed items
