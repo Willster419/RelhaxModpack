@@ -60,14 +60,13 @@ namespace RelhaxModpack
         public static bool MoveFileEx(string existingFileName, string newFileName, bool overwrite)
         {
             if (overwrite)
-                return MoveFileExW(existingFileName, newFileName, MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH);
+                return MoveFileEx(existingFileName, newFileName, MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH);
             else
-                return MoveFileExW(existingFileName, newFileName, 0);
+                return MoveFileEx(existingFileName, newFileName, 0);
         }
 
         [return: MarshalAs(UnmanagedType.Bool)]                 // https://stackoverflow.com/questions/5920882/file-move-does-not-work-file-already-exists
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        // public static extern bool MoveFileEx(string existingFileName, string newFileName, int flags);
-        private static extern bool MoveFileExW(string existingFileName, string newFileName, int flags);
+        private static extern bool MoveFileEx(string existingFileName, string newFileName, int flags);
     }
 }
