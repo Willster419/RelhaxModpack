@@ -1934,8 +1934,7 @@ namespace RelhaxModpack
                     // childProgressBar.Maximum = 1;
                     if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
                         childProgressBar.Value = e.ChildProcessed;
-                    // message = string.Format("{0} {1} {2} {3}\n{4} {5} {6} {7}", Translations.GetTranslatedString("restoringUserData"), e.ChildProcessed, Translations.GetTranslatedString("of"), e.ChildTotalToProcess, Translations.GetTranslatedString("file"), e.Filecounter, Translations.GetTranslatedString("of"), e.FilesToDo);
-                    message = string.Format("writing {0} {1} {2} installation logfile", Translations.GetTranslatedString("restoringUserData"), e.FilesToDo, Translations.GetTranslatedString("files"), Translations.GetTranslatedString("to"));
+                    message = string.Format(Translations.GetTranslatedString("writingInstallationLogfile"), e.FilesToDo);
                     break;
                 case InstallerEventArgs.InstallProgress.ExtractGlobalDependencies:
                 case InstallerEventArgs.InstallProgress.ExtractDependencies:
