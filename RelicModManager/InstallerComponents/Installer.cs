@@ -546,7 +546,7 @@ namespace RelhaxModpack
         {
             args.ChildTotalToProcess = 0;
             args.ChildProcessed = 0;
-            ReportProgressToInstallWorker(0);        // will show text => scanning mods folders
+            ReportProgressToInstallWorker(0, true);        // will show text => scanning mods folders
             List<string> linesFromLog = new List<string>();
             List<string> filesFromLog = new List<string>();
             List<string> foldersFromLog = new List<string>();
@@ -739,6 +739,9 @@ namespace RelhaxModpack
         //Step 3: Delete all mods (quick)
         public void UninstallModsQuick()
         {
+            args.ChildTotalToProcess = 0;
+            args.ChildProcessed = 0;
+            ReportProgressToInstallWorker(0, true);        // will show text => scanning mods folders
             try
             {
                 NumFilesToProcess(Path.Combine(TanksLocation, "res_mods"));
@@ -1255,15 +1258,13 @@ namespace RelhaxModpack
                                         Logging.Manager(string.Format("failed to create folder: {0} ({1})", targetDir, ex.Message));
                                     }
                                     args.currentFile = correctedUserFiles;
-                                    // ReportProgressToInstallWorker(0);
-
                                     if (Directory.Exists(tempStorageFolder))
                                     {
                                         //find the files with the specified pattern
                                         string[] fileList = Directory.GetFiles(tempStorageFolder, Path.GetFileName(correctedUserFiles));
                                         args.Filecounter = 0;
                                         args.FilesToDo = fileList.Length;
-                                        ReportProgressToInstallWorker(0);
+                                        ReportProgressToInstallWorker(0, true);
                                         // to move the folder, the target folder may not exist!
                                         if (us.placeBeforeExtraction && beforeExtraction && !Directory.Exists(targetDir))
                                         {
@@ -1280,8 +1281,8 @@ namespace RelhaxModpack
                                                 ReportProgressToInstallWorker(0);
                                                 foreach (string ss in fileList)
                                                 {
-                                                    // args.Filecounter++;
-                                                    // ReportProgressToInstallWorker(0);
+                                                    args.Filecounter++;
+                                                    ReportProgressToInstallWorker(0);
                                                     Logging.Installer(Path.Combine(targetDir, Path.GetFileName(ss)));
                                                 }
                                             }
