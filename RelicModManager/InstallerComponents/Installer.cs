@@ -468,10 +468,11 @@ namespace RelhaxModpack
         {
             try
             {
-                args.ChildTotalToProcess = ModsConfigsWithData.Count();
+                args.ParrentTotalToProcess = ModsConfigsWithData.Count();
+                args.ParrentProcessed = 0;
                 foreach (SelectablePackage dbo in ModsConfigsWithData)
                 {
-                    args.ChildProcessed++;
+                    args.ParrentProcessed++;
                     ReportProgressToInstallWorker(0);
                     try
                     {
@@ -496,8 +497,8 @@ namespace RelhaxModpack
                                 c++;
                                 if (!Directory.Exists(folderPath)) continue;
                                 string[] fileList = Directory.GetFiles(folderPath, Path.GetFileName(correctedPath));   // use the GetFileName(correctedPath) as a search pattern, to only get wanted files
-                                args.Filecounter = 0;
-                                args.FilesToDo = fileList.Length;
+                                args.ChildProcessed = 0;
+                                args.ChildTotalToProcess = fileList.Length;
                                 if (fileList.Length > 0)
                                 {
                                     Directory.CreateDirectory(tempStorageFolder);
@@ -509,7 +510,7 @@ namespace RelhaxModpack
                                             if (File.Exists(@startLoc))
                                             {
                                                 File.Move(startLoc, destLoc);
-                                                args.Filecounter++;
+                                                args.ChildProcessed++;
                                                 if (fileList.Length < 5) Logging.Manager(string.Format("BackupUserData: {0} ({1})", Path.Combine(Path.GetDirectoryName(correctedPath), Path.GetFileName(startLoc)), Path.GetFileName(correctedPath)));
                                             }
                                         }
@@ -520,7 +521,7 @@ namespace RelhaxModpack
                                         }
                                         ReportProgressToInstallWorker(0);
                                     }
-                                    if (!(fileList.Length < 5)) Logging.Manager(string.Format("BackupUserData: {0} files ({1})", args.Filecounter, correctedPath));
+                                    if (!(fileList.Length < 5)) Logging.Manager(string.Format("BackupUserData: {0} files ({1})", args.ChildProcessed, correctedPath));
                                 }
                             }
                             catch (Exception exStartLoc)
@@ -1213,13 +1214,12 @@ namespace RelhaxModpack
             {
                 Logging.InstallerGroup("RestoreUserData" + (beforeExtraction ? "Before" : ""));
                 args.ParrentTotalToProcess = ModsConfigsWithData.Count;
-                // ReportProgressToInstallWorker(0);
+                args.ParrentProcessed = 0;
                 foreach (SelectablePackage dbo in ModsConfigsWithData)
                 {
                     try
                     {
-                        args.ChildTotalToProcess = dbo.UserFiles.Count;
-                        // ReportProgressToInstallWorker(0);
+                        args.ParrentProcessed++;
                         int c = 0;
                         foreach (UserFiles us in dbo.UserFiles)
                         {
@@ -1262,8 +1262,8 @@ namespace RelhaxModpack
                                     {
                                         //find the files with the specified pattern
                                         string[] fileList = Directory.GetFiles(tempStorageFolder, Path.GetFileName(correctedUserFiles));
-                                        args.Filecounter = 0;
-                                        args.FilesToDo = fileList.Length;
+                                        args.ChildProcessed = 0;
+                                        args.ChildTotalToProcess = fileList.Length;
                                         ReportProgressToInstallWorker(0, true);
                                         // to move the folder, the target folder may not exist!
                                         if (us.placeBeforeExtraction && beforeExtraction && !Directory.Exists(targetDir))
@@ -1281,7 +1281,7 @@ namespace RelhaxModpack
                                                 ReportProgressToInstallWorker(0);
                                                 foreach (string ss in fileList)
                                                 {
-                                                    args.Filecounter++;
+                                                    args.ChildProcessed++;
                                                     ReportProgressToInstallWorker(0);
                                                     Logging.Installer(Path.Combine(targetDir, Path.GetFileName(ss)));
                                                 }
@@ -1296,7 +1296,7 @@ namespace RelhaxModpack
                                         {
                                             foreach (string ss in fileList)
                                             {
-                                                args.Filecounter++;
+                                                args.ChildProcessed++;
                                                 ReportProgressToInstallWorker(0);
                                                 string targetFilename = Path.Combine(targetDir, Path.GetFileName(ss));
                                                 try
@@ -1314,8 +1314,8 @@ namespace RelhaxModpack
                                                     Utils.ExceptionLog("RestoreUserData", "p\n" + ss, p);
                                                 }
                                             }
-                                            // log proceeded sum of files if count is 5 or higher
-                                            if (!(fileList.Length < 20)) Logging.Manager(string.Format("RestoredUserData: {0} files ({1})", args.Filecounter, correctedUserFiles));
+                                            // log proceeded sum of files if count is 20 or higher
+                                            if (!(fileList.Length < 20)) Logging.Manager(string.Format("RestoredUserData: {0} files ({1})", args.ChildProcessed, correctedUserFiles));
                                             DirectoryDelete(tempStorageFolder, false);
                                         }
                                     }
