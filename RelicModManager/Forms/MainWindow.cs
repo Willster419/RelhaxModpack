@@ -1743,7 +1743,14 @@ namespace RelhaxModpack
             parrentProgressBar.Maximum = DatabasePackagesToDownload.Count;
             //at this point, there may be user mods selected,
             //and there is at least one mod to extract
-            Downloader_DownloadFileCompleted(null, null);
+            try
+            {
+                Downloader_DownloadFileCompleted(null, null);
+            }
+            catch (Exception ex)
+            {
+                Utils.ExceptionLog("Downloader_DownloadFileCompleted", "ex", ex);
+            }
             //release no longer needed rescources and end the installation process
             list.Dispose();
             list = null;
@@ -2040,18 +2047,6 @@ namespace RelhaxModpack
                     childProgressBar.Maximum = 1;
                     childProgressBar.Value = childProgressBar.Maximum;
                     downloadProgress.Text = message;
-                    if (Settings.ShowInstallCompleteWindow)
-                    {
-                        using (InstallFinished IF = new InstallFinished(tanksLocation))
-                        {
-                            System.Media.SystemSounds.Beep.Play();
-                            IF.ShowDialog();
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show(Translations.GetTranslatedString("installationFinished"), Translations.GetTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
                     break;
                 case InstallerEventArgs.InstallProgress.Done:
                     //dispose of a lot of stuff

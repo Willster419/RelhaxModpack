@@ -418,6 +418,18 @@ namespace RelhaxModpack
             Logging.Manager("Recorded time after extraction (msec): " + afterExtraction);
             long totalExtraction = beforeExtraction + duringExtraction + afterExtraction;
             Logging.Manager("Total recorded install time (msec): " + totalExtraction);
+            if (Settings.ShowInstallCompleteWindow)
+            {
+                using (InstallFinished IF = new InstallFinished(TanksLocation))
+                {
+                    System.Media.SystemSounds.Beep.Play();
+                    IF.ShowDialog();
+                }
+            }
+            else
+            {
+                MessageBox.Show(Translations.GetTranslatedString("installationFinished"), Translations.GetTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         
@@ -1199,6 +1211,7 @@ namespace RelhaxModpack
                     try
                     {
                         args.ChildTotalToProcess = dbo.UserFiles.Count;
+                        InstallWorker.ReportProgress(0);
                         int c = 0;
                         foreach (UserFiles us in dbo.UserFiles)
                         {
@@ -1225,21 +1238,11 @@ namespace RelhaxModpack
                                     }
                                     try
                                     {
-                                        // check if target dir is existing. if not, create it
+                                        // check if target dir is existing. if not, create it, but only if NOT beforeExtraction
                                         if (!Directory.Exists(targetDir) && !beforeExtraction)
                                         {
                                             Directory.CreateDirectory(targetDir);
                                             Logging.Installer(targetDir);
-                                        }
-                                        else if (beforeExtraction)
-                                        {
-                                            // to be able to move folder with MoveFileEx, the folder 1 step lower the one to be created must be existing
-                                            string beforeExtractionBaseFolder = string.Join(Path.DirectorySeparatorChar.ToString(), targetDir.Split(Path.DirectorySeparatorChar).Take(targetDir.Split(Path.DirectorySeparatorChar).Count() - 1).ToArray());
-                                            if (!Directory.Exists(beforeExtractionBaseFolder))
-                                            {
-                                                Directory.CreateDirectory(beforeExtractionBaseFolder);
-                                                Logging.Installer(beforeExtractionBaseFolder);
-                                            }
                                         }
                                     }
                                     catch (Exception ex)
@@ -1255,18 +1258,25 @@ namespace RelhaxModpack
                                         string[] fileList = Directory.GetFiles(tempStorageFolder, Path.GetFileName(correctedUserFiles));
                                         args.Filecounter = 0;
                                         args.FilesToDo = fileList.Length;
-
+                                        InstallWorker.ReportProgress(0);
                                         // to move the folder, the target folder may not exist!
                                         if (us.placeBeforeExtraction && beforeExtraction && !Directory.Exists(targetDir))
                                         {
+                                            // to be able to move folder with MoveFileEx, the folder 1 step lower the one to be created must be existing
+                                            string beforeExtractionBaseFolder = string.Join(Path.DirectorySeparatorChar.ToString(), targetDir.Split(Path.DirectorySeparatorChar).Take(targetDir.Split(Path.DirectorySeparatorChar).Count() - 1).ToArray());
+                                            if (!Directory.Exists(beforeExtractionBaseFolder))
+                                            {
+                                                Directory.CreateDirectory(beforeExtractionBaseFolder);
+                                                Logging.Installer(beforeExtractionBaseFolder);
+                                            }
                                             if (NativeMethods.MoveFileEx(Utils.AddTrailingBackslashChar(@"\\?\" + tempStorageFolder), Utils.AddTrailingBackslashChar(@"\\?\" + targetDir), true))
                                             {
                                                 Logging.Manager(string.Format("RestoredUserData: {0} files ({1})", fileList.Length, correctedUserFiles));
                                                 foreach (string ss in fileList)
                                                 {
                                                     args.Filecounter++;
-                                                    Logging.Installer(Path.Combine(targetDir, Path.GetFileName(ss)));
                                                     InstallWorker.ReportProgress(0);
+                                                    Logging.Installer(Path.Combine(targetDir, Path.GetFileName(ss)));
                                                 }
                                             }
                                             else
@@ -1280,6 +1290,7 @@ namespace RelhaxModpack
                                             foreach (string ss in fileList)
                                             {
                                                 args.Filecounter++;
+                                                InstallWorker.ReportProgress(0);
                                                 string targetFilename = Path.Combine(targetDir, Path.GetFileName(ss));
                                                 try
                                                 {
@@ -1295,7 +1306,6 @@ namespace RelhaxModpack
                                                 {
                                                     Utils.ExceptionLog("RestoreUserData", "p\n" + ss, p);
                                                 }
-                                                InstallWorker.ReportProgress(0);
                                             }
                                             // log proceeded sum of files if count is 5 or higher
                                             if (!(fileList.Length < 20)) Logging.Manager(string.Format("RestoredUserData: {0} files ({1})", args.Filecounter, correctedUserFiles));
