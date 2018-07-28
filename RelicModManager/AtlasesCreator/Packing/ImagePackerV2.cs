@@ -165,7 +165,7 @@ namespace RelhaxModpack.AtlasesCreator
                 return (int)FailCode.FailedToSaveImage;
 
             Installer.args.ChildProcessed++;
-            Installer.InstallWorker.ReportProgress(0);
+            Installer.ReportProgressToInstallWorker(0);
 
             if (generateMap)
             {
@@ -179,7 +179,7 @@ namespace RelhaxModpack.AtlasesCreator
                 outputMap = CreateOutputMapData.generateMapData(imagePlacement, imageSizes);
             }
 
-            Installer.InstallWorker.ReportProgress(0);
+            Installer.ReportProgressToInstallWorker(0);
 
             // clear our dictionaries just to free up some memory
             imageSizes.Clear();

@@ -90,6 +90,12 @@ namespace RelhaxModpack
             originalSortedPatchNames = new SortedDictionary<string, string>();
         }
 
+        public static void ReportProgressToInstallWorker(int i, bool forceMessage = false)
+        {
+            if (MainWindow.ReadyPublishMessage || forceMessage)
+                InstallWorker.ReportProgress(0);
+        }
+
         //Start installation on the UI thread
         public void StartInstallation()
         {
@@ -111,7 +117,7 @@ namespace RelhaxModpack
                 args.currentFile = e.CurrentEntry.FileName;
                 args.currentFileSizeProcessed = e.BytesTransferred;
             }
-            InstallWorker.ReportProgress(0);
+            ReportProgressToInstallWorker(0);
         }
 
         public void WorkerReportProgress(object sender, ProgressChangedEventArgs e)
@@ -159,7 +165,7 @@ namespace RelhaxModpack
                 NumExtractorsCompleted++;
                 args.ParrentProcessed++;
                 Logging.Manager("Number of threads completed: " + NumExtractorsCompleted);
-                InstallWorker.ReportProgress(0);
+                ReportProgressToInstallWorker(0);
             }
         }
         //gets the total number of files to process to eithor delete or copy
@@ -209,7 +215,7 @@ namespace RelhaxModpack
             if (!Directory.Exists(Path.Combine(TanksLocation, "mods", TanksVersion)))
                 Directory.CreateDirectory(Path.Combine(TanksLocation, "mods", TanksVersion));
             args.InstalProgress = InstallerEventArgs.InstallProgress.UninstallDone;
-            InstallWorker.ReportProgress(0);
+            ReportProgressToInstallWorker(0);
             Logging.Manager("Uninstallation process finished");
             MessageBox.Show(Translations.GetTranslatedString("uninstallFinished"), Translations.GetTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -312,10 +318,7 @@ namespace RelhaxModpack
             //Step 5.5: restore UserData BEFORE extraction will be started
             Logging.Manager("Installation RestoreUserData (directory manner)");
             args.InstalProgress = InstallerEventArgs.InstallProgress.RestoreUserDataBefore;
-            if (Settings.SaveUserData)
-                RestoreUserData(true);
-            else
-                Logging.Manager("... skipped");
+            RestoreUserData(true);
             //Step 6-10: Extract packages
             Logging.Manager("Installation ExtractDatabaseObjects");
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractGlobalDependencies;
@@ -411,8 +414,7 @@ namespace RelhaxModpack
                     }
                 }
             }
-
-            InstallWorker.ReportProgress(0);
+            ReportProgressToInstallWorker(0);
             Logging.InstallerFinished();                                      // installation is finished. logfile will be flushed and filestream will be disposed
             afterExtraction = installTimer.ElapsedMilliseconds - duringExtraction - beforeExtraction;
             Logging.Manager("Recorded time after extraction (msec): " + afterExtraction);
@@ -451,7 +453,7 @@ namespace RelhaxModpack
                     Directory.CreateDirectory(Path.Combine(Settings.RelHaxModBackupFolder, folderDateName, "mods"));
                 NumFilesToProcess(Path.Combine(Settings.RelHaxModBackupFolder, folderDateName, "mods"));
                 NumFilesToProcess(Path.Combine(Settings.RelHaxModBackupFolder, folderDateName, "res_mods"));
-                InstallWorker.ReportProgress(0);
+                ReportProgressToInstallWorker(0);
                 DirectoryCopy(Path.Combine(TanksLocation, "res_mods"), Path.Combine(Settings.RelHaxModBackupFolder, folderDateName, "res_mods"), true);
                 DirectoryCopy(Path.Combine(TanksLocation, "mods"), Path.Combine(Settings.RelHaxModBackupFolder, folderDateName, "mods"), true);
             }
@@ -470,7 +472,7 @@ namespace RelhaxModpack
                 foreach (SelectablePackage dbo in ModsConfigsWithData)
                 {
                     args.ChildProcessed++;
-                    InstallWorker.ReportProgress(0);
+                    ReportProgressToInstallWorker(0);
                     try
                     {
                         int c = 0;
@@ -516,7 +518,7 @@ namespace RelhaxModpack
                                             if (Program.testMode) { MessageBox.Show(string.Format("Error: can not move file.\nstartLoc: \"{0}\"\ndestLoc: \"{1}\"", startLoc, destLoc)); };
                                             Logging.Manager(string.Format("Error: can not move file. startLoc: \"{0}\" destLoc: \"{1}\"", startLoc, destLoc));
                                         }
-                                        InstallWorker.ReportProgress(0);
+                                        ReportProgressToInstallWorker(0);
                                     }
                                     if (!(fileList.Length < 5)) Logging.Manager(string.Format("BackupUserData: {0} files ({1})", args.Filecounter, correctedPath));
                                 }
@@ -542,6 +544,9 @@ namespace RelhaxModpack
         //Step 3: Delete all mods (default)
         public void UninstallModsDefault()
         {
+            args.ChildTotalToProcess = 0;
+            args.ChildProcessed = 0;
+            ReportProgressToInstallWorker(0);        // will show text => scanning mods folders
             List<string> linesFromLog = new List<string>();
             List<string> filesFromLog = new List<string>();
             List<string> foldersFromLog = new List<string>();
@@ -627,7 +632,7 @@ namespace RelhaxModpack
             //report the progress
             args.ChildTotalToProcess = totalFiles.Count + totalFolders.Count + totalShortcuts.Count;
             args.ChildProcessed = 0;
-            InstallWorker.ReportProgress(0);
+            ReportProgressToInstallWorker(0);
 
             //backup old uninstall log file
             Logging.Manager("backing up old uninstall log file", true);
@@ -665,7 +670,7 @@ namespace RelhaxModpack
                     tw.WriteLine(string.Format(@"/* failed to delete: {0} */",file));
                     Logging.Manager(string.Format("failed to delete: {0} ({1})", file, ex.Message));
                 }
-                InstallWorker.ReportProgress(args.ChildProcessed++);
+                ReportProgressToInstallWorker(args.ChildProcessed++);
             }
             if(Settings.CreateShortcuts)
             {
@@ -702,7 +707,7 @@ namespace RelhaxModpack
                 {
                     args.currentFile = folder;
                     DirectoryDeleteNoProgress(folder, false);
-                    InstallWorker.ReportProgress(args.ChildProcessed++);
+                    ReportProgressToInstallWorker(args.ChildProcessed++);
                     tw.WriteLine(folder);
                 }
             }
@@ -738,7 +743,7 @@ namespace RelhaxModpack
             {
                 NumFilesToProcess(Path.Combine(TanksLocation, "res_mods"));
                 NumFilesToProcess(Path.Combine(TanksLocation, "mods"));
-                InstallWorker.ReportProgress(0);
+                ReportProgressToInstallWorker(0);
                 //don't forget to delete the readme files
                 if (Directory.Exists(Path.Combine(TanksLocation, "_readme")))
                     Directory.Delete(Path.Combine(TanksLocation, "_readme"), true);
@@ -881,7 +886,7 @@ namespace RelhaxModpack
                     if (!d.ZipFile.Equals(""))
                         args.ParrentTotalToProcess++;
 
-                InstallWorker.ReportProgress(0);
+                ReportProgressToInstallWorker(0);
                 //extract global dependencies
                 int patchCounter = 0;
                 foreach (Dependency d in GlobalDependencies)
@@ -910,11 +915,11 @@ namespace RelhaxModpack
                             Application.Exit();
                         }
                     }
-                    InstallWorker.ReportProgress(0);
+                    ReportProgressToInstallWorker(0);
                 }
                 //extract dependencies
                 args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractDependencies;
-                InstallWorker.ReportProgress(0);
+                ReportProgressToInstallWorker(0);
                 patchCounter = 0;
                 foreach (Dependency d in Dependencies)
                 {
@@ -942,13 +947,13 @@ namespace RelhaxModpack
                             Application.Exit();
                         }
                     }
-                    InstallWorker.ReportProgress(0);
+                    ReportProgressToInstallWorker(0);
                 }
                 //set xvmConfigDir here because xvm is always a dependency, but don't log it
                 xvmConfigDir = PatchUtils.GetXVMBootLoc(TanksLocation, null, false);
                 //extract logical dependencies
                 args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractLogicalDependencies;
-                InstallWorker.ReportProgress(0);
+                ReportProgressToInstallWorker(0);
                 patchCounter = 0;
                 foreach (LogicalDependency d in LogicalDependencies)
                 {
@@ -976,7 +981,7 @@ namespace RelhaxModpack
                             Application.Exit();
                         }
                     }
-                    InstallWorker.ReportProgress(0);
+                    ReportProgressToInstallWorker(0);
                 }
                 Stopwatch sw = new Stopwatch();
                 sw.Reset();
@@ -989,7 +994,7 @@ namespace RelhaxModpack
                     args.ParrentProcessed = 0;
                     args.currentFile = "";
                     args.currentFileSizeProcessed = 0;
-                    InstallWorker.ReportProgress(0);
+                    ReportProgressToInstallWorker(0);
                     int igCounter = 0;
                     foreach(InstallGroup ig in InstallGroups)
                     {
@@ -1013,7 +1018,7 @@ namespace RelhaxModpack
                 {
                     //extract mods and configs
                     args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractMods;
-                    InstallWorker.ReportProgress(0);
+                    ReportProgressToInstallWorker(0);
                     foreach (SelectablePackage dbo in ModsConfigsToInstall)
                     {
                         if (!dbo.ZipFile.Equals(""))
@@ -1040,14 +1045,14 @@ namespace RelhaxModpack
                                 Application.Exit();
                             }
                         }
-                        InstallWorker.ReportProgress(0);
+                        ReportProgressToInstallWorker(0);
                     }
                 }
                 sw.Stop();
                 Logging.Manager("Recorded Install Time for MOD/CONFIG extraction (msec): " + sw.ElapsedMilliseconds);
                 //extract dependencies
                 args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractAppendedDependencies;
-                InstallWorker.ReportProgress(0);
+                ReportProgressToInstallWorker(0);
                 patchCounter = 0;
                 foreach (Dependency d in AppendedDependencies)
                 {
@@ -1075,14 +1080,14 @@ namespace RelhaxModpack
                             Application.Exit();
                         }
                     }
-                    InstallWorker.ReportProgress(0);
+                    ReportProgressToInstallWorker(0);
                 }
                 //don't actually run this anymore
                 /*
                 //finish by moving WoTAppData folder contents into application data folder
                 //folder name is "WoTAppData"
                 args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractConfigs;
-                InstallWorker.ReportProgress(0);
+                ReportProgressToInstallWorker(0);
                 string folderToMove = Path.Combine(TanksLocation, "WoTAppData");
                 if (Directory.Exists(folderToMove))
                 {
@@ -1098,7 +1103,7 @@ namespace RelhaxModpack
                         //move the file, overwrite if required
                         string temppath = Path.Combine(AppDataFolder, file.Name);
                         args.currentFile = temppath;
-                        InstallWorker.ReportProgress(0);
+                        ReportProgressToInstallWorker(0);
                         if (File.Exists(temppath))
                             File.Delete(temppath);
                         file.MoveTo(temppath);
@@ -1110,7 +1115,7 @@ namespace RelhaxModpack
                         string temppath = Path.Combine(TanksLocation, "WoTAppData", subdir.Name);
                         string temppath2 = Path.Combine(AppDataFolder, subdir.Name);
                         args.currentFile = temppath;
-                        InstallWorker.ReportProgress(0);
+                        ReportProgressToInstallWorker(0);
                         DirectoryMove(temppath, temppath2, true, true, false);
                     }
                     //call the process folders function to delete any leftover folders
@@ -1203,15 +1208,15 @@ namespace RelhaxModpack
         {
             try
             {
-                Logging.InstallerGroup("RestoreUserData");
+                Logging.InstallerGroup("RestoreUserData" + (beforeExtraction ? "Before" : ""));
                 args.ParrentTotalToProcess = ModsConfigsWithData.Count;
-                InstallWorker.ReportProgress(0);
+                // ReportProgressToInstallWorker(0);
                 foreach (SelectablePackage dbo in ModsConfigsWithData)
                 {
                     try
                     {
                         args.ChildTotalToProcess = dbo.UserFiles.Count;
-                        InstallWorker.ReportProgress(0);
+                        // ReportProgressToInstallWorker(0);
                         int c = 0;
                         foreach (UserFiles us in dbo.UserFiles)
                         {
@@ -1250,7 +1255,7 @@ namespace RelhaxModpack
                                         Logging.Manager(string.Format("failed to create folder: {0} ({1})", targetDir, ex.Message));
                                     }
                                     args.currentFile = correctedUserFiles;
-                                    InstallWorker.ReportProgress(0);
+                                    // ReportProgressToInstallWorker(0);
 
                                     if (Directory.Exists(tempStorageFolder))
                                     {
@@ -1258,7 +1263,7 @@ namespace RelhaxModpack
                                         string[] fileList = Directory.GetFiles(tempStorageFolder, Path.GetFileName(correctedUserFiles));
                                         args.Filecounter = 0;
                                         args.FilesToDo = fileList.Length;
-                                        InstallWorker.ReportProgress(0);
+                                        ReportProgressToInstallWorker(0);
                                         // to move the folder, the target folder may not exist!
                                         if (us.placeBeforeExtraction && beforeExtraction && !Directory.Exists(targetDir))
                                         {
@@ -1272,10 +1277,11 @@ namespace RelhaxModpack
                                             if (NativeMethods.MoveFileEx(Utils.AddTrailingBackslashChar(@"\\?\" + tempStorageFolder), Utils.AddTrailingBackslashChar(@"\\?\" + targetDir), true))
                                             {
                                                 Logging.Manager(string.Format("RestoredUserData: {0} files ({1})", fileList.Length, correctedUserFiles));
+                                                ReportProgressToInstallWorker(0);
                                                 foreach (string ss in fileList)
                                                 {
-                                                    args.Filecounter++;
-                                                    InstallWorker.ReportProgress(0);
+                                                    // args.Filecounter++;
+                                                    // ReportProgressToInstallWorker(0);
                                                     Logging.Installer(Path.Combine(targetDir, Path.GetFileName(ss)));
                                                 }
                                             }
@@ -1290,7 +1296,7 @@ namespace RelhaxModpack
                                             foreach (string ss in fileList)
                                             {
                                                 args.Filecounter++;
-                                                InstallWorker.ReportProgress(0);
+                                                ReportProgressToInstallWorker(0);
                                                 string targetFilename = Path.Combine(targetDir, Path.GetFileName(ss));
                                                 try
                                                 {
@@ -1314,7 +1320,7 @@ namespace RelhaxModpack
                                     }
                                 }
                                 args.ChildProcessed++;
-                                InstallWorker.ReportProgress(0);
+                                ReportProgressToInstallWorker(0);
                             }
                             catch (Exception fl)
                             {
@@ -1322,7 +1328,7 @@ namespace RelhaxModpack
                             }
                         }
                         args.ParrentProcessed++;
-                        InstallWorker.ReportProgress(0);
+                        ReportProgressToInstallWorker(0);
                     }
                     catch (Exception uf)
                     {
@@ -1468,7 +1474,7 @@ namespace RelhaxModpack
                         Utils.ExceptionLog(string.Format("UnpackXmlFiles", "xmlUnPack\nfileName: {0}", Path.Combine(r.ExtractDirectory, fn)), ex);
                     }
                     args.ChildProcessed++;
-                    InstallWorker.ReportProgress(0);
+                    ReportProgressToInstallWorker(0);
                 }
             }
             catch (Exception ex)
@@ -1531,7 +1537,7 @@ namespace RelhaxModpack
                 foreach (Patch p in PatchList)
                 {
                     args.currentFile = p.file;
-                    InstallWorker.ReportProgress(0);
+                    ReportProgressToInstallWorker(0);
                     if (!oldNativeProcessingFile.Equals(p.nativeProcessingFile))
                     {
                         Logging.Manager(string.Format("nativeProcessingFile: {0}, originalName: {1}", p.nativeProcessingFile, p.actualPatchName));
@@ -1641,7 +1647,7 @@ namespace RelhaxModpack
                         PatchUtils.PMODPatch(p);
                     }
                     args.ParrentProcessed++;
-                    InstallWorker.ReportProgress(0);
+                    ReportProgressToInstallWorker(0);
                 }
             }
             catch (Exception ex)
@@ -1788,7 +1794,7 @@ namespace RelhaxModpack
                     //4 steps per atlas (extract, optimize, build, map)
                     args.ChildTotalToProcess = AtlasesList.Count * 3;
                     args.ChildProcessed = 0;
-                    InstallWorker.ReportProgress(0);
+                    ReportProgressToInstallWorker(0);
 
                     foreach(Atlas a in AtlasesList)
                     {
@@ -1835,7 +1841,7 @@ namespace RelhaxModpack
         {
             Size os = ExtractAtlases_run(a);        // os = original size of the extracted Bitmap
             args.ChildProcessed++;
-            InstallWorker.ReportProgress(0);
+            ReportProgressToInstallWorker(0);
             Atlas atlasesArgs = new Atlas
             {
                 AtlasHeight = a.AtlasHeight,
@@ -1893,7 +1899,7 @@ namespace RelhaxModpack
             {
                 NumAtlasCreatorsComplete++;
                 args.ParrentProcessed++;
-                InstallWorker.ReportProgress(0);
+                ReportProgressToInstallWorker(0);
             }
         }
         
@@ -2058,7 +2064,7 @@ namespace RelhaxModpack
                         Logging.Manager("Extracting " + Path.GetFileName(m.ZipFile));
                         Unzip(Path.Combine(downloadedFilesDir, Path.GetFileName(m.ZipFile)), null,99,ref tempPatchNum,m.LogAtInstall);
                         tempPatchNum++;
-                        InstallWorker.ReportProgress(0);
+                        ReportProgressToInstallWorker(0);
                     }
                 }
             }
@@ -2759,7 +2765,7 @@ namespace RelhaxModpack
                         }
                     }
                 }
-                InstallWorker.ReportProgress(args.ChildProcessed++);
+                ReportProgressToInstallWorker(args.ChildProcessed++);
             }
 
             // If copying subdirectories, copy them and their contents to new location.
@@ -2786,7 +2792,7 @@ namespace RelhaxModpack
                                 Application.Exit();
                         }
                     }
-                    InstallWorker.ReportProgress(args.ChildProcessed++);
+                    ReportProgressToInstallWorker(args.ChildProcessed++);
                 }
             }
         }
@@ -2802,7 +2808,7 @@ namespace RelhaxModpack
             {
                 Directory.CreateDirectory(destDirName);
                 if(reportProgress)
-                    InstallWorker.ReportProgress(args.ChildProcessed++);
+                    ReportProgressToInstallWorker(args.ChildProcessed++);
             }
             // Get the files in the directory and copy them to the new location.
             FileInfo[] files = dir.GetFiles();
@@ -2811,7 +2817,7 @@ namespace RelhaxModpack
                 string temppath = Path.Combine(destDirName, file.Name);
                 file.CopyTo(temppath, false);
                 if(reportProgress)
-                    InstallWorker.ReportProgress(args.ChildProcessed++);
+                    ReportProgressToInstallWorker(args.ChildProcessed++);
             }
             // If copying subdirectories, copy them and their contents to new location.
             if (copySubDirs)
@@ -2846,7 +2852,7 @@ namespace RelhaxModpack
             {
                 Directory.CreateDirectory(destDirName);
                 if (reportProgress)
-                    InstallWorker.ReportProgress(args.ChildProcessed++);
+                    ReportProgressToInstallWorker(args.ChildProcessed++);
             }
             // Get the files in the directory and copy them to the new location.
             FileInfo[] files = dir.GetFiles();
@@ -2857,7 +2863,7 @@ namespace RelhaxModpack
                     File.Delete(temppath);
                 file.MoveTo(temppath);
                 if (reportProgress)
-                    InstallWorker.ReportProgress(args.ChildProcessed++);
+                    ReportProgressToInstallWorker(args.ChildProcessed++);
             }
             // If copying subdirectories, copy them and their contents to new location.
             if (copySubDirs)

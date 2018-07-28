@@ -82,6 +82,8 @@ namespace RelhaxModpack
         private FontSize previousFontSize;
         private bool loading = false;
         private bool revertingScaling = false;
+        //ready to publish message
+        public static bool ReadyPublishMessage = true;
 
         //  interpret the created CiInfo buildTag as an "us-US" or a "de-DE" timeformat and return it as a local time- and dateformat string
         public static string CompileTime()//if getting build error, check windows date and time format settings https://puu.sh/xgCqO/e97e2e4a34.png
@@ -1887,6 +1889,10 @@ namespace RelhaxModpack
         {
             string message = "";
             totalProgressBar.Maximum = (int)InstallerEventArgs.InstallProgress.Done;
+            if (!ReadyPublishMessage)
+                return;
+            else
+                ReadyPublishMessage = false;
             switch (e.InstalProgress)
             {
                 case InstallerEventArgs.InstallProgress.BackupMods:
@@ -1921,6 +1927,16 @@ namespace RelhaxModpack
                     parrentProgressBar.Value = 0;
                     message = Translations.GetTranslatedString("deletingWOTCache") + " ";
                     break;
+                case InstallerEventArgs.InstallProgress.RestoreUserDataBefore:
+                    totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.RestoreUserDataBefore;
+                    parrentProgressBar.Value = 0;
+                    childProgressBar.Maximum = e.ChildTotalToProcess;
+                    // childProgressBar.Maximum = 1;
+                    if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
+                        childProgressBar.Value = e.ChildProcessed;
+                    // message = string.Format("{0} {1} {2} {3}\n{4} {5} {6} {7}", Translations.GetTranslatedString("restoringUserData"), e.ChildProcessed, Translations.GetTranslatedString("of"), e.ChildTotalToProcess, Translations.GetTranslatedString("file"), e.Filecounter, Translations.GetTranslatedString("of"), e.FilesToDo);
+                    message = string.Format("writing {0} {1} {2} installation logfile", Translations.GetTranslatedString("restoringUserData"), e.FilesToDo, Translations.GetTranslatedString("files"), Translations.GetTranslatedString("to"));
+                    break;
                 case InstallerEventArgs.InstallProgress.ExtractGlobalDependencies:
                 case InstallerEventArgs.InstallProgress.ExtractDependencies:
                 case InstallerEventArgs.InstallProgress.ExtractLogicalDependencies:
@@ -1947,7 +1963,6 @@ namespace RelhaxModpack
                         e.currentFile, Math.Round(e.currentFileSizeProcessed / MBDivisor, 2).ToString() });
                     }
                     break;
-                case InstallerEventArgs.InstallProgress.RestoreUserDataBefore:
                 case InstallerEventArgs.InstallProgress.RestoreUserData:
                     totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.RestoreUserData;
                     parrentProgressBar.Value = 0;
@@ -2086,10 +2101,17 @@ namespace RelhaxModpack
                     totalProgressBar.Value = 0;
                     parrentProgressBar.Value = 0;
                     childProgressBar.Maximum = e.ChildTotalToProcess;
-                    if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
-                        childProgressBar.Value = e.ChildProcessed;
-                    message = string.Format("{0} {1} {2} {3}\n{4}: {5}", Translations.GetTranslatedString("uninstallingFile"), e.ChildProcessed, Translations.GetTranslatedString("of"),
-                        e.ChildTotalToProcess, Translations.GetTranslatedString("file"), e.currentFile);
+                    if (e.ChildTotalToProcess == 0 && e.ChildProcessed == 0)
+                    {
+                        message = string.Format("currently scanning mods folders ..."); 
+                    }
+                    else
+                    {
+                        if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
+                            childProgressBar.Value = e.ChildProcessed;
+                        message = string.Format("{0} {1} {2} {3}\n{4}: {5}", Translations.GetTranslatedString("uninstallingFile"), e.ChildProcessed, Translations.GetTranslatedString("of"),
+                            e.ChildTotalToProcess, Translations.GetTranslatedString("file"), e.currentFile);
+                    }
                     break;
                 case InstallerEventArgs.InstallProgress.UninstallDone:
                     message = Translations.GetTranslatedString("done");
@@ -2110,12 +2132,13 @@ namespace RelhaxModpack
                     Logging.Manager("Invalid state: " + e.InstalProgress);
                     break;
             }
-            if (errorCounter > 0 && Program.testMode)
+            if (errorCounter > 0 && (Program.testMode || (Program.Version != Program.ProgramVersion.Stable)))
             {
                 this.ErrorCounterLabel.Visible = true;
                 this.ErrorCounterLabel.Text = string.Format("Error counter: {0}", errorCounter);
             }
             downloadProgress.Text = message;
+            ReadyPublishMessage = true;
         }
         #endregion
 
