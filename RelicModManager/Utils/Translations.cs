@@ -1927,6 +1927,13 @@ namespace RelhaxModpack
             polish.Add("restoringUserData", "Przywracanie danych użytkownika");
             french.Add("restoringUserData", "Restoration des données utilisateur");
 
+            //Component restoringUserData before (function moveFileEx)
+            //
+            english.Add("writingInstallationLogfile", "writing {0} files to installation-logfile ...");
+            german.Add("writingInstallationLogfile", "schreibe {0} Dateieinträge in die Installations-Logdatei ...");
+            polish.Add("writingInstallationLogfile", TranslationNeeded);
+            french.Add("writingInstallationLogfile", TranslationNeeded);
+
             //Componet: unpackingXMLFiles
             //
             english.Add("unpackingXMLFiles", "Unpacking local XML file");
