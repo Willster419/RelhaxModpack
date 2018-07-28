@@ -1913,6 +1913,14 @@ namespace RelhaxModpack
             polish.Add("deletingFiles", "Usuwanie plików");
             french.Add("deletingFiles", "Suppression de fichiers");
 
+            //Component DeleteMods
+            //
+            english.Add("scanningModsFolders", "scanning mods folders ...");
+            german.Add("scanningModsFolders", "Durchsuche Mod Verzeichnisse ...");
+            polish.Add("scanningModsFolders", TranslationNeeded);
+            french.Add("scanningModsFolders", TranslationNeeded);
+
+
             //Componet: deletingWOTCache
             //
             english.Add("deletingWOTCache", "Deleting WoT cache");
