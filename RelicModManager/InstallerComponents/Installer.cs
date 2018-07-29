@@ -1277,6 +1277,7 @@ namespace RelhaxModpack
                                             }
                                             if (NativeMethods.MoveFileEx(Utils.AddTrailingBackslashChar(@"\\?\" + tempStorageFolder), Utils.AddTrailingBackslashChar(@"\\?\" + targetDir), true))
                                             {
+                                                Logging.Installer(Utils.AddTrailingBackslashChar(targetDir));
                                                 Logging.Manager(string.Format("RestoredUserData: {0} files ({1})", fileList.Length, correctedUserFiles));
                                                 ReportProgressToInstallWorker(0);
                                                 foreach (string ss in fileList)
