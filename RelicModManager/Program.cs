@@ -83,7 +83,6 @@ namespace RelhaxModpack
                     try
                     {
                         EmbeddedUnmanagedDll.ExtractEmbeddedDlls(resourcePath, s.Key, s.Value == Compressed.Yes, out string filename);
-                        // AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
                         Logging.Manager(string.Format("extracted unmanaged library: {0}{1}", s.Key, s.Value == Compressed.Yes ? " (" + filename + ")" : ""));
                         continue;
                     }
