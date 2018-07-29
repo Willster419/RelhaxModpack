@@ -1688,18 +1688,16 @@ namespace RelhaxModpack
 
         private void ObjectUserdatasList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ObjectUserdatasList.DataSource == null)
-            {
-                EditUserdatasButton.Enabled = SelectedDatabaseObject.UserFiles.Count > 0;
-                return;
-            }
-
+            EditUserdatasButton.Enabled = SelectedDatabaseObject.UserFiles.Count > 0;
             ListBox lb = (ListBox)sender;
             if (lb.DataSource == null)
+            {
+                placeBeforeExtractionCheckBox.Checked = false;
                 return;
+            }
             foreach (UserFiles uf in SelectedDatabaseObject.UserFiles)
             {
-                if (uf.Pattern.Equals(lb.SelectedItem.ToString()))
+                if (uf.ToString().Equals(lb.SelectedItem.ToString()))
                 {
                     ObjectUserdatasTB.Text = uf.Pattern;
                     placeBeforeExtractionCheckBox.Checked = uf.placeBeforeExtraction;
