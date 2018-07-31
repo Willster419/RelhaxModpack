@@ -1285,6 +1285,14 @@ namespace RelhaxModpack
             }
             return true;
         }
+
+        public static void CallBrowser(string url)
+        {
+            if (!Settings.PriorityBrowser.Equals(""))
+                Process.Start(Settings.PriorityBrowser.Trim(), url);
+            else
+                Process.Start(url);
+        }
     }
 
     #region gross shortcut stuff

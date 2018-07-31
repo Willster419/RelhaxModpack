@@ -208,6 +208,7 @@ namespace RelhaxModpack
         //the config file version for saving the user's selection prefrences
         public static string ConfigFileVersion = "2.0";     // for later imports of this files, we need a better identification
         public static string CustomModInfoPath = "";
+        public static string PriorityBrowser = "";
         public static Font AppFont = new Font(DefaultFontType, FontSize100);
         //loads settings from xml file
         public static void LoadSettings()
@@ -365,6 +366,9 @@ namespace RelhaxModpack
                             if(!Program.betaDBSetFromCommandLine)
                                 BetaDatabase = bool.Parse(n.InnerText);
                             break;
+                        case "priorityBrowser":
+                            PriorityBrowser = n.InnerText;
+                            break;
                     }
                 }
             }
@@ -477,8 +481,11 @@ namespace RelhaxModpack
             xpreviewY.InnerText = "" + PreviewY;
             settingsHolder.AppendChild(xpreviewY);
             XmlElement customModInfoPath = doc.CreateElement("customModInfoPath");
-            if (CustomModInfoPath != "") { customModInfoPath.InnerText = CustomModInfoPath; }
+            if (!CustomModInfoPath.Equals("")) { customModInfoPath.InnerText = CustomModInfoPath; }
             settingsHolder.AppendChild(customModInfoPath);
+            XmlElement priorityBrowser = doc.CreateElement("priorityBrowser");
+            if (!PriorityBrowser.Equals("")) { priorityBrowser.InnerText = PriorityBrowser; }
+            settingsHolder.AppendChild(priorityBrowser);
             XmlElement xPreviewFullscreen = doc.CreateElement("PreviewFullscreen");
             xPreviewFullscreen.InnerText = "" + PreviewFullscreen;
             settingsHolder.AppendChild(xPreviewFullscreen);

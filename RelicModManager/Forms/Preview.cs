@@ -231,7 +231,8 @@ namespace RelhaxModpack
         private void DevLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             if (!DBO.DevURL.Equals(""))
-                System.Diagnostics.Process.Start(DBO.DevURL);
+                // System.Diagnostics.Process.Start(DBO.DevURL);
+                Utils.CallBrowser(DBO.DevURL);
         }
         //load the next picture in the list
         private void NextPicButton_Click(object sender, EventArgs e)
@@ -258,12 +259,14 @@ namespace RelhaxModpack
 
         private void DescriptionBox_LinkClicked(object sender, LinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start(e.LinkText);
+            // System.Diagnostics.Process.Start(e.LinkText);
+            Utils.CallBrowser(e.LinkText);
         }
 
         private void UpdateBox_LinkClicked(object sender, LinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start(e.LinkText);
+            // System.Diagnostics.Process.Start(e.LinkText);
+            Utils.CallBrowser(e.LinkText);
         }
 
         private void PreviewPicture_Click(object sender, EventArgs e)

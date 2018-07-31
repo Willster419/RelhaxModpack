@@ -36,7 +36,8 @@ namespace RelhaxModpack
 
         private void richTextBox1_LinkClicked(object sender, LinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start(e.LinkText);
+            // System.Diagnostics.Process.Start(e.LinkText);
+            Utils.CallBrowser(e.LinkText);
         }
     }
 }

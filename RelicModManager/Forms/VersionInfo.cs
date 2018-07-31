@@ -38,12 +38,14 @@ namespace RelhaxModpack
 
         private void clickHereUpdateLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/Willster419/RelhaxModpack/releases/latest");
+            // System.Diagnostics.Process.Start("https://github.com/Willster419/RelhaxModpack/releases/latest");
+            Utils.CallBrowser("https://github.com/Willster419/RelhaxModpack/releases/latest");
         }
 
         private void downloadedVersionInfo_LinkClicked(object sender, LinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start(e.LinkText);
+            // System.Diagnostics.Process.Start(e.LinkText);
+            Utils.CallBrowser(e.LinkText);
         }
     }
 }

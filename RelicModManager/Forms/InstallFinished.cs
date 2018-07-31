@@ -58,7 +58,8 @@ namespace RelhaxModpack
 
         private void StartXVMStatButton_Click(object sender, EventArgs e)
         {
-            Process.Start(string.Format(XVMURL, Translations.GetTranslatedString("xvmUrlLocalisation")));
+            // Process.Start(string.Format(XVMURL, Translations.GetTranslatedString("xvmUrlLocalisation")));
+            Utils.CallBrowser(string.Format(XVMURL, Translations.GetTranslatedString("xvmUrlLocalisation")));
             DialogResult = DialogResult.OK;
         }
 
