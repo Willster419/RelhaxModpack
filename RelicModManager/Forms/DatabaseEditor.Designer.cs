@@ -117,6 +117,7 @@
             this.MoveButton = new System.Windows.Forms.Button();
             this.SearchBox = new System.Windows.Forms.ComboBox();
             this.ObjectUserdatasToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.SystemInitiatedCB = new System.Windows.Forms.CheckBox();
             this.DatabasePanelTree.SuspendLayout();
             this.DatabaseEditPanel.SuspendLayout();
             this.ObjectPropertiesTabControl.SuspendLayout();
@@ -679,6 +680,7 @@
             // 
             // UserDatasTabPage
             // 
+            this.UserDatasTabPage.Controls.Add(this.SystemInitiatedCB);
             this.UserDatasTabPage.Controls.Add(this.placeBeforeExtractionCheckBox);
             this.UserDatasTabPage.Controls.Add(this.EditUserdatasButton);
             this.UserDatasTabPage.Controls.Add(this.ObjectUserdatasTB);
@@ -699,12 +701,12 @@
             this.placeBeforeExtractionCheckBox.AutoSize = true;
             this.placeBeforeExtractionCheckBox.Location = new System.Drawing.Point(9, 119);
             this.placeBeforeExtractionCheckBox.Name = "placeBeforeExtractionCheckBox";
-            this.placeBeforeExtractionCheckBox.Size = new System.Drawing.Size(262, 17);
+            this.placeBeforeExtractionCheckBox.Size = new System.Drawing.Size(194, 17);
             this.placeBeforeExtractionCheckBox.TabIndex = 46;
-            this.placeBeforeExtractionCheckBox.Text = "execute restore BEFORE extraction process starts";
+            this.placeBeforeExtractionCheckBox.Text = "execute restore BEFORE extraction";
             this.ObjectUserdatasToolTip.SetToolTip(this.placeBeforeExtractionCheckBox, "Checking this option, will make possible to move the complete backup UserData fol" +
-        "der to the mod installation. Very usefull for extrem large backups e.g. ClanIcon" +
-        "s)");
+        "der to the mod installation. Very usefull for extrem large backups (e.g. ClanIco" +
+        "ns)");
             this.placeBeforeExtractionCheckBox.UseVisualStyleBackColor = true;
             // 
             // EditUserdatasButton
@@ -1036,6 +1038,18 @@
             this.ObjectUserdatasToolTip.InitialDelay = 500;
             this.ObjectUserdatasToolTip.ReshowDelay = 100;
             // 
+            // SystemInitiatedCB
+            // 
+            this.SystemInitiatedCB.AutoSize = true;
+            this.SystemInitiatedCB.Location = new System.Drawing.Point(217, 119);
+            this.SystemInitiatedCB.Name = "SystemInitiatedCB";
+            this.SystemInitiatedCB.Size = new System.Drawing.Size(97, 17);
+            this.SystemInitiatedCB.TabIndex = 47;
+            this.SystemInitiatedCB.Text = "system initiated";
+            this.ObjectUserdatasToolTip.SetToolTip(this.SystemInitiatedCB, "This entry will be proceeded (PackageName must be checked), even if \"save user da" +
+        "ta\" option is NOT checked");
+            this.SystemInitiatedCB.UseVisualStyleBackColor = true;
+            // 
             // DatabaseEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1169,5 +1183,6 @@
         private System.Windows.Forms.CheckBox LogicalDependnecyNegateFlagCB;
         private System.Windows.Forms.ListBox ObjectLogicalDependenciesList;
         private System.Windows.Forms.CheckBox placeBeforeExtractionCheckBox;
+        private System.Windows.Forms.CheckBox SystemInitiatedCB;
     }
 }

@@ -506,6 +506,10 @@ namespace RelhaxModpack
                                                                 uf.Pattern = innerText;
                                                                 if (userDataNode.Attribute("before") != null)
                                                                     uf.placeBeforeExtraction = Utils.ParseBool(userDataNode.Attribute("before").Value, false);
+                                                                if (userDataNode.Attribute("pre") != null)
+                                                                    uf.placeBeforeExtraction = Utils.ParseBool(userDataNode.Attribute("pre").Value, false);
+                                                                if (userDataNode.Attribute("system") != null)
+                                                                    uf.systemInitiated = Utils.ParseBool(userDataNode.Attribute("system").Value, false);
                                                                 m.UserFiles.Add(uf);
                                                                 break;
                                                             default:
@@ -883,6 +887,10 @@ namespace RelhaxModpack
                                                 uf.Pattern = innerText;
                                                 if (userDataNode.Attribute("before") != null)
                                                     uf.placeBeforeExtraction = Utils.ParseBool(userDataNode.Attribute("before").Value, false);
+                                                if (userDataNode.Attribute("pre") != null)
+                                                    uf.placeBeforeExtraction = Utils.ParseBool(userDataNode.Attribute("pre").Value, false);
+                                                if (userDataNode.Attribute("system") != null)
+                                                    uf.systemInitiated = Utils.ParseBool(userDataNode.Attribute("system").Value, false);
                                                 c.UserFiles.Add(uf);
                                                 break;
                                             default:
@@ -1448,7 +1456,10 @@ namespace RelhaxModpack
                         {
                             XmlElement userData = doc.CreateElement("userData");
                             userData.InnerText = us.Pattern.Trim();
-                            userData.SetAttribute("before", "" + us.placeBeforeExtraction);
+                            if (us.placeBeforeExtraction)
+                                userData.SetAttribute("pre", "" + us.placeBeforeExtraction);
+                            if (us.systemInitiated)
+                                userData.SetAttribute("system", "" + us.systemInitiated);
                             modDatas.AppendChild(userData);
                         }
                         modRoot.AppendChild(modDatas);
@@ -1630,7 +1641,10 @@ namespace RelhaxModpack
                     {
                         XmlElement userData = doc.CreateElement("userData");
                         userData.InnerText = us.Pattern.Trim();
-                        userData.SetAttribute("before", "" + us.placeBeforeExtraction);
+                        if (us.placeBeforeExtraction)
+                            userData.SetAttribute("pre", "" + us.placeBeforeExtraction);
+                        if (us.systemInitiated)
+                            userData.SetAttribute("system", "" + us.systemInitiated);
                         configDatas.AppendChild(userData);
                     }
                     configRoot.AppendChild(configDatas);

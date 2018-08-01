@@ -1643,7 +1643,8 @@ namespace RelhaxModpack
             UserFiles uf = new UserFiles
             {
                 Pattern = ObjectUserdatasTB.Text,
-                placeBeforeExtraction = placeBeforeExtractionCheckBox.Checked
+                placeBeforeExtraction = placeBeforeExtractionCheckBox.Checked,
+                systemInitiated = SystemInitiatedCB.Checked
             };
             SelectedDatabaseObject.UserFiles.Add(uf);
             ObjectUserdatasList.DataSource = null;
@@ -1665,6 +1666,7 @@ namespace RelhaxModpack
             int index = SelectedDatabaseObject.UserFiles.IndexOf((UserFiles)ObjectUserdatasList.SelectedItem);
             SelectedDatabaseObject.UserFiles[index].Pattern = ObjectUserdatasTB.Text;
             SelectedDatabaseObject.UserFiles[index].placeBeforeExtraction = placeBeforeExtractionCheckBox.Checked;
+            SelectedDatabaseObject.UserFiles[index].systemInitiated = SystemInitiatedCB.Checked;
             ObjectUserdatasList.DataSource = null;
             ObjectUserdatasList.Items.Clear();
             ObjectUserdatasList.DataSource = SelectedDatabaseObject.UserFiles;
@@ -1693,6 +1695,7 @@ namespace RelhaxModpack
             if (lb.DataSource == null)
             {
                 placeBeforeExtractionCheckBox.Checked = false;
+                SystemInitiatedCB.Checked = false;
                 return;
             }
             foreach (UserFiles uf in SelectedDatabaseObject.UserFiles)
@@ -1701,6 +1704,7 @@ namespace RelhaxModpack
                 {
                     ObjectUserdatasTB.Text = uf.Pattern;
                     placeBeforeExtractionCheckBox.Checked = uf.placeBeforeExtraction;
+                    SystemInitiatedCB.Checked = uf.systemInitiated;
                     break;
                 }
             }
@@ -2055,7 +2059,8 @@ namespace RelhaxModpack
                 int pos = med.URL.IndexOf(r, StringComparison.OrdinalIgnoreCase);
                 if (pos >= 0)
                 {
-                    System.Diagnostics.Process.Start(med.URL.Substring(pos));
+                    // System.Diagnostics.Process.Start(med.URL.Substring(pos));
+                    Utils.CallBrowser(med.URL.Substring(pos));
                 }
             }
         }
