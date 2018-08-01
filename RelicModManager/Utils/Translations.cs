@@ -1899,12 +1899,19 @@ namespace RelhaxModpack
             polish.Add("backupModFile", "Stwórz kopię zapasową pliku modyfikacji");
             french.Add("backupModFile", "Sauvegarde du fichier mod");
 
-            //Componet: backupUserdatas
+            //Componet: backupUserDatas
             //
-            english.Add("backupUserdatas", "Backing up user data");
-            german.Add("backupUserdatas", "Benutzerdaten sichern");
-            polish.Add("backupUserdatas", "Stwórz kopię zapasową danych użytkownika");
-            french.Add("backupUserdatas", "Sauvegarde des données utilisateur");
+            english.Add("backupUserDatas", "Backing up user data");
+            german.Add("backupUserDatas", "Benutzerdaten sichern");
+            polish.Add("backupUserDatas", "Stwórz kopię zapasową danych użytkownika");
+            french.Add("backupUserDatas", "Sauvegarde des données utilisateur");
+
+            //Componet: backupSystemDatas
+            //
+            english.Add("backupSystemDatas",  "Backing up mod related data");
+            german.Add("backupSystemDatas", TranslationNeeded);
+            polish.Add("backupSystemDatas", TranslationNeeded);
+            french.Add("backupSystemDatas", TranslationNeeded);
 
             //Componet: deletingFiles
             //
@@ -1935,7 +1942,15 @@ namespace RelhaxModpack
             polish.Add("restoringUserData", "Przywracanie danych użytkownika");
             french.Add("restoringUserData", "Restoration des données utilisateur");
 
-            //Component restoringUserData before (function moveFileEx)
+            //Componet: restoringSystemData
+            //
+            english.Add("restoringSystemData", "Restoring Mod-files");
+            german.Add("restoringSystemData", "Mod-Dateien wiederherstellen");
+            polish.Add("restoringSystemData", TranslationNeeded);
+            french.Add("restoringSystemData", TranslationNeeded);
+
+
+            //Component restoringData before (function moveFileEx)
             //
             english.Add("writingInstallationLogfile", "writing {0} files to installation-logfile ...");
             german.Add("writingInstallationLogfile", "schreibe {0} Dateieinträge in die Installations-Logdatei ...");
