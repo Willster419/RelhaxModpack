@@ -242,15 +242,20 @@ namespace RelhaxModpack
             else
                 Logging.Manager("... skipped");
             ResetArgs();
-            //Step 2: do a backup of user data
+            //Step 2: do a backup of system data
+            Logging.Manager("Installation BackupSystemData");
+            args.InstalProgress = InstallerEventArgs.InstallProgress.BackupSystemData;
+            BackupData(true);
+            ResetArgs();
+            //Step 3: do a backup of user data
             Logging.Manager("Installation BackupUserData");
             args.InstalProgress = InstallerEventArgs.InstallProgress.BackupUserData;
             if (Settings.SaveUserData)
-                BackupUserData();
+                BackupData();
             else
                 Logging.Manager("... skipped");
             ResetArgs();
-            //Step 3: Delete Mods
+            //Step 4: Delete Mods
             Logging.Manager("Installation UninstallMods");
             args.InstalProgress = InstallerEventArgs.InstallProgress.DeleteMods;
             if (Settings.CleanInstallation)
@@ -313,28 +318,42 @@ namespace RelhaxModpack
             else
                 Logging.Manager("... skipped");
             ResetArgs();
+            //Step 6: restore SystemData BEFORE extraction will be started
+            Logging.Manager("Installation RestoreSystemDataBefore (directory manner)");
+            args.InstalProgress = InstallerEventArgs.InstallProgress.RestoreSystemDataBefore;
+            RestoreData(true, true);
+            ResetArgs();
+            //Step 7: restore UserData BEFORE extraction will be started
+            Logging.Manager("Installation RestoreUserDataBefore (directory manner)");
+            args.InstalProgress = InstallerEventArgs.InstallProgress.RestoreUserDataBefore;
+            if (Settings.SaveUserData)
+                RestoreData(true);
+            else
+                Logging.Manager("... skipped");
+            ResetArgs();
+            //Step 8-13: Extract packages
             beforeExtraction = installTimer.ElapsedMilliseconds;
             Logging.Manager("Recorded Install time before extraction (msec): " + beforeExtraction);
-            //Step 5.5: restore UserData BEFORE extraction will be started
-            Logging.Manager("Installation RestoreUserData (directory manner)");
-            args.InstalProgress = InstallerEventArgs.InstallProgress.RestoreUserDataBefore;
-            RestoreUserData(true);
-            //Step 6-10: Extract packages
             Logging.Manager("Installation ExtractDatabaseObjects");
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractGlobalDependencies;
             ExtractDatabaseObjects();
             ResetArgs();
             duringExtraction = installTimer.ElapsedMilliseconds - beforeExtraction;
             Logging.Manager("Recorded Install time during extraction (msec): " + duringExtraction);
-            //Step 11: Restore User Data
+            //Step 14: Restore System Data
+            Logging.Manager("Installation RestoreSystemData");
+            args.InstalProgress = InstallerEventArgs.InstallProgress.RestoreSystemData;
+            RestoreData(false, true);
+            ResetArgs();
+            //Step 15: Restore User Data
             Logging.Manager("Installation RestoreUserData");
             args.InstalProgress = InstallerEventArgs.InstallProgress.RestoreUserData;
             if (Settings.SaveUserData)
-                RestoreUserData(false);
+                RestoreData(false);
             else
                 Logging.Manager("... skipped");
             ResetArgs();
-            //Step 12: unpack original game xml file
+            //Step 16: unpack original game xml file
             Logging.Manager("Installation UnpackXmlFiles");
             args.InstalProgress = InstallerEventArgs.InstallProgress.UnpackXmlFiles;
             if (Directory.Exists(Path.Combine(TanksLocation, "_xmlUnPack")))
@@ -344,7 +363,7 @@ namespace RelhaxModpack
             else
                 Logging.Manager("... skipped");
             ResetArgs();
-            //Step 13: Extract User Mods
+            //Step 19: Extract User Mods
             Logging.Manager("Installation ExtractUserMods");
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractUserMods;
             if (UserMods.Count > 0)
@@ -352,7 +371,7 @@ namespace RelhaxModpack
             else
                 Logging.Manager("... skipped");
             ResetArgs();
-            //Step 14: Patch Mods
+            //Step 20: Patch Mods
             Logging.Manager("Installation PatchMods (previously patchUserMods)");
             args.InstalProgress = InstallerEventArgs.InstallProgress.PatchUserMods;
             if (Directory.Exists(Path.Combine(TanksLocation, "_patch")))
@@ -360,7 +379,7 @@ namespace RelhaxModpack
             else
                 Logging.Manager("... skipped");
             ResetArgs();
-            //Step 15: Parse and create Atlases
+            //Step 21: Parse and create Atlases
             Logging.Manager("Installation ExtractAtlases");
             args.InstalProgress = InstallerEventArgs.InstallProgress.ExtractAtlases;
             if (Directory.Exists(Path.Combine(TanksLocation, "_atlases")))
@@ -370,7 +389,7 @@ namespace RelhaxModpack
             else
                 Logging.Manager("... skipped");
             ResetArgs();
-            //Step 16: Install Fonts
+            //Step 23: Install Fonts
             Logging.Manager("Installation UserFonts");
             args.InstalProgress = InstallerEventArgs.InstallProgress.InstallUserFonts;
             if (Directory.Exists(Path.Combine(TanksLocation, "_fonts")))
@@ -378,7 +397,7 @@ namespace RelhaxModpack
             else
                 Logging.Manager("... skipped");
             ResetArgs();
-            //Step 17: create shortCuts
+            //Step 24: create shortCuts
             Logging.Manager("Installation CreateShortscuts");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CreateShortcuts;
             if (Settings.CreateShortcuts)
@@ -386,7 +405,7 @@ namespace RelhaxModpack
             else
                 Logging.Manager("... skipped");
             ResetArgs();
-            //Step 18: CheckDatabase and delete outdated or no more needed files
+            //Step 25: CheckDatabase and delete outdated or no more needed files
             Logging.Manager("Installation CheckDatabase");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CheckDatabase;
             if ((!Program.testMode) && (!Settings.BetaDatabase) && (Program.Version != Program.ProgramVersion.Alpha))
@@ -394,7 +413,7 @@ namespace RelhaxModpack
             else
                 Logging.Manager("... skipped");
             ResetArgs();
-            //Step 19: Cleanup
+            //Step 26: Cleanup
             Logging.Manager("Intallation CleanUp");
             args.InstalProgress = InstallerEventArgs.InstallProgress.CleanUp;
             if(!Settings.ExportMode)
@@ -463,8 +482,8 @@ namespace RelhaxModpack
             }
         }
 
-        //Step 2: Backup User Data
-        public void BackupUserData()
+        //Step 2: Backup Data
+        public void BackupData(bool systemCall = false)
         {
             try
             {
@@ -481,6 +500,8 @@ namespace RelhaxModpack
                         {
                             try
                             {
+                                string tempStorageFolder = Path.Combine(Settings.RelhaxTempFolder, Utils.GetValidFilename(dbo.PackageName + "__" + c++));
+                                if ((systemCall && !us.systemInitiated) || (!systemCall && us.systemInitiated)) continue;
                                 string correctedPath = us.Pattern.TrimStart('\x005c').Replace(@"\\", @"\");
                                 string folderPath = "";
                                 if (correctedPath[0].Equals("{"))
@@ -493,8 +514,6 @@ namespace RelhaxModpack
                                     correctedPath = Utils.ReplaceMacro(correctedPath);
                                     folderPath = Path.Combine(TanksLocation, Path.GetDirectoryName(correctedPath));
                                 }
-                                string tempStorageFolder = Path.Combine(Settings.RelhaxTempFolder, Utils.GetValidFilename(dbo.PackageName + "__" + c));
-                                c++;
                                 if (!Directory.Exists(folderPath)) continue;
                                 string[] fileList = Directory.GetFiles(folderPath, Path.GetFileName(correctedPath));   // use the GetFileName(correctedPath) as a search pattern, to only get wanted files
                                 args.ChildProcessed = 0;
@@ -526,19 +545,19 @@ namespace RelhaxModpack
                             }
                             catch (Exception exStartLoc)
                             {
-                                Utils.ExceptionLog("BackupUserData", "exStartLoc", exStartLoc);
+                                Utils.ExceptionLog("BackupData", "exStartLoc", exStartLoc);
                             }
                         }
                     }
                     catch (Exception exS)
                     {
-                        Utils.ExceptionLog("BackupUserData", "s", exS);
+                        Utils.ExceptionLog("BackupData", "s", exS);
                     }
                 }
             }
             catch (Exception exDbo)
             {
-                Utils.ExceptionLog("BackupUserData", "dbo", exDbo);
+                Utils.ExceptionLog("BackupData", "dbo", exDbo);
             }
         }
 
@@ -1207,12 +1226,12 @@ namespace RelhaxModpack
             }
         }
 
-        //Step 11: Restore User Data
-        public void RestoreUserData(bool beforeExtraction)
+        //Step 11: Restore Data
+        public void RestoreData(bool beforeExtraction = false, bool systemCall = false)
         {
             try
             {
-                Logging.InstallerGroup("RestoreUserData" + (beforeExtraction ? "Before" : ""));
+                Logging.InstallerGroup("RestoreData" + (beforeExtraction ? "_Before" : "") + (systemCall ? "_System" : ""));
                 args.ParrentTotalToProcess = ModsConfigsWithData.Count;
                 args.ParrentProcessed = 0;
                 foreach (SelectablePackage dbo in ModsConfigsWithData)
@@ -1225,8 +1244,9 @@ namespace RelhaxModpack
                         {
                             try {
                                 string tempStorageFolder = Path.Combine(Settings.RelhaxTempFolder, Utils.GetValidFilename(dbo.PackageName + "__" + c++));
+                                // if ((systemCall && !us.systemInitiated) || (!systemCall && us.systemInitiated)) continue;
                                 // if beforeExtraction flag is set and filerestore should not be done before extracting, go on with the next entry
-                                if (beforeExtraction && !us.placeBeforeExtraction)
+                                if ((beforeExtraction && !us.placeBeforeExtraction) || (systemCall && !us.systemInitiated) || (!systemCall && us.systemInitiated))
                                 {
                                     // do nothing this round
                                 }
@@ -1278,7 +1298,7 @@ namespace RelhaxModpack
                                             if (NativeMethods.MoveFileEx(Utils.AddTrailingBackslashChar(@"\\?\" + tempStorageFolder), Utils.AddTrailingBackslashChar(@"\\?\" + targetDir), true))
                                             {
                                                 Logging.Installer(Utils.AddTrailingBackslashChar(targetDir));
-                                                Logging.Manager(string.Format("RestoredUserData: {0} files ({1})", fileList.Length, correctedUserFiles));
+                                                Logging.Manager(string.Format("RestoredData: {0} files ({1})", fileList.Length, correctedUserFiles));
                                                 ReportProgressToInstallWorker(0);
                                                 foreach (string ss in fileList)
                                                 {
@@ -1289,7 +1309,7 @@ namespace RelhaxModpack
                                             }
                                             else
                                             {
-                                                Logging.Manager(string.Format("fail at RestoredUserData: {0} ({1})", correctedUserFiles, NativeMethods.GetLastError()));
+                                                Logging.Manager(string.Format("fail at RestoredData: {0} ({1})", correctedUserFiles, NativeMethods.GetLastError()));
                                             }
                                         }
                                         //if no results, go on with the next entry
@@ -1308,15 +1328,15 @@ namespace RelhaxModpack
                                                     File.Move(Path.Combine(tempStorageFolder, Path.GetFileName(ss)), targetFilename); 
                                                     Logging.Installer(targetFilename);
                                                     // do not log single files if count is 5 or higher 
-                                                    if (fileList.Length < 20) Logging.Manager(string.Format("RestoredUserData: {0}", targetFilename));
+                                                    if (fileList.Length < 20) Logging.Manager(string.Format("RestoredData: {0}", targetFilename));
                                                 }
                                                 catch (Exception p)
                                                 {
-                                                    Utils.ExceptionLog("RestoreUserData", "p\n" + ss, p);
+                                                    Utils.ExceptionLog("RestoreData", "p\n" + ss, p);
                                                 }
                                             }
                                             // log proceeded sum of files if count is 20 or higher
-                                            if (!(fileList.Length < 20)) Logging.Manager(string.Format("RestoredUserData: {0} files ({1})", args.ChildProcessed, correctedUserFiles));
+                                            if (!(fileList.Length < 20)) Logging.Manager(string.Format("RestoredData: {0} files ({1})", args.ChildProcessed, correctedUserFiles));
                                             DirectoryDelete(tempStorageFolder, false);
                                         }
                                     }
@@ -1326,7 +1346,7 @@ namespace RelhaxModpack
                             }
                             catch (Exception fl)
                             {
-                                Utils.ExceptionLog("RestoreUserData", "fl", fl);
+                                Utils.ExceptionLog("RestoreData", "fl", fl);
                             }
                         }
                         args.ParrentProcessed++;
@@ -1334,13 +1354,13 @@ namespace RelhaxModpack
                     }
                     catch (Exception uf)
                     {
-                        Utils.ExceptionLog("RestoreUserData", "uf", uf);
+                        Utils.ExceptionLog("RestoreData", "uf", uf);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Utils.ExceptionLog("RestoreUserData", "ex", ex);
+                Utils.ExceptionLog("RestoreData", "ex", ex);
             }
         }
 

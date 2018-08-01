@@ -1901,8 +1901,15 @@ namespace RelhaxModpack
                         childProgressBar.Value = e.ChildProcessed;
                     totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.BackupMods;
                     parrentProgressBar.Value = 0;
-                    // message = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("backupModFile"), e.ChildProcessed, Translations.GetTranslatedString("of"), e.ChildTotalToProcess);
                     message = string.Format("{0} {1}", Translations.GetTranslatedString("backupModFile"), e.ChildProcessed);
+                    break;
+                case InstallerEventArgs.InstallProgress.BackupSystemData:
+                    childProgressBar.Maximum = e.ChildTotalToProcess;
+                    if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
+                        childProgressBar.Value = e.ChildProcessed;
+                    totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.BackupSystemData;
+                    parrentProgressBar.Value = 0;
+                    message = string.Format("{0} {1} {2} {3}\n{4} {5} {6} {7}", Translations.GetTranslatedString("backupSystemDatas"), e.ParrentProcessed, Translations.GetTranslatedString("of"), e.ParrentTotalToProcess, Translations.GetTranslatedString("file"), e.ChildProcessed, Translations.GetTranslatedString("of"), e.ChildTotalToProcess);
                     break;
                 case InstallerEventArgs.InstallProgress.BackupUserData:
                     childProgressBar.Maximum = e.ChildTotalToProcess;
@@ -1910,7 +1917,7 @@ namespace RelhaxModpack
                         childProgressBar.Value = e.ChildProcessed;
                     totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.BackupUserData;
                     parrentProgressBar.Value = 0;
-                    message = string.Format("{0} {1} {2} {3}\n{4} {5} {6} {7}", Translations.GetTranslatedString("backupUserdatas"), e.ParrentProcessed, Translations.GetTranslatedString("of"), e.ParrentTotalToProcess, Translations.GetTranslatedString("file"), e.ChildProcessed, Translations.GetTranslatedString("of"), e.ChildTotalToProcess);
+                    message = string.Format("{0} {1} {2} {3}\n{4} {5} {6} {7}", Translations.GetTranslatedString("backupUserDatas"), e.ParrentProcessed, Translations.GetTranslatedString("of"), e.ParrentTotalToProcess, Translations.GetTranslatedString("file"), e.ChildProcessed, Translations.GetTranslatedString("of"), e.ChildTotalToProcess);
                     break;
                 case InstallerEventArgs.InstallProgress.DeleteMods:
                     childProgressBar.Maximum = e.ChildTotalToProcess;
@@ -1933,6 +1940,14 @@ namespace RelhaxModpack
                     childProgressBar.Value = 0;
                     parrentProgressBar.Value = 0;
                     message = Translations.GetTranslatedString("deletingWOTCache") + " ";
+                    break;
+                case InstallerEventArgs.InstallProgress.RestoreSystemDataBefore:
+                    totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.RestoreSystemDataBefore;
+                    parrentProgressBar.Value = 0;
+                    childProgressBar.Maximum = e.ChildTotalToProcess;
+                    if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
+                        childProgressBar.Value = e.ChildProcessed;
+                    message = string.Format(Translations.GetTranslatedString("writingInstallationLogfile"), e.ChildTotalToProcess);
                     break;
                 case InstallerEventArgs.InstallProgress.RestoreUserDataBefore:
                     totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.RestoreUserDataBefore;
@@ -1968,13 +1983,21 @@ namespace RelhaxModpack
                         e.currentFile, Math.Round(e.currentFileSizeProcessed / MBDivisor, 2).ToString() });
                     }
                     break;
+                case InstallerEventArgs.InstallProgress.RestoreSystemData:
+                    totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.RestoreSystemData;
+                    parrentProgressBar.Value = 0;
+                    childProgressBar.Maximum = e.ChildTotalToProcess;
+                    if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
+                        childProgressBar.Value = e.ChildProcessed;
+                    message = string.Format("{0} {1} {2} {3}\n{4} {5} {6} {7}", Translations.GetTranslatedString("restoringSystemData"), e.ParrentProcessed, Translations.GetTranslatedString("of"), e.ParrentTotalToProcess, Translations.GetTranslatedString("file"), e.ChildProcessed, Translations.GetTranslatedString("of"), e.ChildTotalToProcess);
+                    break;
                 case InstallerEventArgs.InstallProgress.RestoreUserData:
                     totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.RestoreUserData;
                     parrentProgressBar.Value = 0;
                     childProgressBar.Maximum = e.ChildTotalToProcess;
                     if ((childProgressBar.Minimum <= e.ChildProcessed) && (e.ChildProcessed <= childProgressBar.Maximum))
                         childProgressBar.Value = e.ChildProcessed;
-                    message = string.Format("{0} {1} {2} {3}\n{4} {5} {6} {7}", Translations.GetTranslatedString("restoringUserData"), e.ChildProcessed, Translations.GetTranslatedString("of"), e.ChildTotalToProcess, Translations.GetTranslatedString("file"), e.ChildProcessed, Translations.GetTranslatedString("of"), e.ChildTotalToProcess);
+                    message = string.Format("{0} {1} {2} {3}\n{4} {5} {6} {7}", Translations.GetTranslatedString("restoringUserData"), e.ParrentProcessed, Translations.GetTranslatedString("of"), e.ParrentTotalToProcess, Translations.GetTranslatedString("file"), e.ChildProcessed, Translations.GetTranslatedString("of"), e.ChildTotalToProcess);
                     break;
                 case InstallerEventArgs.InstallProgress.UnpackXmlFiles:
                     totalProgressBar.Value = (int)InstallerEventArgs.InstallProgress.UnpackXmlFiles;
@@ -3091,38 +3114,45 @@ namespace RelhaxModpack
 
             // Logging.Manager("language: " + CultureInfo.CurrentUICulture.Name);
             // Logging.Manager("TwoLetterISOLanguageName: " + CultureInfo.CurrentUICulture.TwoLetterISOLanguageName);            
-            System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2");
+            // System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2");
+            Utils.CallBrowser("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2");
             // https://www.paypal.com/paypalme/grab?country.x=IN&locale.x=en_IN
         }
 
         private void FindBugAddModLabel_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("http://forums.relhaxmodpack.com/");
+            // System.Diagnostics.Process.Start("http://forums.relhaxmodpack.com/");
+            Utils.CallBrowser("http://forums.relhaxmodpack.com/");
         }
 
         private void DiscordServerLink_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("https://discord.gg/58fdPvK");
+            // System.Diagnostics.Process.Start("https://discord.gg/58fdPvK");
+            Utils.CallBrowser("https://discord.gg/58fdPvK");
         }
         //when the "visit form page" link is clicked. the link clicked handler
         private void FormPageNALink_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
+            // System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
+            Utils.CallBrowser("http://forum.worldoftanks.com/index.php?/topic/535868-");
         }
 
         private void FormPageEULink_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/623269-");
+            // System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/623269-");
+            Utils.CallBrowser("http://forum.worldoftanks.eu/index.php?/topic/623269-");
         }
 
         private void FormPageEUGERLink_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/624499-");
+            // System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/624499-");
+            Utils.CallBrowser("http://forum.worldoftanks.eu/index.php?/topic/624499-");
         }
 
         private void VisitWebsiteLink_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("https://relhaxmodpack.com/");
+            // System.Diagnostics.Process.Start("https://relhaxmodpack.com/");
+            Utils.CallBrowser("https://relhaxmodpack.com/");
         }
 
         private void SendEmailLink_Click(object sender, EventArgs e)
@@ -3132,12 +3162,14 @@ namespace RelhaxModpack
 
         private void ViewTwitterLink_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("https://twitter.com/relhaxmodpack");
+            // System.Diagnostics.Process.Start("https://twitter.com/relhaxmodpack");
+            Utils.CallBrowser("https://twitter.com/relhaxmodpack");
         }
 
         private void ViewFacebookLink_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("https://www.facebook.com/Relhax-Modpack-187224775238379/");
+            // System.Diagnostics.Process.Start("https://www.facebook.com/Relhax-Modpack-187224775238379/");
+            Utils.CallBrowser("https://www.facebook.com/Relhax-Modpack-187224775238379/");
         }
         #endregion
 
