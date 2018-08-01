@@ -1435,17 +1435,20 @@ namespace RelhaxModpack
         }
         private void EUGERFormusLinksBUtton_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/624499-");
+            // System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/624499-");
+            Utils.CallBrowser("http://forum.worldoftanks.eu/index.php?/topic/624499-");
         }
 
         private void EUENGFormsLinkButton_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/623269-");
+            // System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/623269-");
+            Utils.CallBrowser("http://forum.worldoftanks.eu/index.php?/topic/624499-");
         }
 
         private void NAForumsLinkButton_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
+            // System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
+            Utils.CallBrowser("http://forum.worldoftanks.com/index.php?/topic/535868-");
         }
         #endregion  
     }
