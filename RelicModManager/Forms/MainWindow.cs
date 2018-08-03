@@ -129,6 +129,7 @@ namespace RelhaxModpack
         {
             using (BackgroundWorker worker = new BackgroundWorker())
             {
+                worker.WorkerSupportsCancellation = true;
                 worker.DoWork += ScanRelHaxModBackupFolder;
                 worker.RunWorkerCompleted += OnModBackupFolderCompleted;
                 worker.RunWorkerAsync();
@@ -473,14 +474,14 @@ namespace RelhaxModpack
                 Settings.DatabaseVersion = doc.XPathSelectElement("//version/database").Value;
                 DatabaseVersionLabel.Text = Translations.GetTranslatedString("DatabaseVersionLabel") + " v" + Settings.DatabaseVersion;
 
-                string version = "";
                 bool startUpdate = false;
                 bool tempManagerVersionStable = false;
                 bool tempManagerVersionBeta = false;
                 //parse the manager version
                 string onlineManager = doc.XPathSelectElement("//version/manager_v2").Value;
                 string onlineManagerBeta = doc.XPathSelectElement("//version/manager_beta_v2").Value;
-                
+                string version = onlineManager + " (stable)";
+
                 // check if current alpha version number is valid. Only valid is the alpha version number is higher then stable and beta version
                 if (Program.Version == Program.ProgramVersion.Alpha)
                 {
@@ -512,8 +513,8 @@ namespace RelhaxModpack
                 if (Program.Version == Program.ProgramVersion.Beta && !Settings.BetaApplication)
                 {
                     version = onlineManager + " (stable)";
-                    startUpdate = true;
                     tempManagerVersionStable = true;
+                    startUpdate = true;
                 }
                 // check if current beta version is still higher then onlineManager (not beta) version. that means is "updat-to-date"
                 else if ((Program.Version == Program.ProgramVersion.Beta || Settings.BetaApplication) && Utils.CompareVersions(onlineManager, onlineManagerBeta) == -1)
@@ -534,7 +535,7 @@ namespace RelhaxModpack
                     }
                 }
                 // check if online beta version is outdated and online stable version (not beta) must be used (beta and stable version with same version number = beta is outdated)
-                else if ((Program.Version == Program.ProgramVersion.Beta || Settings.BetaApplication) && Utils.CompareVersions(onlineManager, onlineManagerBeta) != -1)
+                else if (Program.Version == Program.ProgramVersion.Beta && Utils.CompareVersions(onlineManager, onlineManagerBeta) != -1)
                 {
                     // beta is outdated and current stable must be used
                     version = onlineManager + " (stable)";
