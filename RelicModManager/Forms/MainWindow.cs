@@ -996,6 +996,9 @@ namespace RelhaxModpack
                     Program.autoInstall = false;
                 }
             }
+            //apply text labels and custom command line properties
+            ApplyVersionTextLabels();
+
             //check if it can still load in autoInstall config mode
             if (Program.autoInstall)
             {
@@ -1004,9 +1007,6 @@ namespace RelhaxModpack
                 this.InstallRelhaxMod_Click(null, null);
                 return;
             }
-
-            //apply text labels and custom command line properties
-            ApplyVersionTextLabels();
 
             //scan Backupfolder and show it on MainForm
             // if (Program.testMode)
