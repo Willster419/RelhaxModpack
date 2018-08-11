@@ -1739,7 +1739,7 @@ namespace RelhaxModpack
                         // get the right imageHandler for this atlas
                         foreach (var exporter in AtlasesCreator.Handlers.MapExporters)
                         {
-                            if (exporter.MapType.Equals(a.mapType))
+                            if (exporter.MapType.Equals(a.MapType))
                             {
                                 a.mapExporter = exporter;
                                 a.MapFile = Path.GetFileNameWithoutExtension(a.AtlasFile) + "." + a.mapExporter.MapExtension.ToLower();
@@ -1747,7 +1747,7 @@ namespace RelhaxModpack
                             }
                         }
 
-                        if (a.mapExporter == null && a.mapType != Atlas.MapType.None)
+                        if (a.mapExporter == null && a.MapType != Atlas.MapTypes.None)
                         {
                             Logging.Manager("Error: no mapExporter found for " + a.AtlasFile);
                             break;
@@ -1874,11 +1874,12 @@ namespace RelhaxModpack
                 mapExporter = a.mapExporter,
                 AtlasSaveDirectory = a.AtlasSaveDirectory,
                 GenerateMap = a.GenerateMap,
-                mapType = a.mapType,
+                MapType = a.MapType,
                 PowOf2 = a.PowOf2,
                 Square = a.Square,
                 FastImagePacker = a.FastImagePacker,
-                Padding = a.Padding
+                Padding = a.Padding,
+                AllowToAddNewPictures = a.AllowToAddNewPictures
             };
 
             // if the arguments in width and/or height of the atlases-creator-config-xml-file are 0 (or below) or not given, work with the original file dimensions to get working width and height
@@ -1914,7 +1915,7 @@ namespace RelhaxModpack
             //only pass in the same bitmaps
 
             //CHANGE THIS TO LIST OF TEXTURES WITH MODS
-            atlasesArgs.TextureList = ParseFilesForAtlasList(a.TextureList, fl.ToArray(), a.AtlasFile);
+            atlasesArgs.TextureList = ParseFilesForAtlasList(a.TextureList, fl.ToArray(), a.AtlasFile, a.AllowToAddNewPictures);
 
             AtlasesCreator.Program.Run(atlasesArgs);
             lock (lockerInstaller)
@@ -2374,11 +2375,11 @@ namespace RelhaxModpack
                                         atlases.GenerateMap = Utils.ParseBool(item.Value, atlases.GenerateMap == Atlas.State.True) ? Atlas.State.True : Atlas.State.False;
                                         break;
                                     case "mapType":
-                                        foreach (Atlas.MapType mt in Enum.GetValues(typeof(Atlas.MapType)))
+                                        foreach (Atlas.MapTypes mt in Enum.GetValues(typeof(Atlas.MapTypes)))
                                         {
-                                            if (item.Value.ToLower().Trim() == Atlas.MapTypeName(mt).ToLower() && mt != Atlas.MapType.None)
+                                            if (item.Value.ToLower().Trim() == Atlas.MapTypeName(mt).ToLower() && mt != Atlas.MapTypes.None)
                                             {
-                                                atlases.mapType = mt;
+                                                atlases.MapType = mt;
                                                 break;
                                             }
                                         }
@@ -2398,6 +2399,9 @@ namespace RelhaxModpack
                                             }
                                         }
                                         break;
+                                    case "allowToAddNewPictures":
+                                        atlases.AllowToAddNewPictures = Utils.ParseBool(item.Value, atlases.AllowToAddNewPictures);
+                                        break;
                                     default:
                                         Logging.Manager(string.Format("unexpected Item found. Name: {0}  Value: {1}", item.Name.ToString(), item.Value));
                                         break;
@@ -2415,7 +2419,7 @@ namespace RelhaxModpack
                         }
                         if (atlases.DirectoryInArchive.Equals("") || atlases.AtlasFile.Equals("") || atlases.AtlasSaveDirectory.Equals(""))
                         {
-                            Logging.Manager(string.Format("ERROR. {0}-Atlases file {1} is not valid and has empty (but important) nodes", Atlas.MapTypeName(atlases.mapType).ToLower(), atlases.ActualPatchName));
+                            Logging.Manager(string.Format("ERROR. {0}-Atlases file {1} is not valid and has empty (but important) nodes", Atlas.MapTypeName(atlases.MapType).ToLower(), atlases.ActualPatchName));
                             break;
                         }
                         bool duplicateFound = false;
@@ -2567,7 +2571,7 @@ namespace RelhaxModpack
             }
         }
 
-        private static List<Texture> ParseFilesForAtlasList(List<Texture> originalTextures, string[] foldersWithModTextures, string atlasName)
+        private static List<Texture> ParseFilesForAtlasList(List<Texture> originalTextures, string[] foldersWithModTextures, string atlasName, bool allowToAddNewPictures)
         {
             List<Texture> textureList = new List<Texture>(originalTextures);
             List<Texture> modTextures = new List<Texture>();
@@ -2637,7 +2641,7 @@ namespace RelhaxModpack
                     }
                 }
                 // if the image was not found, add it too the main list
-                if (!found)
+                if (!found && allowToAddNewPictures)
                     textureList.Add(modTextures[i]);
             }
 

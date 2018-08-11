@@ -37,9 +37,9 @@ namespace RelhaxModpack.AtlasesCreator
             get { return "txt"; }
         }
 
-        public Atlas.MapType MapType
+        public Atlas.MapTypes MapType
         {
-            get { return Atlas.MapType.TxtMap; }
+            get { return Atlas.MapTypes.TxtMap; }
         }
 
         public List<Texture> Load(string MapFile)

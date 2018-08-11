@@ -41,9 +41,9 @@ namespace RelhaxModpack.AtlasesCreator
             get { return "xml"; }
         }
 
-        public Atlas.MapType MapType
+        public Atlas.MapTypes MapType
         {
-            get { return Atlas.MapType.WGXmlMap; }
+            get { return Atlas.MapTypes.WGXmlMap; }
         }
 
         // parses a xmlAtlasesFile to the process queue

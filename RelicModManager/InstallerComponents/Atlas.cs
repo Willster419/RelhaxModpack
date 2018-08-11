@@ -45,15 +45,17 @@ namespace RelhaxModpack
         // generate map file
         public State GenerateMap { get; set; } = State.None;
         // map file type
-        public MapType mapType { get; set; } = MapType.None;
+        public MapTypes MapType { get; set; } = MapTypes.None;
         // maybe new fileName
         public List<string> ImageFolderList { get; set; } = new List<string>();
         //the list of textures in each atlas
         public List<Texture> TextureList { get; set; } = new List<Texture>();
+        // allow the folderparser to add new images to the atlas file
+        public bool AllowToAddNewPictures { get; set; } = false;
         //for the tostring thing
         public override string ToString()
         {
-            return string.Format("NativeProcessingFile: {0}\nActualPatchName: {1}\nPkg: {2}\nDirectoryInArchive: {3}\nAtlasFile: {4}\nStlasSaveDirectory: {5}\nSltas width: {6}\nSltas hight: {7}\nPadding: {8}\nPowOf2: {9}\nSquare: {10}\nFastImagePacker: {11}\nGenerateMap: {12}\nMapTypeName: {13}\nImageFolderList: {14}",
+            return string.Format("NativeProcessingFile: {0}\nActualPatchName: {1}\nPkg: {2}\nDirectoryInArchive: {3}\nAtlasFile: {4}\nStlasSaveDirectory: {5}\nSltas width: {6}\nSltas hight: {7}\nPadding: {8}\nPowOf2: {9}\nSquare: {10}\nFastImagePacker: {11}\nGenerateMap: {12}\nMapTypeName: {13}\nImageFolderList: {14}\nTexturelist: {15}\nAllowToAddNewPictures: {16}",
                 NativeProcessingFile.Equals("") ? "(empty)" : NativeProcessingFile,
                 ActualPatchName.Equals("") ? "(empty)" : ActualPatchName,
                 Pkg.Equals("") ? "(empty)" : Pkg,
@@ -67,11 +69,13 @@ namespace RelhaxModpack
                 Square == State.None ? "(empty)" : Square == State.True ? "True" : "False",
                 FastImagePacker ? "True" : "False",
                 GenerateMap == State.None ? "(empty)" : GenerateMap == State.True ? "True" : "False",
-                mapType == MapType.None ? "(none selected)" : MapTypeName(mapType),
-                ImageFolderList.Count == 0 ? "(empty)" : ImageFolderList.ToString());
+                MapType == MapTypes.None ? "(none selected)" : MapTypeName(MapType),
+                ImageFolderList.Count == 0 ? "(empty)" : ImageFolderList.ToString(),
+                TextureList.Count == 0 ? "(empty)" : TextureList.Count.ToString(),
+                AllowToAddNewPictures ? "True" : "False");
         }
 
-        public enum MapType
+        public enum MapTypes
         {
             None,
             WGXmlMap,
@@ -79,18 +83,18 @@ namespace RelhaxModpack
             TxtMap,
         }
 
-        public static string MapTypeName(MapType mt)
+        public static string MapTypeName(MapTypes mt)
         {
             switch (mt)
             {
-                case MapType.WGXmlMap:
+                case MapTypes.WGXmlMap:
                     return "WgXml";
-                case MapType.XmlMap:
+                case MapTypes.XmlMap:
                     return "Xml";
-                case MapType.TxtMap:
+                case MapTypes.TxtMap:
                     return "Txt";
                 default:
-                    return MapTypeName(MapType.WGXmlMap);
+                    return MapTypeName(MapTypes.WGXmlMap);
             }
         }
 

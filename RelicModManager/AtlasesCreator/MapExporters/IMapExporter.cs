@@ -42,7 +42,7 @@ namespace RelhaxModpack.AtlasesCreator
         /// <summary>
         /// Gets the MapType for the map file type.
         /// </summary>
-        Atlas.MapType MapType { get; }
+        Atlas.MapTypes MapType { get; }
 
         /// <summary>
         /// Saves the map of rectangles to a file.
