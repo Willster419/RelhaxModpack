@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Forms;
 
 namespace RelhaxModpack
 {
@@ -20,9 +21,23 @@ namespace RelhaxModpack
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Creates the instance of the MainWindow class
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void TheMainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            //create the notify icon
+            NotifyIcon relhaxIcon = new NotifyIcon()
+            {
+                Visible = true,
+                Icon = Properties.Resources.modpack_icon,
+                Text = Title
+            };
         }
     }
 }
