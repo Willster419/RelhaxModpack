@@ -120,6 +120,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Content Include="Resources\Licences\modpack_license_agrement.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -138,6 +139,36 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\loading.gif" />
+    <Resource Include="Resources\Images\loading_3rdguards.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\play_pause.png" />
+    <Resource Include="Resources\Images\stop2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\discord brand.png" />
+    <Resource Include="Resources\Images\donation.png" />
+    <Resource Include="Resources\Images\EMail.png" />
+    <Resource Include="Resources\Images\facebook brand.png" />
+    <Resource Include="Resources\Images\flag de.png" />
+    <Resource Include="Resources\Images\flag gb.png" />
+    <Resource Include="Resources\Images\flag us.png" />
+    <Resource Include="Resources\Images\Home.png" />
+    <Resource Include="Resources\Images\report.png" />
+    <Resource Include="Resources\Images\twitter brand.png" />
+    <Resource Include="Resources\Images\WoT brand light grey.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Licences\dds-reader.txt" />
+    <Resource Include="Resources\Licences\NAudio.txt" />
+    <Resource Include="Resources\Licences\SpriteSheetPacker.txt" />
+    <Resource Include="Resources\Licences\TeximpNet.txt" />
+    <Content Include="Resources\Libraries\DotNetZip.dll" />
+    <Content Include="Resources\Libraries\NAudio.dll" />
+    <Content Include="Resources\Libraries\Newtonsoft.Json.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
