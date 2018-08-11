@@ -28,6 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
@@ -112,7 +113,7 @@ namespace RelhaxModpack.AtlasesCreator
             using (StreamWriter writer = new StreamWriter(filename))
             {
                 writer.WriteLine("<root createdBy=\"Relhax ModPack Manager\" date=\"{0:yyyy-MM-dd HH:mm:ss.fff}\">", System.DateTime.Now);
-                foreach (var entry in map)
+                foreach (var entry in map.OrderBy(key => key.Key))
                 {
                     Rectangle r = entry.Value;
                     writer.WriteLine(string.Format("\t<SubTexture>"));

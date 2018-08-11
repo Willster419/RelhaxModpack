@@ -1879,7 +1879,7 @@ namespace RelhaxModpack
                 Square = a.Square,
                 FastImagePacker = a.FastImagePacker,
                 Padding = a.Padding,
-                AllowToAddNewPictures = a.AllowToAddNewPictures
+                AllowToAddAdditionalImages = a.AllowToAddAdditionalImages
             };
 
             // if the arguments in width and/or height of the atlases-creator-config-xml-file are 0 (or below) or not given, work with the original file dimensions to get working width and height
@@ -1915,7 +1915,7 @@ namespace RelhaxModpack
             //only pass in the same bitmaps
 
             //CHANGE THIS TO LIST OF TEXTURES WITH MODS
-            atlasesArgs.TextureList = ParseFilesForAtlasList(a.TextureList, fl.ToArray(), a.AtlasFile, a.AllowToAddNewPictures);
+            atlasesArgs.TextureList = ParseFilesForAtlasList(a.TextureList, fl.ToArray(), a.AtlasFile, a.AllowToAddAdditionalImages);
 
             AtlasesCreator.Program.Run(atlasesArgs);
             lock (lockerInstaller)
@@ -2399,8 +2399,8 @@ namespace RelhaxModpack
                                             }
                                         }
                                         break;
-                                    case "allowToAddNewPictures":
-                                        atlases.AllowToAddNewPictures = Utils.ParseBool(item.Value, atlases.AllowToAddNewPictures);
+                                    case "allowToAddAdditionalImages":
+                                        atlases.AllowToAddAdditionalImages = Utils.ParseBool(item.Value, atlases.AllowToAddAdditionalImages);
                                         break;
                                     default:
                                         Logging.Manager(string.Format("unexpected Item found. Name: {0}  Value: {1}", item.Name.ToString(), item.Value));

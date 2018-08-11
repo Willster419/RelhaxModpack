@@ -51,7 +51,7 @@ namespace RelhaxModpack
         //the list of textures in each atlas
         public List<Texture> TextureList { get; set; } = new List<Texture>();
         // allow the folderparser to add new images to the atlas file
-        public bool AllowToAddNewPictures { get; set; } = false;
+        public bool AllowToAddAdditionalImages { get; set; } = false;
         //for the tostring thing
         public override string ToString()
         {
@@ -72,7 +72,7 @@ namespace RelhaxModpack
                 MapType == MapTypes.None ? "(none selected)" : MapTypeName(MapType),
                 ImageFolderList.Count == 0 ? "(empty)" : ImageFolderList.ToString(),
                 TextureList.Count == 0 ? "(empty)" : TextureList.Count.ToString(),
-                AllowToAddNewPictures ? "True" : "False");
+                AllowToAddAdditionalImages ? "True" : "False");
         }
 
         public enum MapTypes
