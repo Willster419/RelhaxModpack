@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+/*
 namespace RelhaxModpack.AtlasesCreator
 {
 
@@ -147,4 +148,4 @@ namespace RelhaxModpack.AtlasesCreator
             }
         }
     }
-}
+}*/
