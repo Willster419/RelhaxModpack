@@ -26,16 +26,89 @@
         </Grid>
         <TabControl HorizontalAlignment="Stretch" Height="254" Margin="12,81,12,0" VerticalAlignment="Top">
             <TabItem Header="Selection View">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <RadioButton x:Name="SelectionDefault" Content="Default" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="EnableBordersCB" Content="Enable Borders" Grid.Column="0" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="EnableColorChangeCB" Content="Enable Color Change" Grid.Column="0" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top"/>
+                    <RadioButton x:Name="SelectionLegacy" Content="Legacy" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="EnableBordersLegacyCB" Content="Enable Borders" Grid.Column="1" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="EnableColorChangeLegacyCB" Content="Enable Color Change" Grid.Column="1" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top"/>
+                </Grid>
             </TabItem>
             <TabItem Header="Installation Settings">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <CheckBox Content="Clean installation (Recommended)" />
+                        <CheckBox Content="Clear log files"/>
+                        <CheckBox Content="Clear WoT cache data" />
+                        <CheckBox Content="Save user created data"/>
+                        <CheckBox Content="Create shortcuts"/>
+                        <CheckBox Content="Multicore extraction mode" />
+                        <CheckBox Content="Immediate extraction upon download" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        
+                    </StackPanel>
+                </Grid>
             </TabItem>
             <TabItem Header="Application Settings">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <CheckBox Content="Save mod selection of last installation" />
+                        <CheckBox Content="Inform if no new database available" />
+                        <CheckBox Content="Force manual game detection" />
+                        <CheckBox Content="Show advanced install complete window" />
+                        <CheckBox Content="Backup mods folder upon installation"/>
+                        <TextBlock Text="Backups: X - Total Size: Y MB" Margin="20,0,0,0" />
+                        <TextBlock Text="Preview Loading Image:" />
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton Content="Default" Margin="20,0,0,0"/>
+                            <RadioButton Content="3rdguards" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="Select theme:" />
+                        <StackPanel Orientation="Vertical" Margin="15,0,0,0">
+                            <RadioButton Content="Default" />
+                            <RadioButton Content="Dark" />
+                            <RadioButton Content="Custom...(TODO)" />
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
             </TabItem>
             <TabItem Header="Advanced Settings">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <CheckBox Content="Use beta database" />
+                        <CheckBox Content="User beta application" />
+                        <CheckBox Content="Use legacy update method" />
+                        <TextBlock Text="Uninstall mode:"/>
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton Content="Default" Margin="20,0,0,0"/>
+                            <RadioButton Content="Quick" Margin="5,0,0,0"/>
+                        </StackPanel>
+                        <CheckBox Content="Export mode" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+
+                    </StackPanel>
+                </Grid>
             </TabItem>
         </TabControl>
         <Grid HorizontalAlignment="Stretch" Height="38" Margin="10,529,10,0" VerticalAlignment="Top" >

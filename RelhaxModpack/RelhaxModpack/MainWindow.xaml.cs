@@ -32,12 +32,12 @@ namespace RelhaxModpack
         private void TheMainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             //create the notify icon
-            NotifyIcon relhaxIcon = new NotifyIcon()
+            /*NotifyIcon relhaxIcon = new NotifyIcon()
             {
                 Visible = true,
                 Icon = Properties.Resources.modpack_icon,
                 Text = Title
-            };
+            };*/
         }
     }
 }
