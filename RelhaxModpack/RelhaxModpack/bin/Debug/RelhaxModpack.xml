@@ -1,0 +1,234 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RelhaxModpack</name>
+    </assembly>
+    <members>
+        <member name="T:RelhaxModpack.CiInfo">
+            <summary>Info about the continuous integration server build that produced this binary.</summary> 
+        </member>
+        <member name="F:RelhaxModpack.CiInfo.BuildTag">
+            <summary>String of the build number and build date/time, and other useful info.</summary> 
+        </member>
+        <member name="T:RelhaxModpack.App">
+            <summary>
+            Interaction logic for App.xaml
+            </summary>
+            <summary>
+            App
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.App.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.App.Main">
+            <summary>
+            Application Entry Point.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.MainWindow">
+            <summary>
+            Interaction logic for MainWindow.xaml
+            </summary>
+            <summary>
+            MainWindow
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.MainWindow.#ctor">
+            <summary>
+            Creates the instance of the MainWindow class
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.MainWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.dds_reader">
+             <summary>
+               Looks up a localized string similar to                   GNU LESSER GENERAL PUBLIC LICENSE
+                                   Version 2.1, February 1999
+            
+             Copyright (C) 1991, 1999 Free Software Foundation, Inc.
+             51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+             Everyone is permitted to copy and distribute verbatim copies
+             of this license document, but changing it is not allowed.
+            
+            (This is the first released version of the Lesser GPL.  It also counts
+             as the successor of the GNU Library Public License, version 2, hence
+             the version numb [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.discord_brand">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.donation">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.DotNetZip">
+            <summary>
+              Looks up a localized resource of type System.Byte[].
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.EMail">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.facebook_brand">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.flag_de">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.flag_gb">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.flag_us">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.Home">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.loading">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.loading_3rdguards">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.modpack_icon">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.modpack_license_agrement">
+             <summary>
+               Looks up a localized string similar to                                  Apache License
+                                       Version 2.0, January 2004
+                                    http://www.apache.org/licenses/
+            
+               TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+            
+               1. Definitions.
+            
+                  &quot;License&quot; shall mean the terms and conditions for use, reproduction,
+                  and distribution as defined by Sections 1 through 9 of this document.
+            
+                  &quot;Licensor&quot; shall mean the copyright owner or entity authorized by
+                  the copyright owner that is [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.NAudio">
+            <summary>
+              Looks up a localized resource of type System.Byte[].
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.NAudio1">
+             <summary>
+               Looks up a localized string similar to Microsoft Public License (Ms-PL)
+            
+            This license governs use of the accompanying software. If you use the software, you accept this license. If you do not accept the license, do not use the software.
+            
+            1. Definitions
+            
+            The terms &quot;reproduce,&quot; &quot;reproduction,&quot; &quot;derivative works,&quot; and &quot;distribution&quot; have the same meaning here as under U.S. copyright law.
+            
+            A &quot;contribution&quot; is the original software, or any additions or changes to the software.
+            
+            A &quot;contributor&quot; is any person that distributes its contribution [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.Newtonsoft_Json">
+            <summary>
+              Looks up a localized resource of type System.Byte[].
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.play_pause">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.report">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.SpriteSheetPacker">
+             <summary>
+               Looks up a localized string similar to Copyright (c) 2009-2010 Nick Gravelyn (nick@gravelyn.com), Markus Ewald (cygon@nuclex.org)
+            
+            Permission is hereby granted, free of charge, to any person obtaining a 
+            copy of this software and associated documentation files (the &quot;Software&quot;), 
+            to deal in the Software without restriction, including without limitation 
+            the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+            and/or sell copies of the Software, and to permit persons to whom the Software 
+            is furnished to do so, subject to t [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.stop2">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.TeximpNet">
+             <summary>
+               Looks up a localized string similar to Copyright (c) 2016-2018 TeximpNet - Nicholas Woodfield
+             
+            Permission is hereby granted, free of charge, to any person obtaining a copy
+            of this software and associated documentation files (the &quot;Software&quot;), to deal
+            in the Software without restriction, including without limitation the rights
+            to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+            copies of the Software, and to permit persons to whom the Software is
+            furnished to do so, subject to the following conditions:
+            
+            The above co [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.twitter_brand">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.WoT_brand_light_grey">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+    </members>
+</doc>
