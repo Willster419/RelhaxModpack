@@ -24,9 +24,9 @@
             <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="2" Margin="2" Content="View News" x:Name="ViewNewsButton"/>
             <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Margin="2" Content="Diagnostic Utilities" x:Name="DiagnosticUtilitiesButton"/>
         </Grid>
-        <TabControl HorizontalAlignment="Stretch" Height="254" Margin="12,81,12,0" VerticalAlignment="Top">
-            <TabItem Header="Selection View">
-                <Grid Background="#FFE5E5E5">
+        <TabControl HorizontalAlignment="Stretch" Height="254" Margin="12,81,12,0" VerticalAlignment="Top" Background="#7FE5E5E5">
+            <TabItem Header="Selection View" Background="#7FE5E5E5">
+                <Grid Background="#7FE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -39,8 +39,8 @@
                     <CheckBox x:Name="EnableColorChangeLegacyCB" Content="Enable Color Change" Grid.Column="1" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Installation Settings">
-                <Grid Background="#FFE5E5E5">
+            <TabItem Header="Installation Settings" Background="#7FE5E5E5">
+                <Grid Background="#7FE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -55,12 +55,12 @@
                         <CheckBox Content="Immediate extraction upon download" />
                     </StackPanel>
                     <StackPanel Grid.Column="1">
-                        
+
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="Application Settings">
-                <Grid Background="#FFE5E5E5">
+            <TabItem Header="Application Settings" Background="#7FE5E5E5">
+                <Grid Background="#7FE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -88,8 +88,8 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="Advanced Settings">
-                <Grid Background="#FFE5E5E5">
+            <TabItem Header="Advanced Settings" Background="#7FE5E5E5">
+                <Grid Background="#7FE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
