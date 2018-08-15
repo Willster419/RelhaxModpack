@@ -97,6 +97,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Utils\CiInfo.cs" />
+    <Compile Include="Windows\AddPicturesZip.xaml.cs">
+      <DependentUpon>AddPicturesZip.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\DatabaseEditor.xaml.cs">
       <DependentUpon>DatabaseEditor.xaml</DependentUpon>
     </Compile>
@@ -127,6 +130,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Windows\AddPicturesZip.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\DatabaseEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
