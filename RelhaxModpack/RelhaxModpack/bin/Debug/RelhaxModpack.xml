@@ -23,6 +23,19 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.ModSelectionList">
+            <summary>
+            Interaction logic for ModSelectionList.xaml
+            </summary>
+            <summary>
+            ModSelectionList
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ModSelectionList.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.PatchTester">
             <summary>
             Interaction logic for PatchTester.xaml
@@ -32,6 +45,19 @@
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.PatchTester.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.SelectionViewer">
+            <summary>
+            Interaction logic for SelectionViewer.xaml
+            </summary>
+            <summary>
+            SelectionViewer
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.SelectionViewer.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>

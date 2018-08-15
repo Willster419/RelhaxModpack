@@ -100,8 +100,14 @@
     <Compile Include="Windows\DatabaseEditor.xaml.cs">
       <DependentUpon>DatabaseEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ModSelectionList.xaml.cs">
+      <DependentUpon>ModSelectionList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\PatchTester.xaml.cs">
       <DependentUpon>PatchTester.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\GenericWindow.xaml.cs">
+      <DependentUpon>GenericWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -119,7 +125,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\ModSelectionList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\PatchTester.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\GenericWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

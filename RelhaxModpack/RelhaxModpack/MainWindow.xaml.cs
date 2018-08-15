@@ -41,8 +41,10 @@ namespace RelhaxModpack
             };*/
             //DatabaseEditor edit = new DatabaseEditor();
             //edit.Show();
-            PatchTester pt = new PatchTester();
-            pt.Show();
+            //PatchTester pt = new PatchTester();
+            //pt.Show();
+            ModSelectionList mls = new ModSelectionList();
+            mls.Show();
         }
     }
 }

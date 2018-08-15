@@ -1,0 +1,36 @@
+﻿<Window x:Class="RelhaxModpack.Windows.ModSelectionList"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RelhaxModpack.Windows"
+        mc:Ignorable="d"
+        Title="ModSelectionList" Height="480" Width="820" MinHeight="480" MinWidth="820">
+    <Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Richt-Click an opton to see a preview window" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,26,0,0" TextWrapping="Wrap" Text="Installing to: " VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,42,0,0" TextWrapping="Wrap" Text="Installing as WoT version: " VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,58,0,0" TextWrapping="Wrap" Text="Window Size: " VerticalAlignment="Top"/>
+        <TabControl HorizontalAlignment="Stretch" Margin="10,80,10,60" VerticalAlignment="Stretch" >
+        </TabControl>
+        <Button Content="Collapse current tab" HorizontalAlignment="Right" Margin="0,10,140,0" VerticalAlignment="Top" Width="125" Height="35"/>
+        <Button Content="Expand current tab" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="125" Height="35"/>
+        <TextBlock HorizontalAlignment="Right" Margin="0,52,270,0" TextWrapping="Wrap" Text="Search for a mod..." VerticalAlignment="Top" Height="22" Width="251" TextAlignment="Right" Padding="3"/>
+        <ComboBox HorizontalAlignment="Right" Margin="0,52,10,0" VerticalAlignment="Top" Width="255"/>
+        <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="120" Height="45">
+            <TextBlock Text="Text that can take up to two lines" TextWrapping="Wrap" TextAlignment="Center"/>
+        </Button>
+        <Button HorizontalAlignment="Right" Margin="0,0,135,10" VerticalAlignment="Bottom" Width="120" Height="45">
+            <TextBlock Text="Text that can take up to two lines" TextWrapping="Wrap" TextAlignment="Center"/>
+        </Button>
+        <Button HorizontalAlignment="Right" Margin="0,0,260,10" VerticalAlignment="Bottom" Width="120" Height="45">
+            <TextBlock Text="Text that can take up to two lines" TextWrapping="Wrap" TextAlignment="Center"/>
+        </Button>
+        <Button HorizontalAlignment="Right" Margin="0,0,385,10" VerticalAlignment="Bottom" Width="120" Height="45">
+            <TextBlock Text="Text that can take up to two lines" TextWrapping="Wrap" TextAlignment="Center"/>
+        </Button>
+        <Button HorizontalAlignment="Right" Margin="0,0,510,10" VerticalAlignment="Bottom" Width="120" Height="45">
+            <TextBlock Text="Text that can take up to two lines" TextWrapping="Wrap" TextAlignment="Center"/>
+        </Button>
+    </Grid>
+</Window>
