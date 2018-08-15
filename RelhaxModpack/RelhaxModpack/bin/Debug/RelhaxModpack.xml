@@ -75,6 +75,19 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.Preview">
+            <summary>
+            Interaction logic for Preview.xaml
+            </summary>
+            <summary>
+            Preview
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.Preview.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.App">
             <summary>
             Interaction logic for App.xaml

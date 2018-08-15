@@ -112,6 +112,9 @@
     <Compile Include="Windows\GenericWindow.xaml.cs">
       <DependentUpon>GenericWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\Preview.xaml.cs">
+      <DependentUpon>Preview.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -141,6 +144,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\GenericWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\Preview.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

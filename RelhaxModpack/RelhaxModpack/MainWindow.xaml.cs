@@ -43,8 +43,10 @@ namespace RelhaxModpack
             //edit.Show();
             //PatchTester pt = new PatchTester();
             //pt.Show();
-            ModSelectionList mls = new ModSelectionList();
-            mls.Show();
+            //ModSelectionList mls = new ModSelectionList();
+            //mls.Show();
+            Preview p = new Preview();
+            p.Show();
         }
     }
 }
