@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="DatabaseEditor" Height="700" Width="1000" MinHeight="480" MinWidth="640">
+        Title="DatabaseEditor" Height="700" Width="1000" MinHeight="480" MinWidth="640" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="632*"/>

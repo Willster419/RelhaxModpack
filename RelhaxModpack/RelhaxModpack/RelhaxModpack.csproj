@@ -100,6 +100,9 @@
     <Compile Include="Windows\DatabaseEditor.xaml.cs">
       <DependentUpon>DatabaseEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\GenericYesNoWindow.xaml.cs">
+      <DependentUpon>GenericYesNoWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ModSelectionList.xaml.cs">
       <DependentUpon>ModSelectionList.xaml</DependentUpon>
     </Compile>
@@ -122,6 +125,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Windows\DatabaseEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\GenericYesNoWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

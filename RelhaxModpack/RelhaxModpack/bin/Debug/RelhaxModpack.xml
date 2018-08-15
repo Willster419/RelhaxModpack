@@ -23,6 +23,19 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.GenericYesNoWindow">
+            <summary>
+            Interaction logic for GenericYesNoWindow.xaml
+            </summary>
+            <summary>
+            GenericYesNoWindow
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.GenericYesNoWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.ModSelectionList">
             <summary>
             Interaction logic for ModSelectionList.xaml
