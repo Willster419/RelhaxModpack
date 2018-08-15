@@ -1,0 +1,21 @@
+﻿<Window x:Class="RelhaxModpack.Windows.DatabaseEditorAddMove"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RelhaxModpack.Windows"
+        mc:Ignorable="d"
+        Title="DatabaseEditorAddMove" Height="215" Width="300" 
+        MinHeight="215" MinWidth="300"
+        Icon="/RelhaxModpack;component/Resources/modpack_icon.ico">
+    <Grid>
+        <TextBlock HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Move or copy to..." VerticalAlignment="Top" TextAlignment="Center"/>
+        <TextBlock HorizontalAlignment="Stretch" Margin="10,31,10,0" TextWrapping="Wrap" Text="Category" VerticalAlignment="Top"/>
+        <ComboBox HorizontalAlignment="Stretch" Margin="10,47,10,0" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Stretch" Margin="10,88,10,0" TextWrapping="Wrap" Text="Above the package..." VerticalAlignment="Top"/>
+        <ComboBox HorizontalAlignment="Stretch" Margin="10,109,10,0" VerticalAlignment="Top" />
+        <CheckBox Content="Make new sublevel at package instead" HorizontalAlignment="Stretch" Margin="10,136,10,0" VerticalAlignment="Top"/>
+        <Button Content="Confirm" HorizontalAlignment="Right" Margin="0,156,10,0" VerticalAlignment="Top" Width="75"/>
+
+    </Grid>
+</Window>
