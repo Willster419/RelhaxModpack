@@ -10,6 +10,19 @@
         <member name="F:RelhaxModpack.CiInfo.BuildTag">
             <summary>String of the build number and build date/time, and other useful info.</summary> 
         </member>
+        <member name="T:RelhaxModpack.Windows.DatabaseEditor">
+            <summary>
+            Interaction logic for DatabaseEditor.xaml
+            </summary>
+            <summary>
+            DatabaseEditor
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.DatabaseEditor.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.App">
             <summary>
             Interaction logic for App.xaml
