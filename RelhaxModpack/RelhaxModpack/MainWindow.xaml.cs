@@ -39,8 +39,10 @@ namespace RelhaxModpack
                 Icon = Properties.Resources.modpack_icon,
                 Text = Title
             };*/
-            DatabaseEditor edit = new DatabaseEditor();
-            edit.Show();
+            //DatabaseEditor edit = new DatabaseEditor();
+            //edit.Show();
+            PatchTester pt = new PatchTester();
+            pt.Show();
         }
     }
 }

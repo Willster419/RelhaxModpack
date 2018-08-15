@@ -23,6 +23,19 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.PatchTester">
+            <summary>
+            Interaction logic for PatchTester.xaml
+            </summary>
+            <summary>
+            PatchTester
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.PatchTester.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.App">
             <summary>
             Interaction logic for App.xaml
