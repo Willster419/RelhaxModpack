@@ -109,6 +109,9 @@
     <Compile Include="Windows\DatabaseEditorDownload.xaml.cs">
       <DependentUpon>DatabaseEditorDownload.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\DatabaseUpdater.xaml.cs">
+      <DependentUpon>DatabaseUpdater.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\GenericYesNoWindow.xaml.cs">
       <DependentUpon>GenericYesNoWindow.xaml</DependentUpon>
     </Compile>
@@ -149,6 +152,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\DatabaseEditorDownload.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\DatabaseUpdater.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

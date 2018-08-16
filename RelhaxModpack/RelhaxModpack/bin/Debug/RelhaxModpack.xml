@@ -10,6 +10,19 @@
         <member name="F:RelhaxModpack.CiInfo.BuildTag">
             <summary>String of the build number and build date/time, and other useful info.</summary> 
         </member>
+        <member name="T:RelhaxModpack.Windows.AddPicturesZip">
+            <summary>
+            Interaction logic for AddPicturesZip.xaml
+            </summary>
+            <summary>
+            AddPicturesZip
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.AddPicturesZip.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.DatabaseEditor">
             <summary>
             Interaction logic for DatabaseEditor.xaml
@@ -19,6 +32,45 @@
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.DatabaseEditor.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.DatabaseEditorAddMove">
+            <summary>
+            Interaction logic for DatabaseEditorAddMove.xaml
+            </summary>
+            <summary>
+            DatabaseEditorAddMove
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.DatabaseEditorAddMove.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.DatabaseEditorDownload">
+            <summary>
+            Interaction logic for DatabaseEditorDownload.xaml
+            </summary>
+            <summary>
+            DatabaseEditorDownload
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.DatabaseEditorDownload.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.DatabaseUpdater">
+            <summary>
+            Interaction logic for DatabaseUpdater.xaml
+            </summary>
+            <summary>
+            DatabaseUpdater
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.DatabaseUpdater.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>

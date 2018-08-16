@@ -45,8 +45,10 @@ namespace RelhaxModpack
             //pt.Show();
             //ModSelectionList mls = new ModSelectionList();
             //mls.Show();
-            Preview p = new Preview();
-            p.Show();
+            //Preview p = new Preview();
+            //p.Show();
+            DatabaseUpdater dba = new DatabaseUpdater();
+            dba.Show();
         }
     }
 }
