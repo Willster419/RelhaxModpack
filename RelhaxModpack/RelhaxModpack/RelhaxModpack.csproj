@@ -115,6 +115,9 @@
     <Compile Include="Windows\GenericYesNoWindow.xaml.cs">
       <DependentUpon>GenericYesNoWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\InstallFinished.xaml.cs">
+      <DependentUpon>InstallFinished.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ModSelectionList.xaml.cs">
       <DependentUpon>ModSelectionList.xaml</DependentUpon>
     </Compile>
@@ -160,6 +163,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\GenericYesNoWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\InstallFinished.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
