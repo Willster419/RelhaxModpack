@@ -153,6 +153,32 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.ProgressIndicator">
+            <summary>
+            Interaction logic for ProgressIndicator.xaml
+            </summary>
+            <summary>
+            ProgressIndicator
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ProgressIndicator.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.VersionInfo">
+            <summary>
+            Interaction logic for VersionInfo.xaml
+            </summary>
+            <summary>
+            VersionInfo
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.VersionInfo.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.App">
             <summary>
             Interaction logic for App.xaml
