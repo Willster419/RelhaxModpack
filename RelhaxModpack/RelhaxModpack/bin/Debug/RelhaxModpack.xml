@@ -88,6 +88,19 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.InstallFinished">
+            <summary>
+            Interaction logic for InstallFinished.xaml
+            </summary>
+            <summary>
+            InstallFinished
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.InstallFinished.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.ModSelectionList">
             <summary>
             Interaction logic for ModSelectionList.xaml
