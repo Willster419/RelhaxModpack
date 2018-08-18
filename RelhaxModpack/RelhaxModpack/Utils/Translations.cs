@@ -11,7 +11,11 @@ namespace RelhaxModpack.Utils
 {
     public static class Translations
     {
-
+        private static string[] TranslationComponentBlacklist = new string[]
+        {
+            "test"
+        };
+        //TODO: when write blacklist check, check if name is blank/null/whitespace!!
 
         public static void ApplyTranslationsOnWindowLoad(Window window)
         {
