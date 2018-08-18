@@ -9,23 +9,27 @@ using System.Windows.Documents;
 
 namespace RelhaxModpack.Utils
 {
-    public class Translations
+    public static class Translations
     {
 
 
-        public void ApplyTranslationsOnWindowLoad(Window window)
+        public static void ApplyTranslationsOnWindowLoad(Window window)
         {
             Panel startingWindowPanel = (Panel)window.Content;
             ApplyPanelTranslations(startingWindowPanel);
         }
 
-        private void ApplyPanelTranslations(Panel p)
+        private static void ApplyPanelTranslations(Panel p)
         {
             foreach (FrameworkElement control in p.Children)
             {
                 //check if it's a panel (we need to go deeper)
                 if (control is Panel subP)
                     ApplyPanelTranslations(subP);
+                else if (control is TextBlock tb)
+                    tb.Text = "TODO";
+                else if (control is TextBox tb2)
+                    tb2.Text = "TODO";
                 //check if it's a tab control (itterate through the tabs)
                 else if (control is TabControl tc)
                     ApplyTabControlTranslations(tc);
@@ -40,7 +44,7 @@ namespace RelhaxModpack.Utils
             }
         }
 
-        private void ApplyContentTranslations(ContentControl cc)
+        private static void ApplyContentTranslations(ContentControl cc)
         {
             if (cc.Content is string)
             {
@@ -64,10 +68,18 @@ namespace RelhaxModpack.Utils
                 ApplyDecoratorTranslations(dec);
         }
 
-        private void ApplyTabControlTranslations(TabControl tc)
+        private static void ApplyTabControlTranslations(TabControl tc)
         {
             foreach (TabItem ti in tc.Items)
             {
+                if (ti.Header is string)
+                    ti.Header = "TODO";
+                else if (ti.Header is TextBlock htb)
+                    htb.Text = "TODO";
+                else if (ti.Header is TextBox htb2)
+                    htb2.Text = "TODO";
+                else if (ti.Header is ContentControl hcc)
+                    ApplyContentTranslations(hcc);
                 if (ti.Content is Panel p)
                     ApplyPanelTranslations(p);
                 else if (ti.Content is ContentControl cc)
@@ -77,7 +89,7 @@ namespace RelhaxModpack.Utils
             }
         }
 
-        private void ApplyGroupBoxTranslations(GroupBox gb)
+        private static void ApplyGroupBoxTranslations(GroupBox gb)
         {
             if (gb.Header is string)
                 gb.Header = "TODO";
@@ -99,7 +111,7 @@ namespace RelhaxModpack.Utils
                 ApplyPanelTranslations(p);
         }
 
-        private void ApplyDecoratorTranslations(Decorator dec)
+        private static void ApplyDecoratorTranslations(Decorator dec)
         {
             if (dec.Child is TextBlock tb)
                 tb.Text = "TODO";

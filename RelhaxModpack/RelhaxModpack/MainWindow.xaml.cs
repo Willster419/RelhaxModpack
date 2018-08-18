@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Forms;
 using RelhaxModpack.Windows;
+using RelhaxModpack.Utils;
 
 namespace RelhaxModpack
 {
@@ -32,6 +33,7 @@ namespace RelhaxModpack
 
         private void TheMainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            Translations.ApplyTranslationsOnWindowLoad(this);
             //create the notify icon
             /*NotifyIcon relhaxIcon = new NotifyIcon()
             {
@@ -47,8 +49,8 @@ namespace RelhaxModpack
             //mls.Show();
             //Preview p = new Preview();
             //p.Show();
-            DatabaseUpdater dba = new DatabaseUpdater();
-            dba.Show();
+            //DatabaseUpdater dba = new DatabaseUpdater();
+            //dba.Show();
         }
     }
 }
