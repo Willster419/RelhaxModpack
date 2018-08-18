@@ -181,13 +181,8 @@
             <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,168,2,0" VerticalAlignment="Top" />
             <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,148,2,0" VerticalAlignment="Top" />
             <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,128,2,0" VerticalAlignment="Top" />
-            <RichTextBox HorizontalAlignment="Stretch" Height="73" Margin="2,50,2,0" VerticalAlignment="Top">
-                <FlowDocument>
-                    <Paragraph>
-                        <Run Text="RichTextBox"/>
-                    </Paragraph>
-                </FlowDocument>
-            </RichTextBox>
+            <TextBox HorizontalAlignment="Stretch" Height="73" Margin="2,50,2,0" VerticalAlignment="Top">
+            </TextBox>
             <GroupBox Header="Language" HorizontalAlignment="Left" Height="45" Margin="360,4,0,0" VerticalAlignment="Top" Width="150">
                 <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             </GroupBox>
