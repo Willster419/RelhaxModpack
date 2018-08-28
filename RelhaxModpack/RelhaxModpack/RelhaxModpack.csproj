@@ -98,6 +98,7 @@
     </ApplicationDefinition>
     <Compile Include="Settings\ModpackSettings.cs" />
     <Compile Include="Settings\UISettings.cs" />
+    <Compile Include="Utils\BadMemeException.cs" />
     <Compile Include="Utils\CiInfo.cs" />
     <Compile Include="Utils\Translations.cs" />
     <Compile Include="Windows\AddPicturesZip.xaml.cs">

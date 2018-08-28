@@ -29,16 +29,25 @@ namespace RelhaxModpack.Settings
         /// The absolute path of the application settings file
         /// </summary>
         public static readonly string SettingsFilePath = Path.Combine(ApplicationStartupPath, SettingsFileName);
-        /// <summary>
-        /// The Dictionary provider of all common settings. Names are stored as their xpath names
-        /// </summary>
+        //The Dictionary provider of all common settings. Names are stored as their xpath names
         private static Dictionary<string, string> CommonSettings = new Dictionary<string, string>();
+        //The document for the main 
         private static XmlDocument SettingsDocument;
+        /// <summary>
+        /// Initializes the Settings (should only be done on application start) and determinds which version of Settings loader method to use
+        /// </summary>
+        /// <returns></returns>
         public static bool LoadSettings()
         {
-
+            if(SettingsDocument != null)
+            {
+                //TODO: logging message here
+                return false;
+            }
+            SettingsDocument = new XmlDocument();
             return true;
         }
+        //for loading legacy style settings
         private static void LoadSettingsLegacy()
         {
 
@@ -54,7 +63,7 @@ namespace RelhaxModpack.Settings
         }
         private static void LoadDefaultSettings()
         {
-
+            
         }
         #endregion
         

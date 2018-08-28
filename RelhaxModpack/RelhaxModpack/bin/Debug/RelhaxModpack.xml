@@ -4,6 +4,48 @@
         <name>RelhaxModpack</name>
     </assembly>
     <members>
+        <member name="T:RelhaxModpack.Settings.ModpackSettings">
+            <summary>
+            Provides access to all settings used in the modpack. Common modpack settings are set with key/value pairs.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.ApplicationStartupPath">
+            <summary>
+            The Startup root path of the application. Does not include the application name
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.SettingsFileName">
+            <summary>
+            The absolute name of the application settings file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.SettingsFilePath">
+            <summary>
+            The absolute path of the application settings file
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Settings.ModpackSettings.LoadSettings">
+            <summary>
+            Initializes the Settings (should only be done on application start) and determinds which version of Settings loader method to use
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:RelhaxModpack.Utils.Languages">
+            <summary>
+            List of all supported Languages in the modpack
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utils.Translations">
+            <summary>
+            Handles all localization for the application User Interface
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Utils.Translations.ApplyTranslationsOnWindowLoad(System.Windows.Window)">
+            <summary>
+            Applies and UI elements with translated strings
+            </summary>
+            <param name="window">The Window instance to apply translations to</param>
+        </member>
         <member name="T:RelhaxModpack.CiInfo">
             <summary>Info about the continuous integration server build that produced this binary.</summary> 
         </member>
