@@ -340,20 +340,25 @@ namespace RelhaxModpack
                     XmlNode file_properties = file_properties_root.LastChild.LastChild;
                     //check if time not equal
                     bool force_md5_check = false;//change this when want to check slowly for all MD5 rather than just 
-                    XmlAttribute file_time = file_in_database_xml.Attributes["time"];
-                    if ((force_md5_check) || (file_time == null) || (!file_time.Value.Equals(file_time.Value)))
+                    //if file time attribute is not there, then add it
+                    XmlAttribute file_time_from_database_xml = file_in_database_xml.Attributes["time"];
+                    if(file_time_from_database_xml == null)
                     {
-                        //update the filetime first
-                        if(file_time == null)
-                        {
-                            file_time = database_xml.CreateAttribute("time");
-                            file_time.Value = file_properties.Attributes["time"].Value;
-                            file_in_database_xml.Attributes.Append(file_time);
-                        }
-                        else
-                        {
-                            file_time.Value = file_properties.Attributes["time"].Value;
-                        }
+                        file_time_from_database_xml = database_xml.CreateAttribute("time");
+                        file_time_from_database_xml.Value = file_properties.Attributes["time"].Value;
+                        file_in_database_xml.Attributes.Append(file_time_from_database_xml);
+                    }
+                    //check for morce md5 flag, size change or filetime change
+                    XmlAttribute file_size_from_database_xml = file_in_database_xml.Attributes["size"];
+                    XmlAttribute file_size_from_properties_xml = file_properties.Attributes["size"];
+                    XmlAttribute file_time_from_properties_xml = file_properties.Attributes["time"];
+                    if ((force_md5_check) ||
+                        (!file_time_from_database_xml.Value.Equals(file_time_from_properties_xml.Value)) ||
+                        (!file_size_from_database_xml.Value.Equals(file_size_from_properties_xml.Value)))
+                    {
+                        //update size and time first
+                        file_time_from_database_xml.Value = file_time_from_properties_xml.Value;
+                        file_size_from_database_xml.Value = file_size_from_properties_xml.Value;
                         //get the md5 this time
                         file_properties_root = new XmlDocument();
                         using (WebClient client = new WebClient())
@@ -391,7 +396,7 @@ namespace RelhaxModpack
                     }
                     else
                     {
-                        ReportProgress("No Change (time check)");
+                        ReportProgress("No Change (time/size check)");
                     }
                 }
             }
@@ -405,7 +410,7 @@ namespace RelhaxModpack
                 }
                 else
                 {
-                    database_xml.RemoveChild(file_in_database_xml);
+                    Database_elements.RemoveChild(file_in_database_xml);
                 }
                 summary.AppendLine("[DELETE] " + s);
             }
