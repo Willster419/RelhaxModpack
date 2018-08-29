@@ -254,9 +254,13 @@ namespace RelhaxModpack
             int progress = 0;
             int total = all_files_in_folder.ChildNodes.Count;
             StringBuilder summary = new StringBuilder();
-            foreach(XmlNode file_in_folder in all_files_in_folder)
+            System.Diagnostics.Stopwatch time_for_each_file = new System.Diagnostics.Stopwatch();
+            System.Diagnostics.Stopwatch total_time_php_processing = new System.Diagnostics.Stopwatch();
+            total_time_php_processing.Restart();
+            foreach (XmlNode file_in_folder in all_files_in_folder)
             {
                 ReportProgress(string.Format("Parsing file {0} ({1} of {2})", file_in_folder.Attributes["name"].Value, ++progress, total));
+                time_for_each_file.Restart();
                 //if exists in string list of database.xml, remove it -> serves as removed files
                 if (removed_files.Contains(file_in_folder.Attributes["name"].Value))
                 {
@@ -280,7 +284,9 @@ namespace RelhaxModpack
                         }
                         catch (Exception ex)
                         {
-                            ReportProgress("Failed");
+                            //https://stackoverflow.com/questions/22094165/timespan-formatting-to-minutes-ans-seconds-without-hours
+                            string elapsed_time2 = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
+                            ReportProgress("Failed" + elapsed_time2);
                             ReportProgress(ex.ToString());
                             if (!string.IsNullOrWhiteSpace(downloaded_xml_string))
                                 ReportProgress(downloaded_xml_string);
@@ -312,7 +318,8 @@ namespace RelhaxModpack
                     //make UI and log updates
                     summary.AppendLine("[NEW] " + file_in_folder.Attributes["name"].Value);
                     added_files.Add(file_in_folder.Attributes["name"].Value);
-                    ReportProgress("Added");
+                    string elapsed_time = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
+                    ReportProgress("Added" + elapsed_time);
                 }
                 else
                 {
@@ -329,7 +336,8 @@ namespace RelhaxModpack
                         }
                         catch (Exception ex)
                         {
-                            ReportProgress("Failed");
+                            string elapsed_time = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
+                            ReportProgress("Failed" + elapsed_time);
                             ReportProgress(ex.ToString());
                             if (!string.IsNullOrWhiteSpace(downloaded_xml_string))
                                 ReportProgress(downloaded_xml_string);
@@ -371,7 +379,8 @@ namespace RelhaxModpack
                             }
                             catch (Exception ex)
                             {
-                                ReportProgress("Failed");
+                                string elapsed_time = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
+                                ReportProgress("Failed" + elapsed_time);
                                 ReportProgress(ex.ToString());
                                 if (!string.IsNullOrWhiteSpace(downloaded_xml_string))
                                     ReportProgress(downloaded_xml_string);
@@ -387,19 +396,24 @@ namespace RelhaxModpack
                             //add it to list of updated file names
                             updated_files.Add(file_in_folder.Attributes["name"].Value);
                             summary.AppendLine("[UPDATE] " + file_in_folder.Attributes["name"].Value);
-                            ReportProgress("Updated");
+                            string elapsed_time = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
+                            ReportProgress("Updated" + elapsed_time);
                         }
                         else
                         {
-                            ReportProgress("No Change (md5 check)");
+                            string elapsed_time = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
+                            ReportProgress("No Change (md5 check)" + elapsed_time);
                         }
                     }
                     else
                     {
-                        ReportProgress("No Change (time/size check)");
+                        string elapsed_time = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
+                        ReportProgress("No Change (time/size check)" + elapsed_time);
                     }
                 }
             }
+            string elapsed_time3 = string.Format(" took {0}.{1} sec", (int)total_time_php_processing.Elapsed.TotalSeconds, total_time_php_processing.Elapsed.Milliseconds);
+            ReportProgress("Total php file processing" + elapsed_time3);
             foreach(string s in removed_files)
             {
                 //delete the entry in the database
