@@ -415,9 +415,15 @@ namespace RelhaxModpack
                 summary.AppendLine("[DELETE] " + s);
             }
             File.WriteAllText("update_files.log", summary.ToString());
-            ReportProgress("Done, results saved to update_files.log");
-            database_xml.Save("temp_database.xml");
-            //TODO: upload it back!
+            ReportProgress("results saved to update_files.log");
+            database_xml.Save("database.xml");
+            //upload it back
+            using (WebClient client = new WebClient() { Credentials = credentials })
+            {
+                client.UploadFile(string.Format("ftp://wotmods.relhaxmodpack.com/WoT/{0}/database.xml", Settings.TanksOnlineFolderVersion), "database.xml");
+            }
+            File.Delete("database.xml");
+            ReportProgress("database.xml uploaded to wot folder " + Settings.TanksOnlineFolderVersion);
         }
 
         private void UpdateDatabaseStep3_Click(object sender, EventArgs e)
