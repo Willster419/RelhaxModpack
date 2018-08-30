@@ -333,11 +333,15 @@ namespace RelhaxModpack
             polish.Add("BackupDeleteFinished", TranslationNeeded);
             french.Add("BackupDeleteFinished", TranslationNeeded);
 
-            english.Add("BackupDeleteWarning", "Realy delete all selected backup folders?\n\nIt will clean up {0} file and give you {1} GB additional free HDD space.");
+            english.Add("BackupDeleteWarning", "Realy delete all selected backup folders?\n\nIt will clean up {0} file and give you {1} additional free HDD space.");
             german.Add("BackupDeleteWarning", TranslationNeeded);
             polish.Add("BackupDeleteWarning", TranslationNeeded);
             french.Add("BackupDeleteWarning", TranslationNeeded);
 
+            english.Add("DeletingBackup", "Deleting Backup");
+            german.Add("DeletingBackup", TranslationNeeded);
+            polish.Add("DeletingBackup", TranslationNeeded);
+            french.Add("DeletingBackup", TranslationNeeded);
             //Componet: settingsGroupBox
             //
             english.Add("settingsGroupBox", "Settings");
