@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -30,7 +31,8 @@ namespace RelhaxModpack
                     Directory = bf.TopfolderName,
                     NameList = bf.FullnameList,
                     Text = string.Format("{0} ({1})", cultureDate, Utils.SizeSuffix(bf.FilesSizeOnDisk, 2, true)),
-                    Name = bf.TopfolderName
+                    Name = bf.TopfolderName,
+                    SizeOnDisk = bf.FilesSizeOnDisk
                 };
                 cb.AutoSize = true;
                 cb.Location = new Point(6, (SelectBackupFolderPanel.Controls.Count * (cb.Size.Height - 3)));
@@ -55,33 +57,44 @@ namespace RelhaxModpack
             this.Dispose();
         }
 
-        private void DeleteButton_Click(object sender, System.EventArgs e)
+        public void DeleteButton_Click(object sender, System.EventArgs e)
         {
-            if (MessageBox.Show("Realy delete all this backup folders?\n\nIt will clean up XX file and give you XX GB additional free HDD space.", "WARNING", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) != DialogResult.Yes)
-                return;
-            List<Control> controlToRemove = new List<Control>();
+            long files = 0;
+            ulong size = 0;
+            int backupsChecked = 0;
             foreach (Control bf in this.SelectBackupFolderPanel.Controls)
             {
                 if (bf is SelectionCheckBox scb)
                 {
                     if (scb.Checked)
                     {
-                        Logging.Manager("deleting backup: " + scb.Directory);
-                        Utils.FileDelete(scb.NameList);
-                        controlToRemove.Add(scb);
+                        files += scb.NameList.Count;
+                        size += scb.SizeOnDisk;
+                        backupsChecked++;
                     }
                 }
             }
-            foreach (Control rc in controlToRemove)
-            {
-                rc.Dispose();
-            }
-            int count = 0;
+            if (MessageBox.Show(string.Format(Translations.GetTranslatedString("BackupDeleteWarning"), files, Utils.SizeSuffix(size, 2, true)), Translations.GetTranslatedString("warning"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) != DialogResult.Yes)
+                return;
+
+            List<SelectionCheckBox> bftd = new List<SelectionCheckBox>();
             foreach (Control bf in this.SelectBackupFolderPanel.Controls)
             {
-                bf.Location = new Point(6, (count * bf.Size.Height));
-                count++;
+                if (bf is SelectionCheckBox scb)
+                {
+                    if (scb.Checked)
+                    {
+                        bftd.Add(scb);
+                    }
+                }
             }
+
+            Installer bud = new Installer()
+                {
+                    BackupFolderToDelete = bftd
+                };
+            // bud.InstallProgressChanged += I_InstallProgressChanged;
+            bud.StartBackupFolderDelete();
         }
 
         private void DeleteBackupFolder_FormClosing(object sender, FormClosingEventArgs e)
