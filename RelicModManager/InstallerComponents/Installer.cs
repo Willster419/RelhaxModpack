@@ -44,6 +44,7 @@ namespace RelhaxModpack
         private List<Patch> PatchList { get; set; }
         private List<XmlUnpack> XmlUnpackList { get; set; }
         private List<Atlas> AtlasesList { get; set; }
+        public List<SelectionCheckBox> BackupFolderToDelete { get; set; }
         public string TanksVersion { get; set; }
         public List<InstallGroup> InstallGroups { get; set; }
         public int TotalCategories = 0;
@@ -108,6 +109,13 @@ namespace RelhaxModpack
             InstallWorker.DoWork += ActuallyStartUninstallation;
             InstallWorker.RunWorkerAsync();
         }
+
+        public void StartBackupFolderDelete()
+        {
+            InstallWorker.DoWork += ActuallyStartBackupDelete;
+            InstallWorker.RunWorkerAsync();
+        }
+
         //handler for when progress is made in extracting a zip file
         void Zip_ExtractProgress(object sender, ExtractProgressEventArgs e)
         {
@@ -218,6 +226,20 @@ namespace RelhaxModpack
             ReportProgressToInstallWorker(0);
             Logging.Manager("Uninstallation process finished");
             MessageBox.Show(Translations.GetTranslatedString("uninstallFinished"), Translations.GetTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        public void ActuallyStartBackupDelete(object sender, DoWorkEventArgs e)
+        {
+            ResetArgs();
+            args.InstalProgress = InstallerEventArgs.InstallProgress.BackupDelete;
+            DoBackupFolderDelete(BackupFolderToDelete);
+
+            // UninstallModsDefault();
+            //put back the folders when done
+
+            args.InstalProgress = InstallerEventArgs.InstallProgress.BackupDeleteDone;
+            ReportProgressToInstallWorker(0);
+            Logging.Manager("BackupDelete process finished");
+            MessageBox.Show(Translations.GetTranslatedString("BackupDeleteFinished"), Translations.GetTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         //Start the installation on the Worker thread
         public void ActuallyStartInstallation(object sender, DoWorkEventArgs e)
@@ -1736,7 +1758,7 @@ namespace RelhaxModpack
                             }
                         }
 
-                        // get the right imageHandler for this atlas
+                        // get the right MapExporter for this atlas
                         foreach (var exporter in AtlasesCreator.Handlers.MapExporters)
                         {
                             if (exporter.MapType.Equals(a.MapType))
@@ -3055,6 +3077,21 @@ namespace RelhaxModpack
                 }
             }
             
+        }
+
+        public static void DoBackupFolderDelete(List<SelectionCheckBox> BackupFolderToDelete)
+        {
+            args.ParrentTotalToProcess = BackupFolderToDelete.Count;
+            args.ParrentProcessed = 0;
+            foreach (Control bf in BackupFolderToDelete)
+            {
+                if (bf is SelectionCheckBox scb)
+                {
+                    args.ParrentProcessed++;
+                    Logging.Manager("deleting backup: " + scb.Directory);
+                    Utils.FileDelete(scb.NameList);
+                }
+            }
         }
 
         #region IDisposable Support
