@@ -162,6 +162,8 @@ namespace RelhaxModpack
             args.currentFileSizeProcessed = 0;
             args.ParrentProcessed = 0;
             args.ParrentTotalToProcess = 0;
+            args.OverallProcessed = 0;
+            args.OverallTotalToProcess = 0;
         }
 
         private void Bg_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
