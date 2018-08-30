@@ -39,7 +39,10 @@ namespace RelhaxModpack
             Done = 27,
             //kept after done because it's not part of the install process
             Uninstall = 28,
-            UninstallDone = 29
+            UninstallDone = 29,
+            BackupDelete,
+            BackupDeleteDone
+            
         };
         public InstallProgress InstalProgress { get; set; }
         //the total parrent processed items
