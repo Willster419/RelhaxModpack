@@ -54,6 +54,9 @@
             this.L2PasswordAttempt = new System.Windows.Forms.TextBox();
             this.L3PasswordAttempt = new System.Windows.Forms.TextBox();
             this.UpdateDatabaseTab = new System.Windows.Forms.TabPage();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.UpdateDatabaseStep5 = new System.Windows.Forms.Button();
             this.EUGERFormusLinksBUtton = new System.Windows.Forms.Button();
             this.EUENGFormsLinkButton = new System.Windows.Forms.Button();
@@ -128,7 +131,7 @@
             // 
             this.UpdateDatabaseStep3.Location = new System.Drawing.Point(6, 131);
             this.UpdateDatabaseStep3.Name = "UpdateDatabaseStep3";
-            this.UpdateDatabaseStep3.Size = new System.Drawing.Size(529, 23);
+            this.UpdateDatabaseStep3.Size = new System.Drawing.Size(264, 23);
             this.UpdateDatabaseStep3.TabIndex = 3;
             this.UpdateDatabaseStep3.Text = "Step 3: Prepare database update (via online method)";
             this.UpdateDatabaseStep3.UseVisualStyleBackColor = true;
@@ -155,26 +158,26 @@
             // 
             this.UpdateDatabaseStep2.Location = new System.Drawing.Point(6, 102);
             this.UpdateDatabaseStep2.Name = "UpdateDatabaseStep2";
-            this.UpdateDatabaseStep2.Size = new System.Drawing.Size(529, 23);
+            this.UpdateDatabaseStep2.Size = new System.Drawing.Size(264, 23);
             this.UpdateDatabaseStep2.TabIndex = 5;
             this.UpdateDatabaseStep2.Text = "Step 2: Run script CreateDatabase.php";
             this.UpdateDatabaseStep2.UseVisualStyleBackColor = true;
-            this.UpdateDatabaseStep2.Click += new System.EventHandler(this.UpdateDatabaseStep2_Click);
+            this.UpdateDatabaseStep2.Click += new System.EventHandler(this.UpdateDatabaseStep2_server_Click);
             // 
             // UpdateDatabaseStep3Advanced
             // 
             this.UpdateDatabaseStep3Advanced.Enabled = false;
-            this.UpdateDatabaseStep3Advanced.Location = new System.Drawing.Point(6, 160);
+            this.UpdateDatabaseStep3Advanced.Location = new System.Drawing.Point(311, 132);
             this.UpdateDatabaseStep3Advanced.Name = "UpdateDatabaseStep3Advanced";
-            this.UpdateDatabaseStep3Advanced.Size = new System.Drawing.Size(529, 22);
+            this.UpdateDatabaseStep3Advanced.Size = new System.Drawing.Size(224, 22);
             this.UpdateDatabaseStep3Advanced.TabIndex = 7;
-            this.UpdateDatabaseStep3Advanced.Text = "(Advanced) (local method)";
+            this.UpdateDatabaseStep3Advanced.Text = "local method (advanced)";
             this.UpdateDatabaseStep3Advanced.UseVisualStyleBackColor = true;
             this.UpdateDatabaseStep3Advanced.Click += new System.EventHandler(this.UpdateDatabaseStep3Advanced_Click);
             // 
             // UpdateDatabaseStep6
             // 
-            this.UpdateDatabaseStep6.Location = new System.Drawing.Point(6, 246);
+            this.UpdateDatabaseStep6.Location = new System.Drawing.Point(6, 218);
             this.UpdateDatabaseStep6.Name = "UpdateDatabaseStep6";
             this.UpdateDatabaseStep6.Size = new System.Drawing.Size(529, 23);
             this.UpdateDatabaseStep6.TabIndex = 8;
@@ -184,7 +187,7 @@
             // 
             // UpdateDatabaseStep7
             // 
-            this.UpdateDatabaseStep7.Location = new System.Drawing.Point(6, 275);
+            this.UpdateDatabaseStep7.Location = new System.Drawing.Point(6, 247);
             this.UpdateDatabaseStep7.Name = "UpdateDatabaseStep7";
             this.UpdateDatabaseStep7.Size = new System.Drawing.Size(529, 23);
             this.UpdateDatabaseStep7.TabIndex = 9;
@@ -206,7 +209,7 @@
             this.DatabaseUpdateTabControl.Location = new System.Drawing.Point(12, 34);
             this.DatabaseUpdateTabControl.Name = "DatabaseUpdateTabControl";
             this.DatabaseUpdateTabControl.SelectedIndex = 0;
-            this.DatabaseUpdateTabControl.Size = new System.Drawing.Size(549, 395);
+            this.DatabaseUpdateTabControl.Size = new System.Drawing.Size(845, 395);
             this.DatabaseUpdateTabControl.TabIndex = 12;
             this.DatabaseUpdateTabControl.Selected += new System.Windows.Forms.TabControlEventHandler(this.DatabaseUpdateTabControl_Selected);
             // 
@@ -216,7 +219,7 @@
             this.AuthStatus.Location = new System.Drawing.Point(4, 22);
             this.AuthStatus.Name = "AuthStatus";
             this.AuthStatus.Padding = new System.Windows.Forms.Padding(3);
-            this.AuthStatus.Size = new System.Drawing.Size(541, 369);
+            this.AuthStatus.Size = new System.Drawing.Size(837, 369);
             this.AuthStatus.TabIndex = 4;
             this.AuthStatus.Text = "Auth Status";
             this.AuthStatus.UseVisualStyleBackColor = true;
@@ -227,7 +230,7 @@
             this.AuthorizationTable.ColumnCount = 3;
             this.AuthorizationTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 46.35569F));
             this.AuthorizationTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 53.64431F));
-            this.AuthorizationTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 190F));
+            this.AuthorizationTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 198F));
             this.AuthorizationTable.Controls.Add(this.CurrentAuthStatusLabel, 0, 0);
             this.AuthorizationTable.Controls.Add(this.AuthStatusLabel, 2, 0);
             this.AuthorizationTable.Controls.Add(this.RequestL1AuthLabel, 0, 1);
@@ -255,7 +258,7 @@
             this.CurrentAuthStatusLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CurrentAuthStatusLabel.Location = new System.Drawing.Point(4, 1);
             this.CurrentAuthStatusLabel.Name = "CurrentAuthStatusLabel";
-            this.CurrentAuthStatusLabel.Size = new System.Drawing.Size(149, 31);
+            this.CurrentAuthStatusLabel.Size = new System.Drawing.Size(145, 31);
             this.CurrentAuthStatusLabel.TabIndex = 0;
             this.CurrentAuthStatusLabel.Text = "Current Authorization status:";
             // 
@@ -263,9 +266,9 @@
             // 
             this.AuthStatusLabel.AutoSize = true;
             this.AuthStatusLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.AuthStatusLabel.Location = new System.Drawing.Point(340, 1);
+            this.AuthStatusLabel.Location = new System.Drawing.Point(332, 1);
             this.AuthStatusLabel.Name = "AuthStatusLabel";
-            this.AuthStatusLabel.Size = new System.Drawing.Size(185, 31);
+            this.AuthStatusLabel.Size = new System.Drawing.Size(193, 31);
             this.AuthStatusLabel.TabIndex = 1;
             this.AuthStatusLabel.Text = "0";
             // 
@@ -275,7 +278,7 @@
             this.RequestL1AuthLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RequestL1AuthLabel.Location = new System.Drawing.Point(4, 33);
             this.RequestL1AuthLabel.Name = "RequestL1AuthLabel";
-            this.RequestL1AuthLabel.Size = new System.Drawing.Size(149, 31);
+            this.RequestL1AuthLabel.Size = new System.Drawing.Size(145, 31);
             this.RequestL1AuthLabel.TabIndex = 2;
             this.RequestL1AuthLabel.Text = "Request Level 1 Authorization";
             // 
@@ -285,7 +288,7 @@
             this.RequestL2AuthLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RequestL2AuthLabel.Location = new System.Drawing.Point(4, 65);
             this.RequestL2AuthLabel.Name = "RequestL2AuthLabel";
-            this.RequestL2AuthLabel.Size = new System.Drawing.Size(149, 31);
+            this.RequestL2AuthLabel.Size = new System.Drawing.Size(145, 31);
             this.RequestL2AuthLabel.TabIndex = 3;
             this.RequestL2AuthLabel.Text = "Request Level 2 Authorization";
             // 
@@ -295,16 +298,16 @@
             this.RequestL3AuthLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RequestL3AuthLabel.Location = new System.Drawing.Point(4, 97);
             this.RequestL3AuthLabel.Name = "RequestL3AuthLabel";
-            this.RequestL3AuthLabel.Size = new System.Drawing.Size(149, 32);
+            this.RequestL3AuthLabel.Size = new System.Drawing.Size(145, 32);
             this.RequestL3AuthLabel.TabIndex = 4;
             this.RequestL3AuthLabel.Text = "Request Level 3 Authorization";
             // 
             // RequestL1AuthButton
             // 
             this.RequestL1AuthButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RequestL1AuthButton.Location = new System.Drawing.Point(340, 36);
+            this.RequestL1AuthButton.Location = new System.Drawing.Point(332, 36);
             this.RequestL1AuthButton.Name = "RequestL1AuthButton";
-            this.RequestL1AuthButton.Size = new System.Drawing.Size(185, 25);
+            this.RequestL1AuthButton.Size = new System.Drawing.Size(193, 25);
             this.RequestL1AuthButton.TabIndex = 5;
             this.RequestL1AuthButton.Text = "Request";
             this.RequestL1AuthButton.UseVisualStyleBackColor = true;
@@ -313,9 +316,9 @@
             // RequestL2AuthButton
             // 
             this.RequestL2AuthButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RequestL2AuthButton.Location = new System.Drawing.Point(340, 68);
+            this.RequestL2AuthButton.Location = new System.Drawing.Point(332, 68);
             this.RequestL2AuthButton.Name = "RequestL2AuthButton";
-            this.RequestL2AuthButton.Size = new System.Drawing.Size(185, 25);
+            this.RequestL2AuthButton.Size = new System.Drawing.Size(193, 25);
             this.RequestL2AuthButton.TabIndex = 6;
             this.RequestL2AuthButton.Text = "Request";
             this.RequestL2AuthButton.UseVisualStyleBackColor = true;
@@ -324,9 +327,9 @@
             // RequestL3AuthButton
             // 
             this.RequestL3AuthButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RequestL3AuthButton.Location = new System.Drawing.Point(340, 100);
+            this.RequestL3AuthButton.Location = new System.Drawing.Point(332, 100);
             this.RequestL3AuthButton.Name = "RequestL3AuthButton";
-            this.RequestL3AuthButton.Size = new System.Drawing.Size(185, 26);
+            this.RequestL3AuthButton.Size = new System.Drawing.Size(193, 26);
             this.RequestL3AuthButton.TabIndex = 7;
             this.RequestL3AuthButton.Text = "Request";
             this.RequestL3AuthButton.UseVisualStyleBackColor = true;
@@ -335,29 +338,32 @@
             // L1AuthPasswordAttempt
             // 
             this.L1AuthPasswordAttempt.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.L1AuthPasswordAttempt.Location = new System.Drawing.Point(160, 36);
+            this.L1AuthPasswordAttempt.Location = new System.Drawing.Point(156, 36);
             this.L1AuthPasswordAttempt.Name = "L1AuthPasswordAttempt";
-            this.L1AuthPasswordAttempt.Size = new System.Drawing.Size(173, 20);
+            this.L1AuthPasswordAttempt.Size = new System.Drawing.Size(169, 20);
             this.L1AuthPasswordAttempt.TabIndex = 8;
             // 
             // L2PasswordAttempt
             // 
             this.L2PasswordAttempt.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.L2PasswordAttempt.Location = new System.Drawing.Point(160, 68);
+            this.L2PasswordAttempt.Location = new System.Drawing.Point(156, 68);
             this.L2PasswordAttempt.Name = "L2PasswordAttempt";
-            this.L2PasswordAttempt.Size = new System.Drawing.Size(173, 20);
+            this.L2PasswordAttempt.Size = new System.Drawing.Size(169, 20);
             this.L2PasswordAttempt.TabIndex = 9;
             // 
             // L3PasswordAttempt
             // 
             this.L3PasswordAttempt.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.L3PasswordAttempt.Location = new System.Drawing.Point(160, 100);
+            this.L3PasswordAttempt.Location = new System.Drawing.Point(156, 100);
             this.L3PasswordAttempt.Name = "L3PasswordAttempt";
-            this.L3PasswordAttempt.Size = new System.Drawing.Size(173, 20);
+            this.L3PasswordAttempt.Size = new System.Drawing.Size(169, 20);
             this.L3PasswordAttempt.TabIndex = 10;
             // 
             // UpdateDatabaseTab
             // 
+            this.UpdateDatabaseTab.Controls.Add(this.label2);
+            this.UpdateDatabaseTab.Controls.Add(this.label1);
+            this.UpdateDatabaseTab.Controls.Add(this.button1);
             this.UpdateDatabaseTab.Controls.Add(this.UpdateDatabaseStep5);
             this.UpdateDatabaseTab.Controls.Add(this.EUGERFormusLinksBUtton);
             this.UpdateDatabaseTab.Controls.Add(this.EUENGFormsLinkButton);
@@ -376,14 +382,42 @@
             this.UpdateDatabaseTab.Location = new System.Drawing.Point(4, 22);
             this.UpdateDatabaseTab.Name = "UpdateDatabaseTab";
             this.UpdateDatabaseTab.Padding = new System.Windows.Forms.Padding(3);
-            this.UpdateDatabaseTab.Size = new System.Drawing.Size(541, 369);
+            this.UpdateDatabaseTab.Size = new System.Drawing.Size(837, 369);
             this.UpdateDatabaseTab.TabIndex = 0;
             this.UpdateDatabaseTab.Text = "Update Database";
             this.UpdateDatabaseTab.UseVisualStyleBackColor = true;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(276, 136);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(29, 13);
+            this.label2.TabIndex = 24;
+            this.label2.Text = "-OR-";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(276, 107);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(29, 13);
+            this.label1.TabIndex = 23;
+            this.label1.Text = "-OR-";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(311, 102);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(224, 23);
+            this.button1.TabIndex = 22;
+            this.button1.Text = "Download and Update database.xml";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.UpdateDatabaseStep2_client_Click);
+            // 
             // UpdateDatabaseStep5
             // 
-            this.UpdateDatabaseStep5.Location = new System.Drawing.Point(6, 217);
+            this.UpdateDatabaseStep5.Location = new System.Drawing.Point(6, 189);
             this.UpdateDatabaseStep5.Name = "UpdateDatabaseStep5";
             this.UpdateDatabaseStep5.Size = new System.Drawing.Size(529, 23);
             this.UpdateDatabaseStep5.TabIndex = 21;
@@ -393,7 +427,7 @@
             // 
             // EUGERFormusLinksBUtton
             // 
-            this.EUGERFormusLinksBUtton.Location = new System.Drawing.Point(467, 338);
+            this.EUGERFormusLinksBUtton.Location = new System.Drawing.Point(467, 310);
             this.EUGERFormusLinksBUtton.Name = "EUGERFormusLinksBUtton";
             this.EUGERFormusLinksBUtton.Size = new System.Drawing.Size(68, 23);
             this.EUGERFormusLinksBUtton.TabIndex = 20;
@@ -403,7 +437,7 @@
             // 
             // EUENGFormsLinkButton
             // 
-            this.EUENGFormsLinkButton.Location = new System.Drawing.Point(404, 338);
+            this.EUENGFormsLinkButton.Location = new System.Drawing.Point(404, 310);
             this.EUENGFormsLinkButton.Name = "EUENGFormsLinkButton";
             this.EUENGFormsLinkButton.Size = new System.Drawing.Size(57, 23);
             this.EUENGFormsLinkButton.TabIndex = 19;
@@ -413,7 +447,7 @@
             // 
             // NAForumsLinkButton
             // 
-            this.NAForumsLinkButton.Location = new System.Drawing.Point(366, 338);
+            this.NAForumsLinkButton.Location = new System.Drawing.Point(366, 310);
             this.NAForumsLinkButton.Name = "NAForumsLinkButton";
             this.NAForumsLinkButton.Size = new System.Drawing.Size(32, 23);
             this.NAForumsLinkButton.TabIndex = 18;
@@ -423,7 +457,7 @@
             // 
             // UpdateDatebaseStep8
             // 
-            this.UpdateDatebaseStep8.Location = new System.Drawing.Point(6, 302);
+            this.UpdateDatebaseStep8.Location = new System.Drawing.Point(6, 274);
             this.UpdateDatebaseStep8.Name = "UpdateDatebaseStep8";
             this.UpdateDatebaseStep8.ReadOnly = true;
             this.UpdateDatebaseStep8.Size = new System.Drawing.Size(529, 32);
@@ -433,7 +467,7 @@
             // 
             // UpdateDatabaseStep4
             // 
-            this.UpdateDatabaseStep4.Location = new System.Drawing.Point(6, 188);
+            this.UpdateDatabaseStep4.Location = new System.Drawing.Point(6, 160);
             this.UpdateDatabaseStep4.Name = "UpdateDatabaseStep4";
             this.UpdateDatabaseStep4.Size = new System.Drawing.Size(529, 23);
             this.UpdateDatabaseStep4.TabIndex = 16;
@@ -452,7 +486,7 @@
             // 
             // UpdateDatebaseStep9
             // 
-            this.UpdateDatebaseStep9.Location = new System.Drawing.Point(6, 340);
+            this.UpdateDatebaseStep9.Location = new System.Drawing.Point(6, 312);
             this.UpdateDatebaseStep9.Name = "UpdateDatebaseStep9";
             this.UpdateDatebaseStep9.ReadOnly = true;
             this.UpdateDatebaseStep9.Size = new System.Drawing.Size(354, 23);
@@ -468,7 +502,7 @@
             this.UpdateApplicationTab.Location = new System.Drawing.Point(4, 22);
             this.UpdateApplicationTab.Name = "UpdateApplicationTab";
             this.UpdateApplicationTab.Padding = new System.Windows.Forms.Padding(3);
-            this.UpdateApplicationTab.Size = new System.Drawing.Size(541, 369);
+            this.UpdateApplicationTab.Size = new System.Drawing.Size(837, 369);
             this.UpdateApplicationTab.TabIndex = 1;
             this.UpdateApplicationTab.Text = "Update Application";
             this.UpdateApplicationTab.UseVisualStyleBackColor = true;
@@ -520,7 +554,7 @@
             this.CleanOnlineFolders.Location = new System.Drawing.Point(4, 22);
             this.CleanOnlineFolders.Name = "CleanOnlineFolders";
             this.CleanOnlineFolders.Padding = new System.Windows.Forms.Padding(3);
-            this.CleanOnlineFolders.Size = new System.Drawing.Size(541, 369);
+            this.CleanOnlineFolders.Size = new System.Drawing.Size(837, 369);
             this.CleanOnlineFolders.TabIndex = 3;
             this.CleanOnlineFolders.Text = "Clean zip folders";
             this.CleanOnlineFolders.UseVisualStyleBackColor = true;
@@ -570,7 +604,7 @@
             this.DatabaseOutput.Location = new System.Drawing.Point(4, 22);
             this.DatabaseOutput.Name = "DatabaseOutput";
             this.DatabaseOutput.Padding = new System.Windows.Forms.Padding(3);
-            this.DatabaseOutput.Size = new System.Drawing.Size(541, 369);
+            this.DatabaseOutput.Size = new System.Drawing.Size(837, 369);
             this.DatabaseOutput.TabIndex = 5;
             this.DatabaseOutput.Text = "Database Output";
             this.DatabaseOutput.UseVisualStyleBackColor = true;
@@ -621,7 +655,7 @@
             this.CreatePasswordTab.Location = new System.Drawing.Point(4, 22);
             this.CreatePasswordTab.Name = "CreatePasswordTab";
             this.CreatePasswordTab.Padding = new System.Windows.Forms.Padding(3);
-            this.CreatePasswordTab.Size = new System.Drawing.Size(541, 369);
+            this.CreatePasswordTab.Size = new System.Drawing.Size(837, 369);
             this.CreatePasswordTab.TabIndex = 2;
             this.CreatePasswordTab.Text = "CreatePassword";
             this.CreatePasswordTab.UseVisualStyleBackColor = true;
@@ -747,7 +781,7 @@
             this.ScriptLogOutput.Location = new System.Drawing.Point(563, 34);
             this.ScriptLogOutput.Name = "ScriptLogOutput";
             this.ScriptLogOutput.ReadOnly = true;
-            this.ScriptLogOutput.Size = new System.Drawing.Size(408, 395);
+            this.ScriptLogOutput.Size = new System.Drawing.Size(704, 395);
             this.ScriptLogOutput.TabIndex = 13;
             this.ScriptLogOutput.Text = "";
             this.ScriptLogOutput.WordWrap = false;
@@ -765,10 +799,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(983, 441);
+            this.ClientSize = new System.Drawing.Size(1279, 441);
             this.Controls.Add(this.ScriptOutputLabel);
             this.Controls.Add(this.ScriptLogOutput);
             this.Controls.Add(this.DatabaseUpdateTabControl);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(900, 480);
@@ -781,6 +816,7 @@
             this.AuthorizationTable.ResumeLayout(false);
             this.AuthorizationTable.PerformLayout();
             this.UpdateDatabaseTab.ResumeLayout(false);
+            this.UpdateDatabaseTab.PerformLayout();
             this.UpdateApplicationTab.ResumeLayout(false);
             this.CleanOnlineFolders.ResumeLayout(false);
             this.CleanOnlineFolders.PerformLayout();
@@ -859,5 +895,8 @@
         private System.Windows.Forms.RichTextBox DatabaseOutputStep1Location;
         private System.Windows.Forms.Button DatabaseOutputStep2a;
         private System.Windows.Forms.Button DatabaseOutputStep1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
     }
 }
