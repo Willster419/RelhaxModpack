@@ -328,6 +328,16 @@ namespace RelhaxModpack
             polish.Add("backupModsSizeLabelDescription", TranslationNeeded);
             french.Add("backupModsSizeLabelDescription", TranslationNeeded);
 
+            english.Add("BackupDeleteFinished", "Done.\n\nAll selected Backupfolder sucessfully deleted.");
+            german.Add("BackupDeleteFinished", TranslationNeeded);
+            polish.Add("BackupDeleteFinished", TranslationNeeded);
+            french.Add("BackupDeleteFinished", TranslationNeeded);
+
+            english.Add("BackupDeleteWarning", "Realy delete all selected backup folders?\n\nIt will clean up {0} file and give you {1} GB additional free HDD space.");
+            german.Add("BackupDeleteWarning", TranslationNeeded);
+            polish.Add("BackupDeleteWarning", TranslationNeeded);
+            french.Add("BackupDeleteWarning", TranslationNeeded);
+
             //Componet: settingsGroupBox
             //
             english.Add("settingsGroupBox", "Settings");
