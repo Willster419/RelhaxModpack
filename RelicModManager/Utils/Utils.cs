@@ -803,13 +803,18 @@ namespace RelhaxModpack
             return fileName;
         }
 
-        public static void FileDelete(List<string> sl, bool proceedListReverse = true)
+        public static void FileDelete(List<string> sl, bool proceedListReverse = true, bool reportProcess = true)
         {
             int pos = 0;
             int ecounter = 0;
             int ecounterlimit = 10;
             while (ecounter < ecounterlimit && sl.Count > 0)
             {
+                if (reportProcess)
+                {
+                    Installer.args.ChildTotalToProcess = sl.Count;
+                    Installer.args.ChildProcessed = 0;
+                }
                 try
                 {
                     while (sl.Count > 0)
@@ -818,6 +823,13 @@ namespace RelhaxModpack
                             pos = sl.Count - 1;
                         else
                             pos = 0;
+                        if (reportProcess)
+                        {
+                            Installer.args.currentFile = sl.ElementAt(pos);
+                            Installer.args.ChildProcessed++;
+                            Installer.args.OverallProcessed++;
+                            Installer.ReportProgressToInstallWorker(0);
+                        }
                         if (System.IO.File.Exists(sl.ElementAt(pos)))
                         {
                             System.IO.File.Delete(sl.ElementAt(pos));
