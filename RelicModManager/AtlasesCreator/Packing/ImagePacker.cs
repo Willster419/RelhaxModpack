@@ -249,7 +249,10 @@ namespace RelhaxModpack.AtlasesCreator
                     if (requireSquare)
                     {
                         int max = Math.Max(testWidth, testHeight);
-                        testWidth = testHeight = (max + padding + padding);
+                        if (requirePow2)
+                            testWidth = testHeight = max;
+                        else
+                            testWidth = testHeight = (max + padding + padding);
                     }
 
                     // if the test results are the same as our last output results, we've reached an optimal size,
