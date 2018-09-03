@@ -1676,6 +1676,22 @@ namespace RelhaxModpack
         {
             Utils.CallBrowser("http://forum.worldoftanks.com/index.php?/topic/535868-");
         }
-        #endregion  
+        #endregion
+
+        private void CreateMD5HashButton_Click(object sender, EventArgs e)
+        {
+            ReportProgress("Starting hashing");
+            if(zipsToHash.ShowDialog() != DialogResult.OK)
+            {
+                ReportProgress("Hashing Aborted");
+            }
+            foreach(string s in zipsToHash.FileNames)
+            {
+                ReportProgress(string.Format("hash of {0}:", Path.GetFileName(s)));
+                ReportProgress(Utils.CreateMd5Hash(s));
+
+            }
+            ReportProgress("Done");
+        }
     }
 }
