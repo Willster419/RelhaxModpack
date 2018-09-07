@@ -97,6 +97,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Settings\ModpackSettings.cs" />
+    <Compile Include="Settings\Settings.cs" />
+    <Compile Include="Settings\ThirdPartySettings.cs" />
     <Compile Include="Settings\UISettings.cs" />
     <Compile Include="Utils\BadMemeException.cs" />
     <Compile Include="Utils\CiInfo.cs" />

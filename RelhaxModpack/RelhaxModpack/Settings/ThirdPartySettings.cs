@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Settings
 {
-    public class UISettings
+    public class ThirdPartySettings
     {
 
     }
