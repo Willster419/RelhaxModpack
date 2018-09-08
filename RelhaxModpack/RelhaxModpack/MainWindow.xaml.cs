@@ -36,8 +36,6 @@ namespace RelhaxModpack
             //don't actually do this yet
             //Translations.ApplyTranslationsOnWindowLoad(this);
 
-            //create the logging for the application
-
             //create the notify icon
             /*NotifyIcon relhaxIcon = new NotifyIcon()
             {
