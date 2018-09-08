@@ -9,9 +9,37 @@ using System.Xml;
 namespace RelhaxModpack.Settings
 {
     /// <summary>
+    /// The type of selection view for how to display the selection tree
+    /// </summary>
+    public enum SelectionView
+    {
+        /// <summary>
+        /// Default Winforms style
+        /// </summary>
+        Default = 0,
+        /// <summary>
+        /// OMC style
+        /// </summary>
+        Legacy = 1,
+        /// <summary>
+        /// Default WPF V2 style
+        /// </summary>
+        DefaultV2 = 2
+    };
+    public enum LoadingGifs
+    {
+        Standard = 0,
+        ThirdGuards = 1
+    };
+    //enumeration for the type of uninstall mode
+    public enum UninstallModes
+    {
+        Default = 0,
+        Quick = 1
+    }
+    /// <summary>
     /// Provides access to all settings used in the modpack.
     /// </summary>
-    //TODO: make a static settings class, make modapck and Ui settings initializeable so to use dependencyproperties
     public class ModpackSettings
     {
         
