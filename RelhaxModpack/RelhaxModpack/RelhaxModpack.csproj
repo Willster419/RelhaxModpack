@@ -96,6 +96,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Logging\Logfile.cs" />
+    <Compile Include="Logging\Logging.cs" />
     <Compile Include="Settings\ModpackSettings.cs" />
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="Settings\ThirdPartySettings.cs" />
