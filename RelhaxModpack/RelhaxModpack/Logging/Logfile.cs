@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Text;
 using System.IO;
-using RelhaxModpack.Utils;
 
-namespace RelhaxModpack.Logging
+namespace RelhaxModpack
 {
     /// <summary>
     /// Represenets an instance of a logfile used for writing important logging information to a log

@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows;
-using RelhaxModpack.Settings;
 
-namespace RelhaxModpack.Logging
+namespace RelhaxModpack
 {
     /// <summary>
     /// The different log files currently used in the modpack
@@ -100,15 +94,15 @@ namespace RelhaxModpack.Logging
         public static bool InitApplicationLogging()
         {
             if (ApplicationLogfile != null)
-                throw new Utils.BadMemeException("only do this once jackass");
-            string oldLogFilePath = Path.Combine(Settings.Settings.ApplicationStartupPath, OldApplicationLogFilename);
-            string newLogFilePath = Path.Combine(Settings.Settings.ApplicationStartupPath, ApplicationLogFilename);
+                throw new BadMemeException("only do this once jackass");
+            string oldLogFilePath = Path.Combine(Settings.ApplicationStartupPath, OldApplicationLogFilename);
+            string newLogFilePath = Path.Combine(Settings.ApplicationStartupPath, ApplicationLogFilename);
             //if the old log exists and the new one does not, move the logging to the new one
             try
             {
                 if (File.Exists(oldLogFilePath) && !File.Exists(newLogFilePath))
                     File.Move(oldLogFilePath, newLogFilePath);
-                Settings.Settings.FirstLoadToV2 = true;
+                Settings.FirstLoadToV2 = true;
             }
             catch
             {

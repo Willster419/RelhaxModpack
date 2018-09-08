@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 
-namespace RelhaxModpack.Utils
+namespace RelhaxModpack
 {
     /// <summary>
     /// List of all supported Languages in the modpack

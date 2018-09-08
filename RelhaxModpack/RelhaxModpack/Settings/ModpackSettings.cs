@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Xml;
 
-namespace RelhaxModpack.Settings
+namespace RelhaxModpack
 {
     /// <summary>
     /// The type of selection view for how to display the selection tree

@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
-namespace RelhaxModpack.Settings
+
+namespace RelhaxModpack
 {
     #region Settings Enumerations
     /// <summary>
     /// Database distribution levels
     /// </summary>
-    public enum DatabaseVersion
+    public enum DatabaseVersions
     {
         /// <summary>
         /// The stable public database
@@ -70,7 +66,7 @@ namespace RelhaxModpack.Settings
         //also serves as place to put default values
         public static bool FirstLoad = false;
         public static bool FirstLoadToV2 = false;
-        public static DatabaseVersion DatabaseDistroVersion = RelhaxModpack.Settings.DatabaseVersion.Stable;
+        public static DatabaseVersions DatabaseDistroVersion = RelhaxModpack.DatabaseVersions.Stable;
         public static bool SkipUpdate = false;
         public static bool SilentStart = false;
         public static bool ForceVisible = false;

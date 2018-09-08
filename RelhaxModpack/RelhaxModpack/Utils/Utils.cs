@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
-namespace RelhaxModpack.Utils
+namespace RelhaxModpack
 {
     /// <summary>
     /// A utility class for static functions used in various places in the modpack

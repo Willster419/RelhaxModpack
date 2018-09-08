@@ -4,164 +4,164 @@
         <name>RelhaxModpack</name>
     </assembly>
     <members>
-        <member name="T:RelhaxModpack.Logging.Logfile">
+        <member name="T:RelhaxModpack.Logfile">
             <summary>
             Represenets an instance of a logfile used for writing important logging information to a log
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Logging.Logfile.Filepath">
+        <member name="P:RelhaxModpack.Logfile.Filepath">
             <summary>
             The path to the file the log is writing to
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Logging.Logfile.Filename">
+        <member name="P:RelhaxModpack.Logfile.Filename">
             <summary>
             The name of the file that the log is writing to
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Logging.Logfile.Timestamp">
+        <member name="P:RelhaxModpack.Logfile.Timestamp">
             <summary>
             The date and time format for writing each line in the logfile
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Logging.Logfile.#ctor(System.String,System.String)">
+        <member name="M:RelhaxModpack.Logfile.#ctor(System.String,System.String)">
             <summary>
             Create an instance of the logfile
             </summary>
             <param name="filePath">The path to the file to create/open</param>
             <param name="timestamp">the date and time format to write for each log line</param>
         </member>
-        <member name="M:RelhaxModpack.Logging.Logfile.Init">
+        <member name="M:RelhaxModpack.Logfile.Init">
             <summary>
             Initializes the logfile
             </summary>
             <returns>True if sucessfull initialization, false otherwise</returns>
         </member>
-        <member name="M:RelhaxModpack.Logging.Logfile.Write(System.String,RelhaxModpack.Logging.LogLevel)">
+        <member name="M:RelhaxModpack.Logfile.Write(System.String,RelhaxModpack.LogLevel)">
             <summary>
             Writes a line of text to the log file with the date and timestamp, and level of severity of the message
             </summary>
             <param name="message">The line to write</param>
             <param name="logLevel">The level of severity of the log message. Default is info level.</param>
         </member>
-        <member name="M:RelhaxModpack.Logging.Logfile.Dispose(System.Boolean)">
+        <member name="M:RelhaxModpack.Logfile.Dispose(System.Boolean)">
             <summary>
             Dispose Managed and Unmanaged rescources used for the logfiles
             </summary>
             <param name="disposing"></param>
         </member>
-        <member name="M:RelhaxModpack.Logging.Logfile.Dispose">
+        <member name="M:RelhaxModpack.Logfile.Dispose">
             <summary>
             Dispose Managed and Unmanaged rescources used for the logfiles
             </summary>
         </member>
-        <member name="T:RelhaxModpack.Logging.Logfiles">
+        <member name="T:RelhaxModpack.Logfiles">
             <summary>
             The different log files currently used in the modpack
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Logging.Logfiles.Application">
+        <member name="F:RelhaxModpack.Logfiles.Application">
             <summary>
             The default modpack logfile
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Logging.Logfiles.Installer">
+        <member name="F:RelhaxModpack.Logfiles.Installer">
             <summary>
             logfile for when installing mods
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Logging.Logfiles.Uninstaller">
+        <member name="F:RelhaxModpack.Logfiles.Uninstaller">
             <summary>
             logfile for when uninstalling mods
             </summary>
         </member>
-        <member name="T:RelhaxModpack.Logging.LogLevel">
+        <member name="T:RelhaxModpack.LogLevel">
             <summary>
             The level of severity of the log message
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Logging.LogLevel.Debug">
+        <member name="F:RelhaxModpack.LogLevel.Debug">
             <summary>
             Debug message
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Logging.LogLevel.Info">
+        <member name="F:RelhaxModpack.LogLevel.Info">
             <summary>
             Informational message
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Logging.LogLevel.Warning">
+        <member name="F:RelhaxModpack.LogLevel.Warning">
             <summary>
             A problem, but can be worked around
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Logging.LogLevel.Error">
+        <member name="F:RelhaxModpack.LogLevel.Error">
             <summary>
             Something is wrong, something may not work
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Logging.LogLevel.Exception">
+        <member name="F:RelhaxModpack.LogLevel.Exception">
             <summary>
             Something is wrong, something will not work
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Logging.LogLevel.ApplicationHalt">
+        <member name="F:RelhaxModpack.LogLevel.ApplicationHalt">
             <summary>
             The application is closing now
             </summary>
         </member>
-        <member name="T:RelhaxModpack.Logging.Logging">
+        <member name="T:RelhaxModpack.Logging">
             <summary>
             A static constant refrence to common logging variables and common log refrences
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Logging.Logging.ApplicationLogFilename">
+        <member name="F:RelhaxModpack.Logging.ApplicationLogFilename">
             <summary>
             The filename of the application log file
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Logging.Logging.OldApplicationLogFilename">
+        <member name="F:RelhaxModpack.Logging.OldApplicationLogFilename">
             <summary>
             The filename of the old application log file
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Logging.Logging.InstallLogFilename">
+        <member name="F:RelhaxModpack.Logging.InstallLogFilename">
             <summary>
             The name of the install log file
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Logging.Logging.UninstallLogFilename">
+        <member name="F:RelhaxModpack.Logging.UninstallLogFilename">
             <summary>
             the name of the uninstall log file
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Logging.Logging.ApplicationLogfile">
+        <member name="F:RelhaxModpack.Logging.ApplicationLogfile">
             <summary>
             Provides a constant refrence to the log file
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Logging.Logging.InstallLogfile">
+        <member name="F:RelhaxModpack.Logging.InstallLogfile">
             <summary>
             Provides a refrence to an instance of an install log file
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Logging.Logging.UninstallLogfile">
+        <member name="F:RelhaxModpack.Logging.UninstallLogfile">
             <summary>
             Provides a refrence to an instalce of an uninstall log file
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Logging.Logging.InitApplicationLogging">
+        <member name="M:RelhaxModpack.Logging.InitApplicationLogging">
             <summary>
             Initialize the logging subsystem for the appilcation
             </summary>
             <returns>True if sucessfull initialization, false otherwise</returns>
         </member>
-        <member name="M:RelhaxModpack.Logging.Logging.DisposeApplicationLogging">
+        <member name="M:RelhaxModpack.Logging.DisposeApplicationLogging">
             <summary>
             Dispose of the application logging subsystem
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Logging.Logging.WriteToLog(System.String,RelhaxModpack.Logging.Logfiles,RelhaxModpack.Logging.LogLevel)">
+        <member name="M:RelhaxModpack.Logging.WriteToLog(System.String,RelhaxModpack.Logfiles,RelhaxModpack.LogLevel)">
             <summary>
             Writes a message to a logfile instance, if it exists
             </summary>
@@ -169,122 +169,122 @@
             <param name="logfiles">The logfile to write to</param>
             <param name="logLevel">The level of severity of the message</param>
         </member>
-        <member name="T:RelhaxModpack.Settings.SelectionView">
+        <member name="T:RelhaxModpack.SelectionView">
             <summary>
             The type of selection view for how to display the selection tree
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.SelectionView.Default">
+        <member name="F:RelhaxModpack.SelectionView.Default">
             <summary>
             Default Winforms style
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.SelectionView.Legacy">
+        <member name="F:RelhaxModpack.SelectionView.Legacy">
             <summary>
             OMC style
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.SelectionView.DefaultV2">
+        <member name="F:RelhaxModpack.SelectionView.DefaultV2">
             <summary>
             Default WPF V2 style
             </summary>
         </member>
-        <member name="T:RelhaxModpack.Settings.ModpackSettings">
+        <member name="T:RelhaxModpack.ModpackSettings">
             <summary>
             Provides access to all settings used in the modpack.
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.ModpackSettings.SettingsDocument">
+        <member name="F:RelhaxModpack.ModpackSettings.SettingsDocument">
             <summary>
             The absolute path of the application settings file
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Settings.ModpackSettings.LoadSettings">
+        <member name="M:RelhaxModpack.ModpackSettings.LoadSettings">
             <summary>
             Initializes the Settings (should only be done on application start) and determinds which version of Settings loader method to use
             </summary>
             <returns></returns>
         </member>
-        <member name="T:RelhaxModpack.Settings.DatabaseVersion">
+        <member name="T:RelhaxModpack.DatabaseVersions">
             <summary>
             Database distribution levels
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.DatabaseVersion.Stable">
+        <member name="F:RelhaxModpack.DatabaseVersions.Stable">
             <summary>
             The stable public database
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.DatabaseVersion.Beta">
+        <member name="F:RelhaxModpack.DatabaseVersions.Beta">
             <summary>
             The unstable public beta database
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.DatabaseVersion.Test">
+        <member name="F:RelhaxModpack.DatabaseVersions.Test">
             <summary>
             The unstable private testing database.
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.Settings.ApplicationStartupPath">
+        <member name="F:RelhaxModpack.Settings.ApplicationStartupPath">
             <summary>
             The Startup root path of the application. Does not include the application name
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.Settings.ModpackSettingsFileName">
+        <member name="F:RelhaxModpack.Settings.ModpackSettingsFileName">
             <summary>
             The absolute name of the application settings file
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.Settings.ApplicationVersion">
+        <member name="F:RelhaxModpack.Settings.ApplicationVersion">
             <summary>
             The current distribution version of the application
             Alhpa should NEVER be built for public distribution unless direct testing!
             </summary>
-        </member>
-        <member name="T:RelhaxModpack.Utils.Languages">
-            <summary>
-            List of all supported Languages in the modpack
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Utils.Translations">
-            <summary>
-            Handles all localization for the application User Interface
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Utils.Translations.ApplyTranslationsOnWindowLoad(System.Windows.Window)">
-            <summary>
-            Applies and UI elements with translated strings
-            </summary>
-            <param name="window">The Window instance to apply translations to</param>
-        </member>
-        <member name="T:RelhaxModpack.Utils.Utils">
-            <summary>
-            A utility class for static functions used in various places in the modpack
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utils.Utils.ProgressIndicator">
-            <summary>
-            A generic Progress Indicator window to be used for when loading things on a UI thread
-            Use this in a using statement
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Utils.Utils.GetApplicationVersion">
-            <summary>
-            Return the entire assembely version
-            </summary>
-            <returns>The entire assembely version string (major, minor, build, revision)</returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.Utils.GetCompileTime">
-            <summary>
-            Return the date and time in EN-US form, the time that the application was built
-            </summary>
-            <returns>the application build date and time in EN-US form</returns>
         </member>
         <member name="T:RelhaxModpack.CiInfo">
             <summary>Info about the continuous integration server build that produced this binary.</summary> 
         </member>
         <member name="F:RelhaxModpack.CiInfo.BuildTag">
             <summary>String of the build number and build date/time, and other useful info.</summary> 
+        </member>
+        <member name="T:RelhaxModpack.Languages">
+            <summary>
+            List of all supported Languages in the modpack
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Translations">
+            <summary>
+            Handles all localization for the application User Interface
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Translations.ApplyTranslationsOnWindowLoad(System.Windows.Window)">
+            <summary>
+            Applies and UI elements with translated strings
+            </summary>
+            <param name="window">The Window instance to apply translations to</param>
+        </member>
+        <member name="T:RelhaxModpack.Utils">
+            <summary>
+            A utility class for static functions used in various places in the modpack
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProgressIndicator">
+            <summary>
+            A generic Progress Indicator window to be used for when loading things on a UI thread
+            Use this in a using statement
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetApplicationVersion">
+            <summary>
+            Return the entire assembely version
+            </summary>
+            <returns>The entire assembely version string (major, minor, build, revision)</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetCompileTime">
+            <summary>
+            Return the date and time in EN-US form, the time that the application was built
+            </summary>
+            <returns>the application build date and time in EN-US form</returns>
         </member>
         <member name="T:RelhaxModpack.Windows.AddPicturesZip">
             <summary>
