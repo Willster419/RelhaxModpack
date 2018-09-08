@@ -78,7 +78,8 @@ namespace RelhaxModpack.Logging
         /// the name of the uninstall log file
         /// </summary>
         public const string UninstallLogFilename = "TODO";
-        public const string ApplicationLogfileTimestamp = "{0:yyyy-MM-dd HH:mm:ss.fff}";
+        private const string ApplicationLogfileTimestamp = "yyyy-MM-dd HH:mm:ss.fff";
+        public const string ApplicationlogStartStop = "|------------------------------------------------------------------------------------------------|";
         /// <summary>
         /// Provides a constant refrence to the log file
         /// </summary>
@@ -91,6 +92,7 @@ namespace RelhaxModpack.Logging
         /// Provides a refrence to an instalce of an uninstall log file
         /// </summary>
         public static Logfile UninstallLogfile;
+        private static bool FailedToWriteToLogWindowShown = false;
         /// <summary>
         /// Initialize the logging subsystem for the appilcation
         /// </summary>
@@ -106,6 +108,7 @@ namespace RelhaxModpack.Logging
             {
                 if (File.Exists(oldLogFilePath) && !File.Exists(newLogFilePath))
                     File.Move(oldLogFilePath, newLogFilePath);
+                Settings.Settings.FirstLoadToV2 = true;
             }
             catch
             {
@@ -149,8 +152,25 @@ namespace RelhaxModpack.Logging
                     fileToWriteTo = UninstallLogfile;
                     break;
             }
-            if (fileToWriteTo == null && ApplicationLogfile != null)
-                WriteToLog(string.Format("Tried to write to null logfile {0}!", logfiles), Logfiles.Application, LogLevel.Error);
+            //check if logfile is null
+            if (fileToWriteTo == null)
+            {
+                //check if it's the application logfile
+                if(fileToWriteTo == ApplicationLogfile)
+                {
+                    if(!FailedToWriteToLogWindowShown)
+                    {
+                        MessageBox.Show("Failed to write to application log: instance is null!");
+                        FailedToWriteToLogWindowShown = true;
+                    }
+                }
+                else
+                {
+                    WriteToLog(string.Format("Tried to write to null log instance: {0}", logfiles.ToString()), Logfiles.Application, LogLevel.Error);
+                }
+                return;
+            }
+            fileToWriteTo.Write(message, logLevel);
         }
     }
 }

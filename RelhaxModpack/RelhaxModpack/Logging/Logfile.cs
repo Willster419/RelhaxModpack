@@ -87,8 +87,11 @@ namespace RelhaxModpack.Logging
                     logMessageLevel = "CRITICAL APPLICATION FAILURE: ";
                     break;
             }
-            message = string.Format("{0}   {1}{2}\r\n", Timestamp, logMessageLevel, message);
+            //https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings
+            string formattedDateTime = DateTime.Now.ToString(Timestamp);
+            message = string.Format("{0}   {1}{2}\r\n", formattedDateTime, logMessageLevel, message);
             fileStream.Write(Encoding.UTF8.GetBytes(message), 0, Encoding.UTF8.GetByteCount(message));
+            fileStream.Flush();
         }
 
         #region IDisposable Support
