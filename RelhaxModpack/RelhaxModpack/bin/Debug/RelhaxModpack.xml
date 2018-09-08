@@ -205,6 +205,26 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:RelhaxModpack.Settings.DatabaseVersion">
+            <summary>
+            Database distribution levels
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.DatabaseVersion.Stable">
+            <summary>
+            The stable public database
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.DatabaseVersion.Beta">
+            <summary>
+            The unstable public beta database
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.DatabaseVersion.Test">
+            <summary>
+            The unstable private testing database.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Settings.Settings.ApplicationStartupPath">
             <summary>
             The Startup root path of the application. Does not include the application name
@@ -213,6 +233,12 @@
         <member name="F:RelhaxModpack.Settings.Settings.ModpackSettingsFileName">
             <summary>
             The absolute name of the application settings file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.Settings.ApplicationVersion">
+            <summary>
+            The current distribution version of the application
+            Alhpa should NEVER be built for public distribution unless direct testing!
             </summary>
         </member>
         <member name="T:RelhaxModpack.Utils.Languages">
@@ -230,6 +256,29 @@
             Applies and UI elements with translated strings
             </summary>
             <param name="window">The Window instance to apply translations to</param>
+        </member>
+        <member name="T:RelhaxModpack.Utils.Utils">
+            <summary>
+            A utility class for static functions used in various places in the modpack
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.Utils.ProgressIndicator">
+            <summary>
+            A generic Progress Indicator window to be used for when loading things on a UI thread
+            Use this in a using statement
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Utils.Utils.GetApplicationVersion">
+            <summary>
+            Return the entire assembely version
+            </summary>
+            <returns>The entire assembely version string (major, minor, build, revision)</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.Utils.GetCompileTime">
+            <summary>
+            Return the date and time in EN-US form, the time that the application was built
+            </summary>
+            <returns>the application build date and time in EN-US form</returns>
         </member>
         <member name="T:RelhaxModpack.CiInfo">
             <summary>Info about the continuous integration server build that produced this binary.</summary> 
@@ -419,6 +468,26 @@
         <member name="F:RelhaxModpack.ReturnCodes.LogfileError">
             <summary>
             Error with logfile creation
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.ApplicationVersions">
+            <summary>
+            The build distribution version of the application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ApplicationVersions.Stable">
+            <summary>
+            The stable distribution for all users
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ApplicationVersions.Beta">
+            <summary>
+            The beta distrubution, for advanced users, may have new features or improvements, and bugs
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ApplicationVersions.Alpha">
+            <summary>
+            The alpha distribution. Should never be publicly distributed
             </summary>
         </member>
         <member name="T:RelhaxModpack.App">
