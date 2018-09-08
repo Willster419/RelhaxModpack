@@ -33,7 +33,11 @@ namespace RelhaxModpack
 
         private void TheMainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            Translations.ApplyTranslationsOnWindowLoad(this);
+            //don't actually do this yet
+            //Translations.ApplyTranslationsOnWindowLoad(this);
+
+            //create the logging for the application
+
             //create the notify icon
             /*NotifyIcon relhaxIcon = new NotifyIcon()
             {

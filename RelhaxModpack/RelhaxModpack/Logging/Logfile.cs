@@ -87,7 +87,6 @@ namespace RelhaxModpack.Logging
                     logMessageLevel = "CRITICAL APPLICATION FAILURE: ";
                     break;
             }
-            //{0:yyyy-MM-dd HH:mm:ss.fff}
             message = string.Format("{0}   {1}{2}\r\n", Timestamp, logMessageLevel, message);
             fileStream.Write(Encoding.UTF8.GetBytes(message), 0, Encoding.UTF8.GetByteCount(message));
         }

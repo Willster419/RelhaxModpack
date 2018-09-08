@@ -4,22 +4,197 @@
         <name>RelhaxModpack</name>
     </assembly>
     <members>
+        <member name="T:RelhaxModpack.Logging.Logfile">
+            <summary>
+            Represenets an instance of a logfile used for writing important logging information to a log
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Logging.Logfile.Filepath">
+            <summary>
+            The path to the file the log is writing to
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Logging.Logfile.Filename">
+            <summary>
+            The name of the file that the log is writing to
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Logging.Logfile.Timestamp">
+            <summary>
+            The date and time format for writing each line in the logfile
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Logfile.#ctor(System.String,System.String)">
+            <summary>
+            Create an instance of the logfile
+            </summary>
+            <param name="filePath">The path to the file to create/open</param>
+            <param name="timestamp">the date and time format to write for each log line</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Logfile.Init">
+            <summary>
+            Initializes the logfile
+            </summary>
+            <returns>True if sucessfull initialization, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Logfile.Write(System.String,RelhaxModpack.Logging.LogLevel)">
+            <summary>
+            Writes a line of text to the log file with the date and timestamp, and level of severity of the message
+            </summary>
+            <param name="message">The line to write</param>
+            <param name="logLevel">The level of severity of the log message. Default is info level.</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Logfile.Dispose(System.Boolean)">
+            <summary>
+            Dispose Managed and Unmanaged rescources used for the logfiles
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Logfile.Dispose">
+            <summary>
+            Dispose Managed and Unmanaged rescources used for the logfiles
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Logging.Logfiles">
+            <summary>
+            The different log files currently used in the modpack
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.Logfiles.Application">
+            <summary>
+            The default modpack logfile
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.Logfiles.Installer">
+            <summary>
+            logfile for when installing mods
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.Logfiles.Uninstaller">
+            <summary>
+            logfile for when uninstalling mods
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Logging.LogLevel">
+            <summary>
+            The level of severity of the log message
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.LogLevel.Debug">
+            <summary>
+            Debug message
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.LogLevel.Info">
+            <summary>
+            Informational message
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.LogLevel.Warning">
+            <summary>
+            A problem, but can be worked around
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.LogLevel.Error">
+            <summary>
+            Something is wrong, something may not work
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.LogLevel.Exception">
+            <summary>
+            Something is wrong, something will not work
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.LogLevel.ApplicationHalt">
+            <summary>
+            The application is closing now
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Logging.Logging">
+            <summary>
+            A static constant refrence to common logging variables and common log refrences
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.Logging.ApplicationLogFilename">
+            <summary>
+            The filename of the application log file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.Logging.OldApplicationLogFilename">
+            <summary>
+            The filename of the old application log file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.Logging.InstallLogFilename">
+            <summary>
+            The name of the install log file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.Logging.UninstallLogFilename">
+            <summary>
+            the name of the uninstall log file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.Logging.ApplicationLogfile">
+            <summary>
+            Provides a constant refrence to the log file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.Logging.InstallLogfile">
+            <summary>
+            Provides a refrence to an instance of an install log file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.Logging.UninstallLogfile">
+            <summary>
+            Provides a refrence to an instalce of an uninstall log file
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Logging.InitApplicationLogging">
+            <summary>
+            Initialize the logging subsystem for the appilcation
+            </summary>
+            <returns>True if sucessfull initialization, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Logging.DisposeApplicationLogging">
+            <summary>
+            Dispose of the application logging subsystem
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Logging.WriteToLog(System.String,RelhaxModpack.Logging.Logfiles,RelhaxModpack.Logging.LogLevel)">
+            <summary>
+            Writes a message to a logfile instance, if it exists
+            </summary>
+            <param name="message">The message to write</param>
+            <param name="logfiles">The logfile to write to</param>
+            <param name="logLevel">The level of severity of the message</param>
+        </member>
+        <member name="T:RelhaxModpack.Settings.SelectionView">
+            <summary>
+            The type of selection view for how to display the selection tree
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.SelectionView.Default">
+            <summary>
+            Default Winforms style
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.SelectionView.Legacy">
+            <summary>
+            OMC style
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.SelectionView.DefaultV2">
+            <summary>
+            Default WPF V2 style
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Settings.ModpackSettings">
             <summary>
-            Provides access to all settings used in the modpack. Common modpack settings are set with key/value pairs.
+            Provides access to all settings used in the modpack.
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.ModpackSettings.ApplicationStartupPath">
-            <summary>
-            The Startup root path of the application. Does not include the application name
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ModpackSettings.SettingsFileName">
-            <summary>
-            The absolute name of the application settings file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ModpackSettings.SettingsFilePath">
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.SettingsDocument">
             <summary>
             The absolute path of the application settings file
             </summary>
@@ -29,6 +204,16 @@
             Initializes the Settings (should only be done on application start) and determinds which version of Settings loader method to use
             </summary>
             <returns></returns>
+        </member>
+        <member name="F:RelhaxModpack.Settings.Settings.ApplicationStartupPath">
+            <summary>
+            The Startup root path of the application. Does not include the application name
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.Settings.ModpackSettingsFileName">
+            <summary>
+            The absolute name of the application settings file
+            </summary>
         </member>
         <member name="T:RelhaxModpack.Utils.Languages">
             <summary>
@@ -219,6 +404,21 @@
         <member name="M:RelhaxModpack.Windows.VersionInfo.InitializeComponent">
             <summary>
             InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.ReturnCodes">
+            <summary>
+            Application return error codes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ReturnCodes.Sucess">
+            <summary>
+            No error occured
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ReturnCodes.LogfileError">
+            <summary>
+            Error with logfile creation
             </summary>
         </member>
         <member name="T:RelhaxModpack.App">

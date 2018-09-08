@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using RelhaxModpack.Settings;
 
 namespace RelhaxModpack.Logging
 {
@@ -75,18 +78,79 @@ namespace RelhaxModpack.Logging
         /// the name of the uninstall log file
         /// </summary>
         public const string UninstallLogFilename = "TODO";
+        public const string ApplicationLogfileTimestamp = "{0:yyyy-MM-dd HH:mm:ss.fff}";
         /// <summary>
         /// Provides a constant refrence to the log file
         /// </summary>
         public static Logfile ApplicationLogfile;
+        /// <summary>
+        /// Provides a refrence to an instance of an install log file
+        /// </summary>
+        public static Logfile InstallLogfile;
+        /// <summary>
+        /// Provides a refrence to an instalce of an uninstall log file
+        /// </summary>
+        public static Logfile UninstallLogfile;
         /// <summary>
         /// Initialize the logging subsystem for the appilcation
         /// </summary>
         /// <returns>True if sucessfull initialization, false otherwise</returns>
         public static bool InitApplicationLogging()
         {
-
+            if (ApplicationLogfile != null)
+                throw new Utils.BadMemeException("only do this once jackass");
+            string oldLogFilePath = Path.Combine(Settings.Settings.ApplicationStartupPath, OldApplicationLogFilename);
+            string newLogFilePath = Path.Combine(Settings.Settings.ApplicationStartupPath, ApplicationLogFilename);
+            //if the old log exists and the new one does not, move the logging to the new one
+            try
+            {
+                if (File.Exists(oldLogFilePath) && !File.Exists(newLogFilePath))
+                    File.Move(oldLogFilePath, newLogFilePath);
+            }
+            catch
+            {
+                MessageBox.Show("Failed to move logfile");
+                return false;
+            }
+            ApplicationLogfile = new Logfile(newLogFilePath, ApplicationLogfileTimestamp);
+            if(!ApplicationLogfile.Init())
+            {
+                MessageBox.Show("Failed to initialize logfile, check file permissions");
+                return false;
+            }
             return true;
+        }
+        /// <summary>
+        /// Dispose of the application logging subsystem
+        /// </summary>
+        public static void DisposeApplicationLogging()
+        {
+            ApplicationLogfile.Dispose();
+            ApplicationLogfile = null;
+        }
+        /// <summary>
+        /// Writes a message to a logfile instance, if it exists
+        /// </summary>
+        /// <param name="message">The message to write</param>
+        /// <param name="logfiles">The logfile to write to</param>
+        /// <param name="logLevel">The level of severity of the message</param>
+        public static void WriteToLog(string message, Logfiles logfiles = Logfiles.Application,LogLevel logLevel = LogLevel.Info)
+        {
+            Logfile fileToWriteTo = null;
+            switch(logfiles)
+            {
+                case Logfiles.Application:
+                    fileToWriteTo = ApplicationLogfile;
+                    break;
+                case Logfiles.Installer:
+                    fileToWriteTo = InstallLogfile;
+                    break;
+                case Logfiles.Uninstaller:
+                    fileToWriteTo = UninstallLogfile;
+                    break;
+            }
+            if (fileToWriteTo == null && ApplicationLogfile != null)
+                WriteToLog(string.Format("Tried to write to null logfile {0}!", logfiles), Logfiles.Application, LogLevel.Error);
         }
     }
 }
