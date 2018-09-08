@@ -67,6 +67,9 @@ namespace RelhaxModpack
                 throw new BadMemeException("You're bad at logfiles");
             if (fileStream == null)
                 throw new BadMemeException("You're still bad at logfiles");
+            //only alpha and beta application distributions should log debug messages
+            if (Settings.ApplicationVersion == ApplicationVersions.Stable && logLevel == LogLevel.Debug)
+                return;
             string logMessageLevel = string.Empty;
             switch(logLevel)
             {
