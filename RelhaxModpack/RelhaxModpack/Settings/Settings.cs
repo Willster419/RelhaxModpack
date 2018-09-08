@@ -56,6 +56,10 @@ namespace RelhaxModpack
 
         public static readonly string RelhaxLibrariesFolder = Path.Combine(ApplicationStartupPath, "RelhaxLibraries");
 
+        public static readonly string RelhaxUserConfigsFolder = Path.Combine(ApplicationStartupPath, "RelhaxUserConfigs");
+
+        public static readonly string RelhaxUserModsFolder = Path.Combine(ApplicationStartupPath, "RelhaxUserMods");
+
         public static readonly string RelhaxTempFolder = Path.Combine(ApplicationStartupPath, "RelhaxTemp");
 
         public static readonly string MD5HashDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "MD5HashDatabase.xml");
