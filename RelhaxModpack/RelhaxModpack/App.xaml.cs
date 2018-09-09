@@ -129,8 +129,6 @@ namespace RelhaxModpack
                         break;
                 }
             }
-            //show loading window
-
         }
     }
 }
