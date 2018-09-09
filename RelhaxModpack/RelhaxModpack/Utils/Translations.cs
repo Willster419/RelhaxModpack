@@ -36,9 +36,11 @@ namespace RelhaxModpack
         private static Dictionary<string, string> French = new Dictionary<string, string>();
         //default is to use english
         private static Dictionary<string, string> CurrentLanguage = English;
+        private static Languages LanguageName;
         #region Language methods
         public static void SetLanguage(Languages language)
         {
+            LanguageName = language;
             switch(language)
             {
                 case Languages.English:
@@ -55,12 +57,14 @@ namespace RelhaxModpack
                     break;
             }
         }
-        public static string GetTranslatedString(string componentName)
+
+        public static string GetTranslatedString(string componentName, string valueToUseIfBlank = "")
         {
             if(string.IsNullOrWhiteSpace(componentName) || TranslationComponentBlacklist.Contains(componentName))
             {
                 //log debug translation component is blank null or from blacklist
-                return componentName;
+                Logging.WriteToLog("Translation component name is blank, using default value of " + valueToUseIfBlank, Logfiles.Application, LogLevel.Debug);
+                return valueToUseIfBlank;
             }
             string s = "";
             //check if componentName key exists in current language
@@ -71,17 +75,32 @@ namespace RelhaxModpack
                 if(s.Equals(TranslationNeeded))
                 {
                     //Log warning it is todo in selected language
+                    Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language={1}", componentName, LanguageName.ToString()),Logfiles.Application,LogLevel.Error);
                     s = English[componentName];
-                    if(English[componentName].Equals(TranslationNeeded))
+                    if(s.Equals(TranslationNeeded))
                     {
                         //Log error it is todo in english
+                        Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language=English", componentName), Logfiles.Application, LogLevel.Error);
                         s = componentName;
                     }
                 }
             }
             else
             {
+                //check if key exists in english (should not be the case 99% of the time)
+                if(English.ContainsKey(componentName))
+                {
+                    Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language={1}", componentName, LanguageName.ToString()), Logfiles.Application, LogLevel.Error);
+                    s = English[componentName];
+                    if (s.Equals(TranslationNeeded))
+                    {
+                        //Log error it is todo in english
+                        Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language=English", componentName), Logfiles.Application, LogLevel.Error);
+                        s = componentName;
+                    }
+                }
                 //Log error it does not exist
+                Logging.WriteToLog(string.Format("component {0} does not exist in any languages", componentName), Logfiles.Application, LogLevel.Error);
                 s=componentName;
             }
             return s;
@@ -93,7 +112,7 @@ namespace RelhaxModpack
             Polish.Add(key, message);
             French.Add(key, message);
         }
-        public static void InitTranslations()
+        public static void LoadTranslations()
         {
             //Syntax is as follows:
             //languageName.Add("componetName","TranslatedString");
@@ -2396,9 +2415,9 @@ namespace RelhaxModpack
                 if (control is Panel subP)
                     ApplyPanelTranslations(subP);
                 else if (control is TextBlock tb)
-                    tb.Text = "TODO";
+                    tb.Text = GetTranslatedString(tb.Name, tb.Text);
                 else if (control is TextBox tb2)
-                    tb2.Text = "TODO";
+                    tb2.Text = GetTranslatedString(tb2.Name, tb2.Text);
                 //check if it's a tab control (itterate through the tabs)
                 else if (control is TabControl tc)
                     ApplyTabControlTranslations(tc);
@@ -2417,12 +2436,12 @@ namespace RelhaxModpack
         {
             if (cc.Content is string)
             {
-                cc.Content = "TODO";
+                cc.Content = GetTranslatedString(cc.Name, (string)cc.Content);
             }
             else if (cc.Content is TextBox tb)
-                tb.Text = "TODO";
+                tb.Text = GetTranslatedString(tb.Name, tb.Text);
             else if (cc.Content is TextBlock tb2)
-                tb2.Text = "TODO";
+                tb2.Text = GetTranslatedString(tb2.Name, tb2.Text);
             else if (cc.Content is Hyperlink hl)
             {
 
@@ -2442,11 +2461,11 @@ namespace RelhaxModpack
             foreach (TabItem ti in tc.Items)
             {
                 if (ti.Header is string)
-                    ti.Header = "TODO";
+                    ti.Header = GetTranslatedString(ti.Name,(string)ti.Header);
                 else if (ti.Header is TextBlock htb)
-                    htb.Text = "TODO";
+                    htb.Text = GetTranslatedString(htb.Name,htb.Text);
                 else if (ti.Header is TextBox htb2)
-                    htb2.Text = "TODO";
+                    htb2.Text = GetTranslatedString(htb2.Name,htb2.Text);
                 else if (ti.Header is ContentControl hcc)
                     ApplyContentTranslations(hcc);
                 if (ti.Content is Panel p)
@@ -2461,17 +2480,17 @@ namespace RelhaxModpack
         private static void ApplyGroupBoxTranslations(GroupBox gb)
         {
             if (gb.Header is string)
-                gb.Header = "TODO";
+                gb.Header = GetTranslatedString(gb.Name, (string)gb.Header);
             else if (gb.Header is TextBlock htb)
-                htb.Text = "TODO";
+                htb.Text = GetTranslatedString(htb.Name, htb.Text);
             else if (gb.Header is TextBox htb2)
-                htb2.Text = "TODO";
+                htb2.Text = GetTranslatedString(htb2.Name, htb2.Text);
             else if (gb.Header is ContentControl hcc)
                 ApplyContentTranslations(hcc);
             if (gb.Content is TextBlock tb)
-                tb.Text = "TODO";
+                tb.Text = GetTranslatedString(tb.Name, tb.Text);
             else if (gb.Content is TextBox tb2)
-                tb2.Text = "TODO";
+                tb2.Text = GetTranslatedString(tb2.Name, tb2.Text);
             else if (gb.Content is Decorator dec)
                 ApplyDecoratorTranslations(dec);
             else if (gb.Content is ContentControl cc)
@@ -2483,9 +2502,9 @@ namespace RelhaxModpack
         private static void ApplyDecoratorTranslations(Decorator dec)
         {
             if (dec.Child is TextBlock tb)
-                tb.Text = "TODO";
+                tb.Text = GetTranslatedString(tb.Name, tb.Text);
             else if (dec.Child is TextBox tb2)
-                tb2.Text = "TODO";
+                tb2.Text = GetTranslatedString(tb2.Name,tb2.Text);
             else if (dec.Child is Decorator dec2)
                 ApplyDecoratorTranslations(dec2);
             else if (dec.Child is Panel p)

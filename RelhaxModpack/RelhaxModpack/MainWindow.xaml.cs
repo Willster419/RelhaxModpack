@@ -31,12 +31,13 @@ namespace RelhaxModpack
 
         private void TheMainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            //load translation hashes
-            Translations.InitTranslations();
+            //load translation hashes and set default language
+            Translations.SetLanguage(Languages.English);
+            Translations.LoadTranslations();
             //apply translations to this window
-            //Translations.ApplyTranslationsOnWindowLoad(this);
+            Translations.ApplyTranslationsOnWindowLoad(this);
 
-            
+            //create the tray icons and menus
         }
 
         private void TheMainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -48,7 +49,7 @@ namespace RelhaxModpack
             }
         }
 
-        private void CreateTrayIcon()
+        private void CreateTray()
         {
             //create base tray icon
             relhaxIcon = new NotifyIcon()
@@ -57,6 +58,7 @@ namespace RelhaxModpack
                 Icon = Properties.Resources.modpack_icon,
                 Text = Title
             };
+            //create menu options
 
         }
     }
