@@ -194,9 +194,14 @@
             Provides access to all settings used in the modpack.
             </summary>
         </member>
-        <member name="F:RelhaxModpack.ModpackSettings.SettingsDocument">
+        <member name="P:RelhaxModpack.ModpackSettings.SettingsFilePath">
             <summary>
             The absolute path of the application settings file
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.ModpackSettings.SettingsFileName">
+            <summary>
+            Get the name of the settings file
             </summary>
         </member>
         <member name="M:RelhaxModpack.ModpackSettings.LoadSettings">

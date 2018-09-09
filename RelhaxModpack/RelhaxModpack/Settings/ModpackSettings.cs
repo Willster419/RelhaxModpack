@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Xml;
+using System.Windows;
 
 namespace RelhaxModpack
 {
@@ -42,30 +43,41 @@ namespace RelhaxModpack
     /// </summary>
     public class ModpackSettings
     {
-        
+        public ModpackSettings(string filePath) : base()
+        {
+            SettingsFilePath = filePath;
+        }
         /// <summary>
         /// The absolute path of the application settings file
         /// </summary>
-        //public static readonly string SettingsFilePath = Path.Combine(ApplicationStartupPath, SettingsFileName);
-        //The document for the main 
-        private static XmlDocument SettingsDocument;
+        public string SettingsFilePath { get; private set; }
+        /// <summary>
+        /// Get the name of the settings file
+        /// </summary>
+        public string SettingsFileName
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(SettingsFilePath))
+                    return Path.GetFileName(SettingsFilePath);
+                else
+                    return string.Empty;
+            }
+        }
+        
         /// <summary>
         /// Initializes the Settings (should only be done on application start) and determinds which version of Settings loader method to use
         /// </summary>
         /// <returns></returns>
-        public static bool LoadSettings()
+        public bool LoadSettings()
         {
-            if(SettingsDocument != null)
-            {
-                //TODO: logging message here
-                return false;
-            }
-            SettingsDocument = new XmlDocument();
+            XmlDocument SettingsDocument = new XmlDocument();
+            
             return true;
         }
-        public static bool SaveSettings()
+        public bool SaveSettings()
         {
-
+            XmlDocument SettingsDocument = new XmlDocument();
             return true;
         }
     }

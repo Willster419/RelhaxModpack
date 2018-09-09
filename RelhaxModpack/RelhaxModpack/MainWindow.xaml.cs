@@ -31,13 +31,25 @@ namespace RelhaxModpack
 
         private void TheMainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            //load please wait thing
+
             //load translation hashes and set default language
             Translations.SetLanguage(Languages.English);
             Translations.LoadTranslations();
             //apply translations to this window
             Translations.ApplyTranslationsOnWindowLoad(this);
-
             //create the tray icons and menus
+
+            //load application settings
+            Settings.InitSettings();
+            //check for updates
+
+            //check for minimizing
+
+            //check for conflicting settings and command line argeuemts
+
+            //dispose of it here
+
         }
 
         private void TheMainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)

@@ -110,6 +110,12 @@ namespace RelhaxModpack
 
         public static bool InitSettings()
         {
+            //legacy compatibility: move the old settings name to the new settings name
+            if (File.Exists(Path.Combine(ApplicationStartupPath, OldModpackSettingsFilename)))
+                File.Move(Path.Combine(ApplicationStartupPath, OldModpackSettingsFilename), Path.Combine(ApplicationStartupPath, ModpackSettingsFileName));
+            if (ModpackSettings != null)
+                throw new BadMemeException("What the hell you doing fool?");
+            ModpackSettings = new ModpackSettings(Path.Combine(ApplicationStartupPath, ModpackSettingsFileName));
             return true;
         }
         #endregion
