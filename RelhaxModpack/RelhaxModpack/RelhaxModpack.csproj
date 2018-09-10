@@ -46,7 +46,8 @@
     <Prefer32Bit>false</Prefer32Bit>
     <DocumentationFile>bin\Debug\RelhaxModpack.xml</DocumentationFile>
     <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>RelhaxModpack.ruleset</CodeAnalysisRuleSet>
+    <NoWarn>1303</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -56,6 +57,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>RelhaxModpack.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>RelhaxModpack.App</StartupObject>
@@ -234,6 +236,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Content Include="Resources\Licences\modpack_license_agrement.txt" />
+    <None Include="RelhaxModpack.ruleset" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\App.config" />

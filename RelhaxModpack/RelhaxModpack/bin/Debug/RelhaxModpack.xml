@@ -189,6 +189,26 @@
             Default WPF V2 style
             </summary>
         </member>
+        <member name="T:RelhaxModpack.DatabaseVersions">
+            <summary>
+            Database distribution levels
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseVersions.Stable">
+            <summary>
+            The stable public database
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseVersions.Beta">
+            <summary>
+            The unstable public beta database
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseVersions.Test">
+            <summary>
+            The unstable private testing database.
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.ModpackSettings">
             <summary>
             Provides access to all settings used in the modpack.
@@ -285,26 +305,6 @@
             Saves all fields (settings) to an xml file
             </summary>
             <returns></returns>
-        </member>
-        <member name="T:RelhaxModpack.DatabaseVersions">
-            <summary>
-            Database distribution levels
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.DatabaseVersions.Stable">
-            <summary>
-            The stable public database
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.DatabaseVersions.Beta">
-            <summary>
-            The unstable public beta database
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.DatabaseVersions.Test">
-            <summary>
-            The unstable private testing database.
-            </summary>
         </member>
         <member name="F:RelhaxModpack.Settings.ApplicationStartupPath">
             <summary>
