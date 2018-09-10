@@ -41,6 +41,24 @@ namespace RelhaxModpack
         Quick = 1
     }
     /// <summary>
+    /// Database distribution levels
+    /// </summary>
+    public enum DatabaseVersions
+    {
+        /// <summary>
+        /// The stable public database
+        /// </summary>
+        Stable,
+        /// <summary>
+        /// The unstable public beta database
+        /// </summary>
+        Beta,
+        /// <summary>
+        /// The unstable private testing database.
+        /// </summary>
+        Test
+    }
+    /// <summary>
     /// Provides access to all settings used in the modpack.
     /// </summary>
     public class ModpackSettings
@@ -67,7 +85,7 @@ namespace RelhaxModpack
             }
         }
         //list of properties to exclude from the properties enumeration
-        private string[] PropertiesToExclude = new string[]
+        private readonly string[] PropertiesToExclude = new string[]
         {
 
         };
@@ -97,11 +115,9 @@ namespace RelhaxModpack
         /// </summary>
         public bool SaveUserData = false;
         //toggle for each view if the borders around the child selection options should show
-        public bool EnableBordersDefaultView = false;
         public bool EnableBordersLegacyView = false;
         public bool EnableBordersDefaultV2View = false;
         //toggle for each view if the color change should occur when a child selection happends
-        public bool EnableColorChangeDefaultView = false;
         public bool EnableColorChangeLegacyView = false;
         public bool EnableColorChangeDefaultV2View = false;
         //toggle if the installation complete window will be shown
@@ -151,7 +167,10 @@ namespace RelhaxModpack
         public int PreviewWidth = 450;
         public LoadingGifs GIF = LoadingGifs.Standard;
         public UninstallModes UninstallMode = UninstallModes.Default;
-        public SelectionView SView = SelectionView.Default;
+        public SelectionView ModSelectionView = SelectionView.Default;
+        public Languages Language = Languages.English;
+        public DatabaseVersions DatabaseDistroVersion = DatabaseVersions.Stable;
+        public ApplicationVersions ApplicationDistroVersion = ApplicationVersions.Stable;
         #endregion
         /// <summary>
         /// Initializes the Settings (should only be done on application start) and determinds which version of Settings loader method to use
@@ -179,7 +198,10 @@ namespace RelhaxModpack
                     Translations.SetLanguageOnFirstLoad();
                     return false;
                 }
+                //using child of child rather than xpath gets around the fact that the root element name has changed
                 XmlNodeList settings = doc.ChildNodes[0].ChildNodes;
+                //https://docs.microsoft.com/en-us/dotnet/api/system.reflection.fieldinfo.getvalue?view=netframework-4.7.2#System_Reflection_FieldInfo_GetValue_System_Object_
+
                 FieldInfo[] fields = typeof(ModpackSettings).GetFields();
                 for(int i = 0; i < settings.Count; i++)
                 {
@@ -187,26 +209,109 @@ namespace RelhaxModpack
                     switch(setting.Name)
                     {
                         //put legacy names here to direct name change
+                        case "backupModFolder":
+                            BackupModFolder = bool.Parse(setting.InnerText);
+                            break;
+                        case "cleanInstallation":
+                            CleanInstallation = bool.Parse(setting.InnerText);
+                            break;
+                        case "forceManuel":
+                            ForceManuel = bool.Parse(setting.InnerText);
+                            break;
+                        case "saveLastConfig":
+                            SaveLastConfig = bool.Parse(setting.InnerText);
+                            break;
+                        case "saveUserData":
+                            SaveUserData = bool.Parse(setting.InnerText);
+                            break;
+                        case "EnableChildColorChangeLegacyView":
+                            EnableColorChangeLegacyView = bool.Parse(setting.InnerText);
+                            break;
+                        case "EnableChildColorChangeDefaultV2View":
+                            EnableColorChangeDefaultV2View = bool.Parse(setting.InnerText);
+                            break;
+                        case "clearCache":
+                            ClearCache = bool.Parse(setting.InnerText);
+                            break;
+                        case "deleteLogs":
+                            DeleteLogs = bool.Parse(setting.InnerText);
+                            break;
+                        case "modSelectionHeight":
+                            ModSelectionHeight = int.Parse(setting.InnerText);
+                            break;
+                        case "modSelectionWidth":
+                            ModSelectionWidth = int.Parse(setting.InnerText);
+                            break;
+                        case "previewX":
+                            PreviewX = int.Parse(setting.InnerText);
+                            break;
+                        case "previewY":
+                            PreviewY = int.Parse(setting.InnerText);
+                            break;
+                        case "loadingGif":
+                            GIF = (LoadingGifs)int.Parse(setting.InnerText);
+                            break;
+                        case "language":
+                            Language = (Languages)int.Parse(setting.InnerText);
+                            break;
+                        case "SelectionView":
+                            ModSelectionView = (SelectionView)int.Parse(setting.InnerText);
+                            if (ModSelectionView == SelectionView.Default)
+                                ModSelectionView = SelectionView.DefaultV2;
+                            break;
+                        case "BetaApplication":
+                            ApplicationDistroVersion = ApplicationVersions.Beta;
+                            break;
+                        case "BetaDatabase":
+                            DatabaseDistroVersion = DatabaseVersions.Beta;
+                            break;
+                        //or when a setting name is changed (should never happen)
                         default:
+                            //https://stackoverflow.com/questions/4651285/checking-if-a-list-of-objects-contains-a-property-with-a-specific-value
                             //check if field/setting with name will match with the xml name (should always be one in theory)
                             FieldInfo[] matches = fields.Where(f => f.Name.Equals(settings[i].Name)).ToArray();
                             Logging.WriteToLog("" + matches.Count() + " matches for xml setting name " + settings[i].Name,Logfiles.Application,LogLevel.Debug);
                             if (matches.Count() == 1)
                             {
                                 FieldInfo settingField = matches[0];
-                                //get the type of that field so we know how to parse
-                                string type = settingField.GetValue(this).GetType().ToString();
+                                //get the type of that field so we know how to parse for each value type
+                                //string type = settingField.GetValue(this).GetType().ToString();
+                                //settingFIeld.setvalue(this,parse setting innertext)
                                 Type type2 = settingField.GetValue(this).GetType();
-                                switch(Type.GetTypeCode(type2))
+                                //https://stackoverflow.com/questions/5482844/how-to-compare-types
+                                if (type2 == typeof(bool))
                                 {
-                                    case TypeCode.Boolean:
-                                        settingField.SetValue(this, bool.Parse(setting.InnerText));
-                                        break;
-                                    default:
-                                        Logging.WriteToLog("unknown type: " + type2, Logfiles.Application, LogLevel.Debug);
-                                        break;
+                                    settingField.SetValue(this, bool.Parse(setting.InnerText));
                                 }
-                                //setting.SetValue(this,typeof())
+                                else if (type2 == typeof(int))
+                                {
+                                    settingField.SetValue(this, int.Parse(setting.InnerText));
+                                }
+                                else if ((type2 == typeof(decimal)) || (type2 == typeof(float)) || (type2 == typeof(double)))
+                                {
+                                    settingField.SetValue(this, float.Parse(setting.InnerText));
+                                }
+                                else if (type2 == typeof(LoadingGifs))
+                                {
+                                    //https://docs.microsoft.com/en-us/dotnet/api/system.enum.parse?view=netframework-4.7.2
+                                    settingField.SetValue(this, Enum.Parse(typeof(LoadingGifs), setting.InnerText));
+                                }
+                                else if (type2 == typeof(UninstallModes))
+                                {
+                                    settingField.SetValue(this, Enum.Parse(typeof(UninstallModes), setting.InnerText));
+                                }
+                                else if (type2 == typeof(SelectionView))
+                                {
+                                    settingField.SetValue(this, Enum.Parse(typeof(SelectionView), setting.InnerText));
+                                }
+                                else if (type2 == typeof(Languages))
+                                {
+                                    settingField.SetValue(this, Enum.Parse(typeof(Languages), setting.InnerText));
+                                }
+                                else
+                                {
+                                    Logging.WriteToLog("unknown type: " + type2, Logfiles.Application, LogLevel.Warning);
+                                }
                             }
                             break;
                     }

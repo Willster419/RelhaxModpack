@@ -3,26 +3,6 @@
 
 namespace RelhaxModpack
 {
-    #region Settings Enumerations
-    /// <summary>
-    /// Database distribution levels
-    /// </summary>
-    public enum DatabaseVersions
-    {
-        /// <summary>
-        /// The stable public database
-        /// </summary>
-        Stable,
-        /// <summary>
-        /// The unstable public beta database
-        /// </summary>
-        Beta,
-        /// <summary>
-        /// The unstable private testing database.
-        /// </summary>
-        Test
-    }
-    #endregion
     //TODO: documentation
     public static class Settings
     {
@@ -70,7 +50,7 @@ namespace RelhaxModpack
         //also serves as place to put default values
         public static bool FirstLoad = false;
         public static bool FirstLoadToV2 = false;
-        public static DatabaseVersions DatabaseDistroVersion = RelhaxModpack.DatabaseVersions.Stable;
+        public static bool TestMode = false;
         public static bool SkipUpdate = false;
         public static bool SilentStart = false;
         public static bool ForceVisible = false;

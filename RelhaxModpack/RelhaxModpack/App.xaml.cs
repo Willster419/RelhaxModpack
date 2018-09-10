@@ -83,11 +83,11 @@ namespace RelhaxModpack
                 switch(commandArgs[i])
                 {
                     case "test":
-                        Logging.WriteToLog("loading in test mode");
-                        Settings.DatabaseDistroVersion = DatabaseVersions.Test;
+                        Logging.WriteToLog("test, loading in test mode");
+                        Settings.TestMode = true;
                         break;
                     case "skip-update":
-                        Logging.WriteToLog("skipping updating");
+                        Logging.WriteToLog("skip-update, skipping updating");
                         Settings.SkipUpdate = true;
                         break;
                     case "silent-start":

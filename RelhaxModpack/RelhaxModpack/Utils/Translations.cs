@@ -37,11 +37,9 @@ namespace RelhaxModpack
         private static Dictionary<string, string> French = new Dictionary<string, string>();
         //default is to use english
         private static Dictionary<string, string> CurrentLanguage = English;
-        private static Languages LanguageName;
         #region Language methods
         public static void SetLanguage(Languages language)
         {
-            LanguageName = language;
             switch(language)
             {
                 case Languages.English:
@@ -97,7 +95,7 @@ namespace RelhaxModpack
                 if(s.Equals(TranslationNeeded))
                 {
                     //Log warning it is todo in selected language
-                    Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language={1}", componentName, LanguageName.ToString()),Logfiles.Application,LogLevel.Error);
+                    Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language={1}", componentName, Settings.ModpackSettings.Language.ToString()),Logfiles.Application,LogLevel.Error);
                     s = English[componentName];
                     if(s.Equals(TranslationNeeded))
                     {
@@ -112,7 +110,7 @@ namespace RelhaxModpack
                 //check if key exists in english (should not be the case 99% of the time)
                 if(English.ContainsKey(componentName))
                 {
-                    Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language={1}", componentName, LanguageName.ToString()), Logfiles.Application, LogLevel.Error);
+                    Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language={1}", componentName, Settings.ModpackSettings.Language.ToString()), Logfiles.Application, LogLevel.Error);
                     s = English[componentName];
                     if (s.Equals(TranslationNeeded))
                     {
