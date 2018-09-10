@@ -41,6 +41,7 @@ namespace RelhaxModpack
             //create the tray icons and menus
 
             //load application settings
+            Logging.WriteToLog("Init and load settings");
             Settings.InitSettings();
             //check for updates
 
@@ -50,10 +51,15 @@ namespace RelhaxModpack
 
             //dispose of it here
 
+            //TODO: save all UI components to a hashtable?
         }
 
         private void TheMainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            Logging.WriteToLog("Saving settings");
+            if (Settings.ModpackSettings.SaveSettings())
+                Logging.WriteToLog("Settings saved");
+            Logging.WriteToLog("Disposing tray icon");
             if(relhaxIcon != null)
             {
                 relhaxIcon.Dispose();

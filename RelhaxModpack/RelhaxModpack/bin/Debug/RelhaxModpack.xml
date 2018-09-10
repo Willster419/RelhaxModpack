@@ -204,9 +204,85 @@
             Get the name of the settings file
             </summary>
         </member>
+        <member name="F:RelhaxModpack.ModpackSettings.NotifyIfSameDatabase">
+            <summary>
+            toggle if the program should notify the user if the database version is the same as the last installed version
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.BackupModFolder">
+            <summary>
+            toggle if the program will backup the current mod installation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.CleanInstallation">
+            <summary>
+            toggle if the program will clean the mods and res_mods folders before installation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ForceManuel">
+            <summary>
+            toggle if the program should force the user to manually point to the WoT location
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.SaveLastConfig">
+            <summary>
+            toggle if the application should automatically save the last selected config to also be automatically loaded upon selection load
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.SaveUserData">
+            <summary>
+            toggle if the application should save user cache save data like session stats, or auto equip configs
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ModSelectionHeight">
+            <summary>
+            the height, in pixels, of the ModSelectionView window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ModSelectionWidth">
+            <summary>
+            the width, in pixels, of the ModSelectionView window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ModSelectionFullscreen">
+            <summary>
+            toggle for if the ModSelectionView window should be shown in fullscreen mode
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.PreviewX">
+            <summary>
+            the x-coordinate location, in pixels, of the Preview window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.PreviewY">
+            <summary>
+            the y-coordinate location, in pixels, of the Preview window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.PreviewFullscreen">
+            <summary>
+            toggle for if the Preview window should be shown in fullscreen mode
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.PreviewHeight">
+            <summary>
+            the height, in pixels, of the Preview window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.PreviewWidth">
+            <summary>
+            the width, in pixels, of the Preview window
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.ModpackSettings.LoadSettings">
             <summary>
             Initializes the Settings (should only be done on application start) and determinds which version of Settings loader method to use
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.ModpackSettings.SaveSettings">
+            <summary>
+            Saves all fields (settings) to an xml file
             </summary>
             <returns></returns>
         </member>

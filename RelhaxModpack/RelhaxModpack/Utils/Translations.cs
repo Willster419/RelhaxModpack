@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -54,6 +55,27 @@ namespace RelhaxModpack
                     break;
                 case Languages.Polish:
                     CurrentLanguage = Polish;
+                    break;
+            }
+        }
+
+        public static void SetLanguageOnFirstLoad()
+        {
+            //try to get and load the native language of the user
+            Logging.WriteToLog("Language: " + CultureInfo.CurrentCulture.DisplayName);
+            switch (CultureInfo.InstalledUICulture.Name.Split('-')[0].ToLower())
+            {
+                case "de":
+                    SetLanguage(Languages.German);
+                    break;
+                case "pl":
+                    SetLanguage(Languages.Polish);
+                    break;
+                case "fr":
+                    SetLanguage(Languages.French);
+                    break;
+                default:
+                    SetLanguage(Languages.English);
                     break;
             }
         }

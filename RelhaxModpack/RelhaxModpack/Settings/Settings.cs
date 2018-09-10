@@ -116,6 +116,7 @@ namespace RelhaxModpack
             if (ModpackSettings != null)
                 throw new BadMemeException("What the hell you doing fool?");
             ModpackSettings = new ModpackSettings(Path.Combine(ApplicationStartupPath, ModpackSettingsFileName));
+            ModpackSettings.LoadSettings();
             return true;
         }
         #endregion
