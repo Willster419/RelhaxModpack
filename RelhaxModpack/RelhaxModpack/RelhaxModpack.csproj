@@ -286,7 +286,9 @@
     <Content Include="Resources\Libraries\NAudio.dll" />
     <Content Include="Resources\Libraries\Newtonsoft.Json.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Resources\XML\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>echo namespace RelhaxModpack &gt; "$(ProjectDir)\Utils\CiInfo.cs"
