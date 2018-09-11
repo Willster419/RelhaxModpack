@@ -128,9 +128,9 @@ namespace RelhaxModpack
         //toggle if the program will create desktop shortcuts
         public bool CreateShortcuts = false;
         //toggle instant extraction
-        public bool InstantExtraction = false;
+        public bool DownloadInstantExtraction = false;
         //toggle super extraction
-        public bool SuperExtraction = false;
+        public bool MulticoreExtraction = false;
         //turn on export mode
         public bool ExportMode = false;
         /// <summary>
@@ -209,6 +209,7 @@ namespace RelhaxModpack
                     switch(setting.Name)
                     {
                         //put legacy names here to direct name change
+                        //TODO: super extraction and instant extraction
                         case "backupModFolder":
                             BackupModFolder = bool.Parse(setting.InnerText);
                             break;

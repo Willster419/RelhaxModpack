@@ -56,8 +56,6 @@ namespace RelhaxModpack
             //check for conflicting settings and command line argeuemts
 
             //dispose of it here
-
-            //TODO: save all UI components to a hashtable?
         }
 
         private void TheMainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -91,89 +89,85 @@ namespace RelhaxModpack
 
         }
 
-        private void EnableBordersCB_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void OnMulticoreExtractionChanged(object sender, RoutedEventArgs e)
         {
-
+            Settings.ModpackSettings.MulticoreExtraction = (bool)MulticoreExtractionCB.IsChecked;
         }
 
         private void OnCreateShortcutsChanged(object sender, RoutedEventArgs e)
         {
-
+            Settings.ModpackSettings.CreateShortcuts = (bool)CreateShortcutsCB.IsChecked;
         }
 
         private void OnSaveUserDataChanged(object sender, RoutedEventArgs e)
         {
-
+            Settings.ModpackSettings.SaveUserData = (bool)SaveUserDataCB.IsChecked;
         }
 
         private void OnClearWoTCacheChanged(object sender, RoutedEventArgs e)
         {
-
+            Settings.ModpackSettings.ClearCache = (bool)ClearCacheCB.IsChecked;
         }
 
         private void OnClearLogFilesChanged(object sender, RoutedEventArgs e)
         {
-
+            Settings.ModpackSettings.DeleteLogs = (bool)ClearLogFilesCB.IsChecked;
         }
 
         private void OnCleanInstallChanged(object sender, RoutedEventArgs e)
         {
-
+            Settings.ModpackSettings.CleanInstallation = (bool)CleanInstallCB.IsChecked;
         }
 
         private void OnImmidateExtarctionChanged(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void ShowInstallCompleteWindowCB_Click(object sender, RoutedEventArgs e)
-        {
-
+            Settings.ModpackSettings.DownloadInstantExtraction = (bool)InstantExtractionCB.IsChecked;
         }
 
         private void OnShowInstallCompleteWindowChanged(object sender, RoutedEventArgs e)
         {
-
+            Settings.ModpackSettings.ShowInstallCompleteWindow = (bool)ShowInstallCompleteWindowCB.IsChecked;
         }
 
         private void OnBackupModsChanged(object sender, RoutedEventArgs e)
         {
-
+            Settings.ModpackSettings.BackupModFolder = (bool)BackupModsCheckBox.IsChecked;
         }
 
         private void OnPreviewLoadingImageChange(object sender, RoutedEventArgs e)
         {
-
+            if ((bool)ThirdGuardsLoadingImageRB.IsChecked)
+                Settings.ModpackSettings.GIF = LoadingGifs.ThirdGuards;
+            else if ((bool)StandardImageRB.IsChecked)
+                Settings.ModpackSettings.GIF = LoadingGifs.Standard;
         }
 
         private void OnForceManuelGameDetectionChanged(object sender, RoutedEventArgs e)
         {
-
+            Settings.ModpackSettings.ForceManuel = (bool)ForceManuelGameDetectionCB.IsChecked;
         }
 
         private void OnInformIfNoNewDatabaseChanged(object sender, RoutedEventArgs e)
         {
-
+            Settings.ModpackSettings.NotifyIfSameDatabase = (bool)NotifyIfSameDatabaseCB.IsChecked;
         }
 
         private void OnSaveLastInstallChanged(object sender, RoutedEventArgs e)
         {
-
+            Settings.ModpackSettings.SaveLastConfig = (bool)SaveLastInstallCB.IsChecked;
         }
 
         private void OnUseBetaAppChanged(object sender, RoutedEventArgs e)
         {
-
+            if ((bool)UseBetaApplicationCB.IsChecked)
+                Settings.ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Beta;
+            else if (!(bool)UseBetaApplicationCB.IsChecked)
+                Settings.ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
         }
 
         private void OnUseBetaDatabaseChanged(object sender, RoutedEventArgs e)
         {
-
+            
         }
 
         private void OnDefaultBordersChanged(object sender, RoutedEventArgs e)
