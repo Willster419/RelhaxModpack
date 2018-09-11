@@ -38,11 +38,17 @@ namespace RelhaxModpack
             Translations.LoadTranslations();
             //apply translations to this window
             Translations.LocalizeWindow(this,true);
+            //add localization translation options to combobox
+            Languages[] allLanguages = (Languages[])Enum.GetValues(typeof(Languages));
+            foreach (Languages lang in allLanguages)
+                LanguagesSelector.Items.Add(lang.ToString());
             //create the tray icons and menus
 
             //load application settings
             Logging.WriteToLog("Init and load settings");
             Settings.InitSettings();
+            //apply settings to UI elements
+
             //check for updates
 
             //check for minimizing
@@ -188,6 +194,12 @@ namespace RelhaxModpack
         private void OnLegacySelectColorChenged(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void OnLanguageSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Translations.SetLanguage((Languages)LanguagesSelector.SelectedIndex);
+            Translations.LocalizeWindow(this, true);
         }
     }
 }

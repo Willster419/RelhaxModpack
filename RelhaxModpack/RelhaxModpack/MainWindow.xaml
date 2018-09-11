@@ -185,11 +185,7 @@
             <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,128,2,0" VerticalAlignment="Top" x:Name="ChildProgressBar"/>
             <TextBox HorizontalAlignment="Stretch" Height="73" Margin="2,50,2,0" VerticalAlignment="Top" x:Name="InstallProgressTextBox"></TextBox>
             <GroupBox Header="Language" HorizontalAlignment="Left" Height="45" Margin="360,4,0,0" VerticalAlignment="Top" Width="150">
-                <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    <System:String>0</System:String>
-                    <System:String>1</System:String>
-                    <System:String>2</System:String>
-                    <System:String>3</System:String>
+                <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="LanguagesSelector" SelectionChanged="OnLanguageSelectionChanged">
                 </ComboBox>
             </GroupBox>
             <TextBlock HorizontalAlignment="Left" Margin="2,29,0,0" TextWrapping="Wrap" Text="Error Counter: X" VerticalAlignment="Top"/>

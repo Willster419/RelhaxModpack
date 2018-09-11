@@ -31,7 +31,8 @@ namespace RelhaxModpack
         {
             "ApplicationVersionLabel",
             "DatabaseVersionLabel",
-            "InstallProgressTextBox"
+            "InstallProgressTextBox",
+            "LanguagesSelector"
         };
         private const string TranslationNeeded = "TODO";
         private static Dictionary<string, string> English = new Dictionary<string, string>();
@@ -58,6 +59,12 @@ namespace RelhaxModpack
                     CurrentLanguage = Polish;
                     break;
             }
+            if (Settings.ModpackSettings != null)
+            {
+                Settings.ModpackSettings.Language = language;
+            }
+            else
+                Logging.WriteToLog("Tried to change language when Settings.ModpackSettings == null!", Logfiles.Application, LogLevel.Warning);
         }
 
         public static void SetLanguageOnFirstLoad()
@@ -81,7 +88,7 @@ namespace RelhaxModpack
             }
         }
 
-        public static string GetTranslatedString(string componentName, bool isLoading, string valueToUseIfBlank = "")
+        public static string GetTranslatedString(string componentName, bool ConsiderBlacklist, string valueToUseIfBlank = "")
         {
             if(string.IsNullOrWhiteSpace(componentName))
             {
@@ -89,7 +96,7 @@ namespace RelhaxModpack
                 Logging.WriteToLog("Translation component name is blank, using default value of " + valueToUseIfBlank, Logfiles.Application, LogLevel.Debug);
                 return valueToUseIfBlank;
             }
-            if(TranslationComponentBlacklist.Contains(componentName) && (isLoading))
+            if(TranslationComponentBlacklist.Contains(componentName) && (ConsiderBlacklist))
             {
                 Logging.WriteToLog(string.Format("Skipping translation of {0}, present in blacklist and isLoading=true", componentName), Logfiles.Application, LogLevel.Debug);
                 return valueToUseIfBlank;
