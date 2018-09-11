@@ -41,8 +41,8 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <RadioButton x:Name="SelectionDefault" Content="Default" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="OnSelectionViewChanged"/>
-                    <CheckBox x:Name="EnableBordersCB" Content="Enable Borders" Grid.Column="0" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Click="OnDefaultBordersChanged"/>
-                    <CheckBox x:Name="EnableColorChangeCB" Content="Enable Color Change" Grid.Column="0" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Click="OnDefaultSelectColorChanged"/>
+                    <CheckBox x:Name="EnableBordersV2CB" Content="Enable Borders" Grid.Column="0" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Click="OnDefaultBordersV2Changed"/>
+                    <CheckBox x:Name="EnableColorChangeV2CB" Content="Enable Color Change" Grid.Column="0" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Click="OnDefaultSelectColorChanged"/>
                     <RadioButton x:Name="SelectionLegacy" Content="Legacy" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Click="OnSelectionViewChanged" />
                     <CheckBox x:Name="EnableBordersLegacyCB" Content="Enable Borders" Grid.Column="1" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Click="OnLegacyBordersChanged"/>
                     <CheckBox x:Name="EnableColorChangeLegacyCB" Content="Enable Color Change" Grid.Column="1" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Click="OnLegacySelectColorChenged"/>

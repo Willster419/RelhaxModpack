@@ -81,12 +81,16 @@ namespace RelhaxModpack
                 Text = Title
             };
             //create menu options
-
+            //TODO
         }
 
         private void OnSelectionViewChanged(object sender, RoutedEventArgs e)
         {
-
+            //selection view code for each new view goes here
+            if ((bool)SelectionDefault.IsChecked)
+                Settings.ModpackSettings.ModSelectionView = SelectionView.DefaultV2;
+            else if ((bool)SelectionLegacy.IsChecked)
+                Settings.ModpackSettings.ModSelectionView = SelectionView.Legacy;
         }
 
         private void OnMulticoreExtractionChanged(object sender, RoutedEventArgs e)
@@ -167,27 +171,30 @@ namespace RelhaxModpack
 
         private void OnUseBetaDatabaseChanged(object sender, RoutedEventArgs e)
         {
-            
+            if ((bool)UseBetaDatabaseCB.IsChecked)
+                Settings.ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Beta;
+            else if (!(bool)UseBetaDatabaseCB.IsChecked)
+                Settings.ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Stable;
         }
 
-        private void OnDefaultBordersChanged(object sender, RoutedEventArgs e)
+        private void OnDefaultBordersV2Changed(object sender, RoutedEventArgs e)
         {
-
+            Settings.ModpackSettings.EnableBordersDefaultV2View = (bool)EnableBordersV2CB.IsChecked;
         }
 
         private void OnDefaultSelectColorChanged(object sender, RoutedEventArgs e)
         {
-
+            Settings.ModpackSettings.EnableColorChangeDefaultV2View = (bool)EnableColorChangeV2CB.IsChecked;
         }
 
         private void OnLegacyBordersChanged(object sender, RoutedEventArgs e)
         {
-
+            Settings.ModpackSettings.EnableBordersLegacyView = (bool)EnableBordersLegacyCB.IsChecked;
         }
 
         private void OnLegacySelectColorChenged(object sender, RoutedEventArgs e)
         {
-
+            Settings.ModpackSettings.EnableColorChangeLegacyView = (bool)EnableColorChangeLegacyCB.IsChecked;
         }
 
         private void OnLanguageSelectionChanged(object sender, SelectionChangedEventArgs e)

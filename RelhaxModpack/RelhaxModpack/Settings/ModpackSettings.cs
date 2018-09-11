@@ -61,8 +61,9 @@ namespace RelhaxModpack
     /// <summary>
     /// Provides access to all settings used in the modpack.
     /// </summary>
-    public class ModpackSettings
+    public class ModpackSettings : DependencyObject
     {
+        //TODO: convert to auto properties and use blacklist field
         public ModpackSettings(string filePath) : base()
         {
             SettingsFilePath = filePath;
