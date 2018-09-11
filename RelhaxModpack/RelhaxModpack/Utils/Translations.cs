@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace RelhaxModpack
 {
@@ -2535,6 +2536,52 @@ namespace RelhaxModpack
                 ApplyGroupBoxTranslations(gb);
             else if (dec.Child is ContentControl cc)
                 ApplyContentTranslations(cc);
+        }
+        #endregion
+        #region Applying Window Translations the right way
+        public static void LocalizeWindow(Window window, bool applyToolTips)
+        {
+            List<Visual> allWindowControls = Utils.GetAllWindowComponents(window, false);
+            foreach(Visual v in allWindowControls)
+            {
+                if (v is Control control)
+                {
+                    if (!string.IsNullOrWhiteSpace(control.Name))
+                    {
+                        if (control is HeaderedContentControl headeredContentControl)
+                        {
+                            if (headeredContentControl.Header is string)
+                                headeredContentControl.Header = GetTranslatedString(headeredContentControl.Name + "Header");
+                            if (headeredContentControl.Content is string)
+                                headeredContentControl.Content = GetTranslatedString(headeredContentControl.Name);
+                            if (applyToolTips)
+                                headeredContentControl.ToolTip = GetTranslatedString(headeredContentControl.Name + "Description");
+                        }
+                        else if (control is ContentControl contentControl)
+                        {
+                            if (contentControl.Content is string)
+                                contentControl.Content = GetTranslatedString(contentControl.Name);
+                            if (applyToolTips)
+                                contentControl.ToolTip = GetTranslatedString(contentControl.Name + "Description");
+                        }
+                        else if (control is TextBox textBox)
+                        {
+                            textBox.Text = GetTranslatedString(textBox.Name);
+                            if (applyToolTips)
+                                textBox.ToolTip = GetTranslatedString(textBox.Name + "Description");
+                        }
+                    }
+                }
+                else if (v is TextBlock textBlock)
+                {
+                    if (!string.IsNullOrWhiteSpace(textBlock.Name))
+                    {
+                        textBlock.Name = GetTranslatedString(textBlock.Name);
+                        if (applyToolTips)
+                            textBlock.ToolTip = GetTranslatedString(textBlock.Name + "Description");
+                    }
+                }
+            }
         }
         #endregion
     }

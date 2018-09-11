@@ -1,4 +1,7 @@
-﻿
+﻿using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace RelhaxModpack
 {
@@ -27,6 +30,29 @@ namespace RelhaxModpack
         public static string GetCompileTime()
         {
             return CiInfo.BuildTag + " (EN-US date format)";
+        }
+
+        public static List<Visual> GetAllWindowComponents(Window window, bool includeWindow)
+        {
+            //https://stackoverflow.com/questions/874380/wpf-how-do-i-loop-through-the-all-controls-in-a-window
+            List<Visual> allWindowComponents = new List<Visual>();
+            if (includeWindow)
+                allWindowComponents.Add(window);
+            if (VisualTreeHelper.GetChildrenCount(window) > 0)
+                GetAllWindowComponents(window, allWindowComponents);
+            return allWindowComponents;
+        }
+
+        private static void GetAllWindowComponents(Visual v, List<Visual> allWindowComponents)
+        {
+            int ChildrenComponents = VisualTreeHelper.GetChildrenCount(v);
+            for (int i = 0; i < ChildrenComponents; i++)
+            {
+                Visual subV = (Visual)VisualTreeHelper.GetChild(v, i);
+                allWindowComponents.Add(subV);
+                if (VisualTreeHelper.GetChildrenCount(subV) > 0)
+                    GetAllWindowComponents(subV, allWindowComponents);
+            }
         }
     }
 }

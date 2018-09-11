@@ -37,7 +37,7 @@ namespace RelhaxModpack
             Translations.SetLanguage(Languages.English);
             Translations.LoadTranslations();
             //apply translations to this window
-            Translations.ApplyTranslationsOnWindowLoad(this);
+            Translations.LocalizeWindow(this,true);
             //create the tray icons and menus
 
             //load application settings
