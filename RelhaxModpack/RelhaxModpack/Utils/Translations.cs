@@ -29,7 +29,9 @@ namespace RelhaxModpack
         //TODO: when write blacklist check, check if name is blank/null/whitespace!!
         private static readonly string[] TranslationComponentBlacklist = new string[]
         {
-            "test"
+            "ApplicationVersionLabel",
+            "DatabaseVersionLabel",
+            "InstallProgressTextBox"
         };
         private const string TranslationNeeded = "TODO";
         private static Dictionary<string, string> English = new Dictionary<string, string>();
@@ -79,12 +81,17 @@ namespace RelhaxModpack
             }
         }
 
-        public static string GetTranslatedString(string componentName, string valueToUseIfBlank = "")
+        public static string GetTranslatedString(string componentName, bool isLoading, string valueToUseIfBlank = "")
         {
-            if(string.IsNullOrWhiteSpace(componentName) || TranslationComponentBlacklist.Contains(componentName))
+            if(string.IsNullOrWhiteSpace(componentName))
             {
                 //log debug translation component is blank null or from blacklist
                 Logging.WriteToLog("Translation component name is blank, using default value of " + valueToUseIfBlank, Logfiles.Application, LogLevel.Debug);
+                return valueToUseIfBlank;
+            }
+            if(TranslationComponentBlacklist.Contains(componentName) && (isLoading))
+            {
+                Logging.WriteToLog(string.Format("Skipping translation of {0}, present in blacklist and isLoading=true", componentName), Logfiles.Application, LogLevel.Debug);
                 return valueToUseIfBlank;
             }
             string s = "";
@@ -286,12 +293,12 @@ namespace RelhaxModpack
             French.Add("mainFormToolTip", "Clic droit pour une description étendue");
 
 
-            //Componet: forceManuel
+            //Componet: ForceManuelGameDetectionCB
             //
-            English.Add("forceManuel", "Force manual game detection");
-            Gernam.Add("forceManuel", "Erzwinge manuelle Spielerkennung");
-            Polish.Add("forceManuel", "Wymuś ręczną weryfikację ścieżki gry");
-            French.Add("forceManuel", "Forcer détection manuel");
+            English.Add("ForceManuelGameDetectionCB", "Force manual game detection");
+            Gernam.Add("ForceManuelGameDetectionCB", "Erzwinge manuelle Spielerkennung");
+            Polish.Add("ForceManuelGameDetectionCB", "Wymuś ręczną weryfikację ścieżki gry");
+            French.Add("ForceManuelGameDetectionCB", "Forcer détection manuel");
 
             //Componet: forceManuel
             //
@@ -327,19 +334,19 @@ namespace RelhaxModpack
             Polish.Add("FormsENG_GERButtonDescription", TranslationNeeded);
             French.Add("FormsENG_GERButtonDescription", TranslationNeeded);
 
-            //Componet: saveUserDataCB
+            //Componet: SaveUserDataCB
             //
-            English.Add("saveUserDataCB", "Save user data");
-            Gernam.Add("saveUserDataCB", "Mod Daten speichern");
-            Polish.Add("saveUserDataCB", "Zapisz ustawienia użytkownika");
-            French.Add("saveUserDataCB", "Sauvegarder les données utilisateur");
+            English.Add("SaveUserDataCB", "Save user data");
+            Gernam.Add("SaveUserDataCB", "Mod Daten speichern");
+            Polish.Add("SaveUserDataCB", "Zapisz ustawienia użytkownika");
+            French.Add("SaveUserDataCB", "Sauvegarder les données utilisateur");
 
-            //Componet: cleanInstallCB
+            //Componet: CleanInstallCB
             //
-            English.Add("cleanInstallCB", "Clean installation (recommended)");
-            Gernam.Add("cleanInstallCB", "Saubere Installation (empfohlen)");
-            Polish.Add("cleanInstallCB", "Czysta instalacja (Zalecane)");
-            French.Add("cleanInstallCB", "Installation propre (Recommandé)");
+            English.Add("CleanInstallCB", "Clean installation (recommended)");
+            Gernam.Add("CleanInstallCB", "Saubere Installation (empfohlen)");
+            Polish.Add("CleanInstallCB", "Czysta instalacja (Zalecane)");
+            French.Add("CleanInstallCB", "Installation propre (Recommandé)");
 
             //Componet: cancerFontCB
             //
@@ -348,12 +355,12 @@ namespace RelhaxModpack
             Polish.Add("ComicSansFontCB", "Czcionka Comic Sans");
             French.Add("ComicSansFontCB", "Police Comic Sans");
 
-            //Componet: backupModsCheckBox
+            //Componet: BackupModsCheckBox
             //
-            English.Add("backupModsCheckBox", "Backup current mods folder");
-            Gernam.Add("backupModsCheckBox", "Sicherung des aktuellen Modsordner");
-            Polish.Add("backupModsCheckBox", "Zrób kopię zapasową obecnego pliku z modyfikacjami");
-            French.Add("backupModsCheckBox", "Sauvegarder le dossier de mods");
+            English.Add("BackupModsCheckBox", "Backup current mods folder");
+            Gernam.Add("BackupModsCheckBox", "Sicherung des aktuellen Modsordner");
+            Polish.Add("BackupModsCheckBox", "Zrób kopię zapasową obecnego pliku z modyfikacjami");
+            French.Add("BackupModsCheckBox", "Sauvegarder le dossier de mods");
 
             //Componet: backupModsSizeLabel
             //
@@ -392,12 +399,12 @@ namespace RelhaxModpack
             Polish.Add("cleanUninstallCB", "Czysta deinstalacja");
             French.Add("cleanUninstallCB", "Désinstallation propre");
 
-            //Componet: saveLastInstallCB
+            //Componet: SaveLastInstallCB
             //
-            English.Add("saveLastInstallCB", "Save selection of last install");
-            Gernam.Add("saveLastInstallCB", "Speicherung der letzten Installation");
-            Polish.Add("saveLastInstallCB", "Zapisz ostatnią konfigurację instalacji");
-            French.Add("saveLastInstallCB", "Sauvegarder la denière configuration");
+            English.Add("SaveLastInstallCB", "Save selection of last install");
+            Gernam.Add("SaveLastInstallCB", "Speicherung der letzten Installation");
+            Polish.Add("SaveLastInstallCB", "Zapisz ostatnią konfigurację instalacji");
+            French.Add("SaveLastInstallCB", "Sauvegarder la denière configuration");
 
             //Componet: largerFontButton
             //
@@ -413,16 +420,16 @@ namespace RelhaxModpack
             Polish.Add("loadingImageGroupBox", "Ładowanie obrazka");
             French.Add("loadingImageGroupBox", "Image de chargement");
 
-            //Componet: standardImageRB
+            //Componet: StandardImageRB
             //
-            English.Add("standardImageRB", "Standard");
-            Gernam.Add("standardImageRB", "Standard");
-            Polish.Add("standardImageRB", "Podstawowe");
-            French.Add("standardImageRB", "Standard");
+            English.Add("StandardImageRB", "Standard");
+            Gernam.Add("StandardImageRB", "Standard");
+            Polish.Add("StandardImageRB", "Podstawowe");
+            French.Add("StandardImageRB", "Standard");
 
-            //Componet: standardImageRB
+            //Componet: ThirdGuardsLoadingImageRB
             //
-            AddTranslationToAll("thirdGuardsLoadingImageRB", "3rdguards");
+            AddTranslationToAll("ThirdGuardsLoadingImageRB", "3rdguards");
 
             //Componet: cancelDownloadButton
             //
@@ -481,19 +488,19 @@ namespace RelhaxModpack
             Polish.Add("EnableColorChangeLegacyCB", "Włącz zmianê kolorów");
             French.Add("EnableColorChangeLegacyCB", "Activer les changements de couleurs");
 
-            //Componet: clearLogFilesCB
+            //Componet: ClearLogFilesCB
             //
-            English.Add("clearLogFilesCB", "Clear log files");
-            Gernam.Add("clearLogFilesCB", "Protokolldatei löschen");
-            Polish.Add("clearLogFilesCB", "Wyczyść logi");
-            French.Add("clearLogFilesCB", "Effacer les fichiers logs");
+            English.Add("ClearLogFilesCB", "Clear log files");
+            Gernam.Add("ClearLogFilesCB", "Protokolldatei löschen");
+            Polish.Add("ClearLogFilesCB", "Wyczyść logi");
+            French.Add("ClearLogFilesCB", "Effacer les fichiers logs");
 
-            //Componet: createShortcutsCB
+            //Componet: CreateShortcutsCB
             //
-            English.Add("createShortcutsCB", "Create desktop shortcuts");
-            Gernam.Add("createShortcutsCB", "Erstelle desktop verknüpfungen");
-            Polish.Add("createShortcutsCB", "Stwórz skróty na pulpicie");
-            French.Add("createShortcutsCB", "Créer des raccourcis sur le bureau");
+            English.Add("CreateShortcutsCB", "Create desktop shortcuts");
+            Gernam.Add("CreateShortcutsCB", "Erstelle desktop verknüpfungen");
+            Polish.Add("CreateShortcutsCB", "Stwórz skróty na pulpicie");
+            French.Add("CreateShortcutsCB", "Créer des raccourcis sur le bureau");
 
             //Componet: InstantExtractionCB
             //
@@ -502,12 +509,12 @@ namespace RelhaxModpack
             Polish.Add("InstantExtractionCB", "Tryb szybkiego wypakowywania (eksperymentalny)");
             French.Add("InstantExtractionCB", "Mode d'extraction instantané (expérimental)");
 
-            //Componet: SuperExtractionCB
+            //Componet: MulticoreExtractionCB
             //
-            English.Add("SuperExtractionCB", "Multicore extraction mode (experimental)");
-            Gernam.Add("SuperExtractionCB", "Mehrkern Extraktion (experimentell)");
-            Polish.Add("SuperExtractionCB", "Wsparcie wielu rdzeni (eksperymentalne)");
-            French.Add("SuperExtractionCB", "Mode d'extraction multicoeur (expérimental)");
+            English.Add("MulticoreExtractionCB", "Multicore extraction mode (experimental)");
+            Gernam.Add("MulticoreExtractionCB", "Mehrkern Extraktion (experimentell)");
+            Polish.Add("MulticoreExtractionCB", "Wsparcie wielu rdzeni (eksperymentalne)");
+            French.Add("MulticoreExtractionCB", "Mode d'extraction multicoeur (expérimental)");
 
             //Componet: DefaultUninstallModeRB
             //
@@ -552,13 +559,13 @@ namespace RelhaxModpack
             French.Add("helperText", "Bienvenue au Modpack Relhax! J'ai aissayé de faire le modpack le plus simple possible, mais des questions peuvent survenir." +
                 " Survolez un paramètre pour voire une explication. Vous n'allez plus voire cette boite, sauf si vous supprimez le fichier de configuration xml ");
 
-            //Component: notifyIfSameDatabaseCB
-            English.Add("notifyIfSameDatabaseCB", "Inform if no new database available");
-            Gernam.Add("notifyIfSameDatabaseCB", "Hinweis wenn keine Aktuallisierungen erfolgt sind");
-            Polish.Add("notifyIfSameDatabaseCB", "Poinformuj, jeśli nie będzie dostępna nowa baza danych");
-            French.Add("notifyIfSameDatabaseCB", "Informer si aucune nouvelle base de données est disponible");
+            //Component: NotifyIfSameDatabaseCB
+            English.Add("NotifyIfSameDatabaseCB", "Inform if no new database available");
+            Gernam.Add("NotifyIfSameDatabaseCB", "Hinweis wenn keine Aktuallisierungen erfolgt sind");
+            Polish.Add("NotifyIfSameDatabaseCB", "Poinformuj, jeśli nie będzie dostępna nowa baza danych");
+            French.Add("NotifyIfSameDatabaseCB", "Informer si aucune nouvelle base de données est disponible");
 
-            //Component: ShowInstallCompleteWindow
+            //Component: ShowInstallCompleteWindowCB
             English.Add("ShowInstallCompleteWindowCB", "Show install complete window");
             Gernam.Add("ShowInstallCompleteWindowCB", "Zeigt \"Installation fertig\" Fenster");
             Polish.Add("ShowInstallCompleteWindowCB", "Pokaż okno akcji po instalacji");
@@ -1234,12 +1241,12 @@ namespace RelhaxModpack
             Polish.Add("appDataFolderError", "Nie znaleziono foderu app data dla WoT. Czyszczenie folderu cache zostanie pominięte. Prosimy zgłosić problem naszym deweloperom.");
             French.Add("appDataFolderError", "Le dossier App Data pour WoT n'as pas pus être trouvé. Nettoyage du cache vas être ignoré. Veuillez avertir l`équipe de développement");
 
-            //Component: clearCacheCB
+            //Component: ClearCacheCB
             //
-            English.Add("clearCacheCB", "Clear WoT cache data");
-            Gernam.Add("clearCacheCB", "Cache-Daten für WoT löschen");
-            Polish.Add("clearCacheCB", "Usuń dane WoT cache");
-            French.Add("clearCacheCB", "Nettoyer le dossier de Cache WoT");
+            English.Add("ClearCacheCB", "Clear WoT cache data");
+            Gernam.Add("ClearCacheCB", "Cache-Daten für WoT löschen");
+            Polish.Add("ClearCacheCB", "Usuń dane WoT cache");
+            French.Add("ClearCacheCB", "Nettoyer le dossier de Cache WoT");
 
             //Component: clearCachCBDescription
             //
@@ -1364,10 +1371,10 @@ namespace RelhaxModpack
 
             //Component: UninstallModeGroupBox
             //
-            English.Add("UninstallModeGroupBox", "Uninstall Mode");
-            Gernam.Add("UninstallModeGroupBox", "Deinstallationsmodus");
-            Polish.Add("UninstallModeGroupBox", "Tryb Deinstalacji");
-            French.Add("UninstallModeGroupBox", "Mode de désinstallation");
+            English.Add("UninstallModeGroupBox", "Uninstall Mode:");
+            Gernam.Add("UninstallModeGroupBox", "Deinstallationsmodus:");
+            Polish.Add("UninstallModeGroupBox", "Tryb Deinstalacji:");
+            French.Add("UninstallModeGroupBox", "Mode de désinstallation:");
 
             //Componet: FontLayoutPanelDescription
             //
@@ -2424,6 +2431,7 @@ namespace RelhaxModpack
         /// <param name="window">The Window instance to apply translations to</param>
         public static void ApplyTranslationsOnWindowLoad(Window window)
         {
+            Logging.WriteToLog("Method not finished: ApplyTranslationsOnWindowLoad(Window window)", Logfiles.Application, LogLevel.Error);
             Panel startingWindowPanel = (Panel)window.Content;
             ApplyPanelTranslations(startingWindowPanel);
         }
@@ -2436,9 +2444,9 @@ namespace RelhaxModpack
                 if (control is Panel subP)
                     ApplyPanelTranslations(subP);
                 else if (control is TextBlock tb)
-                    tb.Text = GetTranslatedString(tb.Name, tb.Text);
+                    tb.Text = GetTranslatedString(tb.Name, true, tb.Text);
                 else if (control is TextBox tb2)
-                    tb2.Text = GetTranslatedString(tb2.Name, tb2.Text);
+                    tb2.Text = GetTranslatedString(tb2.Name, true, tb2.Text);
                 //check if it's a tab control (itterate through the tabs)
                 else if (control is TabControl tc)
                     ApplyTabControlTranslations(tc);
@@ -2457,12 +2465,12 @@ namespace RelhaxModpack
         {
             if (cc.Content is string)
             {
-                cc.Content = GetTranslatedString(cc.Name, (string)cc.Content);
+                cc.Content = GetTranslatedString(cc.Name, true, (string)cc.Content);
             }
             else if (cc.Content is TextBox tb)
-                tb.Text = GetTranslatedString(tb.Name, tb.Text);
+                tb.Text = GetTranslatedString(tb.Name, true, tb.Text);
             else if (cc.Content is TextBlock tb2)
-                tb2.Text = GetTranslatedString(tb2.Name, tb2.Text);
+                tb2.Text = GetTranslatedString(tb2.Name, true, tb2.Text);
             else if (cc.Content is Hyperlink hl)
             {
 
@@ -2482,11 +2490,11 @@ namespace RelhaxModpack
             foreach (TabItem ti in tc.Items)
             {
                 if (ti.Header is string)
-                    ti.Header = GetTranslatedString(ti.Name,(string)ti.Header);
+                    ti.Header = GetTranslatedString(ti.Name, true, (string)ti.Header);
                 else if (ti.Header is TextBlock htb)
-                    htb.Text = GetTranslatedString(htb.Name,htb.Text);
+                    htb.Text = GetTranslatedString(htb.Name, true, htb.Text);
                 else if (ti.Header is TextBox htb2)
-                    htb2.Text = GetTranslatedString(htb2.Name,htb2.Text);
+                    htb2.Text = GetTranslatedString(htb2.Name, true, htb2.Text);
                 else if (ti.Header is ContentControl hcc)
                     ApplyContentTranslations(hcc);
                 if (ti.Content is Panel p)
@@ -2501,17 +2509,17 @@ namespace RelhaxModpack
         private static void ApplyGroupBoxTranslations(GroupBox gb)
         {
             if (gb.Header is string)
-                gb.Header = GetTranslatedString(gb.Name, (string)gb.Header);
+                gb.Header = GetTranslatedString(gb.Name, true, (string)gb.Header);
             else if (gb.Header is TextBlock htb)
-                htb.Text = GetTranslatedString(htb.Name, htb.Text);
+                htb.Text = GetTranslatedString(htb.Name, true, htb.Text);
             else if (gb.Header is TextBox htb2)
-                htb2.Text = GetTranslatedString(htb2.Name, htb2.Text);
+                htb2.Text = GetTranslatedString(htb2.Name, true, htb2.Text);
             else if (gb.Header is ContentControl hcc)
                 ApplyContentTranslations(hcc);
             if (gb.Content is TextBlock tb)
-                tb.Text = GetTranslatedString(tb.Name, tb.Text);
+                tb.Text = GetTranslatedString(tb.Name, true, tb.Text);
             else if (gb.Content is TextBox tb2)
-                tb2.Text = GetTranslatedString(tb2.Name, tb2.Text);
+                tb2.Text = GetTranslatedString(tb2.Name, true, tb2.Text);
             else if (gb.Content is Decorator dec)
                 ApplyDecoratorTranslations(dec);
             else if (gb.Content is ContentControl cc)
@@ -2523,9 +2531,9 @@ namespace RelhaxModpack
         private static void ApplyDecoratorTranslations(Decorator dec)
         {
             if (dec.Child is TextBlock tb)
-                tb.Text = GetTranslatedString(tb.Name, tb.Text);
+                tb.Text = GetTranslatedString(tb.Name, true, tb.Text);
             else if (dec.Child is TextBox tb2)
-                tb2.Text = GetTranslatedString(tb2.Name,tb2.Text);
+                tb2.Text = GetTranslatedString(tb2.Name, true, tb2.Text);
             else if (dec.Child is Decorator dec2)
                 ApplyDecoratorTranslations(dec2);
             else if (dec.Child is Panel p)
@@ -2551,24 +2559,24 @@ namespace RelhaxModpack
                         if (control is HeaderedContentControl headeredContentControl)
                         {
                             if (headeredContentControl.Header is string)
-                                headeredContentControl.Header = GetTranslatedString(headeredContentControl.Name + "Header");
+                                headeredContentControl.Header = GetTranslatedString(headeredContentControl.Name + "Header", true,(string)headeredContentControl.Header);
                             if (headeredContentControl.Content is string)
-                                headeredContentControl.Content = GetTranslatedString(headeredContentControl.Name);
+                                headeredContentControl.Content = GetTranslatedString(headeredContentControl.Name, true, (string)headeredContentControl.Content);
                             if (applyToolTips)
-                                headeredContentControl.ToolTip = GetTranslatedString(headeredContentControl.Name + "Description");
+                                headeredContentControl.ToolTip = GetTranslatedString(headeredContentControl.Name + "Description", true);
                         }
                         else if (control is ContentControl contentControl)
                         {
                             if (contentControl.Content is string)
-                                contentControl.Content = GetTranslatedString(contentControl.Name);
+                                contentControl.Content = GetTranslatedString(contentControl.Name, true, (string)contentControl.Content);
                             if (applyToolTips)
-                                contentControl.ToolTip = GetTranslatedString(contentControl.Name + "Description");
+                                contentControl.ToolTip = GetTranslatedString(contentControl.Name + "Description", true);
                         }
                         else if (control is TextBox textBox)
                         {
-                            textBox.Text = GetTranslatedString(textBox.Name);
+                            textBox.Text = GetTranslatedString(textBox.Name, true, textBox.Name);
                             if (applyToolTips)
-                                textBox.ToolTip = GetTranslatedString(textBox.Name + "Description");
+                                textBox.ToolTip = GetTranslatedString(textBox.Name + "Description", true);
                         }
                     }
                 }
@@ -2576,9 +2584,9 @@ namespace RelhaxModpack
                 {
                     if (!string.IsNullOrWhiteSpace(textBlock.Name))
                     {
-                        textBlock.Name = GetTranslatedString(textBlock.Name);
+                        textBlock.Text = GetTranslatedString(textBlock.Name, true, textBlock.Text);
                         if (applyToolTips)
-                            textBlock.ToolTip = GetTranslatedString(textBlock.Name + "Description");
+                            textBlock.ToolTip = GetTranslatedString(textBlock.Name + "Description", true);
                     }
                 }
             }
