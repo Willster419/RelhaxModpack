@@ -214,16 +214,6 @@
             Provides access to all settings used in the modpack.
             </summary>
         </member>
-        <member name="P:RelhaxModpack.ModpackSettings.SettingsFilePath">
-            <summary>
-            The absolute path of the application settings file
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.ModpackSettings.SettingsFileName">
-            <summary>
-            Get the name of the settings file
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.ModpackSettings.NotifyIfSameDatabase">
             <summary>
             toggle if the program should notify the user if the database version is the same as the last installed version

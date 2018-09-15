@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack
 {
-    public class UISettings
+    public static class UISettings
     {
 
     }

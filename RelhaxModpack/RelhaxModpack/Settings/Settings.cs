@@ -1,16 +1,19 @@
-﻿using System.IO;
-
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace RelhaxModpack
 {
-    //TODO: documentation
     public static class Settings
     {
-        #region Settings constants
+        #region Constants
         /// <summary>
         /// The Startup root path of the application. Does not include the application name
         /// </summary>
-        public static readonly string ApplicationStartupPath = System.AppDomain.CurrentDomain.BaseDirectory;
+        public static readonly string ApplicationStartupPath = AppDomain.CurrentDomain.BaseDirectory;
         /// <summary>
         /// The absolute name of the application settings file
         /// </summary>
@@ -45,27 +48,7 @@ namespace RelhaxModpack
         public static readonly string MD5HashDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "MD5HashDatabase.xml");
         #endregion
 
-        #region Settings statics
-        //application command line level settings
-        //also serves as place to put default values
-        public static bool FirstLoad = false;
-        public static bool FirstLoadToV2 = false;
-        public static bool TestMode = false;
-        public static bool SkipUpdate = false;
-        public static bool SilentStart = false;
-        public static bool ForceVisible = false;
-        public static bool ForceEnabled = false;
-        public static bool PatchCheck = false;
-        public static bool DatabaseUpdate = false;
-        public static bool DatabaseEdit = false;
-        //use the filename as check for auto install
-        public static string AutoInstallFileName = string.Empty;
-        //use key filename as check for update key mode
-        public static string UpdateKeyFileName = string.Empty;
-        public static string EditorAutoLoadFileName = string.Empty;
-        //TODO: make some of these properties so that the get can return eithor the modpack standalone or third party version
-        public static string DefaultStartAddress = @"http://wotmods.relhaxmodpack.com/WoT/{onlineFolder}/";
-        public static string DefaultEndAddress = @"";
+        #region Statics
         //file and folder macro locations
         public static string AppDataFolder = "";
         public static string TanksLocation = "";
@@ -74,31 +57,14 @@ namespace RelhaxModpack
         public static string TanksOnlineFolderVersion = "";
         //needed to create to first line to installedRelhaxFiles.log
         public static string DatabaseVersion = "";
-        public static string CustomModInfoPath = "";
+        public static bool FirstLoad = false;
+        public static bool FirstLoadToV2 = false;
         #endregion
-        public static void ParseCommandLineConflicts()
-        {
-            //check for conflicting command line arguements
-        }
-        #region Settings refrences and init
 
-        public static ModpackSettings ModpackSettings;
-
-        public static UISettings UISettings;
-
-        public static ThirdPartySettings ThirdPartySettings;
-
-        public static bool InitSettings()
-        {
-            //legacy compatibility: move the old settings name to the new settings name
-            if (File.Exists(Path.Combine(ApplicationStartupPath, OldModpackSettingsFilename)))
-                File.Move(Path.Combine(ApplicationStartupPath, OldModpackSettingsFilename), Path.Combine(ApplicationStartupPath, ModpackSettingsFileName));
-            if (ModpackSettings != null)
-                throw new BadMemeException("What the hell you doing fool?");
-            ModpackSettings = new ModpackSettings(Path.Combine(ApplicationStartupPath, ModpackSettingsFileName));
-            ModpackSettings.LoadSettings();
-            return true;
-        }
+        #region Settings that can be over-ridden by loading thirdPartySettings
+        //TODO: make some of these properties so that the get can return eithor the modpack standalone or third party version
+        public static string DefaultStartAddress = @"http://wotmods.relhaxmodpack.com/WoT/{onlineFolder}/";
+        public static string DefaultEndAddress = @"";
         #endregion
     }
 }

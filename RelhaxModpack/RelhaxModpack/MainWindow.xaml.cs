@@ -44,9 +44,6 @@ namespace RelhaxModpack
                 LanguagesSelector.Items.Add(lang.ToString());
             //create the tray icons and menus
 
-            //load application settings
-            Logging.WriteToLog("Init and load settings");
-            Settings.InitSettings();
             //apply settings to UI elements
 
             //check for updates
@@ -61,7 +58,7 @@ namespace RelhaxModpack
         private void TheMainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Logging.WriteToLog("Saving settings");
-            if (Settings.ModpackSettings.SaveSettings())
+            if (ModpackSettings.SaveSettings())
                 Logging.WriteToLog("Settings saved");
             Logging.WriteToLog("Disposing tray icon");
             if(relhaxIcon != null)
@@ -88,113 +85,113 @@ namespace RelhaxModpack
         {
             //selection view code for each new view goes here
             if ((bool)SelectionDefault.IsChecked)
-                Settings.ModpackSettings.ModSelectionView = SelectionView.DefaultV2;
+                ModpackSettings.ModSelectionView = SelectionView.DefaultV2;
             else if ((bool)SelectionLegacy.IsChecked)
-                Settings.ModpackSettings.ModSelectionView = SelectionView.Legacy;
+                ModpackSettings.ModSelectionView = SelectionView.Legacy;
         }
 
         private void OnMulticoreExtractionChanged(object sender, RoutedEventArgs e)
         {
-            Settings.ModpackSettings.MulticoreExtraction = (bool)MulticoreExtractionCB.IsChecked;
+            ModpackSettings.MulticoreExtraction = (bool)MulticoreExtractionCB.IsChecked;
         }
 
         private void OnCreateShortcutsChanged(object sender, RoutedEventArgs e)
         {
-            Settings.ModpackSettings.CreateShortcuts = (bool)CreateShortcutsCB.IsChecked;
+            ModpackSettings.CreateShortcuts = (bool)CreateShortcutsCB.IsChecked;
         }
 
         private void OnSaveUserDataChanged(object sender, RoutedEventArgs e)
         {
-            Settings.ModpackSettings.SaveUserData = (bool)SaveUserDataCB.IsChecked;
+            ModpackSettings.SaveUserData = (bool)SaveUserDataCB.IsChecked;
         }
 
         private void OnClearWoTCacheChanged(object sender, RoutedEventArgs e)
         {
-            Settings.ModpackSettings.ClearCache = (bool)ClearCacheCB.IsChecked;
+            ModpackSettings.ClearCache = (bool)ClearCacheCB.IsChecked;
         }
 
         private void OnClearLogFilesChanged(object sender, RoutedEventArgs e)
         {
-            Settings.ModpackSettings.DeleteLogs = (bool)ClearLogFilesCB.IsChecked;
+            ModpackSettings.DeleteLogs = (bool)ClearLogFilesCB.IsChecked;
         }
 
         private void OnCleanInstallChanged(object sender, RoutedEventArgs e)
         {
-            Settings.ModpackSettings.CleanInstallation = (bool)CleanInstallCB.IsChecked;
+            ModpackSettings.CleanInstallation = (bool)CleanInstallCB.IsChecked;
         }
 
         private void OnImmidateExtarctionChanged(object sender, RoutedEventArgs e)
         {
-            Settings.ModpackSettings.DownloadInstantExtraction = (bool)InstantExtractionCB.IsChecked;
+            ModpackSettings.DownloadInstantExtraction = (bool)InstantExtractionCB.IsChecked;
         }
 
         private void OnShowInstallCompleteWindowChanged(object sender, RoutedEventArgs e)
         {
-            Settings.ModpackSettings.ShowInstallCompleteWindow = (bool)ShowInstallCompleteWindowCB.IsChecked;
+            ModpackSettings.ShowInstallCompleteWindow = (bool)ShowInstallCompleteWindowCB.IsChecked;
         }
 
         private void OnBackupModsChanged(object sender, RoutedEventArgs e)
         {
-            Settings.ModpackSettings.BackupModFolder = (bool)BackupModsCheckBox.IsChecked;
+            ModpackSettings.BackupModFolder = (bool)BackupModsCheckBox.IsChecked;
         }
 
         private void OnPreviewLoadingImageChange(object sender, RoutedEventArgs e)
         {
             if ((bool)ThirdGuardsLoadingImageRB.IsChecked)
-                Settings.ModpackSettings.GIF = LoadingGifs.ThirdGuards;
+                ModpackSettings.GIF = LoadingGifs.ThirdGuards;
             else if ((bool)StandardImageRB.IsChecked)
-                Settings.ModpackSettings.GIF = LoadingGifs.Standard;
+                ModpackSettings.GIF = LoadingGifs.Standard;
         }
 
         private void OnForceManuelGameDetectionChanged(object sender, RoutedEventArgs e)
         {
-            Settings.ModpackSettings.ForceManuel = (bool)ForceManuelGameDetectionCB.IsChecked;
+            ModpackSettings.ForceManuel = (bool)ForceManuelGameDetectionCB.IsChecked;
         }
 
         private void OnInformIfNoNewDatabaseChanged(object sender, RoutedEventArgs e)
         {
-            Settings.ModpackSettings.NotifyIfSameDatabase = (bool)NotifyIfSameDatabaseCB.IsChecked;
+            ModpackSettings.NotifyIfSameDatabase = (bool)NotifyIfSameDatabaseCB.IsChecked;
         }
 
         private void OnSaveLastInstallChanged(object sender, RoutedEventArgs e)
         {
-            Settings.ModpackSettings.SaveLastConfig = (bool)SaveLastInstallCB.IsChecked;
+            ModpackSettings.SaveLastConfig = (bool)SaveLastInstallCB.IsChecked;
         }
 
         private void OnUseBetaAppChanged(object sender, RoutedEventArgs e)
         {
             if ((bool)UseBetaApplicationCB.IsChecked)
-                Settings.ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Beta;
+                ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Beta;
             else if (!(bool)UseBetaApplicationCB.IsChecked)
-                Settings.ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
+                ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
         }
 
         private void OnUseBetaDatabaseChanged(object sender, RoutedEventArgs e)
         {
             if ((bool)UseBetaDatabaseCB.IsChecked)
-                Settings.ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Beta;
+                ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Beta;
             else if (!(bool)UseBetaDatabaseCB.IsChecked)
-                Settings.ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Stable;
+                ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Stable;
         }
 
         private void OnDefaultBordersV2Changed(object sender, RoutedEventArgs e)
         {
-            Settings.ModpackSettings.EnableBordersDefaultV2View = (bool)EnableBordersV2CB.IsChecked;
+            ModpackSettings.EnableBordersDefaultV2View = (bool)EnableBordersV2CB.IsChecked;
         }
 
         private void OnDefaultSelectColorChanged(object sender, RoutedEventArgs e)
         {
-            Settings.ModpackSettings.EnableColorChangeDefaultV2View = (bool)EnableColorChangeV2CB.IsChecked;
+            ModpackSettings.EnableColorChangeDefaultV2View = (bool)EnableColorChangeV2CB.IsChecked;
         }
 
         private void OnLegacyBordersChanged(object sender, RoutedEventArgs e)
         {
-            Settings.ModpackSettings.EnableBordersLegacyView = (bool)EnableBordersLegacyCB.IsChecked;
+            ModpackSettings.EnableBordersLegacyView = (bool)EnableBordersLegacyCB.IsChecked;
         }
 
         private void OnLegacySelectColorChenged(object sender, RoutedEventArgs e)
         {
-            Settings.ModpackSettings.EnableColorChangeLegacyView = (bool)EnableColorChangeLegacyCB.IsChecked;
+            ModpackSettings.EnableColorChangeLegacyView = (bool)EnableColorChangeLegacyCB.IsChecked;
         }
 
         private void OnLanguageSelectionChanged(object sender, SelectionChangedEventArgs e)

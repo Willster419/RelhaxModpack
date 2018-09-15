@@ -84,47 +84,47 @@ namespace RelhaxModpack
                 {
                     case "test":
                         Logging.WriteToLog("test, loading in test mode");
-                        Settings.TestMode = true;
+                        CommandLineSettings.TestMode = true;
                         break;
                     case "skip-update":
                         Logging.WriteToLog("skip-update, skipping updating");
-                        Settings.SkipUpdate = true;
+                        CommandLineSettings.SkipUpdate = true;
                         break;
                     case "silent-start":
                         Logging.WriteToLog("silent-start, loading in background");
-                        Settings.SilentStart = true;
+                        CommandLineSettings.SilentStart = true;
                         break;
                     case "auto-install":
-                        Settings.AutoInstallFileName = commandArgs[++i];
-                        Logging.WriteToLog("auto-install, attempting to parse user configuration file: " + Settings.AutoInstallFileName);
+                        CommandLineSettings.AutoInstallFileName = commandArgs[++i];
+                        Logging.WriteToLog("auto-install, attempting to parse user configuration file: " + CommandLineSettings.AutoInstallFileName);
                         break;
                     case "updateKeyFile":
                         //get key file
-                        Settings.UpdateKeyFileName = commandArgs[++i];
-                        Logging.WriteToLog("updateKeyFile, loading keyfile " + Settings.UpdateKeyFileName);
+                        CommandLineSettings.UpdateKeyFileName = commandArgs[++i];
+                        Logging.WriteToLog("updateKeyFile, loading keyfile " + CommandLineSettings.UpdateKeyFileName);
                         break;
                     case "editorAutoLoad":
-                        Settings.EditorAutoLoadFileName = commandArgs[++i];
-                        Logging.WriteToLog("editorAutoLoad, loading databse from " + Settings.EditorAutoLoadFileName);
+                        CommandLineSettings.EditorAutoLoadFileName = commandArgs[++i];
+                        Logging.WriteToLog("editorAutoLoad, loading databse from " + CommandLineSettings.EditorAutoLoadFileName);
                         break;
                     case "forceVisible":
-                        Settings.ForceVisible = true;
+                        CommandLineSettings.ForceVisible = true;
                         Logging.WriteToLog("forceVisible, loading all invisible mods in selection list");
                         break;
                     case "forceEnabled":
-                        Settings.ForceEnabled = true;
+                        CommandLineSettings.ForceEnabled = true;
                         Logging.WriteToLog("forceEnabled, loading all visible mods as enabled");
                         break;
                     case "patchcheck":
-                        Settings.PatchCheck = true;
+                        CommandLineSettings.PatchCheck = true;
                         Logging.WriteToLog("patchcheck, loading in patch design mode");
                         break;
                     case "databaseupdate":
-                        Settings.DatabaseUpdate = true;
+                        CommandLineSettings.DatabaseUpdate = true;
                         Logging.WriteToLog("databaseupdate, loading in database update mode");
                         break;
                     case "databaseedit":
-                        Settings.DatabaseEdit = true;
+                        CommandLineSettings.DatabaseEdit = true;
                         Logging.WriteToLog("databaseedit, loading in database edit mode");
                         break;
                 }
