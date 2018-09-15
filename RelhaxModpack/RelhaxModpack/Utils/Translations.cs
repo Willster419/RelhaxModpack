@@ -98,7 +98,7 @@ namespace RelhaxModpack
             }
             if(TranslationComponentBlacklist.Contains(componentName) && (ConsiderBlacklist))
             {
-                Logging.WriteToLog(string.Format("Skipping translation of {0}, present in blacklist and isLoading=true", componentName), Logfiles.Application, LogLevel.Debug);
+                Logging.WriteToLog(string.Format("Skipping translation of {0}, present in blacklist and consider=true", componentName), Logfiles.Application, LogLevel.Debug);
                 return valueToUseIfBlank;
             }
             string s = "";
@@ -309,13 +309,10 @@ namespace RelhaxModpack
 
             //Componet: forceManuel
             //
-            English.Add("languageSelectionGB", "Language selection");
-            Gernam.Add("languageSelectionGB", "Sprachauswahl");
-            Polish.Add("languageSelectionGB", "Wybór języka");
-            French.Add("languageSelectionGB", "Choix de langue");
-
-            //Component: Forms_ENG_NAButton
-            AddTranslationToAll("Forms_ENG_NAButton", "");
+            English.Add("LanguageSelectionGB", "Language selection");
+            Gernam.Add("LanguageSelectionGB", "Sprachauswahl");
+            Polish.Add("LanguageSelectionGB", "Wybór języka");
+            French.Add("LanguageSelectionGB", "Choix de langue");
 
             //Componet: Forms_ENG_NAButtonDescription
             English.Add("Forms_ENG_NAButtonDescription", "Go to the English-speaking 'World of Tanks' forum page for the NA server");
@@ -323,23 +320,17 @@ namespace RelhaxModpack
             Polish.Add("Forms_ENG_NAButtonDescription", TranslationNeeded);
             French.Add("Forms_ENG_NAButtonDescription", TranslationNeeded);
 
-            //Component: FormsENG_EUButton
-            AddTranslationToAll("FormsENG_EUButton", "");
-
             //Componet: FormsENG_EUButtonDescription
-            English.Add("FormsENG_EUButtonDescription", "Go to the English-speaking 'World of Tanks' forum page for the EU server");
-            Gernam.Add("FormsENG_EUButtonDescription", "Gehe zur englischsprachigen 'World of Tanks' Forum Seite für den EU Server");
-            Polish.Add("FormsENG_EUButtonDescription", TranslationNeeded);
-            French.Add("FormsENG_EUButtonDescription", TranslationNeeded);
-
-            //Component: FormsENG_GERButton
-            AddTranslationToAll("FormsENG_GERButton", "");
+            English.Add("Forms_ENG_EUButtonDescription", "Go to the English-speaking 'World of Tanks' forum page for the EU server");
+            Gernam.Add("Forms_ENG_EUButtonDescription", "Gehe zur englischsprachigen 'World of Tanks' Forum Seite für den EU Server");
+            Polish.Add("Forms_ENG_EUButtonDescription", TranslationNeeded);
+            French.Add("Forms_ENG_EUButtonDescription", TranslationNeeded);
 
             //Componet: FormsENG_GERButtonDescription
-            English.Add("FormsENG_GERButtonDescription", "Go to the Gernam-speaking 'World of Tanks' forum page for the EU server");
-            Gernam.Add("FormsENG_GERButtonDescription", "Gehe zur deutschsprachigen 'World of Tanks' Forum Seite für den EU Server");
-            Polish.Add("FormsENG_GERButtonDescription", TranslationNeeded);
-            French.Add("FormsENG_GERButtonDescription", TranslationNeeded);
+            English.Add("Forms_GER_EUButtonDescription", "Go to the Gernam-speaking 'World of Tanks' forum page for the EU server");
+            Gernam.Add("Forms_GER_EUButtonDescription", "Gehe zur deutschsprachigen 'World of Tanks' Forum Seite für den EU Server");
+            Polish.Add("Forms_GER_EUButtonDescription", TranslationNeeded);
+            French.Add("Forms_GER_EUButtonDescription", TranslationNeeded);
 
             //Componet: SaveUserDataCB
             //
@@ -2554,17 +2545,29 @@ namespace RelhaxModpack
         }
         #endregion
         #region Applying Window Translations the right way
+        /// <summary>
+        /// Applies localized text translations for the passed in window
+        /// See the comments in the method for more information
+        /// </summary>
+        /// <param name="window">The window to apply translations to</param>
+        /// <param name="applyToolTips">Set to true to seach and apply tooltips to the components</param>
         public static void LocalizeWindow(Window window, bool applyToolTips)
         {
+            //Get a list of all visual class controls curently presend and loaded in the window
             List<Visual> allWindowControls = Utils.GetAllWindowComponents(window, false);
             foreach(Visual v in allWindowControls)
             {
+                //use the "is" keyword to be able to apply translations (text is under different properties for each type of visuals)
                 if (v is Control control)
                 {
+                    //Generic control
+                    //check if the name is declared, a blank name implies te control should not be translated. this was by design
                     if (!string.IsNullOrWhiteSpace(control.Name))
                     {
+                        //headered content controls have a header and content object
                         if (control is HeaderedContentControl headeredContentControl)
                         {
+                            //ALWAYS make sure that the header and content are of type string BEFORE over-writing! (what if it is an image?)
                             if (headeredContentControl.Header is string)
                                 headeredContentControl.Header = GetTranslatedString(headeredContentControl.Name + "Header", true,(string)headeredContentControl.Header);
                             if (headeredContentControl.Content is string)
@@ -2572,13 +2575,16 @@ namespace RelhaxModpack
                             if (applyToolTips)
                                 headeredContentControl.ToolTip = GetTranslatedString(headeredContentControl.Name + "Description", true);
                         }
+                        //content controls have only a heder
                         else if (control is ContentControl contentControl)
                         {
+                            //ALWAYS make sure that the header and content are of type string BEFORE over-writing! (what if it is an image?)
                             if (contentControl.Content is string)
                                 contentControl.Content = GetTranslatedString(contentControl.Name, true, (string)contentControl.Content);
                             if (applyToolTips)
                                 contentControl.ToolTip = GetTranslatedString(contentControl.Name + "Description", true);
                         }
+                        //textbox only has string text as input
                         else if (control is TextBox textBox)
                         {
                             textBox.Text = GetTranslatedString(textBox.Name, true, textBox.Name);
@@ -2589,9 +2595,12 @@ namespace RelhaxModpack
                 }
                 else if (v is TextBlock textBlock)
                 {
+                    //lightweight block of text that only uses string as it's input. makes it not a control (no content of children property)
+                    //next check if the name is declared. a blank name implies the control should not be translated
                     if (!string.IsNullOrWhiteSpace(textBlock.Name))
                     {
                         textBlock.Text = GetTranslatedString(textBlock.Name, true, textBlock.Text);
+                        //apply tool tips?
                         if (applyToolTips)
                             textBlock.ToolTip = GetTranslatedString(textBlock.Name + "Description", true);
                     }

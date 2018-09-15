@@ -140,13 +140,13 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="EU_ENG_forums_button" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0">
-                <Image Source="Resources/Images/flag gb.png" Stretch="None"/>
+            <Button x:Name="Forms_ENG_EUButton" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0">
+                <Image Source="Resources/Images/flag gb.png" Stretch="None" x:Name="EU_ENG_forms_image"/>
             </Button>
-            <Button Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0">
+            <Button Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="Forms_GER_EUButton">
                 <Image Source="Resources/Images/flag de.png" Stretch="None"/>
             </Button>
-            <Button Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0">
+            <Button Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="Forms_ENG_NAButton">
                 <Image Source="Resources/Images/flag us.png" Stretch="None"/>
             </Button>
             <Button Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0">
@@ -184,7 +184,7 @@
             <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,148,2,0" VerticalAlignment="Top" x:Name="ParentProgressBar"/>
             <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,128,2,0" VerticalAlignment="Top" x:Name="ChildProgressBar"/>
             <TextBox HorizontalAlignment="Stretch" Height="73" Margin="2,50,2,0" VerticalAlignment="Top" x:Name="InstallProgressTextBox"></TextBox>
-            <GroupBox Header="Language" HorizontalAlignment="Left" Height="45" Margin="360,4,0,0" VerticalAlignment="Top" Width="150">
+            <GroupBox Header="Language" HorizontalAlignment="Left" Height="45" Margin="360,4,0,0" VerticalAlignment="Top" Width="150" x:Name="LanguageSelectionGB">
                 <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="LanguagesSelector" SelectionChanged="OnLanguageSelectionChanged">
                 </ComboBox>
             </GroupBox>

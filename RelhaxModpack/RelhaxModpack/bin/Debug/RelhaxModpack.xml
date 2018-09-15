@@ -344,6 +344,14 @@
             </summary>
             <param name="window">The Window instance to apply translations to</param>
         </member>
+        <member name="M:RelhaxModpack.Translations.LocalizeWindow(System.Windows.Window,System.Boolean)">
+            <summary>
+            Applies localized text translations for the passed in window
+            See the comments in the method for more information
+            </summary>
+            <param name="window">The window to apply translations to</param>
+            <param name="applyToolTips">Set to true to seach and apply tooltips to the components</param>
+        </member>
         <member name="T:RelhaxModpack.Utils">
             <summary>
             A utility class for static functions used in various places in the modpack
