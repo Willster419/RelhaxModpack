@@ -310,6 +310,14 @@ namespace RelhaxModpack
                                 {
                                     settingField.SetValue(this, Enum.Parse(typeof(Languages), setting.InnerText));
                                 }
+                                else if (type2 == typeof(DatabaseVersions))
+                                {
+                                    settingField.SetValue(this, Enum.Parse(typeof(DatabaseVersions), setting.InnerText));
+                                }
+                                else if (type2 == typeof(ApplicationVersions))
+                                {
+                                    settingField.SetValue(this, Enum.Parse(typeof(ApplicationVersions), setting.InnerText));
+                                }
                                 else
                                 {
                                     Logging.WriteToLog("unknown type: " + type2, Logfiles.Application, LogLevel.Warning);
