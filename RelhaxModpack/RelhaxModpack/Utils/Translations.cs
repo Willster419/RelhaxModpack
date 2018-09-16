@@ -2207,7 +2207,7 @@ namespace RelhaxModpack
             French.Add("searchTB", "Rechercher le nom du mod:");
             #endregion
         }
-        public static void LegacyTranlationsToKeepButNotLoadJustInCaseWeEverNeedThemAgain()
+        private static void LegacyTranlationsToKeepButNotLoadJustInCaseWeEverNeedThemAgain()
         {
 
             //Componet: toolTip
@@ -2475,7 +2475,7 @@ namespace RelhaxModpack
         /// Applies and UI elements with translated strings
         /// </summary>
         /// <param name="window">The Window instance to apply translations to</param>
-        public static void ApplyTranslationsOnWindowLoad(Window window)
+        private static void ApplyTranslationsOnWindowLoad_Deprecated(Window window)
         {
             Logging.WriteToLog("Method not finished: ApplyTranslationsOnWindowLoad(Window window)", Logfiles.Application, LogLevel.Error);
             Panel startingWindowPanel = (Panel)window.Content;
