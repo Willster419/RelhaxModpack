@@ -85,6 +85,14 @@ namespace RelhaxModpack
             }
         }
 
+        public static void TranslateComponent(Visual v, bool ConsiderBlacklist, string valueToUseIfBlank = "")
+        {
+            //TODO: pass in the object itself so now we can consider blacklist correcly and only apply when we should
+
+            //first check name
+
+        }
+
         public static string GetTranslatedString(string componentName, bool ConsiderBlacklist, string valueToUseIfBlank = "")
         {
             if(string.IsNullOrWhiteSpace(componentName))
@@ -137,6 +145,9 @@ namespace RelhaxModpack
             }
             return s;
         }
+        #endregion
+
+        #region Literally loading Translations
         private static void AddTranslationToAll(string key, string message)
         {
             English.Add(key, message);
@@ -2607,7 +2618,7 @@ namespace RelhaxModpack
         public static void LocalizeWindow(Window window, bool applyToolTips)
         {
             //Get a list of all visual class controls curently presend and loaded in the window
-            List<Visual> allWindowControls = Utils.GetAllWindowComponents(window, false);
+            List<Visual> allWindowControls = Utils.GetAllWindowComponentsVisual(window, false);
             foreach(Visual v in allWindowControls)
             {
                 //use the "is" keyword to be able to apply translations (text is under different properties for each type of visuals)
