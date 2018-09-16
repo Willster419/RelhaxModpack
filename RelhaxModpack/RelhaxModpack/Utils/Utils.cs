@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -32,26 +33,52 @@ namespace RelhaxModpack
             return CiInfo.BuildTag + " (EN-US date format)";
         }
 
-        public static List<Visual> GetAllWindowComponents(Window window, bool includeWindow)
+        public static List<Visual> GetAllWindowComponentsVisual(Window window, bool includeWindow)
         {
             //https://stackoverflow.com/questions/874380/wpf-how-do-i-loop-through-the-all-controls-in-a-window
-            List<Visual> allWindowComponents = new List<Visual>();
+            List<Visual> windowComponents = new List<Visual>();
             if (includeWindow)
-                allWindowComponents.Add(window);
+                windowComponents.Add(window);
             if (VisualTreeHelper.GetChildrenCount(window) > 0)
-                GetAllWindowComponents(window, allWindowComponents);
-            return allWindowComponents;
+                GetAllWindowComponentsVisual(window, windowComponents);
+            return windowComponents;
         }
 
-        private static void GetAllWindowComponents(Visual v, List<Visual> allWindowComponents)
+        private static void GetAllWindowComponentsLogical(Visual v, List<Visual> allWindowComponents)
+        {
+            //NOTE: v has been added
+            //have to use var here cause i got NO CLUE what type it is #niceMeme
+            var children = LogicalTreeHelper.GetChildren(v);
+            //Type temp = children.GetType();
+            foreach(var child in children)
+            {
+                //Type temp2 = child.GetType();
+                if(child is Visual childVisual)
+                {
+                    allWindowComponents.Add(childVisual);
+                    GetAllWindowComponentsLogical(childVisual, allWindowComponents);
+                }
+            }
+        }
+
+        private static void GetAllWindowComponentsVisual(Visual v, List<Visual> allWindowComponents)
         {
             int ChildrenComponents = VisualTreeHelper.GetChildrenCount(v);
             for (int i = 0; i < ChildrenComponents; i++)
             {
                 Visual subV = (Visual)VisualTreeHelper.GetChild(v, i);
                 allWindowComponents.Add(subV);
-                if (VisualTreeHelper.GetChildrenCount(subV) > 0)
-                    GetAllWindowComponents(subV, allWindowComponents);
+                if (subV is TabControl tabControl)
+                {
+                    foreach(Visual tabVisual in tabControl.Items)
+                    {
+                        allWindowComponents.Add(tabVisual);
+                        GetAllWindowComponentsLogical(tabVisual, allWindowComponents);
+                    }
+                }
+                int childrenCount = VisualTreeHelper.GetChildrenCount(subV);
+                if (childrenCount > 0)
+                    GetAllWindowComponentsVisual(subV, allWindowComponents);
             }
         }
     }
