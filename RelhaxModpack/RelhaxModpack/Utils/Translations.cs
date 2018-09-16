@@ -32,7 +32,9 @@ namespace RelhaxModpack
             "ApplicationVersionLabel",
             "DatabaseVersionLabel",
             "InstallProgressTextBox",
-            "LanguagesSelector"
+            "LanguagesSelector",
+            "PART_ContentHostDescription",
+            "toggleButtonDescription"
         };
         private const string TranslationNeeded = "TODO";
         private static Dictionary<string, string> English = new Dictionary<string, string>();
@@ -273,19 +275,47 @@ namespace RelhaxModpack
             #endregion
 
             #region Main Window
-            //Componet: installRelhaxMod
+            //Componet: InstallModpackButton
             //The button for installing the modpack
-            English.Add("installRelhaxMod", "Start mod selection");
-            Gernam.Add("installRelhaxMod", "Auswahl der Mods");
-            Polish.Add("installRelhaxMod", "Przejdź Do Wyboru Modyfikacji");
-            French.Add("installRelhaxMod", "Sélection des mods");
+            English.Add("InstallModpackButton", "Start mod selection");
+            Gernam.Add("InstallModpackButton", "Auswahl der Mods");
+            Polish.Add("InstallModpackButton", "Przejdź Do Wyboru Modyfikacji");
+            French.Add("InstallModpackButton", "Sélection des mods");
 
-            //Componet: uninstallRelhaxMod
+            //Componet: InstallModpackButtonDescription
             //
-            English.Add("uninstallRelhaxMod", "Uninstall Relhax Modpack");
-            Gernam.Add("uninstallRelhaxMod", "Relhax Modpack deinstallieren");
-            Polish.Add("uninstallRelhaxMod", "Odinstaluj Paczkę Relhax");
-            French.Add("uninstallRelhaxMod", "Désinstaller Relhax Modpack");
+            English.Add("InstallModpackButtonDescription", "Select the mods you want to install to your WoT client");
+            Gernam.Add("InstallModpackButtonDescription", TranslationNeeded);
+            Polish.Add("InstallModpackButtonDescription", TranslationNeeded);
+            French.Add("InstallModpackButtonDescription", TranslationNeeded);
+
+            //Componet: UninstallModpackButton
+            //
+            English.Add("UninstallModpackButton", "Uninstall Relhax Modpack");
+            Gernam.Add("UninstallModpackButton", "Relhax Modpack deinstallieren");
+            Polish.Add("UninstallModpackButton", "Odinstaluj Paczkę Relhax");
+            French.Add("UninstallModpackButton", "Désinstaller Relhax Modpack");
+
+            //Componet: UninstallModpackButtonDescription
+            //
+            English.Add("UninstallModpackButtonDescription", "Remove *all* mods installed to your WoT client");
+            Gernam.Add("UninstallModpackButtonDescription", TranslationNeeded);
+            Polish.Add("UninstallModpackButtonDescription", TranslationNeeded);
+            French.Add("UninstallModpackButtonDescription", TranslationNeeded);
+
+            //Componet: ViewNewsButton
+            //
+            English.Add("ViewNewsButton", "View update news");
+            Gernam.Add("ViewNewsButton", TranslationNeeded);
+            Polish.Add("ViewNewsButton", TranslationNeeded);
+            French.Add("ViewNewsButton", TranslationNeeded);
+
+            //Componet: ViewNewsButtonDescription
+            //
+            English.Add("ViewNewsButtonDescription", "View application, database, and other update news");
+            Gernam.Add("ViewNewsButtonDescription", TranslationNeeded);
+            Polish.Add("ViewNewsButtonDescription", TranslationNeeded);
+            French.Add("ViewNewsButtonDescription", TranslationNeeded);
 
             //Componet: toolTip
             //MainForm
@@ -304,10 +334,10 @@ namespace RelhaxModpack
 
             //Componet: forceManuel
             //
-            English.Add("LanguageSelectionGB", "Language selection");
-            Gernam.Add("LanguageSelectionGB", "Sprachauswahl");
-            Polish.Add("LanguageSelectionGB", "Wybór języka");
-            French.Add("LanguageSelectionGB", "Choix de langue");
+            English.Add("LanguageSelectionGBHeader", "Language selection");
+            Gernam.Add("LanguageSelectionGBHeader", "Sprachauswahl");
+            Polish.Add("LanguageSelectionGBHeader", "Wybór języka");
+            French.Add("LanguageSelectionGBHeader", "Choix de langue");
 
             //Componet: Forms_ENG_NAButtonDescription
             English.Add("Forms_ENG_NAButtonDescription", "Go to the English-speaking 'World of Tanks' forum page for the NA server");
@@ -573,6 +603,12 @@ namespace RelhaxModpack
             //Component: ApplicationVersionLabel
             AddTranslationToAll("ApplicationVersionLabel", "Application");
 
+            //Component: ApplicationVersionLabelDescription
+            English.Add("ApplicationVersionLabelDescription", "The version of the application currently running");
+            Gernam.Add("ApplicationVersionLabelDescription", TranslationNeeded);
+            Polish.Add("ApplicationVersionLabelDescription", TranslationNeeded);
+            French.Add("ApplicationVersionLabelDescription", TranslationNeeded);
+
             //Component: ErrorCounterLabel
             AddTranslationToAll("ErrorCounterLabel", "Error Counter: ");
 
@@ -718,6 +754,13 @@ namespace RelhaxModpack
             Gernam.Add("DevLinkLabel", "Entwickler webseite");
             Polish.Add("DevLinkLabel", "Strona Dewelopera");
             French.Add("DevLinkLabel", "Site web du développeur");
+
+            //Componet: InstallProgressTextBoxDescription
+            //
+            English.Add("InstallProgressTextBoxDescription", "Progress of an installation will be shown here");
+            Gernam.Add("InstallProgressTextBoxDescription", TranslationNeeded);
+            Polish.Add("InstallProgressTextBoxDescription", TranslationNeeded);
+            French.Add("InstallProgressTextBoxDescription", TranslationNeeded);
             #endregion
 
             #region Update Window
@@ -1355,12 +1398,25 @@ namespace RelhaxModpack
             Polish.Add("DiagnosticUtilitiesButton", "Narzędzia diagnostyczne");
             French.Add("DiagnosticUtilitiesButton", "Utilitaires de diagnostique");
 
+            //Component: DiagnosticUtilitiesButtonDescription
+            //
+            English.Add("DiagnosticUtilitiesButtonDescription", "Report a bug, attempt a WG client repair, etc.");
+            Gernam.Add("DiagnosticUtilitiesButtonDescription", TranslationNeeded);
+            Polish.Add("DiagnosticUtilitiesButtonDescription", TranslationNeeded);
+            French.Add("DiagnosticUtilitiesButtonDescription", TranslationNeeded);
+
             //Component: DatabaseVersionLabel
             //
             English.Add("DatabaseVersionLabel", "Latest Database");
             Gernam.Add("DatabaseVersionLabel", "Datenbank");
             Polish.Add("DatabaseVersionLabel", "Baza danych");
             French.Add("DatabaseVersionLabel", "Base de donnés");
+
+            //Component: DatabaseVersionLabelDescription
+            English.Add("DatabaseVersionLabelDescription", "The latest public stable database version");
+            Gernam.Add("DatabaseVersionLabelDescription", TranslationNeeded);
+            Polish.Add("DatabaseVersionLabelDescription", TranslationNeeded);
+            French.Add("DatabaseVersionLabelDescription", TranslationNeeded);
 
             //Component: UninstallModeGroupBox
             //
@@ -1460,12 +1516,12 @@ namespace RelhaxModpack
             Polish.Add("selectionView_MouseEnter", "Wybierz listę wyboru modyfikacji.");
             French.Add("selectionView_MouseEnter", "Sélectionnez une vue de liste de sélection de mod.");
 
-            //Componet: LanguageComboBoxDescription
+            //Componet: LanguageSelectionGBDescription
             //
-            English.Add("LanguageComboBoxDescription", "Select your preferred language.");
-            Gernam.Add("LanguageComboBoxDescription", "wähle Deine bevorzugte Sprache");
-            Polish.Add("LanguageComboBoxDescription", "Wybierz preferowany język.");
-            French.Add("LanguageComboBoxDescription", "Sélectionnez votre langue préféré");
+            English.Add("LanguageSelectionGBDescription", "Select your preferred language.");
+            Gernam.Add("LanguageSelectionGBDescription", "wähle Deine bevorzugte Sprache");
+            Polish.Add("LanguageSelectionGBDescription", "Wybierz preferowany język.");
+            French.Add("LanguageSelectionGBDescription", "Sélectionnez votre langue préféré");
 
             //Componet: fontSizeGB
             //
@@ -2417,6 +2473,7 @@ namespace RelhaxModpack
             #endregion
         }
         #endregion
+
         #region Applying Window Translations
         /// <summary>
         /// Applies and UI elements with translated strings
@@ -2539,6 +2596,7 @@ namespace RelhaxModpack
                 ApplyContentTranslations(cc);
         }
         #endregion
+
         #region Applying Window Translations the right way
         /// <summary>
         /// Applies localized text translations for the passed in window
