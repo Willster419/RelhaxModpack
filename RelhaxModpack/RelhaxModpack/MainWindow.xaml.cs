@@ -38,21 +38,19 @@ namespace RelhaxModpack
             Translations.LoadTranslations();
             //apply translations to this window
             Translations.LocalizeWindow(this,true);
-            //add localization translation options to combobox
-            Languages[] allLanguages = (Languages[])Enum.GetValues(typeof(Languages));
-            foreach (Languages lang in allLanguages)
-                LanguagesSelector.Items.Add(lang.ToString());
-            //create the tray icons and menus
+            //create and localize the tray icons and menus
+
+            //load and apply modpack settings
 
             //apply settings to UI elements
 
+            //check command line settings
+
+            //apply color UI settings
+
             //check for updates
 
-            //check for minimizing
-
-            //check for conflicting settings and command line argeuemts
-
-            //dispose of it here
+            //dispose of please wait here
         }
 
         private void TheMainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -81,6 +79,15 @@ namespace RelhaxModpack
             //TODO
         }
 
+        private void ApplySettingsToUIOnApplicationLoad()
+        {
+            //add localization translation options to combobox
+            Languages[] allLanguages = (Languages[])Enum.GetValues(typeof(Languages));
+            foreach (Languages lang in allLanguages)
+                LanguagesSelector.Items.Add(lang.ToString());
+        }
+
+        #region all the dumb events for all the changing of settings
         private void OnSelectionViewChanged(object sender, RoutedEventArgs e)
         {
             //selection view code for each new view goes here
@@ -199,5 +206,6 @@ namespace RelhaxModpack
             Translations.SetLanguage((Languages)LanguagesSelector.SelectedIndex);
             Translations.LocalizeWindow(this, true);
         }
+        #endregion
     }
 }
