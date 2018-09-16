@@ -132,7 +132,7 @@ namespace RelhaxModpack
 
         private void OnBackupModsChanged(object sender, RoutedEventArgs e)
         {
-            ModpackSettings.BackupModFolder = (bool)BackupModsCheckBox.IsChecked;
+            ModpackSettings.BackupModFolder = (bool)BackupModsCB.IsChecked;
         }
 
         private void OnPreviewLoadingImageChange(object sender, RoutedEventArgs e)
@@ -176,12 +176,12 @@ namespace RelhaxModpack
 
         private void OnDefaultBordersV2Changed(object sender, RoutedEventArgs e)
         {
-            ModpackSettings.EnableBordersDefaultV2View = (bool)EnableBordersV2CB.IsChecked;
+            ModpackSettings.EnableBordersDefaultV2View = (bool)EnableBordersDefaultV2CB.IsChecked;
         }
 
         private void OnDefaultSelectColorChanged(object sender, RoutedEventArgs e)
         {
-            ModpackSettings.EnableColorChangeDefaultV2View = (bool)EnableColorChangeV2CB.IsChecked;
+            ModpackSettings.EnableColorChangeDefaultV2View = (bool)EnableColorChangeDefaultV2CB.IsChecked;
         }
 
         private void OnLegacyBordersChanged(object sender, RoutedEventArgs e)

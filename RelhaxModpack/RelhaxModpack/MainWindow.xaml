@@ -41,8 +41,8 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <RadioButton x:Name="SelectionDefault" Content="Default" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="OnSelectionViewChanged"/>
-                    <CheckBox x:Name="EnableBordersV2CB" Content="Enable Borders" Grid.Column="0" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Click="OnDefaultBordersV2Changed"/>
-                    <CheckBox x:Name="EnableColorChangeV2CB" Content="Enable Color Change" Grid.Column="0" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Click="OnDefaultSelectColorChanged"/>
+                    <CheckBox x:Name="EnableBordersDefaultV2CB" Content="Enable Borders" Grid.Column="0" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Click="OnDefaultBordersV2Changed"/>
+                    <CheckBox x:Name="EnableColorChangeDefaultV2CB" Content="Enable Color Change" Grid.Column="0" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Click="OnDefaultSelectColorChanged"/>
                     <RadioButton x:Name="SelectionLegacy" Content="Legacy" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Click="OnSelectionViewChanged" />
                     <CheckBox x:Name="EnableBordersLegacyCB" Content="Enable Borders" Grid.Column="1" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Click="OnLegacyBordersChanged"/>
                     <CheckBox x:Name="EnableColorChangeLegacyCB" Content="Enable Color Change" Grid.Column="1" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Click="OnLegacySelectColorChenged"/>
@@ -77,7 +77,7 @@
                         <CheckBox Content="Inform if no new database available" x:Name="NotifyIfSameDatabaseCB" Click="OnInformIfNoNewDatabaseChanged"/>
                         <CheckBox Content="Force manual game detection" x:Name="ForceManuelGameDetectionCB" Click="OnForceManuelGameDetectionChanged"/>
                         <CheckBox Content="Show install complete window" x:Name="ShowInstallCompleteWindowCB" Click="OnShowInstallCompleteWindowChanged"/>
-                        <CheckBox Content="Backup mods folder upon installation" x:Name="BackupModsCheckBox" Click="OnBackupModsChanged" IsEnabled="False"/>
+                        <CheckBox Content="Backup mods folder upon installation" x:Name="BackupModsCB" Click="OnBackupModsChanged" IsEnabled="False"/>
                         <TextBlock Text="Backups: X - Total Size: Y MB" Margin="20,0,0,0" />
                         <TextBlock Text="Preview Loading Image:" />
                         <StackPanel Orientation="Horizontal">
