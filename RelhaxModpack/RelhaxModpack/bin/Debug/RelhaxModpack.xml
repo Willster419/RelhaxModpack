@@ -328,7 +328,7 @@
             Handles all localization for the application User Interface
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Translations.ApplyTranslationsOnWindowLoad(System.Windows.Window)">
+        <member name="M:RelhaxModpack.Translations.ApplyTranslationsOnWindowLoad_Deprecated(System.Windows.Window)">
             <summary>
             Applies and UI elements with translated strings
             </summary>
