@@ -109,44 +109,44 @@
     <Compile Include="Utils\CiInfo.cs" />
     <Compile Include="Utils\Translations.cs" />
     <Compile Include="Utils\Utils.cs" />
-    <Compile Include="Windows\AddPicturesZip.xaml.cs">
+    <Compile Include="UIComponents\AddPicturesZip.xaml.cs">
       <DependentUpon>AddPicturesZip.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\DatabaseEditor.xaml.cs">
+    <Compile Include="UIComponents\DatabaseEditor.xaml.cs">
       <DependentUpon>DatabaseEditor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\DatabaseEditorAddMove.xaml.cs">
+    <Compile Include="UIComponents\DatabaseEditorAddMove.xaml.cs">
       <DependentUpon>DatabaseEditorAddMove.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\DatabaseEditorDownload.xaml.cs">
+    <Compile Include="UIComponents\DatabaseEditorDownload.xaml.cs">
       <DependentUpon>DatabaseEditorDownload.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\DatabaseUpdater.xaml.cs">
+    <Compile Include="UIComponents\DatabaseUpdater.xaml.cs">
       <DependentUpon>DatabaseUpdater.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\GenericYesNoWindow.xaml.cs">
+    <Compile Include="UIComponents\GenericYesNoWindow.xaml.cs">
       <DependentUpon>GenericYesNoWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\InstallFinished.xaml.cs">
+    <Compile Include="UIComponents\InstallFinished.xaml.cs">
       <DependentUpon>InstallFinished.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\ModSelectionList.xaml.cs">
+    <Compile Include="UIComponents\ModSelectionList.xaml.cs">
       <DependentUpon>ModSelectionList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\PatchTester.xaml.cs">
+    <Compile Include="UIComponents\PatchTester.xaml.cs">
       <DependentUpon>PatchTester.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\GenericWindow.xaml.cs">
+    <Compile Include="UIComponents\GenericWindow.xaml.cs">
       <DependentUpon>GenericWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\Preview.xaml.cs">
+    <Compile Include="UIComponents\Preview.xaml.cs">
       <DependentUpon>Preview.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\ProgressIndicator.xaml.cs">
+    <Compile Include="UIComponents\ProgressIndicator.xaml.cs">
       <DependentUpon>ProgressIndicator.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\RelhaxWindow.cs" />
-    <Compile Include="Windows\VersionInfo.xaml.cs">
+    <Compile Include="UIComponents\RelhaxWindow.cs" />
+    <Compile Include="UIComponents\VersionInfo.xaml.cs">
       <DependentUpon>VersionInfo.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
@@ -161,55 +161,55 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Windows\AddPicturesZip.xaml">
+    <Page Include="UIComponents\AddPicturesZip.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\DatabaseEditor.xaml">
+    <Page Include="UIComponents\DatabaseEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\DatabaseEditorAddMove.xaml">
+    <Page Include="UIComponents\DatabaseEditorAddMove.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\DatabaseEditorDownload.xaml">
+    <Page Include="UIComponents\DatabaseEditorDownload.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\DatabaseUpdater.xaml">
+    <Page Include="UIComponents\DatabaseUpdater.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\GenericYesNoWindow.xaml">
+    <Page Include="UIComponents\GenericYesNoWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\InstallFinished.xaml">
+    <Page Include="UIComponents\InstallFinished.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\ModSelectionList.xaml">
+    <Page Include="UIComponents\ModSelectionList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\PatchTester.xaml">
+    <Page Include="UIComponents\PatchTester.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\GenericWindow.xaml">
+    <Page Include="UIComponents\GenericWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\Preview.xaml">
+    <Page Include="UIComponents\Preview.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\ProgressIndicator.xaml">
+    <Page Include="UIComponents\ProgressIndicator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\VersionInfo.xaml">
+    <Page Include="UIComponents\VersionInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
