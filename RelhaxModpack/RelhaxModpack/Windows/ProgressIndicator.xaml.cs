@@ -17,7 +17,7 @@ namespace RelhaxModpack.Windows
     /// <summary>
     /// Interaction logic for ProgressIndicator.xaml
     /// </summary>
-    public partial class ProgressIndicator : Window
+    public partial class ProgressIndicator : RelhaxWindow
     {
         public double ProgressMinimum
         {
@@ -52,8 +52,6 @@ namespace RelhaxModpack.Windows
                 Logging.WriteToLog("progress maximum is less than or equal to 0! (is this the intent?) setting to default of 100",
                     Logfiles.Application, LogLevel.Warning);
             }
-            //apply translations
-            Translations.LocalizeWindow(this, false);
         }
 
         public void UpdateProgress(double percent)
