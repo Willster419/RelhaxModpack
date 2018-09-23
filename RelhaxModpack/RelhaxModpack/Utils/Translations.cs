@@ -85,7 +85,7 @@ namespace RelhaxModpack
             }
         }
 
-        public static void TranslateComponent(Visual v, bool ConsiderBlacklist, string valueToUseIfBlank = "")
+        public static void TranslateComponent(Visual v, bool ConsiderBlacklist = true, string valueToUseIfBlank = "")
         {
             //TODO: pass in the object itself so now we can consider blacklist correcly and only apply when we should
 
