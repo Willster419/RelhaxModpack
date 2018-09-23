@@ -93,7 +93,7 @@ namespace RelhaxModpack
 
         }
 
-        public static string GetTranslatedString(string componentName, bool ConsiderBlacklist, string valueToUseIfBlank = "")
+        public static string GetTranslatedString(string componentName, bool ConsiderBlacklist = true, string valueToUseIfBlank = "")
         {
             if(string.IsNullOrWhiteSpace(componentName))
             {
