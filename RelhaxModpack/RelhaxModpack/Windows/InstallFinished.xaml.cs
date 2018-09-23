@@ -17,7 +17,7 @@ namespace RelhaxModpack.Windows
     /// <summary>
     /// Interaction logic for InstallFinished.xaml
     /// </summary>
-    public partial class InstallFinished : Window
+    public partial class InstallFinished : RelhaxWindow
     {
         public InstallFinished()
         {

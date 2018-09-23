@@ -1,4 +1,4 @@
-﻿<Window x:Class="RelhaxModpack.Windows.VersionInfo"
+﻿<local:RelhaxWindow x:Class="RelhaxModpack.Windows.VersionInfo"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -16,4 +16,4 @@
         <Button Content="No" HorizontalAlignment="Left" Margin="10,0,0,31" VerticalAlignment="Bottom" Width="75"/>
         <Button Content="Yes" HorizontalAlignment="Right" Margin="0,0,10,31" VerticalAlignment="Bottom" Width="75"/>
     </Grid>
-</Window>
+</local:RelhaxWindow>

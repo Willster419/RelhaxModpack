@@ -17,7 +17,7 @@ namespace RelhaxModpack.Windows
     /// <summary>
     /// Interaction logic for VersionInfo.xaml
     /// </summary>
-    public partial class VersionInfo : Window
+    public partial class VersionInfo : RelhaxWindow
     {
         public VersionInfo()
         {

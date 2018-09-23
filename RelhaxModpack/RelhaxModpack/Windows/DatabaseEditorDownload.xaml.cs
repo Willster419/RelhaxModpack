@@ -17,7 +17,7 @@ namespace RelhaxModpack.Windows
     /// <summary>
     /// Interaction logic for DatabaseEditorDownload.xaml
     /// </summary>
-    public partial class DatabaseEditorDownload : Window
+    public partial class DatabaseEditorDownload : RelhaxWindow
     {
         public DatabaseEditorDownload()
         {

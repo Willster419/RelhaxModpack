@@ -17,7 +17,7 @@ namespace RelhaxModpack.Windows
     /// <summary>
     /// Interaction logic for AddPicturesZip.xaml
     /// </summary>
-    public partial class AddPicturesZip : Window
+    public partial class AddPicturesZip : RelhaxWindow
     {
         public AddPicturesZip()
         {

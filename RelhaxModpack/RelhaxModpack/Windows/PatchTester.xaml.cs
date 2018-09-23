@@ -17,7 +17,7 @@ namespace RelhaxModpack.Windows
     /// <summary>
     /// Interaction logic for PatchTester.xaml
     /// </summary>
-    public partial class PatchTester : Window
+    public partial class PatchTester : RelhaxWindow
     {
         public PatchTester()
         {

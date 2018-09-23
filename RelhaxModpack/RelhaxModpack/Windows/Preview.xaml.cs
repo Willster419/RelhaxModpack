@@ -17,7 +17,7 @@ namespace RelhaxModpack.Windows
     /// <summary>
     /// Interaction logic for Preview.xaml
     /// </summary>
-    public partial class Preview : Window
+    public partial class Preview : RelhaxWindow
     {
         public Preview()
         {

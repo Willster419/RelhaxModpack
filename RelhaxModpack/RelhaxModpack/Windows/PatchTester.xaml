@@ -1,4 +1,4 @@
-﻿<Window x:Class="RelhaxModpack.Windows.PatchTester"
+﻿<local:RelhaxWindow x:Class="RelhaxModpack.Windows.PatchTester"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -111,4 +111,4 @@
         <Button Content="Save patch XML" HorizontalAlignment="Left" Margin="101,3,0,0" Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Top" Width="95"/>
         <Button Content="Save patch to zip file" HorizontalAlignment="Left" Margin="201,3,0,0" Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Top" Width="123"/>
     </Grid>
-</Window>
+</local:RelhaxWindow>

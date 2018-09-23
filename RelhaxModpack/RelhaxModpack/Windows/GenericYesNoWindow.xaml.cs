@@ -17,7 +17,7 @@ namespace RelhaxModpack.Windows
     /// <summary>
     /// Interaction logic for GenericYesNoWindow.xaml
     /// </summary>
-    public partial class GenericYesNoWindow : Window
+    public partial class GenericYesNoWindow : RelhaxWindow
     {
         public GenericYesNoWindow()
         {

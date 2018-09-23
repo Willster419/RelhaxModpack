@@ -1,4 +1,4 @@
-﻿<Window x:Class="RelhaxModpack.Windows.ModSelectionList"
+﻿<local:RelhaxWindow x:Class="RelhaxModpack.Windows.ModSelectionList"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -33,4 +33,4 @@
             <TextBlock Text="Text that can take up to two lines" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
     </Grid>
-</Window>
+</local:RelhaxWindow>

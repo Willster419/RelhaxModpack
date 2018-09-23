@@ -17,7 +17,7 @@ namespace RelhaxModpack.Windows
     /// <summary>
     /// Interaction logic for DatabaseUpdater.xaml
     /// </summary>
-    public partial class DatabaseUpdater : Window
+    public partial class DatabaseUpdater : RelhaxWindow
     {
         public DatabaseUpdater()
         {

@@ -17,7 +17,7 @@ namespace RelhaxModpack.Windows
     /// <summary>
     /// Interaction logic for SelectionViewer.xaml
     /// </summary>
-    public partial class SelectionViewer : Window
+    public partial class SelectionViewer : RelhaxWindow
     {
         public SelectionViewer()
         {

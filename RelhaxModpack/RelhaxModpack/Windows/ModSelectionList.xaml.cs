@@ -17,7 +17,7 @@ namespace RelhaxModpack.Windows
     /// <summary>
     /// Interaction logic for ModSelectionList.xaml
     /// </summary>
-    public partial class ModSelectionList : Window
+    public partial class ModSelectionList : RelhaxWindow
     {
         public ModSelectionList()
         {

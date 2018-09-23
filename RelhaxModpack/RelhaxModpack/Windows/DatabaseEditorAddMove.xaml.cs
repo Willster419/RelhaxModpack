@@ -17,7 +17,7 @@ namespace RelhaxModpack.Windows
     /// <summary>
     /// Interaction logic for DatabaseEditorAddMove.xaml
     /// </summary>
-    public partial class DatabaseEditorAddMove : Window
+    public partial class DatabaseEditorAddMove : RelhaxWindow
     {
         public DatabaseEditorAddMove()
         {
