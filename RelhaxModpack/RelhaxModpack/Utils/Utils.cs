@@ -28,6 +28,8 @@ namespace RelhaxModpack
             return CiInfo.BuildTag + " (EN-US date format)";
         }
 
+        #region Window Utils
+
         public static List<FrameworkElement> GetAllWindowComponentsVisual(Window window, bool includeWindow)
         {
             //https://stackoverflow.com/questions/874380/wpf-how-do-i-loop-through-the-all-controls-in-a-window
@@ -81,5 +83,6 @@ namespace RelhaxModpack
                     GetAllWindowComponentsVisual(subV, allWindowComponents);
             }
         }
+        #endregion
     }
 }

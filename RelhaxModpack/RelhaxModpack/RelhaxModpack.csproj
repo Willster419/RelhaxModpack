@@ -237,6 +237,10 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Resource Include="3rdPartyLicences\dds-reader.txt" />
+    <Resource Include="3rdPartyLicences\NAudio.txt" />
+    <Resource Include="3rdPartyLicences\SpriteSheetPacker.txt" />
+    <Resource Include="3rdPartyLicences\TeximpNet.txt" />
     <Content Include="Resources\Licences\modpack_license_agrement.txt" />
     <None Include="RelhaxModpack.ruleset" />
   </ItemGroup>
@@ -289,6 +293,7 @@
     <Content Include="Resources\Libraries\Newtonsoft.Json.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="DatabaseComponents\" />
     <Folder Include="Resources\XML\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
