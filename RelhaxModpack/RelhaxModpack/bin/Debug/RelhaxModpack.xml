@@ -328,12 +328,6 @@
             Handles all localization for the application User Interface
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Translations.ApplyTranslationsOnWindowLoad_Deprecated(System.Windows.Window)">
-            <summary>
-            Applies and UI elements with translated strings
-            </summary>
-            <param name="window">The Window instance to apply translations to</param>
-        </member>
         <member name="M:RelhaxModpack.Translations.LocalizeWindow(System.Windows.Window,System.Boolean)">
             <summary>
             Applies localized text translations for the passed in window

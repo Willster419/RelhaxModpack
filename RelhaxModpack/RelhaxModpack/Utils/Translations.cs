@@ -85,27 +85,8 @@ namespace RelhaxModpack
             }
         }
 
-        public static void TranslateComponent(Visual v, bool ConsiderBlacklist = true, string valueToUseIfBlank = "")
+        public static string GetTranslatedString(string componentName)
         {
-            //TODO: pass in the object itself so now we can consider blacklist correcly and only apply when we should
-
-            //first check name
-
-        }
-
-        public static string GetTranslatedString(string componentName, bool ConsiderBlacklist = true, string valueToUseIfBlank = "")
-        {
-            if(string.IsNullOrWhiteSpace(componentName))
-            {
-                //log debug translation component is blank null or from blacklist
-                Logging.WriteToLog("Translation component name is blank, using default value of " + valueToUseIfBlank, Logfiles.Application, LogLevel.Debug);
-                return valueToUseIfBlank;
-            }
-            if(TranslationComponentBlacklist.Contains(componentName) && (ConsiderBlacklist))
-            {
-                Logging.WriteToLog(string.Format("Skipping translation of {0}, present in blacklist and consider=true", componentName), Logfiles.Application, LogLevel.Debug);
-                return valueToUseIfBlank;
-            }
             string s = "";
             //check if componentName key exists in current language
             if(CurrentLanguage.ContainsKey(componentName))
@@ -2472,129 +2453,6 @@ namespace RelhaxModpack
 
         #region Applying Window Translations
         /// <summary>
-        /// Applies and UI elements with translated strings
-        /// </summary>
-        /// <param name="window">The Window instance to apply translations to</param>
-        private static void ApplyTranslationsOnWindowLoad_Deprecated(Window window)
-        {
-            Logging.WriteToLog("Method not finished: ApplyTranslationsOnWindowLoad(Window window)", Logfiles.Application, LogLevel.Error);
-            Panel startingWindowPanel = (Panel)window.Content;
-            ApplyPanelTranslations(startingWindowPanel);
-        }
-
-        private static void ApplyPanelTranslations(Panel p)
-        {
-            foreach (FrameworkElement control in p.Children)
-            {
-                //check if it's a panel (we need to go deeper)
-                if (control is Panel subP)
-                    ApplyPanelTranslations(subP);
-                else if (control is TextBlock tb)
-                    tb.Text = GetTranslatedString(tb.Name, true, tb.Text);
-                else if (control is TextBox tb2)
-                    tb2.Text = GetTranslatedString(tb2.Name, true, tb2.Text);
-                //check if it's a tab control (itterate through the tabs)
-                else if (control is TabControl tc)
-                    ApplyTabControlTranslations(tc);
-                //check if it's a GroupBox (check header and then content)
-                else if (control is GroupBox gb)
-                    ApplyGroupBoxTranslations(gb);
-                //check if it's a ContentControl (dynamically apply based on sub class result)
-                else if (control is ContentControl cc)
-                    ApplyContentTranslations(cc);
-                else if (control is Decorator dec)
-                    ApplyDecoratorTranslations(dec);
-            }
-        }
-
-        private static void ApplyContentTranslations(ContentControl cc)
-        {
-            if (cc.Content is string)
-            {
-                cc.Content = GetTranslatedString(cc.Name, true, (string)cc.Content);
-            }
-            else if (cc.Content is TextBox tb)
-                tb.Text = GetTranslatedString(tb.Name, true, tb.Text);
-            else if (cc.Content is TextBlock tb2)
-                tb2.Text = GetTranslatedString(tb2.Name, true, tb2.Text);
-            else if (cc.Content is Hyperlink hl)
-            {
-
-            }
-            else if (cc.Content is Panel p)
-                ApplyPanelTranslations(p);
-            else if (cc.Content is TabControl tc)
-                ApplyTabControlTranslations(tc);
-            else if (cc.Content is ContentControl cc2)
-                ApplyContentTranslations(cc2);
-            else if (cc.Content is Decorator dec)
-                ApplyDecoratorTranslations(dec);
-        }
-
-        private static void ApplyTabControlTranslations(TabControl tc)
-        {
-            foreach (TabItem ti in tc.Items)
-            {
-                if (ti.Header is string)
-                    ti.Header = GetTranslatedString(ti.Name, true, (string)ti.Header);
-                else if (ti.Header is TextBlock htb)
-                    htb.Text = GetTranslatedString(htb.Name, true, htb.Text);
-                else if (ti.Header is TextBox htb2)
-                    htb2.Text = GetTranslatedString(htb2.Name, true, htb2.Text);
-                else if (ti.Header is ContentControl hcc)
-                    ApplyContentTranslations(hcc);
-                if (ti.Content is Panel p)
-                    ApplyPanelTranslations(p);
-                else if (ti.Content is ContentControl cc)
-                    ApplyContentTranslations(cc);
-                else if (ti.Content is Decorator dec)
-                    ApplyDecoratorTranslations(dec);
-            }
-        }
-
-        private static void ApplyGroupBoxTranslations(GroupBox gb)
-        {
-            if (gb.Header is string)
-                gb.Header = GetTranslatedString(gb.Name, true, (string)gb.Header);
-            else if (gb.Header is TextBlock htb)
-                htb.Text = GetTranslatedString(htb.Name, true, htb.Text);
-            else if (gb.Header is TextBox htb2)
-                htb2.Text = GetTranslatedString(htb2.Name, true, htb2.Text);
-            else if (gb.Header is ContentControl hcc)
-                ApplyContentTranslations(hcc);
-            if (gb.Content is TextBlock tb)
-                tb.Text = GetTranslatedString(tb.Name, true, tb.Text);
-            else if (gb.Content is TextBox tb2)
-                tb2.Text = GetTranslatedString(tb2.Name, true, tb2.Text);
-            else if (gb.Content is Decorator dec)
-                ApplyDecoratorTranslations(dec);
-            else if (gb.Content is ContentControl cc)
-                ApplyContentTranslations(cc);
-            else if (gb.Content is Panel p)
-                ApplyPanelTranslations(p);
-        }
-
-        private static void ApplyDecoratorTranslations(Decorator dec)
-        {
-            if (dec.Child is TextBlock tb)
-                tb.Text = GetTranslatedString(tb.Name, true, tb.Text);
-            else if (dec.Child is TextBox tb2)
-                tb2.Text = GetTranslatedString(tb2.Name, true, tb2.Text);
-            else if (dec.Child is Decorator dec2)
-                ApplyDecoratorTranslations(dec2);
-            else if (dec.Child is Panel p)
-                ApplyPanelTranslations(p);
-            else if (dec.Child is TabControl tc)
-                ApplyTabControlTranslations(tc);
-            else if (dec.Child is GroupBox gb)
-                ApplyGroupBoxTranslations(gb);
-            else if (dec.Child is ContentControl cc)
-                ApplyContentTranslations(cc);
-        }
-        #endregion
-
-        #region Applying Window Translations the right way
-        /// <summary>
         /// Applies localized text translations for the passed in window
         /// See the comments in the method for more information
         /// </summary>
@@ -2606,54 +2464,68 @@ namespace RelhaxModpack
             List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsVisual(window, false);
             foreach(FrameworkElement v in allWindowControls)
             {
-                //use the "is" keyword to be able to apply translations (text is under different properties for each type of visuals)
-                if (v is Control control)
+                TranslateComponent(v, true);
+            }
+        }
+
+        
+        private static void TranslateComponent(FrameworkElement frameworkElement, bool applyToolTips)
+        {
+            //TODO: pass in the object itself so now we can consider blacklist correcly and only apply when we should
+            //first check name is none or on blacklist
+            string componentName = frameworkElement.Name;
+            if (string.IsNullOrWhiteSpace(componentName))
+            {
+                //log debug translation component is blank null or from blacklist
+                Logging.WriteToLog("Translation component name is blank", Logfiles.Application, LogLevel.Debug);
+                return;
+            }
+            if (TranslationComponentBlacklist.Contains(componentName))
+            {
+                Logging.WriteToLog(string.Format("Skipping translation of {0}, present in blacklist and consider=true", componentName), Logfiles.Application, LogLevel.Debug);
+                return;
+            }
+            //getting here means that the object is a framework UI element, has a name, and is not on te blacklist. it's safe to translate
+            //use the "is" keyword to be able to apply translations (text is under different properties for each type of visuals)
+            if (frameworkElement is Control control)
+            {
+                //Generic control
+                //headered content controls have a header and content object
+                if (control is HeaderedContentControl headeredContentControl)
                 {
-                    //Generic control
-                    //check if the name is declared, a blank name implies te control should not be translated. this was by design
-                    if (!string.IsNullOrWhiteSpace(control.Name))
-                    {
-                        //headered content controls have a header and content object
-                        if (control is HeaderedContentControl headeredContentControl)
-                        {
-                            //ALWAYS make sure that the header and content are of type string BEFORE over-writing! (what if it is an image?)
-                            if (headeredContentControl.Header is string)
-                                headeredContentControl.Header = GetTranslatedString(headeredContentControl.Name + "Header", true,(string)headeredContentControl.Header);
-                            if (headeredContentControl.Content is string)
-                                headeredContentControl.Content = GetTranslatedString(headeredContentControl.Name, true, (string)headeredContentControl.Content);
-                            if (applyToolTips)
-                                headeredContentControl.ToolTip = GetTranslatedString(headeredContentControl.Name + "Description", true);
-                        }
-                        //content controls have only a heder
-                        else if (control is ContentControl contentControl)
-                        {
-                            //ALWAYS make sure that the header and content are of type string BEFORE over-writing! (what if it is an image?)
-                            if (contentControl.Content is string)
-                                contentControl.Content = GetTranslatedString(contentControl.Name, true, (string)contentControl.Content);
-                            if (applyToolTips)
-                                contentControl.ToolTip = GetTranslatedString(contentControl.Name + "Description", true);
-                        }
-                        //textbox only has string text as input
-                        else if (control is TextBox textBox)
-                        {
-                            textBox.Text = GetTranslatedString(textBox.Name, true, textBox.Name);
-                            if (applyToolTips)
-                                textBox.ToolTip = GetTranslatedString(textBox.Name + "Description", true);
-                        }
-                    }
+                    //ALWAYS make sure that the header and content are of type string BEFORE over-writing! (what if it is an image?)
+                    if (headeredContentControl.Header is string)
+                        headeredContentControl.Header = GetTranslatedString(headeredContentControl.Name + "Header");
+                    if (headeredContentControl.Content is string)
+                        headeredContentControl.Content = GetTranslatedString(headeredContentControl.Name);
+                    if (applyToolTips)
+                        headeredContentControl.ToolTip = GetTranslatedString(headeredContentControl.Name + "Description");
                 }
-                else if (v is TextBlock textBlock)
+                //content controls have only a heder
+                else if (control is ContentControl contentControl)
                 {
-                    //lightweight block of text that only uses string as it's input. makes it not a control (no content of children property)
-                    //next check if the name is declared. a blank name implies the control should not be translated
-                    if (!string.IsNullOrWhiteSpace(textBlock.Name))
-                    {
-                        textBlock.Text = GetTranslatedString(textBlock.Name, true, textBlock.Text);
-                        //apply tool tips?
-                        if (applyToolTips)
-                            textBlock.ToolTip = GetTranslatedString(textBlock.Name + "Description", true);
-                    }
+                    //ALWAYS make sure that the header and content are of type string BEFORE over-writing! (what if it is an image?)
+                    if (contentControl.Content is string)
+                        contentControl.Content = GetTranslatedString(contentControl.Name);
+                    if (applyToolTips)
+                        contentControl.ToolTip = GetTranslatedString(contentControl.Name + "Description");
                 }
+                //textbox only has string text as input
+                else if (control is TextBox textBox)
+                {
+                    textBox.Text = GetTranslatedString(textBox.Name);
+                    if (applyToolTips)
+                        textBox.ToolTip = GetTranslatedString(textBox.Name + "Description");
+                }
+                
+            }
+            else if (frameworkElement is TextBlock textBlock)
+            {
+                //lightweight block of text that only uses string as it's input. makes it not a control (no content of children property)
+                textBlock.Text = GetTranslatedString(textBlock.Name);
+                //apply tool tips?
+                if (applyToolTips)
+                    textBlock.ToolTip = GetTranslatedString(textBlock.Name + "Description");
             }
         }
         #endregion
