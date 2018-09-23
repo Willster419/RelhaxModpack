@@ -228,5 +228,25 @@ namespace RelhaxModpack
             Translations.LocalizeWindow(this, true);
         }
         #endregion
+
+        private void InstallModpackButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void UninstallModpackButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DiagnosticUtilitiesButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ViewNewsButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
