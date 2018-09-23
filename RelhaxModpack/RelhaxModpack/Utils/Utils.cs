@@ -61,6 +61,11 @@ namespace RelhaxModpack
             int ChildrenComponents = VisualTreeHelper.GetChildrenCount(v);
             for (int i = 0; i < ChildrenComponents; i++)
             {
+                DependencyObject dep = VisualTreeHelper.GetChild(v, i);
+                if(!(dep is FrameworkElement))
+                {
+                    continue;
+                }
                 FrameworkElement subV = (FrameworkElement)VisualTreeHelper.GetChild(v, i);
                 allWindowComponents.Add(subV);
                 if (subV is TabControl tabControl)
