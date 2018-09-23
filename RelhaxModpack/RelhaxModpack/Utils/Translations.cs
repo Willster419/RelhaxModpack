@@ -2603,8 +2603,8 @@ namespace RelhaxModpack
         public static void LocalizeWindow(Window window, bool applyToolTips)
         {
             //Get a list of all visual class controls curently presend and loaded in the window
-            List<Visual> allWindowControls = Utils.GetAllWindowComponentsVisual(window, false);
-            foreach(Visual v in allWindowControls)
+            List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsVisual(window, false);
+            foreach(FrameworkElement v in allWindowControls)
             {
                 //use the "is" keyword to be able to apply translations (text is under different properties for each type of visuals)
                 if (v is Control control)

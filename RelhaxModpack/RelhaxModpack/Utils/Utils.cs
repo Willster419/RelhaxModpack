@@ -12,11 +12,6 @@ namespace RelhaxModpack
     public static class Utils
     {
         /// <summary>
-        /// A generic Progress Indicator window to be used for when loading things on a UI thread
-        /// Use this in a using statement
-        /// </summary>
-        public static Windows.ProgressIndicator ProgressIndicator;
-        /// <summary>
         /// Return the entire assembely version
         /// </summary>
         /// <returns>The entire assembely version string (major, minor, build, revision)</returns>
@@ -33,10 +28,10 @@ namespace RelhaxModpack
             return CiInfo.BuildTag + " (EN-US date format)";
         }
 
-        public static List<Visual> GetAllWindowComponentsVisual(Window window, bool includeWindow)
+        public static List<FrameworkElement> GetAllWindowComponentsVisual(Window window, bool includeWindow)
         {
             //https://stackoverflow.com/questions/874380/wpf-how-do-i-loop-through-the-all-controls-in-a-window
-            List<Visual> windowComponents = new List<Visual>();
+            List<FrameworkElement> windowComponents = new List<FrameworkElement>();
             if (includeWindow)
                 windowComponents.Add(window);
             if (VisualTreeHelper.GetChildrenCount(window) > 0)
@@ -44,7 +39,7 @@ namespace RelhaxModpack
             return windowComponents;
         }
 
-        private static void GetAllWindowComponentsLogical(Visual v, List<Visual> allWindowComponents)
+        private static void GetAllWindowComponentsLogical(FrameworkElement v, List<FrameworkElement> allWindowComponents)
         {
             //NOTE: v has been added
             //have to use var here cause i got NO CLUE what type it is #niceMeme
@@ -53,7 +48,7 @@ namespace RelhaxModpack
             foreach(var child in children)
             {
                 //Type temp2 = child.GetType();
-                if(child is Visual childVisual)
+                if(child is FrameworkElement childVisual)
                 {
                     allWindowComponents.Add(childVisual);
                     GetAllWindowComponentsLogical(childVisual, allWindowComponents);
@@ -61,16 +56,16 @@ namespace RelhaxModpack
             }
         }
 
-        private static void GetAllWindowComponentsVisual(Visual v, List<Visual> allWindowComponents)
+        private static void GetAllWindowComponentsVisual(FrameworkElement v, List<FrameworkElement> allWindowComponents)
         {
             int ChildrenComponents = VisualTreeHelper.GetChildrenCount(v);
             for (int i = 0; i < ChildrenComponents; i++)
             {
-                Visual subV = (Visual)VisualTreeHelper.GetChild(v, i);
+                FrameworkElement subV = (FrameworkElement)VisualTreeHelper.GetChild(v, i);
                 allWindowComponents.Add(subV);
                 if (subV is TabControl tabControl)
                 {
-                    foreach(Visual tabVisual in tabControl.Items)
+                    foreach(FrameworkElement tabVisual in tabControl.Items)
                     {
                         allWindowComponents.Add(tabVisual);
                         GetAllWindowComponentsLogical(tabVisual, allWindowComponents);
