@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using RelhaxModpack.Windows;
 
 
 namespace RelhaxModpack
@@ -31,26 +32,40 @@ namespace RelhaxModpack
 
         private void TheMainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            Hide();
             //load please wait thing
-
+            ProgressIndicator progressIndicator = new ProgressIndicator()
+            {
+                Message = Translations.GetTranslatedString("loadingTranslations"),
+                ProgressMinimum = 0,
+                ProgressMaximum = 3
+            };
+            progressIndicator.Show();
+            progressIndicator.UpdateProgress(0);
             //load translation hashes and set default language
             Translations.SetLanguage(Languages.English);
             Translations.LoadTranslations();
             //apply translations to this window
             Translations.LocalizeWindow(this,true);
             //create and localize the tray icons and menus
+            progressIndicator.UpdateProgress(1, "STRING_TODO");
 
             //load and apply modpack settings
-
+            progressIndicator.UpdateProgress(2, "STRING_TODO");
+            ModpackSettings.LoadSettings();
             //apply settings to UI elements
-
+            UISettings.LoadSettings();
             //check command line settings
-
-            //apply color UI settings
-
+            CommandLineSettings.ParseCommandLineConflicts();
+            //apply third party settings
+            ThirdPartySettings.LoadSettings();
             //check for updates
-
+            progressIndicator.UpdateProgress(3, "STRING_TODO");
+            CheckForUpdates();
             //dispose of please wait here
+            progressIndicator.Close();
+            progressIndicator = null;
+            Show();
         }
 
         private void TheMainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -79,9 +94,15 @@ namespace RelhaxModpack
             //TODO
         }
 
+        private void CheckForUpdates()
+        {
+
+        }
+
         private void ApplySettingsToUIOnApplicationLoad()
         {
             //add localization translation options to combobox
+            //TODO these need to be in the lanaugae thatthey are in
             Languages[] allLanguages = (Languages[])Enum.GetValues(typeof(Languages));
             foreach (Languages lang in allLanguages)
                 LanguagesSelector.Items.Add(lang.ToString());

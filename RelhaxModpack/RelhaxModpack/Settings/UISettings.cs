@@ -8,6 +8,9 @@ namespace RelhaxModpack
 {
     public static class UISettings
     {
-
+        public static void LoadSettings()
+        {
+            //stub TODO
+        }
     }
 }

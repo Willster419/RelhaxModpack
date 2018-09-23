@@ -22,7 +22,7 @@ namespace RelhaxModpack
         public static string UpdateKeyFileName = string.Empty;
         public static string EditorAutoLoadFileName = string.Empty;
 
-        public static void ParseCommandLineConflicts()
+        public static void ParseCommandLineConflicts()//stub TODO
         {
             //check for conflicting command line arguements
         }

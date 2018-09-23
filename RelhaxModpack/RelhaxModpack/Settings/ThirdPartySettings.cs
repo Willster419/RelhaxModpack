@@ -8,6 +8,9 @@ namespace RelhaxModpack
 {
     public static class ThirdPartySettings
     {
-
+        public static void LoadSettings()
+        {
+            //stub TODO
+        }
     }
 }
