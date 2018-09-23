@@ -182,7 +182,7 @@ namespace RelhaxModpack
             backupFolderContent = new List<BackupFolder>();                         // this list will hold ALL directories and files after parsing
             List<DirectoryInfo> folderList = di.GetDirectories().ToList();          // parsed top folders
 
-            this.backupModsSizeLabel.Enabled = false;
+            //this.backupModsSizeLabel.Enabled = false;
 
             foreach (var fL in folderList)
             {
