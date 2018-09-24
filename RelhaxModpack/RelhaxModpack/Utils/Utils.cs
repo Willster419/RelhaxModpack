@@ -1,5 +1,11 @@
-﻿using System;
+﻿using Ionic.Zip;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -11,6 +17,11 @@ namespace RelhaxModpack
     /// </summary>
     public static class Utils
     {
+        #region Statics
+        static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+        //MACROS TODO
+        #endregion
+        #region Application Utils
         /// <summary>
         /// Return the entire assembely version
         /// </summary>
@@ -27,9 +38,14 @@ namespace RelhaxModpack
         {
             return CiInfo.BuildTag + " (EN-US date format)";
         }
-
+        #endregion
         #region Window Utils
-
+        /// <summary>
+        /// Get a list of all visual components in the window
+        /// </summary>
+        /// <param name="window">The window to get the list of</param>
+        /// <param name="includeWindow">if the list should include the window itself</param>
+        /// <returns>A list of type FrameowrkElement of all components</returns>
         public static List<FrameworkElement> GetAllWindowComponentsVisual(Window window, bool includeWindow)
         {
             //https://stackoverflow.com/questions/874380/wpf-how-do-i-loop-through-the-all-controls-in-a-window
@@ -40,24 +56,7 @@ namespace RelhaxModpack
                 GetAllWindowComponentsVisual(window, windowComponents);
             return windowComponents;
         }
-
-        private static void GetAllWindowComponentsLogical(FrameworkElement v, List<FrameworkElement> allWindowComponents)
-        {
-            //NOTE: v has been added
-            //have to use var here cause i got NO CLUE what type it is #niceMeme
-            var children = LogicalTreeHelper.GetChildren(v);
-            //Type temp = children.GetType();
-            foreach(var child in children)
-            {
-                //Type temp2 = child.GetType();
-                if(child is FrameworkElement childVisual)
-                {
-                    allWindowComponents.Add(childVisual);
-                    GetAllWindowComponentsLogical(childVisual, allWindowComponents);
-                }
-            }
-        }
-
+        //A recursive method for navigating the visual tree
         private static void GetAllWindowComponentsVisual(FrameworkElement v, List<FrameworkElement> allWindowComponents)
         {
             int ChildrenComponents = VisualTreeHelper.GetChildrenCount(v);
@@ -82,6 +81,295 @@ namespace RelhaxModpack
                 if (childrenCount > 0)
                     GetAllWindowComponentsVisual(subV, allWindowComponents);
             }
+        }
+        //Gets any logical components that are not currently shown (like elemnts behind a tab)
+        private static void GetAllWindowComponentsLogical(FrameworkElement v, List<FrameworkElement> allWindowComponents)
+        {
+            //NOTE: v has been added
+            //have to use var here cause i got NO CLUE what type it is #niceMeme
+            var children = LogicalTreeHelper.GetChildren(v);
+            //Type temp = children.GetType();
+            foreach (var child in children)
+            {
+                //Type temp2 = child.GetType();
+                if (child is FrameworkElement childVisual)
+                {
+                    allWindowComponents.Add(childVisual);
+                    GetAllWindowComponentsLogical(childVisual, allWindowComponents);
+                }
+            }
+        }
+        #endregion
+        #region File Utilities
+        /// <summary>
+        /// Creates an MD5 hash calculation of the input file
+        /// </summary>
+        /// <param name="inputFile">The path to the file to calculate</param>
+        /// <returns></returns>
+        public static string CreateMD5Hash(string inputFile)
+        {
+            if (string.IsNullOrWhiteSpace(inputFile))
+                return "-1";
+            //first, return if the file does not exist
+            if (!System.IO.File.Exists(inputFile))
+                return "-1";
+            //Convert the input string to a byte array and compute the hash
+            StringBuilder sBuilder;
+            using (MD5 md5Hash = MD5.Create())
+            using (var stream = System.IO.File.OpenRead(inputFile))
+            {
+                byte[] data = md5Hash.ComputeHash(stream);
+                stream.Close();
+                //Create a new Stringbuilder to collect the bytes
+                sBuilder = new StringBuilder();
+                //Loop through each byte of the hashed data 
+                //and format each one as a hexadecimal string.
+                for (int i = 0; i < data.Length; i++)
+                {
+                    sBuilder.Append(data[i].ToString("x2"));
+                }
+            }
+            //Return the hexadecimal string.
+            return sBuilder.ToString();
+        }
+        /// <summary>
+        /// Gets a zip file entry in the form of a string
+        /// </summary>
+        /// <param name="zipFilename">The path to the file in the zip</param>
+        /// <param name="archivedFilename">the path to the zip file</param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public static string GetStringFromZip(string zipFilename, string archivedFilename, string password = "")
+        {
+            // https://social.msdn.microsoft.com/Forums/vstudio/en-US/92a36534-0f01-4425-ab63-c5f8830d64ae/help-please-with-dotnetzip-extracting-data-form-ziped-file?forum=csharpgeneral
+            if(!File.Exists(zipFilename))
+            {
+                Logging.WriteToLog(string.Format("ERROR: {0} not found", zipFilename));
+                return null;
+            }
+            string textStr = "";
+            using (ZipFile zip = ZipFile.Read(zipFilename))
+            using (MemoryStream ms = new MemoryStream() { Position=0 })
+            using (StreamReader sr = new StreamReader(ms))
+            {
+                ZipEntry e = zip[archivedFilename];
+                if (!string.IsNullOrWhiteSpace(password))
+                    e.ExtractWithPassword(ms, password);
+                else
+                    e.Extract(ms);
+                //ms.Position = 0;// should be fine with it done above
+                textStr = sr.ReadToEnd();
+            }
+            return textStr;
+        }
+        //deletes all empty directories from a given start location
+        public static void ProcessDirectory(string startLocation, bool reportToLog = true)
+        {
+            foreach (var directory in Directory.GetDirectories(startLocation))
+            {
+                ProcessDirectory(directory);
+                if (Directory.GetFiles(directory).Length == 0 &&
+                    Directory.GetDirectories(directory).Length == 0)
+                {
+                    if (reportToLog)
+                        Logging.WriteToLog(string.Format("Deleting empty directory {0}", directory),Logfiles.Application, LogLevel.Debug);
+                    Directory.Delete(directory, false);
+                }
+            }
+        }
+
+        public static string SizeSuffix(long value, int decimalPlaces = 1, bool sizeSuffix = false)
+        {
+            // https://stackoverflow.com/questions/14488796/does-net-provide-an-easy-way-convert-bytes-to-kb-mb-gb-etc
+            if (value < 0) { return "-" + SizeSuffix(-value); }
+            return SizeSuffix((ulong)value, decimalPlaces, sizeSuffix);
+        }
+
+        public static string SizeSuffix(ulong value, int decimalPlaces = 1, bool sizeSuffix = false)
+        {
+            if (value == 0) { if (sizeSuffix) return "0.0 bytes"; else return "0.0"; }
+            if (value < 1000) { if (sizeSuffix) return string.Format("{0:n" + decimalPlaces + "} {1}", 0.1, SizeSuffixes[1]); else return string.Format("{0:n" + decimalPlaces + "}", 0.1); }
+
+            // mag is 0 for bytes, 1 for KB, 2, for MB, etc.
+            int mag = (int)Math.Log(value, 1024);
+
+            // 1L << (mag * 10) == 2 ^ (10 * mag) 
+            // [i.e. the number of bytes in the unit corresponding to mag]
+            decimal adjustedSize = (decimal)value / (1L << (mag * 10));
+
+            // make adjustment when the value is large enough that
+            // it would round up to 1000 or more
+            if (Math.Round(adjustedSize, decimalPlaces) >= 1000)
+            {
+                mag += 1;
+                adjustedSize /= 1024;
+            }
+
+            if (sizeSuffix)
+                return string.Format("{0:n" + decimalPlaces + "} {1}", adjustedSize, SizeSuffixes[mag]);
+            else
+                return string.Format("{0:n" + decimalPlaces + "}", adjustedSize);
+        }
+
+        public static string GetValidFilename(string fileName)
+        {
+            foreach (char c in Path.GetInvalidFileNameChars())
+            {
+                fileName = fileName.Replace(c, '_');
+            }
+            return fileName;
+        }
+
+        public static void DirectoryDelete(string folderPath, bool deleteSubfolders, bool deleteTopFolder, int numRetrys, int timeout)
+        {
+            if (numRetrys < 1)
+                numRetrys = 1;
+            int retryCounter = 0;
+            foreach (string file in Directory.GetFiles(folderPath))
+            {
+                while(retryCounter < numRetrys)
+                {
+                    try
+                    {
+                        File.Delete(file);
+                        retryCounter = numRetrys;
+                    }
+                    catch(Exception ex)
+                    {
+                        Logging.WriteToLog(string.Format("failed to delete {0}, retryCount={1}, message:\n{2}", file, retryCounter, ex.Message),
+                            Logfiles.Application,LogLevel.Error);
+                        retryCounter++;
+                        System.Threading.Thread.Sleep(timeout);
+                    }
+                }
+            }
+            //if deleting the sub directories
+            if (deleteSubfolders)
+            {
+                foreach (string dir in Directory.GetDirectories(folderPath))
+                {
+                    DirectoryDelete(dir, deleteSubfolders, deleteTopFolder, numRetrys,timeout);
+                }
+            }
+            //delete the top directory
+            if(deleteTopFolder)
+            {
+                try
+                {
+                    Directory.Delete(folderPath);
+                }
+                catch (Exception ex)
+                {
+                    Logging.WriteToLog(string.Format("Error at DirectoryDelete, Folder: {0} ({1})", folderPath, ex.Message));
+                }
+            }
+            
+        }
+        #endregion
+        #region data type from string processing/parsing
+        /// <summary>
+        /// Try to parse a boolean value based on string input
+        /// </summary>
+        /// <param name="input">the string to try to parse</param>
+        /// <param name="defaultValue">the default value to use if parsing fails</param>
+        /// <returns>The bool value of the ipnut string, or the default value if parsing failes</returns>
+        public static bool ParseBool(string input, bool defaultValue)
+        {
+            if (bool.TryParse(input, out bool result))
+                return result;
+            else return defaultValue;
+        }
+        /// <summary>
+        /// Try to parse an intiger value based on string input
+        /// </summary>
+        /// <param name="input">the string to try to parse</param>
+        /// <param name="defaultValue">the default value to use if parsing fails</param>
+        /// <returns>The int value of the ipnut string, or the default value if parsing failes</returns>
+        public static int ParseInt(string input, int defaultValue)
+        {
+            if (int.TryParse(input, out int result))
+                return result;
+            else return defaultValue;
+        }
+        /// <summary>
+        /// Try to parse a float value based on string input
+        /// </summary>
+        /// <param name="input">the string to try to parse</param>
+        /// <param name="defaultValue">the default value to use if parsing fails</param>
+        /// <returns>The float value of the ipnut string, or the default value if parsing failes</returns>
+        public static float ParseFloat(string input, float defaultValue)
+        {
+            if (float.TryParse(input,NumberStyles.Float,CultureInfo.InvariantCulture,out float result))
+                return result;
+            else return defaultValue;
+        }
+        #endregion
+        #region duplicates checking
+
+        #endregion
+        #region mods list sorting
+
+        #endregion
+        #region generic utils
+        /// <summary>
+        /// https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings-in-c
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static string RandomString(int length)
+        {
+            Random random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+        // https://stackoverflow.com/questions/30494/compare-version-identifiers
+        /// <summary>
+        /// Compare versions of form "1,2,3,4" or "1.2.3.4". Throws FormatException
+        /// in case of invalid version. See function comments for more informations and samples.
+        /// </summary>
+        /// <param name="strA">the first version</param>
+        /// <param name="strB">the second version</param>
+        /// <returns>less than zero if strA is less than strB, equal to zero if
+        /// strA equals strB, and greater than zero if strA is greater than strB
+        /// Samples:
+        /// 1.0.0.0     | 1.0.0.1 = -1
+        /// 1.0.0.1     | 1.0.0.0 =  1
+        /// 1.0.0.0     | 1.0.0.0 =  0
+        /// 1, 0.0.0    | 1.0.0.0 =  0
+        /// 9, 5, 1, 44 | 3.4.5.6 =  1
+        /// 1, 5, 1, 44 | 3.4.5.6 = -1
+        /// 6,5,4,3     | 6.5.4.3 =  0</returns>
+        public static int CompareVersions(String strA, String strB)
+        {
+            Version vA = new Version(strA.Replace(",", "."));
+            Version vB = new Version(strB.Replace(",", "."));
+
+            return vA.CompareTo(vB);
+        }
+
+        public static long GetCurrentUniversalFiletimeTimestamp()
+        {
+            return DateTime.Now.ToUniversalTime().ToFileTime();
+        }
+
+        public static string ConvertFiletimeTimestampToDate(long timestamp)
+        {
+            return DateTime.FromFileTime(timestamp).ToString();
+        }
+        //MACROS TODO
+        
+        public static string Base64Encode(string plainText)
+        {
+            //https://stackoverflow.com/questions/11743160/how-do-i-encode-and-decode-a-base64-string
+            var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
+            return Convert.ToBase64String(plainTextBytes);
+        }
+
+        public static string Base64Decode(string base64EncodedData)
+        {
+            var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
+            return Encoding.UTF8.GetString(base64EncodedBytes);
         }
         #endregion
     }
