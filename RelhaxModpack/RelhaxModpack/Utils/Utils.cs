@@ -162,30 +162,34 @@ namespace RelhaxModpack
             }
             return textStr;
         }
-        //deletes all empty directories from a given start location
-        public static void ProcessDirectory(string startLocation, bool reportToLog = true)
+        /// <summary>
+        /// deletes all empty directories from a given path
+        /// </summary>
+        /// <param name="startLocation">the path to start in</param>
+        public static void ProcessDirectory(string startLocation)
         {
+            if (!Directory.Exists(startLocation))
+                return;
             foreach (var directory in Directory.GetDirectories(startLocation))
             {
                 ProcessDirectory(directory);
                 if (Directory.GetFiles(directory).Length == 0 &&
                     Directory.GetDirectories(directory).Length == 0)
                 {
-                    if (reportToLog)
-                        Logging.WriteToLog(string.Format("Deleting empty directory {0}", directory),Logfiles.Application, LogLevel.Debug);
+                    Logging.WriteToLog(string.Format("Deleting empty directory {0}", directory),Logfiles.Application, LogLevel.Debug);
                     Directory.Delete(directory, false);
                 }
             }
         }
-
+        //TODO
         public static string SizeSuffix(long value, int decimalPlaces = 1, bool sizeSuffix = false)
         {
             // https://stackoverflow.com/questions/14488796/does-net-provide-an-easy-way-convert-bytes-to-kb-mb-gb-etc
             if (value < 0) { return "-" + SizeSuffix(-value); }
             return SizeSuffix((ulong)value, decimalPlaces, sizeSuffix);
         }
-
-        public static string SizeSuffix(ulong value, int decimalPlaces = 1, bool sizeSuffix = false)
+        //TODO
+        private static string SizeSuffix(ulong value, int decimalPlaces = 1, bool sizeSuffix = false)
         {
             if (value == 0) { if (sizeSuffix) return "0.0 bytes"; else return "0.0"; }
             if (value < 1000) { if (sizeSuffix) return string.Format("{0:n" + decimalPlaces + "} {1}", 0.1, SizeSuffixes[1]); else return string.Format("{0:n" + decimalPlaces + "}", 0.1); }
@@ -210,7 +214,11 @@ namespace RelhaxModpack
             else
                 return string.Format("{0:n" + decimalPlaces + "}", adjustedSize);
         }
-
+        /// <summary>
+        /// Checks if a filename has invalid characters and replaces them with underscores
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         public static string GetValidFilename(string fileName)
         {
             foreach (char c in Path.GetInvalidFileNameChars())
@@ -219,11 +227,28 @@ namespace RelhaxModpack
             }
             return fileName;
         }
-
-        public static void DirectoryDelete(string folderPath, bool deleteSubfolders, bool deleteTopFolder, int numRetrys, int timeout)
+        /// <summary>
+        /// Deletes files in a directory
+        /// </summary>
+        /// <param name="folderPath">The path to delete files from</param>
+        /// <param name="deleteSubfolders">set to true to delete files recursivly inside each subdirectory</param>
+        /// <param name="numRetrys">The number of times the method should retry to delete a file</param>
+        /// <param name="timeout">The ammount of time in milliseconds to wait before trying again to delete files</param>
+        public static void DirectoryDelete(string folderPath, bool deleteSubfolders, int numRetrys, int timeout)
         {
+            //check to make sure the number of retries is between 1 and 10
             if (numRetrys < 1)
+            {
+                Logging.WriteToLog(string.Format("numRetrys is invalid (below 1), setting to 1 (numRetryes={0})", numRetrys),
+                    Logfiles.Application, LogLevel.Warning);
                 numRetrys = 1;
+            }
+            if (numRetrys > 10)
+            {
+                Logging.WriteToLog(string.Format("numRetrys is invalid (above 10), setting to 10 (numRetryes={0})", numRetrys),
+                    Logfiles.Application, LogLevel.Warning);
+                numRetrys = 10;
+            }
             int retryCounter = 0;
             foreach (string file in Directory.GetFiles(folderPath))
             {
@@ -248,22 +273,9 @@ namespace RelhaxModpack
             {
                 foreach (string dir in Directory.GetDirectories(folderPath))
                 {
-                    DirectoryDelete(dir, deleteSubfolders, deleteTopFolder, numRetrys,timeout);
+                    DirectoryDelete(dir, deleteSubfolders, numRetrys,timeout);
                 }
             }
-            //delete the top directory
-            if(deleteTopFolder)
-            {
-                try
-                {
-                    Directory.Delete(folderPath);
-                }
-                catch (Exception ex)
-                {
-                    Logging.WriteToLog(string.Format("Error at DirectoryDelete, Folder: {0} ({1})", folderPath, ex.Message));
-                }
-            }
-            
         }
         #endregion
         #region data type from string processing/parsing
@@ -347,25 +359,40 @@ namespace RelhaxModpack
 
             return vA.CompareTo(vB);
         }
-
+        /// <summary>
+        /// Gets the current time in the form of universal time
+        /// </summary>
+        /// <returns>the universal time of now</returns>
         public static long GetCurrentUniversalFiletimeTimestamp()
         {
             return DateTime.Now.ToUniversalTime().ToFileTime();
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="timestamp"></param>
+        /// <returns></returns>
         public static string ConvertFiletimeTimestampToDate(long timestamp)
         {
             return DateTime.FromFileTime(timestamp).ToString();
         }
         //MACROS TODO
-        
+        /// <summary>
+        /// Encode a plain text string into base64 UTF8 encoding
+        /// </summary>
+        /// <param name="plainText">The plain text string</param>
+        /// <returns>The UTF8 base64 encoded version</returns>
         public static string Base64Encode(string plainText)
         {
             //https://stackoverflow.com/questions/11743160/how-do-i-encode-and-decode-a-base64-string
             var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
             return Convert.ToBase64String(plainTextBytes);
         }
-
+        /// <summary>
+        /// Decode a base64 UTF8 encoded string into plain text
+        /// </summary>
+        /// <param name="base64EncodedData">The base64 stirng</param>
+        /// <returns>The plain text version</returns>
         public static string Base64Decode(string base64EncodedData)
         {
             var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);

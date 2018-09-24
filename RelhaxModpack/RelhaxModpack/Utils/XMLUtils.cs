@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack
 {
+    /// <summary>
+    /// Utility class for all XML static methods
+    /// </summary>
     public static class XMLUtils
     {
 
