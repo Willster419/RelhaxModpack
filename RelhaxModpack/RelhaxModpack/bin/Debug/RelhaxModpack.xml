@@ -353,6 +353,79 @@
             </summary>
             <returns>the application build date and time in EN-US form</returns>
         </member>
+        <member name="M:RelhaxModpack.Utils.GetAllWindowComponentsVisual(System.Windows.Window,System.Boolean)">
+            <summary>
+            Get a list of all visual components in the window
+            </summary>
+            <param name="window">The window to get the list of</param>
+            <param name="includeWindow">if the list should include the window itself</param>
+            <returns>A list of type FrameowrkElement of all components</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.CreateMD5Hash(System.String)">
+            <summary>
+            Creates an MD5 hash calculation of the input file
+            </summary>
+            <param name="inputFile">The path to the file to calculate</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetStringFromZip(System.String,System.String,System.String)">
+            <summary>
+            Gets a zip file entry in the form of a string
+            </summary>
+            <param name="zipFilename">The path to the file in the zip</param>
+            <param name="archivedFilename">the path to the zip file</param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.ParseBool(System.String,System.Boolean)">
+            <summary>
+            Try to parse a boolean value based on string input
+            </summary>
+            <param name="input">the string to try to parse</param>
+            <param name="defaultValue">the default value to use if parsing fails</param>
+            <returns>The bool value of the ipnut string, or the default value if parsing failes</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.ParseInt(System.String,System.Int32)">
+            <summary>
+            Try to parse an intiger value based on string input
+            </summary>
+            <param name="input">the string to try to parse</param>
+            <param name="defaultValue">the default value to use if parsing fails</param>
+            <returns>The int value of the ipnut string, or the default value if parsing failes</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.ParseFloat(System.String,System.Single)">
+            <summary>
+            Try to parse a float value based on string input
+            </summary>
+            <param name="input">the string to try to parse</param>
+            <param name="defaultValue">the default value to use if parsing fails</param>
+            <returns>The float value of the ipnut string, or the default value if parsing failes</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.RandomString(System.Int32)">
+            <summary>
+            https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings-in-c
+            </summary>
+            <param name="length"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.CompareVersions(System.String,System.String)">
+            <summary>
+            Compare versions of form "1,2,3,4" or "1.2.3.4". Throws FormatException
+            in case of invalid version. See function comments for more informations and samples.
+            </summary>
+            <param name="strA">the first version</param>
+            <param name="strB">the second version</param>
+            <returns>less than zero if strA is less than strB, equal to zero if
+            strA equals strB, and greater than zero if strA is greater than strB
+            Samples:
+            1.0.0.0     | 1.0.0.1 = -1
+            1.0.0.1     | 1.0.0.0 =  1
+            1.0.0.0     | 1.0.0.0 =  0
+            1, 0.0.0    | 1.0.0.0 =  0
+            9, 5, 1, 44 | 3.4.5.6 =  1
+            1, 5, 1, 44 | 3.4.5.6 = -1
+            6,5,4,3     | 6.5.4.3 =  0</returns>
+        </member>
         <member name="T:RelhaxModpack.Windows.AddPicturesZip">
             <summary>
             Interaction logic for AddPicturesZip.xaml
