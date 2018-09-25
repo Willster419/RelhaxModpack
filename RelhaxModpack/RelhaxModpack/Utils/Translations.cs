@@ -16,9 +16,21 @@ namespace RelhaxModpack
     /// </summary>
     public enum Languages
     {
+        /// <summary>
+        /// The English language
+        /// </summary>
         English,
+        /// <summary>
+        /// The German language
+        /// </summary>
         German,
+        /// <summary>
+        /// The Polish language
+        /// </summary>
         Polish,
+        /// <summary>
+        /// The French language
+        /// </summary>
         French
     };
     /// <summary>
@@ -44,6 +56,10 @@ namespace RelhaxModpack
         //default is to use english
         private static Dictionary<string, string> CurrentLanguage = English;
         #region Language methods
+        /// <summary>
+        /// Sets the language dictionary to use when returning a localized string
+        /// </summary>
+        /// <param name="language">The language to switch to</param>
         public static void SetLanguage(Languages language)
         {
             switch(language)
@@ -63,7 +79,9 @@ namespace RelhaxModpack
             }            
             ModpackSettings.Language = language;
         }
-
+        /// <summary>
+        /// Change the language to the active language code installed on the computer, if we support
+        /// </summary>
         public static void SetLanguageOnFirstLoad()
         {
             //try to get and load the native language of the user
@@ -84,7 +102,11 @@ namespace RelhaxModpack
                     break;
             }
         }
-
+        /// <summary>
+        /// Get a localized string in the currently selected language
+        /// </summary>
+        /// <param name="componentName">The key value of the string phrase</param>
+        /// <returns></returns>
         public static string GetTranslatedString(string componentName)
         {
             string s = "";
@@ -136,6 +158,9 @@ namespace RelhaxModpack
             Polish.Add(key, message);
             French.Add(key, message);
         }
+        /// <summary>
+        /// Loads all translation dictionaries. Should only be done once (at application start)
+        /// </summary>
         public static void LoadTranslations()
         {
             //Syntax is as follows:

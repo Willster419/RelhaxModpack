@@ -73,6 +73,9 @@ namespace RelhaxModpack
         /// </summary>
         public const string UninstallLogFilename = "TODO";
         private const string ApplicationLogfileTimestamp = "yyyy-MM-dd HH:mm:ss.fff";
+        /// <summary>
+        /// The header and end that shows the start and stop of the application log file
+        /// </summary>
         public const string ApplicationlogStartStop = "|------------------------------------------------------------------------------------------------|";
         /// <summary>
         /// Provides a constant refrence to the log file

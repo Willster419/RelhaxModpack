@@ -29,15 +29,32 @@ namespace RelhaxModpack
         /// </summary>
         DefaultV2 = 2
     };
+    /// <summary>
+    /// The different loading Gifs for when loading the preview
+    /// </summary>
     public enum LoadingGifs
     {
+        /// <summary>
+        /// The standard loading Gif
+        /// </summary>
         Standard = 0,
+        /// <summary>
+        /// Thirdguards head loading Gif
+        /// </summary>
         ThirdGuards = 1
     };
-    //enumeration for the type of uninstall mode
+    /// <summary>
+    /// The types on uninstall mods the application supports
+    /// </summary>
     public enum UninstallModes
     {
+        /// <summary>
+        /// Default uninstall method to uninstall all modifiecation done by the application
+        /// </summary>
         Default = 0,
+        /// <summary>
+        /// Quick uninstall method to remove 
+        /// </summary>
         Quick = 1
     }
     /// <summary>
@@ -69,6 +86,9 @@ namespace RelhaxModpack
             //put blacklist fields here
         };
         #region saveable modpack settings
+        /// <summary>
+        /// The custom path to the ModInfo.xml file if loading in test mode
+        /// </summary>
         public static string CustomModInfoPath = "";
         /// <summary>
         /// toggle if the program should notify the user if the database version is the same as the last installed version
@@ -94,24 +114,49 @@ namespace RelhaxModpack
         /// toggle if the application should save user cache save data like session stats, or auto equip configs
         /// </summary>
         public static bool SaveUserData = false;
-        //toggle for each view if the borders around the child selection options should show
+        /// <summary>
+        /// toggle for each view if the borders around the child selection options should show
+        /// </summary>
         public static bool EnableBordersLegacyView = false;
+        /// <summary>
+        /// toggle for each view if the borders around the child selection options should show
+        /// </summary>
         public static bool EnableBordersDefaultV2View = false;
-        //toggle for each view if the color change should occur when a child selection happends
+        /// <summary>
+        /// toggle for each view if the color change should occur when a child selection happends
+        /// </summary>
         public static bool EnableColorChangeLegacyView = false;
+        /// <summary>
+        /// toggle for each view if the color change should occur when a child selection happends
+        /// </summary>
         public static bool EnableColorChangeDefaultV2View = false;
-        //toggle if the installation complete window will be shown
+        /// <summary>
+        /// toggle if the installation complete window will be shown
+        /// </summary>
         public static bool ShowInstallCompleteWindow = false;
-        //toggle if the program will delete the WoT appdata cache
+        /// <summary>
+        /// toggle if the program will delete the WoT appdata cache
+        /// </summary>
         public static bool ClearCache = false;
+        /// <summary>
+        /// toggle if the program will delete xvm, pmod, WoT logs
+        /// </summary>
         public static bool DeleteLogs = false;
-        //toggle if the program will create desktop shortcuts
+        /// <summary>
+        /// toggle if the program will create desktop shortcuts
+        /// </summary>
         public static bool CreateShortcuts = false;
-        //toggle instant extraction
+        /// <summary>
+        /// toggle the ability for the modpack to extract a package as soon as it is downloaded
+        /// </summary>
         public static bool DownloadInstantExtraction = false;
-        //toggle super extraction
+        /// <summary>
+        /// toggle the ability to have multiple extractions happening at the same time
+        /// </summary>
         public static bool MulticoreExtraction = false;
-        //turn on export mode
+        /// <summary>
+        /// toggle export mode
+        /// </summary>
         public static bool ExportMode = false;
         /// <summary>
         /// the height, in pixels, of the ModSelectionView window
@@ -145,11 +190,29 @@ namespace RelhaxModpack
         /// the width, in pixels, of the Preview window
         /// </summary>
         public static int PreviewWidth = 450;
+        /// <summary>
+        /// The Gif to use when loading previews
+        /// </summary>
         public static LoadingGifs GIF = LoadingGifs.Standard;
+        /// <summary>
+        /// The Uninstall mode to use when uninstalling or installing with the clean install option
+        /// </summary>
         public static UninstallModes UninstallMode = UninstallModes.Default;
+        /// <summary>
+        /// The selection view to use
+        /// </summary>
         public static SelectionView ModSelectionView = SelectionView.Default;
+        /// <summary>
+        /// The selected language
+        /// </summary>
         public static Languages Language = Languages.English;
+        /// <summary>
+        /// The distribution version of the database to use when selecting mods
+        /// </summary>
         public static DatabaseVersions DatabaseDistroVersion = DatabaseVersions.Stable;
+        /// <summary>
+        /// The application distribution version to use. When selected, it won't take affect until application restart
+        /// </summary>
         public static ApplicationVersions ApplicationDistroVersion = ApplicationVersions.Stable;
         #endregion
         /// <summary>

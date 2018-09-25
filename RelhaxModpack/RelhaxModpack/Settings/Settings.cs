@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack
 {
+    /// <summary>
+    /// Handles all generic constants and statics used throughout the application
+    /// </summary>
     public static class Settings
     {
         #region Constants
