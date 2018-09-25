@@ -135,6 +135,11 @@
             the name of the uninstall log file
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Logging.ApplicationlogStartStop">
+            <summary>
+            The header and end that shows the start and stop of the application log file
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Logging.ApplicationLogfile">
             <summary>
             Provides a constant refrence to the log file
@@ -189,6 +194,36 @@
             Default WPF V2 style
             </summary>
         </member>
+        <member name="T:RelhaxModpack.LoadingGifs">
+            <summary>
+            The different loading Gifs for when loading the preview
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.LoadingGifs.Standard">
+            <summary>
+            The standard loading Gif
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.LoadingGifs.ThirdGuards">
+            <summary>
+            Thirdguards head loading Gif
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UninstallModes">
+            <summary>
+            The types on uninstall mods the application supports
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UninstallModes.Default">
+            <summary>
+            Default uninstall method to uninstall all modifiecation done by the application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UninstallModes.Quick">
+            <summary>
+            Quick uninstall method to remove 
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.DatabaseVersions">
             <summary>
             Database distribution levels
@@ -212,6 +247,11 @@
         <member name="T:RelhaxModpack.ModpackSettings">
             <summary>
             Provides access to all settings used in the modpack.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.CustomModInfoPath">
+            <summary>
+            The custom path to the ModInfo.xml file if loading in test mode
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.NotifyIfSameDatabase">
@@ -242,6 +282,61 @@
         <member name="F:RelhaxModpack.ModpackSettings.SaveUserData">
             <summary>
             toggle if the application should save user cache save data like session stats, or auto equip configs
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.EnableBordersLegacyView">
+            <summary>
+            toggle for each view if the borders around the child selection options should show
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.EnableBordersDefaultV2View">
+            <summary>
+            toggle for each view if the borders around the child selection options should show
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.EnableColorChangeLegacyView">
+            <summary>
+            toggle for each view if the color change should occur when a child selection happends
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.EnableColorChangeDefaultV2View">
+            <summary>
+            toggle for each view if the color change should occur when a child selection happends
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ShowInstallCompleteWindow">
+            <summary>
+            toggle if the installation complete window will be shown
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ClearCache">
+            <summary>
+            toggle if the program will delete the WoT appdata cache
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.DeleteLogs">
+            <summary>
+            toggle if the program will delete xvm, pmod, WoT logs
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.CreateShortcuts">
+            <summary>
+            toggle if the program will create desktop shortcuts
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.DownloadInstantExtraction">
+            <summary>
+            toggle the ability for the modpack to extract a package as soon as it is downloaded
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.MulticoreExtraction">
+            <summary>
+            toggle the ability to have multiple extractions happening at the same time
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ExportMode">
+            <summary>
+            toggle export mode
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.ModSelectionHeight">
@@ -284,6 +379,36 @@
             the width, in pixels, of the Preview window
             </summary>
         </member>
+        <member name="F:RelhaxModpack.ModpackSettings.GIF">
+            <summary>
+            The Gif to use when loading previews
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.UninstallMode">
+            <summary>
+            The Uninstall mode to use when uninstalling or installing with the clean install option
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ModSelectionView">
+            <summary>
+            The selection view to use
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.Language">
+            <summary>
+            The selected language
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.DatabaseDistroVersion">
+            <summary>
+            The distribution version of the database to use when selecting mods
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ApplicationDistroVersion">
+            <summary>
+            The application distribution version to use. When selected, it won't take affect until application restart
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.ModpackSettings.LoadSettings">
             <summary>
             Initializes the Settings (should only be done on application start) and determinds which version of Settings loader method to use
@@ -295,6 +420,11 @@
             Saves all fields (settings) to an xml file
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:RelhaxModpack.Settings">
+            <summary>
+            Handles all generic constants and statics used throughout the application
+            </summary>
         </member>
         <member name="F:RelhaxModpack.Settings.ApplicationStartupPath">
             <summary>
@@ -312,6 +442,27 @@
             Alhpa should NEVER be built for public distribution unless direct testing!
             </summary>
         </member>
+        <member name="T:RelhaxModpack.ThirdPartySettings">
+            <summary>
+            Contains all properties that can be over-ridden or used when a 3rd party modpacker wants
+            to use the Relhax install engine
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.ThirdPartySettings.LoadSettings">
+            <summary>
+            Load the custom 3rd party settings from XML, if they exist
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UISettings">
+            <summary>
+            Handles all custom UI color settings
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UISettings.LoadSettings">
+            <summary>
+            Load the custom color definitions from XML
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.CiInfo">
             <summary>Info about the continuous integration server build that produced this binary.</summary> 
         </member>
@@ -323,9 +474,52 @@
             List of all supported Languages in the modpack
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Languages.English">
+            <summary>
+            The English language
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Languages.German">
+            <summary>
+            The German language
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Languages.Polish">
+            <summary>
+            The Polish language
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Languages.French">
+            <summary>
+            The French language
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Translations">
             <summary>
             Handles all localization for the application User Interface
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Translations.SetLanguage(RelhaxModpack.Languages)">
+            <summary>
+            Sets the language dictionary to use when returning a localized string
+            </summary>
+            <param name="language">The language to switch to</param>
+        </member>
+        <member name="M:RelhaxModpack.Translations.SetLanguageOnFirstLoad">
+            <summary>
+            Change the language to the active language code installed on the computer, if we support
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Translations.GetTranslatedString(System.String)">
+            <summary>
+            Get a localized string in the currently selected language
+            </summary>
+            <param name="componentName">The key value of the string phrase</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Translations.LoadTranslations">
+            <summary>
+            Loads all translation dictionaries. Should only be done once (at application start)
             </summary>
         </member>
         <member name="M:RelhaxModpack.Translations.LocalizeWindow(System.Windows.Window,System.Boolean)">
@@ -377,6 +571,28 @@
             <param name="password"></param>
             <returns></returns>
         </member>
+        <member name="M:RelhaxModpack.Utils.ProcessDirectory(System.String)">
+            <summary>
+            deletes all empty directories from a given path
+            </summary>
+            <param name="startLocation">the path to start in</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetValidFilename(System.String)">
+            <summary>
+            Checks if a filename has invalid characters and replaces them with underscores
+            </summary>
+            <param name="fileName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.DirectoryDelete(System.String,System.Boolean,System.Int32,System.Int32)">
+            <summary>
+            Deletes files in a directory
+            </summary>
+            <param name="folderPath">The path to delete files from</param>
+            <param name="deleteSubfolders">set to true to delete files recursivly inside each subdirectory</param>
+            <param name="numRetrys">The number of times the method should retry to delete a file</param>
+            <param name="timeout">The ammount of time in milliseconds to wait before trying again to delete files</param>
+        </member>
         <member name="M:RelhaxModpack.Utils.ParseBool(System.String,System.Boolean)">
             <summary>
             Try to parse a boolean value based on string input
@@ -425,6 +641,33 @@
             9, 5, 1, 44 | 3.4.5.6 =  1
             1, 5, 1, 44 | 3.4.5.6 = -1
             6,5,4,3     | 6.5.4.3 =  0</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetCurrentUniversalFiletimeTimestamp">
+            <summary>
+            Gets the current time in the form of universal time
+            </summary>
+            <returns>the universal time of now</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.ConvertFiletimeTimestampToDate(System.Int64)">
+            <summary>
+            
+            </summary>
+            <param name="timestamp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.Base64Encode(System.String)">
+            <summary>
+            Encode a plain text string into base64 UTF8 encoding
+            </summary>
+            <param name="plainText">The plain text string</param>
+            <returns>The UTF8 base64 encoded version</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.Base64Decode(System.String)">
+            <summary>
+            Decode a base64 UTF8 encoded string into plain text
+            </summary>
+            <param name="base64EncodedData">The base64 stirng</param>
+            <returns>The plain text version</returns>
         </member>
         <member name="T:RelhaxModpack.Windows.AddPicturesZip">
             <summary>
@@ -582,6 +825,26 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.RelhaxWindow">
+            <summary>
+            Defines a window with translation and custom UI color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.RelhaxWindow.LocalizeWindow">
+            <summary>
+            Specifies if the window should have translatoin applied
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.RelhaxWindow.ApplyToolTips">
+            <summary>
+            Specified if the window should have tooltips applied
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxWindow.#ctor">
+            <summary>
+            Creates an instance of the RelhaxWindow class
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.VersionInfo">
             <summary>
             Interaction logic for VersionInfo.xaml
@@ -593,6 +856,11 @@
         <member name="M:RelhaxModpack.Windows.VersionInfo.InitializeComponent">
             <summary>
             InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.XMLUtils">
+            <summary>
+            Utility class for all XML static methods
             </summary>
         </member>
         <member name="T:RelhaxModpack.ReturnCodes">
