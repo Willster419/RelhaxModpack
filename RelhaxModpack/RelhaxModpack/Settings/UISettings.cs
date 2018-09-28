@@ -9,6 +9,7 @@ using System.Xml;
 using System.IO;
 using System.Windows.Controls;
 using RelhaxModpack.Windows;
+using System.Globalization;
 
 namespace RelhaxModpack
 {
@@ -310,6 +311,7 @@ namespace RelhaxModpack
             //make window element
             XmlElement windowElement = doc.CreateElement(w.GetType().ToString());
             //save attributes to element
+            ApplyColorattributesToElement(windowElement, w, doc);
             //same to root
             root.AppendChild(windowElement);
             //get list of all frameowrk elements in the window
@@ -318,6 +320,11 @@ namespace RelhaxModpack
             List<FrameworkElement> AllUIElements = Utils.GetAllWindowComponentsVisual(w, false);
             for(int i = 0; i < AllUIElements.Count; )
             {
+                if (!(AllUIElements[i] is Control))
+                {
+                    AllUIElements.RemoveAt(i);
+                    continue;
+                }
                 if (AllUIElements[i].Tag == null)
                 {
                     AllUIElements.RemoveAt(i);
@@ -336,12 +343,70 @@ namespace RelhaxModpack
                 i++;
             }
             //make xml entries for each UI element now
-            foreach(FrameworkElement frameworkElement in AllUIElements)
+            foreach(Control control in AllUIElements)
             {
                 XmlElement colorSetting = doc.CreateElement("ColorSetting");
                 //save attributes to element
-
+                ApplyColorattributesToElement(colorSetting, control, doc);
                 windowElement.AppendChild(colorSetting);
+            }
+        }
+
+        private static void ApplyColorattributesToElement(XmlElement colorEntry, Control control, XmlDocument doc)
+        {
+            XmlAttribute colorType, color1;
+            if(control.Background is SolidColorBrush solidColorBrush)
+            {
+                //type
+                colorType = doc.CreateAttribute("type");
+                colorType.Value = nameof(SolidColorBrush);
+                colorEntry.Attributes.Append(colorType);
+                //color1
+                color1 = doc.CreateAttribute("color1");
+                color1.Value = solidColorBrush.Color.ToString(CultureInfo.InvariantCulture);
+                colorEntry.Attributes.Append(color1);
+            }
+            else if (control.Background is LinearGradientBrush linearGradientBrush)
+            {
+                //type
+                colorType = doc.CreateAttribute("type");
+                colorType.Value = nameof(LinearGradientBrush);
+                colorEntry.Attributes.Append(colorType);
+                //color1
+                color1 = doc.CreateAttribute("color1");
+                color1.Value = linearGradientBrush.GradientStops[0].Color.ToString(CultureInfo.InvariantCulture);
+                colorEntry.Attributes.Append(color1);
+                //color2
+                XmlAttribute color2 = doc.CreateAttribute("color2");
+                color2.Value = linearGradientBrush.GradientStops[linearGradientBrush.GradientStops.Count-1].Color.ToString(CultureInfo.InvariantCulture);
+                colorEntry.Attributes.Append(color2);
+                //point1
+                XmlAttribute point1 = doc.CreateAttribute("point1");
+                point1.Value = linearGradientBrush.StartPoint.ToString(CultureInfo.InvariantCulture);
+                colorEntry.Attributes.Append(point1);
+                //point2
+                XmlAttribute point2 = doc.CreateAttribute("point2");
+                point2.Value = linearGradientBrush.EndPoint.ToString(CultureInfo.InvariantCulture);
+                colorEntry.Attributes.Append(point2);
+            }
+            else if (control.Background is RadialGradientBrush radialGradientBrush)
+            {
+                //type
+                colorType = doc.CreateAttribute("type");
+                colorType.Value = nameof(RadialGradientBrush);
+                colorEntry.Attributes.Append(colorType);
+                //color1
+                color1 = doc.CreateAttribute("color1");
+                color1.Value = radialGradientBrush.GradientStops[0].Color.ToString(CultureInfo.InvariantCulture);
+                colorEntry.Attributes.Append(color1);
+                //color2
+                XmlAttribute color2 = doc.CreateAttribute("color2");
+                color2.Value = radialGradientBrush.GradientStops[radialGradientBrush.GradientStops.Count - 1].Color.ToString(CultureInfo.InvariantCulture);
+                colorEntry.Attributes.Append(color2);
+            }
+            else
+            {
+                Logging.WriteToLog("Unknown background type: " + control.Background.GetType().ToString(), Logfiles.Application, LogLevel.Debug);
             }
         }
     }
