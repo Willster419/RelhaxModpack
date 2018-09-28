@@ -8,6 +8,7 @@ using System.Windows;
 using System.Xml;
 using System.IO;
 using System.Windows.Controls;
+using RelhaxModpack.Windows;
 
 namespace RelhaxModpack
 {
@@ -23,9 +24,9 @@ namespace RelhaxModpack
         {
             "ColorChangeColor"
         };
-        public static readonly Window[] WindowsWithColor = new Window[]
+        public static readonly Type[] WindowsWithColor = new Type[]
         {
-            //TODO
+            typeof(AddPicturesZip)
         };
         public static XmlDocument UIDocument;
         #endregion
@@ -285,15 +286,63 @@ namespace RelhaxModpack
             }
         }
         
-        public static void DumpCurrentCollorSettingsToFile(string savePath)
+        public static void DumpAllWindowColorSettingsToFile(string savePath)
         {
-            //make xml document
+            //make xml document and declaration
             XmlDocument doc = new XmlDocument();
-            
+            XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
+            doc.AppendChild(dec);
+            //make root element and attribute
+            XmlElement root = doc.CreateElement(UIRoot);
+            XmlAttribute version = doc.CreateAttribute("version");
+            version.Value = "1.0";
+            root.Attributes.Append(version);
+            doc.AppendChild(root);
+            //add all window instances to document:
             //make windows for all appropriate windows
-            //get list of all FrameworkComponents
-            //dump all windows and their standard colors to xml file
+            DumpWindowColorSettingsToXml(root, doc, new AddPicturesZip());//sample TODO more
             //save xml file
+            doc.Save(savePath);
+        }
+
+        public static void DumpWindowColorSettingsToXml(XmlElement root, XmlDocument doc, Window w)
+        {
+            //make window element
+            XmlElement windowElement = doc.CreateElement(w.GetType().ToString());
+            //save attributes to element
+            //same to root
+            root.AppendChild(windowElement);
+            //get list of all frameowrk elements in the window
+            //TODO: this may not work due to visual not being shown
+            //TODO: need to disable translations to save CPU TIME
+            List<FrameworkElement> AllUIElements = Utils.GetAllWindowComponentsVisual(w, false);
+            for(int i = 0; i < AllUIElements.Count; )
+            {
+                if (AllUIElements[i].Tag == null)
+                {
+                    AllUIElements.RemoveAt(i);
+                    continue;
+                }
+                if (!(AllUIElements[i].Tag is string s))
+                {
+                    AllUIElements.RemoveAt(i);
+                    continue;
+                }
+                if (string.IsNullOrWhiteSpace(s))
+                {
+                    AllUIElements.RemoveAt(i);
+                    continue;
+                }
+                i++;
+            }
+            //make xml entries for each UI element now
+            foreach(FrameworkElement frameworkElement in AllUIElements)
+            {
+                XmlElement colorSetting = doc.CreateElement("ColorSetting");
+                //save attributes to element
+
+                windowElement.AppendChild(colorSetting);
+            }
         }
     }
 }
