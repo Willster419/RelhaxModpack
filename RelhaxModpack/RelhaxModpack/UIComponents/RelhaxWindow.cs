@@ -20,6 +20,7 @@ namespace RelhaxModpack.Windows
         /// Specified if the window should have tooltips applied
         /// </summary>
         public bool ApplyToolTips { get; set; } = false;
+        public bool ApplyColorSettings { get; set; } = false;
         /// <summary>
         /// Creates an instance of the RelhaxWindow class
         /// </summary>
@@ -38,7 +39,10 @@ namespace RelhaxModpack.Windows
                 Translations.LocalizeWindow(this, ApplyToolTips);
             }
             //apply UI color changes
-
+            if(ApplyColorSettings)
+            {
+                UISettings.ApplyUIColorSettings(this);
+            }
         }
     }
 }

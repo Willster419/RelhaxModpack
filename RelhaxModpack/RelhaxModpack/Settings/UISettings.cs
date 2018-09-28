@@ -19,7 +19,7 @@ namespace RelhaxModpack
     public static class UISettings
     {
         #region statics and constants
-        public const string UIRoot = "UISettings.XML";
+        public const string UIRoot = "UISettings.xml";
         public const string CustomColorSettingsPath = "CustomColorSettings";
         public static readonly string[] CustomSettings = new string[]
         {
@@ -69,7 +69,8 @@ namespace RelhaxModpack
                 return;
             }
             //get the UI format version of the xml file
-            string formatVersion = XMLUtils.GetXMLStringFromXPath(UIDocument, "//" + UIRoot + "/@version");
+            string versionXpath = "//" + UIRoot + "/@version";
+            string formatVersion = XMLUtils.GetXMLStringFromXPath(UIDocument, versionXpath);
             if(string.IsNullOrWhiteSpace(formatVersion))
             {
                 Logging.WriteToLog("formatVersion string is null! in ApplyColorSettings()",Logfiles.Application, LogLevel.Error);
@@ -87,7 +88,7 @@ namespace RelhaxModpack
             }
         }
         
-        public static void ApplyUIColorsettingsV1(Window w)
+        private static void ApplyUIColorsettingsV1(Window w)
         {
             //build the xpath string
             string windowXPathRefrence = w.GetType().ToString();
@@ -102,14 +103,8 @@ namespace RelhaxModpack
             List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsVisual(w, false);
             foreach (FrameworkElement element in allWindowControls)
             {
-                if(!(element is Control ctrl))
-                {
-                    Logging.WriteToLog(string.Format("skipping UI color apply of component {0} in window {1} due ot not a Control class element"
-                        ,element.Name, w.GetType().ToString()),Logfiles.Application, LogLevel.Debug);
-                    continue;
-                }
                 //make sure we have an element that we want color changing
-                if(ctrl.Tag is string ID)
+                if(element.Tag is string ID)
                 {
                     if(!string.IsNullOrEmpty(ID))
                     {
@@ -119,20 +114,39 @@ namespace RelhaxModpack
                         XmlNode brushSettings = XMLUtils.GetXMLNodeFromXPath(UIDocument, XPathColorSetting);
                         //make sure setting is there
                         if(brushSettings != null)
-                            ApplyBrushSettings(ctrl, brushSettings);
+                            ApplyBrushSettings(element, brushSettings);
                     }
                 }
             }
         }
         
-        public static void ApplyBrushSettings(Control ctrl, XmlNode brushSettings)
+        private static void ApplyBrushSettings(FrameworkElement element, XmlNode brushSettings)
         {
+            if (element is Control control)
+            {
+                if(ApplyBrushSettings(control.Name, (string)control.Tag, brushSettings, out Brush colorToChange))
+                {
+                    control.Background = colorToChange;
+                }
+            }
+            else if (element is Panel panel)
+            {
+                if(ApplyBrushSettings(panel.Name, (string)panel.Tag, brushSettings, out Brush colorToChange))
+                {
+                    panel.Background = colorToChange;
+                }
+            }  
+        }
+
+        private static bool ApplyBrushSettings(string componentName, string componentTag, XmlNode brushSettings, out Brush colorToChange)
+        {
+            colorToChange = new SolidColorBrush();
             //make sure type is set correctly
             XmlAttribute brushType = brushSettings.Attributes["type"];
             if(brushType == null)
             {
                 Logging.WriteToLog("failed to apply brush setting: type attribute not exist!");
-                return;
+                return false;
             }
             //https://docs.microsoft.com/en-us/dotnet/api/system.windows.media.color.fromargb?view=netframework-4.7.2#System_Windows_Media_Color_FromArgb_System_Byte_System_Byte_System_Byte_System_Byte_
             XmlAttribute color1 = brushSettings.Attributes["color1"];
@@ -141,8 +155,9 @@ namespace RelhaxModpack
             XmlAttribute point2 = brushSettings.Attributes["point2"];
             if(color1 == null)
             {
-                Logging.WriteToLog(string.Format("skipping coloring of control {0}: color1 is null, type={1}",ctrl.Name,brushType.InnerText),Logfiles.Application,LogLevel.Warning);
-                return;
+                Logging.WriteToLog(string.Format("skipping coloring of control {0}: color1 is null, type={1}",
+                    componentName,brushType.InnerText),Logfiles.Application,LogLevel.Warning);
+                return false;
             }
             Point point_1;
             Point point_2;
@@ -151,32 +166,33 @@ namespace RelhaxModpack
                 case "SolidColorBrush"://color=1
                     if(ParseColorFromString(color1.InnerText, out Color kolor1_solid))
                     {
-                        ctrl.Background = new SolidColorBrush(kolor1_solid);
+                        colorToChange = new SolidColorBrush(kolor1_solid);
+                        return true;
                     }
                     else
                     {
                         Logging.WriteToLog(string.Format("failed to parse color to {0}, type={1}, color1={2}, ",
-                            ctrl.Tag, brushType.InnerText, color1.InnerText), Logfiles.Application, LogLevel.Warning);
+                            componentTag, brushType.InnerText, color1.InnerText), Logfiles.Application, LogLevel.Warning);
+                        return false;
                     }
-                    break;
                 case "LinearGradientBrush"://color=2, point=2
                     if(color2 == null)
                     {
                         Logging.WriteToLog(string.Format("skipping coloring of control {0}: color2 is null, type={1}",
-                            ctrl.Tag, brushType.InnerText),Logfiles.Application,LogLevel.Warning);
-                        return;
+                            componentTag, brushType.InnerText),Logfiles.Application,LogLevel.Warning);
+                        return false;
                     }
                     if(point1 == null)
                     {
                         Logging.WriteToLog(string.Format("skipping coloring of control {0}: point1 is null, type={1}",
-                            ctrl.Tag, brushType.InnerText),Logfiles.Application,LogLevel.Warning);
-                        return;
+                            componentTag, brushType.InnerText),Logfiles.Application,LogLevel.Warning);
+                        return false;
                     }
                     if(point2 == null)
                     {
                         Logging.WriteToLog(string.Format("skipping coloring of control {0}: point2 is null, type={1}",
-                            ctrl.Tag, brushType.InnerText),Logfiles.Application,LogLevel.Warning);
-                        return;
+                            componentTag, brushType.InnerText),Logfiles.Application,LogLevel.Warning);
+                        return false;
                     }
                     if(ParseColorFromString(color1.InnerText, out Color kolor1_linear) &&
                         ParseColorFromString(color2.InnerText, out Color kolor2_linear))
@@ -191,39 +207,41 @@ namespace RelhaxModpack
                         {
                             Logging.WriteToLog(string.Format("failed to parse points, point1={0}, point2={1}",
                                 point1.InnerText, point2.InnerText), Logfiles.Application, LogLevel.Warning);
-                            return;
+                            return false;
                         }
                         VerifyPoints(point_1);
                         VerifyPoints(point_2);
-                        ctrl.Background = new LinearGradientBrush(kolor1_linear, kolor2_linear, point_1, point_2);
+                        colorToChange = new LinearGradientBrush(kolor1_linear, kolor2_linear, point_1, point_2);
+                        return true;
                     }
                     else
                     {
                         Logging.WriteToLog(string.Format("failed to parse color to {0}, type={1}, color1={2}, color2={3}",
-                            ctrl.Tag, brushType.InnerText, color1.InnerText, color2.InnerText), Logfiles.Application, LogLevel.Warning);
+                            componentTag, brushType.InnerText, color1.InnerText, color2.InnerText), Logfiles.Application, LogLevel.Warning);
+                        return false;
                     }
-                    break;
                 case "RadialGradientBrush"://color=2
                     if(color2 == null)
                     {
                         Logging.WriteToLog(string.Format("skipping coloring of control {0}: color2 is null, type={1}",
-                            ctrl.Tag, brushType.InnerText),Logfiles.Application,LogLevel.Warning);
-                        return;
+                            componentTag, brushType.InnerText),Logfiles.Application,LogLevel.Warning);
+                        return false;
                     }
                     if(ParseColorFromString(color1.InnerText, out Color kolor1_radial)
                         && ParseColorFromString(color2.InnerText, out Color kolor2_radial))
                     {
-                        ctrl.Background = new RadialGradientBrush(kolor1_radial, kolor2_radial);
+                        colorToChange = new RadialGradientBrush(kolor1_radial, kolor2_radial);
+                        return true;
                     }
                     else
                     {
                         Logging.WriteToLog(string.Format("failed to apply color to {0}, type={1}, color1={2}, color2={3}",
-                            ctrl.Tag, brushType.InnerText, color1.InnerText, color2.InnerText), Logfiles.Application, LogLevel.Warning);
+                            componentTag, brushType.InnerText, color1.InnerText, color2.InnerText), Logfiles.Application, LogLevel.Warning);
+                        return false;
                     }
-                    break;
                 default:
-                    Logging.WriteToLog(string.Format("unknown type parameter{0} in component {1} ",brushType.InnerText,ctrl.Tag));
-                    return;
+                    Logging.WriteToLog(string.Format("unknown type parameter{0} in component {1} ",brushType.InnerText,componentTag));
+                    return false;
             }
         }
         
@@ -236,10 +254,10 @@ namespace RelhaxModpack
             string bPart = string.Empty;
             try
             {
-                aPart = color.Substring(0,2);
-                rPart = color.Substring(2,2);
-                gPart = color.Substring(4,2);
-                bPart = color.Substring(6,2);
+                aPart = color.Substring(1,2);
+                rPart = color.Substring(3,2);
+                gPart = color.Substring(5,2);
+                bPart = color.Substring(7,2);
             }
             catch(ArgumentException)
             {
@@ -247,8 +265,10 @@ namespace RelhaxModpack
                   ,Logfiles.Application,LogLevel.Warning);
               return false;
             }
-            if((byte.TryParse(aPart, out byte a)) && (byte.TryParse(rPart, out byte r)) 
-                && (byte.TryParse(gPart, out byte g)) && (byte.TryParse(bPart, out byte b)))
+            if((byte.TryParse(aPart, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte a)) &&
+                (byte.TryParse(rPart, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte r))&&
+                (byte.TryParse(gPart, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte g))&&
+                (byte.TryParse(bPart, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte b)))
             {
                 kolor = Color.FromArgb(a, r, g, b);
                 return true;
@@ -301,30 +321,25 @@ namespace RelhaxModpack
             doc.AppendChild(root);
             //add all window instances to document:
             //make windows for all appropriate windows
-            DumpWindowColorSettingsToXml(root, doc, new AddPicturesZip());//sample TODO more
+            DumpWindowColorSettingsToXml(root, doc, new MainWindow());//sample TODO more
             //save xml file
             doc.Save(savePath);
         }
 
-        public static void DumpWindowColorSettingsToXml(XmlElement root, XmlDocument doc, Window w)
+        private static void DumpWindowColorSettingsToXml(XmlElement root, XmlDocument doc, Window w)
         {
             //make window element
             XmlElement windowElement = doc.CreateElement(w.GetType().ToString());
             //save attributes to element
-            ApplyColorattributesToElement(windowElement, w, doc);
+            ApplyColorattributesToElement(windowElement, w.Background, doc);
             //same to root
             root.AppendChild(windowElement);
             //get list of all frameowrk elements in the window
             //TODO: this may not work due to visual not being shown
             //TODO: need to disable translations to save CPU TIME
-            List<FrameworkElement> AllUIElements = Utils.GetAllWindowComponentsVisual(w, false);
+            List<FrameworkElement> AllUIElements = Utils.GetAllWindowComponentsLogical(w, false);
             for(int i = 0; i < AllUIElements.Count; )
             {
-                if (!(AllUIElements[i] is Control))
-                {
-                    AllUIElements.RemoveAt(i);
-                    continue;
-                }
                 if (AllUIElements[i].Tag == null)
                 {
                     AllUIElements.RemoveAt(i);
@@ -343,19 +358,35 @@ namespace RelhaxModpack
                 i++;
             }
             //make xml entries for each UI element now
-            foreach(Control control in AllUIElements)
+            foreach(FrameworkElement element in AllUIElements)
             {
                 XmlElement colorSetting = doc.CreateElement("ColorSetting");
-                //save attributes to element
-                ApplyColorattributesToElement(colorSetting, control, doc);
-                windowElement.AppendChild(colorSetting);
+                if(element.Tag is string ID)
+                {
+                    if(!string.IsNullOrWhiteSpace(ID))
+                    {
+                        //save attributes to element
+                        XmlAttribute elementID = doc.CreateAttribute("ID");
+                        elementID.Value = ID;
+                        colorSetting.Attributes.Append(elementID);
+                        if (element is Panel panel)
+                            ApplyColorattributesToElement(colorSetting, panel.Background, doc);
+                        else if (element is Control control)
+                            ApplyColorattributesToElement(colorSetting, control.Background, doc);
+                        else
+                            continue;
+                        windowElement.AppendChild(colorSetting);
+                    }
+                }
             }
+            w.Close();
+            w = null;
         }
 
-        private static void ApplyColorattributesToElement(XmlElement colorEntry, Control control, XmlDocument doc)
+        private static void ApplyColorattributesToElement(XmlElement colorEntry, Brush brush, XmlDocument doc)
         {
             XmlAttribute colorType, color1;
-            if(control.Background is SolidColorBrush solidColorBrush)
+            if(brush is SolidColorBrush solidColorBrush)
             {
                 //type
                 colorType = doc.CreateAttribute("type");
@@ -366,7 +397,7 @@ namespace RelhaxModpack
                 color1.Value = solidColorBrush.Color.ToString(CultureInfo.InvariantCulture);
                 colorEntry.Attributes.Append(color1);
             }
-            else if (control.Background is LinearGradientBrush linearGradientBrush)
+            else if (brush is LinearGradientBrush linearGradientBrush)
             {
                 //type
                 colorType = doc.CreateAttribute("type");
@@ -389,7 +420,7 @@ namespace RelhaxModpack
                 point2.Value = linearGradientBrush.EndPoint.ToString(CultureInfo.InvariantCulture);
                 colorEntry.Attributes.Append(point2);
             }
-            else if (control.Background is RadialGradientBrush radialGradientBrush)
+            else if (brush is RadialGradientBrush radialGradientBrush)
             {
                 //type
                 colorType = doc.CreateAttribute("type");
@@ -406,7 +437,7 @@ namespace RelhaxModpack
             }
             else
             {
-                Logging.WriteToLog("Unknown background type: " + control.Background.GetType().ToString(), Logfiles.Application, LogLevel.Debug);
+                Logging.WriteToLog("Unknown background type: " + brush.GetType().ToString(), Logfiles.Application, LogLevel.Debug);
             }
         }
     }

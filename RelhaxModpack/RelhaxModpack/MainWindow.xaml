@@ -92,6 +92,7 @@
                             <RadioButton Content="Dark" />
                             <RadioButton Content="Custom...(TODO)" />
                         </StackPanel>
+                        <Button Content="Dump color settings to xml" Tag="DumpColorSettingsButton" Name="DumpColorSettingsButton" Click="DumpColorSettingsButton_Click"/>
                     </StackPanel>
                 </Grid>
             </TabItem>

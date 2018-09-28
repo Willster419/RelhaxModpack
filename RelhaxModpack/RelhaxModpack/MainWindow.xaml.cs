@@ -55,6 +55,7 @@ namespace RelhaxModpack
             ModpackSettings.LoadSettings();
             //apply settings to UI elements
             UISettings.LoadSettings(true);
+            UISettings.ApplyUIColorSettings(this);
             //check command line settings
             CommandLineSettings.ParseCommandLineConflicts();
             //apply third party settings
@@ -247,6 +248,27 @@ namespace RelhaxModpack
         private void ViewNewsButton_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void DumpColorSettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog()
+            {
+                AddExtension = true,
+                CheckPathExists = true,
+                OverwritePrompt = true,
+                RestoreDirectory = true,
+                DefaultExt = "xml",
+                Title = Translations.GetTranslatedString("ColorDumpSaveFileDialog"),
+                Filter = "XML Documents|*.xml"
+            };
+            bool result = (bool)saveFileDialog.ShowDialog();
+            if(result)
+            {
+                Logging.WriteToLog("Saving color settings dump to " + saveFileDialog.FileName);
+                UISettings.DumpAllWindowColorSettingsToFile(saveFileDialog.FileName);
+                Logging.WriteToLog("Color settings saved");
+            }
         }
     }
 }
