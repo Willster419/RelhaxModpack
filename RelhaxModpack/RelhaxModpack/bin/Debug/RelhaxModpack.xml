@@ -458,7 +458,7 @@
             Handles all custom UI color settings
             </summary>
         </member>
-        <member name="M:RelhaxModpack.UISettings.LoadSettings">
+        <member name="M:RelhaxModpack.UISettings.LoadSettings(System.Boolean)">
             <summary>
             Load the custom color definitions from XML
             </summary>

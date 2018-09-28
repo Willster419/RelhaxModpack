@@ -54,7 +54,7 @@ namespace RelhaxModpack
             progressIndicator.UpdateProgress(2, "STRING_TODO");
             ModpackSettings.LoadSettings();
             //apply settings to UI elements
-            UISettings.LoadSettings();
+            UISettings.LoadSettings(true);
             //check command line settings
             CommandLineSettings.ParseCommandLineConflicts();
             //apply third party settings
