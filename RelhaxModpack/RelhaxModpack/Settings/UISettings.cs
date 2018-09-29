@@ -23,7 +23,8 @@ namespace RelhaxModpack
         public const string CustomColorSettingsPath = "CustomColorSettings";
         public static readonly string[] CustomSettings = new string[]
         {
-            "ColorChangeColor"
+            "SelectedColor",
+            "NotSelectedColor"
         };
         public static readonly Type[] WindowsWithColor = new Type[]
         {
@@ -65,7 +66,7 @@ namespace RelhaxModpack
         {
             if(UIDocument == null)
             {
-                Logging.WriteToLog("UIDocument is null! in ApplyColorSettings()",Logfiles.Application, LogLevel.Error);
+                Logging.WriteToLog("in ApplyColorSettings(), UIDocument is null! ", Logfiles.Application, LogLevel.Error);
                 return;
             }
             //get the UI format version of the xml file

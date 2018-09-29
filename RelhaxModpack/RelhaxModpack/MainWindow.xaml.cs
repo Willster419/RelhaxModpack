@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Forms;
+//using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using RelhaxModpack.Windows;
+using System.Xml;
 
 
 namespace RelhaxModpack
@@ -21,7 +24,7 @@ namespace RelhaxModpack
     /// </summary>
     public partial class MainWindow : Window
     {
-        private NotifyIcon relhaxIcon;
+        private System.Windows.Forms.NotifyIcon relhaxIcon;
         /// <summary>
         /// Creates the instance of the MainWindow class
         /// </summary>
@@ -48,10 +51,9 @@ namespace RelhaxModpack
             //apply translations to this window
             Translations.LocalizeWindow(this,true);
             //create and localize the tray icons and menus
-            progressIndicator.UpdateProgress(1, "STRING_TODO");
-
+            CreateTray();
             //load and apply modpack settings
-            progressIndicator.UpdateProgress(2, "STRING_TODO");
+            progressIndicator.UpdateProgress(2, "LoadingSettings");
             ModpackSettings.LoadSettings();
             //apply settings to UI elements
             UISettings.LoadSettings(true);
@@ -61,8 +63,8 @@ namespace RelhaxModpack
             //apply third party settings
             ThirdPartySettings.LoadSettings();
             //check for updates
-            progressIndicator.UpdateProgress(3, "STRING_TODO");
-            CheckForUpdates();
+            progressIndicator.UpdateProgress(3, "CheckForUpdates");
+            CheckForApplicationUpdates();
             //dispose of please wait here
             progressIndicator.Close();
             progressIndicator = null;
@@ -85,7 +87,7 @@ namespace RelhaxModpack
         private void CreateTray()
         {
             //create base tray icon
-            relhaxIcon = new NotifyIcon()
+            relhaxIcon = new System.Windows.Forms.NotifyIcon()
             {
                 Visible = true,
                 Icon = Properties.Resources.modpack_icon,
@@ -95,8 +97,47 @@ namespace RelhaxModpack
             //TODO
         }
 
-        private void CheckForUpdates()
+        private void CheckForApplicationUpdates()
         {
+            //check if skipping updates
+            Logging.WriteToLog("Started check for application updates");
+            if(CommandLineSettings.SkipUpdate && ModpackSettings.DatabaseDistroVersion != DatabaseVersions.Test)
+            {
+                MessageBox.Show(Translations.GetTranslatedString("skipUpdateWarning"));
+                Logging.WriteToLog("Skipping updates", Logfiles.Application, LogLevel.Warning);
+                return;
+            }
+            //delete the last one and download a new one
+            using (WebClient client = new WebClient())
+            {
+                try
+                {
+                    if (File.Exists("TODO"))
+                        File.Delete("TODO");
+                    client.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat", "TODO");
+
+                }
+                catch (Exception e)
+                {
+                    Logging.WriteToLog(string.Format("Failed to check for updates: \n{0}", e), Logfiles.Application, LogLevel.Exception);
+                    .Application.Current.Shutdown();
+                }
+            }
+            //get the version info string
+            string xmlString = Utils.GetStringFromZip("TODO", "manager_version.xml");
+            if(string.IsNullOrEmpty(xmlString))
+            {
+                Logging.WriteToLog("Failed to get get xml string from managerInfo.dat", Logfiles.Application, LogLevel.Exception);
+                return;
+            }
+            //load the document info
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xmlString);
+            //get a string of current applicatoin version
+
+            //get a string of online application version
+
+            //if not equal, update required
 
         }
 
