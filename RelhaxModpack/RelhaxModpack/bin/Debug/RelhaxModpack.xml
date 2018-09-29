@@ -4,6 +4,281 @@
         <name>RelhaxModpack</name>
     </assembly>
     <members>
+        <member name="T:RelhaxModpack.Category">
+            <summary>
+            a catagory is what makes up each tab in the mod selection dislpay window. It holds the first level of list of SelectablePackages
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.DatabaseComponents.DatabasePackage">
+            <summary>
+            A database component is an abstract class for all Components within the database
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.PackageName">
+            <summary>
+            a unique identifier for each component in the database. No two components will have the same PackageName
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.Version">
+            <summary>
+            a method to keep track of the version of the package
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.Timestamp">
+            <summary>
+            used to determine when the package entry was last modified
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.ZipFile">
+            <summary>
+            the zip file to extract (can be "")
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabaseComponents.DatabasePackage.Enabled">
+            <summary>
+            a toggle to enable and disable the component
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.CRC">
+            <summary>
+            the crc checksum of the zipfile
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.StartAddress">
+            <summary>
+            the start address of the url to the zip file
+            URL format: StartAddress + ZipFile + EndAddress
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.EndAddress">
+            <summary>
+            the end address of the url to the zip file
+            URL format: StartAddress + ZipFile + EndAddress
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.DownloadFlag">
+            <summary>
+            determine at install time if the package needs to be downloaded
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.ReadyForInstall">
+            <summary>
+            determine if the mod has been downloaded and is ready for installation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.AppendExtraction">
+            <summary>
+            determine if the package needs to be installed at the end
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.LogAtInstall">
+            <summary>
+            determine if the files from the package should be logged for uninstallation
+            only set this to false if absolutly necessary!
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.DevURL">
+            <summary>
+            the URL link of where you can view the webpage of the mod
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.Shortcuts">
+            <summary>
+            list containing all shortcuts that could be created based on package data
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.CheckDatabaseListIndex">
+            <summary>
+            used to inentify [if a PackageName confilct occurs] where in the xml file the conflict is
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabaseComponents.DatabasePackage.CompletePath">
+            <summary>
+            Provides (if possible) a complete tree style path in for the cateogry views
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.SelectablePackage">
+            <summary>
+            A package that has UI elements, and is eithor a mod or config that can be selected in the UI
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.SelectablePackage.#ctor">
+            <summary>
+            Constructior override for DatabasePackage. save memory by only enabling the components we need
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Name">
+            <summary>
+            the name of the package
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.NameFormatted">
+            <summary>
+            the name of the package with the version macro replaced for use display
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.TabIndex">
+            <summary>
+            the TabPage refrence
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ParentCategory">
+            <summary>
+            the Category refrence
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Type">
+            <summary>
+            the type of selectable package logic to follow (options are single1, single_dropdown1, single_dropdown2, multi)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Parent">
+            <summary>
+            the refrence for the direct parent of this package
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.TopParent">
+            <summary>
+            the refrence for the absolute top of the package tree
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.UIComponent">
+            <summary>
+            the UI element refrence for this package
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ParentUIComponent">
+            <summary>
+            the UI element refrence for the direct parent of this package
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.TopParentUIComponent">
+            <summary>
+            the UI element refrence for the absolute top of the package tree
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Visible">
+            <summary>
+            a flag to determine wether or not the mod should be shown in UI
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Size">
+            <summary>
+            size of the mod zip file
+            TODO: convert this to Uint64
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.UpdateComment">
+            <summary>
+            update comments of the package
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Description">
+            <summary>
+            description of the package
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage._Checked">
+            <summary>
+            field for wether the package is selected to install
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.Checked">
+            <summary>
+            property for if the package is selected by the user to install. handles all color change and single_dropdown updating code
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Level">
+            <summary>
+            The level in the database tree where the package resides.
+            Category header is -1, each child is +1 from there
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ChildBorder">
+            <summary>
+            the border for the legacy view to allow for putting all subchilderen in the border. sits inside treeviewitem. wpf component
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ChildStackPanel">
+            <summary>
+            the stackpanel to allow the child treeviewitems to stack upon each other. sits inside the border. wpf component
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ParentBorder">
+            <summary>
+            the border that this component is in. wpf componment
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ParentStackPanel">
+            <summary>
+            the stackpanel that this item is inside. wpf component
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ContentControl">
+            <summary>
+            ContentControl item to allow for right-clicking of disabled components. defaultv2 wpf component
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.TreeViewItem">
+            <summary>
+            the treeviewitem that corresponds to this package. legacy wpf component
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.TreeView">
+            <summary>
+            the treeview that this package is in. legacy wpf component
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.UserFiles">
+            <summary>
+            the list of cache files that should be backed up before wiping the directory
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Packages">
+            <summary>
+            the list of child SelectablePackage entries in this instance of SelectablePackages
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.LogicalDependencies">
+            <summary>
+            list of LogicalDependency package names
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Dependencies">
+            <summary>
+            list of Dependency package names
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.PictureList">
+            <summary>
+            list of media preview items associated with this package, shown in the preview window on right click of component
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.CompletePath">
+            <summary>
+            provides a nice complete path that is more human readable than a packagePath
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.SelectablePackage.CompareMods(RelhaxModpack.SelectablePackage,RelhaxModpack.SelectablePackage)">
+            <summary>
+            Allows for alphabetical sorting of mods
+            </summary>
+            <param name="x">a package</param>
+            <param name="y">another package</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.SelectablePackage.ToString">
+            <summary>
+            Allows for display in a combobox and when debugging
+            </summary>
+            <returns>The nameFormatted property of the pacakge</returns>
+        </member>
+        <member name="M:RelhaxModpack.SelectablePackage.AnyPackagesChecked">
+            <summary>
+            check if the color change should be changed on or off, based on if any other packages at this level are enabled and checked
+            </summary>
+            <returns>True if another package at this level is checked and enabled, false otherwise</returns>
+        </member>
         <member name="T:RelhaxModpack.Logfile">
             <summary>
             Represenets an instance of a logfile used for writing important logging information to a log
@@ -177,11 +452,6 @@
         <member name="T:RelhaxModpack.SelectionView">
             <summary>
             The type of selection view for how to display the selection tree
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.SelectionView.Default">
-            <summary>
-            Default Winforms style
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectionView.Legacy">

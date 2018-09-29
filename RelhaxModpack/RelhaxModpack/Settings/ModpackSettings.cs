@@ -17,17 +17,13 @@ namespace RelhaxModpack
     public enum SelectionView
     {
         /// <summary>
-        /// Default Winforms style
-        /// </summary>
-        Default = 0,
-        /// <summary>
         /// OMC style
         /// </summary>
         Legacy = 1,
         /// <summary>
         /// Default WPF V2 style
         /// </summary>
-        DefaultV2 = 2
+        DefaultV2 = 0
     };
     /// <summary>
     /// The different loading Gifs for when loading the preview
@@ -201,7 +197,7 @@ namespace RelhaxModpack
         /// <summary>
         /// The selection view to use
         /// </summary>
-        public static SelectionView ModSelectionView = SelectionView.Default;
+        public static SelectionView ModSelectionView = SelectionView.DefaultV2;
         /// <summary>
         /// The selected language
         /// </summary>
@@ -300,8 +296,6 @@ namespace RelhaxModpack
                             break;
                         case "SelectionView":
                             ModSelectionView = (SelectionView)int.Parse(setting.InnerText);
-                            if (ModSelectionView == SelectionView.Default)
-                                ModSelectionView = SelectionView.DefaultV2;
                             break;
                         case "BetaApplication":
                             ApplicationDistroVersion = ApplicationVersions.Beta;

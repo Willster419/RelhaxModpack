@@ -103,6 +103,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DatabaseComponents\Category.cs" />
+    <Compile Include="DatabaseComponents\DatabaseLogic.cs" />
+    <Compile Include="DatabaseComponents\DatabasePackage.cs" />
+    <Compile Include="DatabaseComponents\Dependency.cs" />
+    <Compile Include="DatabaseComponents\LogicalDependency.cs" />
+    <Compile Include="DatabaseComponents\Media.cs" />
+    <Compile Include="DatabaseComponents\PackageComparer.cs" />
+    <Compile Include="DatabaseComponents\SelectablePackage.cs" />
+    <Compile Include="DatabaseComponents\UserFiles.cs" />
+    <Compile Include="InstallerComponents\Shortcut.cs" />
     <Compile Include="Logging\Logfile.cs" />
     <Compile Include="Logging\Logging.cs" />
     <Compile Include="Settings\ModpackSettings.cs" />
@@ -110,6 +120,11 @@
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="Settings\ThirdPartySettings.cs" />
     <Compile Include="Settings\UISettings.cs" />
+    <Compile Include="UIComponents\ComboBoxItem.cs" />
+    <Compile Include="UIComponents\IPackageUIComponent.cs" />
+    <Compile Include="UIComponents\RelhaxWPFCheckBox.cs" />
+    <Compile Include="UIComponents\RelhaxWPFComboBox.cs" />
+    <Compile Include="UIComponents\RelhaxWPFRadioButton.cs" />
     <Compile Include="Utils\BadMemeException.cs" />
     <Compile Include="Utils\CiInfo.cs" />
     <Compile Include="Utils\Translations.cs" />
@@ -299,7 +314,6 @@
     <Content Include="Resources\Libraries\Newtonsoft.Json.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DatabaseComponents\" />
     <Folder Include="Resources\XML\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
