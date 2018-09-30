@@ -203,6 +203,8 @@ namespace RelhaxModpack
                         {
                             Logging.WriteToLog("User canceled update, because he does not want to end the parallel running Relhax instance.");
                             Application.Current.Shutdown();
+                            Close();
+                            return;
                         }
                     }
                     else
@@ -232,6 +234,9 @@ namespace RelhaxModpack
             else
             {
                 Logging.WriteToLog("User pressed x or said no");
+                Application.Current.Shutdown();
+                Close();
+                return;
             }
         }
 
