@@ -24,11 +24,9 @@ namespace RelhaxModpack
         public static readonly string[] CustomSettings = new string[]
         {
             "SelectedColor",
-            "NotSelectedColor"
-        };
-        public static readonly Type[] WindowsWithColor = new Type[]
-        {
-            typeof(AddPicturesZip)
+            "NotSelectedColor",
+            "SelectedTextColor",
+            "NotSelectedTextColor"
         };
         public static XmlDocument UIDocument;
         #endregion
@@ -61,7 +59,7 @@ namespace RelhaxModpack
             }
             Logging.WriteToLog("UIDocument xml file loaded sucessfully", Logfiles.Application, LogLevel.Debug);
         }
-        
+        #region Apply to window
         public static void ApplyUIColorSettings(Window w)
         {
             if(UIDocument == null)
@@ -118,6 +116,11 @@ namespace RelhaxModpack
                             ApplyBrushSettings(element, brushSettings);
                     }
                 }
+            }
+            //custom code for ModSelectionList
+            if(w is ModSelectionList modSelectionList)
+            {
+                //set enabled and disbled brushes properly
             }
         }
         
@@ -349,22 +352,38 @@ namespace RelhaxModpack
                 p.Y = 0;
             }
         }
-        
+        #endregion
+        #region Dump to file
         public static void DumpAllWindowColorSettingsToFile(string savePath)
         {
             //make xml document and declaration
             XmlDocument doc = new XmlDocument();
             XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
+            //append declaration to document
             doc.AppendChild(dec);
-            //make root element and attribute
+            //make root element and version attribute
             XmlElement root = doc.CreateElement(UIRoot);
+            //NOTE: version attribute should be incrimented when large change in color loading structure is done
+            //allows us to make whole new method to load UI settings
             XmlAttribute version = doc.CreateAttribute("version");
+            //append to document
             version.Value = "1.0";
             root.Attributes.Append(version);
             doc.AppendChild(root);
             //add all window instances to document:
             //make windows for all appropriate windows
-            DumpWindowColorSettingsToXml(root, doc, new MainWindow());//sample TODO more
+            //TODO: more windows
+            DumpWindowColorSettingsToXml(root, doc, new MainWindow());
+            //save custom color settings to document
+            //for now, just use single solid color for these settings
+            foreach(string s in CustomSettings)
+            {
+                XmlElement element = doc.CreateElement(s);
+                XmlAttribute color = doc.CreateAttribute("color");
+                color.Value = "TODO";
+                element.Attributes.Append(color);
+                root.AppendChild(element);
+            }
             //save xml file
             doc.Save(savePath);
         }
@@ -416,7 +435,6 @@ namespace RelhaxModpack
                 else
                     continue;
                 windowElement.AppendChild(colorSetting);
-                
             }
             w.Close();
             w = null;
@@ -488,5 +506,6 @@ namespace RelhaxModpack
                 colorEntry.Attributes.Append(textColor);
             }
         }
+        #endregion
     }
 }
