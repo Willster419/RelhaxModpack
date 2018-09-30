@@ -128,7 +128,7 @@ namespace RelhaxModpack
                 if(ApplyBrushSettings(control.Name, (string)control.Tag, brushSettings, out Brush backgroundColorToChange))
                 {
                     control.Background = backgroundColorToChange;
-                    if(ApplyTextBrushSettings(control.Name, (string)control.Tag, brushSettings, out Brush textColorToChange))
+                    if(!(element is Window) && ApplyTextBrushSettings(control.Name, (string)control.Tag, brushSettings, out Brush textColorToChange))
                         control.Foreground = textColorToChange;
                 }
             }
@@ -168,7 +168,7 @@ namespace RelhaxModpack
             }
             else
             {
-                Logging.WriteToLog(string.Format("skipping text coloring of control {0}: textrColor is null", componentName),
+                Logging.WriteToLog(string.Format("skipping text coloring of control {0}: textColor is null", componentName),
                     Logfiles.Application, LogLevel.Warning);
             }
             return somethingApplied;
