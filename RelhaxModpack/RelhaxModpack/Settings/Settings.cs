@@ -30,6 +30,10 @@ namespace RelhaxModpack
 
         //the config file version for saving the user's selection prefrences
         public const string ConfigFileVersion = "2.0";
+        public const string ApplicationUpdateURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";
+        public const string ApplicationBetaUpdateURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.zip";
+        public const string ApplicationUpdateFileName = "RelhaxModpack_update.zip";
+        public const string RelicBatchUpdateScript = "RelicCopyUpdate.bat";
         /// <summary>
         /// The current distribution version of the application
         /// Alhpa should NEVER be built for public distribution unless direct testing!
@@ -49,6 +53,8 @@ namespace RelhaxModpack
         public static readonly string RelhaxTempFolder = Path.Combine(ApplicationStartupPath, "RelhaxTemp");
 
         public static readonly string MD5HashDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "MD5HashDatabase.xml");
+
+        public static readonly string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, "managerInfo.dat");
         #endregion
 
         #region Statics

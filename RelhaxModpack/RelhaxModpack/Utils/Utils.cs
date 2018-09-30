@@ -19,7 +19,8 @@ namespace RelhaxModpack
     public static class Utils
     {
         #region Statics
-        static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+        public static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+        public const long BYTES_TO_MBYTES = 1048576;
         //MACROS TODO
         #endregion
         #region Application Utils

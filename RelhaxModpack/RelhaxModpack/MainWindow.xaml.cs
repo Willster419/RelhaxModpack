@@ -15,7 +15,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using RelhaxModpack.Windows;
 using System.Xml;
-
+using System.Diagnostics;
+using Ionic.Zip;
 
 namespace RelhaxModpack
 {
@@ -25,6 +26,7 @@ namespace RelhaxModpack
     public partial class MainWindow : Window
     {
         private System.Windows.Forms.NotifyIcon relhaxIcon;
+        private Stopwatch stopwatch = new Stopwatch();
         /// <summary>
         /// Creates the instance of the MainWindow class
         /// </summary>
@@ -119,35 +121,186 @@ namespace RelhaxModpack
                 }
                 catch (Exception e)
                 {
-                    Logging.WriteToLog(string.Format("Failed to check for updates: \n{0}", e), Logfiles.Application, LogLevel.Exception);
-                    .Application.Current.Shutdown();
+                    Logging.WriteToLog(string.Format("Failed to check for updates: \n{0}", e), Logfiles.Application, LogLevel.ApplicationHalt);
+                    Application.Current.Shutdown();
                 }
             }
             //get the version info string
             string xmlString = Utils.GetStringFromZip("TODO", "manager_version.xml");
             if(string.IsNullOrEmpty(xmlString))
             {
-                Logging.WriteToLog("Failed to get get xml string from managerInfo.dat", Logfiles.Application, LogLevel.Exception);
-                return;
+                Logging.WriteToLog("Failed to get get xml string from managerInfo.dat", Logfiles.Application, LogLevel.ApplicationHalt);
+                Application.Current.Shutdown();
             }
             //load the document info
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(xmlString);
-            //get a string of current applicatoin version
-
-            //get a string of online application version
-
-            //if not equal, update required
-
+            //if the request distro version is alpha, correct it to stable
+            if (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Alpha)
+            {
+                Logging.WriteToLog(nameof(ModpackSettings.ApplicationDistroVersion) + "is Alpha, setting to stable for safety",
+                    Logfiles.Application, LogLevel.Debug);
+                ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
+            }
+            //make a copy of the curent application version and set it to stable if alphs
+            ApplicationVersions version = Settings.ApplicationVersion;
+            if (version == ApplicationVersions.Alpha)
+            {
+                Logging.WriteToLog("temp version of " + nameof(Settings.ApplicationVersion) + " is Alpha, setting to stable for safety",
+                    Logfiles.Application, LogLevel.Debug);
+                version = ApplicationVersions.Stable;
+            }
+            //4 possibilities:
+            //stable->stable (update check)
+            //stable->beta (auto out of date)
+            //beta->stable (auto out of date)
+            //beta->beta (update check)
+            bool outOfDate = false;
+            //declare these out hereso the logger can access them
+            string applicationBuildVersion = Utils.GetApplicationVersion();
+            //if current application build does not equal requestion distribution channel
+            if (version != ModpackSettings.ApplicationDistroVersion)
+            {
+                outOfDate = true;//can assume out of date
+                Logging.WriteToLog(string.Format("Current build is {0} ({1}), online build is NA (changing distro version {2}->{3})",
+                    applicationBuildVersion, version.ToString(), version.ToString(), ModpackSettings.ApplicationDistroVersion.ToString()));
+            }
+            else
+            {
+                //actually compare the bulid of the application of the requested distribution channel
+                string applicationOnlineVersion = (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Stable) ?
+                    XMLUtils.GetXMLStringFromXPath(doc, "//version/manager_v2") ://stable
+                    XMLUtils.GetXMLStringFromXPath(doc, "//version/manager_beta_v2");//beta
+                if (!(applicationBuildVersion.Equals(applicationOnlineVersion)))
+                    outOfDate = true;
+                Logging.WriteToLog(string.Format("Current build is {0} ({1}), online build is {2} ({3})",
+                    applicationBuildVersion, version.ToString(), applicationOnlineVersion, ModpackSettings.ApplicationDistroVersion.ToString()));
+            }
+            if(!outOfDate)
+            {
+                Logging.WriteToLog("Application up to date");
+                return;
+            }
+            Logging.WriteToLog("Application is out of date, display update window");
+            VersionInfo versionInfo = new VersionInfo();
+            versionInfo.ShowDialog();
+            if(versionInfo.ConfirmUpdate)
+            {
+                //check for any other running instances
+                while (true)
+                {
+                    System.Threading.Thread.Sleep(100);
+                    if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1)
+                    {
+                        MessageBoxResult result = MessageBox.Show(Translations.GetTranslatedString("closeInstanceRunningForUpdate"), Translations.GetTranslatedString("critical"), MessageBoxButton.OKCancel);
+                        if (result != MessageBoxResult.OK)
+                        {
+                            Logging.WriteToLog("User canceled update, because he does not want to end the parallel running Relhax instance.");
+                            Application.Current.Shutdown();
+                        }
+                    }
+                    else
+                        break;
+                }
+                using (WebClient client = new WebClient())
+                {
+                    //start download of new version
+                    client.DownloadProgressChanged += OnUpdateDownloadProgresChange;
+                    client.DownloadFileCompleted += OnUpdateDownloadCompleted;
+                    //set the UI for a download
+                    ResetUI();
+                    stopwatch.Reset();
+                    //check to make sure this window is displayed for progress
+                    if (WindowState != WindowState.Normal)
+                        WindowState = WindowState.Normal;
+                    //download the file
+                    string modpackURL = (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Stable) ?
+                        Settings.ApplicationUpdateURL :
+                        Settings.ApplicationBetaUpdateURL;
+                    //make sure to delte it if it's currently three
+                    if (File.Exists(Settings.ApplicationUpdateFileName))
+                        File.Delete(Settings.ApplicationUpdateFileName);
+                    client.DownloadFileAsync(new Uri(modpackURL), Settings.ApplicationUpdateFileName);
+                }
+            }
+            else
+            {
+                Logging.WriteToLog("User pressed x or said no");
+            }
         }
 
-        private void ApplySettingsToUIOnApplicationLoad()
+        private void ResetUI()
         {
-            //add localization translation options to combobox
-            //TODO these need to be in the lanaugae thatthey are in
-            Languages[] allLanguages = (Languages[])Enum.GetValues(typeof(Languages));
-            foreach (Languages lang in allLanguages)
-                LanguagesSelector.Items.Add(lang.ToString());
+            ChildProgressBar.Value = ParentProgressBar.Value = TotalProgressBar.Value = 0;
+            InstallProgressTextBox.Text = string.Empty;
+        }
+
+        private void OnUpdateDownloadCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+        {
+            //stop the timer
+            stopwatch.Reset();
+            if(e.Error != null)
+            {
+                Logging.WriteToLog("Failed to download application update\n" + e.Error.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
+                MessageBox.Show(Translations.GetTranslatedString("cantDownloadNewVersion"));
+                Application.Current.Shutdown();
+            }
+            //try to extract the update
+            try
+            {
+                using (ZipFile zip = new ZipFile(Settings.ApplicationUpdateFileName))
+                {
+                    zip.ExtractAll(Settings.ApplicationStartupPath);
+                }
+            }
+            catch (ZipException zipex)
+            {
+                Logging.WriteToLog("Failed to extract update zip file\n" + zipex.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
+                MessageBox.Show(Translations.GetTranslatedString("failedToExtractUpdateArchive"));
+                Application.Current.Shutdown();
+            }
+            //extract the batch script to update the application
+            string batchScript = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "RelicCopyUpdate.txt");
+            File.WriteAllText(Settings.RelicBatchUpdateScript, batchScript);
+            //try to start the update script
+            try
+            {
+                ProcessStartInfo info = new ProcessStartInfo
+                {
+                    FileName = Path.Combine(Settings.ApplicationStartupPath,Settings.RelicBatchUpdateScript),
+                    Arguments = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).ToArray())
+                };
+                Process installUpdate = new Process
+                {
+                    StartInfo = info
+                };
+                installUpdate.Start();
+            }
+            catch (Exception e3)
+            {
+                Logging.WriteToLog("Failed to start " + Settings.RelicBatchUpdateScript + "\n" + e3.ToString(),
+                    Logfiles.Application, LogLevel.ApplicationHalt);
+                MessageBox.Show(Translations.GetTranslatedString("cantStartNewApp"));
+            }
+            Application.Current.Shutdown();
+        }
+
+        private void OnUpdateDownloadProgresChange(object sender, DownloadProgressChangedEventArgs e)
+        {
+            //if it's in instant extraction mode, don't show download progress
+            if (ModpackSettings.DownloadInstantExtraction)
+                return;
+            //if it's not running, start it
+            if (!stopwatch.IsRunning)
+                stopwatch.Start();
+            //set the update progress bar
+            ChildProgressBar.Value = e.ProgressPercentage;
+            float MBDownloaded = (float)e.BytesReceived / (float)Utils.BYTES_TO_MBYTES;
+            float MBTotal = (float)e.TotalBytesToReceive / (float)Utils.BYTES_TO_MBYTES;
+            float timeToDownloadInSeconds = (float)e.TotalBytesToReceive / ((float)e.BytesReceived / (float)stopwatch.Elapsed.TotalSeconds);
+            string downloadMessage = string.Format("{0} {1}MB {2} {3}MB (ETA={4} sec)", Translations.GetTranslatedString("downloadingUpdate"),
+                MBDownloaded, Translations.GetTranslatedString("of"), MBTotal, timeToDownloadInSeconds);
+            InstallProgressTextBox.Text = downloadMessage;
         }
 
         #region all the dumb events for all the changing of settings
