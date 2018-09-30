@@ -373,6 +373,10 @@ namespace RelhaxModpack
                                     else
                                         settingField.SetValue(typeof(ModpackSettings), ApplicationVersions.Stable);
                                 }
+                                else if (type2 == typeof(string))
+                                {
+                                    settingField.SetValue(typeof(ModpackSettings), setting.InnerText);
+                                }
                                 else
                                 {
                                     Logging.WriteToLog("unknown type: " + type2, Logfiles.Application, LogLevel.Warning);
