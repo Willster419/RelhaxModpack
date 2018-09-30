@@ -332,27 +332,46 @@ namespace RelhaxModpack
                                 else if (type2 == typeof(LoadingGifs))
                                 {
                                     //https://docs.microsoft.com/en-us/dotnet/api/system.enum.parse?view=netframework-4.7.2
-                                    settingField.SetValue(typeof(ModpackSettings), Enum.Parse(typeof(LoadingGifs), setting.InnerText));
+                                    if (Enum.TryParse(setting.InnerText, out LoadingGifs result))
+                                        settingField.SetValue(typeof(ModpackSettings), result);
+                                    else
+                                        settingField.SetValue(typeof(ModpackSettings), LoadingGifs.Standard);
                                 }
                                 else if (type2 == typeof(UninstallModes))
                                 {
-                                    settingField.SetValue(typeof(ModpackSettings), Enum.Parse(typeof(UninstallModes), setting.InnerText));
+                                    if (Enum.TryParse(setting.InnerText, out UninstallModes result))
+                                        settingField.SetValue(typeof(ModpackSettings), result);
+                                    else
+                                        settingField.SetValue(typeof(ModpackSettings), UninstallModes.Default);
                                 }
                                 else if (type2 == typeof(SelectionView))
                                 {
-                                    settingField.SetValue(typeof(ModpackSettings), Enum.Parse(typeof(SelectionView), setting.InnerText));
+                                    //try ot parse the value (supports int entries) if fail set a default value
+                                    if(Enum.TryParse(setting.InnerText,out SelectionView result))
+                                        settingField.SetValue(typeof(ModpackSettings), result);
+                                    else
+                                        settingField.SetValue(typeof(ModpackSettings), SelectionView.DefaultV2);
                                 }
                                 else if (type2 == typeof(Languages))
                                 {
-                                    settingField.SetValue(typeof(ModpackSettings), Enum.Parse(typeof(Languages), setting.InnerText));
+                                    if (Enum.TryParse(setting.InnerText, out Languages result))
+                                        settingField.SetValue(typeof(ModpackSettings), result);
+                                    else
+                                        settingField.SetValue(typeof(ModpackSettings), Languages.English);
                                 }
                                 else if (type2 == typeof(DatabaseVersions))
                                 {
-                                    settingField.SetValue(typeof(ModpackSettings), Enum.Parse(typeof(DatabaseVersions), setting.InnerText));
+                                    if (Enum.TryParse(setting.InnerText, out DatabaseVersions result))
+                                        settingField.SetValue(typeof(ModpackSettings), result);
+                                    else
+                                        settingField.SetValue(typeof(ModpackSettings), DatabaseVersions.Stable);
                                 }
                                 else if (type2 == typeof(ApplicationVersions))
                                 {
-                                    settingField.SetValue(typeof(ModpackSettings), Enum.Parse(typeof(ApplicationVersions), setting.InnerText));
+                                    if (Enum.TryParse(setting.InnerText, out ApplicationVersions result))
+                                        settingField.SetValue(typeof(ModpackSettings), result);
+                                    else
+                                        settingField.SetValue(typeof(ModpackSettings), ApplicationVersions.Stable);
                                 }
                                 else
                                 {
