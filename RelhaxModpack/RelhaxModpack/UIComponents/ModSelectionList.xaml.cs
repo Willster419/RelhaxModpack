@@ -23,5 +23,35 @@ namespace RelhaxModpack.Windows
         {
             InitializeComponent();
         }
+
+        private void OnWindowLoad(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OnContinueInstallation(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OnCancelInstallation(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OnSaveSelectionClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OnLoadSelectionClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OnClearSelectionsClick(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
