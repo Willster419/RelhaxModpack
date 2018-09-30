@@ -25,7 +25,7 @@ namespace RelhaxModpack
     /// </summary>
     public partial class MainWindow : Window
     {
-        private System.Windows.Forms.NotifyIcon relhaxIcon;
+        private System.Windows.Forms.NotifyIcon RelhaxIcon;
         private Stopwatch stopwatch = new Stopwatch();
         /// <summary>
         /// Creates the instance of the MainWindow class
@@ -69,6 +69,7 @@ namespace RelhaxModpack
             VerifyApplicationFolderStructure();
             progressIndicator.UpdateProgress(4, Translations.GetTranslatedString("checkForUpdates"));
             CheckForApplicationUpdates();
+            CheckForDatabaseUpdates(false, true);
             //dispose of please wait here
             progressIndicator.Close();
             progressIndicator = null;
@@ -81,24 +82,156 @@ namespace RelhaxModpack
             if (ModpackSettings.SaveSettings())
                 Logging.WriteToLog("Settings saved");
             Logging.WriteToLog("Disposing tray icon");
-            if(relhaxIcon != null)
+            if(RelhaxIcon != null)
             {
-                relhaxIcon.Dispose();
-                relhaxIcon = null;
+                RelhaxIcon.Dispose();
+                RelhaxIcon = null;
             }
         }
-
+        #region Tray code
         private void CreateTray()
         {
             //create base tray icon
-            relhaxIcon = new System.Windows.Forms.NotifyIcon()
+            RelhaxIcon = new System.Windows.Forms.NotifyIcon()
             {
                 Visible = true,
                 Icon = Properties.Resources.modpack_icon,
                 Text = Title
             };
             //create menu options
-            //TODO
+            //RelhaxMenustrip
+            System.Windows.Forms.ContextMenuStrip RelhaxMenuStrip = new System.Windows.Forms.ContextMenuStrip();
+            //MenuItemRestore
+            System.Windows.Forms.ToolStripMenuItem MenuItemRestore = new System.Windows.Forms.ToolStripMenuItem();
+            MenuItemRestore.Name = nameof(MenuItemRestore);
+            //MenuItemCheckUpdates
+            System.Windows.Forms.ToolStripMenuItem MenuItemCheckUpdates = new System.Windows.Forms.ToolStripMenuItem();
+            MenuItemCheckUpdates.Name = nameof(MenuItemCheckUpdates);
+            //MenuItemAppClose
+            System.Windows.Forms.ToolStripMenuItem MenuItemAppClose = new System.Windows.Forms.ToolStripMenuItem();
+            MenuItemAppClose.Name = nameof(MenuItemAppClose);
+            //build it
+            RelhaxMenuStrip.Items.Add(MenuItemRestore);
+            RelhaxMenuStrip.Items.Add(MenuItemCheckUpdates);
+            RelhaxMenuStrip.Items.Add(MenuItemAppClose);
+            RelhaxIcon.ContextMenuStrip = RelhaxMenuStrip;
+            //setup the right click option
+            RelhaxIcon.MouseClick += OnIconMouseClick;
+            //setup each even option
+            MenuItemRestore.Click += OnMenuItemRestoreClick;
+            MenuItemCheckUpdates.Click += OnMenuClickChekUpdates;
+            MenuItemAppClose.Click += OnMenuItemCloseClick;
+        }
+
+        private void OnMenuItemCloseClick(object sender, EventArgs e)
+        {
+            Application.Current.Shutdown();
+            Close();
+        }
+
+        private void OnMenuClickChekUpdates(object sender, EventArgs e)
+        {
+            //make and show progress indicator
+            ProgressIndicator progressIndicator = new ProgressIndicator()
+            {
+                Message = Translations.GetTranslatedString("checkForUpdates"),
+                ProgressMinimum = 0,
+                ProgressMaximum = 1
+            };
+            progressIndicator.Show();
+            CheckForDatabaseUpdates(false,false);
+            //clean up progress inicaogr
+            progressIndicator.Close();
+            progressIndicator = null;
+        }
+
+        private void OnMenuItemRestoreClick(object sender, EventArgs e)
+        {
+            if (WindowState != WindowState.Normal)
+                WindowState = WindowState.Normal;
+            //https://stackoverflow.com/questions/257587/bring-a-window-to-the-front-in-wpf
+            this.Activate();
+        }
+
+        private void OnIconMouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            switch (e.Button)
+            {
+                case System.Windows.Forms.MouseButtons.Right:
+                    //apply translations for each sub menu option
+                    foreach(System.Windows.Forms.ToolStripMenuItem item in RelhaxIcon.ContextMenuStrip.Items)
+                    {
+                        item.Text = Translations.GetTranslatedString(item.Name);
+                    }
+                    break;
+                case System.Windows.Forms.MouseButtons.Left:
+                    //if the application is not displayed on the screen (minimized, for example), then show it.
+                    if (WindowState != WindowState.Normal)
+                        WindowState = WindowState.Normal;
+                    //https://stackoverflow.com/questions/257587/bring-a-window-to-the-front-in-wpf
+                    this.Activate();
+                    break;
+            }
+        }
+        #endregion
+
+        private void CheckForDatabaseUpdates(bool refreshManagerInfo, bool init)
+        {
+            Logging.WriteToLog("Checking for database updates");
+            //TODO: consider just getting it from online?
+            if(refreshManagerInfo)
+            {
+                //delete the last one and download a new one
+                using (WebClient client = new WebClient())
+                {
+                    try
+                    {
+                        if (File.Exists(Settings.ManagerInfoDatFile))
+                            File.Delete(Settings.ManagerInfoDatFile);
+                        client.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat", Settings.ManagerInfoDatFile);
+
+                    }
+                    catch (Exception e)
+                    {
+                        Logging.WriteToLog(string.Format("Failed to check for updates: \n{0}", e), Logfiles.Application, LogLevel.ApplicationHalt);
+                        Application.Current.Shutdown();
+                        Close();
+                        return;
+                    }
+                }
+            }
+            //get the version info string
+            string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
+            if (string.IsNullOrEmpty(xmlString))
+            {
+                Logging.WriteToLog("Failed to get get xml string from managerInfo.dat", Logfiles.Application, LogLevel.ApplicationHalt);
+                return;
+            }
+            //load the document info
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xmlString);
+            //get new DB update version
+            string databaseNewVersion = XMLUtils.GetXMLStringFromXPath(doc, "//version/database");
+            if(init)
+            {
+                //auto apply and don't annouce
+                Settings.DatabaseVersion = databaseNewVersion;
+            }
+            else
+            {
+                Logging.WriteToLog(string.Format("Comparing database versions, old={0}, new={1}", Settings.DatabaseVersion, databaseNewVersion));
+                //compare and annouce if not equal
+                if (!Settings.DatabaseVersion.Equals(databaseNewVersion))
+                {
+                    Logging.WriteToLog("new version of database applied");
+                    Settings.DatabaseVersion = databaseNewVersion;
+                    DatabaseVersionLabel.Text = Translations.GetTranslatedString("databaseVersion") + " " + Settings.DatabaseVersion;
+                    MessageBox.Show(Translations.GetTranslatedString("newDBApplied"));
+                }
+                else
+                    Logging.WriteToLog("database versions are the same");
+            }
+            Logging.WriteToLog("Checking for database updates complete");
         }
 
         private void CheckForApplicationUpdates()
