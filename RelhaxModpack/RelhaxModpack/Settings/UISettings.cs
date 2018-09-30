@@ -404,31 +404,27 @@ namespace RelhaxModpack
             foreach(FrameworkElement element in AllUIElements)
             {
                 XmlElement colorSetting = doc.CreateElement("ColorSetting");
-                if(element.Tag is string ID)
-                {
-                    if(!string.IsNullOrWhiteSpace(ID))
-                    {
-                        //save attributes to element
-                        XmlAttribute elementID = doc.CreateAttribute("ID");
-                        elementID.Value = ID;
-                        colorSetting.Attributes.Append(elementID);
-                        if (element is Panel panel)
-                            ApplyColorattributesToElement(colorSetting, panel.Background, doc);
-                        else if (element is Control control)
-                            ApplyColorattributesToElement(colorSetting, control.Background, doc);
-                        else
-                            continue;
-                        windowElement.AppendChild(colorSetting);
-                    }
-                }
+                string ID = (string)element.Tag;
+                //save attributes to element
+                XmlAttribute elementID = doc.CreateAttribute("ID");
+                elementID.Value = ID;
+                colorSetting.Attributes.Append(elementID);
+                if (element is Panel panel)
+                    ApplyColorattributesToElement(colorSetting, panel.Background, doc);
+                else if (element is Control control)
+                    ApplyColorattributesToElement(colorSetting, control.Background, doc, control.Foreground);
+                else
+                    continue;
+                windowElement.AppendChild(colorSetting);
+                
             }
             w.Close();
             w = null;
         }
 
-        private static void ApplyColorattributesToElement(XmlElement colorEntry, Brush brush, XmlDocument doc)
+        private static void ApplyColorattributesToElement(XmlElement colorEntry, Brush brush, XmlDocument doc, Brush textBrush = null)
         {
-            XmlAttribute colorType, color1;
+            XmlAttribute colorType, color1, textColor;
             if(brush is SolidColorBrush solidColorBrush)
             {
                 //type
@@ -481,6 +477,15 @@ namespace RelhaxModpack
             else
             {
                 Logging.WriteToLog("Unknown background type: " + brush.GetType().ToString(), Logfiles.Application, LogLevel.Debug);
+            }
+            if(textBrush != null)
+            {
+                //text color (forground)
+                textColor = doc.CreateAttribute("textColor");
+                //should all be solid color brushes...
+                SolidColorBrush solidColorTextBrush = (SolidColorBrush)textBrush;
+                textColor.Value = solidColorTextBrush.Color.ToString(CultureInfo.InvariantCulture);
+                colorEntry.Attributes.Append(textColor);
             }
         }
     }
