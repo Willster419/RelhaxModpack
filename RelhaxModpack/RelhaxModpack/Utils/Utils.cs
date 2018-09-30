@@ -167,7 +167,7 @@ namespace RelhaxModpack
                     e.ExtractWithPassword(ms, password);
                 else
                     e.Extract(ms);
-                //ms.Position = 0;// should be fine with it done above
+                ms.Position = 0;
                 textStr = sr.ReadToEnd();
             }
             return textStr;

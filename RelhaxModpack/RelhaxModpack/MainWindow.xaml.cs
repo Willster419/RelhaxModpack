@@ -43,7 +43,7 @@ namespace RelhaxModpack
             {
                 Message = Translations.GetTranslatedString("loadingTranslations"),
                 ProgressMinimum = 0,
-                ProgressMaximum = 3
+                ProgressMaximum = 4
             };
             progressIndicator.Show();
             progressIndicator.UpdateProgress(0);
@@ -55,7 +55,7 @@ namespace RelhaxModpack
             //create and localize the tray icons and menus
             CreateTray();
             //load and apply modpack settings
-            progressIndicator.UpdateProgress(2, "LoadingSettings");
+            progressIndicator.UpdateProgress(2, Translations.GetTranslatedString("loadingSettings"));
             ModpackSettings.LoadSettings();
             //apply settings to UI elements
             UISettings.LoadSettings(true);
@@ -65,8 +65,10 @@ namespace RelhaxModpack
             //apply third party settings
             ThirdPartySettings.LoadSettings();
             //check for updates
-            progressIndicator.UpdateProgress(3, "CheckForUpdates");
-            //CheckForApplicationUpdates();
+            progressIndicator.UpdateProgress(3, Translations.GetTranslatedString("folderStructure"));
+            VerifyApplicationFolderStructure();
+            progressIndicator.UpdateProgress(4, Translations.GetTranslatedString("checkForUpdates"));
+            CheckForApplicationUpdates();
             //dispose of please wait here
             progressIndicator.Close();
             progressIndicator = null;
@@ -114,23 +116,27 @@ namespace RelhaxModpack
             {
                 try
                 {
-                    if (File.Exists("TODO"))
-                        File.Delete("TODO");
-                    client.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat", "TODO");
+                    if (File.Exists(Settings.ManagerInfoDatFile))
+                        File.Delete(Settings.ManagerInfoDatFile);
+                    client.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat", Settings.ManagerInfoDatFile);
 
                 }
                 catch (Exception e)
                 {
                     Logging.WriteToLog(string.Format("Failed to check for updates: \n{0}", e), Logfiles.Application, LogLevel.ApplicationHalt);
                     Application.Current.Shutdown();
+                    Close();
+                    return;
                 }
             }
             //get the version info string
-            string xmlString = Utils.GetStringFromZip("TODO", "manager_version.xml");
+            string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
             if(string.IsNullOrEmpty(xmlString))
             {
                 Logging.WriteToLog("Failed to get get xml string from managerInfo.dat", Logfiles.Application, LogLevel.ApplicationHalt);
                 Application.Current.Shutdown();
+                Close();
+                return;
             }
             //load the document info
             XmlDocument doc = new XmlDocument();
@@ -248,7 +254,7 @@ namespace RelhaxModpack
             //try to extract the update
             try
             {
-                using (ZipFile zip = new ZipFile(Settings.ApplicationUpdateFileName))
+                using (ZipFile zip = ZipFile.Read(Settings.ApplicationUpdateFileName))
                 {
                     zip.ExtractAll(Settings.ApplicationStartupPath);
                 }
@@ -297,9 +303,10 @@ namespace RelhaxModpack
             ChildProgressBar.Value = e.ProgressPercentage;
             float MBDownloaded = (float)e.BytesReceived / (float)Utils.BYTES_TO_MBYTES;
             float MBTotal = (float)e.TotalBytesToReceive / (float)Utils.BYTES_TO_MBYTES;
-            float timeToDownloadInSeconds = (float)e.TotalBytesToReceive / ((float)e.BytesReceived / (float)stopwatch.Elapsed.TotalSeconds);
-            string downloadMessage = string.Format("{0} {1}MB {2} {3}MB (ETA={4} sec)", Translations.GetTranslatedString("downloadingUpdate"),
-                MBDownloaded, Translations.GetTranslatedString("of"), MBTotal, timeToDownloadInSeconds);
+            MBDownloaded = (float)Math.Round(MBDownloaded,2);
+            MBTotal = (float)Math.Round(MBTotal,2);
+            string downloadMessage = string.Format("{0} {1}MB {2} {3}MB", Translations.GetTranslatedString("downloadingUpdate"),
+                MBDownloaded, Translations.GetTranslatedString("of"), MBTotal);
             InstallProgressTextBox.Text = downloadMessage;
         }
 
@@ -463,6 +470,26 @@ namespace RelhaxModpack
                 UISettings.DumpAllWindowColorSettingsToFile(saveFileDialog.FileName);
                 Logging.WriteToLog("Color settings saved");
             }
+        }
+
+        private bool VerifyApplicationFolderStructure()
+        {
+            Logging.WriteToLog("Verifying folder structure");
+            foreach(string s in Settings.FoldersToCheck)
+            {
+                try
+                {
+                    if (!Directory.Exists(s))
+                        Directory.CreateDirectory(s);
+                }
+                catch(Exception e)
+                {
+                    Logging.WriteToLog("Failed to check application folder sturcture\n" + e.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
+                    return false;
+                }
+            }
+            Logging.WriteToLog("Structure verified");
+            return true;
         }
     }
 }
