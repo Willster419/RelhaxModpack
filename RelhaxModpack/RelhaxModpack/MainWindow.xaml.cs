@@ -66,7 +66,7 @@ namespace RelhaxModpack
             ThirdPartySettings.LoadSettings();
             //check for updates
             progressIndicator.UpdateProgress(3, "CheckForUpdates");
-            CheckForApplicationUpdates();
+            //CheckForApplicationUpdates();
             //dispose of please wait here
             progressIndicator.Close();
             progressIndicator = null;

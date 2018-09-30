@@ -125,23 +125,59 @@ namespace RelhaxModpack
         {
             if (element is Control control)
             {
-                if(ApplyBrushSettings(control.Name, (string)control.Tag, brushSettings, out Brush colorToChange))
+                if(ApplyBrushSettings(control.Name, (string)control.Tag, brushSettings, out Brush backgroundColorToChange))
                 {
-                    control.Background = colorToChange;
+                    control.Background = backgroundColorToChange;
+                    if(ApplyTextBrushSettings(control.Name, (string)control.Tag, brushSettings, out Brush textColorToChange))
+                        control.Foreground = textColorToChange;
                 }
             }
             else if (element is Panel panel)
             {
-                if(ApplyBrushSettings(panel.Name, (string)panel.Tag, brushSettings, out Brush colorToChange))
+                if(ApplyBrushSettings(panel.Name, (string)panel.Tag, brushSettings, out Brush backgroundColorToChange))
                 {
-                    panel.Background = colorToChange;
+                    panel.Background = backgroundColorToChange;
                 }
             }  
         }
-
-        private static bool ApplyBrushSettings(string componentName, string componentTag, XmlNode brushSettings, out Brush colorToChange)
+        private static bool ApplyTextBrushSettings(string componentName, string componentTag, XmlNode brushSettings, out Brush textColorToChange)
         {
-            colorToChange = new SolidColorBrush();
+            bool somethingApplied = false;
+            textColorToChange = new SolidColorBrush();
+            //make sure type is set correctly
+            XmlAttribute brushType = brushSettings.Attributes["type"];
+            if (brushType == null)
+            {
+                Logging.WriteToLog("failed to apply brush setting: type attribute not exist!");
+                return false;
+            }
+            XmlAttribute textColor = brushSettings.Attributes["textColor"];
+            //try to apply the text color
+            if (textColor != null)
+            {
+                if(ParseColorFromString(textColor.InnerText, out Color color))
+                {
+                    textColorToChange = new SolidColorBrush(color);
+                    somethingApplied = true;
+                }
+                else
+                {
+                    Logging.WriteToLog(string.Format("failed to parse color to {0}, type={1}, color1={2}, ",
+                        componentTag, brushType.InnerText, textColor.InnerText), Logfiles.Application, LogLevel.Warning);
+                }
+            }
+            else
+            {
+                Logging.WriteToLog(string.Format("skipping text coloring of control {0}: textrColor is null", componentName),
+                    Logfiles.Application, LogLevel.Warning);
+            }
+            return somethingApplied;
+        }
+        private static bool ApplyBrushSettings(string componentName, string componentTag, XmlNode brushSettings,
+            out Brush backgroundColorToChange)
+        {
+            bool someThingApplied = false;
+            backgroundColorToChange = new SolidColorBrush();
             //make sure type is set correctly
             XmlAttribute brushType = brushSettings.Attributes["type"];
             if(brushType == null)
@@ -154,96 +190,102 @@ namespace RelhaxModpack
             XmlAttribute color2 = brushSettings.Attributes["color2"];
             XmlAttribute point1 = brushSettings.Attributes["point1"];
             XmlAttribute point2 = brushSettings.Attributes["point2"];
-            if(color1 == null)
+            if(color1 != null)
+            {
+                Point point_1;
+                Point point_2;
+                switch (brushType.InnerText)//TODO
+                {
+                    case "SolidColorBrush"://color=1
+                        if (ParseColorFromString(color1.InnerText, out Color kolor1_solid))
+                        {
+                            backgroundColorToChange = new SolidColorBrush(kolor1_solid);
+                            someThingApplied = true;
+                            break;
+                        }
+                        else
+                        {
+                            Logging.WriteToLog(string.Format("failed to parse color to {0}, type={1}, color1={2}, ",
+                                componentTag, brushType.InnerText, color1.InnerText), Logfiles.Application, LogLevel.Warning);
+                            break;
+                        }
+                    case "LinearGradientBrush"://color=2, point=2
+                        if (color2 == null)
+                        {
+                            Logging.WriteToLog(string.Format("skipping coloring of control {0}: color2 is null, type={1}",
+                                componentTag, brushType.InnerText), Logfiles.Application, LogLevel.Warning);
+                            break;
+                        }
+                        if (point1 == null)
+                        {
+                            Logging.WriteToLog(string.Format("skipping coloring of control {0}: point1 is null, type={1}",
+                                componentTag, brushType.InnerText), Logfiles.Application, LogLevel.Warning);
+                            break;
+                        }
+                        if (point2 == null)
+                        {
+                            Logging.WriteToLog(string.Format("skipping coloring of control {0}: point2 is null, type={1}",
+                                componentTag, brushType.InnerText), Logfiles.Application, LogLevel.Warning);
+                            break;
+                        }
+                        if (ParseColorFromString(color1.InnerText, out Color kolor1_linear) &&
+                            ParseColorFromString(color2.InnerText, out Color kolor2_linear))
+                        {
+                            try
+                            {
+                                //https://docs.microsoft.com/en-us/dotnet/api/system.windows.point.parse?view=netframework-4.7.2
+                                point_1 = Point.Parse(point1.InnerText);
+                                point_2 = Point.Parse(point2.InnerText);
+                            }
+                            catch
+                            {
+                                Logging.WriteToLog(string.Format("failed to parse points, point1={0}, point2={1}",
+                                    point1.InnerText, point2.InnerText), Logfiles.Application, LogLevel.Warning);
+                                break;
+                            }
+                            VerifyPoints(point_1);
+                            VerifyPoints(point_2);
+                            backgroundColorToChange = new LinearGradientBrush(kolor1_linear, kolor2_linear, point_1, point_2);
+                            someThingApplied = true;
+                            break;
+                        }
+                        else
+                        {
+                            Logging.WriteToLog(string.Format("failed to parse color to {0}, type={1}, color1={2}, color2={3}",
+                                componentTag, brushType.InnerText, color1.InnerText, color2.InnerText), Logfiles.Application, LogLevel.Warning);
+                            break;
+                        }
+                    case "RadialGradientBrush"://color=2
+                        if (color2 == null)
+                        {
+                            Logging.WriteToLog(string.Format("skipping coloring of control {0}: color2 is null, type={1}",
+                                componentTag, brushType.InnerText), Logfiles.Application, LogLevel.Warning);
+                            break;
+                        }
+                        if (ParseColorFromString(color1.InnerText, out Color kolor1_radial)
+                            && ParseColorFromString(color2.InnerText, out Color kolor2_radial))
+                        {
+                            backgroundColorToChange = new RadialGradientBrush(kolor1_radial, kolor2_radial);
+                            someThingApplied = true;
+                            break;
+                        }
+                        else
+                        {
+                            Logging.WriteToLog(string.Format("failed to apply color to {0}, type={1}, color1={2}, color2={3}",
+                                componentTag, brushType.InnerText, color1.InnerText, color2.InnerText), Logfiles.Application, LogLevel.Warning);
+                            break;
+                        }
+                    default:
+                        Logging.WriteToLog(string.Format("unknown type parameter{0} in component {1} ", brushType.InnerText, componentTag));
+                        break;
+                }
+            }
+            else
             {
                 Logging.WriteToLog(string.Format("skipping coloring of control {0}: color1 is null, type={1}",
-                    componentName,brushType.InnerText),Logfiles.Application,LogLevel.Warning);
-                return false;
+                    componentName, brushType.InnerText), Logfiles.Application, LogLevel.Warning);
             }
-            Point point_1;
-            Point point_2;
-            switch (brushType.InnerText)//TODO
-            {
-                case "SolidColorBrush"://color=1
-                    if(ParseColorFromString(color1.InnerText, out Color kolor1_solid))
-                    {
-                        colorToChange = new SolidColorBrush(kolor1_solid);
-                        return true;
-                    }
-                    else
-                    {
-                        Logging.WriteToLog(string.Format("failed to parse color to {0}, type={1}, color1={2}, ",
-                            componentTag, brushType.InnerText, color1.InnerText), Logfiles.Application, LogLevel.Warning);
-                        return false;
-                    }
-                case "LinearGradientBrush"://color=2, point=2
-                    if(color2 == null)
-                    {
-                        Logging.WriteToLog(string.Format("skipping coloring of control {0}: color2 is null, type={1}",
-                            componentTag, brushType.InnerText),Logfiles.Application,LogLevel.Warning);
-                        return false;
-                    }
-                    if(point1 == null)
-                    {
-                        Logging.WriteToLog(string.Format("skipping coloring of control {0}: point1 is null, type={1}",
-                            componentTag, brushType.InnerText),Logfiles.Application,LogLevel.Warning);
-                        return false;
-                    }
-                    if(point2 == null)
-                    {
-                        Logging.WriteToLog(string.Format("skipping coloring of control {0}: point2 is null, type={1}",
-                            componentTag, brushType.InnerText),Logfiles.Application,LogLevel.Warning);
-                        return false;
-                    }
-                    if(ParseColorFromString(color1.InnerText, out Color kolor1_linear) &&
-                        ParseColorFromString(color2.InnerText, out Color kolor2_linear))
-                    {
-                        try
-                        {
-                            //https://docs.microsoft.com/en-us/dotnet/api/system.windows.point.parse?view=netframework-4.7.2
-                            point_1 = Point.Parse(point1.InnerText);
-                            point_2 = Point.Parse(point2.InnerText);
-                        }
-                        catch
-                        {
-                            Logging.WriteToLog(string.Format("failed to parse points, point1={0}, point2={1}",
-                                point1.InnerText, point2.InnerText), Logfiles.Application, LogLevel.Warning);
-                            return false;
-                        }
-                        VerifyPoints(point_1);
-                        VerifyPoints(point_2);
-                        colorToChange = new LinearGradientBrush(kolor1_linear, kolor2_linear, point_1, point_2);
-                        return true;
-                    }
-                    else
-                    {
-                        Logging.WriteToLog(string.Format("failed to parse color to {0}, type={1}, color1={2}, color2={3}",
-                            componentTag, brushType.InnerText, color1.InnerText, color2.InnerText), Logfiles.Application, LogLevel.Warning);
-                        return false;
-                    }
-                case "RadialGradientBrush"://color=2
-                    if(color2 == null)
-                    {
-                        Logging.WriteToLog(string.Format("skipping coloring of control {0}: color2 is null, type={1}",
-                            componentTag, brushType.InnerText),Logfiles.Application,LogLevel.Warning);
-                        return false;
-                    }
-                    if(ParseColorFromString(color1.InnerText, out Color kolor1_radial)
-                        && ParseColorFromString(color2.InnerText, out Color kolor2_radial))
-                    {
-                        colorToChange = new RadialGradientBrush(kolor1_radial, kolor2_radial);
-                        return true;
-                    }
-                    else
-                    {
-                        Logging.WriteToLog(string.Format("failed to apply color to {0}, type={1}, color1={2}, color2={3}",
-                            componentTag, brushType.InnerText, color1.InnerText, color2.InnerText), Logfiles.Application, LogLevel.Warning);
-                        return false;
-                    }
-                default:
-                    Logging.WriteToLog(string.Format("unknown type parameter{0} in component {1} ",brushType.InnerText,componentTag));
-                    return false;
-            }
+            return someThingApplied;
         }
         
         public static bool ParseColorFromString(string color, out Color kolor)
