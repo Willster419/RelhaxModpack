@@ -1,4 +1,5 @@
 ﻿using Ionic.Zip;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -454,6 +455,96 @@ namespace RelhaxModpack
         public static void VerifySelection()
         {
             //verify selections and remove and rouge selections and report them
+        }
+        #endregion
+        #region Tanks Install Auto/Manuel Search Code
+        //checks the registry to get the location of where WoT is installed
+        public static bool AutoFindWoTDirectory(ref string WoTRoot)
+        {
+            List<string> searchPathWoT = new List<string>();
+            string[] registryPathArray = new string[] { };
+
+            // here we need the value for the searchlist
+            // check replay link
+            registryPathArray = new string[] { @"HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.wotreplay\shell\open\command", @"HKEY_CURRENT_USER\Software\Classes\.wotreplay\shell\open\command" };
+            foreach (string regEntry in registryPathArray)
+            {
+                // get values from from registry
+                object obj = Registry.GetValue(regEntry, "", -1);
+                // if it is not "null", it is containing possible a string
+                if (obj != null)
+                {
+                    try
+                    {
+                        // add the thing to the checklist, but remove the Quotation Marks in front of the string and the trailing -> " "%1"
+                        searchPathWoT.Add(((string)obj).Substring(1).Substring(0, ((string)obj).Length - 7));
+                    }
+                    catch
+                    { } // only exception catching
+                }
+            }
+
+            // here we need the value for the searchlist
+            string regPath = @"HKEY_CURRENT_USER\Software\Wargaming.net\Launcher\Apps\wot";
+            RegistryKey subKeyHandle = Registry.CurrentUser.OpenSubKey(regPath.Replace(@"HKEY_CURRENT_USER\", ""));
+            if (subKeyHandle != null)
+            {
+                // get the value names at the reg Key one by one
+                foreach (string valueName in subKeyHandle.GetValueNames())
+                {
+                    // read the value from the regPath
+                    object obj = Registry.GetValue(regPath, valueName, -1);
+                    if (obj != null)
+                    {
+                        try
+                        {
+                            // we did get only a path to used WoT folders, so add the game name to the path and add it to the checklist
+                            searchPathWoT.Add(Path.Combine((string)obj, "WorldOfTanks.exe"));
+                        }
+                        catch
+                        { } // only exception catching
+                    }
+                }
+            }
+
+            // here we need the value name for the searchlist
+            registryPathArray = new string[] { @"Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\MuiCache", @"Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Compatibility Assistant\Store" };
+            foreach (string p in registryPathArray)
+            {
+                // set the handle to the registry key
+                subKeyHandle = Registry.CurrentUser.OpenSubKey(p);
+                if (subKeyHandle == null) continue;            // subKeyHandle == null not existsting
+                // parse all value names of the registry key abouve
+                foreach (string valueName in subKeyHandle.GetValueNames())
+                {
+                    try
+                    {
+                        // if the lower string "worldoftanks.exe" is contained => match !!
+                        if (valueName.ToLower().Contains("Worldoftanks.exe".ToLower()))
+                        {
+                            // remove (replace it with "") the attachment ".ApplicationCompany" or ".FriendlyAppName" in the string and add the string to the searchlist
+                            searchPathWoT.Add(valueName.Replace(".ApplicationCompany", "").Replace(".FriendlyAppName", ""));
+                        }
+                    }
+                    catch
+                    { } // only exception catching
+                }
+            }
+
+            // this searchlist is long, maybe 30-40 entries (system depended), but the best possibility to find a currently installed WoT game.
+            foreach (string path in searchPathWoT)
+            {
+                if (File.Exists(path))
+                {
+                    Logging.WriteToLog(string.Format("valid game path found: {0}", path));
+                    // write the path to the central value holder
+                    WoTRoot = path;
+                    // return the path
+                    return true;
+                }
+            }
+            //return false if nothing found
+            return false;
         }
         #endregion
     }

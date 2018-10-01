@@ -114,10 +114,10 @@
                         <CheckBox Content="Minimze to system tray"/>
                     </StackPanel>
                     <CheckBox Content="Enable mods auto-sync" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" IsEnabled="False"/>
-                    <TextBox Grid.Column="1" HorizontalAlignment="Left" Height="46" Margin="0,35,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="257"/>
+                    <TextBox x:Name="AutoSyncSelectionFileTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="46" Margin="0,35,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="257"/>
                     <Button Content="Load selection file" Grid.Column="1" HorizontalAlignment="Left" Margin="0,15,0,0" VerticalAlignment="Top" Width="106"/>
                     <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="0,81,0,0" TextWrapping="Wrap" Text="Frequency: every" VerticalAlignment="Top"/>
-                    <TextBox Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="94,80,0,0" TextWrapping="Wrap" Text="xx" VerticalAlignment="Top" Width="25"/>
+                    <TextBox x:Name="AutoSyncFrequencyTexbox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="94,80,0,0" TextWrapping="Wrap" Text="xx" VerticalAlignment="Top" Width="25"/>
                     <ComboBox Grid.Column="1" HorizontalAlignment="Left" Margin="124,81,0,0" VerticalAlignment="Top" Width="67">
                         <System:String>Minuets</System:String>
                         <System:String>Hours</System:String>
@@ -190,7 +190,7 @@
                 </ComboBox>
             </GroupBox>
             <TextBlock HorizontalAlignment="Left" Margin="2,29,0,0" TextWrapping="Wrap" Text="Error Counter: X" VerticalAlignment="Top"/>
-            <Button Content="Cancel" HorizontalAlignment="Left" Margin="235,14,0,0" VerticalAlignment="Top" Width="118" Height="31"/>
+            <Button x:Name="CancelDownloadButton" Content="Cancel" HorizontalAlignment="Left" Margin="235,14,0,0" VerticalAlignment="Top" Width="118" Height="31"/>
         </Grid>
     </Grid>
 </Window>

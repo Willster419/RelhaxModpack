@@ -70,11 +70,10 @@ namespace RelhaxModpack
         #region Statics
         //file and folder macro locations
         public static string AppDataFolder = "";
-        public static string TanksLocation = "";
+        public static string WoTDirectory = "";
         //version informations
-        public static string TanksVersion = "";
-        public static string TanksOnlineFolderVersion = "";
-        //needed to create to first line to installedRelhaxFiles.log
+        public static string WoTClientVersion = "";
+        public static string WoTModpackOnlineFolderVersion = "";
         public static string DatabaseVersion = "";
         public static bool FirstLoad = false;
         public static bool FirstLoadToV2 = false;

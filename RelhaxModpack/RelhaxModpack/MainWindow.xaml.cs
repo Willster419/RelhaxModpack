@@ -27,6 +27,7 @@ namespace RelhaxModpack
     {
         private System.Windows.Forms.NotifyIcon RelhaxIcon;
         private Stopwatch stopwatch = new Stopwatch();
+        
         /// <summary>
         /// Creates the instance of the MainWindow class
         /// </summary>
@@ -52,7 +53,7 @@ namespace RelhaxModpack
             Translations.LoadTranslations();
             //apply translations to this window
             Translations.LocalizeWindow(this,true);
-            //create and localize the tray icons and menus
+            //create tray icons and menus
             CreateTray();
             //load and apply modpack settings
             progressIndicator.UpdateProgress(2, Translations.GetTranslatedString("loadingSettings"));
@@ -64,9 +65,22 @@ namespace RelhaxModpack
             CommandLineSettings.ParseCommandLineConflicts();
             //apply third party settings
             ThirdPartySettings.LoadSettings();
-            //check for updates
+            //verify folder paths
             progressIndicator.UpdateProgress(3, Translations.GetTranslatedString("folderStructure"));
+            //verify folder stucture for all folders in the directory
             VerifyApplicationFolderStructure();
+            //set the application appData direcotry
+            Settings.AppDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "Wargaming.net", "WorldOfTanks");
+            if(!Directory.Exists(Settings.AppDataFolder))
+            {
+                Logging.WriteToLog(string.Format("AppDataFolder does not exist at {0}, creating it",Settings.AppDataFolder),
+                    Logfiles.Application,LogLevel.Warning);
+                Directory.CreateDirectory(Settings.AppDataFolder);
+            }
+            //Build application macros TODO
+
+            //check for updates to database and application
             progressIndicator.UpdateProgress(4, Translations.GetTranslatedString("checkForUpdates"));
             CheckForApplicationUpdates();
             CheckForDatabaseUpdates(false, true);
@@ -88,6 +102,7 @@ namespace RelhaxModpack
                 RelhaxIcon = null;
             }
         }
+
         #region Tray code
         private void CreateTray()
         {
@@ -175,6 +190,7 @@ namespace RelhaxModpack
         }
         #endregion
 
+        #region Update Code
         private void CheckForDatabaseUpdates(bool refreshManagerInfo, bool init)
         {
             Logging.WriteToLog("Checking for database updates");
@@ -378,7 +394,7 @@ namespace RelhaxModpack
             ChildProgressBar.Value = ParentProgressBar.Value = TotalProgressBar.Value = 0;
             InstallProgressTextBox.Text = string.Empty;
         }
-
+        
         private void OnUpdateDownloadCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
             //stop the timer
@@ -447,8 +463,9 @@ namespace RelhaxModpack
                 MBDownloaded, Translations.GetTranslatedString("of"), MBTotal);
             InstallProgressTextBox.Text = downloadMessage;
         }
+        #endregion
 
-        #region all the dumb events for all the changing of settings
+        #region All the dumb events for all the changing of settings
         private void OnSelectionViewChanged(object sender, RoutedEventArgs e)
         {
             //selection view code for each new view goes here
@@ -571,6 +588,56 @@ namespace RelhaxModpack
 
         private void InstallModpackButton_Click(object sender, RoutedEventArgs e)
         {
+            //toggle buttons and reset UI
+            ResetUI();
+            ToggleUIButtons(false);
+            //settings for export mode
+            if(ModpackSettings.ExportMode)
+            {
+                //TODO
+            }
+            //parse WoT root directory
+            Logging.WriteToLog("started looking for WoT root directory", Logfiles.Application, LogLevel.Debug);
+            if(!Utils.AutoFindWoTDirectory(ref Settings.WoTDirectory) || ModpackSettings.ForceManuel)
+            {
+                Logging.WriteToLog("auto detect failed or user requests manual", Logfiles.Application, LogLevel.Debug);
+                Microsoft.Win32.OpenFileDialog manualWoTFind = new Microsoft.Win32.OpenFileDialog()
+                {
+                    InitialDirectory = string.IsNullOrWhiteSpace(Settings.WoTDirectory) ? Settings.ApplicationStartupPath : Settings.WoTDirectory,
+                    AddExtension = true,
+                    CheckFileExists = true,
+                    CheckPathExists = true,
+                    Filter = "WorldOfTanks.exe|WorldOfTanks.exe",
+                    Multiselect = false,
+                    RestoreDirectory = true,
+                    ValidateNames = true
+                };
+                if((bool)manualWoTFind.ShowDialog())
+                {
+                    Settings.WoTDirectory = manualWoTFind.FileName;
+                }
+                else
+                {
+                    Logging.WriteToLog("User Canceled installation");
+                    ToggleUIButtons(true);
+                    return;
+                }
+            }
+            Settings.WoTDirectory = Path.GetDirectoryName(Settings.WoTDirectory);
+            Logging.WriteToLog("Wot root directory parsed as " + Settings.WoTDirectory);
+            //check to make sure the application is not in the same directory as the WoT install
+            if (Settings.WoTDirectory.Equals(Settings.ApplicationStartupPath))
+            {
+                //display error and abort
+                MessageBox.Show(Translations.GetTranslatedString("moveOutOfTanksLocation"));
+                ToggleUIButtons(true);
+                return;
+            }
+            //get the version of tanks in the format
+            //of the res_mods version folder i.e. 0.9.17.0.3
+            string versionTemp = XMLUtils.GetXMLStringFromXPath(Path.Combine(Settings.WoTDirectory, "version.xml"), "//version.xml/version");
+            Settings.WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2);
+            //determine if current detected version of the game is supported
 
         }
 
@@ -628,6 +695,22 @@ namespace RelhaxModpack
             }
             Logging.WriteToLog("Structure verified");
             return true;
+        }
+
+        private void ToggleUIButtons(bool toggle)
+        {
+            List<FrameworkElement> controlsToToggle = Utils.GetAllWindowComponentsLogical(this, false);
+            //any to remove here
+            if (controlsToToggle.Contains(CancelDownloadButton))
+                controlsToToggle.Remove(CancelDownloadButton);
+            foreach (FrameworkElement control in controlsToToggle)
+            {
+                if (control is Button || control is CheckBox || control is RadioButton)
+                    control.IsEnabled = toggle;
+            }
+            //any to include here
+            AutoSyncFrequencyTexbox.IsEnabled = toggle;
+            AutoSyncSelectionFileTextBox.IsEnabled = toggle;
         }
     }
 }
