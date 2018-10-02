@@ -718,7 +718,7 @@
             to use the Relhax install engine
             </summary>
         </member>
-        <member name="M:RelhaxModpack.ThirdPartySettings.LoadSettings">
+        <member name="M:RelhaxModpack.ThirdPartySettings.LoadSettings(System.String)">
             <summary>
             Load the custom 3rd party settings from XML, if they exist
             </summary>

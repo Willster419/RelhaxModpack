@@ -64,7 +64,7 @@ namespace RelhaxModpack
             //check command line settings
             CommandLineSettings.ParseCommandLineConflicts();
             //apply third party settings
-            ThirdPartySettings.LoadSettings();
+            ThirdPartySettings.LoadSettings(Settings.ThirdPartySettingsFileName);
             //verify folder paths
             progressIndicator.UpdateProgress(3, Translations.GetTranslatedString("folderStructure"));
             //verify folder stucture for all folders in the directory
