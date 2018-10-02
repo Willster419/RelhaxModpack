@@ -638,7 +638,88 @@ namespace RelhaxModpack
             string versionTemp = XMLUtils.GetXMLStringFromXPath(Path.Combine(Settings.WoTDirectory, "version.xml"), "//version.xml/version");
             Settings.WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2);
             //determine if current detected version of the game is supported
+            //only if applicaition distro is not alhpa and databate distro is not test
+            if(Settings.ApplicationVersion != ApplicationVersions.Alpha && ModpackSettings.DatabaseDistroVersion != DatabaseVersions.Test)
+            {
+                //make an array of all the supported versions
+                string supportedClientsXML = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "supported_clients.xml");
+                if(string.IsNullOrWhiteSpace(supportedClientsXML))
+                {
+                    Logging.WriteToLog("Failed to parse supported_clients.xml from string from zipfile", Logfiles.Application, LogLevel.Exception);
+                    MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " supported_clients.xml");
+                    ToggleUIButtons(true);
+                    return;
+                }
+                XmlDocument doc = new XmlDocument();
+                try
+                {
+                    doc.LoadXml(supportedClientsXML);
+                }
+                catch(XmlException ex)
+                {
+                    Logging.WriteToLog("Failed to parse supported_clients.xml to xml\n" + ex.ToString(), Logfiles.Application, LogLevel.Exception);
+                    MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " supported_clients.xml");
+                    ToggleUIButtons(true);
+                    return;
+                }
+                //copy inner text of each WoT version into a string array
+                XmlNodeList supportedVersionsXML = XMLUtils.GetXMLNodesFromXPath(doc, "//versions/version");
+                string[] supportedVersionsString = new string[supportedVersionsXML.Count];
+                for (int i = 0; i < supportedVersionsXML.Count; i++)
+                {
+                    supportedVersionsString[i] = supportedVersionsXML[i].InnerText;
+                    //see if this supported client version is the same as what was parsed to be the current client version
+                    if (supportedVersionsXML[i].InnerText.Equals(Settings.WoTClientVersion))
+                    {
+                        //WoTClientVersions is already set, set the online folder
+                        Settings.WoTModpackOnlineFolderVersion = supportedVersionsXML[i].Attributes["folder"].Value;
+                    }
+                        
+                }
+                //checko see if array of supported clients cas the detected WoT client version
+                if(!supportedVersionsString.Contains(Settings.WoTClientVersion))
+                {
+                    //log and inform the user
+                    Logging.WriteToLog("Detected client version is " + Settings.WoTClientVersion + ", not supported",
+                        Logfiles.Application, LogLevel.Warning);
+                    Logging.WriteToLog("Supported versions are: " + string.Join(", ", supportedVersionsString));
+                    MessageBox.Show(string.Format("{0}: {1}\n{2}\n\n{3}:\n{4}", Translations.GetTranslatedString("detectedClientVersion"),
+                        Settings.WoTClientVersion, Translations.GetTranslatedString("supportNotGuarnteed"),
+                        Translations.GetTranslatedString("supportedClientVersions"), string.Join("\n", supportedVersionsString)),
+                        Translations.GetTranslatedString("critical"));
+                    //set the version and online folder to the last ones
+                    Settings.WoTClientVersion = supportedVersionsXML[supportedVersionsXML.Count - 1].InnerText;
+                    Settings.WoTModpackOnlineFolderVersion = supportedVersionsXML[supportedVersionsXML.Count - 1].Attributes["folder"].Value;
+                }
+                //if the user wants to, check if the database has actually changed
+                if(ModpackSettings.NotifyIfSameDatabase)
+                {
+                    //get the instal llog for last installed database version
+                    string installedfilesLogPath = Path.Combine(Settings.WoTDirectory, "logs", "installedRelhaxFiles.log");
+                    if (File.Exists(installedfilesLogPath))
+                    {
+                        //use index 0 of array, index 18 of string array
+                        string lastInstalledDatabaseVersion = File.ReadAllText(installedfilesLogPath).Split('\n')[0].Substring(18).Trim();
+                        if (Settings.DatabaseVersion.Equals(lastInstalledDatabaseVersion))
+                        {
+                            if (MessageBox.Show(Translations.GetTranslatedString("DatabaseVersionsSameBody"), Translations.GetTranslatedString("DatabaseVersionsSameHeader"), MessageBoxButton.YesNo) == MessageBoxResult.No)
+                            {
+                                ToggleUIButtons(true);
+                                return;
+                            }
+                        }
+                    }
+                }
+                //check to make sure that the md5hashdatabase is valid before using it
+                Logging.WriteToLog("Checking md5 database file");
+                if ((File.Exists(Settings.MD5HashDatabaseXmlFile)) && (!XMLUtils.IsValidXml(Settings.MD5HashDatabaseXmlFile)))
+                {
+                    Logging.WriteToLog("database file in invalid, deleting", Logfiles.Application, LogLevel.Warning);
+                    File.Delete(Settings.MD5HashDatabaseXmlFile);
+                }
+                //show the mod selection list
 
+            }
         }
 
         private void UninstallModpackButton_Click(object sender, RoutedEventArgs e)
