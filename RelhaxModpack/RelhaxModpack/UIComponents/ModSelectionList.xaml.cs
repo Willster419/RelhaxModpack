@@ -23,7 +23,9 @@ namespace RelhaxModpack.Windows
         private SolidColorBrush NotSelectedColor = new SolidColorBrush(Colors.White);
         private SolidColorBrush SelectedTextColor = SystemColors.ControlTextBrush;
         private SolidColorBrush NotSelectedTextColor = SystemColors.ControlTextBrush;
-        private List<Category> ParsedCategoryList;
+        public List<Category> ParsedCategoryList;
+        public List<Dependency> GlobalDependencies;
+        public List<Dependency> LogicalDependencies;
         public bool ContinueInstallation { get; set; } = false;
 
         public ModSelectionList()
@@ -33,7 +35,17 @@ namespace RelhaxModpack.Windows
 
         private void OnWindowLoad(object sender, RoutedEventArgs e)
         {
-
+            //init the lists
+            ParsedCategoryList = new List<Category>();
+            GlobalDependencies = new List<Dependency>();
+            LogicalDependencies = new List<Dependency>();
+            this.Hide();
+            //create async task to:
+            //-creat loading window
+            //-download online modInfo
+            //-parse more versoin stuff if need be
+            //-check db cache of local files
+            //-build UI
         }
 
         private void OnContinueInstallation(object sender, RoutedEventArgs e)
@@ -75,6 +87,16 @@ namespace RelhaxModpack.Windows
                     ClearSelections(package.Packages);
                 package.Checked = false;
             }
+        }
+
+        private void LoadSelection()
+        {
+
+        }
+
+        private void SaveSelection()
+        {
+
         }
     }
 }
