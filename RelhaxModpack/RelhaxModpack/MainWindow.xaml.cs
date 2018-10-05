@@ -718,8 +718,29 @@ namespace RelhaxModpack
                     File.Delete(Settings.MD5HashDatabaseXmlFile);
                 }
                 //show the mod selection list
-
+                ModSelectionList modSelectionList = new ModSelectionList()
+                {
+                    ContinueInstallation = false
+                };
+                modSelectionList.ShowDialog();
+                if (modSelectionList.ContinueInstallation)
+                {
+                    OnBeginInstallation(new List<Category>(modSelectionList.ParsedCategoryList));
+                    modSelectionList = null;
+                }
+                else
+                {
+                    ToggleUIButtons(true);
+                }
             }
+        }
+
+        private void OnBeginInstallation(List<Category> parsedCategoryList)
+        {
+            Logging.WriteToLog("Starting an installation (timer starts now)");
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Restart();
+            //perform calculations
         }
 
         private void UninstallModpackButton_Click(object sender, RoutedEventArgs e)
