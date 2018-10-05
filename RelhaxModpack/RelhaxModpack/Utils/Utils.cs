@@ -409,6 +409,13 @@ namespace RelhaxModpack
             var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
             return Encoding.UTF8.GetString(base64EncodedBytes);
         }
+        public static bool IsWoTRunning(string WoTPath)
+        {
+            //get list of running instances of WoT
+            //check if path of exe is the same as the one we're looking at
+            //if to return true
+            return false;
+        }
         #endregion
         #region Selections parsing
         public static void ParseDeveloperSelections()

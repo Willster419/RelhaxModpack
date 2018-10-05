@@ -740,7 +740,17 @@ namespace RelhaxModpack
             Logging.WriteToLog("Starting an installation (timer starts now)");
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Restart();
+            //check if wot is running
+            while (Utils.IsWoTRunning(Settings.WoTDirectory))
+            {
+                System.Threading.Thread.Sleep(100);
+                //create window to determine if cancel, wait, kill TODO
+
+            }
+            //build macro hash for install
+            //TODO?
             //perform calculations
+
         }
 
         private void UninstallModpackButton_Click(object sender, RoutedEventArgs e)
