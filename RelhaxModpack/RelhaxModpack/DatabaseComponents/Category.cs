@@ -10,8 +10,6 @@ namespace RelhaxModpack
     public class Category
     {
         public string Name = "";
-        //for super extraction, the group that should be used for the category
-        public int InstallGroup = 0;
         //the TabPage refrence for the UI
         public TabPage @TabPage = null;
         //the holder for all packages of a catagory
@@ -24,7 +22,6 @@ namespace RelhaxModpack
         public List<Dependency> Dependencies = new List<Dependency>();
         public Category()
         {
-            InstallGroup = 0;
         }
         //returns the mod with the specified name
         //if it does not exist, it returns null
@@ -48,6 +45,26 @@ namespace RelhaxModpack
         public override string ToString()
         {
             return Name;
+        }
+        public List<SelectablePackage> GetFlatPackageList()
+        {
+            List<SelectablePackage> selectablePackages = new List<SelectablePackage>();
+            foreach(SelectablePackage selectablePackage in Packages)
+            {
+                selectablePackages.Add(selectablePackage);
+                if (selectablePackage.Packages.Count > 0)
+                    GetFlatPackageList(selectablePackage.Packages);
+            }
+            return selectablePackages;
+        }
+        public void GetFlatPackageList(List<SelectablePackage> selectablePackages)
+        {
+            foreach (SelectablePackage selectablePackage in selectablePackages)
+            {
+                selectablePackages.Add(selectablePackage);
+                if (selectablePackage.Packages.Count > 0)
+                    GetFlatPackageList(selectablePackage.Packages);
+            }
         }
     }
 }
