@@ -107,7 +107,6 @@
     <Compile Include="DatabaseComponents\DatabaseLogic.cs" />
     <Compile Include="DatabaseComponents\DatabasePackage.cs" />
     <Compile Include="DatabaseComponents\Dependency.cs" />
-    <Compile Include="DatabaseComponents\LogicalDependency.cs" />
     <Compile Include="DatabaseComponents\Media.cs" />
     <Compile Include="DatabaseComponents\PackageComparer.cs" />
     <Compile Include="DatabaseComponents\SelectablePackage.cs" />

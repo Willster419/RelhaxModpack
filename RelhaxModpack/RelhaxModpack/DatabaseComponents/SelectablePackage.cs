@@ -334,14 +334,6 @@ namespace RelhaxModpack
         /// </summary>
         public List<SelectablePackage> Packages = new List<SelectablePackage>();
         /// <summary>
-        /// list of LogicalDependency package names
-        /// </summary>
-        public List<LogicalDependency> LogicalDependencies = new List<LogicalDependency>();
-        /// <summary>
-        /// list of Dependency package names
-        /// </summary>
-        public List<Dependency> Dependencies = new List<Dependency>();
-        /// <summary>
         /// list of media preview items associated with this package, shown in the preview window on right click of component
         /// </summary>
         public List<Media> PictureList = new List<Media>();

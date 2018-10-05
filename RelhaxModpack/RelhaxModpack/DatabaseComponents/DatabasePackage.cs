@@ -71,10 +71,12 @@ namespace RelhaxModpack.DatabaseComponents
         /// list containing all shortcuts that could be created based on package data
         /// </summary>
         public List<Shortcut> Shortcuts = new List<Shortcut>();
+        public int ExtractionLevel = 5;
         /// <summary>
         /// used to inentify [if a PackageName confilct occurs] where in the xml file the conflict is
         /// </summary>
         public int CheckDatabaseListIndex = 0;
+        public List<Dependency> Dependencies = new List<Dependency>();
         public abstract override string ToString();
         /// <summary>
         /// Provides (if possible) a complete tree style path in for the cateogry views

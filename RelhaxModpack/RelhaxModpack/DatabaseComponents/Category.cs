@@ -12,7 +12,7 @@ namespace RelhaxModpack
         public string Name = "";
         //the TabPage refrence for the UI
         public TabPage @TabPage = null;
-        //the holder for all packages of a catagory
+        //the holder for all packages of a catagory. UI only
         public SelectablePackage CategoryHeader = null;
         public List<SelectablePackage> Packages = new List<SelectablePackage>();
 
@@ -57,7 +57,7 @@ namespace RelhaxModpack
             }
             return selectablePackages;
         }
-        public void GetFlatPackageList(List<SelectablePackage> selectablePackages)
+        private void GetFlatPackageList(List<SelectablePackage> selectablePackages)
         {
             foreach (SelectablePackage selectablePackage in selectablePackages)
             {
