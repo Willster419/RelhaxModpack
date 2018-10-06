@@ -239,16 +239,6 @@
             the list of child SelectablePackage entries in this instance of SelectablePackages
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.LogicalDependencies">
-            <summary>
-            list of LogicalDependency package names
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.SelectablePackage.Dependencies">
-            <summary>
-            list of Dependency package names
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.SelectablePackage.PictureList">
             <summary>
             list of media preview items associated with this package, shown in the preview window on right click of component

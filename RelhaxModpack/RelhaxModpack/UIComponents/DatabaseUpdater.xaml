@@ -15,126 +15,80 @@
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
         <Grid Grid.Column="2" HorizontalAlignment="Left" Height="100" Margin="179,269,0,0" VerticalAlignment="Top" Width="100"/>
         <TabControl HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" >
-            <TabItem Header="Auth Status">
+            <TabItem x:Name="AuthStatusTab" Header="Auth Status">
                 <Grid Background="#FFE5E5E5">
-                    <Grid HorizontalAlignment="Stretch" Height="161" VerticalAlignment="Top">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="0">
-                            <TextBlock TextWrapping="Wrap" Text="Current Authorization Status"/>
-                        </Border>
-                        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="0">
-                            <Button Content="Request Level 1 Authorization"/>
-                        </Border>
-                        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Grid.Column="0">
-                            <Button Content="Request Level 2 Authorization"/>
-                        </Border>
-                        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="3" Grid.Column="0">
-                            <Button Content="Request Level 3 Authorization"/>
-                        </Border>
-                        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="1">
-                            <TextBlock TextWrapping="Wrap" Text="0"/>
-                        </Border>
-                        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="1">
-                            <TextBox TextWrapping="Wrap" />
-                        </Border>
-                        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Grid.Column="1">
-                            <TextBox TextWrapping="Wrap" />
-                        </Border>
-                        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="3" Grid.Column="1">
-                            <TextBox TextWrapping="Wrap" />
-                        </Border>
-                    </Grid>
+                    <TextBlock x:Name="PasswordLabel" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Please Enter password to use this tool" VerticalAlignment="Top"/>
+                    <TextBox x:Name="PaswordTextbox" HorizontalAlignment="Left" Height="23" Margin="10,26,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="200"/>
+                    <Button x:Name="PasswordButton" Content="Button" HorizontalAlignment="Left" Margin="10,49,0,0" VerticalAlignment="Top" Width="75"/>
+
                 </Grid>
             </TabItem>
-            <TabItem Header="Update Database">
+            <TabItem x:Name="UpdateDatabaeTab" Header="Update Database">
                 <Grid Background="#FFE5E5E5">
                     <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-                        <TextBox Height="23" TextWrapping="Wrap" Text="Step 0: Pull latest database!!!" TextAlignment="Center"/>
-                        <Button Content="Step 1: Load modInfo.xml"/>
-                        <TextBox Height="23" TextWrapping="Wrap" />
-                        <Button Content="Step 2: Run script CreateDatabase.php"/>
-                        <Button Content="Step 3: Prepare database update (via online method)"/>
-                        <Button Content="(Advanced) (local method)"/>
-                        <Button Content="Step 4: Upload changed files and save databaseUpdate.txt to disk"/>
-                        <Button Content="Step 5: Upload databaseUpdate.txt (in case manual changes)"/>
-                        <Button Content="Step 6: Run script CreateModInfo.php"/>
-                        <Button Content="Step 7: Run script CreateManagerInfo.php"/>
-                        <TextBox Height="35" TextWrapping="Wrap" Text="Step 8: Commit modInfo.xml and databaseUpdate.txt update with message: &quot;made database public @123gauss&quot;" TextAlignment="Center"/>
-                        <TextBox Height="23" TextWrapping="Wrap" Text="Step 9: Post database update on discord/forums"/>
+                        <TextBox x:Name="UpdateDatabaseStep0" Height="23" TextWrapping="Wrap" Text="Step 0: Pull latest database!!!" TextAlignment="Left" IsReadOnly="True"/>
+                        <Button x:Name="UpdateDatabaseStep1" Content="Step 1: Load modInfo.xml" HorizontalContentAlignment="Left"/>
+                        <Button x:Name="UpdateDatabaseStep2" Content="Step 2: Update remote database.xml" HorizontalContentAlignment="Left"/>
+                        <Button x:Name="UpdateDatabaseStep3" Content="Step 3: Prepare database update" HorizontalContentAlignment="Left"/>
+                        <Button x:Name="UpdateDatabaseStep4" Content="Step 4: Upload changed files and save databaseUpdate.txt to disk" HorizontalContentAlignment="Left"/>
+                        <Button x:Name="UpdateDatabaseStep5" Content="Step 5: Upload databaseUpdate.txt (in case manual changes)" HorizontalContentAlignment="Left"/>
+                        <Button x:Name="UpdateDatabaseStep6" Content="Step 6: Run script CreateModInfo.php" HorizontalContentAlignment="Left"/>
+                        <Button x:Name="UpdateDatabaseStep7" Content="Step 7: Run script CreateManagerInfo.php" HorizontalContentAlignment="Left"/>
+                        <TextBox x:Name="UpdateDatabaseStep8" Height="35" TextWrapping="Wrap" Text="Step 8: Commit modInfo.xml and databaseUpdate.txt update with message: &quot;made database public @123gauss&quot;" IsReadOnly="True"/>
                         <StackPanel Orientation="Horizontal">
-                            <Button Content="NA"  Margin="0,0,0,0"/>
-                            <Button Content="EU ENG"  Margin="5,0,0,0"/>
-                            <Button Content="EU GER"  Margin="5,0,0,0"/>
+                            <TextBox x:Name="UpdateDatabaseStep9" Height="23" TextWrapping="Wrap" Text="Step 9: Post database update on discord/forums" Margin="0,0,5,0" IsReadOnly="True"/>
+                            <Button x:Name="UpdateDatabasestep9_NA_ENG" Content="NA"  Margin="0,0,0,0"/>
+                            <Button x:Name="UpdateDatabaseStep9_EU_ENG" Content="EU ENG"  Margin="5,0,0,0"/>
+                            <Button x:Name="UpdateDatabaseStep9_EU_GER" Content="EU GER"  Margin="5,0,0,0"/>
                         </StackPanel>
                     </StackPanel>
+                    <TextBox HorizontalAlignment="Left" Height="65" Margin="0,315,0,0" TextWrapping="Wrap" Text="File X of Y: Filename.zip&#x0a;Size: x&#x0a;Time: y&#x0a;Hash: z" VerticalAlignment="Top" Width="388"/>
+                    <ProgressBar HorizontalAlignment="Left" Height="21" Margin="0,380,0,0" VerticalAlignment="Top" Width="388"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Update Application">
+            <TabItem x:Name="UpdateApplicationTab" Header="Update Application">
                 <Grid Background="#FFE5E5E5">
                     <StackPanel >
-                        <TextBox Height="23" TextWrapping="Wrap" Text="Step 0: Verify Application Works, is number updated"/>
-                        <TextBox Height="23" TextWrapping="Wrap" Text="Step 1: Create Beta Version"/>
-                        <TextBox Height="23" TextWrapping="Wrap" Text="Step 2: Create and sign stable version"/>
-                        <TextBox Height="23" TextWrapping="Wrap" Text="Step 3: Update virustotal.com link"/>
-                        <TextBox Height="23" TextWrapping="Wrap" Text="Step 4: Update on github"/>
-                        <TextBox Height="23" TextWrapping="Wrap" Text="Step 5: Upload new stable and beta applications"/>
-                        <TextBox Height="23" TextWrapping="Wrap" Text="Step 6: Update manager_info.xml file"/>
-                        <Button Content="Step 7: Run script CreateUpdatePackages.php"/>
-                        <Button Content="Step 8: Run script CreateManagerInfo.php"/>
-                        <TextBox Height="23" TextWrapping="Wrap" Text="Step 9: Post update notes on discord, slack, forums"/>
+                        <TextBox x:Name="UpdateApplicationStep0" Height="23" TextWrapping="Wrap" Text="Step 0: Verify Application Works, is number updated"/>
+                        <TextBox x:Name="UpdateApplicationStep1" Height="23" TextWrapping="Wrap" Text="Step 1: Create Beta Version"/>
+                        <TextBox x:Name="UpdateApplicationStep2" Height="23" TextWrapping="Wrap" Text="Step 2: Create and sign stable version"/>
+                        <TextBox x:Name="UpdateApplicationStep3" Height="23" TextWrapping="Wrap" Text="Step 3: Update virustotal.com link"/>
+                        <TextBox x:Name="UpdateApplicationStep4" Height="23" TextWrapping="Wrap" Text="Step 4: Update on github"/>
+                        <TextBox x:Name="UpdateApplicationStep5" Height="23" TextWrapping="Wrap" Text="Step 5: Upload new stable and beta applications"/>
+                        <TextBox x:Name="UpdateApplicationStep6" Height="23" TextWrapping="Wrap" Text="Step 6: Update manager_info.xml file"/>
+                        <Button x:Name="UpdateApplicationStep7" Content="Step 7: Run script CreateUpdatePackages.php" HorizontalContentAlignment="Left"/>
+                        <Button x:Name="UpdateApplicationStep8" Content="Step 8: Run script CreateManagerInfo.php" HorizontalContentAlignment="Left"/>
+                        <TextBox x:Name="UpdateApplicationStep9" Height="23" TextWrapping="Wrap" Text="Step 9: Post update notes on discord, slack, forums"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="Clean Zip folders">
+            <TabItem x:Name="CleanZipFoldersTab" Header="Clean Zip folders">
                 <Grid Background="#FFE5E5E5">
-                    <StackPanel >
-                        <Button Content="Step 1: Run script CreateOutdatedFileList.php"/>
-                        <TextBlock TextWrapping="Wrap" Text="Step 2: Specify online folder to clean:"/>
+                    <StackPanel>
+                        <TextBlock x:Name="CleanZipFoldersOnlineMethod" Text="--Online Method--" HorizontalAlignment="Center"/>
+                        <Button Content="Step 1: Run script CreateOutdatedFileList.php" HorizontalContentAlignment="Left"/>
                         <TextBox Height="23" TextWrapping="Wrap" Margin="0,0,0,0"/>
-                        <Button Content="Step 3: Start Process to delete old zip files"/>
+                        <Button Content="Step 3: Start Process to delete old zip files" HorizontalContentAlignment="Left"/>
+                        <TextBlock x:Name="CleanZipFoldersOfflineMethod" Text="--Offline Method--" HorizontalAlignment="Center"/>
+                        <Button Content="Step 1: Load database files" HorizontalContentAlignment="Left"/>
+                        <Button Content="Step 2: Load folder of zip files" HorizontalContentAlignment="Left"/>
+                        <Button Content="Step 3: Delete files" HorizontalContentAlignment="Left"/>
+                        <TextBlock x:Name="CleanZipFoldersListHeader" Text="--List--" HorizontalAlignment="Center"/>
                     </StackPanel>
+                    <TextBox x:Name="CleanZipFoldersTextbox" HorizontalAlignment="Left" Height="227" Margin="0,174,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="388"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Database Output">
+            <TabItem x:Name="DatabaseOutputTab" Header="Database Output">
                 <Grid Background="#FFE5E5E5">
                     <StackPanel >
-                        <Button Content="Step 1: Load database"/>
-                        <TextBox Height="35" TextWrapping="Wrap" />
-                        <Button Content="Step 2a: Generate internal spreadsheet (csv)"/>
-                        <Button Content="Step 2b: Generate user spreadsheet (csv)"/>
+                        <Button x:Name="DatabaseOutputStep1" Content="Step 1: Load database" HorizontalContentAlignment="Left"/>
+                        <TextBox x:Name="DatabaseOutputLoadedPath" Height="35" TextWrapping="Wrap" />
+                        <Button x:Name="DatabaseOutputStep2a" Content="Step 2a: Generate internal spreadsheet (csv)" HorizontalContentAlignment="Left"/>
+                        <Button x:Name="DatabaseOutputStep2b" Content="Step 2b: Generate user spreadsheet (csv)" HorizontalContentAlignment="Left"/>
                     </StackPanel>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Create Password">
-                <Grid Background="#FFE5E5E5">
-                    <Grid HorizontalAlignment="Stretch" Height="135" VerticalAlignment="Top" >
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="20" MinHeight="20"/>
-                            <RowDefinition Height="20" MinHeight="20"/>
-                            <RowDefinition Height="20" MinHeight="20"/>
-                            <RowDefinition Height="20" MinHeight="20"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Text="Authorization Level" Margin="10,0,0,0"/>
-                        <RadioButton Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top" Content="L1" Margin="10,0,0,0" />
-                        <RadioButton Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top" Content="L2" Margin="46,0,0,0" />
-                        <RadioButton Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top" Content="L3" Margin="82,0,0,0" />
-                        <TextBox Grid.Row="2" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Margin="0,0,80,0"/>
-                        <Button Grid.Row="2" Content="Read" HorizontalAlignment="Right" Margin="0,0,0,0" VerticalAlignment="Top" Width="75"/>
-                        <TextBox Grid.Row="3" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Margin="0,0,80,0"/>
-                        <Button Grid.Row="3" Content="Generate" HorizontalAlignment="Right" Margin="0,0,0,0" VerticalAlignment="Top" Width="75"/>
-                    </Grid>
                 </Grid>
             </TabItem>
         </TabControl>
-        <TextBox Grid.Column="2" HorizontalAlignment="Stretch" Margin="0" TextWrapping="Wrap" VerticalAlignment="Stretch" />
+        <TextBox x:Name="LogOutput" Grid.Column="2" HorizontalAlignment="Stretch" Margin="0" TextWrapping="Wrap" VerticalAlignment="Stretch" />
     </Grid>
 </local:RelhaxWindow>
