@@ -30,11 +30,17 @@ namespace RelhaxModpack.Windows
             get { return LoadingProgressBar.Maximum; }
             set { LoadingProgressBar.Maximum = value; }
         }
-        
+
         public string Message
         {
             get { return LoadingText.Text; }
             set { LoadingText.Text = value; }
+        }
+
+        public double ProgressValue
+        {
+            get { return LoadingProgressBar.Value; }
+            set { LoadingProgressBar.Value = value; }
         }
 
         public ProgressIndicator()
