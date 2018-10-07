@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -24,6 +25,7 @@ namespace RelhaxModpack
         public const long BYTES_TO_MBYTES = 1048576;
         //MACROS TODO
         #endregion
+
         #region Application Utils
         /// <summary>
         /// Return the entire assembely version
@@ -42,6 +44,7 @@ namespace RelhaxModpack
             return CiInfo.BuildTag + " (EN-US date format)";
         }
         #endregion
+
         #region Window Utils
         /// <summary>
         /// Get a list of all visual components in the window
@@ -111,6 +114,7 @@ namespace RelhaxModpack
             }
         }
         #endregion
+
         #region File Utilities
         /// <summary>
         /// Creates an MD5 hash calculation of the input file
@@ -289,7 +293,8 @@ namespace RelhaxModpack
             }
         }
         #endregion
-        #region data type from string processing/parsing
+
+        #region Data type from string processing/parsing
         /// <summary>
         /// Try to parse a boolean value based on string input
         /// </summary>
@@ -327,13 +332,16 @@ namespace RelhaxModpack
             else return defaultValue;
         }
         #endregion
-        #region duplicates checking
+
+        #region Duplicates checking
 
         #endregion
-        #region mods list sorting
+
+        #region Mods list sorting
 
         #endregion
-        #region generic utils
+
+        #region Generic utils
         /// <summary>
         /// https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings-in-c
         /// </summary>
@@ -409,14 +417,51 @@ namespace RelhaxModpack
             var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
             return Encoding.UTF8.GetString(base64EncodedBytes);
         }
-        public static bool IsWoTRunning(string WoTPath)
+        public static bool IsProcessRunning(string processName, string pathToMatch = "")
         {
-            //get list of running instances of WoT
             //check if path of exe is the same as the one we're looking at
-            //if to return true
+            //first check to make sure wot path is legit
+            bool checkWithPath = true;
+            if(string.IsNullOrEmpty(pathToMatch))
+            {
+                Logging.WriteToLog(nameof(pathToMatch) + "Is empty, cannot check for direct path, only checking for num processes",
+                    Logfiles.Application, LogLevel.Error);
+                checkWithPath = false;
+            }
+            //get list of running instances of WoT
+            //TO GET PROCESS NAME: Process.GetCurrentProcess().ProcessName
+            Process[] processes = Process.GetProcessesByName(processName);
+            //check if three are any at all
+            if(processes.Length == 0)
+            {
+                return false;
+            }
+            //first check if the number is 1 or less, if so stop here
+            else if (processes.Length == 1)
+                return false;
+            //if not checking for path, we don't know if is the direct path, 
+            else if (!checkWithPath)
+                return true;
+            else
+            {
+                foreach (Process p in processes)
+                {
+                    if (pathToMatch.Equals(Path.GetDirectoryName(p.StartInfo.FileName)))
+                    {
+                        Logging.WriteToLog(string.Format("Matched process name {0} to path {1}", p.ProcessName, pathToMatch),
+                            Logfiles.Application, LogLevel.Debug);
+                    }
+                }
+            }
             return false;
         }
+        public static void BuildMacroList()
+        {
+            //TODO
+        }
+
         #endregion
+
         #region Selections parsing
         public static void ParseDeveloperSelections()
         {
@@ -464,6 +509,7 @@ namespace RelhaxModpack
             //verify selections and remove and rouge selections and report them
         }
         #endregion
+
         #region Tanks Install Auto/Manuel Search Code
         //checks the registry to get the location of where WoT is installed
         public static bool AutoFindWoTDirectory(ref string WoTRoot)
