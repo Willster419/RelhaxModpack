@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Xml;
+using System.Net;
 
 namespace RelhaxModpack.Windows
 {
@@ -33,6 +35,7 @@ namespace RelhaxModpack.Windows
         public List<Dependency> GlobalDependencies;
         public List<Dependency> LogicalDependencies;
         public bool ContinueInstallation { get; set; } = false;
+        private bool developerSelectionsReady = false;
         private ProgressIndicator loadingProgress;
 
         public ModSelectionList()
@@ -94,24 +97,109 @@ namespace RelhaxModpack.Windows
         {
             RelhaxProgress loadProgress = new RelhaxProgress()
             {
-                ChildProgressTotal = 8,
+                ChildProgressTotal = 4,
                 ChildProgressCurrent = 1,
                 ReportMessage = Translations.GetTranslatedString("downloadingDatabase")
             };
             progress.Report(loadProgress);
-            //-download online modInfo
+            //download online modInfo into xml file
+            XmlDocument modInfoDocument = new XmlDocument();
+            string modInfoXml = "";
+            //get is based on different types of database mode
+            switch(ModpackSettings.DatabaseDistroVersion)
+            {
+                case DatabaseVersions.Stable:
+                    //make string
+                    string modInfoxmlURL = Settings.DefaultStartAddress + "modInfo.dat";
+                    modInfoxmlURL = modInfoxmlURL.Replace("{onlineFolder}", Settings.WoTModpackOnlineFolderVersion);
+                    //download dat file
+                    string tempDownloadLocation = System.IO.Path.Combine(Settings.RelhaxTempFolder, "modInfo.dat");
+                    using (WebClient client = new WebClient())
+                    {
+                        try
+                        {
+                            client.DownloadFile(modInfoxmlURL, tempDownloadLocation);
+                        }
+                        catch (Exception ex)
+                        {
+                            Logging.WriteToLog("Failed to download managerInfo.dat from " + modInfoxmlURL + "\n" + ex.ToString(),
+                                Logfiles.Application, LogLevel.Exception);
+                            return false;
+                        }
+                    }
+                    //extract modinfo xml string
+                    modInfoXml = Utils.GetStringFromZip(tempDownloadLocation, "modInfo.xml");
+                    break;
+                case DatabaseVersions.Beta:
+                    //load string constant url from manager info xml
+                    string managerInfoXml = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
+                    if (string.IsNullOrWhiteSpace(managerInfoXml))
+                    {
+                        Logging.WriteToLog("Failed to parse manager_version.xml from string from zipfile", Logfiles.Application, LogLevel.Exception);
+                        MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " manager_version.xml");
+                        return false;
+                    }
+                    //get download URL of static beta database location
+                    string downloadURL = XMLUtils.GetXMLStringFromXPath(managerInfoXml, "//version/database_beta_url", "manager_version.xml");
+                    if(string.IsNullOrWhiteSpace(downloadURL))
+                    {
+                        Logging.WriteToLog("Failed to get xpath value //version/database_beta_url from manager_version.xml",
+                            Logfiles.Application, LogLevel.Exception);
+                        return false;
+                    }
+                    //download document from string
+                    using (WebClient client = new WebClient())
+                    {
+                        modInfoXml = client.DownloadString(downloadURL);
+                    }
+                    break;
+                case DatabaseVersions.Test:
+                    //make string
+                    string modInfoFilePath = ModpackSettings.CustomModInfoPath;
+                    if(string.IsNullOrWhiteSpace(modInfoFilePath))
+                    {
+                        modInfoFilePath = System.IO.Path.Combine(Settings.ApplicationStartupPath, "modInfo.xml");
+                    }
+                    //load modinfo xml
+                    if (System.IO.File.Exists(modInfoFilePath))
+                        modInfoXml = System.IO.File.ReadAllText(modInfoFilePath);
+                    else
+                    {
+                        Logging.WriteToLog("modInfo.xml does not exist at " + modInfoFilePath, Logfiles.Application, LogLevel.Error);
+                        return false;
+                    }
+                    break;
+            }
+            if (string.IsNullOrWhiteSpace(modInfoXml))
+            {
+                Logging.WriteToLog("Failed to read modInfoxml xml string", Logfiles.Application, LogLevel.Exception);
+                MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
+                return false;
+            }
+            try
+            {
+                modInfoDocument.LoadXml(modInfoXml);
+            }
+            catch (XmlException ex)
+            {
+                Logging.WriteToLog("Failed to parse modInfoxml from xml string\n" + ex.ToString(), Logfiles.Application, LogLevel.Exception);
+                MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
+                return false;
+            }
+            //if not stable db, update current version and online folder version from modInfoxml itself
+            if(ModpackSettings.DatabaseDistroVersion != DatabaseVersions.Stable)
+            {
+                Settings.WoTModpackOnlineFolderVersion = XMLUtils.GetXMLStringFromXPath(modInfoDocument, "//modInfoAlpha.xml@onlineFolder");
+                Settings.WoTClientVersion = XMLUtils.GetXMLStringFromXPath(modInfoDocument, "//modInfoAlpha.xml@version");
+            }
+            //parse the modInfoXml to list in memory
 
-            //-parse more versoin stuff if need be
-            loadProgress.ChildProgressCurrent++;
-            loadProgress.ReportMessage = Translations.GetTranslatedString("parsingDatabase");
-            progress.Report(loadProgress);
-
-            //-check db cache of local files
+            //check db cache of local files
             loadProgress.ChildProgressCurrent++;
             loadProgress.ReportMessage = Translations.GetTranslatedString("verifyingDownloadCache");
             progress.Report(loadProgress);
 
-            //-build UI
+            //build UI
             loadProgress.ChildProgressCurrent++;
             loadProgress.ReportMessage = Translations.GetTranslatedString("loadingUI");
             progress.Report(loadProgress);
