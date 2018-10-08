@@ -15,6 +15,7 @@ namespace RelhaxModpack
     {
         //list of linked mods and configs that use 
         public List<DatabaseLogic> DatabasePackageLogic = new List<DatabaseLogic>();
+        public List<Dependency> Dependencies = new List<Dependency>();
         //acts as a NOT flag
         public bool NegateFlag;
         //handle linked dependencies as AND or OR logic

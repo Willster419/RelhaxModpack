@@ -9,90 +9,85 @@
             a catagory is what makes up each tab in the mod selection dislpay window. It holds the first level of list of SelectablePackages
             </summary>
         </member>
-        <member name="T:RelhaxModpack.DatabaseComponents.DatabasePackage">
+        <member name="T:RelhaxModpack.DatabasePackage">
             <summary>
             A database component is an abstract class for all Components within the database
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.PackageName">
+        <member name="F:RelhaxModpack.DatabasePackage.PackageName">
             <summary>
             a unique identifier for each component in the database. No two components will have the same PackageName
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.Version">
+        <member name="F:RelhaxModpack.DatabasePackage.Version">
             <summary>
             a method to keep track of the version of the package
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.Timestamp">
+        <member name="F:RelhaxModpack.DatabasePackage.Timestamp">
             <summary>
             used to determine when the package entry was last modified
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.ZipFile">
+        <member name="F:RelhaxModpack.DatabasePackage.ZipFile">
             <summary>
             the zip file to extract (can be "")
             </summary>
         </member>
-        <member name="P:RelhaxModpack.DatabaseComponents.DatabasePackage.Enabled">
+        <member name="P:RelhaxModpack.DatabasePackage.Enabled">
             <summary>
             a toggle to enable and disable the component
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.CRC">
+        <member name="F:RelhaxModpack.DatabasePackage.CRC">
             <summary>
             the crc checksum of the zipfile
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.StartAddress">
+        <member name="F:RelhaxModpack.DatabasePackage.StartAddress">
             <summary>
             the start address of the url to the zip file
             URL format: StartAddress + ZipFile + EndAddress
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.EndAddress">
+        <member name="F:RelhaxModpack.DatabasePackage.EndAddress">
             <summary>
             the end address of the url to the zip file
             URL format: StartAddress + ZipFile + EndAddress
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.DownloadFlag">
+        <member name="F:RelhaxModpack.DatabasePackage.DownloadFlag">
             <summary>
             determine at install time if the package needs to be downloaded
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.ReadyForInstall">
+        <member name="F:RelhaxModpack.DatabasePackage.ReadyForInstall">
             <summary>
             determine if the mod has been downloaded and is ready for installation
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.AppendExtraction">
+        <member name="F:RelhaxModpack.DatabasePackage.AppendExtraction">
             <summary>
             determine if the package needs to be installed at the end
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.LogAtInstall">
+        <member name="F:RelhaxModpack.DatabasePackage.LogAtInstall">
             <summary>
             determine if the files from the package should be logged for uninstallation
             only set this to false if absolutly necessary!
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.DevURL">
+        <member name="F:RelhaxModpack.DatabasePackage.DevURL">
             <summary>
             the URL link of where you can view the webpage of the mod
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.Shortcuts">
-            <summary>
-            list containing all shortcuts that could be created based on package data
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.DatabaseComponents.DatabasePackage.CheckDatabaseListIndex">
+        <member name="F:RelhaxModpack.DatabasePackage.CheckDatabaseListIndex">
             <summary>
             used to inentify [if a PackageName confilct occurs] where in the xml file the conflict is
             </summary>
         </member>
-        <member name="P:RelhaxModpack.DatabaseComponents.DatabasePackage.CompletePath">
+        <member name="P:RelhaxModpack.DatabasePackage.CompletePath">
             <summary>
             Provides (if possible) a complete tree style path in for the cateogry views
             </summary>

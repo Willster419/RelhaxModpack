@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace RelhaxModpack.DatabaseComponents
+namespace RelhaxModpack
 {
     /// <summary>
     /// A database component is an abstract class for all Components within the database
     /// </summary>
-    public abstract class DatabasePackage
+    public class DatabasePackage
     {
         /// <summary>
         /// a unique identifier for each component in the database. No two components will have the same PackageName
@@ -67,26 +67,19 @@ namespace RelhaxModpack.DatabaseComponents
         /// the URL link of where you can view the webpage of the mod
         /// </summary>
         public string DevURL = "";
-        /// <summary>
-        /// list containing all shortcuts that could be created based on package data
-        /// </summary>
-        public List<Shortcut> Shortcuts = new List<Shortcut>();
         public int ExtractionLevel = 5;
         /// <summary>
         /// used to inentify [if a PackageName confilct occurs] where in the xml file the conflict is
         /// </summary>
         public int CheckDatabaseListIndex = 0;
-        public List<Dependency> Dependencies = new List<Dependency>();
-        public abstract override string ToString();
+        public override string ToString()
+        {
+            return PackageName;
+        }
         /// <summary>
         /// Provides (if possible) a complete tree style path in for the cateogry views
         /// </summary>
         public virtual string CompletePath
-        {
-            get
-            {
-                return PackageName;
-            }
-        }
+        { get {  return PackageName; } }
     }
 }
