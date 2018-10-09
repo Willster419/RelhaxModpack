@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="DatabaseUpdater" Height="480" Width="800" MinHeight="480" MinWidth="800">
+        Title="DatabaseUpdater" Height="480" Width="800" MinHeight="480" MinWidth="800" Loaded="RelhaxWindow_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" MinWidth="200"/>
@@ -14,12 +14,13 @@
         </Grid.ColumnDefinitions>
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
         <Grid Grid.Column="2" HorizontalAlignment="Left" Height="100" Margin="179,269,0,0" VerticalAlignment="Top" Width="100"/>
-        <TabControl HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" >
+        <TabControl x:Name="TabController" HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" SelectionChanged="TabControl_SelectionChanged" >
             <TabItem x:Name="AuthStatusTab" Header="Auth Status">
                 <Grid Background="#FFE5E5E5">
                     <TextBlock x:Name="PasswordLabel" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Please Enter password to use this tool" VerticalAlignment="Top"/>
-                    <TextBox x:Name="PaswordTextbox" HorizontalAlignment="Left" Height="23" Margin="10,26,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="200"/>
-                    <Button x:Name="PasswordButton" Content="Button" HorizontalAlignment="Left" Margin="10,49,0,0" VerticalAlignment="Top" Width="75"/>
+                    <TextBox x:Name="PaswordTextbox" HorizontalAlignment="Left" Height="23" Margin="10,26,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200"/>
+                    <Button x:Name="PasswordButton" Content="Button" HorizontalAlignment="Left" Margin="10,49,0,0" VerticalAlignment="Top" Width="75" Click="PasswordButton_Click"/>
+                    <TextBlock x:Name="AuthStatusTextblock" HorizontalAlignment="Left" Margin="90,51,0,0" TextWrapping="Wrap" Text="Current status: Denied" VerticalAlignment="Top" Foreground="#FFEE1111"/>
 
                 </Grid>
             </TabItem>
@@ -27,7 +28,7 @@
                 <Grid Background="#FFE5E5E5">
                     <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
                         <TextBox x:Name="UpdateDatabaseStep0" Height="23" TextWrapping="Wrap" Text="Step 0: Pull latest database!!!" TextAlignment="Left" IsReadOnly="True"/>
-                        <Button x:Name="UpdateDatabaseStep1" Content="Step 1: Load modInfo.xml" HorizontalContentAlignment="Left"/>
+                        <Button x:Name="UpdateDatabaseStep1" Content="Step 1: Load modInfo.xml" HorizontalContentAlignment="Left" Click="OnLoadModInfo"/>
                         <Button x:Name="UpdateDatabaseStep2" Content="Step 2: Update remote database.xml" HorizontalContentAlignment="Left"/>
                         <Button x:Name="UpdateDatabaseStep3" Content="Step 3: Prepare database update" HorizontalContentAlignment="Left"/>
                         <Button x:Name="UpdateDatabaseStep4" Content="Step 4: Upload changed files and save databaseUpdate.txt to disk" HorizontalContentAlignment="Left"/>
@@ -56,8 +57,8 @@
                         <TextBox x:Name="UpdateApplicationStep4" Height="23" TextWrapping="Wrap" Text="Step 4: Update on github"/>
                         <TextBox x:Name="UpdateApplicationStep5" Height="23" TextWrapping="Wrap" Text="Step 5: Upload new stable and beta applications"/>
                         <TextBox x:Name="UpdateApplicationStep6" Height="23" TextWrapping="Wrap" Text="Step 6: Update manager_info.xml file"/>
-                        <Button x:Name="UpdateApplicationStep7" Content="Step 7: Run script CreateUpdatePackages.php" HorizontalContentAlignment="Left"/>
-                        <Button x:Name="UpdateApplicationStep8" Content="Step 8: Run script CreateManagerInfo.php" HorizontalContentAlignment="Left"/>
+                        <Button x:Name="UpdateApplicationStep7" Content="Step 7: Run script CreateUpdatePackages.php" HorizontalContentAlignment="Left" Click="UpdateApplicationStep7_Click"/>
+                        <Button x:Name="UpdateApplicationStep8" Content="Step 8: Run script CreateManagerInfo.php" HorizontalContentAlignment="Left" Click="UpdateApplicationStep8_Click"/>
                         <TextBox x:Name="UpdateApplicationStep9" Height="23" TextWrapping="Wrap" Text="Step 9: Post update notes on discord, slack, forums"/>
                     </StackPanel>
                 </Grid>
@@ -66,13 +67,16 @@
                 <Grid Background="#FFE5E5E5">
                     <StackPanel>
                         <TextBlock x:Name="CleanZipFoldersOnlineMethod" Text="--Online Method--" HorizontalAlignment="Center"/>
-                        <Button Content="Step 1: Run script CreateOutdatedFileList.php" HorizontalContentAlignment="Left"/>
-                        <TextBox Height="23" TextWrapping="Wrap" Margin="0,0,0,0"/>
-                        <Button Content="Step 3: Start Process to delete old zip files" HorizontalContentAlignment="Left"/>
+                        <Button x:Name="CleanFoldersOnlineStep1" Content="Step 1: Run script CreateOutdatedFileList.php" HorizontalContentAlignment="Left" Click="CleanFoldersOnlineStep1_Click"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="CleanFoldersOnlineStep2a" Content="Parse Online Folders" Click="CleanFoldersOnlineStep2a_Click" />
+                            <ComboBox x:Name="CleanFoldersOnlineStep2b" MinWidth="100" Margin="0,0,0,0" SelectionChanged="CleanFoldersOnlineStep2b_SelectionChanged"/>
+                        </StackPanel>
+                        <Button x:Name="CleanFoldersOnlineStep3" Content="Step 3: Start Process to delete old zip files" HorizontalContentAlignment="Left" Click="CleanFoldersOnlineStep3_Click"/>
                         <TextBlock x:Name="CleanZipFoldersOfflineMethod" Text="--Offline Method--" HorizontalAlignment="Center"/>
-                        <Button Content="Step 1: Load database files" HorizontalContentAlignment="Left"/>
-                        <Button Content="Step 2: Load folder of zip files" HorizontalContentAlignment="Left"/>
-                        <Button Content="Step 3: Delete files" HorizontalContentAlignment="Left"/>
+                        <Button x:Name="CleanFoldersLocalStep1" Content="Step 1: Load database files" HorizontalContentAlignment="Left"/>
+                        <Button x:Name="CleanFoldersLocalStep2" Content="Step 2: Load folder of zip files" HorizontalContentAlignment="Left"/>
+                        <Button x:Name="CleanFoldersLocalStep3" Content="Step 3: Delete files" HorizontalContentAlignment="Left"/>
                         <TextBlock x:Name="CleanZipFoldersListHeader" Text="--List--" HorizontalAlignment="Center"/>
                     </StackPanel>
                     <TextBox x:Name="CleanZipFoldersTextbox" HorizontalAlignment="Left" Height="227" Margin="0,174,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="388"/>
@@ -81,10 +85,10 @@
             <TabItem x:Name="DatabaseOutputTab" Header="Database Output">
                 <Grid Background="#FFE5E5E5">
                     <StackPanel >
-                        <Button x:Name="DatabaseOutputStep1" Content="Step 1: Load database" HorizontalContentAlignment="Left"/>
+                        <Button x:Name="DatabaseOutputStep1" Content="Step 1: Load database" HorizontalContentAlignment="Left" Click="OnLoadModInfo"/>
                         <TextBox x:Name="DatabaseOutputLoadedPath" Height="35" TextWrapping="Wrap" />
-                        <Button x:Name="DatabaseOutputStep2a" Content="Step 2a: Generate internal spreadsheet (csv)" HorizontalContentAlignment="Left"/>
-                        <Button x:Name="DatabaseOutputStep2b" Content="Step 2b: Generate user spreadsheet (csv)" HorizontalContentAlignment="Left"/>
+                        <Button x:Name="DatabaseOutputStep2a" Content="Step 2a: Generate internal spreadsheet (csv)" HorizontalContentAlignment="Left" Click="DatabaseOutputStep2a_Click"/>
+                        <Button x:Name="DatabaseOutputStep2b" Content="Step 2b: Generate user spreadsheet (csv)" HorizontalContentAlignment="Left" Click="DatabaseOutputStep2b_Click"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
