@@ -182,21 +182,21 @@ namespace RelhaxModpack
           }
           return results;
         }
-        public static bool ParseDatabase(XmlDocument modInfoDocument, List<Dependency> globalDependencies,
-            List<Dependency> logicalDependencies, List<Category> parsedCategoryList)
+        public static bool ParseDatabase(XmlDocument modInfoDocument, List<DatabasePackage> globalDependencies,
+            List<Dependency> dependencies, List<Category> parsedCategoryList)
         {
             Logging.WriteToLog("start of ParseDatabase()", Logfiles.Application, LogLevel.Debug);
             //check all input parameters
             if (modInfoDocument == null)
                 throw new BadMemeException("modInfoDocument is null dumbass");
             if (globalDependencies == null)
-                globalDependencies = new List<Dependency>();
+                globalDependencies = new List<DatabasePackage>();
             else
                 globalDependencies.Clear();
-            if (logicalDependencies == null)
-                logicalDependencies = new List<Dependency>();
+            if (dependencies == null)
+                dependencies = new List<Dependency>();
             else
-                logicalDependencies.Clear();
+                dependencies.Clear();
             if (parsedCategoryList == null)
                 parsedCategoryList = new List<Category>();
             else
@@ -207,14 +207,14 @@ namespace RelhaxModpack
             switch(versionString)
             {
                 case "2.0":
-                    return ParseDatabaseV2(DocumentToXDocument(modInfoDocument), globalDependencies, logicalDependencies, parsedCategoryList);
+                    return ParseDatabaseV2(DocumentToXDocument(modInfoDocument), globalDependencies, dependencies, parsedCategoryList);
                 default:
                     Logging.WriteToLog(string.Format("unknown format of {0}: {1}", nameof(versionString), versionString),
                         Logfiles.Application, LogLevel.Error);
                     return false;
             }
         }
-        public static bool ParseDatabaseV2(XDocument modInfoDocument, List<Dependency> globalDependencies,
+        public static bool ParseDatabaseV2(XDocument modInfoDocument, List<DatabasePackage> globalDependencies,
             List<Dependency> logicalDependencies, List<Category> parsedCategoryList)
         {
             //parsing the global dependencies
@@ -228,7 +228,7 @@ namespace RelhaxModpack
                 "/modInfoAlpha.xml/catagories/catagory").ToList(), parsedCategoryList);
             return (globalParsed && logicalDepParsed && categoriesParsed) ? true : false;
         }
-        private static bool ParseDatabaseV2GlobalDependencies(List<XElement> holder, List<Dependency> globalDependencies)
+        private static bool ParseDatabaseV2GlobalDependencies(List<XElement> holder, List<DatabasePackage> globalDependencies)
         {
             //first for loop is for each "dependency" object holder
             foreach(XElement dependency in holder)
