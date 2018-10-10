@@ -70,13 +70,13 @@
                         <Button x:Name="CleanFoldersOnlineStep1" Content="Step 1: Run script CreateOutdatedFileList.php" HorizontalContentAlignment="Left" Click="CleanFoldersOnlineStep1_Click"/>
                         <StackPanel Orientation="Horizontal">
                             <Button x:Name="CleanFoldersOnlineStep2a" Content="Parse Online Folders" Click="CleanFoldersOnlineStep2a_Click" />
-                            <ComboBox x:Name="CleanFoldersOnlineStep2b" MinWidth="100" Margin="0,0,0,0" SelectionChanged="CleanFoldersOnlineStep2b_SelectionChanged"/>
+                            <ComboBox x:Name="CleanFoldersOnlineStep2b" MinWidth="100" Margin="0,0,0,0"/>
                         </StackPanel>
                         <Button x:Name="CleanFoldersOnlineStep3" Content="Step 3: Start Process to delete old zip files" HorizontalContentAlignment="Left" Click="CleanFoldersOnlineStep3_Click"/>
                         <TextBlock x:Name="CleanZipFoldersOfflineMethod" Text="--Offline Method--" HorizontalAlignment="Center"/>
-                        <Button x:Name="CleanFoldersLocalStep1" Content="Step 1: Load database files" HorizontalContentAlignment="Left"/>
-                        <Button x:Name="CleanFoldersLocalStep2" Content="Step 2: Load folder of zip files" HorizontalContentAlignment="Left"/>
-                        <Button x:Name="CleanFoldersLocalStep3" Content="Step 3: Delete files" HorizontalContentAlignment="Left"/>
+                        <Button x:Name="CleanFoldersLocalStep1" Content="Step 1: Load database files" HorizontalContentAlignment="Left" Click="CleanFoldersLocalStep1_Click"/>
+                        <Button x:Name="CleanFoldersLocalStep2" Content="Step 2: Load folder of zip files" HorizontalContentAlignment="Left" Click="CleanFoldersLocalStep2_Click"/>
+                        <Button x:Name="CleanFoldersLocalStep3" Content="Step 3: Delete files" HorizontalContentAlignment="Left" Click="CleanFoldersLocalStep3_Click"/>
                         <TextBlock x:Name="CleanZipFoldersListHeader" Text="--List--" HorizontalAlignment="Center"/>
                     </StackPanel>
                     <TextBox x:Name="CleanZipFoldersTextbox" HorizontalAlignment="Left" Height="227" Margin="0,174,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="388"/>

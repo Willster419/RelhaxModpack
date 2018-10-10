@@ -24,7 +24,7 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class DatabaseUpdater : RelhaxWindow
     {
-        #region constants
+        #region Constants
         private const string DatabaseUpdateTxt = "databaseUpdate.txt";
         private const string DatabaseUpdateBackupTxt = "databaseUpdate.txt.bak";
         private const string KeyAddress = "TODO";
@@ -33,25 +33,32 @@ namespace RelhaxModpack.Windows
         private const string FTPRoot =                       "ftp://wotmods.relhaxmodpack.com/";
         private const string WotFolderRoot =                 "ftp://wotmods.relhaxmodpack.com/WoT/";
         private const string FTPModpackRoot =                "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/";
+        private const string FTPRescourcesRoot =             "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/";
+        private const string FTPManagerInfoRoot =            "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/managerInfo/";
         private const string ModInfosLocation =              "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/modInfo/";
         private const string ModInfoBackupsFolderLocation =  "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/modInfoBackups/";
         private const string DatabaseBackupsFolderLocation = "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/databaseBackups/";
         private const string SupportedClients = "supported_clients.xml";
         private const string ManagerVersion = "manager_version.xml";
+        private const string TrashXML = "trash.xml";
         #endregion
-        #region editables
+
+        #region Editables
         private string KeyFilename = "key.txt";//can be overridden by command line arguement
         private WebClient client;
         private NetworkCredential @Credentials;
         private bool authorized = false;
         private OpenFileDialog SelectModInfo = new OpenFileDialog();
         private OpenFileDialog SelectManyModInfo = new OpenFileDialog();
+        private OpenFileDialog SelectManyZip = new OpenFileDialog();
         #endregion
+
         public DatabaseUpdater()
         {
             InitializeComponent();
         }
-        #region password auth stuff
+
+        #region Password auth stuff
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
             //parse credentials
@@ -101,7 +108,7 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region database output
+        #region Database output
         private void SaveDatabaseText(bool mode)
         {
             //true = internal, false = user
@@ -207,29 +214,124 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region cleaning folders
-        private void CleanFoldersOnlineStep1_Click(object sender, RoutedEventArgs e)
+        #region Cleaning online folders
+        private async void CleanFoldersOnlineStep1_Click(object sender, RoutedEventArgs e)
         {
-
+            //run trash xml collect script
+            LogOutput.Text = "Running script CreateOutdatedFileList.php...";
+            using (WebClient client = new WebClient() { Credentials = Credentials })
+            {
+                client.DownloadStringCompleted += OnDownloadStringComplete;
+                await client.DownloadStringTaskAsync(new Uri("http://wotmods.relhaxmodpack.com/scripts/CreateOutdatedFileList.php"));
+            }
         }
 
-        private void CleanFoldersOnlineStep2a_Click(object sender, RoutedEventArgs e)
+        private async void CleanFoldersOnlineStep2a_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void CleanFoldersOnlineStep2b_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
+            ReportProgress("Downloading " + SupportedClients);
+            //download supported_clients
+            using(WebClient client = new WebClient() { Credentials = Credentials })
+            {
+                string xml = await client.DownloadStringTaskAsync(FTPManagerInfoRoot + SupportedClients);
+            }
+            //parse each online folder to list type string
+            ReportProgress("Parsing " + SupportedClients);
+            XmlNodeList supportedClients = XMLUtils.GetXMLNodesFromXPath(SupportedClients, "//versions/version");
+            List<string> onlineFolders = new List<string>();
+            foreach(XmlNode node in supportedClients)
+            {
+                string onlineFolderVersion = node.Attributes["folder"].Value;
+                if(!onlineFolders.Contains(onlineFolderVersion))
+                  onlineFolders.Add(onlineFolderVersion);
+            }
+            //clear it
+            CleanFoldersOnlineStep2b.Items.Clear();
+            foreach (string s in onlineFolders)
+                CleanFoldersOnlineStep2b.Items.Add(s);
         }
 
         private void CleanFoldersOnlineStep3_Click(object sender, RoutedEventArgs e)
         {
-
+            LogOutput.Clear();
+            //check if database versions set
+            string wotFolderToClean = (string)CleanFoldersOnlineStep2b.SelectedItem;
+            if (string.IsNullOrEmpty(wotFolderToClean))
+            {
+                ReportProgress("online folder version is blank");
+                return;
+            }
+            //make sure folder exists
+            ReportProgress(string.Format("Checking if folder {0} exists...", wotFolderToClean));
+            string[] onlineFolders = FTPListFilesFolders("ftp://wotmods.relhaxmodpack.com/WoT/");
+            if (!onlineFolders.Contains(wotFolderToClean))
+            {
+                ReportProgress(string.Format("ERROR: folder {0} does not exist in WoT folder!", wotFolderToClean));
+                return;
+            }
+            //download trash xml file
+            ReportProgress("Downloading " + TrashXML);
+            string onlineFolderPath = "ftp://wotmods.relhaxmodpack.com/WoT/" + wotFolderToClean + "/";
+            using (client = new WebClient() { Credentials = Credentials })
+            {
+                if (File.Exists(TrashXML))
+                    File.Delete(TrashXML);
+                client.DownloadFile(onlineFolderPath + TrashXML, TrashXML);
+            }
+            ReportProgress("Parsing " + TrashXML);
+            XmlNodeList trashFiles = XMLUtils.GetXMLNodesFromXPath(TrashXML, "//trash/filename");
+            if(trashFiles == null || trashFiles.Count == 0)
+            {
+                ReportProgress("Error: trashfiles is null or count = 0");
+                return;
+            }
+            int totalFilesToDelete = trashFiles.Count;
+            int filesDeleted = 1;
+            //run the script with the selected online folder
+            foreach (XmlNode file in trashFiles)
+            {
+                ReportProgress(string.Format("Deleting file {0} of {1}, filename={2}", filesDeleted++, totalFilesToDelete, file.InnerText));
+                FTPDeleteFile(onlineFolderPath + file.InnerText);
+            }
+            ReportProgress("Complete");
+            File.Delete(TrashXML);
         }
         #endregion
 
-        #region boring stuff
+        #region FTP methods
+        private void FTPMakeFolder(string addressWithDirectory)
+        {
+            WebRequest folderRequest = WebRequest.Create(addressWithDirectory);
+            folderRequest.Method = WebRequestMethods.Ftp.MakeDirectory;
+            folderRequest.Credentials = Credentials;
+            using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
+            { }
+        }
+
+        private string[] FTPListFilesFolders(string address)
+        {
+            WebRequest folderRequest = WebRequest.Create(address);
+            folderRequest.Method = WebRequestMethods.Ftp.ListDirectory;
+            folderRequest.Credentials = Credentials;
+            using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
+            {
+                Stream responseStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(responseStream);
+                string temp = reader.ReadToEnd();
+                return temp.Split(new[] { "\r\n" }, StringSplitOptions.None);
+            }
+        }
+
+        private void FTPDeleteFile(string address)
+        {
+            WebRequest folderRequest = WebRequest.Create(address);
+            folderRequest.Method = WebRequestMethods.Ftp.DeleteFile;
+            folderRequest.Credentials = Credentials;
+            using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
+            { }
+        }
+        #endregion
+
+        #region Boring stuff
         private void OnLoadModInfo(object sender, RoutedEventArgs e)
         {
             if (SelectModInfo.ShowDialog() == true)
@@ -262,6 +364,78 @@ namespace RelhaxModpack.Windows
             //reports to the log file and the console otuptu
             Logging.WriteToLog(message);
             LogOutput.AppendText(message + "\n");
+        }
+        #endregion
+
+        #region Local zip file cleaning
+        private List<string> zipFilesInDatabaseUse = new List<string>();
+        private List<string> zipFilesInFolder = new List<string>();
+        private List<string> zipFilesToDelete = new List<string>();
+        private void CleanFoldersLocalStep1_Click(object sender, RoutedEventArgs e)
+        {
+            //init and checks
+            LogOutput.Clear();
+            if(SelectManyModInfo.ShowDialog() == false)
+            {
+                ReportProgress("User canceled");
+                return;
+            }
+            zipFilesInDatabaseUse = new List<string>();
+            List<DatabasePackage> packages = new List<DatabasePackage>();
+            //get all packages to one list
+            foreach(string s in SelectManyModInfo.FileNames)
+            {
+                List<DatabasePackage> globalDependencies = new List<DatabasePackage>();
+                List<Dependency> dependencies = new List<Dependency>();
+                List<Category> categories = new List<Category>();
+                XmlDocument doc = new XmlDocument();
+                doc.Load(s);
+                XMLUtils.ParseDatabase(doc, globalDependencies, dependencies, categories);
+                packages.AddRange(globalDependencies);
+                packages.AddRange(dependencies);
+                foreach (Category cat in categories)
+                    packages.AddRange(cat.GetFlatPackageList());
+            }
+            //parse to string list
+            CleanZipFoldersTextbox.Clear();
+            foreach(DatabasePackage databasePackage in packages)
+            {
+                if (!string.IsNullOrWhiteSpace(databasePackage.ZipFile) && !zipFilesInDatabaseUse.Contains(databasePackage.ZipFile))
+                {
+                    zipFilesInDatabaseUse.Add(databasePackage.ZipFile);
+                    CleanZipFoldersTextbox.AppendText(databasePackage.ZipFile + "\n");
+                }
+            }
+        }
+
+        private void CleanFoldersLocalStep2_Click(object sender, RoutedEventArgs e)
+        {
+            if(SelectManyZip.ShowDialog() == false)
+            {
+                ReportProgress("canceled");
+                return;
+            }
+            //make a new list of just zip files not in use
+            //i.e. list of all files selected EXCEPT those in the modInfo selection
+            zipFilesInFolder = SelectManyZip.FileNames.ToList();
+            zipFilesToDelete = zipFilesInFolder.Except(zipFilesInDatabaseUse).ToList();
+            CleanZipFoldersTextbox.Clear();
+            foreach (string s in zipFilesToDelete)
+                CleanZipFoldersTextbox.AppendText(s);
+            ReportProgress("zips selected, ready for deleting");
+        }
+
+        private void CleanFoldersLocalStep3_Click(object sender, RoutedEventArgs e)
+        {
+            int numDeleted = 1;
+            foreach(string s in zipFilesToDelete)
+            {
+                if(File.Exists(s))
+                {
+                    File.Delete(s);
+                    ReportProgress(string.Format("Deleted {0} of {1}, {2}", numDeleted, zipFilesToDelete.Count, s));
+                }
+            }
         }
         #endregion
     }
