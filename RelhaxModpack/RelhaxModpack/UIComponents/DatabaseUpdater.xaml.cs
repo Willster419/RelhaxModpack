@@ -51,12 +51,16 @@ namespace RelhaxModpack.Windows
         private OpenFileDialog SelectModInfo = new OpenFileDialog();
         private OpenFileDialog SelectManyModInfo = new OpenFileDialog();
         private OpenFileDialog SelectManyZip = new OpenFileDialog();
+        //strings
+
         #endregion
 
+        #region Constructor
         public DatabaseUpdater()
         {
             InitializeComponent();
         }
+        #endregion
 
         #region Password auth stuff
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
@@ -206,7 +210,7 @@ namespace RelhaxModpack.Windows
         private void UpdateApplicationStep8_Click(object sender, RoutedEventArgs e)
         {
             LogOutput.Text = "Running script CreateManagerInfo.php...";
-            using (WebClient client = new WebClient() { Credentials = Credentials })
+            using (client = new WebClient() { Credentials = Credentials })
             {
                 client.DownloadStringCompleted += OnDownloadStringComplete;
                 client.DownloadStringAsync(new Uri("http://wotmods.relhaxmodpack.com/scripts/CreateManagerInfo.php"));
@@ -219,7 +223,7 @@ namespace RelhaxModpack.Windows
         {
             //run trash xml collect script
             LogOutput.Text = "Running script CreateOutdatedFileList.php...";
-            using (WebClient client = new WebClient() { Credentials = Credentials })
+            using (client = new WebClient() { Credentials = Credentials })
             {
                 client.DownloadStringCompleted += OnDownloadStringComplete;
                 await client.DownloadStringTaskAsync(new Uri("http://wotmods.relhaxmodpack.com/scripts/CreateOutdatedFileList.php"));
@@ -230,7 +234,7 @@ namespace RelhaxModpack.Windows
         {
             ReportProgress("Downloading " + SupportedClients);
             //download supported_clients
-            using(WebClient client = new WebClient() { Credentials = Credentials })
+            using(client = new WebClient() { Credentials = Credentials })
             {
                 string xml = await client.DownloadStringTaskAsync(FTPManagerInfoRoot + SupportedClients);
             }
@@ -436,6 +440,90 @@ namespace RelhaxModpack.Windows
                     ReportProgress(string.Format("Deleted {0} of {1}, {2}", numDeleted, zipFilesToDelete.Count, s));
                 }
             }
+        }
+        #endregion
+
+        #region Database Updating
+        private void UpdateDatabaseStep2_Click(object sender, RoutedEventArgs e)
+        {
+            LogOutput.Clear();
+            ReportProgress("Starting database update step 2");
+            //check for selected online folder version
+            if(string.IsNullOrWhiteSpace(Settings.WoTModpackOnlineFolderVersion))
+            {
+                ReportProgress("string " + nameof(Settings.WoTModpackOnlineFolderVersion) + " is null or empty or whitespace");
+                return;
+            }
+            //download databaseInfo
+
+            //get filelist
+
+            //check vs time and size
+
+            //if one is bad
+            //if size > 75MB
+
+            //download, get hash
+
+            //else get hash from running script
+
+        }
+
+        private void UpdateDatabaseStep3_Click(object sender, RoutedEventArgs e)
+        {
+            //getting local crc's and comparing them on server
+
+        }
+
+        private void UpdateDatabaseStep4_Click(object sender, RoutedEventArgs e)
+        {
+            //do stuff on the server
+
+        }
+
+        private void UpdateDatabaseStep5_Click(object sender, RoutedEventArgs e)
+        {
+            //upload databaseUpdate.txt
+
+        }
+
+        private void UpdateDatabaseStep6_Click(object sender, RoutedEventArgs e)
+        {
+            LogOutput.Clear();
+            ReportProgress("Starting Update database step 6...");
+            ReportProgress("Running script CreateModInfo.php...");
+            using (client = new WebClient())
+            {
+                client.DownloadStringCompleted += OnDownloadStringComplete;
+                client.DownloadStringAsync(new Uri("http://wotmods.relhaxmodpack.com/scripts/CreateModInfo.php"));
+            }
+        }
+
+        private void UpdateDatabaseStep7_Click(object sender, RoutedEventArgs e)
+        {
+            LogOutput.Clear();
+            ReportProgress("Starting Update database step 7...");
+            ReportProgress("Running script CreateManagerInfo.php...");
+            using (client = new WebClient())
+            {
+                client.DownloadStringCompleted += OnDownloadStringComplete;
+                client.DownloadStringAsync(new Uri("http://wotmods.relhaxmodpack.com/scripts/CreateManagerInfo.php"));
+            }
+        }
+
+        private void UpdateDatabasestep9_NA_ENG_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/624499-");
+        }
+
+        private void UpdateDatabaseStep9_EU_ENG_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/623269-");
+        }
+
+        private void UpdateDatabaseStep9_EU_GER_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
         }
         #endregion
     }
