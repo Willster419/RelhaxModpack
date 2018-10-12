@@ -15,7 +15,6 @@ using System.Net;
 using System.IO;
 using Microsoft.Win32;
 using System.Xml;
-using System.Text;
 
 namespace RelhaxModpack.Windows
 {
@@ -38,9 +37,11 @@ namespace RelhaxModpack.Windows
         private const string ModInfosLocation =              "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/modInfo/";
         private const string ModInfoBackupsFolderLocation =  "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/modInfoBackups/";
         private const string DatabaseBackupsFolderLocation = "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/databaseBackups/";
+        private const string FilePropertiesPHP = "http://wotmods.relhaxmodpack.com/scripts/GetFileProperties.php";
         private const string SupportedClients = "supported_clients.xml";
         private const string ManagerVersion = "manager_version.xml";
         private const string TrashXML = "trash.xml";
+        private const int MaxFileSizeForHash = 80000000;
         #endregion
 
         #region Editables
@@ -310,6 +311,15 @@ namespace RelhaxModpack.Windows
             using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
             { }
         }
+        
+        private async void FTPMakeFolderAsync(string addressWithDirectory)
+        {
+            WebRequest folderRequest = WebRequest.Create(addressWithDirectory);
+            folderRequest.Method = WebRequestMethods.Ftp.MakeDirectory;
+            folderRequest.Credentials = Credentials;
+            using (FtpWebResponse webResponse = (FtpWebResponse) await folderRequest.GetResponseAsync())
+            { }
+        }
 
         private string[] FTPListFilesFolders(string address)
         {
@@ -325,6 +335,20 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        private async Task<string[]> FTPListFilesFoldersAsync(string address)
+        {
+            WebRequest folderRequest = WebRequest.Create(address);
+            folderRequest.Method = WebRequestMethods.Ftp.ListDirectory;
+            folderRequest.Credentials = Credentials;
+            using (FtpWebResponse response = (FtpWebResponse) await folderRequest.GetResponseAsync())
+            {
+                Stream responseStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(responseStream);
+                string temp = reader.ReadToEnd();
+                return temp.Split(new[] { "\r\n" }, StringSplitOptions.None);
+            }
+        }
+
         private void FTPDeleteFile(string address)
         {
             WebRequest folderRequest = WebRequest.Create(address);
@@ -332,6 +356,102 @@ namespace RelhaxModpack.Windows
             folderRequest.Credentials = Credentials;
             using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
             { }
+        }
+
+        private async void FTPDeleteFileAsync(string address)
+        {
+            WebRequest folderRequest = WebRequest.Create(address);
+            folderRequest.Method = WebRequestMethods.Ftp.DeleteFile;
+            folderRequest.Credentials = Credentials;
+            using (FtpWebResponse response = (FtpWebResponse) await folderRequest.GetResponseAsync())
+            { }
+        }
+
+        private async Task<XmlNode> GetFilePropertiesAsync(string phpScriptAddress, string fileName, bool getMD5)
+        {
+            XmlDocument doc = new XmlDocument();
+            using (client = new WebClient() { Credentials = Credentials })
+            {
+                if(getMD5)
+                {
+                    Logging.WriteToLog("getMD5 is true, checking size before requesting hash", Logfiles.Application, LogLevel.Debug);
+                    //get the size of the file first. if it's greator that 75 MB,
+                    //download the file and get hash manually. should prevent timeout errors and manual editing
+                    string parsedURLRequest = string.Format("{0}?folder={1}&file={2}&getMD5=0",
+                        phpScriptAddress, Settings.WoTModpackOnlineFolderVersion, fileName);
+                    string xmlString = await client.DownloadStringTaskAsync(parsedURLRequest);
+                    try
+                    {
+                        doc.LoadXml(xmlString);
+                    }
+                    catch (XmlException ex)
+                    {
+                        Logging.WriteToLog(ex.ToString(), Logfiles.Application, LogLevel.Exception);
+                        return null;
+                    }
+                    XmlNode fileProperties = doc.LastChild.LastChild;
+                    XmlAttribute filePropertiesSize = fileProperties.Attributes["size"];
+                    int fileSizeBytes = int.Parse(filePropertiesSize.Value);
+                    if(fileSizeBytes > MaxFileSizeForHash)
+                    {
+                        Logging.WriteToLog("file size greator than limit, downloading for size", Logfiles.Application, LogLevel.Debug);
+                        string fileDownloadURL = string.Format("{0}{1}/{2}", WotFolderRoot, Settings.WoTModpackOnlineFolderVersion, fileName);
+                        if (File.Exists(fileName))
+                            File.Delete(fileName);
+                        client.DownloadProgressChanged += OnDownloadProgress;
+                        await client.DownloadFileTaskAsync(fileDownloadURL, fileName);
+                        //get the actual md5 hash
+                        string hash = Utils.CreateMD5Hash(fileName);
+                        //append it to the node
+                        XmlAttribute filePropertieshash = doc.CreateAttribute("MD5");
+                        filePropertieshash.Value = hash;
+                        fileProperties.Attributes.Append(filePropertieshash);
+                        //and cleanup
+                        File.Delete(fileName);
+                        return fileProperties;
+                    }
+                    else
+                    {
+                        Logging.WriteToLog("file size smaller than limit, using online info for size", Logfiles.Application, LogLevel.Debug);
+                        parsedURLRequest = string.Format("{0}?folder={1}&file={2}&getMD5=1",
+                        phpScriptAddress, Settings.WoTModpackOnlineFolderVersion, fileName);
+                        xmlString = await client.DownloadStringTaskAsync(parsedURLRequest);
+                        try
+                        {
+                            doc = new XmlDocument();
+                            doc.LoadXml(xmlString);
+                        }
+                        catch (XmlException ex)
+                        {
+                            Logging.WriteToLog(ex.ToString(), Logfiles.Application, LogLevel.Exception);
+                            return null;
+                        }
+                        return doc.LastChild.LastChild;
+                    }
+                }
+                else
+                {
+                    //only getting size and time, no timout issues
+                    string parsedURLRequest = string.Format("{0}?folder={1}&file={2}&getMD5=0",
+                        phpScriptAddress, Settings.WoTModpackOnlineFolderVersion, fileName);
+                    string xmlString = await client.DownloadStringTaskAsync(parsedURLRequest);
+                    try
+                    {
+                        doc.LoadXml(xmlString);
+                    }
+                    catch (XmlException ex)
+                    {
+                        Logging.WriteToLog(ex.ToString(), Logfiles.Application, LogLevel.Exception);
+                        return null;
+                    }
+                    return doc.LastChild.LastChild;
+                }
+            }
+        }
+
+        private void OnDownloadProgress(object sender, DownloadProgressChangedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
         #endregion
 
@@ -444,7 +564,9 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Database Updating
-        private void UpdateDatabaseStep2_Click(object sender, RoutedEventArgs e)
+        //stuff needed for the databae update update process
+        //PUT ALL LISTS HERE
+        private async void UpdateDatabaseStep2_Click(object sender, RoutedEventArgs e)
         {
             LogOutput.Clear();
             ReportProgress("Starting database update step 2");
@@ -455,18 +577,195 @@ namespace RelhaxModpack.Windows
                 return;
             }
             //download databaseInfo
-
+            ReportProgress(string.Format("Loading database.xml from online folder {0}", Settings.WoTModpackOnlineFolderVersion));
+            XmlDocument downloadedDatabaseXml = new XmlDocument();
+            using (WebClient client = new WebClient())
+            {
+                string xmlString = await client.DownloadStringTaskAsync(string.Format("ftp://wotmods.relhaxmodpack.com/WoT/{0}/database.xml", Settings.WoTModpackOnlineFolderVersion));
+                downloadedDatabaseXml.LoadXml(xmlString);
+            }
+            //make string list of file names from database.xml
+            ReportProgress("Creating string list of names from database.xml");
+            List<string> removed_files = new List<string>();
+            XmlNode Database_elements = downloadedDatabaseXml.LastChild;
+            foreach(XmlNode file in Database_elements.ChildNodes)
+            {
+                removed_files.Add(file.Attributes["name"].Value);
+            }
             //get filelist
-
+            //load xml string from php script of listing all files in folder
+            ReportProgress("Loading list of files in online folder");
+            XmlDocument files_in_folder = new XmlDocument();
+            using (WebClient client = new WebClient())
+            {
+                string xmlString = await client.DownloadStringTaskAsync(string.Format("http://wotmods.relhaxmodpack.com/scripts/GetZipFiles.php?folder={0}", Settings.WoTModpackOnlineFolderVersion));
+                files_in_folder.LoadXml(xmlString);
+            }
+            XmlNode zipFilesList = files_in_folder.LastChild;
+            List<string> added_files = new List<string>();
+            List<string> updated_files = new List<string>();
+            List<string> error_files = new List<string>();
             //check vs time and size
-
-            //if one is bad
-            //if size > 75MB
-
-            //download, get hash
-
-            //else get hash from running script
-
+            //for each file name:
+            int progress = 0;
+            int total = zipFilesList.ChildNodes.Count;
+            StringBuilder summary = new StringBuilder();
+            System.Diagnostics.Stopwatch time_for_each_file = new System.Diagnostics.Stopwatch();
+            System.Diagnostics.Stopwatch total_time_php_processing = new System.Diagnostics.Stopwatch();
+            total_time_php_processing.Restart();
+            //verify UI is ready for the update process
+            //TODO
+            foreach (XmlNode zipFileEntry in zipFilesList)
+            {
+                ReportProgress(string.Format("Parsing file {1} of {2} name={0}", zipFileEntry.Attributes["name"].Value, ++progress, total));
+                //update the UI
+                //TODO
+                time_for_each_file.Restart();
+                //if exists in string list of database.xml, remove it -> serves as removed files
+                if (removed_files.Contains(zipFileEntry.Attributes["name"].Value))
+                {
+                    removed_files.Remove(zipFileEntry.Attributes["name"].Value);
+                }
+                //check if filename is in database.xml, if not, then it's new
+                //attribute example: "//root/element/@attribute"
+                XmlNode fileEntryInDownloadedDatabaseXml = downloadedDatabaseXml.SelectSingleNode(string.Format("//database/file[@name = \"{0}\"]", zipFileEntry.Attributes["name"].Value));
+                //if the aboe is null, then it does not exist in the current database.xml, so we need to add it
+                if (fileEntryInDownloadedDatabaseXml == null)
+                {
+                    //add
+                    //get all file properties
+                    XmlNode onlineFileProperties = await GetFilePropertiesAsync(FilePropertiesPHP, zipFileEntry.Attributes["name"].Value,true);
+                    if(onlineFileProperties == null)
+                    {
+                        string elapsed_time_add = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
+                        ReportProgress("Failed" + elapsed_time_add);
+                        summary.AppendLine("[ERROR] " + zipFileEntry.Attributes["name"].Value);
+                        continue;
+                    }
+                    //add node to database xml
+                    //create element
+                    fileEntryInDownloadedDatabaseXml = downloadedDatabaseXml.CreateElement("file");
+                    //create attributes
+                    XmlAttribute file_name = downloadedDatabaseXml.CreateAttribute("name");
+                    file_name.Value = onlineFileProperties.Attributes["name"].Value;
+                    XmlAttribute file_size = downloadedDatabaseXml.CreateAttribute("size");
+                    file_size.Value = onlineFileProperties.Attributes["size"].Value;
+                    XmlAttribute file_md5 = downloadedDatabaseXml.CreateAttribute("md5");
+                    file_md5.Value = onlineFileProperties.Attributes["MD5"].Value;
+                    //NEW: add the timestamp to database.xml
+                    XmlAttribute file_time = downloadedDatabaseXml.CreateAttribute("time");
+                    file_time.Value = onlineFileProperties.Attributes["time"].Value;
+                    //add attributes to new element
+                    fileEntryInDownloadedDatabaseXml.Attributes.Append(file_name);
+                    fileEntryInDownloadedDatabaseXml.Attributes.Append(file_size);
+                    fileEntryInDownloadedDatabaseXml.Attributes.Append(file_md5);
+                    fileEntryInDownloadedDatabaseXml.Attributes.Append(file_time);
+                    //add element to database xml
+                    downloadedDatabaseXml.LastChild.AppendChild(fileEntryInDownloadedDatabaseXml);
+                    //make UI and log updates
+                    summary.AppendLine("[NEW] " + zipFileEntry.Attributes["name"].Value);
+                    added_files.Add(zipFileEntry.Attributes["name"].Value);
+                    string elapsed_time = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
+                    ReportProgress("Added" + elapsed_time);
+                }
+                else
+                {
+                    //update
+                    //get file info without md5 check (faster)
+                    bool force_md5_check = false;//change this when want to check slowly for all MD5 rather than just 
+                    XmlNode onlineFileProperties = await GetFilePropertiesAsync(FilePropertiesPHP, zipFileEntry.Attributes["name"].Value, false);
+                    if (onlineFileProperties == null)
+                    {
+                        string elapsed_time_add = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
+                        ReportProgress("Failed" + elapsed_time_add);
+                        summary.AppendLine("[ERROR] " + zipFileEntry.Attributes["name"].Value);
+                        continue;
+                    }
+                    //legacy compatibility: if file time attribute is not there, then add it
+                    XmlAttribute filePropertiesTimeDatabaseXml = fileEntryInDownloadedDatabaseXml.Attributes["time"];
+                    if(filePropertiesTimeDatabaseXml == null)
+                    {
+                        filePropertiesTimeDatabaseXml = downloadedDatabaseXml.CreateAttribute("time");
+                        filePropertiesTimeDatabaseXml.Value = onlineFileProperties.Attributes["time"].Value;
+                        fileEntryInDownloadedDatabaseXml.Attributes.Append(filePropertiesTimeDatabaseXml);
+                    }
+                    //end legacy compatibility
+                    //
+                    XmlAttribute filePropertiesSizeDatabaseXml = fileEntryInDownloadedDatabaseXml.Attributes["size"];
+                    XmlAttribute filePropertiesSizeOnline = onlineFileProperties.Attributes["size"];
+                    XmlAttribute filePropertiesTimeOnline = onlineFileProperties.Attributes["time"];
+                    //check if time, force md5 or size are not the same
+                    if ((force_md5_check) ||
+                        (!filePropertiesTimeDatabaseXml.Value.Equals(filePropertiesTimeOnline.Value)) ||
+                        (!filePropertiesSizeDatabaseXml.Value.Equals(filePropertiesSizeOnline.Value)))
+                    {
+                        //get the script online file properties again but this time with the hash info
+                        onlineFileProperties = await GetFilePropertiesAsync(FilePropertiesPHP, zipFileEntry.Attributes["name"].Value, true);
+                        if (onlineFileProperties == null)
+                        {
+                            string elapsed_time_add = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
+                            ReportProgress("Failed" + elapsed_time_add);
+                            summary.AppendLine("[ERROR] " + zipFileEntry.Attributes["name"].Value);
+                            continue;
+                        }
+                        //set time and size equal to new time and size
+                        filePropertiesSizeOnline = onlineFileProperties.Attributes["size"];
+                        filePropertiesTimeOnline = onlineFileProperties.Attributes["time"];
+                        filePropertiesTimeDatabaseXml.Value = filePropertiesTimeOnline.Value;
+                        filePropertiesSizeDatabaseXml.Value = filePropertiesSizeOnline.Value;
+                        //get the md5 properties
+                        XmlAttribute filePropertiesHashOnline = onlineFileProperties.Attributes["MD5"];
+                        XmlAttribute filePropertieshashDatabaseXml = fileEntryInDownloadedDatabaseXml.Attributes["md5"];
+                        //update if MD5 not equal
+                        if (filePropertieshashDatabaseXml == null || 
+                            (!(filePropertiesHashOnline.Value.Equals(filePropertieshashDatabaseXml.Value))))
+                        {
+                            filePropertieshashDatabaseXml.Value = filePropertiesHashOnline.Value;
+                            //add it to list of updated file names
+                            updated_files.Add(zipFileEntry.Attributes["name"].Value);
+                            summary.AppendLine("[UPDATE] " + zipFileEntry.Attributes["name"].Value);
+                            string elapsed_time = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
+                            ReportProgress("Updated" + elapsed_time);
+                        }
+                        else
+                        {
+                            string elapsed_time = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
+                            ReportProgress("No Change (md5 check)" + elapsed_time);
+                        }
+                    }
+                    else
+                    {
+                        string elapsed_time = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
+                        ReportProgress("No Change (time/size check)" + elapsed_time);
+                    }
+                }
+            }
+            string elapsed_time3 = string.Format(" took {0}.{1} sec", (int)total_time_php_processing.Elapsed.TotalSeconds, total_time_php_processing.Elapsed.Milliseconds);
+            ReportProgress("Total php file processing" + elapsed_time3);
+            foreach(string s in removed_files)
+            {
+                //delete the entry in the database
+                XmlNode file_in_database_xml = downloadedDatabaseXml.SelectSingleNode(string.Format("//database/file[@name = \"{0}\"]", s));
+                if(file_in_database_xml == null)
+                {
+                    //error
+                }
+                else
+                {
+                    Database_elements.RemoveChild(file_in_database_xml);
+                }
+                summary.AppendLine("[DELETE] " + s);
+            }
+            File.WriteAllText("update_files.log", summary.ToString());
+            ReportProgress("results saved to update_files.log");
+            downloadedDatabaseXml.Save("database.xml");
+            //upload it back
+            using (WebClient client = new WebClient() { Credentials = Credentials })
+            {
+                client.UploadFile(string.Format("ftp://wotmods.relhaxmodpack.com/WoT/{0}/database.xml", Settings.WoTModpackOnlineFolderVersion), "database.xml");
+            }
+            File.Delete("database.xml");
+            ReportProgress("database.xml uploaded to wot folder " + Settings.WoTModpackOnlineFolderVersion);
         }
 
         private void UpdateDatabaseStep3_Click(object sender, RoutedEventArgs e)
