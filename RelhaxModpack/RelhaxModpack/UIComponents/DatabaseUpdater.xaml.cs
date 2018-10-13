@@ -199,23 +199,40 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Application update
-        private void UpdateApplicationStep7_Click(object sender, RoutedEventArgs e)
+        private async void UpdateApplicationStep7_Click(object sender, RoutedEventArgs e)
         {
             LogOutput.Text = "Running script CreateUpdatePackages.php...";
+            //Replace("<br />", "\n")
             using (client = new WebClient() { Credentials = Credentials })
             {
-                client.DownloadStringCompleted += OnDownloadStringComplete;
-                client.DownloadStringAsync(new Uri("http://wotmods.relhaxmodpack.com/scripts/CreateUpdatePackages.php"));
+                try
+                {
+                    string result = await client.DownloadStringTaskAsync("http://wotmods.relhaxmodpack.com/scripts/CreateUpdatePackages.php");
+                    LogOutput.Text = result.Replace("<br />", "\n");
+                }
+                catch (WebException wex)
+                {
+                    ReportProgress("failed to run application upate step 8");
+                    ReportProgress(wex.ToString());
+                }
             }
         }
 
-        private void UpdateApplicationStep8_Click(object sender, RoutedEventArgs e)
+        private async void UpdateApplicationStep8_Click(object sender, RoutedEventArgs e)
         {
             LogOutput.Text = "Running script CreateManagerInfo.php...";
             using (client = new WebClient() { Credentials = Credentials })
             {
-                client.DownloadStringCompleted += OnDownloadStringComplete;
-                client.DownloadStringAsync(new Uri("http://wotmods.relhaxmodpack.com/scripts/CreateManagerInfo.php"));
+                try
+                {
+                    string result = await client.DownloadStringTaskAsync("http://wotmods.relhaxmodpack.com/scripts/CreateManagerInfo.php");
+                    LogOutput.Text = result.Replace("<br />", "\n");
+                }
+                catch (WebException wex)
+                {
+                    ReportProgress("failed to run application update step 8");
+                    ReportProgress(wex.ToString());
+                }
             }
         }
         #endregion
@@ -227,8 +244,16 @@ namespace RelhaxModpack.Windows
             LogOutput.Text = "Running script CreateOutdatedFileList.php...";
             using (client = new WebClient() { Credentials = Credentials })
             {
-                client.DownloadStringCompleted += OnDownloadStringComplete;
-                await client.DownloadStringTaskAsync(new Uri("http://wotmods.relhaxmodpack.com/scripts/CreateOutdatedFileList.php"));
+                try
+                {
+                    string result = await client.DownloadStringTaskAsync("http://wotmods.relhaxmodpack.com/scripts/CreateOutdatedFileList.php");
+                    LogOutput.Text = result.Replace("<br />", "\n");
+                }
+                catch (WebException wex)
+                {
+                    ReportProgress("failed to run clean folder online step 1");
+                    ReportProgress(wex.ToString());
+                }
             }
         }
 
@@ -483,11 +508,6 @@ namespace RelhaxModpack.Windows
         {
             if (!authorized)
                 AuthStatusTab.Focus();
-        }
-
-        private void OnDownloadStringComplete(object sender, DownloadStringCompletedEventArgs e)
-        {
-            LogOutput.Text = e.Result.Replace("<br />", "\n");
         }
 
         private void ReportProgress(string message)
@@ -904,27 +924,43 @@ namespace RelhaxModpack.Windows
 
         }
 
-        private void UpdateDatabaseStep6_Click(object sender, RoutedEventArgs e)
+        private async void UpdateDatabaseStep6_Click(object sender, RoutedEventArgs e)
         {
             LogOutput.Clear();
             ReportProgress("Starting Update database step 6...");
             ReportProgress("Running script CreateModInfo.php...");
             using (client = new WebClient())
             {
-                client.DownloadStringCompleted += OnDownloadStringComplete;
-                client.DownloadStringAsync(new Uri("http://wotmods.relhaxmodpack.com/scripts/CreateModInfo.php"));
+                try
+                {
+                    string result = await client.DownloadStringTaskAsync("http://wotmods.relhaxmodpack.com/scripts/CreateModInfo.php");
+                    LogOutput.Text = result.Replace("<br />", "\n");
+                }
+                catch (WebException wex)
+                {
+                    ReportProgress("failed to run Update database step 6");
+                    ReportProgress(wex.ToString());
+                }
             }
         }
 
-        private void UpdateDatabaseStep7_Click(object sender, RoutedEventArgs e)
+        private async void UpdateDatabaseStep7_Click(object sender, RoutedEventArgs e)
         {
             LogOutput.Clear();
             ReportProgress("Starting Update database step 7...");
             ReportProgress("Running script CreateManagerInfo.php...");
             using (client = new WebClient())
             {
-                client.DownloadStringCompleted += OnDownloadStringComplete;
-                client.DownloadStringAsync(new Uri("http://wotmods.relhaxmodpack.com/scripts/CreateManagerInfo.php"));
+                try
+                {
+                    string result = await client.DownloadStringTaskAsync("http://wotmods.relhaxmodpack.com/scripts/CreateManagerInfo.php");
+                    LogOutput.Text = result.Replace("<br />", "\n");
+                }
+                catch (WebException wex)
+                {
+                    ReportProgress("failed to run Update database step 7");
+                    ReportProgress(wex.ToString());
+                }
             }
         }
 
