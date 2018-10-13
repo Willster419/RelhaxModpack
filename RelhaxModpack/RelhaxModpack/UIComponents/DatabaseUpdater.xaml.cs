@@ -42,6 +42,7 @@ namespace RelhaxModpack.Windows
         private const string SupportedClients = "supported_clients.xml";
         private const string ManagerVersion = "manager_version.xml";
         private const string TrashXML = "trash.xml";
+        private const string DatabaseXml = "database.xml";
         private const int MaxFileSizeForHash = 80000000;
         #endregion
 
@@ -516,6 +517,16 @@ namespace RelhaxModpack.Windows
             Logging.WriteToLog(message);
             LogOutput.AppendText(message + "\n");
         }
+
+        private void LogOutput_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            LogOutput.ScrollToEnd();
+        }
+
+        private void CancelDownloadButon_Click(object sender, RoutedEventArgs e)
+        {
+            client.CancelAsync();
+        }
         #endregion
 
         #region Local zip file cleaning
@@ -980,14 +991,5 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        private void LogOutput_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            LogOutput.ScrollToEnd();
-        }
-
-        private void CancelDownloadButon_Click(object sender, RoutedEventArgs e)
-        {
-            client.CancelAsync();
-        }
     }
 }
