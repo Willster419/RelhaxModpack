@@ -43,8 +43,10 @@
                             <Button x:Name="UpdateDatabaseStep9_EU_GER" Content="EU GER"  Margin="5,0,0,0" Click="UpdateDatabaseStep9_EU_GER_Click"/>
                         </StackPanel>
                     </StackPanel>
-                    <TextBox HorizontalAlignment="Left" Height="65" Margin="0,315,0,0" TextWrapping="Wrap" Text="File X of Y: Filename.zip&#x0a;Size: x&#x0a;Time: y&#x0a;Hash: z" VerticalAlignment="Top" Width="388"/>
-                    <ProgressBar HorizontalAlignment="Left" Height="21" Margin="0,380,0,0" VerticalAlignment="Top" Width="388"/>
+                    <ProgressBar x:Name="TotalUpdateProgressBar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="22"/>
+                    <ProgressBar x:Name="FileDownloadProgresBar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="15" Margin="0,0,0,25"/>
+                    <TextBlock x:Name="DownloadProgressText" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,42" TextWrapping="Wrap" Text="X kb of Y kb"/>
+                    <Button Content="Cancel Download" HorizontalAlignment="Right"  VerticalAlignment="Bottom" Margin="0,0,0,42" Width="106" x:Name="CancelDownloadButon" Click="CancelDownloadButon_Click"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="UpdateApplicationTab" Header="Update Application">
@@ -93,6 +95,6 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <TextBox x:Name="LogOutput" Grid.Column="2" HorizontalAlignment="Stretch" Margin="0" TextWrapping="Wrap" VerticalAlignment="Stretch" />
+        <TextBox x:Name="LogOutput" Grid.Column="2" HorizontalAlignment="Stretch" Margin="0" TextWrapping="Wrap" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Visible" TextChanged="LogOutput_TextChanged" />
     </Grid>
 </local:RelhaxWindow>

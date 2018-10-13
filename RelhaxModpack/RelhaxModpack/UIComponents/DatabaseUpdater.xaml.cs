@@ -26,11 +26,12 @@ namespace RelhaxModpack.Windows
         #region Constants
         private const string DatabaseUpdateTxt = "databaseUpdate.txt";
         private const string DatabaseUpdateBackupTxt = "databaseUpdate.txt.bak";
-        private const string KeyAddress = "TODO";
+        private const string KeyAddress = "aHR0cDovL3dvdG1vZHMucmVsaGF4bW9kcGFjay5jb20vUmVsaGF4TW9kcGFjay9SZXNvdXJjZXMvZXh0ZXJuYWwva2V5LnR4dA==";
         private const string ModpackUsername = "modpack@wotmods.relhaxmodpack.com";
         private const string ModpackPassword = "QjFZLi0zaGxsTStY";
         private const string FTPRoot =                       "ftp://wotmods.relhaxmodpack.com/";
         private const string WotFolderRoot =                 "ftp://wotmods.relhaxmodpack.com/WoT/";
+        private const string WotFolderRootHTTP =             "http://wotmods.relhaxmodpack.com/WoT/";
         private const string FTPModpackRoot =                "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/";
         private const string FTPRescourcesRoot =             "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/";
         private const string FTPManagerInfoRoot =            "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/managerInfo/";
@@ -394,8 +395,10 @@ namespace RelhaxModpack.Windows
                     int fileSizeBytes = int.Parse(filePropertiesSize.Value);
                     if(fileSizeBytes > MaxFileSizeForHash)
                     {
+                        //UPDATE UI
+                        CancelDownloadButon.Visibility = Visibility.Visible;
                         Logging.WriteToLog("file size greator than limit, downloading for size", Logfiles.Application, LogLevel.Debug);
-                        string fileDownloadURL = string.Format("{0}{1}/{2}", WotFolderRoot, Settings.WoTModpackOnlineFolderVersion, fileName);
+                        string fileDownloadURL = string.Format("{0}{1}/{2}", WotFolderRootHTTP, Settings.WoTModpackOnlineFolderVersion, fileName);
                         if (File.Exists(fileName))
                             File.Delete(fileName);
                         client.DownloadProgressChanged += OnDownloadProgress;
@@ -451,7 +454,10 @@ namespace RelhaxModpack.Windows
 
         private void OnDownloadProgress(object sender, DownloadProgressChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            FileDownloadProgresBar.Minimum = 0;
+            FileDownloadProgresBar.Value = e.ProgressPercentage;
+            FileDownloadProgresBar.Maximum = 100;
+            DownloadProgressText.Text = string.Format("{0}kb of {1}kb", e.BytesReceived/1024, e.TotalBytesToReceive/1024);
         }
         #endregion
 
@@ -468,7 +474,8 @@ namespace RelhaxModpack.Windows
                 string versionInfo = string.Format("{0}={1},  {2}={3}", nameof(Settings.WoTModpackOnlineFolderVersion)
                     , Settings.WoTModpackOnlineFolderVersion, nameof(Settings.WoTClientVersion), Settings.WoTClientVersion);
                 Logging.WriteToLog(versionInfo);
-                this.Name = "DatabaseUpdater: " + versionInfo;
+                ReportProgress(versionInfo);
+                //this.Name = "DatabaseUpdater: " + versionInfo;
             }
         }
 
@@ -579,10 +586,20 @@ namespace RelhaxModpack.Windows
             //download databaseInfo
             ReportProgress(string.Format("Loading database.xml from online folder {0}", Settings.WoTModpackOnlineFolderVersion));
             XmlDocument downloadedDatabaseXml = new XmlDocument();
-            using (WebClient client = new WebClient())
+            using (WebClient client = new WebClient() { Credentials = Credentials })
             {
                 string xmlString = await client.DownloadStringTaskAsync(string.Format("ftp://wotmods.relhaxmodpack.com/WoT/{0}/database.xml", Settings.WoTModpackOnlineFolderVersion));
-                downloadedDatabaseXml.LoadXml(xmlString);
+                try
+                {
+                    downloadedDatabaseXml.LoadXml(xmlString);
+                }
+                catch (XmlException xmlx)
+                {
+                    ReportProgress("Invalid XML document");
+                    ReportProgress(xmlx.ToString());
+                    return;
+                }
+                
             }
             //make string list of file names from database.xml
             ReportProgress("Creating string list of names from database.xml");
@@ -596,7 +613,7 @@ namespace RelhaxModpack.Windows
             //load xml string from php script of listing all files in folder
             ReportProgress("Loading list of files in online folder");
             XmlDocument files_in_folder = new XmlDocument();
-            using (WebClient client = new WebClient())
+            using (WebClient client = new WebClient() { Credentials = Credentials })
             {
                 string xmlString = await client.DownloadStringTaskAsync(string.Format("http://wotmods.relhaxmodpack.com/scripts/GetZipFiles.php?folder={0}", Settings.WoTModpackOnlineFolderVersion));
                 files_in_folder.LoadXml(xmlString);
@@ -614,12 +631,22 @@ namespace RelhaxModpack.Windows
             System.Diagnostics.Stopwatch total_time_php_processing = new System.Diagnostics.Stopwatch();
             total_time_php_processing.Restart();
             //verify UI is ready for the update process
-            //TODO
+            TotalUpdateProgressBar.Minimum = 0;
+            TotalUpdateProgressBar.Value = TotalUpdateProgressBar.Minimum;
+            TotalUpdateProgressBar.Maximum = total;
+            FileDownloadProgresBar.Minimum = 0;
+            FileDownloadProgresBar.Value = FileDownloadProgresBar.Minimum;
+            FileDownloadProgresBar.Maximum = 1;
             foreach (XmlNode zipFileEntry in zipFilesList)
             {
+                //always save progress so it's not lost
+                downloadedDatabaseXml.Save("database.xml");
                 ReportProgress(string.Format("Parsing file {1} of {2} name={0}", zipFileEntry.Attributes["name"].Value, ++progress, total));
                 //update the UI
-                //TODO
+                CancelDownloadButon.Visibility = Visibility.Hidden;
+                DownloadProgressText.Text = "";
+                FileDownloadProgresBar.Value = 0;
+                TotalUpdateProgressBar.Value = progress;
                 time_for_each_file.Restart();
                 //if exists in string list of database.xml, remove it -> serves as removed files
                 if (removed_files.Contains(zipFileEntry.Attributes["name"].Value))
@@ -634,7 +661,16 @@ namespace RelhaxModpack.Windows
                 {
                     //add
                     //get all file properties
-                    XmlNode onlineFileProperties = await GetFilePropertiesAsync(FilePropertiesPHP, zipFileEntry.Attributes["name"].Value,true);
+                    XmlNode onlineFileProperties = null;
+                    try
+                    {
+                        onlineFileProperties = await GetFilePropertiesAsync(FilePropertiesPHP, zipFileEntry.Attributes["name"].Value, true);
+                    }
+                    catch (WebException ex)
+                    {
+                        ReportProgress("failed to update");
+                        ReportProgress(ex.ToString());
+                    }
                     if(onlineFileProperties == null)
                     {
                         string elapsed_time_add = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
@@ -700,7 +736,16 @@ namespace RelhaxModpack.Windows
                         (!filePropertiesSizeDatabaseXml.Value.Equals(filePropertiesSizeOnline.Value)))
                     {
                         //get the script online file properties again but this time with the hash info
-                        onlineFileProperties = await GetFilePropertiesAsync(FilePropertiesPHP, zipFileEntry.Attributes["name"].Value, true);
+                        try
+                        {
+                            onlineFileProperties = await GetFilePropertiesAsync(FilePropertiesPHP, zipFileEntry.Attributes["name"].Value, true);
+                        }
+                        catch(WebException exception)
+                        {
+                            ReportProgress("Failed to update");
+                            ReportProgress(exception.ToString());
+                            onlineFileProperties = null;
+                        }
                         if (onlineFileProperties == null)
                         {
                             string elapsed_time_add = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
@@ -825,5 +870,15 @@ namespace RelhaxModpack.Windows
             System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
         }
         #endregion
+
+        private void LogOutput_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            LogOutput.ScrollToEnd();
+        }
+
+        private void CancelDownloadButon_Click(object sender, RoutedEventArgs e)
+        {
+            client.CancelAsync();
+        }
     }
 }

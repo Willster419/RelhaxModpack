@@ -80,7 +80,11 @@ namespace RelhaxModpack
             Logging.WriteToLog("command line: " + string.Join(" ", commandArgs));
             for (int i = 0; i < commandArgs.Count(); i++)
             {
-                switch(commandArgs[i])
+                string commandArg = commandArgs[i];
+                char compare = commandArg[0];
+                if (compare.Equals('/') || compare.Equals('-'))
+                    commandArg = commandArg.Remove(0, 1);
+                switch(commandArg)
                 {
                     case "test":
                         Logging.WriteToLog("test, loading in test mode");
@@ -128,6 +132,12 @@ namespace RelhaxModpack
                         Logging.WriteToLog("databaseedit, loading in database edit mode");
                         break;
                 }
+            }
+            if(CommandLineSettings.DatabaseUpdate)
+            {
+                RelhaxModpack.Windows.DatabaseUpdater updater = new Windows.DatabaseUpdater();
+                updater.ShowDialog();
+                Application.Current.Shutdown();
             }
         }
     }
