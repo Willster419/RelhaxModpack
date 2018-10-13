@@ -807,10 +807,20 @@ namespace RelhaxModpack.Windows
             //upload it back
             using (WebClient client = new WebClient() { Credentials = Credentials })
             {
-                client.UploadFile(string.Format("ftp://wotmods.relhaxmodpack.com/WoT/{0}/database.xml", Settings.WoTModpackOnlineFolderVersion), "database.xml");
+                try
+                {
+                    await client.UploadFileTaskAsync(string.Format("ftp://wotmods.relhaxmodpack.com/WoT/{0}/database.xml",
+                        Settings.WoTModpackOnlineFolderVersion), "database.xml");
+                    File.Delete("database.xml");
+                    ReportProgress("database.xml uploaded to wot folder " + Settings.WoTModpackOnlineFolderVersion);
+                }
+                catch (WebException ex)
+                {
+                    ReportProgress("Failed to upload back to server");
+                    ReportProgress(ex.ToString());
+                    ReportProgress("database.xml not deleted");
+                }
             }
-            File.Delete("database.xml");
-            ReportProgress("database.xml uploaded to wot folder " + Settings.WoTModpackOnlineFolderVersion);
         }
 
         private void UpdateDatabaseStep3_Click(object sender, RoutedEventArgs e)
