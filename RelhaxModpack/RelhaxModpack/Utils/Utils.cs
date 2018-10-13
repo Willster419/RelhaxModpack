@@ -459,7 +459,23 @@ namespace RelhaxModpack
         {
             //TODO
         }
-
+        public static List<DatabasePackage> GetFlatList(List<DatabasePackage> globalDependnecies = null, List<Dependency> dependencies = null,
+            List<DatabasePackage> logicalDependencies = null, List<Category> parsedCategoryList = null)
+        {
+            if (globalDependnecies == null && dependencies == null && logicalDependencies == null && parsedCategoryList == null)
+                return null;
+            List<DatabasePackage> flatList = new List<DatabasePackage>();
+            if (globalDependnecies != null)
+                flatList.AddRange(globalDependnecies);
+            if (dependencies != null)
+                flatList.AddRange(dependencies);
+            if (logicalDependencies != null)
+                flatList.AddRange(logicalDependencies);
+            if (parsedCategoryList != null)
+                foreach (Category cat in parsedCategoryList)
+                    flatList.AddRange(cat.GetFlatPackageList());
+            return flatList;
+        }
         #endregion
 
         #region Selections parsing

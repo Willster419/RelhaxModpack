@@ -640,7 +640,7 @@ namespace RelhaxModpack.Windows
             foreach (XmlNode zipFileEntry in zipFilesList)
             {
                 //always save progress so it's not lost
-                downloadedDatabaseXml.Save("database.xml");
+                downloadedDatabaseXml.Save("database.xml.bak");
                 ReportProgress(string.Format("Parsing file {1} of {2} name={0}", zipFileEntry.Attributes["name"].Value, ++progress, total));
                 //update the UI
                 CancelDownloadButon.Visibility = Visibility.Hidden;
@@ -804,6 +804,7 @@ namespace RelhaxModpack.Windows
             File.WriteAllText("update_files.log", summary.ToString());
             ReportProgress("results saved to update_files.log");
             downloadedDatabaseXml.Save("database.xml");
+            downloadedDatabaseXml.Save("database.xml.bak");
             //upload it back
             using (WebClient client = new WebClient() { Credentials = Credentials })
             {
@@ -811,6 +812,7 @@ namespace RelhaxModpack.Windows
                 {
                     await client.UploadFileTaskAsync(string.Format("ftp://wotmods.relhaxmodpack.com/WoT/{0}/database.xml",
                         Settings.WoTModpackOnlineFolderVersion), "database.xml");
+                    if (File.Exists("database.xml"))
                     File.Delete("database.xml");
                     ReportProgress("database.xml uploaded to wot folder " + Settings.WoTModpackOnlineFolderVersion);
                 }
@@ -822,20 +824,81 @@ namespace RelhaxModpack.Windows
                 }
             }
         }
+        //string needed for step 4 go here
 
-        private void UpdateDatabaseStep3_Click(object sender, RoutedEventArgs e)
+        private async void UpdateDatabaseStep3_Click(object sender, RoutedEventArgs e)
         {
             //getting local crc's and comparing them on server
+            //init UI
+            LogOutput.Clear();
+            ReportProgress("Starting databaseUpdate step 3");
+            //checks
+            if(string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
+            {
+                ReportProgress("wot online folder version is empty");
+                return;
+            }
+            if(!File.Exists(SelectModInfo.FileName))
+            {
+                ReportProgress("selectMofInfo file selected does not exist:" + SelectModInfo.FileName);
+                return;
+            }
+            //init stringbuilders
+            StringBuilder filesNotFoundSB = new StringBuilder();
+            StringBuilder globalDepsSB = new StringBuilder();
+            StringBuilder dependenciesSB = new StringBuilder();
+            StringBuilder packagesSB = new StringBuilder();
+            StringBuilder databaseUpdateText = new StringBuilder();
+            filesNotFoundSB.Append("FILES NOT FOUND:\n");
+            globalDepsSB.Append("\nGlobal Dependencies updated:\n");
+            dependenciesSB.Append("\nDependencies updated:\n");
+            packagesSB.Append("\nPackages updated:\n");
+            //init lists
+            List<DatabasePackage> globalDependencies = new List<DatabasePackage>();
+            List<Dependency> dependencies = new List<Dependency>();
+            List<Category> parsedCategoryList = new List<Category>();
+            ReportProgress("downloading modInfo.xml from server");
+            using (client = new WebClient() { Credentials = Credentials })
+            {
+                try
+                {
+                    await client.DownloadFileTaskAsync(string.Format("ftp://wotmods.relhaxmodpack.com/WoT/{0}/database.xml",
+                        Settings.WoTModpackOnlineFolderVersion), "database.xml");
+                }
+                catch(WebException ex)
+                {
+                    ReportProgress("failed to download database.xml");
+                    ReportProgress(ex.ToString());
+                    return;
+                }
+            }
+            XmlDocument doc = new XmlDocument();
+            try
+            {
+                doc.Load(SelectModInfo.FileName);
+            }
+            catch (XmlException xmlx)
+            {
+                ReportProgress("failed to parse modInfo from xml");
+                ReportProgress(xmlx.ToString());
+                return;
+            }
+            if(!XMLUtils.ParseDatabase(doc,globalDependencies,dependencies,parsedCategoryList))
+            {
+                ReportProgress("failed to parse modInfo to lists");
+                return;
+            }
+            List<DatabasePackage> flatList = Utils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
 
         }
 
-        private void UpdateDatabaseStep4_Click(object sender, RoutedEventArgs e)
+        private async void UpdateDatabaseStep4_Click(object sender, RoutedEventArgs e)
         {
             //do stuff on the server
 
         }
 
-        private void UpdateDatabaseStep5_Click(object sender, RoutedEventArgs e)
+        private async void UpdateDatabaseStep5_Click(object sender, RoutedEventArgs e)
         {
             //upload databaseUpdate.txt
 
