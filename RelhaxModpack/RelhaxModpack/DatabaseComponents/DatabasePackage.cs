@@ -68,10 +68,6 @@ namespace RelhaxModpack
         /// </summary>
         public string DevURL = "";
         public int ExtractionLevel = 5;
-        /// <summary>
-        /// used to inentify [if a PackageName confilct occurs] where in the xml file the conflict is
-        /// </summary>
-        public int CheckDatabaseListIndex = 0;
         public override string ToString()
         {
             return PackageName;

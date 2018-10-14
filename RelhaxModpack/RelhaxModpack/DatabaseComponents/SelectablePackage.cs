@@ -338,6 +338,7 @@ namespace RelhaxModpack
         /// </summary>
         public List<Media> PictureList = new List<Media>();
         public List<Dependency> Dependencies = new List<Dependency>();
+        public bool HideFromSearchList = false;
         /// <summary>
         /// provides a nice complete path that is more human readable than a packagePath
         /// </summary>

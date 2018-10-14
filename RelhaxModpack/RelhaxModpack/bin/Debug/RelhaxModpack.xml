@@ -82,11 +82,6 @@
             the URL link of where you can view the webpage of the mod
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.CheckDatabaseListIndex">
-            <summary>
-            used to inentify [if a PackageName confilct occurs] where in the xml file the conflict is
-            </summary>
-        </member>
         <member name="P:RelhaxModpack.DatabasePackage.CompletePath">
             <summary>
             Provides (if possible) a complete tree style path in for the cateogry views
