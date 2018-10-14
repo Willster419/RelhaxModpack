@@ -334,7 +334,19 @@ namespace RelhaxModpack
         #endregion
 
         #region Duplicates checking
-
+        public static List<string> CheckForDuplicates(List<DatabasePackage> globalDependencies, List<Dependency> dependencies,
+            List<Category> parsedCategoryList, List<Dependency> logicalDependencies = null)
+        {
+            List<string> duplicatesList = new List<string>();
+            List<DatabasePackage> flatList = GetFlatList(globalDependencies, dependencies, logicalDependencies, parsedCategoryList);
+            foreach(DatabasePackage package in flatList)
+            {
+                List<DatabasePackage> packagesWithPackagename = flatList.Where(item => item.PackageName.Equals(package.PackageName)).ToList();
+                if (packagesWithPackagename.Count > 1)
+                    duplicatesList.Add(package.PackageName);
+            }
+            return duplicatesList;
+        }
         #endregion
 
         #region Mods list sorting
@@ -460,7 +472,7 @@ namespace RelhaxModpack
             //TODO
         }
         public static List<DatabasePackage> GetFlatList(List<DatabasePackage> globalDependnecies = null, List<Dependency> dependencies = null,
-            List<DatabasePackage> logicalDependencies = null, List<Category> parsedCategoryList = null)
+            List<Dependency> logicalDependencies = null, List<Category> parsedCategoryList = null)
         {
             if (globalDependnecies == null && dependencies == null && logicalDependencies == null && parsedCategoryList == null)
                 return null;
