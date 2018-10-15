@@ -336,8 +336,9 @@ namespace RelhaxModpack
         /// <summary>
         /// list of media preview items associated with this package, shown in the preview window on right click of component
         /// </summary>
-        public List<Media> PictureList = new List<Media>();
-        public List<Dependency> Dependencies = new List<Dependency>();
+        public List<Media> Medias = new List<Media>();
+        //list of dependnecys this package calls for
+        public List<DatabaseLogic> Dependencies = new List<DatabaseLogic>();
         public bool HideFromSearchList = false;
         /// <summary>
         /// provides a nice complete path that is more human readable than a packagePath

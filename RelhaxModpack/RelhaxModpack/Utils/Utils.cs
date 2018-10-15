@@ -331,6 +331,12 @@ namespace RelhaxModpack
                 return result;
             else return defaultValue;
         }
+        public static long ParseLong(string input, long defaultValue)
+        {
+            if (long.TryParse(input, out long result))
+                return result;
+            else return defaultValue;
+        }
         #endregion
 
         #region Duplicates checking

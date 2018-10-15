@@ -18,24 +18,7 @@ namespace RelhaxModpack
     {
         //static path for all developer selections
         public const string DeveloperSelectionsXPath = "TODO";
-        #region Components of packages
-        //for base package
-        public static readonly string[] BaseRequiredAttributes = new string[] { "PackageName", "Enabled" };
-        public static readonly string[] BaseOptionalAttributes = new string[] { "Version", "Timestamp", "ZipFile", "CRC", "StartAddress",
-            "EndAddress", "AppendExtraction", "LogAtInstall", "DevURL", "ExtractionLevel" };
-        //for dependency
-        public static readonly string[] DependnecyRequiredAttributes = new string[] { "LogicType" };
-        //for selectable package
-        public static readonly string[] SelectablePackageRequiredAttributes = new string[] { "Name", "Type" };
-        public static readonly string[] SelectablePackageOptionalAttributes = new string[] { "Visible", "Size", "UpdateComment", "Description" };
-        public static readonly string[] SelectablePackagOptionaleNodes = new string[] { "UserFiles", "Packages", "PictureList" };
-        //for both:
-        public static readonly string[] DependencySelectableOptionalNodes = new string[] { "Dependencies" };
-        //inside packages - component required attributes
-        public static readonly string[] DependnecyLogicRequiredAttributes = new string[] { "NegateFlag", "PackageName" };
-        public static readonly string[] MediaRequiredAttributes = new string[] { "URL", "MediaType" };
-        public static readonly string[] UserfilesRequiredAttributes = new string[] { "Pattern" };
-        #endregion
+        
         //check to make sure an xml file is valid
         public static bool IsValidXml(string filePath)
         {
@@ -209,8 +192,8 @@ namespace RelhaxModpack
                 case "2.0":
                     return ParseDatabaseV2(DocumentToXDocument(modInfoDocument), globalDependencies, dependencies, parsedCategoryList);
                 default:
-                    Logging.WriteToLog(string.Format("unknown format of {0}: {1}", nameof(versionString), versionString),
-                        Logfiles.Application, LogLevel.Error);
+                    //parse legacy database
+
                     return false;
             }
         }
@@ -221,108 +204,364 @@ namespace RelhaxModpack
             bool globalParsed = ParseDatabaseV2GlobalDependencies(
                 modInfoDocument.XPathSelectElements("/modInfoAlpha.xml/globaldependencies/globaldependency").ToList(), globalDependencies);
             //parsing the logical dependnecies
-            bool logicalDepParsed = ParseDatabaseV2LogicalDependencies(modInfoDocument.XPathSelectElements(
+            bool logicalDepParsed = ParseDatabaseV2Dependencies(modInfoDocument.XPathSelectElements(
                 "/modInfoAlpha.xml/logicalDependencies/logicalDependency").ToList(), logicalDependencies);
             //parsing the categories
             bool categoriesParsed = ParseDatabaseV2Categories(modInfoDocument.XPathSelectElements(
                 "/modInfoAlpha.xml/catagories/catagory").ToList(), parsedCategoryList);
             return (globalParsed && logicalDepParsed && categoriesParsed) ? true : false;
         }
-        private static bool ParseDatabaseV2GlobalDependencies(List<XElement> holder, List<DatabasePackage> globalDependencies)
+        private static bool ParseDatabaseV2GlobalDependencies(List<XElement> packageNodeHolder, List<DatabasePackage> globalDependencies)
         {
             //first for loop is for each "dependency" object holder
-            foreach(XElement dependency in holder)
+            foreach(XElement dependency in packageNodeHolder)
             {
-                Dependency globalDependency = new Dependency();
+                DatabasePackage globalDependency = new DatabasePackage();
                 
             }
             return true;
         }
-        private static void DynamicXMLParse(XElement dependency, ref DatabasePackage package)
+        private static bool ParseDatabaseV2Dependencies(List<XElement> packageNodeHolder, List<Dependency> logicalDependencies)
+        {
+            foreach (XElement dependency in packageNodeHolder)
+            {
+                
+
+            }
+            return true;
+        }
+        private static bool ParseDatabaseV2Categories(List<XElement> packageNodeHolder, List<Category> categories)
+        {
+            //TODO
+            foreach (XElement dependency in packageNodeHolder)
+            {
+                
+
+            }
+            return true;
+        }
+        #region Components of packages for database parsing V2
+        //for base package
+        public static readonly string[] BaseRequiredNodesV2 = new string[] { "PackageName" };
+        public static readonly string[] BaseOptionalNodesV2 = new string[] { "Version", "Timestamp", "ZipFile", "CRC", "StartAddress",
+            "EndAddress", "AppendExtraction", "LogAtInstall", "DevURL", "ExtractionLevel", "Enabled" };//all of these have defaults
+        //for dependency
+        //--nothing--
+        //for selectable package
+        public static readonly string[] SelectablePackageRequiredNodesV2 = new string[] { "Name", "Type" };
+        public static readonly string[] SelectablePackagOptionalNodesV2 = new string[] { "UserFiles", "Packages", "Medias",
+            "Visible", "Size", "UpdateComment", "Description" };
+        //for depdendency and selectable package
+        public static readonly string[] DependencySelectableOptionalNodesV2 = new string[] { "Dependencies" };
+        //for categories
+        public static readonly string[] CategoryRequiredNodesV2 = new string[] { "name", "dependencies" };
+        #endregion
+        private static void DynamicXMLDatabasePackageParse(XElement xmlPackage, ref DatabasePackage package)
         {
             //first treat it as regular package
             //check for all fields in it
-            List<string> copyOfRequiredBaseAttributes = new List<string>(BaseRequiredAttributes.ToList());
+            List<string> copyOfRequiredBaseNodes = new List<string>(BaseRequiredNodesV2.ToList());
             List<string> unknownElements = new List<string>();
-            foreach(XAttribute attribute in dependency.Attributes())//ATTRIBUTES
+            //start with databasePackage
+            foreach(XElement xmlPackageProperty in xmlPackage.Elements())//Properties of the package
             {
-                string attributeName = attribute.Name.LocalName;
-                if (copyOfRequiredBaseAttributes.Contains(attributeName))
+                string elementName = xmlPackageProperty.Name.LocalName;
+                if (copyOfRequiredBaseNodes.Contains(elementName))
                 {
                     //switch
-                    copyOfRequiredBaseAttributes.Remove(attributeName);
+                    switch (elementName)
+                    {
+                        case "PackageName":
+                            package.PackageName = xmlPackageProperty.Value.Trim();
+                            break;
+                    }
+                    copyOfRequiredBaseNodes.Remove(elementName);
                 }
-                else if (BaseOptionalAttributes.Contains(attributeName))
+                else if (BaseOptionalNodesV2.Contains(elementName))
                 {
                     //switch
-
+                    switch (elementName)
+                    {
+                        case "PackageName":
+                            package.PackageName = xmlPackageProperty.Value.Trim();
+                            break;
+                        case "Version":
+                            package.Version = xmlPackageProperty.Value.Trim();
+                            break;
+                        case "Timestamp"://long
+                            package.Timestamp = Utils.ParseLong(xmlPackageProperty.Value.Trim(),0);
+                            break;
+                        case "ZipFile":
+                            package.ZipFile = xmlPackageProperty.Value.Trim();
+                            break;
+                        case "CRC":
+                            package.CRC = xmlPackageProperty.Value.Trim();
+                            break;
+                        case "StartAddress":
+                            package.StartAddress = xmlPackageProperty.Value.Trim();
+                            break;
+                        case "EndAddress":
+                            package.EndAddress = xmlPackageProperty.Value.Trim();
+                            break;
+                        case "AppendExtraction"://bool
+                            package.AppendExtraction = Utils.ParseBool(xmlPackageProperty.Value.Trim(),false);
+                            break;
+                        case "LogAtInstall"://bool
+                            package.LogAtInstall = Utils.ParseBool(xmlPackageProperty.Value.Trim(),false);
+                            break;
+                        case "DevURL":
+                            package.DevURL = xmlPackageProperty.Value.Trim();
+                            break;
+                        case "ExtractionLevel"://int
+                            package.ExtractionLevel = Utils.ParseInt(xmlPackageProperty.Value.Trim(),5);
+                            break;
+                        case "Enabled"://bool
+                            package.Enabled = Utils.ParseBool(xmlPackageProperty.Value.Trim(),false);
+                            break;
+                    }
                 }
-                else
-                    unknownElements.Add(attributeName);
             }
-            //check if it's logical or selectable
-            if(package is Dependency dep)
+            //check for mising required nodes of databasePackage
+            if (copyOfRequiredBaseNodes.Count > 0)
             {
-                DynamicXMLParse(dependency, ref dep, ref unknownElements);
-            }
-            else if (package is SelectablePackage sp)
-            {
-                DynamicXMLParse(dependency, ref sp, ref unknownElements);
-            }
-            else
-            {
-                Logging.WriteToLog("Package type should not get here", Logfiles.Application, LogLevel.Error);
-            }
-        }
-        private static void DynamicXMLParse(XElement dependency, ref Dependency package, ref List<string> unknownElements)
-        {
-            //copy list of required
-
-            //process list of attributes
-
-            //process list of nodes
-            /*foreach(XElement element in dependency.Elements())//ELEMENTS
-            {
-                string elementName = element.Name.LocalName;
-                if (OptionalBaseNodes.Contains(elementName))
+                foreach (string s in copyOfRequiredBaseNodes)
                 {
-                    //switch
+                    //write it's missing
+                    string lineNumber = "" + ((IXmlLineInfo)xmlPackage).LineNumber;
+                    Logging.WriteToLog(string.Format("property name={0}, line number={1},", s, lineNumber),Logfiles.Application,LogLevel.Error);
                 }
-                else
-                    unknownElements.Add(elementName);
-            }*/
-        }
-        private static void DynamicXMLParse(XElement dependency, ref SelectablePackage package, ref List<string> unknownElements)
-        {
-            //copy list of required
-
-            //process list of attributes
-
-            //process list of nodes
-            /*foreach(XElement element in dependency.Elements())//ELEMENTS
+            }
+            //check if it's a dependency or package
+            if (package is Dependency dependency)
             {
-                string elementName = element.Name.LocalName;
-                if (OptionalBaseNodes.Contains(elementName))
+                foreach (XElement xmlPackageProperty in xmlPackage.Elements())
                 {
-                    //switch
+                    string elementName = xmlPackageProperty.Name.LocalName;
+                    //{ "Dependencies" }
+                    if (DependencySelectableOptionalNodesV2.Contains(elementName))
+                    {
+                        switch (elementName)
+                        {
+                            case "Dependencies":
+                                ProcessDependencies(xmlPackageProperty, dependency.Dependencies);
+                                break;
+                        }
+                    }
                 }
-                else
-                    unknownElements.Add(elementName);
-            }*/
+                //no required dependency specific nodes...
+            }
+            else if (package is SelectablePackage selectablePackage)
+            {
+                List<string> copyOfRequiredSelectablePackages = new List<string>(SelectablePackageRequiredNodesV2.ToList());
+                foreach (XElement xmlPackageProperty in xmlPackage.Elements())
+                {
+                    string elementName = xmlPackageProperty.Name.LocalName;
+                    //{ "Name", "Type" }
+                    if (SelectablePackageRequiredNodesV2.Contains(elementName))
+                    {
+                        //switch
+                        switch (elementName)
+                        {
+                            case "name":
+                                selectablePackage.Name = xmlPackageProperty.Value.Trim();
+                                break;
+                            case "type":
+                                selectablePackage.Type = xmlPackageProperty.Value.Trim();
+                                break;
+                        }
+                        copyOfRequiredSelectablePackages.Remove(elementName);
+                    }
+                    //{ "UserFiles", "Packages", "Medias", "Visible", "Size", "UpdateComment", "Description" }
+                    else if (SelectablePackagOptionalNodesV2.Contains(elementName))
+                    {
+                        switch (elementName)
+                        {
+                            case "visible":
+                            case "visable":
+                                selectablePackage.Visible = Utils.ParseBool(xmlPackageProperty.Value.Trim(), false);
+                                break;
+                            case "size":
+                                selectablePackage.Size = Utils.ParseLong(xmlPackageProperty.Value.Trim(), 0);
+                                break;
+                            case "updateComment"://TODO: need ot macro unescape text
+                                selectablePackage.UpdateComment = xmlPackageProperty.Value.Trim();
+                                break;
+                            case "description":
+                                selectablePackage.Description = xmlPackageProperty.Value.Trim();
+                                break;
+                            case "updateInstructions":
+                                selectablePackage.UpdateInstructions = xmlPackageProperty.Value.Trim();
+                                break;
+                            case "userFiles":
+                                ProcessUserFiles(xmlPackageProperty, selectablePackage.UserFiles);
+                                break;
+                            case "medias":
+                                ProcessMedias(xmlPackageProperty, selectablePackage.Medias);
+                                break;
+                            case "packages":
+                                throw new BadMemeException("THIS IS STILL TODO - RECURSIVE PACKAGE PROCESSING");
+                                break;
+                        }
+                    }
+                    //{ "Dependencies" }
+                    else if (DependencySelectableOptionalNodesV2.Contains(elementName))
+                    {
+                        switch (elementName)
+                        {
+                            case "Dependencies":
+                                ProcessDependencies(xmlPackageProperty, selectablePackage.Dependencies);
+                                break;
+                        }
+                    }
+                }
+                //check for missing required nodes of package
+                if (copyOfRequiredSelectablePackages.Count > 0)
+                {
+                    foreach (string s in copyOfRequiredSelectablePackages)
+                    {
+                        //write it's missing
+                        string lineNumber = "" + ((IXmlLineInfo)xmlPackage).LineNumber;
+                        Logging.WriteToLog(string.Format("property name={0}, line number={1},", s, lineNumber), Logfiles.Application, LogLevel.Error);
+                    }
+                }
+            }
+            //TODO: maybe put this in it's own method?
+            //process if any extra unknown nodes are left
+            List<string> allPossiblePackageNodes = new List<string>();
+            //BaseRequiredNodesV2
+            //BaseOptionalNodesV2
+            //SelectablePackageRequiredNodesV2
+            //SelectablePackagOptionalNodesV2
+            //DependencySelectableOptionalNodesV2
+            allPossiblePackageNodes.AddRange(BaseRequiredNodesV2);
+            allPossiblePackageNodes.AddRange(BaseOptionalNodesV2);
+            if (package is Dependency || package is SelectablePackage)
+            {
+                allPossiblePackageNodes.AddRange(DependencySelectableOptionalNodesV2);
+                if(package is SelectablePackage)
+                {
+                    allPossiblePackageNodes.AddRange(SelectablePackageRequiredNodesV2);
+                    allPossiblePackageNodes.AddRange(SelectablePackagOptionalNodesV2);
+                }
+            }
+            foreach (XElement xmlPackageProperty in xmlPackage.Elements())
+            {
+                string elementName = xmlPackageProperty.Name.LocalName;
+                string lineNumber = "" + ((IXmlLineInfo)xmlPackageProperty).LineNumber;
+                if (!allPossiblePackageNodes.Contains(elementName))
+                    unknownElements.Add(string.Format("node name={0}, line number={1}",elementName,lineNumber));
+            }
+            if(unknownElements.Count > 0)
+            {
+                foreach (string s in unknownElements)
+                    Logging.WriteToLog("Parsing database error," + s, Logfiles.Application, LogLevel.Error);
+            }
         }
-        private static bool ParseDatabaseV2LogicalDependencies(List<XElement> holder, List<Dependency> logicalDependencies)
+        //{ "UserFiles", "Packages", "Medias" }//packages are different story
+        //{ "Dependencies" }
+        //inside packages - component required attributes
+        public static readonly string[] UserfilesRequiredNodesV2 = new string[] { "Pattern" };
+        private static void ProcessUserFiles(XElement userFilesHolder, List<UserFiles> userfiles)
         {
+            //NOTE FOR ALL THESE: the holder is the holder, inside is each element
+            foreach(XElement userfileElement in userFilesHolder.Elements())
+            {
+                //inside element values is the actual userdata element
+                UserFiles files = new UserFiles
+                {
+                    Pattern = userfileElement.Value
+                };
+                //TODO: make into attributes?
+                userfiles.Add(files);
+            }
+        }
 
-            return true;
-        }
-        private static bool ParseDatabaseV2Categories(List<XElement> holder, List<Category> categories)
+        public static readonly string[] MediaRequiredNodesV2 = new string[] { "URL", "type" };
+        private static void ProcessMedias(XElement mediasHolder, List<Media> medias)
         {
-
-            return true;
+            foreach(XElement mediaElement in mediasHolder.Elements())
+            {
+                Media media = new Media();
+                List<string> unknownElements = new List<string>();
+                List<string> copyOfMediaRequiredNodes = new List<string>(MediaRequiredNodesV2.ToList());
+                foreach(XElement mediaProperties in mediaElement.Elements())
+                {
+                    string elementName = mediaProperties.Name.LocalName;
+                    if (MediaRequiredNodesV2.Contains(elementName))
+                    {
+                        switch(elementName)
+                        {
+                            case "URL":
+                                media.URL = mediaProperties.Value.Trim();
+                                break;
+                            case "type":
+                                media.MediaType = (MediaType) Utils.ParseInt(mediaProperties.Value.Trim(),1);
+                                break;
+                        }
+                        copyOfMediaRequiredNodes.Remove(elementName);
+                    }
+                    else
+                        unknownElements.Add(elementName);
+                }
+                if (copyOfMediaRequiredNodes.Count > 0)
+                    ListNotUsedRequired(mediaElement, copyOfMediaRequiredNodes);
+                if (unknownElements.Count > 0)
+                    ListUnknown(mediaElement, unknownElements);
+                medias.Add(media);
+            }
         }
-        public static void CheckCRC()
+        public static readonly string[] DependnecyLogicRequiredNodesV2 = new string[] { "negateFlag", "packageName", "logicType" };
+        private static void ProcessDependencies(XElement logicsHodler, List<DatabaseLogic> logics)
         {
-            //stub
+            foreach (XElement logicsElement in logicsHodler.Elements())
+            {
+                DatabaseLogic logic = new DatabaseLogic();
+                List<string> unknownElements = new List<string>();
+                List<string> copyOfDependencyLigicRequiredNodes = new List<string>(DependnecyLogicRequiredNodesV2.ToList());
+                foreach (XElement logicProperties in logicsElement.Elements())
+                {
+                    string elementName = logicProperties.Name.LocalName;
+                    if (DependnecyLogicRequiredNodesV2.Contains(elementName))
+                    {
+                        switch (elementName)
+                        {
+                            case "negateFlag":
+                                logic.NotFlag = Utils.ParseBool(logicProperties.Value.Trim(), false);
+                                break;
+                            case "packageName":
+                                logic.PackageName = logicProperties.Value.Trim();
+                                break;
+                            case "logicType":
+                                logic.Logic = (Logic)Utils.ParseInt(logicProperties.Value.Trim(), 0);
+                                break;
+                        }
+                        copyOfDependencyLigicRequiredNodes.Remove(elementName);
+                    }
+                    else
+                        unknownElements.Add(elementName);
+                }
+                if (copyOfDependencyLigicRequiredNodes.Count > 0)
+                    ListNotUsedRequired(logicsElement, copyOfDependencyLigicRequiredNodes);
+                if (unknownElements.Count > 0)
+                    ListUnknown(logicsElement, unknownElements);
+                logics.Add(logic);
+            }
+        }
+        private static void ListNotUsedRequired(XElement node, List<string> missingRequriedProperties)
+        {
+            foreach (string s in missingRequriedProperties)
+            {
+                Logging.WriteToLog(string.Format("missing required xml property: name={0}, value={1}, line={2}", node.Name.LocalName, node.Value,
+                    ((IXmlLineInfo)node).LineNumber), Logfiles.Application, LogLevel.Error);
+            }
+        }
+        private static void ListUnknown(XElement node, List<string> unknownElements)
+        {
+            foreach (string s in unknownElements)
+            {
+                Logging.WriteToLog(string.Format("unknown xml property: name={0}, value={1}, line={2}", node.Name.LocalName, node.Value,
+                    ((IXmlLineInfo)node).LineNumber), Logfiles.Application, LogLevel.Error);
+            }
         }
         //https://blogs.msdn.microsoft.com/xmlteam/2009/03/31/converting-from-xmldocument-to-xdocument/
         private static XDocument DocumentToXDocument(XmlDocument doc)

@@ -19,7 +19,7 @@ namespace RelhaxModpack
         public TreeView @TreeView;
         //list of dependencies required if anything is
         //selected from this catagory
-        public List<Dependency> Dependencies = new List<Dependency>();
+        public List<DatabaseLogic> Dependencies = new List<DatabaseLogic>();
         public Category()
         {
         }

@@ -229,7 +229,7 @@
             the list of child SelectablePackage entries in this instance of SelectablePackages
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.PictureList">
+        <member name="F:RelhaxModpack.SelectablePackage.Medias">
             <summary>
             list of media preview items associated with this package, shown in the preview window on right click of component
             </summary>

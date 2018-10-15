@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="DatabaseUpdater" Height="480" Width="800" MinHeight="480" MinWidth="800" Loaded="RelhaxWindow_Loaded">
+        Title="DatabaseUpdater" Height="480" Width="1000" MinHeight="300" MinWidth="400" Loaded="RelhaxWindow_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" MinWidth="200"/>
+            <ColumnDefinition Width="350" MinWidth="200"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="1*" MinWidth="200"/>
         </Grid.ColumnDefinitions>
