@@ -126,23 +126,33 @@ namespace RelhaxModpack
             if (string.IsNullOrWhiteSpace(inputFile))
                 return "-1";
             //first, return if the file does not exist
-            if (!System.IO.File.Exists(inputFile))
+            if (!File.Exists(inputFile))
                 return "-1";
-            //Convert the input string to a byte array and compute the hash
-            StringBuilder sBuilder;
-            using (MD5 md5Hash = MD5.Create())
-            using (var stream = System.IO.File.OpenRead(inputFile))
+            //Create a new Stringbuilder to collect the bytes
+            StringBuilder sBuilder = new StringBuilder();
+            MD5 md5Hash;
+            FileStream stream;
+            try
             {
-                byte[] data = md5Hash.ComputeHash(stream);
-                stream.Close();
-                //Create a new Stringbuilder to collect the bytes
-                sBuilder = new StringBuilder();
-                //Loop through each byte of the hashed data 
-                //and format each one as a hexadecimal string.
-                for (int i = 0; i < data.Length; i++)
+                using (md5Hash = MD5.Create())
+                using (stream = File.OpenRead(inputFile))
                 {
-                    sBuilder.Append(data[i].ToString("x2"));
+                    //Convert the input string to a byte array and compute the hash
+                    byte[] data = md5Hash.ComputeHash(stream);
+                    stream.Close();
+                    
+                    //Loop through each byte of the hashed data 
+                    //and format each one as a hexadecimal string.
+                    for (int i = 0; i < data.Length; i++)
+                    {
+                        sBuilder.Append(data[i].ToString("x2"));
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Logging.WriteToLog("Failed to check crc of local file " + inputFile + ex.ToString());
+                return "-1";
             }
             //Return the hexadecimal string.
             return sBuilder.ToString();
