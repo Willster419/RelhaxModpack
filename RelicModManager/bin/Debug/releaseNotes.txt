@@ -1,3 +1,8 @@
+Version 0.28.2.11 (10/16/2018)
+https://www.virustotal.com/#/file/e506065d8b4c810409e466111bfde78ca031fcffb496bd65c29fbcea8657cca5/detection
+-Updated embedded assemblies to prevent application crash on load
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 0.28.2.10 (10/16/2018)
 https://www.virustotal.com/#/file/d325923bf69d567caf142b079477a30232dfd8e07c507fd2ef44972b3b6736bc/detection
 -Fixed possible issue when invalid filepath is used for md5 file hash calculation
