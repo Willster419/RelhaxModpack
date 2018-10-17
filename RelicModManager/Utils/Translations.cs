@@ -422,14 +422,14 @@ namespace RelhaxModpack
             english.Add("viewAppUpdates", "View latest application updates");
             german.Add("viewAppUpdates", "Programmaktualisierungen anzeigen");
             polish.Add("viewAppUpdates", "Pokaż ostatnie zmiany w aplikacji");
-            french.Add("viewAppUpdates", "Afficher les dernières mises à jour de l'applications");
+            french.Add("viewAppUpdates", "Afficher les dernières MAJ de l'applications");
 
             //Componet: viewDBUpdates
             //
             english.Add("viewDBUpdates", "View latest database updates");
             german.Add("viewDBUpdates", "Datenbankaktualisierungen anzeigen");
             polish.Add("viewDBUpdates", "Pokaż ostatnie zmiany w bazie danych");
-            french.Add("viewDBUpdates", "Afficher les dernières mises à jour de la base de données");
+            french.Add("viewDBUpdates", "Afficher les dernières MAJ de la base de données");
 
             //Componet: EnableColorChangeDefaultCB
             //
@@ -807,7 +807,7 @@ namespace RelhaxModpack
             english.Add("checkForUpdates", "Checking for updates");
             german.Add("checkForUpdates", "Auf Updates prüfen");
             polish.Add("checkForUpdates", "Sprawdzanie aktualizacji");
-            french.Add("checkForUpdates", "Vérification de mise à jours");
+            french.Add("checkForUpdates", "Vérification de mise à jour");
 
             //Componet: 
             //
@@ -1324,7 +1324,7 @@ namespace RelhaxModpack
             english.Add("DiagnosticUtilitiesButton", "Diagnostic utilities");
             german.Add("DiagnosticUtilitiesButton", "Diagnosedienstprogramme");
             polish.Add("DiagnosticUtilitiesButton", "Narzędzia diagnostyczne");
-            french.Add("DiagnosticUtilitiesButton", "Utilitaires de diagnostique");
+            french.Add("DiagnosticUtilitiesButton", "Utilitaires de diagnostic");
 
             //Component: DatabaseVersionLabel
             //
