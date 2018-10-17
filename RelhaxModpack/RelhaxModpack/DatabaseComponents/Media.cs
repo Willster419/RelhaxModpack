@@ -2,6 +2,7 @@
 {
     public enum MediaType
     {
+        Unknown = 0,
         Picture = 1,
         Webpage = 2,
         MediaFile = 3,
