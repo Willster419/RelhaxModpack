@@ -1851,7 +1851,7 @@ namespace RelhaxModpack
             english.Add("foundOldFilesDelete2", "Would you like to delete them?");
             german.Add("foundOldFilesDelete2", "Möchtest du das sie gelöscht werden?");
             polish.Add("foundOldFilesDelete2", "Czy chcesz je usunąć?");
-            french.Add("foundOldFilesDelete2", "Voulez vous les supprimés");
+            french.Add("foundOldFilesDelete2", "Voulez vous les supprimer");
             #endregion
 
             #region SelectionViewer
