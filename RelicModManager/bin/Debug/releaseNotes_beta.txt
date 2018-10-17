@@ -1,9 +1,16 @@
-Version 29.2.9 (09/03/2019)
+Version 0.28.2.10 (10/16/2018)
+https://www.virustotal.com/#/file/d325923bf69d567caf142b079477a30232dfd8e07c507fd2ef44972b3b6736bc/detection
+-Fixed possible issue when invalid filepath is used for md5 file hash calculation
+-Updated French Translations
+-Removed legacy/outdated code from DatabaseUpdater
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Version 0.28.2.9 (09/03/2018)
 https://www.virustotal.com/#/file/60ed06a03ebbb582ea2f0bf3c7670f8158f56574f63f67fe4201c34673f655b4/detection
 -Fixed issues with drawing of MainForm when auto-Install is selected
 -Fixed several bugs with atlas creation
 -Fixed issues and added features to BackupFolderViewer
--FIxed back-end issues with the database update utilities
+-Fixed back-end issues with the database update utilities
 --------------------------------------------------------------------------------------------------------------------------------------------
 
 Version 0.28.2.8 (08/03/2018)
