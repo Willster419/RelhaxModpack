@@ -105,12 +105,10 @@ namespace RelhaxModpack
                 //ability to update database
                 foreach (Control c in UpdateDatabaseTab.Controls)
                     c.Enabled = true;
-                UpdateDatabaseStep3Advanced.Enabled = false;
             }
             if((int)CurrentAuthLevel > 2)
             {
                 //admin
-                UpdateDatabaseStep3Advanced.Enabled = true;
                 foreach (Control c in UpdateApplicationTab.Controls)
                     c.Enabled = true;
                 foreach (Control c in CleanOnlineFolders.Controls)
@@ -199,19 +197,6 @@ namespace RelhaxModpack
             Text = String.Format("DatabaseUpdateUtility      TanksVersion: {0}    OnlineFolder: {1}", Settings.TanksVersion, Settings.TanksOnlineFolderVersion);
             ReportProgress("Settings.TanksVersion (current game version): " + Settings.TanksVersion);
             ReportProgress("Settings.TanksOnlineFolderVersion (online zip folder): " + Settings.TanksOnlineFolderVersion);
-        }
-
-        private void UpdateDatabaseStep2_server_Click(object sender, EventArgs e)
-        {
-            ScriptLogOutput.Text = "";
-            ReportProgress("Starting Update database step 2a...");
-            ReportProgress("Running script CreateDatabase.php...");
-            using (WebClient client = new WebClient())
-            {
-                client.DownloadStringCompleted += Client_DownloadStringCompleted;
-                //ScriptLogOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateDatabase.php").Replace("<br />", "\n");
-                client.DownloadStringAsync(new Uri("http://wotmods.relhaxmodpack.com/scripts/CreateDatabase.php"));
-            }
         }
 
         private void UpdateDatabaseStep2_client_Click(object sender, EventArgs e)
@@ -793,94 +778,6 @@ namespace RelhaxModpack
             ReportProgress(string.Format("Number of Added packages: {0}\nNumber of Updated packages: {1}\nNumber of Disabled packages: {2}\nNumber of Removed packages: {3}\n",
                 addedPackages.Count,updatedPackages.Count,disabledPackages.Count,removedPackages.Count));
             ReportProgress("Done with processing and loading changes, can start next step");
-        }
-
-        private void UpdateDatabaseStep3Advanced_Click(object sender, EventArgs e)
-        {
-            ScriptLogOutput.Text = "";
-            ReportProgress("Starting Update database step 3 advanced...");
-            // check for database
-            if (!File.Exists(DatabaseLocationTextBox.Text))
-                return;
-            //show file dialog
-            if (addZipsDialog.ShowDialog() == DialogResult.Cancel)
-                return;
-            globalDepsSB.Clear();
-            dependenciesSB.Clear();
-            packagesSB.Clear();
-            //load database
-            globalDependencies = new List<Dependency>();
-            parsedCatagoryList = new List<Category>();
-            dependencies = new List<Dependency>();
-            logicalDependencies = new List<LogicalDependency>();
-            Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocationTextBox.Text, "//modInfoAlpha.xml/@version");
-            Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocationTextBox.Text, "//modInfoAlpha.xml/@onlineFolder");
-            XMLUtils.CreateModStructure(DatabaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList,true);
-            int duplicatesCounter = 0;
-            //check for duplicates
-            if (Utils.Duplicates(parsedCatagoryList) && Utils.DuplicatesPackageName(parsedCatagoryList, ref duplicatesCounter))
-            {
-                MessageBox.Show(string.Format("{0} duplicates found !!!", duplicatesCounter));
-                return;
-            }
-            ScriptLogOutput.Text = "Updating database...";
-            globalDepsSB.Append("Global Dependencies updated:\n");
-            dependenciesSB.Append("Dependencies updated:\n");
-            packagesSB.Append("Packages updated:\n");
-            //foreach zip file name
-            foreach (Dependency d in globalDependencies)
-            {
-                int index = this.getZipIndex(d.ZipFile);
-                if (index == -1)
-                {
-                    continue;
-                }
-                if (d.CRC == null || d.CRC.Equals("") || d.CRC.Equals("f"))
-                {
-                    d.CRC = Utils.CreateMd5Hash(addZipsDialog.FileNames[index]);
-                    globalDepsSB.Append(d.ZipFile + "\n");
-                }
-            }
-            foreach (Dependency d in dependencies)
-            {
-                int index = this.getZipIndex(d.ZipFile);
-                if (index == -1)
-                {
-                    continue;
-                }
-                if (d.CRC == null || d.CRC.Equals("") || d.CRC.Equals("f"))
-                {
-                    d.CRC = Utils.CreateMd5Hash(addZipsDialog.FileNames[index]);
-                    dependenciesSB.Append(d.ZipFile + "\n");
-                }
-            }
-            foreach (Category c in parsedCatagoryList)
-            {
-                foreach (SelectablePackage m in c.Packages)
-                {
-                    int index = this.getZipIndex(m.ZipFile);
-                    if (index != -1)
-                    {
-                        m.Size = this.getFileSize(addZipsDialog.FileNames[index]);
-                        if (m.CRC == null || m.CRC.Equals("") || m.CRC.Equals("f"))
-                        {
-                            m.CRC = Utils.CreateMd5Hash(addZipsDialog.FileNames[index]);
-
-                            packagesSB.Append(m.ZipFile + "\n");
-                        }
-                    }
-                    if (m.Packages.Count > 0)
-                    {
-                        this.processConfigsCRCUpdate_old(m.Packages);
-                    }
-                }
-            }
-            //update the CRC value
-            //update the file size
-            //save config file
-            XMLUtils.SaveDatabase(DatabaseLocationTextBox.Text, Settings.TanksVersion, Settings.TanksOnlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
-            //MessageBox.Show(globalDepsSB.ToString() + dependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
-            ScriptLogOutput.Text = globalDepsSB.ToString() + dependenciesSB.ToString() + packagesSB.ToString();
         }
 
         private void UpdateDatabaseStep4_Click(object sender, EventArgs e)
@@ -1521,7 +1418,7 @@ namespace RelhaxModpack
                     cat.Size = this.getFileSize(addZipsDialog.FileNames[cindex]);
                     if (cat.CRC == null || cat.CRC.Equals("") || cat.CRC.Equals("f"))
                     {
-                        cat.CRC = Utils.CreateMd5Hash(addZipsDialog.FileNames[cindex]);
+                        cat.CRC = Utils.CreateMD5Hash(addZipsDialog.FileNames[cindex]);
 
                         packagesSB.Append(cat.ZipFile + "\n");
                     }
@@ -1649,14 +1546,9 @@ namespace RelhaxModpack
             "releaseNotes.txt\n" +
             "releaseNotes_beta.txt\n" +
             "default_checked.xml";
-            string database = "creating the database.xml file at every online version folder of WoT,\n containing the filename, size and MD5Hash of " +
-                "the current folder,\n the script \"CreateMD5List.php\" is a needed subscript of CreateDatabase.php,\n \"relhax_db.sqlite\" is the needed sqlite database to " +
-                "be fast on parsing\n all files and only working on new or changed files";
             string modInfo = "creating the modInfo.dat file at every online version folder  of WoT,\n added the onlineFolder name to the root element,\n " +
                 "added the \"selections\" (developerSelections) names, creation date and\n filenames to the modInfo.xml, adding all parsed develeoperSelection-Config\n " +
                 "files to the modInfo.dat archive";
-            HelpfullMessages.Add(UpdateDatabaseStep2.Name, database);
-            ButtonInfo.SetToolTip(UpdateDatabaseStep2, database);
             HelpfullMessages.Add(UpdateDatabaseStep6.Name, modInfo);
             ButtonInfo.SetToolTip(UpdateDatabaseStep6, modInfo);
             HelpfullMessages.Add(UpdateDatabaseStep7.Name, serverInfo);
@@ -1688,7 +1580,7 @@ namespace RelhaxModpack
             foreach(string s in zipsToHash.FileNames)
             {
                 ReportProgress(string.Format("hash of {0}:", Path.GetFileName(s)));
-                ReportProgress(Utils.CreateMd5Hash(s));
+                ReportProgress(Utils.CreateMD5Hash(s));
 
             }
             ReportProgress("Done");
