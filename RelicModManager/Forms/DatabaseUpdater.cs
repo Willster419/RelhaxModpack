@@ -1418,7 +1418,7 @@ namespace RelhaxModpack
                     cat.Size = this.getFileSize(addZipsDialog.FileNames[cindex]);
                     if (cat.CRC == null || cat.CRC.Equals("") || cat.CRC.Equals("f"))
                     {
-                        cat.CRC = Utils.CreateMD5Hash(addZipsDialog.FileNames[cindex]);
+                        cat.CRC = Utils.CreateMd5Hash(addZipsDialog.FileNames[cindex]);
 
                         packagesSB.Append(cat.ZipFile + "\n");
                     }
@@ -1580,7 +1580,7 @@ namespace RelhaxModpack
             foreach(string s in zipsToHash.FileNames)
             {
                 ReportProgress(string.Format("hash of {0}:", Path.GetFileName(s)));
-                ReportProgress(Utils.CreateMD5Hash(s));
+                ReportProgress(Utils.CreateMd5Hash(s));
 
             }
             ReportProgress("Done");
