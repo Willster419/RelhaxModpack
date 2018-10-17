@@ -919,6 +919,20 @@
             <param name="base64EncodedData">The base64 stirng</param>
             <returns>The plain text version</returns>
         </member>
+        <member name="M:RelhaxModpack.Utils.BuildLinksRefrence(System.Collections.Generic.List{RelhaxModpack.Category})">
+            <summary>
+            Links all the refrences (like parent, etc) for each class object making it possible to traverse the list tree in memory
+            </summary>
+            <param name="ParsedCategoryList">The List of categories</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.BuildLinksRefrence(RelhaxModpack.SelectablePackage,RelhaxModpack.Category,RelhaxModpack.SelectablePackage)">
+            <summary>
+            Links all the refrences (like parent, etc) for each class object making it possible to traverse the list tree in memory
+            </summary>
+            <param name="sp">The package to perform linking on</param>
+            <param name="cat">The category that the SelectablePackagesp belongs to</param>
+            <param name="parent">The tree parent of sp</param>
+        </member>
         <member name="T:RelhaxModpack.Windows.AddPicturesZip">
             <summary>
             Interaction logic for AddPicturesZip.xaml
