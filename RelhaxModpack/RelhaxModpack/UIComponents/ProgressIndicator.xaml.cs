@@ -70,7 +70,7 @@ namespace RelhaxModpack.Windows
             }
             else if (percent < 0)
             {
-                Logging.WriteToLog(string.Format("percent value of {0} is less than 0, setting to maxumum instead", percent, LoadingProgressBar.Minimum),
+                Logging.WriteToLog(string.Format("percent value of {0} is less than {1}, setting to maxumum instead", percent, LoadingProgressBar.Minimum),
                     Logfiles.Application, LogLevel.Warning);
                 LoadingProgressBar.Value = LoadingProgressBar.Minimum;
             }
