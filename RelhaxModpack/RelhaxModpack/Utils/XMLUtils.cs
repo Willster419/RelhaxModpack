@@ -2248,6 +2248,18 @@ namespace RelhaxModpack
                         dependenciesHolder.AppendChild(dependencyLogic);
                     }
                 }
+                if (selectablePackage.Packages.Count > 0)
+                {
+                    //create sub packages holder
+                    XmlElement subPackagesHoder = root.CreateElement("packages");
+                    element.AppendChild(subPackagesHoder);
+                    foreach(SelectablePackage sp in selectablePackage.Packages)
+                    {
+                        XmlElement subPackage = root.CreateElement("package");
+                        SavePackage(root, subPackage, sp);
+                        subPackagesHoder.AppendChild(subPackage);
+                    }
+                }
             }
             //append to holder
             holder.AppendChild(element);
