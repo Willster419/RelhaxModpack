@@ -80,7 +80,7 @@ namespace RelhaxModpack
         /// <summary>
         /// a flag to determine wether or not the mod should be shown in UI
         /// </summary>
-        public bool Visible = true;
+        public bool Visible = false;
         /// <summary>
         /// size of the mod zip file
         /// TODO: convert this to Uint64
