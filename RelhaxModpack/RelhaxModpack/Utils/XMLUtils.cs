@@ -571,11 +571,6 @@ namespace RelhaxModpack
                 return null;
             return XDocument.Parse(doc.OuterXml,LoadOptions.SetLineInfo);
         }
-        public static void SaveDatabaseV2(string saveLocation, List<DatabasePackage> globalDependencies, List<Dependency> dependencies,
-            List<Category> parsedCategoryList, bool checkForIssues)
-        {
-            //STUB
-        }
         #region Legacy methods
         //parses the xml mod info into the memory database (change XML reader from XMLDocument to XDocument)
         // https://www.google.de/search?q=c%23+xdocument+get+line+number&oq=c%23+xdocument+get+line+number&aqs=chrome..69i57j69i58.11773j0j7&sourceid=chrome&ie=UTF-8
@@ -2143,6 +2138,144 @@ namespace RelhaxModpack
             }
         }
         #endregion
+        //saving database in a way that doesn't suck
+        public static void SaveDatabase(string saveLocation, string gameVersion, string onlineFolderVersion, List<DatabasePackage> globalDependencies,
+        List<Dependency> dependencies, List<Category> parsedCatagoryList)
+        {
+            //make root of document
+            XmlDocument doc = new XmlDocument();
+            //database root modInfo.xml
+            XmlElement root = doc.CreateElement("modInfo.xml");
+            root.SetAttribute("version", gameVersion);
+            root.SetAttribute("onlineFolder", onlineFolderVersion);
+            doc.AppendChild(root);
+            //save global depednecies
+            //idea: method to handle root leemnts here, but make a "save element" and from there do more if(element is SelectablePackage)
+            //save dependencies
+            
+            //save categories
+            
+            //save databse
+            if(File.Exists(saveLocation))
+                File.Delete(saveLocation);
+            doc.Save(saveLocation);
+        }
+        private static void SavePackage(XmlDocument root, XmlElement holder, DatabasePackage package)
+        {
+            //make the root element
+            XmlElement element = root.CreateElement("globalDependency");
+            SaveProperty(root, element, nameof(package.PackageName), package.PackageName, "there should always be a packageName lol", true);
+            SaveProperty(root, element, nameof(package.Version), package.Version, "", true);
+            SaveProperty(root, element, nameof(package.Timestamp), package.Timestamp.ToString(), ((long)0).ToString(), true);
+            SaveProperty(root, element, nameof(package.ZipFile), package.ZipFile, "", true);
+            SaveProperty(root, element, nameof(package.Enabled), package.Enabled.ToString(), false.ToString(), true);
+            SaveProperty(root, element, nameof(package.CRC), package.CRC, "", true);
+            SaveProperty(root, element, nameof(package.StartAddress), package.StartAddress, Settings.DefaultStartAddress, true);
+            SaveProperty(root, element, nameof(package.EndAddress), package.EndAddress, Settings.DefaultEndAddress, true);
+            SaveProperty(root, element, nameof(package.AppendExtraction), package.AppendExtraction.ToString(), false.ToString(), true);
+            SaveProperty(root, element, nameof(package.LogAtInstall), package.LogAtInstall.ToString(), true.ToString(), true);
+            SaveProperty(root, element, nameof(package.DevURL), package.DevURL, "", true);
+            SaveProperty(root, element, nameof(package.UpdateInstructions), package.UpdateInstructions, "", true);
+            SaveProperty(root, element, nameof(package.ExtractionLevel), package.ExtractionLevel.ToString(), ((int)5).ToString(), true);
+            //save the basic elements (if they exist, otherwise defaults will be used on load)
+            if (package is Dependency dependency)
+            {
+                //handle dependency specific stuff
+                //like the Depedndencies
+                if(dependency.Dependencies.Count > 0)
+                {
+                    //create holder and hold them
+                    XmlElement dependenciesHolder = root.CreateElement("dependencies");
+                    element.AppendChild(dependenciesHolder);
+                    foreach(DatabaseLogic logics in dependency.Dependencies)
+                    {
+                        XmlElement dependencyLogic = root.CreateElement("dependency");
+                        SaveProperty(root, dependencyLogic, nameof(logics.PackageName), logics.PackageName, "should always have this", false);
+                        SaveProperty(root, dependencyLogic, nameof(logics.Enabled), logics.Enabled.ToString(), false.ToString(), false);
+                        SaveProperty(root, dependencyLogic, nameof(logics.Checked), logics.Checked.ToString(), false.ToString(), false);
+                        SaveProperty(root, dependencyLogic, nameof(logics.NotFlag), logics.NotFlag.ToString(), false.ToString(), false);
+                        SaveProperty(root, dependencyLogic, nameof(logics.Logic), logics.Logic.ToString(), Logic.OR.ToString(), false);
+                    }
+                }
+            }
+            else if (package is SelectablePackage selectablePackage)
+            {
+                //handle package specific stuff
+                SaveProperty(root, element, nameof(selectablePackage.Name), selectablePackage.Name, "", true, element[nameof(package.PackageName)]);
+                SaveProperty(root, element, nameof(selectablePackage.Type), selectablePackage.Type, "", true, element[nameof(selectablePackage.Name)]);
+                SaveProperty(root, element, nameof(selectablePackage.Visible), selectablePackage.Visible.ToString(), false.ToString(), true, element[nameof(selectablePackage.Enabled)]);
+                SaveProperty(root, element, nameof(selectablePackage.Size), selectablePackage.Size.ToString(), ((int)0).ToString(), true, element[nameof(selectablePackage.CRC)]);
+                SaveProperty(root, element, nameof(selectablePackage.UpdateComment), selectablePackage.UpdateComment, "", true);
+                SaveProperty(root, element, nameof(selectablePackage.Description), selectablePackage.Description, "", true);
+                SaveProperty(root, element, nameof(selectablePackage.Checked), selectablePackage.Checked.ToString(), false.ToString(), true, element[nameof(selectablePackage.Enabled)]);
+                SaveProperty(root, element, nameof(selectablePackage.HideFromSearchList), selectablePackage.HideFromSearchList.ToString(), false.ToString(), true);
+                if(selectablePackage.UserFiles.Count > 0)
+                {
+                    XmlElement userFilesHolder = root.CreateElement("userFiles");
+                    element.AppendChild(userFilesHolder);
+                    foreach(UserFiles file in selectablePackage.UserFiles)
+                    {
+                        XmlElement userFile = root.CreateElement("userFile");
+                        userFile.InnerText = file.Pattern;
+                        userFilesHolder.AppendChild(userFile);
+                    }
+                }
+                if(selectablePackage.Medias.Count > 0)
+                {
+                    XmlElement mediasHolder = root.CreateElement("medias");
+                    element.AppendChild(mediasHolder);
+                    foreach(Media media in selectablePackage.Medias)
+                    {
+                        XmlElement mediaElement = root.CreateElement("media");
+                        SaveProperty(root, mediaElement, nameof(media.MediaType), media.MediaType.ToString(), MediaType.Picture.ToString(), false);
+                        SaveProperty(root, mediaElement, nameof(media.URL), media.URL, "", false);
+                        mediasHolder.AppendChild(mediaElement);
+                    }
+                }
+                if (selectablePackage.Dependencies.Count > 0)
+                {
+                    //create holder and hold them
+                    XmlElement dependenciesHolder = root.CreateElement("dependencies");
+                    element.AppendChild(dependenciesHolder);
+                    foreach (DatabaseLogic logics in selectablePackage.Dependencies)
+                    {
+                        XmlElement dependencyLogic = root.CreateElement("dependency");
+                        SaveProperty(root, dependencyLogic, nameof(logics.PackageName), logics.PackageName, "should always have this", false);
+                        SaveProperty(root, dependencyLogic, nameof(logics.Enabled), logics.Enabled.ToString(), false.ToString(), false);
+                        SaveProperty(root, dependencyLogic, nameof(logics.Checked), logics.Checked.ToString(), false.ToString(), false);
+                        SaveProperty(root, dependencyLogic, nameof(logics.NotFlag), logics.NotFlag.ToString(), false.ToString(), false);
+                        SaveProperty(root, dependencyLogic, nameof(logics.Logic), logics.Logic.ToString(), Logic.OR.ToString(), false);
+                        dependenciesHolder.AppendChild(dependencyLogic);
+                    }
+                }
+            }
+            //append to holder
+            holder.AppendChild(element);
+        }
+        private static void SaveProperty(XmlDocument doc, XmlElement packageHolder, string propertyName, string propertyValue, string propertyDefault, bool elementType, XmlElement elementToInsertAfter = null)
+        {
+            //if the input value is the same as the default, don't even bother making it. saves space (and time to load it).
+            if(propertyDefault.Equals(propertyValue))
+              return;
+            //TODO
+            //if element, make->set->append
+            if (elementType)
+            {
+                XmlElement element = doc.CreateElement(propertyName);
+                element.InnerText = propertyValue;
+                if (elementToInsertAfter != null)
+                    packageHolder.InsertAfter(element, elementToInsertAfter);
+                else
+                    packageHolder.AppendChild(element);
+            }
+            //else if attribute, make->set->append
+            else
+            {
+                XmlAttribute attribute = doc.CreateAttribute(propertyName);
+                attribute.Value = propertyValue;
+                packageHolder.Attributes.Append(attribute);
+            }
+        }
     }
 }
  
