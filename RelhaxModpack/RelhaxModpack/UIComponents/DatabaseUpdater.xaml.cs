@@ -619,18 +619,17 @@ namespace RelhaxModpack.Windows
             XmlDocument downloadedDatabaseXml = new XmlDocument();
             using (WebClient client = new WebClient() { Credentials = Credentials })
             {
-                string xmlString = await client.DownloadStringTaskAsync(string.Format("ftp://wotmods.relhaxmodpack.com/WoT/{0}/database.xml", Settings.WoTModpackOnlineFolderVersion));
                 try
                 {
+                    string xmlString = await client.DownloadStringTaskAsync(string.Format("ftp://wotmods.relhaxmodpack.com/WoT/{0}/database.xml", Settings.WoTModpackOnlineFolderVersion));
                     downloadedDatabaseXml.LoadXml(xmlString);
                 }
-                catch (XmlException xmlx)
+                catch (Exception xmlx)
                 {
-                    ReportProgress("Invalid XML document");
+                    ReportProgress("Failed");
                     ReportProgress(xmlx.ToString());
                     return;
                 }
-                
             }
             //make string list of file names from database.xml
             ReportProgress("Creating string list of names from database.xml");
