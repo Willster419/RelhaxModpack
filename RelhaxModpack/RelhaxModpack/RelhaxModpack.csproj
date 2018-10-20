@@ -31,6 +31,7 @@
     <TargetCulture>en-US</TargetCulture>
     <ProductName>Relhax Modpack</ProductName>
     <PublisherName>Willard Wider</PublisherName>
+    <TrustUrlParameters>true</TrustUrlParameters>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
@@ -48,7 +49,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <DocumentationFile>bin\Debug\RelhaxModpack.xml</DocumentationFile>
     <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>RelhaxModpack.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>Properties\RelhaxModpack.ruleset</CodeAnalysisRuleSet>
     <NoWarn>1303</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -59,7 +60,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>RelhaxModpack.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>Properties\RelhaxModpack.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>RelhaxModpack.App</StartupObject>
@@ -252,7 +253,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="packages.config" />
+    <None Include="Properties\packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -262,7 +263,7 @@
     <Resource Include="3rdPartyLicences\SpriteSheetPacker.txt" />
     <Resource Include="3rdPartyLicences\TeximpNet.txt" />
     <Content Include="Resources\Licences\modpack_license_agrement.txt" />
-    <None Include="RelhaxModpack.ruleset" />
+    <None Include="Properties\RelhaxModpack.ruleset" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\App.config" />
@@ -329,7 +330,8 @@ echo     } &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
 echo } &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>IF "%25COMPUTERNAME%25"=="IMOSDPC04" copy /Y $(TargetPath) "D:\RelHax Manager\"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\TeximpNet.1.3.0\build\TeximpNet.targets" Condition="Exists('..\packages\TeximpNet.1.3.0\build\TeximpNet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
