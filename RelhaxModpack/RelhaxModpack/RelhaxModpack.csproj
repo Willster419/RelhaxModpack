@@ -127,6 +127,9 @@
     <Compile Include="UIComponents\RelhaxWPFRadioButton.cs" />
     <Compile Include="Utils\BadMemeException.cs" />
     <Compile Include="Utils\CiInfo.cs" />
+    <Compile Include="Utils\PatientWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Utils\Translations.cs" />
     <Compile Include="Utils\Utils.cs" />
     <Compile Include="UIComponents\AddPicturesZip.xaml.cs">

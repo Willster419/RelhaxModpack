@@ -39,6 +39,7 @@ namespace RelhaxModpack.Windows
         private const string ModInfoBackupsFolderLocation =  "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/modInfoBackups/";
         private const string DatabaseBackupsFolderLocation = "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/databaseBackups/";
         private const string FilePropertiesPHP = "http://wotmods.relhaxmodpack.com/scripts/GetFileProperties.php";
+        private const string UpdateDatabaseOnlinePHP = "https://bigmods.relhaxmodpack.com/scripts/CreateDatabase.php";
         private const string SupportedClients = "supported_clients.xml";
         private const string ManagerVersion = "manager_version.xml";
         private const string TrashXML = "trash.xml";
@@ -602,9 +603,30 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Database Updating
+        private async void UpdateDatabaseStep2PHP_Click(object sender, RoutedEventArgs e)
+        {
+            LogOutput.Clear();
+            ReportProgress("Starting Update database step 6...");
+            ReportProgress("Running script CreateModInfo.php...");
+            //custom credentials...
+            using (client = new PatientWebClient()
+            { Credentials = new NetworkCredential(Utils.Base64Decode("dGVzdA=="), Utils.Base64Decode("dGVzdA==")) })
+            {
+                try
+                {
+                    string result = await client.DownloadStringTaskAsync(UpdateDatabaseOnlinePHP);
+                    LogOutput.Text = result.Replace("<br />", "\n");
+                }
+                catch (WebException wex)
+                {
+                    ReportProgress("failed to run Update database step 6");
+                    ReportProgress(wex.ToString());
+                }
+            }
+        }
         //stuff needed for the databae update update process
         //PUT ALL LISTS HERE
-        private async void UpdateDatabaseStep2_Click(object sender, RoutedEventArgs e)
+        private async void UpdateDatabaseStep2XML_Click(object sender, RoutedEventArgs e)
         {
             LogOutput.Clear();
             ReportProgress("Starting database update step 2");
@@ -989,6 +1011,5 @@ namespace RelhaxModpack.Windows
             System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
         }
         #endregion
-
     }
 }
