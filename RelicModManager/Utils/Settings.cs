@@ -195,7 +195,7 @@ namespace RelhaxModpack
         // public static string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, Path.GetRandomFileName() + "_managerInfo.dat");
         public static string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, SessionTag + "_managerInfo.dat");
         public static string ModInfoDatFile = Path.Combine(RelhaxTempFolder, "modInfo.dat");
-        public const string DefaultStartAddress = @"http://wotmods.relhaxmodpack.com/WoT/{onlineFolder}/";
+        public const string DefaultStartAddress = @"http://bigmods.relhaxmodpack.com/WoT/{onlineFolder}/";
         public const string DefaultEndAddress = @"";
         //file and folder macro locations
         public static string AppDataFolder = "";

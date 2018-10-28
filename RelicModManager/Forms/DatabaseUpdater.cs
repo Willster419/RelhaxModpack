@@ -26,8 +26,10 @@ namespace RelhaxModpack
         private const string modInfoBackupsFolderLocation = "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/modInfoBackups/";
         private const string modInfosLocation = "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/modInfo/";
         private const string ftpModpackRoot = "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/";
-        private const string ftpRoot = "ftp://wotmods.relhaxmodpack.com/";
-        private const string WotFolderRoot = "ftp://wotmods.relhaxmodpack.com/WoT/";
+        private const string ftpWotmodsRoot = "ftp://wotmods.relhaxmodpack.com/";
+        private const string ftpBigmodsRoot = "ftp://bigmods.relhaxmodpack.com/";
+        private const string ftpWotFolderRoot = "ftp://bigmods.relhaxmodpack.com/WoT/";
+        private const string httpwotmodsScripts = "http://wotmods.relhaxmodpack.com/WoT/scripts";
         private const string supportedClients = "supported_clients.xml";
         private const string managerVersion = "manager_version.xml";
         private enum AuthLevel
