@@ -1,9 +1,10 @@
-﻿<local:RelhaxWindow x:Class="RelhaxModpack.Windows.DatabaseUpdater"
+﻿<local:RelhaxWindow
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="RelhaxModpack.Windows.DatabaseUpdater"
         mc:Ignorable="d"
         Title="DatabaseUpdater" Height="480" Width="1200" MinHeight="300" MinWidth="400" Loaded="RelhaxWindow_Loaded">
     <Grid>
@@ -35,8 +36,8 @@
                             <TextBlock Text="OR"/>
                             <Button x:Name="UpdateDatabaseStep2PHP" Content="Update via PHP script" HorizontalAlignment="Left" Margin="2,0,2,0" Click="UpdateDatabaseStep2PHP_Click"/>
                             <ComboBox SelectedIndex="0" x:Name="DomainSelectComboBox">
-                                <ComboBoxItem Content="bigmods" HorizontalAlignment="Left" Width="60"/>
-                                <ComboBoxItem Content="wotmods" HorizontalAlignment="Left" Width="60"/>
+                                <System:String>bigmods</System:String>
+                                <System:String>wotmods</System:String>
                             </ComboBox>
                         </StackPanel>
                         <Button x:Name="UpdateDatabaseStep3" Content="Step 3: Prepare database update" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep3_Click"/>

@@ -30,15 +30,12 @@ namespace RelhaxModpack.Windows
         private const string ModpackUsername = "modpack@wotmods.relhaxmodpack.com";
         private const string ModpackPassword = "QjFZLi0zaGxsTStY";
         private const string FTPRoot =                       "ftp://wotmods.relhaxmodpack.com/";
-        private const string WotFolderRoot =                 "ftp://wotmods.relhaxmodpack.com/WoT/";
-        private const string WotFolderRootHTTP =             "http://wotmods.relhaxmodpack.com/WoT/";
         private const string FTPModpackRoot =                "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/";
         private const string FTPRescourcesRoot =             "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/";
         private const string FTPManagerInfoRoot =            "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/managerInfo/";
         private const string ModInfosLocation =              "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/modInfo/";
         private const string ModInfoBackupsFolderLocation =  "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/modInfoBackups/";
         private const string DatabaseBackupsFolderLocation = "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/databaseBackups/";
-        private const string FilePropertiesPHP = "http://wotmods.relhaxmodpack.com/scripts/GetFileProperties.php";
         private const string UpdateDatabaseOnlinePHP = "https://bigmods.relhaxmodpack.com/scripts/CreateDatabase.php";
         private const string SupportedClients = "supported_clients.xml";
         private const string ManagerVersion = "manager_version.xml";
@@ -425,7 +422,9 @@ namespace RelhaxModpack.Windows
                         //UPDATE UI
                         CancelDownloadButon.Visibility = Visibility.Visible;
                         Logging.WriteToLog("file size greator than limit, downloading for size", Logfiles.Application, LogLevel.Debug);
-                        string fileDownloadURL = string.Format("{0}{1}/{2}", WotFolderRootHTTP, Settings.WoTModpackOnlineFolderVersion, fileName);
+                        //http://wotmods.relhaxmodpack.com/WoT/
+                        string fileDownloadURL = string.Format("http://{0}.relhaxmodpack.com/WoT/{1}/{2}",
+                            (string)DomainSelectComboBox.SelectedItem, Settings.WoTModpackOnlineFolderVersion, fileName);
                         if (File.Exists(fileName))
                             File.Delete(fileName);
                         client.DownloadProgressChanged += OnDownloadProgress;
@@ -636,6 +635,15 @@ namespace RelhaxModpack.Windows
                 ReportProgress("string " + nameof(Settings.WoTModpackOnlineFolderVersion) + " is null or empty or whitespace");
                 return;
             }
+            //create actual base string to use for this (bigmods or wotmods?)
+            //location to database.xml
+            string databaseXMLLocation = string.Format("ftp://{0}.relhaxmodpack.com/WoT/{1}/{2}",
+                (string)DomainSelectComboBox.SelectedItem, Settings.WoTModpackOnlineFolderVersion, DatabaseXml);
+            //location for script getZipFiles
+            string getZipFilesURL = string.Format("http://{0}.relhaxmodpack.com/scripts/GetZipFiles.php?folder={1}",
+                (string)DomainSelectComboBox.SelectedItem, Settings.WoTModpackOnlineFolderVersion);
+            //locatio for script getFileProperties
+            string filePropertiesPHP = string.Format("http://{0}.relhaxmodpack.com/scripts/GetFileProperties.php", (string)DomainSelectComboBox.SelectedItem);
             //download databaseInfo
             ReportProgress(string.Format("Loading database.xml from online folder {0}", Settings.WoTModpackOnlineFolderVersion));
             XmlDocument downloadedDatabaseXml = new XmlDocument();
@@ -643,7 +651,7 @@ namespace RelhaxModpack.Windows
             {
                 try
                 {
-                    string xmlString = await client.DownloadStringTaskAsync(string.Format("ftp://wotmods.relhaxmodpack.com/WoT/{0}/database.xml", Settings.WoTModpackOnlineFolderVersion));
+                    string xmlString = await client.DownloadStringTaskAsync(databaseXMLLocation);
                     downloadedDatabaseXml.LoadXml(xmlString);
                 }
                 catch (Exception xmlx)
@@ -667,7 +675,7 @@ namespace RelhaxModpack.Windows
             XmlDocument files_in_folder = new XmlDocument();
             using (WebClient client = new WebClient() { Credentials = Credentials })
             {
-                string xmlString = await client.DownloadStringTaskAsync(string.Format("http://wotmods.relhaxmodpack.com/scripts/GetZipFiles.php?folder={0}", Settings.WoTModpackOnlineFolderVersion));
+                string xmlString = await client.DownloadStringTaskAsync(getZipFilesURL);
                 files_in_folder.LoadXml(xmlString);
             }
             XmlNode zipFilesList = files_in_folder.LastChild;
@@ -716,7 +724,7 @@ namespace RelhaxModpack.Windows
                     XmlNode onlineFileProperties = null;
                     try
                     {
-                        onlineFileProperties = await GetFilePropertiesAsync(FilePropertiesPHP, zipFileEntry.Attributes["name"].Value, true);
+                        onlineFileProperties = await GetFilePropertiesAsync(filePropertiesPHP, zipFileEntry.Attributes["name"].Value, true);
                     }
                     catch (WebException ex)
                     {
@@ -761,7 +769,7 @@ namespace RelhaxModpack.Windows
                     //update
                     //get file info without md5 check (faster)
                     bool force_md5_check = false;//change this when want to check slowly for all MD5 rather than just 
-                    XmlNode onlineFileProperties = await GetFilePropertiesAsync(FilePropertiesPHP, zipFileEntry.Attributes["name"].Value, false);
+                    XmlNode onlineFileProperties = await GetFilePropertiesAsync(filePropertiesPHP, zipFileEntry.Attributes["name"].Value, false);
                     if (onlineFileProperties == null)
                     {
                         string elapsed_time_add = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
@@ -790,7 +798,7 @@ namespace RelhaxModpack.Windows
                         //get the script online file properties again but this time with the hash info
                         try
                         {
-                            onlineFileProperties = await GetFilePropertiesAsync(FilePropertiesPHP, zipFileEntry.Attributes["name"].Value, true);
+                            onlineFileProperties = await GetFilePropertiesAsync(filePropertiesPHP, zipFileEntry.Attributes["name"].Value, true);
                         }
                         catch(WebException exception)
                         {
@@ -862,10 +870,9 @@ namespace RelhaxModpack.Windows
             {
                 try
                 {
-                    await client.UploadFileTaskAsync(string.Format("ftp://wotmods.relhaxmodpack.com/WoT/{0}/database.xml",
-                        Settings.WoTModpackOnlineFolderVersion), "database.xml");
+                    await client.UploadFileTaskAsync(databaseXMLLocation, "database.xml");
                     if (File.Exists("database.xml"))
-                    File.Delete("database.xml");
+                        File.Delete("database.xml");
                     ReportProgress("database.xml uploaded to wot folder " + Settings.WoTModpackOnlineFolderVersion);
                 }
                 catch (WebException ex)
