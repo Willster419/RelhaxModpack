@@ -49,7 +49,7 @@ namespace RelhaxModpack.Windows
         private WebClient client;
         private NetworkCredential @Credentials;
         private bool authorized = false;
-        private OpenFileDialog SelectModInfo = new OpenFileDialog();
+        private OpenFileDialog SelectModInfo = new OpenFileDialog() { Filter = "*.xml|*.xml" };
         private OpenFileDialog SelectManyModInfo = new OpenFileDialog();
         private OpenFileDialog SelectManyZip = new OpenFileDialog();
         //strings
@@ -124,6 +124,8 @@ namespace RelhaxModpack.Windows
             XmlDocument doc = new XmlDocument();
             doc.Load(SelectModInfo.FileName);
             XMLUtils.ParseDatabase(doc, globalDependencies, dependencies, parsecCateogryList);
+            //link stuff in memory or something
+            Utils.BuildLinksRefrence(parsecCateogryList);
             //create variables
             StringBuilder sb = new StringBuilder();
             string saveLocation = mode ? System.IO.Path.Combine(Settings.ApplicationStartupPath, "database_internal.csv") :
@@ -143,7 +145,8 @@ namespace RelhaxModpack.Windows
             }
             foreach (Category cat in parsecCateogryList)
             {
-                foreach (SelectablePackage sp in cat.GetFlatPackageList())
+                List<SelectablePackage> flatlist = cat.GetFlatPackageList();
+                foreach (SelectablePackage sp in flatlist)
                 {
                     string packageName = sp.PackageName;
                     if(!mode)
