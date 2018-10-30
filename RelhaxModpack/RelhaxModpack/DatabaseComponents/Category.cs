@@ -48,22 +48,22 @@ namespace RelhaxModpack
         }
         public List<SelectablePackage> GetFlatPackageList()
         {
-            List<SelectablePackage> selectablePackages = new List<SelectablePackage>();
+            List<SelectablePackage> flatPackageList = new List<SelectablePackage>();
             foreach(SelectablePackage selectablePackage in Packages)
             {
-                selectablePackages.Add(selectablePackage);
+                flatPackageList.Add(selectablePackage);
                 if (selectablePackage.Packages.Count > 0)
-                    GetFlatPackageList(selectablePackage.Packages);
+                    GetFlatPackageList(flatPackageList, selectablePackage.Packages);
             }
-            return selectablePackages;
+            return flatPackageList;
         }
-        private void GetFlatPackageList(List<SelectablePackage> selectablePackages)
+        private void GetFlatPackageList(List<SelectablePackage> flatPackageList, List<SelectablePackage> selectablePackages)
         {
             foreach (SelectablePackage selectablePackage in selectablePackages)
             {
-                selectablePackages.Add(selectablePackage);
+                flatPackageList.Add(selectablePackage);
                 if (selectablePackage.Packages.Count > 0)
-                    GetFlatPackageList(selectablePackage.Packages);
+                    GetFlatPackageList(flatPackageList, selectablePackage.Packages);
             }
         }
     }
