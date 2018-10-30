@@ -82,7 +82,16 @@ namespace RelhaxModpack
         //for the folder version: //modInfoAlpha.xml/@version
         public static string GetXMLStringFromXPath(XmlDocument doc, string xpath)
         {
-            XmlNode result = doc.SelectSingleNode(xpath);
+            //set to something dumb for temporary purposes
+            XmlNode result = doc.FirstChild;
+            try
+            {
+                result = doc.SelectSingleNode(xpath);
+            }
+            catch
+            {
+                return null;
+            }
             if (result == null)
                 return null;
             return result.InnerText;
@@ -186,7 +195,8 @@ namespace RelhaxModpack
             else
                 parsedCategoryList.Clear();
             //determine which version of the document we are loading. allows for loading of different versions if structure change
-            string versionString = GetXMLStringFromXPath(modInfoDocument, "//modInfoAlpha.xml@documentVersion");
+            //a blank value is assumed to be pre 2.0 version of the database
+            string versionString = GetXMLStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@documentVersion");
             Logging.WriteToLog(nameof(versionString) + "=" + versionString, Logfiles.Application, LogLevel.Debug);
             switch(versionString)
             {
@@ -194,8 +204,11 @@ namespace RelhaxModpack
                     return ParseDatabaseV2(DocumentToXDocument(modInfoDocument), globalDependencies, dependencies, parsedCategoryList);
                 default:
                     //parse legacy database
-
-                    return false;
+                    List<Dependency> logicalDependencies = new List<Dependency>();
+                    ParseDatabaseLegacy(DocumentToXDocument(modInfoDocument), globalDependencies, dependencies, logicalDependencies,
+                        parsedCategoryList, true);
+                    dependencies.AddRange(logicalDependencies);
+                    return true;
             }
         }
         public static bool ParseDatabaseV2(XDocument modInfoDocument, List<DatabasePackage> globalDependencies,
@@ -574,35 +587,11 @@ namespace RelhaxModpack
         #region Legacy methods
         //parses the xml mod info into the memory database (change XML reader from XMLDocument to XDocument)
         // https://www.google.de/search?q=c%23+xdocument+get+line+number&oq=c%23+xdocument+get+line+number&aqs=chrome..69i57j69i58.11773j0j7&sourceid=chrome&ie=UTF-8
-        public static void ParseDatabaseLegacy(string databaseURL, List<Dependency> globalDependencies, List<Dependency> dependencies,
+        public static void ParseDatabaseLegacy(XDocument doc, List<DatabasePackage> globalDependencies, List<Dependency> dependencies,
             List<Dependency> logicalDependencies, List<Category> parsedCatagoryList, bool buildRefrences)
         {
-            //LEGACY CONVERSON:
-            //remove old not needed stuff
-            XDocument doc = null;
-            //for if loading fie
-            if(true)
-            {
-              if(!File.Exists(databaseURL))
-              {
-                  throw new BadMemeException("SPECIFY AN XML FILE DUMBASS");
-              }
-            }
-            try
-            {
-                //for to load from file
-                doc = XDocument.Load(databaseURL, LoadOptions.SetLineInfo);
-                //for to load from direct string
-                //doc = XDocument.Parse(xmlString, LoadOptions.SetLineInfo);
-            }
-            catch (XmlException ex)
-            {
-                return;
-            }
-            catch (Exception ex)
-            {
-                return;
-            }
+            //LEGACY CONVERSION:
+            //remove all the file loading stuff
             //add the global dependencies
             foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/globaldependencies/globaldependency"))
             {
