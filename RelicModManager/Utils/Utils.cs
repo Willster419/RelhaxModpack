@@ -136,24 +136,38 @@ namespace RelhaxModpack
         //returns the md5 hash of the file based on the input file string location
         public static string CreateMd5Hash(string inputFile)
         {
+            if (string.IsNullOrWhiteSpace(inputFile))
+                return "-1";
             //first, return if the file does not exist
             if (!System.IO.File.Exists(inputFile))
                 return "-1";
-            MD5 md5Hash = MD5.Create();
-            // Convert the input string to a byte array and compute the hash.
-            var stream = System.IO.File.OpenRead(inputFile);
-            byte[] data = md5Hash.ComputeHash(stream);
-            stream.Close();
-            // Create a new Stringbuilder to collect the bytes
-            // and create a string.
+            //Create a new Stringbuilder to collect the bytes
             StringBuilder sBuilder = new StringBuilder();
-            // Loop through each byte of the hashed data 
-            // and format each one as a hexadecimal string.
-            for (int i = 0; i < data.Length; i++)
+            MD5 md5Hash;
+            FileStream stream;
+            try
             {
-                sBuilder.Append(data[i].ToString("x2"));
+                using (md5Hash = MD5.Create())
+                using (stream = System.IO.File.OpenRead(inputFile))
+                {
+                    //Convert the input string to a byte array and compute the hash
+                    byte[] data = md5Hash.ComputeHash(stream);
+                    stream.Close();
+                    
+                    //Loop through each byte of the hashed data 
+                    //and format each one as a hexadecimal string.
+                    for (int i = 0; i < data.Length; i++)
+                    {
+                        sBuilder.Append(data[i].ToString("x2"));
+                    }
+                }
             }
-            // Return the hexadecimal string.
+            catch (Exception ex)
+            {
+                Logging.Manager("Failed to check crc of local file " + inputFile + ex.ToString());
+                return "-1";
+            }
+            //Return the hexadecimal string.
             return sBuilder.ToString();
         }
 
@@ -803,13 +817,18 @@ namespace RelhaxModpack
             return fileName;
         }
 
-        public static void FileDelete(List<string> sl, bool proceedListReverse = true)
+        public static void FileDelete(List<string> sl, bool proceedListReverse = true, bool reportProcess = true)
         {
             int pos = 0;
             int ecounter = 0;
             int ecounterlimit = 10;
             while (ecounter < ecounterlimit && sl.Count > 0)
             {
+                if (reportProcess)
+                {
+                    Installer.args.ChildTotalToProcess = sl.Count;
+                    Installer.args.ChildProcessed = 0;
+                }
                 try
                 {
                     while (sl.Count > 0)
@@ -818,6 +837,13 @@ namespace RelhaxModpack
                             pos = sl.Count - 1;
                         else
                             pos = 0;
+                        if (reportProcess)
+                        {
+                            Installer.args.currentFile = sl.ElementAt(pos);
+                            Installer.args.ChildProcessed++;
+                            Installer.args.OverallProcessed++;
+                            Installer.ReportProgressToInstallWorker(0);
+                        }
                         if (System.IO.File.Exists(sl.ElementAt(pos)))
                         {
                             System.IO.File.Delete(sl.ElementAt(pos));

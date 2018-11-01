@@ -1743,7 +1743,7 @@ namespace RelhaxModpack
             //create saved config xml layout
             XDocument doc = new XDocument(
                 new XDeclaration("1.0", "utf-8", "yes"),
-                new XElement("mods", new XAttribute("ver", Settings.ConfigFileVersion), new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")), new XAttribute("dbVersion", Settings.BetaDatabase ? "beta" : (String)Settings.DatabaseVersion)));
+                new XElement("mods", new XAttribute("ver", Settings.ConfigFileVersion), new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")), new XAttribute("timezone", TimeZoneInfo.Local.DisplayName), new XAttribute("dbVersion", Settings.BetaDatabase ? "beta" : (String)Settings.DatabaseVersion)));
 
             //relhax mods root
             doc.Element("mods").Add(new XElement("relhaxMods"));

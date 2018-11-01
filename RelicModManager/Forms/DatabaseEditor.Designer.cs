@@ -81,6 +81,7 @@
             this.PicturesTypeLabel = new System.Windows.Forms.Label();
             this.PicturesTypeCBox = new System.Windows.Forms.ComboBox();
             this.UserDatasTabPage = new System.Windows.Forms.TabPage();
+            this.SystemInitiatedCB = new System.Windows.Forms.CheckBox();
             this.placeBeforeExtractionCheckBox = new System.Windows.Forms.CheckBox();
             this.EditUserdatasButton = new System.Windows.Forms.Button();
             this.ObjectUserdatasTB = new System.Windows.Forms.TextBox();
@@ -117,7 +118,6 @@
             this.MoveButton = new System.Windows.Forms.Button();
             this.SearchBox = new System.Windows.Forms.ComboBox();
             this.ObjectUserdatasToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.SystemInitiatedCB = new System.Windows.Forms.CheckBox();
             this.DatabasePanelTree.SuspendLayout();
             this.DatabaseEditPanel.SuspendLayout();
             this.ObjectPropertiesTabControl.SuspendLayout();
@@ -479,6 +479,7 @@
             this.AddLogicalDependencyButton.TabIndex = 40;
             this.AddLogicalDependencyButton.Text = "add";
             this.AddLogicalDependencyButton.UseVisualStyleBackColor = true;
+            this.AddLogicalDependencyButton.Click += new System.EventHandler(this.AddLogicalDependencyButton_Click);
             // 
             // CurrentLogicalDependenciesCB
             // 
@@ -507,6 +508,7 @@
             this.RemoveLogicalDependencyButton.TabIndex = 38;
             this.RemoveLogicalDependencyButton.Text = "remove";
             this.RemoveLogicalDependencyButton.UseVisualStyleBackColor = true;
+            this.RemoveLogicalDependencyButton.Click += new System.EventHandler(this.RemoveLogicalDependencyButton_Click);
             // 
             // LogicalDependencyPackageNameLabel
             // 
@@ -695,6 +697,18 @@
             this.UserDatasTabPage.TabIndex = 4;
             this.UserDatasTabPage.Text = "Userdatas";
             this.UserDatasTabPage.UseVisualStyleBackColor = true;
+            // 
+            // SystemInitiatedCB
+            // 
+            this.SystemInitiatedCB.AutoSize = true;
+            this.SystemInitiatedCB.Location = new System.Drawing.Point(217, 119);
+            this.SystemInitiatedCB.Name = "SystemInitiatedCB";
+            this.SystemInitiatedCB.Size = new System.Drawing.Size(97, 17);
+            this.SystemInitiatedCB.TabIndex = 47;
+            this.SystemInitiatedCB.Text = "system initiated";
+            this.ObjectUserdatasToolTip.SetToolTip(this.SystemInitiatedCB, "This entry will be proceeded (PackageName must be checked), even if \"save user da" +
+        "ta\" option is NOT checked");
+            this.SystemInitiatedCB.UseVisualStyleBackColor = true;
             // 
             // placeBeforeExtractionCheckBox
             // 
@@ -1037,18 +1051,6 @@
             this.ObjectUserdatasToolTip.AutoPopDelay = 50000;
             this.ObjectUserdatasToolTip.InitialDelay = 500;
             this.ObjectUserdatasToolTip.ReshowDelay = 100;
-            // 
-            // SystemInitiatedCB
-            // 
-            this.SystemInitiatedCB.AutoSize = true;
-            this.SystemInitiatedCB.Location = new System.Drawing.Point(217, 119);
-            this.SystemInitiatedCB.Name = "SystemInitiatedCB";
-            this.SystemInitiatedCB.Size = new System.Drawing.Size(97, 17);
-            this.SystemInitiatedCB.TabIndex = 47;
-            this.SystemInitiatedCB.Text = "system initiated";
-            this.ObjectUserdatasToolTip.SetToolTip(this.SystemInitiatedCB, "This entry will be proceeded (PackageName must be checked), even if \"save user da" +
-        "ta\" option is NOT checked");
-            this.SystemInitiatedCB.UseVisualStyleBackColor = true;
             // 
             // DatabaseEditor
             // 

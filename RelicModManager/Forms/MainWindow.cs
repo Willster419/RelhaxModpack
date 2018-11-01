@@ -182,7 +182,7 @@ namespace RelhaxModpack
             backupFolderContent = new List<BackupFolder>();                         // this list will hold ALL directories and files after parsing
             List<DirectoryInfo> folderList = di.GetDirectories().ToList();          // parsed top folders
 
-            this.backupModsSizeLabel.Enabled = false;
+            //this.backupModsSizeLabel.Enabled = false;
 
             foreach (var fL in folderList)
             {
@@ -2156,6 +2156,18 @@ namespace RelhaxModpack
                     totalProgressBar.Value = totalProgressBar.Minimum;
                     parrentProgressBar.Value = parrentProgressBar.Minimum;
                     childProgressBar.Value = childProgressBar.Minimum;
+                    break;
+                case InstallerEventArgs.InstallProgress.BackupDelete:
+                    totalProgressBar.Maximum = e.OverallTotalToProcess;        // (Files overall)
+                    totalProgressBar.Value = e.OverallProcessed;
+                    parrentProgressBar.Maximum = e.ParrentTotalToProcess;         // backupfolders
+                    parrentProgressBar.Value = e.ParrentProcessed;
+                    childProgressBar.Maximum = e.ChildTotalToProcess;       // files in specific backupfolder
+                    childProgressBar.Value = e.ChildProcessed;
+                    message = string.Format("{0} {1} {2} {3}\n{0} {1} {2}\n{3}: {4}", Translations.GetTranslatedString("DeletingBackup"), e.ParrentProcessed, Translations.GetTranslatedString("of"), e.ParrentTotalToProcess, e.ChildProcessed, Translations.GetTranslatedString("of"), e.ChildTotalToProcess, Translations.GetTranslatedString("file"), e.currentFile);
+                    break;
+                case InstallerEventArgs.InstallProgress.BackupDeleteDone:
+
                     break;
                 default:
                     Logging.Manager("Invalid state: " + e.InstalProgress);

@@ -1,3 +1,45 @@
+Version 0.28.2.11 (10/16/2018)
+https://www.virustotal.com/#/file/e506065d8b4c810409e466111bfde78ca031fcffb496bd65c29fbcea8657cca5/detection
+-Updated embedded assemblies to prevent application crash on load
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Version 0.28.2.10 (10/16/2018)
+https://www.virustotal.com/#/file/d325923bf69d567caf142b079477a30232dfd8e07c507fd2ef44972b3b6736bc/detection
+-Fixed possible issue when invalid filepath is used for md5 file hash calculation
+-Updated French Translations
+-Removed legacy/outdated code from DatabaseUpdater
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Version 0.28.2.9 (09/03/2018)
+https://www.virustotal.com/#/file/60ed06a03ebbb582ea2f0bf3c7670f8158f56574f63f67fe4201c34673f655b4/detection
+-Fixed issues with drawing of MainForm when auto-Install is selected
+-Fixed several bugs with atlas creation
+-Fixed issues and added features to BackupFolderViewer
+-Fixed back-end issues with the database update utilities
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Version 0.28.2.8 (08/03/2018)
+https://www.virustotal.com/#/file/f3904706e7a512f594375c843493ecbac8b899fee2bb85a668d85a573f4c870f/detection
+-Fixed Manager infinity update loop
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Version 0.28.2.7 (08/03/2018)
+https://www.virustotal.com/#/file/74c5acee1c971126d4b868fdf7d77b044003a92949588433d0b6d6039e8c01a2/detection
+-Fixed a bug at the patching system where regex commands will crash the patching queue
+-Fixed wrong error messages at Log 
+-Added the ability to clean up your backup folder by the manager
+-Changed the update handling
+-Changed the markers of Alpha, Beta and Stable executables
+-Translations have been updated
+-added a special backup und restore process to speedup huge file counts (e.g. Clan Icons)
+-corrected some progress messages at installation UI
+-fixed rare bug that two or more final windows were be displayed
+-grouped upped code of native methods to one class
+-changed update UI during installation to "create" less CPU-load
+-added ability to set default browser to use if http calls are made with the manager (see RelHaxSettings.xml -> priorityBrowser)
+-added system related backup and restore steps at installation
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 28.2.3 (06/29/2018)
 https://www.virustotal.com/#/file/f173b760fa2e32f0136666aaa99b258b13317083caa8281d1f602d19f3dfd19b/detection
 -Added new property to packages "logUninstall" for packages that should not be logged to the uninstall logfile. This fixes the bug where the game would not start after XVM install and uninstall

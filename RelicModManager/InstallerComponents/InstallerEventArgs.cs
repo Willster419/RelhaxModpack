@@ -39,9 +39,16 @@ namespace RelhaxModpack
             Done = 27,
             //kept after done because it's not part of the install process
             Uninstall = 28,
-            UninstallDone = 29
+            UninstallDone = 29,
+            BackupDelete,
+            BackupDeleteDone
+            
         };
         public InstallProgress InstalProgress { get; set; }
+        //the overall processed items
+        public int OverallProcessed;
+        //the total overall items to process
+        public int OverallTotalToProcess;
         //the total parrent processed items
         public int ParrentProcessed;
         //the total parrent items to process
@@ -56,9 +63,5 @@ namespace RelhaxModpack
         public string currentSubFile;
         //the size of the current file being processed
         public float currentFileSizeProcessed;
-        //the filecounter
-        // public int Filecounter;
-        //files to do
-        // public int FilesToDo;
     }
 }

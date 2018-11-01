@@ -26,7 +26,10 @@ namespace RelhaxModpack
         private const string modInfoBackupsFolderLocation = "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/modInfoBackups/";
         private const string modInfosLocation = "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/modInfo/";
         private const string ftpModpackRoot = "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/";
-        private const string ftpRoot = "ftp://wotmods.relhaxmodpack.com/";
+        private const string ftpWotmodsRoot = "ftp://wotmods.relhaxmodpack.com/";
+        private const string ftpBigmodsRoot = "ftp://bigmods.relhaxmodpack.com/";
+        private const string ftpWotFolderRoot = "ftp://bigmods.relhaxmodpack.com/WoT/";
+        private const string httpwotmodsScripts = "http://wotmods.relhaxmodpack.com/WoT/scripts";
         private const string supportedClients = "supported_clients.xml";
         private const string managerVersion = "manager_version.xml";
         private enum AuthLevel
@@ -104,12 +107,10 @@ namespace RelhaxModpack
                 //ability to update database
                 foreach (Control c in UpdateDatabaseTab.Controls)
                     c.Enabled = true;
-                UpdateDatabaseStep3Advanced.Enabled = false;
             }
             if((int)CurrentAuthLevel > 2)
             {
                 //admin
-                UpdateDatabaseStep3Advanced.Enabled = true;
                 foreach (Control c in UpdateApplicationTab.Controls)
                     c.Enabled = true;
                 foreach (Control c in CleanOnlineFolders.Controls)
@@ -200,17 +201,230 @@ namespace RelhaxModpack
             ReportProgress("Settings.TanksOnlineFolderVersion (online zip folder): " + Settings.TanksOnlineFolderVersion);
         }
 
-        private void UpdateDatabaseStep2_Click(object sender, EventArgs e)
+        private void UpdateDatabaseStep2_client_Click(object sender, EventArgs e)
         {
             ScriptLogOutput.Text = "";
-            ReportProgress("Starting Update database step 2...");
-            ReportProgress("Running script CreateDatabase.php...");
+            ReportProgress("Starting Update database step 2b...");
+            // check for database
+            if (!File.Exists(DatabaseLocationTextBox.Text))
+            {
+                ReportProgress("ERROR: managerInfo xml not found! (did you run the previous steps?)");
+                return;
+            }
+            //load current database.xml from online folder
+            ReportProgress(string.Format("Loading database.xml from online folder {0}", Settings.TanksOnlineFolderVersion));
+            XmlDocument database_xml = new XmlDocument();
             using (WebClient client = new WebClient())
             {
-                client.DownloadStringCompleted += Client_DownloadStringCompleted;
-                //ScriptLogOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateDatabase.php").Replace("<br />", "\n");
-                client.DownloadStringAsync(new Uri("http://wotmods.relhaxmodpack.com/scripts/CreateDatabase.php"));
+                database_xml.LoadXml(client.DownloadString(string.Format("http://wotmods.relhaxmodpack.com/WoT/{0}/database.xml",Settings.TanksOnlineFolderVersion)));
             }
+            //make string list of file names from database.xml
+            ReportProgress("Creating string list of names from database.xml");
+            List<string> removed_files = new List<string>();
+            XmlNode Database_elements = database_xml.LastChild;
+            foreach(XmlNode file in Database_elements.ChildNodes)
+            {
+                removed_files.Add(file.Attributes["name"].Value);
+            }
+            //load xml string from php script of listing all files in folder
+            ReportProgress("Loading list of files in online folder");
+            XmlDocument files_in_folder = new XmlDocument();
+            using (WebClient client = new WebClient())
+            {
+                files_in_folder.LoadXml(client.DownloadString(string.Format("http://wotmods.relhaxmodpack.com/scripts/GetZipFiles.php?folder={0}",Settings.TanksOnlineFolderVersion)));
+            }
+            XmlNode all_files_in_folder = files_in_folder.LastChild;
+            List<string> added_files = new List<string>();
+            List<string> updated_files = new List<string>();
+            List<string> error_files = new List<string>();
+            //for each file name:
+            int progress = 0;
+            int total = all_files_in_folder.ChildNodes.Count;
+            StringBuilder summary = new StringBuilder();
+            System.Diagnostics.Stopwatch time_for_each_file = new System.Diagnostics.Stopwatch();
+            System.Diagnostics.Stopwatch total_time_php_processing = new System.Diagnostics.Stopwatch();
+            total_time_php_processing.Restart();
+            foreach (XmlNode file_in_folder in all_files_in_folder)
+            {
+                ReportProgress(string.Format("Parsing file {0} ({1} of {2})", file_in_folder.Attributes["name"].Value, ++progress, total));
+                time_for_each_file.Restart();
+                //if exists in string list of database.xml, remove it -> serves as removed files
+                if (removed_files.Contains(file_in_folder.Attributes["name"].Value))
+                {
+                    removed_files.Remove(file_in_folder.Attributes["name"].Value);
+                }
+                //check if filename is in database.xml, if not, then it's new
+                //attribute example: "//root/element/@attribute"
+                XmlNode file_in_database_xml = database_xml.SelectSingleNode(string.Format("//database/file[@name = \"{0}\"]", file_in_folder.Attributes["name"].Value));
+                if (file_in_database_xml == null)
+                {
+                    //add
+                    //get all file properties
+                    XmlDocument file_properties_root = new XmlDocument();
+                    using (WebClient client = new WebClient())
+                    {
+                        string downloaded_xml_string = "";
+                        try
+                        {
+                            downloaded_xml_string = client.DownloadString(string.Format("http://wotmods.relhaxmodpack.com/scripts/GetFileProperties.php?folder={0}&file={1}&getMD5=1", Settings.TanksOnlineFolderVersion, file_in_folder.Attributes["name"].Value));
+                            file_properties_root.LoadXml(downloaded_xml_string);
+                        }
+                        catch (Exception ex)
+                        {
+                            //https://stackoverflow.com/questions/22094165/timespan-formatting-to-minutes-ans-seconds-without-hours
+                            string elapsed_time2 = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
+                            ReportProgress("Failed" + elapsed_time2);
+                            ReportProgress(ex.ToString());
+                            if (!string.IsNullOrWhiteSpace(downloaded_xml_string))
+                                ReportProgress(downloaded_xml_string);
+                            summary.AppendLine("[ERROR] " + file_in_folder.Attributes["name"].Value);
+                            continue;
+                        }
+                    }
+                    XmlNode file_properties = file_properties_root.LastChild.LastChild;
+                    //add node to database xml
+                    //create element
+                    XmlElement file_to_add_to_database_xml = database_xml.CreateElement("file");
+                    //create attributes
+                    XmlAttribute file_name = database_xml.CreateAttribute("name");
+                    file_name.Value = file_properties.Attributes["name"].Value;
+                    XmlAttribute file_size = database_xml.CreateAttribute("size");
+                    file_size.Value = file_properties.Attributes["size"].Value;
+                    XmlAttribute file_md5 = database_xml.CreateAttribute("md5");
+                    file_md5.Value = file_properties.Attributes["MD5"].Value;
+                    //NEW: add the timestamp to database.xml
+                    XmlAttribute file_time = database_xml.CreateAttribute("time");
+                    file_time.Value = file_properties.Attributes["time"].Value;
+                    //add attributes to new element
+                    file_to_add_to_database_xml.Attributes.Append(file_name);
+                    file_to_add_to_database_xml.Attributes.Append(file_size);
+                    file_to_add_to_database_xml.Attributes.Append(file_md5);
+                    file_to_add_to_database_xml.Attributes.Append(file_time);
+                    //add element to database xml
+                    database_xml.LastChild.AppendChild(file_to_add_to_database_xml);
+                    //make UI and log updates
+                    summary.AppendLine("[NEW] " + file_in_folder.Attributes["name"].Value);
+                    added_files.Add(file_in_folder.Attributes["name"].Value);
+                    string elapsed_time = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
+                    ReportProgress("Added" + elapsed_time);
+                }
+                else
+                {
+                    //update
+                    //get file info without md5 check (faster)
+                    XmlDocument file_properties_root = new XmlDocument();
+                    using (WebClient client = new WebClient())
+                    {
+                        string downloaded_xml_string = "";
+                        try
+                        {
+                            downloaded_xml_string = client.DownloadString(string.Format("http://wotmods.relhaxmodpack.com/scripts/GetFileProperties.php?folder={0}&file={1}&getMD5=0", Settings.TanksOnlineFolderVersion, file_in_folder.Attributes["name"].Value));
+                            file_properties_root.LoadXml(downloaded_xml_string);
+                        }
+                        catch (Exception ex)
+                        {
+                            string elapsed_time = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
+                            ReportProgress("Failed" + elapsed_time);
+                            ReportProgress(ex.ToString());
+                            if (!string.IsNullOrWhiteSpace(downloaded_xml_string))
+                                ReportProgress(downloaded_xml_string);
+                            summary.AppendLine("[ERROR] " + file_in_folder.Attributes["name"].Value);
+                            continue;
+                        }
+                    }
+                    XmlNode file_properties = file_properties_root.LastChild.LastChild;
+                    //check if time not equal
+                    bool force_md5_check = false;//change this when want to check slowly for all MD5 rather than just 
+                    //if file time attribute is not there, then add it
+                    XmlAttribute file_time_from_database_xml = file_in_database_xml.Attributes["time"];
+                    if(file_time_from_database_xml == null)
+                    {
+                        file_time_from_database_xml = database_xml.CreateAttribute("time");
+                        file_time_from_database_xml.Value = file_properties.Attributes["time"].Value;
+                        file_in_database_xml.Attributes.Append(file_time_from_database_xml);
+                    }
+                    //check for morce md5 flag, size change or filetime change
+                    XmlAttribute file_size_from_database_xml = file_in_database_xml.Attributes["size"];
+                    XmlAttribute file_size_from_properties_xml = file_properties.Attributes["size"];
+                    XmlAttribute file_time_from_properties_xml = file_properties.Attributes["time"];
+                    if ((force_md5_check) ||
+                        (!file_time_from_database_xml.Value.Equals(file_time_from_properties_xml.Value)) ||
+                        (!file_size_from_database_xml.Value.Equals(file_size_from_properties_xml.Value)))
+                    {
+                        //update size and time first
+                        file_time_from_database_xml.Value = file_time_from_properties_xml.Value;
+                        file_size_from_database_xml.Value = file_size_from_properties_xml.Value;
+                        //get the md5 this time
+                        file_properties_root = new XmlDocument();
+                        using (WebClient client = new WebClient())
+                        {
+                            string downloaded_xml_string = "";
+                            try
+                            {
+                                downloaded_xml_string = client.DownloadString(string.Format("http://wotmods.relhaxmodpack.com/scripts/GetFileProperties.php?folder={0}&file={1}&getMD5=1", Settings.TanksOnlineFolderVersion, file_in_folder.Attributes["name"].Value));
+                                file_properties_root.LoadXml(downloaded_xml_string);
+                            }
+                            catch (Exception ex)
+                            {
+                                string elapsed_time = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
+                                ReportProgress("Failed" + elapsed_time);
+                                ReportProgress(ex.ToString());
+                                if (!string.IsNullOrWhiteSpace(downloaded_xml_string))
+                                    ReportProgress(downloaded_xml_string);
+                                summary.AppendLine("[ERROR] " + file_in_folder.Attributes["name"].Value);
+                                continue;
+                            }
+                        }
+                        file_properties = file_properties_root.LastChild.LastChild;
+                        //update if MD5 not equal
+                        if (!(file_properties.Attributes["MD5"].Value.Equals(file_in_database_xml.Attributes["md5"].Value)))
+                        {
+                            file_in_database_xml.Attributes["md5"].Value = file_properties.Attributes["MD5"].Value;
+                            //add it to list of updated file names
+                            updated_files.Add(file_in_folder.Attributes["name"].Value);
+                            summary.AppendLine("[UPDATE] " + file_in_folder.Attributes["name"].Value);
+                            string elapsed_time = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
+                            ReportProgress("Updated" + elapsed_time);
+                        }
+                        else
+                        {
+                            string elapsed_time = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
+                            ReportProgress("No Change (md5 check)" + elapsed_time);
+                        }
+                    }
+                    else
+                    {
+                        string elapsed_time = string.Format(" Took {0}.{1} sec", (int)time_for_each_file.Elapsed.TotalSeconds, time_for_each_file.Elapsed.Milliseconds);
+                        ReportProgress("No Change (time/size check)" + elapsed_time);
+                    }
+                }
+            }
+            string elapsed_time3 = string.Format(" took {0}.{1} sec", (int)total_time_php_processing.Elapsed.TotalSeconds, total_time_php_processing.Elapsed.Milliseconds);
+            ReportProgress("Total php file processing" + elapsed_time3);
+            foreach(string s in removed_files)
+            {
+                //delete the entry in the database
+                XmlNode file_in_database_xml = database_xml.SelectSingleNode(string.Format("//database/file[@name = \"{0}\"]", s));
+                if(file_in_database_xml == null)
+                {
+                    //error
+                }
+                else
+                {
+                    Database_elements.RemoveChild(file_in_database_xml);
+                }
+                summary.AppendLine("[DELETE] " + s);
+            }
+            File.WriteAllText("update_files.log", summary.ToString());
+            ReportProgress("results saved to update_files.log");
+            database_xml.Save("database.xml");
+            //upload it back
+            using (WebClient client = new WebClient() { Credentials = credentials })
+            {
+                client.UploadFile(string.Format("ftp://wotmods.relhaxmodpack.com/WoT/{0}/database.xml", Settings.TanksOnlineFolderVersion), "database.xml");
+            }
+            File.Delete("database.xml");
+            ReportProgress("database.xml uploaded to wot folder " + Settings.TanksOnlineFolderVersion);
         }
 
         private void UpdateDatabaseStep3_Click(object sender, EventArgs e)
@@ -566,94 +780,6 @@ namespace RelhaxModpack
             ReportProgress(string.Format("Number of Added packages: {0}\nNumber of Updated packages: {1}\nNumber of Disabled packages: {2}\nNumber of Removed packages: {3}\n",
                 addedPackages.Count,updatedPackages.Count,disabledPackages.Count,removedPackages.Count));
             ReportProgress("Done with processing and loading changes, can start next step");
-        }
-
-        private void UpdateDatabaseStep3Advanced_Click(object sender, EventArgs e)
-        {
-            ScriptLogOutput.Text = "";
-            ReportProgress("Starting Update database step 3 advanced...");
-            // check for database
-            if (!File.Exists(DatabaseLocationTextBox.Text))
-                return;
-            //show file dialog
-            if (addZipsDialog.ShowDialog() == DialogResult.Cancel)
-                return;
-            globalDepsSB.Clear();
-            dependenciesSB.Clear();
-            packagesSB.Clear();
-            //load database
-            globalDependencies = new List<Dependency>();
-            parsedCatagoryList = new List<Category>();
-            dependencies = new List<Dependency>();
-            logicalDependencies = new List<LogicalDependency>();
-            Settings.TanksVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocationTextBox.Text, "//modInfoAlpha.xml/@version");
-            Settings.TanksOnlineFolderVersion = XMLUtils.GetXMLElementAttributeFromFile(DatabaseLocationTextBox.Text, "//modInfoAlpha.xml/@onlineFolder");
-            XMLUtils.CreateModStructure(DatabaseLocationTextBox.Text, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList,true);
-            int duplicatesCounter = 0;
-            //check for duplicates
-            if (Utils.Duplicates(parsedCatagoryList) && Utils.DuplicatesPackageName(parsedCatagoryList, ref duplicatesCounter))
-            {
-                MessageBox.Show(string.Format("{0} duplicates found !!!", duplicatesCounter));
-                return;
-            }
-            ScriptLogOutput.Text = "Updating database...";
-            globalDepsSB.Append("Global Dependencies updated:\n");
-            dependenciesSB.Append("Dependencies updated:\n");
-            packagesSB.Append("Packages updated:\n");
-            //foreach zip file name
-            foreach (Dependency d in globalDependencies)
-            {
-                int index = this.getZipIndex(d.ZipFile);
-                if (index == -1)
-                {
-                    continue;
-                }
-                if (d.CRC == null || d.CRC.Equals("") || d.CRC.Equals("f"))
-                {
-                    d.CRC = Utils.CreateMd5Hash(addZipsDialog.FileNames[index]);
-                    globalDepsSB.Append(d.ZipFile + "\n");
-                }
-            }
-            foreach (Dependency d in dependencies)
-            {
-                int index = this.getZipIndex(d.ZipFile);
-                if (index == -1)
-                {
-                    continue;
-                }
-                if (d.CRC == null || d.CRC.Equals("") || d.CRC.Equals("f"))
-                {
-                    d.CRC = Utils.CreateMd5Hash(addZipsDialog.FileNames[index]);
-                    dependenciesSB.Append(d.ZipFile + "\n");
-                }
-            }
-            foreach (Category c in parsedCatagoryList)
-            {
-                foreach (SelectablePackage m in c.Packages)
-                {
-                    int index = this.getZipIndex(m.ZipFile);
-                    if (index != -1)
-                    {
-                        m.Size = this.getFileSize(addZipsDialog.FileNames[index]);
-                        if (m.CRC == null || m.CRC.Equals("") || m.CRC.Equals("f"))
-                        {
-                            m.CRC = Utils.CreateMd5Hash(addZipsDialog.FileNames[index]);
-
-                            packagesSB.Append(m.ZipFile + "\n");
-                        }
-                    }
-                    if (m.Packages.Count > 0)
-                    {
-                        this.processConfigsCRCUpdate_old(m.Packages);
-                    }
-                }
-            }
-            //update the CRC value
-            //update the file size
-            //save config file
-            XMLUtils.SaveDatabase(DatabaseLocationTextBox.Text, Settings.TanksVersion, Settings.TanksOnlineFolderVersion, globalDependencies, dependencies, logicalDependencies, parsedCatagoryList);
-            //MessageBox.Show(globalDepsSB.ToString() + dependenciesSB.ToString() + modsSB.ToString() + configsSB.ToString());
-            ScriptLogOutput.Text = globalDepsSB.ToString() + dependenciesSB.ToString() + packagesSB.ToString();
         }
 
         private void UpdateDatabaseStep4_Click(object sender, EventArgs e)
@@ -1268,6 +1394,8 @@ namespace RelhaxModpack
             //reports to the log file and the console otuptu
             Logging.Manager(message);
             ScriptLogOutput.AppendText(message + "\n");
+            ScriptLogOutput.SelectionStart = ScriptLogOutput.Text.Length;
+            ScriptLogOutput.ScrollToCaret();
             Application.DoEvents();
         }
 
@@ -1420,14 +1548,9 @@ namespace RelhaxModpack
             "releaseNotes.txt\n" +
             "releaseNotes_beta.txt\n" +
             "default_checked.xml";
-            string database = "creating the database.xml file at every online version folder of WoT,\n containing the filename, size and MD5Hash of " +
-                "the current folder,\n the script \"CreateMD5List.php\" is a needed subscript of CreateDatabase.php,\n \"relhax_db.sqlite\" is the needed sqlite database to " +
-                "be fast on parsing\n all files and only working on new or changed files";
             string modInfo = "creating the modInfo.dat file at every online version folder  of WoT,\n added the onlineFolder name to the root element,\n " +
                 "added the \"selections\" (developerSelections) names, creation date and\n filenames to the modInfo.xml, adding all parsed develeoperSelection-Config\n " +
                 "files to the modInfo.dat archive";
-            HelpfullMessages.Add(UpdateDatabaseStep2.Name, database);
-            ButtonInfo.SetToolTip(UpdateDatabaseStep2, database);
             HelpfullMessages.Add(UpdateDatabaseStep6.Name, modInfo);
             ButtonInfo.SetToolTip(UpdateDatabaseStep6, modInfo);
             HelpfullMessages.Add(UpdateDatabaseStep7.Name, serverInfo);
@@ -1447,6 +1570,22 @@ namespace RelhaxModpack
         {
             Utils.CallBrowser("http://forum.worldoftanks.com/index.php?/topic/535868-");
         }
-        #endregion  
+        #endregion
+
+        private void CreateMD5HashButton_Click(object sender, EventArgs e)
+        {
+            ReportProgress("Starting hashing");
+            if(zipsToHash.ShowDialog() != DialogResult.OK)
+            {
+                ReportProgress("Hashing Aborted");
+            }
+            foreach(string s in zipsToHash.FileNames)
+            {
+                ReportProgress(string.Format("hash of {0}:", Path.GetFileName(s)));
+                ReportProgress(Utils.CreateMd5Hash(s));
+
+            }
+            ReportProgress("Done");
+        }
     }
 }
