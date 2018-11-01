@@ -114,9 +114,10 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Database output
-        private void SaveDatabaseText(bool mode)
+        private void SaveDatabaseText(bool @internal)
         {
             //true = internal, false = user
+            string notApplicable = "n/a";
             //list creation and parsing
             List<Category> parsecCateogryList = new List<Category>();
             List<DatabasePackage> globalDependencies = new List<DatabasePackage>();
@@ -128,37 +129,48 @@ namespace RelhaxModpack.Windows
             Utils.BuildLinksRefrence(parsecCateogryList);
             //create variables
             StringBuilder sb = new StringBuilder();
-            string saveLocation = mode ? System.IO.Path.Combine(Settings.ApplicationStartupPath, "database_internal.csv") :
+            string saveLocation = @internal ? System.IO.Path.Combine(Settings.ApplicationStartupPath, "database_internal.csv") :
                 System.IO.Path.Combine(Settings.ApplicationStartupPath, "database_user.csv");
             //global dependencies
-            string header = mode ? "PackageName\tCategory\tPackage\tLevel\tZip\tDevURL\tEnabled\tVisible" : "Category\tMod\tDevURL";
+            string header = @internal ? "PackageName\tCategory\tPackage\tLevel\tZip\tDevURL\tEnabled\tVisible" : "Category\tMod\tDevURL";
             sb.AppendLine(header);
-            foreach (DatabasePackage dp in globalDependencies)
+            if(@internal)
             {
-                sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}", dp.PackageName, "GlobalDependencies", "", "0",
-                    dp.ZipFile, string.IsNullOrWhiteSpace(dp.DevURL) ? "" : "=HYPERLINK(\"" + dp.DevURL + "\",\"link\")", dp.Enabled, ""));
-            }
-            foreach (Dependency dep in dependencies)
-            {
-                sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}", dep.PackageName, "Dependencies", "", "0",
-                    dep.ZipFile, string.IsNullOrWhiteSpace(dep.DevURL) ? "" : "=HYPERLINK(\"" + dep.DevURL + "\",\"link\")", dep.Enabled, ""));
+                foreach (DatabasePackage dp in globalDependencies)
+                {
+                    sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}", dp.PackageName, "GlobalDependencies", "", "0",
+                        string.IsNullOrWhiteSpace(dp.ZipFile) ? notApplicable : dp.ZipFile,
+                        string.IsNullOrWhiteSpace(dp.DevURL) ? "" : "=HYPERLINK(\"" + dp.DevURL + "\",\"link\")", dp.Enabled, ""));
+                }
+                foreach (Dependency dep in dependencies)
+                {
+                    sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}", dep.PackageName, "Dependencies", "", "0",
+                        string.IsNullOrWhiteSpace(dep.ZipFile) ? notApplicable : dep.ZipFile,
+                        string.IsNullOrWhiteSpace(dep.DevURL) ? "" : "=HYPERLINK(\"" + dep.DevURL + "\",\"link\")", dep.Enabled, ""));
+                }
             }
             foreach (Category cat in parsecCateogryList)
             {
                 List<SelectablePackage> flatlist = cat.GetFlatPackageList();
                 foreach (SelectablePackage sp in flatlist)
                 {
-                    string packageName = sp.PackageName;
-                    if(!mode)
+                    string nameIndneted = sp.NameFormatted;
+                    if (!@internal)
                     {
-                        for (int i = 0; i <= sp.Level; i++)
+                        for (int i = 0; i < sp.Level; i++)
                         {
-                            packageName = "--" + packageName;
+                            nameIndneted = "--" + nameIndneted;
                         }
+                        sb.AppendLine(string.Format("{0}\t{1}\t{2}", sp.ParentCategory.Name, nameIndneted,
+                            string.IsNullOrWhiteSpace(sp.DevURL) ? "" : "=HYPERLINK(\"" + sp.DevURL + "\",\"link\")"));
                     }
-                    sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}", packageName, sp.ParentCategory.Name, sp.NameFormatted,
-                        sp.Level, sp.ZipFile, string.IsNullOrWhiteSpace(sp.DevURL) ? "" : "=HYPERLINK(\"" + sp.DevURL + "\",\"link\")",
+                    else
+                    {
+                        sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}", nameIndneted, sp.ParentCategory.Name, sp.NameFormatted,
+                        sp.Level, string.IsNullOrWhiteSpace(sp.ZipFile) ? notApplicable : sp.ZipFile,
+                        string.IsNullOrWhiteSpace(sp.DevURL) ? "" : "=HYPERLINK(\"" + sp.DevURL + "\",\"link\")",
                         sp.Enabled, sp.Visible));
+                    }
                 }
             }
             try
