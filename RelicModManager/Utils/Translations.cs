@@ -1689,13 +1689,13 @@ namespace RelhaxModpack
 
             //Componet: failedToParseFile
             english.Add("failedToParseFile", "Failed to parse the file");
-            german.Add("failedToParseFile", TranslationNeeded);
+            german.Add("failedToParseFile", "Analyse der Datei fehlgeschlagen");
             polish.Add("failedToParseFile", TranslationNeeded);
             french.Add("failedToParseFile", "Échec de l'analyse du fichier");
 
             //Componet: rebootTryAgain
             english.Add("rebootTryAgain", "Please reboot the application and try again");
-            german.Add("rebootTryAgain", TranslationNeeded);
+            german.Add("rebootTryAgain", "Bitte starte die Anwendung neu und versuch es noch einmal");
             polish.Add("rebootTryAgain", TranslationNeeded);
             french.Add("rebootTryAgain", "Veuillez redémarrer l`application et réessayer");
             #endregion
