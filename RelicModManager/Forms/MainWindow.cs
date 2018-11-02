@@ -754,7 +754,28 @@ namespace RelhaxModpack
         {
             supportedVersions.Clear();
             string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "supported_clients.xml");  //xml doc name can change
-            XDocument doc = XDocument.Parse(xmlString);
+            XDocument doc = new XDocument();
+            if (string.IsNullOrWhiteSpace(xmlString))
+            {
+                //log the error
+                MessageBox.Show(string.Format("{0}: {1}\n{2}", Translations.GetTranslatedString("failedToParseFile"),
+                    "supported_clients.xml", Translations.GetTranslatedString("rebootTryAgain")));
+                Logging.Manager("ERROR: failed to parse supported_clients.xml");
+                Logging.Manager("xmlString is empty!!");
+                return false;
+            }
+            try
+            {
+                doc = XDocument.Parse(xmlString);
+            }
+            catch (XmlException ex)
+            {
+                MessageBox.Show(string.Format("{0}: {1}\n{2}", Translations.GetTranslatedString("failedToParseFile"),
+                    "supported_clients.xml", Translations.GetTranslatedString("rebootTryAgain")));
+                Logging.Manager("ERROR: failed to parse supported_clients.xml");
+                Logging.Manager(ex.ToString());
+                return false;
+            }
             bool result = doc.Descendants("version")
                    .Where(arg => arg.Value.Equals(detectedVersion))
                    .Any();
@@ -1167,6 +1188,13 @@ namespace RelhaxModpack
                 //determine if the tanks client version is supported
                 if (!Program.testMode && !IsClientVersionSupported(tanksVersion))
                 {
+                    //check first if it was able to get the list of supported versions
+                    //if not then abort now
+                    if(supportedVersions.Count == 0)
+                    {
+                        ToggleUIButtons(true);
+                        return;
+                    }
                     //log and inform the user
                     Logging.Manager("WARNING: Detected client version is " + tanksVersion + ", not supported");
                     Logging.Manager("Supported versions are: " + string.Join(", ", supportedVersions));

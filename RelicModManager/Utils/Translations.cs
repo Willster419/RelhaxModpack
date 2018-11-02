@@ -1686,6 +1686,18 @@ namespace RelhaxModpack
             german.Add("FindBugAddModButtonDescription", "Fehler gefunden? Willst Du einen Mod hinzufügen? Bitte hier melden!");
             polish.Add("FindBugAddModButtonDescription", "Znalazłeś błąd? Chcesz dodać mod?");
             french.Add("FindBugAddModButtonDescription", "Trouvé un bug? Recommandation de mod?");
+
+            //Componet: failedToParseFile
+            english.Add("failedToParseFile", "Failed to parse the file");
+            german.Add("failedToParseFile", TranslationNeeded);
+            polish.Add("failedToParseFile", TranslationNeeded);
+            french.Add("failedToParseFile", "Échec de l'analyse du fichier");
+
+            //Componet: rebootTryAgain
+            english.Add("rebootTryAgain", "Please reboot the application and try again");
+            german.Add("rebootTryAgain", TranslationNeeded);
+            polish.Add("rebootTryAgain", TranslationNeeded);
+            french.Add("rebootTryAgain", "Veuillez redémarrer l`application et réessayer");
             #endregion
 
             #region Messages from ModSelectionList
