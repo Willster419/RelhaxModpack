@@ -620,9 +620,10 @@ namespace RelhaxModpack.Windows
         private async void UpdateDatabaseStep2PHP_Click(object sender, RoutedEventArgs e)
         {
             LogOutput.Clear();
-            ReportProgress("Starting Update database step 6...");
-            ReportProgress("Running script CreateModInfo.php...");
+            ReportProgress("Starting Update database step 2...");
+            ReportProgress("Running script CreateDatabase.php...");
             //custom credentials...
+            //a PatientWebClient should allow a timeout value of 5 mins (or more)
             using (client = new PatientWebClient()
             { Credentials = new NetworkCredential(Utils.Base64Decode("dGVzdA=="), Utils.Base64Decode("dGVzdA==")) })
             {
@@ -633,17 +634,16 @@ namespace RelhaxModpack.Windows
                 }
                 catch (WebException wex)
                 {
-                    ReportProgress("failed to run Update database step 6");
+                    ReportProgress("failed to run Update database step 2");
                     ReportProgress(wex.ToString());
                 }
             }
         }
-        //stuff needed for the databae update update process
-        //PUT ALL LISTS HERE
+        
         private async void UpdateDatabaseStep2XML_Click(object sender, RoutedEventArgs e)
         {
             LogOutput.Clear();
-            ReportProgress("Starting database update step 2");
+            ReportProgress("Starting database update step 2 (xml style)");
             //check for selected online folder version
             if(string.IsNullOrWhiteSpace(Settings.WoTModpackOnlineFolderVersion))
             {
@@ -651,14 +651,26 @@ namespace RelhaxModpack.Windows
                 return;
             }
             //create actual base string to use for this (bigmods or wotmods?)
+            //AND if its bigmods, confirm that you actually want to run this on bigmods
+            //TODO verify index
+            string currentSelectedDomain = (string)DomainSelectComboBox.SelectedItem;
+            string bigmodsDomain = (string)DomainSelectComboBox.Items[0];//TODO
+            if(currentSelectedDomain.Equals(bigmodsDomain))
+            {
+                if(MessageBox.Show("Are you sure you want to run xml update on bigmods and NOT use the php script??", "are you sure?", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                {
+                    ReportProgress("Aborted");
+                    return;
+                }
+            }
             //location to database.xml
             string databaseXMLLocation = string.Format("ftp://{0}.relhaxmodpack.com/WoT/{1}/{2}",
-                (string)DomainSelectComboBox.SelectedItem, Settings.WoTModpackOnlineFolderVersion, DatabaseXml);
+                currentSelectedDomain, Settings.WoTModpackOnlineFolderVersion, DatabaseXml);
             //location for script getZipFiles
             string getZipFilesURL = string.Format("http://{0}.relhaxmodpack.com/scripts/GetZipFiles.php?folder={1}",
-                (string)DomainSelectComboBox.SelectedItem, Settings.WoTModpackOnlineFolderVersion);
+                currentSelectedDomain, Settings.WoTModpackOnlineFolderVersion);
             //locatio for script getFileProperties
-            string filePropertiesPHP = string.Format("http://{0}.relhaxmodpack.com/scripts/GetFileProperties.php", (string)DomainSelectComboBox.SelectedItem);
+            string filePropertiesPHP = string.Format("http://{0}.relhaxmodpack.com/scripts/GetFileProperties.php", currentSelectedDomain);
             //download databaseInfo
             ReportProgress(string.Format("Loading database.xml from online folder {0}", Settings.WoTModpackOnlineFolderVersion));
             XmlDocument downloadedDatabaseXml = new XmlDocument();
@@ -1033,5 +1045,6 @@ namespace RelhaxModpack.Windows
             System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
         }
         #endregion
+    
     }
 }
