@@ -64,13 +64,15 @@ namespace RelhaxModpack
                 string newZipFileName = "";
                 try
                 {
-                    string RelHaxLogPath = Path.Combine(AppStartupPath, "RelHaxLog.txt");
-                    string LastInstalledConfig = Path.Combine(AppStartupPath, "RelHaxUserConfigs", "lastInstalledConfig.xml");
-                    string InstalledRelhaxFiles = Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log");
-                    string UninstalledRelhaxFiles = Path.Combine(TanksLocation, "logs", "uninstall.log");
-                    string PythonLog = Path.Combine(TanksLocation, "python.log");
-                    string SelectionXMlFile = "";
-                    List<string> filesToCollect = new List<string>(){ RelHaxLogPath, InstalledRelhaxFiles, UninstalledRelhaxFiles, PythonLog, SelectionXMlFile, LastInstalledConfig };
+                    List<string> filesToCollect = new List<string>()
+                    { 
+                        Path.Combine(AppStartupPath, "RelHaxLog.txt"),
+                        Path.Combine(AppStartupPath, "RelHaxUserConfigs", "lastInstalledConfig.xml"),
+                        Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"),
+                        Path.Combine(TanksLocation, "logs", "uninstall.log"),
+                        Path.Combine(AppStartupPath, "RelHaxSettings.xml"),
+                        Path.Combine(TanksLocation, "python.log")
+                    };
                     using (AddPicturesZip apz = new AddPicturesZip()
                     {
                         AppStartupPath = this.AppStartupPath
