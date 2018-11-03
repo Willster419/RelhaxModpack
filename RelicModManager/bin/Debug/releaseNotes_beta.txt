@@ -1,3 +1,12 @@
+Version 0.28.2.12 (11/02/2018)
+https://www.virustotal.com/#/file/29531bd3ae7fd6b1248400d579741e701500fb07312bad40883bb7076070872a/detection
+-Changed default URL for zipfiles to be now hosted out of bigmods, not wotmods
+-Added exception handling if the application fails to parse supported clients document
+-Added RelHaxSettings.xml, xmv.log, pmod.log to list of log files to search for when making diagnostic zip file
+-Improved logging of creating the diagnostic zip file
+-Updated translations
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 0.28.2.11 (10/16/2018)
 https://www.virustotal.com/#/file/e506065d8b4c810409e466111bfde78ca031fcffb496bd65c29fbcea8657cca5/detection
 -Updated embedded assemblies to prevent application crash on load
