@@ -41,7 +41,8 @@ namespace RelhaxModpack.Windows
         private const string ManagerVersion = "manager_version.xml";
         private const string TrashXML = "trash.xml";
         private const string DatabaseXml = "database.xml";
-        private const int MaxFileSizeForHash = 80000000;
+        private const int MaxFileSizeForHash = 510000000;
+                                              
         #endregion
 
         #region Editables
@@ -410,7 +411,7 @@ namespace RelhaxModpack.Windows
         private async Task<XmlNode> GetFilePropertiesAsync(string phpScriptAddress, string fileName, bool getMD5)
         {
             XmlDocument doc = new XmlDocument();
-            using (client = new WebClient() { Credentials = Credentials })
+            using (client = new PatientWebClient() { Credentials = Credentials })
             {
                 if(getMD5)
                 {
