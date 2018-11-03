@@ -94,6 +94,7 @@ namespace RelhaxModpack
         /// description of the package
         /// </summary>
         public string Description = "";
+        public string Hotkeys = "";
         /// <summary>
         /// field for wether the package is selected to install
         /// </summary>
@@ -339,7 +340,8 @@ namespace RelhaxModpack
         public List<Media> Medias = new List<Media>();
         //list of dependnecys this package calls for
         public List<DatabaseLogic> Dependencies = new List<DatabaseLogic>();
-        public bool HideFromSearchList = false;
+        public List<string> ConflictingPackages = new List<string>();
+        public bool HideFromSearchList = true;
         /// <summary>
         /// provides a nice complete path that is more human readable than a packagePath
         /// </summary>
