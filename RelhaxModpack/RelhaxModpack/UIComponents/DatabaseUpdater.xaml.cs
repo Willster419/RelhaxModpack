@@ -988,15 +988,22 @@ namespace RelhaxModpack.Windows
         private async void UpdateDatabaseStep5_Click(object sender, RoutedEventArgs e)
         {
             //upload databaseUpdate.txt
-
+            LogOutput.Clear();
+            ReportProgress("Starting update database step 5...");
+            ReportProgress("Uploading databaseUpdate.txt");
+            using (client = new WebClient() { Credentials = Credentials })
+            {
+                await client.UploadFileTaskAsync(FTPManagerInfoRoot + DatabaseUpdateTxt, DatabaseUpdateTxt);
+            }
+            ReportProgress("Uploaded sucessfully");
         }
 
         private async void UpdateDatabaseStep6_Click(object sender, RoutedEventArgs e)
         {
             LogOutput.Clear();
-            ReportProgress("Starting Update database step 6...");
+            ReportProgress("Starting update database step 6...");
             ReportProgress("Running script CreateModInfo.php...");
-            using (client = new WebClient())
+            using (client = new WebClient() { Credentials = Credentials })
             {
                 try
                 {
@@ -1016,7 +1023,7 @@ namespace RelhaxModpack.Windows
             LogOutput.Clear();
             ReportProgress("Starting Update database step 7...");
             ReportProgress("Running script CreateManagerInfo.php...");
-            using (client = new WebClient())
+            using (client = new WebClient() { Credentials = Credentials })
             {
                 try
                 {
