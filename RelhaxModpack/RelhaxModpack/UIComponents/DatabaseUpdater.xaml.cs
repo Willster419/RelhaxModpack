@@ -57,6 +57,26 @@ namespace RelhaxModpack.Windows
 
         #endregion
 
+        #region Stuff for parts 3 and 4 to share
+        //strings
+        //the modInfoXml document name to upload to the modInfo online folder
+        //only used for uploading to the server TODO: can be moved to step 4 ONLY
+        string currentModInfoXml = "";
+        //the last supported modInfo, gotten from the supported_clients.xml for comparing with the currentModInfoXml
+        string lastSupportedModInfoXml = "";
+        //the new database version to upload
+        string databaseUpdateVersion = "";
+        //made from the above info, the name of the xml file of the last supported to be uploaded to the backups folder on the server
+        string modInfoXmlToBackup = "";
+
+        //string builders
+        StringBuilder filesNotFoundSB;
+        StringBuilder globalDepsSB;
+        StringBuilder dependenciesSB;
+        StringBuilder packagesSB;
+        StringBuilder databaseUpdateText;
+        #endregion
+
         #region Constructor
         public DatabaseUpdater()
         {
@@ -931,11 +951,11 @@ namespace RelhaxModpack.Windows
                 return;
             }
             //init stringbuilders
-            StringBuilder filesNotFoundSB = new StringBuilder();
-            StringBuilder globalDepsSB = new StringBuilder();
-            StringBuilder dependenciesSB = new StringBuilder();
-            StringBuilder packagesSB = new StringBuilder();
-            StringBuilder databaseUpdateText = new StringBuilder();
+            filesNotFoundSB = new StringBuilder();
+            globalDepsSB = new StringBuilder();
+            dependenciesSB = new StringBuilder();
+            packagesSB = new StringBuilder();
+            databaseUpdateText = new StringBuilder();
             filesNotFoundSB.Append("FILES NOT FOUND:\n");
             globalDepsSB.Append("\nGlobal Dependencies updated:\n");
             dependenciesSB.Append("\nDependencies updated:\n");
@@ -976,13 +996,31 @@ namespace RelhaxModpack.Windows
                 return;
             }
             List<DatabasePackage> flatList = Utils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
-
+            //make the name of current (to be supported) xml file for uploading later (TODO: put this in later section, step 4?)
+            //download and parse supported_clients to make xml name of last supported wot version for comparison
+            //TODO: get new database update version here, confirm below with getting name to backup upload to server?
+            //load it
+            //make a flat list of it for comparison
+            //load current modInfoXml and check for duplicates
+            //check/create online backup folder for new wot versoin
+            //make the name of the backup file as to not overwrite any currently backed up files
+            //at some point check if the backup folder exists??
+            //get the parsed update db version stirng (if not doing it above)
+            //download and load latest database.xml file from server
+            //parse the flat list packages from the current (to be supported) xml
+            //this will updat ethe CRC values, add to list of updated packages, and add to list of missing packages
+            //(packages zip files not existing in the zip file, therefore not registered on the server)
+            //do list magic to get all added, removed, disabled, etc package lists
+            //put them to stringbuilder, maybe put it to disk in temp filename?
         }
 
         private async void UpdateDatabaseStep4_Click(object sender, RoutedEventArgs e)
         {
-            //do stuff on the server
-
+            //backup the old live modInfo.xml
+            //save and upload new modInfo file
+            //if not dumped to temp file, dump/replace databaeUpdate.txt on disk
+            //check if supported_clients needs to be updated and if so upload TODO: do this above??
+            //update and upload manager_info.xml TODO: prepare it before??
         }
 
         private async void UpdateDatabaseStep5_Click(object sender, RoutedEventArgs e)
