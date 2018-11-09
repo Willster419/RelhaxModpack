@@ -35,10 +35,6 @@
                             <Button x:Name="UpdateDatabaseStep2XML" Content="Update via database.xml" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep2XML_Click" Margin="2,0,2,0"/>
                             <TextBlock Text="OR"/>
                             <Button x:Name="UpdateDatabaseStep2PHP" Content="Update via PHP script" HorizontalAlignment="Left" Margin="2,0,2,0" Click="UpdateDatabaseStep2PHP_Click"/>
-                            <ComboBox SelectedIndex="0" x:Name="DomainSelectComboBox">
-                                <System:String>bigmods</System:String>
-                                <System:String>wotmods</System:String>
-                            </ComboBox>
                         </StackPanel>
                         <Button x:Name="UpdateDatabaseStep3" Content="Step 3: Prepare database update" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep3_Click"/>
                         <Button x:Name="UpdateDatabaseStep4" Content="Step 4: Upload changed files and save databaseUpdate.txt to disk" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep4_Click"/>

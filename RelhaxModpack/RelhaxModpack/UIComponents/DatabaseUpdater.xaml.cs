@@ -459,8 +459,8 @@ namespace RelhaxModpack.Windows
                         CancelDownloadButon.Visibility = Visibility.Visible;
                         Logging.WriteToLog("file size greator than limit, downloading for size", Logfiles.Application, LogLevel.Debug);
                         //http://wotmods.relhaxmodpack.com/WoT/
-                        string fileDownloadURL = string.Format("http://{0}.relhaxmodpack.com/WoT/{1}/{2}",
-                            (string)DomainSelectComboBox.SelectedItem, Settings.WoTModpackOnlineFolderVersion, fileName);
+                        string fileDownloadURL = string.Format("http://bigmods.relhaxmodpack.com/WoT/{0}/{1}",
+                            Settings.WoTModpackOnlineFolderVersion, fileName);
                         if (File.Exists(fileName))
                             File.Delete(fileName);
                         client.DownloadProgressChanged += OnDownloadProgress;
@@ -671,27 +671,18 @@ namespace RelhaxModpack.Windows
                 ReportProgress("string " + nameof(Settings.WoTModpackOnlineFolderVersion) + " is null or empty or whitespace");
                 return;
             }
-            //create actual base string to use for this (bigmods or wotmods?)
-            //AND if its bigmods, confirm that you actually want to run this on bigmods
-            //TODO verify index
-            string currentSelectedDomain = (string)DomainSelectComboBox.SelectedItem;
-            string bigmodsDomain = (string)DomainSelectComboBox.Items[0];//TODO
-            if(currentSelectedDomain.Equals(bigmodsDomain))
+            //confirm that you actually want to run this on bigmods
+            if (MessageBox.Show("Are you sure you want to run xml update on bigmods and NOT use the php script??", "are you sure?", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
             {
-                if(MessageBox.Show("Are you sure you want to run xml update on bigmods and NOT use the php script??", "are you sure?", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
-                {
-                    ReportProgress("Aborted");
-                    return;
-                }
+                ReportProgress("Aborted");
+                return;
             }
             //location to database.xml
-            string databaseXMLLocation = string.Format("ftp://{0}.relhaxmodpack.com/WoT/{1}/{2}",
-                currentSelectedDomain, Settings.WoTModpackOnlineFolderVersion, DatabaseXml);
+            string databaseXMLLocation = string.Format("ftp://bigmods.relhaxmodpack.com/WoT/{0}/{1}", Settings.WoTModpackOnlineFolderVersion, DatabaseXml);
             //location for script getZipFiles
-            string getZipFilesURL = string.Format("http://{0}.relhaxmodpack.com/scripts/GetZipFiles.php?folder={1}",
-                currentSelectedDomain, Settings.WoTModpackOnlineFolderVersion);
+            string getZipFilesURL = string.Format("http://bigmods.relhaxmodpack.com/scripts/GetZipFiles.php?folder={0}", Settings.WoTModpackOnlineFolderVersion);
             //locatio for script getFileProperties
-            string filePropertiesPHP = string.Format("http://{0}.relhaxmodpack.com/scripts/GetFileProperties.php", currentSelectedDomain);
+            string filePropertiesPHP = "http://bigmods.relhaxmodpack.com/scripts/GetFileProperties.php";
             //download databaseInfo
             ReportProgress(string.Format("Loading database.xml from online folder {0}", Settings.WoTModpackOnlineFolderVersion));
             XmlDocument downloadedDatabaseXml = new XmlDocument();
