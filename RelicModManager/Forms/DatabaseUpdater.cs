@@ -449,7 +449,7 @@ namespace RelhaxModpack
             ReportProgress("Downloading database.xml (list of crc zip file changes)");
             using (downloader = new WebClient())
             {
-                string address = string.Format("http://wotmods.relhaxmodpack.com/WoT/{0}/database.xml", Settings.TanksOnlineFolderVersion);
+                string address = string.Format("http://bigmods.relhaxmodpack.com/WoT/{0}/database.xml", Settings.TanksOnlineFolderVersion);
                 string fileName = Path.Combine(Settings.RelhaxTempFolder, Settings.OnlineDatabaseXmlFile);
                 downloader.DownloadFile(address, fileName);
             }
