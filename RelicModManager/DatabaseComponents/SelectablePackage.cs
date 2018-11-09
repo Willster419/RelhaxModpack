@@ -115,27 +115,27 @@ namespace RelhaxModpack
                 _Checked = value;
                 if(UIComponent != null)
                     UIComponent.OnCheckedChanged(value);
-                if ((Type.Equals("single_dropdown") || Type.Equals("single_dropdown1")) && Enabled)
+                int dropDownSelectionType = -1;
+                if (Type.Equals("single_dropdown") || Type.Equals("single_dropdown1"))
                 {
-                    switch(Settings.SView)
-                    {
-                        case SelectionView.Default:
-                            Parent.RelhaxFormComboBoxList[0].OnDropDownSelectionChanged(this, value);
-                            break;
-                        case SelectionView.DefaultV2:
-                            Parent.RelhaxWPFComboBoxList[0].OnDropDownSelectionChanged(this, value);
-                            break;
-                    }
+                    dropDownSelectionType = 0;
                 }
-                else if (Type.Equals("single_dropdown2") && Enabled)
+                else if (Type.Equals("single_dropdown2"))
+                {
+                    dropDownSelectionType = 1;
+                }
+                if (Enabled && dropDownSelectionType > -1)
                 {
                     switch (Settings.SView)
                     {
                         case SelectionView.Default:
-                            Parent.RelhaxFormComboBoxList[1].OnDropDownSelectionChanged(this, value);
+                            Parent.RelhaxFormComboBoxList[dropDownSelectionType].OnDropDownSelectionChanged(this, value);
                             break;
                         case SelectionView.DefaultV2:
-                            Parent.RelhaxWPFComboBoxList[1].OnDropDownSelectionChanged(this, value);
+                            Parent.RelhaxWPFComboBoxList[dropDownSelectionType].OnDropDownSelectionChanged(this, value);
+                            break;
+                        case SelectionView.Legacy:
+                            Parent.RelhaxWPFComboBoxList[dropDownSelectionType].OnDropDownSelectionChanged(this, value);
                             break;
                     }
                 }
