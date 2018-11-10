@@ -42,7 +42,7 @@ namespace RelhaxModpack.Windows
         private const string TrashXML = "trash.xml";
         private const string DatabaseXml = "database.xml";
         private const int MaxFileSizeForHash = 510000000;
-                                              
+
         #endregion
 
         #region Editables
@@ -53,21 +53,26 @@ namespace RelhaxModpack.Windows
         private OpenFileDialog SelectModInfo = new OpenFileDialog() { Filter = "*.xml|*.xml" };
         private OpenFileDialog SelectManyModInfo = new OpenFileDialog();
         private OpenFileDialog SelectManyZip = new OpenFileDialog();
-        //strings
-
+        //strings for database updating
+        //for decoding the password upon application load
+        private string ModpackPasswordDecoded = "";
         #endregion
 
         #region Stuff for parts 3 and 4 to share
         //strings
         //the modInfoXml document name to upload to the modInfo online folder
         //only used for uploading to the server TODO: can be moved to step 4 ONLY
-        string currentModInfoXml = "";
+        //RENAME TO NewModInfoXml
+        string CurrentModInfoXml = "";
         //the last supported modInfo, gotten from the supported_clients.xml for comparing with the currentModInfoXml
-        string lastSupportedModInfoXml = "";
+        //LastSupportedModInfoXml is old name
+        string LastSupportedModInfoXml = "";
         //the new database version to upload
-        string databaseUpdateVersion = "";
+        string DatabaseUpdateVersion = "";
         //made from the above info, the name of the xml file of the last supported to be uploaded to the backups folder on the server
-        string modInfoXmlToBackup = "";
+        string BackupModInfoXmlToServer = "";
+        //the version number of the last supported WoT client, used for making backup online folder
+        string LastSupportedTanksVersion = "";
 
         //string builders
         StringBuilder filesNotFoundSB;
@@ -926,14 +931,13 @@ namespace RelhaxModpack.Windows
                 }
             }
         }
-        //string needed for step 4 go here
-
+        
         private async void UpdateDatabaseStep3_Click(object sender, RoutedEventArgs e)
         {
             //getting local crc's and comparing them on server
             //init UI
             LogOutput.Clear();
-            ReportProgress("Starting databaseUpdate step 3");
+            ReportProgress("Starting DatabaseUpdate step 3");
             //checks
             if(string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
             {
@@ -959,58 +963,173 @@ namespace RelhaxModpack.Windows
             List<DatabasePackage> globalDependencies = new List<DatabasePackage>();
             List<Dependency> dependencies = new List<Dependency>();
             List<Category> parsedCategoryList = new List<Category>();
-            ReportProgress("downloading modInfo.xml from server");
+            //init strings
+            CurrentModInfoXml = string.Empty;
+            BackupModInfoXmlToServer = string.Empty;
+            DatabaseUpdateVersion = string.Empty;
+            LastSupportedModInfoXml = string.Empty;
+            LastSupportedTanksVersion = string.Empty;
+            //load current modInfoXml and check for duplicates
+            ReportProgress("Loading current modInfo.xml and checking for duplicates");
+            XmlDocument currentDatabase = new XmlDocument();
+            currentDatabase.Load(SelectModInfo.FileName);
+            if(!XMLUtils.ParseDatabase(currentDatabase,globalDependencies,dependencies,parsedCategoryList))
+            {
+                ReportProgress("failed to parse modInfo to lists");
+                return;
+            }
+            List<DatabasePackage> flatListCurrent = Utils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
+            //check for duplicates TODO
+            
+            ReportProgress("Downloading list of supported clients for last supported WoT client");
+            //make the name of current (to be supported) xml file for uploading later (TODO: put this in later section, step 4?)
+            CurrentModInfoXml = "modInfo_" + Settings.WoTClientVersion + ".xml";
+            //download and parse supported_clients to make xml name of last supported wot version for comparison
+            if(File.Exists(SupportedClients))
+                File.Delete(SupportedClients);
+            using (client = new WebClient() { Credentials = Credentials})
+            {
+                await client.DownloadFileTaskAsync(FTPManagerInfoRoot + SupportedClients, SupportedClients);
+                XmlDocument doc = new XmlDocument();
+                doc.Load(SupportedClients);
+                XmlNodeList supported_clients = doc.SelectNodes("//versions/version");
+                //last version is most recent supported
+                XmlNode lastSupportred = supported_clients[supported_clients.Count - 1];
+                LastSupportedTanksVersion = lastSupportred.InnerText;
+                LastSupportedModInfoXml = "modInfo_" + LastSupportedTanksVersion + ".xml";
+                if (File.Exists(LastSupportedModInfoXml))
+                    File.Delete(LastSupportedModInfoXml);
+                ReportProgress("Downloading last supported client modInfo.xml for database comparison");
+                await client.DownloadFileTaskAsync(ModInfosLocation + LastSupportedModInfoXml, LastSupportedModInfoXml);
+            }
+            //check/create online backup folder for new wot version
+            //needs to be done here because need to make sure folder at least exists for below section
+            ReportProgress("Checking if modInfo backup folder exists for last supported version...");
+            string[] folders = await FTPListFilesFoldersAsync(ModInfoBackupsFolderLocation);
+            if (!(folders.Contains(LastSupportedTanksVersion)))
+            {
+                ReportProgress("Does NOT exist, creating");
+                //create the folder
+                FTPMakeFolder(ModInfoBackupsFolderLocation + LastSupportedTanksVersion);
+            }
+            else
+                ReportProgress("DOES exists");
+            //make the name of the backup file as to not overwrite any currently backed up files
+            //name format: modInfo_lastVersion_yyyy-mm-dd_itteration
+            //could have multiple database releases in one day (should be no more than 3)
+            ReportProgress("Creating new database version string based on currently backed up versions");
+            int itteraton = 0;//always start with 1
+            //get EST timezone
+            DateTime dt = DateTime.UtcNow;
+            TimeZoneInfo EST = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+            DateTime realToday = TimeZoneInfo.ConvertTimeFromUtc(dt, EST);
+            string dateTimeFormat = string.Format("{0:yyyy-MM-dd}", realToday);
+            bool fileExists = true;
+            while(fileExists)
+            {
+                BackupModInfoXmlToServer = "modInfo_" + LastSupportedTanksVersion + "_" + dateTimeFormat + "_" + ++itteraton + ".xml";
+                ReportProgress("Current Iteration: " + BackupModInfoXmlToServer);
+                string[] modInfoBackups = await FTPListFilesFoldersAsync(ModInfoBackupsFolderLocation + LastSupportedTanksVersion);
+                if(!modInfoBackups.Contains(BackupModInfoXmlToServer))
+                {
+                    fileExists = false;
+                    ReportProgress("Completed");
+                }
+            }
+            //make the name of the new database update version. similar to process above
+            //first make the online backup folder for the new WoT version, if it does not alreayd eixst
+            ReportProgress("Checking if backup modInfo folder exists for new supported version...");
+            string[] modInfoBackupFolders = await FTPListFilesFoldersAsync(ModInfoBackupsFolderLocation);
+            if (!(modInfoBackupFolders.Contains(Settings.WoTClientVersion)))
+            {
+                ReportProgress("Does NOT exist, creating");
+                //create the folder
+                FTPMakeFolder(ModInfoBackupsFolderLocation + LastSupportedTanksVersion);
+            }
+            else
+                ReportProgress("DOES exist");
+            //make the name of the new database update version. similar to process above
+            ReportProgress("Making new database version string");
+            itteraton = 0;
+            fileExists = true;
+            while(fileExists)
+            {
+                string tempModInfoFilename = string.Format("modInfo_{0}_{1}_{2}.xml",
+                    Settings.WoTClientVersion, dateTimeFormat,++itteraton);
+                ReportProgress("Current Iteration: " + tempModInfoFilename);
+                string[] modInfoBackups = await FTPListFilesFoldersAsync(ModInfoBackupsFolderLocation + Settings.WoTClientVersion);
+                if(!modInfoBackups.Contains(tempModInfoFilename))
+                {
+                    fileExists = false;
+                    DatabaseUpdateVersion = string.Format("{0}_{1}_{2}.xml",
+                    Settings.WoTClientVersion, dateTimeFormat,itteraton);
+                    ReportProgress("Completed, string is " + DatabaseUpdateVersion);
+                }
+            }
+            return;//just in case i try to run it...
+            //LEFT OFF HERE
+            //make a flat list of old (last supported modInfoxml) for comparison
+            XmlDocument oldDatabase = new XmlDocument();
+            oldDatabase.Load(LastSupportedModInfoXml);
+            globalDependencies.Clear();
+            dependencies.Clear();
+            parsedCategoryList.Clear();
+            if(!XMLUtils.ParseDatabase(oldDatabase,globalDependencies,dependencies,parsedCategoryList))
+            {
+                ReportProgress("failed to parse modInfo to lists");
+                return;
+            }
+            List<DatabasePackage> flatListOld = Utils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
+            //download and load latest database.xml file from server
+            ReportProgress("downloading database.xml of current WoT onlineFolder version from server");
+            XmlDocument databaseXml = new XmlDocument();
             using (client = new WebClient() { Credentials = Credentials })
             {
                 try
                 {
+                    if(File.Exists(DatabaseXml));
+                    {
+                        File.Delete(DatabaseXml);
+                    }
                     await client.DownloadFileTaskAsync(string.Format("ftp://wotmods.relhaxmodpack.com/WoT/{0}/database.xml",
-                        Settings.WoTModpackOnlineFolderVersion), "database.xml");
+                        Settings.WoTModpackOnlineFolderVersion), DatabaseXml);
+                    databaseXml.Load(DatabaseXml);
                 }
-                catch(WebException ex)
+                catch(Exception ex)
                 {
                     ReportProgress("failed to download database.xml");
                     ReportProgress(ex.ToString());
                     return;
                 }
             }
-            XmlDocument doc = new XmlDocument();
-            try
+            //update the crc values, also makes list of updated mods
+            foreach(DatabasePackage package in flatListCurrent)
             {
-                doc.Load(SelectModInfo.FileName);
+                if(string.IsNullOrEmpty(package.ZipFile))
+                    continue;
+                XmlNode databaseEntry = databaseXml.SelectSingleNode("");
+                if(databaseEntry != null)
+                {
+                    package.CRC = databaseEntry.Attributes["md5"].Value;//TODO:CHECK
+                    //updatedPackages.AppendLine(package.NameFormatted);
+                }
+                else if (package.CRC.Equals("f") || string.IsNullOrWhiteSpace(package.CRC))
+                {
+                    //missingPackages.AppendLine(package.ZipFile);
+                }
             }
-            catch (XmlException xmlx)
-            {
-                ReportProgress("failed to parse modInfo from xml");
-                ReportProgress(xmlx.ToString());
-                return;
-            }
-            if(!XMLUtils.ParseDatabase(doc,globalDependencies,dependencies,parsedCategoryList))
-            {
-                ReportProgress("failed to parse modInfo to lists");
-                return;
-            }
-            List<DatabasePackage> flatList = Utils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
-            //make the name of current (to be supported) xml file for uploading later (TODO: put this in later section, step 4?)
-            //download and parse supported_clients to make xml name of last supported wot version for comparison
-            //TODO: get new database update version here, confirm below with getting name to backup upload to server?
-            //load it
-            //make a flat list of it for comparison
-            //load current modInfoXml and check for duplicates
-            //check/create online backup folder for new wot versoin
-            //make the name of the backup file as to not overwrite any currently backed up files
-            //at some point check if the backup folder exists??
-            //get the parsed update db version stirng (if not doing it above)
-            //download and load latest database.xml file from server
-            //parse the flat list packages from the current (to be supported) xml
-            //this will updat ethe CRC values, add to list of updated packages, and add to list of missing packages
-            //(packages zip files not existing in the zip file, therefore not registered on the server)
             //do list magic to get all added, removed, disabled, etc package lists
-            //put them to stringbuilder, maybe put it to disk in temp filename?
+            
+            //put them to stringbuilder and write txt to disk
+            
+            //clean up other files made (if applicable)
+            
         }
 
         private async void UpdateDatabaseStep4_Click(object sender, RoutedEventArgs e)
         {
+            //check for stuff
+            
             //backup the old live modInfo.xml
             //save and upload new modInfo file
             //if not dumped to temp file, dump/replace databaeUpdate.txt on disk
