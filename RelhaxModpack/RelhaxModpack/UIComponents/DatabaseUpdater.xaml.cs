@@ -457,6 +457,7 @@ namespace RelhaxModpack.Windows
                     {
                         //UPDATE UI
                         CancelDownloadButon.Visibility = Visibility.Visible;
+                        FileDownloadProgresBar.Visibility = Visibility.Visible;
                         Logging.WriteToLog("file size greator than limit, downloading for size", Logfiles.Application, LogLevel.Debug);
                         //http://wotmods.relhaxmodpack.com/WoT/
                         string fileDownloadURL = string.Format("http://bigmods.relhaxmodpack.com/WoT/{0}/{1}",
@@ -473,6 +474,7 @@ namespace RelhaxModpack.Windows
                         fileProperties.Attributes.Append(filePropertieshash);
                         //and cleanup
                         File.Delete(fileName);
+                        FileDownloadProgresBar.Visibility = Visibility.Hidden;
                         return fileProperties;
                     }
                     else
@@ -844,6 +846,8 @@ namespace RelhaxModpack.Windows
                             ReportProgress("Failed to update");
                             ReportProgress(exception.ToString());
                             onlineFileProperties = null;
+                            //and delete the file if it exists
+                            File.Delete(zipFileEntry.Attributes["name"].Value);
                         }
                         if (onlineFileProperties == null)
                         {
