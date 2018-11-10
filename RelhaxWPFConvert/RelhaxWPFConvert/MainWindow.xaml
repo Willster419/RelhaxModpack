@@ -24,11 +24,11 @@
                 </Border>
             </StackPanel>
         </Border>
-            <TreeView HorizontalAlignment="Left" Height="161" Margin="10,215,0,0" VerticalAlignment="Top" Width="500">
-                <TreeViewItem Header="" Padding="0" Margin="0" IsExpanded="True">
-                    <Border BorderBrush="Black" BorderThickness="1" Padding="0" Margin="-22,-15,0,0">
-                        <StackPanel>
-                            <CheckBox Content="TEST"/>
+            <TreeView HorizontalAlignment="Left" Height="161" Margin="10,215,0,0" VerticalAlignment="Top" Width="500" HorizontalContentAlignment="Stretch">
+                <TreeViewItem Header="" Padding="0" Margin="0" IsExpanded="True" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                    <Border BorderBrush="Black" BorderThickness="1" Padding="0" Margin="-22,-15,0,0" HorizontalAlignment="Stretch">
+                        <StackPanel HorizontalAlignment="Stretch">
+                            <CheckBox Content="TEST" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"/>
                             <CheckBox Content="TEST"/>
                             <CheckBox Content="TEST"/>
                             <TreeViewItem Header="" Padding="0" Margin="0" IsExpanded="True">
