@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RelhaxModpack.DatabaseComponents
+namespace RelhaxModpack
 {
     public class PackageComparer : IEqualityComparer<DatabasePackage>
     {
