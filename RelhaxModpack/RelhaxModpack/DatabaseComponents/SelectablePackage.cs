@@ -39,9 +39,6 @@ namespace RelhaxModpack
         {
             get {
                     return Name.Replace("{version}",Version);
-                    //string replace takes much less time than replaceMacro
-                    //also name property currently only ever has {version} macro
-                    //Utils.ReplaceMacro(Name,"version",Version);
                 }
         }
         /// <summary>
