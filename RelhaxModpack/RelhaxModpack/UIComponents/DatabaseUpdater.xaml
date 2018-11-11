@@ -95,6 +95,13 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
+            <TabItem x:Name="GenerateHashesTab" Header="Generate MD5">
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel >
+                        <Button x:Name="GenerateMD5Button" Content="Load files to hash" Click="GenerateMD5Button_Click"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
         </TabControl>
         <TextBox x:Name="LogOutput" Grid.Column="2" HorizontalAlignment="Stretch" Margin="0" TextWrapping="Wrap" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Visible" TextChanged="LogOutput_TextChanged" />
     </Grid>

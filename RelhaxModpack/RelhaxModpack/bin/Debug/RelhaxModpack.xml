@@ -812,6 +812,13 @@
             <param name="inputFile">The path to the file to calculate</param>
             <returns></returns>
         </member>
+        <member name="M:RelhaxModpack.Utils.CreateMD5HashAsync(System.String)">
+            <summary>
+            Creates an MD5 hash calculation of the input file
+            </summary>
+            <param name="inputFile">The path to the file to calculate</param>
+            <returns></returns>
+        </member>
         <member name="M:RelhaxModpack.Utils.GetStringFromZip(System.String,System.String,System.String)">
             <summary>
             Gets a zip file entry in the form of a string

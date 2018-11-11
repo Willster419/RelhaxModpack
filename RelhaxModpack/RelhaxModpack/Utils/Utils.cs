@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -156,6 +157,17 @@ namespace RelhaxModpack
             }
             //Return the hexadecimal string.
             return sBuilder.ToString();
+        }
+        /// <summary>
+        /// Creates an MD5 hash calculation of the input file
+        /// </summary>
+        /// <param name="inputFile">The path to the file to calculate</param>
+        /// <returns></returns>
+        public static async Task<string> CreateMD5HashAsync(string inputFile)
+        {
+            //https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/task-based-asynchronous-programming
+            //Task taskA = Task.Run( () => Console.WriteLine("Hello from taskA."));
+            return await Task.Run(() => CreateMD5Hash(inputFile));
         }
         /// <summary>
         /// Gets a zip file entry in the form of a string

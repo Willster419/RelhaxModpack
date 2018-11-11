@@ -1413,5 +1413,31 @@ namespace RelhaxModpack.Windows
             System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
         }
         #endregion
+
+        #region MD5 hashing
+        private async void GenerateMD5Button_Click(object sender, RoutedEventArgs e)
+        {
+            LogOutput.Clear();
+            ReportProgress("Starting hashing");
+            OpenFileDialog zipsToHash = new OpenFileDialog()
+            {
+                DefaultExt = "zip",
+                Filter = "*.zip|*.zip",
+                Multiselect = true,
+                Title = "Load zip files to hash"
+            };
+            if (!(bool)zipsToHash.ShowDialog())
+            {
+                ReportProgress("Hashing Aborted");
+                return;
+            }
+            foreach (string s in zipsToHash.FileNames)
+            {
+                ReportProgress(string.Format("hash of {0}:", System.IO.Path.GetFileName(s)));
+                ReportProgress(await Utils.CreateMD5HashAsync(s));
+            }
+            ReportProgress("Done");
+        }
+        #endregion
     }
 }
