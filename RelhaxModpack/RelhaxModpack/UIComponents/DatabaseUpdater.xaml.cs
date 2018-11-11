@@ -133,6 +133,231 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
+        #region FTP methods
+        private void FTPMakeFolder(string addressWithDirectory)
+        {
+            WebRequest folderRequest = WebRequest.Create(addressWithDirectory);
+            folderRequest.Method = WebRequestMethods.Ftp.MakeDirectory;
+            folderRequest.Credentials = Credentials;
+            using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
+            { }
+        }
+
+        private async void FTPMakeFolderAsync(string addressWithDirectory)
+        {
+            WebRequest folderRequest = WebRequest.Create(addressWithDirectory);
+            folderRequest.Method = WebRequestMethods.Ftp.MakeDirectory;
+            folderRequest.Credentials = Credentials;
+            using (FtpWebResponse webResponse = (FtpWebResponse)await folderRequest.GetResponseAsync())
+            { }
+        }
+
+        private string[] FTPListFilesFolders(string address)
+        {
+            WebRequest folderRequest = WebRequest.Create(address);
+            folderRequest.Method = WebRequestMethods.Ftp.ListDirectory;
+            folderRequest.Credentials = Credentials;
+            using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
+            {
+                Stream responseStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(responseStream);
+                string temp = reader.ReadToEnd();
+                return temp.Split(new[] { "\r\n" }, StringSplitOptions.None);
+            }
+        }
+
+        private async Task<string[]> FTPListFilesFoldersAsync(string address)
+        {
+            WebRequest folderRequest = WebRequest.Create(address);
+            folderRequest.Method = WebRequestMethods.Ftp.ListDirectory;
+            folderRequest.Credentials = Credentials;
+            using (FtpWebResponse response = (FtpWebResponse)await folderRequest.GetResponseAsync())
+            {
+                Stream responseStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(responseStream);
+                string temp = reader.ReadToEnd();
+                return temp.Split(new[] { "\r\n" }, StringSplitOptions.None);
+            }
+        }
+
+        private void FTPDeleteFile(string address)
+        {
+            WebRequest folderRequest = WebRequest.Create(address);
+            folderRequest.Method = WebRequestMethods.Ftp.DeleteFile;
+            folderRequest.Credentials = Credentials;
+            using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
+            { }
+        }
+
+        private async void FTPDeleteFileAsync(string address)
+        {
+            WebRequest folderRequest = WebRequest.Create(address);
+            folderRequest.Method = WebRequestMethods.Ftp.DeleteFile;
+            folderRequest.Credentials = Credentials;
+            using (FtpWebResponse response = (FtpWebResponse)await folderRequest.GetResponseAsync())
+            { }
+        }
+
+        private async Task<XmlNode> GetFilePropertiesAsync(string phpScriptAddress, string fileName, bool getMD5)
+        {
+            XmlDocument doc = new XmlDocument();
+            using (client = new PatientWebClient() { Credentials = Credentials })
+            {
+                if (getMD5)
+                {
+                    Logging.WriteToLog("getMD5 is true, checking size before requesting hash", Logfiles.Application, LogLevel.Debug);
+                    //get the size of the file first. if it's greator that 75 MB,
+                    //download the file and get hash manually. should prevent timeout errors and manual editing
+                    string parsedURLRequest = string.Format("{0}?folder={1}&file={2}&getMD5=0",
+                        phpScriptAddress, Settings.WoTModpackOnlineFolderVersion, fileName);
+                    string xmlString = await client.DownloadStringTaskAsync(parsedURLRequest);
+                    try
+                    {
+                        doc.LoadXml(xmlString);
+                    }
+                    catch (XmlException ex)
+                    {
+                        Logging.WriteToLog(ex.ToString(), Logfiles.Application, LogLevel.Exception);
+                        return null;
+                    }
+                    XmlNode fileProperties = doc.LastChild.LastChild;
+                    XmlAttribute filePropertiesSize = fileProperties.Attributes["size"];
+                    int fileSizeBytes = int.Parse(filePropertiesSize.Value);
+                    if (fileSizeBytes > MaxFileSizeForHash)
+                    {
+                        //UPDATE UI
+                        CancelDownloadButon.Visibility = Visibility.Visible;
+                        FileDownloadProgresBar.Visibility = Visibility.Visible;
+                        Logging.WriteToLog("file size greator than limit, downloading for size", Logfiles.Application, LogLevel.Debug);
+                        //http://wotmods.relhaxmodpack.com/WoT/
+                        string fileDownloadURL = string.Format("http://bigmods.relhaxmodpack.com/WoT/{0}/{1}",
+                            Settings.WoTModpackOnlineFolderVersion, fileName);
+                        if (File.Exists(fileName))
+                            File.Delete(fileName);
+                        client.DownloadProgressChanged += OnDownloadProgress;
+                        await client.DownloadFileTaskAsync(fileDownloadURL, fileName);
+                        //get the actual md5 hash
+                        string hash = Utils.CreateMD5Hash(fileName);
+                        //append it to the node
+                        XmlAttribute filePropertieshash = doc.CreateAttribute("MD5");
+                        filePropertieshash.Value = hash;
+                        fileProperties.Attributes.Append(filePropertieshash);
+                        //and cleanup
+                        File.Delete(fileName);
+                        FileDownloadProgresBar.Visibility = Visibility.Hidden;
+                        return fileProperties;
+                    }
+                    else
+                    {
+                        Logging.WriteToLog("file size smaller than limit, using online info for size", Logfiles.Application, LogLevel.Debug);
+                        parsedURLRequest = string.Format("{0}?folder={1}&file={2}&getMD5=1",
+                        phpScriptAddress, Settings.WoTModpackOnlineFolderVersion, fileName);
+                        xmlString = await client.DownloadStringTaskAsync(parsedURLRequest);
+                        try
+                        {
+                            doc = new XmlDocument();
+                            doc.LoadXml(xmlString);
+                        }
+                        catch (XmlException ex)
+                        {
+                            Logging.WriteToLog(ex.ToString(), Logfiles.Application, LogLevel.Exception);
+                            return null;
+                        }
+                        return doc.LastChild.LastChild;
+                    }
+                }
+                else
+                {
+                    //only getting size and time, no timout issues
+                    string parsedURLRequest = string.Format("{0}?folder={1}&file={2}&getMD5=0",
+                        phpScriptAddress, Settings.WoTModpackOnlineFolderVersion, fileName);
+                    string xmlString = await client.DownloadStringTaskAsync(parsedURLRequest);
+                    try
+                    {
+                        doc.LoadXml(xmlString);
+                    }
+                    catch (XmlException ex)
+                    {
+                        Logging.WriteToLog(ex.ToString(), Logfiles.Application, LogLevel.Exception);
+                        return null;
+                    }
+                    return doc.LastChild.LastChild;
+                }
+            }
+        }
+
+        private void OnDownloadProgress(object sender, DownloadProgressChangedEventArgs e)
+        {
+            FileDownloadProgresBar.Minimum = 0;
+            FileDownloadProgresBar.Value = e.ProgressPercentage;
+            FileDownloadProgresBar.Maximum = 100;
+            DownloadProgressText.Text = string.Format("{0}kb of {1}kb", e.BytesReceived / 1024, e.TotalBytesToReceive / 1024);
+        }
+        #endregion
+
+        #region Boring stuff
+        private void OnLoadModInfo(object sender, RoutedEventArgs e)
+        {
+            if (SelectModInfo.ShowDialog() == true)
+            {
+                LogOutput.Text = "Loading ModInfo...";
+                //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
+                //for the folder version: //modInfoAlpha.xml/@version
+                Settings.WoTModpackOnlineFolderVersion = XMLUtils.GetXMLStringFromXPath(SelectModInfo.FileName, "//modInfoAlpha.xml/@onlineFolder");
+                Settings.WoTClientVersion = XMLUtils.GetXMLStringFromXPath(SelectModInfo.FileName, "//modInfoAlpha.xml/@version");
+                string versionInfo = string.Format("{0}={1},  {2}={3}", nameof(Settings.WoTModpackOnlineFolderVersion)
+                    , Settings.WoTModpackOnlineFolderVersion, nameof(Settings.WoTClientVersion), Settings.WoTClientVersion);
+                Logging.WriteToLog(versionInfo);
+                ReportProgress(versionInfo);
+                //this.Name = "DatabaseUpdater: " + versionInfo;
+            }
+        }
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!authorized)
+                AuthStatusTab.Focus();
+        }
+
+        private void ReportProgress(string message)
+        {
+            //reports to the log file and the console otuptu
+            Logging.WriteToLog(message);
+            LogOutput.AppendText(message + "\n");
+        }
+
+        private void LogOutput_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            LogOutput.ScrollToEnd();
+        }
+
+        private void CancelDownloadButon_Click(object sender, RoutedEventArgs e)
+        {
+            client.CancelAsync();
+        }
+
+        private void OnApplicationClose(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            //if strings are not empty and file exists, delete them
+            //for all the class level strings
+            Logging.WriteToLog("Deleting trash files...");
+            string[] filesToDelete = new string[]
+            {
+                SupportedClients,
+                ManagerVersion,
+                DatabaseXml,
+                BackupModInfoXmlToServer,
+                CurrentModInfoXml,
+                LastSupportedModInfoXml
+            };
+            foreach (string s in filesToDelete)
+            {
+                if (!string.IsNullOrWhiteSpace(s) && File.Exists(s))
+                    File.Delete(s);
+            }
+        }
+        #endregion
+
         #region Database output
         private void SaveDatabaseText(bool @internal)
         {
@@ -359,210 +584,6 @@ namespace RelhaxModpack.Windows
             }
             ReportProgress("Complete");
             File.Delete(TrashXML);
-        }
-        #endregion
-
-        #region FTP methods
-        private void FTPMakeFolder(string addressWithDirectory)
-        {
-            WebRequest folderRequest = WebRequest.Create(addressWithDirectory);
-            folderRequest.Method = WebRequestMethods.Ftp.MakeDirectory;
-            folderRequest.Credentials = Credentials;
-            using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
-            { }
-        }
-        
-        private async void FTPMakeFolderAsync(string addressWithDirectory)
-        {
-            WebRequest folderRequest = WebRequest.Create(addressWithDirectory);
-            folderRequest.Method = WebRequestMethods.Ftp.MakeDirectory;
-            folderRequest.Credentials = Credentials;
-            using (FtpWebResponse webResponse = (FtpWebResponse) await folderRequest.GetResponseAsync())
-            { }
-        }
-
-        private string[] FTPListFilesFolders(string address)
-        {
-            WebRequest folderRequest = WebRequest.Create(address);
-            folderRequest.Method = WebRequestMethods.Ftp.ListDirectory;
-            folderRequest.Credentials = Credentials;
-            using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
-            {
-                Stream responseStream = response.GetResponseStream();
-                StreamReader reader = new StreamReader(responseStream);
-                string temp = reader.ReadToEnd();
-                return temp.Split(new[] { "\r\n" }, StringSplitOptions.None);
-            }
-        }
-
-        private async Task<string[]> FTPListFilesFoldersAsync(string address)
-        {
-            WebRequest folderRequest = WebRequest.Create(address);
-            folderRequest.Method = WebRequestMethods.Ftp.ListDirectory;
-            folderRequest.Credentials = Credentials;
-            using (FtpWebResponse response = (FtpWebResponse) await folderRequest.GetResponseAsync())
-            {
-                Stream responseStream = response.GetResponseStream();
-                StreamReader reader = new StreamReader(responseStream);
-                string temp = reader.ReadToEnd();
-                return temp.Split(new[] { "\r\n" }, StringSplitOptions.None);
-            }
-        }
-
-        private void FTPDeleteFile(string address)
-        {
-            WebRequest folderRequest = WebRequest.Create(address);
-            folderRequest.Method = WebRequestMethods.Ftp.DeleteFile;
-            folderRequest.Credentials = Credentials;
-            using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
-            { }
-        }
-
-        private async void FTPDeleteFileAsync(string address)
-        {
-            WebRequest folderRequest = WebRequest.Create(address);
-            folderRequest.Method = WebRequestMethods.Ftp.DeleteFile;
-            folderRequest.Credentials = Credentials;
-            using (FtpWebResponse response = (FtpWebResponse) await folderRequest.GetResponseAsync())
-            { }
-        }
-
-        private async Task<XmlNode> GetFilePropertiesAsync(string phpScriptAddress, string fileName, bool getMD5)
-        {
-            XmlDocument doc = new XmlDocument();
-            using (client = new PatientWebClient() { Credentials = Credentials })
-            {
-                if(getMD5)
-                {
-                    Logging.WriteToLog("getMD5 is true, checking size before requesting hash", Logfiles.Application, LogLevel.Debug);
-                    //get the size of the file first. if it's greator that 75 MB,
-                    //download the file and get hash manually. should prevent timeout errors and manual editing
-                    string parsedURLRequest = string.Format("{0}?folder={1}&file={2}&getMD5=0",
-                        phpScriptAddress, Settings.WoTModpackOnlineFolderVersion, fileName);
-                    string xmlString = await client.DownloadStringTaskAsync(parsedURLRequest);
-                    try
-                    {
-                        doc.LoadXml(xmlString);
-                    }
-                    catch (XmlException ex)
-                    {
-                        Logging.WriteToLog(ex.ToString(), Logfiles.Application, LogLevel.Exception);
-                        return null;
-                    }
-                    XmlNode fileProperties = doc.LastChild.LastChild;
-                    XmlAttribute filePropertiesSize = fileProperties.Attributes["size"];
-                    int fileSizeBytes = int.Parse(filePropertiesSize.Value);
-                    if(fileSizeBytes > MaxFileSizeForHash)
-                    {
-                        //UPDATE UI
-                        CancelDownloadButon.Visibility = Visibility.Visible;
-                        FileDownloadProgresBar.Visibility = Visibility.Visible;
-                        Logging.WriteToLog("file size greator than limit, downloading for size", Logfiles.Application, LogLevel.Debug);
-                        //http://wotmods.relhaxmodpack.com/WoT/
-                        string fileDownloadURL = string.Format("http://bigmods.relhaxmodpack.com/WoT/{0}/{1}",
-                            Settings.WoTModpackOnlineFolderVersion, fileName);
-                        if (File.Exists(fileName))
-                            File.Delete(fileName);
-                        client.DownloadProgressChanged += OnDownloadProgress;
-                        await client.DownloadFileTaskAsync(fileDownloadURL, fileName);
-                        //get the actual md5 hash
-                        string hash = Utils.CreateMD5Hash(fileName);
-                        //append it to the node
-                        XmlAttribute filePropertieshash = doc.CreateAttribute("MD5");
-                        filePropertieshash.Value = hash;
-                        fileProperties.Attributes.Append(filePropertieshash);
-                        //and cleanup
-                        File.Delete(fileName);
-                        FileDownloadProgresBar.Visibility = Visibility.Hidden;
-                        return fileProperties;
-                    }
-                    else
-                    {
-                        Logging.WriteToLog("file size smaller than limit, using online info for size", Logfiles.Application, LogLevel.Debug);
-                        parsedURLRequest = string.Format("{0}?folder={1}&file={2}&getMD5=1",
-                        phpScriptAddress, Settings.WoTModpackOnlineFolderVersion, fileName);
-                        xmlString = await client.DownloadStringTaskAsync(parsedURLRequest);
-                        try
-                        {
-                            doc = new XmlDocument();
-                            doc.LoadXml(xmlString);
-                        }
-                        catch (XmlException ex)
-                        {
-                            Logging.WriteToLog(ex.ToString(), Logfiles.Application, LogLevel.Exception);
-                            return null;
-                        }
-                        return doc.LastChild.LastChild;
-                    }
-                }
-                else
-                {
-                    //only getting size and time, no timout issues
-                    string parsedURLRequest = string.Format("{0}?folder={1}&file={2}&getMD5=0",
-                        phpScriptAddress, Settings.WoTModpackOnlineFolderVersion, fileName);
-                    string xmlString = await client.DownloadStringTaskAsync(parsedURLRequest);
-                    try
-                    {
-                        doc.LoadXml(xmlString);
-                    }
-                    catch (XmlException ex)
-                    {
-                        Logging.WriteToLog(ex.ToString(), Logfiles.Application, LogLevel.Exception);
-                        return null;
-                    }
-                    return doc.LastChild.LastChild;
-                }
-            }
-        }
-
-        private void OnDownloadProgress(object sender, DownloadProgressChangedEventArgs e)
-        {
-            FileDownloadProgresBar.Minimum = 0;
-            FileDownloadProgresBar.Value = e.ProgressPercentage;
-            FileDownloadProgresBar.Maximum = 100;
-            DownloadProgressText.Text = string.Format("{0}kb of {1}kb", e.BytesReceived/1024, e.TotalBytesToReceive/1024);
-        }
-        #endregion
-
-        #region Boring stuff
-        private void OnLoadModInfo(object sender, RoutedEventArgs e)
-        {
-            if (SelectModInfo.ShowDialog() == true)
-            {
-                LogOutput.Text = "Loading ModInfo...";
-                //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
-                //for the folder version: //modInfoAlpha.xml/@version
-                Settings.WoTModpackOnlineFolderVersion = XMLUtils.GetXMLStringFromXPath(SelectModInfo.FileName, "//modInfoAlpha.xml/@onlineFolder");
-                Settings.WoTClientVersion = XMLUtils.GetXMLStringFromXPath(SelectModInfo.FileName, "//modInfoAlpha.xml/@version");
-                string versionInfo = string.Format("{0}={1},  {2}={3}", nameof(Settings.WoTModpackOnlineFolderVersion)
-                    , Settings.WoTModpackOnlineFolderVersion, nameof(Settings.WoTClientVersion), Settings.WoTClientVersion);
-                Logging.WriteToLog(versionInfo);
-                ReportProgress(versionInfo);
-                //this.Name = "DatabaseUpdater: " + versionInfo;
-            }
-        }
-
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (!authorized)
-                AuthStatusTab.Focus();
-        }
-
-        private void ReportProgress(string message)
-        {
-            //reports to the log file and the console otuptu
-            Logging.WriteToLog(message);
-            LogOutput.AppendText(message + "\n");
-        }
-
-        private void LogOutput_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            LogOutput.ScrollToEnd();
-        }
-
-        private void CancelDownloadButon_Click(object sender, RoutedEventArgs e)
-        {
-            client.CancelAsync();
         }
         #endregion
 
@@ -1354,25 +1375,5 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        private void OnApplicationClose(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            //if strings are not empty and file exists, delete them
-            //for all the class level strings
-            Logging.WriteToLog("Deleting trash files...");
-            string[] filesToDelete = new string[]
-            {
-                SupportedClients,
-                ManagerVersion,
-                DatabaseXml,
-                BackupModInfoXmlToServer,
-                CurrentModInfoXml,
-                LastSupportedModInfoXml
-            };
-            foreach(string s in filesToDelete)
-            {
-                if (!string.IsNullOrWhiteSpace(s) && File.Exists(s))
-                    File.Delete(s);
-            }
-        }
     }
 }
