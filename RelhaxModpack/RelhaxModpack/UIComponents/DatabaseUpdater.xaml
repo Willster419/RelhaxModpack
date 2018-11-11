@@ -75,19 +75,14 @@
                 <Grid Background="#FFE5E5E5">
                     <StackPanel>
                         <TextBlock x:Name="CleanZipFoldersOnlineMethod" Text="--Online Method--" HorizontalAlignment="Center"/>
-                        <Button x:Name="CleanFoldersOnlineStep1" Content="Step 1: Run script CreateOutdatedFileList.php" HorizontalContentAlignment="Left" Click="CleanFoldersOnlineStep1_Click"/>
-                        <StackPanel Orientation="Horizontal">
-                            <Button x:Name="CleanFoldersOnlineStep2a" Content="Parse Online Folders" Click="CleanFoldersOnlineStep2a_Click" />
-                            <ComboBox x:Name="CleanFoldersOnlineStep2b" MinWidth="100" Margin="0,0,0,0"/>
-                        </StackPanel>
-                        <Button x:Name="CleanFoldersOnlineStep3" Content="Step 3: Start Process to delete old zip files" HorizontalContentAlignment="Left" Click="CleanFoldersOnlineStep3_Click"/>
-                        <TextBlock x:Name="CleanZipFoldersOfflineMethod" Text="--Offline Method--" HorizontalAlignment="Center"/>
-                        <Button x:Name="CleanFoldersLocalStep1" Content="Step 1: Load database files" HorizontalContentAlignment="Left" Click="CleanFoldersLocalStep1_Click"/>
-                        <Button x:Name="CleanFoldersLocalStep2" Content="Step 2: Load folder of zip files" HorizontalContentAlignment="Left" Click="CleanFoldersLocalStep2_Click"/>
-                        <Button x:Name="CleanFoldersLocalStep3" Content="Step 3: Delete files" HorizontalContentAlignment="Left" Click="CleanFoldersLocalStep3_Click"/>
-                        <TextBlock x:Name="CleanZipFoldersListHeader" Text="--List--" HorizontalAlignment="Center"/>
+                        <Button x:Name="CleanFoldersOnlineStep1" Content="Step 1: Parse onine folders via supported__clients.xml" HorizontalContentAlignment="Left" Click="CleanFoldersOnlineStep1_Click"/>
+                        <ComboBox x:Name="CleanFoldersOnlineStep2b"/>
+                        <Button x:Name="CleanFoldersOnlineStep2" Content="Step 2: Get list of trash files" HorizontalContentAlignment="Left" Click="CleanFoldersOnlineStep2_Click"/>
+                        <Button x:Name="CleanFoldersOnlineStep3" Content="Step 3: Confirm start Process to delete old zip files" HorizontalContentAlignment="Left" Click="CleanFoldersOnlineStep3_Click"/>
+                        <Button x:Name="CleanFoldersOnlineCancelStep3" Content="Cancel Process" HorizontalContentAlignment="Left" Visibility="Hidden" Click="CleanFoldersOnlineCancel_Click"/>
+                        <TextBlock x:Name="CleanZipFoldersListHeader" Text="List of files to be deleted" HorizontalAlignment="Center"/>
                     </StackPanel>
-                    <TextBox x:Name="CleanZipFoldersTextbox" HorizontalAlignment="Left" Height="227" Margin="0,174,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="388"/>
+                    <TextBox x:Name="CleanZipFoldersTextbox" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible" Margin="1,118,1,5" TextWrapping="NoWrap" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Visible"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="DatabaseOutputTab" Header="Database Output">

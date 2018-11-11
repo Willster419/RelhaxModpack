@@ -27,6 +27,7 @@ namespace RelhaxModpack.Windows
         private const string DatabaseUpdateTxt = "databaseUpdate.txt";
         private const string KeyAddress = "aHR0cDovL3dvdG1vZHMucmVsaGF4bW9kcGFjay5jb20vUmVsaGF4TW9kcGFjay9SZXNvdXJjZXMvZXh0ZXJuYWwva2V5LnR4dA==";
         private const string ModpackUsername = "modpack@wotmods.relhaxmodpack.com";
+        private const string ModpackUsernameBigmods = "modpack@bigmods.relhaxmodpack.com";
         private const string ModpackPassword = "QjFZLi0zaGxsTStY";
         private const string FTPRoot =                       "ftp://wotmods.relhaxmodpack.com/";
         private const string FTPModpackRoot =                "ftp://wotmods.relhaxmodpack.com/RelhaxModpack/";
@@ -49,13 +50,11 @@ namespace RelhaxModpack.Windows
         private string KeyFilename = "key.txt";//can be overridden by command line arguement
         private WebClient client;
         private NetworkCredential @Credentials;
+        private NetworkCredential CredentialsBigmods;
         private bool authorized = false;
         private OpenFileDialog SelectModInfo = new OpenFileDialog() { Filter = "*.xml|*.xml" };
         private OpenFileDialog SelectManyModInfo = new OpenFileDialog();
         private OpenFileDialog SelectManyZip = new OpenFileDialog();
-        //strings for database updating
-        //for decoding the password upon application load
-        private string ModpackPasswordDecoded = "";
         #endregion
 
         #region Stuff for parts 3 and 4 to share
@@ -76,6 +75,21 @@ namespace RelhaxModpack.Windows
 
         #endregion
 
+        #region Stuff for Cleaning online folders
+        public struct VersionInfos
+        {
+            public string WoTClientVersion;
+            public string WoTOnlineFolderVersion;
+            public override string ToString()
+            {
+                return string.Format("WoTClientVersion={0}, WoTOnlineFolderVersion={1}", WoTClientVersion, WoTOnlineFolderVersion);
+            }
+        }
+        List<VersionInfos> VersionInfosList;
+        VersionInfos selectedVersionInfos;
+        bool cancelDelete = false;
+        #endregion
+
         #region Constructor
         public DatabaseUpdater()
         {
@@ -88,6 +102,7 @@ namespace RelhaxModpack.Windows
         {
             //parse credentials
             Credentials = new NetworkCredential(ModpackUsername, Utils.Base64Decode(ModpackPassword));
+            CredentialsBigmods = new NetworkCredential(ModpackUsernameBigmods, Utils.Base64Decode(ModpackPassword));
             PasswordButton_Click(sender, e);
         }
 
@@ -134,29 +149,29 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region FTP methods
-        private void FTPMakeFolder(string addressWithDirectory)
+        private void FTPMakeFolder(string addressWithDirectory, ICredentials credentials)
         {
             WebRequest folderRequest = WebRequest.Create(addressWithDirectory);
             folderRequest.Method = WebRequestMethods.Ftp.MakeDirectory;
-            folderRequest.Credentials = Credentials;
+            folderRequest.Credentials = credentials;
             using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
             { }
         }
 
-        private async void FTPMakeFolderAsync(string addressWithDirectory)
+        private async Task FTPMakeFolderAsync(string addressWithDirectory, ICredentials credentials)
         {
             WebRequest folderRequest = WebRequest.Create(addressWithDirectory);
             folderRequest.Method = WebRequestMethods.Ftp.MakeDirectory;
-            folderRequest.Credentials = Credentials;
+            folderRequest.Credentials = credentials;
             using (FtpWebResponse webResponse = (FtpWebResponse)await folderRequest.GetResponseAsync())
             { }
         }
 
-        private string[] FTPListFilesFolders(string address)
+        private string[] FTPListFilesFolders(string address, ICredentials credentials)
         {
             WebRequest folderRequest = WebRequest.Create(address);
             folderRequest.Method = WebRequestMethods.Ftp.ListDirectory;
-            folderRequest.Credentials = Credentials;
+            folderRequest.Credentials = credentials;
             using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
             {
                 Stream responseStream = response.GetResponseStream();
@@ -166,11 +181,11 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private async Task<string[]> FTPListFilesFoldersAsync(string address)
+        private async Task<string[]> FTPListFilesFoldersAsync(string address, ICredentials credentials)
         {
             WebRequest folderRequest = WebRequest.Create(address);
             folderRequest.Method = WebRequestMethods.Ftp.ListDirectory;
-            folderRequest.Credentials = Credentials;
+            folderRequest.Credentials = credentials;
             using (FtpWebResponse response = (FtpWebResponse)await folderRequest.GetResponseAsync())
             {
                 Stream responseStream = response.GetResponseStream();
@@ -180,20 +195,20 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void FTPDeleteFile(string address)
+        private void FTPDeleteFile(string address, ICredentials credentials)
         {
             WebRequest folderRequest = WebRequest.Create(address);
             folderRequest.Method = WebRequestMethods.Ftp.DeleteFile;
-            folderRequest.Credentials = Credentials;
+            folderRequest.Credentials = credentials;
             using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
             { }
         }
 
-        private async void FTPDeleteFileAsync(string address)
+        private async Task FTPDeleteFileAsync(string address, ICredentials credentials)
         {
             WebRequest folderRequest = WebRequest.Create(address);
             folderRequest.Method = WebRequestMethods.Ftp.DeleteFile;
-            folderRequest.Credentials = Credentials;
+            folderRequest.Credentials = credentials;
             using (FtpWebResponse response = (FtpWebResponse)await folderRequest.GetResponseAsync())
             { }
         }
@@ -499,163 +514,187 @@ namespace RelhaxModpack.Windows
         #region Cleaning online folders
         private async void CleanFoldersOnlineStep1_Click(object sender, RoutedEventArgs e)
         {
-            //run trash xml collect script
-            LogOutput.Text = "Running script CreateOutdatedFileList.php...";
+            LogOutput.Clear();
+            ReportProgress("Runnint Clean online folders step 1");
+            ReportProgress("Downloading and parsing " + SupportedClients);
+            //download supported_clients
+            XmlDocument doc = new XmlDocument();
             using (client = new WebClient() { Credentials = Credentials })
             {
-                try
-                {
-                    string result = await client.DownloadStringTaskAsync("http://wotmods.relhaxmodpack.com/scripts/CreateOutdatedFileList.php");
-                    LogOutput.Text = result.Replace("<br />", "\n");
-                }
-                catch (WebException wex)
-                {
-                    ReportProgress("failed to run clean folder online step 1");
-                    ReportProgress(wex.ToString());
-                }
-            }
-        }
-
-        private async void CleanFoldersOnlineStep2a_Click(object sender, RoutedEventArgs e)
-        {
-            ReportProgress("Downloading " + SupportedClients);
-            //download supported_clients
-            using(client = new WebClient() { Credentials = Credentials })
-            {
                 string xml = await client.DownloadStringTaskAsync(FTPManagerInfoRoot + SupportedClients);
+                doc.LoadXml(xml);
             }
             //parse each online folder to list type string
             ReportProgress("Parsing " + SupportedClients);
-            XmlNodeList supportedClients = XMLUtils.GetXMLNodesFromXPath(SupportedClients, "//versions/version");
-            List<string> onlineFolders = new List<string>();
-            foreach(XmlNode node in supportedClients)
-            {
-                string onlineFolderVersion = node.Attributes["folder"].Value;
-                if(!onlineFolders.Contains(onlineFolderVersion))
-                  onlineFolders.Add(onlineFolderVersion);
-            }
-            //clear it
             CleanFoldersOnlineStep2b.Items.Clear();
-            foreach (string s in onlineFolders)
-                CleanFoldersOnlineStep2b.Items.Add(s);
+            XmlNodeList supportedClients = XMLUtils.GetXMLNodesFromXPath(doc, "//versions/version");
+            if(supportedClients == null || supportedClients.Count == 0)
+            {
+                ReportProgress("Error is parsing supported_clients.xml");
+                return;
+            }
+            VersionInfosList = new List<VersionInfos>();
+            foreach (XmlNode node in supportedClients)
+            {
+                VersionInfos newVersionInfo = new VersionInfos()
+                {
+                    WoTOnlineFolderVersion = node.Attributes["folder"].Value,
+                    WoTClientVersion = node.InnerText
+                };
+                VersionInfosList.Add(newVersionInfo);
+                CleanFoldersOnlineStep2b.Items.Add(newVersionInfo);
+            }
+            ReportProgress("Done");
         }
 
-        private void CleanFoldersOnlineStep3_Click(object sender, RoutedEventArgs e)
+        private async void CleanFoldersOnlineStep2_Click(object sender, RoutedEventArgs e)
         {
             LogOutput.Clear();
-            //check if database versions set
-            string wotFolderToClean = (string)CleanFoldersOnlineStep2b.SelectedItem;
-            if (string.IsNullOrEmpty(wotFolderToClean))
+            ReportProgress("Running Clean Folders online step 2");
+            if(CleanFoldersOnlineStep2b.Items.Count == 0)
             {
-                ReportProgress("online folder version is blank");
+                ReportProgress("Combobox items count = 0");
                 return;
             }
-            //make sure folder exists
-            ReportProgress(string.Format("Checking if folder {0} exists...", wotFolderToClean));
-            string[] onlineFolders = FTPListFilesFolders("ftp://wotmods.relhaxmodpack.com/WoT/");
-            if (!onlineFolders.Contains(wotFolderToClean))
+            if(VersionInfosList == null)
             {
-                ReportProgress(string.Format("ERROR: folder {0} does not exist in WoT folder!", wotFolderToClean));
+                ReportProgress("VersionsInfoList == null");
                 return;
             }
-            //download trash xml file
-            ReportProgress("Downloading " + TrashXML);
-            string onlineFolderPath = "ftp://wotmods.relhaxmodpack.com/WoT/" + wotFolderToClean + "/";
-            using (client = new WebClient() { Credentials = Credentials })
+            if(CleanFoldersOnlineStep2b.SelectedItem == null)
             {
-                if (File.Exists(TrashXML))
-                    File.Delete(TrashXML);
-                client.DownloadFile(onlineFolderPath + TrashXML, TrashXML);
-            }
-            ReportProgress("Parsing " + TrashXML);
-            XmlNodeList trashFiles = XMLUtils.GetXMLNodesFromXPath(TrashXML, "//trash/filename");
-            if(trashFiles == null || trashFiles.Count == 0)
-            {
-                ReportProgress("Error: trashfiles is null or count = 0");
+                ReportProgress("Item not selected");
                 return;
             }
-            int totalFilesToDelete = trashFiles.Count;
-            int filesDeleted = 1;
-            //run the script with the selected online folder
-            foreach (XmlNode file in trashFiles)
+            if(VersionInfosList.Count == 0)
             {
-                ReportProgress(string.Format("Deleting file {0} of {1}, filename={2}", filesDeleted++, totalFilesToDelete, file.InnerText));
-                FTPDeleteFile(onlineFolderPath + file.InnerText);
-            }
-            ReportProgress("Complete");
-            File.Delete(TrashXML);
-        }
-        #endregion
-
-        #region Local zip file cleaning
-        private List<string> zipFilesInDatabaseUse = new List<string>();
-        private List<string> zipFilesInFolder = new List<string>();
-        private List<string> zipFilesToDelete = new List<string>();
-        private void CleanFoldersLocalStep1_Click(object sender, RoutedEventArgs e)
-        {
-            //init and checks
-            LogOutput.Clear();
-            if(SelectManyModInfo.ShowDialog() == false)
-            {
-                ReportProgress("User canceled");
+                ReportProgress("VersionsInfosList count = 0");
                 return;
             }
-            zipFilesInDatabaseUse = new List<string>();
-            List<DatabasePackage> packages = new List<DatabasePackage>();
-            //get all packages to one list
-            foreach(string s in SelectManyModInfo.FileNames)
+            selectedVersionInfos = (VersionInfos)CleanFoldersOnlineStep2b.SelectedItem;
+            ReportProgress("Getting all trash files in online folder " + selectedVersionInfos.WoTOnlineFolderVersion);
+            //make a new list where it only has versions who's online folder match the selected one from the combobox
+            List<VersionInfos> specificVersions = 
+                VersionInfosList.Where(info => info.WoTOnlineFolderVersion.Equals(selectedVersionInfos.WoTOnlineFolderVersion)).ToList();
+            List<string> allUsedZipFiles = new List<string>();
+            specificVersions.Add(new VersionInfos { WoTClientVersion = "GITHUB" });
+            foreach(VersionInfos infos in specificVersions)
             {
+                ReportProgress("Adding zip files from WoTClientVersion " + infos.WoTClientVersion);
+                XmlDocument doc = new XmlDocument();
+                List<DatabasePackage> flatList = new List<DatabasePackage>();
                 List<DatabasePackage> globalDependencies = new List<DatabasePackage>();
                 List<Dependency> dependencies = new List<Dependency>();
-                List<Category> categories = new List<Category>();
-                XmlDocument doc = new XmlDocument();
-                doc.Load(s);
-                XMLUtils.ParseDatabase(doc, globalDependencies, dependencies, categories);
-                packages.AddRange(globalDependencies);
-                packages.AddRange(dependencies);
-                foreach (Category cat in categories)
-                    packages.AddRange(cat.GetFlatPackageList());
-            }
-            //parse to string list
-            CleanZipFoldersTextbox.Clear();
-            foreach(DatabasePackage databasePackage in packages)
-            {
-                if (!string.IsNullOrWhiteSpace(databasePackage.ZipFile) && !zipFilesInDatabaseUse.Contains(databasePackage.ZipFile))
+                List<Category> parsedCategoryList = new List<Category>();
+                //download and parse database to flat list
+                using (client = new WebClient() { Credentials = Credentials })
                 {
-                    zipFilesInDatabaseUse.Add(databasePackage.ZipFile);
-                    CleanZipFoldersTextbox.AppendText(databasePackage.ZipFile + "\n");
+                    if(infos.WoTClientVersion.Equals("GITHUB"))
+                    {
+                        doc.LoadXml(await client.DownloadStringTaskAsync(
+                            "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/modInfo.xml"));
+                    }
+                    else
+                    {
+                        string newModInfoName = "modInfo_" + infos.WoTClientVersion + ".xml";
+                        doc.LoadXml(await client.DownloadStringTaskAsync(ModInfosLocation + newModInfoName));
+                    }
+                }
+                if (!XMLUtils.ParseDatabase(doc, globalDependencies, dependencies, parsedCategoryList))
+                {
+                    ReportProgress("failed to parse modInfo to lists");
+                    return;
+                }
+                Utils.BuildLinksRefrence(parsedCategoryList);
+                Utils.BuildLevelPerPackage(parsedCategoryList);
+                //if the list of zip files does not already have it, then add it
+                flatList = Utils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
+                foreach (DatabasePackage package in flatList)
+                    if(!string.IsNullOrWhiteSpace(package.ZipFile) && !allUsedZipFiles.Contains(package.ZipFile))
+                            allUsedZipFiles.Add(package.ZipFile);
+            }
+            //just a check
+            allUsedZipFiles = allUsedZipFiles.Distinct().ToList();
+            //have a list of ALL used zip files in the folder, now get the list of all zip files in the onlineFolder
+            ReportProgress("Complete, getting database.xml in onlineFolder " + selectedVersionInfos.WoTOnlineFolderVersion);
+            List<string> notUsedFiles = new List<string>();
+            List<string> missingFiles = new List<string>();
+            List<string> filesFromDatabaseXml = new List<string>();
+            using (client = new WebClient())
+            {
+                XmlDocument filesInOnlineFolder = new XmlDocument();
+                filesInOnlineFolder.LoadXml(await client.DownloadStringTaskAsync(string.Format("http://bigmods.relhaxmodpack.com/WoT/{0}/{1}",
+                    selectedVersionInfos.WoTOnlineFolderVersion, DatabaseXml)));
+                foreach(XmlNode node in filesInOnlineFolder.SelectNodes("//database/file"))
+                {
+                    filesFromDatabaseXml.Add(node.Attributes["name"].Value);
                 }
             }
-        }
-
-        private void CleanFoldersLocalStep2_Click(object sender, RoutedEventArgs e)
-        {
-            if(SelectManyZip.ShowDialog() == false)
+            filesFromDatabaseXml = filesFromDatabaseXml.Distinct().ToList();
+            ReportProgress("Complete, building lists");
+            notUsedFiles = filesFromDatabaseXml.Except(allUsedZipFiles).ToList();
+            missingFiles = allUsedZipFiles.Except(filesFromDatabaseXml).ToList();
+            CleanZipFoldersTextbox.Clear();
+            if (missingFiles.Count > 0)
             {
-                ReportProgress("canceled");
+                ReportProgress("ERROR: missing files on the server! (Saved in textbox)");
+                CleanZipFoldersTextbox.AppendText(string.Join("\n", missingFiles));
                 return;
             }
-            //make a new list of just zip files not in use
-            //i.e. list of all files selected EXCEPT those in the modInfo selection
-            zipFilesInFolder = SelectManyZip.FileNames.ToList();
-            zipFilesToDelete = zipFilesInFolder.Except(zipFilesInDatabaseUse).ToList();
-            CleanZipFoldersTextbox.Clear();
-            foreach (string s in zipFilesToDelete)
-                CleanZipFoldersTextbox.AppendText(s);
-            ReportProgress("zips selected, ready for deleting");
+            else if(notUsedFiles.Count == 0)
+            {
+                ReportProgress("No files to clean!");
+            }
+            else
+            {
+                CleanZipFoldersTextbox.AppendText(string.Join("\n", notUsedFiles));
+                ReportProgress("Complete");
+            }
         }
 
-        private void CleanFoldersLocalStep3_Click(object sender, RoutedEventArgs e)
+        private void CleanFoldersOnlineCancel_Click(object sender, RoutedEventArgs e)
         {
-            int numDeleted = 1;
-            foreach(string s in zipFilesToDelete)
+            cancelDelete = true;
+        }
+
+        private async void CleanFoldersOnlineStep3_Click(object sender, RoutedEventArgs e)
+        {
+            if(string.IsNullOrWhiteSpace(CleanZipFoldersTextbox.Text))
             {
-                if(File.Exists(s))
-                {
-                    File.Delete(s);
-                    ReportProgress(string.Format("Deleted {0} of {1}, {2}", numDeleted, zipFilesToDelete.Count, s));
-                }
+                ReportProgress("textbox is empty");
             }
+            if(string.IsNullOrWhiteSpace(selectedVersionInfos.WoTOnlineFolderVersion))
+            {
+                ReportProgress("selectedVersionInfos is null");
+                return;
+            }
+            cancelDelete = false;
+            CleanFoldersOnlineCancelStep3.Visibility = Visibility.Visible;
+            List<string> filesToDelete = new List<string>();
+            filesToDelete = CleanZipFoldersTextbox.Text.Split('\n').ToList();
+            string[] filesActuallyInFolder = await FTPListFilesFoldersAsync(string.Format("ftp://bigmods.relhaxmodpack.com/{0}/",
+                selectedVersionInfos.WoTOnlineFolderVersion),CredentialsBigmods);
+            int count = 1;
+            foreach(string s in filesToDelete)
+            {
+                if(cancelDelete)
+                {
+                    ReportProgress("Cancel Requested");
+                    return;
+                }
+                if(!filesActuallyInFolder.Contains(s))
+                {
+                    ReportProgress(string.Format("skipping file {0}, does not exist", s));
+                    count++;
+                    continue;
+                }
+                ReportProgress(string.Format("Deleting file {0} of {1}, {2}", count++, filesToDelete.Count, s));
+                await FTPDeleteFileAsync(string.Format("ftp://bigmods.relhaxmodpack.com/{0}/{1}",
+                    selectedVersionInfos.WoTClientVersion, s), CredentialsBigmods);
+            }
+            CleanZipFoldersTextbox.Clear();
+            CleanFoldersOnlineCancelStep3.Visibility = Visibility.Hidden;
+            ReportProgress("Done");
         }
         #endregion
 
@@ -1027,12 +1066,12 @@ namespace RelhaxModpack.Windows
             //check/create online backup folder for new wot version
             //needs to be done here because need to make sure folder at least exists for below section
             ReportProgress("Checking if modInfo backup folder exists for last supported version...");
-            string[] folders = await FTPListFilesFoldersAsync(ModInfoBackupsFolderLocation);
+            string[] folders = await FTPListFilesFoldersAsync(ModInfoBackupsFolderLocation,Credentials);
             if (!(folders.Contains(LastSupportedTanksVersion)))
             {
                 ReportProgress("Does NOT exist, creating");
                 //create the folder
-                FTPMakeFolder(ModInfoBackupsFolderLocation + LastSupportedTanksVersion);
+                await FTPMakeFolderAsync(ModInfoBackupsFolderLocation + LastSupportedTanksVersion, Credentials);
             }
             else
                 ReportProgress("DOES exist");
@@ -1051,7 +1090,7 @@ namespace RelhaxModpack.Windows
             {
                 BackupModInfoXmlToServer = "modInfo_" + LastSupportedTanksVersion + "_" + dateTimeFormat + "_" + ++itteraton + ".xml";
                 ReportProgress("Current Iteration: " + BackupModInfoXmlToServer);
-                string[] modInfoBackups = await FTPListFilesFoldersAsync(ModInfoBackupsFolderLocation + LastSupportedTanksVersion);
+                string[] modInfoBackups = await FTPListFilesFoldersAsync(ModInfoBackupsFolderLocation + LastSupportedTanksVersion, Credentials);
                 if(!modInfoBackups.Contains(BackupModInfoXmlToServer))
                 {
                     fileExists = false;
@@ -1061,12 +1100,12 @@ namespace RelhaxModpack.Windows
             //make the name of the new database update version. similar to process above
             //first make the online backup folder for the new WoT version, if it does not alreayd eixst
             ReportProgress("Checking if backup modInfo folder exists for new supported version...");
-            string[] modInfoBackupFolders = await FTPListFilesFoldersAsync(ModInfoBackupsFolderLocation);
+            string[] modInfoBackupFolders = await FTPListFilesFoldersAsync(ModInfoBackupsFolderLocation, Credentials);
             if (!(modInfoBackupFolders.Contains(Settings.WoTClientVersion)))
             {
                 ReportProgress("Does NOT exist, creating");
                 //create the folder
-                FTPMakeFolder(ModInfoBackupsFolderLocation + LastSupportedTanksVersion);
+                await FTPMakeFolderAsync(ModInfoBackupsFolderLocation + LastSupportedTanksVersion, Credentials);
             }
             else
                 ReportProgress("DOES exist");
@@ -1079,7 +1118,7 @@ namespace RelhaxModpack.Windows
                 string tempModInfoFilename = string.Format("modInfo_{0}_{1}_{2}.xml",
                     Settings.WoTClientVersion, dateTimeFormat,++itteraton);
                 ReportProgress("Current Iteration: " + tempModInfoFilename);
-                string[] modInfoBackups = await FTPListFilesFoldersAsync(ModInfoBackupsFolderLocation + Settings.WoTClientVersion);
+                string[] modInfoBackups = await FTPListFilesFoldersAsync(ModInfoBackupsFolderLocation + Settings.WoTClientVersion, Credentials);
                 if(!modInfoBackups.Contains(tempModInfoFilename))
                 {
                     fileExists = false;
@@ -1374,6 +1413,5 @@ namespace RelhaxModpack.Windows
             System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
         }
         #endregion
-
     }
 }
