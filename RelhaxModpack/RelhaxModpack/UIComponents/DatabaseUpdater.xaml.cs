@@ -25,7 +25,6 @@ namespace RelhaxModpack.Windows
     {
         #region Constants
         private const string DatabaseUpdateTxt = "databaseUpdate.txt";
-        private const string DatabaseUpdateBackupTxt = "databaseUpdate.txt.bak";
         private const string KeyAddress = "aHR0cDovL3dvdG1vZHMucmVsaGF4bW9kcGFjay5jb20vUmVsaGF4TW9kcGFjay9SZXNvdXJjZXMvZXh0ZXJuYWwva2V5LnR4dA==";
         private const string ModpackUsername = "modpack@wotmods.relhaxmodpack.com";
         private const string ModpackPassword = "QjFZLi0zaGxsTStY";
@@ -41,6 +40,7 @@ namespace RelhaxModpack.Windows
         private const string ManagerVersion = "manager_version.xml";
         private const string TrashXML = "trash.xml";
         private const string DatabaseXml = "database.xml";
+        private const string MissingPackagesTxt = "missingPackages.txt";
         private const int MaxFileSizeForHash = 510000000;
 
         #endregion
@@ -74,12 +74,6 @@ namespace RelhaxModpack.Windows
         //the version number of the last supported WoT client, used for making backup online folder
         string LastSupportedTanksVersion = "";
 
-        //string builders
-        StringBuilder filesNotFoundSB;
-        StringBuilder globalDepsSB;
-        StringBuilder dependenciesSB;
-        StringBuilder packagesSB;
-        StringBuilder databaseUpdateText;
         #endregion
 
         #region Constructor
@@ -912,7 +906,7 @@ namespace RelhaxModpack.Windows
             File.WriteAllText("update_files.log", summary.ToString());
             ReportProgress("results saved to update_files.log");
             downloadedDatabaseXml.Save("database.xml");
-            downloadedDatabaseXml.Save("database.xml.bak");
+            File.Delete("database.xml.bak");
             //upload it back
             using (WebClient client = new WebClient() { Credentials = Credentials })
             {
@@ -950,19 +944,18 @@ namespace RelhaxModpack.Windows
                 return;
             }
             //init stringbuilders
-            filesNotFoundSB = new StringBuilder();
-            globalDepsSB = new StringBuilder();
-            dependenciesSB = new StringBuilder();
-            packagesSB = new StringBuilder();
-            databaseUpdateText = new StringBuilder();
+            StringBuilder filesNotFoundSB = new StringBuilder();
+            StringBuilder databaseUpdateText = new StringBuilder();
             filesNotFoundSB.Append("FILES NOT FOUND:\n");
-            globalDepsSB.Append("\nGlobal Dependencies updated:\n");
-            dependenciesSB.Append("\nDependencies updated:\n");
-            packagesSB.Append("\nPackages updated:\n");
             //init lists
             List<DatabasePackage> globalDependencies = new List<DatabasePackage>();
             List<Dependency> dependencies = new List<Dependency>();
             List<Category> parsedCategoryList = new List<Category>();
+            List<DatabasePackage> addedPackages = new List<DatabasePackage>();
+            List<DatabasePackage> updatedPackages = new List<DatabasePackage>();
+            List<DatabasePackage> disabledPackages = new List<DatabasePackage>();
+            List<DatabasePackage> removedPackages = new List<DatabasePackage>();
+            List<DatabasePackage> missingPackages = new List<DatabasePackage>();
             //init strings
             CurrentModInfoXml = string.Empty;
             BackupModInfoXmlToServer = string.Empty;
@@ -978,9 +971,17 @@ namespace RelhaxModpack.Windows
                 ReportProgress("failed to parse modInfo to lists");
                 return;
             }
+            Utils.BuildLinksRefrence(parsedCategoryList);
+            Utils.BuildLevelPerPackage(parsedCategoryList);
             List<DatabasePackage> flatListCurrent = Utils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
-            //check for duplicates TODO
-            
+            List<string> duplicates = Utils.CheckForDuplicates(globalDependencies, dependencies, parsedCategoryList);
+            if(duplicates.Count > 0)
+            {
+                ReportProgress("ERROR: Duplicates found!");
+                foreach (string s in duplicates)
+                    ReportProgress(s);
+                return;
+            }
             ReportProgress("Downloading list of supported clients for last supported WoT client");
             //make the name of current (to be supported) xml file for uploading later (TODO: put this in later section, step 4?)
             CurrentModInfoXml = "modInfo_" + Settings.WoTClientVersion + ".xml";
@@ -1013,11 +1014,11 @@ namespace RelhaxModpack.Windows
                 FTPMakeFolder(ModInfoBackupsFolderLocation + LastSupportedTanksVersion);
             }
             else
-                ReportProgress("DOES exists");
+                ReportProgress("DOES exist");
             //make the name of the backup file as to not overwrite any currently backed up files
             //name format: modInfo_lastVersion_yyyy-mm-dd_itteration
             //could have multiple database releases in one day (should be no more than 3)
-            ReportProgress("Creating new database version string based on currently backed up versions");
+            ReportProgress("Creating new modInfo backup name based on currently backed up versions");
             int itteraton = 0;//always start with 1
             //get EST timezone
             DateTime dt = DateTime.UtcNow;
@@ -1066,7 +1067,7 @@ namespace RelhaxModpack.Windows
                     ReportProgress("Completed, string is " + DatabaseUpdateVersion);
                 }
             }
-            return;//just in case i try to run it...
+            //return;//just in case i try to run it...
             //LEFT OFF HERE
             //make a flat list of old (last supported modInfoxml) for comparison
             XmlDocument oldDatabase = new XmlDocument();
@@ -1079,51 +1080,101 @@ namespace RelhaxModpack.Windows
                 ReportProgress("failed to parse modInfo to lists");
                 return;
             }
+            Utils.BuildLinksRefrence(parsedCategoryList);
+            Utils.BuildLevelPerPackage(parsedCategoryList);
             List<DatabasePackage> flatListOld = Utils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
             //download and load latest database.xml file from server
             ReportProgress("downloading database.xml of current WoT onlineFolder version from server");
             XmlDocument databaseXml = new XmlDocument();
-            using (client = new WebClient() { Credentials = Credentials })
+            using (client = new WebClient())
             {
-                try
+                if(File.Exists(DatabaseXml))
                 {
-                    if(File.Exists(DatabaseXml));
-                    {
-                        File.Delete(DatabaseXml);
-                    }
-                    await client.DownloadFileTaskAsync(string.Format("ftp://wotmods.relhaxmodpack.com/WoT/{0}/database.xml",
-                        Settings.WoTModpackOnlineFolderVersion), DatabaseXml);
-                    databaseXml.Load(DatabaseXml);
+                    File.Delete(DatabaseXml);
                 }
-                catch(Exception ex)
-                {
-                    ReportProgress("failed to download database.xml");
-                    ReportProgress(ex.ToString());
-                    return;
-                }
+                await client.DownloadFileTaskAsync(string.Format("http://bigmods.relhaxmodpack.com/WoT/{0}/{1}",
+                    Settings.WoTModpackOnlineFolderVersion, DatabaseXml), DatabaseXml);
+                databaseXml.Load(DatabaseXml);
             }
             //update the crc values, also makes list of updated mods
             foreach(DatabasePackage package in flatListCurrent)
             {
                 if(string.IsNullOrEmpty(package.ZipFile))
                     continue;
-                XmlNode databaseEntry = databaseXml.SelectSingleNode("");
+                ////database/file[@name="Sounds_HRMOD_Gun_Sounds_by_Zorgane_v2.01_1.2.0_2018-10-12.zip"]
+                string xpathText = string.Format("//database/file[@name=\"{0}\"]",package.ZipFile);
+                XmlNode databaseEntry = databaseXml.SelectSingleNode(xpathText);
                 if(databaseEntry != null)
                 {
-                    package.CRC = databaseEntry.Attributes["md5"].Value;//TODO:CHECK
-                    //updatedPackages.AppendLine(package.NameFormatted);
+                    string newCRC = databaseEntry.Attributes["md5"].Value;
+                    if (string.IsNullOrWhiteSpace(newCRC))
+                        throw new BadMemeException("newCRC string is null, and you suck at writing code");
+                    if (!package.CRC.Equals(newCRC))
+                    {
+                        package.CRC = databaseEntry.Attributes["md5"].Value;
+                        updatedPackages.Add(package);
+                    }
                 }
                 else if (package.CRC.Equals("f") || string.IsNullOrWhiteSpace(package.CRC))
                 {
-                    //missingPackages.AppendLine(package.ZipFile);
+                    missingPackages.Add(package);
                 }
             }
             //do list magic to get all added, removed, disabled, etc package lists
-            
+            //used for disabled, removed, added mods
+            PackageComparer pc = new PackageComparer();
+            //if in before but not after = removed
+            removedPackages = flatListOld.Except(flatListCurrent, pc).ToList();
+            //if not in before but after = added
+            addedPackages = flatListCurrent.Except(flatListOld, pc).ToList();
+            //list of disabed packages before
+            List<DatabasePackage> disabledBefore = flatListOld.Where(p => !p.Enabled).ToList();
+            //list of disabled packages after
+            List<DatabasePackage> disabledAfter = flatListCurrent.Where(p => !p.Enabled).ToList();
+            //compare except with after.before
+            disabledPackages = disabledAfter.Except(disabledBefore, pc).ToList();
+            //also need to remove and removed and added and disabled from updated
+            updatedPackages = updatedPackages.Except(removedPackages, pc).ToList();
+            updatedPackages = updatedPackages.Except(disabledPackages, pc).ToList();
+            updatedPackages = updatedPackages.Except(addedPackages, pc).ToList();
             //put them to stringbuilder and write txt to disk
-            
-            //clean up other files made (if applicable)
-            
+            ReportProgress(string.Format("Number of Added packages: {0}\nNumber of Updated packages: {1}\n" +
+                "Number of Disabled packages: {2}\nNumber of Removed packages: {3}\n",
+                addedPackages.Count, updatedPackages.Count, disabledPackages.Count, removedPackages.Count));
+            //abort if missing files
+            if(missingPackages.Count > 0)
+            {
+                if (File.Exists(MissingPackagesTxt))
+                    File.Delete(MissingPackagesTxt);
+                filesNotFoundSB.Clear();
+                foreach (DatabasePackage package in missingPackages)
+                    filesNotFoundSB.AppendLine(package.ZipFile);
+                File.WriteAllText(MissingPackagesTxt, filesNotFoundSB.ToString());
+                ReportProgress("ERROR: " + missingPackages.Count + " packages missing files! (saved to missingPackages.txt)");
+                return;
+            }
+            //make stringbuilder of databaseUpdate.text
+            databaseUpdateText.Clear();
+            databaseUpdateText.Append("Database Update!\n\n");
+            databaseUpdateText.Append("Updated: " + DatabaseUpdateVersion + "\n\n");
+            databaseUpdateText.Append("Added:\n");
+            foreach (DatabasePackage dp in addedPackages)
+                databaseUpdateText.Append("-" + dp.CompletePath + "\n");
+            databaseUpdateText.Append("\nUpdated:\n");
+            foreach (DatabasePackage dp in updatedPackages)
+                databaseUpdateText.Append("-" + dp.CompletePath + "\n");
+            databaseUpdateText.Append("\nDisabled:\n");
+            foreach (DatabasePackage dp in disabledPackages)
+                databaseUpdateText.Append("-" + dp.CompletePath + "\n");
+            databaseUpdateText.Append("\nRemoved:\n");
+            foreach (DatabasePackage dp in removedPackages)
+                databaseUpdateText.Append("-" + dp.CompletePath + "\n");
+            databaseUpdateText.Append("\nNotes:\n-\n\n-----------------------------------------------------" +
+                "---------------------------------------------------------------------------------------");
+            //save and upload databaseUpdate.txt
+            File.WriteAllText(DatabaseUpdateTxt, databaseUpdateText.ToString());
+            ReportProgress("Database text processed and written to disk");
+            ReportProgress("Ready for step 4");
         }
 
         private async void UpdateDatabaseStep4_Click(object sender, RoutedEventArgs e)
@@ -1205,6 +1256,26 @@ namespace RelhaxModpack.Windows
             System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
         }
         #endregion
-    
+
+        private void OnApplicationClose(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            //if strings are not empty and file exists, delete them
+            //for all the class level strings
+            Logging.WriteToLog("Deleting trash files...");
+            string[] filesToDelete = new string[]
+            {
+                SupportedClients,
+                ManagerVersion,
+                DatabaseXml,
+                BackupModInfoXmlToServer,
+                CurrentModInfoXml,
+                LastSupportedModInfoXml
+            };
+            foreach(string s in filesToDelete)
+            {
+                if (!string.IsNullOrWhiteSpace(s) && File.Exists(s))
+                    File.Delete(s);
+            }
+        }
     }
 }
