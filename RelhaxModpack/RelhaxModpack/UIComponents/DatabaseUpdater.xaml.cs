@@ -1067,22 +1067,24 @@ namespace RelhaxModpack.Windows
                     ReportProgress("Completed, string is " + DatabaseUpdateVersion);
                 }
             }
-            //return;//just in case i try to run it...
-            //LEFT OFF HERE
             //make a flat list of old (last supported modInfoxml) for comparison
+            //TODO: TEST WITH NEW CHNAGES
             XmlDocument oldDatabase = new XmlDocument();
             oldDatabase.Load(LastSupportedModInfoXml);
-            globalDependencies.Clear();
-            dependencies.Clear();
-            parsedCategoryList.Clear();
-            if(!XMLUtils.ParseDatabase(oldDatabase,globalDependencies,dependencies,parsedCategoryList))
+            //globalDependencies.Clear();
+            //dependencies.Clear();
+            //parsedCategoryList.Clear();
+            List<DatabasePackage> globalDependenciesOld = new List<DatabasePackage>();
+            List<Dependency> dependenciesOld = new List<Dependency>();
+            List<Category> parsedCateogryListOld = new List<Category>();
+            if(!XMLUtils.ParseDatabase(oldDatabase,globalDependenciesOld,dependenciesOld, parsedCateogryListOld))
             {
                 ReportProgress("failed to parse modInfo to lists");
                 return;
             }
-            Utils.BuildLinksRefrence(parsedCategoryList);
-            Utils.BuildLevelPerPackage(parsedCategoryList);
-            List<DatabasePackage> flatListOld = Utils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
+            Utils.BuildLinksRefrence(parsedCateogryListOld);
+            Utils.BuildLevelPerPackage(parsedCateogryListOld);
+            List<DatabasePackage> flatListOld = Utils.GetFlatList(globalDependenciesOld, dependenciesOld, null, parsedCateogryListOld);
             //download and load latest database.xml file from server
             ReportProgress("downloading database.xml of current WoT onlineFolder version from server");
             XmlDocument databaseXml = new XmlDocument();
@@ -1174,18 +1176,113 @@ namespace RelhaxModpack.Windows
             //save and upload databaseUpdate.txt
             File.WriteAllText(DatabaseUpdateTxt, databaseUpdateText.ToString());
             ReportProgress("Database text processed and written to disk");
+            ReportProgress("Updating selected modInfo.xml");
+            File.Delete(SelectModInfo.FileName);
+            XMLUtils.SaveDatabase(SelectModInfo.FileName, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
+                globalDependencies, dependencies, parsedCategoryList);
+            ReportProgress("Checking if supported_clients needs to be updated for new WoT version");
+            if (!LastSupportedTanksVersion.Equals(Settings.WoTClientVersion))
+            {
+                ReportProgress("DOES need to be updated");
+                using (client = new WebClient() { Credentials = Credentials })
+                {
+                    ReportProgress("Old version = " + LastSupportedTanksVersion + ", new version = " + Settings.WoTClientVersion);
+                    XmlDocument supportedClients = new XmlDocument();
+                    supportedClients.Load(SupportedClients);
+                    XmlNode versionRoot = supportedClients.SelectSingleNode("//versions");
+                    XmlElement supported_client = supportedClients.CreateElement("version");
+                    supported_client.InnerText = Settings.WoTClientVersion;
+                    supported_client.SetAttribute("folder", Settings.WoTModpackOnlineFolderVersion);
+                    versionRoot.AppendChild(supported_client);
+                    File.Delete(SupportedClients);
+                    supportedClients.Save(SupportedClients);
+                    client.UploadFile(FTPManagerInfoRoot + SupportedClients, SupportedClients);
+                }
+                ReportProgress("Done");
+            }
+            else
+            {
+                ReportProgress("DOES NOT need to be uploaded, deleting (since no changes)");
+                if (File.Exists(SupportedClients))
+                    File.Delete(SupportedClients);
+            }
+            //update manager_info.xml
+            ReportProgress("Updating manager_version.xml");
+            using (client = new WebClient() { Credentials = Credentials })
+            {
+                client.DownloadFile(FTPManagerInfoRoot + ManagerVersion, ManagerVersion);
+                XmlDocument doc = new XmlDocument();
+                doc.Load(ManagerVersion);
+                XmlNode database_version_text = doc.SelectSingleNode("//version/database");
+                database_version_text.InnerText = DatabaseUpdateVersion;
+                doc.Save(ManagerVersion);
+                client.UploadFile(FTPManagerInfoRoot + ManagerVersion, ManagerVersion);
+                File.Delete(ManagerVersion);
+            }
             ReportProgress("Ready for step 4");
         }
 
         private async void UpdateDatabaseStep4_Click(object sender, RoutedEventArgs e)
         {
             //check for stuff
-            
-            //backup the old live modInfo.xml
-            //save and upload new modInfo file
-            //if not dumped to temp file, dump/replace databaeUpdate.txt on disk
-            //check if supported_clients needs to be updated and if so upload TODO: do this above??
-            //update and upload manager_info.xml TODO: prepare it before??
+            LogOutput.Clear();
+            ReportProgress("Starting DatabaseUpdate step 4");
+            //checks
+            if (string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
+            {
+                ReportProgress("wot online folder version is empty");
+                return;
+            }
+            if (!File.Exists(SelectModInfo.FileName))
+            {
+                ReportProgress("selectMofInfo file selected does not exist:" + SelectModInfo.FileName);
+                return;
+            }
+            if(string.IsNullOrEmpty(DatabaseUpdateVersion))
+            {
+                ReportProgress("DatabaseUpdateVersion is null");
+                return;
+            }
+            if(string.IsNullOrWhiteSpace(LastSupportedModInfoXml))
+            {
+                ReportProgress("LastSupportedModInfoXml is null, empty, or whitespace");
+                return;
+            }
+            if (!File.Exists(LastSupportedModInfoXml))
+            {
+                ReportProgress("LastSupportedModInfoXml does not exist (" + LastSupportedModInfoXml + ")");
+                return;
+            }
+            if(!File.Exists(ManagerVersion))
+            {
+                ReportProgress("manager_version.xml does not exist");
+                return;
+            }
+            using (client = new WebClient() { Credentials = Credentials })
+            {
+                //backup the old live modInfo.xml
+                ReportProgress("backing up old (was live) modInfo.xml to online folder");
+                await client.UploadFileTaskAsync(ModInfoBackupsFolderLocation + LastSupportedTanksVersion + "/" + BackupModInfoXmlToServer,
+                    LastSupportedModInfoXml);
+                File.Delete(LastSupportedModInfoXml);
+                //save and upload new modInfo file (will override the current name if exist[which it should unless new WoT client version supported])
+                ReportProgress("Saving and uploading new modInfo.xml to live server folder");
+                await client.UploadFileTaskAsync(ModInfosLocation + CurrentModInfoXml, SelectModInfo.FileName);
+                //upload supported_clients.xml if exist
+                if (File.Exists(SupportedClients))
+                {
+                    ReportProgress("Uploading new supported_clients.xml");
+                    await client.UploadFileTaskAsync(FTPManagerInfoRoot + SupportedClients, SupportedClients);
+                }
+                else
+                {
+                    ReportProgress("No new supported_clients.xml to upload");
+                }
+                //upload manager_version.xml
+                ReportProgress("Uploading new manager_version.xml");
+                await client.UploadFileTaskAsync(FTPManagerInfoRoot + ManagerVersion, ManagerVersion);
+            }
+            ReportProgress("Done");
         }
 
         private async void UpdateDatabaseStep5_Click(object sender, RoutedEventArgs e)
