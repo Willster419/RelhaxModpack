@@ -72,20 +72,6 @@ namespace RelhaxModpack
         //the modInfoxml downloaded and uesd for before and after comparison
         private string compareModInfoXml = "";
 
-        //from databaseListGenerator
-        //create and reset internal variables
-        StringBuilder sb = new StringBuilder();
-        string packageDisplayName = "";
-        string category = "";
-        string packageName = "N/A";
-        string notApplicatable = "n/a";
-        string zipfile = "";
-        bool enabled = false;
-        bool visible = false;
-        string devURL = "";
-        string header;
-
-
         public DatabaseUpdater()
         {
             InitializeComponent();
@@ -97,8 +83,6 @@ namespace RelhaxModpack
             //disable everything first, then enable via falling case statements
             foreach (Control c in UpdateDatabaseTab.Controls)
                 c.Enabled = false;
-            foreach (Control c in CleanOnlineFolders.Controls)
-                c.Enabled = false;
             foreach (Control c in CreatePasswordTab.Controls)
                 c.Enabled = false;
             if((int)CurrentAuthLevel > 1)
@@ -109,8 +93,6 @@ namespace RelhaxModpack
             }
             if((int)CurrentAuthLevel > 2)
             {
-                foreach (Control c in CleanOnlineFolders.Controls)
-                    c.Enabled = true;
                 foreach (Control c in CreatePasswordTab.Controls)
                     c.Enabled = false;
             }
@@ -737,82 +719,6 @@ namespace RelhaxModpack
         }
         #endregion
 
-        #region Application Updating
-        private void UpdateApplicationStep7_Click(object sender, EventArgs e)
-        {
-            ScriptLogOutput.Text = "Running script CreateUpdatePackages.php...";
-            using (WebClient client = new WebClient())
-            {
-                client.DownloadStringCompleted += Client_DownloadStringCompleted;
-                //ScriptLogOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateUpdatePackages.php").Replace("<br />", "\n");
-                client.DownloadStringAsync(new Uri("http://wotmods.relhaxmodpack.com/scripts/CreateUpdatePackages.php"));
-            }
-        }
-
-        private void UpdateApplicationStep8_Click(object sender, EventArgs e)
-        {
-            ScriptLogOutput.Text = "Running script CreateManagerInfo.php...";
-            using (WebClient client = new WebClient())
-            {
-                client.DownloadStringCompleted += Client_DownloadStringCompleted;
-                //ScriptLogOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateManagerInfo.php").Replace("<br />", "\n");
-                client.DownloadStringAsync(new Uri("http://wotmods.relhaxmodpack.com/scripts/CreateManagerInfo.php"));
-            }
-        }
-        #endregion
-
-        #region Online Folder Cleaning
-        private void CleanFoldersStep1_Click(object sender, EventArgs e)
-        {
-            ScriptLogOutput.Text = "Running script CreateOutDatesFilesList.php...";
-            using (WebClient client = new WebClient())
-            {
-                client.DownloadStringCompleted += Client_DownloadStringCompleted;
-                //ScriptLogOutput.Text = client.DownloadString("http://wotmods.relhaxmodpack.com/scripts/CreateOutdatedFileList.php").Replace("<br />", "\n");
-                client.DownloadStringAsync(new Uri("http://wotmods.relhaxmodpack.com/scripts/CreateOutdatedFileList.php"));
-            }
-        }
-
-        private void CleanFoldersStep3_Click(object sender, EventArgs e)
-        {
-            ScriptLogOutput.Text = "";
-            if(string.IsNullOrWhiteSpace(CleanFoldersStep2Input.Text))
-            {
-                ReportProgress("ERROR: text for folder is blank!");
-                return;
-            }
-            ReportProgress(string.Format("Checking if folder {0} exists...", CleanFoldersStep2Input.Text));
-            string[] onlineFolders = FTPListFilesFolders("ftp://wotmods.relhaxmodpack.com/WoT/");
-            if(!onlineFolders.Contains(CleanFoldersStep2Input.Text))
-            {
-                ReportProgress(string.Format("ERROR: folder {0} does not exist in WoT folder!", CleanFoldersStep2Input.Text));
-                return;
-            }
-            ReportProgress("Cleaning online folder " + CleanFoldersStep2Input.Text);
-            string onlineFolder = CleanFoldersStep2Input.Text;
-            string onlineFolderPath = "ftp://wotmods.relhaxmodpack.com/WoT/" + onlineFolder + "/";
-            string trashXML = "trash.xml";
-            ReportProgress("Downloading trash.xml from " + onlineFolder);
-            using (downloader = new WebClient() { Credentials = credentials })
-            {
-                downloader.DownloadFile(onlineFolderPath + trashXML, trashXML);
-            }
-            ReportProgress("Parsing " + trashXML);
-            XmlDocument doc = new XmlDocument();
-            doc.Load(trashXML);
-            XmlNodeList trashFiles = doc.SelectNodes("//trash/filename");
-            int totalFilesToDelete = trashFiles.Count;
-            int filesDeleted = 1;
-            foreach(XmlNode file in trashFiles)
-            {
-                ReportProgress(string.Format("Deleting file {0} of {1}, filename={2}", filesDeleted++, totalFilesToDelete, file.InnerText));
-                FTPDeleteFile(onlineFolderPath + file.InnerText);
-            }
-            ReportProgress("Complete");
-            File.Delete(trashXML);
-        }
-        #endregion
-
         #region FTP methods
         private void FTPMakeFolder(string addressWithDirectory)
         {
@@ -1164,20 +1070,5 @@ namespace RelhaxModpack
         }
         #endregion
 
-        private void CreateMD5HashButton_Click(object sender, EventArgs e)
-        {
-            ReportProgress("Starting hashing");
-            if(zipsToHash.ShowDialog() != DialogResult.OK)
-            {
-                ReportProgress("Hashing Aborted");
-            }
-            foreach(string s in zipsToHash.FileNames)
-            {
-                ReportProgress(string.Format("hash of {0}:", Path.GetFileName(s)));
-                ReportProgress(Utils.CreateMd5Hash(s));
-
-            }
-            ReportProgress("Done");
-        }
     }
 }

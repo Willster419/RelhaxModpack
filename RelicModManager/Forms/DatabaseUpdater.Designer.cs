@@ -61,11 +61,6 @@
             this.UpdateDatabaseStep4 = new System.Windows.Forms.Button();
             this.UpdateDatabaseStep0 = new System.Windows.Forms.RichTextBox();
             this.UpdateDatebaseStep9 = new System.Windows.Forms.RichTextBox();
-            this.CleanOnlineFolders = new System.Windows.Forms.TabPage();
-            this.CleanFoldersStep2Input = new System.Windows.Forms.TextBox();
-            this.CleanFoldersStep2Description = new System.Windows.Forms.Label();
-            this.CleanFoldersStep3 = new System.Windows.Forms.Button();
-            this.CleanFoldersStep1 = new System.Windows.Forms.Button();
             this.CreatePasswordTab = new System.Windows.Forms.TabPage();
             this.PasswordL3Panel = new System.Windows.Forms.Panel();
             this.ReadbackL3Password = new System.Windows.Forms.Button();
@@ -79,9 +74,6 @@
             this.CreatePasswordL2Label = new System.Windows.Forms.Label();
             this.L2TextPassword = new System.Windows.Forms.TextBox();
             this.GenerateL2Password = new System.Windows.Forms.Button();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.CreateMD5HashButton = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
             this.ScriptLogOutput = new System.Windows.Forms.RichTextBox();
             this.ButtonInfo = new System.Windows.Forms.ToolTip(this.components);
             this.zipsToHash = new System.Windows.Forms.OpenFileDialog();
@@ -89,11 +81,9 @@
             this.AuthStatus.SuspendLayout();
             this.AuthorizationTable.SuspendLayout();
             this.UpdateDatabaseTab.SuspendLayout();
-            this.CleanOnlineFolders.SuspendLayout();
             this.CreatePasswordTab.SuspendLayout();
             this.PasswordL3Panel.SuspendLayout();
             this.PasswordL2Panel.SuspendLayout();
-            this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // UpdateDatabaseStep1
@@ -167,9 +157,7 @@
             this.DatabaseUpdateTabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.DatabaseUpdateTabControl.Controls.Add(this.AuthStatus);
             this.DatabaseUpdateTabControl.Controls.Add(this.UpdateDatabaseTab);
-            this.DatabaseUpdateTabControl.Controls.Add(this.CleanOnlineFolders);
             this.DatabaseUpdateTabControl.Controls.Add(this.CreatePasswordTab);
-            this.DatabaseUpdateTabControl.Controls.Add(this.tabPage1);
             this.DatabaseUpdateTabControl.Location = new System.Drawing.Point(12, 34);
             this.DatabaseUpdateTabControl.Name = "DatabaseUpdateTabControl";
             this.DatabaseUpdateTabControl.SelectedIndex = 0;
@@ -194,7 +182,7 @@
             this.AuthorizationTable.ColumnCount = 3;
             this.AuthorizationTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 46.35569F));
             this.AuthorizationTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 53.64431F));
-            this.AuthorizationTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 212F));
+            this.AuthorizationTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 216F));
             this.AuthorizationTable.Controls.Add(this.CurrentAuthStatusLabel, 0, 0);
             this.AuthorizationTable.Controls.Add(this.AuthStatusLabel, 2, 0);
             this.AuthorizationTable.Controls.Add(this.RequestL1AuthLabel, 0, 1);
@@ -222,7 +210,7 @@
             this.CurrentAuthStatusLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CurrentAuthStatusLabel.Location = new System.Drawing.Point(4, 1);
             this.CurrentAuthStatusLabel.Name = "CurrentAuthStatusLabel";
-            this.CurrentAuthStatusLabel.Size = new System.Drawing.Size(139, 31);
+            this.CurrentAuthStatusLabel.Size = new System.Drawing.Size(137, 31);
             this.CurrentAuthStatusLabel.TabIndex = 0;
             this.CurrentAuthStatusLabel.Text = "Current Authorization status:";
             // 
@@ -230,9 +218,9 @@
             // 
             this.AuthStatusLabel.AutoSize = true;
             this.AuthStatusLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.AuthStatusLabel.Location = new System.Drawing.Point(318, 1);
+            this.AuthStatusLabel.Location = new System.Drawing.Point(314, 1);
             this.AuthStatusLabel.Name = "AuthStatusLabel";
-            this.AuthStatusLabel.Size = new System.Drawing.Size(207, 31);
+            this.AuthStatusLabel.Size = new System.Drawing.Size(211, 31);
             this.AuthStatusLabel.TabIndex = 1;
             this.AuthStatusLabel.Text = "0";
             // 
@@ -242,7 +230,7 @@
             this.RequestL1AuthLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RequestL1AuthLabel.Location = new System.Drawing.Point(4, 33);
             this.RequestL1AuthLabel.Name = "RequestL1AuthLabel";
-            this.RequestL1AuthLabel.Size = new System.Drawing.Size(139, 31);
+            this.RequestL1AuthLabel.Size = new System.Drawing.Size(137, 31);
             this.RequestL1AuthLabel.TabIndex = 2;
             this.RequestL1AuthLabel.Text = "Request Level 1 Authorization";
             // 
@@ -252,7 +240,7 @@
             this.RequestL2AuthLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RequestL2AuthLabel.Location = new System.Drawing.Point(4, 65);
             this.RequestL2AuthLabel.Name = "RequestL2AuthLabel";
-            this.RequestL2AuthLabel.Size = new System.Drawing.Size(139, 31);
+            this.RequestL2AuthLabel.Size = new System.Drawing.Size(137, 31);
             this.RequestL2AuthLabel.TabIndex = 3;
             this.RequestL2AuthLabel.Text = "Request Level 2 Authorization";
             // 
@@ -262,16 +250,16 @@
             this.RequestL3AuthLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RequestL3AuthLabel.Location = new System.Drawing.Point(4, 97);
             this.RequestL3AuthLabel.Name = "RequestL3AuthLabel";
-            this.RequestL3AuthLabel.Size = new System.Drawing.Size(139, 32);
+            this.RequestL3AuthLabel.Size = new System.Drawing.Size(137, 32);
             this.RequestL3AuthLabel.TabIndex = 4;
             this.RequestL3AuthLabel.Text = "Request Level 3 Authorization";
             // 
             // RequestL1AuthButton
             // 
             this.RequestL1AuthButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RequestL1AuthButton.Location = new System.Drawing.Point(318, 36);
+            this.RequestL1AuthButton.Location = new System.Drawing.Point(314, 36);
             this.RequestL1AuthButton.Name = "RequestL1AuthButton";
-            this.RequestL1AuthButton.Size = new System.Drawing.Size(207, 25);
+            this.RequestL1AuthButton.Size = new System.Drawing.Size(211, 25);
             this.RequestL1AuthButton.TabIndex = 5;
             this.RequestL1AuthButton.Text = "Request";
             this.RequestL1AuthButton.UseVisualStyleBackColor = true;
@@ -280,9 +268,9 @@
             // RequestL2AuthButton
             // 
             this.RequestL2AuthButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RequestL2AuthButton.Location = new System.Drawing.Point(318, 68);
+            this.RequestL2AuthButton.Location = new System.Drawing.Point(314, 68);
             this.RequestL2AuthButton.Name = "RequestL2AuthButton";
-            this.RequestL2AuthButton.Size = new System.Drawing.Size(207, 25);
+            this.RequestL2AuthButton.Size = new System.Drawing.Size(211, 25);
             this.RequestL2AuthButton.TabIndex = 6;
             this.RequestL2AuthButton.Text = "Request";
             this.RequestL2AuthButton.UseVisualStyleBackColor = true;
@@ -291,9 +279,9 @@
             // RequestL3AuthButton
             // 
             this.RequestL3AuthButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RequestL3AuthButton.Location = new System.Drawing.Point(318, 100);
+            this.RequestL3AuthButton.Location = new System.Drawing.Point(314, 100);
             this.RequestL3AuthButton.Name = "RequestL3AuthButton";
-            this.RequestL3AuthButton.Size = new System.Drawing.Size(207, 26);
+            this.RequestL3AuthButton.Size = new System.Drawing.Size(211, 26);
             this.RequestL3AuthButton.TabIndex = 7;
             this.RequestL3AuthButton.Text = "Request";
             this.RequestL3AuthButton.UseVisualStyleBackColor = true;
@@ -302,25 +290,25 @@
             // L1AuthPasswordAttempt
             // 
             this.L1AuthPasswordAttempt.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.L1AuthPasswordAttempt.Location = new System.Drawing.Point(150, 36);
+            this.L1AuthPasswordAttempt.Location = new System.Drawing.Point(148, 36);
             this.L1AuthPasswordAttempt.Name = "L1AuthPasswordAttempt";
-            this.L1AuthPasswordAttempt.Size = new System.Drawing.Size(161, 20);
+            this.L1AuthPasswordAttempt.Size = new System.Drawing.Size(159, 20);
             this.L1AuthPasswordAttempt.TabIndex = 8;
             // 
             // L2PasswordAttempt
             // 
             this.L2PasswordAttempt.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.L2PasswordAttempt.Location = new System.Drawing.Point(150, 68);
+            this.L2PasswordAttempt.Location = new System.Drawing.Point(148, 68);
             this.L2PasswordAttempt.Name = "L2PasswordAttempt";
-            this.L2PasswordAttempt.Size = new System.Drawing.Size(161, 20);
+            this.L2PasswordAttempt.Size = new System.Drawing.Size(159, 20);
             this.L2PasswordAttempt.TabIndex = 9;
             // 
             // L3PasswordAttempt
             // 
             this.L3PasswordAttempt.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.L3PasswordAttempt.Location = new System.Drawing.Point(150, 100);
+            this.L3PasswordAttempt.Location = new System.Drawing.Point(148, 100);
             this.L3PasswordAttempt.Name = "L3PasswordAttempt";
-            this.L3PasswordAttempt.Size = new System.Drawing.Size(161, 20);
+            this.L3PasswordAttempt.Size = new System.Drawing.Size(159, 20);
             this.L3PasswordAttempt.TabIndex = 10;
             // 
             // UpdateDatabaseTab
@@ -434,59 +422,6 @@
             this.UpdateDatebaseStep9.Size = new System.Drawing.Size(354, 23);
             this.UpdateDatebaseStep9.TabIndex = 14;
             this.UpdateDatebaseStep9.Text = "Step 9: Post DatabaseUpdate.txt on discord, forums";
-            // 
-            // CleanOnlineFolders
-            // 
-            this.CleanOnlineFolders.Controls.Add(this.CleanFoldersStep2Input);
-            this.CleanOnlineFolders.Controls.Add(this.CleanFoldersStep2Description);
-            this.CleanOnlineFolders.Controls.Add(this.CleanFoldersStep3);
-            this.CleanOnlineFolders.Controls.Add(this.CleanFoldersStep1);
-            this.CleanOnlineFolders.Location = new System.Drawing.Point(4, 22);
-            this.CleanOnlineFolders.Name = "CleanOnlineFolders";
-            this.CleanOnlineFolders.Padding = new System.Windows.Forms.Padding(3);
-            this.CleanOnlineFolders.Size = new System.Drawing.Size(542, 369);
-            this.CleanOnlineFolders.TabIndex = 3;
-            this.CleanOnlineFolders.Text = "Clean zip folders";
-            this.CleanOnlineFolders.UseVisualStyleBackColor = true;
-            // 
-            // CleanFoldersStep2Input
-            // 
-            this.CleanFoldersStep2Input.Enabled = false;
-            this.CleanFoldersStep2Input.Location = new System.Drawing.Point(192, 47);
-            this.CleanFoldersStep2Input.Name = "CleanFoldersStep2Input";
-            this.CleanFoldersStep2Input.Size = new System.Drawing.Size(343, 20);
-            this.CleanFoldersStep2Input.TabIndex = 15;
-            // 
-            // CleanFoldersStep2Description
-            // 
-            this.CleanFoldersStep2Description.AutoSize = true;
-            this.CleanFoldersStep2Description.Location = new System.Drawing.Point(6, 50);
-            this.CleanFoldersStep2Description.Name = "CleanFoldersStep2Description";
-            this.CleanFoldersStep2Description.Size = new System.Drawing.Size(180, 13);
-            this.CleanFoldersStep2Description.TabIndex = 14;
-            this.CleanFoldersStep2Description.Text = "Step 2: Specify online folder to clean";
-            // 
-            // CleanFoldersStep3
-            // 
-            this.CleanFoldersStep3.Enabled = false;
-            this.CleanFoldersStep3.Location = new System.Drawing.Point(6, 73);
-            this.CleanFoldersStep3.Name = "CleanFoldersStep3";
-            this.CleanFoldersStep3.Size = new System.Drawing.Size(529, 35);
-            this.CleanFoldersStep3.TabIndex = 13;
-            this.CleanFoldersStep3.Text = "Step 3: Start Process to delete old zip files";
-            this.CleanFoldersStep3.UseVisualStyleBackColor = true;
-            this.CleanFoldersStep3.Click += new System.EventHandler(this.CleanFoldersStep3_Click);
-            // 
-            // CleanFoldersStep1
-            // 
-            this.CleanFoldersStep1.Enabled = false;
-            this.CleanFoldersStep1.Location = new System.Drawing.Point(6, 6);
-            this.CleanFoldersStep1.Name = "CleanFoldersStep1";
-            this.CleanFoldersStep1.Size = new System.Drawing.Size(529, 35);
-            this.CleanFoldersStep1.TabIndex = 12;
-            this.CleanFoldersStep1.Text = "Step 1: Run script CreateOutdatedFileList.php";
-            this.CleanFoldersStep1.UseVisualStyleBackColor = true;
-            this.CleanFoldersStep1.Click += new System.EventHandler(this.CleanFoldersStep1_Click);
             // 
             // CreatePasswordTab
             // 
@@ -616,37 +551,6 @@
             this.GenerateL2Password.UseVisualStyleBackColor = true;
             this.GenerateL2Password.Click += new System.EventHandler(this.GenerateL2Password_Click);
             // 
-            // tabPage1
-            // 
-            this.tabPage1.Controls.Add(this.CreateMD5HashButton);
-            this.tabPage1.Controls.Add(this.label3);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(542, 369);
-            this.tabPage1.TabIndex = 6;
-            this.tabPage1.Text = "MD5 Generaton";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // CreateMD5HashButton
-            // 
-            this.CreateMD5HashButton.Location = new System.Drawing.Point(6, 19);
-            this.CreateMD5HashButton.Name = "CreateMD5HashButton";
-            this.CreateMD5HashButton.Size = new System.Drawing.Size(155, 23);
-            this.CreateMD5HashButton.TabIndex = 1;
-            this.CreateMD5HashButton.Text = "Load list of files to generate";
-            this.CreateMD5HashButton.UseVisualStyleBackColor = true;
-            this.CreateMD5HashButton.Click += new System.EventHandler(this.CreateMD5HashButton_Click);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 3);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(140, 13);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Generate MD5 Hashes here";
-            // 
             // ScriptLogOutput
             // 
             this.ScriptLogOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -685,15 +589,11 @@
             this.AuthorizationTable.ResumeLayout(false);
             this.AuthorizationTable.PerformLayout();
             this.UpdateDatabaseTab.ResumeLayout(false);
-            this.CleanOnlineFolders.ResumeLayout(false);
-            this.CleanOnlineFolders.PerformLayout();
             this.CreatePasswordTab.ResumeLayout(false);
             this.PasswordL3Panel.ResumeLayout(false);
             this.PasswordL3Panel.PerformLayout();
             this.PasswordL2Panel.ResumeLayout(false);
             this.PasswordL2Panel.PerformLayout();
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -709,9 +609,6 @@
         private System.Windows.Forms.Button UpdateDatabaseStep7;
         private System.Windows.Forms.TabControl DatabaseUpdateTabControl;
         private System.Windows.Forms.TabPage UpdateDatabaseTab;
-        private System.Windows.Forms.TabPage CleanOnlineFolders;
-        private System.Windows.Forms.Button CleanFoldersStep3;
-        private System.Windows.Forms.Button CleanFoldersStep1;
         private System.Windows.Forms.TabPage CreatePasswordTab;
         private System.Windows.Forms.Panel PasswordL3Panel;
         private System.Windows.Forms.RichTextBox L3GenerateOutput;
@@ -744,16 +641,11 @@
         private System.Windows.Forms.ToolTip ButtonInfo;
         private System.Windows.Forms.Button UpdateDatabaseStep4;
         private System.Windows.Forms.RichTextBox UpdateDatebaseStep8;
-        private System.Windows.Forms.TextBox CleanFoldersStep2Input;
-        private System.Windows.Forms.Label CleanFoldersStep2Description;
         private System.Windows.Forms.Button UpdateDatabaseStep5;
         private System.Windows.Forms.Button EUGERFormusLinksBUtton;
         private System.Windows.Forms.Button EUENGFormsLinkButton;
         private System.Windows.Forms.Button NAForumsLinkButton;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.Button CreateMD5HashButton;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.OpenFileDialog zipsToHash;
     }
 }
