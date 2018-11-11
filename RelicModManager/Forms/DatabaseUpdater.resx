@@ -123,15 +123,6 @@
   <metadata name="loadDatabaseDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>147, 17</value>
   </metadata>
-  <data name="UpdateApplicatonSteps0to4.Text" xml:space="preserve">
-    <value>Step 0: Verify Application Works, is number updated
-Step 1: Create Beta Version
-Step 2: Create and sign stable version
-Step 3: Update virustotal.com link
-Step 4: Update on github
-Step 5: Upload new stable and beta applications
-Step 6: Update manager_info.xml file</value>
-  </data>
   <metadata name="ButtonInfo.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>308, 17</value>
   </metadata>
