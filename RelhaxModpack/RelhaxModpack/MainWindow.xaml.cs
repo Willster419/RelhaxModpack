@@ -27,7 +27,8 @@ namespace RelhaxModpack
     {
         private System.Windows.Forms.NotifyIcon RelhaxIcon;
         private Stopwatch stopwatch = new Stopwatch();
-        
+        private ModSelectionList modSelectionList;
+
         /// <summary>
         /// Creates the instance of the MainWindow class
         /// </summary>
@@ -723,14 +724,27 @@ namespace RelhaxModpack
                 File.Delete(Settings.MD5HashDatabaseXmlFile);
             }
             //show the mod selection list
-            ModSelectionList modSelectionList = new ModSelectionList()
+            modSelectionList = new ModSelectionList()
             {
                 ContinueInstallation = false
             };
+            //https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c
+            modSelectionList.OnSelectionListReturn += ModSelectionList_OnSelectionListReturn;
+            modSelectionList.Visibility = Visibility.Hidden;
+            modSelectionList.Hide();
+            modSelectionList.WindowState = WindowState.Minimized;
             modSelectionList.ShowDialog();
-            if (modSelectionList.ContinueInstallation)
+            modSelectionList.Visibility = Visibility.Hidden;
+            modSelectionList.Hide();
+            modSelectionList.WindowState = WindowState.Minimized;
+        }
+
+        //https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c
+        private void ModSelectionList_OnSelectionListReturn(object sender, SelectionListEventArgs e)
+        {
+            if (e.ContinueInstallation)
             {
-                OnBeginInstallation(new List<Category>(modSelectionList.ParsedCategoryList));
+                OnBeginInstallation(new List<Category>(e.ParsedCategoryList));
                 modSelectionList = null;
             }
             else

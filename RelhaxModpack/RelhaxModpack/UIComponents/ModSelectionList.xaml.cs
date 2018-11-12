@@ -21,6 +21,13 @@ namespace RelhaxModpack.Windows
         public int ChildProgressCurrent;
         public int ChildProgressTotal;
     }
+    //https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c
+    public class SelectionListEventArgs : EventArgs
+    {
+        public bool ContinueInstallation = false;
+        public List<Category> ParsedCategoryList;
+    }
+    public delegate void OnSelectionListReturn(object sender, SelectionListEventArgs e);
     /// <summary>
     /// Interaction logic for ModSelectionList.xaml
     /// </summary>
@@ -36,6 +43,7 @@ namespace RelhaxModpack.Windows
         public bool ContinueInstallation { get; set; } = false;
         private bool developerSelectionsReady = false;
         private ProgressIndicator loadingProgress;
+        public event OnSelectionListReturn OnSelectionListReturn;
 
         public ModSelectionList()
         {
@@ -56,8 +64,7 @@ namespace RelhaxModpack.Windows
                 Message = Translations.GetTranslatedString("loading")
             };
             loadingProgress.Show();
-            //this.Hide();
-            this.Visibility = Visibility.Hidden;
+            this.Hide();
             //create and run async task
             try
             {
@@ -282,6 +289,15 @@ namespace RelhaxModpack.Windows
         private void SaveSelection()
         {
 
+        }
+
+        private void RelhaxWindow_Closed(object sender, EventArgs e)
+        {
+            if(OnSelectionListReturn != null)
+            {
+                OnSelectionListReturn(this, new SelectionListEventArgs()
+                { ContinueInstallation = ContinueInstallation, ParsedCategoryList = ParsedCategoryList });
+            }
         }
     }
 }
