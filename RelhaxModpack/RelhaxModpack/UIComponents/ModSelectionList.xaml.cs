@@ -9,10 +9,9 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Xml;
 using System.Net;
+using System.IO;
 
 namespace RelhaxModpack.Windows
 {
@@ -32,8 +31,8 @@ namespace RelhaxModpack.Windows
         private SolidColorBrush SelectedTextColor = SystemColors.ControlTextBrush;
         private SolidColorBrush NotSelectedTextColor = SystemColors.ControlTextBrush;
         public List<Category> ParsedCategoryList;
-        public List<Dependency> GlobalDependencies;
-        public List<Dependency> LogicalDependencies;
+        public List<DatabasePackage> GlobalDependencies;
+        public List<Dependency> Dependencies;
         public bool ContinueInstallation { get; set; } = false;
         private bool developerSelectionsReady = false;
         private ProgressIndicator loadingProgress;
@@ -47,8 +46,8 @@ namespace RelhaxModpack.Windows
         {
             //init the lists
             ParsedCategoryList = new List<Category>();
-            GlobalDependencies = new List<Dependency>();
-            LogicalDependencies = new List<Dependency>();
+            GlobalDependencies = new List<DatabasePackage>();
+            Dependencies = new List<Dependency>();
             //create and show loading window
             loadingProgress = new ProgressIndicator()
             {
@@ -57,14 +56,15 @@ namespace RelhaxModpack.Windows
                 Message = Translations.GetTranslatedString("loading")
             };
             loadingProgress.Show();
-            this.Hide();
+            //this.Hide();
+            this.Visibility = Visibility.Hidden;
             //create and run async task
             try
             {
-                Logging.WriteToLog("Starting async task: " + nameof(LoadSelectionListAsync) + "()");
+                Logging.WriteToLog("Starting async task: " + nameof(ActuallyLoadModSelectionListAsync) + "()");
                 //https://blogs.msdn.microsoft.com/dotnet/2012/06/06/async-in-4-5-enabling-progress-and-cancellation-in-async-apis/
-                var progressIndicator = new Progress<RelhaxProgress>(OnWindowLoadReportProgress);
-                bool result = await LoadSelectionListAsync(progressIndicator);
+                Progress<RelhaxProgress> progressIndicator = new Progress<RelhaxProgress>(OnWindowLoadReportProgress);
+                bool result = await ActuallyLoadModSelectionListAsync(progressIndicator);
                 if (!result)
                     throw new BadMemeException("Result was false!!");
             }
@@ -93,7 +93,7 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private async Task<bool> LoadSelectionListAsync(IProgress<RelhaxProgress> progress)
+        private async Task<bool> ActuallyLoadModSelectionListAsync(IProgress<RelhaxProgress> progress)
         {
             RelhaxProgress loadProgress = new RelhaxProgress()
             {
@@ -113,12 +113,12 @@ namespace RelhaxModpack.Windows
                     string modInfoxmlURL = Settings.DefaultStartAddress + "modInfo.dat";
                     modInfoxmlURL = modInfoxmlURL.Replace("{onlineFolder}", Settings.WoTModpackOnlineFolderVersion);
                     //download dat file
-                    string tempDownloadLocation = System.IO.Path.Combine(Settings.RelhaxTempFolder, "modInfo.dat");
+                    string tempDownloadLocation = Path.Combine(Settings.RelhaxTempFolder, "modInfo.dat");
                     using (WebClient client = new WebClient())
                     {
                         try
                         {
-                            client.DownloadFile(modInfoxmlURL, tempDownloadLocation);
+                            await client.DownloadFileTaskAsync(modInfoxmlURL, tempDownloadLocation);
                         }
                         catch (Exception ex)
                         {
@@ -150,7 +150,7 @@ namespace RelhaxModpack.Windows
                     //download document from string
                     using (WebClient client = new WebClient())
                     {
-                        modInfoXml = client.DownloadString(downloadURL);
+                        modInfoXml = await client.DownloadStringTaskAsync(downloadURL);
                     }
                     break;
                 case DatabaseVersions.Test:
@@ -196,11 +196,35 @@ namespace RelhaxModpack.Windows
             loadProgress.ChildProgressCurrent++;
             loadProgress.ReportMessage = Translations.GetTranslatedString("parsingDatabase");
             progress.Report(loadProgress);
+            if(!XMLUtils.ParseDatabase(modInfoDocument,GlobalDependencies,Dependencies,ParsedCategoryList))
+            {
+                Logging.WriteToLog("Failed to parse database",Logfiles.Application,LogLevel.Error);
+                MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
+                return false;
+            }
+            Utils.BuildLinksRefrence(ParsedCategoryList);
+            Utils.BuildLevelPerPackage(ParsedCategoryList);
+            List<DatabasePackage> flatList = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList);
             //check db cache of local files
             loadProgress.ChildProgressCurrent++;
             loadProgress.ReportMessage = Translations.GetTranslatedString("verifyingDownloadCache");
             progress.Report(loadProgress);
-
+            return false;
+            //the below does not work yet
+            List<DatabasePackage> flatListZips = flatList.Where(package => !string.IsNullOrWhiteSpace(package.ZipFile)).ToList();
+            foreach(DatabasePackage package in flatListZips)
+            {
+                string name = package.PackageName;
+                if(package is SelectablePackage sp)
+                {
+                    name = sp.NameFormatted;
+                }
+                loadProgress.ReportMessage=string.Format(Translations.GetTranslatedString("loading") + " " + name);
+                progress.Report(loadProgress);
+                string oldCRCFromDownloadsFolder = await Utils.CreateMD5HashAsync(Path.Combine(Settings.RelhaxDownloadsFolder, package.ZipFile));
+                if (!package.CRC.Equals(oldCRCFromDownloadsFolder))
+                    package.DownloadFlag = true;
+            }
             //build UI
             loadProgress.ChildProgressCurrent++;
             loadProgress.ReportMessage = Translations.GetTranslatedString("loadingUI");
