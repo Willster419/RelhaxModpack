@@ -639,11 +639,11 @@ namespace RelhaxModpack
             Settings.WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2);
             //determine if current detected version of the game is supported
             //only if applicaition distro is not alhpa and databate distro is not test
-            if(Settings.ApplicationVersion != ApplicationVersions.Alpha && ModpackSettings.DatabaseDistroVersion != DatabaseVersions.Test)
+            if (ModpackSettings.DatabaseDistroVersion != DatabaseVersions.Test)
             {
                 //make an array of all the supported versions
                 string supportedClientsXML = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "supported_clients.xml");
-                if(string.IsNullOrWhiteSpace(supportedClientsXML))
+                if (string.IsNullOrWhiteSpace(supportedClientsXML))
                 {
                     Logging.WriteToLog("Failed to parse supported_clients.xml from string from zipfile", Logfiles.Application, LogLevel.Exception);
                     MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " supported_clients.xml");
@@ -655,7 +655,7 @@ namespace RelhaxModpack
                 {
                     doc.LoadXml(supportedClientsXML);
                 }
-                catch(XmlException ex)
+                catch (XmlException ex)
                 {
                     Logging.WriteToLog("Failed to parse supported_clients.xml to xml\n" + ex.ToString(), Logfiles.Application, LogLevel.Exception);
                     MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " supported_clients.xml");
@@ -674,10 +674,10 @@ namespace RelhaxModpack
                         //WoTClientVersions is already set, set the online folder
                         Settings.WoTModpackOnlineFolderVersion = supportedVersionsXML[i].Attributes["folder"].Value;
                     }
-                        
+
                 }
-                //checko see if array of supported clients cas the detected WoT client version
-                if(!supportedVersionsString.Contains(Settings.WoTClientVersion))
+                //check to see if array of supported clients cas the detected WoT client version
+                if (Settings.ApplicationVersion != ApplicationVersions.Alpha && !supportedVersionsString.Contains(Settings.WoTClientVersion))
                 {
                     //log and inform the user
                     Logging.WriteToLog("Detected client version is " + Settings.WoTClientVersion + ", not supported",
@@ -692,7 +692,7 @@ namespace RelhaxModpack
                     Settings.WoTModpackOnlineFolderVersion = supportedVersionsXML[supportedVersionsXML.Count - 1].Attributes["folder"].Value;
                 }
                 //if the user wants to, check if the database has actually changed
-                if(ModpackSettings.NotifyIfSameDatabase)
+                if (ModpackSettings.NotifyIfSameDatabase)
                 {
                     //get the instal llog for last installed database version
                     string installedfilesLogPath = Path.Combine(Settings.WoTDirectory, "logs", "installedRelhaxFiles.log");
@@ -709,29 +709,33 @@ namespace RelhaxModpack
                             }
                         }
                     }
+                    else
+                    {
+                        Logging.WriteToLog("installedRelhaxFiles.log does not exist, cannnot notify if same database");
+                    }
                 }
-                //check to make sure that the md5hashdatabase is valid before using it
-                Logging.WriteToLog("Checking md5 database file");
-                if ((File.Exists(Settings.MD5HashDatabaseXmlFile)) && (!XMLUtils.IsValidXml(Settings.MD5HashDatabaseXmlFile)))
-                {
-                    Logging.WriteToLog("database file in invalid, deleting", Logfiles.Application, LogLevel.Warning);
-                    File.Delete(Settings.MD5HashDatabaseXmlFile);
-                }
-                //show the mod selection list
-                ModSelectionList modSelectionList = new ModSelectionList()
-                {
-                    ContinueInstallation = false
-                };
-                modSelectionList.ShowDialog();
-                if (modSelectionList.ContinueInstallation)
-                {
-                    OnBeginInstallation(new List<Category>(modSelectionList.ParsedCategoryList));
-                    modSelectionList = null;
-                }
-                else
-                {
-                    ToggleUIButtons(true);
-                }
+            }
+            //check to make sure that the md5hashdatabase is valid before using it
+            Logging.WriteToLog("Checking md5 database file");
+            if ((File.Exists(Settings.MD5HashDatabaseXmlFile)) && (!XMLUtils.IsValidXml(Settings.MD5HashDatabaseXmlFile)))
+            {
+                Logging.WriteToLog("database file in invalid, deleting", Logfiles.Application, LogLevel.Warning);
+                File.Delete(Settings.MD5HashDatabaseXmlFile);
+            }
+            //show the mod selection list
+            ModSelectionList modSelectionList = new ModSelectionList()
+            {
+                ContinueInstallation = false
+            };
+            modSelectionList.ShowDialog();
+            if (modSelectionList.ContinueInstallation)
+            {
+                OnBeginInstallation(new List<Category>(modSelectionList.ParsedCategoryList));
+                modSelectionList = null;
+            }
+            else
+            {
+                ToggleUIButtons(true);
             }
         }
 
