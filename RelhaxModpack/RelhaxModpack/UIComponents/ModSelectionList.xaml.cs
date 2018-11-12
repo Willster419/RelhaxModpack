@@ -193,7 +193,9 @@ namespace RelhaxModpack.Windows
                 Settings.WoTClientVersion = XMLUtils.GetXMLStringFromXPath(modInfoDocument, "//modInfoAlpha.xml@version");
             }
             //parse the modInfoXml to list in memory
-
+            loadProgress.ChildProgressCurrent++;
+            loadProgress.ReportMessage = Translations.GetTranslatedString("parsingDatabase");
+            progress.Report(loadProgress);
             //check db cache of local files
             loadProgress.ChildProgressCurrent++;
             loadProgress.ReportMessage = Translations.GetTranslatedString("verifyingDownloadCache");

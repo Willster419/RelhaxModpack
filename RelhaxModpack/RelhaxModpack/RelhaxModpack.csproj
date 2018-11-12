@@ -114,7 +114,13 @@
     <Compile Include="Settings\ThirdPartySettings.cs" />
     <Compile Include="Settings\UISettings.cs" />
     <Compile Include="UIComponents\ComboBoxItem.cs" />
+    <Compile Include="UIComponents\FirstLoadAknowledgements.xaml.cs">
+      <DependentUpon>FirstLoadAknowledgements.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UIComponents\IPackageUIComponent.cs" />
+    <Compile Include="UIComponents\NewsViewer.xaml.cs">
+      <DependentUpon>NewsViewer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UIComponents\RelhaxWPFCheckBox.cs" />
     <Compile Include="UIComponents\RelhaxWPFComboBox.cs" />
     <Compile Include="UIComponents\RelhaxWPFRadioButton.cs" />
@@ -198,6 +204,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UIComponents\FirstLoadAknowledgements.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UIComponents\GenericYesNoWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -207,6 +217,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UIComponents\ModSelectionList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\NewsViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

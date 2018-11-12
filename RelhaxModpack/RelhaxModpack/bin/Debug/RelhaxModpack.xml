@@ -713,6 +713,221 @@
             Load the custom color definitions from XML
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.FirstLoadAknowledgements">
+            <summary>
+            Interaction logic for FirstLoadAknowledgements.xaml
+            </summary>
+            <summary>
+            FirstLoadAknowledgements
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.FirstLoadAknowledgements.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.NewsViewer">
+            <summary>
+            Interaction logic for NewsViewer.xaml
+            </summary>
+            <summary>
+            NewsViewer
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.NewsViewer.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.AddPicturesZip">
+            <summary>
+            Interaction logic for AddPicturesZip.xaml
+            </summary>
+            <summary>
+            AddPicturesZip
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.AddPicturesZip.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.DatabaseEditor">
+            <summary>
+            Interaction logic for DatabaseEditor.xaml
+            </summary>
+            <summary>
+            DatabaseEditor
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.DatabaseEditor.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.DatabaseEditorAddMove">
+            <summary>
+            Interaction logic for DatabaseEditorAddMove.xaml
+            </summary>
+            <summary>
+            DatabaseEditorAddMove
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.DatabaseEditorAddMove.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.DatabaseEditorDownload">
+            <summary>
+            Interaction logic for DatabaseEditorDownload.xaml
+            </summary>
+            <summary>
+            DatabaseEditorDownload
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.DatabaseEditorDownload.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.DatabaseUpdater">
+            <summary>
+            Interaction logic for DatabaseUpdater.xaml
+            </summary>
+            <summary>
+            DatabaseUpdater
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.DatabaseUpdater.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.GenericYesNoWindow">
+            <summary>
+            Interaction logic for GenericYesNoWindow.xaml
+            </summary>
+            <summary>
+            GenericYesNoWindow
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.GenericYesNoWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.InstallFinished">
+            <summary>
+            Interaction logic for InstallFinished.xaml
+            </summary>
+            <summary>
+            InstallFinished
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.InstallFinished.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.ModSelectionList">
+            <summary>
+            Interaction logic for ModSelectionList.xaml
+            </summary>
+            <summary>
+            ModSelectionList
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ModSelectionList.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.PatchTester">
+            <summary>
+            Interaction logic for PatchTester.xaml
+            </summary>
+            <summary>
+            PatchTester
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.PatchTester.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.SelectionViewer">
+            <summary>
+            Interaction logic for SelectionViewer.xaml
+            </summary>
+            <summary>
+            SelectionViewer
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.SelectionViewer.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.Preview">
+            <summary>
+            Interaction logic for Preview.xaml
+            </summary>
+            <summary>
+            Preview
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.Preview.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.ProgressIndicator">
+            <summary>
+            Interaction logic for ProgressIndicator.xaml
+            </summary>
+            <summary>
+            ProgressIndicator
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ProgressIndicator.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.RelhaxWindow">
+            <summary>
+            Defines a window with translation and custom UI color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.RelhaxWindow.LocalizeWindow">
+            <summary>
+            Specifies if the window should have translatoin applied
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.RelhaxWindow.ApplyToolTips">
+            <summary>
+            Specified if the window should have tooltips applied
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxWindow.#ctor">
+            <summary>
+            Creates an instance of the RelhaxWindow class
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.VersionInfo">
+            <summary>
+            Interaction logic for VersionInfo.xaml
+            </summary>
+            <summary>
+            VersionInfo
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.VersionInfo.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.CiInfo">
             <summary>Info about the continuous integration server build that produced this binary.</summary> 
         </member>
@@ -939,195 +1154,6 @@
             <param name="sp">The package to perform linking on</param>
             <param name="cat">The category that the SelectablePackagesp belongs to</param>
             <param name="parent">The tree parent of sp</param>
-        </member>
-        <member name="T:RelhaxModpack.Windows.AddPicturesZip">
-            <summary>
-            Interaction logic for AddPicturesZip.xaml
-            </summary>
-            <summary>
-            AddPicturesZip
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.AddPicturesZip.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Windows.DatabaseEditor">
-            <summary>
-            Interaction logic for DatabaseEditor.xaml
-            </summary>
-            <summary>
-            DatabaseEditor
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.DatabaseEditor.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Windows.DatabaseEditorAddMove">
-            <summary>
-            Interaction logic for DatabaseEditorAddMove.xaml
-            </summary>
-            <summary>
-            DatabaseEditorAddMove
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.DatabaseEditorAddMove.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Windows.DatabaseEditorDownload">
-            <summary>
-            Interaction logic for DatabaseEditorDownload.xaml
-            </summary>
-            <summary>
-            DatabaseEditorDownload
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.DatabaseEditorDownload.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Windows.DatabaseUpdater">
-            <summary>
-            Interaction logic for DatabaseUpdater.xaml
-            </summary>
-            <summary>
-            DatabaseUpdater
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.DatabaseUpdater.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Windows.GenericYesNoWindow">
-            <summary>
-            Interaction logic for GenericYesNoWindow.xaml
-            </summary>
-            <summary>
-            GenericYesNoWindow
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.GenericYesNoWindow.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Windows.InstallFinished">
-            <summary>
-            Interaction logic for InstallFinished.xaml
-            </summary>
-            <summary>
-            InstallFinished
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.InstallFinished.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Windows.ModSelectionList">
-            <summary>
-            Interaction logic for ModSelectionList.xaml
-            </summary>
-            <summary>
-            ModSelectionList
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.ModSelectionList.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Windows.PatchTester">
-            <summary>
-            Interaction logic for PatchTester.xaml
-            </summary>
-            <summary>
-            PatchTester
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.PatchTester.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Windows.SelectionViewer">
-            <summary>
-            Interaction logic for SelectionViewer.xaml
-            </summary>
-            <summary>
-            SelectionViewer
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.SelectionViewer.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Windows.Preview">
-            <summary>
-            Interaction logic for Preview.xaml
-            </summary>
-            <summary>
-            Preview
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.Preview.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Windows.ProgressIndicator">
-            <summary>
-            Interaction logic for ProgressIndicator.xaml
-            </summary>
-            <summary>
-            ProgressIndicator
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.ProgressIndicator.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Windows.RelhaxWindow">
-            <summary>
-            Defines a window with translation and custom UI color
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Windows.RelhaxWindow.LocalizeWindow">
-            <summary>
-            Specifies if the window should have translatoin applied
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Windows.RelhaxWindow.ApplyToolTips">
-            <summary>
-            Specified if the window should have tooltips applied
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.RelhaxWindow.#ctor">
-            <summary>
-            Creates an instance of the RelhaxWindow class
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Windows.VersionInfo">
-            <summary>
-            Interaction logic for VersionInfo.xaml
-            </summary>
-            <summary>
-            VersionInfo
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.VersionInfo.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
         </member>
         <member name="T:RelhaxModpack.XMLUtils">
             <summary>
