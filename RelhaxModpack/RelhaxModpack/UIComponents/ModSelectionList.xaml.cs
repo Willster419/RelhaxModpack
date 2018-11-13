@@ -239,8 +239,24 @@ namespace RelhaxModpack.Windows
             loadProgress.ChildProgressCurrent++;
             loadProgress.ReportMessage = Translations.GetTranslatedString("loadingUI");
             progress.Report(loadProgress);
-
+            BuildUIInit(progress, loadProgress, ParsedCategoryList);
             return true;
+        }
+
+        private void BuildUIInit(IProgress<RelhaxProgress> progress, RelhaxProgress loadProgress, List<Category> parsedCategoryList)
+        {
+            //one time init of stuff goes here (init the tabGroup would have been nice if needed here)
+            foreach(Category cat in parsedCategoryList)
+            {
+                //build per cateogry tab here
+                BuildCategory(progress, loadProgress, cat.Packages);
+            }
+        }
+
+        private void BuildCategory(IProgress<RelhaxProgress> progress, RelhaxProgress loadProgress, List<SelectablePackage> packages)
+        {
+            //make a flat list here?
+
         }
 
         private void OnContinueInstallation(object sender, RoutedEventArgs e)
