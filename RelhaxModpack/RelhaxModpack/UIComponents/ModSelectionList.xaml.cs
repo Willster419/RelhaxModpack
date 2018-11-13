@@ -27,7 +27,7 @@ namespace RelhaxModpack.Windows
         public bool ContinueInstallation = false;
         public List<Category> ParsedCategoryList;
     }
-    public delegate void OnSelectionListReturn(object sender, SelectionListEventArgs e);
+    public delegate void SelectionListClosedDelegate(object sender, SelectionListEventArgs e);
     /// <summary>
     /// Interaction logic for ModSelectionList.xaml
     /// </summary>
@@ -43,7 +43,7 @@ namespace RelhaxModpack.Windows
         public bool ContinueInstallation { get; set; } = false;
         private bool developerSelectionsReady = false;
         private ProgressIndicator loadingProgress;
-        public event OnSelectionListReturn OnSelectionListReturn;
+        public event SelectionListClosedDelegate OnSelectionListReturn;
 
         public ModSelectionList()
         {
@@ -216,11 +216,14 @@ namespace RelhaxModpack.Windows
             loadProgress.ChildProgressCurrent++;
             loadProgress.ReportMessage = Translations.GetTranslatedString("verifyingDownloadCache");
             progress.Report(loadProgress);
-            return false;
             //the below does not work yet
             List<DatabasePackage> flatListZips = flatList.Where(package => !string.IsNullOrWhiteSpace(package.ZipFile)).ToList();
             foreach(DatabasePackage package in flatListZips)
             {
+                string zipFile = Path.Combine(Settings.RelhaxDownloadsFolder, package.ZipFile);
+                //only look for a crc if the cache file exists
+                if (!File.Exists(zipFile))
+                    continue;
                 string name = package.PackageName;
                 if(package is SelectablePackage sp)
                 {
