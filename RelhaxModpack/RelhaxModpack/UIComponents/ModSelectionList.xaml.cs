@@ -300,7 +300,24 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void LoadSelection()
+        private void LoadSelection(XmlDocument document, List<SelectablePackage> parsedCategoryList)
+        {
+            //get the string version of the document, determine what to do from there
+            string selectionVersion = "";
+            selectionVersion = XMLUtils.GetXMLStringFromXPath(document, "//selection/version");//TODO: CHECK THIS
+            switch(selectionVersion)
+            {
+                case "2.0":
+                    LoadSelectionV2(document, parsedCategoryList);
+                break;
+
+                default:
+                    //log we don't know wtf it is
+                break;
+            }
+        }
+
+        private void LoadSelectionV2(XmlDocument document, List<SelectablePackage> parsedCategoryList)
         {
 
         }
