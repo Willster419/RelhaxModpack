@@ -713,6 +713,19 @@
             Load the custom color definitions from XML
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.DeveloperSelectionsViewer">
+            <summary>
+            Interaction logic for DeveloperSelectionsViewer.xaml
+            </summary>
+            <summary>
+            DeveloperSelectionsViewer
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.DeveloperSelectionsViewer.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.FirstLoadAknowledgements">
             <summary>
             Interaction logic for FirstLoadAknowledgements.xaml

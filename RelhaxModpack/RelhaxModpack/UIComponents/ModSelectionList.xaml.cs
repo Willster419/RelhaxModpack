@@ -40,8 +40,7 @@ namespace RelhaxModpack.Windows
         public List<Category> ParsedCategoryList;
         public List<DatabasePackage> GlobalDependencies;
         public List<Dependency> Dependencies;
-        public bool ContinueInstallation { get; set; } = false;
-        private bool developerSelectionsReady = false;
+        private bool continueInstallation  = false;
         private ProgressIndicator loadingProgress;
         public event SelectionListClosedDelegate OnSelectionListReturn;
 
@@ -261,13 +260,13 @@ namespace RelhaxModpack.Windows
 
         private void OnContinueInstallation(object sender, RoutedEventArgs e)
         {
-            ContinueInstallation = true;
+            continueInstallation = true;
             this.Close();
         }
 
         private void OnCancelInstallation(object sender, RoutedEventArgs e)
         {
-            ContinueInstallation = false;
+            continueInstallation = false;
             this.Close();
         }
 
@@ -304,7 +303,8 @@ namespace RelhaxModpack.Windows
         {
             //get the string version of the document, determine what to do from there
             string selectionVersion = "";
-            selectionVersion = XMLUtils.GetXMLStringFromXPath(document, "//selection/version");//TODO: CHECK THIS
+            //attribute example: "//root/element/@attribute"
+            selectionVersion = XMLUtils.GetXMLStringFromXPath(document, "//mods@ver");//TODO: CHECK THIS
             switch(selectionVersion)
             {
                 case "2.0":
@@ -332,7 +332,7 @@ namespace RelhaxModpack.Windows
             if(OnSelectionListReturn != null)
             {
                 OnSelectionListReturn(this, new SelectionListEventArgs()
-                { ContinueInstallation = ContinueInstallation, ParsedCategoryList = ParsedCategoryList });
+                { ContinueInstallation = continueInstallation, ParsedCategoryList = ParsedCategoryList });
             }
         }
     }

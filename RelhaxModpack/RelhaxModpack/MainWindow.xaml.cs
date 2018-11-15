@@ -724,10 +724,7 @@ namespace RelhaxModpack
                 File.Delete(Settings.MD5HashDatabaseXmlFile);
             }
             //show the mod selection list
-            modSelectionList = new ModSelectionList()
-            {
-                ContinueInstallation = false
-            };
+            modSelectionList = new ModSelectionList();
             //https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c
             modSelectionList.OnSelectionListReturn += ModSelectionList_OnSelectionListReturn;
             modSelectionList.Visibility = Visibility.Hidden;
