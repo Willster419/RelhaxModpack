@@ -189,7 +189,7 @@ namespace RelhaxModpack
                         {
                             case true:
                                 //handle color change code
-                                if (Settings.EnableBordersDefaultV2View)
+                                if (Settings.EnableColorChangeDefaultV2View)
                                 {
                                     if(ParentBorder != null && ParentBorder.Background != System.Windows.Media.Brushes.BlanchedAlmond)
                                     {
@@ -221,7 +221,7 @@ namespace RelhaxModpack
                                 break;
                             case false:
                                 //handle color change code
-                                if (Settings.EnableBordersDefaultV2View)
+                                if (Settings.EnableColorChangeDefaultV2View)
                                 {
                                     if (ParentBorder != null && !AnyPackagesChecked())
                                         ParentBorder.Background = Settings.GetBackColorWPF();
