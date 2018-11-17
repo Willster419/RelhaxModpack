@@ -2283,7 +2283,7 @@ namespace RelhaxModpack
             EnableBordersDefaultV2CB.Checked = Settings.EnableBordersDefaultV2View;
             EnableColorChangeDefaultCB.Checked = Settings.EnableColorChangeDefaultView;
             EnableColorChangeLegacyCB.Checked = Settings.EnableColorChangeLegacyView;
-            EnableColorChangeDefaultV2CB.Checked = Settings.EnableBordersDefaultV2View;
+            EnableColorChangeDefaultV2CB.Checked = Settings.EnableColorChangeDefaultV2View;
             LanguageComboBox.SelectedIndexChanged -= LanguageComboBox_SelectedIndexChanged;
             switch (Translations.language)
             {
