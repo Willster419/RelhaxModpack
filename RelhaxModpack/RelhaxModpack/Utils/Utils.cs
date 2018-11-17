@@ -361,7 +361,7 @@ namespace RelhaxModpack
         }
         #endregion
 
-        #region Duplicates checking
+        #region Database Utils
         public static List<string> CheckForDuplicates(List<DatabasePackage> globalDependencies, List<Dependency> dependencies,
             List<Category> parsedCategoryList, List<Dependency> logicalDependencies = null)
         {
@@ -375,10 +375,12 @@ namespace RelhaxModpack
             }
             return duplicatesList;
         }
-        #endregion
-
-        #region Mods list sorting
-
+        //sorts a list of mods alphabetaicaly
+        public static void SortModsList(List<SelectablePackage> modList)
+        {
+            //sortModsList
+            modList.Sort(SelectablePackage.CompareMods);
+        }
         #endregion
 
         #region Generic utils
