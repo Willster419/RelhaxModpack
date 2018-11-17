@@ -238,7 +238,13 @@ namespace RelhaxModpack.Windows
             loadProgress.ChildProgressCurrent++;
             loadProgress.ReportMessage = Translations.GetTranslatedString("loadingUI");
             progress.Report(loadProgress);
+            //initialize the categories lists
             BuildUIInit(progress, loadProgress, ParsedCategoryList);
+            //add the packages for each category
+            foreach(Category cat in ParsedCategoryList)
+            {
+                AddPackage(progress, loadProgress, cat.Packages);
+            }
             return true;
         }
 
@@ -248,14 +254,23 @@ namespace RelhaxModpack.Windows
             foreach(Category cat in parsedCategoryList)
             {
                 //build per cateogry tab here
-                BuildCategory(progress, loadProgress, cat.Packages);
+                //like all the UI stuff and linking internally
+
             }
         }
 
-        private void BuildCategory(IProgress<RelhaxProgress> progress, RelhaxProgress loadProgress, List<SelectablePackage> packages)
+        private void AddPackage(IProgress<RelhaxProgress> progress, RelhaxProgress loadProgress, List<SelectablePackage> packages)
         {
-            //make a flat list here?
+            foreach(SelectablePackage package in packages)
+            {
+                //do all the package UI building here
+                //should NOT have to do any of the memory linking since that was all done for us above in a utility #likeABoss
 
+
+                //howerver
+                if(package.Packages.Count > 0)
+                    AddPackage(progress,loadProgress, package.Packages);
+            }
         }
 
         private void OnContinueInstallation(object sender, RoutedEventArgs e)
@@ -313,6 +328,9 @@ namespace RelhaxModpack.Windows
 
                 default:
                     //log we don't know wtf it is
+                    Logging.WriteToLog("Unknown selection version: " + selectionVersion + ", aborting");
+                    MessageBox.Show(string.Format(Translations.GetTranslatedString("unknownselectionFileFormat"),selectionVersion));
+                    return;
                 break;
             }
         }
