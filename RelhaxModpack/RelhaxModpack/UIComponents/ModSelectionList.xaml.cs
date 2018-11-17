@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Xml;
 using System.Net;
 using System.IO;
+using RelhaxModpack.UIComponents;
 
 namespace RelhaxModpack.Windows
 {
@@ -263,7 +264,100 @@ namespace RelhaxModpack.Windows
             {
                 //build per cateogry tab here
                 //like all the UI stuff and linking internally
-
+                //make the tab page
+                cat.TabPage = new TabItem()
+                {
+                    //Background TODO
+                    Name = cat.Name
+                };
+                //Sorts the mods
+                Utils.SortModsList(cat.Packages);
+                //make and attach the category header
+                cat.CategoryHeader = new SelectablePackage()
+                {
+                    Name = string.Format("----------[{0}]----------", cat.Name),
+                    TabIndex = cat.TabPage,
+                    ParentCategory = cat,
+                    Type = "multi",
+                    Visible = true,
+                    Enabled = true,
+                    Level = -1,
+                    PackageName = string.Format("Category_{0}_Header",cat.Name.Replace(' ','_'))
+                };
+                //creates a refrence to itself
+                cat.CategoryHeader.Parent = cat.CategoryHeader;
+                cat.CategoryHeader.TopParent = cat.CategoryHeader;
+                //just in case
+                if(ModTabGroups.Items.Count > 0)
+                    ModTabGroups.Items.Clear();
+                switch(ModpackSettings.ModSelectionView)
+                {
+                    case SelectionView.Legacy:
+                        cat.CategoryHeader.TreeView = new TreeView();
+                        cat.CategoryHeader.ChildStackPanel = new StackPanel();
+                        cat.CategoryHeader.ChildBorder = new Border()
+                        {
+                            BorderBrush = Brushes.Black,
+                            BorderThickness = ModpackSettings.EnableBordersLegacyView? new Thickness(1) : new Thickness(0),
+                            Child = cat.CategoryHeader.ChildStackPanel,
+                            Margin = new Thickness(-25, 0, 0, 0)
+                        };
+                        //i know i don't need to do this but i'm doing it anyways
+                        if (cat.CategoryHeader.TreeView.Items.Count > 0)
+                            cat.CategoryHeader.TreeView.Items.Clear();
+                        cat.CategoryHeader.TreeViewItem.Items.Add(cat.CategoryHeader.ChildBorder);
+                        cat.CategoryHeader.TreeViewItem.IsExpanded = true;
+                        //TODO MOUSE DOWN
+                        //TODO BACKGROUND?
+                        IPackageUIComponent categoryTop = new RelhaxWPFCheckBox()
+                        {
+                            Package = cat.CategoryHeader,
+                            Content = cat.CategoryHeader.NameFormatted,
+                            //forground TODO
+                        };
+                        //TODO ON WPF COMPONENT CLICK
+                        cat.CategoryHeader.UIComponent = cat.CategoryHeader.ParentUIComponent = cat.CategoryHeader.TopParentUIComponent = categoryTop;
+                        cat.CategoryHeader.Packages = cat.Packages;
+                        cat.CategoryHeader.TreeViewItem.Header = cat.CategoryHeader.UIComponent;
+                        break;
+                    case SelectionView.DefaultV2:
+                        cat.CategoryHeader.ParentStackPanel = new StackPanel();
+                        cat.CategoryHeader.ParentBorder = new Border()
+                        {
+                            //background TODO
+                            Child = cat.CategoryHeader.ParentStackPanel,
+                            Padding = new Thickness(2)
+                        };
+                        //put parent stack panel into parent border
+                        //cat tabpage add top border (parentBorder)
+                        //COLOR UI BACKGROUND TODO
+                        //ON WPF TODO
+                        //create checkbox for inside selecteionlist
+                        RelhaxWPFCheckBox cb2 = new RelhaxWPFCheckBox()
+                        {
+                            Package = cat.CategoryHeader,
+                            Content = cat.CategoryHeader.NameFormatted,
+                            //Foreground = Settings.GetTextColorWPF(),//TODO
+                            HorizontalAlignment = HorizontalAlignment.Left
+                        };
+                        cat.CategoryHeader.UIComponent = cat.CategoryHeader.ParentUIComponent = cat.CategoryHeader.TopParentUIComponent = cb2;
+                        //create and link the child borderand stackpanel
+                        cat.CategoryHeader.ChildStackPanel = new StackPanel();
+                        cat.CategoryHeader.ChildBorder = new Border()
+                        {
+                            BorderBrush = Brushes.Black,
+                            BorderThickness = ModpackSettings.EnableBordersDefaultV2View? new Thickness(1) : new Thickness(0),
+                            Child = cat.CategoryHeader.ChildStackPanel,
+                            Padding = new Thickness(15,0,0,0)
+                        };
+                        //add the category header item to the stack panel
+                        cat.CategoryHeader.ParentStackPanel.Children.Add((Control)cat.CategoryHeader.UIComponent);
+                        //add the child border to the parent stack panel
+                        cat.CategoryHeader.ParentStackPanel.Children.Add(cat.CategoryHeader.ChildBorder);
+                        cat.CategoryHeader.Packages = cat.Packages;
+                        break;
+                }
+                ModTabGroups.Items.Add(cat.TabPage);
             }
         }
 

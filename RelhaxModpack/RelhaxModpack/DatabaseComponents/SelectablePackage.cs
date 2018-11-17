@@ -44,7 +44,7 @@ namespace RelhaxModpack
         /// <summary>
         /// the TabPage refrence
         /// </summary>
-        public TabControl TabIndex = null;
+        public TabItem TabIndex = null;
         /// <summary>
         /// the Category refrence
         /// </summary>

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Forms;
 using RelhaxModpack.UIComponents;
+using System.Windows.Controls;
 
 namespace RelhaxModpack
 {
@@ -10,8 +10,8 @@ namespace RelhaxModpack
     public class Category
     {
         public string Name = "";
-        //the TabPage refrence for the UI
-        public TabPage @TabPage = null;
+        //the TabItem refrence for the UI
+        public TabItem TabPage = null;
         //the holder for all packages of a catagory. UI only
         public SelectablePackage CategoryHeader = null;
         public List<SelectablePackage> Packages = new List<SelectablePackage>();
