@@ -43,6 +43,7 @@ namespace RelhaxModpack.Windows
         private bool continueInstallation  = false;
         private ProgressIndicator loadingProgress;
         public event SelectionListClosedDelegate OnSelectionListReturn;
+        private bool Loading = false;
 
         public ModSelectionList()
         {
@@ -51,6 +52,7 @@ namespace RelhaxModpack.Windows
 
         private async void OnWindowLoad(object sender, RoutedEventArgs e)
         {
+            Loading = true;
             //init the lists
             ParsedCategoryList = new List<Category>();
             GlobalDependencies = new List<DatabasePackage>();
@@ -72,7 +74,7 @@ namespace RelhaxModpack.Windows
                 Progress<RelhaxProgress> progressIndicator = new Progress<RelhaxProgress>(OnWindowLoadReportProgress);
                 bool result = await ActuallyLoadModSelectionListAsync(progressIndicator);
                 if (!result)
-                    throw new BadMemeException("Result was false!!");
+                    throw new BadMemeException("Result was false reeeeeee!!");
             }
             catch (Exception ex)
             {
@@ -86,6 +88,7 @@ namespace RelhaxModpack.Windows
             }
             loadingProgress.Close();
             loadingProgress = null;
+            Loading = false;
             this.Show();
         }
 
@@ -246,6 +249,11 @@ namespace RelhaxModpack.Windows
                 AddPackage(progress, loadProgress, cat.Packages);
             }
             return true;
+        }
+
+        private void BuildUserMods()
+        {
+            //stub
         }
 
         private void BuildUIInit(IProgress<RelhaxProgress> progress, RelhaxProgress loadProgress, List<Category> parsedCategoryList)
