@@ -1,3 +1,11 @@
+Version 0.28.2.14 (11/17/2018)
+https://www.virustotal.com/#/file/d584d555028f151dcbf880fa26ebd1b8463c937c67f5dfe0509b35381db2c463/detection
+-Removed old legacy DatabaseUpdater code parts that were re-written for Relhax V2
+-Fixed bug in default v2 view where color change settings were not applying properly (color change setting would not work)
+-Fixed bug where default v2 color change setting would not be restored to the UI on application load
+-Improved names of UI components
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 0.28.2.13 (11/09/2018)
 https://www.virustotal.com/#/file/26ab0e67ea7c800fcb82c33723832443ea533d766e17859a3a21617e99620433/detection
 -Fixed a bug with the database updater backend tool
