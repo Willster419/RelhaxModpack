@@ -8,7 +8,19 @@
         Title="TabviewTesting" MinHeight="480" MinWidth="800" Height="480" Width="800" Loaded="Window_Loaded">
     <Grid Background="#FF0C0CE6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <TabControl x:Name="TabTest" Background="#FF0C0CE6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            
+            <TabControl.Template>
+                <ControlTemplate TargetType="TabControl">
+                    <Grid SnapsToDevicePixels="true" KeyboardNavigation.TabNavigation="Local" HorizontalAlignment="Stretch">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <WrapPanel x:Name="HeaderPanel" HorizontalAlignment="Center" VerticalAlignment="Top" IsItemsHost="true"
+            Grid.Row="0" KeyboardNavigation.TabIndex="1" />
+                        <ContentPresenter Grid.Row="1" x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="10" />
+                    </Grid>
+                </ControlTemplate>
+            </TabControl.Template>
         </TabControl>
     </Grid>
 </Window>
