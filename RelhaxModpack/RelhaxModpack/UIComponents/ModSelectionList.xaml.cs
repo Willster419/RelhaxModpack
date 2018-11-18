@@ -388,24 +388,25 @@ namespace RelhaxModpack.Windows
                             Child = cat.CategoryHeader.ChildStackPanel,
                             Margin = new Thickness(-25, 0, 0, 0)
                         };
-                        //i know i don't need to do this but i'm doing it anyways
                         if (cat.CategoryHeader.TreeView.Items.Count > 0)
                             cat.CategoryHeader.TreeView.Items.Clear();
                         cat.CategoryHeader.TreeViewItem.Items.Add(cat.CategoryHeader.ChildBorder);
                         cat.CategoryHeader.TreeViewItem.IsExpanded = true;
-                        cat.TabPage.Content = cat.CategoryHeader.TreeViewItem;
+
                         //TODO MOUSE DOWN
                         //TODO BACKGROUND?
-                        IPackageUIComponent categoryTop = new RelhaxWPFCheckBox()
+                        cat.CategoryHeader.UIComponent = new RelhaxWPFCheckBox()
                         {
                             Package = cat.CategoryHeader,
                             Content = cat.CategoryHeader.NameFormatted,
                             //forground TODO
                         };
                         //TODO ON WPF COMPONENT CLICK
-                        cat.CategoryHeader.UIComponent = cat.CategoryHeader.ParentUIComponent = cat.CategoryHeader.TopParentUIComponent = categoryTop;
-                        cat.CategoryHeader.Packages = cat.Packages;
+                        cat.CategoryHeader.ParentUIComponent = cat.CategoryHeader.TopParentUIComponent = cat.CategoryHeader.UIComponent;
                         cat.CategoryHeader.TreeViewItem.Header = cat.CategoryHeader.UIComponent;
+                        cat.CategoryHeader.TreeView.Items.Add(cat.CategoryHeader.TreeViewItem);
+                        cat.TabPage.Content = cat.CategoryHeader.TreeView;
+                        cat.CategoryHeader.Packages = cat.Packages;
                         break;
                     case SelectionView.DefaultV2:
                         cat.CategoryHeader.ParentStackPanel = new StackPanel();
@@ -491,11 +492,20 @@ namespace RelhaxModpack.Windows
                         BorderBrush = Brushes.Black,
                         BorderThickness = ModpackSettings.EnableBordersDefaultV2View ? new Thickness(1) : new Thickness(0),
                         Child = package.ChildStackPanel,
-                        Padding = new Thickness(15, 0, 0, 0),
+                        //Padding = new Thickness(15, 0, 0, 0),
                         //background TODO
                     };
-                    if (ModpackSettings.ModSelectionView == SelectionView.Legacy)
-                        package.TreeViewItem.Items.Add(package.ChildBorder);
+                    //custom settings for each border
+                    switch(ModpackSettings.ModSelectionView)
+                    {
+                        case SelectionView.DefaultV2:
+                            package.ChildBorder.Padding = new Thickness(15, 0, 0, 0);
+                            break;
+                        case SelectionView.Legacy:
+                            package.ChildBorder.Margin = new Thickness(-25, 0, 0, 0);
+                            package.TreeViewItem.Items.Add(package.ChildBorder);
+                            break;
+                    }
                 }
                 
                 switch(package.Type)
