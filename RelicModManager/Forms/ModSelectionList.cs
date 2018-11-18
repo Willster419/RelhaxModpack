@@ -729,6 +729,9 @@ namespace RelhaxModpack
                     }
                     sp.ParentPanel = sp.Parent.ChildPanel;
                     //end code for dealing with panels
+                    //escape the "&" symbol for winforms
+                    //https://stackoverflow.com/questions/4325094/enter-symbol-into-a-text-label-in-windows-forms
+                    packageDisplayName = packageDisplayName.Replace(@"&", @"&&");
                     switch (sp.Type)
                     {
                         case "single":
