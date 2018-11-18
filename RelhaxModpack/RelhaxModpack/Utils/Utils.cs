@@ -219,17 +219,23 @@ namespace RelhaxModpack
             }
         }
         //TODO
-        public static string SizeSuffix(long value, int decimalPlaces = 1, bool sizeSuffix = false)
+        public static string SizeSuffix(ulong value, uint decimalPlaces = 1, bool sizeSuffix = false)
         {
-            // https://stackoverflow.com/questions/14488796/does-net-provide-an-easy-way-convert-bytes-to-kb-mb-gb-etc
-            if (value < 0) { return "-" + SizeSuffix(-value); }
-            return SizeSuffix((ulong)value, decimalPlaces, sizeSuffix);
-        }
-        //TODO
-        private static string SizeSuffix(ulong value, int decimalPlaces = 1, bool sizeSuffix = false)
-        {
-            if (value == 0) { if (sizeSuffix) return "0.0 bytes"; else return "0.0"; }
-            if (value < 1000) { if (sizeSuffix) return string.Format("{0:n" + decimalPlaces + "} {1}", 0.1, SizeSuffixes[1]); else return string.Format("{0:n" + decimalPlaces + "}", 0.1); }
+            if (value == 0)
+            {
+                if (sizeSuffix)
+                    return "0.0 bytes";
+                else
+                    return "0.0";
+            }
+
+            if (value < 1000)
+            {
+                if (sizeSuffix)
+                    return string.Format("{0:n" + decimalPlaces + "} {1}", 0.1, SizeSuffixes[1]);
+                else
+                    return string.Format("{0:n" + decimalPlaces + "}", 0.1);
+            }
 
             // mag is 0 for bytes, 1 for KB, 2, for MB, etc.
             int mag = (int)Math.Log(value, 1024);
@@ -240,7 +246,7 @@ namespace RelhaxModpack
 
             // make adjustment when the value is large enough that
             // it would round up to 1000 or more
-            if (Math.Round(adjustedSize, decimalPlaces) >= 1000)
+            if (Math.Round(adjustedSize, (int)decimalPlaces) >= 1000)
             {
                 mag += 1;
                 adjustedSize /= 1024;
@@ -356,6 +362,12 @@ namespace RelhaxModpack
         public static long ParseLong(string input, long defaultValue)
         {
             if (long.TryParse(input, out long result))
+                return result;
+            else return defaultValue;
+        }
+        public static ulong ParseuLong(string input, ulong defaultValue)
+        {
+            if (ulong.TryParse(input, out ulong result))
                 return result;
             else return defaultValue;
         }
@@ -659,6 +671,7 @@ namespace RelhaxModpack
         }
         #endregion
 
+        //TODO: MOVE THIS TO DATABASE UTILS
         #region List refrence linking and level building
         /// <summary>
         /// Links all the refrences (like parent, etc) for each class object making it possible to traverse the list tree in memory

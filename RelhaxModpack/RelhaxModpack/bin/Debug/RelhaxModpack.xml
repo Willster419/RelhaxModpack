@@ -155,7 +155,6 @@
         <member name="F:RelhaxModpack.SelectablePackage.Size">
             <summary>
             size of the mod zip file
-            TODO: convert this to Uint64
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.UpdateComment">

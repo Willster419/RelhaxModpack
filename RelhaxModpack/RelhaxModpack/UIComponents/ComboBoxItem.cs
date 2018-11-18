@@ -1,7 +1,7 @@
 ﻿namespace RelhaxModpack
 {
     //an item to add ot a ComboBox
-    class ComboBoxItem
+    class ComboBoxItem : System.Windows.Controls.ComboBoxItem
     {
         public SelectablePackage Package { get; set; }
         public string DisplayName { get; set; }

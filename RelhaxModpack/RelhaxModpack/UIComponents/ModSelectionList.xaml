@@ -6,33 +6,28 @@
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
         Title="ModSelectionList" Height="480" Width="800" MinHeight="480" MinWidth="800" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="OnWindowLoad" Closed="RelhaxWindow_Closed" >
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="89*"/>
-            <ColumnDefinition Width="109*"/>
-        </Grid.ColumnDefinitions>
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <TextBlock x:Name="HelpLabel" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Richt-Click an opton to see a preview window" VerticalAlignment="Top" Tag="HelpLabel"/>
         <TextBlock x:Name="TanksPath" HorizontalAlignment="Left" Margin="10,26,0,0" TextWrapping="Wrap" Text="Installing to: " VerticalAlignment="Top" Tag="TanksPath"/>
         <TextBlock x:Name="TanksVersionLabel" HorizontalAlignment="Left" Margin="10,42,0,0" TextWrapping="Wrap" Text="Installing as WoT version: " VerticalAlignment="Top" Tag="TanksVersionLabel"/>
-        <TabControl x:Name="ModTabGroups" HorizontalAlignment="Stretch" Margin="10,80,10,60" VerticalAlignment="Stretch" Grid.ColumnSpan="2" >
-        </TabControl>
-        <Button x:Name="CollapseAllButton" Content="Collapse current tab" HorizontalAlignment="Right" Margin="0,10,140,0" VerticalAlignment="Top" Width="125" Height="35" Tag="CollapseAllButton" Grid.Column="1"/>
-        <Button x:Name="ExpandAllButton" Content="Expand current tab" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="125" Height="35" Tag="ExpandAllButton" Grid.Column="1"/>
-        <TextBlock x:Name="SearchTB" HorizontalAlignment="Right" Margin="0,52,270,0" TextWrapping="Wrap" Text="Search for a mod..." VerticalAlignment="Top" Height="22" Width="251" TextAlignment="Right" Padding="3" Tag="SearchTB" Grid.ColumnSpan="2"/>
-        <ComboBox x:Name="SearchCB" HorizontalAlignment="Right" Margin="0,52,10,0" VerticalAlignment="Top" Width="255" Grid.Column="1"/>
-        <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnContinueInstallation" Tag="ContinueButton" Grid.Column="1">
+        <TabControl x:Name="ModTabGroups" HorizontalAlignment="Stretch" Margin="10,80,10,60" VerticalAlignment="Stretch" />
+        <Button x:Name="CollapseAllButton" Content="Collapse current tab" HorizontalAlignment="Right" Margin="0,10,140,0" VerticalAlignment="Top" Width="125" Height="35" Tag="CollapseAllButton" />
+        <Button x:Name="ExpandAllButton" Content="Expand current tab" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="125" Height="35" Tag="ExpandAllButton" />
+        <TextBlock x:Name="SearchTB" HorizontalAlignment="Right" Margin="0,52,270,0" TextWrapping="Wrap" Text="Search for a mod..." VerticalAlignment="Top" Height="22" Width="251" TextAlignment="Right" Padding="3" Tag="SearchTB" />
+        <ComboBox x:Name="SearchCB" HorizontalAlignment="Right" Margin="0,52,10,0" VerticalAlignment="Top" Width="255" />
+        <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnContinueInstallation" Tag="ContinueButton" >
             <TextBlock x:Name="ContinueButtonLabel" Text="Text that can take up to two lines" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
-        <Button HorizontalAlignment="Right" Margin="0,0,135,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnCancelInstallation" Tag="CancelButton" Grid.Column="1">
+        <Button HorizontalAlignment="Right" Margin="0,0,135,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnCancelInstallation" Tag="CancelButton" >
             <TextBlock x:Name="CancelButtonLabel" Text="Text that can take up to two lines" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
-        <Button HorizontalAlignment="Right" Margin="0,0,260,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnSaveSelectionClick" Tag="SaveSelectionButton" Grid.Column="1">
+        <Button HorizontalAlignment="Right" Margin="0,0,260,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnSaveSelectionClick" Tag="SaveSelectionButton" >
             <TextBlock x:Name="SaveSelectionButtonLabel" Text="Text that can take up to two lines" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
-        <Button HorizontalAlignment="Right" Margin="0,0,385,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnLoadSelectionClick" Tag="LoadSelectionButton" Grid.ColumnSpan="2">
+        <Button HorizontalAlignment="Right" Margin="0,0,385,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnLoadSelectionClick" Tag="LoadSelectionButton" >
             <TextBlock x:Name="LoadSelectionButtonLabel" Text="Text that can take up to two lines" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
-        <Button HorizontalAlignment="Right" Margin="0,0,74,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnClearSelectionsClick" Tag="ClearSelectionsButton">
+        <Button HorizontalAlignment="Right" Margin="0,0,510,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnClearSelectionsClick" Tag="ClearSelectionsButton">
             <TextBlock x:Name="ClearSelectionsButtonLabel" Text="Text that can take up to two lines" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
     </Grid>

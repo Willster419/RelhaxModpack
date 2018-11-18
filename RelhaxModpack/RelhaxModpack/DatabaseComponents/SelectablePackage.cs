@@ -20,10 +20,10 @@ namespace RelhaxModpack
             {
                 case SelectionView.DefaultV2:
                     RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
-                    ContentControl = new System.Windows.Controls.ContentControl();
+                    ContentControl = new ContentControl();
                     break;
                 case SelectionView.Legacy:
-                    TreeViewItem = new System.Windows.Controls.TreeViewItem();
+                    TreeViewItem = new TreeViewItem();
                     RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
                     break;
             }
@@ -79,9 +79,8 @@ namespace RelhaxModpack
         public bool Visible = false;
         /// <summary>
         /// size of the mod zip file
-        /// TODO: convert this to Uint64
         /// </summary>
-        public long Size = 0;
+        public ulong Size = 0;
         /// <summary>
         /// update comments of the package
         /// </summary>
@@ -136,18 +135,18 @@ namespace RelhaxModpack
                                         //need to go through every contentpresenter of a stackpanel and parse
                                         foreach (System.Windows.UIElement ele in ParentStackPanel.Children)
                                         {
-                                            if (ele is System.Windows.Controls.ContentControl ctrl)
+                                            if (ele is ContentControl ctrl)
                                             {
-                                                if(ctrl.Content is System.Windows.Controls.Control ctrl3 && !(ele is RelhaxWPFComboBox))
+                                                if(ctrl.Content is Control ctrl3 && !(ele is RelhaxWPFComboBox))
                                                 {
                                                     ctrl3.Foreground = System.Windows.Media.Brushes.Black;
                                                 }
-                                                else if (ele is System.Windows.Controls.Control topHeader)
+                                                else if (ele is Control topHeader)
                                                 {
                                                     topHeader.Foreground = System.Windows.Media.Brushes.Black;
                                                 }
                                             }
-                                            else if (ele is System.Windows.Controls.Control ctrl2 && !(ele is RelhaxWPFComboBox))
+                                            else if (ele is Control ctrl2 && !(ele is RelhaxWPFComboBox))
                                             {
                                                 ctrl2.Foreground = System.Windows.Media.Brushes.Black;
                                             }
@@ -170,18 +169,18 @@ namespace RelhaxModpack
                                         {
                                             foreach (System.Windows.UIElement ele in ParentStackPanel.Children)
                                             {
-                                                if (ele is System.Windows.Controls.ContentControl ctrl)
+                                                if (ele is ContentControl ctrl)
                                                 {
-                                                    if (ctrl.Content is System.Windows.Controls.Control ctrl3 && !(ele is RelhaxWPFComboBox))
+                                                    if (ctrl.Content is Control ctrl3 && !(ele is RelhaxWPFComboBox))
                                                     {
                                                         ctrl3.Foreground = Settings.GetTextColorWPF();
                                                     }
-                                                    else if (ele is System.Windows.Controls.Control topHeader)
+                                                    else if (ele is Control topHeader)
                                                     {
                                                         topHeader.Foreground = Settings.GetTextColorWPF();
                                                     }
                                                 }
-                                                else if (ele is System.Windows.Controls.Control ctrl2 && !(ele is RelhaxWPFComboBox))
+                                                else if (ele is Control ctrl2 && !(ele is RelhaxWPFComboBox))
                                                 {
                                                     ctrl2.Foreground = Settings.GetTextColorWPF();
                                                 }
@@ -216,11 +215,11 @@ namespace RelhaxModpack
                                     if(false)//Settings.DarkUI && (ParentStackPanel != null)
                                     {
                                         //need to go through every treviewitem and parse
-                                        foreach(System.Windows.Controls.TreeViewItem tview in ParentStackPanel.Children)
+                                        foreach(TreeViewItem tview in ParentStackPanel.Children)
                                         {
                                             if(tview.Header is RelhaxWPFCheckBox  || tview.Header is RelhaxWPFRadioButton )
                                             {
-                                                System.Windows.Controls.Control c = (System.Windows.Controls.Control)tview.Header;
+                                                Control c = (Control)tview.Header;
                                                 c.Foreground = System.Windows.Media.Brushes.Black;
                                             }
                                         }
@@ -248,11 +247,11 @@ namespace RelhaxModpack
                                     {
                                         if(!AnyPackagesChecked() && (ParentStackPanel != null))
                                         {
-                                            foreach (System.Windows.Controls.TreeViewItem tview in ParentStackPanel.Children)
+                                            foreach (TreeViewItem tview in ParentStackPanel.Children)
                                             {
                                                 if (tview.Header is RelhaxWPFCheckBox || tview.Header is RelhaxWPFRadioButton)
                                                 {
-                                                    System.Windows.Controls.Control c = (System.Windows.Controls.Control)tview.Header;
+                                                    Control c = (Control)tview.Header;
                                                     //c.Foreground = Settings.GetTextColorWPF();
                                                 }
                                             }
@@ -292,35 +291,36 @@ namespace RelhaxModpack
         /// <summary>
         /// the border for the legacy view to allow for putting all subchilderen in the border. sits inside treeviewitem. wpf component
         /// </summary>
-        public System.Windows.Controls.Border ChildBorder;
+        public Border ChildBorder;
         /// <summary>
         /// the stackpanel to allow the child treeviewitems to stack upon each other. sits inside the border. wpf component
         /// </summary>
-        public System.Windows.Controls.StackPanel ChildStackPanel;
+        public StackPanel ChildStackPanel;
         /// <summary>
         /// the border that this component is in. wpf componment
         /// </summary>
-        public System.Windows.Controls.Border ParentBorder;
+        public Border ParentBorder;
         /// <summary>
         /// the stackpanel that this item is inside. wpf component
         /// </summary>
-        public System.Windows.Controls.StackPanel ParentStackPanel;
+        public StackPanel ParentStackPanel;
 
         //only for DEFAULT V2
         /// <summary>
         /// ContentControl item to allow for right-clicking of disabled components. defaultv2 wpf component
         /// </summary>
-        public System.Windows.Controls.ContentControl @ContentControl;
+        public ContentControl @ContentControl;
+        public ScrollViewer @ScrollViewer;
 
         //only for LEGACY
         /// <summary>
         /// the treeviewitem that corresponds to this package. legacy wpf component
         /// </summary>
-        public System.Windows.Controls.TreeViewItem @TreeViewItem;
+        public TreeViewItem @TreeViewItem;
         /// <summary>
         /// the treeview that this package is in. legacy wpf component
         /// </summary>
-        public System.Windows.Controls.TreeView @TreeView;
+        public TreeView @TreeView;
 
         /// <summary>
         /// the list of cache files that should be backed up before wiping the directory
@@ -337,7 +337,7 @@ namespace RelhaxModpack
         //list of dependnecys this package calls for
         public List<DatabaseLogic> Dependencies = new List<DatabaseLogic>();
         public List<string> ConflictingPackages = new List<string>();
-        public bool HideFromSearchList = true;
+        public bool ShowInSearchList = true;
         /// <summary>
         /// provides a nice complete path that is more human readable than a packagePath
         /// </summary>
@@ -360,6 +360,90 @@ namespace RelhaxModpack
                 parentPackages.Add(ParentCategory.Name);
                 parentPackages.Reverse();
                 return string.Join("->",parentPackages);
+            }
+        }
+        public bool IsStructureVisible
+        {
+            get
+            {
+                if (Parent == null || TopParent == null)
+                    throw new BadMemeException("RUN THE LINKING CODE FIRST (dur)");
+                if (!Visible) return false;
+                bool structureVisible = true;
+                SelectablePackage parentRef = Parent;
+                while (parentRef != TopParent)
+                {
+                    if (!parentRef.Visible)
+                    {
+                        structureVisible = false;
+                        //at this point it's false so we can exit early and save a few cycles
+                        break;
+                    }
+                    parentRef = parentRef.Parent;
+                }
+                return structureVisible;
+            }
+        }
+        public bool IsStructureEnabled
+        {
+            get
+            {
+                if (Parent == null || TopParent == null)
+                    throw new BadMemeException("RUN THE LINKING CODE FIRST (dur)");
+                if (!Enabled) return false;
+                bool structureEnabled = true;
+                SelectablePackage parentRef = Parent;
+                while (parentRef != TopParent)
+                {
+                    if (!parentRef.Enabled)
+                    {
+                        structureEnabled = false;
+                        //at this point it's false so we can exit early and save a few cycles
+                        break;
+                    }
+                    parentRef = parentRef.Parent;
+                }
+                return structureEnabled;
+            }
+        }
+        public string NameDisplay
+        {
+            get
+            {
+                //get the original formatted name
+                //get if the package is forced visable
+                //get if the package is forced enabled
+                //get if the package is need to be download "(updated)" text (and size)
+                //(only happends if level > -1)
+                string nameDisplay = NameFormatted;
+                if (CommandLineSettings.ForceVisible && !IsStructureVisible)
+                    nameDisplay = string.Format("{0} [{1}]", nameDisplay, Translations.GetTranslatedString("invisible"));
+                if (CommandLineSettings.ForceEnabled && !IsStructureEnabled)
+                    nameDisplay = string.Format("{0} [{1}]", nameDisplay, Translations.GetTranslatedString("disabled"));
+                if(Level > -1 && DownloadFlag)
+                {
+                    nameDisplay = string.Format("{0} ({1})", nameDisplay, Translations.GetTranslatedString("updated"));
+                    if (Size > 0)
+                        nameDisplay = string.Format("{0} ({1})", nameDisplay, Utils.SizeSuffix(Size, 1, true));
+                }
+                return nameDisplay.Replace("_","__");
+            }
+        }
+        public string TimeStampString
+        {
+            get
+            {
+                return Utils.ConvertFiletimeTimestampToDate(Timestamp);
+            }
+        }
+        public string ToolTipString
+        {
+            get
+            {
+                string toolTipResult = string.IsNullOrWhiteSpace(Description) ?
+                    Translations.GetTranslatedString("noDescription") : Description;
+                return string.Format("{0}\n\n{1}{2}",
+                    toolTipResult, Translations.GetTranslatedString("lastUpdated"), TimeStampString).Replace("_","__");
             }
         }
         /// <summary>

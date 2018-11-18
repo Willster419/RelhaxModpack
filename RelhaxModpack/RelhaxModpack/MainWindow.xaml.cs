@@ -729,11 +729,9 @@ namespace RelhaxModpack
             modSelectionList.OnSelectionListReturn += ModSelectionList_OnSelectionListReturn;
             modSelectionList.Visibility = Visibility.Hidden;
             modSelectionList.Hide();
-            modSelectionList.WindowState = WindowState.Minimized;
+            //modSelectionList.WindowState = WindowState.Minimized;
             modSelectionList.ShowDialog();
-            modSelectionList.Visibility = Visibility.Hidden;
-            modSelectionList.Hide();
-            modSelectionList.WindowState = WindowState.Minimized;
+            modSelectionList.WindowState = WindowState.Normal;
         }
 
         //https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c

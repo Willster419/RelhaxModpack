@@ -135,6 +135,7 @@ namespace RelhaxModpack
             }
             if(CommandLineSettings.DatabaseUpdate)
             {
+                Uri debug = StartupUri;
                 RelhaxModpack.Windows.DatabaseUpdater updater = new Windows.DatabaseUpdater();
                 updater.ShowDialog();
                 Application.Current.Shutdown();

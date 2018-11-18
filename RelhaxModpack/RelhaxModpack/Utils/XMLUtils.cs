@@ -395,7 +395,7 @@ namespace RelhaxModpack
                                 selectablePackage.Visible = Utils.ParseBool(xmlPackageProperty.Value.Trim(), false);
                                 break;
                             case "size":
-                                selectablePackage.Size = Utils.ParseLong(xmlPackageProperty.Value.Trim(), 0);
+                                selectablePackage.Size = Utils.ParseuLong(xmlPackageProperty.Value.Trim(), 0);
                                 break;
                             case "updateComment"://TODO: need ot macro unescape text
                                 selectablePackage.UpdateComment = xmlPackageProperty.Value.Trim();
@@ -946,7 +946,7 @@ namespace RelhaxModpack
                                                     }
                                                     break;
                                                 case "size":
-                                                    m.Size = Utils.ParseInt(modNode.Value, 0);
+                                                    m.Size = Utils.ParseuLong(modNode.Value, 0);
                                                     break;
                                                 case "description":
                                                     m.Description = ConvertFromXmlSaveFormat(modNode.Value);
@@ -1315,7 +1315,7 @@ namespace RelhaxModpack
                                     }
                                     break;
                                 case "size":
-                                    c.Size = Utils.ParseInt(configNode.Value, 0);
+                                    c.Size = Utils.ParseuLong(configNode.Value, 0);
                                     break;
                                 case "updateComment":
                                     c.UpdateComment = ConvertFromXmlSaveFormat(configNode.Value);
@@ -2197,7 +2197,7 @@ namespace RelhaxModpack
                 SaveProperty(root, element, nameof(selectablePackage.UpdateComment), selectablePackage.UpdateComment, "", true);
                 SaveProperty(root, element, nameof(selectablePackage.Description), selectablePackage.Description, "", true);
                 SaveProperty(root, element, nameof(selectablePackage.Checked), selectablePackage.Checked.ToString(), false.ToString(), true, element[nameof(selectablePackage.Enabled)]);
-                SaveProperty(root, element, nameof(selectablePackage.HideFromSearchList), selectablePackage.HideFromSearchList.ToString(), false.ToString(), true);
+                SaveProperty(root, element, nameof(selectablePackage.ShowInSearchList), selectablePackage.ShowInSearchList.ToString(), false.ToString(), true);
                 if(selectablePackage.UserFiles.Count > 0)
                 {
                     XmlElement userFilesHolder = root.CreateElement("userFiles");
