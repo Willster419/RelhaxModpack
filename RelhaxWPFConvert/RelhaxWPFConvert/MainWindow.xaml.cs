@@ -44,5 +44,15 @@ namespace RelhaxWPFConvert
         {
 
         }
+
+        private void ComboBoxItem_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void Grid_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            
+        }
     }
 }
