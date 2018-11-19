@@ -806,8 +806,7 @@ namespace RelhaxModpack.Windows
                 parent = spc.Parent;
             else
                 parent = spc;
-            //first of all, check itself (if not checked already)
-            parent.Checked = true;
+            
             //for each type of requried single selection, check if the package has them, and if any are enabled
             bool hasSingles = false;
             bool singleSelected = false;
@@ -897,6 +896,8 @@ namespace RelhaxModpack.Windows
                     }
                 }
             }
+            //last of all, check itself (if not checked already)
+            parent.Checked = true;
             if (upDown)
                 if (parent.Level >= 0)
                     //recursivly propagate the change back up the selection list
