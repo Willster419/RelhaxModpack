@@ -649,6 +649,7 @@ namespace RelhaxModpack.Windows
             ComboBoxItem cbi = new ComboBoxItem(package, package.NameDisplay)
             {
                 IsEnabled = package.IsStructureEnabled,
+                Content = package.NameDisplay
             };
             package.Parent.RelhaxWPFComboBoxList[boxIndex].Items.Add(cbi);
             if (package.Parent.RelhaxWPFComboBoxList[boxIndex].Name.Equals("notAddedYet"))
