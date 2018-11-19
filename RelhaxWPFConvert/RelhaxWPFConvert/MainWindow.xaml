@@ -28,14 +28,14 @@
                     </Border>
                 </StackPanel>
             </Border>
-            <TreeView HorizontalAlignment="Left" Height="161" Margin="10,215,0,0" VerticalAlignment="Top" Width="500" HorizontalContentAlignment="Stretch">
-                <TreeViewItem Header="" Padding="0" Margin="0" IsExpanded="True" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
-                    <Border BorderBrush="Black" BorderThickness="1" Padding="0" Margin="-22,-15,0,0" HorizontalAlignment="Stretch">
+            <local:StretchingTreeView HorizontalAlignment="Left" Height="161" Margin="10,215,0,0" VerticalAlignment="Top" Width="500" HorizontalContentAlignment="Stretch">
+                <local:StretchingTreeViewItem Header="UI COMPONENT" Padding="0" Margin="0" IsExpanded="True" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                    <Border BorderBrush="Black" BorderThickness="1" Padding="0" Margin="-22,0,0,0" HorizontalAlignment="Stretch">
                         <StackPanel HorizontalAlignment="Stretch">
-                            <CheckBox Content="TEST" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"/>
+                            <CheckBox Content="TEST" HorizontalAlignment="Left"/>
                             <CheckBox Content="TEST"/>
                             <CheckBox Content="TEST"/>
-                            <TreeViewItem Header="" Padding="0" Margin="0" IsExpanded="True">
+                            <local:StretchingTreeViewItem Header="" Padding="0" Margin="0" IsExpanded="True">
                                 <Border BorderBrush="Black" BorderThickness="1" Padding="0" Margin="-22,-15,0,0">
                                     <StackPanel>
                                         <CheckBox Content="TEST"/>
@@ -43,13 +43,19 @@
                                         <CheckBox Content="TEST"/>
                                     </StackPanel>
                                 </Border>
-                            </TreeViewItem>
+                            </local:StretchingTreeViewItem>
                         </StackPanel>
                     </Border>
-                </TreeViewItem>
-            </TreeView>
+                </local:StretchingTreeViewItem>
+            </local:StretchingTreeView>
             <TabControl HorizontalAlignment="Left" Height="100" Margin="515,10,0,0" VerticalAlignment="Top" Width="250">
                 <TabItem Header="TabItem1">
+                    <TabItem.Background>
+                        <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                            <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                            <GradientStop Color="#FFE5E5E5" Offset="1"/>
+                        </LinearGradientBrush>
+                    </TabItem.Background>
                     <Grid Background="#FFE5E5E5"/>
                 </TabItem>
                 <TabItem Header="TabItem2" Background="#FF0C0CE6">

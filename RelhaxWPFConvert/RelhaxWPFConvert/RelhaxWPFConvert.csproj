@@ -73,9 +73,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="stretchtreeview.xaml.cs">
+      <DependentUpon>stretchtreeview.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TabviewTesting.xaml.cs">
       <DependentUpon>TabviewTesting.xaml</DependentUpon>
     </Compile>
+    <Compile Include="test.cs" />
     <Compile Include="wrapPanelTest.xaml.cs">
       <DependentUpon>wrapPanelTest.xaml</DependentUpon>
     </Compile>
@@ -92,6 +96,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="OMCViewTesting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="stretchtreeview.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
