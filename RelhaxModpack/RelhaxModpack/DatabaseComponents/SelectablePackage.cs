@@ -175,13 +175,16 @@ namespace RelhaxModpack
                         TabIndex.Background = UISettings.NotSelectedTabColor;
                     //workaround for legacy:
                     //top item is not going to correct color
-                    if(ModpackSettings.ModSelectionView == SelectionView.Legacy)
+                    if (ModpackSettings.ModSelectionView == SelectionView.Legacy)
                     {
                         if (_Checked)
                             TreeView.Background = UISettings.SelectedPanelColor;
                         else
                             TreeView.Background = UISettings.NotSelectedPanelColor;
                     }
+                    else if (ModpackSettings.ModSelectionView == SelectionView.DefaultV2)
+                        if (!_Checked)
+                            ParentBorder.Background = UISettings.NotSelectedPanelColor;
                 }
             }
         }
