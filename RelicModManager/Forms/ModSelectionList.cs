@@ -944,6 +944,7 @@ namespace RelhaxModpack
                             {
                                 sp.Parent.RelhaxWPFComboBoxList[0].Name = "added";
                                 sp.Parent.RelhaxWPFComboBoxList[0].PreviewMouseRightButtonDown += Generic_MouseDown;
+                                sp.Parent.RelhaxWPFComboBoxList[0].DropDownClosed += DropDownHotfix;
                                 sp.Parent.RelhaxWPFComboBoxList[0].SelectionChanged += OnSingleDDPackageClick;
                                 sp.Parent.RelhaxWPFComboBoxList[0].handler = OnSingleDDPackageClick;
                                 //ADD HANDLER HERE
@@ -986,6 +987,7 @@ namespace RelhaxModpack
                                 sp.Parent.RelhaxWPFComboBoxList[1].Name = "added";
                                 sp.Parent.RelhaxWPFComboBoxList[1].PreviewMouseRightButtonDown += Generic_MouseDown;
                                 sp.Parent.RelhaxWPFComboBoxList[1].SelectionChanged += OnSingleDDPackageClick;
+                                sp.Parent.RelhaxWPFComboBoxList[1].DropDownClosed += DropDownHotfix;
                                 sp.Parent.RelhaxWPFComboBoxList[1].handler = OnSingleDDPackageClick;
                                 //ADD HANDLER HERE
                                 if (sp.Parent.RelhaxWPFComboBoxList[1].Items.Count > 0)
@@ -1115,6 +1117,7 @@ namespace RelhaxModpack
                                 sp.Parent.RelhaxWPFComboBoxList[0].Name = "added";
                                 sp.Parent.RelhaxWPFComboBoxList[0].PreviewMouseRightButtonDown += Generic_MouseDown;
                                 sp.Parent.RelhaxWPFComboBoxList[0].SelectionChanged += OnSingleDDPackageClick;
+                                sp.Parent.RelhaxWPFComboBoxList[0].DropDownClosed += DropDownHotfix;
                                 sp.Parent.RelhaxWPFComboBoxList[0].handler = OnSingleDDPackageClick;
                                 //ADD HANDLER HERE
                                 if (sp.Parent.RelhaxWPFComboBoxList[0].Items.Count > 0)
@@ -1154,6 +1157,7 @@ namespace RelhaxModpack
                                 sp.Parent.RelhaxWPFComboBoxList[1].Name = "added";
                                 sp.Parent.RelhaxWPFComboBoxList[1].PreviewMouseRightButtonDown += Generic_MouseDown;
                                 sp.Parent.RelhaxWPFComboBoxList[1].SelectionChanged += OnSingleDDPackageClick;
+                                sp.Parent.RelhaxWPFComboBoxList[1].DropDownClosed += DropDownHotfix;
                                 sp.Parent.RelhaxWPFComboBoxList[1].handler = OnSingleDDPackageClick;
                                 //ADD HANDLER HERE
                                 if (sp.Parent.RelhaxWPFComboBoxList[1].Items.Count > 0)
@@ -1227,6 +1231,23 @@ namespace RelhaxModpack
                 foreach(SelectablePackage sp2 in sp.Packages)
                 {
                     AddPackage(sp2, c, sp);
+                }
+            }
+        }
+        //https://stackoverflow.com/questions/25763954/event-when-combobox-is-selected
+        private void DropDownHotfix(object sender, EventArgs e)
+        {
+            if (LoadingConfig || IgnoreSearchBoxFocus)
+                return;
+            IPackageUIComponent ipc = (IPackageUIComponent)sender;
+            SelectablePackage spc = null;
+            if (ipc is RelhaxWPFComboBox cb2)
+            {
+                ComboBoxItem cbi = (ComboBoxItem)cb2.SelectedItem;
+                spc = cbi.Package;
+                if(!spc.Checked && spc.Enabled && cb2.SelectedIndex == 0)
+                {
+                    OnSingleDDPackageClick(sender, e);
                 }
             }
         }

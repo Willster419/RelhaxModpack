@@ -659,6 +659,7 @@ namespace RelhaxModpack.Windows
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].PreviewMouseRightButtonDown += Generic_MouseDown;
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].SelectionChanged += OnSingleDDPackageClick;
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].handler = OnSingleDDPackageClick;
+                package.Parent.RelhaxWPFComboBoxList[boxIndex].DropDownClosed += DropDownSelectSelfFix;
                 if (package.Parent.RelhaxWPFComboBoxList[boxIndex].Items.Count > 0)
                 {
                     package.Parent.RelhaxWPFComboBoxList[boxIndex].IsEnabled = true;
@@ -699,6 +700,26 @@ namespace RelhaxModpack.Windows
                 else if (!(bool)rb.IsChecked)
                     rb.IsChecked = true;
                 OnSinglePackageClick(sender, e);
+            }
+        }
+        //special fix for when the combobox is showing selectedIndex item 0 (first item)
+        //(AND it's not actually clicked, just showing it), and user selects that one
+        //this takes care of event not previously firing to select it in memory
+        //https://stackoverflow.com/questions/25763954/event-when-combobox-is-selected
+        private void DropDownSelectSelfFix(object sender, EventArgs e)
+        {
+            if (LoadingConfig || IgnoreSearchBoxFocus)
+                return;
+            IPackageUIComponent ipc = (IPackageUIComponent)sender;
+            SelectablePackage spc = null;
+            if (ipc is RelhaxWPFComboBox cb2)
+            {
+                ComboBoxItem cbi = (ComboBoxItem)cb2.SelectedItem;
+                spc = cbi.Package;
+                if(cb2.SelectedIndex == 0 && spc.IsStructureEnabled && !spc.Checked)
+                {
+                    OnSingleDDPackageClick(sender, e);
+                }
             }
         }
 
