@@ -16,6 +16,7 @@ using RelhaxModpack.UIComponents;
 
 namespace RelhaxModpack.Windows
 {
+    #region structs and stuff
     public struct RelhaxProgress
     {
         public string ReportMessage;
@@ -29,33 +30,65 @@ namespace RelhaxModpack.Windows
         public List<Category> ParsedCategoryList;
     }
     public delegate void SelectionListClosedDelegate(object sender, SelectionListEventArgs e);
+    #endregion
     /// <summary>
     /// Interaction logic for ModSelectionList.xaml
     /// </summary>
     public partial class ModSelectionList : RelhaxWindow
     {
-        private SolidColorBrush SelectedColor = new SolidColorBrush(Colors.BlanchedAlmond);
-        private SolidColorBrush NotSelectedColor = new SolidColorBrush(Colors.White);
-        private SolidColorBrush SelectedTextColor = SystemColors.ControlTextBrush;
-        private SolidColorBrush NotSelectedTextColor = SystemColors.ControlTextBrush;
         public List<Category> ParsedCategoryList;
         public List<DatabasePackage> GlobalDependencies;
         public List<Dependency> Dependencies;
         private bool continueInstallation  = false;
         private ProgressIndicator loadingProgress;
         public event SelectionListClosedDelegate OnSelectionListReturn;
-        private bool Loading = false;
+        private bool LoadingConfig = false;
+        private bool IgnoreSearchBoxFocus = false;
         private List<SelectablePackage> modSearchList;
         private List<SelectablePackage> userMods;
 
+        #region Boring stuff
         public ModSelectionList()
         {
             InitializeComponent();
         }
 
+        private void OnWindowLoadReportProgress(RelhaxProgress progress)
+        {
+            if (loadingProgress != null)
+            {
+                loadingProgress.Message = progress.ReportMessage;
+                loadingProgress.ProgressValue = progress.ChildProgressCurrent;
+                loadingProgress.ProgressMaximum = progress.ChildProgressTotal;
+            }
+        }
+
+        private void OnContinueInstallation(object sender, RoutedEventArgs e)
+        {
+            continueInstallation = true;
+            this.Close();
+        }
+
+        private void OnCancelInstallation(object sender, RoutedEventArgs e)
+        {
+            continueInstallation = false;
+            this.Close();
+        }
+
+        private void RelhaxWindow_Closed(object sender, EventArgs e)
+        {
+            if (OnSelectionListReturn != null)
+            {
+                OnSelectionListReturn(this, new SelectionListEventArgs()
+                { ContinueInstallation = continueInstallation, ParsedCategoryList = ParsedCategoryList });
+            }
+        }
+        #endregion
+
+        #region UI INIT STUFF
         private async void OnWindowLoad(object sender, RoutedEventArgs e)
         {
-            Loading = true;
+            LoadingConfig = true;
             //init the lists
             ParsedCategoryList = new List<Category>();
             GlobalDependencies = new List<DatabasePackage>();
@@ -92,21 +125,13 @@ namespace RelhaxModpack.Windows
             }
             loadingProgress.Close();
             loadingProgress = null;
-            Loading = false;
+            LoadingConfig = false;
             //this.WindowState = WindowState.Normal;
             this.Show();
             this.WindowState = WindowState.Normal;
         }
 
-        private void OnWindowLoadReportProgress(RelhaxProgress progress)
-        {
-            if (loadingProgress != null)
-            {
-                loadingProgress.Message = progress.ReportMessage;
-                loadingProgress.ProgressValue = progress.ChildProgressCurrent;
-                loadingProgress.ProgressMaximum = progress.ChildProgressTotal;
-            }
-        }
+        
 
         private async Task<bool> ActuallyLoadModSelectionListAsync(IProgress<RelhaxProgress> progress)
         {
@@ -380,6 +405,7 @@ namespace RelhaxModpack.Windows
                 {
                     case SelectionView.Legacy:
                         cat.CategoryHeader.TreeView = new TreeView();
+                        cat.CategoryHeader.TreeView.MouseDown += Lsl_MouseDown;
                         cat.CategoryHeader.ChildStackPanel = new StackPanel();
                         cat.CategoryHeader.ChildBorder = new Border()
                         {
@@ -392,16 +418,15 @@ namespace RelhaxModpack.Windows
                             cat.CategoryHeader.TreeView.Items.Clear();
                         cat.CategoryHeader.TreeViewItem.Items.Add(cat.CategoryHeader.ChildBorder);
                         cat.CategoryHeader.TreeViewItem.IsExpanded = true;
-
-                        //TODO MOUSE DOWN
-                        //TODO BACKGROUND?
-                        cat.CategoryHeader.UIComponent = new RelhaxWPFCheckBox()
+                        //TODO BACKGROUND
+                        RelhaxWPFCheckBox box = new RelhaxWPFCheckBox()
                         {
                             Package = cat.CategoryHeader,
                             Content = cat.CategoryHeader.NameFormatted,
                             //forground TODO
                         };
-                        //TODO ON WPF COMPONENT CLICK
+                        cat.CategoryHeader.UIComponent = box;
+                        box.Click += OnWPFComponentCheck;
                         cat.CategoryHeader.ParentUIComponent = cat.CategoryHeader.TopParentUIComponent = cat.CategoryHeader.UIComponent;
                         cat.CategoryHeader.TreeViewItem.Header = cat.CategoryHeader.UIComponent;
                         cat.CategoryHeader.TreeView.Items.Add(cat.CategoryHeader.TreeViewItem);
@@ -424,7 +449,6 @@ namespace RelhaxModpack.Windows
                         //tab page -> scrollViewer -> Border -> stackPanel
                         cat.TabPage.Content = cat.CategoryHeader.ScrollViewer;
                         //COLOR UI BACKGROUND TODO
-                        //ON WPF TODO
                         //create checkbox for inside selecteionlist
                         RelhaxWPFCheckBox cb2 = new RelhaxWPFCheckBox()
                         {
@@ -433,6 +457,7 @@ namespace RelhaxModpack.Windows
                             //Foreground = Settings.GetTextColorWPF(),//TODO
                             HorizontalAlignment = HorizontalAlignment.Left
                         };
+                        cb2.Click += OnWPFComponentCheck;
                         //set it's parent and top parent to itself
                         cat.CategoryHeader.UIComponent = cat.CategoryHeader.ParentUIComponent = cat.CategoryHeader.TopParentUIComponent = cb2;
                         //create and link the child borderand stackpanel
@@ -492,7 +517,6 @@ namespace RelhaxModpack.Windows
                         BorderBrush = Brushes.Black,
                         BorderThickness = ModpackSettings.EnableBordersDefaultV2View ? new Thickness(1) : new Thickness(0),
                         Child = package.ChildStackPanel,
-                        //Padding = new Thickness(15, 0, 0, 0),
                         //background TODO
                     };
                     //custom settings for each border
@@ -507,7 +531,6 @@ namespace RelhaxModpack.Windows
                             break;
                     }
                 }
-                
                 switch(package.Type)
                 {
                     case "single":
@@ -555,22 +578,22 @@ namespace RelhaxModpack.Windows
                 //filters out the null UIComponents like if dropdown
                 if(package.UIComponent != null)
                 {
-                    //FONT STUFF? TODO
-                    //GENERIC MOUSE EVENTS TODO
                     if (package.UIComponent is RadioButton rb)
                     {
-                        //CLICK EVENT TODO
+                        rb.MouseDown += Generic_MouseDown;
+                        rb.Click += OnWPFComponentCheck;
                     }
                     else if (package.UIComponent is CheckBox cb)
                     {
-                        //CLICK EVENT TODO
+                        cb.MouseDown += Generic_MouseDown;
+                        cb.Click += OnWPFComponentCheck;
                     }
-                    //MOUSE EVENTS TODO
-                    switch(ModpackSettings.ModSelectionView)
+                    switch (ModpackSettings.ModSelectionView)
                     {
                         case SelectionView.DefaultV2:
                             //Link the content control stuff (it allows for mousedown)
                             package.ContentControl.Content = package.UIComponent;
+                            package.ContentControl.MouseRightButtonUp += Lsl_MouseDown;
                             //and add this uiComopnet to the stackpanel
                             package.Parent.ChildStackPanel.Children.Add(package.ContentControl);
                             break;
@@ -623,7 +646,9 @@ namespace RelhaxModpack.Windows
             {
                 //lol add it
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].Name = "added";
-                //MOUSE EVENTS TODO
+                package.Parent.RelhaxWPFComboBoxList[boxIndex].PreviewMouseRightButtonDown += Generic_MouseDown;
+                package.Parent.RelhaxWPFComboBoxList[boxIndex].SelectionChanged += OnSingleDDPackageClick;
+                package.Parent.RelhaxWPFComboBoxList[boxIndex].handler = OnSingleDDPackageClick;
                 if (package.Parent.RelhaxWPFComboBoxList[boxIndex].Items.Count > 0)
                 {
                     package.Parent.RelhaxWPFComboBoxList[boxIndex].IsEnabled = true;
@@ -641,19 +666,342 @@ namespace RelhaxModpack.Windows
                 }
             }
         }
+        #endregion
 
-        private void OnContinueInstallation(object sender, RoutedEventArgs e)
+        #region UI Interaction
+        //generic handler to disable the auto check like in forms, but for WPF
+        void OnWPFComponentCheck(object sender, RoutedEventArgs e)
         {
-            continueInstallation = true;
-            this.Close();
+            if (LoadingConfig)
+                return;
+            if (sender is RelhaxWPFCheckBox cb)
+            {
+                if ((bool)cb.IsChecked)
+                    cb.IsChecked = false;
+                else if (!(bool)cb.IsChecked)
+                    cb.IsChecked = true;
+                OnMultiPackageClick(sender, e);
+            }
+            else if (sender is RelhaxWPFRadioButton rb)
+            {
+                if ((bool)rb.IsChecked)
+                    rb.IsChecked = false;
+                else if (!(bool)rb.IsChecked)
+                    rb.IsChecked = true;
+                OnSinglePackageClick(sender, e);
+            }
         }
 
-        private void OnCancelInstallation(object sender, RoutedEventArgs e)
+        //when a single/single1 mod is selected
+        void OnSinglePackageClick(object sender, EventArgs e)
         {
-            continueInstallation = false;
-            this.Close();
+            if (LoadingConfig || IgnoreSearchBoxFocus)
+                return;
+            IPackageUIComponent ipc = (IPackageUIComponent)sender;
+            SelectablePackage spc = ipc.Package;
+            if (!spc.IsStructureEnabled)
+                return;
+            //uncheck all packages at this level that are single
+            foreach (SelectablePackage childPackage in spc.Parent.Packages)
+            {
+                if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
+                {
+                    if (childPackage.Equals(spc))
+                        continue;
+                    childPackage.Checked = false;
+                    PropagateDownNotChecked(childPackage);
+                }
+            }
+            //check the acutal package
+            spc.Checked = true;
+            //down
+            PropagateChecked(spc, false);
+            //up
+            PropagateChecked(spc, true);
         }
 
+        //when a single_dropdown mod is selected
+        void OnSingleDDPackageClick(object sender, EventArgs e)
+        {
+            if (LoadingConfig || IgnoreSearchBoxFocus)
+                return;
+            IPackageUIComponent ipc = (IPackageUIComponent)sender;
+            SelectablePackage spc = null;
+            if (ipc is RelhaxWPFComboBox cb2)
+            {
+                ComboBoxItem cbi = (ComboBoxItem)cb2.SelectedItem;
+                spc = cbi.Package;
+            }
+            if (!spc.IsStructureEnabled)
+                return;
+            foreach (SelectablePackage childPackage in spc.Parent.Packages)
+            {
+                if (childPackage.Equals(spc))
+                    continue;
+                //uncheck all packages of the same type
+                if (childPackage.Type.Equals(spc.Type))
+                {
+                    childPackage.Checked = false;
+                }
+            }
+            //verify selected is actually checked
+            if (!spc.Checked)
+                spc.Checked = true;
+            //dropdown packages only need to propagate up when selected...
+            PropagateChecked(spc, true);
+        }
+
+        //when a multi mod is selected
+        void OnMultiPackageClick(object sender, EventArgs e)
+        {
+            if (LoadingConfig || IgnoreSearchBoxFocus)
+                return;
+            IPackageUIComponent ipc = (IPackageUIComponent)sender;
+            SelectablePackage spc = ipc.Package;
+            if (!spc.IsStructureEnabled)
+                return;
+            //can be enabled
+            if (!spc.Checked)
+            {
+                //check it and propagate change
+                spc.Checked = true;
+                //if it's a user checkbox end here
+                //DISABLED FOR NOW
+                //if (ipc is RelhaxUserCheckBox)
+                   // return;
+                //down
+                PropagateChecked(spc, false);
+                //up
+                PropagateChecked(spc, true);
+            }
+            else if (spc.Checked)
+            {
+                //uncheck it and propagate change
+                spc.Checked = false;
+                //if (ipc is RelhaxUserCheckBox)
+                   // return;
+                //up then down
+                //PropagateUpNotChecked(spc);
+                PropagateDownNotChecked(spc);
+            }
+        }
+
+        //propagates the change back up the selection tree
+        //can be sent from any component
+        //true = up, false = down
+        void PropagateChecked(SelectablePackage spc, bool upDown)
+        {
+            //the parent of the package we just checked
+            SelectablePackage parent = null;
+            //if we're going up the tree, set the package to it's parent
+            //else use itself
+            if (upDown)
+                parent = spc.Parent;
+            else
+                parent = spc;
+            //first of all, check itself (if not checked already)
+            parent.Checked = true;
+            //for each type of requried single selection, check if the package has them, and if any are enabled
+            bool hasSingles = false;
+            bool singleSelected = false;
+            bool hasDD1 = false;
+            bool DD1Selected = false;
+            bool hasDD2 = false;
+            bool DD2Selected = false;
+            foreach (SelectablePackage childPackage in parent.Packages)
+            {
+                //if the pacakge is enabled and it is of single type
+                if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
+                {
+                    //then this package does have single type packages
+                    hasSingles = true;
+                    //if it's checked, set that bool as well
+                    if (childPackage.Checked)
+                        singleSelected = true;
+                }
+                //same idea as above
+                else if ((childPackage.Type.Equals("single_dropdown") || childPackage.Type.Equals("single_dropdown1")) && childPackage.Enabled)
+                {
+                    hasDD1 = true;
+                    if (childPackage.Checked)
+                        DD1Selected = true;
+                }
+                else if (childPackage.Type.Equals("single_dropdown2") && childPackage.Enabled)
+                {
+                    hasDD2 = true;
+                    if (childPackage.Checked)
+                        DD2Selected = true;
+                }
+            }
+            //if going up, will only ever see radiobuttons (not dropDown)
+            //check if this package is of single type, if it is then we need to unselect all other packages of this level
+            if (upDown && (parent.Type.Equals("single") || parent.Type.Equals("single1")))
+            {
+                foreach (SelectablePackage childPackage in parent.Parent.Packages)
+                {
+                    if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
+                    {
+                        if (!childPackage.Equals(parent))
+                        {
+                            childPackage.Checked = false;
+                            PropagateDownNotChecked(childPackage);
+                        }
+                    }
+                }
+                //singleSelected = true;
+            }
+            if (hasSingles && !singleSelected)
+            {
+                //select one
+                foreach (SelectablePackage childPackage in parent.Packages)
+                {
+                    if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
+                    {
+                        childPackage.Checked = true;
+                        PropagateChecked(childPackage, false);
+                        break;
+                        //PropagateDownChecked(childPackage);
+                    }
+                }
+            }
+            if (hasDD1 && !DD1Selected)
+            {
+                //select one
+                foreach (SelectablePackage childPackage in parent.Packages)
+                {
+                    if ((childPackage.Type.Equals("single_dropdown") || childPackage.Type.Equals("single_dropdown1")) && childPackage.Enabled)
+                    {
+                        childPackage.Checked = true;
+                        break;
+                        //no need to propagate, dropdown has no children
+                    }
+                }
+            }
+            if (hasDD2 && !DD2Selected)
+            {
+                //select one
+                foreach (SelectablePackage childPackage in parent.Packages)
+                {
+                    if (childPackage.Type.Equals("single_dropdown2") && childPackage.Enabled)
+                    {
+                        childPackage.Checked = true;
+                        break;
+                        //no need to propagate, dropdown has no children
+                    }
+                }
+            }
+            if (upDown)
+                if (parent.Level >= 0)
+                    //recursivly propagate the change back up the selection list
+                    PropagateChecked(parent, true);
+        }
+
+        //propagates the change back up the selection tree
+        //NOTE: the only component that can propagate up for a not checked is a multi
+        void PropagateUpNotChecked(SelectablePackage spc)
+        {
+            if (spc.Level == -1)
+                return;
+            //if nothing cheched at this level, uncheck the parent and propagate up not checked agailn
+            bool anythingChecked = false;
+            foreach (SelectablePackage childPackage in spc.Parent.Packages)
+            {
+                if (childPackage.Enabled && childPackage.Checked)
+                    anythingChecked = true;
+            }
+            if (!anythingChecked)
+            {
+                spc.Parent.Checked = false;
+                PropagateUpNotChecked(spc.Parent);
+            }
+        }
+
+        //propagaetes the change down the selection tree
+        void PropagateDownNotChecked(SelectablePackage spc)
+        {
+            foreach (SelectablePackage childPackage in spc.Packages)
+            {
+                if (!childPackage.Enabled)
+                    continue;
+                childPackage.Checked = false;
+                if (childPackage.Packages.Count > 0)
+                    PropagateDownNotChecked(childPackage);
+            }
+        }
+        #endregion
+
+        #region Preview Code
+        //generic hander for when any mouse button is clicked for MouseDown Events
+        void Generic_MouseDown(object sender, EventArgs e)
+        {
+            if (LoadingConfig)
+                return;
+            if (e is MouseEventArgs m)
+                if (m.RightButton != MouseButtonState.Pressed)
+                    return;
+            if (sender is IPackageUIComponent ipc)
+            {
+                SelectablePackage spc = ipc.Package;
+                if (ipc is RelhaxWPFComboBox cb2)
+                {
+                    ComboBoxItem cbi = (ComboBoxItem)cb2.SelectedItem;
+                    spc = cbi.Package;
+                }
+                if (spc.DevURL == null)
+                    spc.DevURL = "";
+                //PREVIEW GENERATION DISABELD
+                /*
+                if (p != null)
+                {
+                    p.Close();
+                    p.Dispose();
+                    p = null;
+                    GC.Collect();
+                }
+                p = new Preview()
+                {
+                    LastUpdated = LastUpdated,
+                    DBO = spc,
+                    Medias = spc.PictureList
+                };
+                p.Show();
+                */
+            }
+        }
+
+        //Handler for allowing right click of disabled mods (WPF)
+        private void Lsl_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (LoadingConfig)
+                return;
+            IPackageUIComponent pkg = null;
+            if (e.OriginalSource is ContentPresenter cp)
+            {
+                if (cp.Content is IPackageUIComponent ipc)
+                {
+                    pkg = ipc;
+                }
+            }
+            if ((pkg != null) && (pkg.Package != null))
+            {
+                bool packageActuallyDisabled = false;
+                SelectablePackage pack = pkg.Package;
+                while (pack.Level > -1)
+                {
+                    if (!pack.Enabled)
+                        packageActuallyDisabled = true;
+                    pack = pack.Parent;
+                }
+                if (packageActuallyDisabled)
+                {
+                    //disabled component, display via generic handler
+                    Generic_MouseDown(pkg, null);
+                }
+            }
+        }
+        #endregion
+
+        #region Selection stuff
         private void OnSaveSelectionClick(object sender, RoutedEventArgs e)
         {
 
@@ -713,14 +1061,7 @@ namespace RelhaxModpack.Windows
         {
 
         }
+        #endregion
 
-        private void RelhaxWindow_Closed(object sender, EventArgs e)
-        {
-            if(OnSelectionListReturn != null)
-            {
-                OnSelectionListReturn(this, new SelectionListEventArgs()
-                { ContinueInstallation = continueInstallation, ParsedCategoryList = ParsedCategoryList });
-            }
-        }
     }
 }

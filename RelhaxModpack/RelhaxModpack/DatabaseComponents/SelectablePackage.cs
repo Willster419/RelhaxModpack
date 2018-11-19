@@ -106,166 +106,55 @@ namespace RelhaxModpack
             set
             {
                 _Checked = value;
-                if(UIComponent != null)
+                int dropDownSelectionType = -1;
+                //inside here is for not comboboxes (checked)
+                if (UIComponent != null)
+                {
                     UIComponent.OnCheckedChanged(value);
-                if ((Type.Equals("single_dropdown") || Type.Equals("single_dropdown1")) && Enabled)
-                {
-                    Parent.RelhaxWPFComboBoxList[0].OnDropDownSelectionChanged(this, value);
                 }
-                else if (Type.Equals("single_dropdown2") && Enabled)
+                if (Type.Equals("single_dropdown") || Type.Equals("single_dropdown1"))
                 {
-                    Parent.RelhaxWPFComboBoxList[1].OnDropDownSelectionChanged(this, value);
+                    dropDownSelectionType = 0;
                 }
-                switch (ModpackSettings.ModSelectionView)
+                else if (Type.Equals("single_dropdown2"))
                 {
-                    case SelectionView.DefaultV2:
-                        switch (_Checked)
-                        {
-                            case true:
-                                //handle color change code
-                                if (ModpackSettings.EnableBordersDefaultV2View)
-                                {
-                                    if(ParentBorder != null && ParentBorder.Background != System.Windows.Media.Brushes.BlanchedAlmond)
-                                    {
-                                        ParentBorder.Background = System.Windows.Media.Brushes.BlanchedAlmond;
-                                    }
-                                    //ON SELECTION CHANGED - CHANGING COLOR OF TEXT
-                                    if (false)//Settings.DarkUI
-                                    {
-                                        //need to go through every contentpresenter of a stackpanel and parse
-                                        foreach (System.Windows.UIElement ele in ParentStackPanel.Children)
-                                        {
-                                            if (ele is ContentControl ctrl)
-                                            {
-                                                if(ctrl.Content is Control ctrl3 && !(ele is RelhaxWPFComboBox))
-                                                {
-                                                    ctrl3.Foreground = System.Windows.Media.Brushes.Black;
-                                                }
-                                                else if (ele is Control topHeader)
-                                                {
-                                                    topHeader.Foreground = System.Windows.Media.Brushes.Black;
-                                                }
-                                            }
-                                            else if (ele is Control ctrl2 && !(ele is RelhaxWPFComboBox))
-                                            {
-                                                ctrl2.Foreground = System.Windows.Media.Brushes.Black;
-                                            }
-                                        }
-                                    }
-                                }
-                                break;
-                            case false:
-                                //handle color change code
-                                if (ModpackSettings.EnableBordersDefaultV2View)
-                                {
-                                    //if (ParentBorder != null && !AnyPackagesChecked())
-                                        //ParentBorder.Background = Settings.GetBackColorWPF();
-                                    //ON SELECTION CHANGED - CHANGING COLOR OF TEXT
-                                    if (false)//Settings.DarkUI
-                                    {
-                                        /*
-                                        //need to go through every contentpresenter of a stackpanel and parse
-                                        if (!AnyPackagesChecked())
-                                        {
-                                            foreach (System.Windows.UIElement ele in ParentStackPanel.Children)
-                                            {
-                                                if (ele is ContentControl ctrl)
-                                                {
-                                                    if (ctrl.Content is Control ctrl3 && !(ele is RelhaxWPFComboBox))
-                                                    {
-                                                        ctrl3.Foreground = Settings.GetTextColorWPF();
-                                                    }
-                                                    else if (ele is Control topHeader)
-                                                    {
-                                                        topHeader.Foreground = Settings.GetTextColorWPF();
-                                                    }
-                                                }
-                                                else if (ele is Control ctrl2 && !(ele is RelhaxWPFComboBox))
-                                                {
-                                                    ctrl2.Foreground = Settings.GetTextColorWPF();
-                                                }
-                                            }
-                                        }
-                                        else if (Level == -1)
-                                        {
-                                            RelhaxWPFCheckBox r = (RelhaxWPFCheckBox)UIComponent;
-                                            r.Foreground = Settings.GetTextColorWPF();
-                                        }
-                                        */
-                                    }
-                                }
-                                break;
-                        }
-                        break;
-                    case SelectionView.Legacy:
-                        switch (_Checked)
-                        {
-                            case true:
-                                //handle color change code
-                                if (ModpackSettings.EnableColorChangeLegacyView)
-                                {
-                                    if (ParentBorder != null && ParentBorder.Background != System.Windows.Media.Brushes.BlanchedAlmond)
-                                    {
-                                        ParentBorder.Background = System.Windows.Media.Brushes.BlanchedAlmond;
-                                    }
-                                    else if (Level == -1 && TreeView.Background != System.Windows.Media.Brushes.BlanchedAlmond)
-                                    {
-                                        TreeView.Background = System.Windows.Media.Brushes.BlanchedAlmond;
-                                    }
-                                    if(false)//Settings.DarkUI && (ParentStackPanel != null)
-                                    {
-                                        //need to go through every treviewitem and parse
-                                        foreach(TreeViewItem tview in ParentStackPanel.Children)
-                                        {
-                                            if(tview.Header is RelhaxWPFCheckBox  || tview.Header is RelhaxWPFRadioButton )
-                                            {
-                                                Control c = (Control)tview.Header;
-                                                c.Foreground = System.Windows.Media.Brushes.Black;
-                                            }
-                                        }
-                                    }
-                                    if (false)//Settings.DarkUI && Level == -1
-                                    {
-                                        RelhaxWPFCheckBox r = (RelhaxWPFCheckBox)UIComponent;
-                                        r.Foreground = System.Windows.Media.Brushes.Black;
-                                    }
-                                }
-                                break;
-                            case false:
-                                //handle color change code
-                                if (ModpackSettings.EnableColorChangeLegacyView)
-                                {
-                                    if (ParentBorder != null && !AnyPackagesChecked())
-                                    {
-                                        //ParentBorder.Background = Settings.GetBackColorWPF();
-                                    }
-                                    else if (Level == -1 && !AnyPackagesChecked())
-                                    {
-                                        //TreeView.Background = Settings.GetBackColorWPF();
-                                    }
-                                    if(false)//Settings.DarkUI
-                                    {
-                                        if(!AnyPackagesChecked() && (ParentStackPanel != null))
-                                        {
-                                            foreach (TreeViewItem tview in ParentStackPanel.Children)
-                                            {
-                                                if (tview.Header is RelhaxWPFCheckBox || tview.Header is RelhaxWPFRadioButton)
-                                                {
-                                                    Control c = (Control)tview.Header;
-                                                    //c.Foreground = Settings.GetTextColorWPF();
-                                                }
-                                            }
-                                        }
-                                        else if (Level == -1)
-                                        {
-                                            RelhaxWPFCheckBox r = (RelhaxWPFCheckBox)UIComponent;
-                                            //r.Foreground = Settings.GetTextColorWPF();
-                                        }
-                                    }
-                                }
-                                break;
-                        }
-                        break;
+                    dropDownSelectionType = 1;
+                }
+                //inside here is for comboboxes (checked)
+                if (Enabled && dropDownSelectionType > -1)
+                {
+                    switch (ModpackSettings.ModSelectionView)
+                    {
+                        case SelectionView.DefaultV2:
+                            Parent.RelhaxWPFComboBoxList[dropDownSelectionType].OnDropDownSelectionChanged(this, value);
+                            break;
+                        case SelectionView.Legacy:
+                            Parent.RelhaxWPFComboBoxList[dropDownSelectionType].OnDropDownSelectionChanged(this, value);
+                            break;
+                    }
+                }
+                //inside here is for color change
+                bool actuallyDoColorChange = false;
+                if (ModpackSettings.ModSelectionView == SelectionView.DefaultV2 && ModpackSettings.EnableColorChangeDefaultV2View)
+                    actuallyDoColorChange = true;
+                else if (ModpackSettings.ModSelectionView == SelectionView.Legacy && ModpackSettings.EnableColorChangeLegacyView)
+                    actuallyDoColorChange = true;
+                if(UIComponent != null && actuallyDoColorChange)
+                {
+                    //set panel and text color based on true or false
+                    switch(_Checked)
+                    {
+                        case true:
+                            if (UIComponent.PanelColor != UISettings.SelectedPanelColor)
+                                UIComponent.PanelColor = UISettings.SelectedPanelColor;
+                                UIComponent.TextColor = UISettings.SelectedTextColor;
+                            break;
+                        case false:
+                            if (UIComponent.PanelColor != UISettings.NotSelectedPanelColor)
+                                UIComponent.PanelColor = UISettings.NotSelectedPanelColor;
+                                UIComponent.TextColor = UISettings.NotSelectedTextColor;
+                            break;
+                    }
                 }
             }
         }

@@ -1,4 +1,5 @@
-﻿namespace RelhaxModpack.UIComponents
+﻿using System.Windows.Media;
+namespace RelhaxModpack.UIComponents
 {
     /*
      * The PackageUIComponent class acts as a handler for when the enabled and checked properties are set from the Package
@@ -11,5 +12,7 @@
         SelectablePackage Package { get; set; }
         void OnEnabledChanged(bool Enabled);
         void OnCheckedChanged(bool Checked);
+        Brush TextColor { get; set; }
+        Brush PanelColor { get; set; }
     }
 }

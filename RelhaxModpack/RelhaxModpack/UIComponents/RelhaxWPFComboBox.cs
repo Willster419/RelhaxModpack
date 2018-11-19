@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace RelhaxModpack.UIComponents
 {
@@ -14,6 +15,25 @@ namespace RelhaxModpack.UIComponents
         public void OnCheckedChanged(bool Checked)
         {
 
+        }
+        public Brush TextColor
+        {
+            get
+            { return null; }
+            set
+            {  }
+        }
+        public Brush PanelColor
+        {
+            get
+            {
+                return Package.ParentBorder == null? null : Package.ParentBorder.Background;
+            }
+            set
+            {
+                if (Package.ParentBorder != null)
+                    Package.ParentBorder.Background = value;
+            }
         }
         public void OnDropDownSelectionChanged(SelectablePackage spc, bool value)
         {

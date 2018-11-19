@@ -23,12 +23,16 @@ namespace RelhaxModpack
         public const string CustomColorSettingsPath = "CustomColorSettings";
         public static readonly string[] CustomSettings = new string[]
         {
-            "SelectedColor",
-            "NotSelectedColor",
-            "SelectedTextColor",
-            "NotSelectedTextColor"
+            nameof(SelectedPanelColor),
+            nameof(NotSelectedPanelColor),
+            nameof(SelectedTextColor),
+            nameof(NotSelectedTextColor)
         };
         public static XmlDocument UIDocument;
+        public static SolidColorBrush SelectedPanelColor = new SolidColorBrush(Colors.BlanchedAlmond);
+        public static SolidColorBrush NotSelectedPanelColor = new SolidColorBrush(Colors.White);
+        public static SolidColorBrush SelectedTextColor = SystemColors.ControlTextBrush;
+        public static SolidColorBrush NotSelectedTextColor = SystemColors.ControlTextBrush;
         #endregion
         /// <summary>
         /// Load the custom color definitions from XML
