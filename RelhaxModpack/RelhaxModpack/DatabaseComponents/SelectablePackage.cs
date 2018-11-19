@@ -164,6 +164,24 @@ namespace RelhaxModpack
                             break;
                     }
                 }
+                else if (dropDownSelectionType > -1 && actuallyDoColorChange)
+                {
+                    //in here means it's a dropdown and doing color change
+                    switch (_Checked)
+                    {
+                        case true:
+                            if (ParentBorder.Background != UISettings.SelectedPanelColor)
+                                ParentBorder.Background = UISettings.SelectedPanelColor;
+                            break;
+                        case false:
+                            if (!AnyPackagesChecked())
+                            {
+                                if (ParentBorder.Background != UISettings.NotSelectedPanelColor)
+                                    ParentBorder.Background = UISettings.NotSelectedPanelColor;
+                            }
+                            break;
+                    }
+                }
                 //toggle the Tab Color based on if anything is selected, done for level -1 top item
                 if(Level == -1)
                 {
