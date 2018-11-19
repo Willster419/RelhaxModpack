@@ -127,6 +127,8 @@
     <Compile Include="UIComponents\RelhaxWPFCheckBox.cs" />
     <Compile Include="UIComponents\RelhaxWPFComboBox.cs" />
     <Compile Include="UIComponents\RelhaxWPFRadioButton.cs" />
+    <Compile Include="UIComponents\StretchingTreeView.cs" />
+    <Compile Include="UIComponents\StretchingTreeViewItem.cs" />
     <Compile Include="Utils\BadMemeException.cs" />
     <Compile Include="Utils\CiInfo.cs" />
     <Compile Include="Utils\PatientWebClient.cs">

@@ -23,7 +23,12 @@ namespace RelhaxModpack
                     ContentControl = new ContentControl();
                     break;
                 case SelectionView.Legacy:
-                    TreeViewItem = new TreeViewItem();
+                    TreeViewItem = new StretchingTreeViewItem()
+                    {
+                        Background = System.Windows.Media.Brushes.Transparent,
+                        HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
+                        HorizontalContentAlignment = System.Windows.HorizontalAlignment.Stretch
+                    };
                     RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
                     break;
             }
@@ -165,6 +170,15 @@ namespace RelhaxModpack
                         TabIndex.Background = UISettings.SelectedPanelColor;
                     else
                         TabIndex.Background = UISettings.NotSelectedTabColor;
+                    //workaround for legacy:
+                    //top item is not going to correct color
+                    if(ModpackSettings.ModSelectionView == SelectionView.Legacy)
+                    {
+                        if (_Checked)
+                            TreeView.Background = UISettings.SelectedPanelColor;
+                        else
+                            TreeView.Background = UISettings.NotSelectedPanelColor;
+                    }
                 }
             }
         }
@@ -215,11 +229,11 @@ namespace RelhaxModpack
         /// <summary>
         /// the treeviewitem that corresponds to this package. legacy wpf component
         /// </summary>
-        public TreeViewItem @TreeViewItem;
+        public StretchingTreeViewItem @TreeViewItem;
         /// <summary>
         /// the treeview that this package is in. legacy wpf component
         /// </summary>
-        public TreeView @TreeView;
+        public StretchingTreeView @TreeView;
 
         /// <summary>
         /// the list of cache files that should be backed up before wiping the directory

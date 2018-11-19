@@ -404,7 +404,12 @@ namespace RelhaxModpack.Windows
                 switch(ModpackSettings.ModSelectionView)
                 {
                     case SelectionView.Legacy:
-                        cat.CategoryHeader.TreeView = new TreeView();
+                        cat.CategoryHeader.TreeView = new StretchingTreeView()
+                        {
+                            Background = Brushes.Transparent,
+                            HorizontalAlignment = HorizontalAlignment.Stretch,
+                            HorizontalContentAlignment = HorizontalAlignment.Stretch
+                        };
                         cat.CategoryHeader.TreeView.MouseDown += Lsl_MouseDown;
                         cat.CategoryHeader.ChildStackPanel = new StackPanel();
                         cat.CategoryHeader.ChildBorder = new Border()
@@ -412,7 +417,8 @@ namespace RelhaxModpack.Windows
                             BorderBrush = Brushes.Black,
                             BorderThickness = ModpackSettings.EnableBordersLegacyView? new Thickness(1) : new Thickness(0),
                             Child = cat.CategoryHeader.ChildStackPanel,
-                            Margin = new Thickness(-25, 0, 0, 0)
+                            Margin = new Thickness(-25, 0, 0, 0),
+                            Background = UISettings.NotSelectedPanelColor
                         };
                         if (cat.CategoryHeader.TreeView.Items.Count > 0)
                             cat.CategoryHeader.TreeView.Items.Clear();
@@ -423,6 +429,7 @@ namespace RelhaxModpack.Windows
                         {
                             Package = cat.CategoryHeader,
                             Content = cat.CategoryHeader.NameFormatted,
+                            HorizontalAlignment = HorizontalAlignment.Left
                             //forground TODO
                         };
                         cat.CategoryHeader.UIComponent = box;
@@ -439,7 +446,8 @@ namespace RelhaxModpack.Windows
                         {
                             //background TODO
                             Child = cat.CategoryHeader.ParentStackPanel,
-                            Padding = new Thickness(2)
+                            Padding = new Thickness(2),
+                            Background = UISettings.NotSelectedPanelColor
                         };
                         cat.CategoryHeader.ScrollViewer = new ScrollViewer()
                         {
@@ -517,6 +525,7 @@ namespace RelhaxModpack.Windows
                         BorderBrush = Brushes.Black,
                         BorderThickness = ModpackSettings.EnableBordersDefaultV2View ? new Thickness(1) : new Thickness(0),
                         Child = package.ChildStackPanel,
+                        Background = UISettings.NotSelectedPanelColor
                         //background TODO
                     };
                     //custom settings for each border
