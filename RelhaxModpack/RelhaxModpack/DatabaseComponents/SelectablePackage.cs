@@ -155,9 +155,12 @@ namespace RelhaxModpack
                                 UIComponent.TextColor = UISettings.SelectedTextColor;
                             break;
                         case false:
-                            if (UIComponent.PanelColor != UISettings.NotSelectedPanelColor)
-                                UIComponent.PanelColor = UISettings.NotSelectedPanelColor;
+                            if (!AnyPackagesChecked())
+                            {
+                                if (UIComponent.PanelColor != UISettings.NotSelectedPanelColor)
+                                    UIComponent.PanelColor = UISettings.NotSelectedPanelColor;
                                 UIComponent.TextColor = UISettings.NotSelectedTextColor;
+                            }
                             break;
                     }
                 }
