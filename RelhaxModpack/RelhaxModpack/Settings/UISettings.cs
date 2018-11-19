@@ -33,6 +33,7 @@ namespace RelhaxModpack
         public static SolidColorBrush NotSelectedPanelColor = new SolidColorBrush(Colors.White);
         public static SolidColorBrush SelectedTextColor = SystemColors.ControlTextBrush;
         public static SolidColorBrush NotSelectedTextColor = SystemColors.ControlTextBrush;
+        public static LinearGradientBrush NotSelectedTabColor = null;
         #endregion
         /// <summary>
         /// Load the custom color definitions from XML

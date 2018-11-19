@@ -156,6 +156,16 @@ namespace RelhaxModpack
                             break;
                     }
                 }
+                //toggle the Tab Color based on if anything is selected, done for level -1 top item
+                if(Level == -1)
+                {
+                    if (UISettings.NotSelectedTabColor == null)
+                        UISettings.NotSelectedTabColor = (System.Windows.Media.LinearGradientBrush)TabIndex.Background;
+                    if (_Checked)
+                        TabIndex.Background = UISettings.SelectedPanelColor;
+                    else
+                        TabIndex.Background = UISettings.NotSelectedTabColor;
+                }
             }
         }
         //overriding the enabled so we can trigger the UI components

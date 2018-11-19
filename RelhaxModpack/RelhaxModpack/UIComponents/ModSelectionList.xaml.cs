@@ -780,8 +780,6 @@ namespace RelhaxModpack.Windows
                 spc.Checked = false;
                 //if (ipc is RelhaxUserCheckBox)
                    // return;
-                //up then down
-                //PropagateUpNotChecked(spc);
                 PropagateDownNotChecked(spc);
             }
         }
