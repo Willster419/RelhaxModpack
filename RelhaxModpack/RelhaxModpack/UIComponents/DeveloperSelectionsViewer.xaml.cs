@@ -44,7 +44,8 @@ namespace RelhaxModpack.Windows
         private void OnApplicationLoading(object sender, RoutedEventArgs e)
         {
             //add loading message to stack panel
-            string forHeader = Translations.GetTranslatedString("loadingDevTranslations");
+            DeveloperSelectionsTextHeader.Text = Translations.GetTranslatedString("loadingDevTranslations");
+            ContinueButton.IsEnabled = false;
             //add it to the thing here
             currentlyDownloading = true;
             using (client = new WebClient())
@@ -91,12 +92,37 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show(Translations.GetTranslatedString("failedToDownload") + "DeveloperSelections.zip");
                 return;
             }
+            //set text to say "pick a selection" instead of "loading selections"
+            DeveloperSelectionsTextHeader.Text = Translations.GetTranslatedString("SelectSelection");
+            //load selections into stackpanel
+            foreach(XmlNode node in XMLUtils.GetXMLNodesFromXPath(doc, "//selections/selection"))
+            {
+                DeveloperSelectionsStackPanel.Children.Add( new RadioButton()
+                {
+                    Content = node.Attributes["displayName"],
+                    //ToolTip = Translations.GetTranslatedString("lastModified") + " " + LastModified = node.Attributes["lastModified"],
+                    Tag = node.InnerText
+                });
+            }
+            //enable the button to select them
+            ContinueButton.IsEnabled = true;
         }
 
         private void OnApplicationClosed(object sender, EventArgs e)
         {
             if (OnDeveloperSelectionsClosed != null)
             {
+                if(!fileToLoad.Equals("LOCAL"))
+                    loadSelection = false;
+                foreach(RadioButton button in DeveloperSelectionsStackPanel.Children)
+                {
+                    if((bool)button.IsChecked)
+                    {
+                        loadSelection = true;
+                        fileToLoad = (string)button.Tag;
+                        break;
+                    }
+                }
                 OnDeveloperSelectionsClosed(this, new DevleoperSelectionsClosedEWventArgs()
                 {
                     LoadSelection = loadSelection,

@@ -9,18 +9,10 @@
     <Grid>
         <Button x:Name="ContinueButton" Content="Select" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="ContinueButton_Click"/>
         <Button x:Name="CancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75" Click="CancelButton_Click"/>
-        <Border Margin="10,31,10,35" BorderThickness="3">
-            <Border.BorderBrush>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="Black" Offset="0"/>
-                    <GradientStop Color="Black" Offset="1"/>
-                </LinearGradientBrush>
-            </Border.BorderBrush>
-            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" >
-
-            </StackPanel>
+        <Border Margin="10,31,10,35" BorderThickness="3" BorderBrush="Black">
+            <StackPanel x:Name="DeveloperSelectionsStackPanel" HorizontalAlignment="Left" VerticalAlignment="Top" />
         </Border>
-        <TextBlock HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Select the selection to load" VerticalAlignment="Top" Margin="10,10,10,0" />
+        <TextBlock x:Name="DeveloperSelectionsTextHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Select the selection to load" VerticalAlignment="Top" Margin="10,10,10,0" />
         <Button x:Name="LocalFile" Content="Local file" HorizontalAlignment="Right" Margin="0,0,90,10" VerticalAlignment="Bottom" Width="78" Click="LocalFile_Click"/>
     </Grid>
 </local:RelhaxWindow>
