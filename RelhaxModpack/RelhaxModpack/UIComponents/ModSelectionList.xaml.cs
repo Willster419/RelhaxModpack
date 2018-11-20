@@ -12,7 +12,9 @@ using System.Windows.Media;
 using System.Xml;
 using System.Net;
 using System.IO;
+using Microsoft.Win32;
 using RelhaxModpack.UIComponents;
+using System.Xml.Linq;
 
 namespace RelhaxModpack.Windows
 {
@@ -44,7 +46,6 @@ namespace RelhaxModpack.Windows
         public event SelectionListClosedDelegate OnSelectionListReturn;
         private bool LoadingConfig = false;
         private bool IgnoreSearchBoxFocus = false;
-        private List<SelectablePackage> modSearchList;
         private List<SelectablePackage> userMods;
 
         #region Boring stuff
@@ -93,7 +94,6 @@ namespace RelhaxModpack.Windows
             ParsedCategoryList = new List<Category>();
             GlobalDependencies = new List<DatabasePackage>();
             Dependencies = new List<Dependency>();
-            modSearchList = new List<SelectablePackage>();
             //create and show loading window
             loadingProgress = new ProgressIndicator()
             {
@@ -510,8 +510,14 @@ namespace RelhaxModpack.Windows
                 if (CommandLineSettings.ForceEnabled && !package.IsStructureEnabled)
                     package.Enabled = true;
                 //add the package to the search list if the package parameter specifies it to be added
-                if (package.ShowInSearchList)
-                    modSearchList.Add(package);
+                if (package.ShowInSearchList && package.Enabled)
+                {
+                    SearchCB.Items.Add(new ComboBoxItem(package, package.NameFormatted)
+                    {
+                        IsEnabled = true,
+                        Content = package.NameFormatted
+                    });
+                }
                 //link the parent panels and border to childs
                 package.ParentBorder = package.Parent.ChildBorder;
                 package.ParentStackPanel = package.Parent.ChildStackPanel;
@@ -1034,43 +1040,110 @@ namespace RelhaxModpack.Windows
         #region Selection stuff
         private void OnSaveSelectionClick(object sender, RoutedEventArgs e)
         {
-
+            SaveFileDialog selectSavePath = new SaveFileDialog()
+            {
+                InitialDirectory = Settings.RelhaxUserConfigsFolder,
+                AddExtension = true,
+                Filter = "XML files|*.xml",
+                RestoreDirectory = true,
+                ValidateNames = true
+            };
+            if((bool)selectSavePath.ShowDialog())
+                SaveSelection(selectSavePath.FileName,false);
         }
 
         private void OnLoadSelectionClick(object sender, RoutedEventArgs e)
         {
+            DeveloperSelectionsViewer selections = new DeveloperSelectionsViewer() { };
+            selections.OnDeveloperSelectionsClosed += OnDeveloperSelectionsExit;
+            selections.ShowDialog();
+        }
 
+        private void OnDeveloperSelectionsExit(object sender, DevleoperSelectionsClosedEWventArgs e)
+        {
+            if(e.LoadSelection)
+                return;
+            if(string.IsNullOrWhiteSpace(e.FileToLoad))
+            {
+                Logging.WriteToLog("DeveloperSelections returned a blank selection to load when e.LoadSelection = true",Logfiles.Application, LogLevel.Error);
+                MessageBox.Show(Translations.GetTranslatedString("failedLoadSelection"));
+                return;
+            }
+            if(e.FileToLoad.Equals("local"))
+            {
+                OpenFileDialog selectLoadPath = new OpenFileDialog()
+                {
+                    InitialDirectory = Settings.RelhaxUserConfigsFolder,
+                    CheckFileExists = true,
+                    CheckPathExists = true,
+                    AddExtension = true,
+                    Filter = "XML files|*.xml",
+                    Multiselect = false,
+                    RestoreDirectory = true,
+                    ValidateNames = true
+                };
+                if((bool)selectLoadPath.ShowDialog())
+                {
+                    XmlDocument doc = new XmlDocument();
+                    try
+                    {
+                        doc.Load(selectLoadPath.FileName);
+                    }
+                    catch(XmlException ex)
+                    {
+                        Logging.WriteToLog(ex.ToString(),Logfiles.Application,LogLevel.Exception);
+                        MessageBox.Show(Translations.GetTranslatedString("failedLoadSelection"));
+                        return;
+                    }
+                    LoadSelection(doc,false);
+                }
+            }
+            else
+            {
+                //get the filename from the develiper zip file
+                string xmlString = Utils.GetStringFromZip(Path.Combine(Settings.RelhaxTempFolder, "developerSelections.zip"),e.FileToLoad);
+                if(string.IsNullOrWhiteSpace(xmlString))
+                {
+                    Logging.WriteToLog("xmlString is null or empty",Logfiles.Application,LogLevel.Error);
+                    MessageBox.Show(Translations.GetTranslatedString("failedLoadSelection"));
+                    return;
+                }
+                XmlDocument doc = new XmlDocument();
+                try
+                {
+                    doc.LoadXml(xmlString);
+                }
+                catch(XmlException ex)
+                {
+                    Logging.WriteToLog(ex.ToString(),Logfiles.Application,LogLevel.Exception);
+                    MessageBox.Show(Translations.GetTranslatedString("failedLoadSelection"));
+                    return;
+                }
+                LoadSelection(doc,false);
+            }
         }
 
         private void OnClearSelectionsClick(object sender, RoutedEventArgs e)
         {
             Logging.WriteToLog("Clearing selections");
-            foreach (Category category in ParsedCategoryList)
-                ClearSelections(category.Packages);
+            //Having utilities to make life easier is nice (+3 XP)
+            //foreach (SelectablePackage package in Utils.GetFlatList(null,null,null,ParsedCategoryList))
+                //package.Checked = false;
+            //UTILS CLEAR SELECTIONS()
             Logging.WriteToLog("Selections cleared");
             MessageBox.Show(Translations.GetTranslatedString("selectionsCleared"));
         }
 
-        private void ClearSelections(List<SelectablePackage> packages)
-        {
-            foreach(SelectablePackage package in packages)
-            {
-                if (package.Packages.Count > 0)
-                    ClearSelections(package.Packages);
-                package.Checked = false;
-            }
-        }
-
-        private void LoadSelection(XmlDocument document, List<SelectablePackage> parsedCategoryList)
+        private void LoadSelection(XmlDocument document, bool silent)
         {
             //get the string version of the document, determine what to do from there
             string selectionVersion = "";
             //attribute example: "//root/element/@attribute"
-            selectionVersion = XMLUtils.GetXMLStringFromXPath(document, "//mods@ver");//TODO: CHECK THIS
+            selectionVersion = XMLUtils.GetXMLStringFromXPath(document, "//mods@ver");
             switch(selectionVersion)
             {
                 case "2.0":
-                    LoadSelectionV2(document, parsedCategoryList);
+                    LoadSelectionV2(document, silent);
                 break;
 
                 default:
@@ -1082,16 +1155,236 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void LoadSelectionV2(XmlDocument document, List<SelectablePackage> parsedCategoryList)
+        private void LoadSelectionV2(XmlDocument document, bool silent)
+        {
+            //first uncheck everyting
+            //UTILS CLEAR SELECTIONS
+            //get a list of all the mods currently in the selection
+            XmlNodeList xmlSelections = XMLUtils.GetXMLNodesFromXPath(document, "//mods/name");
+            XmlNodeList xmluserSelections = XMLUtils.GetXMLNodesFromXPath(document, "//userMods/mod");
+            //save a list string of all the packagenames in the list for later
+            List<string> stringSelections = new List<string>();
+            List<string> stringUserSelections = new List<string>();
+            List<string> disabledMods = new List<string>();
+            List<string> disabledStructureMods = new List<string>();
+            foreach(XmlNode node in xmlSelections)
+                stringSelections.Add(node.InnerText);
+            foreach(XmlNode node in xmluserSelections)
+                stringUserSelections.Add(node.InnerText);
+            //check the mods in the actual list if it's in the list
+            foreach(SelectablePackage package in Utils.GetFlatList(null,null,null,ParsedCategoryList))
+            {
+                //also check to only "check" the mod if it is visible OR if the command line settings to force visiable all compoents
+                if(stringSelections.Contains(package.PackageName) && (package.Visible || CommandLineSettings.ForceVisible))
+                {
+                    stringSelections.Remove(package.PackageName);
+                    //also check if the mod only if it's enabled OR is command line settings force enabled
+                    if(package.Enabled || CommandLineSettings.ForceEnabled)
+                    {
+                        package.Checked = true;
+                        Logging.WriteToLog(string.Format("Checking package {0}",package.CompletePath));
+                    }
+                    else
+                    {
+                        disabledMods.Add(package.CompletePath);
+                        Logging.WriteToLog(string.Format("\"{0}\" is a disabled mod", package.CompletePath));
+                    }
+                    //if it's the top level, chedk the category header
+                    if (package.Level == 0 && !package.ParentCategory.CategoryHeader.Checked)
+                    {
+                        package.ParentCategory.CategoryHeader.Checked = true;
+                        Logging.WriteToLog("Checking top header " + package.ParentCategory.CategoryHeader.NameFormatted);
+                    }
+                }
+            }
+            //do the same as above but for user mods
+            foreach(SelectablePackage package in userMods)
+            {
+                if(stringUserSelections.Contains(package.ZipFile) && File.Exists(Path.Combine(Settings.RelhaxUserModsFolder,package.ZipFile)))
+                {
+                    Logging.WriteToLog(string.Format("Checking User Mod {0}",package.ZipFile));
+                    package.Enabled = true;
+                    package.Checked = true;
+                    stringUserSelections.Remove(package.ZipFile);
+                }
+            }
+            //now check for the correct structre of mods
+            List<SelectablePackage> brokenMods = IsValidStructure(ParsedCategoryList);
+            Logging.WriteToLog("Broken mods structre count: " + brokenMods.Count);
+            //only report issues if silent is false. true means its doing sometthing like auto selections or
+            if(!silent)
+            {
+                Logging.WriteToLog(string.Format("Informing user of {0} disabled mods, {1} broken selections, {2} removed mods, {3} removed user mods",
+                disabledMods.Count, disabledStructureMods.Count, stringSelections.Count, stringUserSelections.Count));
+                if(disabledMods.Count > 0)
+                {
+                    //disabled mods
+                    MessageBox.Show(Translations.GetTranslatedString("modsDisabled") + "\n" + string.Join("\n",disabledMods));
+                }
+                if(stringSelections.Count > 0)
+                {
+                    //removed mods
+                    MessageBox.Show(Translations.GetTranslatedString("modsNotRemovedTechnical") + "\n" + string.Join("\n", stringSelections));
+                }
+                if(stringUserSelections.Count > 0)
+                {
+                    //removed user mdos
+                    MessageBox.Show(Translations.GetTranslatedString("userModsRemovedTechnical") + "\n" + string.Join("\n", stringUserSelections));
+                }
+                if(disabledStructureMods.Count > 0)
+                {
+                    //removed structure user mdos
+                    MessageBox.Show(Translations.GetTranslatedString("modsBrokenStructure") + "\n" + string.Join("\n", disabledStructureMods));
+                }
+            }
+        }
+
+        private void SaveSelection(string savePath, bool silent)
+        {
+            Logging.WriteToLog("Saving selections to " + savePath);
+            //create saved config xml layout
+            XDocument doc = new XDocument(
+                new XDeclaration("1.0", "utf-8", "yes"),
+                new XElement("mods", new XAttribute("ver", Settings.ConfigFileVersion), new XAttribute("date",
+                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")), new XAttribute("timezone", TimeZoneInfo.Local.DisplayName),
+                new XAttribute("dbVersion", Settings.DatabaseVersion), new XAttribute("dbDistro", ModpackSettings.DatabaseDistroVersion.ToString())));
+
+            //relhax mods root
+            doc.Element("mods").Add(new XElement("relhaxMods"));
+            //user mods root
+            doc.Element("mods").Add(new XElement("userMods"));
+
+            //do some cool xml stuff grumpel does
+            var nodeRelhax = doc.Descendants("relhaxMods").FirstOrDefault();
+            var nodeUserMods = doc.Descendants("userMods").FirstOrDefault();
+
+            //check relhax Mods
+            foreach (SelectablePackage package in Utils.GetFlatList(null,null,null,ParsedCategoryList))
+            {
+                if (package.Checked)
+                {
+                    Logging.WriteToLog("Adding relhax mod " + package.PackageName);
+                    //add it to the list
+                    nodeRelhax.Add(new XElement("mod", package.PackageName));
+                }
+            }
+
+            //check user mods
+            foreach (SelectablePackage m in userMods)
+            {
+                if (m.Checked)
+                {
+                    Logging.WriteToLog("adding user mod" + m.ZipFile);
+                    //add it to the list
+                    nodeUserMods.Add(new XElement("mod", m.Name));
+                }
+            }
+            doc.Save(savePath);
+            if (!silent)
+            {
+                MessageBox.Show(Translations.GetTranslatedString("configSaveSuccess"));
+            }
+        }
+        //checks for invalid structure in the selected packages
+        //ex: a new mandatory option was added to a mod, but the user does not have it selected
+        public List<SelectablePackage> IsValidStructure(List<Category> ParsedCategoryList)
+        {
+            List<SelectablePackage>  brokenPackages = new List<SelectablePackage>();
+            foreach (Category cat in ParsedCategoryList)
+            {
+                if (cat.Packages.Count > 0)
+                {
+                    foreach (SelectablePackage sp in cat.Packages)
+                        IsValidStructure(sp, ref brokenPackages);
+                }
+                //then check if the header should *still* be checked
+                //at this point it is assumed that the structure is valid, meanign that
+                //if there is at least on package selected it should be propagated up to level 0
+                //so ontly need to do this at level 0
+                bool anyPackagesSelected = false;
+                foreach(SelectablePackage sp in cat.Packages)
+                {
+                    if (sp.Enabled && sp.Checked)
+                        anyPackagesSelected = true;
+                }
+                if (!anyPackagesSelected && cat.CategoryHeader.Checked)
+                    cat.CategoryHeader.Checked = false;
+            }
+            return brokenPackages;
+        }
+
+        private void IsValidStructure(SelectablePackage Package, ref List<SelectablePackage> brokenPackages)
+        {
+            if (Package.Checked)
+            {
+                bool hasSingles = false;
+                bool singleSelected = false;
+                bool hasDD1 = false;
+                bool DD1Selected = false;
+                bool hasDD2 = false;
+                bool DD2Selected = false;
+                foreach (SelectablePackage childPackage in Package.Packages)
+                {
+                    if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
+                    {
+                        hasSingles = true;
+                        if (childPackage.Checked)
+                            singleSelected = true;
+                    }
+                    else if ((childPackage.Type.Equals("single_dropdown") || childPackage.Type.Equals("single_dropdown1")) && childPackage.Enabled)
+                    {
+                        hasDD1 = true;
+                        if (childPackage.Checked)
+                            DD1Selected = true;
+                    }
+                    else if (childPackage.Type.Equals("single_dropdown2") && childPackage.Enabled)
+                    {
+                        hasDD2 = true;
+                        if (childPackage.Checked)
+                            DD2Selected = true;
+                    }
+                }
+                if (hasSingles && !singleSelected)
+                {
+                    Package.Checked = false;
+                    if (!brokenPackages.Contains(Package))
+                        brokenPackages.Add(Package);
+                }
+                if (hasDD1 && !DD1Selected)
+                {
+                    Package.Checked = false;
+                    if (!brokenPackages.Contains(Package))
+                        brokenPackages.Add(Package);
+                }
+                if (hasDD2 && !DD2Selected)
+                {
+                    Package.Checked = false;
+                    if (!brokenPackages.Contains(Package))
+                        brokenPackages.Add(Package);
+                }
+                if (Package.Checked && !Package.Parent.Checked)
+                {
+                    Package.Checked = false;
+                    if (!brokenPackages.Contains(Package))
+                        brokenPackages.Add(Package);
+                }
+            }
+            if (Package.Packages.Count > 0)
+                foreach (SelectablePackage sep in Package.Packages)
+                    IsValidStructure(sep, ref brokenPackages);
+        }
+        #endregion
+
+        #region Search Box Code
+        private void SearchCB_DropDownOpened(object sender, EventArgs e)
         {
 
         }
 
-        private void SaveSelection()
+        private void SearchCB_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
 
         }
         #endregion
-
     }
 }
