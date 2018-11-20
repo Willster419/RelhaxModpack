@@ -1,3 +1,9 @@
+Version 0.28.2.15 (11/19/2018)
+https://www.virustotal.com/#/file/023edb64c4efa485009668b9472c79ba76f6b132712f06125ea1fe0de12540ea/detection
+-Fixed issue with "&" symbol not showing for mod names in default view
+-Fixed bug in legacy and default v2 views in relhax V1 and V2 where if user selects the 0th item in the drop down box it's not actually selected
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 0.28.2.14 (11/17/2018)
 https://www.virustotal.com/#/file/d584d555028f151dcbf880fa26ebd1b8463c937c67f5dfe0509b35381db2c463/detection
 -Removed old legacy DatabaseUpdater code parts that were re-written for Relhax V2
