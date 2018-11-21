@@ -393,6 +393,63 @@ namespace RelhaxModpack
             //sortModsList
             modList.Sort(SelectablePackage.CompareMods);
         }
+        /// <summary>
+        /// Links all the refrences (like parent, etc) for each class object making it possible to traverse the list tree in memory
+        /// </summary>
+        /// <param name="ParsedCategoryList">The List of categories</param>
+        public static void BuildLinksRefrence(List<Category> ParsedCategoryList)
+        {
+            foreach (Category cat in ParsedCategoryList)
+            {
+                foreach (SelectablePackage sp in cat.Packages)
+                {
+                    BuildLinksRefrence(sp, cat, cat.CategoryHeader);
+                }
+            }
+        }
+        /// <summary>
+        /// Links all the refrences (like parent, etc) for each class object making it possible to traverse the list tree in memory
+        /// </summary>
+        /// <param name="sp">The package to perform linking on</param>
+        /// <param name="cat">The category that the SelectablePackagesp belongs to</param>
+        /// <param name="parent">The tree parent of sp</param>
+        private static void BuildLinksRefrence(SelectablePackage sp, Category cat, SelectablePackage parent)
+        {
+            sp.Parent = parent;
+            sp.TopParent = cat.CategoryHeader;
+            sp.ParentCategory = cat;
+            if (sp.Packages.Count > 0)
+            {
+                foreach (SelectablePackage sp2 in sp.Packages)
+                {
+                    BuildLinksRefrence(sp2, cat, sp);
+                }
+            }
+        }
+        public static void BuildLevelPerPackage(List<Category> ParsedCategoryList, int startingLevel = 0)
+        {
+            //root level direct form category is 0
+            foreach (Category cat in ParsedCategoryList)
+            {
+                foreach (SelectablePackage package in cat.Packages)
+                {
+                    package.Level = startingLevel;
+                    if (package.Packages.Count > 0)
+                        //increase the level BEFORE it calls the method
+                        BuildLevelPerPackage(package.Packages, ++startingLevel);
+                }
+            }
+        }
+        private static void BuildLevelPerPackage(List<SelectablePackage> packages, int level)
+        {
+            foreach (SelectablePackage package in packages)
+            {
+                package.Level = level;
+                if (package.Packages.Count > 0)
+                    //increase the level BEFORE it calls the method
+                    BuildLevelPerPackage(package.Packages, ++level);
+            }
+        }
         #endregion
 
         #region Generic utils
@@ -668,67 +725,6 @@ namespace RelhaxModpack
             }
             //return false if nothing found
             return false;
-        }
-        #endregion
-
-        //TODO: MOVE THIS TO DATABASE UTILS
-        #region List refrence linking and level building
-        /// <summary>
-        /// Links all the refrences (like parent, etc) for each class object making it possible to traverse the list tree in memory
-        /// </summary>
-        /// <param name="ParsedCategoryList">The List of categories</param>
-        public static void BuildLinksRefrence(List<Category> ParsedCategoryList)
-        {
-            foreach(Category cat in ParsedCategoryList)
-            {
-                foreach(SelectablePackage sp in cat.Packages)
-                {
-                    BuildLinksRefrence(sp, cat, cat.CategoryHeader);
-                }
-            }
-        }
-        /// <summary>
-        /// Links all the refrences (like parent, etc) for each class object making it possible to traverse the list tree in memory
-        /// </summary>
-        /// <param name="sp">The package to perform linking on</param>
-        /// <param name="cat">The category that the SelectablePackagesp belongs to</param>
-        /// <param name="parent">The tree parent of sp</param>
-        private static void BuildLinksRefrence(SelectablePackage sp, Category cat, SelectablePackage parent)
-        {
-            sp.Parent = parent;
-            sp.TopParent = cat.CategoryHeader;
-            sp.ParentCategory = cat;
-            if(sp.Packages.Count > 0)
-            {
-                foreach(SelectablePackage sp2 in sp.Packages)
-                {
-                    BuildLinksRefrence(sp2, cat, sp);
-                }
-            }
-        }
-        public static void BuildLevelPerPackage(List<Category> ParsedCategoryList, int startingLevel = 0)
-        {
-            //root level direct form category is 0
-            foreach(Category cat in ParsedCategoryList)
-            {
-                foreach(SelectablePackage package in cat.Packages)
-                {
-                    package.Level = startingLevel;
-                    if(package.Packages.Count > 0)
-                        //increase the level BEFORE it calls the method
-                        BuildLevelPerPackage(package.Packages, ++startingLevel);
-                }
-            }
-        }
-        private static void BuildLevelPerPackage(List<SelectablePackage> packages, int level)
-        {
-            foreach(SelectablePackage package in packages)
-              {
-                  package.Level = level;
-                  if(package.Packages.Count > 0)
-                      //increase the level BEFORE it calls the method
-                      BuildLevelPerPackage(package.Packages, ++level);
-              }
         }
         #endregion
         }
