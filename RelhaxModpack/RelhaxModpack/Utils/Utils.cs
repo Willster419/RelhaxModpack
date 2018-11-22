@@ -611,6 +611,24 @@ namespace RelhaxModpack
             }
             return dependenciesToInstall;
         }
+        public static List<DatabasePackage>[] CreateOrderedInstallList(List<DatabasePackage> packagesToInstall)
+        {
+            //get the max number of defined groups
+            int maxGrops = 0;
+            foreach (DatabasePackage package in packagesToInstall)
+                if (package.ExtractionLevel > maxGrops)
+                    maxGrops = package.ExtractionLevel;
+            //make the list to return
+            List<DatabasePackage>[] orderedList = new List<DatabasePackage>[maxGrops];
+            //new up the lists
+            for (int i = 0; i < orderedList.Count(); i++)
+                orderedList[i] = new List<DatabasePackage>();
+            foreach(DatabasePackage package in packagesToInstall)
+            {
+                orderedList[package.ExtractionLevel].Add(package);
+            }
+            return orderedList;
+        }
         #endregion
 
         #region Generic utils

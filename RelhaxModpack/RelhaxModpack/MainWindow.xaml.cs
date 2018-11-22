@@ -767,11 +767,18 @@ namespace RelhaxModpack
             //build macro hash for install?
 
             //perform dependency calculations
+            //get a flat list of packages to install
             List<DatabasePackage> flatList = Utils.GetFlatList(null, null, null, parsedCategoryList);
             List<SelectablePackage> flatListSelect = new List<SelectablePackage>();
+            //convert it to correct class type
             foreach (SelectablePackage sp in flatList)
                 flatListSelect.Add(sp);
             List<Dependency> dependneciesToInstall = new List<Dependency>(Utils.CalculateDependencies(dependencies, flatListSelect));
+            //make a flat list of all packages to install that will actually be installed
+            List<DatabasePackage> packagesToInstall = new List<DatabasePackage>();
+            packagesToInstall.AddRange(globalDependencies.Where(globalDep => globalDep.Enabled && !string.IsNullOrWhiteSpace(globalDep.ZipFile)).ToList());
+            packagesToInstall.AddRange(dependneciesToInstall.Where(dep => dep.Enabled && !string.IsNullOrWhiteSpace(dep.ZipFile)).ToList());
+            packagesToInstall.AddRange(flatListSelect.Where(fl => fl.Enabled && fl.Checked && !string.IsNullOrWhiteSpace(fl.ZipFile)).ToList());
             //perform list install order calculations
 
         }
