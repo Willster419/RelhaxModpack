@@ -780,6 +780,8 @@ namespace RelhaxModpack
             packagesToInstall.AddRange(dependneciesToInstall.Where(dep => dep.Enabled && !string.IsNullOrWhiteSpace(dep.ZipFile)).ToList());
             packagesToInstall.AddRange(flatListSelect.Where(fl => fl.Enabled && fl.Checked && !string.IsNullOrWhiteSpace(fl.ZipFile)).ToList());
             //perform list install order calculations
+            List<DatabasePackage>[] orderedPackagesToInstall = Utils.CreateOrderedInstallList(packagesToInstall);
+            //we now have a list of enabled, checked and actual zip file mods that we are going to install based on install groups
 
         }
 
