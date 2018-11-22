@@ -739,7 +739,8 @@ namespace RelhaxModpack
         {
             if (e.ContinueInstallation)
             {
-                OnBeginInstallation(new List<Category>(e.ParsedCategoryList));
+                OnBeginInstallation(new List<Category>(e.ParsedCategoryList),
+                    new List<Dependency>(e.Dependencies),new List<DatabasePackage>(e.GlobalDependencies));
                 modSelectionList = null;
             }
             else
@@ -748,8 +749,11 @@ namespace RelhaxModpack
             }
         }
 
-        private void OnBeginInstallation(List<Category> parsedCategoryList)
+        private void OnBeginInstallation(List<Category> parsedCategoryList, List<Dependency> dependencies, List<DatabasePackage> globalDependencies)
         {
+            if (parsedCategoryList == null || dependencies == null || globalDependencies == null ||
+                parsedCategoryList.Count == 0 || dependencies.Count == 0 || globalDependencies.Count == 0)
+                throw new BadMemeException("You suck at starting installations LEARN2CODE");
             Logging.WriteToLog("Starting an installation (timer starts now)");
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Restart();
@@ -760,9 +764,15 @@ namespace RelhaxModpack
                 //create window to determine if cancel, wait, kill TODO
 
             }
-            //build macro hash for install
-            //TODO?
-            //perform calculations
+            //build macro hash for install?
+
+            //perform dependency calculations
+            List<DatabasePackage> flatList = Utils.GetFlatList(null, null, null, parsedCategoryList);
+            List<SelectablePackage> flatListSelect = new List<SelectablePackage>();
+            foreach (SelectablePackage sp in flatList)
+                flatListSelect.Add(sp);
+            List<Dependency> dependneciesToInstall = new List<Dependency>(Utils.CalculateDependencies(dependencies, flatListSelect));
+            //perform list install order calculations
 
         }
 

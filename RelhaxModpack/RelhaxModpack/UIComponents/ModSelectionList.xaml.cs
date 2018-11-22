@@ -30,6 +30,8 @@ namespace RelhaxModpack.Windows
     {
         public bool ContinueInstallation = false;
         public List<Category> ParsedCategoryList;
+        public List<Dependency> Dependencies;
+        public List<DatabasePackage> GlobalDependencies;
     }
     public delegate void SelectionListClosedDelegate(object sender, SelectionListEventArgs e);
     #endregion
@@ -81,7 +83,12 @@ namespace RelhaxModpack.Windows
             if (OnSelectionListReturn != null)
             {
                 OnSelectionListReturn(this, new SelectionListEventArgs()
-                { ContinueInstallation = continueInstallation, ParsedCategoryList = ParsedCategoryList });
+                {
+                    ContinueInstallation = continueInstallation,
+                    ParsedCategoryList = ParsedCategoryList,
+                    Dependencies = Dependencies,
+                    GlobalDependencies = GlobalDependencies
+                });
             }
         }
         #endregion
