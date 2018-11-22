@@ -65,6 +65,8 @@ namespace RelhaxModpack
         public static readonly string MD5HashDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "MD5HashDatabase.xml");
 
         public static readonly string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, "managerInfo.dat");
+
+        public static readonly int NumLogicalProcesors = Environment.ProcessorCount;
         #endregion
 
         #region Statics

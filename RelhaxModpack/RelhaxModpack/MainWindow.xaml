@@ -61,6 +61,7 @@
                         <CheckBox Content="Save user created data" x:Name="SaveUserDataCB" Click="OnSaveUserDataChanged"/>
                         <CheckBox Content="Create shortcuts" x:Name="CreateShortcutsCB" Click="OnCreateShortcutsChanged"/>
                         <CheckBox Content="Multicore extraction mode (experimental)" IsEnabled="False" x:Name="MulticoreExtractionCB" Click="OnMulticoreExtractionChanged"/>
+                        <TextBlock Text="Detected Cores: {0}" x:Name="MulticoreExtractionCoresCountLabel" IsEnabled="True" Padding="20,0,0,0"/>
                         <CheckBox Content="Immediate extraction mode (experimental)" IsEnabled="False" x:Name="InstantExtractionCB" Click="OnImmidateExtarctionChanged"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1"/>

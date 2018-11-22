@@ -85,6 +85,9 @@ namespace RelhaxModpack
             progressIndicator.UpdateProgress(4, Translations.GetTranslatedString("checkForUpdates"));
             CheckForApplicationUpdates();
             CheckForDatabaseUpdates(false, true);
+            //get the number of processor cores
+            MulticoreExtractionCoresCountLabel.Text = string.Format(Translations.GetTranslatedString("detectedCores"), Settings.NumLogicalProcesors);
+
             //dispose of please wait here
             progressIndicator.Close();
             progressIndicator = null;
