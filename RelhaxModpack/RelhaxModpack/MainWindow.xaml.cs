@@ -778,11 +778,67 @@ namespace RelhaxModpack
             List<DatabasePackage> packagesToInstall = new List<DatabasePackage>();
             packagesToInstall.AddRange(globalDependencies.Where(globalDep => globalDep.Enabled && !string.IsNullOrWhiteSpace(globalDep.ZipFile)).ToList());
             packagesToInstall.AddRange(dependneciesToInstall.Where(dep => dep.Enabled && !string.IsNullOrWhiteSpace(dep.ZipFile)).ToList());
-            packagesToInstall.AddRange(flatListSelect.Where(fl => fl.Enabled && fl.Checked && !string.IsNullOrWhiteSpace(fl.ZipFile)).ToList());
+            List<SelectablePackage> selectablePackagesToInstall = flatListSelect.Where(fl => fl.Enabled && fl.Checked && !string.IsNullOrWhiteSpace(fl.ZipFile)).ToList();
+            packagesToInstall.AddRange(selectablePackagesToInstall);
+            //while we're at it let's make a list of packages that need to be downloaded
+            List<DatabasePackage> packagesToDownload = packagesToInstall.Where(pack => pack.DownloadFlag).ToList();
+            //and check if we need to actuall install anything lol
+            if (selectablePackagesToInstall.Count == 0)
+            {
+                Logging.WriteToLog("no packages selected to install...");
+            }
             //perform list install order calculations
             List<DatabasePackage>[] orderedPackagesToInstall = Utils.CreateOrderedInstallList(packagesToInstall);
             //we now have a list of enabled, checked and actual zip file mods that we are going to install based on install groups
+            //log the time to process lists
+            TimeSpan lastTime = stopwatch.Elapsed;
+            Logging.WriteToLog(string.Format("Took {0} msec to process lists", stopwatch.ElapsedMilliseconds));
+            //first, if we have downloads to do and doing them the standard way, then start processing them
+            if(packagesToDownload.Count > 0 && !ModpackSettings.DownloadInstantExtraction)
+            {
+                Logging.WriteToLog("download while install = false and packages to download, starting ProcessDownloads()");
+                ProcessDownloads(packagesToDownload);
+                Logging.WriteToLog(string.Format("download time took {0} msec", stopwatch.Elapsed.TotalMilliseconds - lastTime.TotalMilliseconds));
+                lastTime = stopwatch.Elapsed;
+            }
+            //now let's start the install procedures
 
+        }
+
+        private async void ProcessDownloads(List<DatabasePackage> packagesToDownload)
+        {
+            //remmeber this is on the UI thread so we can update the progress via this
+            using(WebClient client = new WebClient())
+            {
+                client.DownloadProgressChanged += Client_DownloadProgressChanged;
+                string fileToDownload = string.Empty;
+                string fileToSaveTo = string.Empty;
+                foreach (DatabasePackage package in packagesToDownload)
+                {
+                    bool retry = true;
+                    while (retry)
+                    {
+                        fileToDownload = package.StartAddress + package.ZipFile + package.EndAddress;
+                        fileToSaveTo = Path.Combine(Settings.RelhaxDownloadsFolder, package.ZipFile);
+                        try
+                        {
+                            await client.DownloadFileTaskAsync(fileToDownload, fileToSaveTo);
+                            retry = false;
+                        }
+                        catch (WebException ex)
+                        {
+                            Logging.WriteToLog("failed to download the file " + package.ZipFile + "\n" + ex.ToString(),
+                                Logfiles.Application, LogLevel.Error);
+                            //show abort retry ignore window TODO
+                        }
+                    }
+                }
+            }
+        }
+
+        private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
+            
         }
 
         private void UninstallModpackButton_Click(object sender, RoutedEventArgs e)
