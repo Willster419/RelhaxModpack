@@ -277,7 +277,7 @@ namespace RelhaxModpack
         /// <param name="deleteSubfolders">set to true to delete files recursivly inside each subdirectory</param>
         /// <param name="numRetrys">The number of times the method should retry to delete a file</param>
         /// <param name="timeout">The ammount of time in milliseconds to wait before trying again to delete files</param>
-        public static void DirectoryDelete(string folderPath, bool deleteSubfolders, int numRetrys, int timeout)
+        public static void DirectoryDelete(string folderPath, bool deleteSubfolders, int numRetrys = 3, int timeout = 100, string pattern = "*")
         {
             //check to make sure the number of retries is between 1 and 10
             if (numRetrys < 1)
@@ -293,7 +293,7 @@ namespace RelhaxModpack
                 numRetrys = 10;
             }
             int retryCounter = 0;
-            foreach (string file in Directory.GetFiles(folderPath))
+            foreach (string file in Directory.GetFiles(folderPath,pattern,SearchOption.TopDirectoryOnly))
             {
                 while(retryCounter < numRetrys)
                 {
@@ -314,10 +314,67 @@ namespace RelhaxModpack
             //if deleting the sub directories
             if (deleteSubfolders)
             {
-                foreach (string dir in Directory.GetDirectories(folderPath))
+                foreach (string dir in Directory.GetDirectories(folderPath,pattern,SearchOption.TopDirectoryOnly))
                 {
                     DirectoryDelete(dir, deleteSubfolders, numRetrys,timeout);
                 }
+            }
+        }
+
+        public static void DirectoryMove(string source, string destination, bool recursive, int numRetrys = 3, int timeout = 100, string pattern = "*")
+        {
+            //DirectoryMove works by getting a directory list of all directories in the source to create,
+            //then making the directories, moving the files, and then deleting the old directories
+            List<string> directoreisToCreate = Directory.GetDirectories(source, pattern,
+                recursive? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).ToList();
+            //create them at the target
+            foreach(string s in directoreisToCreate)
+            {
+                if(!Directory.Exists(Path.Combine(destination,s)))
+                {
+                    Directory.CreateDirectory(Path.Combine(destination, s));
+                }
+            }
+            //move the files over
+            List<string> filesToMove = Directory.GetFiles(source, pattern,
+                recursive? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).ToList();
+            foreach(string file in filesToMove)
+            {
+                File.Move(Path.Combine(source, file), Path.Combine(destination, file));
+            }
+            //delete all the other old empty source directories
+            directoreisToCreate.Sort();
+            foreach(string s in directoreisToCreate)
+            {
+                if(Directory.Exists(Path.Combine(source,s)))
+                {
+                    if (Directory.GetFiles(Path.Combine(source, s)).Count() > 0)
+                        throw new BadMemeException("waaaaaaa?");
+                    Directory.Delete(Path.Combine(source, s));
+                    //TODO: will this work in it's curent setup
+                    //TODO: add while and retry and stuff
+                }
+            }
+        }
+
+        public static void DirectoryCopy(string source, string destination, bool recursive, int numRetrys = 3, int timeout = 100, string pattern = "*")
+        {
+            List<string> directoreisToCreate = Directory.GetDirectories(source, pattern,
+                recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).ToList();
+            //create them at the target
+            foreach (string s in directoreisToCreate)
+            {
+                if (!Directory.Exists(Path.Combine(destination, s)))
+                {
+                    Directory.CreateDirectory(Path.Combine(destination, s));
+                }
+            }
+            //copy the files over
+            List<string> filesToMove = Directory.GetFiles(source, pattern,
+                recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).ToList();
+            foreach (string file in filesToMove)
+            {
+                File.Copy(Path.Combine(source, file), Path.Combine(destination, file));
             }
         }
         #endregion
@@ -912,5 +969,5 @@ namespace RelhaxModpack
             return false;
         }
         #endregion
-        }
+    }
 }

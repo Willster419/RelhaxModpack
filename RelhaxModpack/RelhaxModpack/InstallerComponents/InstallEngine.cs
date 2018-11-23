@@ -248,19 +248,6 @@ namespace RelhaxModpack.InstallerComponents
             return true;
         }
 
-        private async Task<bool> RestoreDataAsync(List<SelectablePackage> packagesWithData)
-        {
-            foreach (SelectablePackage package in packagesWithData)
-            {
-                Logging.WriteToLog(string.Format("Restore data of package {0} starting", package.PackageName));
-                foreach (UserFiles files in package.UserFiles)
-                {
-                    //reeeeeee
-                }
-            }
-            return true;
-        }
-
         private async Task<bool> ClearCacheAsync()
         {
             //make sure that the app data folder exists
@@ -316,13 +303,13 @@ namespace RelhaxModpack.InstallerComponents
                 else if (Directory.Exists(Path.Combine(AppPathTempFolder, file)))
                 {
                     //Utils.DirectoryMove(Path.Combine(AppPathTempFolder, file), Path.Combine(Settings.AppDataFolder, file), true, null);
+                    Utils.DirectoryMove(Path.Combine(AppPathTempFolder, file), Path.Combine(Settings.AppDataFolder, file), true);
                 }
                 else
                 {
                     Logging.WriteToLog("File or folder does not exist in step clearCache: " + file, Logfiles.Application, LogLevel.Debug);
                 }
             }
-
             return true;
         }
 
@@ -439,6 +426,19 @@ namespace RelhaxModpack.InstallerComponents
             if (string.IsNullOrWhiteSpace(package.ZipFile))
                 throw new BadMemeException("REEEEEEEE");
 
+        }
+
+        private async Task<bool> RestoreDataAsync(List<SelectablePackage> packagesWithData)
+        {
+            foreach (SelectablePackage package in packagesWithData)
+            {
+                Logging.WriteToLog(string.Format("Restore data of package {0} starting", package.PackageName));
+                foreach (UserFiles files in package.UserFiles)
+                {
+                    //reeeeeee
+                }
+            }
+            return true;
         }
 
         private async Task<bool> PatchFilesAsync()
