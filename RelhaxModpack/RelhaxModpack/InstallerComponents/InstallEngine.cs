@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using RelhaxModpack.UIComponents;
+using System.IO;
 
 namespace RelhaxModpack.InstallerComponents
 {
@@ -39,6 +40,7 @@ namespace RelhaxModpack.InstallerComponents
     {
         #region Instance Variables
         public List<DatabasePackage>[] OrderedPackagesToInstall;
+        public List<SelectablePackage> FlatListSelectablePackages;
         public event InstallFinishedDelegate OnInstallFinish;
         public event InstallProgressDelegate OnInstallProgress;
         public RelhaxInstallFinishedEventArgs InstallFinishedEventArgs = new RelhaxInstallFinishedEventArgs();
@@ -76,7 +78,8 @@ namespace RelhaxModpack.InstallerComponents
                 throw new BadMemeException("HOW DAFAQ DID YOU FAQ THIS UP???");
             Logging.WriteToLog("Installation starts now from RunInstallation() in Install Engine");
             //do more stuff here im sure like init log files
-            
+            List<SelectablePackage> selectedPackages = FlatListSelectablePackages.Where(package => package.Checked).ToList();
+            List<SelectablePackage> packagesWithData = selectedPackages.Where(package => package.UserFiles.Count > 0).ToList();
             //and reset the stopwatch
             InstallStopWatch.Reset();
 
@@ -107,7 +110,7 @@ namespace RelhaxModpack.InstallerComponents
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.SaveUserData)
             {
-
+                
             }
             else
                 Logging.WriteToLog("...skipped");
@@ -232,15 +235,113 @@ namespace RelhaxModpack.InstallerComponents
             return true;
         }
 
+        private async Task<bool> BackupDataAsync(List<SelectablePackage> packagesWithData)
+        {
+            foreach(SelectablePackage package in packagesWithData)
+            {
+                Logging.WriteToLog(string.Format("Backup data of package {0} starting", package.PackageName));
+                foreach(UserFiles files in package.UserFiles)
+                {
+                    //reeeeeee
+                }
+            }
+            return true;
+        }
+
+        private async Task<bool> RestoreDataAsync(List<SelectablePackage> packagesWithData)
+        {
+            foreach (SelectablePackage package in packagesWithData)
+            {
+                Logging.WriteToLog(string.Format("Restore data of package {0} starting", package.PackageName));
+                foreach (UserFiles files in package.UserFiles)
+                {
+                    //reeeeeee
+                }
+            }
+            return true;
+        }
+
         private async Task<bool> ClearCacheAsync()
         {
+            //make sure that the app data folder exists
+            //if it does not, then it does not need to run this
+            if(!Directory.Exists(Settings.AppDataFolder))
+            {
+                Logging.WriteToLog("Appdata folder does not exist, creating");
+                Directory.CreateDirectory(Settings.AppDataFolder);
+                return true;
+            }
+            Logging.WriteToLog("Appdata folder exists, backing up user settings and clearing cache");
+            //make the temp folder if it does not already exist
+            string AppPathTempFolder = Path.Combine(Settings.RelhaxTempFolder, "AppDataBackup");
+            if (Directory.Exists(AppPathTempFolder))
+                Directory.Delete(AppPathTempFolder, true);
+            Directory.CreateDirectory(AppPathTempFolder);
+            string[] fileFolderNames = { "preferences.xml", "preferences_ct.xml", "modsettings.dat", "xvm", "pmod" };
+            //check if the directories are files or folders
+            //if files they can move directly
+            //if folders they have to be re-created on the destination and files moved manually
+            Logging.WriteToLog("Starting clearing cache step 1 of 3: backing up old files", Logfiles.Application, LogLevel.Debug);
+            foreach(string file in fileFolderNames)
+            {
+                Logging.WriteToLog("Processing cache file/folder to move: " + file, Logfiles.Application, LogLevel.Debug);
+                if(File.Exists(Path.Combine(Settings.AppDataFolder, file)))
+                {
+                    File.Move(Path.Combine(Settings.AppDataFolder, file), Path.Combine(AppPathTempFolder, file));
+                }
+                else if (Directory.Exists(Path.Combine(Settings.AppDataFolder, file)))
+                {
+                    //Utils.DirectoryMove(Path.Combine(Settings.AppDataFolder, file,) Path.Combine(AppPathTempFolder, file), true, null);
+                }
+                else
+                {
+                    Logging.WriteToLog("File or folder does not exist in step clearCache: " + file,Logfiles.Application,LogLevel.Debug);
+                }
+            }
+
+            //now delete the temp folder
+            Logging.WriteToLog("Starting clearing cache step 2 of 3: actually clearing cache", Logfiles.Application, LogLevel.Debug);
+            Directory.Delete(Settings.AppDataFolder, true);
+
+            //then put the above files back
+            Logging.WriteToLog("Starting clearing cache step 3 of 3: restoring old files", Logfiles.Application, LogLevel.Debug);
+            Directory.CreateDirectory(Settings.AppDataFolder);
+            foreach (string file in fileFolderNames)
+            {
+                Logging.WriteToLog("Processing cache file/folder to move: " + file, Logfiles.Application, LogLevel.Debug);
+                if (File.Exists(Path.Combine(AppPathTempFolder, file)))
+                {
+                    File.Move(Path.Combine(AppPathTempFolder, file), Path.Combine(Settings.AppDataFolder, file));
+                }
+                else if (Directory.Exists(Path.Combine(AppPathTempFolder, file)))
+                {
+                    //Utils.DirectoryMove(Path.Combine(AppPathTempFolder, file), Path.Combine(Settings.AppDataFolder, file), true, null);
+                }
+                else
+                {
+                    Logging.WriteToLog("File or folder does not exist in step clearCache: " + file, Logfiles.Application, LogLevel.Debug);
+                }
+            }
 
             return true;
         }
 
         private async Task<bool> ClearLogsAsync()
         {
-
+            string[] logsToDelete = new string[]
+            {
+                Path.Combine(Settings.WoTDirectory, "python.log"),
+                Path.Combine(Settings.WoTDirectory, "xvm.log"),
+                Path.Combine(Settings.WoTDirectory, "pmod.log"),
+                Path.Combine(Settings.WoTDirectory, "WoTLauncher.log"),
+                Path.Combine(Settings.WoTDirectory, "cef.log")
+            };
+            foreach(string s in logsToDelete)
+            {
+                Logging.WriteToLog("Processing log file (if exists) " + s, Logfiles.Application, LogLevel.Debug);
+                if (File.Exists(s))
+                    File.Delete(s);
+            }
             return true;
         }
 
