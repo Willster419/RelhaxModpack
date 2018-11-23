@@ -13,11 +13,13 @@ namespace RelhaxModpack.InstallerComponents
     {
         Success,
         DownloadModsError,
+        BackupModsError,
+        BackupDataError,
         ClearCacheError,
         ClearLogsError,
-        BackupModsError,
         CleanModsError,
         ExtractionError,
+        RestoreUserdataError,
         PatchError,
         ShortcustError,
         ContourIconAtlasError,
@@ -97,11 +99,24 @@ namespace RelhaxModpack.InstallerComponents
             else
                 Logging.WriteToLog("...skipped");
 
-            //step 2: clear cache
+            //step 2: backup data
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
             InstallFinishedEventArgs.ExitCodes++;
-            Logging.WriteToLog(string.Format("Cleaning ofcache folders, current install time = {0} msec",
+            Logging.WriteToLog(string.Format("Backup of userdata, current install time = {0} msec",
+                InstallStopWatch.Elapsed.TotalMilliseconds));
+            if (ModpackSettings.SaveUserData)
+            {
+
+            }
+            else
+                Logging.WriteToLog("...skipped");
+
+            //step 3: clear cache
+            OldTime = InstallStopWatch.Elapsed;
+            Progress.TotalCurrent++;
+            InstallFinishedEventArgs.ExitCodes++;
+            Logging.WriteToLog(string.Format("Cleaning of cache folders, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.ClearCache)
             {
@@ -110,7 +125,7 @@ namespace RelhaxModpack.InstallerComponents
             else
                 Logging.WriteToLog("...skipped");
 
-            //step 3: clear logs
+            //step 4: clear logs
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
             InstallFinishedEventArgs.ExitCodes++;
@@ -123,7 +138,7 @@ namespace RelhaxModpack.InstallerComponents
             else
                 Logging.WriteToLog("...skipped");
 
-            //step 4: clean mods folders
+            //step 5: clean mods folders
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
             InstallFinishedEventArgs.ExitCodes++;
@@ -136,12 +151,40 @@ namespace RelhaxModpack.InstallerComponents
             else
                 Logging.WriteToLog("...skipped");
 
-            //step 5: extract mods
+            //step 6: extract mods
+            OldTime = InstallStopWatch.Elapsed;
+            Progress.TotalCurrent++;
+            InstallFinishedEventArgs.ExitCodes++;
+            Logging.WriteToLog(string.Format("Exctacting mods, current install time = {0} msec",
+                InstallStopWatch.Elapsed.TotalMilliseconds));
+            if (ModpackSettings.CleanInstallation)
+            {
+
+            }
+            else
+                Logging.WriteToLog("...skipped?");
+
+            //step 7: restore data
+            OldTime = InstallStopWatch.Elapsed;
+            Progress.TotalCurrent++;
+            InstallFinishedEventArgs.ExitCodes++;
+            Logging.WriteToLog(string.Format("Restore of userdata, current install time = {0} msec",
+                InstallStopWatch.Elapsed.TotalMilliseconds));
+            //if statement TODO
+            if (ModpackSettings.SaveUserData)
+            {
+
+            }
+            else
+                Logging.WriteToLog("...skipped");
+
+            //step 8: patch files (async option)
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
             InstallFinishedEventArgs.ExitCodes++;
             Logging.WriteToLog(string.Format("Cleaning of mods foldres, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
+            //if statement TODO
             if (ModpackSettings.CleanInstallation)
             {
 
@@ -149,38 +192,26 @@ namespace RelhaxModpack.InstallerComponents
             else
                 Logging.WriteToLog("...skipped");
 
-            //step 6: patch files (async option)
+            //step 9: create create shortcuts (async option)
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
             InstallFinishedEventArgs.ExitCodes++;
-            Logging.WriteToLog(string.Format("Cleaning of mods foldres, current install time = {0} msec",
+            Logging.WriteToLog(string.Format("Creating of shortcuts, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
-            if (ModpackSettings.CleanInstallation)
+            if (ModpackSettings.CreateShortcuts)
             {
 
             }
             else
                 Logging.WriteToLog("...skipped");
 
-            //step 7: create create shortcuts (async option)
+            //step 10: create atlasas (async option)
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
             InstallFinishedEventArgs.ExitCodes++;
-            Logging.WriteToLog(string.Format("Cleaning of mods foldres, current install time = {0} msec",
+            Logging.WriteToLog(string.Format("Creating of atlases, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
-            if (ModpackSettings.CleanInstallation)
-            {
-
-            }
-            else
-                Logging.WriteToLog("...skipped");
-
-            //step 8: create atlasas (async option)
-            OldTime = InstallStopWatch.Elapsed;
-            Progress.TotalCurrent++;
-            InstallFinishedEventArgs.ExitCodes++;
-            Logging.WriteToLog(string.Format("Cleaning of mods foldres, current install time = {0} msec",
-                InstallStopWatch.Elapsed.TotalMilliseconds));
+            //if statement TODO
             if (ModpackSettings.CleanInstallation)
             {
 
@@ -213,7 +244,7 @@ namespace RelhaxModpack.InstallerComponents
             return true;
         }
 
-        private async Task<bool> ClearModsFolders()
+        private async Task<bool> ClearModsFoldersAsync()
         {
 
             return true;
