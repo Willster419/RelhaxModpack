@@ -36,7 +36,7 @@ namespace RelhaxModpack.InstallerComponents
     public class InstallEngine : IDisposable
     {
         #region Instance Variables
-        public List<DatabasePackage>[] orderedPackagesToInstall;
+        public List<DatabasePackage>[] OrderedPackagesToInstall;
         public event InstallFinishedDelegate OnInstallFinish;
         public event InstallProgressDelegate OnInstallProgress;
         public RelhaxInstallFinishedEventArgs InstallFinishedEventArgs = new RelhaxInstallFinishedEventArgs();
@@ -68,7 +68,7 @@ namespace RelhaxModpack.InstallerComponents
 
         public async void RunInstallationAsync()
         {
-            if(orderedPackagesToInstall == null || orderedPackagesToInstall.Count() == 0)
+            if(OrderedPackagesToInstall == null || OrderedPackagesToInstall.Count() == 0)
                 throw new BadMemeException("WOW you really suck at programming");
             if (OnInstallFinish == null || OnInstallProgress == null)
                 throw new BadMemeException("HOW DAFAQ DID YOU FAQ THIS UP???");
@@ -221,8 +221,86 @@ namespace RelhaxModpack.InstallerComponents
 
         private async Task<bool> ExtractFilesAsync()
         {
+            //this is the only really new one. for each install group, spawn a bunch of threads to start the instal process
+            //get the number of threads we will use for each of the install stepps
+            int numThreads = ModpackSettings.MulticoreExtraction ? Settings.NumLogicalProcesors : 1;
+            Logging.WriteToLog(string.Format("Number of threads to use for install is {0}, (MulticoreExtraction={1}, LogicalProcesosrs={2}",
+                numThreads, ModpackSettings.MulticoreExtraction, Settings.NumLogicalProcesors));
+            for (int i = 0; i < OrderedPackagesToInstall.Count(); i++)
+            {
+                Logging.WriteToLog("Install Group " + i + " starts now");
+                //get the list of packages to install
+                List<DatabasePackage> packages = new List<DatabasePackage>(OrderedPackagesToInstall[i]);
+                //this list represents all te packages in this group that can all be installed at the same time
+                //i.e. there are NO conflicting zip file paths in ALL of the files, in other works all the files are mutually exclusive
 
+                //first sort the packages by the size parameter
+                //https://stackoverflow.com/questions/3309188/how-to-sort-a-listt-by-a-property-in-the-object
+                //TODO: the size of all objects MUST BE KNOWN??
+                //List<DatabasePackage> packagesSortedBySize = packages.OrderByDescending(pack => pack.)
+                //for not just go with the packages as they are, they should alrady be in alphabetical order
+
+                //make a list of packages again, but size is based on number of logical processors and/or multicore install mdos
+                //if a user has 8 cores, then make a lists of packages to install
+                List<DatabasePackage>[] packageThreads = new List<DatabasePackage>[numThreads];
+                //assign each package one at a time into a package thread
+                for(int j = 0; j < packages.Count; j++)
+                {
+                    int threadSelector = j % numThreads;
+                    packageThreads[threadSelector].Add(packages[j]);
+                    Logging.WriteToLog(string.Format("j index = {0} package {1} has been assigned to packageThread {2}", j, packages[j].PackageName,
+                        threadSelector), Logfiles.Application, LogLevel.Debug);
+                }
+                //now the fun starts. these all can run at once
+                //https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/task-based-asynchronous-programming
+                Task[] tasks = new Task[numThreads];
+                if (tasks.Count() != packageThreads.Count())
+                    throw new BadMemeException("ohhhhhhhhh, NOW you f*cked UP!");
+                for(int k = 0; k < tasks.Count(); k++)
+                {
+                    Logging.WriteToLog(string.Format("thread {0} starting task, packages to extract={1}", k, packageThreads[k].Count));
+                    //tasks[k] = ExtractFilesAsync(packageThreads[k], k);
+                    tasks[k] = Task.Factory.StartNew(() => ExtractFilesAsync(packageThreads[k], k));
+                }
+                Logging.WriteToLog(string.Format("all threads started on group {0}, master thread now waiting on Task.WaitAll(tasks)",i),
+                    Logfiles.Application,LogLevel.Debug);
+                Task.WaitAll(tasks);
+                Logging.WriteToLog("Install Group " + i + " finishes now");
+            }
             return true;
+        }
+
+        private void ExtractFilesAsync(List<DatabasePackage> packagesToExtract, int threadNum)
+        {
+            bool notAllPackagesExtracted = true;
+            while(notAllPackagesExtracted)
+            {
+                int numExtracted = 0;
+                foreach (DatabasePackage package in packagesToExtract)
+                {
+                    if(ModpackSettings.DownloadInstantExtraction && package.DownloadFlag)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        Logging.WriteToLog("Thread ID=" + threadNum + ", starting extraction of " + package.ZipFile);
+                        numExtracted++;
+                        Unzip(package);
+                    }
+                }
+                if (numExtracted == packagesToExtract.Count)
+                    notAllPackagesExtracted = false;
+                else
+                    System.Threading.Thread.Sleep(200);
+            }
+            
+        }
+
+        private void Unzip(DatabasePackage package)
+        {
+            //do any zip file processing, then extract
+
         }
 
         private async Task<bool> PatchFilesAsync()
