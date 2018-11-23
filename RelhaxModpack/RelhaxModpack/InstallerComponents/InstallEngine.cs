@@ -231,7 +231,32 @@ namespace RelhaxModpack.InstallerComponents
 
         private async Task<bool> BackupModsAsync()
         {
-
+            //check first if the directory exists first
+            if (!Directory.Exists(Settings.RelhaxModBackupFolder))
+                Directory.CreateDirectory(Settings.RelhaxModBackupFolder);
+            //create the directory for this version to backup to
+            string folderDateName = string.Format("{0:yyyy-MM-dd-HH-mm-ss}", DateTime.Now);
+            string fullFolderPath = Path.Combine(Settings.RelhaxModBackupFolder, folderDateName);
+            if (Directory.Exists(fullFolderPath))
+                throw new BadMemeException("how does this already exist, like seriously");
+            Directory.CreateDirectory(fullFolderPath);
+            //make zip files maybe? TODO
+            if (false)
+            { 
+                using (Ionic.Zip.ZipFile backupZip = new Ionic.Zip.ZipFile(fullFolderPath + ".zip"))
+                {
+                    backupZip.AddDirectory(Path.Combine(Settings.WoTDirectory, "mods"));
+                    backupZip.AddDirectory(Path.Combine(Settings.WoTDirectory, "res_mods"));
+                    backupZip.Save();
+                }
+            }
+            else
+            {
+                //copy the files over
+                //progress TODO
+                Utils.DirectoryCopy(Path.Combine(Settings.WoTDirectory, "mods"), Path.Combine(fullFolderPath, "mods"),true);
+                Utils.DirectoryCopy(Path.Combine(Settings.WoTDirectory, "res_mods"), Path.Combine(fullFolderPath, "res_mods"), true);
+            }
             return true;
         }
 
