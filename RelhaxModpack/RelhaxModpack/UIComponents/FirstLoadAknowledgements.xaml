@@ -7,6 +7,13 @@
         mc:Ignorable="d"
         Title="FirstLoadAknowledgements" Height="450" Width="800">
     <Grid>
-        
+        <RichTextBox HorizontalAlignment="Left" Height="100" Margin="223,136,0,0" VerticalAlignment="Top" Width="100">
+            <FlowDocument>
+                <Paragraph>
+                    <Run Text="RichTextBox"/>
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+
     </Grid>
 </local:RelhaxWindow>
