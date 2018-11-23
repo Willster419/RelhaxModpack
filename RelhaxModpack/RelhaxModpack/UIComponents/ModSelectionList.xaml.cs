@@ -245,6 +245,7 @@ namespace RelhaxModpack.Windows
             }
             Utils.BuildLinksRefrence(ParsedCategoryList);
             Utils.BuildLevelPerPackage(ParsedCategoryList);
+            Utils.AssignCateogryPatchIDS(ParsedCategoryList);
             List<DatabasePackage> flatList = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList);
             //check db cache of local files
             loadProgress.ChildCurrent++;
