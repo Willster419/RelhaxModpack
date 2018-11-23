@@ -19,12 +19,6 @@ using System.Xml.Linq;
 namespace RelhaxModpack.Windows
 {
     #region structs and stuff
-    public struct RelhaxProgress
-    {
-        public string ReportMessage;
-        public int ChildProgressCurrent;
-        public int ChildProgressTotal;
-    }
     //https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c
     public class SelectionListEventArgs : EventArgs
     {
@@ -61,8 +55,8 @@ namespace RelhaxModpack.Windows
             if (loadingProgress != null)
             {
                 loadingProgress.Message = progress.ReportMessage;
-                loadingProgress.ProgressValue = progress.ChildProgressCurrent;
-                loadingProgress.ProgressMaximum = progress.ChildProgressTotal;
+                loadingProgress.ProgressValue = progress.ChildCurrent;
+                loadingProgress.ProgressMaximum = progress.ChildTotal;
             }
         }
 
@@ -144,8 +138,8 @@ namespace RelhaxModpack.Windows
         {
             RelhaxProgress loadProgress = new RelhaxProgress()
             {
-                ChildProgressTotal = 4,
-                ChildProgressCurrent = 1,
+                ChildTotal = 4,
+                ChildCurrent = 1,
                 ReportMessage = Translations.GetTranslatedString("downloadingDatabase")
             };
             progress.Report(loadProgress);
@@ -240,7 +234,7 @@ namespace RelhaxModpack.Windows
                 Settings.WoTClientVersion = XMLUtils.GetXMLStringFromXPath(modInfoDocument, "//modInfoAlpha.xml@version");
             }
             //parse the modInfoXml to list in memory
-            loadProgress.ChildProgressCurrent++;
+            loadProgress.ChildCurrent++;
             loadProgress.ReportMessage = Translations.GetTranslatedString("parsingDatabase");
             progress.Report(loadProgress);
             if(!XMLUtils.ParseDatabase(modInfoDocument,GlobalDependencies,Dependencies,ParsedCategoryList))
@@ -253,7 +247,7 @@ namespace RelhaxModpack.Windows
             Utils.BuildLevelPerPackage(ParsedCategoryList);
             List<DatabasePackage> flatList = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList);
             //check db cache of local files
-            loadProgress.ChildProgressCurrent++;
+            loadProgress.ChildCurrent++;
             loadProgress.ReportMessage = Translations.GetTranslatedString("verifyingDownloadCache");
             progress.Report(loadProgress);
             //the below does not work yet TODO: CHECK?
@@ -276,7 +270,7 @@ namespace RelhaxModpack.Windows
                     package.DownloadFlag = true;
             }
             //build UI
-            loadProgress.ChildProgressCurrent = 0;
+            loadProgress.ChildCurrent = 0;
             loadProgress.ReportMessage = Translations.GetTranslatedString("loadingUI");
             progress.Report(loadProgress);
             //initialize the categories lists
@@ -286,8 +280,8 @@ namespace RelhaxModpack.Windows
             //initialize the user mods
             BuildUserMods();
             //add the packages for each category
-            loadProgress.ChildProgressTotal = Utils.GetFlatList(null, null, null, ParsedCategoryList).Count;
-            loadProgress.ChildProgressTotal += userMods.Count;
+            loadProgress.ChildTotal = Utils.GetFlatList(null, null, null, ParsedCategoryList).Count;
+            loadProgress.ChildTotal += userMods.Count;
             foreach(Category cat in ParsedCategoryList)
             {
                 AddPackage(ref progress, ref loadProgress, cat.Packages);
@@ -504,7 +498,7 @@ namespace RelhaxModpack.Windows
                 //but first check if we actually want to add it. if the program isn't forcing them to be enabled
                 //and the mod reports being disabled, then don't add it to the UI
                 //the counter needs to still be kept up to date with the list (the whole list includes invisible mods!)
-                loadProgress.ChildProgressCurrent++;
+                loadProgress.ChildCurrent++;
                 if (!CommandLineSettings.ForceVisible && !package.Visible)
                     continue;
                 //now that we are actually adding it, report some progress

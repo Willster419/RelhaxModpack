@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using RelhaxModpack.Windows;
+using RelhaxModpack.UIComponents;
 using System.Xml;
 using System.Diagnostics;
 using Ionic.Zip;
@@ -28,6 +29,12 @@ namespace RelhaxModpack
         private System.Windows.Forms.NotifyIcon RelhaxIcon;
         private Stopwatch stopwatch = new Stopwatch();
         private ModSelectionList modSelectionList;
+        private Stopwatch downloadTimer = new Stopwatch();
+        private double last_download_time;
+        private double current_download_time;
+        private long last_bytes_downloaded;
+        private long current_bytes_downloaded;
+        private RelhaxProgress downloadProgress = null;
 
         /// <summary>
         /// Creates the instance of the MainWindow class
@@ -811,18 +818,38 @@ namespace RelhaxModpack
         private async void ProcessDownloads(List<DatabasePackage> packagesToDownload)
         {
             //remmeber this is on the UI thread so we can update the progress via this
+            //and also update the UI info
+            ParentProgressBar.Minimum = 0;
+            ParentProgressBar.Maximum = packagesToDownload.Count;
+            ParentProgressBar.Value = 0;
             using(WebClient client = new WebClient())
             {
                 client.DownloadProgressChanged += Client_DownloadProgressChanged;
                 string fileToDownload = string.Empty;
                 string fileToSaveTo = string.Empty;
+                downloadProgress = new RelhaxProgress()
+                {
+                    ParrentCurrent = 0,
+                    ParrentTotal = packagesToDownload.Count
+                };
                 foreach (DatabasePackage package in packagesToDownload)
                 {
+                    //increate it out here, not in the repeat loop
+                    ParentProgressBar.Value++;
+                    downloadProgress.ChildCurrentProgress = package.ZipFile;
                     bool retry = true;
                     while (retry)
                     {
                         fileToDownload = package.StartAddress + package.ZipFile + package.EndAddress;
                         fileToSaveTo = Path.Combine(Settings.RelhaxDownloadsFolder, package.ZipFile);
+                        current_bytes_downloaded = 0;
+                        last_bytes_downloaded = 0;
+                        last_download_time = 0;
+                        current_download_time = 0;
+                        //restarting the time should be the last thing to happen before starting file download
+                        //kind of like a timing constraint
+
+                        downloadTimer.Restart();
                         try
                         {
                             await client.DownloadFileTaskAsync(fileToDownload, fileToSaveTo);
@@ -833,6 +860,25 @@ namespace RelhaxModpack
                             Logging.WriteToLog("failed to download the file " + package.ZipFile + "\n" + ex.ToString(),
                                 Logfiles.Application, LogLevel.Error);
                             //show abort retry ignore window TODO
+                            MessageBoxResult result = MessageBox.Show(string.Format("{0} \"{1}\" {2}",
+                                Translations.GetTranslatedString("failedToDownload1"),
+                                package.ZipFile, Translations.GetTranslatedString("failedToDownload2")),
+                                Translations.GetTranslatedString("failedToDownloadHeader"), MessageBoxButton.YesNoCancel);
+                            switch(result)
+                            {
+                                case MessageBoxResult.Yes:
+                                    //keep retry as true
+                                    break;
+                                case MessageBoxResult.No:
+                                    //skip this file
+                                    retry = false;
+                                    break;
+                                case MessageBoxResult.Cancel:
+                                    //stop the installation alltogether
+                                    //cancel token stuff TODO
+                                    retry = false;
+                                    break;
+                            }
                         }
                     }
                 }
@@ -841,7 +887,39 @@ namespace RelhaxModpack
 
         private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            
+            //update the ETA
+            //ignore the first hit of this method, because the timer started while the connection was
+            //setting up, and not actually downloading in constant stream
+            if(current_bytes_downloaded + current_download_time + last_bytes_downloaded + last_download_time == 0)
+            {
+                //set a starting point for the "current" download timer value and size downloaded
+                current_bytes_downloaded = e.BytesReceived;
+                current_download_time = downloadTimer.Elapsed.TotalMilliseconds;
+                return;
+            }
+            //otherwise use standard estimating procedures
+            //set current to last and get new currents
+            last_bytes_downloaded = current_bytes_downloaded;
+            last_download_time = current_download_time;
+            current_bytes_downloaded = e.BytesReceived;
+            current_download_time = downloadTimer.Elapsed.TotalMilliseconds;
+            //get the current bytes per millisecond
+            double bytes_per_millisecond = (current_bytes_downloaded-last_bytes_downloaded) / (current_download_time-last_download_time);
+            double bytes_per_second = bytes_per_millisecond / 1000;
+            double kbytes_per_second = bytes_per_second / 1024;
+            double mbytes_per_second = kbytes_per_second / 1024;
+            //if we have a download rate, and a remaining size, then we can get a remaining time!
+            double remaining_bytes = e.TotalBytesToReceive - e.BytesReceived;
+            double remaining_milliseconds = remaining_bytes / bytes_per_millisecond;
+            double remaining_seconds = remaining_milliseconds / 1000;
+            ChildProgressBar.Maximum = e.TotalBytesToReceive;
+            ChildProgressBar.Minimum = 0;
+            ChildProgressBar.Value = e.BytesReceived;
+            //also report to the download message process
+            InstallProgressTextBox.Text = string.Format("{0} {1} {2} {3}\n{4}\n{5} {6} {7}\n{8} {9} {10}",
+                Translations.GetTranslatedString("downloading"), TotalProgressBar.Value, Translations.GetTranslatedString("of"),
+                TotalProgressBar.Maximum, downloadProgress.ChildCurrentProgress, e.BytesReceived / (1024 * 1024), Translations.GetTranslatedString("of"),
+                e.TotalBytesToReceive / (1024 * 1024), "ETA:", remaining_seconds, Translations.GetTranslatedString("seconds"));
         }
 
         private void UninstallModpackButton_Click(object sender, RoutedEventArgs e)
