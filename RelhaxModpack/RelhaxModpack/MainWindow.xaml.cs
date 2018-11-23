@@ -796,6 +796,9 @@ namespace RelhaxModpack
             if (selectablePackagesToInstall.Count == 0)
             {
                 Logging.WriteToLog("no packages selected to install...");
+                ResetUI();
+                ToggleUIButtons(true);
+                return;
             }
             //perform list install order calculations
             List<DatabasePackage>[] orderedPackagesToInstall = Utils.CreateOrderedInstallList(packagesToInstall);
