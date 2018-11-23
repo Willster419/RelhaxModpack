@@ -814,8 +814,45 @@ namespace RelhaxModpack
                 Logging.WriteToLog(string.Format("download time took {0} msec", stopwatch.Elapsed.TotalMilliseconds - lastTime.TotalMilliseconds));
                 lastTime = stopwatch.Elapsed;
             }
+            else if(packagesToDownload.Count > 0 && ModpackSettings.DownloadInstantExtraction)
+            {
+                Logging.WriteToLog("download while install = true and packages to download, starting ProcessDownloadsAsync()");
+                ProcessDownloadsAsync(packagesToDownload);
+            }
             //now let's start the install procedures
 
+        }
+
+        //handles processing of downloads and nothing more...
+        private async Task ProcessDownloadsAsync(List<DatabasePackage> packagesToDownload)
+        {
+            using (WebClient client = new WebClient())
+            {
+                int retryCount = 3;
+                string fileToDownload = string.Empty;
+                string fileToSaveTo = string.Empty;
+                foreach (DatabasePackage package in packagesToDownload)
+                {
+                    retryCount = 3;
+                    while(retryCount > 0)
+                    {
+                        fileToDownload = package.StartAddress + package.ZipFile + package.EndAddress;
+                        fileToSaveTo = Path.Combine(Settings.RelhaxDownloadsFolder, package.ZipFile);
+                        try
+                        {
+                            await client.DownloadFileTaskAsync(fileToDownload, fileToSaveTo);
+                            retryCount = 0;
+                            package.DownloadFlag = false;
+                        }
+                        catch(WebException ex)
+                        {
+                            Logging.WriteToLog(string.Format("Failed to download the file {0}, try {1} of {2}\n{3}", package.ZipFile, retryCount, 1,
+                                ex.ToString()), Logfiles.Application, LogLevel.Error);
+                            retryCount--;
+                        }
+                    }
+                }
+            }
         }
 
         private async void ProcessDownloads(List<DatabasePackage> packagesToDownload)
@@ -857,6 +894,7 @@ namespace RelhaxModpack
                         {
                             await client.DownloadFileTaskAsync(fileToDownload, fileToSaveTo);
                             retry = false;
+                            package.DownloadFlag = false;
                         }
                         catch (WebException ex)
                         {

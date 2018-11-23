@@ -260,7 +260,8 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     Logging.WriteToLog(string.Format("thread {0} starting task, packages to extract={1}", k, packageThreads[k].Count));
                     //tasks[k] = ExtractFilesAsync(packageThreads[k], k);
-                    tasks[k] = Task.Factory.StartNew(() => ExtractFilesAsync(packageThreads[k], k));
+                    //use the task factory to create tasks(threads) for each logical cores
+                    tasks[k] = Task.Factory.StartNew(() => ExtractFiles(packageThreads[k], k));
                 }
                 Logging.WriteToLog(string.Format("all threads started on group {0}, master thread now waiting on Task.WaitAll(tasks)",i),
                     Logfiles.Application,LogLevel.Debug);
@@ -270,9 +271,12 @@ namespace RelhaxModpack.InstallerComponents
             return true;
         }
 
-        private void ExtractFilesAsync(List<DatabasePackage> packagesToExtract, int threadNum)
+        private void ExtractFiles(List<DatabasePackage> packagesToExtract, int threadNum)
         {
             bool notAllPackagesExtracted = true;
+            //in case the user selected to "download and install at the same time", there may be cases where
+            //some items in this list (earlier, for sake of areugment) are not downloaded yet, but others below are.
+            //if this is the case, then we need to skip over those items for now while they download in the background
             while(notAllPackagesExtracted)
             {
                 int numExtracted = 0;
@@ -300,6 +304,8 @@ namespace RelhaxModpack.InstallerComponents
         private void Unzip(DatabasePackage package)
         {
             //do any zip file processing, then extract
+            if (string.IsNullOrWhiteSpace(package.ZipFile))
+                throw new BadMemeException("REEEEEEEE");
 
         }
 
