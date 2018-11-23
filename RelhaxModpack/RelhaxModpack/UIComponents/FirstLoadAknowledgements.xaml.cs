@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,9 +20,26 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class FirstLoadAknowledgements : RelhaxWindow
     {
-        public FirstLoadAknowledgements()
+        public FirstLoadAknowledgements() => InitializeComponent();
+
+
+
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            InitializeComponent();
+
+        }
+
+        private void RichTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            
+        }
+
+        private void Link_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+            //Link clicking event that opens the browser
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
         }
     }
 }
