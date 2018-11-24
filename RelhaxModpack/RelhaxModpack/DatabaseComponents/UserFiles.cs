@@ -14,6 +14,9 @@ namespace RelhaxModpack
         // this entry will be pßroceeded in any case (if package is checked), even if "save user data" option is "false"
         public bool systemInitiated = false;//TODO: remove
 
+        //contain the list of actuall files saved. it's the full path inlcuding the file name
+        public List<string> Files_saved = new List<string>();
+
         public override string ToString()
         {
             return Pattern + (placeBeforeExtraction ?  " (pre)" : "") + (systemInitiated ? " (sys)" : "");

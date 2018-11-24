@@ -267,7 +267,37 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.WriteToLog(string.Format("Backup data of package {0} starting", package.PackageName));
                 foreach(UserFiles files in package.UserFiles)
                 {
-                    //reeeeeee
+                    //use the search parameter to get the actual files to move
+                    //remove the mistake i made over a year ago of the double slashes
+                    string searchPattern = files.Pattern.Replace(@"\\", @"\");
+                    //legacy compatibility: eithor the item will be with a macro start or not.
+                    //they need to be treated differently
+                    string root_directory = "";
+                    string actual_search = "";
+                    if (searchPattern[0].Equals('{'))
+                    {
+                        //it has macros, and the first one is the base path. remove and macro it
+                        //root_directory = macro using split of }
+                    }
+                    else
+                    {
+                        //it's an old style (or at least can assume that it's assuming root WoT direcotry
+                        root_directory = Settings.WoTDirectory;
+                        //actual_search = Utils.MacroParse();
+
+                    }
+                    throw new BadMemeException("TODO");
+                    files.Files_saved = Directory.GetFiles(root_directory, actual_search, SearchOption.AllDirectories).ToList();
+                    //make root directory to store the temp files
+                    if(files.Files_saved.Count > 0)
+                    {
+                        if (!Directory.Exists(Path.Combine(Settings.RelhaxTempFolder, package.PackageName)))
+                            Directory.CreateDirectory(Path.Combine(Settings.RelhaxTempFolder, package.PackageName));
+                        foreach(string s in files.Files_saved)
+                        {
+                            File.Move(s, Path.Combine(Path.Combine(Settings.RelhaxTempFolder, package.PackageName, Path.GetFileName(s))));
+                        }
+                    }
                 }
             }
             return true;
@@ -458,9 +488,27 @@ namespace RelhaxModpack.InstallerComponents
             foreach (SelectablePackage package in packagesWithData)
             {
                 Logging.WriteToLog(string.Format("Restore data of package {0} starting", package.PackageName));
+                //check if the package name exists first
+                string tempBackupFolder = Path.Combine(Settings.RelhaxTempFolder, package.PackageName);
+                if(!Directory.Exists(tempBackupFolder))
+                {
+                    Logging.WriteToLog(string.Format("folder {0} does not exist, skipping", package.PackageName), Logfiles.Application, LogLevel.Debug);
+                }
                 foreach (UserFiles files in package.UserFiles)
                 {
-                    //reeeeeee
+                    foreach(string savedFile in files.Files_saved)
+                    {
+                        string filePath = Path.Combine(Settings.RelhaxTempFolder, package.PackageName, Path.GetFileName(savedFile));
+                        if(File.Exists(filePath))
+                        {
+                            Logging.WriteToLog(string.Format("Restoring file {0} of {1}", Path.GetFileName(savedFile), package.PackageName));
+                            if (!Directory.Exists(Path.GetDirectoryName(savedFile)))
+                                Directory.CreateDirectory(Path.GetDirectoryName(savedFile));
+                            if (File.Exists(savedFile))
+                                File.Delete(savedFile);
+                            File.Move(filePath, savedFile);
+                        }
+                    }
                 }
             }
             return true;

@@ -1068,7 +1068,7 @@
             <param name="fileName"></param>
             <returns></returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.DirectoryDelete(System.String,System.Boolean,System.Int32,System.Int32)">
+        <member name="M:RelhaxModpack.Utils.DirectoryDelete(System.String,System.Boolean,System.Int32,System.Int32,System.String)">
             <summary>
             Deletes files in a directory
             </summary>
