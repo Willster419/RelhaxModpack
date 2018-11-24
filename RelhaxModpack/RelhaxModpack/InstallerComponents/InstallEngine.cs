@@ -41,10 +41,12 @@ namespace RelhaxModpack.InstallerComponents
         #region Instance Variables
         public List<DatabasePackage>[] OrderedPackagesToInstall;
         public List<SelectablePackage> FlatListSelectablePackages;
+        public bool AwaitCallback = false;
         public event InstallFinishedDelegate OnInstallFinish;
         public event InstallProgressDelegate OnInstallProgress;
-        public RelhaxInstallFinishedEventArgs InstallFinishedEventArgs = new RelhaxInstallFinishedEventArgs();
-        public Stopwatch InstallStopWatch = new Stopwatch();
+
+        private RelhaxInstallFinishedEventArgs InstallFinishedArgs = new RelhaxInstallFinishedEventArgs();
+        private Stopwatch InstallStopWatch = new Stopwatch();
         private TimeSpan OldTime;
         private RelhaxProgress Progress = new RelhaxProgress();
         #endregion
@@ -65,12 +67,26 @@ namespace RelhaxModpack.InstallerComponents
         {
             if(OnInstallFinish != null)
             {
-                OnInstallFinish(this, InstallFinishedEventArgs);
+                OnInstallFinish(this, InstallFinishedArgs);
             }
         }
         #endregion
 
         public async void RunInstallationAsync()
+        {
+            if (AwaitCallback)
+            {
+                await Task.Factory.StartNew(() => LOLActuallyRunInstallationAsync());
+                InstallFinishedArgs.ExitCodes = InstallerExitCodes.Success;
+                ReportFinish();
+            }
+            else
+            {
+                Task.Factory.StartNew(() => LOLActuallyRunInstallationAsync());
+            }
+        }
+
+        private async void LOLActuallyRunInstallationAsync()
         {
             if(OrderedPackagesToInstall == null || OrderedPackagesToInstall.Count() == 0)
                 throw new BadMemeException("WOW you really suck at programming");
@@ -78,7 +94,8 @@ namespace RelhaxModpack.InstallerComponents
                 throw new BadMemeException("HOW DAFAQ DID YOU FAQ THIS UP???");
             Logging.WriteToLog("Installation starts now from RunInstallation() in Install Engine");
             //do more stuff here im sure like init log files
-            List<SelectablePackage> selectedPackages = FlatListSelectablePackages.Where(package => package.Checked).ToList();
+            //also check enalbed just to be safe
+            List<SelectablePackage> selectedPackages = FlatListSelectablePackages.Where(package => package.Checked && package.Enabled).ToList();
             List<SelectablePackage> packagesWithData = selectedPackages.Where(package => package.UserFiles.Count > 0).ToList();
             //and reset the stopwatch
             InstallStopWatch.Reset();
@@ -86,7 +103,7 @@ namespace RelhaxModpack.InstallerComponents
             //step 1 on install: backup user mods
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
-            InstallFinishedEventArgs.ExitCodes++;
+            InstallFinishedArgs.ExitCodes++;
             Logging.WriteToLog("Backup of mods, current install time = 0 msec");
             if (ModpackSettings.BackupModFolder)
             {
@@ -105,7 +122,7 @@ namespace RelhaxModpack.InstallerComponents
             //step 2: backup data
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
-            InstallFinishedEventArgs.ExitCodes++;
+            InstallFinishedArgs.ExitCodes++;
             Logging.WriteToLog(string.Format("Backup of userdata, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.SaveUserData)
@@ -118,7 +135,7 @@ namespace RelhaxModpack.InstallerComponents
             //step 3: clear cache
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
-            InstallFinishedEventArgs.ExitCodes++;
+            InstallFinishedArgs.ExitCodes++;
             Logging.WriteToLog(string.Format("Cleaning of cache folders, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.ClearCache)
@@ -131,7 +148,7 @@ namespace RelhaxModpack.InstallerComponents
             //step 4: clear logs
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
-            InstallFinishedEventArgs.ExitCodes++;
+            InstallFinishedArgs.ExitCodes++;
             Logging.WriteToLog(string.Format("Cleaning of logs, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.DeleteLogs)
@@ -144,7 +161,7 @@ namespace RelhaxModpack.InstallerComponents
             //step 5: clean mods folders
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
-            InstallFinishedEventArgs.ExitCodes++;
+            InstallFinishedArgs.ExitCodes++;
             Logging.WriteToLog(string.Format("Cleaning of mods foldres, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.CleanInstallation)
@@ -157,7 +174,7 @@ namespace RelhaxModpack.InstallerComponents
             //step 6: extract mods
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
-            InstallFinishedEventArgs.ExitCodes++;
+            InstallFinishedArgs.ExitCodes++;
             Logging.WriteToLog(string.Format("Exctacting mods, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.CleanInstallation)
@@ -170,7 +187,7 @@ namespace RelhaxModpack.InstallerComponents
             //step 7: restore data
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
-            InstallFinishedEventArgs.ExitCodes++;
+            InstallFinishedArgs.ExitCodes++;
             Logging.WriteToLog(string.Format("Restore of userdata, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             //if statement TODO
@@ -184,7 +201,7 @@ namespace RelhaxModpack.InstallerComponents
             //step 8: patch files (async option)
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
-            InstallFinishedEventArgs.ExitCodes++;
+            InstallFinishedArgs.ExitCodes++;
             Logging.WriteToLog(string.Format("Cleaning of mods foldres, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             //if statement TODO
@@ -198,7 +215,7 @@ namespace RelhaxModpack.InstallerComponents
             //step 9: create create shortcuts (async option)
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
-            InstallFinishedEventArgs.ExitCodes++;
+            InstallFinishedArgs.ExitCodes++;
             Logging.WriteToLog(string.Format("Creating of shortcuts, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.CreateShortcuts)
@@ -211,7 +228,7 @@ namespace RelhaxModpack.InstallerComponents
             //step 10: create atlasas (async option)
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
-            InstallFinishedEventArgs.ExitCodes++;
+            InstallFinishedArgs.ExitCodes++;
             Logging.WriteToLog(string.Format("Creating of atlases, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             //if statement TODO
@@ -227,6 +244,12 @@ namespace RelhaxModpack.InstallerComponents
             //step 9: cleanup (whatever that implies lol)
 
             //and i guess we're done
+            //if were'not causing the main thread to await, then yeah report that we'er done
+            if(!AwaitCallback)
+            {
+                InstallFinishedArgs.ExitCodes = InstallerExitCodes.Success;
+                ReportFinish();
+            }
         }
 
         private async Task<bool> BackupModsAsync()
@@ -393,7 +416,7 @@ namespace RelhaxModpack.InstallerComponents
             return true;
         }
 
-        private async Task<bool> ExtractFilesAsync()
+        private bool ExtractFiles()
         {
             //this is the only really new one. for each install group, spawn a bunch of threads to start the instal process
             //get the number of threads we will use for each of the install stepps

@@ -820,7 +820,37 @@ namespace RelhaxModpack
                 ProcessDownloadsAsync(packagesToDownload);
             }
             //now let's start the install procedures
+            //create and link the install engine
+            InstallerComponents.InstallEngine engine = new InstallerComponents.InstallEngine()
+            {
+                FlatListSelectablePackages = flatListSelect,
+                OrderedPackagesToInstall = orderedPackagesToInstall,
+                AwaitCallback = false
+            };
+            engine.OnInstallProgress += Engine_OnInstallProgress;
+            engine.OnInstallFinish += Engine_OnInstallFinish;
+        }
 
+        private void Engine_OnInstallFinish(object sender, InstallerComponents.RelhaxInstallFinishedEventArgs e)
+        {
+            if(e.ExitCodes == InstallerComponents.InstallerExitCodes.Success)
+            {
+
+            }
+            else
+            {
+                //explain why if failed
+                //messagebox
+
+                //and log
+                Logging.WriteToLog(string.Format("Installer failed to install, exit code {0}\n{1}", e.ExitCodes.ToString(), e.ErrorMessage),
+                    Logfiles.Application, LogLevel.Exception);
+            }
+        }
+
+        private void Engine_OnInstallProgress(object sender, RelhaxProgress e)
+        {
+            
         }
 
         //handles processing of downloads and nothing more...
