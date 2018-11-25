@@ -283,7 +283,7 @@ namespace RelhaxModpack.InstallerComponents
             return true;
         }
 
-        private async Task<bool> BackupDataAsync(List<SelectablePackage> packagesWithData)
+        private bool BackupData(List<SelectablePackage> packagesWithData)
         {
             foreach(SelectablePackage package in packagesWithData)
             {
@@ -326,7 +326,7 @@ namespace RelhaxModpack.InstallerComponents
             return true;
         }
 
-        private async Task<bool> ClearCacheAsync()
+        private bool ClearCache()
         {
             //make sure that the app data folder exists
             //if it does not, then it does not need to run this
@@ -391,7 +391,7 @@ namespace RelhaxModpack.InstallerComponents
             return true;
         }
 
-        private async Task<bool> ClearLogsAsync()
+        private bool ClearLogs()
         {
             string[] logsToDelete = new string[]
             {
@@ -506,7 +506,7 @@ namespace RelhaxModpack.InstallerComponents
 
         }
 
-        private async Task<bool> RestoreDataAsync(List<SelectablePackage> packagesWithData)
+        private bool RestoreData(List<SelectablePackage> packagesWithData)
         {
             foreach (SelectablePackage package in packagesWithData)
             {
@@ -537,19 +537,19 @@ namespace RelhaxModpack.InstallerComponents
             return true;
         }
 
-        private async Task<bool> PatchFilesAsync()
+        private bool PatchFiles()
         {
 
             return true;
         }
 
-        private async Task<bool> CreateShortcutsAsync()
+        private bool CreateShortcuts()
         {
 
             return true;
         }
 
-        private async Task<bool> CreateAtlasesAsync()
+        private bool CreateAtlases()
         {
 
             return true;
