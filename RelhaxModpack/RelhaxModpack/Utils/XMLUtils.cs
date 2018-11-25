@@ -17,9 +17,12 @@ namespace RelhaxModpack
     /// </summary>
     public static class XMLUtils
     {
+        #region Statics
         //static path for all developer selections
         public const string DeveloperSelectionsXPath = "TODO";
-        
+        #endregion
+
+        #region XML Validating
         //check to make sure an xml file is valid
         public static bool IsValidXml(string filePath)
         {
@@ -45,6 +48,9 @@ namespace RelhaxModpack
                 }
             }
         }
+        #endregion
+
+        #region Xpath stuff
         //get an xml element attribute given an xml path
         public static string GetXMLStringFromXPath(string file, string xpath)
         {
@@ -175,6 +181,9 @@ namespace RelhaxModpack
           }
           return results;
         }
+        #endregion
+
+        #region Database Loading
         public static bool ParseDatabase(XmlDocument modInfoDocument, List<DatabasePackage> globalDependencies,
             List<Dependency> dependencies, List<Category> parsedCategoryList)
         {
@@ -489,7 +498,6 @@ namespace RelhaxModpack
                 userfiles.Add(files);
             }
         }
-
         public static readonly string[] MediaRequiredNodesV2 = new string[] { "URL", "type" };
         private static void ProcessMedias(XElement mediasHolder, List<Media> medias)
         {
@@ -577,6 +585,9 @@ namespace RelhaxModpack
                     ((IXmlLineInfo)node).LineNumber), Logfiles.Application, LogLevel.Error);
             }
         }
+        #endregion
+
+        #region Other XML stuffs
         //https://blogs.msdn.microsoft.com/xmlteam/2009/03/31/converting-from-xmldocument-to-xdocument/
         private static XDocument DocumentToXDocument(XmlDocument doc)
         {
@@ -584,6 +595,8 @@ namespace RelhaxModpack
                 return null;
             return XDocument.Parse(doc.OuterXml,LoadOptions.SetLineInfo);
         }
+        #endregion
+
         #region Legacy methods
         //parses the xml mod info into the memory database (change XML reader from XMLDocument to XDocument)
         // https://www.google.de/search?q=c%23+xdocument+get+line+number&oq=c%23+xdocument+get+line+number&aqs=chrome..69i57j69i58.11773j0j7&sourceid=chrome&ie=UTF-8
@@ -2127,6 +2140,8 @@ namespace RelhaxModpack
             }
         }
         #endregion
+
+        #region Database Saving
         //saving database in a way that doesn't suck
         public static void SaveDatabase(string saveLocation, string gameVersion, string onlineFolderVersion, List<DatabasePackage> globalDependencies,
         List<Dependency> dependencies, List<Category> parsedCatagoryList)
@@ -2277,6 +2292,7 @@ namespace RelhaxModpack
                 packageHolder.Attributes.Append(attribute);
             }
         }
+        #endregion
     }
 }
  
