@@ -106,6 +106,7 @@
     <Compile Include="DatabaseComponents\SelectablePackage.cs" />
     <Compile Include="DatabaseComponents\UserFiles.cs" />
     <Compile Include="InstallerComponents\InstallEngine.cs" />
+    <Compile Include="InstallerComponents\Patch.cs" />
     <Compile Include="InstallerComponents\Shortcut.cs" />
     <Compile Include="Logging\Logfile.cs" />
     <Compile Include="Logging\Logging.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="UIComponents\StretchingTreeViewItem.cs" />
     <Compile Include="Utils\BadMemeException.cs" />
     <Compile Include="Utils\CiInfo.cs" />
+    <Compile Include="Utils\PatchUtils.cs" />
     <Compile Include="Utils\PatientWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
