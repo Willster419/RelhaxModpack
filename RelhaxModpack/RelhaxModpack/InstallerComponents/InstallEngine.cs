@@ -410,7 +410,29 @@ namespace RelhaxModpack.InstallerComponents
             return true;
         }
 
-        private async Task<bool> ClearModsFoldersAsync()
+        private bool ClearModsFolders()
+        {
+            switch (ModpackSettings.UninstallMode)
+            {
+                case UninstallModes.Default:
+                    Logging.WriteToLog("Running uninstall modes method Default");
+                    return UninstallModsDefault();
+                case UninstallModes.Quick:
+                    Logging.WriteToLog("Running uninstall modes method Quick (Advnaced)");
+                    return UninstallModsQuick();
+                default:
+                    Logging.WriteToLog("Unknown uninstall mode: " + ModpackSettings.UninstallMode.ToString());
+                    return false;
+            }
+        }
+
+        private bool UninstallModsQuick()
+        {
+
+            return true;
+        }
+
+        private bool UninstallModsDefault()
         {
 
             return true;
