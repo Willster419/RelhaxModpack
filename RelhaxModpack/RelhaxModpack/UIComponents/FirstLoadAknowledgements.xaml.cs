@@ -30,11 +30,6 @@ namespace RelhaxModpack.Windows
 
         }
 
-        private void RichTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            
-        }
-
         private void Link_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
             //Link clicking event that opens the browser
         {

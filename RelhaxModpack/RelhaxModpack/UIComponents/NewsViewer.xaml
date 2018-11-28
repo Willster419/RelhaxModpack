@@ -5,15 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="NewsViewer" Height="450" Width="800">
+        Title="NewsViewer" Height="450" Width="415">
     <Grid>
-        <ListBox HorizontalAlignment="Left" Height="383" Margin="10,26,0,0" VerticalAlignment="Top" Width="382" Background="White"/>
-        <TabControl Height="26" VerticalAlignment="Top" Margin="10,0,19,0">
-            <TabItem x:Name="ApplicationTab" Header="Application" Margin="-2,-2,-2,2">
-                <Grid Background="#FFE5E5E5"/>
+        <TabControl Height="26" VerticalAlignment="Top">
+            <TabItem x:Name="ApplicationTab" Header="Application" Margin="-2,-2,-2,2" VerticalAlignment="Top">
+
+                <Grid Background="#FFE5E5E5">
+                    <TextBox Margin="2,0,0,-98">
+                         
+                    </TextBox>
+                </Grid>
+
             </TabItem>
-            <TabItem Header="Database" Margin="0,-2,-4,-1" Height="23" VerticalAlignment="Bottom">
-                <Grid Background="#FFE5E5E5"/>
+            <TabItem x:Name="DatabaseTab" Header="Database" Margin="0,-2,-4,-1" Height="23" VerticalAlignment="Top">
+                <Grid Background="#FFE5E5E5">
+
+                </Grid>
             </TabItem>
         </TabControl>
 
