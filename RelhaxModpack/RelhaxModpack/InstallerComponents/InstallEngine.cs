@@ -111,7 +111,7 @@ namespace RelhaxModpack.InstallerComponents
             Logging.WriteToLog("Backup of mods, current install time = 0 msec");
             if (ModpackSettings.BackupModFolder)
             {
-                if (!await BackupModsAsync())
+                if (! BackupMods())
                 {
                     ReportProgress();
                     ReportFinish();
@@ -591,6 +591,25 @@ namespace RelhaxModpack.InstallerComponents
             return true;
         }
 
+        private List<Patch> MakePatchList()
+        {
+            //get a list of all files in the dedicated patch directory
+            //foreach one add it to the patch list
+            List<Patch> patches = new List<Patch>();
+
+            return patches;
+        }
+
+        private List<Shortcut> MakeShortcutList()
+        {
+            List<Shortcut> shortcuts = new List<Shortcut>();
+
+            return shortcuts;
+        }
+
+        //XML Unpack Import TODO
+
+        //Atlas parsing TODO
         #endregion
 
         #region IDisposable Support

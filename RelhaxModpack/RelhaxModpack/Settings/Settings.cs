@@ -67,6 +67,14 @@ namespace RelhaxModpack
         public static readonly string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, "managerInfo.dat");
 
         public static readonly int NumLogicalProcesors = Environment.ProcessorCount;
+
+        public const string PatchFolderName = "_patch";
+
+        public const string ShortcutFolderName = "TODO";
+
+        public const string XmlUnpackFolderName = "TODO";
+
+        public const string AtlasCreationFoldername = "TODO";
         #endregion
 
         #region Statics
