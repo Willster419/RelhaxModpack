@@ -72,6 +72,7 @@ namespace RelhaxModpack.InstallerComponents
         }
         #endregion
 
+        #region installer entry points
         public async void RunInstallationAsync()
         {
             if (AwaitCallback)
@@ -85,7 +86,10 @@ namespace RelhaxModpack.InstallerComponents
                 Task.Factory.StartNew(() => LOLActuallyRunInstallationAsync());
             }
         }
+        //TODO: uninstall code
+        #endregion
 
+        #region Main Install method
         private async void LOLActuallyRunInstallationAsync()
         {
             if(OrderedPackagesToInstall == null || OrderedPackagesToInstall.Count() == 0)
@@ -251,8 +255,10 @@ namespace RelhaxModpack.InstallerComponents
                 ReportFinish();
             }
         }
+        #endregion
 
-        private async Task<bool> BackupModsAsync()
+        #region Installer methods
+        private bool BackupMods()
         {
             //check first if the directory exists first
             if (!Directory.Exists(Settings.RelhaxModBackupFolder))
@@ -426,19 +432,7 @@ namespace RelhaxModpack.InstallerComponents
             }
         }
 
-        private bool UninstallModsQuick()
-        {
-
-            return true;
-        }
-
-        private bool UninstallModsDefault()
-        {
-
-            return true;
-        }
-
-        private bool ExtractFiles()
+        private bool ExtractFilesAsyncSetup()
         {
             //this is the only really new one. for each install group, spawn a bunch of threads to start the instal process
             //get the number of threads we will use for each of the install stepps
@@ -488,44 +482,6 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.WriteToLog("Install Group " + i + " finishes now");
             }
             return true;
-        }
-
-        private void ExtractFiles(List<DatabasePackage> packagesToExtract, int threadNum)
-        {
-            bool notAllPackagesExtracted = true;
-            //in case the user selected to "download and install at the same time", there may be cases where
-            //some items in this list (earlier, for sake of areugment) are not downloaded yet, but others below are.
-            //if this is the case, then we need to skip over those items for now while they download in the background
-            while(notAllPackagesExtracted)
-            {
-                int numExtracted = 0;
-                foreach (DatabasePackage package in packagesToExtract)
-                {
-                    if(ModpackSettings.DownloadInstantExtraction && package.DownloadFlag)
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        Logging.WriteToLog("Thread ID=" + threadNum + ", starting extraction of " + package.ZipFile);
-                        numExtracted++;
-                        Unzip(package);
-                    }
-                }
-                if (numExtracted == packagesToExtract.Count)
-                    notAllPackagesExtracted = false;
-                else
-                    System.Threading.Thread.Sleep(200);
-            }
-            
-        }
-
-        private void Unzip(DatabasePackage package)
-        {
-            //do any zip file processing, then extract
-            if (string.IsNullOrWhiteSpace(package.ZipFile))
-                throw new BadMemeException("REEEEEEEE");
-
         }
 
         private bool RestoreData(List<SelectablePackage> packagesWithData)
@@ -582,6 +538,60 @@ namespace RelhaxModpack.InstallerComponents
 
             return true;
         }
+        #endregion
+
+        #region Util Methods
+        private void ExtractFiles(List<DatabasePackage> packagesToExtract, int threadNum)
+        {
+            bool notAllPackagesExtracted = true;
+            //in case the user selected to "download and install at the same time", there may be cases where
+            //some items in this list (earlier, for sake of areugment) are not downloaded yet, but others below are.
+            //if this is the case, then we need to skip over those items for now while they download in the background
+            while (notAllPackagesExtracted)
+            {
+                int numExtracted = 0;
+                foreach (DatabasePackage package in packagesToExtract)
+                {
+                    if (ModpackSettings.DownloadInstantExtraction && package.DownloadFlag)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        Logging.WriteToLog("Thread ID=" + threadNum + ", starting extraction of " + package.ZipFile);
+                        numExtracted++;
+                        Unzip(package);
+                    }
+                }
+                if (numExtracted == packagesToExtract.Count)
+                    notAllPackagesExtracted = false;
+                else
+                    System.Threading.Thread.Sleep(200);
+            }
+
+        }
+
+        private void Unzip(DatabasePackage package)
+        {
+            //do any zip file processing, then extract
+            if (string.IsNullOrWhiteSpace(package.ZipFile))
+                throw new BadMemeException("REEEEEEEE");
+
+        }
+
+        private bool UninstallModsQuick()
+        {
+
+            return true;
+        }
+
+        private bool UninstallModsDefault()
+        {
+
+            return true;
+        }
+
+        #endregion
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
