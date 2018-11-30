@@ -8,42 +8,53 @@
         Title="First Load Aknowledgements" Height="236" Width="569" ResizeMode="NoResize">
 
 
-    <Grid Margin="0,0,0,-21">
+    <Grid>
 
-        <CheckBox HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock x:Name="AgreementLicense" Text="You agree to the "/>
-                <TextBlock>
+        <StackPanel>
+            
+            <CheckBox x:Name="license_Agree" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="AgreementLicense" TextWrapping="Wrap" Text="You agree to the "/>
+                    
+                    <TextBlock>
                         <Hyperlink x:Name="LicenseLink" NavigateUri="https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/LICENSE" RequestNavigate="Link_RequestNavigate">License Agreement</Hyperlink>
-                </TextBlock>
-            </StackPanel>
-        </CheckBox>
-
-        <CheckBox HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked" Height="62" Width="406" MaxWidth="400" MaxHeight="60">
-            <TextBlock TextWrapping="Wrap"  
-             Text="I understand Relhax is a mod hoster and installation service and Relhax does not maintain every mod found in this Mod Pack"></TextBlock>
-        </CheckBox>
-        <Button Content="Continue" HorizontalAlignment="Right" Margin="0,0,10,32" VerticalAlignment="Bottom" Width="99"/>
-
-        <CheckBox HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked" Height="32" Width="406" MaxWidth="400" MaxHeight="60">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock x:Name="AgreementSupport" Text="If you need support you will either visit our "/>
-                <TextBlock Width="43">
+                    </TextBlock>
+                    
+                </StackPanel>
+            </CheckBox>
+            
+            <CheckBox HorizontalAlignment="Left"  VerticalAlignment="Top" Checked="CheckBox_Checked" Margin="10,10,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="agreement_Support" TextWrapping="Wrap" Text="If you need support you will either visit our "/>
+                    
+                    <TextBlock Width="43">
                         <Hyperlink x:Name="AgreementSupportForums" NavigateUri="https://forums.relhaxmodpack.com/index.php?board=6.0" RequestNavigate="Link_RequestNavigate">Forums</Hyperlink>
-                </TextBlock>
-                <TextBlock x:Name="AgreementSupport2" Text="or our "/>
-                <TextBlock>
+                    </TextBlock>
+                    
+                    <TextBlock x:Name="AgreementSupport2" Text="or our "/>
+                    
+                    <TextBlock>
                         <Hyperlink x:Name="AgreementSupportDiscord" NavigateUri="https://discord.gg/eURMQ2Y" RequestNavigate="Link_RequestNavigate">Discord.</Hyperlink>
+                    </TextBlock>
+                </StackPanel>
+            </CheckBox>
+            
+            <CheckBox HorizontalAlignment="Left" VerticalAlignment="Top" Checked="CheckBox_Checked" Margin="10,10,0,0">
+                <TextBlock x:Name="agreement_Hoster" TextWrapping="Wrap"  
+                 Text="I understand Relhax is a mod hoster and installation service and Relhax does not maintain every mod found in this Mod Pack">
                 </TextBlock>
-            </StackPanel>
-        </CheckBox>
-        <Button Content="Continue" HorizontalAlignment="Right" Margin="0,0,10,32" VerticalAlignment="Bottom" Width="99"/>
+            </CheckBox>
+            
+            <CheckBox HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="38" Width="332">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="agreement_Your_OS_Is_Trash" TextWrapping="Wrap" Text="Moving to Relhax V2 is a permanent process and does not support Windows XP" Height="37" Width="312"/>
+                </StackPanel>
+            </CheckBox>
 
-        <CheckBox HorizontalAlignment="Left" Margin="10,158,0,0" VerticalAlignment="Top" Height="38" Width="332">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock TextWrapping="Wrap" x:Name="AgreementPermanent" Text="Moving to Relhax V2 is a permanent process and does not support Windows XP" Height="37" Width="312"/>
-            </StackPanel>
-        </CheckBox>
+        </StackPanel>
+
+
+        <Button Content="Continue" x:Name="continue_Button" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="99"/>
 
     </Grid>
 </local:RelhaxWindow>
