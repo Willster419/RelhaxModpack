@@ -5,20 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="NewsViewer" Height="451" Width="420">
+        Title="NewsViewer" Height="451" Width="420" MinWidth="420" MinHeight="451">
     <Grid>
         
-        <TabControl HorizontalAlignment="Left" Height="420" VerticalAlignment="Top" Width="407">
+        <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <TabItem x:Name="application_Update_Tab" Header="Application">
                 <Grid>
-                    <TextBox Background="#FFE5E5E5" IsReadOnly="True">
+                    <TextBox x:Name="application_Update_Text" Tag="application_Update_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
                         This is where the text goes for the Application updates
                     </TextBox>
                 </Grid>
             </TabItem>
             <TabItem x:Name="database_Update_Tab" Header="Database">
                 <Grid Background="#FFE5E5E5">
-                    <TextBox Background="#FFE5E5E5" IsReadOnly="True">
+                    <TextBox x:Name="database_Update_Text" Tag="database_Update_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
                         This is where the text goes for the Database updates
                     </TextBox>
                 </Grid>
