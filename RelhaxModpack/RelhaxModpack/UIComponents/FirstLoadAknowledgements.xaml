@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="First Load Aknowledgements" Height="236" Width="569" ResizeMode="NoResize">
+        Title="First Load Aknowledgements" Height="236" Width="569" ResizeMode="NoResize" Loaded="RelhaxWindow_Loaded">
 
 
     <Grid>
@@ -54,7 +54,7 @@
         </StackPanel>
 
 
-        <Button Content="Continue" x:Name="continue_Button" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="99"/>
+        <Button Content="Continue" x:Name="continue_Button" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="99" Click="Continue_Button_Click"/>
 
     </Grid>
 </local:RelhaxWindow>

@@ -36,5 +36,15 @@ namespace RelhaxModpack.Windows
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
         }
+
+        private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Continue_Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
