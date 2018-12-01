@@ -1,0 +1,863 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<HelpTOC>
+
+  <HelpTOCNode Id="e0e20401-3649-44e8-879c-6daddc98a180" Title="Welcome to the Relhax Modpack Application API Documentation" Url="html/abef5387-c745-4958-aaee-130ddfe2186a.htm">
+    <HelpTOCNode Id="29d9b483-a781-474d-8fd5-756c6d959415" Title="RelhaxModpack" Url="html/R_Project_RelhaxDocumentation.htm">
+      <HelpTOCNode Id="b56eb0b1-139f-4bc4-b5f9-ec5c035ef01c" Title="RelhaxModpack" Url="html/N_RelhaxModpack.htm">
+        <HelpTOCNode Id="5035701d-322f-4bee-8f0a-3a854ae8b348" Title="App Class" Url="html/T_RelhaxModpack_App.htm">
+          <HelpTOCNode Title="App Constructor " Url="html/M_RelhaxModpack_App__ctor.htm" />
+          <HelpTOCNode Title="App Properties" Url="html/Properties_T_RelhaxModpack_App.htm" />
+          <HelpTOCNode Id="ac9871f8-155b-455d-bc7f-0fc19736e0a0" Title="App Methods" Url="html/Methods_T_RelhaxModpack_App.htm">
+            <HelpTOCNode Title="InitializeComponent Method " Url="html/M_RelhaxModpack_App_InitializeComponent.htm" />
+            <HelpTOCNode Title="Main Method " Url="html/M_RelhaxModpack_App_Main.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="App Events" Url="html/Events_T_RelhaxModpack_App.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Title="ApplicationVersions Enumeration" Url="html/T_RelhaxModpack_ApplicationVersions.htm" />
+        <HelpTOCNode Id="c7fdd50f-4579-49fd-951c-a9d5ddc1b8d1" Title="Category Class" Url="html/T_RelhaxModpack_Category.htm">
+          <HelpTOCNode Title="Category Constructor " Url="html/M_RelhaxModpack_Category__ctor.htm" />
+          <HelpTOCNode Id="cb3ccf41-41de-42fe-bd35-e74944e8db5d" Title="Category Methods" Url="html/Methods_T_RelhaxModpack_Category.htm">
+            <HelpTOCNode Title="CompareCatagories Method " Url="html/M_RelhaxModpack_Category_CompareCatagories.htm" />
+            <HelpTOCNode Title="GetFlatPackageList Method " Url="html/M_RelhaxModpack_Category_GetFlatPackageList.htm" />
+            <HelpTOCNode Title="GetSelectablePackage Method " Url="html/M_RelhaxModpack_Category_GetSelectablePackage.htm" />
+            <HelpTOCNode Title="ToString Method " Url="html/M_RelhaxModpack_Category_ToString.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="8fd7e4df-c615-46cb-8237-1cbceff8051b" Title="Category Fields" Url="html/Fields_T_RelhaxModpack_Category.htm">
+            <HelpTOCNode Title="CategoryHeader Field" Url="html/F_RelhaxModpack_Category_CategoryHeader.htm" />
+            <HelpTOCNode Title="Dependencies Field" Url="html/F_RelhaxModpack_Category_Dependencies.htm" />
+            <HelpTOCNode Title="Name Field" Url="html/F_RelhaxModpack_Category_Name.htm" />
+            <HelpTOCNode Title="Packages Field" Url="html/F_RelhaxModpack_Category_Packages.htm" />
+            <HelpTOCNode Title="PatchProcessCategoryID Field" Url="html/F_RelhaxModpack_Category_PatchProcessCategoryID.htm" />
+            <HelpTOCNode Title="TabPage Field" Url="html/F_RelhaxModpack_Category_TabPage.htm" />
+            <HelpTOCNode Title="TreeView Field" Url="html/F_RelhaxModpack_Category_TreeView.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Id="1ffbb539-07c0-4fe9-9970-a72129e7bacd" Title="CiInfo Class" Url="html/T_RelhaxModpack_CiInfo.htm">
+          <HelpTOCNode Id="41ec971c-9ba0-4f11-b7c6-36c89f1f4b18" Title="CiInfo Fields" Url="html/Fields_T_RelhaxModpack_CiInfo.htm">
+            <HelpTOCNode Title="BuildTag Field" Url="html/F_RelhaxModpack_CiInfo_BuildTag.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Id="5f0c7e91-4c0f-4774-8a1c-b5bf7a99e338" Title="CommandLineSettings Class" Url="html/T_RelhaxModpack_CommandLineSettings.htm">
+          <HelpTOCNode Id="8c09983c-11f5-442a-9d28-3868d5c66ae9" Title="CommandLineSettings Methods" Url="html/Methods_T_RelhaxModpack_CommandLineSettings.htm">
+            <HelpTOCNode Title="ParseCommandLineConflicts Method " Url="html/M_RelhaxModpack_CommandLineSettings_ParseCommandLineConflicts.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="bf05555a-ee89-4ac0-97d2-266cfd1e6275" Title="CommandLineSettings Fields" Url="html/Fields_T_RelhaxModpack_CommandLineSettings.htm">
+            <HelpTOCNode Title="AutoInstallFileName Field" Url="html/F_RelhaxModpack_CommandLineSettings_AutoInstallFileName.htm" />
+            <HelpTOCNode Title="DatabaseEdit Field" Url="html/F_RelhaxModpack_CommandLineSettings_DatabaseEdit.htm" />
+            <HelpTOCNode Title="DatabaseUpdate Field" Url="html/F_RelhaxModpack_CommandLineSettings_DatabaseUpdate.htm" />
+            <HelpTOCNode Title="EditorAutoLoadFileName Field" Url="html/F_RelhaxModpack_CommandLineSettings_EditorAutoLoadFileName.htm" />
+            <HelpTOCNode Title="ForceEnabled Field" Url="html/F_RelhaxModpack_CommandLineSettings_ForceEnabled.htm" />
+            <HelpTOCNode Title="ForceVisible Field" Url="html/F_RelhaxModpack_CommandLineSettings_ForceVisible.htm" />
+            <HelpTOCNode Title="PatchCheck Field" Url="html/F_RelhaxModpack_CommandLineSettings_PatchCheck.htm" />
+            <HelpTOCNode Title="SilentStart Field" Url="html/F_RelhaxModpack_CommandLineSettings_SilentStart.htm" />
+            <HelpTOCNode Title="SkipUpdate Field" Url="html/F_RelhaxModpack_CommandLineSettings_SkipUpdate.htm" />
+            <HelpTOCNode Title="TestMode Field" Url="html/F_RelhaxModpack_CommandLineSettings_TestMode.htm" />
+            <HelpTOCNode Title="UpdateKeyFileName Field" Url="html/F_RelhaxModpack_CommandLineSettings_UpdateKeyFileName.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Id="b51d0eee-d64b-4746-aab2-1620be576ad9" Title="DatabaseLogic Class" Url="html/T_RelhaxModpack_DatabaseLogic.htm">
+          <HelpTOCNode Title="DatabaseLogic Constructor " Url="html/M_RelhaxModpack_DatabaseLogic__ctor.htm" />
+          <HelpTOCNode Id="d64dc580-73e8-4748-989c-97b1d1d7ef34" Title="DatabaseLogic Properties" Url="html/Properties_T_RelhaxModpack_DatabaseLogic.htm">
+            <HelpTOCNode Title="Checked Property " Url="html/P_RelhaxModpack_DatabaseLogic_Checked.htm" />
+            <HelpTOCNode Title="Enabled Property " Url="html/P_RelhaxModpack_DatabaseLogic_Enabled.htm" />
+            <HelpTOCNode Title="Logic Property " Url="html/P_RelhaxModpack_DatabaseLogic_Logic.htm" />
+            <HelpTOCNode Title="NotFlag Property " Url="html/P_RelhaxModpack_DatabaseLogic_NotFlag.htm" />
+            <HelpTOCNode Title="PackageName Property " Url="html/P_RelhaxModpack_DatabaseLogic_PackageName.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="a8ad87d0-874c-4a11-8ae3-2f3744e9178b" Title="DatabaseLogic Methods" Url="html/Methods_T_RelhaxModpack_DatabaseLogic.htm">
+            <HelpTOCNode Title="ToString Method " Url="html/M_RelhaxModpack_DatabaseLogic_ToString.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Id="02b9bb25-f3ca-4761-8bab-0efac40891e5" Title="DatabasePackage Class" Url="html/T_RelhaxModpack_DatabasePackage.htm">
+          <HelpTOCNode Title="DatabasePackage Constructor " Url="html/M_RelhaxModpack_DatabasePackage__ctor.htm" />
+          <HelpTOCNode Id="80d14af0-f1fc-4afc-8a42-2e70b023a278" Title="DatabasePackage Properties" Url="html/Properties_T_RelhaxModpack_DatabasePackage.htm">
+            <HelpTOCNode Title="CompletePath Property " Url="html/P_RelhaxModpack_DatabasePackage_CompletePath.htm" />
+            <HelpTOCNode Title="Enabled Property " Url="html/P_RelhaxModpack_DatabasePackage_Enabled.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="6941f22b-4485-460c-9cb5-63d382ca121c" Title="DatabasePackage Methods" Url="html/Methods_T_RelhaxModpack_DatabasePackage.htm">
+            <HelpTOCNode Title="ToString Method " Url="html/M_RelhaxModpack_DatabasePackage_ToString.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="a421ceaa-5192-40e3-a2b9-d7e7ca72f6a2" Title="DatabasePackage Fields" Url="html/Fields_T_RelhaxModpack_DatabasePackage.htm">
+            <HelpTOCNode Title="_Enabled Field" Url="html/F_RelhaxModpack_DatabasePackage__Enabled.htm" />
+            <HelpTOCNode Title="AppendExtraction Field" Url="html/F_RelhaxModpack_DatabasePackage_AppendExtraction.htm" />
+            <HelpTOCNode Title="CRC Field" Url="html/F_RelhaxModpack_DatabasePackage_CRC.htm" />
+            <HelpTOCNode Title="DevURL Field" Url="html/F_RelhaxModpack_DatabasePackage_DevURL.htm" />
+            <HelpTOCNode Title="DownloadFlag Field" Url="html/F_RelhaxModpack_DatabasePackage_DownloadFlag.htm" />
+            <HelpTOCNode Title="EndAddress Field" Url="html/F_RelhaxModpack_DatabasePackage_EndAddress.htm" />
+            <HelpTOCNode Title="ExtractionLevel Field" Url="html/F_RelhaxModpack_DatabasePackage_ExtractionLevel.htm" />
+            <HelpTOCNode Title="LogAtInstall Field" Url="html/F_RelhaxModpack_DatabasePackage_LogAtInstall.htm" />
+            <HelpTOCNode Title="PackageName Field" Url="html/F_RelhaxModpack_DatabasePackage_PackageName.htm" />
+            <HelpTOCNode Title="ReadyForInstall Field" Url="html/F_RelhaxModpack_DatabasePackage_ReadyForInstall.htm" />
+            <HelpTOCNode Title="StartAddress Field" Url="html/F_RelhaxModpack_DatabasePackage_StartAddress.htm" />
+            <HelpTOCNode Title="Timestamp Field" Url="html/F_RelhaxModpack_DatabasePackage_Timestamp.htm" />
+            <HelpTOCNode Title="UpdateInstructions Field" Url="html/F_RelhaxModpack_DatabasePackage_UpdateInstructions.htm" />
+            <HelpTOCNode Title="Version Field" Url="html/F_RelhaxModpack_DatabasePackage_Version.htm" />
+            <HelpTOCNode Title="ZipFile Field" Url="html/F_RelhaxModpack_DatabasePackage_ZipFile.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Title="DatabaseVersions Enumeration" Url="html/T_RelhaxModpack_DatabaseVersions.htm" />
+        <HelpTOCNode Id="b813ddca-e794-4ad7-a142-30eef48f0645" Title="Dependency Class" Url="html/T_RelhaxModpack_Dependency.htm">
+          <HelpTOCNode Title="Dependency Constructor " Url="html/M_RelhaxModpack_Dependency__ctor.htm" />
+          <HelpTOCNode Title="Dependency Properties" Url="html/Properties_T_RelhaxModpack_Dependency.htm" />
+          <HelpTOCNode Title="Dependency Methods" Url="html/Methods_T_RelhaxModpack_Dependency.htm" />
+          <HelpTOCNode Id="6261bd50-9b0b-4fdd-a856-902dd0001f04" Title="Dependency Fields" Url="html/Fields_T_RelhaxModpack_Dependency.htm">
+            <HelpTOCNode Title="DatabasePackageLogic Field" Url="html/F_RelhaxModpack_Dependency_DatabasePackageLogic.htm" />
+            <HelpTOCNode Title="Dependencies Field" Url="html/F_RelhaxModpack_Dependency_Dependencies.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Title="Languages Enumeration" Url="html/T_RelhaxModpack_Languages.htm" />
+        <HelpTOCNode Title="LoadingGifs Enumeration" Url="html/T_RelhaxModpack_LoadingGifs.htm" />
+        <HelpTOCNode Id="153d1b78-da5b-4883-a910-864a943073ce" Title="Logfile Class" Url="html/T_RelhaxModpack_Logfile.htm">
+          <HelpTOCNode Title="Logfile Constructor " Url="html/M_RelhaxModpack_Logfile__ctor.htm" />
+          <HelpTOCNode Id="0e4cb077-6150-4342-8d12-80202a0ce723" Title="Logfile Properties" Url="html/Properties_T_RelhaxModpack_Logfile.htm">
+            <HelpTOCNode Title="Filename Property " Url="html/P_RelhaxModpack_Logfile_Filename.htm" />
+            <HelpTOCNode Title="Filepath Property " Url="html/P_RelhaxModpack_Logfile_Filepath.htm" />
+            <HelpTOCNode Title="Timestamp Property " Url="html/P_RelhaxModpack_Logfile_Timestamp.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="1b2258e4-efe9-48be-9f3b-5dea6e56bea8" Title="Logfile Methods" Url="html/Methods_T_RelhaxModpack_Logfile.htm">
+            <HelpTOCNode Id="70687505-cbcf-4606-b8b6-cb26bd8dd00d" Title="Dispose Method " Url="html/Overload_RelhaxModpack_Logfile_Dispose.htm">
+              <HelpTOCNode Title="Dispose Method " Url="html/M_RelhaxModpack_Logfile_Dispose.htm" />
+              <HelpTOCNode Title="Dispose Method (Boolean)" Url="html/M_RelhaxModpack_Logfile_Dispose_1.htm" />
+            </HelpTOCNode>
+            <HelpTOCNode Title="Init Method " Url="html/M_RelhaxModpack_Logfile_Init.htm" />
+            <HelpTOCNode Title="Write Method " Url="html/M_RelhaxModpack_Logfile_Write.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Title="Logfiles Enumeration" Url="html/T_RelhaxModpack_Logfiles.htm" />
+        <HelpTOCNode Id="70b98bc1-e774-4ba6-a94b-b6fa93170e75" Title="Logging Class" Url="html/T_RelhaxModpack_Logging.htm">
+          <HelpTOCNode Id="df51c723-1a3b-4c6a-9e32-2c3a036b6c20" Title="Logging Methods" Url="html/Methods_T_RelhaxModpack_Logging.htm">
+            <HelpTOCNode Id="2dfd0114-5ca0-412f-8b61-f2df5dab615b" Title="Debug Method " Url="html/Overload_RelhaxModpack_Logging_Debug.htm">
+              <HelpTOCNode Title="Debug Method (String)" Url="html/M_RelhaxModpack_Logging_Debug.htm" />
+              <HelpTOCNode Title="Debug Method (String, Object[])" Url="html/M_RelhaxModpack_Logging_Debug_1.htm" />
+            </HelpTOCNode>
+            <HelpTOCNode Title="DisposeApplicationLogging Method " Url="html/M_RelhaxModpack_Logging_DisposeApplicationLogging.htm" />
+            <HelpTOCNode Id="d368595e-cb0a-47e3-af93-7b2f8fba7aad" Title="Error Method " Url="html/Overload_RelhaxModpack_Logging_Error.htm">
+              <HelpTOCNode Title="Error Method (String)" Url="html/M_RelhaxModpack_Logging_Error.htm" />
+              <HelpTOCNode Title="Error Method (String, Object[])" Url="html/M_RelhaxModpack_Logging_Error_1.htm" />
+            </HelpTOCNode>
+            <HelpTOCNode Id="c57bedda-8058-45c7-a33a-fc6a74e23349" Title="Exception Method " Url="html/Overload_RelhaxModpack_Logging_Exception.htm">
+              <HelpTOCNode Title="Exception Method (String)" Url="html/M_RelhaxModpack_Logging_Exception.htm" />
+              <HelpTOCNode Title="Exception Method (String, Object[])" Url="html/M_RelhaxModpack_Logging_Exception_1.htm" />
+            </HelpTOCNode>
+            <HelpTOCNode Id="d0233e4a-bbf4-4432-88ec-b56c85b3b90a" Title="Info Method " Url="html/Overload_RelhaxModpack_Logging_Info.htm">
+              <HelpTOCNode Title="Info Method (String, Logfiles)" Url="html/M_RelhaxModpack_Logging_Info.htm" />
+              <HelpTOCNode Title="Info Method (String, Logfiles, Object[])" Url="html/M_RelhaxModpack_Logging_Info_1.htm" />
+            </HelpTOCNode>
+            <HelpTOCNode Title="InitApplicationLogging Method " Url="html/M_RelhaxModpack_Logging_InitApplicationLogging.htm" />
+            <HelpTOCNode Id="70037088-a748-433e-9d7d-319e1d7aef4e" Title="Warning Method " Url="html/Overload_RelhaxModpack_Logging_Warning.htm">
+              <HelpTOCNode Title="Warning Method (String)" Url="html/M_RelhaxModpack_Logging_Warning.htm" />
+              <HelpTOCNode Title="Warning Method (String, Object[])" Url="html/M_RelhaxModpack_Logging_Warning_1.htm" />
+            </HelpTOCNode>
+            <HelpTOCNode Id="4255b9ed-5aa7-4fbf-8650-cce424809d6b" Title="WriteToLog Method " Url="html/Overload_RelhaxModpack_Logging_WriteToLog.htm">
+              <HelpTOCNode Title="WriteToLog Method (String, Logfiles, LogLevel)" Url="html/M_RelhaxModpack_Logging_WriteToLog.htm" />
+              <HelpTOCNode Title="WriteToLog Method (String, Logfiles, LogLevel, Object[])" Url="html/M_RelhaxModpack_Logging_WriteToLog_1.htm" />
+            </HelpTOCNode>
+          </HelpTOCNode>
+          <HelpTOCNode Id="9db3360c-b762-46a9-9709-65340afdbba2" Title="Logging Fields" Url="html/Fields_T_RelhaxModpack_Logging.htm">
+            <HelpTOCNode Title="ApplicationLogfile Field" Url="html/F_RelhaxModpack_Logging_ApplicationLogfile.htm" />
+            <HelpTOCNode Title="ApplicationLogFilename Field" Url="html/F_RelhaxModpack_Logging_ApplicationLogFilename.htm" />
+            <HelpTOCNode Title="ApplicationlogStartStop Field" Url="html/F_RelhaxModpack_Logging_ApplicationlogStartStop.htm" />
+            <HelpTOCNode Title="InstallLogfile Field" Url="html/F_RelhaxModpack_Logging_InstallLogfile.htm" />
+            <HelpTOCNode Title="InstallLogFilename Field" Url="html/F_RelhaxModpack_Logging_InstallLogFilename.htm" />
+            <HelpTOCNode Title="OldApplicationLogFilename Field" Url="html/F_RelhaxModpack_Logging_OldApplicationLogFilename.htm" />
+            <HelpTOCNode Title="UninstallLogfile Field" Url="html/F_RelhaxModpack_Logging_UninstallLogfile.htm" />
+            <HelpTOCNode Title="UninstallLogFilename Field" Url="html/F_RelhaxModpack_Logging_UninstallLogFilename.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Title="Logic Enumeration" Url="html/T_RelhaxModpack_Logic.htm" />
+        <HelpTOCNode Title="LogLevel Enumeration" Url="html/T_RelhaxModpack_LogLevel.htm" />
+        <HelpTOCNode Id="5d40abbb-da06-4b1f-b4b4-87bfcd020cf0" Title="MainWindow Class" Url="html/T_RelhaxModpack_MainWindow.htm">
+          <HelpTOCNode Title="MainWindow Constructor " Url="html/M_RelhaxModpack_MainWindow__ctor.htm" />
+          <HelpTOCNode Title="MainWindow Properties" Url="html/Properties_T_RelhaxModpack_MainWindow.htm" />
+          <HelpTOCNode Id="5c4c5456-e652-46b8-b0d9-0b043a9ddeed" Title="MainWindow Methods" Url="html/Methods_T_RelhaxModpack_MainWindow.htm">
+            <HelpTOCNode Title="InitializeComponent Method " Url="html/M_RelhaxModpack_MainWindow_InitializeComponent.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="MainWindow Events" Url="html/Events_T_RelhaxModpack_MainWindow.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="90091e6c-7e01-44b6-96ac-e00a3977d948" Title="Media Class" Url="html/T_RelhaxModpack_Media.htm">
+          <HelpTOCNode Title="Media Constructor " Url="html/M_RelhaxModpack_Media__ctor.htm" />
+          <HelpTOCNode Id="e01ce71c-beb7-4384-8494-96ee83c6ff14" Title="Media Methods" Url="html/Methods_T_RelhaxModpack_Media.htm">
+            <HelpTOCNode Title="ToString Method " Url="html/M_RelhaxModpack_Media_ToString.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="9e723683-e4f9-4b84-ad3d-6a8aefabd497" Title="Media Fields" Url="html/Fields_T_RelhaxModpack_Media.htm">
+            <HelpTOCNode Title="MediaType Field" Url="html/F_RelhaxModpack_Media_MediaType.htm" />
+            <HelpTOCNode Title="URL Field" Url="html/F_RelhaxModpack_Media_URL.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Title="MediaType Enumeration" Url="html/T_RelhaxModpack_MediaType.htm" />
+        <HelpTOCNode Id="bd953288-53a1-4699-9b12-07d5bf3940ca" Title="ModpackSettings Class" Url="html/T_RelhaxModpack_ModpackSettings.htm">
+          <HelpTOCNode Id="4f18e3b7-2d3f-46e9-9ef3-79c3f00c9cc5" Title="ModpackSettings Methods" Url="html/Methods_T_RelhaxModpack_ModpackSettings.htm">
+            <HelpTOCNode Title="LoadSettings Method " Url="html/M_RelhaxModpack_ModpackSettings_LoadSettings.htm" />
+            <HelpTOCNode Title="SaveSettings Method " Url="html/M_RelhaxModpack_ModpackSettings_SaveSettings.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="a1377b67-01e2-4f9d-9ede-17911fdb62de" Title="ModpackSettings Fields" Url="html/Fields_T_RelhaxModpack_ModpackSettings.htm">
+            <HelpTOCNode Title="ApplicationDistroVersion Field" Url="html/F_RelhaxModpack_ModpackSettings_ApplicationDistroVersion.htm" />
+            <HelpTOCNode Title="BackupModFolder Field" Url="html/F_RelhaxModpack_ModpackSettings_BackupModFolder.htm" />
+            <HelpTOCNode Title="CleanInstallation Field" Url="html/F_RelhaxModpack_ModpackSettings_CleanInstallation.htm" />
+            <HelpTOCNode Title="ClearCache Field" Url="html/F_RelhaxModpack_ModpackSettings_ClearCache.htm" />
+            <HelpTOCNode Title="CreateShortcuts Field" Url="html/F_RelhaxModpack_ModpackSettings_CreateShortcuts.htm" />
+            <HelpTOCNode Title="CustomModInfoPath Field" Url="html/F_RelhaxModpack_ModpackSettings_CustomModInfoPath.htm" />
+            <HelpTOCNode Title="DatabaseDistroVersion Field" Url="html/F_RelhaxModpack_ModpackSettings_DatabaseDistroVersion.htm" />
+            <HelpTOCNode Title="DeleteLogs Field" Url="html/F_RelhaxModpack_ModpackSettings_DeleteLogs.htm" />
+            <HelpTOCNode Title="DownloadInstantExtraction Field" Url="html/F_RelhaxModpack_ModpackSettings_DownloadInstantExtraction.htm" />
+            <HelpTOCNode Title="EnableBordersDefaultV2View Field" Url="html/F_RelhaxModpack_ModpackSettings_EnableBordersDefaultV2View.htm" />
+            <HelpTOCNode Title="EnableBordersLegacyView Field" Url="html/F_RelhaxModpack_ModpackSettings_EnableBordersLegacyView.htm" />
+            <HelpTOCNode Title="EnableColorChangeDefaultV2View Field" Url="html/F_RelhaxModpack_ModpackSettings_EnableColorChangeDefaultV2View.htm" />
+            <HelpTOCNode Title="EnableColorChangeLegacyView Field" Url="html/F_RelhaxModpack_ModpackSettings_EnableColorChangeLegacyView.htm" />
+            <HelpTOCNode Title="ExportMode Field" Url="html/F_RelhaxModpack_ModpackSettings_ExportMode.htm" />
+            <HelpTOCNode Title="ForceManuel Field" Url="html/F_RelhaxModpack_ModpackSettings_ForceManuel.htm" />
+            <HelpTOCNode Title="GIF Field" Url="html/F_RelhaxModpack_ModpackSettings_GIF.htm" />
+            <HelpTOCNode Title="Language Field" Url="html/F_RelhaxModpack_ModpackSettings_Language.htm" />
+            <HelpTOCNode Title="ModSelectionFullscreen Field" Url="html/F_RelhaxModpack_ModpackSettings_ModSelectionFullscreen.htm" />
+            <HelpTOCNode Title="ModSelectionHeight Field" Url="html/F_RelhaxModpack_ModpackSettings_ModSelectionHeight.htm" />
+            <HelpTOCNode Title="ModSelectionView Field" Url="html/F_RelhaxModpack_ModpackSettings_ModSelectionView.htm" />
+            <HelpTOCNode Title="ModSelectionWidth Field" Url="html/F_RelhaxModpack_ModpackSettings_ModSelectionWidth.htm" />
+            <HelpTOCNode Title="MulticoreExtraction Field" Url="html/F_RelhaxModpack_ModpackSettings_MulticoreExtraction.htm" />
+            <HelpTOCNode Title="NotifyIfSameDatabase Field" Url="html/F_RelhaxModpack_ModpackSettings_NotifyIfSameDatabase.htm" />
+            <HelpTOCNode Title="PreviewFullscreen Field" Url="html/F_RelhaxModpack_ModpackSettings_PreviewFullscreen.htm" />
+            <HelpTOCNode Title="PreviewHeight Field" Url="html/F_RelhaxModpack_ModpackSettings_PreviewHeight.htm" />
+            <HelpTOCNode Title="PreviewWidth Field" Url="html/F_RelhaxModpack_ModpackSettings_PreviewWidth.htm" />
+            <HelpTOCNode Title="PreviewX Field" Url="html/F_RelhaxModpack_ModpackSettings_PreviewX.htm" />
+            <HelpTOCNode Title="PreviewY Field" Url="html/F_RelhaxModpack_ModpackSettings_PreviewY.htm" />
+            <HelpTOCNode Title="SaveLastConfig Field" Url="html/F_RelhaxModpack_ModpackSettings_SaveLastConfig.htm" />
+            <HelpTOCNode Title="SaveUserData Field" Url="html/F_RelhaxModpack_ModpackSettings_SaveUserData.htm" />
+            <HelpTOCNode Title="ShowInstallCompleteWindow Field" Url="html/F_RelhaxModpack_ModpackSettings_ShowInstallCompleteWindow.htm" />
+            <HelpTOCNode Title="UninstallMode Field" Url="html/F_RelhaxModpack_ModpackSettings_UninstallMode.htm" />
+            <HelpTOCNode Title="VerboseLogging Field" Url="html/F_RelhaxModpack_ModpackSettings_VerboseLogging.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Id="c64f8295-f0aa-41b2-ba14-555c185d8bad" Title="PackageComparer Class" Url="html/T_RelhaxModpack_PackageComparer.htm">
+          <HelpTOCNode Title="PackageComparer Constructor " Url="html/M_RelhaxModpack_PackageComparer__ctor.htm" />
+          <HelpTOCNode Id="e104ddf8-683d-4d3f-9538-22e3776dcd2e" Title="PackageComparer Methods" Url="html/Methods_T_RelhaxModpack_PackageComparer.htm">
+            <HelpTOCNode Id="33feca78-0c83-4b81-9110-7f17a82d8a79" Title="Equals Method " Url="html/Overload_RelhaxModpack_PackageComparer_Equals.htm">
+              <HelpTOCNode Title="Equals Method (DatabasePackage, DatabasePackage)" Url="html/M_RelhaxModpack_PackageComparer_Equals.htm" />
+            </HelpTOCNode>
+            <HelpTOCNode Id="f409dc23-18d5-4ea8-abe4-aab8747a9f91" Title="GetHashCode Method " Url="html/Overload_RelhaxModpack_PackageComparer_GetHashCode.htm">
+              <HelpTOCNode Title="GetHashCode Method (DatabasePackage)" Url="html/M_RelhaxModpack_PackageComparer_GetHashCode.htm" />
+            </HelpTOCNode>
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Id="b74daf3f-fabe-4279-ab4d-1fcd843d3104" Title="Patch Class" Url="html/T_RelhaxModpack_Patch.htm">
+          <HelpTOCNode Title="Patch Constructor " Url="html/M_RelhaxModpack_Patch__ctor.htm" />
+          <HelpTOCNode Id="afbeadc0-9af2-4894-ab97-09cd2214c39f" Title="Patch Properties" Url="html/Properties_T_RelhaxModpack_Patch.htm">
+            <HelpTOCNode Title="ActualPatchName Property " Url="html/P_RelhaxModpack_Patch_ActualPatchName.htm" />
+            <HelpTOCNode Title="CompletePath Property " Url="html/P_RelhaxModpack_Patch_CompletePath.htm" />
+            <HelpTOCNode Title="file Property " Url="html/P_RelhaxModpack_Patch_file.htm" />
+            <HelpTOCNode Title="lines Property " Url="html/P_RelhaxModpack_Patch_lines.htm" />
+            <HelpTOCNode Title="mode Property " Url="html/P_RelhaxModpack_Patch_mode.htm" />
+            <HelpTOCNode Title="NativeProcessingFile Property " Url="html/P_RelhaxModpack_Patch_NativeProcessingFile.htm" />
+            <HelpTOCNode Title="PatchPath Property " Url="html/P_RelhaxModpack_Patch_PatchPath.htm" />
+            <HelpTOCNode Title="Path Property " Url="html/P_RelhaxModpack_Patch_Path.htm" />
+            <HelpTOCNode Title="Replace Property " Url="html/P_RelhaxModpack_Patch_Replace.htm" />
+            <HelpTOCNode Title="Search Property " Url="html/P_RelhaxModpack_Patch_Search.htm" />
+            <HelpTOCNode Title="Type Property " Url="html/P_RelhaxModpack_Patch_Type.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Patch Methods" Url="html/Methods_T_RelhaxModpack_Patch.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="8668d576-64d6-4815-8556-8e6fe4988a77" Title="PatchUtils Class" Url="html/T_RelhaxModpack_PatchUtils.htm">
+          <HelpTOCNode Id="0610872c-43eb-479e-8cab-fb1eb8f1a16a" Title="PatchUtils Methods" Url="html/Methods_T_RelhaxModpack_PatchUtils.htm">
+            <HelpTOCNode Title="GetXVMBootLoc Method " Url="html/M_RelhaxModpack_PatchUtils_GetXVMBootLoc.htm" />
+            <HelpTOCNode Title="JSONPatch Method " Url="html/M_RelhaxModpack_PatchUtils_JSONPatch.htm" />
+            <HelpTOCNode Title="RegxPatch Method " Url="html/M_RelhaxModpack_PatchUtils_RegxPatch.htm" />
+            <HelpTOCNode Title="XMLPatch Method " Url="html/M_RelhaxModpack_PatchUtils_XMLPatch.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Id="371d6cd5-e8f6-42fd-8a17-4343bdb38918" Title="PatientWebClient Class" Url="html/T_RelhaxModpack_PatientWebClient.htm">
+          <HelpTOCNode Title="PatientWebClient Constructor " Url="html/M_RelhaxModpack_PatientWebClient__ctor.htm" />
+          <HelpTOCNode Id="0fd54678-e010-4cb6-8620-8630590124f5" Title="PatientWebClient Properties" Url="html/Properties_T_RelhaxModpack_PatientWebClient.htm">
+            <HelpTOCNode Title="Timeout Property " Url="html/P_RelhaxModpack_PatientWebClient_Timeout.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="87926449-cc93-4b8d-bda4-4304ac616569" Title="PatientWebClient Methods" Url="html/Methods_T_RelhaxModpack_PatientWebClient.htm">
+            <HelpTOCNode Title="GetWebRequest Method " Url="html/M_RelhaxModpack_PatientWebClient_GetWebRequest.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="PatientWebClient Events" Url="html/Events_T_RelhaxModpack_PatientWebClient.htm" />
+          <HelpTOCNode Id="3b2d19ec-8496-4d6f-b195-fabff151a11b" Title="PatientWebClient Fields" Url="html/Fields_T_RelhaxModpack_PatientWebClient.htm">
+            <HelpTOCNode Title="TO_MINUETS Field" Url="html/F_RelhaxModpack_PatientWebClient_TO_MINUETS.htm" />
+            <HelpTOCNode Title="TO_SECONDS Field" Url="html/F_RelhaxModpack_PatientWebClient_TO_SECONDS.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Title="ReturnCodes Enumeration" Url="html/T_RelhaxModpack_ReturnCodes.htm" />
+        <HelpTOCNode Id="80704e29-42d6-4eb8-9b0f-13cf6736add0" Title="SelectablePackage Class" Url="html/T_RelhaxModpack_SelectablePackage.htm">
+          <HelpTOCNode Title="SelectablePackage Constructor " Url="html/M_RelhaxModpack_SelectablePackage__ctor.htm" />
+          <HelpTOCNode Id="355b75ed-f7e6-486e-8f1e-0bd78d641f16" Title="SelectablePackage Properties" Url="html/Properties_T_RelhaxModpack_SelectablePackage.htm">
+            <HelpTOCNode Title="Checked Property " Url="html/P_RelhaxModpack_SelectablePackage_Checked.htm" />
+            <HelpTOCNode Title="CompletePath Property " Url="html/P_RelhaxModpack_SelectablePackage_CompletePath.htm" />
+            <HelpTOCNode Title="Enabled Property " Url="html/P_RelhaxModpack_SelectablePackage_Enabled.htm" />
+            <HelpTOCNode Title="IsStructureEnabled Property " Url="html/P_RelhaxModpack_SelectablePackage_IsStructureEnabled.htm" />
+            <HelpTOCNode Title="IsStructureVisible Property " Url="html/P_RelhaxModpack_SelectablePackage_IsStructureVisible.htm" />
+            <HelpTOCNode Title="NameDisplay Property " Url="html/P_RelhaxModpack_SelectablePackage_NameDisplay.htm" />
+            <HelpTOCNode Title="NameFormatted Property " Url="html/P_RelhaxModpack_SelectablePackage_NameFormatted.htm" />
+            <HelpTOCNode Title="TimeStampString Property " Url="html/P_RelhaxModpack_SelectablePackage_TimeStampString.htm" />
+            <HelpTOCNode Title="ToolTipString Property " Url="html/P_RelhaxModpack_SelectablePackage_ToolTipString.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="e7b93439-df40-429b-8b4f-881ba0d59dfa" Title="SelectablePackage Methods" Url="html/Methods_T_RelhaxModpack_SelectablePackage.htm">
+            <HelpTOCNode Title="AnyPackagesChecked Method " Url="html/M_RelhaxModpack_SelectablePackage_AnyPackagesChecked.htm" />
+            <HelpTOCNode Title="CompareMods Method " Url="html/M_RelhaxModpack_SelectablePackage_CompareMods.htm" />
+            <HelpTOCNode Title="ToString Method " Url="html/M_RelhaxModpack_SelectablePackage_ToString.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="71b40999-450b-472a-907a-8f60d0db73e5" Title="SelectablePackage Fields" Url="html/Fields_T_RelhaxModpack_SelectablePackage.htm">
+            <HelpTOCNode Title="_Checked Field" Url="html/F_RelhaxModpack_SelectablePackage__Checked.htm" />
+            <HelpTOCNode Title="ChildBorder Field" Url="html/F_RelhaxModpack_SelectablePackage_ChildBorder.htm" />
+            <HelpTOCNode Title="ChildStackPanel Field" Url="html/F_RelhaxModpack_SelectablePackage_ChildStackPanel.htm" />
+            <HelpTOCNode Title="ConflictingPackages Field" Url="html/F_RelhaxModpack_SelectablePackage_ConflictingPackages.htm" />
+            <HelpTOCNode Title="ContentControl Field" Url="html/F_RelhaxModpack_SelectablePackage_ContentControl.htm" />
+            <HelpTOCNode Title="Dependencies Field" Url="html/F_RelhaxModpack_SelectablePackage_Dependencies.htm" />
+            <HelpTOCNode Title="Description Field" Url="html/F_RelhaxModpack_SelectablePackage_Description.htm" />
+            <HelpTOCNode Title="Hotkeys Field" Url="html/F_RelhaxModpack_SelectablePackage_Hotkeys.htm" />
+            <HelpTOCNode Title="Level Field" Url="html/F_RelhaxModpack_SelectablePackage_Level.htm" />
+            <HelpTOCNode Title="Medias Field" Url="html/F_RelhaxModpack_SelectablePackage_Medias.htm" />
+            <HelpTOCNode Title="Name Field" Url="html/F_RelhaxModpack_SelectablePackage_Name.htm" />
+            <HelpTOCNode Title="Packages Field" Url="html/F_RelhaxModpack_SelectablePackage_Packages.htm" />
+            <HelpTOCNode Title="Parent Field" Url="html/F_RelhaxModpack_SelectablePackage_Parent.htm" />
+            <HelpTOCNode Title="ParentBorder Field" Url="html/F_RelhaxModpack_SelectablePackage_ParentBorder.htm" />
+            <HelpTOCNode Title="ParentCategory Field" Url="html/F_RelhaxModpack_SelectablePackage_ParentCategory.htm" />
+            <HelpTOCNode Title="ParentStackPanel Field" Url="html/F_RelhaxModpack_SelectablePackage_ParentStackPanel.htm" />
+            <HelpTOCNode Title="ParentUIComponent Field" Url="html/F_RelhaxModpack_SelectablePackage_ParentUIComponent.htm" />
+            <HelpTOCNode Title="RelhaxWPFComboBoxList Field" Url="html/F_RelhaxModpack_SelectablePackage_RelhaxWPFComboBoxList.htm" />
+            <HelpTOCNode Title="ScrollViewer Field" Url="html/F_RelhaxModpack_SelectablePackage_ScrollViewer.htm" />
+            <HelpTOCNode Title="ShowInSearchList Field" Url="html/F_RelhaxModpack_SelectablePackage_ShowInSearchList.htm" />
+            <HelpTOCNode Title="Size Field" Url="html/F_RelhaxModpack_SelectablePackage_Size.htm" />
+            <HelpTOCNode Title="TabIndex Field" Url="html/F_RelhaxModpack_SelectablePackage_TabIndex.htm" />
+            <HelpTOCNode Title="TopParent Field" Url="html/F_RelhaxModpack_SelectablePackage_TopParent.htm" />
+            <HelpTOCNode Title="TopParentUIComponent Field" Url="html/F_RelhaxModpack_SelectablePackage_TopParentUIComponent.htm" />
+            <HelpTOCNode Title="TreeView Field" Url="html/F_RelhaxModpack_SelectablePackage_TreeView.htm" />
+            <HelpTOCNode Title="TreeViewItem Field" Url="html/F_RelhaxModpack_SelectablePackage_TreeViewItem.htm" />
+            <HelpTOCNode Title="Type Field" Url="html/F_RelhaxModpack_SelectablePackage_Type.htm" />
+            <HelpTOCNode Title="UIComponent Field" Url="html/F_RelhaxModpack_SelectablePackage_UIComponent.htm" />
+            <HelpTOCNode Title="UpdateComment Field" Url="html/F_RelhaxModpack_SelectablePackage_UpdateComment.htm" />
+            <HelpTOCNode Title="UserFiles Field" Url="html/F_RelhaxModpack_SelectablePackage_UserFiles.htm" />
+            <HelpTOCNode Title="Visible Field" Url="html/F_RelhaxModpack_SelectablePackage_Visible.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Title="SelectionView Enumeration" Url="html/T_RelhaxModpack_SelectionView.htm" />
+        <HelpTOCNode Id="a9a23bc4-bc05-4ab6-b151-f75be0f19f3a" Title="Settings Class" Url="html/T_RelhaxModpack_Settings.htm">
+          <HelpTOCNode Id="23a80b5c-5224-4a1e-8e14-618174a73690" Title="Settings Fields" Url="html/Fields_T_RelhaxModpack_Settings.htm">
+            <HelpTOCNode Title="AppDataFolder Field" Url="html/F_RelhaxModpack_Settings_AppDataFolder.htm" />
+            <HelpTOCNode Title="ApplicationBetaUpdateURL Field" Url="html/F_RelhaxModpack_Settings_ApplicationBetaUpdateURL.htm" />
+            <HelpTOCNode Title="ApplicationStartupPath Field" Url="html/F_RelhaxModpack_Settings_ApplicationStartupPath.htm" />
+            <HelpTOCNode Title="ApplicationUpdateFileName Field" Url="html/F_RelhaxModpack_Settings_ApplicationUpdateFileName.htm" />
+            <HelpTOCNode Title="ApplicationUpdateURL Field" Url="html/F_RelhaxModpack_Settings_ApplicationUpdateURL.htm" />
+            <HelpTOCNode Title="ApplicationVersion Field" Url="html/F_RelhaxModpack_Settings_ApplicationVersion.htm" />
+            <HelpTOCNode Title="AtlasCreationFoldername Field" Url="html/F_RelhaxModpack_Settings_AtlasCreationFoldername.htm" />
+            <HelpTOCNode Title="ConfigFileVersion Field" Url="html/F_RelhaxModpack_Settings_ConfigFileVersion.htm" />
+            <HelpTOCNode Title="DatabaseVersion Field" Url="html/F_RelhaxModpack_Settings_DatabaseVersion.htm" />
+            <HelpTOCNode Title="DefaultEndAddress Field" Url="html/F_RelhaxModpack_Settings_DefaultEndAddress.htm" />
+            <HelpTOCNode Title="DefaultStartAddress Field" Url="html/F_RelhaxModpack_Settings_DefaultStartAddress.htm" />
+            <HelpTOCNode Title="FirstLoad Field" Url="html/F_RelhaxModpack_Settings_FirstLoad.htm" />
+            <HelpTOCNode Title="FirstLoadToV2 Field" Url="html/F_RelhaxModpack_Settings_FirstLoadToV2.htm" />
+            <HelpTOCNode Title="FoldersToCheck Field" Url="html/F_RelhaxModpack_Settings_FoldersToCheck.htm" />
+            <HelpTOCNode Title="ManagerInfoDatFile Field" Url="html/F_RelhaxModpack_Settings_ManagerInfoDatFile.htm" />
+            <HelpTOCNode Title="MD5HashDatabaseXmlFile Field" Url="html/F_RelhaxModpack_Settings_MD5HashDatabaseXmlFile.htm" />
+            <HelpTOCNode Title="ModpackSettingsFileName Field" Url="html/F_RelhaxModpack_Settings_ModpackSettingsFileName.htm" />
+            <HelpTOCNode Title="NumLogicalProcesors Field" Url="html/F_RelhaxModpack_Settings_NumLogicalProcesors.htm" />
+            <HelpTOCNode Title="OldModpackSettingsFilename Field" Url="html/F_RelhaxModpack_Settings_OldModpackSettingsFilename.htm" />
+            <HelpTOCNode Title="PatchFolderName Field" Url="html/F_RelhaxModpack_Settings_PatchFolderName.htm" />
+            <HelpTOCNode Title="RelhaxDownloadsFolder Field" Url="html/F_RelhaxModpack_Settings_RelhaxDownloadsFolder.htm" />
+            <HelpTOCNode Title="RelhaxLibrariesFolder Field" Url="html/F_RelhaxModpack_Settings_RelhaxLibrariesFolder.htm" />
+            <HelpTOCNode Title="RelhaxModBackupFolder Field" Url="html/F_RelhaxModpack_Settings_RelhaxModBackupFolder.htm" />
+            <HelpTOCNode Title="RelhaxTempFolder Field" Url="html/F_RelhaxModpack_Settings_RelhaxTempFolder.htm" />
+            <HelpTOCNode Title="RelhaxUserConfigsFolder Field" Url="html/F_RelhaxModpack_Settings_RelhaxUserConfigsFolder.htm" />
+            <HelpTOCNode Title="RelhaxUserModsFolder Field" Url="html/F_RelhaxModpack_Settings_RelhaxUserModsFolder.htm" />
+            <HelpTOCNode Title="RelicBatchUpdateScript Field" Url="html/F_RelhaxModpack_Settings_RelicBatchUpdateScript.htm" />
+            <HelpTOCNode Title="ShortcutFolderName Field" Url="html/F_RelhaxModpack_Settings_ShortcutFolderName.htm" />
+            <HelpTOCNode Title="ThirdPartySettingsFileName Field" Url="html/F_RelhaxModpack_Settings_ThirdPartySettingsFileName.htm" />
+            <HelpTOCNode Title="UISettingsFileName Field" Url="html/F_RelhaxModpack_Settings_UISettingsFileName.htm" />
+            <HelpTOCNode Title="WoTClientVersion Field" Url="html/F_RelhaxModpack_Settings_WoTClientVersion.htm" />
+            <HelpTOCNode Title="WoTDirectory Field" Url="html/F_RelhaxModpack_Settings_WoTDirectory.htm" />
+            <HelpTOCNode Title="WoTModpackOnlineFolderVersion Field" Url="html/F_RelhaxModpack_Settings_WoTModpackOnlineFolderVersion.htm" />
+            <HelpTOCNode Title="XmlUnpackFolderName Field" Url="html/F_RelhaxModpack_Settings_XmlUnpackFolderName.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Id="b0f29903-144d-499f-9fa9-749eda901bb3" Title="Shortcut Class" Url="html/T_RelhaxModpack_Shortcut.htm">
+          <HelpTOCNode Title="Shortcut Constructor " Url="html/M_RelhaxModpack_Shortcut__ctor.htm" />
+          <HelpTOCNode Id="04e4131a-f1d3-42aa-9fbb-cf39c0a4d590" Title="Shortcut Properties" Url="html/Properties_T_RelhaxModpack_Shortcut.htm">
+            <HelpTOCNode Title="Enabled Property " Url="html/P_RelhaxModpack_Shortcut_Enabled.htm" />
+            <HelpTOCNode Title="Name Property " Url="html/P_RelhaxModpack_Shortcut_Name.htm" />
+            <HelpTOCNode Title="Path Property " Url="html/P_RelhaxModpack_Shortcut_Path.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="2b512edb-b7a2-4aa7-ac18-72be609d02cd" Title="Shortcut Methods" Url="html/Methods_T_RelhaxModpack_Shortcut.htm">
+            <HelpTOCNode Title="ToString Method " Url="html/M_RelhaxModpack_Shortcut_ToString.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Id="3213c49b-8b95-4ccf-8b0e-f3df8a37dd4b" Title="StringSave Structure" Url="html/T_RelhaxModpack_StringSave.htm">
+          <HelpTOCNode Id="9b756138-204f-43c6-bfe0-ca326cdf2bd3" Title="StringSave Properties" Url="html/Properties_T_RelhaxModpack_StringSave.htm">
+            <HelpTOCNode Title="Name Property " Url="html/P_RelhaxModpack_StringSave_Name.htm" />
+            <HelpTOCNode Title="Value Property " Url="html/P_RelhaxModpack_StringSave_Value.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="StringSave Methods" Url="html/Methods_T_RelhaxModpack_StringSave.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="0c7df62c-a99b-44d7-851f-5b01ac262216" Title="ThirdPartySettings Class" Url="html/T_RelhaxModpack_ThirdPartySettings.htm">
+          <HelpTOCNode Id="1e7e4c9e-b9ec-48d5-837e-e1da993be068" Title="ThirdPartySettings Properties" Url="html/Properties_T_RelhaxModpack_ThirdPartySettings.htm">
+            <HelpTOCNode Title="BetaDatabaseURL Property " Url="html/P_RelhaxModpack_ThirdPartySettings_BetaDatabaseURL.htm" />
+            <HelpTOCNode Title="CustomApplication Property " Url="html/P_RelhaxModpack_ThirdPartySettings_CustomApplication.htm" />
+            <HelpTOCNode Title="CustomApplicationName Property " Url="html/P_RelhaxModpack_ThirdPartySettings_CustomApplicationName.htm" />
+            <HelpTOCNode Title="CustomIconPath Property " Url="html/P_RelhaxModpack_ThirdPartySettings_CustomIconPath.htm" />
+            <HelpTOCNode Title="DefaultPackageEndAddress Property " Url="html/P_RelhaxModpack_ThirdPartySettings_DefaultPackageEndAddress.htm" />
+            <HelpTOCNode Title="DefaultPackageStartAddress Property " Url="html/P_RelhaxModpack_ThirdPartySettings_DefaultPackageStartAddress.htm" />
+            <HelpTOCNode Title="DonationURL Property " Url="html/P_RelhaxModpack_ThirdPartySettings_DonationURL.htm" />
+            <HelpTOCNode Title="ManagerInfoURL Property " Url="html/P_RelhaxModpack_ThirdPartySettings_ManagerInfoURL.htm" />
+            <HelpTOCNode Title="StableDatabaseURL Property " Url="html/P_RelhaxModpack_ThirdPartySettings_StableDatabaseURL.htm" />
+            <HelpTOCNode Title="SupportedClientsURL Property " Url="html/P_RelhaxModpack_ThirdPartySettings_SupportedClientsURL.htm" />
+            <HelpTOCNode Title="WebsiteURL Property " Url="html/P_RelhaxModpack_ThirdPartySettings_WebsiteURL.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="1768dc77-ba3d-4513-8fcf-dffb3661697f" Title="ThirdPartySettings Methods" Url="html/Methods_T_RelhaxModpack_ThirdPartySettings.htm">
+            <HelpTOCNode Title="ApplyThirdPartyWindowSettings Method " Url="html/M_RelhaxModpack_ThirdPartySettings_ApplyThirdPartyWindowSettings.htm" />
+            <HelpTOCNode Title="LoadSettings Method " Url="html/M_RelhaxModpack_ThirdPartySettings_LoadSettings.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="53d2e439-d6c0-4d93-9520-ab6d97748891" Title="ThirdPartySettings Fields" Url="html/Fields_T_RelhaxModpack_ThirdPartySettings.htm">
+            <HelpTOCNode Title="Use3rdPartySettings Field" Url="html/F_RelhaxModpack_ThirdPartySettings_Use3rdPartySettings.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Id="6cf98d2e-9586-4a1a-ba8c-f323026a4283" Title="Translations Class" Url="html/T_RelhaxModpack_Translations.htm">
+          <HelpTOCNode Id="174acb9b-36c6-4019-89df-e8707fb03cc8" Title="Translations Methods" Url="html/Methods_T_RelhaxModpack_Translations.htm">
+            <HelpTOCNode Title="GetTranslatedString Method " Url="html/M_RelhaxModpack_Translations_GetTranslatedString.htm" />
+            <HelpTOCNode Title="LoadTranslations Method " Url="html/M_RelhaxModpack_Translations_LoadTranslations.htm" />
+            <HelpTOCNode Title="LocalizeWindow Method " Url="html/M_RelhaxModpack_Translations_LocalizeWindow.htm" />
+            <HelpTOCNode Title="SetLanguage Method " Url="html/M_RelhaxModpack_Translations_SetLanguage.htm" />
+            <HelpTOCNode Title="SetLanguageOnFirstLoad Method " Url="html/M_RelhaxModpack_Translations_SetLanguageOnFirstLoad.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Id="aad29686-ff55-4913-a724-5906f8fef5d5" Title="UISettings Class" Url="html/T_RelhaxModpack_UISettings.htm">
+          <HelpTOCNode Id="aa3e39f2-feec-49d1-872e-e725621610ed" Title="UISettings Methods" Url="html/Methods_T_RelhaxModpack_UISettings.htm">
+            <HelpTOCNode Title="ApplyUIColorSettings Method " Url="html/M_RelhaxModpack_UISettings_ApplyUIColorSettings.htm" />
+            <HelpTOCNode Title="DumpAllWindowColorSettingsToFile Method " Url="html/M_RelhaxModpack_UISettings_DumpAllWindowColorSettingsToFile.htm" />
+            <HelpTOCNode Title="LoadSettings Method " Url="html/M_RelhaxModpack_UISettings_LoadSettings.htm" />
+            <HelpTOCNode Title="ParseColorFromString Method " Url="html/M_RelhaxModpack_UISettings_ParseColorFromString.htm" />
+            <HelpTOCNode Title="VerifyPoints Method " Url="html/M_RelhaxModpack_UISettings_VerifyPoints.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="1ab758c2-9638-4a17-94cb-95ab0258016d" Title="UISettings Fields" Url="html/Fields_T_RelhaxModpack_UISettings.htm">
+            <HelpTOCNode Title="CustomColorSettingsPath Field" Url="html/F_RelhaxModpack_UISettings_CustomColorSettingsPath.htm" />
+            <HelpTOCNode Title="CustomSettings Field" Url="html/F_RelhaxModpack_UISettings_CustomSettings.htm" />
+            <HelpTOCNode Title="NotSelectedPanelColor Field" Url="html/F_RelhaxModpack_UISettings_NotSelectedPanelColor.htm" />
+            <HelpTOCNode Title="NotSelectedTabColor Field" Url="html/F_RelhaxModpack_UISettings_NotSelectedTabColor.htm" />
+            <HelpTOCNode Title="NotSelectedTextColor Field" Url="html/F_RelhaxModpack_UISettings_NotSelectedTextColor.htm" />
+            <HelpTOCNode Title="SelectedPanelColor Field" Url="html/F_RelhaxModpack_UISettings_SelectedPanelColor.htm" />
+            <HelpTOCNode Title="SelectedTextColor Field" Url="html/F_RelhaxModpack_UISettings_SelectedTextColor.htm" />
+            <HelpTOCNode Title="UIDocument Field" Url="html/F_RelhaxModpack_UISettings_UIDocument.htm" />
+            <HelpTOCNode Title="UIRoot Field" Url="html/F_RelhaxModpack_UISettings_UIRoot.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Title="UninstallModes Enumeration" Url="html/T_RelhaxModpack_UninstallModes.htm" />
+        <HelpTOCNode Id="80f4b10d-5439-45e3-99ee-5257ddb5a040" Title="UserFiles Class" Url="html/T_RelhaxModpack_UserFiles.htm">
+          <HelpTOCNode Title="UserFiles Constructor " Url="html/M_RelhaxModpack_UserFiles__ctor.htm" />
+          <HelpTOCNode Id="b3b51a3c-4c51-4c46-8bc6-beda7b2ec29d" Title="UserFiles Methods" Url="html/Methods_T_RelhaxModpack_UserFiles.htm">
+            <HelpTOCNode Title="ToString Method " Url="html/M_RelhaxModpack_UserFiles_ToString.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="7a21b0fb-63dc-4b02-8d89-868cd616ff64" Title="UserFiles Fields" Url="html/Fields_T_RelhaxModpack_UserFiles.htm">
+            <HelpTOCNode Title="Files_saved Field" Url="html/F_RelhaxModpack_UserFiles_Files_saved.htm" />
+            <HelpTOCNode Title="Pattern Field" Url="html/F_RelhaxModpack_UserFiles_Pattern.htm" />
+            <HelpTOCNode Title="placeBeforeExtraction Field" Url="html/F_RelhaxModpack_UserFiles_placeBeforeExtraction.htm" />
+            <HelpTOCNode Title="systemInitiated Field" Url="html/F_RelhaxModpack_UserFiles_systemInitiated.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Id="f58e6a0e-9bfd-4945-adf3-04534993dcd5" Title="Utils Class" Url="html/T_RelhaxModpack_Utils.htm">
+          <HelpTOCNode Id="f1f5195b-0d8d-4b7a-945e-746744280a92" Title="Utils Methods" Url="html/Methods_T_RelhaxModpack_Utils.htm">
+            <HelpTOCNode Title="ApplyNormalFileProperties Method " Url="html/M_RelhaxModpack_Utils_ApplyNormalFileProperties.htm" />
+            <HelpTOCNode Title="AssignCateogryPatchIDS Method " Url="html/M_RelhaxModpack_Utils_AssignCateogryPatchIDS.htm" />
+            <HelpTOCNode Title="AutoFindWoTDirectory Method " Url="html/M_RelhaxModpack_Utils_AutoFindWoTDirectory.htm" />
+            <HelpTOCNode Title="Base64Decode Method " Url="html/M_RelhaxModpack_Utils_Base64Decode.htm" />
+            <HelpTOCNode Title="Base64Encode Method " Url="html/M_RelhaxModpack_Utils_Base64Encode.htm" />
+            <HelpTOCNode Title="BuildLevelPerPackage Method " Url="html/M_RelhaxModpack_Utils_BuildLevelPerPackage.htm" />
+            <HelpTOCNode Title="BuildLinksRefrence Method " Url="html/M_RelhaxModpack_Utils_BuildLinksRefrence.htm" />
+            <HelpTOCNode Title="BuildMacroList Method " Url="html/M_RelhaxModpack_Utils_BuildMacroList.htm" />
+            <HelpTOCNode Title="CalculateDependencies Method " Url="html/M_RelhaxModpack_Utils_CalculateDependencies.htm" />
+            <HelpTOCNode Title="CheckForDuplicates Method " Url="html/M_RelhaxModpack_Utils_CheckForDuplicates.htm" />
+            <HelpTOCNode Title="CompareVersions Method " Url="html/M_RelhaxModpack_Utils_CompareVersions.htm" />
+            <HelpTOCNode Title="ConvertFiletimeTimestampToDate Method " Url="html/M_RelhaxModpack_Utils_ConvertFiletimeTimestampToDate.htm" />
+            <HelpTOCNode Title="CreateMD5Hash Method " Url="html/M_RelhaxModpack_Utils_CreateMD5Hash.htm" />
+            <HelpTOCNode Title="CreateMD5HashAsync Method " Url="html/M_RelhaxModpack_Utils_CreateMD5HashAsync.htm" />
+            <HelpTOCNode Title="CreateOrderedInstallList Method " Url="html/M_RelhaxModpack_Utils_CreateOrderedInstallList.htm" />
+            <HelpTOCNode Title="DirectoryCopy Method " Url="html/M_RelhaxModpack_Utils_DirectoryCopy.htm" />
+            <HelpTOCNode Title="DirectoryDelete Method " Url="html/M_RelhaxModpack_Utils_DirectoryDelete.htm" />
+            <HelpTOCNode Title="DirectoryMove Method " Url="html/M_RelhaxModpack_Utils_DirectoryMove.htm" />
+            <HelpTOCNode Title="DirectorySearch Method " Url="html/M_RelhaxModpack_Utils_DirectorySearch.htm" />
+            <HelpTOCNode Title="GetAllWindowComponentsLogical Method " Url="html/M_RelhaxModpack_Utils_GetAllWindowComponentsLogical.htm" />
+            <HelpTOCNode Title="GetAllWindowComponentsVisual Method " Url="html/M_RelhaxModpack_Utils_GetAllWindowComponentsVisual.htm" />
+            <HelpTOCNode Title="GetApplicationVersion Method " Url="html/M_RelhaxModpack_Utils_GetApplicationVersion.htm" />
+            <HelpTOCNode Title="GetCompileTime Method " Url="html/M_RelhaxModpack_Utils_GetCompileTime.htm" />
+            <HelpTOCNode Title="GetCurrentUniversalFiletimeTimestamp Method " Url="html/M_RelhaxModpack_Utils_GetCurrentUniversalFiletimeTimestamp.htm" />
+            <HelpTOCNode Title="GetFlatList Method " Url="html/M_RelhaxModpack_Utils_GetFlatList.htm" />
+            <HelpTOCNode Title="GetStringFromZip Method " Url="html/M_RelhaxModpack_Utils_GetStringFromZip.htm" />
+            <HelpTOCNode Title="GetValidFilename Method " Url="html/M_RelhaxModpack_Utils_GetValidFilename.htm" />
+            <HelpTOCNode Title="IsProcessRunning Method " Url="html/M_RelhaxModpack_Utils_IsProcessRunning.htm" />
+            <HelpTOCNode Title="ParseBool Method " Url="html/M_RelhaxModpack_Utils_ParseBool.htm" />
+            <HelpTOCNode Title="ParseDeveloperSelections Method " Url="html/M_RelhaxModpack_Utils_ParseDeveloperSelections.htm" />
+            <HelpTOCNode Title="ParseFloat Method " Url="html/M_RelhaxModpack_Utils_ParseFloat.htm" />
+            <HelpTOCNode Title="ParseInt Method " Url="html/M_RelhaxModpack_Utils_ParseInt.htm" />
+            <HelpTOCNode Title="ParseLong Method " Url="html/M_RelhaxModpack_Utils_ParseLong.htm" />
+            <HelpTOCNode Title="ParseSelection Method " Url="html/M_RelhaxModpack_Utils_ParseSelection.htm" />
+            <HelpTOCNode Title="ParseuLong Method " Url="html/M_RelhaxModpack_Utils_ParseuLong.htm" />
+            <HelpTOCNode Title="ParseUserSelection Method " Url="html/M_RelhaxModpack_Utils_ParseUserSelection.htm" />
+            <HelpTOCNode Title="ParseUserSelectionV2 Method " Url="html/M_RelhaxModpack_Utils_ParseUserSelectionV2.htm" />
+            <HelpTOCNode Title="ProcessDirectory Method " Url="html/M_RelhaxModpack_Utils_ProcessDirectory.htm" />
+            <HelpTOCNode Title="RandomString Method " Url="html/M_RelhaxModpack_Utils_RandomString.htm" />
+            <HelpTOCNode Title="SizeSuffix Method " Url="html/M_RelhaxModpack_Utils_SizeSuffix.htm" />
+            <HelpTOCNode Title="SortModsList Method " Url="html/M_RelhaxModpack_Utils_SortModsList.htm" />
+            <HelpTOCNode Title="VerifySelection Method " Url="html/M_RelhaxModpack_Utils_VerifySelection.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="38e53a39-dfe0-49d7-96a2-007eb822e002" Title="Utils Fields" Url="html/Fields_T_RelhaxModpack_Utils.htm">
+            <HelpTOCNode Title="BYTES_TO_MBYTES Field" Url="html/F_RelhaxModpack_Utils_BYTES_TO_MBYTES.htm" />
+            <HelpTOCNode Title="SizeSuffixes Field" Url="html/F_RelhaxModpack_Utils_SizeSuffixes.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Id="11818810-39ca-47e1-89d3-9cccfdfdc966" Title="XMLUtils Class" Url="html/T_RelhaxModpack_XMLUtils.htm">
+          <HelpTOCNode Id="11146fb7-96bc-4236-9c06-86f5a2f0efc0" Title="XMLUtils Methods" Url="html/Methods_T_RelhaxModpack_XMLUtils.htm">
+            <HelpTOCNode Id="269e2f63-3b9a-4ea1-91cf-91adc63b3af3" Title="GetXMLNodeFromXPath Method " Url="html/Overload_RelhaxModpack_XMLUtils_GetXMLNodeFromXPath.htm">
+              <HelpTOCNode Title="GetXMLNodeFromXPath Method (String, String)" Url="html/M_RelhaxModpack_XMLUtils_GetXMLNodeFromXPath.htm" />
+              <HelpTOCNode Title="GetXMLNodeFromXPath Method (XmlDocument, String)" Url="html/M_RelhaxModpack_XMLUtils_GetXMLNodeFromXPath_2.htm" />
+              <HelpTOCNode Title="GetXMLNodeFromXPath Method (String, String, String)" Url="html/M_RelhaxModpack_XMLUtils_GetXMLNodeFromXPath_1.htm" />
+            </HelpTOCNode>
+            <HelpTOCNode Id="828d090c-bdf2-4103-9174-1ea464160463" Title="GetXMLNodesFromXPath Method " Url="html/Overload_RelhaxModpack_XMLUtils_GetXMLNodesFromXPath.htm">
+              <HelpTOCNode Title="GetXMLNodesFromXPath Method (String, String)" Url="html/M_RelhaxModpack_XMLUtils_GetXMLNodesFromXPath.htm" />
+              <HelpTOCNode Title="GetXMLNodesFromXPath Method (XmlDocument, String)" Url="html/M_RelhaxModpack_XMLUtils_GetXMLNodesFromXPath_2.htm" />
+              <HelpTOCNode Title="GetXMLNodesFromXPath Method (String, String, String)" Url="html/M_RelhaxModpack_XMLUtils_GetXMLNodesFromXPath_1.htm" />
+            </HelpTOCNode>
+            <HelpTOCNode Id="6d2cdbf9-6d87-4d06-86bf-41254e4e614e" Title="GetXMLStringFromXPath Method " Url="html/Overload_RelhaxModpack_XMLUtils_GetXMLStringFromXPath.htm">
+              <HelpTOCNode Title="GetXMLStringFromXPath Method (String, String)" Url="html/M_RelhaxModpack_XMLUtils_GetXMLStringFromXPath.htm" />
+              <HelpTOCNode Title="GetXMLStringFromXPath Method (XmlDocument, String)" Url="html/M_RelhaxModpack_XMLUtils_GetXMLStringFromXPath_2.htm" />
+              <HelpTOCNode Title="GetXMLStringFromXPath Method (String, String, String)" Url="html/M_RelhaxModpack_XMLUtils_GetXMLStringFromXPath_1.htm" />
+            </HelpTOCNode>
+            <HelpTOCNode Id="17ff3a07-a80b-45ba-8d21-893d701a466e" Title="IsValidXml Method " Url="html/Overload_RelhaxModpack_XMLUtils_IsValidXml.htm">
+              <HelpTOCNode Title="IsValidXml Method (String)" Url="html/M_RelhaxModpack_XMLUtils_IsValidXml.htm" />
+              <HelpTOCNode Title="IsValidXml Method (String, String)" Url="html/M_RelhaxModpack_XMLUtils_IsValidXml_1.htm" />
+            </HelpTOCNode>
+            <HelpTOCNode Title="ParseDatabase Method " Url="html/M_RelhaxModpack_XMLUtils_ParseDatabase.htm" />
+            <HelpTOCNode Title="ParseDatabaseLegacy Method " Url="html/M_RelhaxModpack_XMLUtils_ParseDatabaseLegacy.htm" />
+            <HelpTOCNode Title="ParseDatabaseV2 Method " Url="html/M_RelhaxModpack_XMLUtils_ParseDatabaseV2.htm" />
+            <HelpTOCNode Title="ProcessConfigs Method " Url="html/M_RelhaxModpack_XMLUtils_ProcessConfigs.htm" />
+            <HelpTOCNode Title="SaveDatabase Method " Url="html/M_RelhaxModpack_XMLUtils_SaveDatabase.htm" />
+            <HelpTOCNode Title="SaveDatabaseLegacy Method " Url="html/M_RelhaxModpack_XMLUtils_SaveDatabaseLegacy.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="cebff498-23cd-4f91-bd23-7378102e74e5" Title="XMLUtils Fields" Url="html/Fields_T_RelhaxModpack_XMLUtils.htm">
+            <HelpTOCNode Title="BaseOptionalNodesV2 Field" Url="html/F_RelhaxModpack_XMLUtils_BaseOptionalNodesV2.htm" />
+            <HelpTOCNode Title="BaseRequiredNodesV2 Field" Url="html/F_RelhaxModpack_XMLUtils_BaseRequiredNodesV2.htm" />
+            <HelpTOCNode Title="CategoryRequiredNodesV2 Field" Url="html/F_RelhaxModpack_XMLUtils_CategoryRequiredNodesV2.htm" />
+            <HelpTOCNode Title="DependencySelectableOptionalNodesV2 Field" Url="html/F_RelhaxModpack_XMLUtils_DependencySelectableOptionalNodesV2.htm" />
+            <HelpTOCNode Title="DependnecyLogicRequiredNodesV2 Field" Url="html/F_RelhaxModpack_XMLUtils_DependnecyLogicRequiredNodesV2.htm" />
+            <HelpTOCNode Title="DeveloperSelectionsXPath Field" Url="html/F_RelhaxModpack_XMLUtils_DeveloperSelectionsXPath.htm" />
+            <HelpTOCNode Title="MediaRequiredNodesV2 Field" Url="html/F_RelhaxModpack_XMLUtils_MediaRequiredNodesV2.htm" />
+            <HelpTOCNode Title="SelectablePackageRequiredNodesV2 Field" Url="html/F_RelhaxModpack_XMLUtils_SelectablePackageRequiredNodesV2.htm" />
+            <HelpTOCNode Title="SelectablePackagOptionalNodesV2 Field" Url="html/F_RelhaxModpack_XMLUtils_SelectablePackagOptionalNodesV2.htm" />
+            <HelpTOCNode Title="UserfilesRequiredNodesV2 Field" Url="html/F_RelhaxModpack_XMLUtils_UserfilesRequiredNodesV2.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+      </HelpTOCNode>
+      <HelpTOCNode Id="3f5a28de-ab50-4e05-b3ad-0384821089d8" Title="RelhaxModpack.InstallerComponents" Url="html/N_RelhaxModpack_InstallerComponents.htm">
+        <HelpTOCNode Id="4020d996-8d08-427b-9268-e50aa66908af" Title="InstallEngine Class" Url="html/T_RelhaxModpack_InstallerComponents_InstallEngine.htm">
+          <HelpTOCNode Title="InstallEngine Constructor " Url="html/M_RelhaxModpack_InstallerComponents_InstallEngine__ctor.htm" />
+          <HelpTOCNode Id="7f86b650-3dc7-4978-931e-cb9c2b951bef" Title="InstallEngine Methods" Url="html/Methods_T_RelhaxModpack_InstallerComponents_InstallEngine.htm">
+            <HelpTOCNode Id="d0a196bd-6988-45bb-9216-b95cee5cfb4d" Title="Dispose Method " Url="html/Overload_RelhaxModpack_InstallerComponents_InstallEngine_Dispose.htm">
+              <HelpTOCNode Title="Dispose Method " Url="html/M_RelhaxModpack_InstallerComponents_InstallEngine_Dispose.htm" />
+              <HelpTOCNode Title="Dispose Method (Boolean)" Url="html/M_RelhaxModpack_InstallerComponents_InstallEngine_Dispose_1.htm" />
+            </HelpTOCNode>
+            <HelpTOCNode Title="RunInstallationAsync Method " Url="html/M_RelhaxModpack_InstallerComponents_InstallEngine_RunInstallationAsync.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="0cf0e557-fb83-4650-a6ab-da81e8b644ca" Title="InstallEngine Events" Url="html/Events_T_RelhaxModpack_InstallerComponents_InstallEngine.htm">
+            <HelpTOCNode Title="OnInstallFinish Event" Url="html/E_RelhaxModpack_InstallerComponents_InstallEngine_OnInstallFinish.htm" />
+            <HelpTOCNode Title="OnInstallProgress Event" Url="html/E_RelhaxModpack_InstallerComponents_InstallEngine_OnInstallProgress.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="75f9eb24-8595-44b9-8981-42dd20113823" Title="InstallEngine Fields" Url="html/Fields_T_RelhaxModpack_InstallerComponents_InstallEngine.htm">
+            <HelpTOCNode Title="AwaitCallback Field" Url="html/F_RelhaxModpack_InstallerComponents_InstallEngine_AwaitCallback.htm" />
+            <HelpTOCNode Title="FlatListSelectablePackages Field" Url="html/F_RelhaxModpack_InstallerComponents_InstallEngine_FlatListSelectablePackages.htm" />
+            <HelpTOCNode Title="OrderedPackagesToInstall Field" Url="html/F_RelhaxModpack_InstallerComponents_InstallEngine_OrderedPackagesToInstall.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Title="InstallerExitCodes Enumeration" Url="html/T_RelhaxModpack_InstallerComponents_InstallerExitCodes.htm" />
+        <HelpTOCNode Title="InstallFinishedDelegate Delegate" Url="html/T_RelhaxModpack_InstallerComponents_InstallFinishedDelegate.htm" />
+        <HelpTOCNode Title="InstallProgressDelegate Delegate" Url="html/T_RelhaxModpack_InstallerComponents_InstallProgressDelegate.htm" />
+        <HelpTOCNode Id="1515a383-57fa-4841-b36c-98b27c58d61c" Title="RelhaxInstallFinishedEventArgs Class" Url="html/T_RelhaxModpack_InstallerComponents_RelhaxInstallFinishedEventArgs.htm">
+          <HelpTOCNode Title="RelhaxInstallFinishedEventArgs Constructor " Url="html/M_RelhaxModpack_InstallerComponents_RelhaxInstallFinishedEventArgs__ctor.htm" />
+          <HelpTOCNode Title="RelhaxInstallFinishedEventArgs Methods" Url="html/Methods_T_RelhaxModpack_InstallerComponents_RelhaxInstallFinishedEventArgs.htm" />
+          <HelpTOCNode Id="70352971-2d80-4884-8133-cba6e8701c5f" Title="RelhaxInstallFinishedEventArgs Fields" Url="html/Fields_T_RelhaxModpack_InstallerComponents_RelhaxInstallFinishedEventArgs.htm">
+            <HelpTOCNode Title="ErrorMessage Field" Url="html/F_RelhaxModpack_InstallerComponents_RelhaxInstallFinishedEventArgs_ErrorMessage.htm" />
+            <HelpTOCNode Title="ExitCodes Field" Url="html/F_RelhaxModpack_InstallerComponents_RelhaxInstallFinishedEventArgs_ExitCodes.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+      </HelpTOCNode>
+      <HelpTOCNode Id="51899766-92d7-4a48-95bf-62ac5b3f02ac" Title="RelhaxModpack.UIComponents" Url="html/N_RelhaxModpack_UIComponents.htm">
+        <HelpTOCNode Id="a6106c9a-5437-4173-8303-3272fdd7da1c" Title="IPackageUIComponent Interface" Url="html/T_RelhaxModpack_UIComponents_IPackageUIComponent.htm">
+          <HelpTOCNode Id="1df11e6b-1fdf-4323-942f-8751a7151ec7" Title="IPackageUIComponent Properties" Url="html/Properties_T_RelhaxModpack_UIComponents_IPackageUIComponent.htm">
+            <HelpTOCNode Title="Package Property " Url="html/P_RelhaxModpack_UIComponents_IPackageUIComponent_Package.htm" />
+            <HelpTOCNode Title="PanelColor Property " Url="html/P_RelhaxModpack_UIComponents_IPackageUIComponent_PanelColor.htm" />
+            <HelpTOCNode Title="TextColor Property " Url="html/P_RelhaxModpack_UIComponents_IPackageUIComponent_TextColor.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="9946358a-5231-4bfa-8f59-fbed01ee8e72" Title="IPackageUIComponent Methods" Url="html/Methods_T_RelhaxModpack_UIComponents_IPackageUIComponent.htm">
+            <HelpTOCNode Title="OnCheckedChanged Method " Url="html/M_RelhaxModpack_UIComponents_IPackageUIComponent_OnCheckedChanged.htm" />
+            <HelpTOCNode Title="OnEnabledChanged Method " Url="html/M_RelhaxModpack_UIComponents_IPackageUIComponent_OnEnabledChanged.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Id="b559657b-fea7-401c-bd24-75f51b35ad42" Title="RelhaxProgress Class" Url="html/T_RelhaxModpack_UIComponents_RelhaxProgress.htm">
+          <HelpTOCNode Title="RelhaxProgress Constructor " Url="html/M_RelhaxModpack_UIComponents_RelhaxProgress__ctor.htm" />
+          <HelpTOCNode Title="RelhaxProgress Methods" Url="html/Methods_T_RelhaxModpack_UIComponents_RelhaxProgress.htm" />
+          <HelpTOCNode Id="fb780ba8-009a-442f-86fe-9109c2b596b1" Title="RelhaxProgress Fields" Url="html/Fields_T_RelhaxModpack_UIComponents_RelhaxProgress.htm">
+            <HelpTOCNode Title="ChildCurrent Field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_ChildCurrent.htm" />
+            <HelpTOCNode Title="ChildCurrentProgress Field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_ChildCurrentProgress.htm" />
+            <HelpTOCNode Title="ChildTotal Field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_ChildTotal.htm" />
+            <HelpTOCNode Title="ParrentCurrent Field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_ParrentCurrent.htm" />
+            <HelpTOCNode Title="ParrentCurrentProgress Field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_ParrentCurrentProgress.htm" />
+            <HelpTOCNode Title="ParrentTotal Field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_ParrentTotal.htm" />
+            <HelpTOCNode Title="ReportMessage Field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_ReportMessage.htm" />
+            <HelpTOCNode Title="TotalCurrent Field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_TotalCurrent.htm" />
+            <HelpTOCNode Title="TotalCurrentProgress Field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_TotalCurrentProgress.htm" />
+            <HelpTOCNode Title="TotalTotal Field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_TotalTotal.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Id="1501bd4a-1dce-4ecd-9377-f74c71872a97" Title="RelhaxWPFCheckBox Class" Url="html/T_RelhaxModpack_UIComponents_RelhaxWPFCheckBox.htm">
+          <HelpTOCNode Title="RelhaxWPFCheckBox Constructor " Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFCheckBox__ctor.htm" />
+          <HelpTOCNode Id="979cfab0-e6b0-460f-b1b1-760954e256cf" Title="RelhaxWPFCheckBox Properties" Url="html/Properties_T_RelhaxModpack_UIComponents_RelhaxWPFCheckBox.htm">
+            <HelpTOCNode Title="Package Property " Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFCheckBox_Package.htm" />
+            <HelpTOCNode Title="PanelColor Property " Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFCheckBox_PanelColor.htm" />
+            <HelpTOCNode Title="TextColor Property " Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFCheckBox_TextColor.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="43331506-32e6-4497-8b65-07af725a5d66" Title="RelhaxWPFCheckBox Methods" Url="html/Methods_T_RelhaxModpack_UIComponents_RelhaxWPFCheckBox.htm">
+            <HelpTOCNode Title="OnCheckedChanged Method " Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFCheckBox_OnCheckedChanged.htm" />
+            <HelpTOCNode Title="OnEnabledChanged Method " Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFCheckBox_OnEnabledChanged.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="RelhaxWPFCheckBox Events" Url="html/Events_T_RelhaxModpack_UIComponents_RelhaxWPFCheckBox.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="afe7b7b9-2455-4a3e-b19a-389a05c2c1ee" Title="RelhaxWPFComboBox Class" Url="html/T_RelhaxModpack_UIComponents_RelhaxWPFComboBox.htm">
+          <HelpTOCNode Title="RelhaxWPFComboBox Constructor " Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFComboBox__ctor.htm" />
+          <HelpTOCNode Id="ed7eb438-67cd-41a5-94cd-21452351170f" Title="RelhaxWPFComboBox Properties" Url="html/Properties_T_RelhaxModpack_UIComponents_RelhaxWPFComboBox.htm">
+            <HelpTOCNode Title="Package Property " Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFComboBox_Package.htm" />
+            <HelpTOCNode Title="PanelColor Property " Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFComboBox_PanelColor.htm" />
+            <HelpTOCNode Title="TextColor Property " Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFComboBox_TextColor.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="490e96c2-ae50-4254-8960-0fb5c70da970" Title="RelhaxWPFComboBox Methods" Url="html/Methods_T_RelhaxModpack_UIComponents_RelhaxWPFComboBox.htm">
+            <HelpTOCNode Title="OnCheckedChanged Method " Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFComboBox_OnCheckedChanged.htm" />
+            <HelpTOCNode Title="OnDropDownSelectionChanged Method " Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFComboBox_OnDropDownSelectionChanged.htm" />
+            <HelpTOCNode Title="OnEnabledChanged Method " Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFComboBox_OnEnabledChanged.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="RelhaxWPFComboBox Events" Url="html/Events_T_RelhaxModpack_UIComponents_RelhaxWPFComboBox.htm" />
+          <HelpTOCNode Id="7b422e5c-900f-40bf-a9d5-f9ae0f5e0c91" Title="RelhaxWPFComboBox Fields" Url="html/Fields_T_RelhaxModpack_UIComponents_RelhaxWPFComboBox.htm">
+            <HelpTOCNode Title="handler Field" Url="html/F_RelhaxModpack_UIComponents_RelhaxWPFComboBox_handler.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Id="788c8567-80d1-4f49-b686-0d0cee6b41e8" Title="RelhaxWPFRadioButton Class" Url="html/T_RelhaxModpack_UIComponents_RelhaxWPFRadioButton.htm">
+          <HelpTOCNode Title="RelhaxWPFRadioButton Constructor " Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFRadioButton__ctor.htm" />
+          <HelpTOCNode Id="a7ff8877-7d65-4810-9e9c-cc51966c8a05" Title="RelhaxWPFRadioButton Properties" Url="html/Properties_T_RelhaxModpack_UIComponents_RelhaxWPFRadioButton.htm">
+            <HelpTOCNode Title="Package Property " Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFRadioButton_Package.htm" />
+            <HelpTOCNode Title="PanelColor Property " Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFRadioButton_PanelColor.htm" />
+            <HelpTOCNode Title="TextColor Property " Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFRadioButton_TextColor.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="2694c835-c413-43a8-a033-113ad3021751" Title="RelhaxWPFRadioButton Methods" Url="html/Methods_T_RelhaxModpack_UIComponents_RelhaxWPFRadioButton.htm">
+            <HelpTOCNode Title="OnCheckedChanged Method " Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFRadioButton_OnCheckedChanged.htm" />
+            <HelpTOCNode Title="OnEnabledChanged Method " Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFRadioButton_OnEnabledChanged.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="RelhaxWPFRadioButton Events" Url="html/Events_T_RelhaxModpack_UIComponents_RelhaxWPFRadioButton.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="02c80343-3c7c-44d7-8492-dbfb35707751" Title="StretchingTreeView Class" Url="html/T_RelhaxModpack_UIComponents_StretchingTreeView.htm">
+          <HelpTOCNode Title="StretchingTreeView Constructor " Url="html/M_RelhaxModpack_UIComponents_StretchingTreeView__ctor.htm" />
+          <HelpTOCNode Title="StretchingTreeView Properties" Url="html/Properties_T_RelhaxModpack_UIComponents_StretchingTreeView.htm" />
+          <HelpTOCNode Id="3ca72f7d-bf1a-4302-bfa5-6514aee15265" Title="StretchingTreeView Methods" Url="html/Methods_T_RelhaxModpack_UIComponents_StretchingTreeView.htm">
+            <HelpTOCNode Title="GetContainerForItemOverride Method " Url="html/M_RelhaxModpack_UIComponents_StretchingTreeView_GetContainerForItemOverride.htm" />
+            <HelpTOCNode Title="IsItemItsOwnContainerOverride Method " Url="html/M_RelhaxModpack_UIComponents_StretchingTreeView_IsItemItsOwnContainerOverride.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="StretchingTreeView Events" Url="html/Events_T_RelhaxModpack_UIComponents_StretchingTreeView.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="d1baf25d-a66b-465a-8511-5dbea01abab1" Title="StretchingTreeViewItem Class" Url="html/T_RelhaxModpack_UIComponents_StretchingTreeViewItem.htm">
+          <HelpTOCNode Title="StretchingTreeViewItem Constructor " Url="html/M_RelhaxModpack_UIComponents_StretchingTreeViewItem__ctor.htm" />
+          <HelpTOCNode Title="StretchingTreeViewItem Properties" Url="html/Properties_T_RelhaxModpack_UIComponents_StretchingTreeViewItem.htm" />
+          <HelpTOCNode Id="91128cf2-ba2e-42fb-b613-293938085a9b" Title="StretchingTreeViewItem Methods" Url="html/Methods_T_RelhaxModpack_UIComponents_StretchingTreeViewItem.htm">
+            <HelpTOCNode Title="GetContainerForItemOverride Method " Url="html/M_RelhaxModpack_UIComponents_StretchingTreeViewItem_GetContainerForItemOverride.htm" />
+            <HelpTOCNode Title="IsItemItsOwnContainerOverride Method " Url="html/M_RelhaxModpack_UIComponents_StretchingTreeViewItem_IsItemItsOwnContainerOverride.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="StretchingTreeViewItem Events" Url="html/Events_T_RelhaxModpack_UIComponents_StretchingTreeViewItem.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+      <HelpTOCNode Id="7f087256-c3ef-41c9-a6ca-90fa5e6d5501" Title="RelhaxModpack.Windows" Url="html/N_RelhaxModpack_Windows.htm">
+        <HelpTOCNode Id="1e9a65f6-fd54-40fa-a342-69181d0a73fd" Title="AddPicturesZip Class" Url="html/T_RelhaxModpack_Windows_AddPicturesZip.htm">
+          <HelpTOCNode Title="AddPicturesZip Constructor " Url="html/M_RelhaxModpack_Windows_AddPicturesZip__ctor.htm" />
+          <HelpTOCNode Title="AddPicturesZip Properties" Url="html/Properties_T_RelhaxModpack_Windows_AddPicturesZip.htm" />
+          <HelpTOCNode Id="14614eb7-480a-4d11-9fb2-26036cb457eb" Title="AddPicturesZip Methods" Url="html/Methods_T_RelhaxModpack_Windows_AddPicturesZip.htm">
+            <HelpTOCNode Title="InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_AddPicturesZip_InitializeComponent.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="AddPicturesZip Events" Url="html/Events_T_RelhaxModpack_Windows_AddPicturesZip.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="401af730-cc56-4ee6-8ce4-ccc91875bd60" Title="DatabaseEditor Class" Url="html/T_RelhaxModpack_Windows_DatabaseEditor.htm">
+          <HelpTOCNode Title="DatabaseEditor Constructor " Url="html/M_RelhaxModpack_Windows_DatabaseEditor__ctor.htm" />
+          <HelpTOCNode Title="DatabaseEditor Properties" Url="html/Properties_T_RelhaxModpack_Windows_DatabaseEditor.htm" />
+          <HelpTOCNode Id="15cf7cb5-aba8-439c-8477-6f2b8c3cda41" Title="DatabaseEditor Methods" Url="html/Methods_T_RelhaxModpack_Windows_DatabaseEditor.htm">
+            <HelpTOCNode Title="InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_DatabaseEditor_InitializeComponent.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="DatabaseEditor Events" Url="html/Events_T_RelhaxModpack_Windows_DatabaseEditor.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="a2f47f14-1901-4317-83b6-67526d807314" Title="DatabaseEditorAddMove Class" Url="html/T_RelhaxModpack_Windows_DatabaseEditorAddMove.htm">
+          <HelpTOCNode Title="DatabaseEditorAddMove Constructor " Url="html/M_RelhaxModpack_Windows_DatabaseEditorAddMove__ctor.htm" />
+          <HelpTOCNode Title="DatabaseEditorAddMove Properties" Url="html/Properties_T_RelhaxModpack_Windows_DatabaseEditorAddMove.htm" />
+          <HelpTOCNode Id="6d027f95-9013-49ff-8b83-27073c082706" Title="DatabaseEditorAddMove Methods" Url="html/Methods_T_RelhaxModpack_Windows_DatabaseEditorAddMove.htm">
+            <HelpTOCNode Title="InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_DatabaseEditorAddMove_InitializeComponent.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="DatabaseEditorAddMove Events" Url="html/Events_T_RelhaxModpack_Windows_DatabaseEditorAddMove.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="c0769a7f-e62e-4e83-9643-fd1656307259" Title="DatabaseEditorDownload Class" Url="html/T_RelhaxModpack_Windows_DatabaseEditorDownload.htm">
+          <HelpTOCNode Title="DatabaseEditorDownload Constructor " Url="html/M_RelhaxModpack_Windows_DatabaseEditorDownload__ctor.htm" />
+          <HelpTOCNode Title="DatabaseEditorDownload Properties" Url="html/Properties_T_RelhaxModpack_Windows_DatabaseEditorDownload.htm" />
+          <HelpTOCNode Id="8ba79da5-53d9-481b-bc95-6e38ed94bfb8" Title="DatabaseEditorDownload Methods" Url="html/Methods_T_RelhaxModpack_Windows_DatabaseEditorDownload.htm">
+            <HelpTOCNode Title="InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_DatabaseEditorDownload_InitializeComponent.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="DatabaseEditorDownload Events" Url="html/Events_T_RelhaxModpack_Windows_DatabaseEditorDownload.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="0209d2a1-e6bd-4e33-9c1f-a473da74a9ad" Title="DatabaseUpdater Class" Url="html/T_RelhaxModpack_Windows_DatabaseUpdater.htm">
+          <HelpTOCNode Title="DatabaseUpdater Constructor " Url="html/M_RelhaxModpack_Windows_DatabaseUpdater__ctor.htm" />
+          <HelpTOCNode Title="DatabaseUpdater Properties" Url="html/Properties_T_RelhaxModpack_Windows_DatabaseUpdater.htm" />
+          <HelpTOCNode Id="7fddc621-f06f-4ecd-9830-5051f0a42987" Title="DatabaseUpdater Methods" Url="html/Methods_T_RelhaxModpack_Windows_DatabaseUpdater.htm">
+            <HelpTOCNode Title="AttemptAuth Method " Url="html/M_RelhaxModpack_Windows_DatabaseUpdater_AttemptAuth.htm" />
+            <HelpTOCNode Title="InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_DatabaseUpdater_InitializeComponent.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="DatabaseUpdater Events" Url="html/Events_T_RelhaxModpack_Windows_DatabaseUpdater.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="c215ac9f-375f-432f-b403-fd8d620db503" Title="DatabaseUpdater.VersionInfos Structure" Url="html/T_RelhaxModpack_Windows_DatabaseUpdater_VersionInfos.htm">
+          <HelpTOCNode Id="f1c7055f-4beb-4f45-b293-9f00e7a94660" Title="VersionInfos Methods" Url="html/Methods_T_RelhaxModpack_Windows_DatabaseUpdater_VersionInfos.htm">
+            <HelpTOCNode Title="ToString Method " Url="html/M_RelhaxModpack_Windows_DatabaseUpdater_VersionInfos_ToString.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="edf709aa-b3ae-4b12-8602-163443583c68" Title="VersionInfos Fields" Url="html/Fields_T_RelhaxModpack_Windows_DatabaseUpdater_VersionInfos.htm">
+            <HelpTOCNode Title="WoTClientVersion Field" Url="html/F_RelhaxModpack_Windows_DatabaseUpdater_VersionInfos_WoTClientVersion.htm" />
+            <HelpTOCNode Title="WoTOnlineFolderVersion Field" Url="html/F_RelhaxModpack_Windows_DatabaseUpdater_VersionInfos_WoTOnlineFolderVersion.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Title="DeveloperSelectionsClosedDelagate Delegate" Url="html/T_RelhaxModpack_Windows_DeveloperSelectionsClosedDelagate.htm" />
+        <HelpTOCNode Id="c0273256-5757-4c6d-bf27-58272c440688" Title="DeveloperSelectionsViewer Class" Url="html/T_RelhaxModpack_Windows_DeveloperSelectionsViewer.htm">
+          <HelpTOCNode Title="DeveloperSelectionsViewer Constructor " Url="html/M_RelhaxModpack_Windows_DeveloperSelectionsViewer__ctor.htm" />
+          <HelpTOCNode Title="DeveloperSelectionsViewer Properties" Url="html/Properties_T_RelhaxModpack_Windows_DeveloperSelectionsViewer.htm" />
+          <HelpTOCNode Id="533ab8dc-831a-4838-9941-f6d12d2ea445" Title="DeveloperSelectionsViewer Methods" Url="html/Methods_T_RelhaxModpack_Windows_DeveloperSelectionsViewer.htm">
+            <HelpTOCNode Title="InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_DeveloperSelectionsViewer_InitializeComponent.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="2477d386-78d8-4751-877e-925372d79c4c" Title="DeveloperSelectionsViewer Events" Url="html/Events_T_RelhaxModpack_Windows_DeveloperSelectionsViewer.htm">
+            <HelpTOCNode Title="OnDeveloperSelectionsClosed Event" Url="html/E_RelhaxModpack_Windows_DeveloperSelectionsViewer_OnDeveloperSelectionsClosed.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Id="18c1433f-228b-4765-9022-69651a0b1bf8" Title="DevleoperSelectionsClosedEWventArgs Class" Url="html/T_RelhaxModpack_Windows_DevleoperSelectionsClosedEWventArgs.htm">
+          <HelpTOCNode Title="DevleoperSelectionsClosedEWventArgs Constructor " Url="html/M_RelhaxModpack_Windows_DevleoperSelectionsClosedEWventArgs__ctor.htm" />
+          <HelpTOCNode Title="DevleoperSelectionsClosedEWventArgs Methods" Url="html/Methods_T_RelhaxModpack_Windows_DevleoperSelectionsClosedEWventArgs.htm" />
+          <HelpTOCNode Id="bf05c18d-7fa8-4e8a-846d-5fdb0c245276" Title="DevleoperSelectionsClosedEWventArgs Fields" Url="html/Fields_T_RelhaxModpack_Windows_DevleoperSelectionsClosedEWventArgs.htm">
+            <HelpTOCNode Title="FileToLoad Field" Url="html/F_RelhaxModpack_Windows_DevleoperSelectionsClosedEWventArgs_FileToLoad.htm" />
+            <HelpTOCNode Title="LoadSelection Field" Url="html/F_RelhaxModpack_Windows_DevleoperSelectionsClosedEWventArgs_LoadSelection.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Id="54f47f9b-93a6-41c6-871a-98d51dfd6084" Title="FirstLoadAknowledgements Class" Url="html/T_RelhaxModpack_Windows_FirstLoadAknowledgements.htm">
+          <HelpTOCNode Title="FirstLoadAknowledgements Constructor " Url="html/M_RelhaxModpack_Windows_FirstLoadAknowledgements__ctor.htm" />
+          <HelpTOCNode Title="FirstLoadAknowledgements Properties" Url="html/Properties_T_RelhaxModpack_Windows_FirstLoadAknowledgements.htm" />
+          <HelpTOCNode Id="e91b4068-fbb9-436c-ad56-43bc0aefa9da" Title="FirstLoadAknowledgements Methods" Url="html/Methods_T_RelhaxModpack_Windows_FirstLoadAknowledgements.htm">
+            <HelpTOCNode Title="InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_FirstLoadAknowledgements_InitializeComponent.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="FirstLoadAknowledgements Events" Url="html/Events_T_RelhaxModpack_Windows_FirstLoadAknowledgements.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="66f3f724-2475-4efb-a1fe-b0e1973787ce" Title="GenericYesNoWindow Class" Url="html/T_RelhaxModpack_Windows_GenericYesNoWindow.htm">
+          <HelpTOCNode Title="GenericYesNoWindow Constructor " Url="html/M_RelhaxModpack_Windows_GenericYesNoWindow__ctor.htm" />
+          <HelpTOCNode Title="GenericYesNoWindow Properties" Url="html/Properties_T_RelhaxModpack_Windows_GenericYesNoWindow.htm" />
+          <HelpTOCNode Id="93f39031-e2de-4628-890f-251ebdd7cf50" Title="GenericYesNoWindow Methods" Url="html/Methods_T_RelhaxModpack_Windows_GenericYesNoWindow.htm">
+            <HelpTOCNode Title="InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_GenericYesNoWindow_InitializeComponent.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="GenericYesNoWindow Events" Url="html/Events_T_RelhaxModpack_Windows_GenericYesNoWindow.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="b209c91d-2b2d-4491-a8a4-17c9d09ed2cf" Title="InstallFinished Class" Url="html/T_RelhaxModpack_Windows_InstallFinished.htm">
+          <HelpTOCNode Title="InstallFinished Constructor " Url="html/M_RelhaxModpack_Windows_InstallFinished__ctor.htm" />
+          <HelpTOCNode Title="InstallFinished Properties" Url="html/Properties_T_RelhaxModpack_Windows_InstallFinished.htm" />
+          <HelpTOCNode Id="f3370fe3-c59a-4f40-9a29-2fbf480347d9" Title="InstallFinished Methods" Url="html/Methods_T_RelhaxModpack_Windows_InstallFinished.htm">
+            <HelpTOCNode Title="InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_InstallFinished_InitializeComponent.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="InstallFinished Events" Url="html/Events_T_RelhaxModpack_Windows_InstallFinished.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="3b9ab860-2062-4744-89ec-1d524ff6b69f" Title="ModSelectionList Class" Url="html/T_RelhaxModpack_Windows_ModSelectionList.htm">
+          <HelpTOCNode Title="ModSelectionList Constructor " Url="html/M_RelhaxModpack_Windows_ModSelectionList__ctor.htm" />
+          <HelpTOCNode Title="ModSelectionList Properties" Url="html/Properties_T_RelhaxModpack_Windows_ModSelectionList.htm" />
+          <HelpTOCNode Id="695c268a-c36d-4221-8612-3061ffebb826" Title="ModSelectionList Methods" Url="html/Methods_T_RelhaxModpack_Windows_ModSelectionList.htm">
+            <HelpTOCNode Title="InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_ModSelectionList_InitializeComponent.htm" />
+            <HelpTOCNode Title="IsValidStructure Method " Url="html/M_RelhaxModpack_Windows_ModSelectionList_IsValidStructure.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="7723353c-4438-4270-a52a-9e02c1877aaf" Title="ModSelectionList Events" Url="html/Events_T_RelhaxModpack_Windows_ModSelectionList.htm">
+            <HelpTOCNode Title="OnSelectionListReturn Event" Url="html/E_RelhaxModpack_Windows_ModSelectionList_OnSelectionListReturn.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="61b0adff-1324-48e1-8772-57dc2f481223" Title="ModSelectionList Fields" Url="html/Fields_T_RelhaxModpack_Windows_ModSelectionList.htm">
+            <HelpTOCNode Title="Dependencies Field" Url="html/F_RelhaxModpack_Windows_ModSelectionList_Dependencies.htm" />
+            <HelpTOCNode Title="GlobalDependencies Field" Url="html/F_RelhaxModpack_Windows_ModSelectionList_GlobalDependencies.htm" />
+            <HelpTOCNode Title="ParsedCategoryList Field" Url="html/F_RelhaxModpack_Windows_ModSelectionList_ParsedCategoryList.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Id="c9b9dbf5-427a-4254-9d08-aa1c27472aaf" Title="NewsViewer Class" Url="html/T_RelhaxModpack_Windows_NewsViewer.htm">
+          <HelpTOCNode Title="NewsViewer Constructor " Url="html/M_RelhaxModpack_Windows_NewsViewer__ctor.htm" />
+          <HelpTOCNode Title="NewsViewer Properties" Url="html/Properties_T_RelhaxModpack_Windows_NewsViewer.htm" />
+          <HelpTOCNode Id="26f08634-3006-4f06-8144-a45be89a119e" Title="NewsViewer Methods" Url="html/Methods_T_RelhaxModpack_Windows_NewsViewer.htm">
+            <HelpTOCNode Title="InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_NewsViewer_InitializeComponent.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="NewsViewer Events" Url="html/Events_T_RelhaxModpack_Windows_NewsViewer.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="b4ee34b4-0946-4589-8796-f1e72b0856ba" Title="PatchTester Class" Url="html/T_RelhaxModpack_Windows_PatchTester.htm">
+          <HelpTOCNode Title="PatchTester Constructor " Url="html/M_RelhaxModpack_Windows_PatchTester__ctor.htm" />
+          <HelpTOCNode Title="PatchTester Properties" Url="html/Properties_T_RelhaxModpack_Windows_PatchTester.htm" />
+          <HelpTOCNode Id="33833080-fbea-4819-968a-e2837835713f" Title="PatchTester Methods" Url="html/Methods_T_RelhaxModpack_Windows_PatchTester.htm">
+            <HelpTOCNode Title="InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_PatchTester_InitializeComponent.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="PatchTester Events" Url="html/Events_T_RelhaxModpack_Windows_PatchTester.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="1f2b8551-d206-4f6f-9f67-fd74b893d94b" Title="Preview Class" Url="html/T_RelhaxModpack_Windows_Preview.htm">
+          <HelpTOCNode Title="Preview Constructor " Url="html/M_RelhaxModpack_Windows_Preview__ctor.htm" />
+          <HelpTOCNode Title="Preview Properties" Url="html/Properties_T_RelhaxModpack_Windows_Preview.htm" />
+          <HelpTOCNode Id="c27bfdcc-7610-4095-b881-5c3114e8b159" Title="Preview Methods" Url="html/Methods_T_RelhaxModpack_Windows_Preview.htm">
+            <HelpTOCNode Title="InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_Preview_InitializeComponent.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Preview Events" Url="html/Events_T_RelhaxModpack_Windows_Preview.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="7d9e97db-60ca-4b8f-a11d-22bd1688644e" Title="ProgressIndicator Class" Url="html/T_RelhaxModpack_Windows_ProgressIndicator.htm">
+          <HelpTOCNode Title="ProgressIndicator Constructor " Url="html/M_RelhaxModpack_Windows_ProgressIndicator__ctor.htm" />
+          <HelpTOCNode Id="6e976cc6-bbae-4843-bd91-aa584ac4316a" Title="ProgressIndicator Properties" Url="html/Properties_T_RelhaxModpack_Windows_ProgressIndicator.htm">
+            <HelpTOCNode Title="Message Property " Url="html/P_RelhaxModpack_Windows_ProgressIndicator_Message.htm" />
+            <HelpTOCNode Title="ProgressMaximum Property " Url="html/P_RelhaxModpack_Windows_ProgressIndicator_ProgressMaximum.htm" />
+            <HelpTOCNode Title="ProgressMinimum Property " Url="html/P_RelhaxModpack_Windows_ProgressIndicator_ProgressMinimum.htm" />
+            <HelpTOCNode Title="ProgressValue Property " Url="html/P_RelhaxModpack_Windows_ProgressIndicator_ProgressValue.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="683a7665-5da3-436a-82d4-ae9b0ef4268e" Title="ProgressIndicator Methods" Url="html/Methods_T_RelhaxModpack_Windows_ProgressIndicator.htm">
+            <HelpTOCNode Title="InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_ProgressIndicator_InitializeComponent.htm" />
+            <HelpTOCNode Id="207a8331-138c-4096-b333-dea0cd4ecd6d" Title="UpdateProgress Method " Url="html/Overload_RelhaxModpack_Windows_ProgressIndicator_UpdateProgress.htm">
+              <HelpTOCNode Title="UpdateProgress Method (Double)" Url="html/M_RelhaxModpack_Windows_ProgressIndicator_UpdateProgress.htm" />
+              <HelpTOCNode Title="UpdateProgress Method (Double, String)" Url="html/M_RelhaxModpack_Windows_ProgressIndicator_UpdateProgress_1.htm" />
+            </HelpTOCNode>
+          </HelpTOCNode>
+          <HelpTOCNode Title="ProgressIndicator Events" Url="html/Events_T_RelhaxModpack_Windows_ProgressIndicator.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="88ffc637-2708-4b20-b4c3-ef43cf0382e1" Title="RelhaxWindow Class" Url="html/T_RelhaxModpack_Windows_RelhaxWindow.htm">
+          <HelpTOCNode Title="RelhaxWindow Constructor " Url="html/M_RelhaxModpack_Windows_RelhaxWindow__ctor.htm" />
+          <HelpTOCNode Id="a67625d1-5dca-46b6-a635-288626c07fb2" Title="RelhaxWindow Properties" Url="html/Properties_T_RelhaxModpack_Windows_RelhaxWindow.htm">
+            <HelpTOCNode Title="ApplyColorSettings Property " Url="html/P_RelhaxModpack_Windows_RelhaxWindow_ApplyColorSettings.htm" />
+            <HelpTOCNode Title="ApplyToolTips Property " Url="html/P_RelhaxModpack_Windows_RelhaxWindow_ApplyToolTips.htm" />
+            <HelpTOCNode Title="LocalizeWindow Property " Url="html/P_RelhaxModpack_Windows_RelhaxWindow_LocalizeWindow.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="RelhaxWindow Methods" Url="html/Methods_T_RelhaxModpack_Windows_RelhaxWindow.htm" />
+          <HelpTOCNode Title="RelhaxWindow Events" Url="html/Events_T_RelhaxModpack_Windows_RelhaxWindow.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Title="SelectionListClosedDelegate Delegate" Url="html/T_RelhaxModpack_Windows_SelectionListClosedDelegate.htm" />
+        <HelpTOCNode Id="bc54f66f-9536-4181-bc98-9d1fc13c8a7c" Title="SelectionListEventArgs Class" Url="html/T_RelhaxModpack_Windows_SelectionListEventArgs.htm">
+          <HelpTOCNode Title="SelectionListEventArgs Constructor " Url="html/M_RelhaxModpack_Windows_SelectionListEventArgs__ctor.htm" />
+          <HelpTOCNode Title="SelectionListEventArgs Methods" Url="html/Methods_T_RelhaxModpack_Windows_SelectionListEventArgs.htm" />
+          <HelpTOCNode Id="1f12da24-8a90-4467-9547-5ed666ae7b10" Title="SelectionListEventArgs Fields" Url="html/Fields_T_RelhaxModpack_Windows_SelectionListEventArgs.htm">
+            <HelpTOCNode Title="ContinueInstallation Field" Url="html/F_RelhaxModpack_Windows_SelectionListEventArgs_ContinueInstallation.htm" />
+            <HelpTOCNode Title="Dependencies Field" Url="html/F_RelhaxModpack_Windows_SelectionListEventArgs_Dependencies.htm" />
+            <HelpTOCNode Title="GlobalDependencies Field" Url="html/F_RelhaxModpack_Windows_SelectionListEventArgs_GlobalDependencies.htm" />
+            <HelpTOCNode Title="ParsedCategoryList Field" Url="html/F_RelhaxModpack_Windows_SelectionListEventArgs_ParsedCategoryList.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+        <HelpTOCNode Id="793649fb-2725-4516-861e-0456c5612dda" Title="SelectionViewer Class" Url="html/T_RelhaxModpack_Windows_SelectionViewer.htm">
+          <HelpTOCNode Title="SelectionViewer Constructor " Url="html/M_RelhaxModpack_Windows_SelectionViewer__ctor.htm" />
+          <HelpTOCNode Title="SelectionViewer Properties" Url="html/Properties_T_RelhaxModpack_Windows_SelectionViewer.htm" />
+          <HelpTOCNode Id="c04b202b-2fef-486c-9682-2f54e154510b" Title="SelectionViewer Methods" Url="html/Methods_T_RelhaxModpack_Windows_SelectionViewer.htm">
+            <HelpTOCNode Title="InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_SelectionViewer_InitializeComponent.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="SelectionViewer Events" Url="html/Events_T_RelhaxModpack_Windows_SelectionViewer.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="4c0b595d-ccaa-4d43-a7a6-f177dd1e5019" Title="VersionInfo Class" Url="html/T_RelhaxModpack_Windows_VersionInfo.htm">
+          <HelpTOCNode Title="VersionInfo Constructor " Url="html/M_RelhaxModpack_Windows_VersionInfo__ctor.htm" />
+          <HelpTOCNode Id="025880a0-b58f-4ef7-a446-f309414d1f19" Title="VersionInfo Properties" Url="html/Properties_T_RelhaxModpack_Windows_VersionInfo.htm">
+            <HelpTOCNode Title="ConfirmUpdate Property " Url="html/P_RelhaxModpack_Windows_VersionInfo_ConfirmUpdate.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="a6f4f50b-c96b-4ee7-ae9d-eeb31a5c3ebb" Title="VersionInfo Methods" Url="html/Methods_T_RelhaxModpack_Windows_VersionInfo.htm">
+            <HelpTOCNode Title="InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_VersionInfo_InitializeComponent.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="VersionInfo Events" Url="html/Events_T_RelhaxModpack_Windows_VersionInfo.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+    </HelpTOCNode>
+  </HelpTOCNode>
+  <HelpTOCNode Id="4d35ab5b-9c60-4983-9f51-5fa20f47c3cc" Title="Version History" Url="html/8ec7a628-a2bd-4fbb-aa95-5642e54ef985.htm">
+    <HelpTOCNode Title="Version 1.0.0.0" Url="html/5f2f8267-88b0-4ab8-93ec-7a67f5130bac.htm" />
+  </HelpTOCNode>
+</HelpTOC>

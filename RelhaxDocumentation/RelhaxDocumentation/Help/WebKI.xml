@@ -1,0 +1,1392 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<HelpKI>
+  <HelpKINode Title="ActualPatchName property" Url="html/P_RelhaxModpack_Patch_ActualPatchName.htm" />
+  <HelpKINode Title="AddPicturesZip class">
+    <HelpKINode Title="AddPicturesZip Class" Url="html/T_RelhaxModpack_Windows_AddPicturesZip.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Windows_AddPicturesZip__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_Windows_AddPicturesZip.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Windows_AddPicturesZip.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_Windows_AddPicturesZip.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AddPicturesZip.AddPicturesZip constructor" Url="html/M_RelhaxModpack_Windows_AddPicturesZip__ctor.htm" />
+  <HelpKINode Title="AddPicturesZip.InitializeComponent method" Url="html/M_RelhaxModpack_Windows_AddPicturesZip_InitializeComponent.htm" />
+  <HelpKINode Title="Alpha enumeration member" Url="html/T_RelhaxModpack_ApplicationVersions.htm" />
+  <HelpKINode Title="AND enumeration member" Url="html/T_RelhaxModpack_Logic.htm" />
+  <HelpKINode Title="AnyPackagesChecked method" Url="html/M_RelhaxModpack_SelectablePackage_AnyPackagesChecked.htm" />
+  <HelpKINode Title="App class">
+    <HelpKINode Title="App Class" Url="html/T_RelhaxModpack_App.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_App__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_App.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_App.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_App.htm" />
+  </HelpKINode>
+  <HelpKINode Title="App.App constructor" Url="html/M_RelhaxModpack_App__ctor.htm" />
+  <HelpKINode Title="App.InitializeComponent method" Url="html/M_RelhaxModpack_App_InitializeComponent.htm" />
+  <HelpKINode Title="App.Main method" Url="html/M_RelhaxModpack_App_Main.htm" />
+  <HelpKINode Title="AppDataFolder field" Url="html/F_RelhaxModpack_Settings_AppDataFolder.htm" />
+  <HelpKINode Title="AppendExtraction field" Url="html/F_RelhaxModpack_DatabasePackage_AppendExtraction.htm" />
+  <HelpKINode Title="Application enumeration member" Url="html/T_RelhaxModpack_Logfiles.htm" />
+  <HelpKINode Title="ApplicationBetaUpdateURL field" Url="html/F_RelhaxModpack_Settings_ApplicationBetaUpdateURL.htm" />
+  <HelpKINode Title="ApplicationDistroVersion field" Url="html/F_RelhaxModpack_ModpackSettings_ApplicationDistroVersion.htm" />
+  <HelpKINode Title="ApplicationHalt enumeration member" Url="html/T_RelhaxModpack_LogLevel.htm" />
+  <HelpKINode Title="ApplicationLogfile field" Url="html/F_RelhaxModpack_Logging_ApplicationLogfile.htm" />
+  <HelpKINode Title="ApplicationLogFilename field" Url="html/F_RelhaxModpack_Logging_ApplicationLogFilename.htm" />
+  <HelpKINode Title="ApplicationlogStartStop field" Url="html/F_RelhaxModpack_Logging_ApplicationlogStartStop.htm" />
+  <HelpKINode Title="ApplicationStartupPath field" Url="html/F_RelhaxModpack_Settings_ApplicationStartupPath.htm" />
+  <HelpKINode Title="ApplicationUpdateFileName field" Url="html/F_RelhaxModpack_Settings_ApplicationUpdateFileName.htm" />
+  <HelpKINode Title="ApplicationUpdateURL field" Url="html/F_RelhaxModpack_Settings_ApplicationUpdateURL.htm" />
+  <HelpKINode Title="ApplicationVersion field" Url="html/F_RelhaxModpack_Settings_ApplicationVersion.htm" />
+  <HelpKINode Title="ApplicationVersions enumeration" Url="html/T_RelhaxModpack_ApplicationVersions.htm" />
+  <HelpKINode Title="ApplyColorSettings property" Url="html/P_RelhaxModpack_Windows_RelhaxWindow_ApplyColorSettings.htm" />
+  <HelpKINode Title="ApplyNormalFileProperties method" Url="html/M_RelhaxModpack_Utils_ApplyNormalFileProperties.htm" />
+  <HelpKINode Title="ApplyThirdPartyWindowSettings method" Url="html/M_RelhaxModpack_ThirdPartySettings_ApplyThirdPartyWindowSettings.htm" />
+  <HelpKINode Title="ApplyToolTips property" Url="html/P_RelhaxModpack_Windows_RelhaxWindow_ApplyToolTips.htm" />
+  <HelpKINode Title="ApplyUIColorSettings method" Url="html/M_RelhaxModpack_UISettings_ApplyUIColorSettings.htm" />
+  <HelpKINode Title="AssignCateogryPatchIDS method" Url="html/M_RelhaxModpack_Utils_AssignCateogryPatchIDS.htm" />
+  <HelpKINode Title="AtlasCreationFoldername field" Url="html/F_RelhaxModpack_Settings_AtlasCreationFoldername.htm" />
+  <HelpKINode Title="AttemptAuth method" Url="html/M_RelhaxModpack_Windows_DatabaseUpdater_AttemptAuth.htm" />
+  <HelpKINode Title="AutoFindWoTDirectory method" Url="html/M_RelhaxModpack_Utils_AutoFindWoTDirectory.htm" />
+  <HelpKINode Title="AutoInstallFileName field" Url="html/F_RelhaxModpack_CommandLineSettings_AutoInstallFileName.htm" />
+  <HelpKINode Title="AwaitCallback field" Url="html/F_RelhaxModpack_InstallerComponents_InstallEngine_AwaitCallback.htm" />
+  <HelpKINode Title="BackupDataError enumeration member" Url="html/T_RelhaxModpack_InstallerComponents_InstallerExitCodes.htm" />
+  <HelpKINode Title="BackupModFolder field" Url="html/F_RelhaxModpack_ModpackSettings_BackupModFolder.htm" />
+  <HelpKINode Title="BackupModsError enumeration member" Url="html/T_RelhaxModpack_InstallerComponents_InstallerExitCodes.htm" />
+  <HelpKINode Title="Base64Decode method" Url="html/M_RelhaxModpack_Utils_Base64Decode.htm" />
+  <HelpKINode Title="Base64Encode method" Url="html/M_RelhaxModpack_Utils_Base64Encode.htm" />
+  <HelpKINode Title="BaseOptionalNodesV2 field" Url="html/F_RelhaxModpack_XMLUtils_BaseOptionalNodesV2.htm" />
+  <HelpKINode Title="BaseRequiredNodesV2 field" Url="html/F_RelhaxModpack_XMLUtils_BaseRequiredNodesV2.htm" />
+  <HelpKINode Title="Beta enumeration member">
+    <HelpKINode Title="ApplicationVersions Enumeration" Url="html/T_RelhaxModpack_ApplicationVersions.htm" />
+    <HelpKINode Title="DatabaseVersions Enumeration" Url="html/T_RelhaxModpack_DatabaseVersions.htm" />
+  </HelpKINode>
+  <HelpKINode Title="BetaDatabaseURL property" Url="html/P_RelhaxModpack_ThirdPartySettings_BetaDatabaseURL.htm" />
+  <HelpKINode Title="BuildLevelPerPackage method" Url="html/M_RelhaxModpack_Utils_BuildLevelPerPackage.htm" />
+  <HelpKINode Title="BuildLinksRefrence method" Url="html/M_RelhaxModpack_Utils_BuildLinksRefrence.htm" />
+  <HelpKINode Title="BuildMacroList method" Url="html/M_RelhaxModpack_Utils_BuildMacroList.htm" />
+  <HelpKINode Title="BuildTag field" Url="html/F_RelhaxModpack_CiInfo_BuildTag.htm" />
+  <HelpKINode Title="BYTES_TO_MBYTES field" Url="html/F_RelhaxModpack_Utils_BYTES_TO_MBYTES.htm" />
+  <HelpKINode Title="CalculateDependencies method" Url="html/M_RelhaxModpack_Utils_CalculateDependencies.htm" />
+  <HelpKINode Title="Category class">
+    <HelpKINode Title="Category Class" Url="html/T_RelhaxModpack_Category.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Category__ctor.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_Category.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Category.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Category.Category constructor" Url="html/M_RelhaxModpack_Category__ctor.htm" />
+  <HelpKINode Title="Category.CategoryHeader field" Url="html/F_RelhaxModpack_Category_CategoryHeader.htm" />
+  <HelpKINode Title="Category.CompareCatagories method" Url="html/M_RelhaxModpack_Category_CompareCatagories.htm" />
+  <HelpKINode Title="Category.Dependencies field" Url="html/F_RelhaxModpack_Category_Dependencies.htm" />
+  <HelpKINode Title="Category.GetFlatPackageList method" Url="html/M_RelhaxModpack_Category_GetFlatPackageList.htm" />
+  <HelpKINode Title="Category.GetSelectablePackage method" Url="html/M_RelhaxModpack_Category_GetSelectablePackage.htm" />
+  <HelpKINode Title="Category.Name field" Url="html/F_RelhaxModpack_Category_Name.htm" />
+  <HelpKINode Title="Category.Packages field" Url="html/F_RelhaxModpack_Category_Packages.htm" />
+  <HelpKINode Title="Category.PatchProcessCategoryID field" Url="html/F_RelhaxModpack_Category_PatchProcessCategoryID.htm" />
+  <HelpKINode Title="Category.TabPage field" Url="html/F_RelhaxModpack_Category_TabPage.htm" />
+  <HelpKINode Title="Category.ToString method" Url="html/M_RelhaxModpack_Category_ToString.htm" />
+  <HelpKINode Title="Category.TreeView field" Url="html/F_RelhaxModpack_Category_TreeView.htm" />
+  <HelpKINode Title="CategoryHeader field" Url="html/F_RelhaxModpack_Category_CategoryHeader.htm" />
+  <HelpKINode Title="CategoryRequiredNodesV2 field" Url="html/F_RelhaxModpack_XMLUtils_CategoryRequiredNodesV2.htm" />
+  <HelpKINode Title="Checked property">
+    <HelpKINode Title="DatabaseLogic.Checked Property " Url="html/P_RelhaxModpack_DatabaseLogic_Checked.htm" />
+    <HelpKINode Title="SelectablePackage.Checked Property " Url="html/P_RelhaxModpack_SelectablePackage_Checked.htm" />
+  </HelpKINode>
+  <HelpKINode Title="CheckForDuplicates method" Url="html/M_RelhaxModpack_Utils_CheckForDuplicates.htm" />
+  <HelpKINode Title="ChildBorder field" Url="html/F_RelhaxModpack_SelectablePackage_ChildBorder.htm" />
+  <HelpKINode Title="ChildCurrent field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_ChildCurrent.htm" />
+  <HelpKINode Title="ChildCurrentProgress field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_ChildCurrentProgress.htm" />
+  <HelpKINode Title="ChildStackPanel field" Url="html/F_RelhaxModpack_SelectablePackage_ChildStackPanel.htm" />
+  <HelpKINode Title="ChildTotal field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_ChildTotal.htm" />
+  <HelpKINode Title="CiInfo class">
+    <HelpKINode Title="CiInfo Class" Url="html/T_RelhaxModpack_CiInfo.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_CiInfo.htm" />
+  </HelpKINode>
+  <HelpKINode Title="CiInfo.BuildTag field" Url="html/F_RelhaxModpack_CiInfo_BuildTag.htm" />
+  <HelpKINode Title="CleanInstallation field" Url="html/F_RelhaxModpack_ModpackSettings_CleanInstallation.htm" />
+  <HelpKINode Title="CleanModsError enumeration member" Url="html/T_RelhaxModpack_InstallerComponents_InstallerExitCodes.htm" />
+  <HelpKINode Title="CleanupError enumeration member" Url="html/T_RelhaxModpack_InstallerComponents_InstallerExitCodes.htm" />
+  <HelpKINode Title="ClearCache field" Url="html/F_RelhaxModpack_ModpackSettings_ClearCache.htm" />
+  <HelpKINode Title="ClearCacheError enumeration member" Url="html/T_RelhaxModpack_InstallerComponents_InstallerExitCodes.htm" />
+  <HelpKINode Title="ClearLogsError enumeration member" Url="html/T_RelhaxModpack_InstallerComponents_InstallerExitCodes.htm" />
+  <HelpKINode Title="CommandLineSettings class">
+    <HelpKINode Title="CommandLineSettings Class" Url="html/T_RelhaxModpack_CommandLineSettings.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_CommandLineSettings.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_CommandLineSettings.htm" />
+  </HelpKINode>
+  <HelpKINode Title="CommandLineSettings.AutoInstallFileName field" Url="html/F_RelhaxModpack_CommandLineSettings_AutoInstallFileName.htm" />
+  <HelpKINode Title="CommandLineSettings.DatabaseEdit field" Url="html/F_RelhaxModpack_CommandLineSettings_DatabaseEdit.htm" />
+  <HelpKINode Title="CommandLineSettings.DatabaseUpdate field" Url="html/F_RelhaxModpack_CommandLineSettings_DatabaseUpdate.htm" />
+  <HelpKINode Title="CommandLineSettings.EditorAutoLoadFileName field" Url="html/F_RelhaxModpack_CommandLineSettings_EditorAutoLoadFileName.htm" />
+  <HelpKINode Title="CommandLineSettings.ForceEnabled field" Url="html/F_RelhaxModpack_CommandLineSettings_ForceEnabled.htm" />
+  <HelpKINode Title="CommandLineSettings.ForceVisible field" Url="html/F_RelhaxModpack_CommandLineSettings_ForceVisible.htm" />
+  <HelpKINode Title="CommandLineSettings.ParseCommandLineConflicts method" Url="html/M_RelhaxModpack_CommandLineSettings_ParseCommandLineConflicts.htm" />
+  <HelpKINode Title="CommandLineSettings.PatchCheck field" Url="html/F_RelhaxModpack_CommandLineSettings_PatchCheck.htm" />
+  <HelpKINode Title="CommandLineSettings.SilentStart field" Url="html/F_RelhaxModpack_CommandLineSettings_SilentStart.htm" />
+  <HelpKINode Title="CommandLineSettings.SkipUpdate field" Url="html/F_RelhaxModpack_CommandLineSettings_SkipUpdate.htm" />
+  <HelpKINode Title="CommandLineSettings.TestMode field" Url="html/F_RelhaxModpack_CommandLineSettings_TestMode.htm" />
+  <HelpKINode Title="CommandLineSettings.UpdateKeyFileName field" Url="html/F_RelhaxModpack_CommandLineSettings_UpdateKeyFileName.htm" />
+  <HelpKINode Title="CompareCatagories method" Url="html/M_RelhaxModpack_Category_CompareCatagories.htm" />
+  <HelpKINode Title="CompareMods method" Url="html/M_RelhaxModpack_SelectablePackage_CompareMods.htm" />
+  <HelpKINode Title="CompareVersions method" Url="html/M_RelhaxModpack_Utils_CompareVersions.htm" />
+  <HelpKINode Title="CompletePath property">
+    <HelpKINode Title="DatabasePackage.CompletePath Property " Url="html/P_RelhaxModpack_DatabasePackage_CompletePath.htm" />
+    <HelpKINode Title="Patch.CompletePath Property " Url="html/P_RelhaxModpack_Patch_CompletePath.htm" />
+    <HelpKINode Title="SelectablePackage.CompletePath Property " Url="html/P_RelhaxModpack_SelectablePackage_CompletePath.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ConfigFileVersion field" Url="html/F_RelhaxModpack_Settings_ConfigFileVersion.htm" />
+  <HelpKINode Title="ConfirmUpdate property" Url="html/P_RelhaxModpack_Windows_VersionInfo_ConfirmUpdate.htm" />
+  <HelpKINode Title="ConflictingPackages field" Url="html/F_RelhaxModpack_SelectablePackage_ConflictingPackages.htm" />
+  <HelpKINode Title="ContentControl field" Url="html/F_RelhaxModpack_SelectablePackage_ContentControl.htm" />
+  <HelpKINode Title="ContinueInstallation field" Url="html/F_RelhaxModpack_Windows_SelectionListEventArgs_ContinueInstallation.htm" />
+  <HelpKINode Title="ContourIconAtlasError enumeration member" Url="html/T_RelhaxModpack_InstallerComponents_InstallerExitCodes.htm" />
+  <HelpKINode Title="ConvertFiletimeTimestampToDate method" Url="html/M_RelhaxModpack_Utils_ConvertFiletimeTimestampToDate.htm" />
+  <HelpKINode Title="CRC field" Url="html/F_RelhaxModpack_DatabasePackage_CRC.htm" />
+  <HelpKINode Title="CreateMD5Hash method" Url="html/M_RelhaxModpack_Utils_CreateMD5Hash.htm" />
+  <HelpKINode Title="CreateMD5HashAsync method" Url="html/M_RelhaxModpack_Utils_CreateMD5HashAsync.htm" />
+  <HelpKINode Title="CreateOrderedInstallList method" Url="html/M_RelhaxModpack_Utils_CreateOrderedInstallList.htm" />
+  <HelpKINode Title="CreateShortcuts field" Url="html/F_RelhaxModpack_ModpackSettings_CreateShortcuts.htm" />
+  <HelpKINode Title="CustomApplication property" Url="html/P_RelhaxModpack_ThirdPartySettings_CustomApplication.htm" />
+  <HelpKINode Title="CustomApplicationName property" Url="html/P_RelhaxModpack_ThirdPartySettings_CustomApplicationName.htm" />
+  <HelpKINode Title="CustomColorSettingsPath field" Url="html/F_RelhaxModpack_UISettings_CustomColorSettingsPath.htm" />
+  <HelpKINode Title="CustomIconPath property" Url="html/P_RelhaxModpack_ThirdPartySettings_CustomIconPath.htm" />
+  <HelpKINode Title="CustomModInfoPath field" Url="html/F_RelhaxModpack_ModpackSettings_CustomModInfoPath.htm" />
+  <HelpKINode Title="CustomSettings field" Url="html/F_RelhaxModpack_UISettings_CustomSettings.htm" />
+  <HelpKINode Title="DatabaseDistroVersion field" Url="html/F_RelhaxModpack_ModpackSettings_DatabaseDistroVersion.htm" />
+  <HelpKINode Title="DatabaseEdit field" Url="html/F_RelhaxModpack_CommandLineSettings_DatabaseEdit.htm" />
+  <HelpKINode Title="DatabaseEditor class">
+    <HelpKINode Title="DatabaseEditor Class" Url="html/T_RelhaxModpack_Windows_DatabaseEditor.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Windows_DatabaseEditor__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_Windows_DatabaseEditor.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Windows_DatabaseEditor.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_Windows_DatabaseEditor.htm" />
+  </HelpKINode>
+  <HelpKINode Title="DatabaseEditor.DatabaseEditor constructor" Url="html/M_RelhaxModpack_Windows_DatabaseEditor__ctor.htm" />
+  <HelpKINode Title="DatabaseEditor.InitializeComponent method" Url="html/M_RelhaxModpack_Windows_DatabaseEditor_InitializeComponent.htm" />
+  <HelpKINode Title="DatabaseEditorAddMove class">
+    <HelpKINode Title="DatabaseEditorAddMove Class" Url="html/T_RelhaxModpack_Windows_DatabaseEditorAddMove.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Windows_DatabaseEditorAddMove__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_Windows_DatabaseEditorAddMove.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Windows_DatabaseEditorAddMove.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_Windows_DatabaseEditorAddMove.htm" />
+  </HelpKINode>
+  <HelpKINode Title="DatabaseEditorAddMove.DatabaseEditorAddMove constructor" Url="html/M_RelhaxModpack_Windows_DatabaseEditorAddMove__ctor.htm" />
+  <HelpKINode Title="DatabaseEditorAddMove.InitializeComponent method" Url="html/M_RelhaxModpack_Windows_DatabaseEditorAddMove_InitializeComponent.htm" />
+  <HelpKINode Title="DatabaseEditorDownload class">
+    <HelpKINode Title="DatabaseEditorDownload Class" Url="html/T_RelhaxModpack_Windows_DatabaseEditorDownload.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Windows_DatabaseEditorDownload__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_Windows_DatabaseEditorDownload.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Windows_DatabaseEditorDownload.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_Windows_DatabaseEditorDownload.htm" />
+  </HelpKINode>
+  <HelpKINode Title="DatabaseEditorDownload.DatabaseEditorDownload constructor" Url="html/M_RelhaxModpack_Windows_DatabaseEditorDownload__ctor.htm" />
+  <HelpKINode Title="DatabaseEditorDownload.InitializeComponent method" Url="html/M_RelhaxModpack_Windows_DatabaseEditorDownload_InitializeComponent.htm" />
+  <HelpKINode Title="DatabaseLogic class">
+    <HelpKINode Title="DatabaseLogic Class" Url="html/T_RelhaxModpack_DatabaseLogic.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_DatabaseLogic__ctor.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_DatabaseLogic.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_DatabaseLogic.htm" />
+  </HelpKINode>
+  <HelpKINode Title="DatabaseLogic.Checked property" Url="html/P_RelhaxModpack_DatabaseLogic_Checked.htm" />
+  <HelpKINode Title="DatabaseLogic.DatabaseLogic constructor" Url="html/M_RelhaxModpack_DatabaseLogic__ctor.htm" />
+  <HelpKINode Title="DatabaseLogic.Enabled property" Url="html/P_RelhaxModpack_DatabaseLogic_Enabled.htm" />
+  <HelpKINode Title="DatabaseLogic.Logic property" Url="html/P_RelhaxModpack_DatabaseLogic_Logic.htm" />
+  <HelpKINode Title="DatabaseLogic.NotFlag property" Url="html/P_RelhaxModpack_DatabaseLogic_NotFlag.htm" />
+  <HelpKINode Title="DatabaseLogic.PackageName property" Url="html/P_RelhaxModpack_DatabaseLogic_PackageName.htm" />
+  <HelpKINode Title="DatabaseLogic.ToString method" Url="html/M_RelhaxModpack_DatabaseLogic_ToString.htm" />
+  <HelpKINode Title="DatabasePackage class">
+    <HelpKINode Title="DatabasePackage Class" Url="html/T_RelhaxModpack_DatabasePackage.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_DatabasePackage__ctor.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_DatabasePackage.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_DatabasePackage.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_DatabasePackage.htm" />
+  </HelpKINode>
+  <HelpKINode Title="DatabasePackage.AppendExtraction field" Url="html/F_RelhaxModpack_DatabasePackage_AppendExtraction.htm" />
+  <HelpKINode Title="DatabasePackage.CompletePath property" Url="html/P_RelhaxModpack_DatabasePackage_CompletePath.htm" />
+  <HelpKINode Title="DatabasePackage.CRC field" Url="html/F_RelhaxModpack_DatabasePackage_CRC.htm" />
+  <HelpKINode Title="DatabasePackage.DatabasePackage constructor" Url="html/M_RelhaxModpack_DatabasePackage__ctor.htm" />
+  <HelpKINode Title="DatabasePackage.DevURL field" Url="html/F_RelhaxModpack_DatabasePackage_DevURL.htm" />
+  <HelpKINode Title="DatabasePackage.DownloadFlag field" Url="html/F_RelhaxModpack_DatabasePackage_DownloadFlag.htm" />
+  <HelpKINode Title="DatabasePackage.Enabled property" Url="html/P_RelhaxModpack_DatabasePackage_Enabled.htm" />
+  <HelpKINode Title="DatabasePackage.EndAddress field" Url="html/F_RelhaxModpack_DatabasePackage_EndAddress.htm" />
+  <HelpKINode Title="DatabasePackage.ExtractionLevel field" Url="html/F_RelhaxModpack_DatabasePackage_ExtractionLevel.htm" />
+  <HelpKINode Title="DatabasePackage.LogAtInstall field" Url="html/F_RelhaxModpack_DatabasePackage_LogAtInstall.htm" />
+  <HelpKINode Title="DatabasePackage.PackageName field" Url="html/F_RelhaxModpack_DatabasePackage_PackageName.htm" />
+  <HelpKINode Title="DatabasePackage.ReadyForInstall field" Url="html/F_RelhaxModpack_DatabasePackage_ReadyForInstall.htm" />
+  <HelpKINode Title="DatabasePackage.StartAddress field" Url="html/F_RelhaxModpack_DatabasePackage_StartAddress.htm" />
+  <HelpKINode Title="DatabasePackage.Timestamp field" Url="html/F_RelhaxModpack_DatabasePackage_Timestamp.htm" />
+  <HelpKINode Title="DatabasePackage.ToString method" Url="html/M_RelhaxModpack_DatabasePackage_ToString.htm" />
+  <HelpKINode Title="DatabasePackage.UpdateInstructions field" Url="html/F_RelhaxModpack_DatabasePackage_UpdateInstructions.htm" />
+  <HelpKINode Title="DatabasePackage.Version field" Url="html/F_RelhaxModpack_DatabasePackage_Version.htm" />
+  <HelpKINode Title="DatabasePackage.ZipFile field" Url="html/F_RelhaxModpack_DatabasePackage_ZipFile.htm" />
+  <HelpKINode Title="DatabasePackage._Enabled field" Url="html/F_RelhaxModpack_DatabasePackage__Enabled.htm" />
+  <HelpKINode Title="DatabasePackageLogic field" Url="html/F_RelhaxModpack_Dependency_DatabasePackageLogic.htm" />
+  <HelpKINode Title="DatabaseUpdate field" Url="html/F_RelhaxModpack_CommandLineSettings_DatabaseUpdate.htm" />
+  <HelpKINode Title="DatabaseUpdater class">
+    <HelpKINode Title="DatabaseUpdater Class" Url="html/T_RelhaxModpack_Windows_DatabaseUpdater.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Windows_DatabaseUpdater__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_Windows_DatabaseUpdater.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Windows_DatabaseUpdater.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_Windows_DatabaseUpdater.htm" />
+  </HelpKINode>
+  <HelpKINode Title="DatabaseUpdater.AttemptAuth method" Url="html/M_RelhaxModpack_Windows_DatabaseUpdater_AttemptAuth.htm" />
+  <HelpKINode Title="DatabaseUpdater.DatabaseUpdater constructor" Url="html/M_RelhaxModpack_Windows_DatabaseUpdater__ctor.htm" />
+  <HelpKINode Title="DatabaseUpdater.InitializeComponent method" Url="html/M_RelhaxModpack_Windows_DatabaseUpdater_InitializeComponent.htm" />
+  <HelpKINode Title="DatabaseUpdater.VersionInfos structure" Url="html/T_RelhaxModpack_Windows_DatabaseUpdater_VersionInfos.htm" />
+  <HelpKINode Title="DatabaseUpdater.VersionInfos.ToString method" Url="html/M_RelhaxModpack_Windows_DatabaseUpdater_VersionInfos_ToString.htm" />
+  <HelpKINode Title="DatabaseUpdater.VersionInfos.WoTClientVersion field" Url="html/F_RelhaxModpack_Windows_DatabaseUpdater_VersionInfos_WoTClientVersion.htm" />
+  <HelpKINode Title="DatabaseUpdater.VersionInfos.WoTOnlineFolderVersion field" Url="html/F_RelhaxModpack_Windows_DatabaseUpdater_VersionInfos_WoTOnlineFolderVersion.htm" />
+  <HelpKINode Title="DatabaseVersion field" Url="html/F_RelhaxModpack_Settings_DatabaseVersion.htm" />
+  <HelpKINode Title="DatabaseVersions enumeration" Url="html/T_RelhaxModpack_DatabaseVersions.htm" />
+  <HelpKINode Title="Debug enumeration member" Url="html/T_RelhaxModpack_LogLevel.htm" />
+  <HelpKINode Title="Debug method" Url="html/Overload_RelhaxModpack_Logging_Debug.htm" />
+  <HelpKINode Title="Default enumeration member" Url="html/T_RelhaxModpack_UninstallModes.htm" />
+  <HelpKINode Title="DefaultEndAddress field" Url="html/F_RelhaxModpack_Settings_DefaultEndAddress.htm" />
+  <HelpKINode Title="DefaultPackageEndAddress property" Url="html/P_RelhaxModpack_ThirdPartySettings_DefaultPackageEndAddress.htm" />
+  <HelpKINode Title="DefaultPackageStartAddress property" Url="html/P_RelhaxModpack_ThirdPartySettings_DefaultPackageStartAddress.htm" />
+  <HelpKINode Title="DefaultStartAddress field" Url="html/F_RelhaxModpack_Settings_DefaultStartAddress.htm" />
+  <HelpKINode Title="DefaultV2 enumeration member" Url="html/T_RelhaxModpack_SelectionView.htm" />
+  <HelpKINode Title="DeleteLogs field" Url="html/F_RelhaxModpack_ModpackSettings_DeleteLogs.htm" />
+  <HelpKINode Title="Dependencies field">
+    <HelpKINode Title="Category.Dependencies Field" Url="html/F_RelhaxModpack_Category_Dependencies.htm" />
+    <HelpKINode Title="Dependency.Dependencies Field" Url="html/F_RelhaxModpack_Dependency_Dependencies.htm" />
+    <HelpKINode Title="ModSelectionList.Dependencies Field" Url="html/F_RelhaxModpack_Windows_ModSelectionList_Dependencies.htm" />
+    <HelpKINode Title="SelectablePackage.Dependencies Field" Url="html/F_RelhaxModpack_SelectablePackage_Dependencies.htm" />
+    <HelpKINode Title="SelectionListEventArgs.Dependencies Field" Url="html/F_RelhaxModpack_Windows_SelectionListEventArgs_Dependencies.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Dependency class">
+    <HelpKINode Title="Dependency Class" Url="html/T_RelhaxModpack_Dependency.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Dependency__ctor.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_Dependency.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Dependency.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_Dependency.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Dependency.DatabasePackageLogic field" Url="html/F_RelhaxModpack_Dependency_DatabasePackageLogic.htm" />
+  <HelpKINode Title="Dependency.Dependencies field" Url="html/F_RelhaxModpack_Dependency_Dependencies.htm" />
+  <HelpKINode Title="Dependency.Dependency constructor" Url="html/M_RelhaxModpack_Dependency__ctor.htm" />
+  <HelpKINode Title="DependencySelectableOptionalNodesV2 field" Url="html/F_RelhaxModpack_XMLUtils_DependencySelectableOptionalNodesV2.htm" />
+  <HelpKINode Title="DependnecyLogicRequiredNodesV2 field" Url="html/F_RelhaxModpack_XMLUtils_DependnecyLogicRequiredNodesV2.htm" />
+  <HelpKINode Title="Description field" Url="html/F_RelhaxModpack_SelectablePackage_Description.htm" />
+  <HelpKINode Title="DeveloperSelectionsClosedDelagate delegate" Url="html/T_RelhaxModpack_Windows_DeveloperSelectionsClosedDelagate.htm" />
+  <HelpKINode Title="DeveloperSelectionsViewer class">
+    <HelpKINode Title="DeveloperSelectionsViewer Class" Url="html/T_RelhaxModpack_Windows_DeveloperSelectionsViewer.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Windows_DeveloperSelectionsViewer__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_Windows_DeveloperSelectionsViewer.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Windows_DeveloperSelectionsViewer.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_Windows_DeveloperSelectionsViewer.htm" />
+  </HelpKINode>
+  <HelpKINode Title="DeveloperSelectionsViewer.DeveloperSelectionsViewer constructor" Url="html/M_RelhaxModpack_Windows_DeveloperSelectionsViewer__ctor.htm" />
+  <HelpKINode Title="DeveloperSelectionsViewer.InitializeComponent method" Url="html/M_RelhaxModpack_Windows_DeveloperSelectionsViewer_InitializeComponent.htm" />
+  <HelpKINode Title="DeveloperSelectionsViewer.OnDeveloperSelectionsClosed event" Url="html/E_RelhaxModpack_Windows_DeveloperSelectionsViewer_OnDeveloperSelectionsClosed.htm" />
+  <HelpKINode Title="DeveloperSelectionsXPath field" Url="html/F_RelhaxModpack_XMLUtils_DeveloperSelectionsXPath.htm" />
+  <HelpKINode Title="DevleoperSelectionsClosedEWventArgs class">
+    <HelpKINode Title="DevleoperSelectionsClosedEWventArgs Class" Url="html/T_RelhaxModpack_Windows_DevleoperSelectionsClosedEWventArgs.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Windows_DevleoperSelectionsClosedEWventArgs__ctor.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_Windows_DevleoperSelectionsClosedEWventArgs.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Windows_DevleoperSelectionsClosedEWventArgs.htm" />
+  </HelpKINode>
+  <HelpKINode Title="DevleoperSelectionsClosedEWventArgs.DevleoperSelectionsClosedEWventArgs constructor" Url="html/M_RelhaxModpack_Windows_DevleoperSelectionsClosedEWventArgs__ctor.htm" />
+  <HelpKINode Title="DevleoperSelectionsClosedEWventArgs.FileToLoad field" Url="html/F_RelhaxModpack_Windows_DevleoperSelectionsClosedEWventArgs_FileToLoad.htm" />
+  <HelpKINode Title="DevleoperSelectionsClosedEWventArgs.LoadSelection field" Url="html/F_RelhaxModpack_Windows_DevleoperSelectionsClosedEWventArgs_LoadSelection.htm" />
+  <HelpKINode Title="DevURL field" Url="html/F_RelhaxModpack_DatabasePackage_DevURL.htm" />
+  <HelpKINode Title="DirectoryCopy method" Url="html/M_RelhaxModpack_Utils_DirectoryCopy.htm" />
+  <HelpKINode Title="DirectoryDelete method" Url="html/M_RelhaxModpack_Utils_DirectoryDelete.htm" />
+  <HelpKINode Title="DirectoryMove method" Url="html/M_RelhaxModpack_Utils_DirectoryMove.htm" />
+  <HelpKINode Title="DirectorySearch method" Url="html/M_RelhaxModpack_Utils_DirectorySearch.htm" />
+  <HelpKINode Title="Dispose method">
+    <HelpKINode Title="InstallEngine.Dispose Method " Url="html/Overload_RelhaxModpack_InstallerComponents_InstallEngine_Dispose.htm" />
+    <HelpKINode Title="Logfile.Dispose Method " Url="html/Overload_RelhaxModpack_Logfile_Dispose.htm" />
+  </HelpKINode>
+  <HelpKINode Title="DisposeApplicationLogging method" Url="html/M_RelhaxModpack_Logging_DisposeApplicationLogging.htm" />
+  <HelpKINode Title="DonationURL property" Url="html/P_RelhaxModpack_ThirdPartySettings_DonationURL.htm" />
+  <HelpKINode Title="DownloadFlag field" Url="html/F_RelhaxModpack_DatabasePackage_DownloadFlag.htm" />
+  <HelpKINode Title="DownloadInstantExtraction field" Url="html/F_RelhaxModpack_ModpackSettings_DownloadInstantExtraction.htm" />
+  <HelpKINode Title="DownloadModsError enumeration member" Url="html/T_RelhaxModpack_InstallerComponents_InstallerExitCodes.htm" />
+  <HelpKINode Title="DumpAllWindowColorSettingsToFile method" Url="html/M_RelhaxModpack_UISettings_DumpAllWindowColorSettingsToFile.htm" />
+  <HelpKINode Title="EditorAutoLoadFileName field" Url="html/F_RelhaxModpack_CommandLineSettings_EditorAutoLoadFileName.htm" />
+  <HelpKINode Title="EnableBordersDefaultV2View field" Url="html/F_RelhaxModpack_ModpackSettings_EnableBordersDefaultV2View.htm" />
+  <HelpKINode Title="EnableBordersLegacyView field" Url="html/F_RelhaxModpack_ModpackSettings_EnableBordersLegacyView.htm" />
+  <HelpKINode Title="EnableColorChangeDefaultV2View field" Url="html/F_RelhaxModpack_ModpackSettings_EnableColorChangeDefaultV2View.htm" />
+  <HelpKINode Title="EnableColorChangeLegacyView field" Url="html/F_RelhaxModpack_ModpackSettings_EnableColorChangeLegacyView.htm" />
+  <HelpKINode Title="Enabled property">
+    <HelpKINode Title="DatabaseLogic.Enabled Property " Url="html/P_RelhaxModpack_DatabaseLogic_Enabled.htm" />
+    <HelpKINode Title="DatabasePackage.Enabled Property " Url="html/P_RelhaxModpack_DatabasePackage_Enabled.htm" />
+    <HelpKINode Title="SelectablePackage.Enabled Property " Url="html/P_RelhaxModpack_SelectablePackage_Enabled.htm" />
+    <HelpKINode Title="Shortcut.Enabled Property " Url="html/P_RelhaxModpack_Shortcut_Enabled.htm" />
+  </HelpKINode>
+  <HelpKINode Title="EndAddress field" Url="html/F_RelhaxModpack_DatabasePackage_EndAddress.htm" />
+  <HelpKINode Title="English enumeration member" Url="html/T_RelhaxModpack_Languages.htm" />
+  <HelpKINode Title="Equals method" Url="html/Overload_RelhaxModpack_PackageComparer_Equals.htm" />
+  <HelpKINode Title="Error enumeration member" Url="html/T_RelhaxModpack_LogLevel.htm" />
+  <HelpKINode Title="Error method" Url="html/Overload_RelhaxModpack_Logging_Error.htm" />
+  <HelpKINode Title="ErrorMessage field" Url="html/F_RelhaxModpack_InstallerComponents_RelhaxInstallFinishedEventArgs_ErrorMessage.htm" />
+  <HelpKINode Title="Exception enumeration member" Url="html/T_RelhaxModpack_LogLevel.htm" />
+  <HelpKINode Title="Exception method" Url="html/Overload_RelhaxModpack_Logging_Exception.htm" />
+  <HelpKINode Title="ExitCodes field" Url="html/F_RelhaxModpack_InstallerComponents_RelhaxInstallFinishedEventArgs_ExitCodes.htm" />
+  <HelpKINode Title="ExportMode field" Url="html/F_RelhaxModpack_ModpackSettings_ExportMode.htm" />
+  <HelpKINode Title="ExtractionError enumeration member" Url="html/T_RelhaxModpack_InstallerComponents_InstallerExitCodes.htm" />
+  <HelpKINode Title="ExtractionLevel field" Url="html/F_RelhaxModpack_DatabasePackage_ExtractionLevel.htm" />
+  <HelpKINode Title="file property" Url="html/P_RelhaxModpack_Patch_file.htm" />
+  <HelpKINode Title="Filename property" Url="html/P_RelhaxModpack_Logfile_Filename.htm" />
+  <HelpKINode Title="Filepath property" Url="html/P_RelhaxModpack_Logfile_Filepath.htm" />
+  <HelpKINode Title="Files_saved field" Url="html/F_RelhaxModpack_UserFiles_Files_saved.htm" />
+  <HelpKINode Title="FileToLoad field" Url="html/F_RelhaxModpack_Windows_DevleoperSelectionsClosedEWventArgs_FileToLoad.htm" />
+  <HelpKINode Title="FirstLoad field" Url="html/F_RelhaxModpack_Settings_FirstLoad.htm" />
+  <HelpKINode Title="FirstLoadAknowledgements class">
+    <HelpKINode Title="FirstLoadAknowledgements Class" Url="html/T_RelhaxModpack_Windows_FirstLoadAknowledgements.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Windows_FirstLoadAknowledgements__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_Windows_FirstLoadAknowledgements.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Windows_FirstLoadAknowledgements.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_Windows_FirstLoadAknowledgements.htm" />
+  </HelpKINode>
+  <HelpKINode Title="FirstLoadAknowledgements.FirstLoadAknowledgements constructor" Url="html/M_RelhaxModpack_Windows_FirstLoadAknowledgements__ctor.htm" />
+  <HelpKINode Title="FirstLoadAknowledgements.InitializeComponent method" Url="html/M_RelhaxModpack_Windows_FirstLoadAknowledgements_InitializeComponent.htm" />
+  <HelpKINode Title="FirstLoadToV2 field" Url="html/F_RelhaxModpack_Settings_FirstLoadToV2.htm" />
+  <HelpKINode Title="FlatListSelectablePackages field" Url="html/F_RelhaxModpack_InstallerComponents_InstallEngine_FlatListSelectablePackages.htm" />
+  <HelpKINode Title="FoldersToCheck field" Url="html/F_RelhaxModpack_Settings_FoldersToCheck.htm" />
+  <HelpKINode Title="ForceEnabled field" Url="html/F_RelhaxModpack_CommandLineSettings_ForceEnabled.htm" />
+  <HelpKINode Title="ForceManuel field" Url="html/F_RelhaxModpack_ModpackSettings_ForceManuel.htm" />
+  <HelpKINode Title="ForceVisible field" Url="html/F_RelhaxModpack_CommandLineSettings_ForceVisible.htm" />
+  <HelpKINode Title="French enumeration member" Url="html/T_RelhaxModpack_Languages.htm" />
+  <HelpKINode Title="GenericYesNoWindow class">
+    <HelpKINode Title="GenericYesNoWindow Class" Url="html/T_RelhaxModpack_Windows_GenericYesNoWindow.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Windows_GenericYesNoWindow__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_Windows_GenericYesNoWindow.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Windows_GenericYesNoWindow.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_Windows_GenericYesNoWindow.htm" />
+  </HelpKINode>
+  <HelpKINode Title="GenericYesNoWindow.GenericYesNoWindow constructor" Url="html/M_RelhaxModpack_Windows_GenericYesNoWindow__ctor.htm" />
+  <HelpKINode Title="GenericYesNoWindow.InitializeComponent method" Url="html/M_RelhaxModpack_Windows_GenericYesNoWindow_InitializeComponent.htm" />
+  <HelpKINode Title="German enumeration member" Url="html/T_RelhaxModpack_Languages.htm" />
+  <HelpKINode Title="GetAllWindowComponentsLogical method" Url="html/M_RelhaxModpack_Utils_GetAllWindowComponentsLogical.htm" />
+  <HelpKINode Title="GetAllWindowComponentsVisual method" Url="html/M_RelhaxModpack_Utils_GetAllWindowComponentsVisual.htm" />
+  <HelpKINode Title="GetApplicationVersion method" Url="html/M_RelhaxModpack_Utils_GetApplicationVersion.htm" />
+  <HelpKINode Title="GetCompileTime method" Url="html/M_RelhaxModpack_Utils_GetCompileTime.htm" />
+  <HelpKINode Title="GetContainerForItemOverride method">
+    <HelpKINode Title="StretchingTreeView.GetContainerForItemOverride Method " Url="html/M_RelhaxModpack_UIComponents_StretchingTreeView_GetContainerForItemOverride.htm" />
+    <HelpKINode Title="StretchingTreeViewItem.GetContainerForItemOverride Method " Url="html/M_RelhaxModpack_UIComponents_StretchingTreeViewItem_GetContainerForItemOverride.htm" />
+  </HelpKINode>
+  <HelpKINode Title="GetCurrentUniversalFiletimeTimestamp method" Url="html/M_RelhaxModpack_Utils_GetCurrentUniversalFiletimeTimestamp.htm" />
+  <HelpKINode Title="GetFlatList method" Url="html/M_RelhaxModpack_Utils_GetFlatList.htm" />
+  <HelpKINode Title="GetFlatPackageList method" Url="html/M_RelhaxModpack_Category_GetFlatPackageList.htm" />
+  <HelpKINode Title="GetHashCode method" Url="html/Overload_RelhaxModpack_PackageComparer_GetHashCode.htm" />
+  <HelpKINode Title="GetSelectablePackage method" Url="html/M_RelhaxModpack_Category_GetSelectablePackage.htm" />
+  <HelpKINode Title="GetStringFromZip method" Url="html/M_RelhaxModpack_Utils_GetStringFromZip.htm" />
+  <HelpKINode Title="GetTranslatedString method" Url="html/M_RelhaxModpack_Translations_GetTranslatedString.htm" />
+  <HelpKINode Title="GetValidFilename method" Url="html/M_RelhaxModpack_Utils_GetValidFilename.htm" />
+  <HelpKINode Title="GetWebRequest method" Url="html/M_RelhaxModpack_PatientWebClient_GetWebRequest.htm" />
+  <HelpKINode Title="GetXMLNodeFromXPath method" Url="html/Overload_RelhaxModpack_XMLUtils_GetXMLNodeFromXPath.htm" />
+  <HelpKINode Title="GetXMLNodesFromXPath method" Url="html/Overload_RelhaxModpack_XMLUtils_GetXMLNodesFromXPath.htm" />
+  <HelpKINode Title="GetXMLStringFromXPath method" Url="html/Overload_RelhaxModpack_XMLUtils_GetXMLStringFromXPath.htm" />
+  <HelpKINode Title="GetXVMBootLoc method" Url="html/M_RelhaxModpack_PatchUtils_GetXVMBootLoc.htm" />
+  <HelpKINode Title="GIF field" Url="html/F_RelhaxModpack_ModpackSettings_GIF.htm" />
+  <HelpKINode Title="GlobalDependencies field">
+    <HelpKINode Title="ModSelectionList.GlobalDependencies Field" Url="html/F_RelhaxModpack_Windows_ModSelectionList_GlobalDependencies.htm" />
+    <HelpKINode Title="SelectionListEventArgs.GlobalDependencies Field" Url="html/F_RelhaxModpack_Windows_SelectionListEventArgs_GlobalDependencies.htm" />
+  </HelpKINode>
+  <HelpKINode Title="handler field" Url="html/F_RelhaxModpack_UIComponents_RelhaxWPFComboBox_handler.htm" />
+  <HelpKINode Title="Hotkeys field" Url="html/F_RelhaxModpack_SelectablePackage_Hotkeys.htm" />
+  <HelpKINode Title="HTML enumeration member" Url="html/T_RelhaxModpack_MediaType.htm" />
+  <HelpKINode Title="Info enumeration member" Url="html/T_RelhaxModpack_LogLevel.htm" />
+  <HelpKINode Title="Info method" Url="html/Overload_RelhaxModpack_Logging_Info.htm" />
+  <HelpKINode Title="Init method" Url="html/M_RelhaxModpack_Logfile_Init.htm" />
+  <HelpKINode Title="InitApplicationLogging method" Url="html/M_RelhaxModpack_Logging_InitApplicationLogging.htm" />
+  <HelpKINode Title="InitializeComponent method">
+    <HelpKINode Title="AddPicturesZip.InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_AddPicturesZip_InitializeComponent.htm" />
+    <HelpKINode Title="App.InitializeComponent Method " Url="html/M_RelhaxModpack_App_InitializeComponent.htm" />
+    <HelpKINode Title="DatabaseEditor.InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_DatabaseEditor_InitializeComponent.htm" />
+    <HelpKINode Title="DatabaseEditorAddMove.InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_DatabaseEditorAddMove_InitializeComponent.htm" />
+    <HelpKINode Title="DatabaseEditorDownload.InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_DatabaseEditorDownload_InitializeComponent.htm" />
+    <HelpKINode Title="DatabaseUpdater.InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_DatabaseUpdater_InitializeComponent.htm" />
+    <HelpKINode Title="DeveloperSelectionsViewer.InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_DeveloperSelectionsViewer_InitializeComponent.htm" />
+    <HelpKINode Title="FirstLoadAknowledgements.InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_FirstLoadAknowledgements_InitializeComponent.htm" />
+    <HelpKINode Title="GenericYesNoWindow.InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_GenericYesNoWindow_InitializeComponent.htm" />
+    <HelpKINode Title="InstallFinished.InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_InstallFinished_InitializeComponent.htm" />
+    <HelpKINode Title="MainWindow.InitializeComponent Method " Url="html/M_RelhaxModpack_MainWindow_InitializeComponent.htm" />
+    <HelpKINode Title="ModSelectionList.InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_ModSelectionList_InitializeComponent.htm" />
+    <HelpKINode Title="NewsViewer.InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_NewsViewer_InitializeComponent.htm" />
+    <HelpKINode Title="PatchTester.InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_PatchTester_InitializeComponent.htm" />
+    <HelpKINode Title="Preview.InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_Preview_InitializeComponent.htm" />
+    <HelpKINode Title="ProgressIndicator.InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_ProgressIndicator_InitializeComponent.htm" />
+    <HelpKINode Title="SelectionViewer.InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_SelectionViewer_InitializeComponent.htm" />
+    <HelpKINode Title="VersionInfo.InitializeComponent Method " Url="html/M_RelhaxModpack_Windows_VersionInfo_InitializeComponent.htm" />
+  </HelpKINode>
+  <HelpKINode Title="InstallEngine class">
+    <HelpKINode Title="InstallEngine Class" Url="html/T_RelhaxModpack_InstallerComponents_InstallEngine.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_InstallerComponents_InstallEngine__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_InstallerComponents_InstallEngine.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_InstallerComponents_InstallEngine.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_InstallerComponents_InstallEngine.htm" />
+  </HelpKINode>
+  <HelpKINode Title="InstallEngine.AwaitCallback field" Url="html/F_RelhaxModpack_InstallerComponents_InstallEngine_AwaitCallback.htm" />
+  <HelpKINode Title="InstallEngine.Dispose method" Url="html/Overload_RelhaxModpack_InstallerComponents_InstallEngine_Dispose.htm" />
+  <HelpKINode Title="InstallEngine.FlatListSelectablePackages field" Url="html/F_RelhaxModpack_InstallerComponents_InstallEngine_FlatListSelectablePackages.htm" />
+  <HelpKINode Title="InstallEngine.InstallEngine constructor" Url="html/M_RelhaxModpack_InstallerComponents_InstallEngine__ctor.htm" />
+  <HelpKINode Title="InstallEngine.OnInstallFinish event" Url="html/E_RelhaxModpack_InstallerComponents_InstallEngine_OnInstallFinish.htm" />
+  <HelpKINode Title="InstallEngine.OnInstallProgress event" Url="html/E_RelhaxModpack_InstallerComponents_InstallEngine_OnInstallProgress.htm" />
+  <HelpKINode Title="InstallEngine.OrderedPackagesToInstall field" Url="html/F_RelhaxModpack_InstallerComponents_InstallEngine_OrderedPackagesToInstall.htm" />
+  <HelpKINode Title="InstallEngine.RunInstallationAsync method" Url="html/M_RelhaxModpack_InstallerComponents_InstallEngine_RunInstallationAsync.htm" />
+  <HelpKINode Title="Installer enumeration member" Url="html/T_RelhaxModpack_Logfiles.htm" />
+  <HelpKINode Title="InstallerExitCodes enumeration" Url="html/T_RelhaxModpack_InstallerComponents_InstallerExitCodes.htm" />
+  <HelpKINode Title="InstallFinished class">
+    <HelpKINode Title="InstallFinished Class" Url="html/T_RelhaxModpack_Windows_InstallFinished.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Windows_InstallFinished__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_Windows_InstallFinished.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Windows_InstallFinished.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_Windows_InstallFinished.htm" />
+  </HelpKINode>
+  <HelpKINode Title="InstallFinished.InitializeComponent method" Url="html/M_RelhaxModpack_Windows_InstallFinished_InitializeComponent.htm" />
+  <HelpKINode Title="InstallFinished.InstallFinished constructor" Url="html/M_RelhaxModpack_Windows_InstallFinished__ctor.htm" />
+  <HelpKINode Title="InstallFinishedDelegate delegate" Url="html/T_RelhaxModpack_InstallerComponents_InstallFinishedDelegate.htm" />
+  <HelpKINode Title="InstallLogfile field" Url="html/F_RelhaxModpack_Logging_InstallLogfile.htm" />
+  <HelpKINode Title="InstallLogFilename field" Url="html/F_RelhaxModpack_Logging_InstallLogFilename.htm" />
+  <HelpKINode Title="InstallProgressDelegate delegate" Url="html/T_RelhaxModpack_InstallerComponents_InstallProgressDelegate.htm" />
+  <HelpKINode Title="IPackageUIComponent interface">
+    <HelpKINode Title="IPackageUIComponent Interface" Url="html/T_RelhaxModpack_UIComponents_IPackageUIComponent.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_UIComponents_IPackageUIComponent.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_UIComponents_IPackageUIComponent.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IPackageUIComponent.OnCheckedChanged method" Url="html/M_RelhaxModpack_UIComponents_IPackageUIComponent_OnCheckedChanged.htm" />
+  <HelpKINode Title="IPackageUIComponent.OnEnabledChanged method" Url="html/M_RelhaxModpack_UIComponents_IPackageUIComponent_OnEnabledChanged.htm" />
+  <HelpKINode Title="IPackageUIComponent.Package property" Url="html/P_RelhaxModpack_UIComponents_IPackageUIComponent_Package.htm" />
+  <HelpKINode Title="IPackageUIComponent.PanelColor property" Url="html/P_RelhaxModpack_UIComponents_IPackageUIComponent_PanelColor.htm" />
+  <HelpKINode Title="IPackageUIComponent.TextColor property" Url="html/P_RelhaxModpack_UIComponents_IPackageUIComponent_TextColor.htm" />
+  <HelpKINode Title="IsItemItsOwnContainerOverride method">
+    <HelpKINode Title="StretchingTreeView.IsItemItsOwnContainerOverride Method " Url="html/M_RelhaxModpack_UIComponents_StretchingTreeView_IsItemItsOwnContainerOverride.htm" />
+    <HelpKINode Title="StretchingTreeViewItem.IsItemItsOwnContainerOverride Method " Url="html/M_RelhaxModpack_UIComponents_StretchingTreeViewItem_IsItemItsOwnContainerOverride.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IsProcessRunning method" Url="html/M_RelhaxModpack_Utils_IsProcessRunning.htm" />
+  <HelpKINode Title="IsStructureEnabled property" Url="html/P_RelhaxModpack_SelectablePackage_IsStructureEnabled.htm" />
+  <HelpKINode Title="IsStructureVisible property" Url="html/P_RelhaxModpack_SelectablePackage_IsStructureVisible.htm" />
+  <HelpKINode Title="IsValidStructure method" Url="html/M_RelhaxModpack_Windows_ModSelectionList_IsValidStructure.htm" />
+  <HelpKINode Title="IsValidXml method" Url="html/Overload_RelhaxModpack_XMLUtils_IsValidXml.htm" />
+  <HelpKINode Title="JSONPatch method" Url="html/M_RelhaxModpack_PatchUtils_JSONPatch.htm" />
+  <HelpKINode Title="Language field" Url="html/F_RelhaxModpack_ModpackSettings_Language.htm" />
+  <HelpKINode Title="Languages enumeration" Url="html/T_RelhaxModpack_Languages.htm" />
+  <HelpKINode Title="Legacy enumeration member" Url="html/T_RelhaxModpack_SelectionView.htm" />
+  <HelpKINode Title="Level field" Url="html/F_RelhaxModpack_SelectablePackage_Level.htm" />
+  <HelpKINode Title="lines property" Url="html/P_RelhaxModpack_Patch_lines.htm" />
+  <HelpKINode Title="LoadingGifs enumeration" Url="html/T_RelhaxModpack_LoadingGifs.htm" />
+  <HelpKINode Title="LoadSelection field" Url="html/F_RelhaxModpack_Windows_DevleoperSelectionsClosedEWventArgs_LoadSelection.htm" />
+  <HelpKINode Title="LoadSettings method">
+    <HelpKINode Title="ModpackSettings.LoadSettings Method " Url="html/M_RelhaxModpack_ModpackSettings_LoadSettings.htm" />
+    <HelpKINode Title="ThirdPartySettings.LoadSettings Method " Url="html/M_RelhaxModpack_ThirdPartySettings_LoadSettings.htm" />
+    <HelpKINode Title="UISettings.LoadSettings Method " Url="html/M_RelhaxModpack_UISettings_LoadSettings.htm" />
+  </HelpKINode>
+  <HelpKINode Title="LoadTranslations method" Url="html/M_RelhaxModpack_Translations_LoadTranslations.htm" />
+  <HelpKINode Title="LocalizeWindow method" Url="html/M_RelhaxModpack_Translations_LocalizeWindow.htm" />
+  <HelpKINode Title="LocalizeWindow property" Url="html/P_RelhaxModpack_Windows_RelhaxWindow_LocalizeWindow.htm" />
+  <HelpKINode Title="LogAtInstall field" Url="html/F_RelhaxModpack_DatabasePackage_LogAtInstall.htm" />
+  <HelpKINode Title="Logfile class">
+    <HelpKINode Title="Logfile Class" Url="html/T_RelhaxModpack_Logfile.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Logfile__ctor.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Logfile.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_Logfile.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Logfile.Dispose method" Url="html/Overload_RelhaxModpack_Logfile_Dispose.htm" />
+  <HelpKINode Title="Logfile.Filename property" Url="html/P_RelhaxModpack_Logfile_Filename.htm" />
+  <HelpKINode Title="Logfile.Filepath property" Url="html/P_RelhaxModpack_Logfile_Filepath.htm" />
+  <HelpKINode Title="Logfile.Init method" Url="html/M_RelhaxModpack_Logfile_Init.htm" />
+  <HelpKINode Title="Logfile.Logfile constructor" Url="html/M_RelhaxModpack_Logfile__ctor.htm" />
+  <HelpKINode Title="Logfile.Timestamp property" Url="html/P_RelhaxModpack_Logfile_Timestamp.htm" />
+  <HelpKINode Title="Logfile.Write method" Url="html/M_RelhaxModpack_Logfile_Write.htm" />
+  <HelpKINode Title="LogfileError enumeration member" Url="html/T_RelhaxModpack_ReturnCodes.htm" />
+  <HelpKINode Title="Logfiles enumeration" Url="html/T_RelhaxModpack_Logfiles.htm" />
+  <HelpKINode Title="Logging class">
+    <HelpKINode Title="Logging Class" Url="html/T_RelhaxModpack_Logging.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_Logging.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Logging.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Logging.ApplicationLogfile field" Url="html/F_RelhaxModpack_Logging_ApplicationLogfile.htm" />
+  <HelpKINode Title="Logging.ApplicationLogFilename field" Url="html/F_RelhaxModpack_Logging_ApplicationLogFilename.htm" />
+  <HelpKINode Title="Logging.ApplicationlogStartStop field" Url="html/F_RelhaxModpack_Logging_ApplicationlogStartStop.htm" />
+  <HelpKINode Title="Logging.Debug method" Url="html/Overload_RelhaxModpack_Logging_Debug.htm" />
+  <HelpKINode Title="Logging.DisposeApplicationLogging method" Url="html/M_RelhaxModpack_Logging_DisposeApplicationLogging.htm" />
+  <HelpKINode Title="Logging.Error method" Url="html/Overload_RelhaxModpack_Logging_Error.htm" />
+  <HelpKINode Title="Logging.Exception method" Url="html/Overload_RelhaxModpack_Logging_Exception.htm" />
+  <HelpKINode Title="Logging.Info method" Url="html/Overload_RelhaxModpack_Logging_Info.htm" />
+  <HelpKINode Title="Logging.InitApplicationLogging method" Url="html/M_RelhaxModpack_Logging_InitApplicationLogging.htm" />
+  <HelpKINode Title="Logging.InstallLogfile field" Url="html/F_RelhaxModpack_Logging_InstallLogfile.htm" />
+  <HelpKINode Title="Logging.InstallLogFilename field" Url="html/F_RelhaxModpack_Logging_InstallLogFilename.htm" />
+  <HelpKINode Title="Logging.OldApplicationLogFilename field" Url="html/F_RelhaxModpack_Logging_OldApplicationLogFilename.htm" />
+  <HelpKINode Title="Logging.UninstallLogfile field" Url="html/F_RelhaxModpack_Logging_UninstallLogfile.htm" />
+  <HelpKINode Title="Logging.UninstallLogFilename field" Url="html/F_RelhaxModpack_Logging_UninstallLogFilename.htm" />
+  <HelpKINode Title="Logging.Warning method" Url="html/Overload_RelhaxModpack_Logging_Warning.htm" />
+  <HelpKINode Title="Logging.WriteToLog method" Url="html/Overload_RelhaxModpack_Logging_WriteToLog.htm" />
+  <HelpKINode Title="Logic enumeration" Url="html/T_RelhaxModpack_Logic.htm" />
+  <HelpKINode Title="Logic property" Url="html/P_RelhaxModpack_DatabaseLogic_Logic.htm" />
+  <HelpKINode Title="LogLevel enumeration" Url="html/T_RelhaxModpack_LogLevel.htm" />
+  <HelpKINode Title="Main method" Url="html/M_RelhaxModpack_App_Main.htm" />
+  <HelpKINode Title="MainWindow class">
+    <HelpKINode Title="MainWindow Class" Url="html/T_RelhaxModpack_MainWindow.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_MainWindow__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_MainWindow.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_MainWindow.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_MainWindow.htm" />
+  </HelpKINode>
+  <HelpKINode Title="MainWindow.InitializeComponent method" Url="html/M_RelhaxModpack_MainWindow_InitializeComponent.htm" />
+  <HelpKINode Title="MainWindow.MainWindow constructor" Url="html/M_RelhaxModpack_MainWindow__ctor.htm" />
+  <HelpKINode Title="ManagerInfoDatFile field" Url="html/F_RelhaxModpack_Settings_ManagerInfoDatFile.htm" />
+  <HelpKINode Title="ManagerInfoURL property" Url="html/P_RelhaxModpack_ThirdPartySettings_ManagerInfoURL.htm" />
+  <HelpKINode Title="MD5HashDatabaseXmlFile field" Url="html/F_RelhaxModpack_Settings_MD5HashDatabaseXmlFile.htm" />
+  <HelpKINode Title="Media class">
+    <HelpKINode Title="Media Class" Url="html/T_RelhaxModpack_Media.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Media__ctor.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_Media.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Media.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Media.Media constructor" Url="html/M_RelhaxModpack_Media__ctor.htm" />
+  <HelpKINode Title="Media.MediaType field" Url="html/F_RelhaxModpack_Media_MediaType.htm" />
+  <HelpKINode Title="Media.ToString method" Url="html/M_RelhaxModpack_Media_ToString.htm" />
+  <HelpKINode Title="Media.URL field" Url="html/F_RelhaxModpack_Media_URL.htm" />
+  <HelpKINode Title="MediaFile enumeration member" Url="html/T_RelhaxModpack_MediaType.htm" />
+  <HelpKINode Title="MediaRequiredNodesV2 field" Url="html/F_RelhaxModpack_XMLUtils_MediaRequiredNodesV2.htm" />
+  <HelpKINode Title="Medias field" Url="html/F_RelhaxModpack_SelectablePackage_Medias.htm" />
+  <HelpKINode Title="MediaType enumeration" Url="html/T_RelhaxModpack_MediaType.htm" />
+  <HelpKINode Title="MediaType field" Url="html/F_RelhaxModpack_Media_MediaType.htm" />
+  <HelpKINode Title="Message property" Url="html/P_RelhaxModpack_Windows_ProgressIndicator_Message.htm" />
+  <HelpKINode Title="mode property" Url="html/P_RelhaxModpack_Patch_mode.htm" />
+  <HelpKINode Title="ModpackSettings class">
+    <HelpKINode Title="ModpackSettings Class" Url="html/T_RelhaxModpack_ModpackSettings.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_ModpackSettings.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_ModpackSettings.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ModpackSettings.ApplicationDistroVersion field" Url="html/F_RelhaxModpack_ModpackSettings_ApplicationDistroVersion.htm" />
+  <HelpKINode Title="ModpackSettings.BackupModFolder field" Url="html/F_RelhaxModpack_ModpackSettings_BackupModFolder.htm" />
+  <HelpKINode Title="ModpackSettings.CleanInstallation field" Url="html/F_RelhaxModpack_ModpackSettings_CleanInstallation.htm" />
+  <HelpKINode Title="ModpackSettings.ClearCache field" Url="html/F_RelhaxModpack_ModpackSettings_ClearCache.htm" />
+  <HelpKINode Title="ModpackSettings.CreateShortcuts field" Url="html/F_RelhaxModpack_ModpackSettings_CreateShortcuts.htm" />
+  <HelpKINode Title="ModpackSettings.CustomModInfoPath field" Url="html/F_RelhaxModpack_ModpackSettings_CustomModInfoPath.htm" />
+  <HelpKINode Title="ModpackSettings.DatabaseDistroVersion field" Url="html/F_RelhaxModpack_ModpackSettings_DatabaseDistroVersion.htm" />
+  <HelpKINode Title="ModpackSettings.DeleteLogs field" Url="html/F_RelhaxModpack_ModpackSettings_DeleteLogs.htm" />
+  <HelpKINode Title="ModpackSettings.DownloadInstantExtraction field" Url="html/F_RelhaxModpack_ModpackSettings_DownloadInstantExtraction.htm" />
+  <HelpKINode Title="ModpackSettings.EnableBordersDefaultV2View field" Url="html/F_RelhaxModpack_ModpackSettings_EnableBordersDefaultV2View.htm" />
+  <HelpKINode Title="ModpackSettings.EnableBordersLegacyView field" Url="html/F_RelhaxModpack_ModpackSettings_EnableBordersLegacyView.htm" />
+  <HelpKINode Title="ModpackSettings.EnableColorChangeDefaultV2View field" Url="html/F_RelhaxModpack_ModpackSettings_EnableColorChangeDefaultV2View.htm" />
+  <HelpKINode Title="ModpackSettings.EnableColorChangeLegacyView field" Url="html/F_RelhaxModpack_ModpackSettings_EnableColorChangeLegacyView.htm" />
+  <HelpKINode Title="ModpackSettings.ExportMode field" Url="html/F_RelhaxModpack_ModpackSettings_ExportMode.htm" />
+  <HelpKINode Title="ModpackSettings.ForceManuel field" Url="html/F_RelhaxModpack_ModpackSettings_ForceManuel.htm" />
+  <HelpKINode Title="ModpackSettings.GIF field" Url="html/F_RelhaxModpack_ModpackSettings_GIF.htm" />
+  <HelpKINode Title="ModpackSettings.Language field" Url="html/F_RelhaxModpack_ModpackSettings_Language.htm" />
+  <HelpKINode Title="ModpackSettings.LoadSettings method" Url="html/M_RelhaxModpack_ModpackSettings_LoadSettings.htm" />
+  <HelpKINode Title="ModpackSettings.ModSelectionFullscreen field" Url="html/F_RelhaxModpack_ModpackSettings_ModSelectionFullscreen.htm" />
+  <HelpKINode Title="ModpackSettings.ModSelectionHeight field" Url="html/F_RelhaxModpack_ModpackSettings_ModSelectionHeight.htm" />
+  <HelpKINode Title="ModpackSettings.ModSelectionView field" Url="html/F_RelhaxModpack_ModpackSettings_ModSelectionView.htm" />
+  <HelpKINode Title="ModpackSettings.ModSelectionWidth field" Url="html/F_RelhaxModpack_ModpackSettings_ModSelectionWidth.htm" />
+  <HelpKINode Title="ModpackSettings.MulticoreExtraction field" Url="html/F_RelhaxModpack_ModpackSettings_MulticoreExtraction.htm" />
+  <HelpKINode Title="ModpackSettings.NotifyIfSameDatabase field" Url="html/F_RelhaxModpack_ModpackSettings_NotifyIfSameDatabase.htm" />
+  <HelpKINode Title="ModpackSettings.PreviewFullscreen field" Url="html/F_RelhaxModpack_ModpackSettings_PreviewFullscreen.htm" />
+  <HelpKINode Title="ModpackSettings.PreviewHeight field" Url="html/F_RelhaxModpack_ModpackSettings_PreviewHeight.htm" />
+  <HelpKINode Title="ModpackSettings.PreviewWidth field" Url="html/F_RelhaxModpack_ModpackSettings_PreviewWidth.htm" />
+  <HelpKINode Title="ModpackSettings.PreviewX field" Url="html/F_RelhaxModpack_ModpackSettings_PreviewX.htm" />
+  <HelpKINode Title="ModpackSettings.PreviewY field" Url="html/F_RelhaxModpack_ModpackSettings_PreviewY.htm" />
+  <HelpKINode Title="ModpackSettings.SaveLastConfig field" Url="html/F_RelhaxModpack_ModpackSettings_SaveLastConfig.htm" />
+  <HelpKINode Title="ModpackSettings.SaveSettings method" Url="html/M_RelhaxModpack_ModpackSettings_SaveSettings.htm" />
+  <HelpKINode Title="ModpackSettings.SaveUserData field" Url="html/F_RelhaxModpack_ModpackSettings_SaveUserData.htm" />
+  <HelpKINode Title="ModpackSettings.ShowInstallCompleteWindow field" Url="html/F_RelhaxModpack_ModpackSettings_ShowInstallCompleteWindow.htm" />
+  <HelpKINode Title="ModpackSettings.UninstallMode field" Url="html/F_RelhaxModpack_ModpackSettings_UninstallMode.htm" />
+  <HelpKINode Title="ModpackSettings.VerboseLogging field" Url="html/F_RelhaxModpack_ModpackSettings_VerboseLogging.htm" />
+  <HelpKINode Title="ModpackSettingsFileName field" Url="html/F_RelhaxModpack_Settings_ModpackSettingsFileName.htm" />
+  <HelpKINode Title="ModSelectionFullscreen field" Url="html/F_RelhaxModpack_ModpackSettings_ModSelectionFullscreen.htm" />
+  <HelpKINode Title="ModSelectionHeight field" Url="html/F_RelhaxModpack_ModpackSettings_ModSelectionHeight.htm" />
+  <HelpKINode Title="ModSelectionList class">
+    <HelpKINode Title="ModSelectionList Class" Url="html/T_RelhaxModpack_Windows_ModSelectionList.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Windows_ModSelectionList__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_Windows_ModSelectionList.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_Windows_ModSelectionList.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Windows_ModSelectionList.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_Windows_ModSelectionList.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ModSelectionList.Dependencies field" Url="html/F_RelhaxModpack_Windows_ModSelectionList_Dependencies.htm" />
+  <HelpKINode Title="ModSelectionList.GlobalDependencies field" Url="html/F_RelhaxModpack_Windows_ModSelectionList_GlobalDependencies.htm" />
+  <HelpKINode Title="ModSelectionList.InitializeComponent method" Url="html/M_RelhaxModpack_Windows_ModSelectionList_InitializeComponent.htm" />
+  <HelpKINode Title="ModSelectionList.IsValidStructure method" Url="html/M_RelhaxModpack_Windows_ModSelectionList_IsValidStructure.htm" />
+  <HelpKINode Title="ModSelectionList.ModSelectionList constructor" Url="html/M_RelhaxModpack_Windows_ModSelectionList__ctor.htm" />
+  <HelpKINode Title="ModSelectionList.OnSelectionListReturn event" Url="html/E_RelhaxModpack_Windows_ModSelectionList_OnSelectionListReturn.htm" />
+  <HelpKINode Title="ModSelectionList.ParsedCategoryList field" Url="html/F_RelhaxModpack_Windows_ModSelectionList_ParsedCategoryList.htm" />
+  <HelpKINode Title="ModSelectionView field" Url="html/F_RelhaxModpack_ModpackSettings_ModSelectionView.htm" />
+  <HelpKINode Title="ModSelectionWidth field" Url="html/F_RelhaxModpack_ModpackSettings_ModSelectionWidth.htm" />
+  <HelpKINode Title="MulticoreExtraction field" Url="html/F_RelhaxModpack_ModpackSettings_MulticoreExtraction.htm" />
+  <HelpKINode Title="Name field">
+    <HelpKINode Title="Category.Name Field" Url="html/F_RelhaxModpack_Category_Name.htm" />
+    <HelpKINode Title="SelectablePackage.Name Field" Url="html/F_RelhaxModpack_SelectablePackage_Name.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Name property">
+    <HelpKINode Title="Shortcut.Name Property " Url="html/P_RelhaxModpack_Shortcut_Name.htm" />
+    <HelpKINode Title="StringSave.Name Property " Url="html/P_RelhaxModpack_StringSave_Name.htm" />
+  </HelpKINode>
+  <HelpKINode Title="NameDisplay property" Url="html/P_RelhaxModpack_SelectablePackage_NameDisplay.htm" />
+  <HelpKINode Title="NameFormatted property" Url="html/P_RelhaxModpack_SelectablePackage_NameFormatted.htm" />
+  <HelpKINode Title="NativeProcessingFile property" Url="html/P_RelhaxModpack_Patch_NativeProcessingFile.htm" />
+  <HelpKINode Title="NewsViewer class">
+    <HelpKINode Title="NewsViewer Class" Url="html/T_RelhaxModpack_Windows_NewsViewer.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Windows_NewsViewer__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_Windows_NewsViewer.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Windows_NewsViewer.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_Windows_NewsViewer.htm" />
+  </HelpKINode>
+  <HelpKINode Title="NewsViewer.InitializeComponent method" Url="html/M_RelhaxModpack_Windows_NewsViewer_InitializeComponent.htm" />
+  <HelpKINode Title="NewsViewer.NewsViewer constructor" Url="html/M_RelhaxModpack_Windows_NewsViewer__ctor.htm" />
+  <HelpKINode Title="NotFlag property" Url="html/P_RelhaxModpack_DatabaseLogic_NotFlag.htm" />
+  <HelpKINode Title="NotifyIfSameDatabase field" Url="html/F_RelhaxModpack_ModpackSettings_NotifyIfSameDatabase.htm" />
+  <HelpKINode Title="NotSelectedPanelColor field" Url="html/F_RelhaxModpack_UISettings_NotSelectedPanelColor.htm" />
+  <HelpKINode Title="NotSelectedTabColor field" Url="html/F_RelhaxModpack_UISettings_NotSelectedTabColor.htm" />
+  <HelpKINode Title="NotSelectedTextColor field" Url="html/F_RelhaxModpack_UISettings_NotSelectedTextColor.htm" />
+  <HelpKINode Title="NumLogicalProcesors field" Url="html/F_RelhaxModpack_Settings_NumLogicalProcesors.htm" />
+  <HelpKINode Title="OldApplicationLogFilename field" Url="html/F_RelhaxModpack_Logging_OldApplicationLogFilename.htm" />
+  <HelpKINode Title="OldModpackSettingsFilename field" Url="html/F_RelhaxModpack_Settings_OldModpackSettingsFilename.htm" />
+  <HelpKINode Title="OnCheckedChanged method">
+    <HelpKINode Title="IPackageUIComponent.OnCheckedChanged Method " Url="html/M_RelhaxModpack_UIComponents_IPackageUIComponent_OnCheckedChanged.htm" />
+    <HelpKINode Title="RelhaxWPFCheckBox.OnCheckedChanged Method " Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFCheckBox_OnCheckedChanged.htm" />
+    <HelpKINode Title="RelhaxWPFComboBox.OnCheckedChanged Method " Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFComboBox_OnCheckedChanged.htm" />
+    <HelpKINode Title="RelhaxWPFRadioButton.OnCheckedChanged Method " Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFRadioButton_OnCheckedChanged.htm" />
+  </HelpKINode>
+  <HelpKINode Title="OnDeveloperSelectionsClosed event" Url="html/E_RelhaxModpack_Windows_DeveloperSelectionsViewer_OnDeveloperSelectionsClosed.htm" />
+  <HelpKINode Title="OnDropDownSelectionChanged method" Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFComboBox_OnDropDownSelectionChanged.htm" />
+  <HelpKINode Title="OnEnabledChanged method">
+    <HelpKINode Title="IPackageUIComponent.OnEnabledChanged Method " Url="html/M_RelhaxModpack_UIComponents_IPackageUIComponent_OnEnabledChanged.htm" />
+    <HelpKINode Title="RelhaxWPFCheckBox.OnEnabledChanged Method " Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFCheckBox_OnEnabledChanged.htm" />
+    <HelpKINode Title="RelhaxWPFComboBox.OnEnabledChanged Method " Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFComboBox_OnEnabledChanged.htm" />
+    <HelpKINode Title="RelhaxWPFRadioButton.OnEnabledChanged Method " Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFRadioButton_OnEnabledChanged.htm" />
+  </HelpKINode>
+  <HelpKINode Title="OnInstallFinish event" Url="html/E_RelhaxModpack_InstallerComponents_InstallEngine_OnInstallFinish.htm" />
+  <HelpKINode Title="OnInstallProgress event" Url="html/E_RelhaxModpack_InstallerComponents_InstallEngine_OnInstallProgress.htm" />
+  <HelpKINode Title="OnSelectionListReturn event" Url="html/E_RelhaxModpack_Windows_ModSelectionList_OnSelectionListReturn.htm" />
+  <HelpKINode Title="OR enumeration member" Url="html/T_RelhaxModpack_Logic.htm" />
+  <HelpKINode Title="OrderedPackagesToInstall field" Url="html/F_RelhaxModpack_InstallerComponents_InstallEngine_OrderedPackagesToInstall.htm" />
+  <HelpKINode Title="Package property">
+    <HelpKINode Title="IPackageUIComponent.Package Property " Url="html/P_RelhaxModpack_UIComponents_IPackageUIComponent_Package.htm" />
+    <HelpKINode Title="RelhaxWPFCheckBox.Package Property " Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFCheckBox_Package.htm" />
+    <HelpKINode Title="RelhaxWPFComboBox.Package Property " Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFComboBox_Package.htm" />
+    <HelpKINode Title="RelhaxWPFRadioButton.Package Property " Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFRadioButton_Package.htm" />
+  </HelpKINode>
+  <HelpKINode Title="PackageComparer class">
+    <HelpKINode Title="PackageComparer Class" Url="html/T_RelhaxModpack_PackageComparer.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_PackageComparer__ctor.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_PackageComparer.htm" />
+  </HelpKINode>
+  <HelpKINode Title="PackageComparer.Equals method" Url="html/Overload_RelhaxModpack_PackageComparer_Equals.htm" />
+  <HelpKINode Title="PackageComparer.GetHashCode method" Url="html/Overload_RelhaxModpack_PackageComparer_GetHashCode.htm" />
+  <HelpKINode Title="PackageComparer.PackageComparer constructor" Url="html/M_RelhaxModpack_PackageComparer__ctor.htm" />
+  <HelpKINode Title="PackageName field" Url="html/F_RelhaxModpack_DatabasePackage_PackageName.htm" />
+  <HelpKINode Title="PackageName property" Url="html/P_RelhaxModpack_DatabaseLogic_PackageName.htm" />
+  <HelpKINode Title="Packages field">
+    <HelpKINode Title="Category.Packages Field" Url="html/F_RelhaxModpack_Category_Packages.htm" />
+    <HelpKINode Title="SelectablePackage.Packages Field" Url="html/F_RelhaxModpack_SelectablePackage_Packages.htm" />
+  </HelpKINode>
+  <HelpKINode Title="PanelColor property">
+    <HelpKINode Title="IPackageUIComponent.PanelColor Property " Url="html/P_RelhaxModpack_UIComponents_IPackageUIComponent_PanelColor.htm" />
+    <HelpKINode Title="RelhaxWPFCheckBox.PanelColor Property " Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFCheckBox_PanelColor.htm" />
+    <HelpKINode Title="RelhaxWPFComboBox.PanelColor Property " Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFComboBox_PanelColor.htm" />
+    <HelpKINode Title="RelhaxWPFRadioButton.PanelColor Property " Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFRadioButton_PanelColor.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Parent field" Url="html/F_RelhaxModpack_SelectablePackage_Parent.htm" />
+  <HelpKINode Title="ParentBorder field" Url="html/F_RelhaxModpack_SelectablePackage_ParentBorder.htm" />
+  <HelpKINode Title="ParentCategory field" Url="html/F_RelhaxModpack_SelectablePackage_ParentCategory.htm" />
+  <HelpKINode Title="ParentStackPanel field" Url="html/F_RelhaxModpack_SelectablePackage_ParentStackPanel.htm" />
+  <HelpKINode Title="ParentUIComponent field" Url="html/F_RelhaxModpack_SelectablePackage_ParentUIComponent.htm" />
+  <HelpKINode Title="ParrentCurrent field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_ParrentCurrent.htm" />
+  <HelpKINode Title="ParrentCurrentProgress field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_ParrentCurrentProgress.htm" />
+  <HelpKINode Title="ParrentTotal field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_ParrentTotal.htm" />
+  <HelpKINode Title="ParseBool method" Url="html/M_RelhaxModpack_Utils_ParseBool.htm" />
+  <HelpKINode Title="ParseColorFromString method" Url="html/M_RelhaxModpack_UISettings_ParseColorFromString.htm" />
+  <HelpKINode Title="ParseCommandLineConflicts method" Url="html/M_RelhaxModpack_CommandLineSettings_ParseCommandLineConflicts.htm" />
+  <HelpKINode Title="ParseDatabase method" Url="html/M_RelhaxModpack_XMLUtils_ParseDatabase.htm" />
+  <HelpKINode Title="ParseDatabaseLegacy method" Url="html/M_RelhaxModpack_XMLUtils_ParseDatabaseLegacy.htm" />
+  <HelpKINode Title="ParseDatabaseV2 method" Url="html/M_RelhaxModpack_XMLUtils_ParseDatabaseV2.htm" />
+  <HelpKINode Title="ParsedCategoryList field">
+    <HelpKINode Title="ModSelectionList.ParsedCategoryList Field" Url="html/F_RelhaxModpack_Windows_ModSelectionList_ParsedCategoryList.htm" />
+    <HelpKINode Title="SelectionListEventArgs.ParsedCategoryList Field" Url="html/F_RelhaxModpack_Windows_SelectionListEventArgs_ParsedCategoryList.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ParseDeveloperSelections method" Url="html/M_RelhaxModpack_Utils_ParseDeveloperSelections.htm" />
+  <HelpKINode Title="ParseFloat method" Url="html/M_RelhaxModpack_Utils_ParseFloat.htm" />
+  <HelpKINode Title="ParseInt method" Url="html/M_RelhaxModpack_Utils_ParseInt.htm" />
+  <HelpKINode Title="ParseLong method" Url="html/M_RelhaxModpack_Utils_ParseLong.htm" />
+  <HelpKINode Title="ParseSelection method" Url="html/M_RelhaxModpack_Utils_ParseSelection.htm" />
+  <HelpKINode Title="ParseuLong method" Url="html/M_RelhaxModpack_Utils_ParseuLong.htm" />
+  <HelpKINode Title="ParseUserSelection method" Url="html/M_RelhaxModpack_Utils_ParseUserSelection.htm" />
+  <HelpKINode Title="ParseUserSelectionV2 method" Url="html/M_RelhaxModpack_Utils_ParseUserSelectionV2.htm" />
+  <HelpKINode Title="Patch class">
+    <HelpKINode Title="Patch Class" Url="html/T_RelhaxModpack_Patch.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Patch__ctor.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Patch.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_Patch.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Patch.ActualPatchName property" Url="html/P_RelhaxModpack_Patch_ActualPatchName.htm" />
+  <HelpKINode Title="Patch.CompletePath property" Url="html/P_RelhaxModpack_Patch_CompletePath.htm" />
+  <HelpKINode Title="Patch.file property" Url="html/P_RelhaxModpack_Patch_file.htm" />
+  <HelpKINode Title="Patch.lines property" Url="html/P_RelhaxModpack_Patch_lines.htm" />
+  <HelpKINode Title="Patch.mode property" Url="html/P_RelhaxModpack_Patch_mode.htm" />
+  <HelpKINode Title="Patch.NativeProcessingFile property" Url="html/P_RelhaxModpack_Patch_NativeProcessingFile.htm" />
+  <HelpKINode Title="Patch.Patch constructor" Url="html/M_RelhaxModpack_Patch__ctor.htm" />
+  <HelpKINode Title="Patch.PatchPath property" Url="html/P_RelhaxModpack_Patch_PatchPath.htm" />
+  <HelpKINode Title="Patch.Path property" Url="html/P_RelhaxModpack_Patch_Path.htm" />
+  <HelpKINode Title="Patch.Replace property" Url="html/P_RelhaxModpack_Patch_Replace.htm" />
+  <HelpKINode Title="Patch.Search property" Url="html/P_RelhaxModpack_Patch_Search.htm" />
+  <HelpKINode Title="Patch.Type property" Url="html/P_RelhaxModpack_Patch_Type.htm" />
+  <HelpKINode Title="PatchCheck field" Url="html/F_RelhaxModpack_CommandLineSettings_PatchCheck.htm" />
+  <HelpKINode Title="PatchError enumeration member" Url="html/T_RelhaxModpack_InstallerComponents_InstallerExitCodes.htm" />
+  <HelpKINode Title="PatchFolderName field" Url="html/F_RelhaxModpack_Settings_PatchFolderName.htm" />
+  <HelpKINode Title="PatchPath property" Url="html/P_RelhaxModpack_Patch_PatchPath.htm" />
+  <HelpKINode Title="PatchProcessCategoryID field" Url="html/F_RelhaxModpack_Category_PatchProcessCategoryID.htm" />
+  <HelpKINode Title="PatchTester class">
+    <HelpKINode Title="PatchTester Class" Url="html/T_RelhaxModpack_Windows_PatchTester.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Windows_PatchTester__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_Windows_PatchTester.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Windows_PatchTester.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_Windows_PatchTester.htm" />
+  </HelpKINode>
+  <HelpKINode Title="PatchTester.InitializeComponent method" Url="html/M_RelhaxModpack_Windows_PatchTester_InitializeComponent.htm" />
+  <HelpKINode Title="PatchTester.PatchTester constructor" Url="html/M_RelhaxModpack_Windows_PatchTester__ctor.htm" />
+  <HelpKINode Title="PatchUtils class">
+    <HelpKINode Title="PatchUtils Class" Url="html/T_RelhaxModpack_PatchUtils.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_PatchUtils.htm" />
+  </HelpKINode>
+  <HelpKINode Title="PatchUtils.GetXVMBootLoc method" Url="html/M_RelhaxModpack_PatchUtils_GetXVMBootLoc.htm" />
+  <HelpKINode Title="PatchUtils.JSONPatch method" Url="html/M_RelhaxModpack_PatchUtils_JSONPatch.htm" />
+  <HelpKINode Title="PatchUtils.RegxPatch method" Url="html/M_RelhaxModpack_PatchUtils_RegxPatch.htm" />
+  <HelpKINode Title="PatchUtils.XMLPatch method" Url="html/M_RelhaxModpack_PatchUtils_XMLPatch.htm" />
+  <HelpKINode Title="Path property">
+    <HelpKINode Title="Patch.Path Property " Url="html/P_RelhaxModpack_Patch_Path.htm" />
+    <HelpKINode Title="Shortcut.Path Property " Url="html/P_RelhaxModpack_Shortcut_Path.htm" />
+  </HelpKINode>
+  <HelpKINode Title="PatientWebClient class">
+    <HelpKINode Title="PatientWebClient Class" Url="html/T_RelhaxModpack_PatientWebClient.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_PatientWebClient__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_PatientWebClient.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_PatientWebClient.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_PatientWebClient.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_PatientWebClient.htm" />
+  </HelpKINode>
+  <HelpKINode Title="PatientWebClient.GetWebRequest method" Url="html/M_RelhaxModpack_PatientWebClient_GetWebRequest.htm" />
+  <HelpKINode Title="PatientWebClient.PatientWebClient constructor" Url="html/M_RelhaxModpack_PatientWebClient__ctor.htm" />
+  <HelpKINode Title="PatientWebClient.Timeout property" Url="html/P_RelhaxModpack_PatientWebClient_Timeout.htm" />
+  <HelpKINode Title="PatientWebClient.TO_MINUETS field" Url="html/F_RelhaxModpack_PatientWebClient_TO_MINUETS.htm" />
+  <HelpKINode Title="PatientWebClient.TO_SECONDS field" Url="html/F_RelhaxModpack_PatientWebClient_TO_SECONDS.htm" />
+  <HelpKINode Title="Pattern field" Url="html/F_RelhaxModpack_UserFiles_Pattern.htm" />
+  <HelpKINode Title="Picture enumeration member" Url="html/T_RelhaxModpack_MediaType.htm" />
+  <HelpKINode Title="placeBeforeExtraction field" Url="html/F_RelhaxModpack_UserFiles_placeBeforeExtraction.htm" />
+  <HelpKINode Title="Polish enumeration member" Url="html/T_RelhaxModpack_Languages.htm" />
+  <HelpKINode Title="Preview class">
+    <HelpKINode Title="Preview Class" Url="html/T_RelhaxModpack_Windows_Preview.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Windows_Preview__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_Windows_Preview.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Windows_Preview.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_Windows_Preview.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Preview.InitializeComponent method" Url="html/M_RelhaxModpack_Windows_Preview_InitializeComponent.htm" />
+  <HelpKINode Title="Preview.Preview constructor" Url="html/M_RelhaxModpack_Windows_Preview__ctor.htm" />
+  <HelpKINode Title="PreviewFullscreen field" Url="html/F_RelhaxModpack_ModpackSettings_PreviewFullscreen.htm" />
+  <HelpKINode Title="PreviewHeight field" Url="html/F_RelhaxModpack_ModpackSettings_PreviewHeight.htm" />
+  <HelpKINode Title="PreviewWidth field" Url="html/F_RelhaxModpack_ModpackSettings_PreviewWidth.htm" />
+  <HelpKINode Title="PreviewX field" Url="html/F_RelhaxModpack_ModpackSettings_PreviewX.htm" />
+  <HelpKINode Title="PreviewY field" Url="html/F_RelhaxModpack_ModpackSettings_PreviewY.htm" />
+  <HelpKINode Title="ProcessConfigs method" Url="html/M_RelhaxModpack_XMLUtils_ProcessConfigs.htm" />
+  <HelpKINode Title="ProcessDirectory method" Url="html/M_RelhaxModpack_Utils_ProcessDirectory.htm" />
+  <HelpKINode Title="ProgressIndicator class">
+    <HelpKINode Title="ProgressIndicator Class" Url="html/T_RelhaxModpack_Windows_ProgressIndicator.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Windows_ProgressIndicator__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_Windows_ProgressIndicator.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Windows_ProgressIndicator.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_Windows_ProgressIndicator.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ProgressIndicator.InitializeComponent method" Url="html/M_RelhaxModpack_Windows_ProgressIndicator_InitializeComponent.htm" />
+  <HelpKINode Title="ProgressIndicator.Message property" Url="html/P_RelhaxModpack_Windows_ProgressIndicator_Message.htm" />
+  <HelpKINode Title="ProgressIndicator.ProgressIndicator constructor" Url="html/M_RelhaxModpack_Windows_ProgressIndicator__ctor.htm" />
+  <HelpKINode Title="ProgressIndicator.ProgressMaximum property" Url="html/P_RelhaxModpack_Windows_ProgressIndicator_ProgressMaximum.htm" />
+  <HelpKINode Title="ProgressIndicator.ProgressMinimum property" Url="html/P_RelhaxModpack_Windows_ProgressIndicator_ProgressMinimum.htm" />
+  <HelpKINode Title="ProgressIndicator.ProgressValue property" Url="html/P_RelhaxModpack_Windows_ProgressIndicator_ProgressValue.htm" />
+  <HelpKINode Title="ProgressIndicator.UpdateProgress method" Url="html/Overload_RelhaxModpack_Windows_ProgressIndicator_UpdateProgress.htm" />
+  <HelpKINode Title="ProgressMaximum property" Url="html/P_RelhaxModpack_Windows_ProgressIndicator_ProgressMaximum.htm" />
+  <HelpKINode Title="ProgressMinimum property" Url="html/P_RelhaxModpack_Windows_ProgressIndicator_ProgressMinimum.htm" />
+  <HelpKINode Title="ProgressValue property" Url="html/P_RelhaxModpack_Windows_ProgressIndicator_ProgressValue.htm" />
+  <HelpKINode Title="Quick enumeration member" Url="html/T_RelhaxModpack_UninstallModes.htm" />
+  <HelpKINode Title="RandomString method" Url="html/M_RelhaxModpack_Utils_RandomString.htm" />
+  <HelpKINode Title="ReadyForInstall field" Url="html/F_RelhaxModpack_DatabasePackage_ReadyForInstall.htm" />
+  <HelpKINode Title="RegxPatch method" Url="html/M_RelhaxModpack_PatchUtils_RegxPatch.htm" />
+  <HelpKINode Title="RelhaxDownloadsFolder field" Url="html/F_RelhaxModpack_Settings_RelhaxDownloadsFolder.htm" />
+  <HelpKINode Title="RelhaxInstallFinishedEventArgs class">
+    <HelpKINode Title="RelhaxInstallFinishedEventArgs Class" Url="html/T_RelhaxModpack_InstallerComponents_RelhaxInstallFinishedEventArgs.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_InstallerComponents_RelhaxInstallFinishedEventArgs__ctor.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_InstallerComponents_RelhaxInstallFinishedEventArgs.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_InstallerComponents_RelhaxInstallFinishedEventArgs.htm" />
+  </HelpKINode>
+  <HelpKINode Title="RelhaxInstallFinishedEventArgs.ErrorMessage field" Url="html/F_RelhaxModpack_InstallerComponents_RelhaxInstallFinishedEventArgs_ErrorMessage.htm" />
+  <HelpKINode Title="RelhaxInstallFinishedEventArgs.ExitCodes field" Url="html/F_RelhaxModpack_InstallerComponents_RelhaxInstallFinishedEventArgs_ExitCodes.htm" />
+  <HelpKINode Title="RelhaxInstallFinishedEventArgs.RelhaxInstallFinishedEventArgs constructor" Url="html/M_RelhaxModpack_InstallerComponents_RelhaxInstallFinishedEventArgs__ctor.htm" />
+  <HelpKINode Title="RelhaxLibrariesFolder field" Url="html/F_RelhaxModpack_Settings_RelhaxLibrariesFolder.htm" />
+  <HelpKINode Title="RelhaxModBackupFolder field" Url="html/F_RelhaxModpack_Settings_RelhaxModBackupFolder.htm" />
+  <HelpKINode Title="RelhaxModpack namespace" Url="html/N_RelhaxModpack.htm" />
+  <HelpKINode Title="RelhaxModpack.App class" Url="html/T_RelhaxModpack_App.htm" />
+  <HelpKINode Title="RelhaxModpack.ApplicationVersions enumeration" Url="html/T_RelhaxModpack_ApplicationVersions.htm" />
+  <HelpKINode Title="RelhaxModpack.Category class" Url="html/T_RelhaxModpack_Category.htm" />
+  <HelpKINode Title="RelhaxModpack.CiInfo class" Url="html/T_RelhaxModpack_CiInfo.htm" />
+  <HelpKINode Title="RelhaxModpack.CommandLineSettings class" Url="html/T_RelhaxModpack_CommandLineSettings.htm" />
+  <HelpKINode Title="RelhaxModpack.DatabaseLogic class" Url="html/T_RelhaxModpack_DatabaseLogic.htm" />
+  <HelpKINode Title="RelhaxModpack.DatabasePackage class" Url="html/T_RelhaxModpack_DatabasePackage.htm" />
+  <HelpKINode Title="RelhaxModpack.DatabaseVersions enumeration" Url="html/T_RelhaxModpack_DatabaseVersions.htm" />
+  <HelpKINode Title="RelhaxModpack.Dependency class" Url="html/T_RelhaxModpack_Dependency.htm" />
+  <HelpKINode Title="RelhaxModpack.InstallerComponents namespace" Url="html/N_RelhaxModpack_InstallerComponents.htm" />
+  <HelpKINode Title="RelhaxModpack.InstallerComponents.InstallEngine class" Url="html/T_RelhaxModpack_InstallerComponents_InstallEngine.htm" />
+  <HelpKINode Title="RelhaxModpack.InstallerComponents.InstallerExitCodes enumeration" Url="html/T_RelhaxModpack_InstallerComponents_InstallerExitCodes.htm" />
+  <HelpKINode Title="RelhaxModpack.InstallerComponents.InstallFinishedDelegate delegate" Url="html/T_RelhaxModpack_InstallerComponents_InstallFinishedDelegate.htm" />
+  <HelpKINode Title="RelhaxModpack.InstallerComponents.InstallProgressDelegate delegate" Url="html/T_RelhaxModpack_InstallerComponents_InstallProgressDelegate.htm" />
+  <HelpKINode Title="RelhaxModpack.InstallerComponents.RelhaxInstallFinishedEventArgs class" Url="html/T_RelhaxModpack_InstallerComponents_RelhaxInstallFinishedEventArgs.htm" />
+  <HelpKINode Title="RelhaxModpack.Languages enumeration" Url="html/T_RelhaxModpack_Languages.htm" />
+  <HelpKINode Title="RelhaxModpack.LoadingGifs enumeration" Url="html/T_RelhaxModpack_LoadingGifs.htm" />
+  <HelpKINode Title="RelhaxModpack.Logfile class" Url="html/T_RelhaxModpack_Logfile.htm" />
+  <HelpKINode Title="RelhaxModpack.Logfiles enumeration" Url="html/T_RelhaxModpack_Logfiles.htm" />
+  <HelpKINode Title="RelhaxModpack.Logging class" Url="html/T_RelhaxModpack_Logging.htm" />
+  <HelpKINode Title="RelhaxModpack.Logic enumeration" Url="html/T_RelhaxModpack_Logic.htm" />
+  <HelpKINode Title="RelhaxModpack.LogLevel enumeration" Url="html/T_RelhaxModpack_LogLevel.htm" />
+  <HelpKINode Title="RelhaxModpack.MainWindow class" Url="html/T_RelhaxModpack_MainWindow.htm" />
+  <HelpKINode Title="RelhaxModpack.Media class" Url="html/T_RelhaxModpack_Media.htm" />
+  <HelpKINode Title="RelhaxModpack.MediaType enumeration" Url="html/T_RelhaxModpack_MediaType.htm" />
+  <HelpKINode Title="RelhaxModpack.ModpackSettings class" Url="html/T_RelhaxModpack_ModpackSettings.htm" />
+  <HelpKINode Title="RelhaxModpack.PackageComparer class" Url="html/T_RelhaxModpack_PackageComparer.htm" />
+  <HelpKINode Title="RelhaxModpack.Patch class" Url="html/T_RelhaxModpack_Patch.htm" />
+  <HelpKINode Title="RelhaxModpack.PatchUtils class" Url="html/T_RelhaxModpack_PatchUtils.htm" />
+  <HelpKINode Title="RelhaxModpack.PatientWebClient class" Url="html/T_RelhaxModpack_PatientWebClient.htm" />
+  <HelpKINode Title="RelhaxModpack.ReturnCodes enumeration" Url="html/T_RelhaxModpack_ReturnCodes.htm" />
+  <HelpKINode Title="RelhaxModpack.SelectablePackage class" Url="html/T_RelhaxModpack_SelectablePackage.htm" />
+  <HelpKINode Title="RelhaxModpack.SelectionView enumeration" Url="html/T_RelhaxModpack_SelectionView.htm" />
+  <HelpKINode Title="RelhaxModpack.Settings class" Url="html/T_RelhaxModpack_Settings.htm" />
+  <HelpKINode Title="RelhaxModpack.Shortcut class" Url="html/T_RelhaxModpack_Shortcut.htm" />
+  <HelpKINode Title="RelhaxModpack.StringSave structure" Url="html/T_RelhaxModpack_StringSave.htm" />
+  <HelpKINode Title="RelhaxModpack.ThirdPartySettings class" Url="html/T_RelhaxModpack_ThirdPartySettings.htm" />
+  <HelpKINode Title="RelhaxModpack.Translations class" Url="html/T_RelhaxModpack_Translations.htm" />
+  <HelpKINode Title="RelhaxModpack.UIComponents namespace" Url="html/N_RelhaxModpack_UIComponents.htm" />
+  <HelpKINode Title="RelhaxModpack.UIComponents.IPackageUIComponent interface" Url="html/T_RelhaxModpack_UIComponents_IPackageUIComponent.htm" />
+  <HelpKINode Title="RelhaxModpack.UIComponents.RelhaxProgress class" Url="html/T_RelhaxModpack_UIComponents_RelhaxProgress.htm" />
+  <HelpKINode Title="RelhaxModpack.UIComponents.RelhaxWPFCheckBox class" Url="html/T_RelhaxModpack_UIComponents_RelhaxWPFCheckBox.htm" />
+  <HelpKINode Title="RelhaxModpack.UIComponents.RelhaxWPFComboBox class" Url="html/T_RelhaxModpack_UIComponents_RelhaxWPFComboBox.htm" />
+  <HelpKINode Title="RelhaxModpack.UIComponents.RelhaxWPFRadioButton class" Url="html/T_RelhaxModpack_UIComponents_RelhaxWPFRadioButton.htm" />
+  <HelpKINode Title="RelhaxModpack.UIComponents.StretchingTreeView class" Url="html/T_RelhaxModpack_UIComponents_StretchingTreeView.htm" />
+  <HelpKINode Title="RelhaxModpack.UIComponents.StretchingTreeViewItem class" Url="html/T_RelhaxModpack_UIComponents_StretchingTreeViewItem.htm" />
+  <HelpKINode Title="RelhaxModpack.UISettings class" Url="html/T_RelhaxModpack_UISettings.htm" />
+  <HelpKINode Title="RelhaxModpack.UninstallModes enumeration" Url="html/T_RelhaxModpack_UninstallModes.htm" />
+  <HelpKINode Title="RelhaxModpack.UserFiles class" Url="html/T_RelhaxModpack_UserFiles.htm" />
+  <HelpKINode Title="RelhaxModpack.Utils class" Url="html/T_RelhaxModpack_Utils.htm" />
+  <HelpKINode Title="RelhaxModpack.Windows namespace" Url="html/N_RelhaxModpack_Windows.htm" />
+  <HelpKINode Title="RelhaxModpack.Windows.AddPicturesZip class" Url="html/T_RelhaxModpack_Windows_AddPicturesZip.htm" />
+  <HelpKINode Title="RelhaxModpack.Windows.DatabaseEditor class" Url="html/T_RelhaxModpack_Windows_DatabaseEditor.htm" />
+  <HelpKINode Title="RelhaxModpack.Windows.DatabaseEditorAddMove class" Url="html/T_RelhaxModpack_Windows_DatabaseEditorAddMove.htm" />
+  <HelpKINode Title="RelhaxModpack.Windows.DatabaseEditorDownload class" Url="html/T_RelhaxModpack_Windows_DatabaseEditorDownload.htm" />
+  <HelpKINode Title="RelhaxModpack.Windows.DatabaseUpdater class" Url="html/T_RelhaxModpack_Windows_DatabaseUpdater.htm" />
+  <HelpKINode Title="RelhaxModpack.Windows.DatabaseUpdater.VersionInfos structure" Url="html/T_RelhaxModpack_Windows_DatabaseUpdater_VersionInfos.htm" />
+  <HelpKINode Title="RelhaxModpack.Windows.DeveloperSelectionsClosedDelagate delegate" Url="html/T_RelhaxModpack_Windows_DeveloperSelectionsClosedDelagate.htm" />
+  <HelpKINode Title="RelhaxModpack.Windows.DeveloperSelectionsViewer class" Url="html/T_RelhaxModpack_Windows_DeveloperSelectionsViewer.htm" />
+  <HelpKINode Title="RelhaxModpack.Windows.DevleoperSelectionsClosedEWventArgs class" Url="html/T_RelhaxModpack_Windows_DevleoperSelectionsClosedEWventArgs.htm" />
+  <HelpKINode Title="RelhaxModpack.Windows.FirstLoadAknowledgements class" Url="html/T_RelhaxModpack_Windows_FirstLoadAknowledgements.htm" />
+  <HelpKINode Title="RelhaxModpack.Windows.GenericYesNoWindow class" Url="html/T_RelhaxModpack_Windows_GenericYesNoWindow.htm" />
+  <HelpKINode Title="RelhaxModpack.Windows.InstallFinished class" Url="html/T_RelhaxModpack_Windows_InstallFinished.htm" />
+  <HelpKINode Title="RelhaxModpack.Windows.ModSelectionList class" Url="html/T_RelhaxModpack_Windows_ModSelectionList.htm" />
+  <HelpKINode Title="RelhaxModpack.Windows.NewsViewer class" Url="html/T_RelhaxModpack_Windows_NewsViewer.htm" />
+  <HelpKINode Title="RelhaxModpack.Windows.PatchTester class" Url="html/T_RelhaxModpack_Windows_PatchTester.htm" />
+  <HelpKINode Title="RelhaxModpack.Windows.Preview class" Url="html/T_RelhaxModpack_Windows_Preview.htm" />
+  <HelpKINode Title="RelhaxModpack.Windows.ProgressIndicator class" Url="html/T_RelhaxModpack_Windows_ProgressIndicator.htm" />
+  <HelpKINode Title="RelhaxModpack.Windows.RelhaxWindow class" Url="html/T_RelhaxModpack_Windows_RelhaxWindow.htm" />
+  <HelpKINode Title="RelhaxModpack.Windows.SelectionListClosedDelegate delegate" Url="html/T_RelhaxModpack_Windows_SelectionListClosedDelegate.htm" />
+  <HelpKINode Title="RelhaxModpack.Windows.SelectionListEventArgs class" Url="html/T_RelhaxModpack_Windows_SelectionListEventArgs.htm" />
+  <HelpKINode Title="RelhaxModpack.Windows.SelectionViewer class" Url="html/T_RelhaxModpack_Windows_SelectionViewer.htm" />
+  <HelpKINode Title="RelhaxModpack.Windows.VersionInfo class" Url="html/T_RelhaxModpack_Windows_VersionInfo.htm" />
+  <HelpKINode Title="RelhaxModpack.XMLUtils class" Url="html/T_RelhaxModpack_XMLUtils.htm" />
+  <HelpKINode Title="RelhaxProgress class">
+    <HelpKINode Title="RelhaxProgress Class" Url="html/T_RelhaxModpack_UIComponents_RelhaxProgress.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_UIComponents_RelhaxProgress__ctor.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_UIComponents_RelhaxProgress.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_UIComponents_RelhaxProgress.htm" />
+  </HelpKINode>
+  <HelpKINode Title="RelhaxProgress.ChildCurrent field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_ChildCurrent.htm" />
+  <HelpKINode Title="RelhaxProgress.ChildCurrentProgress field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_ChildCurrentProgress.htm" />
+  <HelpKINode Title="RelhaxProgress.ChildTotal field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_ChildTotal.htm" />
+  <HelpKINode Title="RelhaxProgress.ParrentCurrent field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_ParrentCurrent.htm" />
+  <HelpKINode Title="RelhaxProgress.ParrentCurrentProgress field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_ParrentCurrentProgress.htm" />
+  <HelpKINode Title="RelhaxProgress.ParrentTotal field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_ParrentTotal.htm" />
+  <HelpKINode Title="RelhaxProgress.RelhaxProgress constructor" Url="html/M_RelhaxModpack_UIComponents_RelhaxProgress__ctor.htm" />
+  <HelpKINode Title="RelhaxProgress.ReportMessage field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_ReportMessage.htm" />
+  <HelpKINode Title="RelhaxProgress.TotalCurrent field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_TotalCurrent.htm" />
+  <HelpKINode Title="RelhaxProgress.TotalCurrentProgress field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_TotalCurrentProgress.htm" />
+  <HelpKINode Title="RelhaxProgress.TotalTotal field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_TotalTotal.htm" />
+  <HelpKINode Title="RelhaxTempFolder field" Url="html/F_RelhaxModpack_Settings_RelhaxTempFolder.htm" />
+  <HelpKINode Title="RelhaxUserConfigsFolder field" Url="html/F_RelhaxModpack_Settings_RelhaxUserConfigsFolder.htm" />
+  <HelpKINode Title="RelhaxUserModsFolder field" Url="html/F_RelhaxModpack_Settings_RelhaxUserModsFolder.htm" />
+  <HelpKINode Title="RelhaxWindow class">
+    <HelpKINode Title="RelhaxWindow Class" Url="html/T_RelhaxModpack_Windows_RelhaxWindow.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Windows_RelhaxWindow__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_Windows_RelhaxWindow.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Windows_RelhaxWindow.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_Windows_RelhaxWindow.htm" />
+  </HelpKINode>
+  <HelpKINode Title="RelhaxWindow.ApplyColorSettings property" Url="html/P_RelhaxModpack_Windows_RelhaxWindow_ApplyColorSettings.htm" />
+  <HelpKINode Title="RelhaxWindow.ApplyToolTips property" Url="html/P_RelhaxModpack_Windows_RelhaxWindow_ApplyToolTips.htm" />
+  <HelpKINode Title="RelhaxWindow.LocalizeWindow property" Url="html/P_RelhaxModpack_Windows_RelhaxWindow_LocalizeWindow.htm" />
+  <HelpKINode Title="RelhaxWindow.RelhaxWindow constructor" Url="html/M_RelhaxModpack_Windows_RelhaxWindow__ctor.htm" />
+  <HelpKINode Title="RelhaxWPFCheckBox class">
+    <HelpKINode Title="RelhaxWPFCheckBox Class" Url="html/T_RelhaxModpack_UIComponents_RelhaxWPFCheckBox.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFCheckBox__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_UIComponents_RelhaxWPFCheckBox.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_UIComponents_RelhaxWPFCheckBox.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_UIComponents_RelhaxWPFCheckBox.htm" />
+  </HelpKINode>
+  <HelpKINode Title="RelhaxWPFCheckBox.OnCheckedChanged method" Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFCheckBox_OnCheckedChanged.htm" />
+  <HelpKINode Title="RelhaxWPFCheckBox.OnEnabledChanged method" Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFCheckBox_OnEnabledChanged.htm" />
+  <HelpKINode Title="RelhaxWPFCheckBox.Package property" Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFCheckBox_Package.htm" />
+  <HelpKINode Title="RelhaxWPFCheckBox.PanelColor property" Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFCheckBox_PanelColor.htm" />
+  <HelpKINode Title="RelhaxWPFCheckBox.RelhaxWPFCheckBox constructor" Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFCheckBox__ctor.htm" />
+  <HelpKINode Title="RelhaxWPFCheckBox.TextColor property" Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFCheckBox_TextColor.htm" />
+  <HelpKINode Title="RelhaxWPFComboBox class">
+    <HelpKINode Title="RelhaxWPFComboBox Class" Url="html/T_RelhaxModpack_UIComponents_RelhaxWPFComboBox.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFComboBox__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_UIComponents_RelhaxWPFComboBox.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_UIComponents_RelhaxWPFComboBox.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_UIComponents_RelhaxWPFComboBox.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_UIComponents_RelhaxWPFComboBox.htm" />
+  </HelpKINode>
+  <HelpKINode Title="RelhaxWPFComboBox.handler field" Url="html/F_RelhaxModpack_UIComponents_RelhaxWPFComboBox_handler.htm" />
+  <HelpKINode Title="RelhaxWPFComboBox.OnCheckedChanged method" Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFComboBox_OnCheckedChanged.htm" />
+  <HelpKINode Title="RelhaxWPFComboBox.OnDropDownSelectionChanged method" Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFComboBox_OnDropDownSelectionChanged.htm" />
+  <HelpKINode Title="RelhaxWPFComboBox.OnEnabledChanged method" Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFComboBox_OnEnabledChanged.htm" />
+  <HelpKINode Title="RelhaxWPFComboBox.Package property" Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFComboBox_Package.htm" />
+  <HelpKINode Title="RelhaxWPFComboBox.PanelColor property" Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFComboBox_PanelColor.htm" />
+  <HelpKINode Title="RelhaxWPFComboBox.RelhaxWPFComboBox constructor" Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFComboBox__ctor.htm" />
+  <HelpKINode Title="RelhaxWPFComboBox.TextColor property" Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFComboBox_TextColor.htm" />
+  <HelpKINode Title="RelhaxWPFComboBoxList field" Url="html/F_RelhaxModpack_SelectablePackage_RelhaxWPFComboBoxList.htm" />
+  <HelpKINode Title="RelhaxWPFRadioButton class">
+    <HelpKINode Title="RelhaxWPFRadioButton Class" Url="html/T_RelhaxModpack_UIComponents_RelhaxWPFRadioButton.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFRadioButton__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_UIComponents_RelhaxWPFRadioButton.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_UIComponents_RelhaxWPFRadioButton.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_UIComponents_RelhaxWPFRadioButton.htm" />
+  </HelpKINode>
+  <HelpKINode Title="RelhaxWPFRadioButton.OnCheckedChanged method" Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFRadioButton_OnCheckedChanged.htm" />
+  <HelpKINode Title="RelhaxWPFRadioButton.OnEnabledChanged method" Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFRadioButton_OnEnabledChanged.htm" />
+  <HelpKINode Title="RelhaxWPFRadioButton.Package property" Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFRadioButton_Package.htm" />
+  <HelpKINode Title="RelhaxWPFRadioButton.PanelColor property" Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFRadioButton_PanelColor.htm" />
+  <HelpKINode Title="RelhaxWPFRadioButton.RelhaxWPFRadioButton constructor" Url="html/M_RelhaxModpack_UIComponents_RelhaxWPFRadioButton__ctor.htm" />
+  <HelpKINode Title="RelhaxWPFRadioButton.TextColor property" Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFRadioButton_TextColor.htm" />
+  <HelpKINode Title="RelicBatchUpdateScript field" Url="html/F_RelhaxModpack_Settings_RelicBatchUpdateScript.htm" />
+  <HelpKINode Title="Replace property" Url="html/P_RelhaxModpack_Patch_Replace.htm" />
+  <HelpKINode Title="ReportMessage field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_ReportMessage.htm" />
+  <HelpKINode Title="RestoreUserdataError enumeration member" Url="html/T_RelhaxModpack_InstallerComponents_InstallerExitCodes.htm" />
+  <HelpKINode Title="ReturnCodes enumeration" Url="html/T_RelhaxModpack_ReturnCodes.htm" />
+  <HelpKINode Title="RunInstallationAsync method" Url="html/M_RelhaxModpack_InstallerComponents_InstallEngine_RunInstallationAsync.htm" />
+  <HelpKINode Title="SaveDatabase method" Url="html/M_RelhaxModpack_XMLUtils_SaveDatabase.htm" />
+  <HelpKINode Title="SaveDatabaseLegacy method" Url="html/M_RelhaxModpack_XMLUtils_SaveDatabaseLegacy.htm" />
+  <HelpKINode Title="SaveLastConfig field" Url="html/F_RelhaxModpack_ModpackSettings_SaveLastConfig.htm" />
+  <HelpKINode Title="SaveSettings method" Url="html/M_RelhaxModpack_ModpackSettings_SaveSettings.htm" />
+  <HelpKINode Title="SaveUserData field" Url="html/F_RelhaxModpack_ModpackSettings_SaveUserData.htm" />
+  <HelpKINode Title="ScrollViewer field" Url="html/F_RelhaxModpack_SelectablePackage_ScrollViewer.htm" />
+  <HelpKINode Title="Search property" Url="html/P_RelhaxModpack_Patch_Search.htm" />
+  <HelpKINode Title="SelectablePackage class">
+    <HelpKINode Title="SelectablePackage Class" Url="html/T_RelhaxModpack_SelectablePackage.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_SelectablePackage__ctor.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_SelectablePackage.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_SelectablePackage.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_SelectablePackage.htm" />
+  </HelpKINode>
+  <HelpKINode Title="SelectablePackage.AnyPackagesChecked method" Url="html/M_RelhaxModpack_SelectablePackage_AnyPackagesChecked.htm" />
+  <HelpKINode Title="SelectablePackage.Checked property" Url="html/P_RelhaxModpack_SelectablePackage_Checked.htm" />
+  <HelpKINode Title="SelectablePackage.ChildBorder field" Url="html/F_RelhaxModpack_SelectablePackage_ChildBorder.htm" />
+  <HelpKINode Title="SelectablePackage.ChildStackPanel field" Url="html/F_RelhaxModpack_SelectablePackage_ChildStackPanel.htm" />
+  <HelpKINode Title="SelectablePackage.CompareMods method" Url="html/M_RelhaxModpack_SelectablePackage_CompareMods.htm" />
+  <HelpKINode Title="SelectablePackage.CompletePath property" Url="html/P_RelhaxModpack_SelectablePackage_CompletePath.htm" />
+  <HelpKINode Title="SelectablePackage.ConflictingPackages field" Url="html/F_RelhaxModpack_SelectablePackage_ConflictingPackages.htm" />
+  <HelpKINode Title="SelectablePackage.ContentControl field" Url="html/F_RelhaxModpack_SelectablePackage_ContentControl.htm" />
+  <HelpKINode Title="SelectablePackage.Dependencies field" Url="html/F_RelhaxModpack_SelectablePackage_Dependencies.htm" />
+  <HelpKINode Title="SelectablePackage.Description field" Url="html/F_RelhaxModpack_SelectablePackage_Description.htm" />
+  <HelpKINode Title="SelectablePackage.Enabled property" Url="html/P_RelhaxModpack_SelectablePackage_Enabled.htm" />
+  <HelpKINode Title="SelectablePackage.Hotkeys field" Url="html/F_RelhaxModpack_SelectablePackage_Hotkeys.htm" />
+  <HelpKINode Title="SelectablePackage.IsStructureEnabled property" Url="html/P_RelhaxModpack_SelectablePackage_IsStructureEnabled.htm" />
+  <HelpKINode Title="SelectablePackage.IsStructureVisible property" Url="html/P_RelhaxModpack_SelectablePackage_IsStructureVisible.htm" />
+  <HelpKINode Title="SelectablePackage.Level field" Url="html/F_RelhaxModpack_SelectablePackage_Level.htm" />
+  <HelpKINode Title="SelectablePackage.Medias field" Url="html/F_RelhaxModpack_SelectablePackage_Medias.htm" />
+  <HelpKINode Title="SelectablePackage.Name field" Url="html/F_RelhaxModpack_SelectablePackage_Name.htm" />
+  <HelpKINode Title="SelectablePackage.NameDisplay property" Url="html/P_RelhaxModpack_SelectablePackage_NameDisplay.htm" />
+  <HelpKINode Title="SelectablePackage.NameFormatted property" Url="html/P_RelhaxModpack_SelectablePackage_NameFormatted.htm" />
+  <HelpKINode Title="SelectablePackage.Packages field" Url="html/F_RelhaxModpack_SelectablePackage_Packages.htm" />
+  <HelpKINode Title="SelectablePackage.Parent field" Url="html/F_RelhaxModpack_SelectablePackage_Parent.htm" />
+  <HelpKINode Title="SelectablePackage.ParentBorder field" Url="html/F_RelhaxModpack_SelectablePackage_ParentBorder.htm" />
+  <HelpKINode Title="SelectablePackage.ParentCategory field" Url="html/F_RelhaxModpack_SelectablePackage_ParentCategory.htm" />
+  <HelpKINode Title="SelectablePackage.ParentStackPanel field" Url="html/F_RelhaxModpack_SelectablePackage_ParentStackPanel.htm" />
+  <HelpKINode Title="SelectablePackage.ParentUIComponent field" Url="html/F_RelhaxModpack_SelectablePackage_ParentUIComponent.htm" />
+  <HelpKINode Title="SelectablePackage.RelhaxWPFComboBoxList field" Url="html/F_RelhaxModpack_SelectablePackage_RelhaxWPFComboBoxList.htm" />
+  <HelpKINode Title="SelectablePackage.ScrollViewer field" Url="html/F_RelhaxModpack_SelectablePackage_ScrollViewer.htm" />
+  <HelpKINode Title="SelectablePackage.SelectablePackage constructor" Url="html/M_RelhaxModpack_SelectablePackage__ctor.htm" />
+  <HelpKINode Title="SelectablePackage.ShowInSearchList field" Url="html/F_RelhaxModpack_SelectablePackage_ShowInSearchList.htm" />
+  <HelpKINode Title="SelectablePackage.Size field" Url="html/F_RelhaxModpack_SelectablePackage_Size.htm" />
+  <HelpKINode Title="SelectablePackage.TabIndex field" Url="html/F_RelhaxModpack_SelectablePackage_TabIndex.htm" />
+  <HelpKINode Title="SelectablePackage.TimeStampString property" Url="html/P_RelhaxModpack_SelectablePackage_TimeStampString.htm" />
+  <HelpKINode Title="SelectablePackage.ToolTipString property" Url="html/P_RelhaxModpack_SelectablePackage_ToolTipString.htm" />
+  <HelpKINode Title="SelectablePackage.TopParent field" Url="html/F_RelhaxModpack_SelectablePackage_TopParent.htm" />
+  <HelpKINode Title="SelectablePackage.TopParentUIComponent field" Url="html/F_RelhaxModpack_SelectablePackage_TopParentUIComponent.htm" />
+  <HelpKINode Title="SelectablePackage.ToString method" Url="html/M_RelhaxModpack_SelectablePackage_ToString.htm" />
+  <HelpKINode Title="SelectablePackage.TreeView field" Url="html/F_RelhaxModpack_SelectablePackage_TreeView.htm" />
+  <HelpKINode Title="SelectablePackage.TreeViewItem field" Url="html/F_RelhaxModpack_SelectablePackage_TreeViewItem.htm" />
+  <HelpKINode Title="SelectablePackage.Type field" Url="html/F_RelhaxModpack_SelectablePackage_Type.htm" />
+  <HelpKINode Title="SelectablePackage.UIComponent field" Url="html/F_RelhaxModpack_SelectablePackage_UIComponent.htm" />
+  <HelpKINode Title="SelectablePackage.UpdateComment field" Url="html/F_RelhaxModpack_SelectablePackage_UpdateComment.htm" />
+  <HelpKINode Title="SelectablePackage.UserFiles field" Url="html/F_RelhaxModpack_SelectablePackage_UserFiles.htm" />
+  <HelpKINode Title="SelectablePackage.Visible field" Url="html/F_RelhaxModpack_SelectablePackage_Visible.htm" />
+  <HelpKINode Title="SelectablePackage._Checked field" Url="html/F_RelhaxModpack_SelectablePackage__Checked.htm" />
+  <HelpKINode Title="SelectablePackageRequiredNodesV2 field" Url="html/F_RelhaxModpack_XMLUtils_SelectablePackageRequiredNodesV2.htm" />
+  <HelpKINode Title="SelectablePackagOptionalNodesV2 field" Url="html/F_RelhaxModpack_XMLUtils_SelectablePackagOptionalNodesV2.htm" />
+  <HelpKINode Title="SelectedPanelColor field" Url="html/F_RelhaxModpack_UISettings_SelectedPanelColor.htm" />
+  <HelpKINode Title="SelectedTextColor field" Url="html/F_RelhaxModpack_UISettings_SelectedTextColor.htm" />
+  <HelpKINode Title="SelectionListClosedDelegate delegate" Url="html/T_RelhaxModpack_Windows_SelectionListClosedDelegate.htm" />
+  <HelpKINode Title="SelectionListEventArgs class">
+    <HelpKINode Title="SelectionListEventArgs Class" Url="html/T_RelhaxModpack_Windows_SelectionListEventArgs.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Windows_SelectionListEventArgs__ctor.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_Windows_SelectionListEventArgs.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Windows_SelectionListEventArgs.htm" />
+  </HelpKINode>
+  <HelpKINode Title="SelectionListEventArgs.ContinueInstallation field" Url="html/F_RelhaxModpack_Windows_SelectionListEventArgs_ContinueInstallation.htm" />
+  <HelpKINode Title="SelectionListEventArgs.Dependencies field" Url="html/F_RelhaxModpack_Windows_SelectionListEventArgs_Dependencies.htm" />
+  <HelpKINode Title="SelectionListEventArgs.GlobalDependencies field" Url="html/F_RelhaxModpack_Windows_SelectionListEventArgs_GlobalDependencies.htm" />
+  <HelpKINode Title="SelectionListEventArgs.ParsedCategoryList field" Url="html/F_RelhaxModpack_Windows_SelectionListEventArgs_ParsedCategoryList.htm" />
+  <HelpKINode Title="SelectionListEventArgs.SelectionListEventArgs constructor" Url="html/M_RelhaxModpack_Windows_SelectionListEventArgs__ctor.htm" />
+  <HelpKINode Title="SelectionView enumeration" Url="html/T_RelhaxModpack_SelectionView.htm" />
+  <HelpKINode Title="SelectionViewer class">
+    <HelpKINode Title="SelectionViewer Class" Url="html/T_RelhaxModpack_Windows_SelectionViewer.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Windows_SelectionViewer__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_Windows_SelectionViewer.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Windows_SelectionViewer.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_Windows_SelectionViewer.htm" />
+  </HelpKINode>
+  <HelpKINode Title="SelectionViewer.InitializeComponent method" Url="html/M_RelhaxModpack_Windows_SelectionViewer_InitializeComponent.htm" />
+  <HelpKINode Title="SelectionViewer.SelectionViewer constructor" Url="html/M_RelhaxModpack_Windows_SelectionViewer__ctor.htm" />
+  <HelpKINode Title="SetLanguage method" Url="html/M_RelhaxModpack_Translations_SetLanguage.htm" />
+  <HelpKINode Title="SetLanguageOnFirstLoad method" Url="html/M_RelhaxModpack_Translations_SetLanguageOnFirstLoad.htm" />
+  <HelpKINode Title="Settings class">
+    <HelpKINode Title="Settings Class" Url="html/T_RelhaxModpack_Settings.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_Settings.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Settings.AppDataFolder field" Url="html/F_RelhaxModpack_Settings_AppDataFolder.htm" />
+  <HelpKINode Title="Settings.ApplicationBetaUpdateURL field" Url="html/F_RelhaxModpack_Settings_ApplicationBetaUpdateURL.htm" />
+  <HelpKINode Title="Settings.ApplicationStartupPath field" Url="html/F_RelhaxModpack_Settings_ApplicationStartupPath.htm" />
+  <HelpKINode Title="Settings.ApplicationUpdateFileName field" Url="html/F_RelhaxModpack_Settings_ApplicationUpdateFileName.htm" />
+  <HelpKINode Title="Settings.ApplicationUpdateURL field" Url="html/F_RelhaxModpack_Settings_ApplicationUpdateURL.htm" />
+  <HelpKINode Title="Settings.ApplicationVersion field" Url="html/F_RelhaxModpack_Settings_ApplicationVersion.htm" />
+  <HelpKINode Title="Settings.AtlasCreationFoldername field" Url="html/F_RelhaxModpack_Settings_AtlasCreationFoldername.htm" />
+  <HelpKINode Title="Settings.ConfigFileVersion field" Url="html/F_RelhaxModpack_Settings_ConfigFileVersion.htm" />
+  <HelpKINode Title="Settings.DatabaseVersion field" Url="html/F_RelhaxModpack_Settings_DatabaseVersion.htm" />
+  <HelpKINode Title="Settings.DefaultEndAddress field" Url="html/F_RelhaxModpack_Settings_DefaultEndAddress.htm" />
+  <HelpKINode Title="Settings.DefaultStartAddress field" Url="html/F_RelhaxModpack_Settings_DefaultStartAddress.htm" />
+  <HelpKINode Title="Settings.FirstLoad field" Url="html/F_RelhaxModpack_Settings_FirstLoad.htm" />
+  <HelpKINode Title="Settings.FirstLoadToV2 field" Url="html/F_RelhaxModpack_Settings_FirstLoadToV2.htm" />
+  <HelpKINode Title="Settings.FoldersToCheck field" Url="html/F_RelhaxModpack_Settings_FoldersToCheck.htm" />
+  <HelpKINode Title="Settings.ManagerInfoDatFile field" Url="html/F_RelhaxModpack_Settings_ManagerInfoDatFile.htm" />
+  <HelpKINode Title="Settings.MD5HashDatabaseXmlFile field" Url="html/F_RelhaxModpack_Settings_MD5HashDatabaseXmlFile.htm" />
+  <HelpKINode Title="Settings.ModpackSettingsFileName field" Url="html/F_RelhaxModpack_Settings_ModpackSettingsFileName.htm" />
+  <HelpKINode Title="Settings.NumLogicalProcesors field" Url="html/F_RelhaxModpack_Settings_NumLogicalProcesors.htm" />
+  <HelpKINode Title="Settings.OldModpackSettingsFilename field" Url="html/F_RelhaxModpack_Settings_OldModpackSettingsFilename.htm" />
+  <HelpKINode Title="Settings.PatchFolderName field" Url="html/F_RelhaxModpack_Settings_PatchFolderName.htm" />
+  <HelpKINode Title="Settings.RelhaxDownloadsFolder field" Url="html/F_RelhaxModpack_Settings_RelhaxDownloadsFolder.htm" />
+  <HelpKINode Title="Settings.RelhaxLibrariesFolder field" Url="html/F_RelhaxModpack_Settings_RelhaxLibrariesFolder.htm" />
+  <HelpKINode Title="Settings.RelhaxModBackupFolder field" Url="html/F_RelhaxModpack_Settings_RelhaxModBackupFolder.htm" />
+  <HelpKINode Title="Settings.RelhaxTempFolder field" Url="html/F_RelhaxModpack_Settings_RelhaxTempFolder.htm" />
+  <HelpKINode Title="Settings.RelhaxUserConfigsFolder field" Url="html/F_RelhaxModpack_Settings_RelhaxUserConfigsFolder.htm" />
+  <HelpKINode Title="Settings.RelhaxUserModsFolder field" Url="html/F_RelhaxModpack_Settings_RelhaxUserModsFolder.htm" />
+  <HelpKINode Title="Settings.RelicBatchUpdateScript field" Url="html/F_RelhaxModpack_Settings_RelicBatchUpdateScript.htm" />
+  <HelpKINode Title="Settings.ShortcutFolderName field" Url="html/F_RelhaxModpack_Settings_ShortcutFolderName.htm" />
+  <HelpKINode Title="Settings.ThirdPartySettingsFileName field" Url="html/F_RelhaxModpack_Settings_ThirdPartySettingsFileName.htm" />
+  <HelpKINode Title="Settings.UISettingsFileName field" Url="html/F_RelhaxModpack_Settings_UISettingsFileName.htm" />
+  <HelpKINode Title="Settings.WoTClientVersion field" Url="html/F_RelhaxModpack_Settings_WoTClientVersion.htm" />
+  <HelpKINode Title="Settings.WoTDirectory field" Url="html/F_RelhaxModpack_Settings_WoTDirectory.htm" />
+  <HelpKINode Title="Settings.WoTModpackOnlineFolderVersion field" Url="html/F_RelhaxModpack_Settings_WoTModpackOnlineFolderVersion.htm" />
+  <HelpKINode Title="Settings.XmlUnpackFolderName field" Url="html/F_RelhaxModpack_Settings_XmlUnpackFolderName.htm" />
+  <HelpKINode Title="ShortcustError enumeration member" Url="html/T_RelhaxModpack_InstallerComponents_InstallerExitCodes.htm" />
+  <HelpKINode Title="Shortcut class">
+    <HelpKINode Title="Shortcut Class" Url="html/T_RelhaxModpack_Shortcut.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Shortcut__ctor.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Shortcut.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_Shortcut.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Shortcut.Enabled property" Url="html/P_RelhaxModpack_Shortcut_Enabled.htm" />
+  <HelpKINode Title="Shortcut.Name property" Url="html/P_RelhaxModpack_Shortcut_Name.htm" />
+  <HelpKINode Title="Shortcut.Path property" Url="html/P_RelhaxModpack_Shortcut_Path.htm" />
+  <HelpKINode Title="Shortcut.Shortcut constructor" Url="html/M_RelhaxModpack_Shortcut__ctor.htm" />
+  <HelpKINode Title="Shortcut.ToString method" Url="html/M_RelhaxModpack_Shortcut_ToString.htm" />
+  <HelpKINode Title="ShortcutFolderName field" Url="html/F_RelhaxModpack_Settings_ShortcutFolderName.htm" />
+  <HelpKINode Title="ShowInSearchList field" Url="html/F_RelhaxModpack_SelectablePackage_ShowInSearchList.htm" />
+  <HelpKINode Title="ShowInstallCompleteWindow field" Url="html/F_RelhaxModpack_ModpackSettings_ShowInstallCompleteWindow.htm" />
+  <HelpKINode Title="SilentStart field" Url="html/F_RelhaxModpack_CommandLineSettings_SilentStart.htm" />
+  <HelpKINode Title="Size field" Url="html/F_RelhaxModpack_SelectablePackage_Size.htm" />
+  <HelpKINode Title="SizeSuffix method" Url="html/M_RelhaxModpack_Utils_SizeSuffix.htm" />
+  <HelpKINode Title="SizeSuffixes field" Url="html/F_RelhaxModpack_Utils_SizeSuffixes.htm" />
+  <HelpKINode Title="SkipUpdate field" Url="html/F_RelhaxModpack_CommandLineSettings_SkipUpdate.htm" />
+  <HelpKINode Title="SortModsList method" Url="html/M_RelhaxModpack_Utils_SortModsList.htm" />
+  <HelpKINode Title="Stable enumeration member">
+    <HelpKINode Title="ApplicationVersions Enumeration" Url="html/T_RelhaxModpack_ApplicationVersions.htm" />
+    <HelpKINode Title="DatabaseVersions Enumeration" Url="html/T_RelhaxModpack_DatabaseVersions.htm" />
+  </HelpKINode>
+  <HelpKINode Title="StableDatabaseURL property" Url="html/P_RelhaxModpack_ThirdPartySettings_StableDatabaseURL.htm" />
+  <HelpKINode Title="Standard enumeration member" Url="html/T_RelhaxModpack_LoadingGifs.htm" />
+  <HelpKINode Title="StartAddress field" Url="html/F_RelhaxModpack_DatabasePackage_StartAddress.htm" />
+  <HelpKINode Title="StretchingTreeView class">
+    <HelpKINode Title="StretchingTreeView Class" Url="html/T_RelhaxModpack_UIComponents_StretchingTreeView.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_UIComponents_StretchingTreeView__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_UIComponents_StretchingTreeView.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_UIComponents_StretchingTreeView.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_UIComponents_StretchingTreeView.htm" />
+  </HelpKINode>
+  <HelpKINode Title="StretchingTreeView.GetContainerForItemOverride method" Url="html/M_RelhaxModpack_UIComponents_StretchingTreeView_GetContainerForItemOverride.htm" />
+  <HelpKINode Title="StretchingTreeView.IsItemItsOwnContainerOverride method" Url="html/M_RelhaxModpack_UIComponents_StretchingTreeView_IsItemItsOwnContainerOverride.htm" />
+  <HelpKINode Title="StretchingTreeView.StretchingTreeView constructor" Url="html/M_RelhaxModpack_UIComponents_StretchingTreeView__ctor.htm" />
+  <HelpKINode Title="StretchingTreeViewItem class">
+    <HelpKINode Title="StretchingTreeViewItem Class" Url="html/T_RelhaxModpack_UIComponents_StretchingTreeViewItem.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_UIComponents_StretchingTreeViewItem__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_UIComponents_StretchingTreeViewItem.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_UIComponents_StretchingTreeViewItem.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_UIComponents_StretchingTreeViewItem.htm" />
+  </HelpKINode>
+  <HelpKINode Title="StretchingTreeViewItem.GetContainerForItemOverride method" Url="html/M_RelhaxModpack_UIComponents_StretchingTreeViewItem_GetContainerForItemOverride.htm" />
+  <HelpKINode Title="StretchingTreeViewItem.IsItemItsOwnContainerOverride method" Url="html/M_RelhaxModpack_UIComponents_StretchingTreeViewItem_IsItemItsOwnContainerOverride.htm" />
+  <HelpKINode Title="StretchingTreeViewItem.StretchingTreeViewItem constructor" Url="html/M_RelhaxModpack_UIComponents_StretchingTreeViewItem__ctor.htm" />
+  <HelpKINode Title="StringSave structure">
+    <HelpKINode Title="StringSave Structure" Url="html/T_RelhaxModpack_StringSave.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_StringSave.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_StringSave.htm" />
+  </HelpKINode>
+  <HelpKINode Title="StringSave.Name property" Url="html/P_RelhaxModpack_StringSave_Name.htm" />
+  <HelpKINode Title="StringSave.Value property" Url="html/P_RelhaxModpack_StringSave_Value.htm" />
+  <HelpKINode Title="Success enumeration member" Url="html/T_RelhaxModpack_InstallerComponents_InstallerExitCodes.htm" />
+  <HelpKINode Title="Sucess enumeration member" Url="html/T_RelhaxModpack_ReturnCodes.htm" />
+  <HelpKINode Title="SupportedClientsURL property" Url="html/P_RelhaxModpack_ThirdPartySettings_SupportedClientsURL.htm" />
+  <HelpKINode Title="systemInitiated field" Url="html/F_RelhaxModpack_UserFiles_systemInitiated.htm" />
+  <HelpKINode Title="TabIndex field" Url="html/F_RelhaxModpack_SelectablePackage_TabIndex.htm" />
+  <HelpKINode Title="TabPage field" Url="html/F_RelhaxModpack_Category_TabPage.htm" />
+  <HelpKINode Title="Test enumeration member" Url="html/T_RelhaxModpack_DatabaseVersions.htm" />
+  <HelpKINode Title="TestMode field" Url="html/F_RelhaxModpack_CommandLineSettings_TestMode.htm" />
+  <HelpKINode Title="TextColor property">
+    <HelpKINode Title="IPackageUIComponent.TextColor Property " Url="html/P_RelhaxModpack_UIComponents_IPackageUIComponent_TextColor.htm" />
+    <HelpKINode Title="RelhaxWPFCheckBox.TextColor Property " Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFCheckBox_TextColor.htm" />
+    <HelpKINode Title="RelhaxWPFComboBox.TextColor Property " Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFComboBox_TextColor.htm" />
+    <HelpKINode Title="RelhaxWPFRadioButton.TextColor Property " Url="html/P_RelhaxModpack_UIComponents_RelhaxWPFRadioButton_TextColor.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ThirdGuards enumeration member" Url="html/T_RelhaxModpack_LoadingGifs.htm" />
+  <HelpKINode Title="ThirdPartySettings class">
+    <HelpKINode Title="ThirdPartySettings Class" Url="html/T_RelhaxModpack_ThirdPartySettings.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_ThirdPartySettings.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_ThirdPartySettings.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_ThirdPartySettings.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ThirdPartySettings.ApplyThirdPartyWindowSettings method" Url="html/M_RelhaxModpack_ThirdPartySettings_ApplyThirdPartyWindowSettings.htm" />
+  <HelpKINode Title="ThirdPartySettings.BetaDatabaseURL property" Url="html/P_RelhaxModpack_ThirdPartySettings_BetaDatabaseURL.htm" />
+  <HelpKINode Title="ThirdPartySettings.CustomApplication property" Url="html/P_RelhaxModpack_ThirdPartySettings_CustomApplication.htm" />
+  <HelpKINode Title="ThirdPartySettings.CustomApplicationName property" Url="html/P_RelhaxModpack_ThirdPartySettings_CustomApplicationName.htm" />
+  <HelpKINode Title="ThirdPartySettings.CustomIconPath property" Url="html/P_RelhaxModpack_ThirdPartySettings_CustomIconPath.htm" />
+  <HelpKINode Title="ThirdPartySettings.DefaultPackageEndAddress property" Url="html/P_RelhaxModpack_ThirdPartySettings_DefaultPackageEndAddress.htm" />
+  <HelpKINode Title="ThirdPartySettings.DefaultPackageStartAddress property" Url="html/P_RelhaxModpack_ThirdPartySettings_DefaultPackageStartAddress.htm" />
+  <HelpKINode Title="ThirdPartySettings.DonationURL property" Url="html/P_RelhaxModpack_ThirdPartySettings_DonationURL.htm" />
+  <HelpKINode Title="ThirdPartySettings.LoadSettings method" Url="html/M_RelhaxModpack_ThirdPartySettings_LoadSettings.htm" />
+  <HelpKINode Title="ThirdPartySettings.ManagerInfoURL property" Url="html/P_RelhaxModpack_ThirdPartySettings_ManagerInfoURL.htm" />
+  <HelpKINode Title="ThirdPartySettings.StableDatabaseURL property" Url="html/P_RelhaxModpack_ThirdPartySettings_StableDatabaseURL.htm" />
+  <HelpKINode Title="ThirdPartySettings.SupportedClientsURL property" Url="html/P_RelhaxModpack_ThirdPartySettings_SupportedClientsURL.htm" />
+  <HelpKINode Title="ThirdPartySettings.Use3rdPartySettings field" Url="html/F_RelhaxModpack_ThirdPartySettings_Use3rdPartySettings.htm" />
+  <HelpKINode Title="ThirdPartySettings.WebsiteURL property" Url="html/P_RelhaxModpack_ThirdPartySettings_WebsiteURL.htm" />
+  <HelpKINode Title="ThirdPartySettingsFileName field" Url="html/F_RelhaxModpack_Settings_ThirdPartySettingsFileName.htm" />
+  <HelpKINode Title="Timeout property" Url="html/P_RelhaxModpack_PatientWebClient_Timeout.htm" />
+  <HelpKINode Title="Timestamp field" Url="html/F_RelhaxModpack_DatabasePackage_Timestamp.htm" />
+  <HelpKINode Title="Timestamp property" Url="html/P_RelhaxModpack_Logfile_Timestamp.htm" />
+  <HelpKINode Title="TimeStampString property" Url="html/P_RelhaxModpack_SelectablePackage_TimeStampString.htm" />
+  <HelpKINode Title="ToolTipString property" Url="html/P_RelhaxModpack_SelectablePackage_ToolTipString.htm" />
+  <HelpKINode Title="TopParent field" Url="html/F_RelhaxModpack_SelectablePackage_TopParent.htm" />
+  <HelpKINode Title="TopParentUIComponent field" Url="html/F_RelhaxModpack_SelectablePackage_TopParentUIComponent.htm" />
+  <HelpKINode Title="ToString method">
+    <HelpKINode Title="Category.ToString Method " Url="html/M_RelhaxModpack_Category_ToString.htm" />
+    <HelpKINode Title="DatabaseLogic.ToString Method " Url="html/M_RelhaxModpack_DatabaseLogic_ToString.htm" />
+    <HelpKINode Title="DatabasePackage.ToString Method " Url="html/M_RelhaxModpack_DatabasePackage_ToString.htm" />
+    <HelpKINode Title="DatabaseUpdater.VersionInfos.ToString Method " Url="html/M_RelhaxModpack_Windows_DatabaseUpdater_VersionInfos_ToString.htm" />
+    <HelpKINode Title="Media.ToString Method " Url="html/M_RelhaxModpack_Media_ToString.htm" />
+    <HelpKINode Title="SelectablePackage.ToString Method " Url="html/M_RelhaxModpack_SelectablePackage_ToString.htm" />
+    <HelpKINode Title="Shortcut.ToString Method " Url="html/M_RelhaxModpack_Shortcut_ToString.htm" />
+    <HelpKINode Title="UserFiles.ToString Method " Url="html/M_RelhaxModpack_UserFiles_ToString.htm" />
+  </HelpKINode>
+  <HelpKINode Title="TotalCurrent field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_TotalCurrent.htm" />
+  <HelpKINode Title="TotalCurrentProgress field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_TotalCurrentProgress.htm" />
+  <HelpKINode Title="TotalTotal field" Url="html/F_RelhaxModpack_UIComponents_RelhaxProgress_TotalTotal.htm" />
+  <HelpKINode Title="TO_MINUETS field" Url="html/F_RelhaxModpack_PatientWebClient_TO_MINUETS.htm" />
+  <HelpKINode Title="TO_SECONDS field" Url="html/F_RelhaxModpack_PatientWebClient_TO_SECONDS.htm" />
+  <HelpKINode Title="Translations class">
+    <HelpKINode Title="Translations Class" Url="html/T_RelhaxModpack_Translations.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Translations.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Translations.GetTranslatedString method" Url="html/M_RelhaxModpack_Translations_GetTranslatedString.htm" />
+  <HelpKINode Title="Translations.LoadTranslations method" Url="html/M_RelhaxModpack_Translations_LoadTranslations.htm" />
+  <HelpKINode Title="Translations.LocalizeWindow method" Url="html/M_RelhaxModpack_Translations_LocalizeWindow.htm" />
+  <HelpKINode Title="Translations.SetLanguage method" Url="html/M_RelhaxModpack_Translations_SetLanguage.htm" />
+  <HelpKINode Title="Translations.SetLanguageOnFirstLoad method" Url="html/M_RelhaxModpack_Translations_SetLanguageOnFirstLoad.htm" />
+  <HelpKINode Title="TreeView field">
+    <HelpKINode Title="Category.TreeView Field" Url="html/F_RelhaxModpack_Category_TreeView.htm" />
+    <HelpKINode Title="SelectablePackage.TreeView Field" Url="html/F_RelhaxModpack_SelectablePackage_TreeView.htm" />
+  </HelpKINode>
+  <HelpKINode Title="TreeViewItem field" Url="html/F_RelhaxModpack_SelectablePackage_TreeViewItem.htm" />
+  <HelpKINode Title="Type field" Url="html/F_RelhaxModpack_SelectablePackage_Type.htm" />
+  <HelpKINode Title="Type property" Url="html/P_RelhaxModpack_Patch_Type.htm" />
+  <HelpKINode Title="UIComponent field" Url="html/F_RelhaxModpack_SelectablePackage_UIComponent.htm" />
+  <HelpKINode Title="UIDocument field" Url="html/F_RelhaxModpack_UISettings_UIDocument.htm" />
+  <HelpKINode Title="UIRoot field" Url="html/F_RelhaxModpack_UISettings_UIRoot.htm" />
+  <HelpKINode Title="UISettings class">
+    <HelpKINode Title="UISettings Class" Url="html/T_RelhaxModpack_UISettings.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_UISettings.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_UISettings.htm" />
+  </HelpKINode>
+  <HelpKINode Title="UISettings.ApplyUIColorSettings method" Url="html/M_RelhaxModpack_UISettings_ApplyUIColorSettings.htm" />
+  <HelpKINode Title="UISettings.CustomColorSettingsPath field" Url="html/F_RelhaxModpack_UISettings_CustomColorSettingsPath.htm" />
+  <HelpKINode Title="UISettings.CustomSettings field" Url="html/F_RelhaxModpack_UISettings_CustomSettings.htm" />
+  <HelpKINode Title="UISettings.DumpAllWindowColorSettingsToFile method" Url="html/M_RelhaxModpack_UISettings_DumpAllWindowColorSettingsToFile.htm" />
+  <HelpKINode Title="UISettings.LoadSettings method" Url="html/M_RelhaxModpack_UISettings_LoadSettings.htm" />
+  <HelpKINode Title="UISettings.NotSelectedPanelColor field" Url="html/F_RelhaxModpack_UISettings_NotSelectedPanelColor.htm" />
+  <HelpKINode Title="UISettings.NotSelectedTabColor field" Url="html/F_RelhaxModpack_UISettings_NotSelectedTabColor.htm" />
+  <HelpKINode Title="UISettings.NotSelectedTextColor field" Url="html/F_RelhaxModpack_UISettings_NotSelectedTextColor.htm" />
+  <HelpKINode Title="UISettings.ParseColorFromString method" Url="html/M_RelhaxModpack_UISettings_ParseColorFromString.htm" />
+  <HelpKINode Title="UISettings.SelectedPanelColor field" Url="html/F_RelhaxModpack_UISettings_SelectedPanelColor.htm" />
+  <HelpKINode Title="UISettings.SelectedTextColor field" Url="html/F_RelhaxModpack_UISettings_SelectedTextColor.htm" />
+  <HelpKINode Title="UISettings.UIDocument field" Url="html/F_RelhaxModpack_UISettings_UIDocument.htm" />
+  <HelpKINode Title="UISettings.UIRoot field" Url="html/F_RelhaxModpack_UISettings_UIRoot.htm" />
+  <HelpKINode Title="UISettings.VerifyPoints method" Url="html/M_RelhaxModpack_UISettings_VerifyPoints.htm" />
+  <HelpKINode Title="UISettingsFileName field" Url="html/F_RelhaxModpack_Settings_UISettingsFileName.htm" />
+  <HelpKINode Title="Uninstaller enumeration member" Url="html/T_RelhaxModpack_Logfiles.htm" />
+  <HelpKINode Title="UninstallLogfile field" Url="html/F_RelhaxModpack_Logging_UninstallLogfile.htm" />
+  <HelpKINode Title="UninstallLogFilename field" Url="html/F_RelhaxModpack_Logging_UninstallLogFilename.htm" />
+  <HelpKINode Title="UninstallMode field" Url="html/F_RelhaxModpack_ModpackSettings_UninstallMode.htm" />
+  <HelpKINode Title="UninstallModes enumeration" Url="html/T_RelhaxModpack_UninstallModes.htm" />
+  <HelpKINode Title="Unknown enumeration member" Url="html/T_RelhaxModpack_MediaType.htm" />
+  <HelpKINode Title="UnknownError enumeration member" Url="html/T_RelhaxModpack_InstallerComponents_InstallerExitCodes.htm" />
+  <HelpKINode Title="UpdateComment field" Url="html/F_RelhaxModpack_SelectablePackage_UpdateComment.htm" />
+  <HelpKINode Title="UpdateInstructions field" Url="html/F_RelhaxModpack_DatabasePackage_UpdateInstructions.htm" />
+  <HelpKINode Title="UpdateKeyFileName field" Url="html/F_RelhaxModpack_CommandLineSettings_UpdateKeyFileName.htm" />
+  <HelpKINode Title="UpdateProgress method" Url="html/Overload_RelhaxModpack_Windows_ProgressIndicator_UpdateProgress.htm" />
+  <HelpKINode Title="URL field" Url="html/F_RelhaxModpack_Media_URL.htm" />
+  <HelpKINode Title="Use3rdPartySettings field" Url="html/F_RelhaxModpack_ThirdPartySettings_Use3rdPartySettings.htm" />
+  <HelpKINode Title="UserFiles class">
+    <HelpKINode Title="UserFiles Class" Url="html/T_RelhaxModpack_UserFiles.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_UserFiles__ctor.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_UserFiles.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_UserFiles.htm" />
+  </HelpKINode>
+  <HelpKINode Title="UserFiles field" Url="html/F_RelhaxModpack_SelectablePackage_UserFiles.htm" />
+  <HelpKINode Title="UserFiles.Files_saved field" Url="html/F_RelhaxModpack_UserFiles_Files_saved.htm" />
+  <HelpKINode Title="UserFiles.Pattern field" Url="html/F_RelhaxModpack_UserFiles_Pattern.htm" />
+  <HelpKINode Title="UserFiles.placeBeforeExtraction field" Url="html/F_RelhaxModpack_UserFiles_placeBeforeExtraction.htm" />
+  <HelpKINode Title="UserFiles.systemInitiated field" Url="html/F_RelhaxModpack_UserFiles_systemInitiated.htm" />
+  <HelpKINode Title="UserFiles.ToString method" Url="html/M_RelhaxModpack_UserFiles_ToString.htm" />
+  <HelpKINode Title="UserFiles.UserFiles constructor" Url="html/M_RelhaxModpack_UserFiles__ctor.htm" />
+  <HelpKINode Title="UserfilesRequiredNodesV2 field" Url="html/F_RelhaxModpack_XMLUtils_UserfilesRequiredNodesV2.htm" />
+  <HelpKINode Title="Utils class">
+    <HelpKINode Title="Utils Class" Url="html/T_RelhaxModpack_Utils.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_Utils.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Utils.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Utils.ApplyNormalFileProperties method" Url="html/M_RelhaxModpack_Utils_ApplyNormalFileProperties.htm" />
+  <HelpKINode Title="Utils.AssignCateogryPatchIDS method" Url="html/M_RelhaxModpack_Utils_AssignCateogryPatchIDS.htm" />
+  <HelpKINode Title="Utils.AutoFindWoTDirectory method" Url="html/M_RelhaxModpack_Utils_AutoFindWoTDirectory.htm" />
+  <HelpKINode Title="Utils.Base64Decode method" Url="html/M_RelhaxModpack_Utils_Base64Decode.htm" />
+  <HelpKINode Title="Utils.Base64Encode method" Url="html/M_RelhaxModpack_Utils_Base64Encode.htm" />
+  <HelpKINode Title="Utils.BuildLevelPerPackage method" Url="html/M_RelhaxModpack_Utils_BuildLevelPerPackage.htm" />
+  <HelpKINode Title="Utils.BuildLinksRefrence method" Url="html/M_RelhaxModpack_Utils_BuildLinksRefrence.htm" />
+  <HelpKINode Title="Utils.BuildMacroList method" Url="html/M_RelhaxModpack_Utils_BuildMacroList.htm" />
+  <HelpKINode Title="Utils.BYTES_TO_MBYTES field" Url="html/F_RelhaxModpack_Utils_BYTES_TO_MBYTES.htm" />
+  <HelpKINode Title="Utils.CalculateDependencies method" Url="html/M_RelhaxModpack_Utils_CalculateDependencies.htm" />
+  <HelpKINode Title="Utils.CheckForDuplicates method" Url="html/M_RelhaxModpack_Utils_CheckForDuplicates.htm" />
+  <HelpKINode Title="Utils.CompareVersions method" Url="html/M_RelhaxModpack_Utils_CompareVersions.htm" />
+  <HelpKINode Title="Utils.ConvertFiletimeTimestampToDate method" Url="html/M_RelhaxModpack_Utils_ConvertFiletimeTimestampToDate.htm" />
+  <HelpKINode Title="Utils.CreateMD5Hash method" Url="html/M_RelhaxModpack_Utils_CreateMD5Hash.htm" />
+  <HelpKINode Title="Utils.CreateMD5HashAsync method" Url="html/M_RelhaxModpack_Utils_CreateMD5HashAsync.htm" />
+  <HelpKINode Title="Utils.CreateOrderedInstallList method" Url="html/M_RelhaxModpack_Utils_CreateOrderedInstallList.htm" />
+  <HelpKINode Title="Utils.DirectoryCopy method" Url="html/M_RelhaxModpack_Utils_DirectoryCopy.htm" />
+  <HelpKINode Title="Utils.DirectoryDelete method" Url="html/M_RelhaxModpack_Utils_DirectoryDelete.htm" />
+  <HelpKINode Title="Utils.DirectoryMove method" Url="html/M_RelhaxModpack_Utils_DirectoryMove.htm" />
+  <HelpKINode Title="Utils.DirectorySearch method" Url="html/M_RelhaxModpack_Utils_DirectorySearch.htm" />
+  <HelpKINode Title="Utils.GetAllWindowComponentsLogical method" Url="html/M_RelhaxModpack_Utils_GetAllWindowComponentsLogical.htm" />
+  <HelpKINode Title="Utils.GetAllWindowComponentsVisual method" Url="html/M_RelhaxModpack_Utils_GetAllWindowComponentsVisual.htm" />
+  <HelpKINode Title="Utils.GetApplicationVersion method" Url="html/M_RelhaxModpack_Utils_GetApplicationVersion.htm" />
+  <HelpKINode Title="Utils.GetCompileTime method" Url="html/M_RelhaxModpack_Utils_GetCompileTime.htm" />
+  <HelpKINode Title="Utils.GetCurrentUniversalFiletimeTimestamp method" Url="html/M_RelhaxModpack_Utils_GetCurrentUniversalFiletimeTimestamp.htm" />
+  <HelpKINode Title="Utils.GetFlatList method" Url="html/M_RelhaxModpack_Utils_GetFlatList.htm" />
+  <HelpKINode Title="Utils.GetStringFromZip method" Url="html/M_RelhaxModpack_Utils_GetStringFromZip.htm" />
+  <HelpKINode Title="Utils.GetValidFilename method" Url="html/M_RelhaxModpack_Utils_GetValidFilename.htm" />
+  <HelpKINode Title="Utils.IsProcessRunning method" Url="html/M_RelhaxModpack_Utils_IsProcessRunning.htm" />
+  <HelpKINode Title="Utils.ParseBool method" Url="html/M_RelhaxModpack_Utils_ParseBool.htm" />
+  <HelpKINode Title="Utils.ParseDeveloperSelections method" Url="html/M_RelhaxModpack_Utils_ParseDeveloperSelections.htm" />
+  <HelpKINode Title="Utils.ParseFloat method" Url="html/M_RelhaxModpack_Utils_ParseFloat.htm" />
+  <HelpKINode Title="Utils.ParseInt method" Url="html/M_RelhaxModpack_Utils_ParseInt.htm" />
+  <HelpKINode Title="Utils.ParseLong method" Url="html/M_RelhaxModpack_Utils_ParseLong.htm" />
+  <HelpKINode Title="Utils.ParseSelection method" Url="html/M_RelhaxModpack_Utils_ParseSelection.htm" />
+  <HelpKINode Title="Utils.ParseuLong method" Url="html/M_RelhaxModpack_Utils_ParseuLong.htm" />
+  <HelpKINode Title="Utils.ParseUserSelection method" Url="html/M_RelhaxModpack_Utils_ParseUserSelection.htm" />
+  <HelpKINode Title="Utils.ParseUserSelectionV2 method" Url="html/M_RelhaxModpack_Utils_ParseUserSelectionV2.htm" />
+  <HelpKINode Title="Utils.ProcessDirectory method" Url="html/M_RelhaxModpack_Utils_ProcessDirectory.htm" />
+  <HelpKINode Title="Utils.RandomString method" Url="html/M_RelhaxModpack_Utils_RandomString.htm" />
+  <HelpKINode Title="Utils.SizeSuffix method" Url="html/M_RelhaxModpack_Utils_SizeSuffix.htm" />
+  <HelpKINode Title="Utils.SizeSuffixes field" Url="html/F_RelhaxModpack_Utils_SizeSuffixes.htm" />
+  <HelpKINode Title="Utils.SortModsList method" Url="html/M_RelhaxModpack_Utils_SortModsList.htm" />
+  <HelpKINode Title="Utils.VerifySelection method" Url="html/M_RelhaxModpack_Utils_VerifySelection.htm" />
+  <HelpKINode Title="Value property" Url="html/P_RelhaxModpack_StringSave_Value.htm" />
+  <HelpKINode Title="VerboseLogging field" Url="html/F_RelhaxModpack_ModpackSettings_VerboseLogging.htm" />
+  <HelpKINode Title="VerifyPoints method" Url="html/M_RelhaxModpack_UISettings_VerifyPoints.htm" />
+  <HelpKINode Title="VerifySelection method" Url="html/M_RelhaxModpack_Utils_VerifySelection.htm" />
+  <HelpKINode Title="version">
+    <HelpKINode Title="1.0.0.0" Url="html/5f2f8267-88b0-4ab8-93ec-7a67f5130bac.htm" />
+    <HelpKINode Title="history" Url="html/8ec7a628-a2bd-4fbb-aa95-5642e54ef985.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Version field" Url="html/F_RelhaxModpack_DatabasePackage_Version.htm" />
+  <HelpKINode Title="VersionInfo class">
+    <HelpKINode Title="VersionInfo Class" Url="html/T_RelhaxModpack_Windows_VersionInfo.htm" />
+    <HelpKINode Title="constructor" Url="html/M_RelhaxModpack_Windows_VersionInfo__ctor.htm" />
+    <HelpKINode Title="events" Url="html/Events_T_RelhaxModpack_Windows_VersionInfo.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Windows_VersionInfo.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_RelhaxModpack_Windows_VersionInfo.htm" />
+  </HelpKINode>
+  <HelpKINode Title="VersionInfo.ConfirmUpdate property" Url="html/P_RelhaxModpack_Windows_VersionInfo_ConfirmUpdate.htm" />
+  <HelpKINode Title="VersionInfo.InitializeComponent method" Url="html/M_RelhaxModpack_Windows_VersionInfo_InitializeComponent.htm" />
+  <HelpKINode Title="VersionInfo.VersionInfo constructor" Url="html/M_RelhaxModpack_Windows_VersionInfo__ctor.htm" />
+  <HelpKINode Title="VersionInfos structure">
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_Windows_DatabaseUpdater_VersionInfos.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_Windows_DatabaseUpdater_VersionInfos.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Visible field" Url="html/F_RelhaxModpack_SelectablePackage_Visible.htm" />
+  <HelpKINode Title="Warning enumeration member" Url="html/T_RelhaxModpack_LogLevel.htm" />
+  <HelpKINode Title="Warning method" Url="html/Overload_RelhaxModpack_Logging_Warning.htm" />
+  <HelpKINode Title="Webpage enumeration member" Url="html/T_RelhaxModpack_MediaType.htm" />
+  <HelpKINode Title="WebsiteURL property" Url="html/P_RelhaxModpack_ThirdPartySettings_WebsiteURL.htm" />
+  <HelpKINode Title="Welcome" Url="html/abef5387-c745-4958-aaee-130ddfe2186a.htm" />
+  <HelpKINode Title="WoTClientVersion field">
+    <HelpKINode Title="DatabaseUpdater.VersionInfos.WoTClientVersion Field" Url="html/F_RelhaxModpack_Windows_DatabaseUpdater_VersionInfos_WoTClientVersion.htm" />
+    <HelpKINode Title="Settings.WoTClientVersion Field" Url="html/F_RelhaxModpack_Settings_WoTClientVersion.htm" />
+  </HelpKINode>
+  <HelpKINode Title="WoTDirectory field" Url="html/F_RelhaxModpack_Settings_WoTDirectory.htm" />
+  <HelpKINode Title="WoTModpackOnlineFolderVersion field" Url="html/F_RelhaxModpack_Settings_WoTModpackOnlineFolderVersion.htm" />
+  <HelpKINode Title="WoTOnlineFolderVersion field" Url="html/F_RelhaxModpack_Windows_DatabaseUpdater_VersionInfos_WoTOnlineFolderVersion.htm" />
+  <HelpKINode Title="Write method" Url="html/M_RelhaxModpack_Logfile_Write.htm" />
+  <HelpKINode Title="WriteToLog method" Url="html/Overload_RelhaxModpack_Logging_WriteToLog.htm" />
+  <HelpKINode Title="XMLPatch method" Url="html/M_RelhaxModpack_PatchUtils_XMLPatch.htm" />
+  <HelpKINode Title="XmlUnpackFolderName field" Url="html/F_RelhaxModpack_Settings_XmlUnpackFolderName.htm" />
+  <HelpKINode Title="XMLUtils class">
+    <HelpKINode Title="XMLUtils Class" Url="html/T_RelhaxModpack_XMLUtils.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_RelhaxModpack_XMLUtils.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_RelhaxModpack_XMLUtils.htm" />
+  </HelpKINode>
+  <HelpKINode Title="XMLUtils.BaseOptionalNodesV2 field" Url="html/F_RelhaxModpack_XMLUtils_BaseOptionalNodesV2.htm" />
+  <HelpKINode Title="XMLUtils.BaseRequiredNodesV2 field" Url="html/F_RelhaxModpack_XMLUtils_BaseRequiredNodesV2.htm" />
+  <HelpKINode Title="XMLUtils.CategoryRequiredNodesV2 field" Url="html/F_RelhaxModpack_XMLUtils_CategoryRequiredNodesV2.htm" />
+  <HelpKINode Title="XMLUtils.DependencySelectableOptionalNodesV2 field" Url="html/F_RelhaxModpack_XMLUtils_DependencySelectableOptionalNodesV2.htm" />
+  <HelpKINode Title="XMLUtils.DependnecyLogicRequiredNodesV2 field" Url="html/F_RelhaxModpack_XMLUtils_DependnecyLogicRequiredNodesV2.htm" />
+  <HelpKINode Title="XMLUtils.DeveloperSelectionsXPath field" Url="html/F_RelhaxModpack_XMLUtils_DeveloperSelectionsXPath.htm" />
+  <HelpKINode Title="XMLUtils.GetXMLNodeFromXPath method" Url="html/Overload_RelhaxModpack_XMLUtils_GetXMLNodeFromXPath.htm" />
+  <HelpKINode Title="XMLUtils.GetXMLNodesFromXPath method" Url="html/Overload_RelhaxModpack_XMLUtils_GetXMLNodesFromXPath.htm" />
+  <HelpKINode Title="XMLUtils.GetXMLStringFromXPath method" Url="html/Overload_RelhaxModpack_XMLUtils_GetXMLStringFromXPath.htm" />
+  <HelpKINode Title="XMLUtils.IsValidXml method" Url="html/Overload_RelhaxModpack_XMLUtils_IsValidXml.htm" />
+  <HelpKINode Title="XMLUtils.MediaRequiredNodesV2 field" Url="html/F_RelhaxModpack_XMLUtils_MediaRequiredNodesV2.htm" />
+  <HelpKINode Title="XMLUtils.ParseDatabase method" Url="html/M_RelhaxModpack_XMLUtils_ParseDatabase.htm" />
+  <HelpKINode Title="XMLUtils.ParseDatabaseLegacy method" Url="html/M_RelhaxModpack_XMLUtils_ParseDatabaseLegacy.htm" />
+  <HelpKINode Title="XMLUtils.ParseDatabaseV2 method" Url="html/M_RelhaxModpack_XMLUtils_ParseDatabaseV2.htm" />
+  <HelpKINode Title="XMLUtils.ProcessConfigs method" Url="html/M_RelhaxModpack_XMLUtils_ProcessConfigs.htm" />
+  <HelpKINode Title="XMLUtils.SaveDatabase method" Url="html/M_RelhaxModpack_XMLUtils_SaveDatabase.htm" />
+  <HelpKINode Title="XMLUtils.SaveDatabaseLegacy method" Url="html/M_RelhaxModpack_XMLUtils_SaveDatabaseLegacy.htm" />
+  <HelpKINode Title="XMLUtils.SelectablePackageRequiredNodesV2 field" Url="html/F_RelhaxModpack_XMLUtils_SelectablePackageRequiredNodesV2.htm" />
+  <HelpKINode Title="XMLUtils.SelectablePackagOptionalNodesV2 field" Url="html/F_RelhaxModpack_XMLUtils_SelectablePackagOptionalNodesV2.htm" />
+  <HelpKINode Title="XMLUtils.UserfilesRequiredNodesV2 field" Url="html/F_RelhaxModpack_XMLUtils_UserfilesRequiredNodesV2.htm" />
+  <HelpKINode Title="ZipFile field" Url="html/F_RelhaxModpack_DatabasePackage_ZipFile.htm" />
+  <HelpKINode Title="_Checked field" Url="html/F_RelhaxModpack_SelectablePackage__Checked.htm" />
+  <HelpKINode Title="_Enabled field" Url="html/F_RelhaxModpack_DatabasePackage__Enabled.htm" />
+</HelpKI>
