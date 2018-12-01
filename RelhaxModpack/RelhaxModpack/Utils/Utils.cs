@@ -377,6 +377,52 @@ namespace RelhaxModpack
                 File.Copy(Path.Combine(source, file), Path.Combine(destination, file));
             }
         }
+
+        public static string[] DirectorySearch(string directoryPath, SearchOption option, uint numRetrys = 3, uint timeout = 5, string searchPattern = "*")
+        {
+            //filter input
+            if(numRetrys == 0)
+            {
+                Logging.WriteToLog("numRetrys needs to be larger than 0!");
+                numRetrys++;
+            }
+            //loop for how many times to try (in case the OS herped a derp, for example)
+            while(numRetrys > 0)
+            {
+                //if a timout is requested, then sleep the thread
+                if (timeout > 0)
+                    System.Threading.Thread.Sleep((int)timeout);
+                //put it in a try catch block
+                try
+                {
+                    if(!Directory.Exists(directoryPath))
+                    {
+                        Logging.WriteToLog(string.Format("Path {0} does not exist!", directoryPath), Logfiles.Application, LogLevel.Error);
+                        return null;
+                    }
+                    return Directory.GetFiles(directoryPath, searchPattern, option);
+                }
+                catch (Exception e)
+                {
+                    //decreate the number of times we will retry to get the files
+                    numRetrys--;
+                    if(numRetrys == 0)
+                    {
+                        //give up; report it and move on
+                        Logging.WriteToLog(string.Format("Failed to get files fo directory {0}\n{1}", Path.GetFullPath(directoryPath), e.ToString()),
+                            Logfiles.Application, LogLevel.Exception);
+                        return null;
+                    }
+                    else
+                    {
+                        Logging.WriteToLog(string.Format("Failed to get files for direcotry {0}\nThis is attempt {1} of 0",
+                            Path.GetFullPath(directoryPath), numRetrys), Logfiles.Application, LogLevel.Warning);
+                    }
+                }
+            }
+            Logging.WriteToLog("Code shuld not reach this point: Utils.DirectorySearch()", Logfiles.Application, LogLevel.Warning);
+            return null;
+        }
         #endregion
 
         #region Data type from string processing/parsing
