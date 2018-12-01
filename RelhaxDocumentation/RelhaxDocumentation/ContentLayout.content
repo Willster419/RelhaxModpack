@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Topics>
+  <Topic id="abef5387-c745-4958-aaee-130ddfe2186a" visible="True" isDefault="true" isSelected="true" apiParentMode="InsertAsChild" title="Welcome to the Relhax Modpack Application API Documentation">
+    <HelpKeywords>
+      <HelpKeyword index="K" term="Welcome" />
+    </HelpKeywords>
+  </Topic>
+  <Topic id="8ec7a628-a2bd-4fbb-aa95-5642e54ef985" visible="True" isExpanded="true" title="Version History">
+    <HelpKeywords>
+      <HelpKeyword index="K" term="version, history" />
+    </HelpKeywords>
+    <Topic id="5f2f8267-88b0-4ab8-93ec-7a67f5130bac" visible="True" title="Version 1.0.0.0">
+      <HelpKeywords>
+        <HelpKeyword index="K" term="version, 1.0.0.0" />
+      </HelpKeywords>
+    </Topic>
+  </Topic>
+</Topics>
