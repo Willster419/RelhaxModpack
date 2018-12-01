@@ -169,5 +169,82 @@ namespace RelhaxModpack
             }
             fileToWriteTo.Write(message, logLevel);
         }
+
+        public static void WriteToLog(string messageFormat, Logfiles logfile, LogLevel level, params object[] args)
+        {
+            WriteToLog(string.Format(messageFormat, args),logfile,level);
+        }
+
+        public static void Debug(string message)
+        {
+            WriteToLog(message, Logfiles.Application, LogLevel.Debug);
+        }
+
+        public static void Debug(string message, params object[] args)
+        {
+            WriteToLog(message, Logfiles.Application, LogLevel.Debug, args);
+        }
+
+        public static void Info(string message, Logfiles logfile)
+        {
+            switch(logfile)
+            {
+                case Logfiles.Application:
+                    WriteToLog(message, logfile, LogLevel.Info);
+                    return;
+                case Logfiles.Installer:
+
+                    return;
+                case Logfiles.Uninstaller:
+
+                    return;
+            }
+        }
+
+        public static void Info(string message, Logfiles logfile, params object[] args)
+        {
+            switch (logfile)
+            {
+                case Logfiles.Application:
+                    WriteToLog(message, logfile, LogLevel.Info, args);
+                    return;
+                case Logfiles.Installer:
+
+                    return;
+                case Logfiles.Uninstaller:
+
+                    return;
+            }
+        }
+
+        public static void Warning(string message)
+        {
+            WriteToLog(message, Logfiles.Application, LogLevel.Warning);
+        }
+
+        public static void Warning(string message, params object[] args)
+        {
+            WriteToLog(message, Logfiles.Application, LogLevel.Warning, args);
+        }
+
+        public static void Error(string message)
+        {
+            WriteToLog(message, Logfiles.Application, LogLevel.Error);
+        }
+
+        public static void Error(string message, params object[] args)
+        {
+            WriteToLog(message, Logfiles.Application, LogLevel.Error, args);
+        }
+
+        public static void Exception(string message)
+        {
+            WriteToLog(message, Logfiles.Application, LogLevel.Error);
+        }
+
+        public static void Exception(string message, params object[] args)
+        {
+            WriteToLog(message, Logfiles.Application, LogLevel.Exception, args);
+        }
     }
 }

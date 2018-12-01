@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using RelhaxModpack.UIComponents;
 using System.IO;
+using System.Xml;
 
 namespace RelhaxModpack.InstallerComponents
 {
@@ -628,6 +629,15 @@ namespace RelhaxModpack.InstallerComponents
         private void AddPatchesFromFile(List<Patch> patches, string filename)
         {
             //make an xml document to get all patches
+            XmlDocument doc = new XmlDocument();
+            try
+            {
+                doc.Load(filename);
+            }
+            catch(XmlException xmlex)
+            {
+                Logging.Exception("Failed to parse xml patch file {0}\n{1}", filename, xmlex.ToString());
+            }
             //make new patch object for each entry
             //remember to add lots of logging
         }
