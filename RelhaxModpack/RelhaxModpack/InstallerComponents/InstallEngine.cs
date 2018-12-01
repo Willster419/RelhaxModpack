@@ -640,6 +640,52 @@ namespace RelhaxModpack.InstallerComponents
             }
             //make new patch object for each entry
             //remember to add lots of logging
+            XmlNodeList XMLpatches = XMLUtils.GetXMLNodesFromXPath(doc, "//patchs/patch");
+            if(XMLpatches == null || XMLpatches.Count == 0)
+            {
+                Logging.Error("File {0} contains no patch entries", filename);
+                return;
+            }
+            Logging.Info("Adding {0} patches from patchFile {1}", Logfiles.Application, XMLpatches.Count, filename);
+            foreach(XmlNode patchNode in XMLpatches)
+            {
+                Patch p = new Patch();
+                //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
+                foreach(XmlNode property in patchNode.ChildNodes)
+                {
+                    //each element in the xml gets put into the
+                    //the corresponding attribute for the Patch instance
+                    switch (property.Name)
+                    {
+                        case "type":
+                            p.Type = property.InnerText;
+                            break;
+                        case "mode":
+                            p.Mode = property.InnerText;
+                            break;
+                        case "patchPath":
+                            p.PatchPath = property.InnerText;
+                            break;
+                        case "file":
+                            p.File = property.InnerText;
+                            break;
+                        case "path":
+                            p.Path = property.InnerText;
+                            break;
+                        case "line":
+                            if(!string.IsNullOrWhiteSpace(property.InnerText))
+                                p.Lines = property.InnerText.Split(',');
+                            break;
+                        case "search":
+                            p.Search = property.InnerText;
+                            break;
+                        case "replace":
+                            p.Replace = property.InnerText;
+                            break;
+                    }
+                }
+                patches.Add(p);
+            }
         }
 
         private List<Shortcut> MakeShortcutList()

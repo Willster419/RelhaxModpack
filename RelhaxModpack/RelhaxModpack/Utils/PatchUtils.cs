@@ -59,7 +59,7 @@ namespace RelhaxModpack
                 }
             }
             //determines which version of pathing will be done
-            switch (p.mode)
+            switch (p.Mode)
             {
                 case "add":
                     //check to see if it's already there
@@ -306,8 +306,8 @@ namespace RelhaxModpack
             if (p.Search.Equals(""))
                 p.Search = @".*";
             //legacy compatibility: treat p.mode being nothing or null default to edit
-            if (p.mode == null || p.mode.Equals("") || p.mode.Equals("arrayEdit"))
-                p.mode = "edit";
+            if (p.Mode == null || p.Mode.Equals("") || p.Mode.Equals("arrayEdit"))
+                p.Mode = "edit";
             //check if the replace value is an xvm path and manually put in the macro equivilants
             //testValue = testValue.Replace(@"[dollar]", @"$").Replace(@"[lbracket]", @"{").Replace(@"[quote]", @"""").Replace(@"[rbracket]""", @"}");
             //match ${"
@@ -316,7 +316,7 @@ namespace RelhaxModpack
             //split the replace path here so both can use it later
             string[] addPathArray = null;
             string testValue = p.Replace;
-            if (p.mode.Equals("add") || p.mode.Equals("arrayAdd"))
+            if (p.Mode.Equals("add") || p.Mode.Equals("arrayAdd"))
             {
                 //.Split(new string[] { @"[index=" }, StringSplitOptions.None)
                 addPathArray = p.Replace.Split('/');
@@ -442,7 +442,7 @@ namespace RelhaxModpack
             {
                 return;
             }
-            if (p.mode.Equals("add"))
+            if (p.Mode.Equals("add"))
             {
                 try
                 {
@@ -647,7 +647,7 @@ namespace RelhaxModpack
                     Logging.WriteToLog(string.Format("Error adding json object\n{0}", add.ToString()), Logfiles.Application, LogLevel.Exception);
                 }
             }
-            else if (p.mode.Equals("edit"))
+            else if (p.Mode.Equals("edit"))
             {
                 try
                 {
@@ -662,7 +662,7 @@ namespace RelhaxModpack
                     }
                     catch (Exception exResults)
                     {
-                        Logging.WriteToLog(string.Format("error with selecting token: {0}, mode={1}\n{2}", p.Path, p.mode, exResults.ToString()),
+                        Logging.WriteToLog(string.Format("error with selecting token: {0}, mode={1}\n{2}", p.Path, p.Mode, exResults.ToString()),
                             Logfiles.Application, LogLevel.Exception);
                     }
                     if (results == null || results.Count() == 0)
@@ -713,7 +713,7 @@ namespace RelhaxModpack
                         Logfiles.Application, LogLevel.Exception);
                 }
             }
-            else if (p.mode.Equals("remove"))
+            else if (p.Mode.Equals("remove"))
             {
                 //get to array/object/property
                 //if is array, remove it
@@ -741,7 +741,7 @@ namespace RelhaxModpack
                     cont.Remove();
                 }
             }
-            else if (p.mode.Equals("arrayAdd"))
+            else if (p.Mode.Equals("arrayAdd"))
             {
                 //get to the array
                 //if split string count is > 2, abort (invalid)
@@ -841,7 +841,7 @@ namespace RelhaxModpack
                     }
                 }
             }
-            else if (p.mode.Equals("arrayRemove"))
+            else if (p.Mode.Equals("arrayRemove"))
             {
                 //get to array from p.path
                 //foreach item.ToString in the array
@@ -885,7 +885,7 @@ namespace RelhaxModpack
                     return;
                 }
             }
-            else if (p.mode.Equals("arrayClear"))
+            else if (p.Mode.Equals("arrayClear"))
             {
                 //get to array from p.path
                 //foreach item.ToString in the array
@@ -931,7 +931,7 @@ namespace RelhaxModpack
             }
             else
             {
-                Logging.WriteToLog(string.Format("ERROR: Unknown json patch mode, {0}", p.mode),Logfiles.Application,LogLevel.Error);
+                Logging.WriteToLog(string.Format("ERROR: Unknown json patch mode, {0}", p.Mode),Logfiles.Application,LogLevel.Error);
             }
 
             StringBuilder rebuilder = new StringBuilder();
