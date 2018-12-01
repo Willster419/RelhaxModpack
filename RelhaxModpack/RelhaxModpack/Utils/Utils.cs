@@ -378,7 +378,8 @@ namespace RelhaxModpack
             }
         }
 
-        public static string[] DirectorySearch(string directoryPath, SearchOption option, uint numRetrys = 3, uint timeout = 5, string searchPattern = "*")
+        public static string[] DirectorySearch(string directoryPath, SearchOption option, string searchPattern = "*",
+            uint timeout = 5, uint numRetrys = 3, bool applyFolderProperties = true)
         {
             //filter input
             if(numRetrys == 0)
@@ -400,6 +401,8 @@ namespace RelhaxModpack
                         Logging.WriteToLog(string.Format("Path {0} does not exist!", directoryPath), Logfiles.Application, LogLevel.Error);
                         return null;
                     }
+                    if (applyFolderProperties)
+                        File.SetAttributes(directoryPath, FileAttributes.Normal);
                     return Directory.GetFiles(directoryPath, searchPattern, option);
                 }
                 catch (Exception e)
@@ -422,6 +425,31 @@ namespace RelhaxModpack
             }
             Logging.WriteToLog("Code shuld not reach this point: Utils.DirectorySearch()", Logfiles.Application, LogLevel.Warning);
             return null;
+        }
+
+        public static void ApplyNormalFileProperties(string file)
+        {
+            //check to make sure it's eithor a file or folder
+            if (!File.Exists(file) && !Directory.Exists(file))
+            {
+                Logging.WriteToLog("file/folder does not exist " + file, Logfiles.Application, LogLevel.Error);
+                return;
+            }
+            try
+            {
+                FileAttributes attribute = File.GetAttributes(file);
+                if (attribute != FileAttributes.Normal)
+                {
+                    Logging.WriteToLog(string.Format("file {0} has FileAttribute {1}, setting to FileAttributes.Normal",
+                        file, attribute.ToString()), Logfiles.Application, LogLevel.Debug);
+                    File.SetAttributes(file, FileAttributes.Normal);
+                }
+            }
+            catch (Exception e)
+            {
+                Logging.WriteToLog("Failed to apply normal attribute\n" + e.ToString(), Logfiles.Application, LogLevel.Exception);
+                return;
+            }
         }
         #endregion
 

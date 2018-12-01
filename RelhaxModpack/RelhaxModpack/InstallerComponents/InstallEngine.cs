@@ -596,8 +596,40 @@ namespace RelhaxModpack.InstallerComponents
             //get a list of all files in the dedicated patch directory
             //foreach one add it to the patch list
             List<Patch> patches = new List<Patch>();
-
+            string[] patch_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.PatchFolderName), SearchOption.TopDirectoryOnly,
+                @"*.xml", 50, 3, true);
+            if (patch_files == null)
+                Logging.WriteToLog("Failed to parse patches from patch directory (see above lines for more info", Logfiles.Application, LogLevel.Error);
+            else
+            {
+                Logging.WriteToLog(string.Format("Number of patch files: {0}",patch_files.Count()), Logfiles.Application, LogLevel.Debug);
+                //if there wern't any, don't bother doing anything
+                if(patch_files.Count() > 0)
+                {
+                    string completePath = string.Empty;
+                    foreach (string filename in patch_files)
+                    {
+                        completePath = Path.Combine(Settings.WoTDirectory, Settings.PatchFolderName, filename);
+                        //just double check...
+                        if(!File.Exists(completePath))
+                        {
+                            Logging.WriteToLog("patch file does not exist?? " + completePath, Logfiles.Application, LogLevel.Warning);
+                            continue;
+                        }
+                        Utils.ApplyNormalFileProperties(completePath);
+                        //ok NOW actually add the file to the patch list
+                        AddPatchesFromFile(patches, completePath);
+                    }
+                }
+            }
             return patches;
+        }
+
+        private void AddPatchesFromFile(List<Patch> patches, string filename)
+        {
+            //make an xml document to get all patches
+            //make new patch object for each entry
+            //remember to add lots of logging
         }
 
         private List<Shortcut> MakeShortcutList()
