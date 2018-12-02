@@ -1043,5 +1043,18 @@ namespace RelhaxModpack
             return false;
         }
         #endregion
+
+        #region Install Utils
+
+        public static void CreateShortcut(Shortcut shortcut)
+        {
+
+        }
+
+        public static void CreateAtlas(Atlas atlas)
+        {
+
+        }
+        #endregion
     }
 }
