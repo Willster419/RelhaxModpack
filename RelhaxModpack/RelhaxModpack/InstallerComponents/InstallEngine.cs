@@ -691,8 +691,74 @@ namespace RelhaxModpack.InstallerComponents
         private List<Shortcut> MakeShortcutList()
         {
             List<Shortcut> shortcuts = new List<Shortcut>();
-
+            //get a list of all files in the dedicated patch directory
+            //foreach one add it to the patch list
+            string[] shortcut_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName), SearchOption.TopDirectoryOnly,
+                @"*.xml", 50, 3, true);
+            if (shortcut_files == null)
+                Logging.WriteToLog("Failed to parse shortcuts from patch directory (see above lines for more info", Logfiles.Application, LogLevel.Error);
+            else
+            {
+                Logging.WriteToLog(string.Format("Number of shortcut files: {0}", shortcut_files.Count()), Logfiles.Application, LogLevel.Debug);
+                //if there wern't any, don't bother doing anything
+                if (shortcut_files.Count() > 0)
+                {
+                    string completePath = string.Empty;
+                    foreach (string filename in shortcut_files)
+                    {
+                        completePath = Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName, filename);
+                        //just double check...
+                        if (!File.Exists(completePath))
+                        {
+                            Logging.WriteToLog("shortcut file does not exist?? " + completePath, Logfiles.Application, LogLevel.Warning);
+                            continue;
+                        }
+                        //apply "normal" file properties just in case the user's wot install directory is special
+                        Utils.ApplyNormalFileProperties(completePath);
+                        //ok NOW actually add the file to the patch list
+                        
+                    }
+                }
+            }
             return shortcuts;
+        }
+
+        private void AddShortcutsFromFile(List<Shortcut> shortcuts, string filename)
+        {
+            //make an xml document to get all patches
+            XmlDocument doc = new XmlDocument();
+            try
+            {
+                doc.Load(filename);
+            }
+            catch (XmlException xmlex)
+            {
+                Logging.Exception("Failed to parse xml patch file {0}\n{1}", filename, xmlex.ToString());
+            }
+            //make new patch object for each entry
+            //remember to add lots of logging
+            XmlNodeList XMLshortcuts = XMLUtils.GetXMLNodesFromXPath(doc, "//shortcuts/shortcut");
+            if (XMLshortcuts == null || XMLshortcuts.Count == 0)
+            {
+                Logging.Error("File {0} contains no shortcut entries", filename);
+                return;
+            }
+            Logging.Info("Adding {0} patches from shortcutFile {1}", Logfiles.Application, XMLshortcuts.Count, filename);
+            foreach (XmlNode patchNode in XMLshortcuts)
+            {
+                Shortcut p = new Shortcut();
+                //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
+                foreach (XmlNode property in patchNode.ChildNodes)
+                {
+                    //each element in the xml gets put into the
+                    //the corresponding attribute for the Patch instance
+                    switch (property.Name)
+                    {
+                        
+                    }
+                }
+                shortcuts.Add(p);
+            }
         }
 
         //XML Unpack Import TODO

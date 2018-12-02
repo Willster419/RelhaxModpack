@@ -70,7 +70,7 @@ namespace RelhaxModpack
 
         public const string PatchFolderName = "_patch";
 
-        public const string ShortcutFolderName = "TODO";
+        public const string ShortcutFolderName = "_shortcuts";
 
         public const string XmlUnpackFolderName = "TODO";
 
