@@ -786,7 +786,7 @@ namespace RelhaxModpack.InstallerComponents
                         //apply "normal" file properties just in case the user's wot install directory is special
                         Utils.ApplyNormalFileProperties(completePath);
                         //ok NOW actually add the file to the patch list
-                        //TODO
+                        AddXmlUnpackFromFile(XmlUnpacks, filename);
                     }
                 }
             }
@@ -794,7 +794,37 @@ namespace RelhaxModpack.InstallerComponents
         }
 
         //actual XML unpack parsing TODO
-
+        private void AddXmlUnpackFromFile(List<XmlUnpack> XmlUnpacks, string filename)
+        {
+            //make an xml document to get all Xml Unpacks
+            XmlDocument doc = XMLUtils.LoadXmlDocument(filename, XmlLoadType.FromFile);
+            if (doc == null)
+                return;
+            //make new patch object for each entry
+            //remember to add lots of logging
+            XmlNodeList XMLshortcuts = XMLUtils.GetXMLNodesFromXPath(doc, "TODO");
+            if (XMLshortcuts == null || XMLshortcuts.Count == 0)
+            {
+                Logging.Error("File {0} contains no xlmUnapck entries", filename);
+                return;
+            }
+            Logging.Info("Adding {0} patches from shortcutFile {1}", Logfiles.Application, XMLshortcuts.Count, filename);
+            foreach (XmlNode patchNode in XMLshortcuts)
+            {
+                XmlUnpack sc = new XmlUnpack();
+                //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
+                foreach (XmlNode property in patchNode.ChildNodes)
+                {
+                    //each element in the xml gets put into the
+                    //the corresponding attribute for the Patch instance
+                    switch (property.Name)
+                    {
+                        
+                    }
+                }
+                XmlUnpacks.Add(sc);
+            }
+        }
 
         //Atlas parsing
         private List<Atlas> MakeAtlasList()
