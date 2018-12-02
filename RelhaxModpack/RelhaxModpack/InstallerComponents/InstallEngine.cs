@@ -734,7 +734,7 @@ namespace RelhaxModpack.InstallerComponents
             Logging.Info("Adding {0} patches from shortcutFile {1}", Logfiles.Application, XMLshortcuts.Count, filename);
             foreach (XmlNode patchNode in XMLshortcuts)
             {
-                Shortcut p = new Shortcut();
+                Shortcut sc = new Shortcut();
                 //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
                 foreach (XmlNode property in patchNode.ChildNodes)
                 {
@@ -742,10 +742,18 @@ namespace RelhaxModpack.InstallerComponents
                     //the corresponding attribute for the Patch instance
                     switch (property.Name)
                     {
-                        
+                        case "path":
+                            sc.Path = property.InnerText;
+                            break;
+                        case "name":
+                            sc.Name = property.InnerText;
+                            break;
+                        case "enabled":
+                            sc.Enabled = Utils.ParseBool(property.InnerText, false);
+                            break;
                     }
                 }
-                shortcuts.Add(p);
+                shortcuts.Add(sc);
             }
         }
 
