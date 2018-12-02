@@ -27,6 +27,8 @@ namespace RelhaxModpack.Windows
             InitializeComponent();
         }
 
+
+
         private void OnHyperlinkClick(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
             //https://stackoverflow.com/questions/10238694/example-using-hyperlink-in-wpf
