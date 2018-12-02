@@ -629,15 +629,9 @@ namespace RelhaxModpack.InstallerComponents
         private void AddPatchesFromFile(List<Patch> patches, string filename)
         {
             //make an xml document to get all patches
-            XmlDocument doc = new XmlDocument();
-            try
-            {
-                doc.Load(filename);
-            }
-            catch(XmlException xmlex)
-            {
-                Logging.Exception("Failed to parse xml patch file {0}\n{1}", filename, xmlex.ToString());
-            }
+            XmlDocument doc = XMLUtils.LoadXmlDocument(filename, XmlLoadType.FromFile);
+            if (doc == null)
+                return;
             //make new patch object for each entry
             //remember to add lots of logging
             XmlNodeList XMLpatches = XMLUtils.GetXMLNodesFromXPath(doc, "//patchs/patch");
@@ -725,16 +719,10 @@ namespace RelhaxModpack.InstallerComponents
 
         private void AddShortcutsFromFile(List<Shortcut> shortcuts, string filename)
         {
-            //make an xml document to get all patches
-            XmlDocument doc = new XmlDocument();
-            try
-            {
-                doc.Load(filename);
-            }
-            catch (XmlException xmlex)
-            {
-                Logging.Exception("Failed to parse xml patch file {0}\n{1}", filename, xmlex.ToString());
-            }
+            //make an xml document to get all shortuts
+            XmlDocument doc = XMLUtils.LoadXmlDocument(filename, XmlLoadType.FromFile);
+            if (doc == null)
+                return;
             //make new patch object for each entry
             //remember to add lots of logging
             XmlNodeList XMLshortcuts = XMLUtils.GetXMLNodesFromXPath(doc, "//shortcuts/shortcut");

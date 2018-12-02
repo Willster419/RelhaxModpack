@@ -15,6 +15,13 @@ namespace RelhaxModpack
     /// <summary>
     /// Utility class for all XML static methods
     /// </summary>
+    
+    public enum XmlLoadType
+    {
+        FromFile,
+        FromXml
+    }
+
     public static class XMLUtils
     {
         #region Statics
@@ -594,6 +601,32 @@ namespace RelhaxModpack
             if (doc == null)
                 return null;
             return XDocument.Parse(doc.OuterXml,LoadOptions.SetLineInfo);
+        }
+
+        public static XmlDocument LoadXmlDocument(string fileOrXml, XmlLoadType type)
+        {
+            XmlDocument doc = new XmlDocument();
+            try
+            {
+                switch(type)
+                {
+                    case XmlLoadType.FromFile:
+                        doc.Load(fileOrXml);
+                        break;
+                    case XmlLoadType.FromXml:
+                        doc.LoadXml(fileOrXml);
+                        break;
+                }
+            }
+            catch (XmlException xmlEx)
+            {
+                if (File.Exists(fileOrXml))
+                    Logging.Exception("Failed to load xml file: {0}\n{1}", Path.GetFileName(fileOrXml), xmlEx.ToString());
+                else
+                    Logging.Exception("failed to load xml string:\n" + xmlEx.ToString());
+                return null;
+            }
+            return doc;
         }
         #endregion
 
