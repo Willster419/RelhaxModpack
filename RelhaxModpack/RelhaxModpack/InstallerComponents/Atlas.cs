@@ -27,7 +27,6 @@ namespace RelhaxModpack
         // path inside the pkg file to the filename to process
         public string DirectoryInArchive { get; set; } = "";
         // path to atlas file outside the archive (after extraction located here)
-        // public string TempAltasPresentDirectory { get; set; } = Path.Combine(Application.StartupPath, "RelHaxTemp");
         public string TempAltasPresentDirectory { get; set; } = Settings.RelhaxTempFolder;
         // path to place the finished file
         public string AtlasSaveDirectory { get; set; } = "";
@@ -50,7 +49,7 @@ namespace RelhaxModpack
         // maybe new fileName
         public List<string> ImageFolderList { get; set; } = new List<string>();
         //the list of textures in each atlas
-        //public List<Texture> TextureList { get; set; } = new List<Texture>();
+        public List<Texture> TextureList { get; set; } = new List<Texture>();
         // allow the folderparser to add new images to the atlas file
         public bool AllowToAddAdditionalImages { get; set; } = false;
         //for the tostring thing
