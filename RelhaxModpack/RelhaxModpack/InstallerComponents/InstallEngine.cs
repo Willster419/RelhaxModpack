@@ -757,9 +757,82 @@ namespace RelhaxModpack.InstallerComponents
             }
         }
 
-        //XML Unpack Import TODO
+        //XML Unpack
+        private List<XmlUnpack> MakeXmlUnpackListList()
+        {
+            List<XmlUnpack> XmlUnpacks = new List<XmlUnpack>();
+            //get a list of all files in the dedicated patch directory
+            //foreach one add it to the patch list
+            string[] unpack_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.XmlUnpackFolderName), SearchOption.TopDirectoryOnly,
+                @"*.xml", 50, 3, true);
+            if (unpack_files == null)
+                Logging.WriteToLog("Failed to parse shortcuts from shortcut directory (see above lines for more info", Logfiles.Application, LogLevel.Error);
+            else
+            {
+                Logging.WriteToLog(string.Format("Number of XmlUnpack files: {0}", unpack_files.Count()), Logfiles.Application, LogLevel.Debug);
+                //if there wern't any, don't bother doing anything
+                if (unpack_files.Count() > 0)
+                {
+                    string completePath = string.Empty;
+                    foreach (string filename in unpack_files)
+                    {
+                        completePath = Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName, filename);
+                        //just double check...
+                        if (!File.Exists(completePath))
+                        {
+                            Logging.WriteToLog("XmlUnpack file does not exist?? " + completePath, Logfiles.Application, LogLevel.Warning);
+                            continue;
+                        }
+                        //apply "normal" file properties just in case the user's wot install directory is special
+                        Utils.ApplyNormalFileProperties(completePath);
+                        //ok NOW actually add the file to the patch list
+                        //TODO
+                    }
+                }
+            }
+            return XmlUnpacks;
+        }
 
-        //Atlas parsing TODO
+        //actual XML unpack parsing TODO
+
+
+        //Atlas parsing
+        private List<Atlas> MakeAtlasList()
+        {
+            List<Atlas> atlases = new List<Atlas>();
+            //get a list of all files in the dedicated patch directory
+            //foreach one add it to the patch list
+            string[] atlas_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.AtlasCreationFoldername), SearchOption.TopDirectoryOnly,
+                @"*.xml", 50, 3, true);
+            if (atlas_files == null)
+                Logging.WriteToLog("Failed to parse atlases from atlas directory (see above lines for more info", Logfiles.Application, LogLevel.Error);
+            else
+            {
+                Logging.WriteToLog(string.Format("Number of atlas files: {0}", atlas_files.Count()), Logfiles.Application, LogLevel.Debug);
+                //if there wern't any, don't bother doing anything
+                if (atlas_files.Count() > 0)
+                {
+                    string completePath = string.Empty;
+                    foreach (string filename in atlas_files)
+                    {
+                        completePath = Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName, filename);
+                        //just double check...
+                        if (!File.Exists(completePath))
+                        {
+                            Logging.WriteToLog("atlas file does not exist?? " + completePath, Logfiles.Application, LogLevel.Warning);
+                            continue;
+                        }
+                        //apply "normal" file properties just in case the user's wot install directory is special
+                        Utils.ApplyNormalFileProperties(completePath);
+                        //ok NOW actually add the file to the patch list
+                        //TODO
+                    }
+                }
+            }
+            return atlases;
+        }
+
+        //actual Atlas parsing TODO
         #endregion
 
         #region IDisposable Support

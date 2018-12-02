@@ -72,9 +72,9 @@ namespace RelhaxModpack
 
         public const string ShortcutFolderName = "_shortcuts";
 
-        public const string XmlUnpackFolderName = "TODO";
+        public const string XmlUnpackFolderName = "_xmlUnPack";
 
-        public const string AtlasCreationFoldername = "TODO";
+        public const string AtlasCreationFoldername = "_atlases";
         #endregion
 
         #region Statics
