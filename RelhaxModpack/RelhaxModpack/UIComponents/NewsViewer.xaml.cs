@@ -23,5 +23,10 @@ namespace RelhaxModpack.Windows
         {
             InitializeComponent();
         }
+
+        private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

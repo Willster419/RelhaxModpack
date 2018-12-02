@@ -5,15 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="NewsViewer" Height="450" Width="800">
+        Title="NewsViewer" Height="451" Width="420" MinWidth="420" MinHeight="451" Loaded="RelhaxWindow_Loaded">
     <Grid>
-        <ListBox HorizontalAlignment="Left" Height="383" Margin="10,26,0,0" VerticalAlignment="Top" Width="382" Background="White"/>
-        <TabControl Height="26" VerticalAlignment="Top" Margin="10,0,19,0">
-            <TabItem x:Name="ApplicationTab" Header="Application" Margin="-2,-2,-2,2">
-                <Grid Background="#FFE5E5E5"/>
+        
+        <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <TabItem x:Name="application_Update_Tab" Header="Application">
+                <Grid>
+                    <TextBox x:Name="application_Update_Text" Tag="application_Update_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
+                        This is where the text goes for the Application updates
+                    </TextBox>
+                </Grid>
             </TabItem>
-            <TabItem Header="Database" Margin="0,-2,-4,-1" Height="23" VerticalAlignment="Bottom">
-                <Grid Background="#FFE5E5E5"/>
+            <TabItem x:Name="database_Update_Tab" Header="Database">
+                <Grid Background="#FFE5E5E5">
+                    <TextBox x:Name="database_Update_Text" Tag="database_Update_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
+                        This is where the text goes for the Database updates
+                    </TextBox>
+                </Grid>
+
             </TabItem>
         </TabControl>
 
