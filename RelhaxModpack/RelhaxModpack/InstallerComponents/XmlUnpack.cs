@@ -1,6 +1,6 @@
 ﻿namespace RelhaxModpack
 {
-    class XmlUnpack
+    public class XmlUnpack
     {
         //a single string with the filename of the processingNativeFile (needed for tracing work instructions after installation)
         public string NativeProcessingFile { get; set; } = "";

@@ -1167,7 +1167,7 @@
             <param name="base64EncodedData">The base64 stirng</param>
             <returns>The plain text version</returns>
         </member>
-        <member name="T:RelhaxModpack.XMLUtils">
+        <member name="T:RelhaxModpack.XmlLoadType">
             <summary>
             Utility class for all XML static methods
             </summary>

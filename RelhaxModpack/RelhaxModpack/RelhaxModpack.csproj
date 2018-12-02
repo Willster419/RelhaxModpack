@@ -109,6 +109,7 @@
     <Compile Include="InstallerComponents\InstallEngine.cs" />
     <Compile Include="InstallerComponents\Patch.cs" />
     <Compile Include="InstallerComponents\Shortcut.cs" />
+    <Compile Include="InstallerComponents\Texture.cs" />
     <Compile Include="InstallerComponents\XmlUnpack.cs" />
     <Compile Include="Logging\Logfile.cs" />
     <Compile Include="Logging\Logging.cs" />
@@ -182,6 +183,9 @@
     <Compile Include="UIComponents\VersionInfo.xaml.cs">
       <DependentUpon>VersionInfo.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\XmlBinary\PackedSectionReader.cs" />
+    <Compile Include="Utils\XmlBinary\PrimitiveFileReader.cs" />
+    <Compile Include="Utils\XmlBinary\XmlBinaryHandler.cs" />
     <Compile Include="Utils\XMLUtils.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

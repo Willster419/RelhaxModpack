@@ -628,6 +628,11 @@ namespace RelhaxModpack
             }
             return doc;
         }
+
+        public static void UnpackXmlFile(XmlUnpack xmlUnpack)
+        {
+
+        }
         #endregion
 
         #region Legacy methods
@@ -2326,10 +2331,7 @@ namespace RelhaxModpack
             }
         }
         #endregion
-
-        #region Installer Parsing
-
-        #endregion
+        
     }
 }
  
