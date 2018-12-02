@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="First Load Aknowledgements" Height="236" Width="569" ResizeMode="NoResize" Loaded="RelhaxWindow_Loaded">
+        Title="First Load Aknowledgements" Height="203" Width="605" ResizeMode="NoResize" Loaded="RelhaxWindow_Loaded">
 
 
     <Grid>
@@ -41,13 +41,13 @@
             
             <CheckBox HorizontalAlignment="Left" VerticalAlignment="Top" Checked="CheckBox_Checked" Margin="10,10,0,0">
                 <TextBlock x:Name="agreement_Hoster" TextWrapping="Wrap"  
-                 Text="I understand Relhax is a mod hoster and installation service and Relhax does not maintain every mod found in this Mod Pack">
+                 Text="I understand Relhax is a mod hoster and installation service and Relhax does not maintain every mod found in this Mod Pack" Width="351">
                 </TextBlock>
             </CheckBox>
             
-            <CheckBox HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="38" Width="332">
+            <CheckBox HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="38" Width="372">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock x:Name="agreement_Your_OS_Is_Trash" TextWrapping="Wrap" Text="Moving to Relhax V2 is a permanent process and does not support Windows XP" Height="37" Width="312"/>
+                    <TextBlock x:Name="agreement_Your_OS_Is_Trash" TextWrapping="Wrap" Text="Moving to Relhax V2 is a permanent process and does not support Windows XP" Height="37" Width="353"/>
                 </StackPanel>
             </CheckBox>
 
