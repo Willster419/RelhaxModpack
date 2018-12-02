@@ -132,6 +132,9 @@
     <Compile Include="UIComponents\RelhaxWPFRadioButton.cs" />
     <Compile Include="UIComponents\StretchingTreeView.cs" />
     <Compile Include="UIComponents\StretchingTreeViewItem.cs" />
+    <Compile Include="UIComponents\AdvancedProgress.xaml.cs">
+      <DependentUpon>AdvancedProgress.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utils\BadMemeException.cs" />
     <Compile Include="Utils\CiInfo.cs" />
     <Compile Include="Utils\PatchUtils.cs" />
@@ -254,6 +257,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UIComponents\VersionInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\AdvancedProgress.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
