@@ -203,19 +203,39 @@ namespace RelhaxModpack.InstallerComponents
             else
                 Logging.WriteToLog("...skipped");
 
+            //step 8: unpack xml files
+            OldTime = InstallStopWatch.Elapsed;
+            Progress.TotalCurrent++;
+            InstallFinishedArgs.ExitCodes++;
+            Logging.WriteToLog(string.Format("Unpack of xml files, current install time = {0} msec",
+                InstallStopWatch.Elapsed.TotalMilliseconds));
+            List<XmlUnpack> xmlUnpacks = MakeXmlUnpackListList();
+            if (xmlUnpacks.Count > 0)
+            {
+                foreach(XmlUnpack xmlUnpack in xmlUnpacks)
+                {
+
+                }
+            }
+            else
+                Logging.WriteToLog("...skipped (no XmlUnpack entries parsed");
+
             //step 8: patch files (async option)
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
             InstallFinishedArgs.ExitCodes++;
-            Logging.WriteToLog(string.Format("Cleaning of mods foldres, current install time = {0} msec",
+            Logging.WriteToLog(string.Format("Patching of files, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
-            //if statement TODO
-            if (ModpackSettings.CleanInstallation)
+            List<Patch> pathces = MakePatchList();
+            if (pathces.Count > 0)
             {
+                foreach(Patch patch in pathces)
+                {
 
+                }
             }
             else
-                Logging.WriteToLog("...skipped");
+                Logging.WriteToLog("...skipped (no patch entries parsed)");
 
             //step 9: create create shortcuts (async option)
             OldTime = InstallStopWatch.Elapsed;
@@ -223,12 +243,16 @@ namespace RelhaxModpack.InstallerComponents
             InstallFinishedArgs.ExitCodes++;
             Logging.WriteToLog(string.Format("Creating of shortcuts, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
-            if (ModpackSettings.CreateShortcuts)
+            List<Shortcut> shortcuts = MakeShortcutList();
+            if (shortcuts.Count > 0)
             {
+                foreach(Shortcut shortcut in shortcuts)
+                {
 
+                }
             }
             else
-                Logging.WriteToLog("...skipped");
+                Logging.WriteToLog("...skipped (no shortcut entries parsed)");
 
             //step 10: create atlasas (async option)
             OldTime = InstallStopWatch.Elapsed;
@@ -236,13 +260,16 @@ namespace RelhaxModpack.InstallerComponents
             InstallFinishedArgs.ExitCodes++;
             Logging.WriteToLog(string.Format("Creating of atlases, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
-            //if statement TODO
-            if (ModpackSettings.CleanInstallation)
+            List<Atlas> atlases = MakeAtlasList();
+            if (atlases.Count > 0)
             {
+                foreach(Atlas atlas in atlases)
+                {
 
+                }
             }
             else
-                Logging.WriteToLog("...skipped");
+                Logging.WriteToLog("...skipped (no atlas entries parsed)");
 
             //barrier goes here to make sure cleanup is the last thing to do
 
@@ -364,6 +391,7 @@ namespace RelhaxModpack.InstallerComponents
                 else if (Directory.Exists(Path.Combine(Settings.AppDataFolder, file)))
                 {
                     //Utils.DirectoryMove(Path.Combine(Settings.AppDataFolder, file,) Path.Combine(AppPathTempFolder, file), true, null);
+                    throw new BadMemeException("i think you forgot to do something here...");
                 }
                 else
                 {
@@ -513,24 +541,6 @@ namespace RelhaxModpack.InstallerComponents
                     }
                 }
             }
-            return true;
-        }
-
-        private bool PatchFiles()
-        {
-
-            return true;
-        }
-
-        private bool CreateShortcuts()
-        {
-
-            return true;
-        }
-
-        private bool CreateAtlases()
-        {
-
             return true;
         }
 
@@ -802,14 +812,14 @@ namespace RelhaxModpack.InstallerComponents
                 return;
             //make new patch object for each entry
             //remember to add lots of logging
-            XmlNodeList XMLshortcuts = XMLUtils.GetXMLNodesFromXPath(doc, "TODO");
-            if (XMLshortcuts == null || XMLshortcuts.Count == 0)
+            XmlNodeList XMLUnpacks = XMLUtils.GetXMLNodesFromXPath(doc, "TODO");
+            if (XMLUnpacks == null || XMLUnpacks.Count == 0)
             {
-                Logging.Error("File {0} contains no xlmUnapck entries", filename);
+                Logging.Error("File {0} contains no XmlUnapck entries", filename);
                 return;
             }
-            Logging.Info("Adding {0} patches from shortcutFile {1}", Logfiles.Application, XMLshortcuts.Count, filename);
-            foreach (XmlNode patchNode in XMLshortcuts)
+            Logging.Info("Adding {0} patches from XmlUnpack file {1}", Logfiles.Application, XMLUnpacks.Count, filename);
+            foreach (XmlNode patchNode in XMLUnpacks)
             {
                 XmlUnpack sc = new XmlUnpack();
                 //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
