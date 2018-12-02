@@ -7,9 +7,9 @@ namespace RelhaxModpack
 {
     public class Shortcut
     {
-        public string Path { get; set; }
-        public string Name { get; set; }
-        public bool Enabled { get; set; }
+        public string Path { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public bool Enabled { get; set; } = false;
 
         public override string ToString()
         {
