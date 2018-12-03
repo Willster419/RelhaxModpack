@@ -214,7 +214,7 @@ namespace RelhaxModpack.InstallerComponents
             {
                 foreach(XmlUnpack xmlUnpack in xmlUnpacks)
                 {
-
+                    XMLUtils.UnpackXmlFile(xmlUnpack);
                 }
             }
             else
@@ -231,7 +231,7 @@ namespace RelhaxModpack.InstallerComponents
             {
                 foreach(Patch patch in pathces)
                 {
-
+                    PatchUtils.RunPatch(patch);
                 }
             }
             else
@@ -248,7 +248,7 @@ namespace RelhaxModpack.InstallerComponents
             {
                 foreach(Shortcut shortcut in shortcuts)
                 {
-
+                    Utils.CreateShortcut(shortcut);
                 }
             }
             else
@@ -265,7 +265,7 @@ namespace RelhaxModpack.InstallerComponents
             {
                 foreach(Atlas atlas in atlases)
                 {
-
+                    Utils.CreateAtlas(atlas);
                 }
             }
             else
