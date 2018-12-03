@@ -16,7 +16,7 @@ namespace RelhaxModpack.XmlBinary
 
         private XmlDocument xDoc;
 
-        public void unPack(string FileNameLoad, string FileNameSave = "")
+        public void UnpackXmlFile(string FileNameLoad, string FileNameSave = "")
         {
             if (FileNameLoad.Length != 0 && File.Exists(FileNameLoad))
             {
@@ -53,21 +53,22 @@ namespace RelhaxModpack.XmlBinary
             try
             {
                 //point the xtw at the StringWriter
-                xtw = new XmlTextWriter(sw)
+                //slap it into a using block because it's disposable
+                using (xtw = new XmlTextWriter(sw) { Formatting = Formatting.Indented })
                 {
-
-                    //we want the output formatted
-                    Formatting = Formatting.Indented
-                };
-
-                //get the dom to dump its contents into the xtw 
-                xd.WriteTo(xtw);
+                    //get the dom to dump its contents into the xtw 
+                    xd.WriteTo(xtw);
+                }
             }
             finally
             {
                 //clean up even if error
                 if (xtw != null)
+                {
                     xtw.Close();
+                    xtw.Dispose();
+                    xtw = null;
+                }
             }
 
             //return the formatted xml
