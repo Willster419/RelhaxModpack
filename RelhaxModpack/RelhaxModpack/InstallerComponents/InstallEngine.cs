@@ -221,6 +221,9 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.WriteToLog("...skipped (no XmlUnpack entries parsed");
 
             //step 8: patch files (async option)
+            //make the task array here. so far can be a maximum of 3 items
+            Task[] concurrentTasksAfterMainExtractoin = new Task[3];
+            int taskIndex = 0;
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
             InstallFinishedArgs.ExitCodes++;
@@ -229,10 +232,13 @@ namespace RelhaxModpack.InstallerComponents
             List<Patch> pathces = MakePatchList();
             if (pathces.Count > 0)
             {
-                foreach(Patch patch in pathces)
+                concurrentTasksAfterMainExtractoin[taskIndex++] = Task.Factory.StartNew(() =>
                 {
-                    PatchUtils.RunPatch(patch);
-                }
+                    foreach (Patch patch in pathces)
+                    {
+                        PatchUtils.RunPatch(patch);
+                    }
+                });
             }
             else
                 Logging.WriteToLog("...skipped (no patch entries parsed)");
@@ -246,10 +252,13 @@ namespace RelhaxModpack.InstallerComponents
             List<Shortcut> shortcuts = MakeShortcutList();
             if (shortcuts.Count > 0)
             {
-                foreach(Shortcut shortcut in shortcuts)
+                concurrentTasksAfterMainExtractoin[taskIndex++] = Task.Factory.StartNew(() =>
                 {
-                    Utils.CreateShortcut(shortcut);
-                }
+                    foreach (Shortcut shortcut in shortcuts)
+                    {
+                        Utils.CreateShortcut(shortcut);
+                    }
+                });
             }
             else
                 Logging.WriteToLog("...skipped (no shortcut entries parsed)");
@@ -263,25 +272,37 @@ namespace RelhaxModpack.InstallerComponents
             List<Atlas> atlases = MakeAtlasList();
             if (atlases.Count > 0)
             {
-                foreach(Atlas atlas in atlases)
+                concurrentTasksAfterMainExtractoin[taskIndex++] = Task.Factory.StartNew(() => 
                 {
-                    Utils.CreateAtlas(atlas);
-                }
+                    foreach (Atlas atlas in atlases)
+                    {
+                        Utils.CreateAtlas(atlas);
+                    }
+                });
             }
             else
                 Logging.WriteToLog("...skipped (no atlas entries parsed)");
 
             //barrier goes here to make sure cleanup is the last thing to do
+            Task.WaitAll(concurrentTasksAfterMainExtractoin);
 
             //step 9: cleanup (whatever that implies lol)
+            OldTime = InstallStopWatch.Elapsed;
+            Progress.TotalCurrent++;
+            InstallFinishedArgs.ExitCodes++;
+            Logging.WriteToLog(string.Format("Cleanup, current install time = {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds));
+            Cleanup();
 
             //and i guess we're done
             //if were'not causing the main thread to await, then yeah report that we'er done
-            if(!AwaitCallback)
+            if (!AwaitCallback)
             {
                 InstallFinishedArgs.ExitCodes = InstallerExitCodes.Success;
                 ReportFinish();
             }
+
+            //report to log install is finished
+            Logging.Info("Install finished, total install time = {0} msec", Logfiles.Application, InstallStopWatch.Elapsed.TotalMilliseconds);
         }
         #endregion
 
