@@ -1,6 +1,7 @@
 ﻿using Ionic.Zip;
 using Microsoft.Win32;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -17,6 +18,17 @@ using System.Xml;
 
 namespace RelhaxModpack
 {
+
+    public enum ReplacementTypes
+    {
+        FilePath,
+        PatchArguements,
+        PatchFiles,
+        TextEscape,
+        TextUnescape,
+        ZipFilePath
+    }
+
     /// <summary>
     /// A utility class for static functions used in various places in the modpack
     /// </summary>
@@ -25,7 +37,33 @@ namespace RelhaxModpack
         #region Statics
         public static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
         public const long BYTES_TO_MBYTES = 1048576;
-        //MACROS TODO
+        //MACROS
+        //FilePath macro
+        //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/how-to-initialize-a-dictionary-with-a-collection-initializer
+        public static Dictionary<string, string> FilePathDict = new Dictionary<string, string>();
+        public static Dictionary<string, string> PatchArguementsDict = new Dictionary<string, string>()
+        {
+            //TODO
+        };
+        public static Dictionary<string, string> PatchFilesDict = new Dictionary<string, string>()
+        {
+            //TODO
+        };
+        public static Dictionary<string, string> TextUnscapeDict = new Dictionary<string, string>()
+        {
+            {@"\n", "\n" },
+            {@"\r", "\r" },
+            {@"\t", "\t" },
+            //legacy compatibilty (i can't believe i did this....)
+            {@"newline", "\n" }
+        };
+        public static Dictionary<string, string> TextEscapeDict = new Dictionary<string, string>()
+        {
+            {"\n", @"\n" },
+            {"\r", @"\r" },
+            {"\t", @"\t" }
+        };
+        public static Dictionary<string, string> ZipFilePathDict = new Dictionary<string, string>();
         #endregion
 
         #region Application Utils
@@ -777,7 +815,7 @@ namespace RelhaxModpack
         }
         #endregion
 
-        #region Generic utils
+        #region Generic Utils
         /// <summary>
         /// https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings-in-c
         /// </summary>
@@ -891,9 +929,64 @@ namespace RelhaxModpack
             }
             return false;
         }
-        public static void BuildMacroList()
+        public static void BuildFilepathMacroList()
         {
-            //TODO
+            if (FilePathDict == null)
+                throw new BadMemeException("REEEEEEEEEE");
+            FilePathDict.Clear();
+            FilePathDict.Add(@"{versiondir}", Settings.WoTClientVersion);
+            FilePathDict.Add(@"{tanksversion}", Settings.WoTClientVersion);
+            FilePathDict.Add(@"{tanksonlinefolderversion}", Settings.WoTModpackOnlineFolderVersion);
+            FilePathDict.Add(@"{appdata}", Settings.AppDataFolder);
+            FilePathDict.Add(@"{app}", Settings.WoTDirectory);
+        }
+        public static void BuildZipFilePathMacroList()
+        {
+            ZipFilePathDict.Clear();
+            ZipFilePathDict.Add("versiondir", Settings.WoTClientVersion);
+            ZipFilePathDict.Add("appdata", Settings.AppDataFolder);
+        }
+        public static string MacroReplace(string inputString, ReplacementTypes type)
+        {
+            //itterate through each entry depending on the dictionary. if the key is contained in the string, replace it
+            //use a switch to get which dictionary reaplce we will use
+            Dictionary<string,string> dictionary = null;
+            switch(type)
+            {
+                case ReplacementTypes.FilePath:
+                    dictionary = FilePathDict;
+                    break;
+                case ReplacementTypes.PatchArguements:
+                    dictionary = PatchArguementsDict;
+                    break;
+                case ReplacementTypes.PatchFiles:
+                    dictionary = PatchFilesDict;
+                    break;
+                case ReplacementTypes.TextEscape:
+                    dictionary = TextEscapeDict;
+                    break;
+                case ReplacementTypes.TextUnescape:
+                    dictionary = TextUnscapeDict;
+                    break;
+                case ReplacementTypes.ZipFilePath:
+                    dictionary = ZipFilePathDict;
+                    break;
+            }
+            if(dictionary == null)
+            {
+                Logging.Error("macro replace dictionary is null! type={0}", type.ToString());
+                return inputString;
+            }
+            for(int i = 0; i < dictionary.Count; i++)
+            {
+                string key = dictionary.ElementAt(i).Key;
+                string replace = dictionary.ElementAt(i).Value;
+                //https://stackoverflow.com/questions/444798/case-insensitive-containsstring
+                //it's an option, not actually used here lol
+                if (inputString.Contains(key))
+                    inputString = inputString.Replace(key, replace);
+            }
+            return inputString;
         }
         public static List<DatabasePackage> GetFlatList(List<DatabasePackage> globalDependnecies = null, List<Dependency> dependencies = null,
             List<Dependency> logicalDependencies = null, List<Category> parsedCategoryList = null)
@@ -1068,7 +1161,7 @@ namespace RelhaxModpack
 
         #endregion
 
-        #region gross shortcut stuff
+        #region Gross shortcut stuff
         // needed for CreateShortcut
         [ComImport]
         [Guid("00021401-0000-0000-C000-000000000046")]
