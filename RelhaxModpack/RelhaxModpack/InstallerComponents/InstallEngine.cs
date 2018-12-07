@@ -833,7 +833,7 @@ namespace RelhaxModpack.InstallerComponents
                 return;
             //make new patch object for each entry
             //remember to add lots of logging
-            XmlNodeList XMLUnpacks = XMLUtils.GetXMLNodesFromXPath(doc, "TODO");
+            XmlNodeList XMLUnpacks = XMLUtils.GetXMLNodesFromXPath(doc, "//files/file");
             if (XMLUnpacks == null || XMLUnpacks.Count == 0)
             {
                 Logging.Error("File {0} contains no XmlUnapck entries", filename);
@@ -842,7 +842,7 @@ namespace RelhaxModpack.InstallerComponents
             Logging.Info("Adding {0} patches from XmlUnpack file {1}", Logfiles.Application, XMLUnpacks.Count, filename);
             foreach (XmlNode patchNode in XMLUnpacks)
             {
-                XmlUnpack sc = new XmlUnpack();
+                XmlUnpack xmlup = new XmlUnpack();
                 //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
                 foreach (XmlNode property in patchNode.ChildNodes)
                 {
@@ -850,10 +850,24 @@ namespace RelhaxModpack.InstallerComponents
                     //the corresponding attribute for the Patch instance
                     switch (property.Name)
                     {
-                        
+                        case "pkg":
+                            xmlup.Pkg = property.InnerText;
+                            break;
+                        case "directoryInArchive":
+                            xmlup.DirectoryInArchive = property.InnerText;
+                            break;
+                        case "fileName":
+                            xmlup.FileName = property.InnerText;
+                            break;
+                        case "extractDirectory":
+                            xmlup.ExtractDirectory = property.InnerText;
+                            break;
+                        case "newFileName":
+                            xmlup.NewFileName = property.InnerText;
+                            break;
                     }
                 }
-                XmlUnpacks.Add(sc);
+                XmlUnpacks.Add(xmlup);
             }
         }
 
@@ -886,7 +900,7 @@ namespace RelhaxModpack.InstallerComponents
                         //apply "normal" file properties just in case the user's wot install directory is special
                         Utils.ApplyNormalFileProperties(completePath);
                         //ok NOW actually add the file to the patch list
-                        //TODO
+                        AddAtlasFromFile(atlases, filename);
                     }
                 }
             }
@@ -894,6 +908,82 @@ namespace RelhaxModpack.InstallerComponents
         }
 
         //actual Atlas parsing TODO
+        private void AddAtlasFromFile(List<Atlas> atlases, string filename)
+        {
+            //make an xml document to get all Xml Unpacks
+            XmlDocument doc = XMLUtils.LoadXmlDocument(filename, XmlLoadType.FromFile);
+            if (doc == null)
+                return;
+            //make new patch object for each entry
+            //remember to add lots of logging
+            XmlNodeList XMLAtlases = XMLUtils.GetXMLNodesFromXPath(doc, "//atlases/atlas");
+            if (XMLAtlases == null || XMLAtlases.Count == 0)
+            {
+                Logging.Error("File {0} contains no XmlUnapck entries", filename);
+                return;
+            }
+            Logging.Info("Adding {0} patches from XmlUnpack file {1}", Logfiles.Application, XMLAtlases.Count, filename);
+            foreach (XmlNode atlasNode in XMLAtlases)
+            {
+                Atlas sc = new Atlas();
+                //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
+                foreach (XmlNode property in atlasNode.ChildNodes)
+                {
+                    //each element in the xml gets put into the
+                    //the corresponding attribute for the Patch instance
+                    switch (property.Name)
+                    {
+                        case "pkg":
+                            sc.Pkg = property.InnerText;
+                            break;
+                        case "directoryInArchive":
+                            sc.DirectoryInArchive = property.InnerText;
+                            break;
+                        case "atlasFile":
+                            sc.AtlasFile = property.InnerText;
+                            break;
+                        case "mapFile":
+                            sc.MapFile = property.InnerText;
+                            break;
+                        case "generateMap":
+                            sc.GenerateMap = Utils.ParseEnum(property.InnerText,Atlas.State.True);
+                            break;
+                        case "mapType":
+                            sc.MapType = Utils.ParseEnum(property.InnerText, Atlas.MapTypes.WGXmlMap);
+                            break;
+                        case "powOf2":
+                            sc.PowOf2 = Utils.ParseEnum(property.InnerText,Atlas.State.False);
+                            break;
+                        case "square":
+                            sc.Square = Utils.ParseEnum(property.InnerText,Atlas.State.False);
+                            break;
+                        case "fastImagePacker":
+                            sc.FastImagePacker = Utils.ParseBool(property.InnerText,false);
+                            break;
+                        case "padding":
+                            sc.Padding = Utils.ParseInt(property.InnerText,1);
+                            break;
+                        case "atlasWidth":
+                            sc.AtlasWidth = Utils.ParseInt(property.InnerText, 2400);
+                            break;
+                        case "atlasHeight":
+                            sc.AtlasHeight = Utils.ParseInt(property.InnerText,8192);
+                            break;
+                        case "atlasSaveDirectory":
+                            sc.AtlasSaveDirectory = property.InnerText;
+                            break;
+                        case "imageFolders":
+                            //sc.im = property.InnerText;
+                            foreach(XmlNode imageFolder in property.ChildNodes)
+                            {
+                                sc.ImageFolderList.Add(imageFolder.InnerText);
+                            }
+                            break;
+                    }
+                }
+                atlases.Add(sc);
+            }
+        }
         #endregion
 
         #region IDisposable Support
