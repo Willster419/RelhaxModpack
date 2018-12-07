@@ -1007,54 +1007,6 @@ namespace RelhaxModpack
         }
         #endregion
 
-        #region Selections parsing
-        public static void ParseDeveloperSelections()
-        {
-            //run php script to create xml string (async)
-        }
-        private static void OnDeveloperSelectionParsed()//TO PUT IN MODSELECTINLSIT
-        {
-            //get nodecollection of developerSelections
-              //display name
-              //list of mods
-            //make UI nodes radiobuttons in stackpanel
-              //text = displayname
-              //tag = list<string> packagesToSelect
-        }
-        private static void OnDeveloperSelectionSelect()//TO PUT IN MODSELECTIONLIST
-        {
-            //parseSelection (radioButton name, radioButton tag)
-        }
-        public static void ParseUserSelection(string filePath)
-        {
-            //load xml string
-            //get version ID
-            string versionID = "";
-            switch(versionID)
-            {
-                case "2.0":
-                  //parse via 2.0 method
-                  break;
-                default:
-                  //unknown or not supported
-                  break;
-            }
-        }
-        public static void ParseUserSelectionV2(XmlDocument doc)
-        {
-            //make list of stirng for packages to select
-        }
-        public static void ParseSelection()
-        {
-            //will take category view and packagelistToSelect<string>
-            //for each category load packages recursivly
-        }
-        public static void VerifySelection()
-        {
-            //verify selections and remove and rouge selections and report them
-        }
-        #endregion
-
         #region Tanks Install Auto/Manuel Search Code
         //checks the registry to get the location of where WoT is installed
         public static bool AutoFindWoTDirectory(ref string WoTRoot)
