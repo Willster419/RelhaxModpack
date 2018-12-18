@@ -7,17 +7,16 @@
         mc:Ignorable="d"
         Title="Advanced Installer Progress" Height="450" Width="800" ResizeMode="NoResize">
     <Grid>
-        <DockPanel LastChildFill="False">
+        <DockPanel>
             <TabControl DockPanel.Dock="Top" x:Name="advanced_Installer_Categories">
                 <TabItem x:Name="advanced_Installer_Cleaner_Tab" Header="Cleaner">
-                    <Grid>
-                        <DockPanel>
-                            <TextBox DockPanel.Dock="Top" x:Name="advanced_Installer_Cleaner_Text" Tag="installer_Cleaner_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
+                    <DockPanel LastChildFill="False">
+                        <TextBox x:Name="advanced_Installer_Cleaner_Text" Tag="installer_Cleaner_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap" DockPanel.Dock="Top">
                                 This is where the text goes for the Folder cleaner
                             </TextBox>
-                            <ProgressBar DockPanel.Dock="Bottom" x:Name="advanced_Installer_Progress_Bar_Cleaner" Height="25"/>
-                        </DockPanel>
-                    </Grid>
+                            <ProgressBar DockPanel.Dock="Bottom" x:Name="advanced_Installer_Progress_Bar_Cleaner" Height="20"/>
+                    </DockPanel>
+                        
                 </TabItem>
                 <TabItem x:Name="installer_Extration_Tab" Header="Extraction" Height="22" VerticalAlignment="Stretch">
                     <Grid Background="#FFE5E5E5">
