@@ -23,5 +23,10 @@ namespace RelhaxModpack.UIComponents
         {
             InitializeComponent();
         }
+
+        private void Advanced_Installer_Categories_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
