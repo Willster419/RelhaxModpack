@@ -7,34 +7,34 @@
         mc:Ignorable="d"
         Title="Advanced Installer Progress" Height="450" Width="800" ResizeMode="NoResize">
     <Grid>
-        <DockPanel>
-            <TabControl DockPanel.Dock="Top" x:Name="advanced_Installer_Categories">
-                <TabItem x:Name="advanced_Installer_Cleaner_Tab" Header="Cleaner">
-                    <DockPanel LastChildFill="False">
-                        <TextBox x:Name="advanced_Installer_Cleaner_Text" Tag="installer_Cleaner_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap" DockPanel.Dock="Top">
-                                This is where the text goes for the Folder cleaner
-                            </TextBox>
-                            <ProgressBar DockPanel.Dock="Bottom" x:Name="advanced_Installer_Progress_Bar_Cleaner" Height="20"/>
-                    </DockPanel>
-                        
-                </TabItem>
-                <TabItem x:Name="installer_Extration_Tab" Header="Extraction" Height="22" VerticalAlignment="Stretch">
-                    <Grid Background="#FFE5E5E5">
-                        <TextBox x:Name="advanced_Installer_Extration_Text" Tag="installer_Extration_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
-                            This is where the text goes for Extractions
-                        </TextBox>
-                    </Grid>
 
-                </TabItem>
-                <TabItem x:Name="installer_Patching_Tab" Header="Patcher" VerticalAlignment="Stretch">
-                    <Grid Background="#FFE5E5E5">
-                        <TextBox x:Name="advanced_Installer_Patching_Text" Tag="database_Update_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
-                            This is where the text goes for patches
-                        </TextBox>
-                    </Grid>
+        <TabControl DockPanel.Dock="Top" x:Name="advanced_Installer_Categories">
+            <TabItem x:Name="advanced_Installer_Cleaner_Tab" Header="Cleaner">
+                <DockPanel LastChildFill="True">
+                    <ProgressBar DockPanel.Dock="Bottom" x:Name="advanced_Installer_Progress_Bar_Cleaner" Height="20"/>
+                    <TextBox x:Name="advanced_Installer_Cleaner_Text" Tag="installer_Cleaner_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap" DockPanel.Dock="Top">
+                        This is where the text goes for the Folder cleaner
+                    </TextBox>
+                </DockPanel>
 
-                </TabItem>
-            </TabControl>
-        </DockPanel>
+            </TabItem>
+            <TabItem x:Name="installer_Extration_Tab" Header="Extraction" Height="22" VerticalAlignment="Stretch">
+                <DockPanel>
+                    <ProgressBar DockPanel.Dock="Bottom" x:Name="advanced_Installer_Progress_Bar_Extraction" Height="20"/>
+                    <TextBox x:Name="advanced_Installer_Extration_Text" Tag="installer_Extration_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
+                        This is where the text goes for Extractions
+                    </TextBox>
+                </DockPanel>
+
+            </TabItem>
+            <TabItem x:Name="installer_Patching_Tab" Header="Patcher" VerticalAlignment="Stretch">
+                <DockPanel>
+                    <ProgressBar DockPanel.Dock="Bottom" x:Name="advanced_Installer_Progress_Bar_Patcher" Height="20"/>
+                    <TextBox x:Name="advanced_Installer_Patching_Text" Tag="database_Update_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
+                        This is where the text goes for patches
+                    </TextBox>
+                </DockPanel>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
