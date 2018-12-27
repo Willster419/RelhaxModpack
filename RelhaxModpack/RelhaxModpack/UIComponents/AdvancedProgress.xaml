@@ -37,6 +37,42 @@
                     </DockPanel>
                 </TabItem>
 
+                <TabItem x:Name="installer_User_Data_Tab" Header="User Data" VerticalAlignment="Stretch">
+                    <DockPanel>
+                        <ProgressBar DockPanel.Dock="Bottom" x:Name="advanced_Installer_Progress_Bar_User_Data" Height="20"/>
+                        <TextBox x:Name="advanced_Installer_User_Data_Text" Tag="database_Update_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
+                            This is where the text goes for user data
+                        </TextBox>
+                    </DockPanel>
+                </TabItem>
+
+                <TabItem x:Name="installer_Atlas_Tab" Header="Atlas" VerticalAlignment="Stretch">
+                    <DockPanel>
+                        <ProgressBar DockPanel.Dock="Bottom" x:Name="advanced_Installer_Progress_Bar_Atlas" Height="20"/>
+                        <TextBox x:Name="advanced_Installer_Atlas_Text" Tag="database_Update_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
+                            This is where the text goes for Atlas
+                        </TextBox>
+                    </DockPanel>
+                </TabItem>
+
+                <TabItem x:Name="installer_Backup_Tab" Header="Backup" VerticalAlignment="Stretch">
+                    <DockPanel>
+                        <ProgressBar DockPanel.Dock="Bottom" x:Name="advanced_Installer_Progress_Bar_Backup" Height="20"/>
+                        <TextBox x:Name="advanced_Installer_Backup_Text" Tag="database_Update_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
+                            This is where the text goes for backups
+                        </TextBox>
+                    </DockPanel>
+                </TabItem>
+
+                <TabItem x:Name="installer_Misc_Tab" Header="Misc" VerticalAlignment="Stretch">
+                    <DockPanel>
+                        <ProgressBar DockPanel.Dock="Bottom" x:Name="advanced_Installer_Progress_Bar_Misc" Height="20"/>
+                        <TextBox x:Name="advanced_Installer_Misc_Text" Tag="database_Update_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
+                            This is where the text goes for misc
+                        </TextBox>
+                    </DockPanel>
+                </TabItem>
+
             </TabControl>
         </DockPanel>
     </Grid>
