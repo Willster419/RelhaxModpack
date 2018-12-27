@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.UIComponents"
         mc:Ignorable="d"
-        Title="Advanced Installer Progress" Height="450" Width="800" ResizeMode="NoResize">
+        Title="Advanced Installer Progress" Height="450" Width="800" MinHeight="200" MinWidth="400">
     <Grid>
 
         <TabControl DockPanel.Dock="Top" x:Name="advanced_Installer_Categories">
@@ -16,8 +16,8 @@
                         This is where the text goes for the Folder cleaner
                     </TextBox>
                 </DockPanel>
-
             </TabItem>
+            
             <TabItem x:Name="installer_Extration_Tab" Header="Extraction" Height="22" VerticalAlignment="Stretch">
                 <DockPanel>
                     <ProgressBar DockPanel.Dock="Bottom" x:Name="advanced_Installer_Progress_Bar_Extraction" Height="20"/>
@@ -25,8 +25,8 @@
                         This is where the text goes for Extractions
                     </TextBox>
                 </DockPanel>
-
             </TabItem>
+
             <TabItem x:Name="installer_Patching_Tab" Header="Patcher" VerticalAlignment="Stretch">
                 <DockPanel>
                     <ProgressBar DockPanel.Dock="Bottom" x:Name="advanced_Installer_Progress_Bar_Patcher" Height="20"/>
@@ -35,6 +35,8 @@
                     </TextBox>
                 </DockPanel>
             </TabItem>
+            
         </TabControl>
+        
     </Grid>
 </Window>
