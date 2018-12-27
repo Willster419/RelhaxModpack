@@ -73,6 +73,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GlobalProgressBarTest.xaml.cs">
+      <DependentUpon>GlobalProgressBarTest.xaml</DependentUpon>
+    </Compile>
     <Compile Include="stretchtreeview.xaml.cs">
       <DependentUpon>stretchtreeview.xaml</DependentUpon>
     </Compile>
@@ -83,6 +86,10 @@
     <Compile Include="wrapPanelTest.xaml.cs">
       <DependentUpon>wrapPanelTest.xaml</DependentUpon>
     </Compile>
+    <Page Include="GlobalProgressBarTest.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
