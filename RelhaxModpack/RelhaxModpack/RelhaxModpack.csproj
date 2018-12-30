@@ -129,6 +129,10 @@
     <Compile Include="UIComponents\NewsViewer.xaml.cs">
       <DependentUpon>NewsViewer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UIComponents\RelhaxMediaPlayer.xaml.cs">
+      <DependentUpon>RelhaxMediaPlayer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UIComponents\RelhaxPreviewIndex.cs" />
     <Compile Include="UIComponents\RelhaxProgress.cs" />
     <Compile Include="UIComponents\RelhaxWPFCheckBox.cs" />
     <Compile Include="UIComponents\RelhaxWPFComboBox.cs" />
@@ -256,6 +260,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UIComponents\ProgressIndicator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\RelhaxMediaPlayer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
