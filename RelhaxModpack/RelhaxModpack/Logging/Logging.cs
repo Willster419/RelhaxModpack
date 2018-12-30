@@ -180,9 +180,19 @@ namespace RelhaxModpack
             WriteToLog(message, Logfiles.Application, LogLevel.Debug);
         }
 
+        public static void Debug(string message, string sendingClass)
+        {
+            WriteToLog(string.Format("[{0}]: {1}", sendingClass, message), Logfiles.Application, LogLevel.Debug);
+        }
+
         public static void Debug(string message, params object[] args)
         {
             WriteToLog(message, Logfiles.Application, LogLevel.Debug, args);
+        }
+
+        public static void Debug(string message, string sendingClass, params object[] args)
+        {
+            WriteToLog(string.Format("[{0}]: {1}", sendingClass, message), Logfiles.Application, LogLevel.Debug, args);
         }
 
         public static void Info(string message, Logfiles logfile)
@@ -232,9 +242,19 @@ namespace RelhaxModpack
             WriteToLog(message, Logfiles.Application, LogLevel.Error);
         }
 
+        public static void Error(string message, string sendingClass)
+        {
+            WriteToLog(string.Format("[{0}]: {1}",sendingClass,message), Logfiles.Application, LogLevel.Error);
+        }
+
         public static void Error(string message, params object[] args)
         {
             WriteToLog(message, Logfiles.Application, LogLevel.Error, args);
+        }
+
+        public static void Error(string message, string sendingClass, params object[] args)
+        {
+            WriteToLog(string.Format("[{0}]: {1}",sendingClass,message), Logfiles.Application, LogLevel.Error,args);
         }
 
         public static void Exception(string message)
