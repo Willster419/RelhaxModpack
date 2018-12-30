@@ -607,19 +607,26 @@ namespace RelhaxModpack.InstallerComponents
         {
             //do any zip file processing, then extract
             if (string.IsNullOrWhiteSpace(package.ZipFile))
-                throw new BadMemeException("REEEEEEEE");
+                return;
 
         }
 
         private bool UninstallModsQuick()
         {
-
+            //lol just wipe mods and res_mods and call it a day
             return true;
         }
 
         private bool UninstallModsDefault()
         {
+            //if the install log does not exist, all we can do is wipe the mods and res_mods folders
 
+            //get a list of all files and folders in the install log
+            //combine with a list of all files and folders in mods and res_mods
+            //sort and then reverse
+            //split off into files and folders and shortcuts
+            //if settings.createShortcuts, then don't delete them (at least here, for now)
+            //otherwise delete them
             return true;
         }
 
