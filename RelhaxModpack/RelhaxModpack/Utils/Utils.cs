@@ -153,6 +153,32 @@ namespace RelhaxModpack
                 }
             }
         }
+
+        /// <summary>Checks if a point is inside the possible monitor space</summary>
+        /// <param name="x">The x coordinate of the point</param>
+        /// <param name="y">The y coordinate of the point</param>
+        public static bool PointWithinScreen(int x, int y)
+        {
+            return PointWithinScreen(new System.Drawing.Point(x, y));
+        }
+
+        /// <summary>Checks if a point is inside the possible monitor space</summary>
+        /// <param name="p">The point to check</param>
+        public static bool PointWithinScreen(System.Drawing.Point p)
+        {
+            //if either x or y are negative it's an invalid location
+            if (p.X < 0 || p.Y < 0)
+                return false;
+            int totalWidth = 0, totalHeight = 0;
+            foreach (System.Windows.Forms.Screen s in System.Windows.Forms.Screen.AllScreens)
+            {
+                totalWidth += s.Bounds.Width;
+                totalHeight += s.Bounds.Height;
+            }
+            if (totalWidth > p.X && totalHeight > p.Y)
+                return true;
+            return false;
+        }
         #endregion
 
         #region File Utilities
