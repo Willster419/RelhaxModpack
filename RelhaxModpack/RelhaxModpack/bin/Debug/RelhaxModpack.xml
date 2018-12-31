@@ -940,6 +940,24 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxMediaPlayer">
+            <summary>
+            Interaction logic for RelhaxMediaPlayer.xaml
+            </summary>
+            <summary>
+            RelhaxMediaPlayer
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxPreviewIndex">
+            <summary>
+            A RelhaxPreviewIndex item is a glorified textblock with a hyperlink with a refrence to a media element
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.CiInfo">
             <summary>Info about the continuous integration server build that produced this binary.</summary> 
         </member>
@@ -1031,6 +1049,15 @@
             <param name="window">The window to get the list of</param>
             <param name="includeWindow">if the list should include the window itself</param>
             <returns>A list of type FrameowrkElement of all components</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.PointWithinScreen(System.Int32,System.Int32)">
+            <summary>Checks if a point is inside the possible monitor space</summary>
+            <param name="x">The x coordinate of the point</param>
+            <param name="y">The y coordinate of the point</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.PointWithinScreen(System.Drawing.Point)">
+            <summary>Checks if a point is inside the possible monitor space</summary>
+            <param name="p">The point to check</param>
         </member>
         <member name="M:RelhaxModpack.Utils.CreateMD5Hash(System.String)">
             <summary>
