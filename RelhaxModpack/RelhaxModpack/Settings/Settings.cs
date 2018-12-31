@@ -28,6 +28,12 @@ namespace RelhaxModpack
 
         public const string ThirdPartySettingsFileName = "ThirdPartySettings.xml";
 
+        public const string BetaDatabaseURL = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/modInfo.xml";
+
+        public const string DatabaseOnlineFolderXpath = "//modInfoAlpha.xml/@onlineFolder";
+
+        public const string DatabaseOnlineVersionXpath = "//modInfoAlpha.xml/@version";
+
         //the config file version for saving the user's selection prefrences
         public const string ConfigFileVersion = "2.0";
         public const string ApplicationUpdateURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";
