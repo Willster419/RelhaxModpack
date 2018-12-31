@@ -195,36 +195,24 @@ namespace RelhaxModpack
             WriteToLog(string.Format("[{0}]: {1}", sendingClass, message), Logfiles.Application, LogLevel.Debug, args);
         }
 
-        public static void Info(string message, Logfiles logfile)
+        public static void Info(string message)
         {
-            switch(logfile)
-            {
-                case Logfiles.Application:
-                    WriteToLog(message, logfile, LogLevel.Info);
-                    return;
-                case Logfiles.Installer:
-
-                    return;
-                case Logfiles.Uninstaller:
-
-                    return;
-            }
+            WriteToLog(message, Logfiles.Application, LogLevel.Info);
         }
 
-        public static void Info(string message, Logfiles logfile, params object[] args)
+        public static void Info(string message, string sendingClass)
         {
-            switch (logfile)
-            {
-                case Logfiles.Application:
-                    WriteToLog(message, logfile, LogLevel.Info, args);
-                    return;
-                case Logfiles.Installer:
+            WriteToLog(string.Format("[{0}]: {1}", sendingClass, message), Logfiles.Application, LogLevel.Info);
+        }
 
-                    return;
-                case Logfiles.Uninstaller:
+        public static void Info(string message, string sendingClass, params object[] args)
+        {
+            WriteToLog(string.Format("[{0}]: {1}", sendingClass, message), Logfiles.Application, LogLevel.Info, args);
+        }
 
-                    return;
-            }
+        public static void Info(string message, params object[] args)
+        {
+            WriteToLog(message, Logfiles.Application, LogLevel.Info, args);
         }
 
         public static void Warning(string message)
@@ -232,9 +220,19 @@ namespace RelhaxModpack
             WriteToLog(message, Logfiles.Application, LogLevel.Warning);
         }
 
+        public static void Warning(string message, string sendingClass)
+        {
+            WriteToLog(string.Format("[{0}]: {1}", sendingClass, message), Logfiles.Application, LogLevel.Warning);
+        }
+
         public static void Warning(string message, params object[] args)
         {
             WriteToLog(message, Logfiles.Application, LogLevel.Warning, args);
+        }
+
+        public static void Warning(string message, string sendingClass, params object[] args)
+        {
+            WriteToLog(string.Format("[{0}]: {1}", sendingClass, message), Logfiles.Application, LogLevel.Warning, args);
         }
 
         public static void Error(string message)
