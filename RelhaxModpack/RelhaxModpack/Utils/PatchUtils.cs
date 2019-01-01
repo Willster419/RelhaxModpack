@@ -35,16 +35,38 @@ namespace RelhaxModpack
         private static string XVMBootFileLoc2 = "\\mods\\configs\\xvm\\xvm.xc";
         #endregion
 
+        #region Main Patch Method
+        public static void RunPatch(Patch p)
+        {
+            //check if file exists
+            if (!File.Exists(p.CompletePath))
+            {
+                Logging.Warning("File {0} not found", p.CompletePath);
+                return;
+            }
+            //macro parsing needs to go here
+            Logging.Info(p.DumpPatchInfoForLog,Logfiles.Application);
+
+            //actually run the patches based on what type it is
+            switch (p.Type.ToLower())
+            {
+                case "regex":
+                case "regx":
+                    RegxPatch(p);
+                    break;
+                case "xml":
+                    XMLPatch(p);
+                    break;
+                case "json":
+                    JSONPatch(p);
+                    break;
+            }
+        }
+        #endregion
+
         #region XML
         public static void XMLPatch(Patch p)
         {
-            //verify the file exists...
-            if (!File.Exists(p.CompletePath))
-            {
-                Logging.WriteToLog(string.Format("File {0} not found", p.CompletePath), Logfiles.Application, LogLevel.Warning);
-                return;
-            }
-
             XmlDocument doc = new XmlDocument();
             doc.Load(p.CompletePath);
             //check to see if it has the header info at the top to see if we need to remove it later
@@ -196,15 +218,8 @@ namespace RelhaxModpack
         #region REGEX
         //method to patch a standard text or json file
         //fileLocation is relative to res_mods folder
-        public static void RegxPatch(Patch p, int lineNumber = 0, bool testMods = false, string testXVMBootLoc = "")
+        public static void RegxPatch(Patch p, int lineNumber = 0)
         {
-            //verify the file exists...
-            if (!File.Exists(p.CompletePath))
-            {
-                Logging.WriteToLog(string.Format("File {0} not found", p.CompletePath), Logfiles.Application, LogLevel.Warning);
-                return;
-            }
-
             //replace all "fake escape characters" with real escape characters
             //TODO: fix newlines and add warning for search and replace
             p.Search = p.Search.Replace(@"\n", "newline");
@@ -293,7 +308,7 @@ namespace RelhaxModpack
 
         #region JSON
         //method to parse json files
-        public static void JSONPatch(Patch p, bool testMods = false, string testXVMBootLoc = "")
+        public static void JSONPatch(Patch p)
         {
             //try to convert the new value to a bool or an int or double first
             bool newValueBool = false;
@@ -350,13 +365,6 @@ namespace RelhaxModpack
             }
             catch (FormatException)
             { }
-            
-            //verify the file exists...
-            if (!File.Exists(p.CompletePath))
-            {
-                Logging.WriteToLog(string.Format("file {0} not found", p.CompletePath), Logfiles.Application, LogLevel.Info);
-                return;
-            }
 
             //load file from disk...
             string file = File.ReadAllText(p.CompletePath);

@@ -591,8 +591,19 @@ namespace RelhaxModpack.Windows
                 {
                     if(infos.WoTClientVersion.Equals("GITHUB"))
                     {
-                        doc.LoadXml(await client.DownloadStringTaskAsync(
-                            "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/modInfo.xml"));
+                        doc.LoadXml(await client.DownloadStringTaskAsync(Settings.BetaDatabaseURL));
+                        string betaDatabaseOnlineFolderVersion = XMLUtils.GetXMLStringFromXPath(doc, Settings.DatabaseOnlineFolderXpath);
+                        ReportProgress(string.Format("GITHUB online folder={0}, selected online folder to clean version={1}",
+                            betaDatabaseOnlineFolderVersion, selectedVersionInfos.WoTOnlineFolderVersion));
+                        if (!betaDatabaseOnlineFolderVersion.Equals(selectedVersionInfos.WoTOnlineFolderVersion))
+                        {
+                            ReportProgress("Skipping (online folders are not equal)");
+                            continue;
+                        }
+                        else
+                        {
+                            ReportProgress("Including (online folders are equal");
+                        }
                     }
                     else
                     {
@@ -690,7 +701,7 @@ namespace RelhaxModpack.Windows
                 }
                 ReportProgress(string.Format("Deleting file {0} of {1}, {2}", count++, filesToDelete.Count, s));
                 await FTPDeleteFileAsync(string.Format("ftp://bigmods.relhaxmodpack.com/{0}/{1}",
-                    selectedVersionInfos.WoTClientVersion, s), CredentialsBigmods);
+                    selectedVersionInfos.WoTOnlineFolderVersion, s), CredentialsBigmods);
             }
             CleanZipFoldersTextbox.Clear();
             CleanFoldersOnlineCancelStep3.Visibility = Visibility.Hidden;

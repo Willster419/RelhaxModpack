@@ -1,11 +1,13 @@
 ﻿using Ionic.Zip;
 using Microsoft.Win32;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +18,17 @@ using System.Xml;
 
 namespace RelhaxModpack
 {
+
+    public enum ReplacementTypes
+    {
+        FilePath,
+        PatchArguements,
+        PatchFiles,
+        TextEscape,
+        TextUnescape,
+        ZipFilePath
+    }
+
     /// <summary>
     /// A utility class for static functions used in various places in the modpack
     /// </summary>
@@ -24,7 +37,33 @@ namespace RelhaxModpack
         #region Statics
         public static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
         public const long BYTES_TO_MBYTES = 1048576;
-        //MACROS TODO
+        //MACROS
+        //FilePath macro
+        //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/how-to-initialize-a-dictionary-with-a-collection-initializer
+        public static Dictionary<string, string> FilePathDict = new Dictionary<string, string>();
+        public static Dictionary<string, string> PatchArguementsDict = new Dictionary<string, string>()
+        {
+            //TODO
+        };
+        public static Dictionary<string, string> PatchFilesDict = new Dictionary<string, string>()
+        {
+            //TODO
+        };
+        public static Dictionary<string, string> TextUnscapeDict = new Dictionary<string, string>()
+        {
+            {@"\n", "\n" },
+            {@"\r", "\r" },
+            {@"\t", "\t" },
+            //legacy compatibilty (i can't believe i did this....)
+            {@"newline", "\n" }
+        };
+        public static Dictionary<string, string> TextEscapeDict = new Dictionary<string, string>()
+        {
+            {"\n", @"\n" },
+            {"\r", @"\r" },
+            {"\t", @"\t" }
+        };
+        public static Dictionary<string, string> ZipFilePathDict = new Dictionary<string, string>();
         #endregion
 
         #region Application Utils
@@ -113,6 +152,32 @@ namespace RelhaxModpack
                     GetAllWindowComponentsLogical(childVisual, allWindowComponents);
                 }
             }
+        }
+
+        /// <summary>Checks if a point is inside the possible monitor space</summary>
+        /// <param name="x">The x coordinate of the point</param>
+        /// <param name="y">The y coordinate of the point</param>
+        public static bool PointWithinScreen(int x, int y)
+        {
+            return PointWithinScreen(new System.Drawing.Point(x, y));
+        }
+
+        /// <summary>Checks if a point is inside the possible monitor space</summary>
+        /// <param name="p">The point to check</param>
+        public static bool PointWithinScreen(System.Drawing.Point p)
+        {
+            //if either x or y are negative it's an invalid location
+            if (p.X < 0 || p.Y < 0)
+                return false;
+            int totalWidth = 0, totalHeight = 0;
+            foreach (System.Windows.Forms.Screen s in System.Windows.Forms.Screen.AllScreens)
+            {
+                totalWidth += s.Bounds.Width;
+                totalHeight += s.Bounds.Height;
+            }
+            if (totalWidth > p.X && totalHeight > p.Y)
+                return true;
+            return false;
         }
         #endregion
 
@@ -502,6 +567,14 @@ namespace RelhaxModpack
                 return result;
             else return defaultValue;
         }
+        //https://stackoverflow.com/questions/10685794/how-to-use-generic-tryparse-with-enum
+        public static TEnum ParseEnum<TEnum>(string input, TEnum defaultValue)
+            where TEnum : struct, IConvertible
+        {
+            if (Enum.TryParse(input, true, out TEnum result))
+                return result;
+            else return defaultValue;
+        }
         #endregion
 
         #region Database Utils
@@ -768,7 +841,7 @@ namespace RelhaxModpack
         }
         #endregion
 
-        #region Generic utils
+        #region Generic Utils
         /// <summary>
         /// https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings-in-c
         /// </summary>
@@ -882,9 +955,64 @@ namespace RelhaxModpack
             }
             return false;
         }
-        public static void BuildMacroList()
+        public static void BuildFilepathMacroList()
         {
-            //TODO
+            if (FilePathDict == null)
+                throw new BadMemeException("REEEEEEEEEE");
+            FilePathDict.Clear();
+            FilePathDict.Add(@"{versiondir}", Settings.WoTClientVersion);
+            FilePathDict.Add(@"{tanksversion}", Settings.WoTClientVersion);
+            FilePathDict.Add(@"{tanksonlinefolderversion}", Settings.WoTModpackOnlineFolderVersion);
+            FilePathDict.Add(@"{appdata}", Settings.AppDataFolder);
+            FilePathDict.Add(@"{app}", Settings.WoTDirectory);
+        }
+        public static void BuildZipFilePathMacroList()
+        {
+            ZipFilePathDict.Clear();
+            ZipFilePathDict.Add("versiondir", Settings.WoTClientVersion);
+            ZipFilePathDict.Add("appdata", Settings.AppDataFolder);
+        }
+        public static string MacroReplace(string inputString, ReplacementTypes type)
+        {
+            //itterate through each entry depending on the dictionary. if the key is contained in the string, replace it
+            //use a switch to get which dictionary reaplce we will use
+            Dictionary<string,string> dictionary = null;
+            switch(type)
+            {
+                case ReplacementTypes.FilePath:
+                    dictionary = FilePathDict;
+                    break;
+                case ReplacementTypes.PatchArguements:
+                    dictionary = PatchArguementsDict;
+                    break;
+                case ReplacementTypes.PatchFiles:
+                    dictionary = PatchFilesDict;
+                    break;
+                case ReplacementTypes.TextEscape:
+                    dictionary = TextEscapeDict;
+                    break;
+                case ReplacementTypes.TextUnescape:
+                    dictionary = TextUnscapeDict;
+                    break;
+                case ReplacementTypes.ZipFilePath:
+                    dictionary = ZipFilePathDict;
+                    break;
+            }
+            if(dictionary == null)
+            {
+                Logging.Error("macro replace dictionary is null! type={0}", type.ToString());
+                return inputString;
+            }
+            for(int i = 0; i < dictionary.Count; i++)
+            {
+                string key = dictionary.ElementAt(i).Key;
+                string replace = dictionary.ElementAt(i).Value;
+                //https://stackoverflow.com/questions/444798/case-insensitive-containsstring
+                //it's an option, not actually used here lol
+                if (inputString.Contains(key))
+                    inputString = inputString.Replace(key, replace);
+            }
+            return inputString;
         }
         public static List<DatabasePackage> GetFlatList(List<DatabasePackage> globalDependnecies = null, List<Dependency> dependencies = null,
             List<Dependency> logicalDependencies = null, List<Category> parsedCategoryList = null)
@@ -902,54 +1030,6 @@ namespace RelhaxModpack
                 foreach (Category cat in parsedCategoryList)
                     flatList.AddRange(cat.GetFlatPackageList());
             return flatList;
-        }
-        #endregion
-
-        #region Selections parsing
-        public static void ParseDeveloperSelections()
-        {
-            //run php script to create xml string (async)
-        }
-        private static void OnDeveloperSelectionParsed()//TO PUT IN MODSELECTINLSIT
-        {
-            //get nodecollection of developerSelections
-              //display name
-              //list of mods
-            //make UI nodes radiobuttons in stackpanel
-              //text = displayname
-              //tag = list<string> packagesToSelect
-        }
-        private static void OnDeveloperSelectionSelect()//TO PUT IN MODSELECTIONLIST
-        {
-            //parseSelection (radioButton name, radioButton tag)
-        }
-        public static void ParseUserSelection(string filePath)
-        {
-            //load xml string
-            //get version ID
-            string versionID = "";
-            switch(versionID)
-            {
-                case "2.0":
-                  //parse via 2.0 method
-                  break;
-                default:
-                  //unknown or not supported
-                  break;
-            }
-        }
-        public static void ParseUserSelectionV2(XmlDocument doc)
-        {
-            //make list of stirng for packages to select
-        }
-        public static void ParseSelection()
-        {
-            //will take category view and packagelistToSelect<string>
-            //for each category load packages recursivly
-        }
-        public static void VerifySelection()
-        {
-            //verify selections and remove and rouge selections and report them
         }
         #endregion
 
@@ -1041,6 +1121,55 @@ namespace RelhaxModpack
             }
             //return false if nothing found
             return false;
+        }
+        #endregion
+
+        #region Install Utils
+
+        public static void CreateShortcut(Shortcut shortcut)
+        {
+
+        }
+
+        public static void CreateAtlas(Atlas atlas)
+        {
+
+        }
+
+
+        #endregion
+
+        #region Gross shortcut stuff
+        // needed for CreateShortcut
+        [ComImport]
+        [Guid("00021401-0000-0000-C000-000000000046")]
+        internal class ShellLink
+        {
+        }
+        // needed for CreateShortcut
+        [ComImport]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [Guid("000214F9-0000-0000-C000-000000000046")]
+        internal interface IShellLink
+        {
+            void GetPath([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszFile, int cchMaxPath, out IntPtr pfd, int fFlags);
+            void GetIDList(out IntPtr ppidl);
+            void SetIDList(IntPtr pidl);
+            void GetDescription([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszName, int cchMaxName);
+            void SetDescription([MarshalAs(UnmanagedType.LPWStr)] string pszName);
+            void GetWorkingDirectory([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszDir, int cchMaxPath);
+            void SetWorkingDirectory([MarshalAs(UnmanagedType.LPWStr)] string pszDir);
+            void GetArguments([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszArgs, int cchMaxPath);
+            void SetArguments([MarshalAs(UnmanagedType.LPWStr)] string pszArgs);
+            void GetHotkey(out short pwHotkey);
+            void SetHotkey(short wHotkey);
+            void GetShowCmd(out int piShowCmd);
+            void SetShowCmd(int iShowCmd);
+            void GetIconLocation([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszIconPath, int cchIconPath, out int piIcon);
+            void SetIconLocation([MarshalAs(UnmanagedType.LPWStr)] string pszIconPath, int iIcon);
+            void SetRelativePath([MarshalAs(UnmanagedType.LPWStr)] string pszPathRel, int dwReserved);
+            void Resolve(IntPtr hwnd, int fFlags);
+            void SetPath([MarshalAs(UnmanagedType.LPWStr)] string pszFile);
         }
         #endregion
     }

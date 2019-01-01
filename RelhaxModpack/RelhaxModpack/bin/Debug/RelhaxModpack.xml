@@ -704,7 +704,7 @@
         </member>
         <member name="T:RelhaxModpack.UISettings">
             <summary>
-            Handles all custom UI color settings
+            Handles all custom UI settings
             </summary>
         </member>
         <member name="M:RelhaxModpack.UISettings.LoadSettings(System.Boolean)">
@@ -721,6 +721,19 @@
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.DeveloperSelectionsViewer.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.Diagnostics">
+            <summary>
+            Interaction logic for Diagnostics.xaml
+            </summary>
+            <summary>
+            Diagnostics
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.Diagnostics.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>
@@ -757,6 +770,11 @@
             </summary>
             <summary>
             AddPicturesZip
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AddPicturesZip.FilesToAddList">
+            <summary>
+            FilesToAddList Name Field
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.AddPicturesZip.InitializeComponent">
@@ -940,17 +958,22 @@
             InitializeComponent
             </summary>
         </member>
-        <member name="T:RelhaxModpack.UIComponents.Window1">
+        <member name="T:RelhaxModpack.UIComponents.RelhaxMediaPlayer">
             <summary>
-            Interaction logic for Window1.xaml
+            Interaction logic for RelhaxMediaPlayer.xaml
             </summary>
             <summary>
-            Window1
+            RelhaxMediaPlayer
             </summary>
         </member>
-        <member name="M:RelhaxModpack.UIComponents.Window1.InitializeComponent">
+        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.InitializeComponent">
             <summary>
             InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxPreviewIndex">
+            <summary>
+            A RelhaxPreviewIndex item is a glorified textblock with a hyperlink with a refrence to a media element
             </summary>
         </member>
         <member name="T:RelhaxModpack.CiInfo">
@@ -1044,6 +1067,15 @@
             <param name="window">The window to get the list of</param>
             <param name="includeWindow">if the list should include the window itself</param>
             <returns>A list of type FrameowrkElement of all components</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.PointWithinScreen(System.Int32,System.Int32)">
+            <summary>Checks if a point is inside the possible monitor space</summary>
+            <param name="x">The x coordinate of the point</param>
+            <param name="y">The y coordinate of the point</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.PointWithinScreen(System.Drawing.Point)">
+            <summary>Checks if a point is inside the possible monitor space</summary>
+            <param name="p">The point to check</param>
         </member>
         <member name="M:RelhaxModpack.Utils.CreateMD5Hash(System.String)">
             <summary>
@@ -1180,7 +1212,7 @@
             <param name="base64EncodedData">The base64 stirng</param>
             <returns>The plain text version</returns>
         </member>
-        <member name="T:RelhaxModpack.XMLUtils">
+        <member name="T:RelhaxModpack.XmlLoadType">
             <summary>
             Utility class for all XML static methods
             </summary>

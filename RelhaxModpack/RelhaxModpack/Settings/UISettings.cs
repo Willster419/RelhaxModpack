@@ -10,11 +10,12 @@ using System.IO;
 using System.Windows.Controls;
 using RelhaxModpack.Windows;
 using System.Globalization;
+using System.Windows.Media.Imaging;
 
 namespace RelhaxModpack
 {
     /// <summary>
-    /// Handles all custom UI color settings
+    /// Handles all custom UI settings
     /// </summary>
     public static class UISettings
     {
@@ -34,6 +35,34 @@ namespace RelhaxModpack
         public static SolidColorBrush SelectedTextColor = SystemColors.ControlTextBrush;
         public static SolidColorBrush NotSelectedTextColor = SystemColors.ControlTextBrush;
         public static LinearGradientBrush NotSelectedTabColor = null;
+        #endregion
+
+        #region Image handling for the Preview
+        public static System.Drawing.Image GetLoadingImage()
+        {
+            switch (ModpackSettings.GIF)
+            {
+                default:
+                    Logging.Error("Unknown GIF setting: {0}, using default", ModpackSettings.GIF.ToString());
+                    return Properties.Resources.loading;
+                case LoadingGifs.Standard:
+                    return Properties.Resources.loading;
+                case LoadingGifs.ThirdGuards:
+                    return Properties.Resources.loading_3rdguards;
+            }
+        }
+        public static BitmapImage DrawingImageToWpfImage(System.Drawing.Image image)
+        {
+            //https://social.msdn.microsoft.com/Forums/vstudio/en-US/a6f74675-77f2-4dac-a7d9-971c77b0b5bf/convert-systemdrawingimage-to-systemwindowscontrolsimage
+            MemoryStream stream = new MemoryStream();
+            Properties.Resources.loading.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
+            BitmapImage bitIM = new BitmapImage();
+            bitIM.BeginInit();
+            bitIM.CacheOption = BitmapCacheOption.OnLoad;
+            bitIM.StreamSource = stream;
+            bitIM.EndInit();
+            return bitIM;
+        }
         #endregion
         /// <summary>
         /// Load the custom color definitions from XML
@@ -64,6 +93,7 @@ namespace RelhaxModpack
             }
             Logging.WriteToLog("UIDocument xml file loaded sucessfully", Logfiles.Application, LogLevel.Debug);
         }
+
         #region Apply to window
         public static void ApplyUIColorSettings(Window w)
         {
@@ -358,6 +388,7 @@ namespace RelhaxModpack
             }
         }
         #endregion
+
         #region Dump to file
         public static void DumpAllWindowColorSettingsToFile(string savePath)
         {

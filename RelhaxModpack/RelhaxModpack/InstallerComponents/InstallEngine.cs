@@ -203,19 +203,45 @@ namespace RelhaxModpack.InstallerComponents
             else
                 Logging.WriteToLog("...skipped");
 
-            //step 8: patch files (async option)
+            //step 8: unpack xml files
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
             InstallFinishedArgs.ExitCodes++;
-            Logging.WriteToLog(string.Format("Cleaning of mods foldres, current install time = {0} msec",
+            Logging.WriteToLog(string.Format("Unpack of xml files, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
-            //if statement TODO
-            if (ModpackSettings.CleanInstallation)
+            List<XmlUnpack> xmlUnpacks = MakeXmlUnpackListList();
+            if (xmlUnpacks.Count > 0)
             {
-
+                foreach(XmlUnpack xmlUnpack in xmlUnpacks)
+                {
+                    XMLUtils.UnpackXmlFile(xmlUnpack);
+                }
             }
             else
-                Logging.WriteToLog("...skipped");
+                Logging.WriteToLog("...skipped (no XmlUnpack entries parsed");
+
+            //step 8: patch files (async option)
+            //make the task array here. so far can be a maximum of 3 items
+            Task[] concurrentTasksAfterMainExtractoin = new Task[3];
+            int taskIndex = 0;
+            OldTime = InstallStopWatch.Elapsed;
+            Progress.TotalCurrent++;
+            InstallFinishedArgs.ExitCodes++;
+            Logging.WriteToLog(string.Format("Patching of files, current install time = {0} msec",
+                InstallStopWatch.Elapsed.TotalMilliseconds));
+            List<Patch> pathces = MakePatchList();
+            if (pathces.Count > 0)
+            {
+                concurrentTasksAfterMainExtractoin[taskIndex++] = Task.Factory.StartNew(() =>
+                {
+                    foreach (Patch patch in pathces)
+                    {
+                        PatchUtils.RunPatch(patch);
+                    }
+                });
+            }
+            else
+                Logging.WriteToLog("...skipped (no patch entries parsed)");
 
             //step 9: create create shortcuts (async option)
             OldTime = InstallStopWatch.Elapsed;
@@ -223,12 +249,19 @@ namespace RelhaxModpack.InstallerComponents
             InstallFinishedArgs.ExitCodes++;
             Logging.WriteToLog(string.Format("Creating of shortcuts, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
-            if (ModpackSettings.CreateShortcuts)
+            List<Shortcut> shortcuts = MakeShortcutList();
+            if (shortcuts.Count > 0)
             {
-
+                concurrentTasksAfterMainExtractoin[taskIndex++] = Task.Factory.StartNew(() =>
+                {
+                    foreach (Shortcut shortcut in shortcuts)
+                    {
+                        Utils.CreateShortcut(shortcut);
+                    }
+                });
             }
             else
-                Logging.WriteToLog("...skipped");
+                Logging.WriteToLog("...skipped (no shortcut entries parsed)");
 
             //step 10: create atlasas (async option)
             OldTime = InstallStopWatch.Elapsed;
@@ -236,25 +269,40 @@ namespace RelhaxModpack.InstallerComponents
             InstallFinishedArgs.ExitCodes++;
             Logging.WriteToLog(string.Format("Creating of atlases, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
-            //if statement TODO
-            if (ModpackSettings.CleanInstallation)
+            List<Atlas> atlases = MakeAtlasList();
+            if (atlases.Count > 0)
             {
-
+                concurrentTasksAfterMainExtractoin[taskIndex++] = Task.Factory.StartNew(() => 
+                {
+                    foreach (Atlas atlas in atlases)
+                    {
+                        Utils.CreateAtlas(atlas);
+                    }
+                });
             }
             else
-                Logging.WriteToLog("...skipped");
+                Logging.WriteToLog("...skipped (no atlas entries parsed)");
 
             //barrier goes here to make sure cleanup is the last thing to do
+            Task.WaitAll(concurrentTasksAfterMainExtractoin);
 
             //step 9: cleanup (whatever that implies lol)
+            OldTime = InstallStopWatch.Elapsed;
+            Progress.TotalCurrent++;
+            InstallFinishedArgs.ExitCodes++;
+            Logging.WriteToLog(string.Format("Cleanup, current install time = {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds));
+            Cleanup();
 
             //and i guess we're done
             //if were'not causing the main thread to await, then yeah report that we'er done
-            if(!AwaitCallback)
+            if (!AwaitCallback)
             {
                 InstallFinishedArgs.ExitCodes = InstallerExitCodes.Success;
                 ReportFinish();
             }
+
+            //report to log install is finished
+            Logging.Info("Install finished, total install time = {0} msec", Logfiles.Application, InstallStopWatch.Elapsed.TotalMilliseconds);
         }
         #endregion
 
@@ -364,6 +412,7 @@ namespace RelhaxModpack.InstallerComponents
                 else if (Directory.Exists(Path.Combine(Settings.AppDataFolder, file)))
                 {
                     //Utils.DirectoryMove(Path.Combine(Settings.AppDataFolder, file,) Path.Combine(AppPathTempFolder, file), true, null);
+                    throw new BadMemeException("i think you forgot to do something here...");
                 }
                 else
                 {
@@ -516,24 +565,6 @@ namespace RelhaxModpack.InstallerComponents
             return true;
         }
 
-        private bool PatchFiles()
-        {
-
-            return true;
-        }
-
-        private bool CreateShortcuts()
-        {
-
-            return true;
-        }
-
-        private bool CreateAtlases()
-        {
-
-            return true;
-        }
-
         private bool Cleanup()
         {
 
@@ -576,19 +607,26 @@ namespace RelhaxModpack.InstallerComponents
         {
             //do any zip file processing, then extract
             if (string.IsNullOrWhiteSpace(package.ZipFile))
-                throw new BadMemeException("REEEEEEEE");
+                return;
 
         }
 
         private bool UninstallModsQuick()
         {
-
+            //lol just wipe mods and res_mods and call it a day
             return true;
         }
 
         private bool UninstallModsDefault()
         {
+            //if the install log does not exist, all we can do is wipe the mods and res_mods folders
 
+            //get a list of all files and folders in the install log
+            //combine with a list of all files and folders in mods and res_mods
+            //sort and then reverse
+            //split off into files and folders and shortcuts
+            //if settings.createShortcuts, then don't delete them (at least here, for now)
+            //otherwise delete them
             return true;
         }
 
@@ -629,15 +667,9 @@ namespace RelhaxModpack.InstallerComponents
         private void AddPatchesFromFile(List<Patch> patches, string filename)
         {
             //make an xml document to get all patches
-            XmlDocument doc = new XmlDocument();
-            try
-            {
-                doc.Load(filename);
-            }
-            catch(XmlException xmlex)
-            {
-                Logging.Exception("Failed to parse xml patch file {0}\n{1}", filename, xmlex.ToString());
-            }
+            XmlDocument doc = XMLUtils.LoadXmlDocument(filename, XmlLoadType.FromFile);
+            if (doc == null)
+                return;
             //make new patch object for each entry
             //remember to add lots of logging
             XmlNodeList XMLpatches = XMLUtils.GetXMLNodesFromXPath(doc, "//patchs/patch");
@@ -725,16 +757,10 @@ namespace RelhaxModpack.InstallerComponents
 
         private void AddShortcutsFromFile(List<Shortcut> shortcuts, string filename)
         {
-            //make an xml document to get all patches
-            XmlDocument doc = new XmlDocument();
-            try
-            {
-                doc.Load(filename);
-            }
-            catch (XmlException xmlex)
-            {
-                Logging.Exception("Failed to parse xml patch file {0}\n{1}", filename, xmlex.ToString());
-            }
+            //make an xml document to get all shortuts
+            XmlDocument doc = XMLUtils.LoadXmlDocument(filename, XmlLoadType.FromFile);
+            if (doc == null)
+                return;
             //make new patch object for each entry
             //remember to add lots of logging
             XmlNodeList XMLshortcuts = XMLUtils.GetXMLNodesFromXPath(doc, "//shortcuts/shortcut");
@@ -746,7 +772,7 @@ namespace RelhaxModpack.InstallerComponents
             Logging.Info("Adding {0} patches from shortcutFile {1}", Logfiles.Application, XMLshortcuts.Count, filename);
             foreach (XmlNode patchNode in XMLshortcuts)
             {
-                Shortcut p = new Shortcut();
+                Shortcut sc = new Shortcut();
                 //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
                 foreach (XmlNode property in patchNode.ChildNodes)
                 {
@@ -754,16 +780,217 @@ namespace RelhaxModpack.InstallerComponents
                     //the corresponding attribute for the Patch instance
                     switch (property.Name)
                     {
-                        
+                        case "path":
+                            sc.Path = property.InnerText;
+                            break;
+                        case "name":
+                            sc.Name = property.InnerText;
+                            break;
+                        case "enabled":
+                            sc.Enabled = Utils.ParseBool(property.InnerText, false);
+                            break;
                     }
                 }
-                shortcuts.Add(p);
+                shortcuts.Add(sc);
             }
         }
 
-        //XML Unpack Import TODO
+        //XML Unpack
+        private List<XmlUnpack> MakeXmlUnpackListList()
+        {
+            List<XmlUnpack> XmlUnpacks = new List<XmlUnpack>();
+            //get a list of all files in the dedicated patch directory
+            //foreach one add it to the patch list
+            string[] unpack_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.XmlUnpackFolderName), SearchOption.TopDirectoryOnly,
+                @"*.xml", 50, 3, true);
+            if (unpack_files == null)
+                Logging.WriteToLog("Failed to parse shortcuts from shortcut directory (see above lines for more info", Logfiles.Application, LogLevel.Error);
+            else
+            {
+                Logging.WriteToLog(string.Format("Number of XmlUnpack files: {0}", unpack_files.Count()), Logfiles.Application, LogLevel.Debug);
+                //if there wern't any, don't bother doing anything
+                if (unpack_files.Count() > 0)
+                {
+                    string completePath = string.Empty;
+                    foreach (string filename in unpack_files)
+                    {
+                        completePath = Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName, filename);
+                        //just double check...
+                        if (!File.Exists(completePath))
+                        {
+                            Logging.WriteToLog("XmlUnpack file does not exist?? " + completePath, Logfiles.Application, LogLevel.Warning);
+                            continue;
+                        }
+                        //apply "normal" file properties just in case the user's wot install directory is special
+                        Utils.ApplyNormalFileProperties(completePath);
+                        //ok NOW actually add the file to the patch list
+                        AddXmlUnpackFromFile(XmlUnpacks, filename);
+                    }
+                }
+            }
+            return XmlUnpacks;
+        }
 
-        //Atlas parsing TODO
+        //actual XML unpack parsing TODO
+        private void AddXmlUnpackFromFile(List<XmlUnpack> XmlUnpacks, string filename)
+        {
+            //make an xml document to get all Xml Unpacks
+            XmlDocument doc = XMLUtils.LoadXmlDocument(filename, XmlLoadType.FromFile);
+            if (doc == null)
+                return;
+            //make new patch object for each entry
+            //remember to add lots of logging
+            XmlNodeList XMLUnpacks = XMLUtils.GetXMLNodesFromXPath(doc, "//files/file");
+            if (XMLUnpacks == null || XMLUnpacks.Count == 0)
+            {
+                Logging.Error("File {0} contains no XmlUnapck entries", filename);
+                return;
+            }
+            Logging.Info("Adding {0} patches from XmlUnpack file {1}", Logfiles.Application, XMLUnpacks.Count, filename);
+            foreach (XmlNode patchNode in XMLUnpacks)
+            {
+                XmlUnpack xmlup = new XmlUnpack();
+                //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
+                foreach (XmlNode property in patchNode.ChildNodes)
+                {
+                    //each element in the xml gets put into the
+                    //the corresponding attribute for the Patch instance
+                    switch (property.Name)
+                    {
+                        case "pkg":
+                            xmlup.Pkg = property.InnerText;
+                            break;
+                        case "directoryInArchive":
+                            xmlup.DirectoryInArchive = property.InnerText;
+                            break;
+                        case "fileName":
+                            xmlup.FileName = property.InnerText;
+                            break;
+                        case "extractDirectory":
+                            xmlup.ExtractDirectory = property.InnerText;
+                            break;
+                        case "newFileName":
+                            xmlup.NewFileName = property.InnerText;
+                            break;
+                    }
+                }
+                XmlUnpacks.Add(xmlup);
+            }
+        }
+
+        //Atlas parsing
+        private List<Atlas> MakeAtlasList()
+        {
+            List<Atlas> atlases = new List<Atlas>();
+            //get a list of all files in the dedicated patch directory
+            //foreach one add it to the patch list
+            string[] atlas_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.AtlasCreationFoldername), SearchOption.TopDirectoryOnly,
+                @"*.xml", 50, 3, true);
+            if (atlas_files == null)
+                Logging.WriteToLog("Failed to parse atlases from atlas directory (see above lines for more info", Logfiles.Application, LogLevel.Error);
+            else
+            {
+                Logging.WriteToLog(string.Format("Number of atlas files: {0}", atlas_files.Count()), Logfiles.Application, LogLevel.Debug);
+                //if there wern't any, don't bother doing anything
+                if (atlas_files.Count() > 0)
+                {
+                    string completePath = string.Empty;
+                    foreach (string filename in atlas_files)
+                    {
+                        completePath = Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName, filename);
+                        //just double check...
+                        if (!File.Exists(completePath))
+                        {
+                            Logging.WriteToLog("atlas file does not exist?? " + completePath, Logfiles.Application, LogLevel.Warning);
+                            continue;
+                        }
+                        //apply "normal" file properties just in case the user's wot install directory is special
+                        Utils.ApplyNormalFileProperties(completePath);
+                        //ok NOW actually add the file to the patch list
+                        AddAtlasFromFile(atlases, filename);
+                    }
+                }
+            }
+            return atlases;
+        }
+
+        //actual Atlas parsing TODO
+        private void AddAtlasFromFile(List<Atlas> atlases, string filename)
+        {
+            //make an xml document to get all Xml Unpacks
+            XmlDocument doc = XMLUtils.LoadXmlDocument(filename, XmlLoadType.FromFile);
+            if (doc == null)
+                return;
+            //make new patch object for each entry
+            //remember to add lots of logging
+            XmlNodeList XMLAtlases = XMLUtils.GetXMLNodesFromXPath(doc, "//atlases/atlas");
+            if (XMLAtlases == null || XMLAtlases.Count == 0)
+            {
+                Logging.Error("File {0} contains no XmlUnapck entries", filename);
+                return;
+            }
+            Logging.Info("Adding {0} patches from XmlUnpack file {1}", Logfiles.Application, XMLAtlases.Count, filename);
+            foreach (XmlNode atlasNode in XMLAtlases)
+            {
+                Atlas sc = new Atlas();
+                //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
+                foreach (XmlNode property in atlasNode.ChildNodes)
+                {
+                    //each element in the xml gets put into the
+                    //the corresponding attribute for the Patch instance
+                    switch (property.Name)
+                    {
+                        case "pkg":
+                            sc.Pkg = property.InnerText;
+                            break;
+                        case "directoryInArchive":
+                            sc.DirectoryInArchive = property.InnerText;
+                            break;
+                        case "atlasFile":
+                            sc.AtlasFile = property.InnerText;
+                            break;
+                        case "mapFile":
+                            sc.MapFile = property.InnerText;
+                            break;
+                        case "generateMap":
+                            sc.GenerateMap = Utils.ParseEnum(property.InnerText,Atlas.State.True);
+                            break;
+                        case "mapType":
+                            sc.MapType = Utils.ParseEnum(property.InnerText, Atlas.MapTypes.WGXmlMap);
+                            break;
+                        case "powOf2":
+                            sc.PowOf2 = Utils.ParseEnum(property.InnerText,Atlas.State.False);
+                            break;
+                        case "square":
+                            sc.Square = Utils.ParseEnum(property.InnerText,Atlas.State.False);
+                            break;
+                        case "fastImagePacker":
+                            sc.FastImagePacker = Utils.ParseBool(property.InnerText,false);
+                            break;
+                        case "padding":
+                            sc.Padding = Utils.ParseInt(property.InnerText,1);
+                            break;
+                        case "atlasWidth":
+                            sc.AtlasWidth = Utils.ParseInt(property.InnerText, 2400);
+                            break;
+                        case "atlasHeight":
+                            sc.AtlasHeight = Utils.ParseInt(property.InnerText,8192);
+                            break;
+                        case "atlasSaveDirectory":
+                            sc.AtlasSaveDirectory = property.InnerText;
+                            break;
+                        case "imageFolders":
+                            //sc.im = property.InnerText;
+                            foreach(XmlNode imageFolder in property.ChildNodes)
+                            {
+                                sc.ImageFolderList.Add(imageFolder.InnerText);
+                            }
+                            break;
+                    }
+                }
+                atlases.Add(sc);
+            }
+        }
         #endregion
 
         #region IDisposable Support
