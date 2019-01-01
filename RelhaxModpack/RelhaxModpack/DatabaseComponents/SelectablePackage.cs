@@ -94,7 +94,10 @@ namespace RelhaxModpack
         /// description of the package
         /// </summary>
         public string Description = "";
+
         public string Hotkeys = "";
+
+        public bool PopularMod = false;
         /// <summary>
         /// field for wether the package is selected to install
         /// </summary>
