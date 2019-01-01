@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using RelhaxModpack.UIComponents;
+using System.Threading;
+using System.IO;
 
 namespace RelhaxModpack.Windows
 {
@@ -109,7 +109,7 @@ namespace RelhaxModpack.Windows
             DisplayMedia(e.Media);
         }
 
-        private void DisplayMedia(Media media)
+        private async void DisplayMedia(Media media)
         {
             //null the child element and make it again
             MainPreviewBorder.Child = null;
@@ -127,15 +127,18 @@ namespace RelhaxModpack.Windows
                     MainPreviewBorder.Child = browser;
                     break;
                 case MediaType.MediaFile:
-
+                    MainPreviewBorder.Child = new RelhaxMediaPlayer(media.URL);
                     break;
                 case MediaType.Picture:
                     //https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.image?view=netframework-4.7.2
                     Image pictureViewer = new Image();
                     pictureViewer.MouseLeftButtonDown += PictureViewer_MouseLeftButtonDown;
-                    //http://dasselsoftwaredevelopment.com/code-samples/changing-the-source-of-an-image-in-c/
-                    pictureViewer.Source = new BitmapImage(new Uri(media.URL));
                     MainPreviewBorder.Child = pictureViewer;
+                    //quick set to internal loading thing
+                    pictureViewer.Source = UISettings.DrawingImageToWpfImage(UISettings.GetLoadingImage());
+                    //http://dasselsoftwaredevelopment.com/code-samples/changing-the-source-of-an-image-in-c/
+                    await System.Threading.Tasks.Task.Factory.StartNew(() =>
+                    { pictureViewer.Source = new BitmapImage(new Uri(media.URL)); });
                     break;
                 case MediaType.Webpage:
                     WebBrowser browserr = new WebBrowser();
