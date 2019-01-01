@@ -12,12 +12,10 @@
             <RowDefinition/>
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
-        <TextBlock HorizontalAlignment="Stretch" Margin="10,0,10,0" TextWrapping="Wrap" Text="Add any additional helpfull files here (your selection file, picture, etc.)" VerticalAlignment="Top"/>
-        <ListBox Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-        <Button Content="Add files" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="2" VerticalAlignment="Top" Width="61"/>
-        <Button Content="Add pictures" HorizontalAlignment="Left" Margin="76,0,0,0" Grid.Row="2" VerticalAlignment="Top" Width="75"/>
-        <Button Content="Remove Selected" HorizontalAlignment="Left" Margin="156,0,0,0" Grid.Row="2" VerticalAlignment="Top" Width="98"/>
-        <Button Content="Continue" HorizontalAlignment="Right" Margin="0,0,10,0" Grid.Row="2" VerticalAlignment="Top" Width="75"/>
-
+        <TextBlock x:Name="AddSelectionsPicturesLabel" HorizontalAlignment="Stretch" Margin="10,0,10,0" TextWrapping="Wrap" Text="Add any additional helpful files here (your selection file, picture, etc.)" VerticalAlignment="Top"/>
+        <ListBox x:FieldModifier="public" x:Name="FilesToAddList" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Visible" AllowDrop="True" SelectionMode="Multiple" DragEnter="FilesToAddList_DragEnter" Drop="FilesToAddList_Drop" />
+        <Button x:Name="AddFilesButton" Content="Add files" HorizontalAlignment="Left" Margin="10,0,0,5" Grid.Row="2" VerticalAlignment="Bottom" Width="61" Click="AddFilesButton_Click"/>
+        <Button x:Name="RemoveSelectedButton" Content="Remove Selected" HorizontalAlignment="Left" Margin="76,0,0,5" Grid.Row="2" VerticalAlignment="Bottom" Width="98" Click="RemoveSelectedButton_Click"/>
+        <Button x:Name="ContinueButton" Content="Continue" HorizontalAlignment="Right" Margin="0,0,10,5" Grid.Row="2" VerticalAlignment="Bottom" Width="75" Click="ContinueButton_Click"/>
     </Grid>
 </local:RelhaxWindow>

@@ -704,7 +704,7 @@
         </member>
         <member name="T:RelhaxModpack.UISettings">
             <summary>
-            Handles all custom UI color settings
+            Handles all custom UI settings
             </summary>
         </member>
         <member name="M:RelhaxModpack.UISettings.LoadSettings(System.Boolean)">
@@ -721,6 +721,19 @@
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.DeveloperSelectionsViewer.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.Diagnostics">
+            <summary>
+            Interaction logic for Diagnostics.xaml
+            </summary>
+            <summary>
+            Diagnostics
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.Diagnostics.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>
@@ -757,6 +770,11 @@
             </summary>
             <summary>
             AddPicturesZip
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AddPicturesZip.FilesToAddList">
+            <summary>
+            FilesToAddList Name Field
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.AddPicturesZip.InitializeComponent">
