@@ -28,6 +28,8 @@ namespace RelhaxModpack
 
         public const string ThirdPartySettingsFileName = "ThirdPartySettings.xml";
 
+        public const string LastSavedConfigFilename = "lastInstalledConfig.xml";
+
         public const string BetaDatabaseURL = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/modInfo.xml";
 
         public const string DatabaseOnlineFolderXpath = "//modInfoAlpha.xml/@onlineFolder";
@@ -58,6 +60,24 @@ namespace RelhaxModpack
 
         public static readonly string RelhaxTempFolder = Path.Combine(ApplicationStartupPath, "RelhaxTemp");
 
+        public const string PatchFolderName = "_patch";
+
+        public const string ShortcutFolderName = "_shortcuts";
+
+        public const string XmlUnpackFolderName = "_xmlUnPack";
+
+        public const string AtlasCreationFoldername = "_atlases";
+
+        public static readonly string MD5HashDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "MD5HashDatabase.xml");
+
+        public static readonly string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, "managerInfo.dat");
+
+        public static readonly string LastInstalledConfigFilepath = Path.Combine(RelhaxUserConfigsFolder, LastSavedConfigFilename);
+
+        public static readonly string RelhaxSettingsFilepath = Path.Combine(ApplicationStartupPath, ModpackSettingsFileName);
+
+        public static readonly string RelhaxLogFilepath = Path.Combine(ApplicationStartupPath, Logging.ApplicationLogFilename);
+
         public static readonly string[] FoldersToCheck = new string[]
         {
             RelhaxDownloadsFolder,
@@ -68,19 +88,7 @@ namespace RelhaxModpack
             RelhaxTempFolder
         };
 
-        public static readonly string MD5HashDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "MD5HashDatabase.xml");
-
-        public static readonly string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, "managerInfo.dat");
-
         public static readonly int NumLogicalProcesors = Environment.ProcessorCount;
-
-        public const string PatchFolderName = "_patch";
-
-        public const string ShortcutFolderName = "_shortcuts";
-
-        public const string XmlUnpackFolderName = "_xmlUnPack";
-
-        public const string AtlasCreationFoldername = "_atlases";
         #endregion
 
         #region Statics
