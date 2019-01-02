@@ -116,6 +116,7 @@
     <Compile Include="InstallerComponents\XmlUnpack.cs" />
     <Compile Include="Logging\Logfile.cs" />
     <Compile Include="Logging\Logging.cs" />
+    <Compile Include="PrivateStuff\relhaxmodpackprivatesettings\PrivateStuff.cs" />
     <Compile Include="Settings\ModpackSettings.cs" />
     <Compile Include="Settings\CommandLineSettings.cs" />
     <Compile Include="Settings\Settings.cs" />
