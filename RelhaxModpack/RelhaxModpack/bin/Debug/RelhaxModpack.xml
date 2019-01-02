@@ -976,6 +976,19 @@
             A RelhaxPreviewIndex item is a glorified textblock with a hyperlink with a refrence to a media element
             </summary>
         </member>
+        <member name="T:RelhaxModpack.UIComponents.Window1">
+            <summary>
+            Interaction logic for Window1.xaml
+            </summary>
+            <summary>
+            Window1
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.Window1.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.CiInfo">
             <summary>Info about the continuous integration server build that produced this binary.</summary> 
         </member>
