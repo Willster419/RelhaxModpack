@@ -35,6 +35,7 @@ namespace RelhaxModpack
         private long last_bytes_downloaded;
         private long current_bytes_downloaded;
         private RelhaxProgress downloadProgress = null;
+        private AdvancedProgress AdvancedProgressWindow;
 
         /// <summary>
         /// Creates the instance of the MainWindow class
@@ -820,7 +821,17 @@ namespace RelhaxModpack
                 ProcessDownloadsAsync(packagesToDownload);
             }
             //now let's start the install procedures
-            //create and link the install engine
+            //like if we need to make the advanced install window
+            //but null it at all times
+            if (AdvancedProgressWindow != null)
+                AdvancedProgressWindow = null;
+            if (ModpackSettings.AdvancedInstalProgress)
+            {
+                AdvancedProgressWindow= new AdvancedProgress();
+                AdvancedProgressWindow.Show();
+            }
+
+            //and create and link the install engine
             InstallerComponents.InstallEngine engine = new InstallerComponents.InstallEngine()
             {
                 FlatListSelectablePackages = flatListSelect,
@@ -848,9 +859,22 @@ namespace RelhaxModpack
             }
         }
 
-        private void Engine_OnInstallProgress(object sender, RelhaxProgress e)
+        private void Engine_OnInstallProgress(object sender, RelhaxInstallerProgress e)
         {
-            
+            if(ModpackSettings.AdvancedInstalProgress )
+            {
+                if(AdvancedProgressWindow == null)
+                {
+                    throw new BadMemeException("but how");
+                }
+                AdvancedProgressWindow.OnReportAdvancedProgress(e);
+            }
+            else
+            {
+                //standard progress
+
+                //other reporting here
+            }
         }
 
         //handles processing of downloads and nothing more...

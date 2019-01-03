@@ -24,6 +24,8 @@ namespace RelhaxModpack.Windows
     public partial class DatabaseUpdater : RelhaxWindow
     {
         #region Constants
+        //get the sensitive constants (like this test below) from the PrivateStuff class
+        private string TestPasswordRef = PrivateStuff.thing;
         private const string DatabaseUpdateTxt = "databaseUpdate.txt";
         private const string KeyAddress = "aHR0cDovL3dvdG1vZHMucmVsaGF4bW9kcGFjay5jb20vUmVsaGF4TW9kcGFjay9SZXNvdXJjZXMvZXh0ZXJuYWwva2V5LnR4dA==";
         private const string ModpackUsername = "modpack@wotmods.relhaxmodpack.com";

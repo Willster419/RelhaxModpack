@@ -43,6 +43,7 @@ namespace RelhaxModpack.Windows
         private bool LoadingConfig = false;
         private bool IgnoreSearchBoxFocus = false;
         private List<SelectablePackage> userMods;
+        private Preview p;
 
         #region Boring stuff
         public ModSelectionList()
@@ -74,6 +75,12 @@ namespace RelhaxModpack.Windows
 
         private void RelhaxWindow_Closed(object sender, EventArgs e)
         {
+            if (p != null)
+            {
+                p.Close();
+                p = null;
+            }
+
             if (OnSelectionListReturn != null)
             {
                 OnSelectionListReturn(this, new SelectionListEventArgs()
@@ -987,23 +994,17 @@ namespace RelhaxModpack.Windows
                 }
                 if (spc.DevURL == null)
                     spc.DevURL = "";
-                //PREVIEW GENERATION DISABELD
-                /*
+                //show the preview
                 if (p != null)
                 {
                     p.Close();
-                    p.Dispose();
                     p = null;
-                    GC.Collect();
                 }
                 p = new Preview()
                 {
-                    LastUpdated = LastUpdated,
-                    DBO = spc,
-                    Medias = spc.PictureList
+                    Package = spc
                 };
                 p.Show();
-                */
             }
         }
 

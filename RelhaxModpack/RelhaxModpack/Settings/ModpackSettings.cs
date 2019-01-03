@@ -155,6 +155,8 @@ namespace RelhaxModpack
         /// toggle export mode
         /// </summary>
         public static bool ExportMode = false;
+
+        public static bool AdvancedInstalProgress = false;
         /// <summary>
         /// the height, in pixels, of the ModSelectionView window
         /// </summary>
