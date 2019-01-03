@@ -13,7 +13,7 @@ namespace RelhaxModpack.InstallerComponents
     #region Event stuff
     public enum InstallerExitCodes
     {
-        Success,
+        Success,//starts at 0
         DownloadModsError,
         BackupModsError,
         BackupDataError,
@@ -34,7 +34,7 @@ namespace RelhaxModpack.InstallerComponents
         public string ErrorMessage;
     }
     public delegate void InstallFinishedDelegate(object sender, RelhaxInstallFinishedEventArgs e);
-    public delegate void InstallProgressDelegate(object sender, RelhaxProgress e);
+    public delegate void InstallProgressDelegate(object sender, RelhaxInstallerProgress e);
     #endregion
 
     public class InstallEngine : IDisposable
@@ -49,7 +49,7 @@ namespace RelhaxModpack.InstallerComponents
         private RelhaxInstallFinishedEventArgs InstallFinishedArgs = new RelhaxInstallFinishedEventArgs();
         private Stopwatch InstallStopWatch = new Stopwatch();
         private TimeSpan OldTime;
-        private RelhaxProgress Progress = new RelhaxProgress();
+        private RelhaxInstallerProgress Progress = new RelhaxInstallerProgress();
         #endregion
 
         #region More boring stuff
@@ -73,7 +73,7 @@ namespace RelhaxModpack.InstallerComponents
         }
         #endregion
 
-        #region installer entry points
+        #region Installer entry points
         public async void RunInstallationAsync()
         {
             if (AwaitCallback)
