@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RelhaxModpack.InstallerComponents;
 
 namespace RelhaxModpack.UIComponents
 {
@@ -17,5 +18,12 @@ namespace RelhaxModpack.UIComponents
         public int TotalCurrent, TotalTotal;//#meta
         public string TotalCurrentProgress;
         public string ReportMessage;
+    }
+
+    public class RelhaxInstallerProgress : RelhaxProgress
+    {
+        public long BytesProcessed, BytesTotal;
+        public string Filename, EntryFilename;
+        public InstallerExitCodes InstallStatus;
     }
 }
