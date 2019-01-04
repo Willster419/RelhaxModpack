@@ -545,19 +545,15 @@ namespace RelhaxModpack
                 }
                 UserMods[i].Enabled = true;
                 UserPackage.Enabled = true;
+                //add internal database refrences
                 UserMods[i].UIComponent = UserPackage;
                 UserMods[i].ParentUIComponent = UserPackage;
                 UserMods[i].TopParentUIComponent = UserPackage;
+                //add UI refrence based on type of view
                 UserPackage.Click += OnMultiPackageClick;
                 tb.Controls.Add(UserPackage);
             }
             modTabGroups.TabPages.Add(tb);
-        }
-
-        private void UserPackage_CheckedChanged(object sender, EventArgs e)
-        {
-            RelhaxUserCheckBox cb = (RelhaxUserCheckBox)sender;
-            cb.Package.Checked = cb.Checked;
         }
 
         private void FinishLoad()
