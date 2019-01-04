@@ -1,3 +1,9 @@
+Version 0.28.2.17 (01/03/2019)
+https://www.virustotal.com/#/file/d8a273613234a81d9756ef695b3daf214c0330c901c267289b6a7ef9c2730c9f/detection
+-Fixed bug in OMC and DefaultV2 views where user mods would not color change, and also would throw exceptions if used with DarkUI setting
+-Added more exception logging in Utils class
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 0.28.2.16 (12/10/2018)
 https://www.virustotal.com/#/file/1dfac9cbcb064c73a8a0866528ce1c8a95a8b99f9af0acd8b70acd309121ef86/detection
 -Hotfix for issue during installation cleanup where some installer's temporary files would fail to delete on some systems
