@@ -540,7 +540,13 @@ namespace RelhaxModpack
                     {
                         foreach (string r in pages)
                         {
-                            client.DownloadString(r);
+                            try
+                            { client.DownloadString(r); }
+                            catch (WebException webex )
+                            {
+                                Logging.Manager(string.Format("An error occured while loading the forum page {0}:{1}{2}",
+                                    r, Environment.NewLine, webex.Message));
+                            }
                         }
                     }
                 };
@@ -548,7 +554,7 @@ namespace RelhaxModpack
                 {
                     if(args.Error != null)
                     {
-                        Logging.Manager("An error occured while loading forum page(s)");
+                        Logging.Manager("A random error occured while loading forum page(s)");
                     }
                 };
                 worker.RunWorkerAsync();
