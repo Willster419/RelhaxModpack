@@ -64,13 +64,13 @@ namespace RelhaxModpack.Windows
         {
             if(percent > LoadingProgressBar.Maximum)
             {
-                Logging.WriteToLog(string.Format("percent value of {0} is greator than maximu set value of {1}, setting to maxumum instead"
+                Logging.WriteToLog(string.Format("percent value of {0} is greater than maximum set value of {1}, setting to maximum instead"
                     , percent, LoadingProgressBar.Maximum), Logfiles.Application, LogLevel.Warning);
                 LoadingProgressBar.Value = LoadingProgressBar.Maximum;
             }
             else if (percent < 0)
             {
-                Logging.WriteToLog(string.Format("percent value of {0} is less than {1}, setting to maxumum instead", percent, LoadingProgressBar.Minimum),
+                Logging.WriteToLog(string.Format("percent value of {0} is less than {1}, setting to maximum instead", percent, LoadingProgressBar.Minimum),
                     Logfiles.Application, LogLevel.Warning);
                 LoadingProgressBar.Value = LoadingProgressBar.Minimum;
             }
