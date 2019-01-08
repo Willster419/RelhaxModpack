@@ -1,27 +1,31 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using System.Reflection;
 using System.Windows;
 
 namespace RelhaxModpack
 {
     /// <summary>
-    /// Utility class for all XML static methods
+    /// Xml document load type enumeration
     /// </summary>
-    
     public enum XmlLoadType
     {
+        /// <summary>
+        /// loading xml from a file on disk
+        /// </summary>
         FromFile,
+        /// <summary>
+        /// loading xml from a text string
+        /// </summary>
         FromXml
     }
-
+    /// <summary>
+    /// Utility class for all XML static methods
+    /// </summary>
     public static class XMLUtils
     {
         #region Statics
@@ -30,12 +34,21 @@ namespace RelhaxModpack
         #endregion
 
         #region XML Validating
-        //check to make sure an xml file is valid
+        /// <summary>
+        /// check to make sure an xml file is valid
+        /// </summary>
+        /// <param name="filePath">The path to the xml file</param>
+        /// <returns>True if valid XML, false otherwise</returns>
         public static bool IsValidXml(string filePath)
         {
             return IsValidXml(File.ReadAllText(filePath), Path.GetFileName(filePath));
         }
-        //check to make sure an xml file is valid
+        /// <summary>
+        /// check to make sure an xml file is valid
+        /// </summary>
+        /// <param name="xmlString">The xml text string</param>
+        /// <param name="fileName">the name of the file, used for debugging purposes</param>
+        /// <returns>True if valid XML, false otherwise</returns>
         public static bool IsValidXml(string xmlString, string fileName)
         {
             using (XmlTextReader read = new XmlTextReader(xmlString))
@@ -58,7 +71,12 @@ namespace RelhaxModpack
         #endregion
 
         #region Xpath stuff
-        //get an xml element attribute given an xml path
+        /// <summary>
+        /// get an xml element attribute given an xml path
+        /// </summary>
+        /// <param name="file">The path to the XML file</param>
+        /// <param name="xpath">The xpath search string</param>
+        /// <returns>The value from the xpath search, otherwise null</returns>
         public static string GetXMLStringFromXPath(string file, string xpath)
         {
             XmlDocument doc = new XmlDocument();
@@ -73,7 +91,13 @@ namespace RelhaxModpack
             }
             return GetXMLStringFromXPath(doc, xpath);
         }
-        //get an xml element attribute given an xml path
+        /// <summary>
+        /// get an xml element attribute given an xml path
+        /// </summary>
+        /// <param name="xmlString">The XML text string</param>
+        /// <param name="xpath">The xpath search string</param>
+        /// <param name="filename"></param>
+        /// <returns>The value from the xpath search, otherwise null</returns>
         public static string GetXMLStringFromXPath(string xmlString, string xpath, string filename)
         {
             XmlDocument doc = new XmlDocument();
@@ -93,6 +117,12 @@ namespace RelhaxModpack
         //attribute example: "//root/element/@attribute"
         //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
         //for the folder version: //modInfoAlpha.xml/@version
+        /// <summary>
+        /// get an xml element attribute given an xml path
+        /// </summary>
+        /// <param name="doc">The XML document object to check</param>
+        /// <param name="xpath">The xpath search string</param>
+        /// <returns>The value from the xpath search, otherwise null</returns>
         public static string GetXMLStringFromXPath(XmlDocument doc, string xpath)
         {
             //set to something dumb for temporary purposes
@@ -487,9 +517,7 @@ namespace RelhaxModpack
                     Logging.WriteToLog("Parsing database error," + s, Logfiles.Application, LogLevel.Error);
             }
         }
-        //{ "UserFiles", "Packages", "Medias" }//packages are different story
-        //{ "Dependencies" }
-        //inside packages - component required attributes
+
         public static readonly string[] UserfilesRequiredNodesV2 = new string[] { "Pattern" };
         private static void ProcessUserFiles(XElement userFilesHolder, List<UserFiles> userfiles)
         {
@@ -631,7 +659,8 @@ namespace RelhaxModpack
 
         public static void UnpackXmlFile(XmlUnpack xmlUnpack)
         {
-
+            throw new BadMemeException("need to implement this still");
+            //TODO
         }
         #endregion
 
