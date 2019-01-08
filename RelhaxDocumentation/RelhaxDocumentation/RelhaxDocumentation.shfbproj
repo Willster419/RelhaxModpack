@@ -60,7 +60,7 @@
     <FeedbackEMailLinkText>info%40relhaxmodpack.com</FeedbackEMailLinkText>
     <SdkLinkTarget>Top</SdkLinkTarget>
     <CopyrightHref>Copyright %28C%29 2019 Willard Wider</CopyrightHref>
-    <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, InheritedFrameworkInternalMembers, InheritedFrameworkPrivateMembers, Internals, Privates, PrivateFields, Protected, SealedProtected, EditorBrowsableNever, NonBrowsable</VisibleItems>
+    <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, InheritedFrameworkInternalMembers, InheritedFrameworkPrivateMembers, Internals, Privates, PrivateFields, Protected, SealedProtected</VisibleItems>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
 			 the build.  The others are optional common platform types that may appear. -->
