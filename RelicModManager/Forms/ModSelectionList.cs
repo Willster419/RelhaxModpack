@@ -1327,7 +1327,8 @@ namespace RelhaxModpack
                 //uncheck all packages of the same type
                 if(childPackage.Type.Equals(spc.Type))
                 {
-                    childPackage.Checked = false;
+                    if(childPackage.Checked)
+                        childPackage.Checked = false;
                 }
             }
             //verify selected is actually checked
