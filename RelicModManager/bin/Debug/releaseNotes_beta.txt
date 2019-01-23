@@ -1,3 +1,9 @@
+Version 0.28.2.18 (01/23/2019)
+https://www.virustotal.com/#/file/924157d54f0e4501686bf0f9fb479e1aecb4b794fba37f5796daafd69ab6433c/detection
+-Fixed a bug in default view when using DarkUI, the drop down options would not show properly
+-Fixed a bug in defaultV2 view and OMC view when using DarkUI and color change, drop down options would cause a crash.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 0.28.2.17 (01/03/2019)
 https://www.virustotal.com/#/file/d8a273613234a81d9756ef695b3daf214c0330c901c267289b6a7ef9c2730c9f/detection
 -Fixed bug in OMC and DefaultV2 views where user mods would not color change, and also would throw exceptions if used with DarkUI setting
