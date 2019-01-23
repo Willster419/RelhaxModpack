@@ -759,7 +759,7 @@ namespace RelhaxModpack
                                     Enabled = false,
                                     Name = "notAddedYet",
                                     DropDownStyle = ComboBoxStyle.DropDownList,
-                                    ForeColor = Settings.GetTextColorWinForms()
+                                    ForeColor = SystemColors.ControlText
                                 };
                                 //https://stackoverflow.com/questions/1882993/c-sharp-how-do-i-prevent-mousewheel-scrolling-in-my-combobox
                                 sp.Parent.RelhaxFormComboBoxList[0].MouseWheel += (o, e) => ((HandledMouseEventArgs)e).Handled = true;
