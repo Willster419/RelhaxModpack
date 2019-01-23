@@ -520,6 +520,10 @@ namespace RelhaxModpack
         /// <returns>True if another package at this level is checked and enabled, false otherwise</returns>
         public bool AnyPackagesChecked()
         {
+            if (Parent == null)
+                return false;
+            if (Parent.Packages.Count == 0)
+                return false;
             foreach (SelectablePackage sp in Parent.Packages)
             {
                 if (sp.Enabled && sp.Checked)
