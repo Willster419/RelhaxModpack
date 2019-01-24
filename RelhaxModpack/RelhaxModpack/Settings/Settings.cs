@@ -42,6 +42,10 @@ namespace RelhaxModpack
         public const string ApplicationBetaUpdateURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.zip";
         public const string ApplicationUpdateFileName = "RelhaxModpack_update.zip";
         public const string RelicBatchUpdateScript = "RelicCopyUpdate.bat";
+
+        public const string SelectionsRoot = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/selection_files/";
+        public const string SelectionsXml = "selections.xml";
+
         /// <summary>
         /// The current distribution version of the application
         /// Alhpa should NEVER be built for public distribution unless direct testing!

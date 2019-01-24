@@ -1062,7 +1062,7 @@ namespace RelhaxModpack.Windows
             selections.ShowDialog();
         }
 
-        private void OnDeveloperSelectionsExit(object sender, DevleoperSelectionsClosedEWventArgs e)
+        private async void OnDeveloperSelectionsExit(object sender, DevleoperSelectionsClosedEWventArgs e)
         {
             if(e.LoadSelection)
                 return;
@@ -1103,11 +1103,24 @@ namespace RelhaxModpack.Windows
             }
             else
             {
-                //get the filename from the develiper zip file
-                string xmlString = Utils.GetStringFromZip(Path.Combine(Settings.RelhaxTempFolder, "developerSelections.zip"),e.FileToLoad);
-                if(string.IsNullOrWhiteSpace(xmlString))
+                //get the filename from the developer zip file
+                string xmlString = string.Empty;
+                using (WebClient client = new WebClient())
                 {
-                    Logging.WriteToLog("xmlString is null or empty",Logfiles.Application,LogLevel.Error);
+                    try
+                    {
+                        xmlString = await client.DownloadStringTaskAsync(Settings.SelectionsRoot + e.FileToLoad);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logging.Exception(ex.ToString());
+                        MessageBox.Show(Translations.GetTranslatedString("failedToParseSelections"));
+                        Close();
+                    }
+                }
+                if (string.IsNullOrWhiteSpace(xmlString))
+                {
+                    Logging.WriteToLog("xmlString is null or empty", Logfiles.Application, LogLevel.Error);
                     MessageBox.Show(Translations.GetTranslatedString("failedLoadSelection"));
                     return;
                 }
