@@ -820,6 +820,7 @@ namespace RelhaxModpack
             }
             return dependenciesToInstall;
         }
+
         public static List<DatabasePackage>[] CreateOrderedInstallList(List<DatabasePackage> packagesToInstall)
         {
             //get the max number of defined groups
@@ -837,6 +838,12 @@ namespace RelhaxModpack
                 orderedList[package.ExtractionLevel].Add(package);
             }
             return orderedList;
+        }
+
+        public static void ClearSelections(List<Category> ParsedCategoryList)
+        {
+            foreach (SelectablePackage package in GetFlatList(null, null, null, ParsedCategoryList))
+                package.Checked = false;
         }
         #endregion
 

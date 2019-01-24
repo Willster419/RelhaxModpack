@@ -1142,10 +1142,7 @@ namespace RelhaxModpack.Windows
         private void OnClearSelectionsClick(object sender, RoutedEventArgs e)
         {
             Logging.WriteToLog("Clearing selections");
-            //Having utilities to make life easier is nice (+3 XP)
-            //foreach (SelectablePackage package in Utils.GetFlatList(null,null,null,ParsedCategoryList))
-                //package.Checked = false;
-            //UTILS CLEAR SELECTIONS()
+            Utils.ClearSelections(ParsedCategoryList);
             Logging.WriteToLog("Selections cleared");
             MessageBox.Show(Translations.GetTranslatedString("selectionsCleared"));
         }
@@ -1167,14 +1164,13 @@ namespace RelhaxModpack.Windows
                     Logging.WriteToLog("Unknown selection version: " + selectionVersion + ", aborting");
                     MessageBox.Show(string.Format(Translations.GetTranslatedString("unknownselectionFileFormat"),selectionVersion));
                     return;
-                break;
             }
         }
 
         private void LoadSelectionV2(XmlDocument document, bool silent)
         {
             //first uncheck everyting
-            //UTILS CLEAR SELECTIONS
+            Utils.ClearSelections(ParsedCategoryList);
             //get a list of all the mods currently in the selection
             XmlNodeList xmlSelections = XMLUtils.GetXMLNodesFromXPath(document, "//mods/name");
             XmlNodeList xmluserSelections = XMLUtils.GetXMLNodesFromXPath(document, "//userMods/mod");
