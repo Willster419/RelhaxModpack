@@ -128,5 +128,20 @@ namespace RelhaxModpack.Windows
             LaunchWoTLauncher.IsEnabled = toggle;
             CollectLogInfo.IsEnabled = toggle;
         }
+
+        private async void ClearDownloadCache_Click(object sender, RoutedEventArgs e)
+        {
+            StatusTextBox.Text = Translations.GetTranslatedString("clearingDownloadCache");
+            try
+            {
+                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolder, false, 3, 100, "*.zip");
+                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolder, false, 3, 100, "*.xml");
+            }
+            catch (IOException ioex)
+            {
+                StatusTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("failedToClearDownloadCache"), Environment.NewLine, Settings.RelhaxDownloadsFolder);
+            }
+            StatusTextBox.Text = Translations.GetTranslatedString("cleaningDownloadCacheComplete");
+        }
     }
 }

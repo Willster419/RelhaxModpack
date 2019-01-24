@@ -11,8 +11,8 @@
         <TextBlock x:Name="SelectedInstallation" HorizontalAlignment="Stretch" Margin="10,80,0,0" TextWrapping="Wrap" Text="Selected WoT Installation" VerticalAlignment="Top" />
         <Button x:Name="ChangeInstall" Content="Change Installation" HorizontalAlignment="Left" Margin="10,101,0,0" VerticalAlignment="Top" Width="250" Click="ChangeInstall_Click"/>
         <TextBox x:Name="StatusTextBox" HorizontalAlignment="Stretch" Height="50" Margin="10,209,0,0" TextWrapping="Wrap" VerticalAlignment="Top" />
-        <Button x:Name="LaunchWoTLauncher" Content="Start WoT Launcher" HorizontalAlignment="Left" Margin="10,126,0,0" VerticalAlignment="Top" Width="250" Click="LaunchWoTLauncher_Click"/>
+        <Button x:Name="LaunchWoTLauncher" Content="Start WoT Launcher Repair" HorizontalAlignment="Left" Margin="10,126,0,0" VerticalAlignment="Top" Width="250" Click="LaunchWoTLauncher_Click"/>
         <Button x:Name="CollectLogInfo" Content="Collect log info" HorizontalAlignment="Left" Margin="10,151,0,0" VerticalAlignment="Top" Width="250" Click="CollectLogInfo_Click"/>
-
+        <Button x:Name="ClearDownloadCache" Content="Clear Download Cache" HorizontalAlignment="Left" Margin="10,176,0,0" VerticalAlignment="Top" Width="250" Click="ClearDownloadCache_Click"/>
     </Grid>
 </local:RelhaxWindow>

@@ -231,6 +231,19 @@ namespace RelhaxModpack
         {
             //https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/task-based-asynchronous-programming
             //Task taskA = Task.Run( () => Console.WriteLine("Hello from taskA."));
+            //https://stackoverflow.com/questions/38423472/what-is-the-difference-between-task-run-and-task-factory-startnew
+            /*
+                in the .NET Framework 4.5 Developer Preview, we’ve introduced the new Task.Run method. This in no way obsoletes Task.Factory.StartNew,
+                but rather should simply be thought of as a quick way to use Task.Factory.StartNew without needing to specify a bunch of parameters.
+                It’s a shortcut. In fact, Task.Run is actually implemented in terms of the same logic used for Task.Factory.StartNew, just passing in
+                some default parameters. When you pass an Action to Task.Run:
+
+                'Task.Run(someAction);'
+
+                it's exactly equivalent to:
+
+                'Task.Factory.StartNew(someAction, CancellationToken.None, TaskCreationOptions.DenyChildAttach, TaskScheduler.Default);'
+             */
             return await Task.Run(() => CreateMD5Hash(inputFile));
         }
         /// <summary>
@@ -334,6 +347,12 @@ namespace RelhaxModpack
             }
             return fileName;
         }
+
+        public static void FileDelete(string folderPath, string file, uint numRetrys = 3, uint timeout = 100)
+        {
+            DirectoryDelete(folderPath, false, numRetrys, timeout, file);
+        }
+
         /// <summary>
         /// Deletes files in a directory
         /// </summary>
@@ -341,7 +360,7 @@ namespace RelhaxModpack
         /// <param name="deleteSubfolders">set to true to delete files recursivly inside each subdirectory</param>
         /// <param name="numRetrys">The number of times the method should retry to delete a file</param>
         /// <param name="timeout">The ammount of time in milliseconds to wait before trying again to delete files</param>
-        public static void DirectoryDelete(string folderPath, bool deleteSubfolders, int numRetrys = 3, int timeout = 100, string pattern = "*")
+        public static void DirectoryDelete(string folderPath, bool deleteSubfolders, uint numRetrys = 3, uint timeout = 100, string pattern = "*")
         {
             //check to make sure the number of retries is between 1 and 10
             if (numRetrys < 1)
@@ -385,7 +404,13 @@ namespace RelhaxModpack
             }
         }
 
-        public static void DirectoryMove(string source, string destination, bool recursive, int numRetrys = 3, int timeout = 100, string pattern = "*")
+        public static async Task DirectoryDeleteAsync(string folderPath, bool deleteSubfolders, uint numRetrys = 3, uint timeout = 100, string pattern = "*")
+        {
+            //Task taskA = Task.Run( () => Console.WriteLine("Hello from taskA."));
+            await Task.Run(() => DirectoryDelete(folderPath, deleteSubfolders, numRetrys, timeout, pattern));
+        }
+
+        public static void DirectoryMove(string source, string destination, bool recursive, uint numRetrys = 3, uint timeout = 100, string pattern = "*")
         {
             //DirectoryMove works by getting a directory list of all directories in the source to create,
             //then making the directories, moving the files, and then deleting the old directories
@@ -421,7 +446,7 @@ namespace RelhaxModpack
             }
         }
 
-        public static void DirectoryCopy(string source, string destination, bool recursive, int numRetrys = 3, int timeout = 100, string pattern = "*")
+        public static void DirectoryCopy(string source, string destination, bool recursive, uint numRetrys = 3, uint timeout = 100, string pattern = "*")
         {
             List<string> directoreisToCreate = Directory.GetDirectories(source, pattern,
                 recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).ToList();
