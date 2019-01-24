@@ -375,7 +375,7 @@ namespace RelhaxModpack
                     Logfiles.Application, LogLevel.Warning);
                 numRetrys = 10;
             }
-            int retryCounter = 0;
+            uint retryCounter = 0;
             foreach (string file in Directory.GetFiles(folderPath,pattern,SearchOption.TopDirectoryOnly))
             {
                 while(retryCounter < numRetrys)
@@ -390,7 +390,7 @@ namespace RelhaxModpack
                         Logging.WriteToLog(string.Format("failed to delete {0}, retryCount={1}, message:\n{2}", file, retryCounter, ex.Message),
                             Logfiles.Application,LogLevel.Error);
                         retryCounter++;
-                        System.Threading.Thread.Sleep(timeout);
+                        System.Threading.Thread.Sleep((int)timeout);
                     }
                 }
             }
