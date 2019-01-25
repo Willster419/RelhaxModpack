@@ -645,6 +645,22 @@
             toggle export mode
             </summary>
         </member>
+        <member name="F:RelhaxModpack.ModpackSettings.AdvancedInstalProgress">
+            <summary>
+            Toggle the advanced installation progress window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.AskToDeleteCache">
+            <summary>
+            True - After an installation the application will ask to delete old download cache files
+            False - After an installation the application will always delete old download cache files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.PreviewFullscreen">
+            <summary>
+            toggle for if the Preview window should be shown in fullscreen mode
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.ModpackSettings.ModSelectionHeight">
             <summary>
             the height, in pixels, of the ModSelectionView window
@@ -668,11 +684,6 @@
         <member name="F:RelhaxModpack.ModpackSettings.PreviewY">
             <summary>
             the y-coordinate location, in pixels, of the Preview window
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.PreviewFullscreen">
-            <summary>
-            toggle for if the Preview window should be shown in fullscreen mode
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.PreviewHeight">
@@ -804,6 +815,19 @@
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.FirstLoadAknowledgements.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.DeleteOldCache">
+            <summary>
+            Interaction logic for GenericYesNoWindow.xaml
+            </summary>
+            <summary>
+            DeleteOldCache
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.DeleteOldCache.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>

@@ -750,8 +750,7 @@ namespace RelhaxModpack
         {
             if (e.ContinueInstallation)
             {
-                OnBeginInstallation(new List<Category>(e.ParsedCategoryList),
-                    new List<Dependency>(e.Dependencies),new List<DatabasePackage>(e.GlobalDependencies));
+                OnBeginInstallation(new List<Category>(e.ParsedCategoryList), new List<Dependency>(e.Dependencies),new List<DatabasePackage>(e.GlobalDependencies));
                 modSelectionList = null;
             }
             else
@@ -836,17 +835,57 @@ namespace RelhaxModpack
             {
                 FlatListSelectablePackages = flatListSelect,
                 OrderedPackagesToInstall = orderedPackagesToInstall,
-                AwaitCallback = false
+                AwaitCallback = false,
+                ParsedCategoryList = parsedCategoryList,
+                Dependencies = dependencies,
+                GlobalDependencies = globalDependencies
             };
             engine.OnInstallProgress += Engine_OnInstallProgress;
             engine.OnInstallFinish += Engine_OnInstallFinish;
+            //call the engine to install
         }
 
-        private void Engine_OnInstallFinish(object sender, InstallerComponents.RelhaxInstallFinishedEventArgs e)
+        private async void Engine_OnInstallFinish(object sender, InstallerComponents.RelhaxInstallFinishedEventArgs e)
         {
             if(e.ExitCodes == InstallerComponents.InstallerExitCodes.Success)
             {
-
+                //get a list of all zip files in the database, compare it with the files in the download cache folder
+                //get a list of zip files in the cache that aren't in the database, these are old and can be deleted
+                List<string> zipFilesInDatabase = new List<string>();
+                foreach (DatabasePackage package in Utils.GetFlatList(e.GlobalDependencies, e.Dependencies, null, e.ParsedCategoryList))
+                    if(!string.IsNullOrWhiteSpace(package.ZipFile))
+                        zipFilesInDatabase.Add(package.ZipFile);
+                List<string> zipFilesInCache = Utils.DirectorySearch(Settings.RelhaxDownloadsFolder, SearchOption.TopDirectoryOnly, "*.zip").ToList();
+                List<string> oldZipFilesNotInDatabase = zipFilesInCache.Except(zipFilesInDatabase).ToList();
+                if(oldZipFilesNotInDatabase.Count > 0)
+                {
+                    //there are files to delete
+                    //if ask if false, assume we are deleting old files
+                    if(ModpackSettings.AskToDeleteCache)
+                    {
+                        DeleteOldCache oldCache = new DeleteOldCache();
+                        if(!(bool)oldCache.ShowDialog())
+                        {
+                            return;
+                        }
+                    }
+                    InstallProgressTextBox.Text = Translations.GetTranslatedString("DeletingOldCache");
+                    await Task.Run(() =>
+                    {
+                        foreach (string zipfile in oldZipFilesNotInDatabase)
+                            Utils.FileDelete(Settings.RelhaxDownloadsFolder, zipfile);
+                    });
+                }
+                if(ModpackSettings.ShowInstallCompleteWindow)
+                {
+                    InstallFinished installFinished = new InstallFinished();
+                    installFinished.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show(Translations.GetTranslatedString("InstallationFinished"));
+                }
+                InstallProgressTextBox.Text = string.Empty;
             }
             else
             {

@@ -32,6 +32,9 @@ namespace RelhaxModpack.InstallerComponents
     {
         public InstallerExitCodes ExitCodes;
         public string ErrorMessage;
+        public List<Category> ParsedCategoryList;
+        public List<Dependency> Dependencies;
+        public List<DatabasePackage> GlobalDependencies;
     }
     public delegate void InstallFinishedDelegate(object sender, RelhaxInstallFinishedEventArgs e);
     public delegate void InstallProgressDelegate(object sender, RelhaxInstallerProgress e);
@@ -40,9 +43,17 @@ namespace RelhaxModpack.InstallerComponents
     public class InstallEngine : IDisposable
     {
         #region Instance Variables
+        //used for installation
         public List<DatabasePackage>[] OrderedPackagesToInstall;
         public List<SelectablePackage> FlatListSelectablePackages;
         public bool AwaitCallback = false;
+
+        //used for parsing later
+        public List<Category> ParsedCategoryList;
+        public List<Dependency> Dependencies;
+        public List<DatabasePackage> GlobalDependencies;
+
+        //delegates
         public event InstallFinishedDelegate OnInstallFinish;
         public event InstallProgressDelegate OnInstallProgress;
 
@@ -68,6 +79,9 @@ namespace RelhaxModpack.InstallerComponents
         {
             if(OnInstallFinish != null)
             {
+                InstallFinishedArgs.ParsedCategoryList = ParsedCategoryList;
+                InstallFinishedArgs.Dependencies = Dependencies;
+                InstallFinishedArgs.GlobalDependencies = GlobalDependencies;
                 OnInstallFinish(this, InstallFinishedArgs);
             }
         }

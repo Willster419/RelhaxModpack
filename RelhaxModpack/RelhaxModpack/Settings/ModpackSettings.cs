@@ -155,8 +155,19 @@ namespace RelhaxModpack
         /// toggle export mode
         /// </summary>
         public static bool ExportMode = false;
-
+        /// <summary>
+        /// Toggle the advanced installation progress window
+        /// </summary>
         public static bool AdvancedInstalProgress = false;
+        /// <summary>
+        /// True - After an installation the application will ask to delete old download cache files
+        /// False - After an installation the application will always delete old download cache files
+        /// </summary>
+        public static bool AskToDeleteCache = false;
+        /// <summary>
+        /// toggle for if the Preview window should be shown in fullscreen mode
+        /// </summary>
+        public static bool PreviewFullscreen = false;
         /// <summary>
         /// the height, in pixels, of the ModSelectionView window
         /// </summary>
@@ -177,10 +188,6 @@ namespace RelhaxModpack
         /// the y-coordinate location, in pixels, of the Preview window
         /// </summary>
         public static int PreviewY = 0;
-        /// <summary>
-        /// toggle for if the Preview window should be shown in fullscreen mode
-        /// </summary>
-        public static bool PreviewFullscreen = false;
         /// <summary>
         /// the height, in pixels, of the Preview window
         /// </summary>
