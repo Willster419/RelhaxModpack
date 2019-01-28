@@ -18,6 +18,8 @@ using RelhaxModpack.UIComponents;
 using System.Xml;
 using System.Diagnostics;
 using Ionic.Zip;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace RelhaxModpack
 {
@@ -563,12 +565,74 @@ namespace RelhaxModpack
                 ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
         }
 
-        private void OnUseBetaDatabaseChanged(object sender, RoutedEventArgs e)
+        private async void OnUseBetaDatabaseChanged(object sender, RoutedEventArgs e)
         {
             if ((bool)UseBetaDatabaseCB.IsChecked)
+            {
+                UseBetaDatabaseCB.IsEnabled = false;
+                //get the branches. the default selected should be master
+                UseBetaDatabaseBranches.IsEnabled = false;
+                UseBetaDatabaseBranches.Items.Clear();
+                UseBetaDatabaseBranches.Items.Add(Translations.GetTranslatedString("loadingBranches"));
+                UseBetaDatabaseBranches.SelectedIndex = 0;
+                string jsonText = string.Empty;
+                using (PatientWebClient client = new PatientWebClient() { Timeout = 1500 })
+                {
+                    try
+                    {
+                        client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
+                        jsonText = await client.DownloadStringTaskAsync(Settings.BetaDatabaseBranchesURL);
+                    }
+                    catch (WebException wex)
+                    {
+                        Logging.Exception(wex.ToString());
+                    }
+                }
+                if(string.IsNullOrWhiteSpace(jsonText))
+                {
+                    //just load master and call it good. it should always be there
+                    UseBetaDatabaseBranches.Items.Clear();
+                    UseBetaDatabaseBranches.Items.Add("master");
+                    UseBetaDatabaseBranches.SelectedIndex = 0;
+                    UseBetaDatabaseBranches.IsEnabled = true;
+                    UseBetaDatabaseCB.IsEnabled = true;
+                    return;
+                }
+                JArray root = null;
+                try
+                {
+                    root = JArray.Parse(jsonText);
+                }
+                catch (JsonException jex)
+                {
+                    Logging.Exception(jex.ToString());
+                    UseBetaDatabaseBranches.Items.Clear();
+                    UseBetaDatabaseBranches.Items.Add("master");
+                    UseBetaDatabaseBranches.SelectedIndex = 0;
+                    UseBetaDatabaseBranches.IsEnabled = true;
+                    UseBetaDatabaseCB.IsEnabled = true;
+                    return;
+                }
+                List<string> branches = new List<string>();
+                foreach(JObject branch in root.Children())
+                {
+                    JValue value = (JValue)branch["name"];
+                    branches.Add((string)value.Value);
+                }
+                branches.Reverse();
+                UseBetaDatabaseBranches.Items.Clear();
+                foreach (string s in branches)
+                    UseBetaDatabaseBranches.Items.Add(s);
                 ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Beta;
-            else if (!(bool)UseBetaDatabaseCB.IsChecked)
+                //default to master selected
+                UseBetaDatabaseBranches.SelectedIndex = 0;
+                UseBetaDatabaseBranches.IsEnabled = true;
+                UseBetaDatabaseCB.IsEnabled = true;
+            }
+            else
+            {
                 ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Stable;
+            }
         }
 
         private void OnDefaultBordersV2Changed(object sender, RoutedEventArgs e)
@@ -1126,6 +1190,16 @@ namespace RelhaxModpack
             //any to include here
             AutoSyncFrequencyTexbox.IsEnabled = toggle;
             AutoSyncSelectionFileTextBox.IsEnabled = toggle;
+        }
+
+        private void OnBetaDatabaseSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (UseBetaDatabaseBranches.SelectedItem is string branchName)
+                ModpackSettings.BetaDatabaseSelectedBranch = branchName;
+            else if (UseBetaDatabaseBranches.SelectedItem == null)
+                ModpackSettings.BetaDatabaseSelectedBranch = "master";
+            else
+                throw new BadMemeException("aids. on a stick");
         }
     }
 }

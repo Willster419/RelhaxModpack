@@ -86,6 +86,8 @@ namespace RelhaxModpack
         /// The custom path to the ModInfo.xml file if loading in test mode
         /// </summary>
         public static string CustomModInfoPath = "";
+
+        public static string BetaDatabaseSelectedBranch = "master";
         /// <summary>
         /// toggle if the program should notify the user if the database version is the same as the last installed version
         /// </summary>
