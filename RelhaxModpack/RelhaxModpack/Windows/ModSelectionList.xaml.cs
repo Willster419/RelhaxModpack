@@ -1198,6 +1198,11 @@ namespace RelhaxModpack.Windows
                     }
                     else
                     {
+                        if(ModpackSettings.SaveDisabledMods)
+                        {
+                            Logging.Debug("SaveDisabledMods=True, flagging disabled mod {0} for future selection later",package.Name);
+                            package.FlagForSelectionSave = true;
+                        }
                         disabledMods.Add(package.CompletePath);
                         Logging.WriteToLog(string.Format("\"{0}\" is a disabled mod", package.CompletePath));
                     }
@@ -1277,6 +1282,11 @@ namespace RelhaxModpack.Windows
                 {
                     Logging.WriteToLog("Adding relhax mod " + package.PackageName);
                     //add it to the list
+                    nodeRelhax.Add(new XElement("mod", package.PackageName));
+                }
+                else if (ModpackSettings.SaveDisabledMods && package.FlagForSelectionSave)
+                {
+                    Logging.Info("Adding relhax mod {0} (not checked, but flagged for save)", package.Name);
                     nodeRelhax.Add(new XElement("mod", package.PackageName));
                 }
             }

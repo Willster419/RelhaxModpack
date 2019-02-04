@@ -85,6 +85,7 @@
                             <RadioButton Content="Default" Margin="20,0,0,0" x:Name="StandardImageRB" Click="OnPreviewLoadingImageChange"/>
                             <RadioButton Content="3rdguards" Margin="5,0,0,0" x:Name="ThirdGuardsLoadingImageRB" Click="OnPreviewLoadingImageChange"/>
                         </StackPanel>
+                        <CheckBox x:Name="SaveDisabledModsInSelection" Tag="SaveDisabledModsInSelection" Content="Keep disabled mods when saving selection"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
                         <TextBlock Text="Select theme:" />
@@ -116,6 +117,7 @@
                         <CheckBox Content="Export mode"/>
                         <CheckBox Content="Minimze to system tray"/>
                         <CheckBox x:Name="AskDownloadCacheDelete" Content="Ask to delete old cache files"/>
+                        <CheckBox x:Name="VerboseLoggingCB" Tag="VerboseLoggingCB" Content="Verbose Logging"/>
                     </StackPanel>
                     <CheckBox Content="Enable mods auto-sync" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" IsEnabled="False"/>
                     <TextBox x:Name="AutoSyncSelectionFileTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="46" Margin="0,35,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="257"/>

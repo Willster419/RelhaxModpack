@@ -868,7 +868,14 @@ namespace RelhaxModpack
         public static void ClearSelections(List<Category> ParsedCategoryList)
         {
             foreach (SelectablePackage package in GetFlatList(null, null, null, ParsedCategoryList))
+            {
+                if(ModpackSettings.SaveDisabledMods && package.FlagForSelectionSave)
+                {
+                    Logging.Debug("SaveDisabledMods=True and package {0} FlagForSelectionSave is high, setting to low", nameof(Utils), package.Name);
+                    package.FlagForSelectionSave = false;
+                }
                 package.Checked = false;
+            }
         }
         #endregion
 

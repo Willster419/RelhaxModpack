@@ -112,6 +112,8 @@ namespace RelhaxModpack
         /// toggle if the application should save user cache save data like session stats, or auto equip configs
         /// </summary>
         public static bool SaveUserData = false;
+        public static bool SaveDisabledMods = true;
+        public static bool DisplayUserModsWarning = true;
         public static bool VerboseLogging = false;
         /// <summary>
         /// toggle for each view if the borders around the child selection options should show

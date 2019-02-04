@@ -99,7 +99,11 @@ namespace RelhaxModpack
         /// </summary>
         public bool PopularMod = false;
         /// <summary>
-        /// field for wether the package is selected to install
+        /// Used as internal flag for if application settings is checked "SaveDisabledModsInSelection". Allows for disabled mods to be saved back to the user's selection
+        /// </summary>
+        public bool FlagForSelectionSave = false;
+        /// <summary>
+        /// field for whether the package is selected to install
         /// </summary>
         protected internal bool _Checked = false;
         /// <summary>
