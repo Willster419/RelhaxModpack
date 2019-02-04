@@ -1168,7 +1168,7 @@ namespace RelhaxModpack
                 }
                 catch(Exception e)
                 {
-                    Logging.WriteToLog("Failed to check application folder sturcture\n" + e.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
+                    Logging.WriteToLog("Failed to check application folder structure\n" + e.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
                     return false;
                 }
             }
