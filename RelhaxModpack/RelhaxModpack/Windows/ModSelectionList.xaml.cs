@@ -353,6 +353,7 @@ namespace RelhaxModpack.Windows
                 Name = "UserMods",
                 Header = Translations.GetTranslatedString("userMods"),
             };
+            userTab.RequestBringIntoView += OnUserModsTabSelected;
             userTab.Content = userStackPanel;
             ModTabGroups.Items.Add(userTab);
             foreach(SelectablePackage package in userMods)
@@ -494,6 +495,15 @@ namespace RelhaxModpack.Windows
                         break;
                 }
                 ModTabGroups.Items.Add(cat.TabPage);
+            }
+        }
+
+        private void OnUserModsTabSelected(object sender, RequestBringIntoViewEventArgs e)
+        {
+            if(ModpackSettings.DisplayUserModsWarning)
+            {
+                MessageBox.Show(Translations.GetTranslatedString("FirstTimeUserModsWarning"));
+                ModpackSettings.DisplayUserModsWarning = false;
             }
         }
 
