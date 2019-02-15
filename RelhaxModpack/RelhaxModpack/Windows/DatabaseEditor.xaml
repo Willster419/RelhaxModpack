@@ -37,6 +37,12 @@
                 <TabItem Header="Database Objects">
                     <Grid Background="#FFE5E5E5"/>
                 </TabItem>
+                <TabItem Header="Install Groups">
+                    <Grid Background="#FFE5E5E5"/>
+                </TabItem>
+                <TabItem Header="Patch Groups">
+                    <Grid Background="#FFE5E5E5"/>
+                </TabItem>
             </TabControl>
             <Grid Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
@@ -93,9 +99,6 @@
                         <Grid Background="#FFE5E5E5"/>
                     </TabItem>
                     <TabItem Header="Update Notes">
-                        <Grid Background="#FFE5E5E5"/>
-                    </TabItem>
-                    <TabItem Header="Update Instructions">
                         <Grid Background="#FFE5E5E5"/>
                     </TabItem>
                     <TabItem Header="Dependencies">
