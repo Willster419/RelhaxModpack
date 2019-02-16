@@ -528,15 +528,6 @@ namespace RelhaxModpack.Windows
                     package.Visible = true;
                 if (CommandLineSettings.ForceEnabled && !package.IsStructureEnabled)
                     package.Enabled = true;
-                //add the package to the search list if the package parameter specifies it to be added
-                if (package.ShowInSearchList && package.Enabled)
-                {
-                    SearchCB.Items.Add(new ComboBoxItem(package, package.NameFormatted)
-                    {
-                        IsEnabled = true,
-                        Content = package.NameFormatted
-                    });
-                }
                 //link the parent panels and border to childs
                 package.ParentBorder = package.Parent.ChildBorder;
                 package.ParentStackPanel = package.Parent.ChildStackPanel;
@@ -1408,15 +1399,122 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Search Box Code
-        private void SearchCB_DropDownOpened(object sender, EventArgs e)
-        {
 
+        private void SearchCB_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            //https://stackoverflow.com/questions/17250650/wpf-combobox-auto-highlighting-on-first-letter-input
+            SearchCB.IsDropDownOpen = true;
+            //https://stackoverflow.com/questions/17250650/wpf-combobox-auto-highlighting-on-first-letter-input
+            /*
+            var textbox = (TextBox)SearchCB.Template.FindName("PART_EditableTextBox", SearchCB);
+            if (textbox != null && textbox.SelectionLength > 0)
+            {
+                textbox.Select(textbox.SelectionLength, 0);
+            }
+            */
+            if(e.Key == Key.Enter)
+            {
+                //ignoreMouse = false;
+            }
         }
 
-        private void SearchCB_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        private void SearchCB_KeyUp(object sender, KeyEventArgs e)
         {
+            if (e.Key == Key.Down || e.Key == Key.Up)
+            {
+                //stop the selection from key events!!!
+                //https://www.codeproject.com/questions/183259/how-to-prevent-selecteditem-change-on-up-and-down (second answer)
+                e.Handled = true;
+                SearchCB.IsDropDownOpen = true;
+            }
+            else if(e.Key == Key.Enter)
+            {
+                OnSearchCBSelectionCommitted();
+            }
+            //check if length 0 or whitespace
+            else if (string.IsNullOrWhiteSpace(SearchCB.Text))
+            {
+                SearchCB.Items.Clear();
+                SearchCB.IsDropDownOpen = false;
+                SearchCB.SelectedIndex = -1;
+            }
+            //check if length 1
+            /*
+            else if(SearchCB.Text.Count() == 1)
+            {
 
+            }
+            */
+            //actually search
+            else
+            {
+                //split the search into an array based on using '*' search
+                List<SelectablePackage> searchComponents = new List<SelectablePackage>();
+                foreach (string searchTerm in SearchCB.Text.Split('*'))
+                {
+                    //check if comparing with this tab only
+                    if((bool)SearchThisTabOnlyCB.IsChecked)
+                    {
+                        TabItem selected = (TabItem)ModTabGroups.SelectedItem;
+                        searchComponents.AddRange(Utils.GetFlatSelectablePackageList(ParsedCategoryList).Where(
+                            term => term.NameFormatted.ToLower().Contains(searchTerm.ToLower()) && term.Visible && term.ParentCategory.TabPage.Equals(selected)));
+                    }
+                    else
+                    {
+                        //get a list of components that match the search term
+                        searchComponents.AddRange(Utils.GetFlatSelectablePackageList(ParsedCategoryList).Where(
+                            term => term.NameFormatted.ToLower().Contains(searchTerm.ToLower()) && term.Visible));
+                    }
+                }
+                //assuming it maintains the order it previously had i.e. removing only when need to...
+                searchComponents = searchComponents.Distinct().ToList();
+                //clear and fill the search list again
+                SearchCB.Items.Clear();
+                foreach (SelectablePackage package in searchComponents)
+                {
+                    SearchCB.Items.Add(new ComboBoxItem(package, package.NameFormatted)
+                    {
+                        IsEnabled = true,
+                        Content = package.NameFormatted
+                    });
+                }
+                SearchCB.IsDropDownOpen = true;
+            }
+        }
+        private void OnSearchCBSelectionCommitted()
+        {
+            if (SearchCB.SelectedItem is ComboBoxItem item)
+            {
+                if (item.Package.UIComponent is Control ctrl)
+                {
+                    //ctrl.Focus();
+                }
+            }
+            else
+                throw new BadMemeException("how the actual fuck");
+        }
+        bool ignoreMouse = true;
+        private void SearchCB_DropDownClosed(object sender, EventArgs e)
+        {
+            if (!ignoreMouse)
+            {
+                foreach (ComboBoxItem itm in SearchCB.Items)
+                {
+
+                    if (itm.IsSelected)
+                    {
+
+                    }
+                }
+            }
+            ignoreMouse = true;
+        }
+        private void SearchCB_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if(!SearchCB.IsDropDownOpen)
+                ignoreMouse = false;
         }
         #endregion
+
     }
 }
