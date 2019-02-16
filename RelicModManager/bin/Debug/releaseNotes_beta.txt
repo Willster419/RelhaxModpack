@@ -1,3 +1,20 @@
+Version 0.28.2.18 (01/23/2019)
+https://www.virustotal.com/#/file/924157d54f0e4501686bf0f9fb479e1aecb4b794fba37f5796daafd69ab6433c/detection
+-Fixed a bug in default view when using DarkUI, the drop down options would not show properly
+-Fixed a bug in defaultV2 view and OMC view when using DarkUI and color change, drop down options would cause a crash.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Version 0.28.2.17 (01/03/2019)
+https://www.virustotal.com/#/file/d8a273613234a81d9756ef695b3daf214c0330c901c267289b6a7ef9c2730c9f/detection
+-Fixed bug in OMC and DefaultV2 views where user mods would not color change, and also would throw exceptions if used with DarkUI setting
+-Added more exception logging in Utils class
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Version 0.28.2.16 (12/10/2018)
+https://www.virustotal.com/#/file/1dfac9cbcb064c73a8a0866528ce1c8a95a8b99f9af0acd8b70acd309121ef86/detection
+-Hotfix for issue during installation cleanup where some installer's temporary files would fail to delete on some systems
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 0.28.2.15 (11/19/2018)
 https://www.virustotal.com/#/file/023edb64c4efa485009668b9472c79ba76f6b132712f06125ea1fe0de12540ea/detection
 -Fixed issue with "&" symbol not showing for mod names in default view

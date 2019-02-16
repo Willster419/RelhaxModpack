@@ -1,21 +1,33 @@
 ﻿using Ionic.Zip;
 using Microsoft.Win32;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Xml;
 
 namespace RelhaxModpack
 {
+
+    public enum ReplacementTypes
+    {
+        FilePath,
+        PatchArguements,
+        PatchFiles,
+        TextEscape,
+        TextUnescape,
+        ZipFilePath
+    }
+
     /// <summary>
     /// A utility class for static functions used in various places in the modpack
     /// </summary>
@@ -24,7 +36,33 @@ namespace RelhaxModpack
         #region Statics
         public static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
         public const long BYTES_TO_MBYTES = 1048576;
-        //MACROS TODO
+        //MACROS
+        //FilePath macro
+        //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/how-to-initialize-a-dictionary-with-a-collection-initializer
+        public static Dictionary<string, string> FilePathDict = new Dictionary<string, string>();
+        public static Dictionary<string, string> PatchArguementsDict = new Dictionary<string, string>()
+        {
+            //TODO
+        };
+        public static Dictionary<string, string> PatchFilesDict = new Dictionary<string, string>()
+        {
+            //TODO
+        };
+        public static Dictionary<string, string> TextUnscapeDict = new Dictionary<string, string>()
+        {
+            {@"\n", "\n" },
+            {@"\r", "\r" },
+            {@"\t", "\t" },
+            //legacy compatibilty (i can't believe i did this....)
+            {@"newline", "\n" }
+        };
+        public static Dictionary<string, string> TextEscapeDict = new Dictionary<string, string>()
+        {
+            {"\n", @"\n" },
+            {"\r", @"\r" },
+            {"\t", @"\t" }
+        };
+        public static Dictionary<string, string> ZipFilePathDict = new Dictionary<string, string>();
         #endregion
 
         #region Application Utils
@@ -114,6 +152,32 @@ namespace RelhaxModpack
                 }
             }
         }
+
+        /// <summary>Checks if a point is inside the possible monitor space</summary>
+        /// <param name="x">The x coordinate of the point</param>
+        /// <param name="y">The y coordinate of the point</param>
+        public static bool PointWithinScreen(int x, int y)
+        {
+            return PointWithinScreen(new System.Drawing.Point(x, y));
+        }
+
+        /// <summary>Checks if a point is inside the possible monitor space</summary>
+        /// <param name="p">The point to check</param>
+        public static bool PointWithinScreen(System.Drawing.Point p)
+        {
+            //if either x or y are negative it's an invalid location
+            if (p.X < 0 || p.Y < 0)
+                return false;
+            int totalWidth = 0, totalHeight = 0;
+            foreach (System.Windows.Forms.Screen s in System.Windows.Forms.Screen.AllScreens)
+            {
+                totalWidth += s.Bounds.Width;
+                totalHeight += s.Bounds.Height;
+            }
+            if (totalWidth > p.X && totalHeight > p.Y)
+                return true;
+            return false;
+        }
         #endregion
 
         #region File Utilities
@@ -167,6 +231,19 @@ namespace RelhaxModpack
         {
             //https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/task-based-asynchronous-programming
             //Task taskA = Task.Run( () => Console.WriteLine("Hello from taskA."));
+            //https://stackoverflow.com/questions/38423472/what-is-the-difference-between-task-run-and-task-factory-startnew
+            /*
+                in the .NET Framework 4.5 Developer Preview, we’ve introduced the new Task.Run method. This in no way obsoletes Task.Factory.StartNew,
+                but rather should simply be thought of as a quick way to use Task.Factory.StartNew without needing to specify a bunch of parameters.
+                It’s a shortcut. In fact, Task.Run is actually implemented in terms of the same logic used for Task.Factory.StartNew, just passing in
+                some default parameters. When you pass an Action to Task.Run:
+
+                'Task.Run(someAction);'
+
+                it's exactly equivalent to:
+
+                'Task.Factory.StartNew(someAction, CancellationToken.None, TaskCreationOptions.DenyChildAttach, TaskScheduler.Default);'
+             */
             return await Task.Run(() => CreateMD5Hash(inputFile));
         }
         /// <summary>
@@ -270,6 +347,12 @@ namespace RelhaxModpack
             }
             return fileName;
         }
+
+        public static void FileDelete(string folderPath, string file, uint numRetrys = 3, uint timeout = 100)
+        {
+            DirectoryDelete(folderPath, false, numRetrys, timeout, file);
+        }
+
         /// <summary>
         /// Deletes files in a directory
         /// </summary>
@@ -277,7 +360,7 @@ namespace RelhaxModpack
         /// <param name="deleteSubfolders">set to true to delete files recursivly inside each subdirectory</param>
         /// <param name="numRetrys">The number of times the method should retry to delete a file</param>
         /// <param name="timeout">The ammount of time in milliseconds to wait before trying again to delete files</param>
-        public static void DirectoryDelete(string folderPath, bool deleteSubfolders, int numRetrys, int timeout)
+        public static void DirectoryDelete(string folderPath, bool deleteSubfolders, uint numRetrys = 3, uint timeout = 100, string pattern = "*")
         {
             //check to make sure the number of retries is between 1 and 10
             if (numRetrys < 1)
@@ -292,8 +375,8 @@ namespace RelhaxModpack
                     Logfiles.Application, LogLevel.Warning);
                 numRetrys = 10;
             }
-            int retryCounter = 0;
-            foreach (string file in Directory.GetFiles(folderPath))
+            uint retryCounter = 0;
+            foreach (string file in Directory.GetFiles(folderPath,pattern,SearchOption.TopDirectoryOnly))
             {
                 while(retryCounter < numRetrys)
                 {
@@ -307,17 +390,154 @@ namespace RelhaxModpack
                         Logging.WriteToLog(string.Format("failed to delete {0}, retryCount={1}, message:\n{2}", file, retryCounter, ex.Message),
                             Logfiles.Application,LogLevel.Error);
                         retryCounter++;
-                        System.Threading.Thread.Sleep(timeout);
+                        System.Threading.Thread.Sleep((int)timeout);
                     }
                 }
             }
             //if deleting the sub directories
             if (deleteSubfolders)
             {
-                foreach (string dir in Directory.GetDirectories(folderPath))
+                foreach (string dir in Directory.GetDirectories(folderPath,pattern,SearchOption.TopDirectoryOnly))
                 {
                     DirectoryDelete(dir, deleteSubfolders, numRetrys,timeout);
                 }
+            }
+        }
+
+        public static async Task DirectoryDeleteAsync(string folderPath, bool deleteSubfolders, uint numRetrys = 3, uint timeout = 100, string pattern = "*")
+        {
+            //Task taskA = Task.Run( () => Console.WriteLine("Hello from taskA."));
+            await Task.Run(() => DirectoryDelete(folderPath, deleteSubfolders, numRetrys, timeout, pattern));
+        }
+
+        public static void DirectoryMove(string source, string destination, bool recursive, uint numRetrys = 3, uint timeout = 100, string pattern = "*")
+        {
+            //DirectoryMove works by getting a directory list of all directories in the source to create,
+            //then making the directories, moving the files, and then deleting the old directories
+            List<string> directoreisToCreate = Directory.GetDirectories(source, pattern,
+                recursive? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).ToList();
+            //create them at the target
+            foreach(string s in directoreisToCreate)
+            {
+                if(!Directory.Exists(Path.Combine(destination,s)))
+                {
+                    Directory.CreateDirectory(Path.Combine(destination, s));
+                }
+            }
+            //move the files over
+            List<string> filesToMove = Directory.GetFiles(source, pattern,
+                recursive? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).ToList();
+            foreach(string file in filesToMove)
+            {
+                File.Move(Path.Combine(source, file), Path.Combine(destination, file));
+            }
+            //delete all the other old empty source directories
+            directoreisToCreate.Sort();
+            foreach(string s in directoreisToCreate)
+            {
+                if(Directory.Exists(Path.Combine(source,s)))
+                {
+                    if (Directory.GetFiles(Path.Combine(source, s)).Count() > 0)
+                        throw new BadMemeException("waaaaaaa?");
+                    Directory.Delete(Path.Combine(source, s));
+                    //TODO: will this work in it's curent setup
+                    //TODO: add while and retry and stuff
+                }
+            }
+        }
+
+        public static void DirectoryCopy(string source, string destination, bool recursive, uint numRetrys = 3, uint timeout = 100, string pattern = "*")
+        {
+            List<string> directoreisToCreate = Directory.GetDirectories(source, pattern,
+                recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).ToList();
+            //create them at the target
+            foreach (string s in directoreisToCreate)
+            {
+                if (!Directory.Exists(Path.Combine(destination, s)))
+                {
+                    Directory.CreateDirectory(Path.Combine(destination, s));
+                }
+            }
+            //copy the files over
+            List<string> filesToMove = Directory.GetFiles(source, pattern,
+                recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).ToList();
+            foreach (string file in filesToMove)
+            {
+                File.Copy(Path.Combine(source, file), Path.Combine(destination, file));
+            }
+        }
+
+        public static string[] DirectorySearch(string directoryPath, SearchOption option, string searchPattern = "*",
+            uint timeout = 5, uint numRetrys = 3, bool applyFolderProperties = true)
+        {
+            //filter input
+            if(numRetrys == 0)
+            {
+                Logging.WriteToLog("numRetrys needs to be larger than 0!");
+                numRetrys++;
+            }
+            //loop for how many times to try (in case the OS herped a derp, for example)
+            while(numRetrys > 0)
+            {
+                //if a timout is requested, then sleep the thread
+                if (timeout > 0)
+                    System.Threading.Thread.Sleep((int)timeout);
+                //put it in a try catch block
+                try
+                {
+                    if(!Directory.Exists(directoryPath))
+                    {
+                        Logging.WriteToLog(string.Format("Path {0} does not exist!", directoryPath), Logfiles.Application, LogLevel.Error);
+                        return null;
+                    }
+                    if (applyFolderProperties)
+                        File.SetAttributes(directoryPath, FileAttributes.Normal);
+                    return Directory.GetFiles(directoryPath, searchPattern, option);
+                }
+                catch (Exception e)
+                {
+                    //decreate the number of times we will retry to get the files
+                    numRetrys--;
+                    if(numRetrys == 0)
+                    {
+                        //give up; report it and move on
+                        Logging.WriteToLog(string.Format("Failed to get files fo directory {0}\n{1}", Path.GetFullPath(directoryPath), e.ToString()),
+                            Logfiles.Application, LogLevel.Exception);
+                        return null;
+                    }
+                    else
+                    {
+                        Logging.WriteToLog(string.Format("Failed to get files for direcotry {0}\nThis is attempt {1} of 0",
+                            Path.GetFullPath(directoryPath), numRetrys), Logfiles.Application, LogLevel.Warning);
+                    }
+                }
+            }
+            Logging.WriteToLog("Code shuld not reach this point: Utils.DirectorySearch()", Logfiles.Application, LogLevel.Warning);
+            return null;
+        }
+
+        public static void ApplyNormalFileProperties(string file)
+        {
+            //check to make sure it's eithor a file or folder
+            if (!File.Exists(file) && !Directory.Exists(file))
+            {
+                Logging.WriteToLog("file/folder does not exist " + file, Logfiles.Application, LogLevel.Error);
+                return;
+            }
+            try
+            {
+                FileAttributes attribute = File.GetAttributes(file);
+                if (attribute != FileAttributes.Normal)
+                {
+                    Logging.WriteToLog(string.Format("file {0} has FileAttribute {1}, setting to FileAttributes.Normal",
+                        file, attribute.ToString()), Logfiles.Application, LogLevel.Debug);
+                    File.SetAttributes(file, FileAttributes.Normal);
+                }
+            }
+            catch (Exception e)
+            {
+                Logging.WriteToLog("Failed to apply normal attribute\n" + e.ToString(), Logfiles.Application, LogLevel.Exception);
+                return;
             }
         }
         #endregion
@@ -368,6 +588,14 @@ namespace RelhaxModpack
         public static ulong ParseuLong(string input, ulong defaultValue)
         {
             if (ulong.TryParse(input, out ulong result))
+                return result;
+            else return defaultValue;
+        }
+        //https://stackoverflow.com/questions/10685794/how-to-use-generic-tryparse-with-enum
+        public static TEnum ParseEnum<TEnum>(string input, TEnum defaultValue)
+            where TEnum : struct, IConvertible
+        {
+            if (Enum.TryParse(input, true, out TEnum result))
                 return result;
             else return defaultValue;
         }
@@ -425,6 +653,12 @@ namespace RelhaxModpack
                     BuildLinksRefrence(sp2, cat, sp);
                 }
             }
+        }
+        public static void AssignCateogryPatchIDS(List<Category> parsedCategoryList)
+        {
+            int ID = 0;
+            foreach (Category cat in parsedCategoryList)
+                cat.PatchProcessCategoryID = ID++;
         }
         public static void BuildLevelPerPackage(List<Category> ParsedCategoryList, int startingLevel = 0)
         {
@@ -611,6 +845,7 @@ namespace RelhaxModpack
             }
             return dependenciesToInstall;
         }
+
         public static List<DatabasePackage>[] CreateOrderedInstallList(List<DatabasePackage> packagesToInstall)
         {
             //get the max number of defined groups
@@ -629,9 +864,22 @@ namespace RelhaxModpack
             }
             return orderedList;
         }
+
+        public static void ClearSelections(List<Category> ParsedCategoryList)
+        {
+            foreach (SelectablePackage package in GetFlatList(null, null, null, ParsedCategoryList))
+            {
+                if(ModpackSettings.SaveDisabledMods && package.FlagForSelectionSave)
+                {
+                    Logging.Debug("SaveDisabledMods=True and package {0} FlagForSelectionSave is high, setting to low", nameof(Utils), package.Name);
+                    package.FlagForSelectionSave = false;
+                }
+                package.Checked = false;
+            }
+        }
         #endregion
 
-        #region Generic utils
+        #region Generic Utils
         /// <summary>
         /// https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings-in-c
         /// </summary>
@@ -745,9 +993,64 @@ namespace RelhaxModpack
             }
             return false;
         }
-        public static void BuildMacroList()
+        public static void BuildFilepathMacroList()
         {
-            //TODO
+            if (FilePathDict == null)
+                throw new BadMemeException("REEEEEEEEEE");
+            FilePathDict.Clear();
+            FilePathDict.Add(@"{versiondir}", Settings.WoTClientVersion);
+            FilePathDict.Add(@"{tanksversion}", Settings.WoTClientVersion);
+            FilePathDict.Add(@"{tanksonlinefolderversion}", Settings.WoTModpackOnlineFolderVersion);
+            FilePathDict.Add(@"{appdata}", Settings.AppDataFolder);
+            FilePathDict.Add(@"{app}", Settings.WoTDirectory);
+        }
+        public static void BuildZipFilePathMacroList()
+        {
+            ZipFilePathDict.Clear();
+            ZipFilePathDict.Add("versiondir", Settings.WoTClientVersion);
+            ZipFilePathDict.Add("appdata", Settings.AppDataFolder);
+        }
+        public static string MacroReplace(string inputString, ReplacementTypes type)
+        {
+            //itterate through each entry depending on the dictionary. if the key is contained in the string, replace it
+            //use a switch to get which dictionary reaplce we will use
+            Dictionary<string,string> dictionary = null;
+            switch(type)
+            {
+                case ReplacementTypes.FilePath:
+                    dictionary = FilePathDict;
+                    break;
+                case ReplacementTypes.PatchArguements:
+                    dictionary = PatchArguementsDict;
+                    break;
+                case ReplacementTypes.PatchFiles:
+                    dictionary = PatchFilesDict;
+                    break;
+                case ReplacementTypes.TextEscape:
+                    dictionary = TextEscapeDict;
+                    break;
+                case ReplacementTypes.TextUnescape:
+                    dictionary = TextUnscapeDict;
+                    break;
+                case ReplacementTypes.ZipFilePath:
+                    dictionary = ZipFilePathDict;
+                    break;
+            }
+            if(dictionary == null)
+            {
+                Logging.Error("macro replace dictionary is null! type={0}", type.ToString());
+                return inputString;
+            }
+            for(int i = 0; i < dictionary.Count; i++)
+            {
+                string key = dictionary.ElementAt(i).Key;
+                string replace = dictionary.ElementAt(i).Value;
+                //https://stackoverflow.com/questions/444798/case-insensitive-containsstring
+                //it's an option, not actually used here lol
+                if (inputString.Contains(key))
+                    inputString = inputString.Replace(key, replace);
+            }
+            return inputString;
         }
         public static List<DatabasePackage> GetFlatList(List<DatabasePackage> globalDependnecies = null, List<Dependency> dependencies = null,
             List<Dependency> logicalDependencies = null, List<Category> parsedCategoryList = null)
@@ -766,53 +1069,14 @@ namespace RelhaxModpack
                     flatList.AddRange(cat.GetFlatPackageList());
             return flatList;
         }
-        #endregion
-
-        #region Selections parsing
-        public static void ParseDeveloperSelections()
+        public static List<SelectablePackage> GetFlatSelectablePackageList(List<Category> parsedCategoryList)
         {
-            //run php script to create xml string (async)
-        }
-        private static void OnDeveloperSelectionParsed()//TO PUT IN MODSELECTINLSIT
-        {
-            //get nodecollection of developerSelections
-              //display name
-              //list of mods
-            //make UI nodes radiobuttons in stackpanel
-              //text = displayname
-              //tag = list<string> packagesToSelect
-        }
-        private static void OnDeveloperSelectionSelect()//TO PUT IN MODSELECTIONLIST
-        {
-            //parseSelection (radioButton name, radioButton tag)
-        }
-        public static void ParseUserSelection(string filePath)
-        {
-            //load xml string
-            //get version ID
-            string versionID = "";
-            switch(versionID)
-            {
-                case "2.0":
-                  //parse via 2.0 method
-                  break;
-                default:
-                  //unknown or not supported
-                  break;
-            }
-        }
-        public static void ParseUserSelectionV2(XmlDocument doc)
-        {
-            //make list of stirng for packages to select
-        }
-        public static void ParseSelection()
-        {
-            //will take category view and packagelistToSelect<string>
-            //for each category load packages recursivly
-        }
-        public static void VerifySelection()
-        {
-            //verify selections and remove and rouge selections and report them
+            if (parsedCategoryList == null)
+                return null;
+            List<SelectablePackage> flatList = new List<SelectablePackage>();
+            foreach (Category cat in parsedCategoryList)
+                flatList.AddRange(cat.GetFlatPackageList());
+            return flatList;
         }
         #endregion
 
@@ -906,5 +1170,54 @@ namespace RelhaxModpack
             return false;
         }
         #endregion
+
+        #region Install Utils
+
+        public static void CreateShortcut(Shortcut shortcut)
+        {
+
         }
+
+        public static void CreateAtlas(Atlas atlas)
+        {
+
+        }
+
+
+        #endregion
+
+        #region Gross shortcut stuff
+        // needed for CreateShortcut
+        [ComImport]
+        [Guid("00021401-0000-0000-C000-000000000046")]
+        internal class ShellLink
+        {
+        }
+        // needed for CreateShortcut
+        [ComImport]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [Guid("000214F9-0000-0000-C000-000000000046")]
+        internal interface IShellLink
+        {
+            void GetPath([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszFile, int cchMaxPath, out IntPtr pfd, int fFlags);
+            void GetIDList(out IntPtr ppidl);
+            void SetIDList(IntPtr pidl);
+            void GetDescription([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszName, int cchMaxName);
+            void SetDescription([MarshalAs(UnmanagedType.LPWStr)] string pszName);
+            void GetWorkingDirectory([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszDir, int cchMaxPath);
+            void SetWorkingDirectory([MarshalAs(UnmanagedType.LPWStr)] string pszDir);
+            void GetArguments([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszArgs, int cchMaxPath);
+            void SetArguments([MarshalAs(UnmanagedType.LPWStr)] string pszArgs);
+            void GetHotkey(out short pwHotkey);
+            void SetHotkey(short wHotkey);
+            void GetShowCmd(out int piShowCmd);
+            void SetShowCmd(int iShowCmd);
+            void GetIconLocation([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszIconPath, int cchIconPath, out int piIcon);
+            void SetIconLocation([MarshalAs(UnmanagedType.LPWStr)] string pszIconPath, int iIcon);
+            void SetRelativePath([MarshalAs(UnmanagedType.LPWStr)] string pszPathRel, int dwReserved);
+            void Resolve(IntPtr hwnd, int fFlags);
+            void SetPath([MarshalAs(UnmanagedType.LPWStr)] string pszFile);
+        }
+        #endregion
+    }
 }

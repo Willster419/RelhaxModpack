@@ -45,7 +45,7 @@ namespace RelhaxModpack
             fileStream = null;
             try
             {
-                fileStream = new FileStream(Logging.ApplicationLogFilename, FileMode.Append, FileAccess.Write);
+                fileStream = new FileStream(Filepath, FileMode.Append, FileAccess.Write);
             }
             catch
             {
@@ -68,7 +68,7 @@ namespace RelhaxModpack
             if (fileStream == null)
                 throw new BadMemeException("You're still bad at logfiles");
             //only alpha and beta application distributions should log debug messages
-            if (Settings.ApplicationVersion == ApplicationVersions.Stable && logLevel == LogLevel.Debug)
+            if (Settings.ApplicationVersion == ApplicationVersions.Stable && logLevel == LogLevel.Debug && !ModpackSettings.VerboseLogging)
                 return;
             string logMessageLevel = string.Empty;
             switch(logLevel)

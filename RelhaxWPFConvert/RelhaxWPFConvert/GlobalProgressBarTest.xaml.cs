@@ -12,14 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace RelhaxModpack.Windows
+namespace RelhaxWPFConvert
 {
     /// <summary>
-    /// Interaction logic for Preview.xaml
+    /// Interaction logic for GlobalProgressBarTest.xaml
     /// </summary>
-    public partial class Preview : RelhaxWindow
+    public partial class GlobalProgressBarTest : Window
     {
-        public Preview()
+        public GlobalProgressBarTest()
         {
             InitializeComponent();
         }

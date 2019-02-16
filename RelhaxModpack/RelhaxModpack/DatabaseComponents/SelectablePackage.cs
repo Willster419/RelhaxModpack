@@ -94,9 +94,16 @@ namespace RelhaxModpack
         /// description of the package
         /// </summary>
         public string Description = "";
-        public string Hotkeys = "";
         /// <summary>
-        /// field for wether the package is selected to install
+        /// Flag to determine if the mod (and children? TODO) should be used in the 
+        /// </summary>
+        public bool PopularMod = false;
+        /// <summary>
+        /// Used as internal flag for if application settings is checked "SaveDisabledModsInSelection". Allows for disabled mods to be saved back to the user's selection
+        /// </summary>
+        public bool FlagForSelectionSave = false;
+        /// <summary>
+        /// field for whether the package is selected to install
         /// </summary>
         protected internal bool _Checked = false;
         /// <summary>
@@ -206,7 +213,10 @@ namespace RelhaxModpack
                 }
             }
         }
-        //overriding the enabled so we can trigger the UI components
+        /// <summary>
+        /// Overrides DatabasePackage.Enabled property. Used to toggle if the mod should be selectable and installed in the selection list.
+        /// The override also enables the triggering of the UI components to reflect the user's selection changes.
+        /// </summary>
         public override bool Enabled
         {
             get { return _Enabled; }
@@ -224,6 +234,9 @@ namespace RelhaxModpack
         public int Level = -2;
 
         //Components for WPF (BOTH)
+        /// <summary>
+        /// The list of WPF combo boxes DESCIBE MORE TODO
+        /// </summary>
         public RelhaxWPFComboBox[] RelhaxWPFComboBoxList;
         /// <summary>
         /// the border for the legacy view to allow for putting all subchilderen in the border. sits inside treeviewitem. wpf component
@@ -272,8 +285,18 @@ namespace RelhaxModpack
         /// </summary>
         public List<Media> Medias = new List<Media>();
         //list of dependnecys this package calls for
+        /// <summary>
+        /// A list of packages (from dependencies list) that this package is dependent on in order to be installed
+        /// </summary>
         public List<DatabaseLogic> Dependencies = new List<DatabaseLogic>();
+        /// <summary>
+        /// A list of any SelectablePackages that conflict with this mod. A conflict will result the package not being processed.
+        /// Refer to examples for more information
+        /// </summary>
         public List<string> ConflictingPackages = new List<string>();
+        /// <summary>
+        /// Toggle if the package should appear in the search list
+        /// </summary>
         public bool ShowInSearchList = true;
         /// <summary>
         /// provides a nice complete path that is more human readable than a packagePath
@@ -299,6 +322,9 @@ namespace RelhaxModpack
                 return string.Join("->",parentPackages);
             }
         }
+        /// <summary>
+        /// Determines if the UI package structure to this package is of all visible components.
+        /// </summary>
         public bool IsStructureVisible
         {
             get
@@ -308,6 +334,7 @@ namespace RelhaxModpack
                 if (!Visible) return false;
                 bool structureVisible = true;
                 SelectablePackage parentRef = Parent;
+                //TopParent is the category header and thus is always visible
                 while (parentRef != TopParent)
                 {
                     if (!parentRef.Visible)
@@ -321,6 +348,9 @@ namespace RelhaxModpack
                 return structureVisible;
             }
         }
+        /// <summary>
+        /// Determines if the UI package structure to this package is of all enabled components.
+        /// </summary>
         public bool IsStructureEnabled
         {
             get
@@ -343,6 +373,9 @@ namespace RelhaxModpack
                 return structureEnabled;
             }
         }
+        /// <summary>
+        /// Returns the display name of the package for the UI, with version macros replaced and any other statuses appended
+        /// </summary>
         public string NameDisplay
         {
             get
@@ -353,9 +386,9 @@ namespace RelhaxModpack
                 //get if the package is need to be download "(updated)" text (and size)
                 //(only happends if level > -1)
                 string nameDisplay = NameFormatted;
-                if (CommandLineSettings.ForceVisible && !IsStructureVisible)
+                if (ModpackSettings.ForceVisible && !IsStructureVisible)
                     nameDisplay = string.Format("{0} [{1}]", nameDisplay, Translations.GetTranslatedString("invisible"));
-                if (CommandLineSettings.ForceEnabled && !IsStructureEnabled)
+                if (ModpackSettings.ForceEnabled && !IsStructureEnabled)
                     nameDisplay = string.Format("{0} [{1}]", nameDisplay, Translations.GetTranslatedString("disabled"));
                 if(Level > -1 && DownloadFlag)
                 {
@@ -363,9 +396,13 @@ namespace RelhaxModpack
                     if (Size > 0)
                         nameDisplay = string.Format("{0} ({1})", nameDisplay, Utils.SizeSuffix(Size, 1, true));
                 }
+                //escape character fix
                 return nameDisplay.Replace("_","__");
             }
         }
+        /// <summary>
+        /// Returns a string representation of the timestamp of when the zip file of this package was last modified
+        /// </summary>
         public string TimeStampString
         {
             get
@@ -373,6 +410,9 @@ namespace RelhaxModpack
                 return Utils.ConvertFiletimeTimestampToDate(Timestamp);
             }
         }
+        /// <summary>
+        /// Returns the display tooltip string, or the translation string for "no description"
+        /// </summary>
         public string ToolTipString
         {
             get

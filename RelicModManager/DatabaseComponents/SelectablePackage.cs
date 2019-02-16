@@ -160,6 +160,7 @@ namespace RelhaxModpack
                                         rucb.BackColor = Color.BlanchedAlmond;
                                         if (Settings.DarkUI)
                                             rucb.ForeColor = SystemColors.ControlText;
+                                        break;
                                     }
                                 }
                                 break;
@@ -171,6 +172,7 @@ namespace RelhaxModpack
                                     {
                                         ParentPanel.BackColor = Settings.GetBackColorWinForms();
                                     }
+                                    //special user CB code
                                     else if (UIComponent is RelhaxUserCheckBox rucb)
                                     {
                                         rucb.BackColor = Settings.GetBackColorWinForms();
@@ -178,8 +180,8 @@ namespace RelhaxModpack
                                         {
                                             rucb.ForeColor = Settings.GetTextColorWinForms();
                                         }
+                                        break;
                                     }
-
                                 }
                                 break;
                         }
@@ -194,6 +196,14 @@ namespace RelhaxModpack
                                     if(ParentBorder != null && ParentBorder.Background != System.Windows.Media.Brushes.BlanchedAlmond)
                                     {
                                         ParentBorder.Background = System.Windows.Media.Brushes.BlanchedAlmond;
+                                    }
+                                    //special user CB code
+                                    else if (UIComponent is RelhaxUserCheckBox rucb)
+                                    {
+                                        rucb.BackColor = Color.BlanchedAlmond;
+                                        if (Settings.DarkUI)
+                                            rucb.ForeColor = SystemColors.ControlText;
+                                        break;
                                     }
                                     if (Settings.DarkUI)
                                     {
@@ -225,6 +235,16 @@ namespace RelhaxModpack
                                 {
                                     if (ParentBorder != null && !AnyPackagesChecked())
                                         ParentBorder.Background = Settings.GetBackColorWPF();
+                                    //special user CB code
+                                    else if (UIComponent is RelhaxUserCheckBox rucb)
+                                    {
+                                        rucb.BackColor = Settings.GetBackColorWinForms();
+                                        if (Settings.DarkUI)
+                                        {
+                                            rucb.ForeColor = Settings.GetTextColorWinForms();
+                                        }
+                                        break;
+                                    }
                                     if (Settings.DarkUI)
                                     {
                                         //need to go through every contentpresenter of a stackpanel and parse
@@ -270,6 +290,14 @@ namespace RelhaxModpack
                                     {
                                         ParentBorder.Background = System.Windows.Media.Brushes.BlanchedAlmond;
                                     }
+                                    //special user CB code
+                                    else if (UIComponent is RelhaxUserCheckBox rucb)
+                                    {
+                                        rucb.BackColor = Color.BlanchedAlmond;
+                                        if (Settings.DarkUI)
+                                            rucb.ForeColor = SystemColors.ControlText;
+                                        break;
+                                    }
                                     else if (Level == -1 && TreeView.Background != System.Windows.Media.Brushes.BlanchedAlmond)
                                     {
                                         TreeView.Background = System.Windows.Media.Brushes.BlanchedAlmond;
@@ -300,6 +328,16 @@ namespace RelhaxModpack
                                     if (ParentBorder != null && !AnyPackagesChecked())
                                     {
                                         ParentBorder.Background = Settings.GetBackColorWPF();
+                                    }
+                                    //special user CB code
+                                    else if (UIComponent is RelhaxUserCheckBox rucb)
+                                    {
+                                        rucb.BackColor = Settings.GetBackColorWinForms();
+                                        if (Settings.DarkUI)
+                                        {
+                                            rucb.ForeColor = Settings.GetTextColorWinForms();
+                                        }
+                                        break;
                                     }
                                     else if (Level == -1 && !AnyPackagesChecked())
                                     {
@@ -482,6 +520,10 @@ namespace RelhaxModpack
         /// <returns>True if another package at this level is checked and enabled, false otherwise</returns>
         public bool AnyPackagesChecked()
         {
+            if (Parent == null)
+                return false;
+            if (Parent.Packages.Count == 0)
+                return false;
             foreach (SelectablePackage sp in Parent.Packages)
             {
                 if (sp.Enabled && sp.Checked)

@@ -167,9 +167,19 @@
             description of the package
             </summary>
         </member>
+        <member name="F:RelhaxModpack.SelectablePackage.PopularMod">
+            <summary>
+            Flag to determine if the mod (and children? TODO) should be used in the 
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.FlagForSelectionSave">
+            <summary>
+            Used as internal flag for if application settings is checked "SaveDisabledModsInSelection". Allows for disabled mods to be saved back to the user's selection
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.SelectablePackage._Checked">
             <summary>
-            field for wether the package is selected to install
+            field for whether the package is selected to install
             </summary>
         </member>
         <member name="P:RelhaxModpack.SelectablePackage.Checked">
@@ -177,10 +187,21 @@
             property for if the package is selected by the user to install. handles all color change and single_dropdown updating code
             </summary>
         </member>
+        <member name="P:RelhaxModpack.SelectablePackage.Enabled">
+            <summary>
+            Overrides DatabasePackage.Enabled property. Used to toggle if the mod should be selectable and installed in the selection list.
+            The override also enables the triggering of the UI components to reflect the user's selection changes.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.SelectablePackage.Level">
             <summary>
             The level in the database tree where the package resides.
             Category header is -1, each child is +1 from there
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.RelhaxWPFComboBoxList">
+            <summary>
+            The list of WPF combo boxes DESCIBE MORE TODO
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.ChildBorder">
@@ -233,9 +254,50 @@
             list of media preview items associated with this package, shown in the preview window on right click of component
             </summary>
         </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Dependencies">
+            <summary>
+            A list of packages (from dependencies list) that this package is dependent on in order to be installed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ConflictingPackages">
+            <summary>
+            A list of any SelectablePackages that conflict with this mod. A conflict will result the package not being processed.
+            Refer to examples for more information
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ShowInSearchList">
+            <summary>
+            Toggle if the package should appear in the search list
+            </summary>
+        </member>
         <member name="P:RelhaxModpack.SelectablePackage.CompletePath">
             <summary>
             provides a nice complete path that is more human readable than a packagePath
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.IsStructureVisible">
+            <summary>
+            Determines if the UI package structure to this package is of all visible components.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.IsStructureEnabled">
+            <summary>
+            Determines if the UI package structure to this package is of all enabled components.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.NameDisplay">
+            <summary>
+            Returns the display name of the package for the UI, with version macros replaced and any other statuses appended
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.TimeStampString">
+            <summary>
+            Returns a string representation of the timestamp of when the zip file of this package was last modified
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.ToolTipString">
+            <summary>
+            Returns the display tooltip string, or the translation string for "no description"
             </summary>
         </member>
         <member name="M:RelhaxModpack.SelectablePackage.CompareMods(RelhaxModpack.SelectablePackage,RelhaxModpack.SelectablePackage)">
@@ -409,13 +471,13 @@
             Provides a refrence to an instalce of an uninstall log file
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Logging.InitApplicationLogging">
+        <member name="M:RelhaxModpack.Logging.InitApplicationLogging(RelhaxModpack.Logfiles,System.String)">
             <summary>
             Initialize the logging subsystem for the appilcation
             </summary>
             <returns>True if sucessfull initialization, false otherwise</returns>
         </member>
-        <member name="M:RelhaxModpack.Logging.DisposeApplicationLogging">
+        <member name="M:RelhaxModpack.Logging.DisposeLogging(RelhaxModpack.Logfiles)">
             <summary>
             Dispose of the application logging subsystem
             </summary>
@@ -588,6 +650,22 @@
             toggle export mode
             </summary>
         </member>
+        <member name="F:RelhaxModpack.ModpackSettings.AdvancedInstalProgress">
+            <summary>
+            Toggle the advanced installation progress window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.AskToDeleteCache">
+            <summary>
+            True - After an installation the application will ask to delete old download cache files
+            False - After an installation the application will always delete old download cache files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.PreviewFullscreen">
+            <summary>
+            toggle for if the Preview window should be shown in fullscreen mode
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.ModpackSettings.ModSelectionHeight">
             <summary>
             the height, in pixels, of the ModSelectionView window
@@ -611,11 +689,6 @@
         <member name="F:RelhaxModpack.ModpackSettings.PreviewY">
             <summary>
             the y-coordinate location, in pixels, of the Preview window
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.PreviewFullscreen">
-            <summary>
-            toggle for if the Preview window should be shown in fullscreen mode
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.PreviewHeight">
@@ -704,7 +777,7 @@
         </member>
         <member name="T:RelhaxModpack.UISettings">
             <summary>
-            Handles all custom UI color settings
+            Handles all custom UI settings
             </summary>
         </member>
         <member name="M:RelhaxModpack.UISettings.LoadSettings(System.Boolean)">
@@ -725,6 +798,19 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.Diagnostics">
+            <summary>
+            Interaction logic for Diagnostics.xaml
+            </summary>
+            <summary>
+            Diagnostics
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.Diagnostics.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.FirstLoadAknowledgements">
             <summary>
             Interaction logic for FirstLoadAknowledgements.xaml
@@ -734,6 +820,19 @@
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.FirstLoadAknowledgements.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.DeleteOldCache">
+            <summary>
+            Interaction logic for GenericYesNoWindow.xaml
+            </summary>
+            <summary>
+            DeleteOldCache
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.DeleteOldCache.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>
@@ -751,12 +850,30 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.AdvancedProgress">
+            <summary>
+            Interaction logic for Window1.xaml
+            </summary>
+            <summary>
+            AdvancedProgress
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.AdvancedProgress.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.AddPicturesZip">
             <summary>
             Interaction logic for AddPicturesZip.xaml
             </summary>
             <summary>
             AddPicturesZip
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AddPicturesZip.FilesToAddList">
+            <summary>
+            FilesToAddList Name Field
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.AddPicturesZip.InitializeComponent">
@@ -940,6 +1057,107 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxMediaPlayer">
+            <summary>
+            Interaction logic for RelhaxMediaPlayer.xaml
+            </summary>
+            <summary>
+            RelhaxMediaPlayer
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxPreviewIndex">
+            <summary>
+            A RelhaxPreviewIndex item is a glorified textblock with a hyperlink with a refrence to a media element
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxProgress">
+            <summary>
+            The base class for reporting async progress to any UI receiver task.
+            There are up to 3 levels of tasks that can be reported: child, parent, and total. At least total will be implemented an any given usage case.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ChildCurrent">
+            <summary>
+            The current completed and total child level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ChildTotal">
+            <summary>
+            The current completed and total child level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ChildCurrentProgress">
+            <summary>
+            A custom formatted string to use if the async task supports/implements it
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ParrentCurrent">
+            <summary>
+            The current completed and total parent level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ParrentTotal">
+            <summary>
+            The current completed and total parent level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ParrentCurrentProgress">
+            <summary>
+            A custom formatted string to use if the async task supports/implements it
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.TotalCurrent">
+            <summary>
+            The current completed and total total level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.TotalTotal">
+            <summary>
+            The current completed and total total level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.TotalCurrentProgress">
+            <summary>
+            A custom formatted string to use if the async task supports/implements it
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ReportMessage">
+            <summary>
+            A custom formatted string to use if the async task supports/implements it
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.BytesProcessed">
+            <summary>
+            During zip file extraction, the number of processed bytes extracted, and the total bytes to extract.
+            During copy operations, the number of processed copied bytes, and the total bytes to copy.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.BytesTotal">
+            <summary>
+            During zip file extraction, the number of processed bytes extracted, and the total bytes to extract.
+            During copy operations, the number of processed copied bytes, and the total bytes to copy.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.Filename">
+            <summary>
+            The name of the file currently being processed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.EntryFilename">
+            <summary>
+            During zip file extraction, the entry inside the zip file being processed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.InstallStatus">
+            <summary>
+            The current status of the installer. Represents the current state of the installer. When it exists, it is also used as an exit code.
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.CiInfo">
             <summary>Info about the continuous integration server build that produced this binary.</summary> 
         </member>
@@ -1032,6 +1250,15 @@
             <param name="includeWindow">if the list should include the window itself</param>
             <returns>A list of type FrameowrkElement of all components</returns>
         </member>
+        <member name="M:RelhaxModpack.Utils.PointWithinScreen(System.Int32,System.Int32)">
+            <summary>Checks if a point is inside the possible monitor space</summary>
+            <param name="x">The x coordinate of the point</param>
+            <param name="y">The y coordinate of the point</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.PointWithinScreen(System.Drawing.Point)">
+            <summary>Checks if a point is inside the possible monitor space</summary>
+            <param name="p">The point to check</param>
+        </member>
         <member name="M:RelhaxModpack.Utils.CreateMD5Hash(System.String)">
             <summary>
             Creates an MD5 hash calculation of the input file
@@ -1068,7 +1295,7 @@
             <param name="fileName"></param>
             <returns></returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.DirectoryDelete(System.String,System.Boolean,System.Int32,System.Int32)">
+        <member name="M:RelhaxModpack.Utils.DirectoryDelete(System.String,System.Boolean,System.UInt32,System.UInt32,System.String)">
             <summary>
             Deletes files in a directory
             </summary>
@@ -1167,10 +1394,65 @@
             <param name="base64EncodedData">The base64 stirng</param>
             <returns>The plain text version</returns>
         </member>
+        <member name="T:RelhaxModpack.XmlLoadType">
+            <summary>
+            Xml document load type enumeration
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.XmlLoadType.FromFile">
+            <summary>
+            loading xml from a file on disk
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.XmlLoadType.FromXml">
+            <summary>
+            loading xml from a text string
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.XMLUtils">
             <summary>
             Utility class for all XML static methods
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.XMLUtils.IsValidXml(System.String)">
+            <summary>
+            check to make sure an xml file is valid
+            </summary>
+            <param name="filePath">The path to the xml file</param>
+            <returns>True if valid XML, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.XMLUtils.IsValidXml(System.String,System.String)">
+            <summary>
+            check to make sure an xml file is valid
+            </summary>
+            <param name="xmlString">The xml text string</param>
+            <param name="fileName">the name of the file, used for debugging purposes</param>
+            <returns>True if valid XML, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.XMLUtils.GetXMLStringFromXPath(System.String,System.String)">
+            <summary>
+            get an xml element attribute given an xml path
+            </summary>
+            <param name="file">The path to the XML file</param>
+            <param name="xpath">The xpath search string</param>
+            <returns>The value from the xpath search, otherwise null</returns>
+        </member>
+        <member name="M:RelhaxModpack.XMLUtils.GetXMLStringFromXPath(System.String,System.String,System.String)">
+            <summary>
+            get an xml element attribute given an xml path
+            </summary>
+            <param name="xmlString">The XML text string</param>
+            <param name="xpath">The xpath search string</param>
+            <param name="filename"></param>
+            <returns>The value from the xpath search, otherwise null</returns>
+        </member>
+        <member name="M:RelhaxModpack.XMLUtils.GetXMLStringFromXPath(System.Xml.XmlDocument,System.String)">
+            <summary>
+            get an xml element attribute given an xml path
+            </summary>
+            <param name="doc">The XML document object to check</param>
+            <param name="xpath">The xpath search string</param>
+            <returns>The value from the xpath search, otherwise null</returns>
         </member>
         <member name="T:RelhaxModpack.ReturnCodes">
             <summary>

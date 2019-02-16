@@ -2213,7 +2213,7 @@ namespace RelhaxModpack
             French.Add("searchTB", "Rechercher le nom du mod:");
             #endregion
         }
-        private static void LegacyTranlationsToKeepButNotLoadJustInCaseWeEverNeedThemAgain()
+        private static void LegacyTranlationsToKeepButNotLoadJustInCaseWeEverNeedThemAgainJustInCase()
         {
 
             //Componet: toolTip

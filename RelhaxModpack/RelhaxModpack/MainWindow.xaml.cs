@@ -18,6 +18,8 @@ using RelhaxModpack.UIComponents;
 using System.Xml;
 using System.Diagnostics;
 using Ionic.Zip;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace RelhaxModpack
 {
@@ -35,6 +37,8 @@ namespace RelhaxModpack
         private long last_bytes_downloaded;
         private long current_bytes_downloaded;
         private RelhaxProgress downloadProgress = null;
+        private AdvancedProgress AdvancedProgressWindow;
+        bool closingFromFailure = false;
 
         /// <summary>
         /// Creates the instance of the MainWindow class
@@ -98,19 +102,23 @@ namespace RelhaxModpack
             //dispose of please wait here
             progressIndicator.Close();
             progressIndicator = null;
-            Show();
+            if(!closingFromFailure)
+                Show();
         }
 
         private void TheMainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Logging.WriteToLog("Saving settings");
-            if (ModpackSettings.SaveSettings())
-                Logging.WriteToLog("Settings saved");
-            Logging.WriteToLog("Disposing tray icon");
-            if(RelhaxIcon != null)
+            if(!Logging.IsLogDisposed(Logfiles.Application))
             {
-                RelhaxIcon.Dispose();
-                RelhaxIcon = null;
+                Logging.WriteToLog("Saving settings");
+                if (ModpackSettings.SaveSettings())
+                    Logging.WriteToLog("Settings saved");
+                Logging.WriteToLog("Disposing tray icon");
+                if (RelhaxIcon != null)
+                {
+                    RelhaxIcon.Dispose();
+                    RelhaxIcon = null;
+                }
             }
         }
 
@@ -284,6 +292,8 @@ namespace RelhaxModpack
                 catch (Exception e)
                 {
                     Logging.WriteToLog(string.Format("Failed to check for updates: \n{0}", e), Logfiles.Application, LogLevel.ApplicationHalt);
+                    MessageBox.Show(Translations.GetTranslatedString("failedCheckUpdates"));
+                    closingFromFailure = true;
                     Application.Current.Shutdown();
                     Close();
                     return;
@@ -562,12 +572,74 @@ namespace RelhaxModpack
                 ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
         }
 
-        private void OnUseBetaDatabaseChanged(object sender, RoutedEventArgs e)
+        private async void OnUseBetaDatabaseChanged(object sender, RoutedEventArgs e)
         {
             if ((bool)UseBetaDatabaseCB.IsChecked)
+            {
+                UseBetaDatabaseCB.IsEnabled = false;
+                //get the branches. the default selected should be master
+                UseBetaDatabaseBranches.IsEnabled = false;
+                UseBetaDatabaseBranches.Items.Clear();
+                UseBetaDatabaseBranches.Items.Add(Translations.GetTranslatedString("loadingBranches"));
+                UseBetaDatabaseBranches.SelectedIndex = 0;
+                string jsonText = string.Empty;
+                using (PatientWebClient client = new PatientWebClient() { Timeout = 1500 })
+                {
+                    try
+                    {
+                        client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
+                        jsonText = await client.DownloadStringTaskAsync(Settings.BetaDatabaseBranchesURL);
+                    }
+                    catch (WebException wex)
+                    {
+                        Logging.Exception(wex.ToString());
+                    }
+                }
+                if(string.IsNullOrWhiteSpace(jsonText))
+                {
+                    //just load master and call it good. it should always be there
+                    UseBetaDatabaseBranches.Items.Clear();
+                    UseBetaDatabaseBranches.Items.Add("master");
+                    UseBetaDatabaseBranches.SelectedIndex = 0;
+                    UseBetaDatabaseBranches.IsEnabled = true;
+                    UseBetaDatabaseCB.IsEnabled = true;
+                    return;
+                }
+                JArray root = null;
+                try
+                {
+                    root = JArray.Parse(jsonText);
+                }
+                catch (JsonException jex)
+                {
+                    Logging.Exception(jex.ToString());
+                    UseBetaDatabaseBranches.Items.Clear();
+                    UseBetaDatabaseBranches.Items.Add("master");
+                    UseBetaDatabaseBranches.SelectedIndex = 0;
+                    UseBetaDatabaseBranches.IsEnabled = true;
+                    UseBetaDatabaseCB.IsEnabled = true;
+                    return;
+                }
+                List<string> branches = new List<string>();
+                foreach(JObject branch in root.Children())
+                {
+                    JValue value = (JValue)branch["name"];
+                    branches.Add((string)value.Value);
+                }
+                branches.Reverse();
+                UseBetaDatabaseBranches.Items.Clear();
+                foreach (string s in branches)
+                    UseBetaDatabaseBranches.Items.Add(s);
                 ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Beta;
-            else if (!(bool)UseBetaDatabaseCB.IsChecked)
+                //default to master selected
+                UseBetaDatabaseBranches.SelectedIndex = 0;
+                UseBetaDatabaseBranches.IsEnabled = true;
+                UseBetaDatabaseCB.IsEnabled = true;
+            }
+            else
+            {
                 ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Stable;
+            }
         }
 
         private void OnDefaultBordersV2Changed(object sender, RoutedEventArgs e)
@@ -749,8 +821,7 @@ namespace RelhaxModpack
         {
             if (e.ContinueInstallation)
             {
-                OnBeginInstallation(new List<Category>(e.ParsedCategoryList),
-                    new List<Dependency>(e.Dependencies),new List<DatabasePackage>(e.GlobalDependencies));
+                OnBeginInstallation(new List<Category>(e.ParsedCategoryList), new List<Dependency>(e.Dependencies),new List<DatabasePackage>(e.GlobalDependencies));
                 modSelectionList = null;
             }
             else
@@ -820,7 +891,100 @@ namespace RelhaxModpack
                 ProcessDownloadsAsync(packagesToDownload);
             }
             //now let's start the install procedures
+            //like if we need to make the advanced install window
+            //but null it at all times
+            if (AdvancedProgressWindow != null)
+                AdvancedProgressWindow = null;
+            if (ModpackSettings.AdvancedInstalProgress)
+            {
+                AdvancedProgressWindow= new AdvancedProgress();
+                AdvancedProgressWindow.Show();
+            }
 
+            //and create and link the install engine
+            InstallerComponents.InstallEngine engine = new InstallerComponents.InstallEngine()
+            {
+                FlatListSelectablePackages = flatListSelect,
+                OrderedPackagesToInstall = orderedPackagesToInstall,
+                AwaitCallback = false,
+                ParsedCategoryList = parsedCategoryList,
+                Dependencies = dependencies,
+                GlobalDependencies = globalDependencies
+            };
+            engine.OnInstallProgress += Engine_OnInstallProgress;
+            engine.OnInstallFinish += Engine_OnInstallFinish;
+            //call the engine to install
+        }
+
+        private async void Engine_OnInstallFinish(object sender, InstallerComponents.RelhaxInstallFinishedEventArgs e)
+        {
+            if(e.ExitCodes == InstallerComponents.InstallerExitCodes.Success)
+            {
+                //get a list of all zip files in the database, compare it with the files in the download cache folder
+                //get a list of zip files in the cache that aren't in the database, these are old and can be deleted
+                List<string> zipFilesInDatabase = new List<string>();
+                foreach (DatabasePackage package in Utils.GetFlatList(e.GlobalDependencies, e.Dependencies, null, e.ParsedCategoryList))
+                    if(!string.IsNullOrWhiteSpace(package.ZipFile))
+                        zipFilesInDatabase.Add(package.ZipFile);
+                List<string> zipFilesInCache = Utils.DirectorySearch(Settings.RelhaxDownloadsFolder, SearchOption.TopDirectoryOnly, "*.zip").ToList();
+                List<string> oldZipFilesNotInDatabase = zipFilesInCache.Except(zipFilesInDatabase).ToList();
+                if(oldZipFilesNotInDatabase.Count > 0)
+                {
+                    //there are files to delete
+                    //if ask if false, assume we are deleting old files
+                    if(ModpackSettings.AskToDeleteCache)
+                    {
+                        DeleteOldCache oldCache = new DeleteOldCache();
+                        if(!(bool)oldCache.ShowDialog())
+                        {
+                            return;
+                        }
+                    }
+                    InstallProgressTextBox.Text = Translations.GetTranslatedString("DeletingOldCache");
+                    await Task.Run(() =>
+                    {
+                        foreach (string zipfile in oldZipFilesNotInDatabase)
+                            Utils.FileDelete(Settings.RelhaxDownloadsFolder, zipfile);
+                    });
+                }
+                if(ModpackSettings.ShowInstallCompleteWindow)
+                {
+                    InstallFinished installFinished = new InstallFinished();
+                    installFinished.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show(Translations.GetTranslatedString("InstallationFinished"));
+                }
+                InstallProgressTextBox.Text = string.Empty;
+            }
+            else
+            {
+                //explain why if failed
+                //messagebox
+
+                //and log
+                Logging.WriteToLog(string.Format("Installer failed to install, exit code {0}\n{1}", e.ExitCodes.ToString(), e.ErrorMessage),
+                    Logfiles.Application, LogLevel.Exception);
+            }
+        }
+
+        private void Engine_OnInstallProgress(object sender, RelhaxInstallerProgress e)
+        {
+            if(ModpackSettings.AdvancedInstalProgress )
+            {
+                if(AdvancedProgressWindow == null)
+                {
+                    throw new BadMemeException("but how");
+                }
+                AdvancedProgressWindow.OnReportAdvancedProgress(e);
+            }
+            else
+            {
+                //standard progress
+
+                //other reporting here
+            }
         }
 
         //handles processing of downloads and nothing more...
@@ -1011,7 +1175,7 @@ namespace RelhaxModpack
                 }
                 catch(Exception e)
                 {
-                    Logging.WriteToLog("Failed to check application folder sturcture\n" + e.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
+                    Logging.WriteToLog("Failed to check application folder structure\n" + e.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
                     return false;
                 }
             }
@@ -1033,6 +1197,16 @@ namespace RelhaxModpack
             //any to include here
             AutoSyncFrequencyTexbox.IsEnabled = toggle;
             AutoSyncSelectionFileTextBox.IsEnabled = toggle;
+        }
+
+        private void OnBetaDatabaseSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (UseBetaDatabaseBranches.SelectedItem is string branchName)
+                ModpackSettings.BetaDatabaseSelectedBranch = branchName;
+            else if (UseBetaDatabaseBranches.SelectedItem == null)
+                ModpackSettings.BetaDatabaseSelectedBranch = "master";
+            else
+                throw new BadMemeException("aids. on a stick");
         }
     }
 }

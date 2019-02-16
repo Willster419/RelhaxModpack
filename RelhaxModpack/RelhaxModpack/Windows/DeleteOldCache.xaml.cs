@@ -15,13 +15,29 @@ using System.Windows.Shapes;
 namespace RelhaxModpack.Windows
 {
     /// <summary>
-    /// Interaction logic for AddPicturesZip.xaml
+    /// Interaction logic for GenericYesNoWindow.xaml
     /// </summary>
-    public partial class AddPicturesZip : RelhaxWindow
+    public partial class DeleteOldCache : RelhaxWindow
     {
-        public AddPicturesZip()
+        public DeleteOldCache()
         {
             InitializeComponent();
+        }
+
+        private void Grid_Loaded(object sender, RoutedEventArgs e)
+        {
+            //Apply Translations
+
+        }
+
+        private void OnNoButtonClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OnYesButtonClick(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

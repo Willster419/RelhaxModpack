@@ -69,11 +69,14 @@
     <ApplicationIcon>Resources\modpack_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DotNetZip, Version=1.12.0.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetZip.1.12.0\lib\net20\DotNetZip.dll</HintPath>
+    <Reference Include="DotNetZip, Version=1.13.0.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.1.13.0\lib\net40\DotNetZip.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="NAudio, Version=1.8.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.8.5\lib\net35\NAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -105,79 +108,101 @@
     <Compile Include="DatabaseComponents\PackageComparer.cs" />
     <Compile Include="DatabaseComponents\SelectablePackage.cs" />
     <Compile Include="DatabaseComponents\UserFiles.cs" />
+    <Compile Include="InstallerComponents\Atlas.cs" />
     <Compile Include="InstallerComponents\InstallEngine.cs" />
+    <Compile Include="InstallerComponents\Patch.cs" />
     <Compile Include="InstallerComponents\Shortcut.cs" />
+    <Compile Include="InstallerComponents\Texture.cs" />
+    <Compile Include="InstallerComponents\XmlUnpack.cs" />
     <Compile Include="Logging\Logfile.cs" />
     <Compile Include="Logging\Logging.cs" />
+    <Compile Include="PrivateStuff\relhaxmodpackprivatesettings\PrivateStuff.cs" />
     <Compile Include="Settings\ModpackSettings.cs" />
     <Compile Include="Settings\CommandLineSettings.cs" />
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="Settings\ThirdPartySettings.cs" />
     <Compile Include="Settings\UISettings.cs" />
     <Compile Include="UIComponents\ComboBoxItem.cs" />
-    <Compile Include="UIComponents\DeveloperSelectionsViewer.xaml.cs">
+    <Compile Include="Windows\DeveloperSelectionsViewer.xaml.cs">
       <DependentUpon>DeveloperSelectionsViewer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\FirstLoadAknowledgements.xaml.cs">
+    <Compile Include="Windows\Diagnostics.xaml.cs">
+      <DependentUpon>Diagnostics.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\FirstLoadAknowledgements.xaml.cs">
       <DependentUpon>FirstLoadAknowledgements.xaml</DependentUpon>
     </Compile>
     <Compile Include="UIComponents\IPackageUIComponent.cs" />
-    <Compile Include="UIComponents\NewsViewer.xaml.cs">
+    <Compile Include="Windows\DeleteOldCache.xaml.cs">
+      <DependentUpon>DeleteOldCache.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\NewsViewer.xaml.cs">
       <DependentUpon>NewsViewer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\RelhaxMediaPlayer.xaml.cs">
+      <DependentUpon>RelhaxMediaPlayer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UIComponents\RelhaxPreviewIndex.cs" />
     <Compile Include="UIComponents\RelhaxProgress.cs" />
     <Compile Include="UIComponents\RelhaxWPFCheckBox.cs" />
     <Compile Include="UIComponents\RelhaxWPFComboBox.cs" />
     <Compile Include="UIComponents\RelhaxWPFRadioButton.cs" />
     <Compile Include="UIComponents\StretchingTreeView.cs" />
     <Compile Include="UIComponents\StretchingTreeViewItem.cs" />
+    <Compile Include="Windows\AdvancedProgress.xaml.cs">
+      <DependentUpon>AdvancedProgress.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utils\BadMemeException.cs" />
     <Compile Include="Utils\CiInfo.cs" />
+    <Compile Include="Utils\PatchUtils.cs" />
     <Compile Include="Utils\PatientWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Utils\Translations.cs" />
     <Compile Include="Utils\Utils.cs" />
-    <Compile Include="UIComponents\AddPicturesZip.xaml.cs">
+    <Compile Include="Windows\AddPicturesZip.xaml.cs">
       <DependentUpon>AddPicturesZip.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\DatabaseEditor.xaml.cs">
+    <Compile Include="Windows\DatabaseEditor.xaml.cs">
       <DependentUpon>DatabaseEditor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\DatabaseEditorAddMove.xaml.cs">
+    <Compile Include="Windows\DatabaseEditorAddMove.xaml.cs">
       <DependentUpon>DatabaseEditorAddMove.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\DatabaseEditorDownload.xaml.cs">
+    <Compile Include="Windows\DatabaseEditorDownload.xaml.cs">
       <DependentUpon>DatabaseEditorDownload.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\DatabaseUpdater.xaml.cs">
+    <Compile Include="Windows\DatabaseUpdater.xaml.cs">
       <DependentUpon>DatabaseUpdater.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\GenericYesNoWindow.xaml.cs">
+    <Compile Include="Windows\GenericYesNoWindow.xaml.cs">
       <DependentUpon>GenericYesNoWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\InstallFinished.xaml.cs">
+    <Compile Include="Windows\InstallFinished.xaml.cs">
       <DependentUpon>InstallFinished.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\ModSelectionList.xaml.cs">
+    <Compile Include="Windows\ModSelectionList.xaml.cs">
       <DependentUpon>ModSelectionList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\PatchTester.xaml.cs">
+    <Compile Include="Windows\PatchTester.xaml.cs">
       <DependentUpon>PatchTester.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\GenericWindow.xaml.cs">
+    <Compile Include="Windows\GenericWindow.xaml.cs">
       <DependentUpon>GenericWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\Preview.xaml.cs">
+    <Compile Include="Windows\Preview.xaml.cs">
       <DependentUpon>Preview.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\ProgressIndicator.xaml.cs">
+    <Compile Include="Windows\ProgressIndicator.xaml.cs">
       <DependentUpon>ProgressIndicator.xaml</DependentUpon>
     </Compile>
     <Compile Include="UIComponents\RelhaxWindow.cs" />
-    <Compile Include="UIComponents\VersionInfo.xaml.cs">
+    <Compile Include="Windows\VersionInfo.xaml.cs">
       <DependentUpon>VersionInfo.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\XmlBinary\PackedSectionReader.cs" />
+    <Compile Include="Utils\XmlBinary\PrimitiveFileReader.cs" />
+    <Compile Include="Utils\XmlBinary\XmlBinaryHandler.cs" />
     <Compile Include="Utils\XMLUtils.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -191,67 +216,83 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="UIComponents\AddPicturesZip.xaml">
+    <Page Include="Windows\AddPicturesZip.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\DatabaseEditor.xaml">
+    <Page Include="Windows\DatabaseEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\DatabaseEditorAddMove.xaml">
+    <Page Include="Windows\DatabaseEditorAddMove.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\DatabaseEditorDownload.xaml">
+    <Page Include="Windows\DatabaseEditorDownload.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\DatabaseUpdater.xaml">
+    <Page Include="Windows\DatabaseUpdater.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\DeveloperSelectionsViewer.xaml">
+    <Page Include="Windows\DeveloperSelectionsViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\FirstLoadAknowledgements.xaml">
+    <Page Include="Windows\Diagnostics.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\GenericYesNoWindow.xaml">
+    <Page Include="Windows\FirstLoadAknowledgements.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\InstallFinished.xaml">
+    <Page Include="Windows\DeleteOldCache.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\GenericYesNoWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\ModSelectionList.xaml">
+    <Page Include="Windows\InstallFinished.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\NewsViewer.xaml">
+    <Page Include="Windows\ModSelectionList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\PatchTester.xaml">
+    <Page Include="Windows\NewsViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\GenericWindow.xaml">
+    <Page Include="Windows\PatchTester.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\Preview.xaml">
+    <Page Include="Windows\GenericWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\ProgressIndicator.xaml">
+    <Page Include="Windows\Preview.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\VersionInfo.xaml">
+    <Page Include="Windows\ProgressIndicator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\RelhaxMediaPlayer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\VersionInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AdvancedProgress.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -279,10 +320,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <Resource Include="3rdPartyLicences\dds-reader.txt" />
-    <Resource Include="3rdPartyLicences\NAudio.txt" />
-    <Resource Include="3rdPartyLicences\SpriteSheetPacker.txt" />
-    <Resource Include="3rdPartyLicences\TeximpNet.txt" />
+    <Resource Include="PrivateStuff\github_readme_link.txt" />
     <Content Include="Resources\Licences\modpack_license_agrement.txt" />
     <None Include="Properties\RelhaxModpack.ruleset" />
   </ItemGroup>
@@ -334,9 +372,7 @@
     <Content Include="Resources\Libraries\NAudio.dll" />
     <Content Include="Resources\Libraries\Newtonsoft.Json.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\XML\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>echo namespace RelhaxModpack &gt; "$(ProjectDir)\Utils\CiInfo.cs"

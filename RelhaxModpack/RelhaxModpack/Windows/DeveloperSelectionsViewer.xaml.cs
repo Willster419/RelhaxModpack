@@ -28,58 +28,35 @@ namespace RelhaxModpack.Windows
     public partial class DeveloperSelectionsViewer : RelhaxWindow
     {
         //init it to false so that it only will get changed to true at that one point when it works
-        private bool loadSelection = false;
-        private string fileToLoad = "";
+        private bool LoadSelection = false;
+        private string FileToLoad = "";
         public event DeveloperSelectionsClosedDelagate OnDeveloperSelectionsClosed;
         private WebClient client;
-        private bool currentlyDownloading = false;
-        private string databaseURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/Rescoruces/developerSelections/developerSelections.zip";
-        private string databaseSaveLocation = Path.Combine(Settings.RelhaxTempFolder, "developerSelections.zip");
+        
 
         public DeveloperSelectionsViewer()
         {
             InitializeComponent();
         }
 
-        private void OnApplicationLoading(object sender, RoutedEventArgs e)
+        private async void OnApplicationLoading(object sender, RoutedEventArgs e)
         {
             //add loading message to stack panel
             DeveloperSelectionsTextHeader.Text = Translations.GetTranslatedString("loadingDevTranslations");
             ContinueButton.IsEnabled = false;
-            //add it to the thing here
-            currentlyDownloading = true;
+            string selectionsXMlString = string.Empty;
             using (client = new WebClient())
             {
-                client.DownloadFileCompleted += OnSelectionsDownloaded;
                 try
                 {
-                    if (File.Exists(databaseSaveLocation))
-                        File.Delete(databaseSaveLocation);
-                    client.DownloadFileAsync(new Uri(databaseURL), databaseSaveLocation);
+                    selectionsXMlString = await client.DownloadStringTaskAsync(Settings.SelectionsRoot + Settings.SelectionsXml);
                 }
                 catch(Exception ex)
                 {
-                    Logging.WriteToLog(ex.ToString(), Logfiles.Application, LogLevel.Exception);
-                    MessageBox.Show(Translations.GetTranslatedString("failedToDownload") + "DeveloperSelections.zip");
-                    this.Close();
+                    Logging.Exception(ex.ToString());
+                    MessageBox.Show(Translations.GetTranslatedString("failedToParseSelections"));
+                    Close();
                 }
-            }
-        }
-
-        private void OnSelectionsDownloaded(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
-        {
-            if(e.Error != null)
-            {
-                //quit now
-                //TODO
-                return;
-            }
-            string selectionsXMlString = Utils.GetStringFromZip(databaseSaveLocation,"selections.xml");
-            if(string.IsNullOrWhiteSpace(selectionsXMlString))
-            {
-                Logging.WriteToLog("Failed to parse selections.xml from developerSelections.zip", Logfiles.Application, LogLevel.Error);
-                MessageBox.Show(Translations.GetTranslatedString("failedToParse") + "DeveloperSelections.zip");
-                return;
             }
             XmlDocument doc = new XmlDocument();
             try
@@ -88,19 +65,19 @@ namespace RelhaxModpack.Windows
             }
             catch (XmlException xmlex)
             {
-                Logging.WriteToLog(xmlex.ToString(), Logfiles.Application, LogLevel.Exception);
-                MessageBox.Show(Translations.GetTranslatedString("failedToDownload") + "DeveloperSelections.zip");
+                Logging.Exception(xmlex.ToString());
+                MessageBox.Show(Translations.GetTranslatedString("failedToParseSelections"));
                 return;
             }
             //set text to say "pick a selection" instead of "loading selections"
             DeveloperSelectionsTextHeader.Text = Translations.GetTranslatedString("SelectSelection");
             //load selections into stackpanel
-            foreach(XmlNode node in XMLUtils.GetXMLNodesFromXPath(doc, "//selections/selection"))
+            foreach (XmlNode node in XMLUtils.GetXMLNodesFromXPath(doc, "//selections/selection"))
             {
-                DeveloperSelectionsStackPanel.Children.Add( new RadioButton()
+                DeveloperSelectionsStackPanel.Children.Add(new RadioButton()
                 {
                     Content = node.Attributes["displayName"],
-                    //ToolTip = Translations.GetTranslatedString("lastModified") + " " + LastModified = node.Attributes["lastModified"],
+                    ToolTip = Translations.GetTranslatedString("lastModified") + " " + node.Attributes["lastModified"],
                     Tag = node.InnerText
                 });
             }
@@ -112,44 +89,43 @@ namespace RelhaxModpack.Windows
         {
             if (OnDeveloperSelectionsClosed != null)
             {
-                if(!fileToLoad.Equals("LOCAL"))
-                    loadSelection = false;
+                if(!FileToLoad.Equals("LOCAL"))
+                    LoadSelection = false;
                 foreach(RadioButton button in DeveloperSelectionsStackPanel.Children)
                 {
                     if((bool)button.IsChecked)
                     {
-                        loadSelection = true;
-                        fileToLoad = (string)button.Tag;
+                        LoadSelection = true;
+                        FileToLoad = (string)button.Tag;
                         break;
                     }
                 }
                 OnDeveloperSelectionsClosed(this, new DevleoperSelectionsClosedEWventArgs()
                 {
-                    LoadSelection = loadSelection,
-                    FileToLoad = fileToLoad
+                    LoadSelection = LoadSelection,
+                    FileToLoad = FileToLoad
                 });
             }
         }
 
         private void ContinueButton_Click(object sender, RoutedEventArgs e)
         {
-            this.loadSelection = true;
-            //get filename of zip xml file to load
-            this.Close();
+            LoadSelection = true;
+            Close();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            this.loadSelection = false;
-            this.fileToLoad = string.Empty;
-            this.Close();
+            LoadSelection = false;
+            FileToLoad = string.Empty;
+            Close();
         }
 
         private void LocalFile_Click(object sender, RoutedEventArgs e)
         {
-            this.loadSelection = true;
-            this.fileToLoad = "LOCAL";
-            this.Close();
+            LoadSelection = true;
+            FileToLoad = "LOCAL";
+            Close();
         }
     }
 }

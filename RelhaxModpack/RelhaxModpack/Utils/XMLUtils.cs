@@ -1,31 +1,54 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using System.Reflection;
 using System.Windows;
 
 namespace RelhaxModpack
 {
     /// <summary>
+    /// Xml document load type enumeration
+    /// </summary>
+    public enum XmlLoadType
+    {
+        /// <summary>
+        /// loading xml from a file on disk
+        /// </summary>
+        FromFile,
+        /// <summary>
+        /// loading xml from a text string
+        /// </summary>
+        FromXml
+    }
+    /// <summary>
     /// Utility class for all XML static methods
     /// </summary>
     public static class XMLUtils
     {
+        #region Statics
         //static path for all developer selections
         public const string DeveloperSelectionsXPath = "TODO";
-        
-        //check to make sure an xml file is valid
+        #endregion
+
+        #region XML Validating
+        /// <summary>
+        /// check to make sure an xml file is valid
+        /// </summary>
+        /// <param name="filePath">The path to the xml file</param>
+        /// <returns>True if valid XML, false otherwise</returns>
         public static bool IsValidXml(string filePath)
         {
             return IsValidXml(File.ReadAllText(filePath), Path.GetFileName(filePath));
         }
-        //check to make sure an xml file is valid
+        /// <summary>
+        /// check to make sure an xml file is valid
+        /// </summary>
+        /// <param name="xmlString">The xml text string</param>
+        /// <param name="fileName">the name of the file, used for debugging purposes</param>
+        /// <returns>True if valid XML, false otherwise</returns>
         public static bool IsValidXml(string xmlString, string fileName)
         {
             using (XmlTextReader read = new XmlTextReader(xmlString))
@@ -45,7 +68,15 @@ namespace RelhaxModpack
                 }
             }
         }
-        //get an xml element attribute given an xml path
+        #endregion
+
+        #region Xpath stuff
+        /// <summary>
+        /// get an xml element attribute given an xml path
+        /// </summary>
+        /// <param name="file">The path to the XML file</param>
+        /// <param name="xpath">The xpath search string</param>
+        /// <returns>The value from the xpath search, otherwise null</returns>
         public static string GetXMLStringFromXPath(string file, string xpath)
         {
             XmlDocument doc = new XmlDocument();
@@ -60,7 +91,13 @@ namespace RelhaxModpack
             }
             return GetXMLStringFromXPath(doc, xpath);
         }
-        //get an xml element attribute given an xml path
+        /// <summary>
+        /// get an xml element attribute given an xml path
+        /// </summary>
+        /// <param name="xmlString">The XML text string</param>
+        /// <param name="xpath">The xpath search string</param>
+        /// <param name="filename"></param>
+        /// <returns>The value from the xpath search, otherwise null</returns>
         public static string GetXMLStringFromXPath(string xmlString, string xpath, string filename)
         {
             XmlDocument doc = new XmlDocument();
@@ -80,6 +117,12 @@ namespace RelhaxModpack
         //attribute example: "//root/element/@attribute"
         //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
         //for the folder version: //modInfoAlpha.xml/@version
+        /// <summary>
+        /// get an xml element attribute given an xml path
+        /// </summary>
+        /// <param name="doc">The XML document object to check</param>
+        /// <param name="xpath">The xpath search string</param>
+        /// <returns>The value from the xpath search, otherwise null</returns>
         public static string GetXMLStringFromXPath(XmlDocument doc, string xpath)
         {
             //set to something dumb for temporary purposes
@@ -175,6 +218,9 @@ namespace RelhaxModpack
           }
           return results;
         }
+        #endregion
+
+        #region Database Loading
         public static bool ParseDatabase(XmlDocument modInfoDocument, List<DatabasePackage> globalDependencies,
             List<Dependency> dependencies, List<Category> parsedCategoryList)
         {
@@ -471,9 +517,7 @@ namespace RelhaxModpack
                     Logging.WriteToLog("Parsing database error," + s, Logfiles.Application, LogLevel.Error);
             }
         }
-        //{ "UserFiles", "Packages", "Medias" }//packages are different story
-        //{ "Dependencies" }
-        //inside packages - component required attributes
+
         public static readonly string[] UserfilesRequiredNodesV2 = new string[] { "Pattern" };
         private static void ProcessUserFiles(XElement userFilesHolder, List<UserFiles> userfiles)
         {
@@ -489,7 +533,6 @@ namespace RelhaxModpack
                 userfiles.Add(files);
             }
         }
-
         public static readonly string[] MediaRequiredNodesV2 = new string[] { "URL", "type" };
         private static void ProcessMedias(XElement mediasHolder, List<Media> medias)
         {
@@ -577,6 +620,9 @@ namespace RelhaxModpack
                     ((IXmlLineInfo)node).LineNumber), Logfiles.Application, LogLevel.Error);
             }
         }
+        #endregion
+
+        #region Other XML stuffs
         //https://blogs.msdn.microsoft.com/xmlteam/2009/03/31/converting-from-xmldocument-to-xdocument/
         private static XDocument DocumentToXDocument(XmlDocument doc)
         {
@@ -584,6 +630,40 @@ namespace RelhaxModpack
                 return null;
             return XDocument.Parse(doc.OuterXml,LoadOptions.SetLineInfo);
         }
+
+        public static XmlDocument LoadXmlDocument(string fileOrXml, XmlLoadType type)
+        {
+            XmlDocument doc = new XmlDocument();
+            try
+            {
+                switch(type)
+                {
+                    case XmlLoadType.FromFile:
+                        doc.Load(fileOrXml);
+                        break;
+                    case XmlLoadType.FromXml:
+                        doc.LoadXml(fileOrXml);
+                        break;
+                }
+            }
+            catch (XmlException xmlEx)
+            {
+                if (File.Exists(fileOrXml))
+                    Logging.Exception("Failed to load xml file: {0}\n{1}", Path.GetFileName(fileOrXml), xmlEx.ToString());
+                else
+                    Logging.Exception("failed to load xml string:\n" + xmlEx.ToString());
+                return null;
+            }
+            return doc;
+        }
+
+        public static void UnpackXmlFile(XmlUnpack xmlUnpack)
+        {
+            throw new BadMemeException("need to implement this still");
+            //TODO
+        }
+        #endregion
+
         #region Legacy methods
         //parses the xml mod info into the memory database (change XML reader from XMLDocument to XDocument)
         // https://www.google.de/search?q=c%23+xdocument+get+line+number&oq=c%23+xdocument+get+line+number&aqs=chrome..69i57j69i58.11773j0j7&sourceid=chrome&ie=UTF-8
@@ -2127,6 +2207,8 @@ namespace RelhaxModpack
             }
         }
         #endregion
+
+        #region Database Saving
         //saving database in a way that doesn't suck
         public static void SaveDatabase(string saveLocation, string gameVersion, string onlineFolderVersion, List<DatabasePackage> globalDependencies,
         List<Dependency> dependencies, List<Category> parsedCatagoryList)
@@ -2277,6 +2359,8 @@ namespace RelhaxModpack
                 packageHolder.Attributes.Append(attribute);
             }
         }
+        #endregion
+        
     }
 }
  

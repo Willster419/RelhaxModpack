@@ -28,12 +28,26 @@ namespace RelhaxModpack
 
         public const string ThirdPartySettingsFileName = "ThirdPartySettings.xml";
 
+        public const string LastSavedConfigFilename = "lastInstalledConfig.xml";
+
+        public const string BetaDatabaseURL = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/modInfo.xml";
+
+        public const string DatabaseOnlineFolderXpath = "//modInfoAlpha.xml/@onlineFolder";
+
+        public const string DatabaseOnlineVersionXpath = "//modInfoAlpha.xml/@version";
+
+        public const string BetaDatabaseBranchesURL = "https://api.github.com/repos/Willster419/RelhaxModpack/branches";
+
         //the config file version for saving the user's selection prefrences
         public const string ConfigFileVersion = "2.0";
         public const string ApplicationUpdateURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";
         public const string ApplicationBetaUpdateURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.zip";
         public const string ApplicationUpdateFileName = "RelhaxModpack_update.zip";
         public const string RelicBatchUpdateScript = "RelicCopyUpdate.bat";
+
+        public const string SelectionsRoot = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/selection_files/";
+        public const string SelectionsXml = "selections.xml";
+
         /// <summary>
         /// The current distribution version of the application
         /// Alhpa should NEVER be built for public distribution unless direct testing!
@@ -52,6 +66,24 @@ namespace RelhaxModpack
 
         public static readonly string RelhaxTempFolder = Path.Combine(ApplicationStartupPath, "RelhaxTemp");
 
+        public const string PatchFolderName = "_patch";
+
+        public const string ShortcutFolderName = "_shortcuts";
+
+        public const string XmlUnpackFolderName = "_xmlUnPack";
+
+        public const string AtlasCreationFoldername = "_atlases";
+
+        public static readonly string MD5HashDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "MD5HashDatabase.xml");
+
+        public static readonly string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, "managerInfo.dat");
+
+        public static readonly string LastInstalledConfigFilepath = Path.Combine(RelhaxUserConfigsFolder, LastSavedConfigFilename);
+
+        public static readonly string RelhaxSettingsFilepath = Path.Combine(ApplicationStartupPath, ModpackSettingsFileName);
+
+        public static readonly string RelhaxLogFilepath = Path.Combine(ApplicationStartupPath, Logging.ApplicationLogFilename);
+
         public static readonly string[] FoldersToCheck = new string[]
         {
             RelhaxDownloadsFolder,
@@ -61,10 +93,6 @@ namespace RelhaxModpack
             RelhaxUserModsFolder,
             RelhaxTempFolder
         };
-
-        public static readonly string MD5HashDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "MD5HashDatabase.xml");
-
-        public static readonly string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, "managerInfo.dat");
 
         public static readonly int NumLogicalProcesors = Environment.ProcessorCount;
         #endregion

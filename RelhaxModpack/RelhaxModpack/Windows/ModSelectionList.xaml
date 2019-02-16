@@ -7,14 +7,14 @@
         mc:Ignorable="d"
         Title="ModSelectionList" Height="480" Width="800" MinHeight="480" MinWidth="800" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="OnWindowLoad" Closed="RelhaxWindow_Closed" >
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <TextBlock x:Name="HelpLabel" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Richt-Click an opton to see a preview window" VerticalAlignment="Top" Tag="HelpLabel"/>
+        <TextBlock x:Name="HelpLabel" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Right-click an option to see a preview window" VerticalAlignment="Top" Tag="HelpLabel"/>
         <TextBlock x:Name="TanksPath" HorizontalAlignment="Left" Margin="10,26,0,0" TextWrapping="Wrap" Text="Installing to: " VerticalAlignment="Top" Tag="TanksPath"/>
         <TextBlock x:Name="TanksVersionLabel" HorizontalAlignment="Left" Margin="10,42,0,0" TextWrapping="Wrap" Text="Installing as WoT version: " VerticalAlignment="Top" Tag="TanksVersionLabel"/>
-        <TabControl x:Name="ModTabGroups" HorizontalAlignment="Stretch" Margin="10,80,10,60" VerticalAlignment="Stretch" />
+        <TabControl x:Name="ModTabGroups" HorizontalAlignment="Stretch" Margin="10,94,10,60" VerticalAlignment="Stretch" />
         <Button x:Name="CollapseAllButton" Content="Collapse current tab" HorizontalAlignment="Right" Margin="0,10,140,0" VerticalAlignment="Top" Width="125" Height="35" Tag="CollapseAllButton" />
         <Button x:Name="ExpandAllButton" Content="Expand current tab" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="125" Height="35" Tag="ExpandAllButton" />
         <TextBlock x:Name="SearchTB" HorizontalAlignment="Right" Margin="0,52,270,0" TextWrapping="Wrap" Text="Search for a mod..." VerticalAlignment="Top" Height="22" Width="251" TextAlignment="Right" Padding="3" Tag="SearchTB" />
-        <ComboBox x:Name="SearchCB" HorizontalAlignment="Right" Margin="0,52,10,0" VerticalAlignment="Top" Width="255" DropDownOpened="SearchCB_DropDownOpened" PreviewTextInput="SearchCB_PreviewTextInput" IsReadOnly="False" IsEditable="True"/>
+        <ComboBox x:Name="SearchCB" HorizontalAlignment="Right" Margin="0,52,10,0" VerticalAlignment="Top" Width="255" PreviewKeyDown="SearchCB_PreviewKeyDown" KeyUp="SearchCB_KeyUp" IsEditable="True" IsTextSearchEnabled="False" PreviewMouseDown="SearchCB_PreviewMouseDown"/>
         <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnContinueInstallation" Tag="ContinueButton" >
             <TextBlock x:Name="ContinueButtonLabel" Text="Text that can take up to two lines" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
@@ -30,5 +30,6 @@
         <Button HorizontalAlignment="Right" Margin="0,0,510,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnClearSelectionsClick" Tag="ClearSelectionsButton">
             <TextBlock x:Name="ClearSelectionsButtonLabel" Text="Text that can take up to two lines" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
+        <CheckBox Content="This tab only" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,79,10,0" x:Name="SearchThisTabOnlyCB" Tag="SearchThisTabOnlyCB"/>
     </Grid>
 </local:RelhaxWindow>

@@ -445,15 +445,22 @@ namespace RelhaxModpack
                 List<string> folder = new List<string> { "_readme", "_patch", "_shortcuts", "_xmlUnPack", "_atlases", "_fonts" };
                 foreach (string f in folder)
                 {
-                    try
+                    int strikes = 0;
+                    while (strikes <= 3)
                     {
-                        if (Directory.Exists(Path.Combine(TanksLocation, f)))
-                            Directory.Delete(Path.Combine(TanksLocation, f), true);
-                    }
-                    catch (Exception ex)
-                    {
-                        ex = ex.GetBaseException();
-                        Logging.Manager(string.Format("error at folder delete: {0} ({1})", f, ex.Message));
+                        try
+                        {
+                            System.Threading.Thread.Sleep(100);
+                            if (Directory.Exists(Path.Combine(TanksLocation, f)))
+                                Directory.Delete(Path.Combine(TanksLocation, f), true);
+                            strikes = 4;
+                        }
+                        catch (Exception ex)
+                        {
+                            ex = ex.GetBaseException();
+                            Logging.Manager(string.Format("error at folder delete (try {0} of {1}: {2} ({3})", strikes, 3, f, ex.Message));
+                            strikes++;
+                        }
                     }
                 }
             }

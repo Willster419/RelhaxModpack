@@ -85,6 +85,7 @@
                             <RadioButton Content="Default" Margin="20,0,0,0" x:Name="StandardImageRB" Click="OnPreviewLoadingImageChange"/>
                             <RadioButton Content="3rdguards" Margin="5,0,0,0" x:Name="ThirdGuardsLoadingImageRB" Click="OnPreviewLoadingImageChange"/>
                         </StackPanel>
+                        <CheckBox x:Name="SaveDisabledModsInSelection" Tag="SaveDisabledModsInSelection" Content="Keep disabled mods when saving selection"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
                         <TextBlock Text="Select theme:" />
@@ -104,26 +105,37 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0">
+                        <!-- Use a margin of 20 to give it a tree affect-->
                         <CheckBox Content="Use beta database" x:Name="UseBetaDatabaseCB" Click="OnUseBetaDatabaseChanged"/>
+                        <ComboBox x:Name="UseBetaDatabaseBranches" SelectionChanged="OnBetaDatabaseSelectionChanged" Margin="20,0,0,0" IsEnabled="False"/>
                         <CheckBox Content="Use beta application" x:Name="UseBetaApplicationCB" Click="OnUseBetaAppChanged"/>
                         <TextBlock Text="Uninstall mode:" x:Name="UninstallModeGroupBox"/>
                         <StackPanel Orientation="Horizontal">
                             <RadioButton Content="Default" Margin="20,0,0,0"/>
                             <RadioButton Content="Quick" Margin="5,0,0,0"/>
                         </StackPanel>
-                        <CheckBox Content="Export mode" />
                         <CheckBox Content="Minimze to system tray"/>
+                        <CheckBox x:Name="AskDownloadCacheDelete" Content="Ask to delete old cache files"/>
+                        <CheckBox x:Name="VerboseLoggingCB" Tag="VerboseLoggingCB" Content="Verbose Logging"/>
                     </StackPanel>
-                    <CheckBox Content="Enable mods auto-sync" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" IsEnabled="False"/>
-                    <TextBox x:Name="AutoSyncSelectionFileTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="46" Margin="0,35,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="257"/>
-                    <Button Content="Load selection file" Grid.Column="1" HorizontalAlignment="Left" Margin="0,15,0,0" VerticalAlignment="Top" Width="106"/>
-                    <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="0,81,0,0" TextWrapping="Wrap" Text="Frequency: every" VerticalAlignment="Top"/>
-                    <TextBox x:Name="AutoSyncFrequencyTexbox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="94,80,0,0" TextWrapping="Wrap" Text="xx" VerticalAlignment="Top" Width="25"/>
-                    <ComboBox Grid.Column="1" HorizontalAlignment="Left" Margin="124,81,0,0" VerticalAlignment="Top" Width="67">
-                        <System:String>Minuets</System:String>
-                        <System:String>Hours</System:String>
-                        <System:String>Days</System:String>
-                    </ComboBox>
+                    <StackPanel Grid.Column="1">
+                        <CheckBox x:Name="EnableModsAutoSyncCheckBox" Content="Enable mods auto-sync" IsEnabled="False"/>
+                        <TextBox x:Name="AutoSyncSelectionFileTextBox" Height="46" TextWrapping="Wrap" Margin="0,3,0,0" />
+                        <Button x:Name="LoadAutoSyncSelectionFile" Content="Load selection file" HorizontalAlignment="Left" Margin="0,3,0,0" Width="120"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
+                            <TextBlock x:Name="AutoSyncCheckFrequencyTextBox"  TextWrapping="Wrap" Text="Frequency: every" />
+                            <TextBox x:Name="AutoSyncFrequencyTexbox" Height="23" TextWrapping="Wrap" Text="xx" Width="25" Margin="5,0,0,0"/>
+                            <ComboBox Margin="5,0,0,0" Width="67">
+                                <System:String>Minuets</System:String>
+                                <System:String>Hours</System:String>
+                                <System:String>Days</System:String>
+                            </ComboBox>
+                        </StackPanel>
+                        <TextBlock x:Name="DeveloperSettingsHeader" Text="Developer Settings"/>
+                        <CheckBox x:Name="ForceEnabledCB" Content="Force all components enabled" Margin="20,0,0,0"/>
+                        <CheckBox x:Name="ForceVisibleCB" Content="Force all components visible" Margin="20,0,0,0"/>
+                        <CheckBox x:Name="ExportModeCB" Content="Export mode" Margin="20,0,0,0"/>
+                    </StackPanel>
                 </Grid>
             </TabItem>
         </TabControl>

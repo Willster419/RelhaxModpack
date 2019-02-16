@@ -86,6 +86,8 @@ namespace RelhaxModpack
         /// The custom path to the ModInfo.xml file if loading in test mode
         /// </summary>
         public static string CustomModInfoPath = "";
+
+        public static string BetaDatabaseSelectedBranch = "master";
         /// <summary>
         /// toggle if the program should notify the user if the database version is the same as the last installed version
         /// </summary>
@@ -110,6 +112,9 @@ namespace RelhaxModpack
         /// toggle if the application should save user cache save data like session stats, or auto equip configs
         /// </summary>
         public static bool SaveUserData = false;
+        public static bool SaveDisabledMods = true;
+        public static bool DisplayUserModsWarning = true;
+        public static bool VerboseLogging = false;
         /// <summary>
         /// toggle for each view if the borders around the child selection options should show
         /// </summary>
@@ -154,6 +159,21 @@ namespace RelhaxModpack
         /// toggle export mode
         /// </summary>
         public static bool ExportMode = false;
+        public static bool ForceEnabled = false;
+        public static bool ForceVisible = false;
+        /// <summary>
+        /// Toggle the advanced installation progress window
+        /// </summary>
+        public static bool AdvancedInstalProgress = false;
+        /// <summary>
+        /// True - After an installation the application will ask to delete old download cache files
+        /// False - After an installation the application will always delete old download cache files
+        /// </summary>
+        public static bool AskToDeleteCache = false;
+        /// <summary>
+        /// toggle for if the Preview window should be shown in fullscreen mode
+        /// </summary>
+        public static bool PreviewFullscreen = false;
         /// <summary>
         /// the height, in pixels, of the ModSelectionView window
         /// </summary>
@@ -174,10 +194,6 @@ namespace RelhaxModpack
         /// the y-coordinate location, in pixels, of the Preview window
         /// </summary>
         public static int PreviewY = 0;
-        /// <summary>
-        /// toggle for if the Preview window should be shown in fullscreen mode
-        /// </summary>
-        public static bool PreviewFullscreen = false;
         /// <summary>
         /// the height, in pixels, of the Preview window
         /// </summary>

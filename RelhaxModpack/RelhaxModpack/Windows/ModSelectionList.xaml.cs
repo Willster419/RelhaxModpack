@@ -43,6 +43,7 @@ namespace RelhaxModpack.Windows
         private bool LoadingConfig = false;
         private bool IgnoreSearchBoxFocus = false;
         private List<SelectablePackage> userMods;
+        private Preview p;
 
         #region Boring stuff
         public ModSelectionList()
@@ -74,6 +75,12 @@ namespace RelhaxModpack.Windows
 
         private void RelhaxWindow_Closed(object sender, EventArgs e)
         {
+            if (p != null)
+            {
+                p.Close();
+                p = null;
+            }
+
             if (OnSelectionListReturn != null)
             {
                 OnSelectionListReturn(this, new SelectionListEventArgs()
@@ -245,6 +252,7 @@ namespace RelhaxModpack.Windows
             }
             Utils.BuildLinksRefrence(ParsedCategoryList);
             Utils.BuildLevelPerPackage(ParsedCategoryList);
+            Utils.AssignCateogryPatchIDS(ParsedCategoryList);
             List<DatabasePackage> flatList = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList);
             //check db cache of local files
             loadProgress.ChildCurrent++;
@@ -345,6 +353,7 @@ namespace RelhaxModpack.Windows
                 Name = "UserMods",
                 Header = Translations.GetTranslatedString("userMods"),
             };
+            userTab.RequestBringIntoView += OnUserModsTabSelected;
             userTab.Content = userStackPanel;
             ModTabGroups.Items.Add(userTab);
             foreach(SelectablePackage package in userMods)
@@ -489,6 +498,15 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        private void OnUserModsTabSelected(object sender, RequestBringIntoViewEventArgs e)
+        {
+            if(ModpackSettings.DisplayUserModsWarning)
+            {
+                MessageBox.Show(Translations.GetTranslatedString("FirstTimeUserModsWarning"));
+                ModpackSettings.DisplayUserModsWarning = false;
+            }
+        }
+
         private void AddPackage(ref IProgress<RelhaxProgress> progress, ref RelhaxProgress loadProgress, List<SelectablePackage> packages)
         {
             foreach(SelectablePackage package in packages)
@@ -499,26 +517,17 @@ namespace RelhaxModpack.Windows
                 //and the mod reports being disabled, then don't add it to the UI
                 //the counter needs to still be kept up to date with the list (the whole list includes invisible mods!)
                 loadProgress.ChildCurrent++;
-                if (!CommandLineSettings.ForceVisible && !package.Visible)
+                if (!ModpackSettings.ForceVisible && !package.Visible)
                     continue;
                 //now that we are actually adding it, report some progress
                 loadProgress.ReportMessage = string.Format("{0} {1}", Translations.GetTranslatedString("loading"), package.NameFormatted);
                 progress.Report(loadProgress);
                 //ok now actuallt load the UI stuff
                 //parse command line stuff. if we're forcinfg it to be enabled or visable
-                if (CommandLineSettings.ForceVisible && !package.IsStructureVisible)
+                if (ModpackSettings.ForceVisible && !package.IsStructureVisible)
                     package.Visible = true;
-                if (CommandLineSettings.ForceEnabled && !package.IsStructureEnabled)
+                if (ModpackSettings.ForceEnabled && !package.IsStructureEnabled)
                     package.Enabled = true;
-                //add the package to the search list if the package parameter specifies it to be added
-                if (package.ShowInSearchList && package.Enabled)
-                {
-                    SearchCB.Items.Add(new ComboBoxItem(package, package.NameFormatted)
-                    {
-                        IsEnabled = true,
-                        Content = package.NameFormatted
-                    });
-                }
                 //link the parent panels and border to childs
                 package.ParentBorder = package.Parent.ChildBorder;
                 package.ParentStackPanel = package.Parent.ChildStackPanel;
@@ -986,23 +995,17 @@ namespace RelhaxModpack.Windows
                 }
                 if (spc.DevURL == null)
                     spc.DevURL = "";
-                //PREVIEW GENERATION DISABELD
-                /*
+                //show the preview
                 if (p != null)
                 {
                     p.Close();
-                    p.Dispose();
                     p = null;
-                    GC.Collect();
                 }
                 p = new Preview()
                 {
-                    LastUpdated = LastUpdated,
-                    DBO = spc,
-                    Medias = spc.PictureList
+                    Package = spc
                 };
                 p.Show();
-                */
             }
         }
 
@@ -1060,7 +1063,7 @@ namespace RelhaxModpack.Windows
             selections.ShowDialog();
         }
 
-        private void OnDeveloperSelectionsExit(object sender, DevleoperSelectionsClosedEWventArgs e)
+        private async void OnDeveloperSelectionsExit(object sender, DevleoperSelectionsClosedEWventArgs e)
         {
             if(e.LoadSelection)
                 return;
@@ -1101,11 +1104,24 @@ namespace RelhaxModpack.Windows
             }
             else
             {
-                //get the filename from the develiper zip file
-                string xmlString = Utils.GetStringFromZip(Path.Combine(Settings.RelhaxTempFolder, "developerSelections.zip"),e.FileToLoad);
-                if(string.IsNullOrWhiteSpace(xmlString))
+                //get the filename from the developer zip file
+                string xmlString = string.Empty;
+                using (WebClient client = new WebClient())
                 {
-                    Logging.WriteToLog("xmlString is null or empty",Logfiles.Application,LogLevel.Error);
+                    try
+                    {
+                        xmlString = await client.DownloadStringTaskAsync(Settings.SelectionsRoot + e.FileToLoad);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logging.Exception(ex.ToString());
+                        MessageBox.Show(Translations.GetTranslatedString("failedToParseSelections"));
+                        Close();
+                    }
+                }
+                if (string.IsNullOrWhiteSpace(xmlString))
+                {
+                    Logging.WriteToLog("xmlString is null or empty", Logfiles.Application, LogLevel.Error);
                     MessageBox.Show(Translations.GetTranslatedString("failedLoadSelection"));
                     return;
                 }
@@ -1127,10 +1143,7 @@ namespace RelhaxModpack.Windows
         private void OnClearSelectionsClick(object sender, RoutedEventArgs e)
         {
             Logging.WriteToLog("Clearing selections");
-            //Having utilities to make life easier is nice (+3 XP)
-            //foreach (SelectablePackage package in Utils.GetFlatList(null,null,null,ParsedCategoryList))
-                //package.Checked = false;
-            //UTILS CLEAR SELECTIONS()
+            Utils.ClearSelections(ParsedCategoryList);
             Logging.WriteToLog("Selections cleared");
             MessageBox.Show(Translations.GetTranslatedString("selectionsCleared"));
         }
@@ -1152,14 +1165,13 @@ namespace RelhaxModpack.Windows
                     Logging.WriteToLog("Unknown selection version: " + selectionVersion + ", aborting");
                     MessageBox.Show(string.Format(Translations.GetTranslatedString("unknownselectionFileFormat"),selectionVersion));
                     return;
-                break;
             }
         }
 
         private void LoadSelectionV2(XmlDocument document, bool silent)
         {
             //first uncheck everyting
-            //UTILS CLEAR SELECTIONS
+            Utils.ClearSelections(ParsedCategoryList);
             //get a list of all the mods currently in the selection
             XmlNodeList xmlSelections = XMLUtils.GetXMLNodesFromXPath(document, "//mods/name");
             XmlNodeList xmluserSelections = XMLUtils.GetXMLNodesFromXPath(document, "//userMods/mod");
@@ -1176,17 +1188,22 @@ namespace RelhaxModpack.Windows
             foreach(SelectablePackage package in Utils.GetFlatList(null,null,null,ParsedCategoryList))
             {
                 //also check to only "check" the mod if it is visible OR if the command line settings to force visiable all compoents
-                if(stringSelections.Contains(package.PackageName) && (package.Visible || CommandLineSettings.ForceVisible))
+                if(stringSelections.Contains(package.PackageName) && (package.Visible || ModpackSettings.ForceVisible))
                 {
                     stringSelections.Remove(package.PackageName);
                     //also check if the mod only if it's enabled OR is command line settings force enabled
-                    if(package.Enabled || CommandLineSettings.ForceEnabled)
+                    if(package.Enabled || ModpackSettings.ForceEnabled)
                     {
                         package.Checked = true;
                         Logging.WriteToLog(string.Format("Checking package {0}",package.CompletePath));
                     }
                     else
                     {
+                        if(ModpackSettings.SaveDisabledMods)
+                        {
+                            Logging.Debug("SaveDisabledMods=True, flagging disabled mod {0} for future selection later",package.Name);
+                            package.FlagForSelectionSave = true;
+                        }
                         disabledMods.Add(package.CompletePath);
                         Logging.WriteToLog(string.Format("\"{0}\" is a disabled mod", package.CompletePath));
                     }
@@ -1266,6 +1283,11 @@ namespace RelhaxModpack.Windows
                 {
                     Logging.WriteToLog("Adding relhax mod " + package.PackageName);
                     //add it to the list
+                    nodeRelhax.Add(new XElement("mod", package.PackageName));
+                }
+                else if (ModpackSettings.SaveDisabledMods && package.FlagForSelectionSave)
+                {
+                    Logging.Info("Adding relhax mod {0} (not checked, but flagged for save)", package.Name);
                     nodeRelhax.Add(new XElement("mod", package.PackageName));
                 }
             }
@@ -1377,15 +1399,114 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Search Box Code
-        private void SearchCB_DropDownOpened(object sender, EventArgs e)
+        bool ignoreKeyboard = true;
+        private void SearchCB_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-
+            //https://stackoverflow.com/questions/17250650/wpf-combobox-auto-highlighting-on-first-letter-input
+            SearchCB.IsDropDownOpen = true;
+            //https://stackoverflow.com/questions/17250650/wpf-combobox-auto-highlighting-on-first-letter-input
+            /*
+            var textbox = (TextBox)SearchCB.Template.FindName("PART_EditableTextBox", SearchCB);
+            if (textbox != null && textbox.SelectionLength > 0)
+            {
+                textbox.Select(textbox.SelectionLength, 0);
+            }
+            */
         }
 
-        private void SearchCB_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        private void SearchCB_KeyUp(object sender, KeyEventArgs e)
         {
+            if (e.Key == Key.Down || e.Key == Key.Up)
+            {
+                //stop the selection from key events!!!
+                //https://www.codeproject.com/questions/183259/how-to-prevent-selecteditem-change-on-up-and-down (second answer)
+                e.Handled = true;
+                SearchCB.IsDropDownOpen = true;
+            }
+            else if(e.Key == Key.Enter)
+            {
+                OnSearchCBSelectionCommitted(SearchCB.SelectedItem as ComboBoxItem, false);
+            }
+            //check if length 0 or whitespace
+            else if (string.IsNullOrWhiteSpace(SearchCB.Text))
+            {
+                SearchCB.Items.Clear();
+                SearchCB.IsDropDownOpen = false;
+                SearchCB.SelectedIndex = -1;
+            }
+            //check if length 1
+            /*
+            else if(SearchCB.Text.Count() == 1)
+            {
 
+            }
+            */
+            //actually search
+            else
+            {
+                //split the search into an array based on using '*' search
+                List<SelectablePackage> searchComponents = new List<SelectablePackage>();
+                foreach (string searchTerm in SearchCB.Text.Split('*'))
+                {
+                    //check if comparing with this tab only
+                    if((bool)SearchThisTabOnlyCB.IsChecked)
+                    {
+                        TabItem selected = (TabItem)ModTabGroups.SelectedItem;
+                        searchComponents.AddRange(Utils.GetFlatSelectablePackageList(ParsedCategoryList).Where(
+                            term => term.NameFormatted.ToLower().Contains(searchTerm.ToLower()) && term.Visible && term.ParentCategory.TabPage.Equals(selected)));
+                    }
+                    else
+                    {
+                        //get a list of components that match the search term
+                        searchComponents.AddRange(Utils.GetFlatSelectablePackageList(ParsedCategoryList).Where(
+                            term => term.NameFormatted.ToLower().Contains(searchTerm.ToLower()) && term.Visible));
+                    }
+                }
+                //assuming it maintains the order it previously had i.e. removing only when need to...
+                searchComponents = searchComponents.Distinct().ToList();
+                //clear and fill the search list again
+                SearchCB.Items.Clear();
+                foreach (SelectablePackage package in searchComponents)
+                {
+                    SearchCB.Items.Add(new ComboBoxItem(package, package.NameFormatted)
+                    {
+                        IsEnabled = true,
+                        Content = package.NameFormatted
+                    });
+                }
+                SearchCB.IsDropDownOpen = true;
+            }
+        }
+        private void OnSearchCBSelectionCommitted(ComboBoxItem committedItem, bool fromMouse)
+        {
+            //test to make sure the UIComponent is a control (it should be, but at least a test to make sure it's not null)
+            if (committedItem.Package.UIComponent is Control ctrl)
+            {
+                //focus the tab first, so it is brought into view
+                committedItem.Package.ParentCategory.TabPage.Focusable = true;
+                committedItem.Package.ParentCategory.TabPage.Focus();
+                //https://stackoverflow.com/questions/38532196/bringintoview-is-not-working
+                //Note that due to the dispatcher's priority queue, the content may not be available as soon as you make changes (such as select a tab).
+                //In that case, you may want to post the bring-into-view request in a lower priority:
+                Dispatcher.InvokeAsync(() => ctrl.BringIntoView(), System.Windows.Threading.DispatcherPriority.Background);
+            }
+            else if (committedItem.Package.UIComponent == null)
+                throw new BadMemeException("WHYYYYYYYY!?!?");
         }
         #endregion
+
+        private void SearchCB_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if(SearchCB.IsDropDownOpen)
+            {
+                foreach(ComboBoxItem item in SearchCB.Items)
+                {
+                    if(item.IsHighlighted && item.IsMouseOver)
+                    {
+                        OnSearchCBSelectionCommitted(item, true);
+                    }
+                }
+            }
+        }
     }
 }

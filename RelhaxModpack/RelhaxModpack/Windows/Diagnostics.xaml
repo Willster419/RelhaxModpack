@@ -1,0 +1,18 @@
+﻿<local:RelhaxWindow x:Class="RelhaxModpack.Windows.Diagnostics"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RelhaxModpack.Windows"
+        mc:Ignorable="d"
+        Title="Diagnostics" MinHeight="300" MinWidth="600" Height="300" Width="600" Loaded="RelhaxWindow_Loaded">
+    <Grid>
+        <TextBox x:Name="MainTextBox" Tag="MainTextBox" HorizontalAlignment="Stretch" Height="65" Margin="10,10,10,0" TextWrapping="Wrap" Text="Helpful explanation window" VerticalAlignment="Top"/>
+        <TextBlock x:Name="SelectedInstallation" HorizontalAlignment="Stretch" Margin="10,80,0,0" TextWrapping="Wrap" Text="Selected WoT Installation" VerticalAlignment="Top" />
+        <Button x:Name="ChangeInstall" Content="Change Installation" HorizontalAlignment="Left" Margin="10,101,0,0" VerticalAlignment="Top" Width="250" Click="ChangeInstall_Click"/>
+        <TextBox x:Name="StatusTextBox" HorizontalAlignment="Stretch" Height="50" Margin="10,209,0,0" TextWrapping="Wrap" VerticalAlignment="Top" />
+        <Button x:Name="LaunchWoTLauncher" Content="Start WoT Launcher Repair" HorizontalAlignment="Left" Margin="10,126,0,0" VerticalAlignment="Top" Width="250" Click="LaunchWoTLauncher_Click"/>
+        <Button x:Name="CollectLogInfo" Content="Collect log info" HorizontalAlignment="Left" Margin="10,151,0,0" VerticalAlignment="Top" Width="250" Click="CollectLogInfo_Click"/>
+        <Button x:Name="ClearDownloadCache" Content="Clear Download Cache" HorizontalAlignment="Left" Margin="10,176,0,0" VerticalAlignment="Top" Width="250" Click="ClearDownloadCache_Click"/>
+    </Grid>
+</local:RelhaxWindow>

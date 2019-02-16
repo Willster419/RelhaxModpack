@@ -545,19 +545,15 @@ namespace RelhaxModpack
                 }
                 UserMods[i].Enabled = true;
                 UserPackage.Enabled = true;
+                //add internal database refrences
                 UserMods[i].UIComponent = UserPackage;
                 UserMods[i].ParentUIComponent = UserPackage;
                 UserMods[i].TopParentUIComponent = UserPackage;
+                //add UI refrence based on type of view
                 UserPackage.Click += OnMultiPackageClick;
                 tb.Controls.Add(UserPackage);
             }
             modTabGroups.TabPages.Add(tb);
-        }
-
-        private void UserPackage_CheckedChanged(object sender, EventArgs e)
-        {
-            RelhaxUserCheckBox cb = (RelhaxUserCheckBox)sender;
-            cb.Package.Checked = cb.Checked;
         }
 
         private void FinishLoad()
@@ -763,7 +759,7 @@ namespace RelhaxModpack
                                     Enabled = false,
                                     Name = "notAddedYet",
                                     DropDownStyle = ComboBoxStyle.DropDownList,
-                                    ForeColor = Settings.GetTextColorWinForms()
+                                    ForeColor = SystemColors.ControlText
                                 };
                                 //https://stackoverflow.com/questions/1882993/c-sharp-how-do-i-prevent-mousewheel-scrolling-in-my-combobox
                                 sp.Parent.RelhaxFormComboBoxList[0].MouseWheel += (o, e) => ((HandledMouseEventArgs)e).Handled = true;
@@ -1331,7 +1327,8 @@ namespace RelhaxModpack
                 //uncheck all packages of the same type
                 if(childPackage.Type.Equals(spc.Type))
                 {
-                    childPackage.Checked = false;
+                    if(childPackage.Checked)
+                        childPackage.Checked = false;
                 }
             }
             //verify selected is actually checked

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="Preview" Height="550" Width="450" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico">
+        Title="Preview" Height="550" Width="450" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="OnPreviewWindowLoad">
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition MinHeight="50" Height="*"/>
@@ -17,7 +17,7 @@
                 <RowDefinition/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
-            <Border Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="1" BorderBrush="Black"/>
+            <Border x:Name="MainPreviewBorder" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="1" BorderBrush="Black"/>
             <Button Content="Next" HorizontalAlignment="Right" Margin="0,5,10,0" Grid.Row="1" VerticalAlignment="Top" Width="75"/>
             <Button Content="Previous" HorizontalAlignment="Left" Margin="10,5,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75"/>
             <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Stretch" Height="20" Margin="90,5,90,0" Grid.Row="1" VerticalAlignment="Top" >
@@ -31,7 +31,7 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="25"/>
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="4" Margin="0,0,10,10" TextWrapping="Wrap" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="131" TextAlignment="Right">
+                <TextBlock x:Name="DevUrlBlock" Grid.Row="4" Margin="0,0,10,10" TextWrapping="Wrap" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="131" TextAlignment="Right">
                     <Hyperlink x:Name="DevUrlLink">Developer Website</Hyperlink>
                 </TextBlock>
                 <Grid >
@@ -40,9 +40,9 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="1*" MinHeight="20"/>
                     </Grid.RowDefinitions>
-                    <TextBox Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsReadOnly="True"/>
+                    <TextBox x:Name="PreviewDescriptionBox" Tag="PreviewDescriptionBox" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsReadOnly="True"/>
                     <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" Height="5"/>
-                    <TextBox Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsReadOnly="True"/>
+                    <TextBox x:Name="PreviewUpdatesBox" Tag="PreviewUpdatesBox" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsReadOnly="True"/>
                 </Grid>
             </Grid>
         </Border>
