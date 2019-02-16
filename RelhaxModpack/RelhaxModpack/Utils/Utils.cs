@@ -851,8 +851,8 @@ namespace RelhaxModpack
             //get the max number of defined groups
             int maxGrops = 0;
             foreach (DatabasePackage package in packagesToInstall)
-                if (package.ExtractionLevel > maxGrops)
-                    maxGrops = package.ExtractionLevel;
+                if (package.InstallGroup > maxGrops)
+                    maxGrops = package.InstallGroup;
             //make the list to return
             List<DatabasePackage>[] orderedList = new List<DatabasePackage>[maxGrops];
             //new up the lists
@@ -860,7 +860,7 @@ namespace RelhaxModpack
                 orderedList[i] = new List<DatabasePackage>();
             foreach(DatabasePackage package in packagesToInstall)
             {
-                orderedList[package.ExtractionLevel].Add(package);
+                orderedList[package.InstallGroup].Add(package);
             }
             return orderedList;
         }

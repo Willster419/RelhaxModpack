@@ -68,7 +68,7 @@ namespace RelhaxModpack
         /// </summary>
         public string DevURL = "";
         public string UpdateInstructions = "";
-        public int ExtractionLevel = 5;
+        public int InstallGroup = 5;
         public override string ToString()
         {
             return PackageName;
