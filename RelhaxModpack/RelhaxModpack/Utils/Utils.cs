@@ -41,15 +41,13 @@ namespace RelhaxModpack
         //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/how-to-initialize-a-dictionary-with-a-collection-initializer
         //build at install time
         public static Dictionary<string, string> FilePathDict = new Dictionary<string, string>();
-        //build at install time
-        public static Dictionary<string, string> ZipFilePathDict = new Dictionary<string, string>();
         public static Dictionary<string, string> PatchArguementsDict = new Dictionary<string, string>()
         {
             //TODO
         };
         public static Dictionary<string, string> PatchFilesDict = new Dictionary<string, string>()
         {
-            //TODO
+            //TODO (what is this for??)
         };
         public static Dictionary<string, string> TextUnscapeDict = new Dictionary<string, string>()
         {
@@ -1035,12 +1033,6 @@ namespace RelhaxModpack
             FilePathDict.Add(@"{appdata}", Settings.AppDataFolder);
             FilePathDict.Add(@"{app}", Settings.WoTDirectory);
         }
-        public static void BuildZipFilePathMacroList()
-        {
-            ZipFilePathDict.Clear();
-            ZipFilePathDict.Add("versiondir", Settings.WoTClientVersion);
-            ZipFilePathDict.Add("appdata", Settings.AppDataFolder);
-        }
         public static string MacroReplace(string inputString, ReplacementTypes type)
         {
             //itterate through each entry depending on the dictionary. if the key is contained in the string, replace it
@@ -1062,9 +1054,6 @@ namespace RelhaxModpack
                     break;
                 case ReplacementTypes.TextUnescape:
                     dictionary = TextUnscapeDict;
-                    break;
-                case ReplacementTypes.ZipFilePath:
-                    dictionary = ZipFilePathDict;
                     break;
             }
             if (dictionary == null)

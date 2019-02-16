@@ -7,6 +7,9 @@ using System.Diagnostics;
 using RelhaxModpack.UIComponents;
 using System.IO;
 using System.Xml;
+using System.Windows;
+using Ionic.Zip;
+using System.Text.RegularExpressions;
 
 namespace RelhaxModpack.InstallerComponents
 {
@@ -606,7 +609,9 @@ namespace RelhaxModpack.InstallerComponents
                     {
                         Logging.WriteToLog("Thread ID=" + threadNum + ", starting extraction of " + package.ZipFile);
                         numExtracted++;
-                        Unzip(package);
+                        if (string.IsNullOrWhiteSpace(package.ZipFile))
+                            continue;
+                        Unzip(package, threadNum);
                     }
                 }
                 if (numExtracted == packagesToExtract.Count)
@@ -617,12 +622,120 @@ namespace RelhaxModpack.InstallerComponents
 
         }
 
-        private void Unzip(DatabasePackage package)
+        private void Unzip(DatabasePackage package, int threadNum)
         {
             //do any zip file processing, then extract
             if (string.IsNullOrWhiteSpace(package.ZipFile))
-                return;
+                throw new BadMemeException("fuck you");
+            //for each zip file, put it in a try catch to see if we can catch any issues in case of a one-off IO error
+            string zipFilePath = Path.Combine(Settings.RelhaxDownloadsFolder, package.ZipFile);
+            for(int i = 3; i > 0; i--)
+            {
+                try
+                {
+                    using (ZipFile zip = new ZipFile(zipFilePath))
+                    {
+                        //update args and logging here...
+                        //first for loop takes care of any path replacing in the zipfile
+                        for(int j = 0; j < zip.Entries.Count; j++)
+                        {
+                            //check for versiondir
+                            string zipEntryName = zip[j].FileName;
+                            if (zipEntryName.Contains("versiondir"))
+                                zipEntryName = zipEntryName.Replace("versiondir", Settings.WoTClientVersion);
+                            //check for xvmConfigFolderName
+                            if (zipEntryName.Contains("configs/xvm/xvmConfigFolderName"))
+                                zipEntryName = zipEntryName.Replace("configs/xvm/xvmConfigFolderName", "configs/xvm/TODO");
+                            if(Regex.IsMatch(zipEntryName, @"_patch.*\.xml"))
+                            {
+                                //build the patch name manually
+                                StringBuilder sb = new StringBuilder();
+                                //first get the "_patch/" prefix (that does not change)
+                                sb.Append(zipEntryName.Substring(0,7));
+                                //pad the patchGroup name
+                                sb.Append(package.PatchGroup.ToString("D3"));
+                                //name else doesn't need to change, to set the rest of the name and use it
+                                sb.Append(zipEntryName.Substring(7));
+                            }
+                            //save zip entry file modifications back to zipfile
+                            zip[j].FileName = zipEntryName;
+                        }
+                        //attach the event handler to report progress
+                        zip.ExtractProgress += OnZipfileExtractProgress;
+                        //second loop extracts each file and checks for extraction macros
+                        for (int j = 0; j < zip.Entries.Count; j++)
+                        {
+                            string zipFilename = zip[j].FileName;
+                            //check each entry if it's going to a custom extraction location by form of macro
+                            //default is nothing, goes to root (World_of_Tanks) directory
+                            //if macro is found, extract to a different folder
+                            //first check for "_AppData" macro in root of zip file
+                            //NOTE: "WoTAppData" is not supported
+                            //check if the root entry contains it
+                            //_AppData = root application data directory
+                            if (zipFilename.Length >= "_AppData".Length && zipFilename.Substring(0,"_AppData".Length).Equals("_AppData"))
+                            {
+                                zipFilename = zipFilename.Replace("_AppData", string.Empty);
+                                if(!string.IsNullOrWhiteSpace(zipFilename))
+                                {
+                                    zip[j].FileName = zipFilename;
+                                    zip[j].Extract(Settings.AppDataFolder, ExtractExistingFileAction.OverwriteSilently);
+                                }
+                            }
+                            //_RelhaxRoot = app startup directory
+                            else if (zipFilename.Length >= "_RelhaxRoot".Length && zipFilename.Substring(0, "_RelhaxRoot".Length).Equals("_RelhaxRoot"))
+                            {
+                                zipFilename = zipFilename.Replace("_RelhaxRoot", string.Empty);
+                                if (!string.IsNullOrWhiteSpace(zipFilename))
+                                {
+                                    zip[j].FileName = zipFilename;
+                                    zip[j].Extract(Settings.ApplicationStartupPath, ExtractExistingFileAction.OverwriteSilently);
+                                }
+                            }
+                            //default is World_of_Tanks directory
+                            else
+                            {
+                                zip[j].Extract(Settings.WoTDirectory, ExtractExistingFileAction.OverwriteSilently);
+                            }
+                        }
+                    }
+                    //set i to 0 so that it breaks out of the loop
+                    i = 0;
+                }
+                catch (Exception e)
+                {
+                    if(i <= 1)
+                    {
+                        //log as error, 3 tries and all failures
+                        Logging.Exception("Failed to extract zipfile {0}, exception message:{1}{2}", package.ZipFile, Environment.NewLine, e.ToString());
+                        MessageBox.Show(string.Format("{0}, {1} {2} {3}",
+                            Translations.GetTranslatedString("zipReadingErrorMessage1"), package.ZipFile, Translations.GetTranslatedString("zipReadingErrorMessage2"),
+                            Translations.GetTranslatedString("zipReadingErrorHeader")));
+                        //delete the file (if it exists)
+                        if(File.Exists(zipFilePath))
+                        {
+                            try
+                            {
+                                File.Delete(zipFilePath);
+                            }
+                            catch (UnauthorizedAccessException ex)
+                            {
+                                Logging.Exception(ex.ToString());
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //log warning, try again
+                        Logging.Warning("Exception of type {0} caught, retryNum = {1} (to 1), on thread = {2}, zipfile = {3}", e.GetType().Name, i, threadNum, package.ZipFile);
+                    }
+                }
+            }
+        }
 
+        private void OnZipfileExtractProgress(object sender, ExtractProgressEventArgs e)
+        {
+            //TODO
         }
 
         private bool UninstallModsQuick()
