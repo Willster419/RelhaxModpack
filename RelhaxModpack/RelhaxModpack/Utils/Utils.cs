@@ -39,7 +39,10 @@ namespace RelhaxModpack
         //MACROS
         //FilePath macro
         //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/how-to-initialize-a-dictionary-with-a-collection-initializer
+        //build at install time
         public static Dictionary<string, string> FilePathDict = new Dictionary<string, string>();
+        //build at install time
+        public static Dictionary<string, string> ZipFilePathDict = new Dictionary<string, string>();
         public static Dictionary<string, string> PatchArguementsDict = new Dictionary<string, string>()
         {
             //TODO
@@ -53,7 +56,7 @@ namespace RelhaxModpack
             {@"\n", "\n" },
             {@"\r", "\r" },
             {@"\t", "\t" },
-            //legacy compatibilty (i can't believe i did this....)
+            //legacy compatibility (i can't believe i did this....)
             {@"newline", "\n" }
         };
         public static Dictionary<string, string> TextEscapeDict = new Dictionary<string, string>()
@@ -62,7 +65,6 @@ namespace RelhaxModpack
             {"\r", @"\r" },
             {"\t", @"\t" }
         };
-        public static Dictionary<string, string> ZipFilePathDict = new Dictionary<string, string>();
         #endregion
 
         #region Application Utils
@@ -933,7 +935,6 @@ namespace RelhaxModpack
         {
             return DateTime.FromFileTime(timestamp).ToString();
         }
-        //MACROS TODO
         /// <summary>
         /// Encode a plain text string into base64 UTF8 encoding
         /// </summary>
@@ -993,6 +994,36 @@ namespace RelhaxModpack
             }
             return false;
         }
+        
+        public static List<DatabasePackage> GetFlatList(List<DatabasePackage> globalDependnecies = null, List<Dependency> dependencies = null,
+            List<Dependency> logicalDependencies = null, List<Category> parsedCategoryList = null)
+        {
+            if (globalDependnecies == null && dependencies == null && logicalDependencies == null && parsedCategoryList == null)
+                return null;
+            List<DatabasePackage> flatList = new List<DatabasePackage>();
+            if (globalDependnecies != null)
+                flatList.AddRange(globalDependnecies);
+            if (dependencies != null)
+                flatList.AddRange(dependencies);
+            if (logicalDependencies != null)
+                flatList.AddRange(logicalDependencies);
+            if (parsedCategoryList != null)
+                foreach (Category cat in parsedCategoryList)
+                    flatList.AddRange(cat.GetFlatPackageList());
+            return flatList;
+        }
+
+        public static List<SelectablePackage> GetFlatSelectablePackageList(List<Category> parsedCategoryList)
+        {
+            if (parsedCategoryList == null)
+                return null;
+            List<SelectablePackage> flatList = new List<SelectablePackage>();
+            foreach (Category cat in parsedCategoryList)
+                flatList.AddRange(cat.GetFlatPackageList());
+            return flatList;
+        }
+        #endregion
+        #region Macro Utils
         public static void BuildFilepathMacroList()
         {
             if (FilePathDict == null)
@@ -1014,8 +1045,8 @@ namespace RelhaxModpack
         {
             //itterate through each entry depending on the dictionary. if the key is contained in the string, replace it
             //use a switch to get which dictionary reaplce we will use
-            Dictionary<string,string> dictionary = null;
-            switch(type)
+            Dictionary<string, string> dictionary = null;
+            switch (type)
             {
                 case ReplacementTypes.FilePath:
                     dictionary = FilePathDict;
@@ -1036,47 +1067,23 @@ namespace RelhaxModpack
                     dictionary = ZipFilePathDict;
                     break;
             }
-            if(dictionary == null)
+            if (dictionary == null)
             {
                 Logging.Error("macro replace dictionary is null! type={0}", type.ToString());
                 return inputString;
             }
-            for(int i = 0; i < dictionary.Count; i++)
+            for (int i = 0; i < dictionary.Count; i++)
             {
                 string key = dictionary.ElementAt(i).Key;
                 string replace = dictionary.ElementAt(i).Value;
                 //https://stackoverflow.com/questions/444798/case-insensitive-containsstring
-                //it's an option, not actually used here lol
+                //it's an option, not actually used here cause it would be a lot of work to implement
+                //could also try regex, may be easlier to ignore case, but then might have to make it an option
+                //so for now, no
                 if (inputString.Contains(key))
                     inputString = inputString.Replace(key, replace);
             }
             return inputString;
-        }
-        public static List<DatabasePackage> GetFlatList(List<DatabasePackage> globalDependnecies = null, List<Dependency> dependencies = null,
-            List<Dependency> logicalDependencies = null, List<Category> parsedCategoryList = null)
-        {
-            if (globalDependnecies == null && dependencies == null && logicalDependencies == null && parsedCategoryList == null)
-                return null;
-            List<DatabasePackage> flatList = new List<DatabasePackage>();
-            if (globalDependnecies != null)
-                flatList.AddRange(globalDependnecies);
-            if (dependencies != null)
-                flatList.AddRange(dependencies);
-            if (logicalDependencies != null)
-                flatList.AddRange(logicalDependencies);
-            if (parsedCategoryList != null)
-                foreach (Category cat in parsedCategoryList)
-                    flatList.AddRange(cat.GetFlatPackageList());
-            return flatList;
-        }
-        public static List<SelectablePackage> GetFlatSelectablePackageList(List<Category> parsedCategoryList)
-        {
-            if (parsedCategoryList == null)
-                return null;
-            List<SelectablePackage> flatList = new List<SelectablePackage>();
-            foreach (Category cat in parsedCategoryList)
-                flatList.AddRange(cat.GetFlatPackageList());
-            return flatList;
         }
         #endregion
 
