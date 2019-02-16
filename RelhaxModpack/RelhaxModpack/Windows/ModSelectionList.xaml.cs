@@ -1479,10 +1479,19 @@ namespace RelhaxModpack.Windows
         }
         private void OnSearchCBSelectionCommitted(ComboBoxItem committedItem, bool fromMouse)
         {
+            //test to make sure the UIComponent is a control (it should be, but at least a test to make sure it's not null)
             if (committedItem.Package.UIComponent is Control ctrl)
             {
-                //ctrl.Focus();
+                //focus the tab first, so it is brought into view
+                committedItem.Package.ParentCategory.TabPage.Focusable = true;
+                committedItem.Package.ParentCategory.TabPage.Focus();
+                //https://stackoverflow.com/questions/38532196/bringintoview-is-not-working
+                //Note that due to the dispatcher's priority queue, the content may not be available as soon as you make changes (such as select a tab).
+                //In that case, you may want to post the bring-into-view request in a lower priority:
+                Dispatcher.InvokeAsync(() => ctrl.BringIntoView(), System.Windows.Threading.DispatcherPriority.Background);
             }
+            else if (committedItem.Package.UIComponent == null)
+                throw new BadMemeException("WHYYYYYYYY!?!?");
         }
         #endregion
 
@@ -1492,7 +1501,7 @@ namespace RelhaxModpack.Windows
             {
                 foreach(ComboBoxItem item in SearchCB.Items)
                 {
-                    if(item.IsHighlighted)
+                    if(item.IsHighlighted && item.IsMouseOver)
                     {
                         OnSearchCBSelectionCommitted(item, true);
                     }
