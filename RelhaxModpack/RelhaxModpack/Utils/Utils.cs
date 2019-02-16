@@ -1069,6 +1069,15 @@ namespace RelhaxModpack
                     flatList.AddRange(cat.GetFlatPackageList());
             return flatList;
         }
+        public static List<SelectablePackage> GetFlatSelectablePackageList(List<Category> parsedCategoryList)
+        {
+            if (parsedCategoryList == null)
+                return null;
+            List<SelectablePackage> flatList = new List<SelectablePackage>();
+            foreach (Category cat in parsedCategoryList)
+                flatList.AddRange(cat.GetFlatPackageList());
+            return flatList;
+        }
         #endregion
 
         #region Tanks Install Auto/Manuel Search Code
