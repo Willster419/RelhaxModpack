@@ -3,6 +3,14 @@
 
 namespace RelhaxModpack
 {
+    public enum ApplicationMode
+    {
+        Default,
+        Editor,
+        Updater,
+        PatchDesigner,
+        Patcher
+    }
     //TODO: documentation
     public static class CommandLineSettings
     {
@@ -11,20 +19,75 @@ namespace RelhaxModpack
         public static bool TestMode = false;
         public static bool SkipUpdate = false;
         public static bool SilentStart = false;
-        public static bool ForceVisible = false;
-        public static bool ForceEnabled = false;
-        public static bool PatchCheck = false;
-        public static bool DatabaseUpdate = false;
-        public static bool DatabaseEdit = false;
         //use the filename as check for auto install
         public static string AutoInstallFileName = string.Empty;
         //use key filename as check for update key mode
         public static string UpdateKeyFileName = string.Empty;
         public static string EditorAutoLoadFileName = string.Empty;
-
+        public static string PatchFilename = string.Empty;
+        public static ApplicationMode ApplicationMode = ApplicationMode.Default;
         public static void ParseCommandLineConflicts()//stub TODO
         {
             //check for conflicting command line arguements
+        }
+
+        public static void ParseCommandLine(string[] args)
+        {
+            Logging.WriteToLog("command line: " + string.Join(" ", args));
+            for (int i = 0; i < args.Length; i++)
+            {
+                string commandArg = args[i];
+                char compare = commandArg[0];
+                if (compare.Equals('/') || compare.Equals('-'))
+                    commandArg = commandArg.Remove(0, 1);
+                switch (commandArg)
+                {
+                    //start with settings for application configurations
+                    case "test":
+                        Logging.WriteToLog("test, loading in test mode");
+                        TestMode = true;
+                        break;
+                    case "skip-update":
+                        Logging.WriteToLog("skip-update, skipping updating");
+                        SkipUpdate = true;
+                        break;
+                    case "silent-start":
+                        Logging.WriteToLog("silent-start, loading in background");
+                        SilentStart = true;
+                        break;
+                    case "auto-install":
+                        AutoInstallFileName = args[++i];
+                        Logging.WriteToLog("auto-install, attempting to parse user configuration file: " + AutoInstallFileName);
+                        break;
+                    case "updateKeyFile":
+                        //get key file
+                        UpdateKeyFileName = args[++i];
+                        Logging.WriteToLog("updateKeyFile, loading keyfile " + UpdateKeyFileName);
+                        break;
+                    case "editorAutoLoad":
+                        EditorAutoLoadFileName = args[++i];
+                        Logging.WriteToLog("editorAutoLoad, loading databse from " + EditorAutoLoadFileName);
+                        break;
+                    //now check for different startup modes
+                    case "patch-designer":
+                        ApplicationMode = ApplicationMode.PatchDesigner;
+                        Logging.WriteToLog("patch-designer, loading in patch design mode");
+                        break;
+                    case "database-updater":
+                        ApplicationMode = ApplicationMode.Updater;
+                        Logging.WriteToLog("database-updater, loading in database update mode");
+                        break;
+                    case "database-editor":
+                        ApplicationMode = ApplicationMode.Editor;
+                        Logging.WriteToLog("database-editor, loading in database edit mode");
+                        break;
+                    case "patcher":
+                        ApplicationMode = ApplicationMode.Patcher;
+                        Logging.Info("patcher, loading in patch mode");
+                        PatchFilename = args[++i];
+                        break;
+                }
+            }
         }
     }
 }

@@ -386,9 +386,9 @@ namespace RelhaxModpack
                 //get if the package is need to be download "(updated)" text (and size)
                 //(only happends if level > -1)
                 string nameDisplay = NameFormatted;
-                if (CommandLineSettings.ForceVisible && !IsStructureVisible)
+                if (ModpackSettings.ForceVisible && !IsStructureVisible)
                     nameDisplay = string.Format("{0} [{1}]", nameDisplay, Translations.GetTranslatedString("invisible"));
-                if (CommandLineSettings.ForceEnabled && !IsStructureEnabled)
+                if (ModpackSettings.ForceEnabled && !IsStructureEnabled)
                     nameDisplay = string.Format("{0} [{1}]", nameDisplay, Translations.GetTranslatedString("disabled"));
                 if(Level > -1 && DownloadFlag)
                 {

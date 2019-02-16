@@ -159,6 +159,8 @@ namespace RelhaxModpack
         /// toggle export mode
         /// </summary>
         public static bool ExportMode = false;
+        public static bool ForceEnabled = false;
+        public static bool ForceVisible = false;
         /// <summary>
         /// Toggle the advanced installation progress window
         /// </summary>

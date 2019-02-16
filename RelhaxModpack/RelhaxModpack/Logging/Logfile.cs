@@ -45,7 +45,7 @@ namespace RelhaxModpack
             fileStream = null;
             try
             {
-                fileStream = new FileStream(Logging.ApplicationLogFilename, FileMode.Append, FileAccess.Write);
+                fileStream = new FileStream(Filepath, FileMode.Append, FileAccess.Write);
             }
             catch
             {

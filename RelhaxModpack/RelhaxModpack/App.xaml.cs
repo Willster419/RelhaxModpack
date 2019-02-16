@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Windows;
+using RelhaxModpack.Windows;
 
 namespace RelhaxModpack
 {
@@ -56,89 +56,85 @@ namespace RelhaxModpack
         //when application is closing (cannot be stopped)
         private void Application_Exit(object sender, ExitEventArgs e)
         {
-            Logging.WriteToLog("Application closing");
-            Logging.WriteToLog(Logging.ApplicationlogStartStop);
-            Logging.DisposeApplicationLogging();
+            CloseApplicationLog(true);
+        }
+
+        private void CloseApplicationLog(bool showCloseMessage)
+        {
+            if (!Logging.IsLogDisposed(Logfiles.Application))
+            {
+                if (showCloseMessage)
+                    Logging.WriteToLog("Application closing");
+                Logging.WriteToLog(Logging.ApplicationlogStartStop);
+                Logging.DisposeLogging(Logfiles.Application);
+            }
         }
 
         //when application is starting for first time
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             //init loggine here
-            if (!Logging.InitApplicationLogging())
+            //"The application failed to open a logfile. Eithor check your file permissions or move the application to a folder with write access"
+            if (!Logging.InitApplicationLogging(Logfiles.Application, Logging.ApplicationLogFilename))
             {
-                MessageBox.Show("The application failed to open a logfile. Eithor check your file permissions or move the application to a folder with write access");
+                MessageBox.Show(Translations.GetTranslatedString("appFailedCreateLogfile"));
                 Shutdown((int)ReturnCodes.LogfileError);
             }
             Logging.WriteToLog(Logging.ApplicationlogStartStop);
-            Logging.WriteToLog(string.Format("| Relhax Modpack version {0}",Utils.GetApplicationVersion()));
+            Logging.WriteToLog(string.Format("| Relhax Modpack version {0}", Utils.GetApplicationVersion()));
             Logging.WriteToLog(string.Format("| Build version {0}, from date {1}", Settings.ApplicationVersion.ToString(), Utils.GetCompileTime()));
             Logging.WriteToLog(string.Format("| Running on OS {0}", Environment.OSVersion.ToString()));
             //parse command line arguements here
             //get the command line args for testing of auto install
-            string[] commandArgs = Environment.GetCommandLineArgs();
-            Logging.WriteToLog("command line: " + string.Join(" ", commandArgs));
-            for (int i = 0; i < commandArgs.Count(); i++)
+            CommandLineSettings.ParseCommandLine(Environment.GetCommandLineArgs());
+            Logging.Info("starting application in {0} mode", CommandLineSettings.ApplicationMode.ToString());
+            //switch into application modes based on mode enum
+            switch(CommandLineSettings.ApplicationMode)
             {
-                string commandArg = commandArgs[i];
-                char compare = commandArg[0];
-                if (compare.Equals('/') || compare.Equals('-'))
-                    commandArg = commandArg.Remove(0, 1);
-                switch(commandArg)
-                {
-                    case "test":
-                        Logging.WriteToLog("test, loading in test mode");
-                        CommandLineSettings.TestMode = true;
-                        break;
-                    case "skip-update":
-                        Logging.WriteToLog("skip-update, skipping updating");
-                        CommandLineSettings.SkipUpdate = true;
-                        break;
-                    case "silent-start":
-                        Logging.WriteToLog("silent-start, loading in background");
-                        CommandLineSettings.SilentStart = true;
-                        break;
-                    case "auto-install":
-                        CommandLineSettings.AutoInstallFileName = commandArgs[++i];
-                        Logging.WriteToLog("auto-install, attempting to parse user configuration file: " + CommandLineSettings.AutoInstallFileName);
-                        break;
-                    case "updateKeyFile":
-                        //get key file
-                        CommandLineSettings.UpdateKeyFileName = commandArgs[++i];
-                        Logging.WriteToLog("updateKeyFile, loading keyfile " + CommandLineSettings.UpdateKeyFileName);
-                        break;
-                    case "editorAutoLoad":
-                        CommandLineSettings.EditorAutoLoadFileName = commandArgs[++i];
-                        Logging.WriteToLog("editorAutoLoad, loading databse from " + CommandLineSettings.EditorAutoLoadFileName);
-                        break;
-                    case "forceVisible":
-                        CommandLineSettings.ForceVisible = true;
-                        Logging.WriteToLog("forceVisible, loading all invisible mods in selection list");
-                        break;
-                    case "forceEnabled":
-                        CommandLineSettings.ForceEnabled = true;
-                        Logging.WriteToLog("forceEnabled, loading all visible mods as enabled");
-                        break;
-                    case "patchcheck":
-                        CommandLineSettings.PatchCheck = true;
-                        Logging.WriteToLog("patchcheck, loading in patch design mode");
-                        break;
-                    case "databaseupdate":
-                        CommandLineSettings.DatabaseUpdate = true;
-                        Logging.WriteToLog("databaseupdate, loading in database update mode");
-                        break;
-                    case "databaseedit":
-                        CommandLineSettings.DatabaseEdit = true;
-                        Logging.WriteToLog("databaseedit, loading in database edit mode");
-                        break;
-                }
-            }
-            if(CommandLineSettings.DatabaseUpdate)
-            {
-                Uri debug = StartupUri;
-                RelhaxModpack.Windows.DatabaseUpdater updater = new Windows.DatabaseUpdater();
-                updater.ShowDialog();
-                Application.Current.Shutdown();
+                case ApplicationMode.Updater:
+                    DatabaseUpdater updater = new DatabaseUpdater();
+                    //stop application logging system
+                    CloseApplicationLog(false);
+                    //start updater logging system
+                    Logging.InitApplicationLogging(Logfiles.Application, Logging.ApplicationUpdaterLogFilename);
+                    Logging.WriteToLog(Logging.ApplicationlogStartStop);
+                    updater.ShowDialog();
+                    //stop updater logging system
+                    CloseApplicationLog(false);
+                    updater = null;
+                    Current.Shutdown(0);
+                    break;
+                case ApplicationMode.Editor:
+                    DatabaseEditor editor = new DatabaseEditor();
+                    //stop application logging system
+                    CloseApplicationLog(false);
+                    //start updater logging system
+                    Logging.InitApplicationLogging(Logfiles.Application, Logging.ApplicationEditorLogFilename);
+                    Logging.WriteToLog(Logging.ApplicationlogStartStop);
+                    editor.ShowDialog();
+                    //stop updater logging system
+                    CloseApplicationLog(false);
+                    editor = null;
+                    Current.Shutdown(0);
+                    break;
+                case ApplicationMode.PatchDesigner:
+                    PatchTester patcher = new PatchTester();
+                    //stop application logging system
+                    CloseApplicationLog(false);
+                    //start updater logging system
+                    Logging.InitApplicationLogging(Logfiles.Application, Logging.ApplicationPatchDesignerLogFilename);
+                    Logging.WriteToLog(Logging.ApplicationlogStartStop);
+                    patcher.ShowDialog();
+                    //stop updater logging system
+                    CloseApplicationLog(false);
+                    patcher = null;
+                    Current.Shutdown(0);
+                    break;
+                case ApplicationMode.Patcher:
+                    Logging.Info("Running patch: {0}", CommandLineSettings.PatchFilename);
+                    throw new BadMemeException("TODO");
+                    //shutdown based on patch return type
+                    break;
             }
         }
     }

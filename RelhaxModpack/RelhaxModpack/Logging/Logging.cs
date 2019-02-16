@@ -60,6 +60,9 @@ namespace RelhaxModpack
         /// The filename of the application log file
         /// </summary>
         public const string ApplicationLogFilename = "Relhax.log";
+        public const string ApplicationUpdaterLogFilename = "RelhaxUpdater.log";
+        public const string ApplicationEditorLogFilename = "RelhaxEditor.log";
+        public const string ApplicationPatchDesignerLogFilename = "RelhaxPatchDesigner.log";
         /// <summary>
         /// The filename of the old application log file
         /// </summary>
@@ -80,53 +83,92 @@ namespace RelhaxModpack
         /// <summary>
         /// Provides a constant refrence to the log file
         /// </summary>
-        public static Logfile ApplicationLogfile;
+        private static Logfile ApplicationLogfile;
         /// <summary>
         /// Provides a refrence to an instance of an install log file
         /// </summary>
-        public static Logfile InstallLogfile;
+        private static Logfile InstallLogfile;
         /// <summary>
         /// Provides a refrence to an instalce of an uninstall log file
         /// </summary>
-        public static Logfile UninstallLogfile;
+        private static Logfile UninstallLogfile;
         private static bool FailedToWriteToLogWindowShown = false;
         /// <summary>
         /// Initialize the logging subsystem for the appilcation
         /// </summary>
         /// <returns>True if sucessfull initialization, false otherwise</returns>
-        public static bool InitApplicationLogging()
+        public static bool InitApplicationLogging(Logfiles logfile, string logfilePath)
         {
-            if (ApplicationLogfile != null)
+            Logfile fileToWriteTo = null;
+            //assign it here first to make sure it's null
+            switch (logfile)
+            {
+                case Logfiles.Application:
+                    fileToWriteTo = ApplicationLogfile;
+                    break;
+                case Logfiles.Installer:
+                    fileToWriteTo = InstallLogfile;
+                    break;
+                case Logfiles.Uninstaller:
+                    fileToWriteTo = UninstallLogfile;
+                    break;
+            }
+            if (fileToWriteTo != null)
                 throw new BadMemeException("only do this once jackass");
-            string oldLogFilePath = Path.Combine(Settings.ApplicationStartupPath, OldApplicationLogFilename);
-            string newLogFilePath = Path.Combine(Settings.ApplicationStartupPath, ApplicationLogFilename);
-            //if the old log exists and the new one does not, move the logging to the new one
-            try
+            fileToWriteTo = new Logfile(logfilePath, ApplicationLogfileTimestamp);
+            //now that it's newed, the reference needs to be reverse assigned
+            switch (logfile)
             {
-                if (File.Exists(oldLogFilePath) && !File.Exists(newLogFilePath))
-                    File.Move(oldLogFilePath, newLogFilePath);
-                Settings.FirstLoadToV2 = true;
+                case Logfiles.Application:
+                    ApplicationLogfile = fileToWriteTo;
+                    break;
+                case Logfiles.Installer:
+                    InstallLogfile = fileToWriteTo;
+                    break;
+                case Logfiles.Uninstaller:
+                    UninstallLogfile = fileToWriteTo;
+                    break;
             }
-            catch
+            if (!fileToWriteTo.Init())
             {
-                MessageBox.Show("Failed to move logfile");
-                return false;
-            }
-            ApplicationLogfile = new Logfile(newLogFilePath, ApplicationLogfileTimestamp);
-            if(!ApplicationLogfile.Init())
-            {
-                MessageBox.Show("Failed to initialize logfile, check file permissions");
+                MessageBox.Show(string.Format("Failed to initialize logfile {0}, check file permissions", logfilePath));
                 return false;
             }
             return true;
         }
+        public static bool IsLogDisposed(Logfiles file)
+        {
+            switch (file)
+            {
+                case Logfiles.Installer:
+                    return InstallLogfile == null ? true : false;
+                case Logfiles.Uninstaller:
+                    return UninstallLogfile == null ? true : false;
+                case Logfiles.Application:
+                default:
+                    return ApplicationLogfile == null ? true : false;
+            }
+        }
         /// <summary>
         /// Dispose of the application logging subsystem
         /// </summary>
-        public static void DisposeApplicationLogging()
+        public static void DisposeLogging(Logfiles logfile)
         {
-            ApplicationLogfile.Dispose();
-            ApplicationLogfile = null;
+            switch (logfile)
+            {
+                case Logfiles.Application:
+                    ApplicationLogfile.Dispose();
+                    ApplicationLogfile = null;
+                    break;
+                case Logfiles.Installer:
+                    InstallLogfile.Dispose();
+                    InstallLogfile = null;
+                    break;
+                case Logfiles.Uninstaller:
+                    UninstallLogfile.Dispose();
+                    UninstallLogfile = null;
+                    break;
+            }
         }
         /// <summary>
         /// Writes a message to a logfile instance, if it exists
@@ -180,34 +222,14 @@ namespace RelhaxModpack
             WriteToLog(message, Logfiles.Application, LogLevel.Debug);
         }
 
-        public static void Debug(string message, string sendingClass)
-        {
-            WriteToLog(string.Format("[{0}]: {1}", sendingClass, message), Logfiles.Application, LogLevel.Debug);
-        }
-
         public static void Debug(string message, params object[] args)
         {
             WriteToLog(message, Logfiles.Application, LogLevel.Debug, args);
         }
 
-        public static void Debug(string message, string sendingClass, params object[] args)
-        {
-            WriteToLog(string.Format("[{0}]: {1}", sendingClass, message), Logfiles.Application, LogLevel.Debug, args);
-        }
-
         public static void Info(string message)
         {
             WriteToLog(message, Logfiles.Application, LogLevel.Info);
-        }
-
-        public static void Info(string message, string sendingClass)
-        {
-            WriteToLog(string.Format("[{0}]: {1}", sendingClass, message), Logfiles.Application, LogLevel.Info);
-        }
-
-        public static void Info(string message, string sendingClass, params object[] args)
-        {
-            WriteToLog(string.Format("[{0}]: {1}", sendingClass, message), Logfiles.Application, LogLevel.Info, args);
         }
 
         public static void Info(string message, params object[] args)
@@ -220,19 +242,9 @@ namespace RelhaxModpack
             WriteToLog(message, Logfiles.Application, LogLevel.Warning);
         }
 
-        public static void Warning(string message, string sendingClass)
-        {
-            WriteToLog(string.Format("[{0}]: {1}", sendingClass, message), Logfiles.Application, LogLevel.Warning);
-        }
-
         public static void Warning(string message, params object[] args)
         {
             WriteToLog(message, Logfiles.Application, LogLevel.Warning, args);
-        }
-
-        public static void Warning(string message, string sendingClass, params object[] args)
-        {
-            WriteToLog(string.Format("[{0}]: {1}", sendingClass, message), Logfiles.Application, LogLevel.Warning, args);
         }
 
         public static void Error(string message)
@@ -240,19 +252,9 @@ namespace RelhaxModpack
             WriteToLog(message, Logfiles.Application, LogLevel.Error);
         }
 
-        public static void Error(string message, string sendingClass)
-        {
-            WriteToLog(string.Format("[{0}]: {1}",sendingClass,message), Logfiles.Application, LogLevel.Error);
-        }
-
         public static void Error(string message, params object[] args)
         {
             WriteToLog(message, Logfiles.Application, LogLevel.Error, args);
-        }
-
-        public static void Error(string message, string sendingClass, params object[] args)
-        {
-            WriteToLog(string.Format("[{0}]: {1}",sendingClass,message), Logfiles.Application, LogLevel.Error,args);
         }
 
         public static void Exception(string message)

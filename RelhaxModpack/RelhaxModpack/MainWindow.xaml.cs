@@ -38,6 +38,7 @@ namespace RelhaxModpack
         private long current_bytes_downloaded;
         private RelhaxProgress downloadProgress = null;
         private AdvancedProgress AdvancedProgressWindow;
+        bool closingFromFailure = false;
 
         /// <summary>
         /// Creates the instance of the MainWindow class
@@ -101,19 +102,23 @@ namespace RelhaxModpack
             //dispose of please wait here
             progressIndicator.Close();
             progressIndicator = null;
-            Show();
+            if(!closingFromFailure)
+                Show();
         }
 
         private void TheMainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Logging.WriteToLog("Saving settings");
-            if (ModpackSettings.SaveSettings())
-                Logging.WriteToLog("Settings saved");
-            Logging.WriteToLog("Disposing tray icon");
-            if(RelhaxIcon != null)
+            if(!Logging.IsLogDisposed(Logfiles.Application))
             {
-                RelhaxIcon.Dispose();
-                RelhaxIcon = null;
+                Logging.WriteToLog("Saving settings");
+                if (ModpackSettings.SaveSettings())
+                    Logging.WriteToLog("Settings saved");
+                Logging.WriteToLog("Disposing tray icon");
+                if (RelhaxIcon != null)
+                {
+                    RelhaxIcon.Dispose();
+                    RelhaxIcon = null;
+                }
             }
         }
 
@@ -287,6 +292,8 @@ namespace RelhaxModpack
                 catch (Exception e)
                 {
                     Logging.WriteToLog(string.Format("Failed to check for updates: \n{0}", e), Logfiles.Application, LogLevel.ApplicationHalt);
+                    MessageBox.Show(Translations.GetTranslatedString("failedCheckUpdates"));
+                    closingFromFailure = true;
                     Application.Current.Shutdown();
                     Close();
                     return;

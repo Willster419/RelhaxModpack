@@ -471,13 +471,13 @@
             Provides a refrence to an instalce of an uninstall log file
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Logging.InitApplicationLogging">
+        <member name="M:RelhaxModpack.Logging.InitApplicationLogging(RelhaxModpack.Logfiles,System.String)">
             <summary>
             Initialize the logging subsystem for the appilcation
             </summary>
             <returns>True if sucessfull initialization, false otherwise</returns>
         </member>
-        <member name="M:RelhaxModpack.Logging.DisposeApplicationLogging">
+        <member name="M:RelhaxModpack.Logging.DisposeLogging(RelhaxModpack.Logfiles)">
             <summary>
             Dispose of the application logging subsystem
             </summary>

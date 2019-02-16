@@ -517,16 +517,16 @@ namespace RelhaxModpack.Windows
                 //and the mod reports being disabled, then don't add it to the UI
                 //the counter needs to still be kept up to date with the list (the whole list includes invisible mods!)
                 loadProgress.ChildCurrent++;
-                if (!CommandLineSettings.ForceVisible && !package.Visible)
+                if (!ModpackSettings.ForceVisible && !package.Visible)
                     continue;
                 //now that we are actually adding it, report some progress
                 loadProgress.ReportMessage = string.Format("{0} {1}", Translations.GetTranslatedString("loading"), package.NameFormatted);
                 progress.Report(loadProgress);
                 //ok now actuallt load the UI stuff
                 //parse command line stuff. if we're forcinfg it to be enabled or visable
-                if (CommandLineSettings.ForceVisible && !package.IsStructureVisible)
+                if (ModpackSettings.ForceVisible && !package.IsStructureVisible)
                     package.Visible = true;
-                if (CommandLineSettings.ForceEnabled && !package.IsStructureEnabled)
+                if (ModpackSettings.ForceEnabled && !package.IsStructureEnabled)
                     package.Enabled = true;
                 //link the parent panels and border to childs
                 package.ParentBorder = package.Parent.ChildBorder;
@@ -1188,11 +1188,11 @@ namespace RelhaxModpack.Windows
             foreach(SelectablePackage package in Utils.GetFlatList(null,null,null,ParsedCategoryList))
             {
                 //also check to only "check" the mod if it is visible OR if the command line settings to force visiable all compoents
-                if(stringSelections.Contains(package.PackageName) && (package.Visible || CommandLineSettings.ForceVisible))
+                if(stringSelections.Contains(package.PackageName) && (package.Visible || ModpackSettings.ForceVisible))
                 {
                     stringSelections.Remove(package.PackageName);
                     //also check if the mod only if it's enabled OR is command line settings force enabled
-                    if(package.Enabled || CommandLineSettings.ForceEnabled)
+                    if(package.Enabled || ModpackSettings.ForceEnabled)
                     {
                         package.Checked = true;
                         Logging.WriteToLog(string.Format("Checking package {0}",package.CompletePath));
