@@ -14,7 +14,7 @@
         <Button x:Name="CollapseAllButton" Content="Collapse current tab" HorizontalAlignment="Right" Margin="0,10,140,0" VerticalAlignment="Top" Width="125" Height="35" Tag="CollapseAllButton" />
         <Button x:Name="ExpandAllButton" Content="Expand current tab" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="125" Height="35" Tag="ExpandAllButton" />
         <TextBlock x:Name="SearchTB" HorizontalAlignment="Right" Margin="0,52,270,0" TextWrapping="Wrap" Text="Search for a mod..." VerticalAlignment="Top" Height="22" Width="251" TextAlignment="Right" Padding="3" Tag="SearchTB" />
-        <ComboBox x:Name="SearchCB" HorizontalAlignment="Right" Margin="0,52,10,0" VerticalAlignment="Top" Width="255" PreviewKeyDown="SearchCB_PreviewKeyDown" KeyUp="SearchCB_KeyUp" IsEditable="True" IsTextSearchEnabled="False" DropDownClosed="SearchCB_DropDownClosed" PreviewMouseUp="SearchCB_PreviewMouseUp"/>
+        <ComboBox x:Name="SearchCB" HorizontalAlignment="Right" Margin="0,52,10,0" VerticalAlignment="Top" Width="255" PreviewKeyDown="SearchCB_PreviewKeyDown" KeyUp="SearchCB_KeyUp" IsEditable="True" IsTextSearchEnabled="False" PreviewMouseDown="SearchCB_PreviewMouseDown"/>
         <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnContinueInstallation" Tag="ContinueButton" >
             <TextBlock x:Name="ContinueButtonLabel" Text="Text that can take up to two lines" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>

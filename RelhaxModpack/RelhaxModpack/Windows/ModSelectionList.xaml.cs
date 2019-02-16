@@ -1399,7 +1399,7 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Search Box Code
-
+        bool ignoreKeyboard = true;
         private void SearchCB_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             //https://stackoverflow.com/questions/17250650/wpf-combobox-auto-highlighting-on-first-letter-input
@@ -1412,10 +1412,6 @@ namespace RelhaxModpack.Windows
                 textbox.Select(textbox.SelectionLength, 0);
             }
             */
-            if(e.Key == Key.Enter)
-            {
-                //ignoreMouse = false;
-            }
         }
 
         private void SearchCB_KeyUp(object sender, KeyEventArgs e)
@@ -1429,7 +1425,7 @@ namespace RelhaxModpack.Windows
             }
             else if(e.Key == Key.Enter)
             {
-                OnSearchCBSelectionCommitted();
+                OnSearchCBSelectionCommitted(SearchCB.SelectedItem as ComboBoxItem, false);
             }
             //check if length 0 or whitespace
             else if (string.IsNullOrWhiteSpace(SearchCB.Text))
@@ -1481,40 +1477,27 @@ namespace RelhaxModpack.Windows
                 SearchCB.IsDropDownOpen = true;
             }
         }
-        private void OnSearchCBSelectionCommitted()
+        private void OnSearchCBSelectionCommitted(ComboBoxItem committedItem, bool fromMouse)
         {
-            if (SearchCB.SelectedItem is ComboBoxItem item)
+            if (committedItem.Package.UIComponent is Control ctrl)
             {
-                if (item.Package.UIComponent is Control ctrl)
-                {
-                    //ctrl.Focus();
-                }
+                //ctrl.Focus();
             }
-            else
-                throw new BadMemeException("how the actual fuck");
-        }
-        bool ignoreMouse = true;
-        private void SearchCB_DropDownClosed(object sender, EventArgs e)
-        {
-            if (!ignoreMouse)
-            {
-                foreach (ComboBoxItem itm in SearchCB.Items)
-                {
-
-                    if (itm.IsSelected)
-                    {
-
-                    }
-                }
-            }
-            ignoreMouse = true;
-        }
-        private void SearchCB_PreviewMouseUp(object sender, MouseButtonEventArgs e)
-        {
-            if(!SearchCB.IsDropDownOpen)
-                ignoreMouse = false;
         }
         #endregion
 
+        private void SearchCB_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if(SearchCB.IsDropDownOpen)
+            {
+                foreach(ComboBoxItem item in SearchCB.Items)
+                {
+                    if(item.IsHighlighted)
+                    {
+                        OnSearchCBSelectionCommitted(item, true);
+                    }
+                }
+            }
+        }
     }
 }
