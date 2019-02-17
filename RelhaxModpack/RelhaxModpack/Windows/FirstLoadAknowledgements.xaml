@@ -45,11 +45,11 @@
                 </TextBlock>
             </CheckBox>
             
-            <!--<CheckBox HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="38" Width="372">
+            <CheckBox HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="38" Width="372" IsChecked="True">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock x:Name="agreement_Your_OS_Is_Trash" TextWrapping="Wrap" Text="Moving to Relhax V2 is a permanent process and does not support Windows XP" Height="37" Width="353"/>
+                    <TextBlock x:Name="agreement_Anon_Data" TextWrapping="Wrap" Text="You understand that Relhax V2 anonymously collects data to improve our application based on usage data." Height="37" Width="353"/>
                 </StackPanel>
-            </CheckBox>-->
+            </CheckBox>
 
         </StackPanel>
 
