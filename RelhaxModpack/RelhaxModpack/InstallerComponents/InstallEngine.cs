@@ -158,53 +158,6 @@ namespace RelhaxModpack.InstallerComponents
         }
         #endregion
 
-        private void ProcessTriggers(List<string> packageTriggers)
-        {
-            //at least 1 trigger exists
-            foreach (string triggerFromPackage in packageTriggers)
-            {
-                //in theory, each database package trigger is unique in each package AND in installer
-                Trigger match = Triggers.Find(search => search.Name.ToLower().Equals(triggerFromPackage.ToLower()));
-                if (match == null)
-                {
-                    Logging.Debug("trigger match is null (no match!) {0}", triggerFromPackage);
-                    continue;
-                }
-                //this could be in multiple threads, so needs to be done in a lock statement (read modify write operation)
-                lock(Triggers)
-                {
-                    match.NumberProcessed++;
-                    if (match.NumberProcessed >= match.Total)
-                    {
-                        string message = string.Format("matched trigger {0} has numberProcessed {1}, total is {2}", match.Name, match.NumberProcessed, match.Total);
-                        if (match.NumberProcessed > match.Total)
-                            Logging.Error(message);
-                        else //it's equal
-                            Logging.Debug(message);
-                        if (match.Fired)
-                        {
-                            Logging.Error("trigger {0} has already fired, skipping", match.Name);
-                        }
-                        else
-                        {
-                            Logging.Debug("trigger {0} is starting", match.Name);
-                            match.Fired = true;
-                            //hard_coded list of triggers that can be fired from list at top of class
-                            switch(match.Name)
-                            {
-                                case TriggerContouricons:
-                                    Task.Run(() => BuildContourIcons());
-                                    break;
-                                default:
-                                    Logging.Error("Invalid trigger name for switch block: {0}", match.Name);
-                                    break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         #region Main Install method
         private async void LOLActuallyRunInstallationAsync()
         {
@@ -432,6 +385,8 @@ namespace RelhaxModpack.InstallerComponents
         }
         #endregion
 
+        #region Installer methods
+
         private void BuildContourIcons()
         {
             Logging.WriteToLog(string.Format("Creating of atlases, current install time = {0} msec",
@@ -448,7 +403,52 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.Error("building contour icons triggered, but none exist!");
         }
 
-        #region Installer methods
+        private void ProcessTriggers(List<string> packageTriggers)
+        {
+            //at least 1 trigger exists
+            foreach (string triggerFromPackage in packageTriggers)
+            {
+                //in theory, each database package trigger is unique in each package AND in installer
+                Trigger match = Triggers.Find(search => search.Name.ToLower().Equals(triggerFromPackage.ToLower()));
+                if (match == null)
+                {
+                    Logging.Debug("trigger match is null (no match!) {0}", triggerFromPackage);
+                    continue;
+                }
+                //this could be in multiple threads, so needs to be done in a lock statement (read modify write operation)
+                lock (Triggers)
+                {
+                    match.NumberProcessed++;
+                    if (match.NumberProcessed >= match.Total)
+                    {
+                        string message = string.Format("matched trigger {0} has numberProcessed {1}, total is {2}", match.Name, match.NumberProcessed, match.Total);
+                        if (match.NumberProcessed > match.Total)
+                            Logging.Error(message);
+                        else //it's equal
+                            Logging.Debug(message);
+                        if (match.Fired)
+                        {
+                            Logging.Error("trigger {0} has already fired, skipping", match.Name);
+                        }
+                        else
+                        {
+                            Logging.Debug("trigger {0} is starting", match.Name);
+                            match.Fired = true;
+                            //hard_coded list of triggers that can be fired from list at top of class
+                            switch (match.Name)
+                            {
+                                case TriggerContouricons:
+                                    Task.Run(() => BuildContourIcons());
+                                    break;
+                                default:
+                                    Logging.Error("Invalid trigger name for switch block: {0}", match.Name);
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
         private bool BackupMods()
         {
             //check first if the directory exists first
