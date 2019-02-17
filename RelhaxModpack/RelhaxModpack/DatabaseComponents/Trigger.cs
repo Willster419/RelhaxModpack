@@ -16,5 +16,6 @@ namespace RelhaxModpack
         public int Total { get; set; }
         public int NumberProcessed { get; set; }
         public bool Fired { get; set; }
+        public Task TriggerTask { get; set; }
     }
 }

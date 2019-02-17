@@ -76,7 +76,7 @@ namespace RelhaxModpack.InstallerComponents
         //trigger array
         public List<Trigger> Triggers = new List<Trigger>
         {
-            new Trigger(){ Fired = false, Name = TriggerContouricons, NumberProcessed = 0, Total = 0 }
+            new Trigger(){ Fired = false, Name = TriggerContouricons, NumberProcessed = 0, Total = 0, TriggerTask = null }
         };
 
         //other
@@ -179,6 +179,7 @@ namespace RelhaxModpack.InstallerComponents
                 if (trig.NumberProcessed != 0)
                     trig.NumberProcessed = 0;
                 trig.Fired = false;
+                trig.TriggerTask = null;
             }
             foreach(DatabasePackage package in PackagesToInstall)
             {
@@ -229,7 +230,13 @@ namespace RelhaxModpack.InstallerComponents
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.SaveUserData)
             {
-                
+                if(!BackupData(packagesWithData))
+                {
+                    ReportProgress();
+                    ReportFinish();
+                    return;
+                }
+                Logging.Info("Back of userdata complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
             }
             else
                 Logging.WriteToLog("...skipped");
@@ -242,7 +249,13 @@ namespace RelhaxModpack.InstallerComponents
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.ClearCache)
             {
-
+                if(!ClearCache())
+                {
+                    ReportProgress();
+                    ReportFinish();
+                    return;
+                }
+                Logging.Info("Wipe of cache complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
             }
             else
                 Logging.WriteToLog("...skipped");
@@ -255,7 +268,13 @@ namespace RelhaxModpack.InstallerComponents
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.DeleteLogs)
             {
-
+                if(!ClearLogs())
+                {
+                    ReportProgress();
+                    ReportFinish();
+                    return;
+                }
+                Logging.Info("Clear of Logs complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
             }
             else
                 Logging.WriteToLog("...skipped");
@@ -268,7 +287,13 @@ namespace RelhaxModpack.InstallerComponents
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.CleanInstallation)
             {
-
+                if (!ClearModsFolders())
+                {
+                    ReportProgress();
+                    ReportFinish();
+                    return;
+                }
+                Logging.Info("Clear of mods folders complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
             }
             else
                 Logging.WriteToLog("...skipped");
@@ -279,12 +304,13 @@ namespace RelhaxModpack.InstallerComponents
             InstallFinishedArgs.ExitCodes++;
             Logging.WriteToLog(string.Format("Exctacting mods, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
-            if (ModpackSettings.CleanInstallation)
+            if(!ExtractFilesAsyncSetup())
             {
-
+                ReportProgress();
+                ReportFinish();
+                return;
             }
-            else
-                Logging.WriteToLog("...skipped?");
+            Logging.Info("Extraction complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
 
             //step 7: restore data
             OldTime = InstallStopWatch.Elapsed;
@@ -295,7 +321,13 @@ namespace RelhaxModpack.InstallerComponents
             //if statement TODO
             if (ModpackSettings.SaveUserData)
             {
-
+                if (!RestoreData(packagesWithData))
+                {
+                    ReportProgress();
+                    ReportFinish();
+                    return;
+                }
+                Logging.Info("Restore of data complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
             }
             else
                 Logging.WriteToLog("...skipped");
@@ -319,7 +351,7 @@ namespace RelhaxModpack.InstallerComponents
 
             //step 8: patch files (async option)
             //make the task array here. so far can be a maximum of 3 items
-            Task[] concurrentTasksAfterMainExtractoin = new Task[3];
+            Task[] concurrentTasksAfterMainExtractoin = new Task[2];
             int taskIndex = 0;
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
@@ -361,7 +393,6 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.WriteToLog("...skipped (no shortcut entries parsed)");
 
             
-
             //barrier goes here to make sure cleanup is the last thing to do
             Task.WaitAll(concurrentTasksAfterMainExtractoin);
 
@@ -371,6 +402,20 @@ namespace RelhaxModpack.InstallerComponents
             InstallFinishedArgs.ExitCodes++;
             Logging.WriteToLog(string.Format("Cleanup, current install time = {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds));
             Cleanup();
+            Logging.Info("Cleanup complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
+
+            //check if any triggers are still running
+            foreach(Trigger trigger in Triggers)
+            {
+                if (trigger.TriggerTask != null)
+                {
+                    Logging.Debug("Start waiting for task {0} to complete at time {1}", trigger.Name, InstallStopWatch.Elapsed.TotalMilliseconds);
+                    trigger.TriggerTask.Wait();
+                    Logging.Debug("Task {0} finished or was already done at time {1}", trigger.Name, InstallStopWatch.Elapsed.TotalMilliseconds);
+                }
+                else
+                    Logging.Debug("Trigger task {0} is null, skipping", trigger.Name);
+            }
 
             //and i guess we're done
             //if were'not causing the main thread to await, then yeah report that we'er done
@@ -386,69 +431,6 @@ namespace RelhaxModpack.InstallerComponents
         #endregion
 
         #region Installer methods
-
-        private void BuildContourIcons()
-        {
-            Logging.WriteToLog(string.Format("Creating of atlases, current install time = {0} msec",
-                InstallStopWatch.Elapsed.TotalMilliseconds));
-            List<Atlas> atlases = MakeAtlasList();
-            if (atlases.Count > 0)
-            {
-                foreach (Atlas atlas in atlases)
-                {
-                    Utils.CreateAtlas(atlas);
-                }
-            }
-            else
-                Logging.Error("building contour icons triggered, but none exist!");
-        }
-
-        private void ProcessTriggers(List<string> packageTriggers)
-        {
-            //at least 1 trigger exists
-            foreach (string triggerFromPackage in packageTriggers)
-            {
-                //in theory, each database package trigger is unique in each package AND in installer
-                Trigger match = Triggers.Find(search => search.Name.ToLower().Equals(triggerFromPackage.ToLower()));
-                if (match == null)
-                {
-                    Logging.Debug("trigger match is null (no match!) {0}", triggerFromPackage);
-                    continue;
-                }
-                //this could be in multiple threads, so needs to be done in a lock statement (read modify write operation)
-                lock (Triggers)
-                {
-                    match.NumberProcessed++;
-                    if (match.NumberProcessed >= match.Total)
-                    {
-                        string message = string.Format("matched trigger {0} has numberProcessed {1}, total is {2}", match.Name, match.NumberProcessed, match.Total);
-                        if (match.NumberProcessed > match.Total)
-                            Logging.Error(message);
-                        else //it's equal
-                            Logging.Debug(message);
-                        if (match.Fired)
-                        {
-                            Logging.Error("trigger {0} has already fired, skipping", match.Name);
-                        }
-                        else
-                        {
-                            Logging.Debug("trigger {0} is starting", match.Name);
-                            match.Fired = true;
-                            //hard_coded list of triggers that can be fired from list at top of class
-                            switch (match.Name)
-                            {
-                                case TriggerContouricons:
-                                    Task.Run(() => BuildContourIcons());
-                                    break;
-                                default:
-                                    Logging.Error("Invalid trigger name for switch block: {0}", match.Name);
-                                    break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
         private bool BackupMods()
         {
             //check first if the directory exists first
@@ -866,6 +848,69 @@ namespace RelhaxModpack.InstallerComponents
         private void OnZipfileExtractProgress(object sender, ExtractProgressEventArgs e)
         {
             //TODO
+        }
+
+        private void BuildContourIcons()
+        {
+            Logging.WriteToLog(string.Format("Creating of atlases, current install time = {0} msec",
+                InstallStopWatch.Elapsed.TotalMilliseconds));
+            List<Atlas> atlases = MakeAtlasList();
+            if (atlases.Count > 0)
+            {
+                foreach (Atlas atlas in atlases)
+                {
+                    Utils.CreateAtlas(atlas);
+                }
+            }
+            else
+                Logging.Error("building contour icons triggered, but none exist!");
+        }
+
+        private void ProcessTriggers(List<string> packageTriggers)
+        {
+            //at least 1 trigger exists
+            foreach (string triggerFromPackage in packageTriggers)
+            {
+                //in theory, each database package trigger is unique in each package AND in installer
+                Trigger match = Triggers.Find(search => search.Name.ToLower().Equals(triggerFromPackage.ToLower()));
+                if (match == null)
+                {
+                    Logging.Debug("trigger match is null (no match!) {0}", triggerFromPackage);
+                    continue;
+                }
+                //this could be in multiple threads, so needs to be done in a lock statement (read modify write operation)
+                lock (Triggers)
+                {
+                    match.NumberProcessed++;
+                    if (match.NumberProcessed >= match.Total)
+                    {
+                        string message = string.Format("matched trigger {0} has numberProcessed {1}, total is {2}", match.Name, match.NumberProcessed, match.Total);
+                        if (match.NumberProcessed > match.Total)
+                            Logging.Error(message);
+                        else //it's equal
+                            Logging.Debug(message);
+                        if (match.Fired)
+                        {
+                            Logging.Error("trigger {0} has already fired, skipping", match.Name);
+                        }
+                        else
+                        {
+                            Logging.Debug("trigger {0} is starting", match.Name);
+                            match.Fired = true;
+                            //hard_coded list of triggers that can be fired from list at top of class
+                            switch (match.Name)
+                            {
+                                case TriggerContouricons:
+                                    match.TriggerTask = Task.Run(() => BuildContourIcons());
+                                    break;
+                                default:
+                                    Logging.Error("Invalid trigger name for switch block: {0}", match.Name);
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private bool UninstallModsQuick()
