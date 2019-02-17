@@ -488,7 +488,7 @@
             </summary>
             <param name="message">The message to write</param>
             <param name="logfiles">The logfile to write to</param>
-            <param name="logLevel">The level of severity of the message</param>
+            <param name="logLevel">The level of severity of the message. If not Application log, this parameter is ignored</param>
         </member>
         <member name="T:RelhaxModpack.SelectionView">
             <summary>
