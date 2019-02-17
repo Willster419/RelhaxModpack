@@ -126,18 +126,24 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        public bool AttemptAuth()
+        private bool AttemptAuth()
         {
-            if(File.Exists(KeyFilename))
+            //check if key filename was changed from command line
+            if(!string.IsNullOrWhiteSpace(CommandLineSettings.UpdateKeyFileName))
+            {
+                Logging.Debug("User specified from command line new key filename to use: {0}", CommandLineSettings.UpdateKeyFileName);
+                KeyFilename = CommandLineSettings.UpdateKeyFileName;
+            }
+            if (File.Exists(KeyFilename))
             {
                 Logging.WriteToLog("Attempting to auth from AttemptAuth()");
                 //compare local password to online version
                 //NOTE: php script if passworded, does NOT need password itself to do stuff
-                using(client = new WebClient(){ Credentials = Credentials })
+                using (client = new WebClient() { Credentials = Credentials })
                 {
                     string onlinePassword = client.DownloadString(Utils.Base64Decode(KeyAddress));
                     string localPassword = File.ReadAllText(KeyFilename);
-                    if(onlinePassword.Equals(localPassword))
+                    if (onlinePassword.Equals(localPassword))
                     {
                         Logging.WriteToLog("authorized from AttemptAuth()");
                         return true;
@@ -146,6 +152,8 @@ namespace RelhaxModpack.Windows
                         Logging.WriteToLog("not authorized from AttemptAuth()");
                 }
             }
+            else
+                Logging.Error("Key file {0} not found", KeyFilename);
             return false;
         }
         #endregion
