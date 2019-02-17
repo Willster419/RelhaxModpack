@@ -63,6 +63,7 @@ namespace RelhaxModpack
         /// only set this to false if absolutly necessary!
         /// </summary>
         public bool LogAtInstall = true;
+        public List<string> Triggers = new List<string>();
         /// <summary>
         /// the URL link of where you can view the webpage of the mod
         /// </summary>

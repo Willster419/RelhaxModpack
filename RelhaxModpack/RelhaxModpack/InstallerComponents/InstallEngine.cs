@@ -47,11 +47,21 @@ namespace RelhaxModpack.InstallerComponents
     {
         #region Instance Variables
         //used for installation
+        /// <summary>
+        /// List of packages that have zip files to install and are enabled (and checked if selectable) and ordered into installGroups
+        /// </summary>
         public List<DatabasePackage>[] OrderedPackagesToInstall;
+        /// <summary>
+        /// List of packages that have zip files to install and are enabled (and checked if selectable)
+        /// </summary>
+        public List<DatabasePackage> PackagesToInstall;
+        /// <summary>
+        /// Flat list of all selectable packages
+        /// </summary>
         public List<SelectablePackage> FlatListSelectablePackages;
         public bool AwaitCallback = false;
 
-        //used for parsing later
+        //for passing back to application (DO NOT USE)
         public List<Category> ParsedCategoryList;
         public List<Dependency> Dependencies;
         public List<DatabasePackage> GlobalDependencies;
@@ -60,6 +70,16 @@ namespace RelhaxModpack.InstallerComponents
         public event InstallFinishedDelegate OnInstallFinish;
         public event InstallProgressDelegate OnInstallProgress;
 
+        //names of triggers
+        public const string TriggerContouricons = "build_contour_icons";
+
+        //trigger array
+        public List<Trigger> Triggers = new List<Trigger>
+        {
+            new Trigger(){ Fired = false, Name = TriggerContouricons, NumberProcessed = 0, Total = 0 }
+        };
+
+        //other
         private RelhaxInstallFinishedEventArgs InstallFinishedArgs = new RelhaxInstallFinishedEventArgs();
         private Stopwatch InstallStopWatch = new Stopwatch();
         private TimeSpan OldTime;
@@ -138,6 +158,53 @@ namespace RelhaxModpack.InstallerComponents
         }
         #endregion
 
+        private void ProcessTriggers(List<string> packageTriggers)
+        {
+            //at least 1 trigger exists
+            foreach (string triggerFromPackage in packageTriggers)
+            {
+                //in theory, each database package trigger is unique in each package AND in installer
+                Trigger match = Triggers.Find(search => search.Name.ToLower().Equals(triggerFromPackage.ToLower()));
+                if (match == null)
+                {
+                    Logging.Debug("trigger match is null (no match!) {0}", triggerFromPackage);
+                    continue;
+                }
+                //this could be in multiple threads, so needs to be done in a lock statement (read modify write operation)
+                lock(Triggers)
+                {
+                    match.NumberProcessed++;
+                    if (match.NumberProcessed >= match.Total)
+                    {
+                        string message = string.Format("matched trigger {0} has numberProcessed {1}, total is {2}", match.Name, match.NumberProcessed, match.Total);
+                        if (match.NumberProcessed > match.Total)
+                            Logging.Error(message);
+                        else //it's equal
+                            Logging.Debug(message);
+                        if (match.Fired)
+                        {
+                            Logging.Error("trigger {0} has already fired, skipping", match.Name);
+                        }
+                        else
+                        {
+                            Logging.Debug("trigger {0} is starting", match.Name);
+                            match.Fired = true;
+                            //hard_coded list of triggers that can be fired from list at top of class
+                            switch(match.Name)
+                            {
+                                case TriggerContouricons:
+                                    Task.Run(() => BuildContourIcons());
+                                    break;
+                                default:
+                                    Logging.Error("Invalid trigger name for switch block: {0}", match.Name);
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         #region Main Install method
         private async void LOLActuallyRunInstallationAsync()
         {
@@ -149,6 +216,35 @@ namespace RelhaxModpack.InstallerComponents
             //do more stuff here im sure like init log files
             //also check enalbed just to be safe
             List<SelectablePackage> selectedPackages = FlatListSelectablePackages.Where(package => package.Checked && package.Enabled).ToList();
+            //do any list processing here
+            //process any packages that have triggers
+            //reset the internal list first
+            foreach(Trigger trig in Triggers)
+            {
+                if (trig.Total != 0)
+                    trig.Total = 0;
+                if (trig.NumberProcessed != 0)
+                    trig.NumberProcessed = 0;
+                trig.Fired = false;
+            }
+            foreach(DatabasePackage package in PackagesToInstall)
+            {
+                if(package.Triggers.Count > 0)
+                {
+                    foreach(string triggerFromPackage in package.Triggers)
+                    {
+                        //in theory, each database package trigger is unique in each package AND in installer
+                        Trigger match = Triggers.Find(search => search.Name.ToLower().Equals(triggerFromPackage.ToLower()));
+                        if(match == null)
+                        {
+                            Logging.Debug("trigger match is null (no match!) {0}", triggerFromPackage);
+                            continue;
+                        }
+                        match.Total++;
+                    }
+                }
+            }
+            //process packages with data (cache) for cache backup and restore
             List<SelectablePackage> packagesWithData = selectedPackages.Where(package => package.UserFiles.Count > 0).ToList();
             //and reset the stopwatch
             InstallStopWatch.Reset();
@@ -311,25 +407,7 @@ namespace RelhaxModpack.InstallerComponents
             else
                 Logging.WriteToLog("...skipped (no shortcut entries parsed)");
 
-            //step 10: create atlasas (async option)
-            OldTime = InstallStopWatch.Elapsed;
-            Progress.TotalCurrent++;
-            InstallFinishedArgs.ExitCodes++;
-            Logging.WriteToLog(string.Format("Creating of atlases, current install time = {0} msec",
-                InstallStopWatch.Elapsed.TotalMilliseconds));
-            List<Atlas> atlases = MakeAtlasList();
-            if (atlases.Count > 0)
-            {
-                concurrentTasksAfterMainExtractoin[taskIndex++] = Task.Factory.StartNew(() => 
-                {
-                    foreach (Atlas atlas in atlases)
-                    {
-                        Utils.CreateAtlas(atlas);
-                    }
-                });
-            }
-            else
-                Logging.WriteToLog("...skipped (no atlas entries parsed)");
+            
 
             //barrier goes here to make sure cleanup is the last thing to do
             Task.WaitAll(concurrentTasksAfterMainExtractoin);
@@ -353,6 +431,22 @@ namespace RelhaxModpack.InstallerComponents
             Logging.Info("Install finished, total install time = {0} msec", Logfiles.Application, InstallStopWatch.Elapsed.TotalMilliseconds);
         }
         #endregion
+
+        private void BuildContourIcons()
+        {
+            Logging.WriteToLog(string.Format("Creating of atlases, current install time = {0} msec",
+                InstallStopWatch.Elapsed.TotalMilliseconds));
+            List<Atlas> atlases = MakeAtlasList();
+            if (atlases.Count > 0)
+            {
+                foreach (Atlas atlas in atlases)
+                {
+                    Utils.CreateAtlas(atlas);
+                }
+            }
+            else
+                Logging.Error("building contour icons triggered, but none exist!");
+        }
 
         #region Installer methods
         private bool BackupMods()
@@ -643,6 +737,9 @@ namespace RelhaxModpack.InstallerComponents
                         if (string.IsNullOrWhiteSpace(package.ZipFile))
                             continue;
                         Unzip(package, threadNum);
+                        //after zip file extraction, process triggers
+                        if (package.Triggers.Count > 0)
+                            ProcessTriggers(package.Triggers);
                     }
                 }
                 if (numExtracted == packagesToExtract.Count)

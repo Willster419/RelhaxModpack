@@ -900,12 +900,26 @@ namespace RelhaxModpack
                 AdvancedProgressWindow= new AdvancedProgress();
                 AdvancedProgressWindow.Show();
             }
+            //make sure each trigger list for each package is unique
+            foreach(DatabasePackage package in packagesToInstall)
+            {
+                //for debug, get the list of duplicates
+                //https://stackoverflow.com/questions/3811464/how-to-get-duplicate-items-from-a-list-using-linq
+                List<string> duplicates = package.Triggers.GroupBy(trigger => trigger).Where(trig => trig.Count() > 1).Select(trig => trig.Key).ToList();
+                if(duplicates.Count > 0)
+                {
+                    //first make it distinct
+                    package.Triggers = package.Triggers.Distinct().ToList();
+                    Logging.Debug("Duplicate triggers found in package {0}:{1}", package.PackageName, string.Join(",", duplicates));
+                }
+            }
 
             //and create and link the install engine
             InstallerComponents.InstallEngine engine = new InstallerComponents.InstallEngine()
             {
                 FlatListSelectablePackages = flatListSelect,
                 OrderedPackagesToInstall = orderedPackagesToInstall,
+                PackagesToInstall = packagesToInstall,
                 AwaitCallback = false,
                 ParsedCategoryList = parsedCategoryList,
                 Dependencies = dependencies,
