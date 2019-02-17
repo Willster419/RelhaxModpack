@@ -449,8 +449,6 @@ namespace RelhaxModpack
                             case "description":
                                 selectablePackage.Description = xmlPackageProperty.Value.Trim();
                                 break;
-                            case "updateInstructions":
-                                selectablePackage.UpdateInstructions = xmlPackageProperty.Value.Trim();
                                 break;
                             case "userFiles":
                                 ProcessUserFiles(xmlPackageProperty, selectablePackage.UserFiles);
@@ -2246,7 +2244,6 @@ namespace RelhaxModpack
             SaveProperty(root, element, nameof(package.AppendExtraction), package.AppendExtraction.ToString(), false.ToString(), true);
             SaveProperty(root, element, nameof(package.LogAtInstall), package.LogAtInstall.ToString(), true.ToString(), true);
             SaveProperty(root, element, nameof(package.DevURL), package.DevURL, "", true);
-            SaveProperty(root, element, nameof(package.UpdateInstructions), package.UpdateInstructions, "", true);
             SaveProperty(root, element, nameof(package.InstallGroup), package.InstallGroup.ToString(), ((int)5).ToString(), true);
             //save the basic elements (if they exist, otherwise defaults will be used on load)
             if (package is Dependency dependency)
