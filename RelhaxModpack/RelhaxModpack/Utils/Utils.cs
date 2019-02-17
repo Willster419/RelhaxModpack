@@ -348,9 +348,9 @@ namespace RelhaxModpack
             return fileName;
         }
 
-        public static void FileDelete(string folderPath, string file, uint numRetrys = 3, uint timeout = 100)
+        public static void FileDelete(string file, uint numRetrys = 3, uint timeout = 100)
         {
-            DirectoryDelete(folderPath, false, numRetrys, timeout, file);
+            DirectoryDelete(Path.GetDirectoryName(file), false, numRetrys, timeout, file);
         }
 
         /// <summary>
