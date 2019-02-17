@@ -60,13 +60,6 @@ namespace RelhaxModpack
         /// <param name="logLevel">The level of severity of the log message. Default is info level.</param>
         public void Write(string message, LogLevel logLevel = LogLevel.Info)
         {
-            //check for empty filepaths or messages first
-            if (string.IsNullOrEmpty(message))
-                return;
-            if (string.IsNullOrEmpty(Filepath))
-                throw new BadMemeException("You're bad at logfiles");
-            if (fileStream == null)
-                throw new BadMemeException("You're still bad at logfiles");
             //only alpha and beta application distributions should log debug messages
             if (Settings.ApplicationVersion == ApplicationVersions.Stable && logLevel == LogLevel.Debug && !ModpackSettings.VerboseLogging)
                 return;
@@ -91,7 +84,20 @@ namespace RelhaxModpack
             }
             //https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings
             string formattedDateTime = DateTime.Now.ToString(Timestamp);
-            message = string.Format("{0}   {1}{2}\r\n", formattedDateTime, logMessageLevel, message);
+            message = string.Format("{0}   {1}{2}", formattedDateTime, logMessageLevel, message);
+            Write(message);
+        }
+        public void Write(string message)
+        {
+            //check for empty filepaths or messages first
+            if (string.IsNullOrEmpty(message))
+                return;
+            if (string.IsNullOrEmpty(Filepath))
+                throw new BadMemeException("You're bad at logfiles");
+            if (fileStream == null)
+                throw new BadMemeException("You're still bad at logfiles");
+            message = message = Environment.NewLine;
+            //actually write message to log
             fileStream.Write(Encoding.UTF8.GetBytes(message), 0, Encoding.UTF8.GetByteCount(message));
             fileStream.Flush();
         }

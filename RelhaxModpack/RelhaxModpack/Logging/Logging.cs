@@ -70,11 +70,13 @@ namespace RelhaxModpack
         /// <summary>
         /// The name of the install log file
         /// </summary>
-        public const string InstallLogFilename = "TODO";
+        public const string InstallLogFilename = "installedRelhaxFiles.log";
+        public const string InstallLogFilenameBackup = "installedRelhaxFiles.bak";
         /// <summary>
         /// the name of the uninstall log file
         /// </summary>
-        public const string UninstallLogFilename = "TODO";
+        public const string UninstallLogFilename = "uninstallRelhaxFiles.log";
+        public const string UninstallLogFilenameBackup = "uninstallRelhaxFiles.bak";
         private const string ApplicationLogfileTimestamp = "yyyy-MM-dd HH:mm:ss.fff";
         /// <summary>
         /// The header and end that shows the start and stop of the application log file
@@ -175,8 +177,8 @@ namespace RelhaxModpack
         /// </summary>
         /// <param name="message">The message to write</param>
         /// <param name="logfiles">The logfile to write to</param>
-        /// <param name="logLevel">The level of severity of the message</param>
-        public static void WriteToLog(string message, Logfiles logfiles = Logfiles.Application,LogLevel logLevel = LogLevel.Info)
+        /// <param name="logLevel">The level of severity of the message. If not Application log, this parameter is ignored</param>
+        public static void WriteToLog(string message, Logfiles logfiles = Logfiles.Application, LogLevel logLevel = LogLevel.Info)
         {
             Logfile fileToWriteTo = null;
             switch(logfiles)
@@ -209,7 +211,10 @@ namespace RelhaxModpack
                 }
                 return;
             }
-            fileToWriteTo.Write(message, logLevel);
+            if (logfiles == Logfiles.Application)
+                fileToWriteTo.Write(message, logLevel);
+            else
+                fileToWriteTo.Write(message);
         }
 
         public static void WriteToLog(string messageFormat, Logfiles logfile, LogLevel level, params object[] args)
