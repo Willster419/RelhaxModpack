@@ -320,6 +320,27 @@
             </summary>
             <returns>True if another package at this level is checked and enabled, false otherwise</returns>
         </member>
+        <member name="T:RelhaxModpack.Trigger">
+            <summary>
+            Represents a trigger object used in the installer as an event starter.
+            For example, a contour icon trigger exists to start the building of contour icons
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.InstallerComponents.InstallEngine.OrderedPackagesToInstall">
+            <summary>
+            List of packages that have zip files to install and are enabled (and checked if selectable) and ordered into installGroups
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.InstallerComponents.InstallEngine.PackagesToInstall">
+            <summary>
+            List of packages that have zip files to install and are enabled (and checked if selectable)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.InstallerComponents.InstallEngine.FlatListSelectablePackages">
+            <summary>
+            Flat list of all selectable packages
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Logfile">
             <summary>
             Represenets an instance of a logfile used for writing important logging information to a log
