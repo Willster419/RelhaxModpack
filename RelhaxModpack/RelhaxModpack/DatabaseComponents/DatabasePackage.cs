@@ -67,7 +67,6 @@ namespace RelhaxModpack
         /// the URL link of where you can view the webpage of the mod
         /// </summary>
         public string DevURL = "";
-        public string UpdateInstructions = "";
         public int InstallGroup = 5;
         public int PatchGroup = 5;
         public override string ToString()
