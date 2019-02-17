@@ -944,7 +944,7 @@ namespace RelhaxModpack
                     await Task.Run(() =>
                     {
                         foreach (string zipfile in oldZipFilesNotInDatabase)
-                            Utils.FileDelete(Settings.RelhaxDownloadsFolder, zipfile);
+                            Utils.FileDelete(Path.Combine(Settings.RelhaxDownloadsFolder, zipfile));
                     });
                 }
                 if(ModpackSettings.ShowInstallCompleteWindow)
