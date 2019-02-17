@@ -615,7 +615,7 @@ namespace RelhaxModpack.InstallerComponents
 
         private bool Cleanup()
         {
-
+            //TODO: is this needed?
             return true;
         }
         #endregion
@@ -687,6 +687,8 @@ namespace RelhaxModpack.InstallerComponents
                                 sb.Append(package.PatchGroup.ToString("D3"));
                                 //name else doesn't need to change, to set the rest of the name and use it
                                 sb.Append(zipEntryName.Substring(7));
+                                //and save it to the string
+                                zipEntryName = sb.ToString();
                             }
                             //save zip entry file modifications back to zipfile
                             zip[j].FileName = zipEntryName;
