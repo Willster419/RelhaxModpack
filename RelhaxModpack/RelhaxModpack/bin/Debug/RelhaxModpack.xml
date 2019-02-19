@@ -752,18 +752,6 @@
             The application distribution version to use. When selected, it won't take affect until application restart
             </summary>
         </member>
-        <member name="M:RelhaxModpack.ModpackSettings.LoadSettings">
-            <summary>
-            Initializes the Settings (should only be done on application start) and determinds which version of Settings loader method to use
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:RelhaxModpack.ModpackSettings.SaveSettings">
-            <summary>
-            Saves all fields (settings) to an xml file
-            </summary>
-            <returns></returns>
-        </member>
         <member name="T:RelhaxModpack.Settings">
             <summary>
             Handles all generic constants and statics used throughout the application
