@@ -4,6 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
+using System.Xml;
+using System.ComponentModel;
 
 namespace RelhaxModpack
 {
@@ -113,6 +116,121 @@ namespace RelhaxModpack
         //TODO: make some of these properties so that the get can return eithor the modpack standalone or third party version
         public static string DefaultStartAddress = @"http://wotmods.relhaxmodpack.com/WoT/{onlineFolder}/";
         public static string DefaultEndAddress = @"";
+        #endregion
+
+        #region Settings parsing to/from XML file
+
+        public static bool LoadSettings(string xmlfile, Type SettingsClass, string[] propertiesToExclude)
+        {
+            //get all fields from the class
+            FieldInfo[] fields = SettingsClass.GetFields();
+            //get all types from the types in the class
+            List<Type> typesOfTypesInClass = new List<Type>();
+            foreach(FieldInfo fieldInClass in fields)
+            {
+                //https://stackoverflow.com/questions/5090224/reflection-get-type-of-fieldinfo-object
+                Type t = fieldInClass.FieldType;
+                if (!typesOfTypesInClass.Contains(t))
+                    typesOfTypesInClass.Add(t);
+            }
+            //now we have a list of all "types" that exist in the class
+            //parse the xml list
+            if(!File.Exists(xmlfile))
+            {
+                Logging.Warning("Xml settings file {0} does not exist, using defaults set in class{1}{2}", xmlfile, SettingsClass.GetType().ToString(), Environment.NewLine);
+                return false;
+            }
+            XmlDocument doc = new XmlDocument();
+            try
+            {
+                doc.Load(xmlfile);
+            }
+            catch (XmlException ex)
+            {
+                Logging.Error("Failed to load {0}, using defaults set in class{1}{2}{3}", xmlfile, SettingsClass.GetType().ToString(), Environment.NewLine, ex.ToString());
+                Translations.SetLanguageOnFirstLoad();
+                return false;
+            }
+            //using child of child rather than xpath gets around the fact that the root element name has changed or can change
+            XmlNodeList settings = doc.ChildNodes[0].ChildNodes;
+            //legacy compatibility: if it's modpackSettings, there's some V1 bad names that need to be manually parsed
+            if(SettingsClass.Equals(typeof(ModpackSettings)))
+            {
+                ModpackSettings.ApplyOldSettings(settings);
+            }
+            for (int i = 0; i < settings.Count; i++)
+            {
+                //verify that the setting name in xml matches a fieldInfo property in the class
+                FieldInfo[] matches = fields.Where(f => f.Name.Equals(settings[i].Name)).ToArray();
+                Logging.WriteToLog("" + matches.Count() + " matches for xml setting name " + settings[i].Name, Logfiles.Application, LogLevel.Debug);
+                if(matches.Count() > 1)
+                {
+                    throw new BadMemeException("ugh");
+                }
+                else if (matches.Count() == 0)
+                {
+                    Logging.Warning("no match for xml setting {0}", settings[i].Name);
+                }
+                else
+                {
+                    FieldInfo settingField = matches[0];
+                    //we have, based on name, matched the xml property to a property in the class
+                    //now set the value
+                    //BUT also check to make sure the item is not on the blacklist
+                    if (propertiesToExclude.Contains(settingField.Name))
+                    {
+                        Logging.Debug("Property {0} matched to exclusion list, skipping", settingField.Name);
+                        continue;
+                    }
+                    //get the type of the field and make sure it actually exists in the list (it should)
+                    if(typesOfTypesInClass.Contains(settingField.FieldType))
+                    {
+                        //since the type exists, it *should* save
+                        //https://stackoverflow.com/questions/2380467/c-dynamic-parse-from-system-type
+                        try
+                        {
+                            var converter = TypeDescriptor.GetConverter(settingField.FieldType);
+                            settingField.SetValue(SettingsClass,converter.ConvertFrom(settings[i].InnerText));
+                        }
+                        catch (Exception e)
+                        {
+                            Logging.Debug("failed to save property {0}{1}{2}", settingField.Name, Environment.NewLine, e.ToString());
+                        }
+                    }
+                    else
+                    {
+                        throw new BadMemeException("hmmmmmm");
+                    }
+                }
+            }
+            return true;
+        }
+
+        public static bool SaveSettings(string xmlFile, Type SettingsClass, string[] propertiesToExclude)
+        {
+            XmlDocument doc = new XmlDocument();
+            //create element called ModpackSettings
+            XmlElement settingsHolder = doc.CreateElement(SettingsClass.Name);
+            doc.AppendChild(settingsHolder);
+            if (File.Exists(xmlFile))
+                File.Delete(xmlFile);
+            //if it can delete, then it can save later
+            FieldInfo[] fields = SettingsClass.GetFields();
+            foreach (FieldInfo field in fields)
+            {
+                //but skip the exclusion list
+                if (propertiesToExclude.Contains(field.Name))
+                {
+                    Logging.Debug("XML file {0}, property {1} matched to exclusion list, skipping", xmlFile, field.Name);
+                    continue;
+                }
+                XmlElement element = doc.CreateElement(field.Name);
+                element.InnerText = field.GetValue(SettingsClass).ToString();
+                settingsHolder.AppendChild(element);
+            }
+            doc.Save(xmlFile);
+            return true;
+        }
         #endregion
     }
 }
