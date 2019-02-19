@@ -96,7 +96,7 @@ namespace RelhaxModpack
                 throw new BadMemeException("You're bad at logfiles");
             if (fileStream == null)
                 throw new BadMemeException("You're still bad at logfiles");
-            message = message = Environment.NewLine;
+            message = message + Environment.NewLine;
             //actually write message to log
             fileStream.Write(Encoding.UTF8.GetBytes(message), 0, Encoding.UTF8.GetByteCount(message));
             fileStream.Flush();
