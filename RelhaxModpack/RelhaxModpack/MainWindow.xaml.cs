@@ -69,7 +69,7 @@ namespace RelhaxModpack
             CreateTray();
             //load and apply modpack settings
             progressIndicator.UpdateProgress(2, Translations.GetTranslatedString("loadingSettings"));
-            Settings.LoadSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude);
+            Settings.LoadSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude,null);
             //apply settings to UI elements
             UISettings.LoadSettings(true);
             UISettings.ApplyUIColorSettings(this);
@@ -111,7 +111,7 @@ namespace RelhaxModpack
             if(!Logging.IsLogDisposed(Logfiles.Application))
             {
                 Logging.WriteToLog("Saving settings");
-                if (Settings.SaveSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude))
+                if (Settings.SaveSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude,null))
                     Logging.WriteToLog("Settings saved");
                 Logging.WriteToLog("Disposing tray icon");
                 if (RelhaxIcon != null)

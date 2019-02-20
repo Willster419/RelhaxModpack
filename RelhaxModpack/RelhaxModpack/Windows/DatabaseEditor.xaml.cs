@@ -19,9 +19,36 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class DatabaseEditor : RelhaxWindow
     {
+
+        private EditorSettings EditorSettings;
+
         public DatabaseEditor()
         {
             InitializeComponent();
+        }
+
+        private void OnApplicationLoad(object sender, RoutedEventArgs e)
+        {
+            EditorSettings = new EditorSettings();
+            Logging.Info("Loading editor settings");
+            if(!Settings.LoadSettings(Settings.EditorSettingsFilename, typeof(EditorSettings), null,EditorSettings))
+            {
+                Logging.Info("Failed to load editor settings, using defaults");
+            }
+            else
+            {
+                Logging.Info("Editor settings loaded success");
+            }
+        }
+
+        private void OnApplicationClose(object sender, EventArgs e)
+        {
+            if (!Logging.IsLogDisposed(Logfiles.Application))
+            {
+                Logging.WriteToLog("Saving editor settings");
+                if (Settings.SaveSettings(Settings.EditorSettingsFilename, typeof(EditorSettings), null, EditorSettings))
+                    Logging.WriteToLog("Editor settings saved");
+            }
         }
     }
 }

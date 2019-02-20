@@ -5,19 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="DatabaseEditor" Height="700" Width="1000" MinHeight="480" MinWidth="640" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico">
+        Title="DatabaseEditor" Height="700" Width="1000" MinHeight="480" MinWidth="640" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="OnApplicationLoad" Closed="OnApplicationClose">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="535*"/>
+            <ColumnDefinition Width="458*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="632*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <Button Content="Remove" HorizontalAlignment="Left" Margin="10,0,0,10" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom" Width="75" Height="20"/>
-        <Button Content="Move" HorizontalAlignment="Left" Margin="90,0,0,10" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom" Width="75" Height="20"/>
-        <Button Content="Add" HorizontalAlignment="Left" Margin="170,0,0,10" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom" Width="75" Height="20"/>
-        <Button Content="Copy To..." HorizontalAlignment="Left" Margin="250,0,0,10" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom" Width="75" Height="20"/>
-        <Button Content="Load Database" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="2" Margin="0,0,100,10"  VerticalAlignment="Bottom" Width="85" Height="20"/>
-        <Button Content="Save Database" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="2" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="85" Height="20"/>
-        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Button Content="Remove" HorizontalAlignment="Left" Margin="10,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"/>
+        <Button Content="Move" HorizontalAlignment="Left" Margin="90,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"/>
+        <Button Content="Add" HorizontalAlignment="Left" Margin="170,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"/>
+        <Button Content="Copy To..." HorizontalAlignment="Left" Margin="250,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"/>
+        <Button Content="Load Database" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="1" Margin="0,0,100,10"  VerticalAlignment="Bottom" Width="85" Height="20"/>
+        <Button Content="Save Database" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="1" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="85" Height="20"/>
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" MinWidth="250"/>
                 <ColumnDefinition Width="5"/>

@@ -31,6 +31,8 @@ namespace RelhaxModpack
 
         public const string ThirdPartySettingsFileName = "ThirdPartySettings.xml";
 
+        public const string EditorSettingsFilename = "EditorSettings.xml";
+
         public const string LastSavedConfigFilename = "lastInstalledConfig.xml";
 
         public const string BetaDatabaseURL = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/modInfo.xml";
@@ -120,7 +122,7 @@ namespace RelhaxModpack
 
         #region Settings parsing to/from XML file
 
-        public static bool LoadSettings(string xmlfile, Type SettingsClass, string[] propertiesToExclude)
+        public static bool LoadSettings(string xmlfile, Type SettingsClass, string[] propertiesToExclude, object classInstance)
         {
             //get all fields from the class
             FieldInfo[] fields = SettingsClass.GetFields();
@@ -177,7 +179,7 @@ namespace RelhaxModpack
                     //we have, based on name, matched the xml property to a property in the class
                     //now set the value
                     //BUT also check to make sure the item is not on the blacklist
-                    if (propertiesToExclude.Contains(settingField.Name))
+                    if (propertiesToExclude != null && propertiesToExclude.Contains(settingField.Name))
                     {
                         Logging.Debug("Property {0} matched to exclusion list, skipping", settingField.Name);
                         continue;
@@ -190,11 +192,14 @@ namespace RelhaxModpack
                         try
                         {
                             var converter = TypeDescriptor.GetConverter(settingField.FieldType);
-                            settingField.SetValue(SettingsClass,converter.ConvertFrom(settings[i].InnerText));
+                            if (classInstance != null)
+                                settingField.SetValue(classInstance, converter.ConvertFrom(settings[i].InnerText));
+                            else
+                                settingField.SetValue(SettingsClass,converter.ConvertFrom(settings[i].InnerText));
                         }
                         catch (Exception e)
                         {
-                            Logging.Debug("failed to save property {0}{1}{2}", settingField.Name, Environment.NewLine, e.ToString());
+                            Logging.Debug("failed to load property to memory {0}{1}{2}", settingField.Name, Environment.NewLine, e.ToString());
                         }
                     }
                     else
@@ -206,7 +211,7 @@ namespace RelhaxModpack
             return true;
         }
 
-        public static bool SaveSettings(string xmlFile, Type SettingsClass, string[] propertiesToExclude)
+        public static bool SaveSettings(string xmlFile, Type SettingsClass, string[] propertiesToExclude, object classInstance)
         {
             XmlDocument doc = new XmlDocument();
             //create element called ModpackSettings
@@ -219,13 +224,23 @@ namespace RelhaxModpack
             foreach (FieldInfo field in fields)
             {
                 //but skip the exclusion list
-                if (propertiesToExclude.Contains(field.Name))
+                if (propertiesToExclude != null && propertiesToExclude.Contains(field.Name))
                 {
                     Logging.Debug("XML file {0}, property {1} matched to exclusion list, skipping", xmlFile, field.Name);
                     continue;
                 }
                 XmlElement element = doc.CreateElement(field.Name);
-                element.InnerText = field.GetValue(SettingsClass).ToString();
+                try
+                {
+                    if (classInstance != null)
+                        element.InnerText = field.GetValue(classInstance).ToString();
+                    else
+                        element.InnerText = field.GetValue(SettingsClass).ToString();
+                }
+                catch (Exception e)
+                {
+                    Logging.Debug("failed to save property from memory {0}{1}{2}", field.Name, Environment.NewLine, e.ToString());
+                }
                 settingsHolder.AppendChild(element);
             }
             doc.Save(xmlFile);
