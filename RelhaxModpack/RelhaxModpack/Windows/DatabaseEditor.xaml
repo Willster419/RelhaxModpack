@@ -7,10 +7,6 @@
         mc:Ignorable="d"
         Title="DatabaseEditor" Height="700" Width="1000" MinHeight="480" MinWidth="640" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="OnApplicationLoad" Closed="OnApplicationClose">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="535*"/>
-            <ColumnDefinition Width="458*"/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="632*"/>
             <RowDefinition Height="40"/>
@@ -35,9 +31,6 @@
                 <TabItem Header="Dependencies">
                     <Grid Background="#FFE5E5E5"/>
                 </TabItem>
-                <TabItem Header="Logical Dependencies">
-                    <Grid Background="#FFE5E5E5"/>
-                </TabItem>
                 <TabItem Header="Database Objects">
                     <Grid Background="#FFE5E5E5"/>
                 </TabItem>
@@ -47,78 +40,107 @@
                 <TabItem Header="Patch Groups">
                     <Grid Background="#FFE5E5E5"/>
                 </TabItem>
+                <TabItem Header="Settings">
+                    <Grid Background="#FFE5E5E5"/>
+                </TabItem>
             </TabControl>
-            <Grid Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <ComboBox Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsEditable="True" />
-                <TextBlock HorizontalAlignment="Stretch" Grid.Row="1" TextWrapping="Wrap" Text="Name" VerticalAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Stretch" Grid.Row="2" TextWrapping="Wrap" Text="Package Name" VerticalAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Stretch" Grid.Row="3" TextWrapping="Wrap" Text="Start Address" VerticalAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Stretch" Grid.Row="4" TextWrapping="Wrap" Text="Zip File" VerticalAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Stretch" Grid.Row="5" TextWrapping="Wrap" Text="End Address" VerticalAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Stretch" Grid.Row="6" TextWrapping="Wrap" Text="Dev URL" VerticalAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Stretch" Grid.Row="7" TextWrapping="Wrap" Text="Version" VerticalAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Stretch" Grid.Row="8" TextWrapping="Wrap" Text="Type" VerticalAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Stretch" Grid.Row="9" TextWrapping="Wrap" Text="Level:" VerticalAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Stretch" Grid.Row="10" TextWrapping="Wrap" Text="Last Updated:" VerticalAlignment="Center"/>
-                <TextBox HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                <TextBox HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                <TextBox HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                <TextBox HorizontalAlignment="Stretch" Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                <TextBox HorizontalAlignment="Stretch" Grid.Row="5" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                <TextBox HorizontalAlignment="Stretch" Grid.Row="6" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                <TextBox HorizontalAlignment="Stretch" Grid.Row="7" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                <ComboBox HorizontalAlignment="Stretch" Grid.Row="8" Grid.Column="1" VerticalAlignment="Center"/>
-                <Button Grid.Column="1" Grid.Row="9" HorizontalAlignment="Left"  VerticalAlignment="Stretch" Content="Download Zip"/>
-                <TextBlock HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="10" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
-                <StackPanel Grid.Column="0" Grid.Row="11" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
-                    <CheckBox Content="Log At Install"/>
-                    <CheckBox Content="Append Extraction" Margin="10,0,0,0"/>
-                </StackPanel>
-                <StackPanel Grid.Column="0" Grid.Row="12" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
-                    <CheckBox Content="Visable"/>
-                    <CheckBox Content="Enabled" Margin="41,0,0,0"/>
-                </StackPanel>
-                <TabControl Grid.ColumnSpan="2" HorizontalAlignment="Stretch" Grid.Row="14" VerticalAlignment="Stretch">
-                    <TabItem Header="Description">
-                        <Grid Background="#FFE5E5E5"/>
-                    </TabItem>
-                    <TabItem Header="Update Notes">
-                        <Grid Background="#FFE5E5E5"/>
-                    </TabItem>
-                    <TabItem Header="Dependencies">
-                        <Grid Background="#FFE5E5E5"/>
-                    </TabItem>
-                    <TabItem Header="Logical Dependnecies">
-                        <Grid Background="#FFE5E5E5"/>
-                    </TabItem>
-                    <TabItem Header="Medias">
-                        <Grid Background="#FFE5E5E5"/>
-                    </TabItem>
-                    <TabItem Header="Userdatas">
-                        <Grid Background="#FFE5E5E5"/>
-                    </TabItem>
-                </TabControl>
-            </Grid>
+            <TabControl Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <TabItem Header="Basic">
+                    <Grid Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#FFE5E5E5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <ComboBox Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsEditable="True" />
+                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="1" TextWrapping="Wrap" Text="Name" VerticalAlignment="Center"/>
+                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="2" TextWrapping="Wrap" Text="Package Name" VerticalAlignment="Center"/>
+                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="3" TextWrapping="Wrap" Text="Start Address" VerticalAlignment="Center"/>
+                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="4" TextWrapping="Wrap" Text="Zip File" VerticalAlignment="Center"/>
+                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="5" TextWrapping="Wrap" Text="End Address" VerticalAlignment="Center"/>
+                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="6" TextWrapping="Wrap" Text="Dev URL" VerticalAlignment="Center"/>
+                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="7" TextWrapping="Wrap" Text="Version" VerticalAlignment="Center"/>
+                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="8" TextWrapping="Wrap" Text="Type" VerticalAlignment="Center"/>
+                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="9" TextWrapping="Wrap" Text="Level:" VerticalAlignment="Center"/>
+                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="10" TextWrapping="Wrap" Text="Last Updated:" VerticalAlignment="Center"/>
+                        <TextBox HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <TextBox HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <TextBox HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <TextBox HorizontalAlignment="Stretch" Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <TextBox HorizontalAlignment="Stretch" Grid.Row="5" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <TextBox HorizontalAlignment="Stretch" Grid.Row="6" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <TextBox HorizontalAlignment="Stretch" Grid.Row="7" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <ComboBox HorizontalAlignment="Stretch" Grid.Row="8" Grid.Column="1" VerticalAlignment="Center"/>
+                        <TextBlock HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="10" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
+                        <StackPanel Grid.Column="0" Grid.Row="11" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
+                            <CheckBox Content="Log At Install"/>
+                            <CheckBox Content="Visable" Margin="10,0,0,0"/>
+                            <CheckBox Content="Enabled" Margin="10,0,0,0"/>
+                        </StackPanel>
+                        <Button Grid.Column="0" Grid.Row="12" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Content="Download Zip"/>
+                        <Button Grid.Column="0" Grid.Row="13" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Upload Zip"/>
+                        <ProgressBar Grid.Column="1" Grid.Row="12" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                        <TextBlock Grid.Column="1" Grid.Row="12" HorizontalAlignment="Center" VerticalAlignment="Center" Text="TEST"/>
+                        <ProgressBar Grid.Column="1" Grid.Row="13" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                        <TextBlock Grid.Column="1" Grid.Row="13" HorizontalAlignment="Center" VerticalAlignment="Center" Text="TEST"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Description">
+                    <Grid Background="#FFE5E5E5">
+                        <TextBox TextWrapping="Wrap" Text="TextBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Update Notes">
+                    <Grid Background="#FFE5E5E5">
+                        <TextBox TextWrapping="Wrap" Text="TextBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Dependencies">
+                    <Grid Background="#FFE5E5E5">
+                        <ListBox HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
+                        <Button Content="Button" HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="75"/>
+                        <Button Content="Button" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="75"/>
+                        <Button Content="Button" HorizontalAlignment="Left" Margin="0,234,0,0" VerticalAlignment="Top" Width="75"/>
+                        <ComboBox HorizontalAlignment="Left" Margin="80,184,0,0" VerticalAlignment="Top" Width="397" Height="20"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Medias">
+                    <Grid Background="#FFE5E5E5">
+                        <ListBox HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
+                        <Button Content="Button" HorizontalAlignment="Left" Margin="0,253,0,0" VerticalAlignment="Top" Width="75"/>
+                        <Button Content="Button" HorizontalAlignment="Left" Margin="80,253,0,0" VerticalAlignment="Top" Width="75"/>
+                        <Button Content="Button" HorizontalAlignment="Left" Margin="160,253,0,0" VerticalAlignment="Top" Width="75"/>
+                        <ComboBox HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="487" Height="20"/>
+                        <TextBox HorizontalAlignment="Left" Height="39" Margin="0,209,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="487"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Userdatas">
+                    <Grid Background="#FFE5E5E5">
+                        <ListBox HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
+                        <Button Content="Button" HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="75"/>
+                        <Button Content="Button" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="75"/>
+                        <Button Content="Button" HorizontalAlignment="Left" Margin="0,234,0,0" VerticalAlignment="Top" Width="75"/>
+                        <TextBox HorizontalAlignment="Left" Margin="80,184,0,0" VerticalAlignment="Top" Width="397" Height="20"/>
+                    </Grid>
+                </TabItem>
+            </TabControl>
         </Grid>
     </Grid>
 </local:RelhaxWindow>
