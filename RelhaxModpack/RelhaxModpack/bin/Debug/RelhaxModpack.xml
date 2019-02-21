@@ -66,11 +66,6 @@
             determine if the mod has been downloaded and is ready for installation
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.AppendExtraction">
-            <summary>
-            determine if the package needs to be installed at the end
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.DatabasePackage.LogAtInstall">
             <summary>
             determine if the files from the package should be logged for uninstallation

@@ -55,10 +55,6 @@ namespace RelhaxModpack
         /// </summary>
         public bool ReadyForInstall = false;
         /// <summary>
-        /// determine if the package needs to be installed at the end
-        /// </summary>
-        public bool AppendExtraction = false;
-        /// <summary>
         /// determine if the files from the package should be logged for uninstallation
         /// only set this to false if absolutly necessary!
         /// </summary>

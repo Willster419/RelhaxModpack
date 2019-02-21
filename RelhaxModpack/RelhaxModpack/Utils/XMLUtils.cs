@@ -363,9 +363,6 @@ namespace RelhaxModpack
                         case "EndAddress":
                             package.EndAddress = xmlPackageProperty.Value.Trim();
                             break;
-                        case "AppendExtraction"://bool
-                            package.AppendExtraction = Utils.ParseBool(xmlPackageProperty.Value.Trim(),false);
-                            break;
                         case "LogAtInstall"://bool
                             package.LogAtInstall = Utils.ParseBool(xmlPackageProperty.Value.Trim(),false);
                             break;
@@ -705,9 +702,6 @@ namespace RelhaxModpack
                         case "enabled":
                             d.Enabled = Utils.ParseBool(globs.Value, false);
                             break;
-                        case "appendExtraction":
-                            d.AppendExtraction = Utils.ParseBool(globs.Value, false);
-                            break;
                         case "packageName":
                             d.PackageName = globs.Value.Trim();
                             if (string.IsNullOrEmpty(d.PackageName))
@@ -783,9 +777,6 @@ namespace RelhaxModpack
                             break;
                         case "enabled":
                             d.Enabled = Utils.ParseBool(globs.Value, false);
-                            break;
-                        case "appendExtraction":
-                            d.AppendExtraction = Utils.ParseBool(globs.Value, false);
                             break;
                         case "packageName":
                             d.PackageName = globs.Value.Trim();
@@ -1675,10 +1666,6 @@ namespace RelhaxModpack
                 globalDepEnabled.InnerText = "" + d.Enabled;
                 globalDependencyRoot.AppendChild(globalDepEnabled);
 
-                XmlElement globalDepAppendExtraction = doc.CreateElement("appendExtraction");
-                globalDepAppendExtraction.InnerText = "" + d.AppendExtraction;
-                globalDependencyRoot.AppendChild(globalDepAppendExtraction);
-
                 XmlElement globalDepPackageName = doc.CreateElement("packageName");
                 if (!string.IsNullOrWhiteSpace(d.PackageName))
                     globalDepPackageName.InnerText = d.PackageName.Trim();
@@ -1741,10 +1728,6 @@ namespace RelhaxModpack
                 XmlElement depEnabled = doc.CreateElement("enabled");
                 depEnabled.InnerText = "" + d.Enabled;
                 dependencyRoot.AppendChild(depEnabled);
-
-                XmlElement depAppendExtraction = doc.CreateElement("appendExtraction");
-                depAppendExtraction.InnerText = "" + d.AppendExtraction;
-                dependencyRoot.AppendChild(depAppendExtraction);
 
                 XmlElement depPackageName = doc.CreateElement("packageName");
                 if (!string.IsNullOrWhiteSpace(d.PackageName))
@@ -2241,7 +2224,6 @@ namespace RelhaxModpack
             SaveProperty(root, element, nameof(package.CRC), package.CRC, "", true);
             SaveProperty(root, element, nameof(package.StartAddress), package.StartAddress, Settings.DefaultStartAddress, true);
             SaveProperty(root, element, nameof(package.EndAddress), package.EndAddress, Settings.DefaultEndAddress, true);
-            SaveProperty(root, element, nameof(package.AppendExtraction), package.AppendExtraction.ToString(), false.ToString(), true);
             SaveProperty(root, element, nameof(package.LogAtInstall), package.LogAtInstall.ToString(), true.ToString(), true);
             SaveProperty(root, element, nameof(package.DevURL), package.DevURL, "", true);
             SaveProperty(root, element, nameof(package.InstallGroup), package.InstallGroup.ToString(), ((int)5).ToString(), true);
