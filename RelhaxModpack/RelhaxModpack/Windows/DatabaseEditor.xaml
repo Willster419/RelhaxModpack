@@ -15,7 +15,7 @@
         <Button Content="Move" HorizontalAlignment="Left" Margin="90,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"/>
         <Button Content="Add" HorizontalAlignment="Left" Margin="170,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"/>
         <Button Content="Copy To..." HorizontalAlignment="Left" Margin="250,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"/>
-        <Button Content="Load Database" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="1" Margin="0,0,100,10"  VerticalAlignment="Bottom" Width="85" Height="20"/>
+        <Button Content="Load Database" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="1" Margin="0,0,100,10"  VerticalAlignment="Bottom" Width="85" Height="20" Click="OnLoadDatabaseClick"/>
         <Button Content="Save Database" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="1" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="85" Height="20"/>
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
@@ -25,14 +25,8 @@
             </Grid.ColumnDefinitions>
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center"/>
             <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <TabItem Header="Global Dependencies">
-                    <Grid Background="#FFE5E5E5"/>
-                </TabItem>
-                <TabItem Header="Dependencies">
-                    <Grid Background="#FFE5E5E5"/>
-                </TabItem>
-                <TabItem Header="Database Objects">
-                    <Grid Background="#FFE5E5E5"/>
+                <TabItem Header="Database Tree View">
+                    <TreeView x:Name="DatabaseTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </TabItem>
                 <TabItem Header="Install Groups">
                     <Grid Background="#FFE5E5E5"/>
@@ -44,7 +38,7 @@
                     <Grid Background="#FFE5E5E5"/>
                 </TabItem>
             </TabControl>
-            <TabControl Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <TabControl Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,20,0,215">
                 <TabItem Header="Basic">
                     <Grid Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#FFE5E5E5">
                         <Grid.ColumnDefinitions>
@@ -69,7 +63,6 @@
                             <RowDefinition Height="20"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <ComboBox Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsEditable="True" />
                         <TextBlock HorizontalAlignment="Stretch" Grid.Row="1" TextWrapping="Wrap" Text="Name" VerticalAlignment="Center"/>
                         <TextBlock HorizontalAlignment="Stretch" Grid.Row="2" TextWrapping="Wrap" Text="Package Name" VerticalAlignment="Center"/>
                         <TextBlock HorizontalAlignment="Stretch" Grid.Row="3" TextWrapping="Wrap" Text="Start Address" VerticalAlignment="Center"/>
@@ -141,6 +134,7 @@
                     </Grid>
                 </TabItem>
             </TabControl>
+            <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsEditable="True" Grid.Column="2" Margin="0,0,0,609" />
         </Grid>
     </Grid>
 </local:RelhaxWindow>
