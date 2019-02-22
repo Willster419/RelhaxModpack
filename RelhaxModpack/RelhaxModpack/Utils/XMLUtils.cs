@@ -260,6 +260,7 @@ namespace RelhaxModpack
         public static bool ParseDatabaseV2(XDocument modInfoDocument, List<DatabasePackage> globalDependencies,
             List<Dependency> logicalDependencies, List<Category> parsedCategoryList)
         {
+            throw new BadMemeException("should probably finish this, don't you think?");
             //parsing the global dependencies
             bool globalParsed = ParseDatabaseV2GlobalDependencies(
                 modInfoDocument.XPathSelectElements("/modInfoAlpha.xml/globaldependencies/globaldependency").ToList(), globalDependencies);
@@ -2204,7 +2205,7 @@ namespace RelhaxModpack
             //save global depednecies
             //idea: method to handle root leemnts here, but make a "save element" and from there do more if(element is SelectablePackage)
             //save dependencies
-            
+            throw new BadMemeException("You should probably finishe this lol");
             //save categories
             
             //save databse
