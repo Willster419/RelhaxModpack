@@ -229,15 +229,15 @@ namespace RelhaxModpack
             if (modInfoDocument == null)
                 throw new BadMemeException("modInfoDocument is null dumbass");
             if (globalDependencies == null)
-                globalDependencies = new List<DatabasePackage>();
+                throw new BadMemeException("lists cannot be null");
             else
                 globalDependencies.Clear();
             if (dependencies == null)
-                dependencies = new List<Dependency>();
+                throw new BadMemeException("lists cannot be null");
             else
                 dependencies.Clear();
             if (parsedCategoryList == null)
-                parsedCategoryList = new List<Category>();
+                throw new BadMemeException("lists cannot be null");
             else
                 parsedCategoryList.Clear();
             //determine which version of the document we are loading. allows for loading of different versions if structure change
