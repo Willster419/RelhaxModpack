@@ -956,9 +956,10 @@
             </summary>
         </member>
         <member name="T:RelhaxModpack.Windows.AdvancedProgress">
-            <summary>
-            Interaction logic for Window1.xaml
-            </summary>
+            I exist as a branch
+             <summary>
+             Interaction logic for Window1.xaml
+             </summary>
             <summary>
             AdvancedProgress
             </summary>
