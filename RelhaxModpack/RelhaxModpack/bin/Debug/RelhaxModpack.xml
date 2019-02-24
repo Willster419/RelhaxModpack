@@ -789,6 +789,107 @@
             Load the custom color definitions from XML
             </summary>
         </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxMediaPlayer">
+            <summary>
+            Interaction logic for RelhaxMediaPlayer.xaml
+            </summary>
+            <summary>
+            RelhaxMediaPlayer
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxPreviewIndex">
+            <summary>
+            A RelhaxPreviewIndex item is a glorified textblock with a hyperlink with a refrence to a media element
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxProgress">
+            <summary>
+            The base class for reporting async progress to any UI receiver task.
+            There are up to 3 levels of tasks that can be reported: child, parent, and total. At least total will be implemented an any given usage case.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ChildCurrent">
+            <summary>
+            The current completed and total child level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ChildTotal">
+            <summary>
+            The current completed and total child level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ChildCurrentProgress">
+            <summary>
+            A custom formatted string to use if the async task supports/implements it
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ParrentCurrent">
+            <summary>
+            The current completed and total parent level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ParrentTotal">
+            <summary>
+            The current completed and total parent level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ParrentCurrentProgress">
+            <summary>
+            A custom formatted string to use if the async task supports/implements it
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.TotalCurrent">
+            <summary>
+            The current completed and total total level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.TotalTotal">
+            <summary>
+            The current completed and total total level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.TotalCurrentProgress">
+            <summary>
+            A custom formatted string to use if the async task supports/implements it
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ReportMessage">
+            <summary>
+            A custom formatted string to use if the async task supports/implements it
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.BytesProcessed">
+            <summary>
+            During zip file extraction, the number of processed bytes extracted, and the total bytes to extract.
+            During copy operations, the number of processed copied bytes, and the total bytes to copy.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.BytesTotal">
+            <summary>
+            During zip file extraction, the number of processed bytes extracted, and the total bytes to extract.
+            During copy operations, the number of processed copied bytes, and the total bytes to copy.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.Filename">
+            <summary>
+            The name of the file currently being processed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.EntryFilename">
+            <summary>
+            During zip file extraction, the entry inside the zip file being processed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.InstallStatus">
+            <summary>
+            The current status of the installer. Represents the current state of the installer. When it exists, it is also used as an exit code.
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.DeveloperSelectionsViewer">
             <summary>
             Interaction logic for DeveloperSelectionsViewer.xaml
@@ -1059,107 +1160,6 @@
         <member name="M:RelhaxModpack.Windows.VersionInfo.InitializeComponent">
             <summary>
             InitializeComponent
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.UIComponents.RelhaxMediaPlayer">
-            <summary>
-            Interaction logic for RelhaxMediaPlayer.xaml
-            </summary>
-            <summary>
-            RelhaxMediaPlayer
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.UIComponents.RelhaxPreviewIndex">
-            <summary>
-            A RelhaxPreviewIndex item is a glorified textblock with a hyperlink with a refrence to a media element
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.UIComponents.RelhaxProgress">
-            <summary>
-            The base class for reporting async progress to any UI receiver task.
-            There are up to 3 levels of tasks that can be reported: child, parent, and total. At least total will be implemented an any given usage case.
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ChildCurrent">
-            <summary>
-            The current completed and total child level tasks. (Tasks are arbitrary and defined by the task itself)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ChildTotal">
-            <summary>
-            The current completed and total child level tasks. (Tasks are arbitrary and defined by the task itself)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ChildCurrentProgress">
-            <summary>
-            A custom formatted string to use if the async task supports/implements it
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ParrentCurrent">
-            <summary>
-            The current completed and total parent level tasks. (Tasks are arbitrary and defined by the task itself)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ParrentTotal">
-            <summary>
-            The current completed and total parent level tasks. (Tasks are arbitrary and defined by the task itself)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ParrentCurrentProgress">
-            <summary>
-            A custom formatted string to use if the async task supports/implements it
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.TotalCurrent">
-            <summary>
-            The current completed and total total level tasks. (Tasks are arbitrary and defined by the task itself)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.TotalTotal">
-            <summary>
-            The current completed and total total level tasks. (Tasks are arbitrary and defined by the task itself)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.TotalCurrentProgress">
-            <summary>
-            A custom formatted string to use if the async task supports/implements it
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ReportMessage">
-            <summary>
-            A custom formatted string to use if the async task supports/implements it
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.BytesProcessed">
-            <summary>
-            During zip file extraction, the number of processed bytes extracted, and the total bytes to extract.
-            During copy operations, the number of processed copied bytes, and the total bytes to copy.
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.BytesTotal">
-            <summary>
-            During zip file extraction, the number of processed bytes extracted, and the total bytes to extract.
-            During copy operations, the number of processed copied bytes, and the total bytes to copy.
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.Filename">
-            <summary>
-            The name of the file currently being processed
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.EntryFilename">
-            <summary>
-            During zip file extraction, the entry inside the zip file being processed
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.InstallStatus">
-            <summary>
-            The current status of the installer. Represents the current state of the installer. When it exists, it is also used as an exit code.
             </summary>
         </member>
         <member name="T:RelhaxModpack.CiInfo">
