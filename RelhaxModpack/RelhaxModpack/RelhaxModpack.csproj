@@ -125,6 +125,7 @@
     <Compile Include="Settings\ThirdPartySettings.cs" />
     <Compile Include="Settings\UISettings.cs" />
     <Compile Include="UIComponents\ComboBoxItem.cs" />
+    <Compile Include="UIComponents\EditorComboBoxItem.cs" />
     <Compile Include="Windows\DeveloperSelectionsViewer.xaml.cs">
       <DependentUpon>DeveloperSelectionsViewer.xaml</DependentUpon>
     </Compile>

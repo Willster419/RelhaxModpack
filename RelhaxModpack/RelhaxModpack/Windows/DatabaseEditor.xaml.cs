@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml;
 using Microsoft.Win32;
+using RelhaxModpack.UIComponents;
 
 namespace RelhaxModpack.Windows
 {
@@ -25,9 +26,9 @@ namespace RelhaxModpack.Windows
 
         private EditorSettings EditorSettings;
         private XmlDocument XmlDatabase;
-        private List<DatabasePackage> GlobalDependencies;
-        private List<Dependency> Dependencies;
-        private List<Category> ParsedCategoryList;
+        private List<DatabasePackage> GlobalDependencies = new List<DatabasePackage>();
+        private List<Dependency> Dependencies = new List<Dependency>();
+        private List<Category> ParsedCategoryList = new List<Category>();
         private OpenFileDialog OpenDatabaseDialog;
         private SaveFileDialog SaveDatabaseDialog;
         private OpenFileDialog OpenZipFileDialog;
@@ -135,7 +136,44 @@ namespace RelhaxModpack.Windows
             //clear and reset
             DatabaseTreeView.Items.Clear();
             //RESET UI TODO? or don't do it?
+            //create treeviewItems for each entry
+            //first make the globalDependencies header
+            TreeViewItem globalDependenciesHeader = new TreeViewItem() {Header = UIHeaders[0]};
+            //add it to the main view
+            DatabaseTreeView.Items.Add(globalDependenciesHeader);
+            //loop to add all the global dependencies to a treeview item, which is a new comboboxitem, which is the package and displayname
+            foreach(DatabasePackage globalDependency in GlobalDependencies)
+            {
+                globalDependenciesHeader.Items.Add(new TreeViewItem() { Header = new EditorComboBoxItem(globalDependency, globalDependency.PackageName)});
+            }
 
+            //same for dependencies
+            TreeViewItem dependenciesHeader = new TreeViewItem() { Header = UIHeaders[1] };
+            DatabaseTreeView.Items.Add(dependenciesHeader);
+            foreach (DatabasePackage dependency in Dependencies)
+            {
+                dependenciesHeader.Items.Add(new TreeViewItem() { Header = new EditorComboBoxItem(dependency, dependency.PackageName) });
+            }
+
+            //add the category, then add each level recursivly
+            foreach (Category cat in parsedCategoryList)
+            {
+                TreeViewItem CategoryHeader = new TreeViewItem() { Header = cat };
+                DatabaseTreeView.Items.Add(CategoryHeader);
+                LoadUI(CategoryHeader, cat.Packages);
+            }
+        }
+        private void LoadUI(TreeViewItem parent, List<SelectablePackage> packages)
+        {
+            foreach(SelectablePackage package in packages)
+            {
+                //make a TVI for it
+                TreeViewItem packageTVI = new TreeViewItem() { Header = new EditorComboBoxItem(package, package.PackageName) };
+                //and have the parent add it
+                parent.Items.Add(packageTVI);
+                if (package.Packages.Count > 0)
+                    LoadUI(packageTVI, package.Packages);
+            }
         }
     }
 }

@@ -38,7 +38,7 @@
                     <Grid Background="#FFE5E5E5"/>
                 </TabItem>
             </TabControl>
-            <TabControl Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,20,0,215">
+            <TabControl Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,20,0,0">
                 <TabItem Header="Basic">
                     <Grid Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#FFE5E5E5">
                         <Grid.ColumnDefinitions>
@@ -133,8 +133,17 @@
                         <TextBox HorizontalAlignment="Left" Margin="80,184,0,0" VerticalAlignment="Top" Width="397" Height="20"/>
                     </Grid>
                 </TabItem>
+                <TabItem Header="Triggers">
+                    <Grid Background="#FFE5E5E5">
+                        <ListBox HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
+                        <Button Content="Button" HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="75"/>
+                        <Button Content="Button" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="75"/>
+                        <Button Content="Button" HorizontalAlignment="Left" Margin="0,234,0,0" VerticalAlignment="Top" Width="75"/>
+                        <ComboBox HorizontalAlignment="Left" Margin="80,184,0,0" VerticalAlignment="Top" Width="397" Height="20"/>
+                    </Grid>
+                </TabItem>
             </TabControl>
-            <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsEditable="True" Grid.Column="2" Margin="0,0,0,609" />
+            <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Top" IsEditable="True" Grid.Column="2"  />
         </Grid>
     </Grid>
 </local:RelhaxWindow>
