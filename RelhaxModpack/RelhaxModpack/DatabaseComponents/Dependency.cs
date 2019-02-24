@@ -11,5 +11,12 @@ namespace RelhaxModpack
         public List<DatabaseLogic> DatabasePackageLogic = new List<DatabaseLogic>();
         //list of dependnecies this dependency calls on
         public List<DatabaseLogic> Dependencies = new List<DatabaseLogic>();
+        //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/versioning-with-the-override-and-new-keywords
+
+        public Dependency()
+        {
+            //https://stackoverflow.com/questions/326223/overriding-fields-or-properties-in-subclasses
+            InstallGroup = 2;
+        }
     }
 }

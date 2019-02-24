@@ -16,6 +16,7 @@ namespace RelhaxModpack
         /// </summary>
         public SelectablePackage()
         {
+            InstallGroup = 4;
             switch (ModpackSettings.ModSelectionView)
             {
                 case SelectionView.DefaultV2:
