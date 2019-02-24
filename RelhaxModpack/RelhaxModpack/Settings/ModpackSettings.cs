@@ -162,6 +162,7 @@ namespace RelhaxModpack
         public static bool ExportMode = false;
         public static bool ForceEnabled = false;
         public static bool ForceVisible = false;
+        public static bool DisableTriggers = false;
         /// <summary>
         /// Toggle the advanced installation progress window
         /// </summary>

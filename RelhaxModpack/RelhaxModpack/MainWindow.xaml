@@ -117,6 +117,7 @@
                         <CheckBox Content="Minimze to system tray"/>
                         <CheckBox x:Name="AskDownloadCacheDelete" Content="Ask to delete old cache files"/>
                         <CheckBox x:Name="VerboseLoggingCB" Tag="VerboseLoggingCB" Content="Verbose Logging"/>
+                        <CheckBox x:Name="DisableTriggersCB" Tag="DisableTriggersCB" Content="Disable Triggers"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
                         <CheckBox x:Name="EnableModsAutoSyncCheckBox" Content="Enable mods auto-sync" IsEnabled="False"/>

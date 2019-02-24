@@ -170,31 +170,34 @@ namespace RelhaxModpack.InstallerComponents
             //also check enalbed just to be safe
             List<SelectablePackage> selectedPackages = FlatListSelectablePackages.Where(package => package.Checked && package.Enabled).ToList();
             //do any list processing here
-            //process any packages that have triggers
-            //reset the internal list first
-            foreach(Trigger trig in Triggers)
+            if(!ModpackSettings.DisableTriggers)
             {
-                if (trig.Total != 0)
-                    trig.Total = 0;
-                if (trig.NumberProcessed != 0)
-                    trig.NumberProcessed = 0;
-                trig.Fired = false;
-                trig.TriggerTask = null;
-            }
-            foreach(DatabasePackage package in PackagesToInstall)
-            {
-                if(package.Triggers.Count > 0)
+                //process any packages that have triggers
+                //reset the internal list first
+                foreach (Trigger trig in Triggers)
                 {
-                    foreach(string triggerFromPackage in package.Triggers)
+                    if (trig.Total != 0)
+                        trig.Total = 0;
+                    if (trig.NumberProcessed != 0)
+                        trig.NumberProcessed = 0;
+                    trig.Fired = false;
+                    trig.TriggerTask = null;
+                }
+                foreach (DatabasePackage package in PackagesToInstall)
+                {
+                    if (package.Triggers.Count > 0)
                     {
-                        //in theory, each database package trigger is unique in each package AND in installer
-                        Trigger match = Triggers.Find(search => search.Name.ToLower().Equals(triggerFromPackage.ToLower()));
-                        if(match == null)
+                        foreach (string triggerFromPackage in package.Triggers)
                         {
-                            Logging.Debug("trigger match is null (no match!) {0}", triggerFromPackage);
-                            continue;
+                            //in theory, each database package trigger is unique in each package AND in installer
+                            Trigger match = Triggers.Find(search => search.Name.ToLower().Equals(triggerFromPackage.ToLower()));
+                            if (match == null)
+                            {
+                                Logging.Debug("trigger match is null (no match!) {0}", triggerFromPackage);
+                                continue;
+                            }
+                            match.Total++;
                         }
-                        match.Total++;
                     }
                 }
             }
@@ -351,7 +354,7 @@ namespace RelhaxModpack.InstallerComponents
 
             //step 8: patch files (async option)
             //make the task array here. so far can be a maximum of 3 items
-            Task[] concurrentTasksAfterMainExtractoin = new Task[2];
+            Task[] concurrentTasksAfterMainExtractoin = new Task[3];
             int taskIndex = 0;
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
@@ -392,6 +395,29 @@ namespace RelhaxModpack.InstallerComponents
             else
                 Logging.WriteToLog("...skipped (no shortcut entries parsed)");
 
+            if(ModpackSettings.DisableTriggers)
+            {
+                //step 10: create atlasas (async option)
+                OldTime = InstallStopWatch.Elapsed;
+                Progress.TotalCurrent++;
+                InstallFinishedArgs.ExitCodes++;
+                Logging.WriteToLog(string.Format("Creating of atlases, current install time = {0} msec",
+                    InstallStopWatch.Elapsed.TotalMilliseconds));
+                List<Atlas> atlases = MakeAtlasList();
+                if (atlases.Count > 0)
+                {
+                    concurrentTasksAfterMainExtractoin[taskIndex++] = Task.Factory.StartNew(() =>
+                    {
+                        foreach (Atlas atlas in atlases)
+                        {
+                            Utils.CreateAtlas(atlas);
+                        }
+                    });
+                }
+                else
+                    Logging.WriteToLog("...skipped (no atlas entries parsed)");
+            }
+
             
             //barrier goes here to make sure cleanup is the last thing to do
             Task.WaitAll(concurrentTasksAfterMainExtractoin);
@@ -403,18 +429,21 @@ namespace RelhaxModpack.InstallerComponents
             Logging.WriteToLog(string.Format("Cleanup, current install time = {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds));
             Cleanup();
             Logging.Info("Cleanup complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
-
-            //check if any triggers are still running
-            foreach(Trigger trigger in Triggers)
+            
+            if(!ModpackSettings.DisableTriggers)
             {
-                if (trigger.TriggerTask != null)
+                //check if any triggers are still running
+                foreach (Trigger trigger in Triggers)
                 {
-                    Logging.Debug("Start waiting for task {0} to complete at time {1}", trigger.Name, InstallStopWatch.Elapsed.TotalMilliseconds);
-                    trigger.TriggerTask.Wait();
-                    Logging.Debug("Task {0} finished or was already done at time {1}", trigger.Name, InstallStopWatch.Elapsed.TotalMilliseconds);
+                    if (trigger.TriggerTask != null)
+                    {
+                        Logging.Debug("Start waiting for task {0} to complete at time {1}", trigger.Name, InstallStopWatch.Elapsed.TotalMilliseconds);
+                        trigger.TriggerTask.Wait();
+                        Logging.Debug("Task {0} finished or was already done at time {1}", trigger.Name, InstallStopWatch.Elapsed.TotalMilliseconds);
+                    }
+                    else
+                        Logging.Debug("Trigger task {0} is null, skipping", trigger.Name);
                 }
-                else
-                    Logging.Debug("Trigger task {0} is null, skipping", trigger.Name);
             }
 
             //and i guess we're done
@@ -719,9 +748,12 @@ namespace RelhaxModpack.InstallerComponents
                         if (string.IsNullOrWhiteSpace(package.ZipFile))
                             continue;
                         Unzip(package, threadNum);
-                        //after zip file extraction, process triggers
-                        if (package.Triggers.Count > 0)
-                            ProcessTriggers(package.Triggers);
+                        //after zip file extraction, process triggers (if enabled)
+                        if(!ModpackSettings.DisableTriggers)
+                        {
+                            if (package.Triggers.Count > 0)
+                                ProcessTriggers(package.Triggers);
+                        }
                     }
                 }
                 if (numExtracted == packagesToExtract.Count)
