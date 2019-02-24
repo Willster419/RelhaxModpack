@@ -309,13 +309,31 @@
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center"/>
             <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <TabItem Header="Database Tree View">
-                    <TreeView x:Name="DatabaseTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <TreeView x:Name="DatabaseTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <TreeView.Resources>
+                            <!-- Style the inactive selection the same as active -->
+                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
+                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightTextColorKey}}"/>
+                        </TreeView.Resources>
+                    </TreeView>
                 </TabItem>
                 <TabItem Header="Install Groups">
-                    <TreeView x:Name="InstallGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <TreeView x:Name="InstallGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <TreeView.Resources>
+                            <!-- Style the inactive selection the same as active -->
+                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
+                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightTextColorKey}}"/>
+                        </TreeView.Resources>
+                    </TreeView>
                 </TabItem>
                 <TabItem Header="Patch Groups">
-                    <TreeView x:Name="PatchGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <TreeView x:Name="PatchGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <TreeView.Resources>
+                            <!-- Style the inactive selection the same as active -->
+                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
+                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightTextColorKey}}"/>
+                        </TreeView.Resources>
+                    </TreeView>
                 </TabItem>
                 <TabItem Header="Settings">
                     <Grid Background="#FFE5E5E5">
