@@ -162,6 +162,40 @@ namespace RelhaxModpack.Windows
                 DatabaseTreeView.Items.Add(CategoryHeader);
                 LoadUI(CategoryHeader, cat.Packages);
             }
+
+            //load the install and patch groups
+            InstallGroupsTreeView.Items.Clear();
+            //make a flat list (can be used in patchGroup as well)
+            List<DatabasePackage> allFlatList = Utils.GetFlatList(GlobalDependencies, dependnecies, null, parsedCategoryList);
+            //make an array of group headers
+            TreeViewItem[] installGroupHeaders = new TreeViewItem[Utils.GetMaxInstallGroupNumber(allFlatList)+1];
+            //for each group header, get the list of packages that have an equal install group number
+            for (int i = 0; i < installGroupHeaders.Count(); i++)
+            {
+                installGroupHeaders[i] = new TreeViewItem() { Header = string.Format("---Install Group {0}---", i) };
+                InstallGroupsTreeView.Items.Add(installGroupHeaders[i]);
+                installGroupHeaders[i].Items.Clear();
+                foreach (DatabasePackage packageWithEqualGroupNumber in allFlatList.Where(package => package.InstallGroup == i).ToList())
+                {
+                    //add them to the install group headers
+                    installGroupHeaders[i].Items.Add(new TreeViewItem() { Header = new EditorComboBoxItem(packageWithEqualGroupNumber, packageWithEqualGroupNumber.PackageName) });
+                }
+            }
+
+            //do the same for patchgroups
+            PatchGroupsTreeView.Items.Clear();
+            TreeViewItem[] patchGroupHeaders = new TreeViewItem[Utils.GetMaxPatchGroupNumber(allFlatList)+1];
+            //for each group header, get the list of packages that have an equal patch group number
+            for (int i = 0; i < patchGroupHeaders.Count(); i++)
+            {
+                patchGroupHeaders[i] = new TreeViewItem() { Header = string.Format("---patch Group {0}---", i) };
+                PatchGroupsTreeView.Items.Add(patchGroupHeaders[i]);
+                patchGroupHeaders[i].Items.Clear();
+                foreach (DatabasePackage packageWithEqualGroupNumber in allFlatList.Where(package => package.PatchGroup == i).ToList())
+                {
+                    patchGroupHeaders[i].Items.Add(new TreeViewItem() { Header = new EditorComboBoxItem(packageWithEqualGroupNumber, packageWithEqualGroupNumber.PackageName) });
+                }
+            }
         }
         private void LoadUI(TreeViewItem parent, List<SelectablePackage> packages)
         {
