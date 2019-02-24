@@ -15,6 +15,7 @@ using System.IO;
 using Microsoft.Win32;
 using RelhaxModpack.UIComponents;
 using System.Xml.Linq;
+using ComboBoxItem = RelhaxModpack.UIComponents.ComboBoxItem;
 
 namespace RelhaxModpack.Windows
 {

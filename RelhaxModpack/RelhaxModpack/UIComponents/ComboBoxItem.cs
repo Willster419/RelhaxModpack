@@ -1,4 +1,4 @@
-﻿namespace RelhaxModpack
+﻿namespace RelhaxModpack.UIComponents
 {
     //an item to add to a ComboBox
     class ComboBoxItem : System.Windows.Controls.ComboBoxItem
