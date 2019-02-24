@@ -11,12 +11,12 @@
             <RowDefinition Height="632*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <Button Content="Remove" HorizontalAlignment="Left" Margin="10,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"/>
-        <Button Content="Move" HorizontalAlignment="Left" Margin="90,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"/>
-        <Button Content="Add" HorizontalAlignment="Left" Margin="170,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"/>
-        <Button Content="Copy To..." HorizontalAlignment="Left" Margin="250,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"/>
-        <Button Content="Load Database" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="1" Margin="0,0,100,10"  VerticalAlignment="Bottom" Width="85" Height="20" Click="OnLoadDatabaseClick"/>
-        <Button Content="Save Database" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="1" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="85" Height="20"/>
+        <Button x:Name="RemoveDatabaseObjectButton" Content="Remove" HorizontalAlignment="Left" Margin="10,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"/>
+        <Button x:Name="MoveDatabaseObjectButton" Content="Move" HorizontalAlignment="Left" Margin="90,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"/>
+        <Button x:Name="AddDatabaseObjectButton" Content="Add" HorizontalAlignment="Left" Margin="170,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"/>
+        <Button x:Name="CopyToDatabaseObjectButton" Content="Copy To..." HorizontalAlignment="Left" Margin="250,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"/>
+        <Button x:Name="LoadDatabaseButton" Content="Load Database" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="1" Margin="0,0,100,10"  VerticalAlignment="Bottom" Width="85" Height="20" Click="OnLoadDatabaseClick"/>
+        <Button x:Name="SaveDatabaseButton" Content="Save Database" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="1" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="85" Height="20"/>
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" MinWidth="250"/>
@@ -29,13 +29,45 @@
                     <TreeView x:Name="DatabaseTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </TabItem>
                 <TabItem Header="Install Groups">
-                    <Grid Background="#FFE5E5E5"/>
+                    <TreeView x:Name="InstallGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </TabItem>
                 <TabItem Header="Patch Groups">
-                    <Grid Background="#FFE5E5E5"/>
+                    <TreeView x:Name="PatchGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </TabItem>
                 <TabItem Header="Settings">
-                    <Grid Background="#FFE5E5E5"/>
+                    <Grid Background="#FFE5E5E5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="45"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:Name="WotmodsUsernameTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Wotmods Username" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0"/>
+                        <TextBlock x:Name="WotmodsPasswordTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Wotmods Password" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1"/>
+                        <TextBlock x:Name="BigmodsUsernameTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Bigmods Username" VerticalAlignment="Center" Grid.Column="0" Grid.Row="2"/>
+                        <TextBlock x:Name="BigmodsPasswordTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Bigmods Password" VerticalAlignment="Center" Grid.Column="0" Grid.Row="3"/>
+                        <TextBlock x:Name="SaveSelectionBeforeLeaveTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Save Selection information before leave" VerticalAlignment="Center" Grid.Column="0" Grid.Row="4"/>
+                        <TextBlock x:Name="SortCategoriesTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Sort each category&#xA;(includes dependencies)" VerticalAlignment="Center" Grid.Column="0" Grid.Row="5"/>
+                        <TextBlock x:Name="ApplyBehaviorTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Apply Behavior" VerticalAlignment="Center" Grid.Column="0" Grid.Row="6"/>
+                        <TextBox x:Name="WotmodsUsernameSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0"/>
+                        <TextBox x:Name="WotmodsPasswordSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1"/>
+                        <TextBox x:Name="BigmodsUsernameSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2"/>
+                        <TextBox x:Name="BigmodsPasswordSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="3"/>
+                        <CheckBox x:Name="SaveSelectionBeforeLeaveSetting" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Column="1" Grid.Row="4"/>
+                        <CheckBox x:Name="SortCategoriesSetting" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Column="1" Grid.Row="5"/>
+                        <StackPanel HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="6">
+                            <RadioButton x:Name="ApplyBehaviorDefaultSetting" Content="Default"/>
+                            <RadioButton x:Name="ApplyBehaviorApplyTriggersSaveSetting" Content="Apply triggers Save"/>
+                            <RadioButton x:Name="ApplyBehaviorSaveTriggersApplySetting" Content="Save triggers Apply"/>
+                        </StackPanel>
+                    </Grid>
                 </TabItem>
             </TabControl>
             <TabControl Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,20,0,0">
@@ -63,16 +95,16 @@
                             <RowDefinition Height="20"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="1" TextWrapping="Wrap" Text="Name" VerticalAlignment="Center"/>
-                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="2" TextWrapping="Wrap" Text="Package Name" VerticalAlignment="Center"/>
-                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="3" TextWrapping="Wrap" Text="Start Address" VerticalAlignment="Center"/>
-                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="4" TextWrapping="Wrap" Text="Zip File" VerticalAlignment="Center"/>
-                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="5" TextWrapping="Wrap" Text="End Address" VerticalAlignment="Center"/>
-                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="6" TextWrapping="Wrap" Text="Dev URL" VerticalAlignment="Center"/>
-                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="7" TextWrapping="Wrap" Text="Version" VerticalAlignment="Center"/>
-                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="8" TextWrapping="Wrap" Text="Type" VerticalAlignment="Center"/>
-                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="9" TextWrapping="Wrap" Text="Level:" VerticalAlignment="Center"/>
-                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="10" TextWrapping="Wrap" Text="Last Updated:" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageDisplayNameTextBlock" HorizontalAlignment="Stretch" Grid.Row="1" TextWrapping="Wrap" Text="Name" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageNameTextBlock" HorizontalAlignment="Stretch" Grid.Row="2" TextWrapping="Wrap" Text="Package Name" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageStartAddressTextBlock" HorizontalAlignment="Stretch" Grid.Row="3" TextWrapping="Wrap" Text="Start Address" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageZipFileTextBlock" HorizontalAlignment="Stretch" Grid.Row="4" TextWrapping="Wrap" Text="Zip File" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageEndAddressTextBlock" HorizontalAlignment="Stretch" Grid.Row="5" TextWrapping="Wrap" Text="End Address" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageDevURLTextBlock" HorizontalAlignment="Stretch" Grid.Row="6" TextWrapping="Wrap" Text="Dev URL" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageVersionTextBlock" HorizontalAlignment="Stretch" Grid.Row="7" TextWrapping="Wrap" Text="Version" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PakageTypeTextBlock" HorizontalAlignment="Stretch" Grid.Row="8" TextWrapping="Wrap" Text="Type" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageLevelTextBlock" HorizontalAlignment="Stretch" Grid.Row="9" TextWrapping="Wrap" Text="Level:" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackagLastUpdatedTextBlock" HorizontalAlignment="Stretch" Grid.Row="10" TextWrapping="Wrap" Text="Last Updated:" VerticalAlignment="Center"/>
                         <TextBox HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
