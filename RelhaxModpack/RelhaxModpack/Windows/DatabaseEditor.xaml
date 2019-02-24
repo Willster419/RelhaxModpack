@@ -171,7 +171,7 @@
                         <Button Content="Button" HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="75"/>
                         <Button Content="Button" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="75"/>
                         <Button Content="Button" HorizontalAlignment="Left" Margin="0,234,0,0" VerticalAlignment="Top" Width="75"/>
-                        <ComboBox HorizontalAlignment="Left" Margin="80,184,0,0" VerticalAlignment="Top" Width="397" Height="20"/>
+                        <ComboBox x:Name="TriggerSelectionComboBox" HorizontalAlignment="Left" Margin="80,184,0,0" VerticalAlignment="Top" Width="397" Height="20"/>
                         <TextBox HorizontalAlignment="Left" Height="83" Margin="0,498,0,0" TextWrapping="Wrap" Text="Currently Supported Triggers:&#xD;&#xA;build_contour_icons - start the process of building the contour icons atlas files&#xD;&#xA;create_shortcuts - start the process of creating the shortcuts" VerticalAlignment="Top" Width="487"/>
                     </Grid>
                 </TabItem>

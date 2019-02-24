@@ -69,6 +69,12 @@ namespace RelhaxModpack.Windows
                     Logging.Info("file does not exist");
                 }
             }
+            //load the trigger box with trigger options
+            TriggerSelectionComboBox.Items.Clear();
+            foreach(Trigger t in InstallerComponents.InstallEngine.Triggers)
+            {
+                TriggerSelectionComboBox.Items.Add(t.Name);
+            }
         }
 
         private void OnApplicationClose(object sender, EventArgs e)
