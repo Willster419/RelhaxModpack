@@ -877,6 +877,34 @@ namespace RelhaxModpack
                 package.Checked = false;
             }
         }
+
+        public static int GetMaxInstallGroupNumber(List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList)
+        {
+            return GetMaxInstallGroupNumber(GetFlatList(globalDependencies, dependencies, null, parsedCategoryList));
+        }
+
+        public static int GetMaxInstallGroupNumber(List<DatabasePackage> listToCheck)
+        {
+            int maxInstallGroup = 0;
+            foreach (DatabasePackage package in listToCheck)
+                if (package.InstallGroup > maxInstallGroup)
+                    maxInstallGroup = package.InstallGroup;
+            return maxInstallGroup;
+        }
+
+        public static int GetMaxPatchGroupNumber(List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList)
+        {
+            return GetMaxPatchGroupNumber(GetFlatList(globalDependencies, dependencies, null, parsedCategoryList));
+        }
+
+        public static int GetMaxPatchGroupNumber(List<DatabasePackage> listToCheck)
+        {
+            int maxPatchGroup = 0;
+            foreach (DatabasePackage package in listToCheck)
+                if (package.PatchGroup > maxPatchGroup)
+                    maxPatchGroup = package.PatchGroup;
+            return maxPatchGroup;
+        }
         #endregion
 
         #region Generic Utils
@@ -1021,6 +1049,7 @@ namespace RelhaxModpack
             return flatList;
         }
         #endregion
+
         #region Macro Utils
         public static void BuildFilepathMacroList()
         {
