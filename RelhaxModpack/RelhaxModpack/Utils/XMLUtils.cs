@@ -674,7 +674,7 @@ namespace RelhaxModpack
                 List<string> depNodeList = new List<string>() { "zipFile", "crc", "enabled", "packageName", "appendExtraction" };
                 List<string> optionalDepNodList = new List<string>() { "startAddress", "endAddress", "devURL", "timestamp", "logAtInstall" };
                 List<string> unknownNodeList = new List<string>() { };
-                Dependency d = new Dependency();
+                DatabasePackage d = new DatabasePackage();
                 foreach (XElement globs in dependencyNode.Elements())
                 {
                     switch (globs.Name.ToString())
