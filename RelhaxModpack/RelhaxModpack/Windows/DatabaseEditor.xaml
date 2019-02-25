@@ -422,10 +422,6 @@
                         </StackPanel>
                         <Button Grid.Column="0" Grid.Row="12" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Content="Download Zip"/>
                         <Button Grid.Column="0" Grid.Row="13" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Upload Zip"/>
-                        <ProgressBar Grid.Column="1" Grid.Row="12" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                        <TextBlock Grid.Column="1" Grid.Row="12" HorizontalAlignment="Center" VerticalAlignment="Center" Text="TEST"/>
-                        <ProgressBar Grid.Column="1" Grid.Row="13" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                        <TextBlock Grid.Column="1" Grid.Row="13" HorizontalAlignment="Center" VerticalAlignment="Center" Text="TEST"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Description">
@@ -441,38 +437,38 @@
                 <TabItem Header="Dependencies">
                     <Grid Background="#FFE5E5E5">
                         <ListBox HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
-                        <Button Content="Button" HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="75"/>
-                        <Button Content="Button" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="75"/>
-                        <Button Content="Button" HorizontalAlignment="Left" Margin="0,234,0,0" VerticalAlignment="Top" Width="75"/>
-                        <ComboBox HorizontalAlignment="Left" Margin="80,184,0,0" VerticalAlignment="Top" Width="397" Height="20"/>
+                        <Button Content="Add selected" HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="100"/>
+                        <Button Content="Remove Selected" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="100"/>
+                        <ComboBox HorizontalAlignment="Left" Margin="105,184,0,0" VerticalAlignment="Top" Width="372" Height="20"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Medias">
                     <Grid Background="#FFE5E5E5">
                         <ListBox HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
-                        <Button Content="Button" HorizontalAlignment="Left" Margin="0,253,0,0" VerticalAlignment="Top" Width="75"/>
-                        <Button Content="Button" HorizontalAlignment="Left" Margin="80,253,0,0" VerticalAlignment="Top" Width="75"/>
-                        <Button Content="Button" HorizontalAlignment="Left" Margin="160,253,0,0" VerticalAlignment="Top" Width="75"/>
+                        <Button Content="Add Media" HorizontalAlignment="Left" Margin="0,253,0,0" VerticalAlignment="Top" Width="100"/>
+                        <Button Content="Apply Edit" HorizontalAlignment="Left" Margin="105,253,0,0" VerticalAlignment="Top" Width="100"/>
+                        <Button Content="Remove Media" HorizontalAlignment="Left" Margin="210,253,0,0" VerticalAlignment="Top" Width="100"/>
                         <ComboBox HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="487" Height="20"/>
                         <TextBox HorizontalAlignment="Left" Height="39" Margin="0,209,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="487"/>
+                        <Button Content="Preview Selected Media" HorizontalAlignment="Left" Margin="0,278,0,0" VerticalAlignment="Top" Width="135"/>
+                        <Button Content="Preview Edit Media" HorizontalAlignment="Left" Margin="140,278,0,0" VerticalAlignment="Top" Width="110"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Userdatas">
                     <Grid Background="#FFE5E5E5">
                         <ListBox HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
-                        <Button Content="Button" HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="75"/>
-                        <Button Content="Button" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="75"/>
-                        <Button Content="Button" HorizontalAlignment="Left" Margin="0,234,0,0" VerticalAlignment="Top" Width="75"/>
-                        <TextBox HorizontalAlignment="Left" Margin="80,184,0,0" VerticalAlignment="Top" Width="397" Height="20"/>
+                        <Button Content="Add Userdata" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="100"/>
+                        <Button Content="Apply Edit" HorizontalAlignment="Left" Margin="105,209,0,0" VerticalAlignment="Top" Width="100"/>
+                        <Button Content="Remove Userdata" HorizontalAlignment="Left" Margin="210,209,0,0" VerticalAlignment="Top" Width="100"/>
+                        <TextBox HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Triggers">
                     <Grid Background="#FFE5E5E5">
                         <ListBox HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
-                        <Button Content="Button" HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="75"/>
-                        <Button Content="Button" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="75"/>
-                        <Button Content="Button" HorizontalAlignment="Left" Margin="0,234,0,0" VerticalAlignment="Top" Width="75"/>
-                        <ComboBox x:Name="TriggerSelectionComboBox" HorizontalAlignment="Left" Margin="80,184,0,0" VerticalAlignment="Top" Width="397" Height="20"/>
+                        <Button Content="Add selected Trigger" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="120"/>
+                        <Button Content="Remove Trigger" HorizontalAlignment="Left" Margin="125,209,0,0" VerticalAlignment="Top" Width="120"/>
+                        <ComboBox x:Name="TriggerSelectionComboBox" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
                         <TextBox HorizontalAlignment="Left" Height="83" Margin="0,498,0,0" TextWrapping="Wrap" Text="Currently Supported Triggers:&#xA;build_contour_icons - start the process of building the contour icons atlas files&#xA;create_shortcuts - start the process of creating the shortcuts" VerticalAlignment="Top" Width="487"/>
                     </Grid>
                 </TabItem>
