@@ -33,6 +33,8 @@ namespace RelhaxModpack.Windows
         private SaveFileDialog SaveDatabaseDialog;
         private OpenFileDialog OpenZipFileDialog;
         private SaveFileDialog SaveZipFileDialog;
+        private System.Windows.Forms.Timer DragDropTimer = new System.Windows.Forms.Timer() {Enabled = false, Interval = 1000 };
+        private TreeViewItem ItemToExpand;
         private string[] UIHeaders = new string[]
         {
             "-----Global Dependencies-----",
@@ -74,6 +76,24 @@ namespace RelhaxModpack.Windows
             foreach(Trigger t in InstallerComponents.InstallEngine.Triggers)
             {
                 TriggerSelectionComboBox.Items.Add(t.Name);
+            }
+            //hook up timer
+            DragDropTimer.Tick += OnDragDropTimerTick;
+        }
+
+        private void OnDragDropTimerTick(object sender, EventArgs e)
+        {
+            DragDropTimer.Stop();
+            if(ItemToExpand.Header is EditorComboBoxItem item)
+            {
+                if(item.Package is SelectablePackage sp)
+                {
+                    if(sp.Packages.Count > 0)
+                    {
+                        if (!ItemToExpand.IsExpanded)
+                            ItemToExpand.IsExpanded = true;
+                    }
+                }
             }
         }
 
@@ -134,6 +154,8 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show("Failed to load the database, check the logfile");
                 return;
             }
+            Utils.BuildLinksRefrence(ParsedCategoryList);
+            Utils.BuildLevelPerPackage(ParsedCategoryList);
             LoadUI(GlobalDependencies, Dependencies, ParsedCategoryList);
         }
 
@@ -213,6 +235,116 @@ namespace RelhaxModpack.Windows
                 parent.Items.Add(packageTVI);
                 if (package.Packages.Count > 0)
                     LoadUI(packageTVI, package.Packages);
+            }
+        }
+
+        
+        private void DatabaseTreeView_Drop(object sender, DragEventArgs e)
+        {
+            //reset the textbox
+            DragDropTest.Text = "";
+            DragDropTest.Visibility = Visibility.Hidden;
+            ItemToExpand = null;
+            if (e.Source is TreeViewItem itemCurrentlyOver)
+            {
+                if (DatabaseTreeView.SelectedItem is TreeViewItem itemToMove)
+                {
+                    if (itemCurrentlyOver.Header is EditorComboBoxItem packageCurrentlyOver)
+                    {
+                        if (itemToMove.Header is EditorComboBoxItem packageToMove)
+                        {
+                            switch(e.Effects)
+                            {
+                                case DragDropEffects.Copy:
+
+                                    break;
+                                case DragDropEffects.Move:
+                                    //remove the treeviewItem from the UI list
+                                    //add the package to the new area (below)
+                                    if (itemToMove.Parent is TreeViewItem parentItemToMove)
+                                    {
+                                        if(itemCurrentlyOver.Parent is TreeViewItem parentItemOver)
+                                        {
+                                            parentItemToMove.Items.Remove(itemToMove);
+                                            parentItemOver.Items.Insert(parentItemOver.Items.IndexOf(itemCurrentlyOver) + 1, itemToMove);
+                                        }
+                                    }
+                                    //remove the package from the internal list
+                                    //add the treeviewitem to the new area (below)
+                                    if (packageToMove.Package is SelectablePackage selectablePackageToMove)
+                                    {
+                                        if (packageCurrentlyOver.Package is SelectablePackage selectablePackageCurrentlyOver)
+                                        {
+                                            selectablePackageToMove.Parent.Packages.Remove(selectablePackageToMove);
+                                            selectablePackageCurrentlyOver.Packages.Insert(selectablePackageCurrentlyOver.Packages.IndexOf(selectablePackageCurrentlyOver) + 1, selectablePackageToMove);
+                                        }
+                                        else break;
+                                    }
+                                    else break;
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void DatabaseTreeView_DragOver(object sender, DragEventArgs e)
+        {
+            string moveOrCopy = string.Empty;
+            if(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            {
+                e.Effects = DragDropEffects.Copy;
+                moveOrCopy = "Copy";
+            }
+            else
+            {
+                e.Effects = DragDropEffects.Move;
+                moveOrCopy = "Move";
+            }
+            DragDropTest.Text = "";
+            DragDropTest.Visibility = Visibility.Hidden;
+            if (e.Source is TreeViewItem itemCurrentlyOver)
+            {
+                if (DatabaseTreeView.SelectedItem is TreeViewItem itemToMove)
+                {
+                    if (itemCurrentlyOver.Header is EditorComboBoxItem packageCurrentlyOver)
+                    {
+                        if (itemToMove.Header is EditorComboBoxItem packageToMove)
+                        {
+                            //check if the left or right control keys are pressed or not (copy or move)
+                            if (DragDropTest.Visibility == Visibility.Hidden)
+                                DragDropTest.Visibility = Visibility.Visible;
+                            DragDropTest.Text = string.Format("{0} {1} below {2}", moveOrCopy, packageToMove.DisplayName, packageCurrentlyOver.DisplayName);
+                            if(ItemToExpand != itemCurrentlyOver)
+                            {
+                                ItemToExpand = itemCurrentlyOver;
+                                DragDropTimer.Stop();
+                                DragDropTimer.Start();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void DatabaseTreeView_MouseMove(object sender, MouseEventArgs e)
+        {
+            //make sure the mouse is pressed
+            if(e.LeftButton == MouseButtonState.Pressed)
+            {
+                if(DatabaseTreeView.SelectedItem is TreeViewItem itemToMove)
+                {
+                    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+                    {
+                        //DoDragDrop is blocking
+                        DragDrop.DoDragDrop(DatabaseTreeView, itemToMove, DragDropEffects.Copy);
+                    }
+                    else
+                    {
+                        DragDrop.DoDragDrop(DatabaseTreeView, itemToMove, DragDropEffects.Move);
+                    }
+                }
             }
         }
     }
