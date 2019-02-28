@@ -475,6 +475,6 @@
             </TabControl>
             <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Top" IsEditable="True" Grid.Column="2"  Style="{DynamicResource EditorComboBoxStyle}"  />
         </Grid>
-        <TextBlock x:Name="DragDropTest" HorizontalAlignment="Left" Margin="250,12,0,0" Grid.Row="1" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+        <TextBlock x:Name="DragDropTest" HorizontalAlignment="Left" Margin="250,12,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top"/>
     </Grid>
 </local:RelhaxWindow>
