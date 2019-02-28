@@ -154,7 +154,7 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show("Failed to load the database, check the logfile");
                 return;
             }
-            Utils.BuildLinksRefrence(ParsedCategoryList);
+            Utils.BuildLinksRefrence(ParsedCategoryList, true);
             Utils.BuildLevelPerPackage(ParsedCategoryList);
             LoadUI(GlobalDependencies, Dependencies, ParsedCategoryList);
         }
@@ -261,6 +261,7 @@ namespace RelhaxModpack.Windows
             DragDropTest.Text = "";
             DragDropTest.Visibility = Visibility.Hidden;
             ItemToExpand = null;
+            DragDropTimer.Stop();
             if (e.Source is TreeViewItem itemCurrentlyOver)
             {
                 if (DatabaseTreeView.SelectedItem is TreeViewItem itemToMove)

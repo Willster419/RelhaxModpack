@@ -625,10 +625,24 @@ namespace RelhaxModpack
         /// Links all the refrences (like parent, etc) for each class object making it possible to traverse the list tree in memory
         /// </summary>
         /// <param name="ParsedCategoryList">The List of categories</param>
-        public static void BuildLinksRefrence(List<Category> ParsedCategoryList)
+        public static void BuildLinksRefrence(List<Category> ParsedCategoryList, bool buildFakeParents)
         {
             foreach (Category cat in ParsedCategoryList)
             {
+                if(buildFakeParents)
+                {
+                    cat.CategoryHeader = new SelectablePackage()
+                    {
+                        Name = string.Format("----------[{0}]----------", cat.Name),
+                        TabIndex = cat.TabPage,
+                        ParentCategory = cat,
+                        Type = "multi",
+                        Visible = true,
+                        Enabled = true,
+                        Level = -1,
+                        PackageName = string.Format("Category_{0}_Header", cat.Name.Replace(' ', '_'))
+                    };
+                }
                 foreach (SelectablePackage sp in cat.Packages)
                 {
                     BuildLinksRefrence(sp, cat, cat.CategoryHeader);

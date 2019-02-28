@@ -396,7 +396,7 @@ namespace RelhaxModpack.Windows
             doc.Load(SelectModInfo.FileName);
             XMLUtils.ParseDatabase(doc, globalDependencies, dependencies, parsecCateogryList);
             //link stuff in memory or something
-            Utils.BuildLinksRefrence(parsecCateogryList);
+            Utils.BuildLinksRefrence(parsecCateogryList, false);
             //create variables
             StringBuilder sb = new StringBuilder();
             string saveLocation = @internal ? System.IO.Path.Combine(Settings.ApplicationStartupPath, "database_internal.csv") :
@@ -626,7 +626,7 @@ namespace RelhaxModpack.Windows
                     ReportProgress("failed to parse modInfo to lists");
                     return;
                 }
-                Utils.BuildLinksRefrence(parsedCategoryList);
+                Utils.BuildLinksRefrence(parsedCategoryList, false);
                 Utils.BuildLevelPerPackage(parsedCategoryList);
                 //if the list of zip files does not already have it, then add it
                 flatList = Utils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
@@ -1052,7 +1052,7 @@ namespace RelhaxModpack.Windows
                 ReportProgress("failed to parse modInfo to lists");
                 return;
             }
-            Utils.BuildLinksRefrence(parsedCategoryList);
+            Utils.BuildLinksRefrence(parsedCategoryList, false);
             Utils.BuildLevelPerPackage(parsedCategoryList);
             List<DatabasePackage> flatListCurrent = Utils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
             List<string> duplicates = Utils.CheckForDuplicates(globalDependencies, dependencies, parsedCategoryList);
@@ -1163,7 +1163,7 @@ namespace RelhaxModpack.Windows
                 ReportProgress("failed to parse modInfo to lists");
                 return;
             }
-            Utils.BuildLinksRefrence(parsedCateogryListOld);
+            Utils.BuildLinksRefrence(parsedCateogryListOld, false);
             Utils.BuildLevelPerPackage(parsedCateogryListOld);
             List<DatabasePackage> flatListOld = Utils.GetFlatList(globalDependenciesOld, dependenciesOld, null, parsedCateogryListOld);
             //download and load latest database.xml file from server

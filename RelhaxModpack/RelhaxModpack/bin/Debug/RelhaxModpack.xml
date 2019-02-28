@@ -1333,7 +1333,7 @@
             <param name="defaultValue">the default value to use if parsing fails</param>
             <returns>The float value of the ipnut string, or the default value if parsing failes</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.BuildLinksRefrence(System.Collections.Generic.List{RelhaxModpack.Category})">
+        <member name="M:RelhaxModpack.Utils.BuildLinksRefrence(System.Collections.Generic.List{RelhaxModpack.Category},System.Boolean)">
             <summary>
             Links all the refrences (like parent, etc) for each class object making it possible to traverse the list tree in memory
             </summary>

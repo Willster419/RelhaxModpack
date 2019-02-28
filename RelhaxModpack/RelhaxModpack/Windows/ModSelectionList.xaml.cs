@@ -251,7 +251,7 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
                 return false;
             }
-            Utils.BuildLinksRefrence(ParsedCategoryList);
+            Utils.BuildLinksRefrence(ParsedCategoryList, false);
             Utils.BuildLevelPerPackage(ParsedCategoryList);
             Utils.AssignCateogryPatchIDS(ParsedCategoryList);
             List<DatabasePackage> flatList = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList);
@@ -285,7 +285,7 @@ namespace RelhaxModpack.Windows
             //initialize the categories lists
             BuildUIInit(ref progress, ref loadProgress, ParsedCategoryList);
             //link everything again now that the category exists
-            Utils.BuildLinksRefrence(ParsedCategoryList);
+            Utils.BuildLinksRefrence(ParsedCategoryList, false);
             //initialize the user mods
             BuildUserMods();
             //add the packages for each category
