@@ -40,12 +40,12 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <RadioButton x:Name="SelectionDefault" Content="Default" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="OnSelectionViewChanged"/>
-                    <CheckBox x:Name="EnableBordersDefaultV2CB" Content="Enable Borders" Grid.Column="0" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Click="OnDefaultBordersV2Changed"/>
-                    <CheckBox x:Name="EnableColorChangeDefaultV2CB" Content="Enable Color Change" Grid.Column="0" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Click="OnDefaultSelectColorChanged"/>
-                    <RadioButton x:Name="SelectionLegacy" Content="Legacy" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Click="OnSelectionViewChanged" />
-                    <CheckBox x:Name="EnableBordersLegacyCB" Content="Enable Borders" Grid.Column="1" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Click="OnLegacyBordersChanged"/>
-                    <CheckBox x:Name="EnableColorChangeLegacyCB" Content="Enable Color Change" Grid.Column="1" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Click="OnLegacySelectColorChenged"/>
+                    <RadioButton Tag="SelectionDefault" x:Name="SelectionDefault" Content="Default" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="OnSelectionViewChanged"/>
+                    <CheckBox Tag="EnableBordersDefaultV2CB" x:Name="EnableBordersDefaultV2CB" Content="Enable Borders" Grid.Column="0" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Click="OnDefaultBordersV2Changed"/>
+                    <CheckBox Tag="EnableColorChangeDefaultV2CB" x:Name="EnableColorChangeDefaultV2CB" Content="Enable Color Change" Grid.Column="0" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Click="OnDefaultSelectColorChanged"/>
+                    <RadioButton Tag="SelectionLegacy" x:Name="SelectionLegacy" Content="Legacy" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Click="OnSelectionViewChanged" />
+                    <CheckBox Tag="EnableBordersLegacyCB" x:Name="EnableBordersLegacyCB" Content="Enable Borders" Grid.Column="1" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Click="OnLegacyBordersChanged"/>
+                    <CheckBox Tag="EnableColorChangeLegacyCB" x:Name="EnableColorChangeLegacyCB" Content="Enable Color Change" Grid.Column="1" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Click="OnLegacySelectColorChenged"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Installation Settings" Background="#7FE5E5E5">
@@ -55,14 +55,14 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0">
-                        <CheckBox Content="Clean installation (Recommended)" x:Name="CleanInstallCB" Click="OnCleanInstallChanged"/>
-                        <CheckBox Content="Clear log files" x:Name="ClearLogFilesCB" Click="OnClearLogFilesChanged"/>
-                        <CheckBox Content="Clear WoT cache data" x:Name="ClearCacheCB" Click="OnClearWoTCacheChanged"/>
-                        <CheckBox Content="Save user created data" x:Name="SaveUserDataCB" Click="OnSaveUserDataChanged"/>
-                        <CheckBox Content="Create shortcuts" x:Name="CreateShortcutsCB" Click="OnCreateShortcutsChanged"/>
-                        <CheckBox Content="Multicore extraction mode (experimental)" IsEnabled="False" x:Name="MulticoreExtractionCB" Click="OnMulticoreExtractionChanged"/>
-                        <TextBlock Text="Detected Cores: {0}" x:Name="MulticoreExtractionCoresCountLabel" IsEnabled="True" Padding="20,0,0,0"/>
-                        <CheckBox Content="Immediate extraction mode (experimental)" IsEnabled="False" x:Name="InstantExtractionCB" Click="OnImmidateExtarctionChanged"/>
+                        <CheckBox Content="Clean installation (Recommended)" Tag="CleanInstallCB" x:Name="CleanInstallCB" Click="OnCleanInstallChanged"/>
+                        <CheckBox Content="Clear log files" Tag="ClearLogFilesCB" x:Name="ClearLogFilesCB" Click="OnClearLogFilesChanged"/>
+                        <CheckBox Content="Clear WoT cache data" Tag="ClearCacheCB" x:Name="ClearCacheCB" Click="OnClearWoTCacheChanged"/>
+                        <CheckBox Content="Save user created data" Tag="SaveUserDataCB" x:Name="SaveUserDataCB" Click="OnSaveUserDataChanged"/>
+                        <CheckBox Content="Create shortcuts" Tag="CreateShortcutsCB" x:Name="CreateShortcutsCB" Click="OnCreateShortcutsChanged"/>
+                        <CheckBox Content="Multicore extraction mode (experimental)" IsEnabled="False" Tag="MulticoreExtractionCB" x:Name="MulticoreExtractionCB" Click="OnMulticoreExtractionChanged"/>
+                        <TextBlock Text="Detected Cores: {0}" Tag="MulticoreExtractionCoresCountLabel" x:Name="MulticoreExtractionCoresCountLabel" IsEnabled="True" Padding="20,0,0,0"/>
+                        <CheckBox Content="Immediate extraction mode (experimental)" IsEnabled="False" Tag="InstantExtractionCB" x:Name="InstantExtractionCB" Click="OnImmidateExtarctionChanged"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1"/>
                 </Grid>
@@ -74,25 +74,25 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0">
-                        <CheckBox Content="Save mod selection of last installation" x:Name="SaveLastInstallCB" Click="OnSaveLastInstallChanged"/>
-                        <CheckBox Content="Inform if no new database available" x:Name="NotifyIfSameDatabaseCB" Click="OnInformIfNoNewDatabaseChanged"/>
-                        <CheckBox Content="Force manual game detection" x:Name="ForceManuelGameDetectionCB" Click="OnForceManuelGameDetectionChanged"/>
-                        <CheckBox Content="Show install complete window" x:Name="ShowInstallCompleteWindowCB" Click="OnShowInstallCompleteWindowChanged"/>
-                        <CheckBox Content="Backup mods folder upon installation" x:Name="BackupModsCB" Click="OnBackupModsChanged" IsEnabled="False"/>
+                        <CheckBox Content="Save mod selection of last installation" Tag="SaveLastInstallCB" x:Name="SaveLastInstallCB" Click="OnSaveLastInstallChanged"/>
+                        <CheckBox Content="Inform if no new database available" Tag="NotifyIfSameDatabaseCB" x:Name="NotifyIfSameDatabaseCB" Click="OnInformIfNoNewDatabaseChanged"/>
+                        <CheckBox Content="Force manual game detection" Tag="ForceManuelGameDetectionCB" x:Name="ForceManuelGameDetectionCB" Click="OnForceManuelGameDetectionChanged"/>
+                        <CheckBox Content="Show install complete window" Tag="ShowInstallCompleteWindowCB" x:Name="ShowInstallCompleteWindowCB" Click="OnShowInstallCompleteWindowChanged"/>
+                        <CheckBox Content="Backup mods folder upon installation" Tag="BackupModsCB" x:Name="BackupModsCB" Click="OnBackupModsChanged" IsEnabled="False"/>
                         <TextBlock Text="Backups: X - Total Size: Y MB" Margin="20,0,0,0" />
                         <TextBlock Text="Preview Loading Image:" />
                         <StackPanel Orientation="Horizontal">
-                            <RadioButton Content="Default" Margin="20,0,0,0" x:Name="StandardImageRB" Click="OnPreviewLoadingImageChange"/>
-                            <RadioButton Content="3rdguards" Margin="5,0,0,0" x:Name="ThirdGuardsLoadingImageRB" Click="OnPreviewLoadingImageChange"/>
+                            <RadioButton Content="Default" Margin="20,0,0,0" Tag="StandardImageRB" x:Name="StandardImageRB" Click="OnPreviewLoadingImageChange"/>
+                            <RadioButton Content="3rdguards" Margin="5,0,0,0" Tag="ThirdGuardsLoadingImageRB" x:Name="ThirdGuardsLoadingImageRB" Click="OnPreviewLoadingImageChange"/>
                         </StackPanel>
-                        <CheckBox x:Name="SaveDisabledModsInSelection" Tag="SaveDisabledModsInSelection" Content="Keep disabled mods when saving selection"/>
+                        <CheckBox x:Name="SaveDisabledModsInSelection" Tag="SaveDisabledModsInSelection" Content="Keep disabled mods when saving selection" Checked="SaveDisabledModsInSelection_Checked"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
                         <TextBlock Text="Select theme:" />
                         <StackPanel Orientation="Vertical" Margin="15,0,0,0">
-                            <RadioButton Content="Default" />
-                            <RadioButton Content="Dark" />
-                            <RadioButton Content="Custom...(TODO)" />
+                            <RadioButton Content="Default" x:Name="ThemeDefault" Tag="ThemeDefault" Checked="ThemeDefault_Checked" />
+                            <RadioButton Content="Dark" x:Name="ThemeDark" Tag="ThemeDark" />
+                            <RadioButton Content="Custom...(TODO)" x:Name="ThemeCustom" Tag="ThemeCustom" />
                         </StackPanel>
                         <Button Content="Dump color settings to xml" Tag="DumpColorSettingsButton" Name="DumpColorSettingsButton" Click="DumpColorSettingsButton_Click"/>
                     </StackPanel>
@@ -106,23 +106,23 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0">
                         <!-- Use a margin of 20 to give it a tree affect-->
-                        <CheckBox Content="Use beta database" x:Name="UseBetaDatabaseCB" Click="OnUseBetaDatabaseChanged"/>
+                        <CheckBox Content="Use beta database" Tag="UseBetaDatabaseCB" x:Name="UseBetaDatabaseCB" Click="OnUseBetaDatabaseChanged"/>
                         <ComboBox x:Name="UseBetaDatabaseBranches" SelectionChanged="OnBetaDatabaseSelectionChanged" Margin="20,0,0,0" IsEnabled="False"/>
-                        <CheckBox Content="Use beta application" x:Name="UseBetaApplicationCB" Click="OnUseBetaAppChanged"/>
+                        <CheckBox Content="Use beta application" Tag="UseBetaApplicationCB" x:Name="UseBetaApplicationCB" Click="OnUseBetaAppChanged"/>
                         <TextBlock Text="Uninstall mode:" x:Name="UninstallModeGroupBox"/>
                         <StackPanel Orientation="Horizontal">
-                            <RadioButton Content="Default" Margin="20,0,0,0"/>
-                            <RadioButton Content="Quick" Margin="5,0,0,0"/>
+                            <RadioButton Content="Default" x:Name="UninstallDefault" Tag="UninstallDefault" Margin="20,0,0,0" Checked="UninstallDefault_Checked"/>
+                            <RadioButton Content="Quick" x:Name="UninstallQuick" Tag="UninstallQuick" Margin="5,0,0,0" Checked="UninstallQuick_Checked"/>
                         </StackPanel>
-                        <CheckBox Content="Minimze to system tray"/>
-                        <CheckBox x:Name="AskDownloadCacheDelete" Content="Ask to delete old cache files"/>
-                        <CheckBox x:Name="VerboseLoggingCB" Tag="VerboseLoggingCB" Content="Verbose Logging"/>
-                        <CheckBox x:Name="DisableTriggersCB" Tag="DisableTriggersCB" Content="Disable Triggers"/>
+                        <CheckBox Content="Minimze to system tray" x:Name="MinimizeToSystemTray" Tag="MinimizeToSystemTray" Checked="MinimizeToSystemTray_Checked"/>
+                        <CheckBox x:Name="AskDownloadCacheDelete" Content="Ask to delete old cache files" Tag="AskDownloadCacheDelete" Checked="AskDownloadCacheDelete_Checked"/>
+                        <CheckBox x:Name="VerboseLoggingCB" Tag="VerboseLoggingCB" Content="Verbose Logging" Checked="VerboseLoggingCB_Checked"/>
+                        <CheckBox x:Name="DisableTriggersCB" Tag="DisableTriggersCB" Content="Disable Triggers" Checked="DisableTriggersCB_Checked"/>
                     </StackPanel>
-                    <StackPanel Grid.Column="1">
-                        <CheckBox x:Name="EnableModsAutoSyncCheckBox" Content="Enable mods auto-sync" IsEnabled="False"/>
+                    <StackPanel Grid.Column="1">    
+                        <CheckBox x:Name="EnableModsAutoSyncCheckBox" Tag="EnableModsAutoSyncCheckbox" Content="Enable mods auto-sync" IsEnabled="False" Checked="EnableModsAutoSyncCheckBox_Checked"/>
                         <TextBox x:Name="AutoSyncSelectionFileTextBox" Height="46" TextWrapping="Wrap" Margin="0,3,0,0" />
-                        <Button x:Name="LoadAutoSyncSelectionFile" Content="Load selection file" HorizontalAlignment="Left" Margin="0,3,0,0" Width="120"/>
+                        <Button x:Name="LoadAutoSyncSelectionFile" Tag="LoadAutoSyncSelectionFile" Content="Load selection file" HorizontalAlignment="Left" Margin="0,3,0,0" Width="120" Click="LoadAutoSyncSelectionFile_Click"/>
                         <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
                             <TextBlock x:Name="AutoSyncCheckFrequencyTextBox"  TextWrapping="Wrap" Text="Frequency: every" />
                             <TextBox x:Name="AutoSyncFrequencyTexbox" Height="23" TextWrapping="Wrap" Text="xx" Width="25" Margin="5,0,0,0"/>
@@ -133,9 +133,9 @@
                             </ComboBox>
                         </StackPanel>
                         <TextBlock x:Name="DeveloperSettingsHeader" Text="Developer Settings"/>
-                        <CheckBox x:Name="ForceEnabledCB" Content="Force all components enabled" Margin="20,0,0,0"/>
-                        <CheckBox x:Name="ForceVisibleCB" Content="Force all components visible" Margin="20,0,0,0"/>
-                        <CheckBox x:Name="ExportModeCB" Content="Export mode" Margin="20,0,0,0"/>
+                        <CheckBox x:Name="ForceEnabledCB" Tag="ForceEnabledCB" Content="Force all components enabled" Margin="20,0,0,0" Checked="ForceEnabledCB_Checked"/>
+                        <CheckBox x:Name="ForceVisibleCB" Tag="ForceVisibleCB" Content="Force all components visible" Margin="20,0,0,0" Checked="ForceVisibleCB_Checked"/>
+                        <CheckBox x:Name="ExportModeCB" Tag="ExportModeCB" Content="Export mode" Margin="20,0,0,0" Checked="ExportModeCB_Checked"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
@@ -204,7 +204,7 @@
                 </ComboBox>
             </GroupBox>
             <TextBlock HorizontalAlignment="Left" Margin="2,29,0,0" TextWrapping="Wrap" Text="Error Counter: X" VerticalAlignment="Top"/>
-            <Button x:Name="CancelDownloadButton" Content="Cancel" HorizontalAlignment="Left" Margin="235,14,0,0" VerticalAlignment="Top" Width="118" Height="31"/>
+            <Button Tag="CancelDownloadButton" x:Name="CancelDownloadButton" Content="Cancel" HorizontalAlignment="Left" Margin="235,14,0,0" VerticalAlignment="Top" Width="118" Height="31" Click="CancelDownloadButton_Click"/>
         </Grid>
     </Grid>
 </Window>

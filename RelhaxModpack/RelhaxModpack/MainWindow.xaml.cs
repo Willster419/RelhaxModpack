@@ -1222,5 +1222,75 @@ namespace RelhaxModpack
             else
                 throw new BadMemeException("aids. on a stick");
         }
+
+        private void VerboseLoggingCB_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DisableTriggersCB_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AskDownloadCacheDelete_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MinimizeToSystemTray_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void UninstallDefault_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void UninstallQuick_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void EnableModsAutoSyncCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void LoadAutoSyncSelectionFile_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ForceEnabledCB_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ForceVisibleCB_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ExportModeCB_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SaveDisabledModsInSelection_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ThemeDefault_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void CancelDownloadButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
