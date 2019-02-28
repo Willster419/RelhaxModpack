@@ -159,7 +159,7 @@ namespace RelhaxModpack.Windows
             LoadUI(GlobalDependencies, Dependencies, ParsedCategoryList);
         }
 
-        private void LoadUI(List<DatabasePackage> globalDependencies, List<Dependency> dependnecies, List<Category> parsedCategoryList)
+        private void LoadUI(List<DatabasePackage> globalDependencies, List<Dependency> dependnecies, List<Category> parsedCategoryList, int numToAddEnd = 5)
         {
             //clear and reset
             DatabaseTreeView.Items.Clear();
@@ -191,6 +191,12 @@ namespace RelhaxModpack.Windows
                 LoadUI(CategoryHeader, cat.Packages);
             }
 
+            //adding the spacing that dirty wants...
+            for(int i = 0; i < numToAddEnd; i++)
+            {
+                DatabaseTreeView.Items.Add(string.Empty);
+            }
+
             //load the install and patch groups
             InstallGroupsTreeView.Items.Clear();
             //make a flat list (can be used in patchGroup as well)
@@ -209,6 +215,11 @@ namespace RelhaxModpack.Windows
                     installGroupHeaders[i].Items.Add(new TreeViewItem() { Header = new EditorComboBoxItem(packageWithEqualGroupNumber, packageWithEqualGroupNumber.PackageName) });
                 }
             }
+            //adding the spacing that dirty wants...
+            for (int i = 0; i < numToAddEnd; i++)
+            {
+                InstallGroupsTreeView.Items.Add(string.Empty);
+            }
 
             //do the same for patchgroups
             PatchGroupsTreeView.Items.Clear();
@@ -216,13 +227,18 @@ namespace RelhaxModpack.Windows
             //for each group header, get the list of packages that have an equal patch group number
             for (int i = 0; i < patchGroupHeaders.Count(); i++)
             {
-                patchGroupHeaders[i] = new TreeViewItem() { Header = string.Format("---patch Group {0}---", i) };
+                patchGroupHeaders[i] = new TreeViewItem() { Header = string.Format("---Patch Group {0}---", i) };
                 PatchGroupsTreeView.Items.Add(patchGroupHeaders[i]);
                 patchGroupHeaders[i].Items.Clear();
                 foreach (DatabasePackage packageWithEqualGroupNumber in allFlatList.Where(package => package.PatchGroup == i).ToList())
                 {
                     patchGroupHeaders[i].Items.Add(new TreeViewItem() { Header = new EditorComboBoxItem(packageWithEqualGroupNumber, packageWithEqualGroupNumber.PackageName) });
                 }
+            }
+            //adding the spacing that dirty wants...
+            for (int i = 0; i < numToAddEnd; i++)
+            {
+                PatchGroupsTreeView.Items.Add(string.Empty);
             }
         }
         private void LoadUI(TreeViewItem parent, List<SelectablePackage> packages)
