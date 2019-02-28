@@ -29,12 +29,12 @@
             <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Margin="2" Content="Diagnostic Utilities" x:Name="DiagnosticUtilitiesButton" Click="DiagnosticUtilitiesButton_Click"/>
         </Grid>
         <TabControl HorizontalAlignment="Stretch" Height="254" Margin="12,81,12,0" VerticalAlignment="Top" Background="#7FE5E5E5">
-            <TabItem Header="Intro" Background="#7FE5E5E5">
+            <TabItem Header="Intro" x:Name="SettingsTabIntro" Tag="SettingsTabIntro" Background="#7FE5E5E5">
                 <Grid Background="#7FE5E5E5">
                     <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="TODO: some sort of documentation..." VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Selection View" Background="#7FE5E5E5">
+            <TabItem Header="Selection View" x:Name="SettingsTabSelectionView" Tag="SettingsTabSelectionView" Background="#7FE5E5E5">
                 <Grid Background="#7FE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -48,7 +48,7 @@
                     <CheckBox Tag="EnableColorChangeLegacyCB" x:Name="EnableColorChangeLegacyCB" Content="Enable Color Change" Grid.Column="1" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Click="OnLegacySelectColorChenged"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Installation Settings" Background="#7FE5E5E5">
+            <TabItem Header="Installation Settings" x:Name="SettingsTabInstallationSettings" Tag="SettingsTabInstallationSettings" Background="#7FE5E5E5">
                 <Grid Background="#7FE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -67,7 +67,7 @@
                     <StackPanel Grid.Column="1"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Application Settings" Background="#7FE5E5E5">
+            <TabItem Header="Application Settings" x:Name="SettingsTabApplicationSettings" Tag="SettingsTabApplicationSettings" Background="#7FE5E5E5">
                 <Grid Background="#7FE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -98,7 +98,7 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="Advanced Settings" Background="#7FE5E5E5">
+            <TabItem Header="Advanced Settings" x:Name="SettingsTabAdvancedSettings" Tag="SettingsTabAdvancedSettings" Background="#7FE5E5E5">
                 <Grid Background="#7FE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>

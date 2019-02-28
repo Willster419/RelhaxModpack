@@ -364,5 +364,115 @@ namespace RelhaxModpack.Windows
                 }
             }
         }
+
+        private void LogAtInstallCB_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void VisibleCB_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void EnabledCB_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ZipDownload_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ZipUload_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SaveDatabaseButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SaveAsDatabaseButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void RemoveDatabaseObjectButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MoveDatabaseObjectButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AddDatabaseObjectButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DependenciesAddSelected_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DependenciesRemoveSelected_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MediaAddMediaButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MediaApplyEditButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MediaRemoveMediaButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MediaPreviewSelectedMediaButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MediaPreviewEditMediaButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void UserdataApplyUsedataButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void UserdataApplyEditButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void UserdataRemoveUserdata_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TriggerAddSelectedTrigger_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TriggerRemoveTrigger_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

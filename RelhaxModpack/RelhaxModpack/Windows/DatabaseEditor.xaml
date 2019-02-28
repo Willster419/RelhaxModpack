@@ -294,12 +294,12 @@
             <RowDefinition Height="632*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <Button x:Name="RemoveDatabaseObjectButton" Content="Remove" HorizontalAlignment="Left" Margin="10,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"/>
-        <Button x:Name="MoveDatabaseObjectButton" Content="Move" HorizontalAlignment="Left" Margin="90,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"/>
-        <Button x:Name="AddDatabaseObjectButton" Content="Add" HorizontalAlignment="Left" Margin="170,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"/>
-        <Button x:Name="LoadDatabaseButton" Content="Load" HorizontalAlignment="Right" Grid.Row="1" Margin="0,0,170,10"  VerticalAlignment="Bottom" Width="75" Height="20" Click="OnLoadDatabaseClick"/>
-        <Button x:Name="SaveAsDatabaseButton" Content="Save as..." HorizontalAlignment="Left" Margin="907,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="SaveDatabaseButton" Content="Save" HorizontalAlignment="Right" Grid.Row="1" Margin="0,0,90,10" VerticalAlignment="Bottom" Width="75" Height="20"/>
+        <Button x:Name="RemoveDatabaseObjectButton" Content="Remove" HorizontalAlignment="Left" Margin="10,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="RemoveDatabaseObjectButton" Click="RemoveDatabaseObjectButton_Click"/>
+        <Button x:Name="MoveDatabaseObjectButton" Content="Move" HorizontalAlignment="Left" Margin="90,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="MoveDatabaseObjectButton" Click="MoveDatabaseObjectButton_Click"/>
+        <Button x:Name="AddDatabaseObjectButton" Content="Add" HorizontalAlignment="Left" Margin="170,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="AddDatabaseObjectButton" Click="AddDatabaseObjectButton_Click"/>
+        <Button x:Name="LoadDatabaseButton" Content="Load" HorizontalAlignment="Right" Grid.Row="1" Margin="0,0,170,10"  VerticalAlignment="Bottom" Width="75" Height="20" Tag="DatabaseLoad" Click="OnLoadDatabaseClick"/>
+        <Button x:Name="SaveAsDatabaseButton" Content="Save as..." HorizontalAlignment="Left" Margin="907,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Tag="DatabaseSaveAs" Click="SaveAsDatabaseButton_Click"/>
+        <Button x:Name="SaveDatabaseButton" Content="Save" HorizontalAlignment="Right" Grid.Row="1" Margin="0,0,90,10" VerticalAlignment="Bottom" Width="75" Height="20" Tag="DatabaseSave" Click="SaveDatabaseButton_Click" />
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" MinWidth="250"/>
@@ -416,12 +416,12 @@
                         <ComboBox HorizontalAlignment="Stretch" Grid.Row="8" Grid.Column="1" VerticalAlignment="Center"/>
                         <TextBlock HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="10" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
                         <StackPanel Grid.Column="0" Grid.Row="11" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
-                            <CheckBox Content="Log At Install"/>
-                            <CheckBox Content="Visable" Margin="10,0,0,0"/>
-                            <CheckBox Content="Enabled" Margin="10,0,0,0"/>
+                            <CheckBox Content="Log At Install" Tag="LogAtInstallCB" x:Name="LogAtInstallCB" Checked="LogAtInstallCB_Checked" />
+                            <CheckBox Content="Visible" x:Name="VisibleCB" Tag="VisibleCB" Margin="10,0,0,0" Checked="VisibleCB_Checked"/>
+                            <CheckBox Content="Enabled" x:Name="EnabledCB" Tag="EnabledCB" Margin="10,0,0,0" Checked="EnabledCB_Checked"/>
                         </StackPanel>
-                        <Button Grid.Column="0" Grid.Row="12" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Content="Download Zip"/>
-                        <Button Grid.Column="0" Grid.Row="13" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Upload Zip"/>
+                        <Button Grid.Column="0" Grid.Row="12" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Content="Download Zip" x:Name="ZipDownload" Tag="ZipUload" Click="ZipDownload_Click" />
+                        <Button Grid.Column="0" Grid.Row="13" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUload_Click" />
                     </Grid>
                 </TabItem>
                 <TabItem Header="Description">
@@ -437,37 +437,37 @@
                 <TabItem Header="Dependencies">
                     <Grid Background="#FFE5E5E5">
                         <ListBox HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
-                        <Button Content="Add selected" HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="100"/>
-                        <Button Content="Remove Selected" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="100"/>
+                        <Button Content="Add selected" x:Name="DependenciesAddSelected" Tag="DependenciesAddSelected" HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="100" Click="DependenciesAddSelected_Click"/>
+                        <Button Content="Remove Selected" x:Name="DependenciesRemoveSelected" Tag="DependenciesRemoveSelected" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="100" Click="DependenciesRemoveSelected_Click"/>
                         <ComboBox HorizontalAlignment="Left" Margin="105,184,0,0" VerticalAlignment="Top" Width="372" Height="20"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Medias">
                     <Grid Background="#FFE5E5E5">
                         <ListBox HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
-                        <Button Content="Add Media" HorizontalAlignment="Left" Margin="0,253,0,0" VerticalAlignment="Top" Width="100"/>
-                        <Button Content="Apply Edit" HorizontalAlignment="Left" Margin="105,253,0,0" VerticalAlignment="Top" Width="100"/>
-                        <Button Content="Remove Media" HorizontalAlignment="Left" Margin="210,253,0,0" VerticalAlignment="Top" Width="100"/>
+                        <Button Content="Add Media" x:Name="MediaAddMediaButton" Tag="MediaAddMediaButton" HorizontalAlignment="Left" Margin="0,253,0,0" VerticalAlignment="Top" Width="100" Click="MediaAddMediaButton_Click"/>
+                        <Button Content="Apply Edit" x:Name="MediaApplyEditButton" Tag="MediaApplyEditButton" HorizontalAlignment="Left" Margin="105,253,0,0" VerticalAlignment="Top" Width="100" Click="MediaApplyEditButton_Click"/>
+                        <Button Content="Remove Media" x:Name="MediaRemoveMediaButton" Tag="MediaRemoveMediaButton" HorizontalAlignment="Left" Margin="210,253,0,0" VerticalAlignment="Top" Width="100" Click="MediaRemoveMediaButton_Click"/>
                         <ComboBox HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="487" Height="20"/>
                         <TextBox HorizontalAlignment="Left" Height="39" Margin="0,209,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="487"/>
-                        <Button Content="Preview Selected Media" HorizontalAlignment="Left" Margin="0,278,0,0" VerticalAlignment="Top" Width="135"/>
-                        <Button Content="Preview Edit Media" HorizontalAlignment="Left" Margin="140,278,0,0" VerticalAlignment="Top" Width="110"/>
+                        <Button Content="Preview Selected Media" x:Name="MediaPreviewSelectedMediaButton" Tag="MediaPreviewSelectedMediaButton" HorizontalAlignment="Left" Margin="0,278,0,0" VerticalAlignment="Top" Width="135" Click="MediaPreviewSelectedMediaButton_Click"/>
+                        <Button Content="Preview Edit Media" x:Name="MediaPreviewEditMediaButton" Tag="MediaPreviewEditMediaButton" HorizontalAlignment="Left" Margin="140,278,0,0" VerticalAlignment="Top" Width="110" Click="MediaPreviewEditMediaButton_Click"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Userdatas">
                     <Grid Background="#FFE5E5E5">
                         <ListBox HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
-                        <Button Content="Add Userdata" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="100"/>
-                        <Button Content="Apply Edit" HorizontalAlignment="Left" Margin="105,209,0,0" VerticalAlignment="Top" Width="100"/>
-                        <Button Content="Remove Userdata" HorizontalAlignment="Left" Margin="210,209,0,0" VerticalAlignment="Top" Width="100"/>
+                        <Button Content="Add Userdata" x:Name="UserdataApplyUsedataButton" Tag="UserdataApplyUsedataButton" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="100" Click="UserdataApplyUsedataButton_Click"/>
+                        <Button Content="Apply Edit" x:Name="UserdataApplyEditButton" HorizontalAlignment="Left" Margin="105,209,0,0" VerticalAlignment="Top" Width="100" Click="UserdataApplyEditButton_Click"/>
+                        <Button Content="Remove Userdata" x:Name="UserdataRemoveUserdata" Tag="UserdataRemoveUserdata" HorizontalAlignment="Left" Margin="210,209,0,0" VerticalAlignment="Top" Width="100" Click="UserdataRemoveUserdata_Click"/>
                         <TextBox HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Triggers">
                     <Grid Background="#FFE5E5E5">
                         <ListBox HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
-                        <Button Content="Add selected Trigger" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="120"/>
-                        <Button Content="Remove Trigger" HorizontalAlignment="Left" Margin="125,209,0,0" VerticalAlignment="Top" Width="120"/>
+                        <Button Content="Add selected Trigger" x:Name="TriggerAddSelectedTrigger" Tag="TriggerAddSelectedTrigger" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="120" Click="TriggerAddSelectedTrigger_Click"/>
+                        <Button Content="Remove Trigger" x:Name="TriggerRemoveTrigger" Tag="TriggerRemoveTrigger" HorizontalAlignment="Left" Margin="125,209,0,0" VerticalAlignment="Top" Width="120" Click="TriggerRemoveTrigger_Click"/>
                         <ComboBox x:Name="TriggerSelectionComboBox" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
                         <TextBox HorizontalAlignment="Left" Height="83" Margin="0,498,0,0" TextWrapping="Wrap" Text="Currently Supported Triggers:&#xA;build_contour_icons - start the process of building the contour icons atlas files&#xA;create_shortcuts - start the process of creating the shortcuts" VerticalAlignment="Top" Width="487"/>
                     </Grid>
