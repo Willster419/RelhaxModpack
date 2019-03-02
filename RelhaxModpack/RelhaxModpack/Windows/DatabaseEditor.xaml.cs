@@ -264,45 +264,44 @@ namespace RelhaxModpack.Windows
             DragDropTest.Visibility = Visibility.Hidden;
             ItemToExpand = null;
             DragDropTimer.Stop();
-            if (e.Source is TreeViewItem itemCurrentlyOver)
+            //make sure the source and destination are tree view items
+            if (e.Source is TreeViewItem itemCurrentlyOver && DatabaseTreeView.SelectedItem is TreeViewItem itemToMove)
             {
-                if (DatabaseTreeView.SelectedItem is TreeViewItem itemToMove)
+                //make sure source and destination have the correct header information
+                if (itemCurrentlyOver.Header is EditorComboBoxItem packageCurrentlyOver && itemToMove.Header is EditorComboBoxItem packageToMove)
                 {
-                    if (itemCurrentlyOver.Header is EditorComboBoxItem packageCurrentlyOver)
+                    //make sure that the source and destination are not the same
+                    if (packageCurrentlyOver.Package.Equals(packageToMove.Package))
+                        return;
+                    switch(e.Effects)
                     {
-                        if (itemToMove.Header is EditorComboBoxItem packageToMove)
-                        {
-                            switch(e.Effects)
-                            {
-                                case DragDropEffects.Copy:
+                        case DragDropEffects.Copy:
 
-                                    break;
-                                case DragDropEffects.Move:
-                                    //remove the treeviewItem from the UI list
-                                    //add the package to the new area (below)
-                                    if (itemToMove.Parent is TreeViewItem parentItemToMove)
-                                    {
-                                        if(itemCurrentlyOver.Parent is TreeViewItem parentItemOver)
-                                        {
-                                            parentItemToMove.Items.Remove(itemToMove);
-                                            parentItemOver.Items.Insert(parentItemOver.Items.IndexOf(itemCurrentlyOver) + 1, itemToMove);
-                                        }
-                                    }
-                                    //remove the package from the internal list
-                                    //add the treeviewitem to the new area (below)
-                                    if (packageToMove.Package is SelectablePackage selectablePackageToMove)
-                                    {
-                                        if (packageCurrentlyOver.Package is SelectablePackage selectablePackageCurrentlyOver)
-                                        {
-                                            selectablePackageToMove.Parent.Packages.Remove(selectablePackageToMove);
-                                            selectablePackageCurrentlyOver.Packages.Insert(selectablePackageCurrentlyOver.Packages.IndexOf(selectablePackageCurrentlyOver) + 1, selectablePackageToMove);
-                                        }
-                                        else break;
-                                    }
-                                    else break;
-                                    break;
+                            break;
+                        case DragDropEffects.Move:
+                            //remove the treeviewItem from the UI list
+                            //add the package to the new area (below)
+                            if (itemToMove.Parent is TreeViewItem parentItemToMove)
+                            {
+                                if(itemCurrentlyOver.Parent is TreeViewItem parentItemOver)
+                                {
+                                    parentItemToMove.Items.Remove(itemToMove);
+                                    parentItemOver.Items.Insert(parentItemOver.Items.IndexOf(itemCurrentlyOver) + 1, itemToMove);
+                                }
                             }
-                        }
+                            //remove the package from the internal list
+                            //add the treeviewitem to the new area (below)
+                            if (packageToMove.Package is SelectablePackage selectablePackageToMove)
+                            {
+                                if (packageCurrentlyOver.Package is SelectablePackage selectablePackageCurrentlyOver)
+                                {
+                                    selectablePackageToMove.Parent.Packages.Remove(selectablePackageToMove);
+                                    selectablePackageCurrentlyOver.Packages.Insert(selectablePackageCurrentlyOver.Packages.IndexOf(selectablePackageCurrentlyOver) + 1, selectablePackageToMove);
+                                }
+                                else break;
+                            }
+                            else break;
+                            break;
                     }
                 }
             }
@@ -323,28 +322,33 @@ namespace RelhaxModpack.Windows
             }
             DragDropTest.Text = "";
             DragDropTest.Visibility = Visibility.Hidden;
-            if (e.Source is TreeViewItem itemCurrentlyOver)
+            //first check as the UI level, make sure we are looking at treeviewItems
+            if (e.Source is TreeViewItem itemCurrentlyOver && DatabaseTreeView.SelectedItem is TreeViewItem itemToMove)
             {
-                if (DatabaseTreeView.SelectedItem is TreeViewItem itemToMove)
+                if (itemCurrentlyOver.Header is EditorComboBoxItem packageCurrentlyOver && itemToMove.Header is EditorComboBoxItem packageToMove)
                 {
-                    if (itemCurrentlyOver.Header is EditorComboBoxItem packageCurrentlyOver)
+                    //check if the left or right control keys are pressed or not (copy or move)
+                    if (DragDropTest.Visibility == Visibility.Hidden)
+                        DragDropTest.Visibility = Visibility.Visible;
+                    //make sure it's not same item
+                    if (packageCurrentlyOver.Package.Equals(packageToMove.Package))
                     {
-                        if (itemToMove.Header is EditorComboBoxItem packageToMove)
-                        {
-                            //check if the left or right control keys are pressed or not (copy or move)
-                            if (DragDropTest.Visibility == Visibility.Hidden)
-                                DragDropTest.Visibility = Visibility.Visible;
-                            DragDropTest.Text = string.Format("{0} {1} below {2}", moveOrCopy, packageToMove.DisplayName, packageCurrentlyOver.DisplayName);
-                            if(ItemToExpand != itemCurrentlyOver)
-                            {
-                                ItemToExpand = itemCurrentlyOver;
-                                DragDropTimer.Stop();
-                                DragDropTimer.Start();
-                            }
-                        }
+                        DragDropTest.Text = "Item can't be itself!";
+                        return;
+                    }
+                    DragDropTest.Text = string.Format("{0} {1} below {2}", moveOrCopy, packageToMove.DisplayName, packageCurrentlyOver.DisplayName);
+                    if (ItemToExpand != itemCurrentlyOver)
+                    {
+                        ItemToExpand = itemCurrentlyOver;
+                        DragDropTimer.Stop();
+                        DragDropTimer.Start();
                     }
                 }
+                else
+                    DragDropTest.Text = "Both items need to be database packages!";
             }
+            else
+                DragDropTest.Text = "Both items need to be inside the tree view!";
         }
 
         //https://stackoverflow.com/questions/19391135/prevent-drag-drop-when-scrolling
