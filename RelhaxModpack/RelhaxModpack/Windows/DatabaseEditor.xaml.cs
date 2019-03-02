@@ -37,6 +37,8 @@ namespace RelhaxModpack.Windows
         private TreeViewItem ItemToExpand;
         private Point BeforeDragDropPoint;
         private bool IsScrolling = false;
+        private bool AlreadyLoggedMouseMove = false;
+        private bool AlreadyLoggedScroll = false;
         private string[] UIHeaders = new string[]
         {
             "-----Global Dependencies-----",
@@ -364,9 +366,10 @@ namespace RelhaxModpack.Windows
         private void DatabaseTreeView_MouseMove(object sender, MouseEventArgs e)
         {
             //make sure the mouse is pressed and the drag movement is confirmed
-            if (e.LeftButton == MouseButtonState.Pressed && IsDragConfirmed(e.GetPosition(DatabaseTreeView)) && !IsScrolling)
+            bool isDragConfirmed = IsDragConfirmed(e.GetPosition(DatabaseTreeView));
+            if (e.LeftButton == MouseButtonState.Pressed && isDragConfirmed && !IsScrolling)
             {
-                Logging.Debug("Drag drop movement accepted, leftButton={0}, IsScrolling={1}",e.LeftButton.ToString(),IsScrolling.ToString());
+                Logging.Debug("MouseMove DragDrop movement accepted, leftButton={0}, isDragConfirmed={1}, IsScrolling={2}", e.LeftButton.ToString(), isDragConfirmed.ToString(), IsScrolling.ToString());
                 if (DatabaseTreeView.SelectedItem is TreeViewItem itemToMove)
                 {
                     if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
@@ -380,13 +383,18 @@ namespace RelhaxModpack.Windows
                     }
                 }
             }
+            else if (!AlreadyLoggedMouseMove)
+            {
+                AlreadyLoggedMouseMove = true;
+                Logging.Debug("MouseMove DragDrop movement not accepted, leftButton={0}, isDragConfirmed={1}, IsScrolling={2}", e.LeftButton.ToString(), isDragConfirmed.ToString(), IsScrolling.ToString());
+            }
         }
 
         private void DatabaseTreeView_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+            Logging.Debug("MouseDown, leftButton={0}, saving mouse location if pressed",e.LeftButton.ToString());
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                Logging.Debug("MouseDown, left button pressed, saving mouse location");
                 BeforeDragDropPoint = e.GetPosition(DatabaseTreeView);
             }
         }
@@ -394,15 +402,27 @@ namespace RelhaxModpack.Windows
         private void DatabaseTreeView_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             //https://stackoverflow.com/questions/14583234/disable-drag-and-drop-when-scrolling
-            IsScrolling = true;
+            if(!AlreadyLoggedScroll)
+            {
+                Logging.Debug("ScrollChanged event fire, LeftButton={0}, setting IsScrolling to true if pressed", Mouse.LeftButton.ToString());
+                AlreadyLoggedScroll = true;
+            }
+            if (Mouse.LeftButton == MouseButtonState.Pressed)
+            {
+                IsScrolling = true;
+            }
+            if (Mouse.LeftButton == MouseButtonState.Released && AlreadyLoggedScroll)
+                AlreadyLoggedScroll = false;
         }
 
-        private void DatabaseTreeView_MouseUp(object sender, MouseButtonEventArgs e)
+        private void DatabaseTreeView_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Released && IsScrolling)
+            Logging.Debug("MouseUp, leftButton={0}, setting IsScrolling to false", e.LeftButton.ToString());
+            if (e.LeftButton == MouseButtonState.Released)
             {
-                Logging.Debug("Mouse up, left button released, IsScrolling true, set to false");
                 IsScrolling = false;
+                AlreadyLoggedMouseMove = false;
+                AlreadyLoggedScroll = false;
             }
         }
         #endregion
