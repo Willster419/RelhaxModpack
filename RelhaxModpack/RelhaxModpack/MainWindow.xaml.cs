@@ -1141,6 +1141,43 @@ namespace RelhaxModpack
                 e.TotalBytesToReceive / (1024 * 1024), "ETA:", remaining_seconds, Translations.GetTranslatedString("seconds"));
         }
 
+        private bool VerifyApplicationFolderStructure()
+        {
+            Logging.WriteToLog("Verifying folder structure");
+            foreach (string s in Settings.FoldersToCheck)
+            {
+                try
+                {
+                    if (!Directory.Exists(s))
+                        Directory.CreateDirectory(s);
+                }
+                catch (Exception e)
+                {
+                    Logging.WriteToLog("Failed to check application folder structure\n" + e.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
+                    return false;
+                }
+            }
+            Logging.WriteToLog("Structure verified");
+            return true;
+        }
+
+        private void ToggleUIButtons(bool toggle)
+        {
+            List<FrameworkElement> controlsToToggle = Utils.GetAllWindowComponentsLogical(this, false);
+            //any to remove here
+            if (controlsToToggle.Contains(CancelDownloadButton))
+                controlsToToggle.Remove(CancelDownloadButton);
+            foreach (FrameworkElement control in controlsToToggle)
+            {
+                if (control is Button || control is CheckBox || control is RadioButton)
+                    control.IsEnabled = toggle;
+            }
+            //any to include here
+            AutoSyncFrequencyTexbox.IsEnabled = toggle;
+            AutoSyncSelectionFileTextBox.IsEnabled = toggle;
+        }
+
+        #region UI events
         private void UninstallModpackButton_Click(object sender, RoutedEventArgs e)
         {
 
@@ -1175,42 +1212,6 @@ namespace RelhaxModpack
                 UISettings.DumpAllWindowColorSettingsToFile(saveFileDialog.FileName);
                 Logging.WriteToLog("Color settings saved");
             }
-        }
-
-        private bool VerifyApplicationFolderStructure()
-        {
-            Logging.WriteToLog("Verifying folder structure");
-            foreach(string s in Settings.FoldersToCheck)
-            {
-                try
-                {
-                    if (!Directory.Exists(s))
-                        Directory.CreateDirectory(s);
-                }
-                catch(Exception e)
-                {
-                    Logging.WriteToLog("Failed to check application folder structure\n" + e.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
-                    return false;
-                }
-            }
-            Logging.WriteToLog("Structure verified");
-            return true;
-        }
-
-        private void ToggleUIButtons(bool toggle)
-        {
-            List<FrameworkElement> controlsToToggle = Utils.GetAllWindowComponentsLogical(this, false);
-            //any to remove here
-            if (controlsToToggle.Contains(CancelDownloadButton))
-                controlsToToggle.Remove(CancelDownloadButton);
-            foreach (FrameworkElement control in controlsToToggle)
-            {
-                if (control is Button || control is CheckBox || control is RadioButton)
-                    control.IsEnabled = toggle;
-            }
-            //any to include here
-            AutoSyncFrequencyTexbox.IsEnabled = toggle;
-            AutoSyncSelectionFileTextBox.IsEnabled = toggle;
         }
 
         private void OnBetaDatabaseSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1275,7 +1276,7 @@ namespace RelhaxModpack
 
         private void ExportModeCB_Checked(object sender, RoutedEventArgs e)
         {
-
+            ModpackSettings.ExportMode = (bool)ExportModeCB.IsChecked;
         }
 
         private void SaveDisabledModsInSelection_Checked(object sender, RoutedEventArgs e)
@@ -1292,5 +1293,6 @@ namespace RelhaxModpack
         {
 
         }
+        #endregion
     }
 }
