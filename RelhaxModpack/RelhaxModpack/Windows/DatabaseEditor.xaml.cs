@@ -259,15 +259,18 @@ namespace RelhaxModpack.Windows
         }
 
         #region Drag Drop code
-        private void DatabaseTreeView_Drop(object sender, DragEventArgs e)
+        private void OnTreeViewDrop(object sender, DragEventArgs e)
         {
+            if (!(sender is TreeView tv))
+                return;
+            TreeView treeView = (TreeView)sender;
             //reset the textbox
             DragDropTest.Text = "";
             DragDropTest.Visibility = Visibility.Hidden;
             ItemToExpand = null;
             DragDropTimer.Stop();
             //make sure the source and destination are tree view items
-            if (e.Source is TreeViewItem itemCurrentlyOver && DatabaseTreeView.SelectedItem is TreeViewItem itemToMove)
+            if (e.Source is TreeViewItem itemCurrentlyOver && treeView.SelectedItem is TreeViewItem itemToMove)
             {
                 //make sure source and destination have the correct header information
                 if (itemCurrentlyOver.Header is EditorComboBoxItem packageCurrentlyOver && itemToMove.Header is EditorComboBoxItem packageToMove)
@@ -309,9 +312,20 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void DatabaseTreeView_DragOver(object sender, DragEventArgs e)
+        private void OnTreeViewDragOver(object sender, DragEventArgs e)
         {
+            if (!(sender is TreeView tv))
+                return;
+            TreeView treeView = (TreeView)sender;
             string moveOrCopy = string.Empty;
+            if(treeView.Equals(DatabaseTreeView))
+            {
+
+            }
+            else
+            {
+
+            }
             if(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
             {
                 e.Effects = DragDropEffects.Copy;
@@ -325,7 +339,7 @@ namespace RelhaxModpack.Windows
             DragDropTest.Text = "";
             DragDropTest.Visibility = Visibility.Hidden;
             //first check as the UI level, make sure we are looking at treeviewItems
-            if (e.Source is TreeViewItem itemCurrentlyOver && DatabaseTreeView.SelectedItem is TreeViewItem itemToMove)
+            if (e.Source is TreeViewItem itemCurrentlyOver && treeView.SelectedItem is TreeViewItem itemToMove)
             {
                 if (itemCurrentlyOver.Header is EditorComboBoxItem packageCurrentlyOver && itemToMove.Header is EditorComboBoxItem packageToMove)
                 {
@@ -363,23 +377,26 @@ namespace RelhaxModpack.Windows
             return (horizontalMovement | verticalMovement);
         }
 
-        private void DatabaseTreeView_MouseMove(object sender, MouseEventArgs e)
+        private void OnTreeViewMouseMove(object sender, MouseEventArgs e)
         {
+            if (!(sender is TreeView tv))
+                return;
+            TreeView treeView = (TreeView)sender;
             //make sure the mouse is pressed and the drag movement is confirmed
-            bool isDragConfirmed = IsDragConfirmed(e.GetPosition(DatabaseTreeView));
+            bool isDragConfirmed = IsDragConfirmed(e.GetPosition(treeView));
             if (e.LeftButton == MouseButtonState.Pressed && isDragConfirmed && !IsScrolling)
             {
                 Logging.Debug("MouseMove DragDrop movement accepted, leftButton={0}, isDragConfirmed={1}, IsScrolling={2}", e.LeftButton.ToString(), isDragConfirmed.ToString(), IsScrolling.ToString());
-                if (DatabaseTreeView.SelectedItem is TreeViewItem itemToMove)
+                if (treeView.SelectedItem is TreeViewItem itemToMove)
                 {
                     if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
                     {
                         //DoDragDrop is blocking
-                        DragDrop.DoDragDrop(DatabaseTreeView, itemToMove, DragDropEffects.Copy);
+                        DragDrop.DoDragDrop(treeView, itemToMove, DragDropEffects.Copy);
                     }
                     else
                     {
-                        DragDrop.DoDragDrop(DatabaseTreeView, itemToMove, DragDropEffects.Move);
+                        DragDrop.DoDragDrop(treeView, itemToMove, DragDropEffects.Move);
                     }
                 }
             }
@@ -390,16 +407,19 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void DatabaseTreeView_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private void OnTreeViewMouseDownPreview(object sender, MouseButtonEventArgs e)
         {
+            if (!(sender is TreeView tv))
+                return;
+            TreeView treeView = (TreeView)sender;
             Logging.Debug("MouseDown, leftButton={0}, saving mouse location if pressed",e.LeftButton.ToString());
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                BeforeDragDropPoint = e.GetPosition(DatabaseTreeView);
+                BeforeDragDropPoint = e.GetPosition(treeView);
             }
         }
 
-        private void DatabaseTreeView_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        private void OnTreeViewScroll(object sender, ScrollChangedEventArgs e)
         {
             //https://stackoverflow.com/questions/14583234/disable-drag-and-drop-when-scrolling
             if(!AlreadyLoggedScroll)
@@ -415,7 +435,7 @@ namespace RelhaxModpack.Windows
                 AlreadyLoggedScroll = false;
         }
 
-        private void DatabaseTreeView_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        private void OnTreeViewMouseUpPreview(object sender, MouseButtonEventArgs e)
         {
             Logging.Debug("MouseUp, leftButton={0}, setting IsScrolling to false", e.LeftButton.ToString());
             if (e.LeftButton == MouseButtonState.Released)
