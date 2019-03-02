@@ -111,6 +111,16 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        private int GetMaxPatchGroups()
+        {
+            return Utils.GetMaxPatchGroupNumber(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
+        }
+
+        private int GetMaxInstallGroups()
+        {
+            return Utils.GetMaxInstallGroupNumber(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
+        }
+
         private void OnLoadDatabaseClick(object sender, RoutedEventArgs e)
         {
             string fileToLoad = string.Empty;
@@ -210,7 +220,7 @@ namespace RelhaxModpack.Windows
             //for each group header, get the list of packages that have an equal install group number
             for (int i = 0; i < installGroupHeaders.Count(); i++)
             {
-                installGroupHeaders[i] = new TreeViewItem() { Header = string.Format("---Install Group {0}---", i) };
+                installGroupHeaders[i] = new TreeViewItem() { Header = string.Format("---Install Group {0}---", i), Tag = i };
                 InstallGroupsTreeView.Items.Add(installGroupHeaders[i]);
                 installGroupHeaders[i].Items.Clear();
                 foreach (DatabasePackage packageWithEqualGroupNumber in allFlatList.Where(package => package.InstallGroup == i).ToList())
@@ -231,7 +241,7 @@ namespace RelhaxModpack.Windows
             //for each group header, get the list of packages that have an equal patch group number
             for (int i = 0; i < patchGroupHeaders.Count(); i++)
             {
-                patchGroupHeaders[i] = new TreeViewItem() { Header = string.Format("---Patch Group {0}---", i) };
+                patchGroupHeaders[i] = new TreeViewItem() { Header = string.Format("---Patch Group {0}---", i), Tag = i };
                 PatchGroupsTreeView.Items.Add(patchGroupHeaders[i]);
                 patchGroupHeaders[i].Items.Clear();
                 foreach (DatabasePackage packageWithEqualGroupNumber in allFlatList.Where(package => package.PatchGroup == i).ToList())
@@ -259,7 +269,7 @@ namespace RelhaxModpack.Windows
         }
 
         #region Drag Drop code
-        private void OnTreeViewDrop(object sender, DragEventArgs e)
+        private void OnTreeViewDatabaseDrop(object sender, DragEventArgs e)
         {
             if (!(sender is TreeView tv))
                 return;
@@ -278,54 +288,39 @@ namespace RelhaxModpack.Windows
                     //make sure that the source and destination are not the same
                     if (packageCurrentlyOver.Package.Equals(packageToMove.Package))
                         return;
-                    switch(e.Effects)
+                    //remove the treeviewItem from the UI list
+                    //add the package to the new area (below)
+                    if (itemToMove.Parent is TreeViewItem parentItemToMove && itemCurrentlyOver.Parent is TreeViewItem parentItemOver)
                     {
-                        case DragDropEffects.Copy:
+                        //remove the package from the internal list
+                        //add the treeviewitem to the new area (below)
+                        if (packageToMove.Package is SelectablePackage selectablePackageToMove && packageCurrentlyOver.Package is SelectablePackage selectablePackageCurrentlyOver)
+                        {
+                            switch(e.Effects)
+                            {
+                                case DragDropEffects.Copy:
 
-                            break;
-                        case DragDropEffects.Move:
-                            //remove the treeviewItem from the UI list
-                            //add the package to the new area (below)
-                            if (itemToMove.Parent is TreeViewItem parentItemToMove)
-                            {
-                                if(itemCurrentlyOver.Parent is TreeViewItem parentItemOver)
-                                {
-                                    parentItemToMove.Items.Remove(itemToMove);
-                                    parentItemOver.Items.Insert(parentItemOver.Items.IndexOf(itemCurrentlyOver) + 1, itemToMove);
-                                }
-                            }
-                            //remove the package from the internal list
-                            //add the treeviewitem to the new area (below)
-                            if (packageToMove.Package is SelectablePackage selectablePackageToMove)
-                            {
-                                if (packageCurrentlyOver.Package is SelectablePackage selectablePackageCurrentlyOver)
-                                {
+                                    break;
+                                case DragDropEffects.Move:
+                                    //internal before UI
                                     selectablePackageToMove.Parent.Packages.Remove(selectablePackageToMove);
                                     selectablePackageCurrentlyOver.Packages.Insert(selectablePackageCurrentlyOver.Packages.IndexOf(selectablePackageCurrentlyOver) + 1, selectablePackageToMove);
-                                }
-                                else break;
+                                    parentItemToMove.Items.Remove(itemToMove);
+                                    parentItemOver.Items.Insert(parentItemOver.Items.IndexOf(itemCurrentlyOver) + 1, itemToMove);
+                                    break;
                             }
-                            else break;
-                            break;
+                        }
                     }
                 }
             }
         }
 
-        private void OnTreeViewDragOver(object sender, DragEventArgs e)
+        private void OnTreeViewDatabaseDragOver(object sender, DragEventArgs e)
         {
             if (!(sender is TreeView tv))
                 return;
             TreeView treeView = (TreeView)sender;
             string moveOrCopy = string.Empty;
-            if(treeView.Equals(DatabaseTreeView))
-            {
-
-            }
-            else
-            {
-
-            }
             if(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
             {
                 e.Effects = DragDropEffects.Copy;
@@ -365,6 +360,22 @@ namespace RelhaxModpack.Windows
             }
             else
                 DragDropTest.Text = "Both items need to be inside the tree view!";
+        }
+
+        private void OnTreeViewGroupsDrop(object sender, DragEventArgs e)
+        {
+            if (!(sender is TreeView tv))
+                return;
+            TreeView treeView = (TreeView)sender;
+
+        }
+
+        private void OnTreeViewGroupsDragOver(object sender, DragEventArgs e)
+        {
+            if (!(sender is TreeView tv))
+                return;
+            TreeView treeView = (TreeView)sender;
+
         }
 
         //https://stackoverflow.com/questions/19391135/prevent-drag-drop-when-scrolling
@@ -446,6 +457,20 @@ namespace RelhaxModpack.Windows
             }
         }
         #endregion
+
+        private void OnTreeViewGroupsDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if(sender is TreeView tv)
+            {
+                if(tv.SelectedItem is TreeViewItem tvi)
+                {
+                    if(tvi.Header is EditorComboBoxItem ecbi)
+                    {
+                        //bring up the window TODO
+                    }
+                }
+            }
+        }
 
         private void LogAtInstallCB_Checked(object sender, RoutedEventArgs e)
         {
