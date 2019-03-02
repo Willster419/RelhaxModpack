@@ -35,6 +35,8 @@ namespace RelhaxModpack.Windows
         private SaveFileDialog SaveZipFileDialog;
         private System.Windows.Forms.Timer DragDropTimer = new System.Windows.Forms.Timer() {Enabled = false, Interval = 1000 };
         private TreeViewItem ItemToExpand;
+        private Point BeforeDragDropPoint;
+        private bool IsScrolling = false;
         private string[] UIHeaders = new string[]
         {
             "-----Global Dependencies-----",
@@ -254,7 +256,7 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        
+        #region Drag Drop code
         private void DatabaseTreeView_Drop(object sender, DragEventArgs e)
         {
             //reset the textbox
@@ -345,12 +347,23 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        //https://stackoverflow.com/questions/19391135/prevent-drag-drop-when-scrolling
+        private bool IsDragConfirmed(Point point)
+        {
+            bool horizontalMovement = Math.Abs(point.X - BeforeDragDropPoint.X) >
+                 SystemParameters.MinimumHorizontalDragDistance;
+            bool verticalMovement = Math.Abs(point.Y - BeforeDragDropPoint.Y) >
+                 SystemParameters.MinimumVerticalDragDistance;
+            return (horizontalMovement | verticalMovement);
+        }
+
         private void DatabaseTreeView_MouseMove(object sender, MouseEventArgs e)
         {
-            //make sure the mouse is pressed
-            if(e.LeftButton == MouseButtonState.Pressed)
+            //make sure the mouse is pressed and the drag movement is confirmed
+            if (e.LeftButton == MouseButtonState.Pressed && IsDragConfirmed(e.GetPosition(DatabaseTreeView)) && !IsScrolling)
             {
-                if(DatabaseTreeView.SelectedItem is TreeViewItem itemToMove)
+                Logging.Debug("Drag drop movement accepted, leftButton={0}, IsScrolling={1}",e.LeftButton.ToString(),IsScrolling.ToString());
+                if (DatabaseTreeView.SelectedItem is TreeViewItem itemToMove)
                 {
                     if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
                     {
@@ -364,6 +377,31 @@ namespace RelhaxModpack.Windows
                 }
             }
         }
+
+        private void DatabaseTreeView_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                Logging.Debug("MouseDown, left button pressed, saving mouse location");
+                BeforeDragDropPoint = e.GetPosition(DatabaseTreeView);
+            }
+        }
+
+        private void DatabaseTreeView_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            //https://stackoverflow.com/questions/14583234/disable-drag-and-drop-when-scrolling
+            IsScrolling = true;
+        }
+
+        private void DatabaseTreeView_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Released && IsScrolling)
+            {
+                Logging.Debug("Mouse up, left button released, IsScrolling true, set to false");
+                IsScrolling = false;
+            }
+        }
+        #endregion
 
         private void LogAtInstallCB_Checked(object sender, RoutedEventArgs e)
         {

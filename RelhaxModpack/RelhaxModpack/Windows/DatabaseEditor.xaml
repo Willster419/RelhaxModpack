@@ -309,7 +309,7 @@
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center"/>
             <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <TabItem Header="Database Tree View">
-                    <TreeView x:Name="DatabaseTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="True" Drop="DatabaseTreeView_Drop" DragOver="DatabaseTreeView_DragOver" MouseMove="DatabaseTreeView_MouseMove">
+                    <TreeView x:Name="DatabaseTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="True" Drop="DatabaseTreeView_Drop" DragOver="DatabaseTreeView_DragOver" MouseMove="DatabaseTreeView_MouseMove" ScrollViewer.ScrollChanged="DatabaseTreeView_ScrollChanged" MouseUp="DatabaseTreeView_MouseUp" PreviewMouseDown="DatabaseTreeView_PreviewMouseDown">
                         <TreeView.Resources>
                             <!-- Style the inactive selection the same as active -->
                             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
@@ -420,7 +420,7 @@
                             <CheckBox Content="Visible" x:Name="VisibleCB" Tag="VisibleCB" Margin="10,0,0,0" Checked="VisibleCB_Checked"/>
                             <CheckBox Content="Enabled" x:Name="EnabledCB" Tag="EnabledCB" Margin="10,0,0,0" Checked="EnabledCB_Checked"/>
                         </StackPanel>
-                        <Button Grid.Column="0" Grid.Row="12" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Content="Download Zip" x:Name="ZipDownload" Tag="ZipUload" Click="ZipDownload_Click" />
+                        <Button Grid.Column="0" Grid.Row="12" HorizontalAlignment="Stretch"  VerticalAlignment="Top" Content="Download Zip" x:Name="ZipDownload" Tag="ZipUload" Click="ZipDownload_Click" Height="20" />
                         <Button Grid.Column="0" Grid.Row="13" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUload_Click" />
                     </Grid>
                 </TabItem>
