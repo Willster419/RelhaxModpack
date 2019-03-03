@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Xml;
 using Microsoft.Win32;
 using RelhaxModpack.UIComponents;
+using Path = System.IO.Path;
 
 namespace RelhaxModpack.Windows
 {
@@ -86,10 +87,14 @@ namespace RelhaxModpack.Windows
             }
             //hook up timer
             DragDropTimer.Tick += OnDragDropTimerTick;
-            //set the data for the combobox
+            //set the data for the search combobox
             SearchBox.Items.Clear();
             foreach (DatabasePackage package in Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList))
                 SearchBox.Items.Add(package.PackageName);
+            //set the items for the triggers combobox. this only needs to be done once anyways
+            TriggerSelectionComboBox.Items.Clear();
+            foreach (string s in InstallerComponents.InstallEngine.CompleteTriggerList)
+                TriggerSelectionComboBox.Items.Add(s);
             Init = false;
         }
 
@@ -355,15 +360,45 @@ namespace RelhaxModpack.Windows
         {
             //load all items in the databasePackage level first
 
+            //then handle if dependency
+
+            //then handle if selectalbePackage
+
+            //reload the list of all dependencies to make sure it's always accurate
+            LoadedDependenciesList.Items.Clear();
+            foreach (Dependency d in Dependencies)
+                LoadedDependenciesList.Items.Add(d);
         }
 
         private void SaveApplyDatabaseObject(DatabasePackage package)
         {
+            if(package == null)
+            {
+                Logging.Error("SaveApplyDatabaseObject() package parameter is null, this should not happen!!");
+                return;
+            }
+            //save everything from the UI into the package
 
+            //save package elements first
+
+            //see if it's a dependency
+
+            //see if it's a selectablePackage
+
+            //reload the list of all dependencies to make sure it's always accurate
+            LoadedDependenciesList.Items.Clear();
+            foreach (Dependency d in Dependencies)
+                LoadedDependenciesList.Items.Add(d);
+            //if user requests apply to also save to disk, then do that now
+            if(EditorSettings.ApplyBehavior == ApplyBehavior.ApplyTriggersSave)
+            {
+                SaveDatabaseButton_Click(null, null);
+            }
         }
         #endregion
 
         #region Other UI events
+
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
             //check if we should ask a confirm first
@@ -439,6 +474,7 @@ namespace RelhaxModpack.Windows
         {
             try
             {
+                if(!string.IsNullOrWhiteSpace(PackageDevURLDisplay.Text))
                 System.Diagnostics.Process.Start(PackageDevURLDisplay.Text);
             }
             catch { }
@@ -446,6 +482,7 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Drag Drop code
+
         private void PerformDatabaseMoveAdd(TreeViewItem itemCurrentlyOver, TreeViewItem itemToMove, TreeViewItem parentItemToMove, TreeViewItem parentItemOver,
             DatabasePackage packageToMove, DatabasePackage packageCurrentlyOver, DragDropEffects effects, bool addBelowItem)
         {
@@ -796,12 +833,48 @@ namespace RelhaxModpack.Windows
 
         private void SaveDatabaseButton_Click(object sender, RoutedEventArgs e)
         {
-
+            //if save triggers apply, then do it
+            if(EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && SelectedItem != null)
+            {
+                SaveApplyDatabaseObject(SelectedItem);
+            }
+            if(string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text))
+            {
+                MessageBox.Show("Default save location is empty, please specify before using this button");
+                return;
+            }
+            if(!Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
+            {
+                MessageBox.Show(string.Format("The save path\n{0}\ndoes not exist, please re-specify", Path.GetDirectoryName(DefaultSaveLocationSetting.Text)));
+                return;
+            }
+            //actually save
+            throw new BadMemeException("TODO");
         }
 
         private void SaveAsDatabaseButton_Click(object sender, RoutedEventArgs e)
         {
-
+            //if save triggers apply, then do it
+            if (EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && SelectedItem != null)
+            {
+                SaveApplyDatabaseObject(SelectedItem);
+            }
+            if (SaveDatabaseDialog == null)
+                SaveDatabaseDialog = new SaveFileDialog()
+                {
+                    AddExtension = true,
+                    CheckPathExists = true,
+                    DefaultExt = "xml",
+                    InitialDirectory = string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text)? Settings.ApplicationStartupPath :
+                    Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text))? DefaultSaveLocationSetting.Text : Settings.ApplicationStartupPath,
+                    Title = "Save Database"
+                };
+            //if what the user just specified is not the same as the current default, then ask to update it
+            if(!Path.GetDirectoryName(SaveDatabaseDialog.FileName).Equals(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
+                if (MessageBox.Show("Use this as default save location?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                DefaultSaveLocationSetting.Text = "";
+            //actually save
+            throw new BadMemeException("TODO");
         }
 
         private void OnLoadDatabaseClick(object sender, RoutedEventArgs e)
@@ -953,6 +1026,7 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Right side package modify buttons
+
         private void DependenciesAddSelected_Click(object sender, RoutedEventArgs e)
         {
 
@@ -1015,6 +1089,7 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Settings tab events
+
         private void WotmodsUsernameSetting_TextChanged(object sender, TextChangedEventArgs e)
         {
             EditorSettings.WotmodsUsername = WotmodsUsernameSetting.Text;

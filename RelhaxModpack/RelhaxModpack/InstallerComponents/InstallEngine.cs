@@ -73,6 +73,11 @@ namespace RelhaxModpack.InstallerComponents
         //names of triggers
         public const string TriggerContouricons = "build_contour_icons";
 
+        public static readonly string[] CompleteTriggerList = new string[]
+        {
+            TriggerContouricons
+        };
+
         //trigger array
         public static List<Trigger> Triggers = new List<Trigger>
         {
