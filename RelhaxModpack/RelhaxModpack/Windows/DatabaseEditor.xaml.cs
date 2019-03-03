@@ -501,15 +501,15 @@ namespace RelhaxModpack.Windows
             if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
                 belowOrInside = "inside";
             DragDropTest.Text = "";
-            DragDropTest.Visibility = Visibility.Hidden;
+            //check if the left or right control keys are pressed or not (copy or move)
+            if (DragDropTest.Visibility == Visibility.Hidden)
+                DragDropTest.Visibility = Visibility.Visible;
             //first check as the UI level, make sure we are looking at treeviewItems
             if (e.Source is TreeViewItem itemCurrentlyOver && treeView.SelectedItem is TreeViewItem itemToMove)
             {
                 if (itemCurrentlyOver.Header is EditorComboBoxItem packageCurrentlyOver && itemToMove.Header is EditorComboBoxItem packageToMove)
                 {
-                    //check if the left or right control keys are pressed or not (copy or move)
-                    if (DragDropTest.Visibility == Visibility.Hidden)
-                        DragDropTest.Visibility = Visibility.Visible;
+                    
                     //make sure it's not same item
                     if (packageCurrentlyOver.Package.Equals(packageToMove.Package))
                     {
@@ -626,6 +626,8 @@ namespace RelhaxModpack.Windows
                 IsScrolling = false;
                 AlreadyLoggedMouseMove = false;
                 AlreadyLoggedScroll = false;
+                if (DragDropTest.Visibility == Visibility.Visible)
+                    DragDropTest.Visibility = Visibility.Hidden;
             }
         }
         #endregion
