@@ -1180,7 +1180,7 @@ namespace RelhaxModpack
         #region UI events
         private void UninstallModpackButton_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
 
         private void DiagnosticUtilitiesButton_Click(object sender, RoutedEventArgs e)
@@ -1226,7 +1226,7 @@ namespace RelhaxModpack
 
         private void VerboseLoggingCB_Checked(object sender, RoutedEventArgs e)
         {
-
+            ModpackSettings.VerboseLogging = (bool)VerboseLoggingCB.IsChecked;
         }
 
         private void DisableTriggersCB_Checked(object sender, RoutedEventArgs e)
@@ -1241,7 +1241,7 @@ namespace RelhaxModpack
 
         private void MinimizeToSystemTray_Checked(object sender, RoutedEventArgs e)
         {
-            
+            ModpackSettings.MinimizeToSystemTray = (bool)MinimizeToSystemTray.IsChecked;
         }
 
         private void UninstallDefault_Checked(object sender, RoutedEventArgs e)
@@ -1256,7 +1256,7 @@ namespace RelhaxModpack
 
         private void EnableModsAutoSyncCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            
+            ModpackSettings.ModsAutoSyncEnable = (bool)EnableModsAutoSyncCheckBox.IsChecked;
         }
 
         private void LoadAutoSyncSelectionFile_Click(object sender, RoutedEventArgs e)
@@ -1271,7 +1271,7 @@ namespace RelhaxModpack
 
         private void ForceVisibleCB_Checked(object sender, RoutedEventArgs e)
         {
-            ModpackSettings.ForceVisible = (bool)ForceVisibleCB.IsChecked
+            ModpackSettings.ForceVisible = (bool)ForceVisibleCB.IsChecked;
         }
 
         private void ExportModeCB_Checked(object sender, RoutedEventArgs e)
@@ -1286,7 +1286,7 @@ namespace RelhaxModpack
 
         private void ThemeDefault_Checked(object sender, RoutedEventArgs e)
         {
-
+            
         }
 
         private void ThemeDark_Checked(object sender, RoutedEventArgs e)
@@ -1301,7 +1301,7 @@ namespace RelhaxModpack
 
         private void CancelDownloadButton_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
         #endregion
 

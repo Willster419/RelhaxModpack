@@ -228,6 +228,18 @@ namespace RelhaxModpack
         /// The application distribution version to use. When selected, it won't take affect until application restart
         /// </summary>
         public static ApplicationVersions ApplicationDistroVersion = ApplicationVersions.Stable;
+        /// <summary>
+        /// toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
+        /// </summary>
+        public static bool MinimizeToSystemTray = false;
+        /// <summary>
+        /// toggle for enabling auto sync of mods
+        /// </summary>
+        public static bool ModsAutoSyncEnable = false;
+        /// <summary>
+        /// toggle to load auto sync of mods
+        /// </summary>
+        public static bool ModsAutoSyncLoad = false;
         #endregion
 
         #region legacy compatability
