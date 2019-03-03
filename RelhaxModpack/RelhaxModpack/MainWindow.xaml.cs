@@ -1185,7 +1185,7 @@ namespace RelhaxModpack
 
         private void DiagnosticUtilitiesButton_Click(object sender, RoutedEventArgs e)
         {
-
+         
         }
 
         private void ViewNewsButton_Click(object sender, RoutedEventArgs e)
@@ -1231,22 +1231,22 @@ namespace RelhaxModpack
 
         private void DisableTriggersCB_Checked(object sender, RoutedEventArgs e)
         {
-
+            ModpackSettings.DisableTriggers = (bool)DisableTriggersCB.IsChecked;
         }
 
         private void AskDownloadCacheDelete_Checked(object sender, RoutedEventArgs e)
         {
-
+            ModpackSettings.AskToDeleteCache = (bool)AskDownloadCacheDelete.IsChecked;
         }
 
         private void MinimizeToSystemTray_Checked(object sender, RoutedEventArgs e)
         {
-
+            
         }
 
         private void UninstallDefault_Checked(object sender, RoutedEventArgs e)
         {
-
+           
         }
 
         private void UninstallQuick_Checked(object sender, RoutedEventArgs e)
@@ -1256,22 +1256,22 @@ namespace RelhaxModpack
 
         private void EnableModsAutoSyncCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-
+            
         }
 
         private void LoadAutoSyncSelectionFile_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
 
         private void ForceEnabledCB_Checked(object sender, RoutedEventArgs e)
         {
-
+            ModpackSettings.ForceEnabled = (bool)ForceEnabledCB.IsChecked;
         }
 
         private void ForceVisibleCB_Checked(object sender, RoutedEventArgs e)
         {
-
+            ModpackSettings.ForceVisible = (bool)ForceVisibleCB.IsChecked
         }
 
         private void ExportModeCB_Checked(object sender, RoutedEventArgs e)
@@ -1281,10 +1281,20 @@ namespace RelhaxModpack
 
         private void SaveDisabledModsInSelection_Checked(object sender, RoutedEventArgs e)
         {
-
+            ModpackSettings.SaveDisabledMods = (bool)SaveDisabledModsInSelection.IsChecked;
         }
 
         private void ThemeDefault_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ThemeDark_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ThemeCustom_Checked(object sender, RoutedEventArgs e)
         {
 
         }
@@ -1294,5 +1304,7 @@ namespace RelhaxModpack
 
         }
         #endregion
+
+
     }
 }

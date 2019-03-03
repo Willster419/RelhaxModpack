@@ -91,8 +91,8 @@
                         <TextBlock Text="Select theme:" />
                         <StackPanel Orientation="Vertical" Margin="15,0,0,0">
                             <RadioButton Content="Default" x:Name="ThemeDefault" Tag="ThemeDefault" Checked="ThemeDefault_Checked" />
-                            <RadioButton Content="Dark" x:Name="ThemeDark" Tag="ThemeDark" />
-                            <RadioButton Content="Custom...(TODO)" x:Name="ThemeCustom" Tag="ThemeCustom" />
+                            <RadioButton Content="Dark" x:Name="ThemeDark" Tag="ThemeDark" Checked="ThemeDark_Checked" />
+                            <RadioButton Content="Custom...(TODO)" x:Name="ThemeCustom" Tag="ThemeCustom" Checked="ThemeCustom_Checked" />
                         </StackPanel>
                         <Button Content="Dump color settings to xml" Tag="DumpColorSettingsButton" Name="DumpColorSettingsButton" Click="DumpColorSettingsButton_Click"/>
                     </StackPanel>
