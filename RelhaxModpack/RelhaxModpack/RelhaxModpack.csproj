@@ -143,6 +143,9 @@
     <Compile Include="Windows\DeleteOldCache.xaml.cs">
       <DependentUpon>DeleteOldCache.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\MediaUpload.xaml.cs">
+      <DependentUpon>MediaUpload.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\NewsViewer.xaml.cs">
       <DependentUpon>NewsViewer.xaml</DependentUpon>
     </Compile>
@@ -211,6 +214,9 @@
     <Compile Include="Utils\XmlBinary\PrimitiveFileReader.cs" />
     <Compile Include="Utils\XmlBinary\XmlBinaryHandler.cs" />
     <Compile Include="Utils\XMLUtils.cs" />
+    <Compile Include="Windows\ZipUploadDownload.xaml.cs">
+      <DependentUpon>ZipUploadDownload.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -271,6 +277,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\MediaUpload.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\ModSelectionList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -304,6 +314,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AdvancedProgress.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ZipUploadDownload.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
