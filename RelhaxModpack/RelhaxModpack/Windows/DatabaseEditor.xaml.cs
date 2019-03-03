@@ -430,12 +430,14 @@ namespace RelhaxModpack.Windows
                         }
                         else if (packageCurrentlyOver is Dependency dependnecyCurrentlyOverForInsert)
                         {
-                            if (!(packageToMove is DatabasePackage))
+                            if (!(packageToMove is Dependency))
                                 packageToMove = CopyDependency(packageToMove);
                             Dependencies.Insert(Dependencies.IndexOf(dependnecyCurrentlyOverForInsert) + 1, (Dependency)packageToMove);
                         }
                         else
                         {
+                            if ((packageToMove is Dependency) || (packageToMove is SelectablePackage))
+                                packageToMove = CopyGlobalDependency(packageToMove);
                             GlobalDependencies.Insert(GlobalDependencies.IndexOf(packageCurrentlyOver) + 1, (DatabasePackage)packageToMove);
                         }
 
@@ -539,7 +541,25 @@ namespace RelhaxModpack.Windows
             if (!(sender is TreeView tv))
                 return;
             TreeView treeView = (TreeView)sender;
-
+            if (e.Source is TreeViewItem itemCurrentlyOver && treeView.SelectedItem is TreeViewItem itemToMove)
+            {
+                if (itemToMove.Header is EditorComboBoxItem editorItemToMove && itemCurrentlyOver.Header is string && itemCurrentlyOver.Tag is int i)
+                {
+                    //assign to internals
+                    if (treeView.Equals(InstallGroupsTreeView))
+                        editorItemToMove.Package.InstallGroup = i;
+                    else
+                        editorItemToMove.Package.PatchGroup = i;
+                    //assign to UI
+                    if(itemToMove.Parent is TreeViewItem itemToMoveParent)
+                    {
+                        itemToMoveParent.Items.Remove(itemToMove);
+                        itemCurrentlyOver.Items.Insert(0,itemToMove);
+                    }
+                }
+            }
+            DragDropTest.Text = string.Empty;
+            DragDropTest.Visibility = Visibility.Hidden;
         }
 
         private void OnTreeViewGroupsDragOver(object sender, DragEventArgs e)
@@ -547,7 +567,21 @@ namespace RelhaxModpack.Windows
             if (!(sender is TreeView tv))
                 return;
             TreeView treeView = (TreeView)sender;
-
+            if (e.Source is TreeViewItem itemCurrentlyOver && treeView.SelectedItem is TreeViewItem itemToMove)
+            {
+                if(itemToMove.Header is EditorComboBoxItem editorItemToMove)
+                {
+                    if(itemCurrentlyOver.Header is string)
+                    {
+                        DragDropTest.Text = string.Format("Assign {0} to {1} group {2}", editorItemToMove.DisplayName, treeView.Equals(InstallGroupsTreeView) ? "Install" : "Patch", itemCurrentlyOver.Tag.ToString());
+                    }
+                    else
+                    {
+                        DragDropTest.Text = "You need to select a group header!";
+                    }
+                }
+            }
+            DragDropTest.Visibility = Visibility.Visible;
         }
 
         //https://stackoverflow.com/questions/19391135/prevent-drag-drop-when-scrolling
@@ -572,7 +606,7 @@ namespace RelhaxModpack.Windows
                 Logging.Debug("MouseMove DragDrop movement accepted, leftButton={0}, isDragConfirmed={1}, IsScrolling={2}", e.LeftButton.ToString(), isDragConfirmed.ToString(), IsScrolling.ToString());
                 if (treeView.SelectedItem is TreeViewItem itemToMove)
                 {
-                    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+                    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) && treeView.Equals(DatabaseTreeView))
                     {
                         //DoDragDrop is blocking
                         DragDrop.DoDragDrop(treeView, itemToMove, DragDropEffects.Copy);

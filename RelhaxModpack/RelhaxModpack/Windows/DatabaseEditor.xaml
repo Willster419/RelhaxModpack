@@ -404,8 +404,10 @@
                         <TextBlock x:Name="PackageDevURLTextBlock" HorizontalAlignment="Stretch" Grid.Row="6" TextWrapping="Wrap" Text="Dev URL" VerticalAlignment="Center"/>
                         <TextBlock x:Name="PackageVersionTextBlock" HorizontalAlignment="Stretch" Grid.Row="7" TextWrapping="Wrap" Text="Version" VerticalAlignment="Center"/>
                         <TextBlock x:Name="PakageTypeTextBlock" HorizontalAlignment="Stretch" Grid.Row="8" TextWrapping="Wrap" Text="Type" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="PackageLevelTextBlock" HorizontalAlignment="Stretch" Grid.Row="9" TextWrapping="Wrap" Text="Level:" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="PackagLastUpdatedTextBlock" HorizontalAlignment="Stretch" Grid.Row="10" TextWrapping="Wrap" Text="Last Updated:" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageInstallGroupTextBlock" HorizontalAlignment="Stretch" Grid.Row="9" TextWrapping="Wrap" Text="Install Group" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackagePatchGroupTextBlock" HorizontalAlignment="Stretch" Grid.Row="10" TextWrapping="Wrap" Text="Patch Group" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageLevelTextBlock" HorizontalAlignment="Stretch" Grid.Row="11" TextWrapping="Wrap" Text="Level:" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackagLastUpdatedTextBlock" HorizontalAlignment="Stretch" Grid.Row="12" TextWrapping="Wrap" Text="Last Updated:" VerticalAlignment="Center"/>
                         <TextBox HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
@@ -415,13 +417,13 @@
                         <TextBox HorizontalAlignment="Stretch" Grid.Row="7" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
                         <ComboBox HorizontalAlignment="Stretch" Grid.Row="8" Grid.Column="1" VerticalAlignment="Center"/>
                         <TextBlock HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="10" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
-                        <StackPanel Grid.Column="0" Grid.Row="11" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
+                        <StackPanel Grid.Column="0" Grid.Row="13" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
                             <CheckBox Content="Log At Install" Tag="LogAtInstallCB" x:Name="LogAtInstallCB" Checked="LogAtInstallCB_Checked" />
                             <CheckBox Content="Visible" x:Name="VisibleCB" Tag="VisibleCB" Margin="10,0,0,0" Checked="VisibleCB_Checked"/>
                             <CheckBox Content="Enabled" x:Name="EnabledCB" Tag="EnabledCB" Margin="10,0,0,0" Checked="EnabledCB_Checked"/>
                         </StackPanel>
-                        <Button Grid.Column="0" Grid.Row="12" HorizontalAlignment="Stretch"  VerticalAlignment="Top" Content="Download Zip" x:Name="ZipDownload" Tag="ZipUload" Click="ZipDownload_Click" Height="20" />
-                        <Button Grid.Column="0" Grid.Row="13" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUload_Click" />
+                        <Button Grid.Column="0" Grid.Row="14" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Content="Download Zip" x:Name="ZipDownload" Tag="ZipUload" Click="ZipDownload_Click" />
+                        <Button Grid.Column="0" Grid.Row="15" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUload_Click" />
                     </Grid>
                 </TabItem>
                 <TabItem Header="Description">
