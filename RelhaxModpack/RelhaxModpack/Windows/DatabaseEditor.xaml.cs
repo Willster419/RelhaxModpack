@@ -271,7 +271,8 @@ namespace RelhaxModpack.Windows
             //loop to add all the global dependencies to a treeview item, which is a new comboboxitem, which is the package and displayname
             foreach(DatabasePackage globalDependency in GlobalDependencies)
             {
-                globalDependenciesHeader.Items.Add(new TreeViewItem() { Header = new EditorComboBoxItem(globalDependency, globalDependency.PackageName)});
+                globalDependency.EditorTreeViewItem = new TreeViewItem() { Header = new EditorComboBoxItem(globalDependency, globalDependency.PackageName) };
+                globalDependenciesHeader.Items.Add(globalDependency.EditorTreeViewItem);
             }
 
             //same for dependencies
@@ -279,7 +280,8 @@ namespace RelhaxModpack.Windows
             DatabaseTreeView.Items.Add(dependenciesHeader);
             foreach (DatabasePackage dependency in Dependencies)
             {
-                dependenciesHeader.Items.Add(new TreeViewItem() { Header = new EditorComboBoxItem(dependency, dependency.PackageName) });
+                dependency.EditorTreeViewItem = new TreeViewItem() { Header = new EditorComboBoxItem(dependency, dependency.PackageName) };
+                dependenciesHeader.Items.Add(dependency.EditorTreeViewItem);
             }
 
             //add the category, then add each level recursivly
@@ -346,6 +348,8 @@ namespace RelhaxModpack.Windows
             {
                 //make a TVI for it
                 TreeViewItem packageTVI = new TreeViewItem() { Header = new EditorComboBoxItem(package, package.PackageName) };
+                //add the new tvi refrence to the package
+                package.EditorTreeViewItem = packageTVI;
                 //and have the parent add it
                 parent.Items.Add(packageTVI);
                 if (package.Packages.Count > 0)
@@ -734,10 +738,16 @@ namespace RelhaxModpack.Windows
 
         private void RemoveDatabaseObjectButton_Click(object sender, RoutedEventArgs e)
         {
-            if(DatabaseTreeView.SelectedItem is TreeViewItem tvi && tvi.Header is EditorComboBoxItem comboBoxItem && tvi.Parent is TreeViewItem parentTvi)
-                if(MessageBox.Show(string.Format("Are you sure you want to remove {0}?",comboBoxItem.DisplayName),"",MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            if (!(DatabaseTreeView.SelectedItem is TreeViewItem tvi2) || !(tvi2.Header is EditorComboBoxItem cbi2))
+            {
+                MessageBox.Show("Please select a package to perform action on");
+                return;
+            }
+            if (DatabaseTreeView.SelectedItem is TreeViewItem tvi && tvi.Header is EditorComboBoxItem comboBoxItem && tvi.Parent is TreeViewItem parentTvi)
+            {
+                if (MessageBox.Show(string.Format("Are you sure you want to remove {0}?", comboBoxItem.DisplayName), "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
-                    if(comboBoxItem.Package is SelectablePackage sp)
+                    if (comboBoxItem.Package is SelectablePackage sp)
                     {
                         sp.Parent.Packages.Remove(sp);
                     }
@@ -751,38 +761,71 @@ namespace RelhaxModpack.Windows
                     }
                     parentTvi.Items.Remove(tvi);
                 }
+            }
+            else
+            {
+                MessageBox.Show("Error, make sure selected item is a package");
+            }
         }
 
         private void MoveDatabaseObjectButton_Click(object sender, RoutedEventArgs e)
         {
+            if (!(DatabaseTreeView.SelectedItem is TreeViewItem tvi2) || !(tvi2.Header is EditorComboBoxItem cbi2))
+            {
+                MessageBox.Show("Please select a package to perform action on");
+                return;
+            }
             EditorAddRemove addRemove = new EditorAddRemove()
             {
                 GlobalDependencies = GlobalDependencies,
                 Dependencies = Dependencies,
                 ParsedCategoryList = ParsedCategoryList,
-                EditOrAdd = true
+                EditOrAdd = true,
+                AddSaveLevel = true,
+                SelectedPackage = null
             };
             if (!(bool)addRemove.ShowDialog())
                 return;
             if (addRemove.SelectedPackage == null)
                 throw new BadMemeException("i hate you all");
             //put the drag drop to a method to access it here TODO
+            //selectedItem is itemToMove, currentlyOver is what you just pointed to
+            if(DatabaseTreeView.SelectedItem is TreeViewItem itemToMove && itemToMove.Header is EditorComboBoxItem editorItemToMove
+                && itemToMove.Parent is TreeViewItem parentItemToMove && addRemove.SelectedPackage.EditorTreeViewItem.Parent is TreeViewItem parentItemCurrentlyOver)
+            {
+                PerformDatabaseMoveAdd(addRemove.SelectedPackage.EditorTreeViewItem, itemToMove, parentItemToMove, parentItemCurrentlyOver, editorItemToMove.Package,
+                    addRemove.SelectedPackage, DragDropEffects.Move, !addRemove.AddSaveLevel);
+            }
         }
 
         private void AddDatabaseObjectButton_Click(object sender, RoutedEventArgs e)
         {
+            if (!(DatabaseTreeView.SelectedItem is TreeViewItem tvi2) || !(tvi2.Header is EditorComboBoxItem cbi2))
+            {
+                MessageBox.Show("Please select a package to perform action on");
+                return;
+            }
             EditorAddRemove addRemove = new EditorAddRemove()
             {
                 GlobalDependencies = GlobalDependencies,
                 Dependencies = Dependencies,
                 ParsedCategoryList = ParsedCategoryList,
-                EditOrAdd = false
+                EditOrAdd = false,
+                AddSaveLevel = true,
+                SelectedPackage = null
             };
             if (!(bool)addRemove.ShowDialog())
                 return;
             if (addRemove.SelectedPackage == null)
                 throw new BadMemeException("i hate you all");
-
+            //put the drag drop to a method to access it here TODO
+            //selectedItem is itemToMove, currentlyOver is what you just pointed to
+            if (DatabaseTreeView.SelectedItem is TreeViewItem itemToMove && itemToMove.Header is EditorComboBoxItem editorItemToMove
+                && itemToMove.Parent is TreeViewItem parentItemToMove && addRemove.SelectedPackage.EditorTreeViewItem.Parent is TreeViewItem parentItemCurrentlyOver)
+            {
+                PerformDatabaseMoveAdd(addRemove.SelectedPackage.EditorTreeViewItem, itemToMove, parentItemToMove, parentItemCurrentlyOver, editorItemToMove.Package,
+                    addRemove.SelectedPackage, DragDropEffects.Copy, !addRemove.AddSaveLevel);
+            }
         }
 
         private void DependenciesAddSelected_Click(object sender, RoutedEventArgs e)

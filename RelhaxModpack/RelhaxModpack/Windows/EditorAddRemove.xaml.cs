@@ -68,8 +68,6 @@ namespace RelhaxModpack.Windows
 
         private void CategoryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (CategoryComboBox.IsDropDownOpen)
-                return;
             if(CategoryComboBox.SelectedItem is string s)
             {
                 if(s.Equals(GlobalDependenciesCategoryHeader))
