@@ -1400,7 +1400,7 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Search Box Code
-        bool ignoreKeyboard = true;
+
         private void SearchCB_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             //https://stackoverflow.com/questions/17250650/wpf-combobox-auto-highlighting-on-first-letter-input
@@ -1478,6 +1478,7 @@ namespace RelhaxModpack.Windows
                 SearchCB.IsDropDownOpen = true;
             }
         }
+
         private void OnSearchCBSelectionCommitted(ComboBoxItem committedItem, bool fromMouse)
         {
             //test to make sure the UIComponent is a control (it should be, but at least a test to make sure it's not null)
@@ -1494,20 +1495,20 @@ namespace RelhaxModpack.Windows
             else if (committedItem.Package.UIComponent == null)
                 throw new BadMemeException("WHYYYYYYYY!?!?");
         }
-        #endregion
 
         private void SearchCB_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(SearchCB.IsDropDownOpen)
+            if (SearchCB.IsDropDownOpen)
             {
-                foreach(ComboBoxItem item in SearchCB.Items)
+                foreach (ComboBoxItem item in SearchCB.Items)
                 {
-                    if(item.IsHighlighted && item.IsMouseOver)
+                    if (item.IsHighlighted && item.IsMouseOver)
                     {
                         OnSearchCBSelectionCommitted(item, true);
                     }
                 }
             }
         }
+        #endregion
     }
 }
