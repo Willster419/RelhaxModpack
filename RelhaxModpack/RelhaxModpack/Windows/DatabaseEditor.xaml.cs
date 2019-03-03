@@ -465,7 +465,11 @@ namespace RelhaxModpack.Windows
 
             //if copy, copy
             if (effects == DragDropEffects.Copy)
+            {
                 realItemToMove = new TreeViewItem() { Header = new EditorComboBoxItem(packageToMove, packageToMove.PackageName) };
+                //and also add it to the new packageToMove
+                packageToMove.EditorTreeViewItem = realItemToMove;
+            }
 
             if (addBelowItem && packageCurrentlyOver is SelectablePackage)
             {
