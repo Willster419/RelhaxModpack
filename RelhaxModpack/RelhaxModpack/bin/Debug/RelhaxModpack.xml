@@ -955,6 +955,19 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.MediaUpload">
+            <summary>
+            Interaction logic for MediaUpload.xaml
+            </summary>
+            <summary>
+            MediaUpload
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.MediaUpload.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.NewsViewer">
             <summary>
             Interaction logic for NewsViewer.xaml
@@ -1172,6 +1185,19 @@
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.VersionInfo.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.ZipUploadDownload">
+            <summary>
+            Interaction logic for ZipUploadDownload.xaml
+            </summary>
+            <summary>
+            ZipUploadDownload
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ZipUploadDownload.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>
