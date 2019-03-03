@@ -869,12 +869,31 @@ namespace RelhaxModpack.Windows
                     Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text))? DefaultSaveLocationSetting.Text : Settings.ApplicationStartupPath,
                     Title = "Save Database"
                 };
+            if (!(bool)SaveDatabaseDialog.ShowDialog())
+                return;
             //if what the user just specified is not the same as the current default, then ask to update it
             if(!Path.GetDirectoryName(SaveDatabaseDialog.FileName).Equals(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
                 if (MessageBox.Show("Use this as default save location?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                DefaultSaveLocationSetting.Text = "";
+                DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
             //actually save
             throw new BadMemeException("TODO");
+        }
+
+        private void SelectDefaultSaveLocationButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (SaveDatabaseDialog == null)
+                SaveDatabaseDialog = new SaveFileDialog()
+                {
+                    AddExtension = true,
+                    CheckPathExists = true,
+                    DefaultExt = "xml",
+                    InitialDirectory = string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ? Settings.ApplicationStartupPath :
+                    Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)) ? DefaultSaveLocationSetting.Text : Settings.ApplicationStartupPath,
+                    Title = "Save Database"
+                };
+            if (!(bool)SaveDatabaseDialog.ShowDialog())
+                return;
+            DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
         }
 
         private void OnLoadDatabaseClick(object sender, RoutedEventArgs e)
@@ -934,6 +953,11 @@ namespace RelhaxModpack.Windows
 
         private void RemoveDatabaseObjectButton_Click(object sender, RoutedEventArgs e)
         {
+            if (EditorSettings.ShowConfirmationOnPackageAddRemoveMove)
+            {
+                if (MessageBox.Show("Confirm this action?", "", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                    return;
+            }
             if (!(DatabaseTreeView.SelectedItem is TreeViewItem tvi2) || !(tvi2.Header is EditorComboBoxItem cbi2))
             {
                 MessageBox.Show("Please select a package to perform action on");
@@ -966,6 +990,12 @@ namespace RelhaxModpack.Windows
 
         private void MoveDatabaseObjectButton_Click(object sender, RoutedEventArgs e)
         {
+            if (EditorSettings.ShowConfirmationOnPackageAddRemoveMove)
+            {
+                if(MessageBox.Show("Confirm this action?", "", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                    return;
+            }
+                
             if (!(DatabaseTreeView.SelectedItem is TreeViewItem tvi2) || !(tvi2.Header is EditorComboBoxItem cbi2))
             {
                 MessageBox.Show("Please select a package to perform action on");
@@ -996,6 +1026,11 @@ namespace RelhaxModpack.Windows
 
         private void AddDatabaseObjectButton_Click(object sender, RoutedEventArgs e)
         {
+            if (EditorSettings.ShowConfirmationOnPackageAddRemoveMove)
+            {
+                if (MessageBox.Show("Confirm this action?", "", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                    return;
+            }
             if (!(DatabaseTreeView.SelectedItem is TreeViewItem tvi2) || !(tvi2.Header is EditorComboBoxItem cbi2))
             {
                 MessageBox.Show("Please select a package to perform action on");
