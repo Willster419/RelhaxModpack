@@ -29,6 +29,12 @@ namespace RelhaxModpack
 
         public ApplyBehavior ApplyBehavior = ApplyBehavior.Default;
 
+        public bool ShowConfirmationOnPackageApply = true;
+
+        public bool ShowConfirmationOnPackageAddRemoveMove = true;
+
+        public string DefaultEditorSaveLocation = string.Empty;
+
         public EditorSettings() { }
     }
 }

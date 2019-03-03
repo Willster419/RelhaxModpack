@@ -361,23 +361,23 @@
                         <TextBlock x:Name="SaveSelectionBeforeLeaveTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Save Selection information before leave (auto apply)" VerticalAlignment="Center" Grid.Column="0" Grid.Row="4"/>
                         <TextBlock x:Name="SortCategoriesTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Sort each category&#xA;(includes dependencies)" VerticalAlignment="Center" Grid.Column="0" Grid.Row="5"/>
                         <TextBlock x:Name="ApplyBehaviorTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Apply Behavior" VerticalAlignment="Center" Grid.Column="0" Grid.Row="6"/>
-                        <TextBox x:Name="WotmodsUsernameSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0"/>
-                        <TextBox x:Name="WotmodsPasswordSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1"/>
-                        <TextBox x:Name="BigmodsUsernameSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2"/>
-                        <TextBox x:Name="BigmodsPasswordSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="3"/>
-                        <CheckBox x:Name="SaveSelectionBeforeLeaveSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="4"/>
-                        <CheckBox x:Name="SortCategoriesSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="5" IsEnabled="False"/>
+                        <TextBox x:Name="WotmodsUsernameSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" TextChanged="WotmodsUsernameSetting_TextChanged"/>
+                        <TextBox x:Name="WotmodsPasswordSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" TextChanged="WotmodsPasswordSetting_TextChanged"/>
+                        <TextBox x:Name="BigmodsUsernameSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" TextChanged="BigmodsUsernameSetting_TextChanged"/>
+                        <TextBox x:Name="BigmodsPasswordSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="3" TextChanged="BigmodsPasswordSetting_TextChanged"/>
+                        <CheckBox x:Name="SaveSelectionBeforeLeaveSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="4" Checked="SaveSelectionBeforeLeaveSetting_Checked"/>
+                        <CheckBox x:Name="SortCategoriesSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="5" IsEnabled="False" Checked="SortCategoriesSetting_Checked"/>
                         <StackPanel HorizontalAlignment="Left" Grid.Column="1" Grid.Row="6">
-                            <RadioButton x:Name="ApplyBehaviorDefaultSetting" Content="Default"/>
-                            <RadioButton x:Name="ApplyBehaviorApplyTriggersSaveSetting" Content="Apply triggers Save"/>
-                            <RadioButton x:Name="ApplyBehaviorSaveTriggersApplySetting" Content="Save triggers Apply"/>
+                            <RadioButton x:Name="ApplyBehaviorDefaultSetting" Content="Default" Checked="ApplyBehaviorDefaultSetting_Checked"/>
+                            <RadioButton x:Name="ApplyBehaviorApplyTriggersSaveSetting" Content="Apply triggers Save" Checked="ApplyBehaviorApplyTriggersSaveSetting_Checked"/>
+                            <RadioButton x:Name="ApplyBehaviorSaveTriggersApplySetting" Content="Save triggers Apply" Checked="ApplyBehaviorSaveTriggersApplySetting_Checked"/>
                         </StackPanel>
-                        <TextBlock HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Row="7" Text="Show confirmation on package apply"/>
-                        <TextBlock HorizontalAlignment="Stretch"  Grid.Row="8" TextWrapping="Wrap" Text="Show confirmation on package add/remove/edit" VerticalAlignment="Center"/>
-                        <CheckBox Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="7" VerticalAlignment="Center"/>
-                        <CheckBox Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="8" VerticalAlignment="Center"/>
-                        <Button Content="Select default save location" HorizontalAlignment="Stretch" Grid.Row="9" VerticalAlignment="Center" />
-                        <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="9" TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <TextBlock x:Name="ShowConfirmOnPackageApply" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Row="7" Text="Show confirmation on package apply"/>
+                        <TextBlock x:Name="ShowConfirmOnPackageAddRemoveEdit" HorizontalAlignment="Stretch"  Grid.Row="8" TextWrapping="Wrap" Text="Show confirmation on package add/remove/move" VerticalAlignment="Center"/>
+                        <CheckBox x:Name="ShowConfirmOnPackageApplySetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="7" VerticalAlignment="Center" Checked="ShowConfirmOnPackageApplySetting_Checked"/>
+                        <CheckBox x:Name="ShowConfirmOnPackageAddRemoveEditSetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="8" VerticalAlignment="Center" Checked="ShowConfirmOnPackageAddRemoveEditSetting_Checked"/>
+                        <Button x:Name="SelectDefaultSaveLocationButton" Content="Select default save location" HorizontalAlignment="Stretch" Grid.Row="9" VerticalAlignment="Center" />
+                        <TextBox x:Name="DefaultSaveLocationSetting" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="9" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="DefaultSaveLocationSetting_TextChanged" />
                     </Grid>
                 </TabItem>
             </TabControl>
@@ -420,21 +420,22 @@
                         <TextBlock x:Name="PackagePatchGroupTextBlock" HorizontalAlignment="Stretch" Grid.Row="10" TextWrapping="Wrap" Text="Patch Group" VerticalAlignment="Center"/>
                         <TextBlock x:Name="PackageLevelTextBlock" HorizontalAlignment="Stretch" Grid.Row="11" TextWrapping="Wrap" Text="Level:" VerticalAlignment="Center"/>
                         <TextBlock x:Name="PackagLastUpdatedTextBlock" HorizontalAlignment="Stretch" Grid.Row="12" TextWrapping="Wrap" Text="Last Updated:" VerticalAlignment="Center"/>
-                        <TextBox HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                        <TextBox HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                        <TextBox HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                        <TextBox HorizontalAlignment="Stretch" Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                        <TextBox HorizontalAlignment="Stretch" Grid.Row="5" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                        <TextBox HorizontalAlignment="Stretch" Grid.Row="6" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                        <TextBox HorizontalAlignment="Stretch" Grid.Row="7" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                        <ComboBox HorizontalAlignment="Stretch" Grid.Row="8" Grid.Column="1" VerticalAlignment="Center"/>
-                        <ComboBox HorizontalAlignment="Stretch" Grid.Row="9" Grid.Column="1" VerticalAlignment="Center"/>
-                        <ComboBox HorizontalAlignment="Stretch" Grid.Row="10" Grid.Column="1" VerticalAlignment="Center"/>
-                        <TextBlock HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="11" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
+                        <TextBox x:Name="PackageNameDisplay" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <TextBox x:Name="PackagePackageNameDisplay" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <TextBox x:Name="PackageStartAddressDisplay" HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <TextBox x:Name="PackageZipFileDisplay" HorizontalAlignment="Stretch" Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <TextBox x:Name="PackageEndAddressDisplay" HorizontalAlignment="Stretch" Grid.Row="5" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <TextBox x:Name="PackageDevURLDisplay" HorizontalAlignment="Stretch" Grid.Row="6" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" MouseDoubleClick="PackageDevURLDisplay_MouseDoubleClick" />
+                        <TextBox x:Name="PackageVersionDisplay" HorizontalAlignment="Stretch" Grid.Row="7" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <ComboBox x:Name="PackageTypeDisplay" HorizontalAlignment="Stretch" Grid.Row="8" Grid.Column="1" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="PackageInstallGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="9" Grid.Column="1" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="PackagePatchGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="10" Grid.Column="1" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageLevelDisplay" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="11" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
+                        <TextBlock x:Name="PackageLastUpdatedDisplay" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="12" TextWrapping="Wrap" VerticalAlignment="Center"/>
                         <StackPanel Grid.Column="0" Grid.Row="13" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
-                            <CheckBox Content="Log At Install" Tag="LogAtInstallCB" x:Name="LogAtInstallCB"/>
-                            <CheckBox Content="Visible" x:Name="VisibleCB" Tag="VisibleCB" Margin="10,0,0,0"/>
-                            <CheckBox Content="Enabled" x:Name="EnabledCB" Tag="EnabledCB" Margin="10,0,0,0"/>
+                            <CheckBox Content="Log At Install" Tag="LogAtInstallCB" x:Name="PackageLogAtInstallDisplay"/>
+                            <CheckBox Content="Visible" x:Name="PackageVisibleDisplay" Tag="VisibleCB" Margin="10,0,0,0"/>
+                            <CheckBox Content="Enabled" x:Name="PackageEnabledDisplay" Tag="EnabledCB" Margin="10,0,0,0"/>
                         </StackPanel>
                         <Button Grid.Column="0" Grid.Row="14" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Apply" x:Name="ApplyButton" Click="ApplyButton_Click"/>
                         <Button Grid.Column="0" Grid.Row="15" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Content="Download Zip" x:Name="ZipDownload" Tag="ZipUload" Click="ZipDownload_Click" />
@@ -443,29 +444,29 @@
                 </TabItem>
                 <TabItem Header="Description">
                     <Grid Background="#FFE5E5E5">
-                        <TextBox TextWrapping="Wrap" Text="TextBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                        <TextBox x:Name="PackageDescriptionDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Update Notes">
                     <Grid Background="#FFE5E5E5">
-                        <TextBox TextWrapping="Wrap" Text="TextBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                        <TextBox x:Name="PackageUpdateNotesDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Dependencies">
                     <Grid Background="#FFE5E5E5">
-                        <ListBox HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
+                        <ListBox x:Name="PackageDependenciesDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
                         <Button Content="Add selected" x:Name="DependenciesAddSelected" Tag="DependenciesAddSelected" HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="100" Click="DependenciesAddSelected_Click"/>
                         <Button Content="Remove Selected" x:Name="DependenciesRemoveSelected" Tag="DependenciesRemoveSelected" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="100" Click="DependenciesRemoveSelected_Click"/>
-                        <ComboBox HorizontalAlignment="Left" Margin="105,184,0,0" VerticalAlignment="Top" Width="372" Height="20"/>
+                        <ComboBox x:Name="LoadedDependenciesList" HorizontalAlignment="Left" Margin="105,184,0,0" VerticalAlignment="Top" Width="372" Height="20"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Medias">
                     <Grid Background="#FFE5E5E5">
-                        <ListBox HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
+                        <ListBox x:Name="PackageMediasDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
                         <Button Content="Add Media" x:Name="MediaAddMediaButton" Tag="MediaAddMediaButton" HorizontalAlignment="Left" Margin="0,253,0,0" VerticalAlignment="Top" Width="100" Click="MediaAddMediaButton_Click"/>
                         <Button Content="Apply Edit" x:Name="MediaApplyEditButton" Tag="MediaApplyEditButton" HorizontalAlignment="Left" Margin="105,253,0,0" VerticalAlignment="Top" Width="100" Click="MediaApplyEditButton_Click"/>
                         <Button Content="Remove Media" x:Name="MediaRemoveMediaButton" Tag="MediaRemoveMediaButton" HorizontalAlignment="Left" Margin="210,253,0,0" VerticalAlignment="Top" Width="100" Click="MediaRemoveMediaButton_Click"/>
-                        <ComboBox HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="487" Height="20"/>
+                        <ComboBox x:Name="MediaTypesList" HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="487" Height="20"/>
                         <TextBox HorizontalAlignment="Left" Height="39" Margin="0,209,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="487"/>
                         <Button Content="Preview Selected Media" x:Name="MediaPreviewSelectedMediaButton" Tag="MediaPreviewSelectedMediaButton" HorizontalAlignment="Left" Margin="0,278,0,0" VerticalAlignment="Top" Width="135" Click="MediaPreviewSelectedMediaButton_Click"/>
                         <Button Content="Preview Edit Media" x:Name="MediaPreviewEditMediaButton" Tag="MediaPreviewEditMediaButton" HorizontalAlignment="Left" Margin="140,278,0,0" VerticalAlignment="Top" Width="110" Click="MediaPreviewEditMediaButton_Click"/>
@@ -473,16 +474,16 @@
                 </TabItem>
                 <TabItem Header="Userdatas">
                     <Grid Background="#FFE5E5E5">
-                        <ListBox HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
+                        <ListBox x:Name="PackageUserdatasDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
                         <Button Content="Add Userdata" x:Name="UserdataApplyUsedataButton" Tag="UserdataApplyUsedataButton" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="100" Click="UserdataApplyUsedataButton_Click"/>
                         <Button Content="Apply Edit" x:Name="UserdataApplyEditButton" HorizontalAlignment="Left" Margin="105,209,0,0" VerticalAlignment="Top" Width="100" Click="UserdataApplyEditButton_Click"/>
                         <Button Content="Remove Userdata" x:Name="UserdataRemoveUserdata" Tag="UserdataRemoveUserdata" HorizontalAlignment="Left" Margin="210,209,0,0" VerticalAlignment="Top" Width="100" Click="UserdataRemoveUserdata_Click"/>
-                        <TextBox HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
+                        <TextBox x:Name="UserDataEditBox" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Triggers">
                     <Grid Background="#FFE5E5E5">
-                        <ListBox HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
+                        <ListBox x:Name="PackageTriggersDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
                         <Button Content="Add selected Trigger" x:Name="TriggerAddSelectedTrigger" Tag="TriggerAddSelectedTrigger" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="120" Click="TriggerAddSelectedTrigger_Click"/>
                         <Button Content="Remove Trigger" x:Name="TriggerRemoveTrigger" Tag="TriggerRemoveTrigger" HorizontalAlignment="Left" Margin="125,209,0,0" VerticalAlignment="Top" Width="120" Click="TriggerRemoveTrigger_Click"/>
                         <ComboBox x:Name="TriggerSelectionComboBox" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>

@@ -40,6 +40,7 @@ namespace RelhaxModpack.Windows
         private bool AlreadyLoggedMouseMove = false;
         private bool AlreadyLoggedScroll = false;
         private bool Init = true;
+        private DatabasePackage SelectedItem = null;
         private string[] UIHeaders = new string[]
         {
             "-----Global Dependencies-----",
@@ -336,11 +337,23 @@ namespace RelhaxModpack.Windows
 
         private void LoadSettingsToUI()
         {
-
+            WotmodsUsernameSetting.Text = EditorSettings.WotmodsUsername;
+            WotmodsPasswordSetting.Text = EditorSettings.WotmodsPassword;
+            BigmodsUsernameSetting.Text = EditorSettings.BigmodsUsername;
+            BigmodsPasswordSetting.Text = EditorSettings.BigmodsPassword;
+            SaveSelectionBeforeLeaveSetting.IsChecked = EditorSettings.SaveSelectionBeforeLeave;
+            SortCategoriesSetting.IsChecked = EditorSettings.SortDatabaseList;
+            ApplyBehaviorDefaultSetting.IsChecked = EditorSettings.ApplyBehavior == ApplyBehavior.Default ? true : false;
+            ApplyBehaviorApplyTriggersSaveSetting.IsChecked = EditorSettings.ApplyBehavior == ApplyBehavior.ApplyTriggersSave ? true : false;
+            ApplyBehaviorSaveTriggersApplySetting.IsChecked = EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply ? true : false;
+            ShowConfirmOnPackageApplySetting.IsChecked = EditorSettings.ShowConfirmationOnPackageApply;
+            ShowConfirmOnPackageAddRemoveEditSetting.IsChecked = EditorSettings.ShowConfirmationOnPackageAddRemoveMove;
+            DefaultSaveLocationSetting.Text = EditorSettings.DefaultEditorSaveLocation;
         }
 
         private void ShowDatabaseObject(DatabasePackage package)
         {
+            //load all items in the databasePackage level first
 
         }
 
@@ -353,12 +366,29 @@ namespace RelhaxModpack.Windows
         #region Other UI events
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
-
+            //check if we should ask a confirm first
+            if(EditorSettings.ShowConfirmationOnPackageApply && MessageBox.Show("Confirm to apply changes?","",MessageBoxButton.YesNo) == MessageBoxResult.OK)
+            if(DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem && selectedTreeViewItem.Header is EditorComboBoxItem editorSelectedItem)
+            {
+                SaveApplyDatabaseObject(editorSelectedItem.Package);
+            }
         }
 
         private void DatabaseTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-
+            //first always check to make sure it's a package item
+            if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem && selectedTreeViewItem.Header is EditorComboBoxItem editorSelectedItem)
+            {
+                //check if we should save the item before updating what the current entry is
+                if(EditorSettings.SaveSelectionBeforeLeave && SelectedItem != null)
+                {
+                    SaveApplyDatabaseObject(SelectedItem);
+                }
+                //set the item as the new selectedItem
+                SelectedItem = editorSelectedItem.Package;
+                //display the new selectedItem
+                ShowDatabaseObject(SelectedItem);
+            }
         }
 
         private void LeftTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -403,6 +433,15 @@ namespace RelhaxModpack.Windows
                     AddDatabaseObjectButton.IsEnabled = false;
                 }
             }
+        }
+
+        private void PackageDevURLDisplay_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(PackageDevURLDisplay.Text);
+            }
+            catch { }
         }
         #endregion
 
@@ -976,6 +1015,67 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Settings tab events
+        private void WotmodsUsernameSetting_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            EditorSettings.WotmodsUsername = WotmodsUsernameSetting.Text;
+        }
+
+        private void WotmodsPasswordSetting_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            EditorSettings.WotmodsPassword = WotmodsPasswordSetting.Text;
+        }
+
+        private void BigmodsUsernameSetting_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            EditorSettings.BigmodsUsername = BigmodsUsernameSetting.Text;
+        }
+
+        private void BigmodsPasswordSetting_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            EditorSettings.BigmodsPassword = BigmodsPasswordSetting.Text;
+        }
+
+        private void DefaultSaveLocationSetting_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            EditorSettings.DefaultEditorSaveLocation = DefaultSaveLocationSetting.Text;
+        }
+
+        private void SaveSelectionBeforeLeaveSetting_Checked(object sender, RoutedEventArgs e)
+        {
+            EditorSettings.SaveSelectionBeforeLeave = (bool)SaveSelectionBeforeLeaveSetting.IsChecked;
+        }
+
+        private void SortCategoriesSetting_Checked(object sender, RoutedEventArgs e)
+        {
+            EditorSettings.SortDatabaseList = (bool)SortCategoriesSetting.IsChecked;
+        }
+
+        private void ApplyBehaviorSetting_Checked(object sender, RoutedEventArgs e)
+        {
+            if ((bool)ApplyBehaviorDefaultSetting.IsChecked)
+                EditorSettings.ApplyBehavior = ApplyBehavior.Default;
+            else if ((bool)ApplyBehaviorApplyTriggersSaveSetting.IsChecked)
+                EditorSettings.ApplyBehavior = ApplyBehavior.ApplyTriggersSave;
+            else if ((bool)ApplyBehaviorSaveTriggersApplySetting.IsChecked)
+                EditorSettings.ApplyBehavior = ApplyBehavior.SaveTriggersApply;
+        }
+
+        private void ShowConfirmOnPackageApplySetting_Checked(object sender, RoutedEventArgs e)
+        {
+            EditorSettings.ShowConfirmationOnPackageApply = (bool)ShowConfirmOnPackageApplySetting.IsChecked;
+        }
+
+        private void ShowConfirmOnPackageAddRemoveEditSetting_Checked(object sender, RoutedEventArgs e)
+        {
+            EditorSettings.ShowConfirmationOnPackageAddRemoveMove = (bool)ShowConfirmOnPackageAddRemoveEditSetting.IsChecked;
+        }
+        #endregion
+
+        #region Searchbox code
+
+        #endregion
+
+        #region Upload/Download zipfile code
 
         #endregion
     }
