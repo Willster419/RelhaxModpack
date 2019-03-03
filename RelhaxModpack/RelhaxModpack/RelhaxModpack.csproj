@@ -133,6 +133,9 @@
     <Compile Include="Windows\Diagnostics.xaml.cs">
       <DependentUpon>Diagnostics.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\EditorAddRemove.xaml.cs">
+      <DependentUpon>EditorAddRemove.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\FirstLoadAknowledgements.xaml.cs">
       <DependentUpon>FirstLoadAknowledgements.xaml</DependentUpon>
     </Compile>
@@ -245,6 +248,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\Diagnostics.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\EditorAddRemove.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

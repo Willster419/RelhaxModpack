@@ -916,6 +916,19 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.EditorAddRemove">
+            <summary>
+            Interaction logic for EditorAddRemove.xaml
+            </summary>
+            <summary>
+            EditorAddRemove
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.EditorAddRemove.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.FirstLoadAknowledgements">
             <summary>
             Interaction logic for FirstLoadAknowledgements.xaml

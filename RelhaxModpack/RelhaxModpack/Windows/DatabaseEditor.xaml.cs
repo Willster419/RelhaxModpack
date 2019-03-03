@@ -717,16 +717,54 @@ namespace RelhaxModpack.Windows
 
         private void RemoveDatabaseObjectButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if(DatabaseTreeView.SelectedItem is TreeViewItem tvi && tvi.Header is EditorComboBoxItem comboBoxItem && tvi.Parent is TreeViewItem parentTvi)
+                if(MessageBox.Show(string.Format("Are you sure you want to remove {0}?",comboBoxItem.DisplayName),"",MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    if(comboBoxItem.Package is SelectablePackage sp)
+                    {
+                        sp.Parent.Packages.Remove(sp);
+                    }
+                    else if (comboBoxItem.Package is Dependency d)
+                    {
+                        Dependencies.Remove(d);
+                    }
+                    else if (comboBoxItem.Package is DatabasePackage dp)
+                    {
+                        GlobalDependencies.Remove(dp);
+                    }
+                    parentTvi.Items.Remove(tvi);
+                }
         }
 
         private void MoveDatabaseObjectButton_Click(object sender, RoutedEventArgs e)
         {
-
+            EditorAddRemove addRemove = new EditorAddRemove()
+            {
+                GlobalDependencies = GlobalDependencies,
+                Dependencies = Dependencies,
+                ParsedCategoryList = ParsedCategoryList,
+                EditOrAdd = true
+            };
+            if (!(bool)addRemove.ShowDialog())
+                return;
+            if (addRemove.SelectedPackage == null)
+                throw new BadMemeException("i hate you all");
+            //put the drag drop to a method to access it here TODO
         }
 
         private void AddDatabaseObjectButton_Click(object sender, RoutedEventArgs e)
         {
+            EditorAddRemove addRemove = new EditorAddRemove()
+            {
+                GlobalDependencies = GlobalDependencies,
+                Dependencies = Dependencies,
+                ParsedCategoryList = ParsedCategoryList,
+                EditOrAdd = false
+            };
+            if (!(bool)addRemove.ShowDialog())
+                return;
+            if (addRemove.SelectedPackage == null)
+                throw new BadMemeException("i hate you all");
 
         }
 
