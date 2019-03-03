@@ -35,6 +35,10 @@ namespace RelhaxModpack.Windows
         private SaveFileDialog SaveZipFileDialog;
         private System.Windows.Forms.Timer DragDropTimer = new System.Windows.Forms.Timer() {Enabled = false, Interval = 1000 };
         private TreeViewItem ItemToExpand;
+        private Point BeforeDragDropPoint;
+        private bool IsScrolling = false;
+        private bool AlreadyLoggedMouseMove = false;
+        private bool AlreadyLoggedScroll = false;
         private string[] UIHeaders = new string[]
         {
             "-----Global Dependencies-----",
@@ -105,6 +109,101 @@ namespace RelhaxModpack.Windows
                 if (Settings.SaveSettings(Settings.EditorSettingsFilename, typeof(EditorSettings), null, EditorSettings))
                     Logging.WriteToLog("Editor settings saved");
             }
+        }
+
+        private int GetMaxPatchGroups()
+        {
+            return Utils.GetMaxPatchGroupNumber(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
+        }
+
+        private int GetMaxInstallGroups()
+        {
+            return Utils.GetMaxInstallGroupNumber(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
+        }
+
+        private DatabasePackage CopyGlobalDependency(DatabasePackage packageToCopy)
+        {
+            DatabasePackage newPackage = new DatabasePackage()
+            {
+                PackageName = packageToCopy.PackageName,
+                Version = packageToCopy.Version,
+                Timestamp = packageToCopy.Timestamp,
+                ZipFile = packageToCopy.ZipFile,
+                Enabled = packageToCopy.Enabled,
+                CRC = packageToCopy.CRC,
+                StartAddress = packageToCopy.StartAddress,
+                EndAddress = packageToCopy.EndAddress,
+                LogAtInstall = packageToCopy.LogAtInstall,
+                Triggers = new List<string>(),
+                DevURL = packageToCopy.DevURL,
+                InstallGroup = packageToCopy.InstallGroup,
+                PatchGroup = packageToCopy.PatchGroup,
+                _Enabled = packageToCopy._Enabled
+            };
+            //foreach (string s in packageToCopy.Triggers)
+                //newPackage.Triggers.Add(s);
+            return newPackage;
+        }
+
+        private Dependency CopyDependency(DatabasePackage packageToCopy)
+        {
+            Dependency dep = new Dependency()
+            {
+                PackageName = packageToCopy.PackageName,
+                Version = packageToCopy.Version,
+                Timestamp = packageToCopy.Timestamp,
+                ZipFile = packageToCopy.ZipFile,
+                Enabled = packageToCopy.Enabled,
+                CRC = packageToCopy.CRC,
+                StartAddress = packageToCopy.StartAddress,
+                EndAddress = packageToCopy.EndAddress,
+                LogAtInstall = packageToCopy.LogAtInstall,
+                Triggers = new List<string>(),
+                DevURL = packageToCopy.DevURL,
+                InstallGroup = packageToCopy.InstallGroup,
+                PatchGroup = packageToCopy.PatchGroup,
+                _Enabled = packageToCopy._Enabled
+            };
+            dep.DatabasePackageLogic = new List<DatabaseLogic>();
+            dep.Dependencies = new List<DatabaseLogic>();
+            return dep;
+        }
+
+        private SelectablePackage CopySelectablePackage(DatabasePackage packageToCopy)
+        {
+            SelectablePackage sp = new SelectablePackage()
+            {
+                PackageName = packageToCopy.PackageName,
+                Version = packageToCopy.Version,
+                Timestamp = packageToCopy.Timestamp,
+                ZipFile = packageToCopy.ZipFile,
+                Enabled = packageToCopy.Enabled,
+                CRC = packageToCopy.CRC,
+                StartAddress = packageToCopy.StartAddress,
+                EndAddress = packageToCopy.EndAddress,
+                LogAtInstall = packageToCopy.LogAtInstall,
+                Triggers = new List<string>(),
+                DevURL = packageToCopy.DevURL,
+                InstallGroup = packageToCopy.InstallGroup,
+                PatchGroup = packageToCopy.PatchGroup,
+                _Enabled = packageToCopy._Enabled
+            };
+            sp.Type = "multi";
+            sp.Name = "WRITE_NEW_NAME";
+            sp.Visible = true;
+            sp.Size = 0;
+            sp.UpdateComment = string.Empty;
+            sp.Description = string.Empty;
+            sp.PopularMod = false;
+            sp._Checked = false;
+            sp.Level = -2;
+            sp.UserFiles = new List<UserFiles>();
+            sp.Packages = new List<SelectablePackage>();
+            sp.Medias = new List<Media>();
+            sp.Dependencies = new List<DatabaseLogic>();
+            sp.ConflictingPackages = new List<string>();
+            sp.ShowInSearchList = true;
+            return sp;
         }
 
         private void OnLoadDatabaseClick(object sender, RoutedEventArgs e)
@@ -206,7 +305,7 @@ namespace RelhaxModpack.Windows
             //for each group header, get the list of packages that have an equal install group number
             for (int i = 0; i < installGroupHeaders.Count(); i++)
             {
-                installGroupHeaders[i] = new TreeViewItem() { Header = string.Format("---Install Group {0}---", i) };
+                installGroupHeaders[i] = new TreeViewItem() { Header = string.Format("---Install Group {0}---", i), Tag = i };
                 InstallGroupsTreeView.Items.Add(installGroupHeaders[i]);
                 installGroupHeaders[i].Items.Clear();
                 foreach (DatabasePackage packageWithEqualGroupNumber in allFlatList.Where(package => package.InstallGroup == i).ToList())
@@ -227,7 +326,7 @@ namespace RelhaxModpack.Windows
             //for each group header, get the list of packages that have an equal patch group number
             for (int i = 0; i < patchGroupHeaders.Count(); i++)
             {
-                patchGroupHeaders[i] = new TreeViewItem() { Header = string.Format("---Patch Group {0}---", i) };
+                patchGroupHeaders[i] = new TreeViewItem() { Header = string.Format("---Patch Group {0}---", i), Tag = i };
                 PatchGroupsTreeView.Items.Add(patchGroupHeaders[i]);
                 patchGroupHeaders[i].Items.Clear();
                 foreach (DatabasePackage packageWithEqualGroupNumber in allFlatList.Where(package => package.PatchGroup == i).ToList())
@@ -254,61 +353,143 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        
-        private void DatabaseTreeView_Drop(object sender, DragEventArgs e)
+        #region Drag Drop code
+        private void OnTreeViewDatabaseDrop(object sender, DragEventArgs e)
         {
+            if (!(sender is TreeView tv))
+                return;
+            TreeView treeView = (TreeView)sender;
             //reset the textbox
             DragDropTest.Text = "";
             DragDropTest.Visibility = Visibility.Hidden;
             ItemToExpand = null;
             DragDropTimer.Stop();
-            if (e.Source is TreeViewItem itemCurrentlyOver)
+            //make sure the source and destination are tree view items
+            if (e.Source is TreeViewItem itemCurrentlyOver && treeView.SelectedItem is TreeViewItem itemToMove)
             {
-                if (DatabaseTreeView.SelectedItem is TreeViewItem itemToMove)
+                //make sure source and destination have the correct header information
+                if (itemCurrentlyOver.Header is EditorComboBoxItem editorPackageCurrentlyOver && itemToMove.Header is EditorComboBoxItem editorPackageToMove)
                 {
-                    if (itemCurrentlyOver.Header is EditorComboBoxItem packageCurrentlyOver)
+                    //make sure that the source and destination are not the same
+                    if (editorPackageCurrentlyOver.Package.Equals(editorPackageToMove.Package))
+                        return;
+                    //remove the treeviewItem from the UI list
+                    //add the package to the new area (below)
+                    if (itemToMove.Parent is TreeViewItem parentItemToMove && itemCurrentlyOver.Parent is TreeViewItem parentItemOver)
                     {
-                        if (itemToMove.Header is EditorComboBoxItem packageToMove)
-                        {
-                            switch(e.Effects)
-                            {
-                                case DragDropEffects.Copy:
+                        //save the references from the editorItems
+                        DatabasePackage packageToMove = editorPackageToMove.Package;
+                        DatabasePackage packageCurrentlyOver = editorPackageCurrentlyOver.Package;
 
-                                    break;
-                                case DragDropEffects.Move:
-                                    //remove the treeviewItem from the UI list
-                                    //add the package to the new area (below)
-                                    if (itemToMove.Parent is TreeViewItem parentItemToMove)
-                                    {
-                                        if(itemCurrentlyOver.Parent is TreeViewItem parentItemOver)
-                                        {
-                                            parentItemToMove.Items.Remove(itemToMove);
-                                            parentItemOver.Items.Insert(parentItemOver.Items.IndexOf(itemCurrentlyOver) + 1, itemToMove);
-                                        }
-                                    }
-                                    //remove the package from the internal list
-                                    //add the treeviewitem to the new area (below)
-                                    if (packageToMove.Package is SelectablePackage selectablePackageToMove)
-                                    {
-                                        if (packageCurrentlyOver.Package is SelectablePackage selectablePackageCurrentlyOver)
-                                        {
-                                            selectablePackageToMove.Parent.Packages.Remove(selectablePackageToMove);
-                                            selectablePackageCurrentlyOver.Packages.Insert(selectablePackageCurrentlyOver.Packages.IndexOf(selectablePackageCurrentlyOver) + 1, selectablePackageToMove);
-                                        }
-                                        else break;
-                                    }
-                                    else break;
-                                    break;
+                        //if it's a move operation, then remove the element from it's original list
+                        if(e.Effects == DragDropEffects.Move)
+                        {
+                            if (packageToMove is SelectablePackage selectablePackageToMove)
+                                selectablePackageToMove.Parent.Packages.Remove(selectablePackageToMove);
+                            else if (packageToMove is Dependency dependencyToMove)
+                                Dependencies.Remove(dependencyToMove);
+                            else
+                                GlobalDependencies.Remove(packageToMove);
+                        }
+
+                        //if it's a copy operation, then make a deep copy new element
+                        //default to make a selectablePackage copy, then cast down as needed
+                        //then assign it back to packageToMove
+                        if(e.Effects == DragDropEffects.Copy)
+                        {
+                            if(packageCurrentlyOver is SelectablePackage)
+                            {
+                                packageToMove = CopySelectablePackage(packageToMove);
                             }
+                            else if (packageCurrentlyOver is Dependency)
+                            {
+                                packageToMove = CopyDependency(packageToMove);
+                            }
+                            else
+                            {
+                                packageToMove = CopyGlobalDependency(packageToMove);
+                            }
+                            //the packageName needs to stay unique as well
+                            int i = 0;
+                            string origName = packageToMove.PackageName;
+                            while (Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList).Where(package => package.PackageName.Equals(packageToMove.PackageName)).Count() > 0)
+                                packageToMove.PackageName = string.Format("{0}_{1}", origName, i++);
+                        }
+
+                        //insert packageToMove into corresponding list that it's over
+                        if(packageCurrentlyOver is SelectablePackage selectablePackageCurrentlyOverFOrInsert)
+                        {
+                            //we need to make a new item if it's subclassing. can't cast into a subclass
+                            if (!(packageToMove is SelectablePackage))
+                                packageToMove = CopySelectablePackage(packageToMove);
+                            //unless alt is pressed to copy new item inside
+                            if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
+                                selectablePackageCurrentlyOverFOrInsert.Packages.Add((SelectablePackage)packageToMove);
+                            else
+                                selectablePackageCurrentlyOverFOrInsert.Parent.Packages.Insert(selectablePackageCurrentlyOverFOrInsert.Parent.Packages.IndexOf(selectablePackageCurrentlyOverFOrInsert) + 1, (SelectablePackage)packageToMove);
+                        }
+                        else if (packageCurrentlyOver is Dependency dependnecyCurrentlyOverForInsert)
+                        {
+                            if (!(packageToMove is Dependency))
+                                packageToMove = CopyDependency(packageToMove);
+                            Dependencies.Insert(Dependencies.IndexOf(dependnecyCurrentlyOverForInsert) + 1, (Dependency)packageToMove);
+                        }
+                        else
+                        {
+                            if ((packageToMove is Dependency) || (packageToMove is SelectablePackage))
+                                packageToMove = CopyGlobalDependency(packageToMove);
+                            GlobalDependencies.Insert(GlobalDependencies.IndexOf(packageCurrentlyOver) + 1, (DatabasePackage)packageToMove);
+                        }
+
+                        //at this point if the destination is a selectale package, then it's refrences need to be updated
+                        if(packageCurrentlyOver is SelectablePackage selectablePackageCurrentlyOver)
+                        {
+                            //packageToMove needs to be casted to a SelectablePackage to have it's refrences updated
+                            SelectablePackage packageToMoveCast = (SelectablePackage)packageToMove;
+                            packageToMoveCast.TopParent = selectablePackageCurrentlyOver.TopParent;
+                            packageToMoveCast.ParentCategory = selectablePackageCurrentlyOver.ParentCategory;
+                            //if alt was used, it's inside the selectable package currently over
+                            if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
+                            {
+                                packageToMoveCast.Parent = selectablePackageCurrentlyOver;
+                            }
+                            else
+                            {
+                                packageToMoveCast.Parent = selectablePackageCurrentlyOver.Parent;
+                            }
+                        }
+
+                        //and edit the tree view list
+                        //same as before
+                        TreeViewItem realItemToMove = itemToMove;
+                        //if move, remove
+                        if(e.Effects == DragDropEffects.Move)
+                            parentItemToMove.Items.Remove(realItemToMove);
+
+                        //if copy, copy
+                        if (e.Effects == DragDropEffects.Copy)
+                            realItemToMove = new TreeViewItem() { Header = new EditorComboBoxItem(packageToMove, packageToMove.PackageName) };
+
+                        if ((Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt)) && packageCurrentlyOver is SelectablePackage)
+                        {
+                            itemCurrentlyOver.Items.Add(realItemToMove);
+                        }
+                        else
+                        {
+                            parentItemOver.Items.Insert(parentItemOver.Items.IndexOf(itemCurrentlyOver) + 1, realItemToMove);
                         }
                     }
                 }
             }
         }
 
-        private void DatabaseTreeView_DragOver(object sender, DragEventArgs e)
+        private void OnTreeViewDatabaseDragOver(object sender, DragEventArgs e)
         {
+            if (!(sender is TreeView tv))
+                return;
+            TreeView treeView = (TreeView)sender;
             string moveOrCopy = string.Empty;
+            string belowOrInside = "below";
             if(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
             {
                 e.Effects = DragDropEffects.Copy;
@@ -319,47 +500,181 @@ namespace RelhaxModpack.Windows
                 e.Effects = DragDropEffects.Move;
                 moveOrCopy = "Move";
             }
+            if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
+                belowOrInside = "inside";
             DragDropTest.Text = "";
-            DragDropTest.Visibility = Visibility.Hidden;
-            if (e.Source is TreeViewItem itemCurrentlyOver)
+            //check if the left or right control keys are pressed or not (copy or move)
+            if (DragDropTest.Visibility == Visibility.Hidden)
+                DragDropTest.Visibility = Visibility.Visible;
+            //first check as the UI level, make sure we are looking at treeviewItems
+            if (e.Source is TreeViewItem itemCurrentlyOver && treeView.SelectedItem is TreeViewItem itemToMove)
             {
-                if (DatabaseTreeView.SelectedItem is TreeViewItem itemToMove)
+                if (itemCurrentlyOver.Header is EditorComboBoxItem packageCurrentlyOver && itemToMove.Header is EditorComboBoxItem packageToMove)
                 {
-                    if (itemCurrentlyOver.Header is EditorComboBoxItem packageCurrentlyOver)
+                    
+                    //make sure it's not same item
+                    if (packageCurrentlyOver.Package.Equals(packageToMove.Package))
                     {
-                        if (itemToMove.Header is EditorComboBoxItem packageToMove)
-                        {
-                            //check if the left or right control keys are pressed or not (copy or move)
-                            if (DragDropTest.Visibility == Visibility.Hidden)
-                                DragDropTest.Visibility = Visibility.Visible;
-                            DragDropTest.Text = string.Format("{0} {1} below {2}", moveOrCopy, packageToMove.DisplayName, packageCurrentlyOver.DisplayName);
-                            if(ItemToExpand != itemCurrentlyOver)
-                            {
-                                ItemToExpand = itemCurrentlyOver;
-                                DragDropTimer.Stop();
-                                DragDropTimer.Start();
-                            }
-                        }
+                        DragDropTest.Text = "Item can't be itself!";
+                        return;
+                    }
+                    //if the item we're moving is not a selectable package, it does not matter if alt is pressed or not
+                    if (!(packageCurrentlyOver.Package is SelectablePackage))
+                        belowOrInside = "below";
+                    DragDropTest.Text = string.Format("{0} {1} {2} {3}", moveOrCopy, packageToMove.DisplayName, belowOrInside, packageCurrentlyOver.DisplayName);
+                    if (ItemToExpand != itemCurrentlyOver)
+                    {
+                        ItemToExpand = itemCurrentlyOver;
+                        DragDropTimer.Stop();
+                        DragDropTimer.Start();
+                    }
+                }
+                else
+                    DragDropTest.Text = "Both items need to be database packages!";
+            }
+            else
+                DragDropTest.Text = "Both items need to be inside the tree view!";
+        }
+
+        private void OnTreeViewGroupsDrop(object sender, DragEventArgs e)
+        {
+            if (!(sender is TreeView tv))
+                return;
+            TreeView treeView = (TreeView)sender;
+            if (e.Source is TreeViewItem itemCurrentlyOver && treeView.SelectedItem is TreeViewItem itemToMove)
+            {
+                if (itemToMove.Header is EditorComboBoxItem editorItemToMove && itemCurrentlyOver.Header is string && itemCurrentlyOver.Tag is int i)
+                {
+                    //assign to internals
+                    if (treeView.Equals(InstallGroupsTreeView))
+                        editorItemToMove.Package.InstallGroup = i;
+                    else
+                        editorItemToMove.Package.PatchGroup = i;
+                    //assign to UI
+                    if(itemToMove.Parent is TreeViewItem itemToMoveParent)
+                    {
+                        itemToMoveParent.Items.Remove(itemToMove);
+                        itemCurrentlyOver.Items.Insert(0,itemToMove);
                     }
                 }
             }
+            DragDropTest.Text = string.Empty;
+            DragDropTest.Visibility = Visibility.Hidden;
         }
 
-        private void DatabaseTreeView_MouseMove(object sender, MouseEventArgs e)
+        private void OnTreeViewGroupsDragOver(object sender, DragEventArgs e)
         {
-            //make sure the mouse is pressed
-            if(e.LeftButton == MouseButtonState.Pressed)
+            if (!(sender is TreeView tv))
+                return;
+            TreeView treeView = (TreeView)sender;
+            if (e.Source is TreeViewItem itemCurrentlyOver && treeView.SelectedItem is TreeViewItem itemToMove)
             {
-                if(DatabaseTreeView.SelectedItem is TreeViewItem itemToMove)
+                if(itemToMove.Header is EditorComboBoxItem editorItemToMove)
                 {
-                    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+                    if(itemCurrentlyOver.Header is string)
                     {
-                        //DoDragDrop is blocking
-                        DragDrop.DoDragDrop(DatabaseTreeView, itemToMove, DragDropEffects.Copy);
+                        DragDropTest.Text = string.Format("Assign {0} to {1} group {2}", editorItemToMove.DisplayName, treeView.Equals(InstallGroupsTreeView) ? "Install" : "Patch", itemCurrentlyOver.Tag.ToString());
                     }
                     else
                     {
-                        DragDrop.DoDragDrop(DatabaseTreeView, itemToMove, DragDropEffects.Move);
+                        DragDropTest.Text = "You need to select a group header!";
+                    }
+                }
+            }
+            DragDropTest.Visibility = Visibility.Visible;
+        }
+
+        //https://stackoverflow.com/questions/19391135/prevent-drag-drop-when-scrolling
+        private bool IsDragConfirmed(Point point)
+        {
+            bool horizontalMovement = Math.Abs(point.X - BeforeDragDropPoint.X) >
+                 SystemParameters.MinimumHorizontalDragDistance;
+            bool verticalMovement = Math.Abs(point.Y - BeforeDragDropPoint.Y) >
+                 SystemParameters.MinimumVerticalDragDistance;
+            return (horizontalMovement | verticalMovement);
+        }
+
+        private void OnTreeViewMouseMove(object sender, MouseEventArgs e)
+        {
+            if (!(sender is TreeView tv))
+                return;
+            TreeView treeView = (TreeView)sender;
+            //make sure the mouse is pressed and the drag movement is confirmed
+            bool isDragConfirmed = IsDragConfirmed(e.GetPosition(treeView));
+            if (e.LeftButton == MouseButtonState.Pressed && isDragConfirmed && !IsScrolling)
+            {
+                Logging.Debug("MouseMove DragDrop movement accepted, leftButton={0}, isDragConfirmed={1}, IsScrolling={2}", e.LeftButton.ToString(), isDragConfirmed.ToString(), IsScrolling.ToString());
+                if (treeView.SelectedItem is TreeViewItem itemToMove)
+                {
+                    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) && treeView.Equals(DatabaseTreeView))
+                    {
+                        //DoDragDrop is blocking
+                        DragDrop.DoDragDrop(treeView, itemToMove, DragDropEffects.Copy);
+                    }
+                    else
+                    {
+                        DragDrop.DoDragDrop(treeView, itemToMove, DragDropEffects.Move);
+                    }
+                }
+            }
+            else if (!AlreadyLoggedMouseMove)
+            {
+                AlreadyLoggedMouseMove = true;
+                Logging.Debug("MouseMove DragDrop movement not accepted, leftButton={0}, isDragConfirmed={1}, IsScrolling={2}", e.LeftButton.ToString(), isDragConfirmed.ToString(), IsScrolling.ToString());
+            }
+        }
+
+        private void OnTreeViewMouseDownPreview(object sender, MouseButtonEventArgs e)
+        {
+            if (!(sender is TreeView tv))
+                return;
+            TreeView treeView = (TreeView)sender;
+            Logging.Debug("MouseDown, leftButton={0}, saving mouse location if pressed",e.LeftButton.ToString());
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                BeforeDragDropPoint = e.GetPosition(treeView);
+            }
+        }
+
+        private void OnTreeViewScroll(object sender, ScrollChangedEventArgs e)
+        {
+            //https://stackoverflow.com/questions/14583234/disable-drag-and-drop-when-scrolling
+            if(!AlreadyLoggedScroll)
+            {
+                Logging.Debug("ScrollChanged event fire, LeftButton={0}, setting IsScrolling to true if pressed", Mouse.LeftButton.ToString());
+                AlreadyLoggedScroll = true;
+            }
+            if (Mouse.LeftButton == MouseButtonState.Pressed)
+            {
+                IsScrolling = true;
+            }
+            if (Mouse.LeftButton == MouseButtonState.Released && AlreadyLoggedScroll)
+                AlreadyLoggedScroll = false;
+        }
+
+        private void OnTreeViewMouseUpPreview(object sender, MouseButtonEventArgs e)
+        {
+            Logging.Debug("MouseUp, leftButton={0}, setting IsScrolling to false", e.LeftButton.ToString());
+            if (e.LeftButton == MouseButtonState.Released)
+            {
+                IsScrolling = false;
+                AlreadyLoggedMouseMove = false;
+                AlreadyLoggedScroll = false;
+                if (DragDropTest.Visibility == Visibility.Visible)
+                    DragDropTest.Visibility = Visibility.Hidden;
+            }
+        }
+        #endregion
+
+        private void OnTreeViewGroupsDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if(sender is TreeView tv)
+            {
+                if(tv.SelectedItem is TreeViewItem tvi)
+                {
+                    if(tvi.Header is EditorComboBoxItem ecbi)
+                    {
+                        //bring up the window TODO
                     }
                 }
             }
@@ -402,16 +717,54 @@ namespace RelhaxModpack.Windows
 
         private void RemoveDatabaseObjectButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if(DatabaseTreeView.SelectedItem is TreeViewItem tvi && tvi.Header is EditorComboBoxItem comboBoxItem && tvi.Parent is TreeViewItem parentTvi)
+                if(MessageBox.Show(string.Format("Are you sure you want to remove {0}?",comboBoxItem.DisplayName),"",MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    if(comboBoxItem.Package is SelectablePackage sp)
+                    {
+                        sp.Parent.Packages.Remove(sp);
+                    }
+                    else if (comboBoxItem.Package is Dependency d)
+                    {
+                        Dependencies.Remove(d);
+                    }
+                    else if (comboBoxItem.Package is DatabasePackage dp)
+                    {
+                        GlobalDependencies.Remove(dp);
+                    }
+                    parentTvi.Items.Remove(tvi);
+                }
         }
 
         private void MoveDatabaseObjectButton_Click(object sender, RoutedEventArgs e)
         {
-
+            EditorAddRemove addRemove = new EditorAddRemove()
+            {
+                GlobalDependencies = GlobalDependencies,
+                Dependencies = Dependencies,
+                ParsedCategoryList = ParsedCategoryList,
+                EditOrAdd = true
+            };
+            if (!(bool)addRemove.ShowDialog())
+                return;
+            if (addRemove.SelectedPackage == null)
+                throw new BadMemeException("i hate you all");
+            //put the drag drop to a method to access it here TODO
         }
 
         private void AddDatabaseObjectButton_Click(object sender, RoutedEventArgs e)
         {
+            EditorAddRemove addRemove = new EditorAddRemove()
+            {
+                GlobalDependencies = GlobalDependencies,
+                Dependencies = Dependencies,
+                ParsedCategoryList = ParsedCategoryList,
+                EditOrAdd = false
+            };
+            if (!(bool)addRemove.ShowDialog())
+                return;
+            if (addRemove.SelectedPackage == null)
+                throw new BadMemeException("i hate you all");
 
         }
 
