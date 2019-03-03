@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.UIComponents
 {
-    public class EditorComboBoxItem
+    public class EditorComboBoxItem : System.Windows.Controls.ComboBoxItem
     {
         public DatabasePackage Package { get; set; }
         public string DisplayName { get; set; }

@@ -34,7 +34,7 @@ namespace RelhaxModpack.Windows
         private SaveFileDialog SaveDatabaseDialog;
         private OpenFileDialog OpenZipFileDialog;
         private SaveFileDialog SaveZipFileDialog;
-        private System.Windows.Forms.Timer DragDropTimer = new System.Windows.Forms.Timer() {Enabled = false, Interval = 1000 };
+        private System.Windows.Forms.Timer DragDropTimer = new System.Windows.Forms.Timer() { Enabled = false, Interval = 1000 };
         private TreeViewItem ItemToExpand;
         private Point BeforeDragDropPoint;
         private bool IsScrolling = false;
@@ -58,7 +58,7 @@ namespace RelhaxModpack.Windows
         {
             EditorSettings = new EditorSettings();
             Logging.Info("Loading editor settings");
-            if(!Settings.LoadSettings(Settings.EditorSettingsFilename, typeof(EditorSettings), null,EditorSettings))
+            if (!Settings.LoadSettings(Settings.EditorSettingsFilename, typeof(EditorSettings), null, EditorSettings))
             {
                 Logging.Info("Failed to load editor settings, using defaults");
             }
@@ -67,10 +67,10 @@ namespace RelhaxModpack.Windows
                 Logging.Info("Editor settings loaded success");
             }
             //check if we are loading the document auto from the command line
-            if(!string.IsNullOrWhiteSpace(CommandLineSettings.EditorAutoLoadFileName))
+            if (!string.IsNullOrWhiteSpace(CommandLineSettings.EditorAutoLoadFileName))
             {
                 Logging.Info("Attempting to auto-load xml file from {0}", CommandLineSettings.EditorAutoLoadFileName);
-                if(File.Exists(CommandLineSettings.EditorAutoLoadFileName))
+                if (File.Exists(CommandLineSettings.EditorAutoLoadFileName))
                 {
                     OnLoadDatabaseClick(null, null);
                 }
@@ -81,16 +81,13 @@ namespace RelhaxModpack.Windows
             }
             //load the trigger box with trigger options
             TriggerSelectionComboBox.Items.Clear();
-            foreach(Trigger t in InstallerComponents.InstallEngine.Triggers)
+            foreach (Trigger t in InstallerComponents.InstallEngine.Triggers)
             {
                 TriggerSelectionComboBox.Items.Add(t.Name);
             }
             //hook up timer
             DragDropTimer.Tick += OnDragDropTimerTick;
-            //set the data for the search combobox
             SearchBox.Items.Clear();
-            foreach (DatabasePackage package in Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList))
-                SearchBox.Items.Add(package.PackageName);
             //set the items for the triggers combobox. this only needs to be done once anyways
             TriggerSelectionComboBox.Items.Clear();
             foreach (string s in InstallerComponents.InstallEngine.CompleteTriggerList)
@@ -101,11 +98,11 @@ namespace RelhaxModpack.Windows
         private void OnDragDropTimerTick(object sender, EventArgs e)
         {
             DragDropTimer.Stop();
-            if(ItemToExpand.Header is EditorComboBoxItem item)
+            if (ItemToExpand.Header is EditorComboBoxItem item)
             {
-                if(item.Package is SelectablePackage sp)
+                if (item.Package is SelectablePackage sp)
                 {
-                    if(sp.Packages.Count > 0)
+                    if (sp.Packages.Count > 0)
                     {
                         if (!ItemToExpand.IsExpanded)
                             ItemToExpand.IsExpanded = true;
@@ -157,7 +154,7 @@ namespace RelhaxModpack.Windows
                 _Enabled = packageToCopy._Enabled
             };
             //foreach (string s in packageToCopy.Triggers)
-                //newPackage.Triggers.Add(s);
+            //newPackage.Triggers.Add(s);
             return newPackage;
         }
 
@@ -327,7 +324,7 @@ namespace RelhaxModpack.Windows
 
         private void LoadUI(TreeViewItem parent, List<SelectablePackage> packages)
         {
-            foreach(SelectablePackage package in packages)
+            foreach (SelectablePackage package in packages)
             {
                 //make a TVI for it
                 TreeViewItem packageTVI = new TreeViewItem() { Header = new EditorComboBoxItem(package, package.PackageName) };
@@ -372,7 +369,7 @@ namespace RelhaxModpack.Windows
 
         private void SaveApplyDatabaseObject(DatabasePackage package)
         {
-            if(package == null)
+            if (package == null)
             {
                 Logging.Error("SaveApplyDatabaseObject() package parameter is null, this should not happen!!");
                 return;
@@ -390,7 +387,7 @@ namespace RelhaxModpack.Windows
             foreach (Dependency d in Dependencies)
                 LoadedDependenciesList.Items.Add(d);
             //if user requests apply to also save to disk, then do that now
-            if(EditorSettings.ApplyBehavior == ApplyBehavior.ApplyTriggersSave)
+            if (EditorSettings.ApplyBehavior == ApplyBehavior.ApplyTriggersSave)
             {
                 SaveDatabaseButton_Click(null, null);
             }
@@ -402,11 +399,11 @@ namespace RelhaxModpack.Windows
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
             //check if we should ask a confirm first
-            if(EditorSettings.ShowConfirmationOnPackageApply && MessageBox.Show("Confirm to apply changes?","",MessageBoxButton.YesNo) == MessageBoxResult.OK)
-            if(DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem && selectedTreeViewItem.Header is EditorComboBoxItem editorSelectedItem)
-            {
-                SaveApplyDatabaseObject(editorSelectedItem.Package);
-            }
+            if (EditorSettings.ShowConfirmationOnPackageApply && MessageBox.Show("Confirm to apply changes?", "", MessageBoxButton.YesNo) == MessageBoxResult.OK)
+                if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem && selectedTreeViewItem.Header is EditorComboBoxItem editorSelectedItem)
+                {
+                    SaveApplyDatabaseObject(editorSelectedItem.Package);
+                }
         }
 
         private void DatabaseTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -415,7 +412,7 @@ namespace RelhaxModpack.Windows
             if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem && selectedTreeViewItem.Header is EditorComboBoxItem editorSelectedItem)
             {
                 //check if we should save the item before updating what the current entry is
-                if(EditorSettings.SaveSelectionBeforeLeave && SelectedItem != null)
+                if (EditorSettings.SaveSelectionBeforeLeave && SelectedItem != null)
                 {
                     SaveApplyDatabaseObject(SelectedItem);
                 }
@@ -430,9 +427,9 @@ namespace RelhaxModpack.Windows
         {
             if (Init)
                 return;
-            if(LeftTabView.SelectedItem is TabItem selectedTab)
+            if (LeftTabView.SelectedItem is TabItem selectedTab)
             {
-                if(selectedTab.Equals(DatabaseViewTab))
+                if (selectedTab.Equals(DatabaseViewTab))
                 {
                     RightTab.IsEnabled = true;
                     SearchBox.IsEnabled = true;
@@ -474,8 +471,8 @@ namespace RelhaxModpack.Windows
         {
             try
             {
-                if(!string.IsNullOrWhiteSpace(PackageDevURLDisplay.Text))
-                System.Diagnostics.Process.Start(PackageDevURLDisplay.Text);
+                if (!string.IsNullOrWhiteSpace(PackageDevURLDisplay.Text))
+                    System.Diagnostics.Process.Start(PackageDevURLDisplay.Text);
             }
             catch { }
         }
@@ -604,6 +601,9 @@ namespace RelhaxModpack.Windows
             {
                 parentItemOver.Items.Insert(parentItemOver.Items.IndexOf(itemCurrentlyOver) + 1, realItemToMove);
             }
+            SearchBox.Items.Clear();
+            //rebulid the levels as well
+            Utils.BuildLevelPerPackage(ParsedCategoryList);
         }
 
         private void OnTreeViewDatabaseDrop(object sender, DragEventArgs e)
@@ -640,7 +640,7 @@ namespace RelhaxModpack.Windows
             TreeView treeView = (TreeView)sender;
             string moveOrCopy = string.Empty;
             string belowOrInside = "below";
-            if(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
             {
                 e.Effects = DragDropEffects.Copy;
                 moveOrCopy = "Copy";
@@ -661,7 +661,7 @@ namespace RelhaxModpack.Windows
             {
                 if (itemCurrentlyOver.Header is EditorComboBoxItem packageCurrentlyOver && itemToMove.Header is EditorComboBoxItem packageToMove)
                 {
-                    
+
                     //make sure it's not same item
                     if (packageCurrentlyOver.Package.Equals(packageToMove.Package))
                     {
@@ -701,10 +701,10 @@ namespace RelhaxModpack.Windows
                     else
                         editorItemToMove.Package.PatchGroup = i;
                     //assign to UI
-                    if(itemToMove.Parent is TreeViewItem itemToMoveParent)
+                    if (itemToMove.Parent is TreeViewItem itemToMoveParent)
                     {
                         itemToMoveParent.Items.Remove(itemToMove);
-                        itemCurrentlyOver.Items.Insert(0,itemToMove);
+                        itemCurrentlyOver.Items.Insert(0, itemToMove);
                     }
                 }
             }
@@ -719,9 +719,9 @@ namespace RelhaxModpack.Windows
             TreeView treeView = (TreeView)sender;
             if (e.Source is TreeViewItem itemCurrentlyOver && treeView.SelectedItem is TreeViewItem itemToMove)
             {
-                if(itemToMove.Header is EditorComboBoxItem editorItemToMove)
+                if (itemToMove.Header is EditorComboBoxItem editorItemToMove)
                 {
-                    if(itemCurrentlyOver.Header is string)
+                    if (itemCurrentlyOver.Header is string)
                     {
                         DragDropTest.Text = string.Format("Assign {0} to {1} group {2}", editorItemToMove.DisplayName, treeView.Equals(InstallGroupsTreeView) ? "Install" : "Patch", itemCurrentlyOver.Tag.ToString());
                     }
@@ -779,7 +779,7 @@ namespace RelhaxModpack.Windows
             if (!(sender is TreeView tv))
                 return;
             TreeView treeView = (TreeView)sender;
-            Logging.Debug("MouseDown, leftButton={0}, saving mouse location if pressed",e.LeftButton.ToString());
+            Logging.Debug("MouseDown, leftButton={0}, saving mouse location if pressed", e.LeftButton.ToString());
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 BeforeDragDropPoint = e.GetPosition(treeView);
@@ -789,7 +789,7 @@ namespace RelhaxModpack.Windows
         private void OnTreeViewScroll(object sender, ScrollChangedEventArgs e)
         {
             //https://stackoverflow.com/questions/14583234/disable-drag-and-drop-when-scrolling
-            if(!AlreadyLoggedScroll)
+            if (!AlreadyLoggedScroll)
             {
                 Logging.Debug("ScrollChanged event fire, LeftButton={0}, setting IsScrolling to true if pressed", Mouse.LeftButton.ToString());
                 AlreadyLoggedScroll = true;
@@ -834,16 +834,16 @@ namespace RelhaxModpack.Windows
         private void SaveDatabaseButton_Click(object sender, RoutedEventArgs e)
         {
             //if save triggers apply, then do it
-            if(EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && SelectedItem != null)
+            if (EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && SelectedItem != null)
             {
                 SaveApplyDatabaseObject(SelectedItem);
             }
-            if(string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text))
+            if (string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text))
             {
                 MessageBox.Show("Default save location is empty, please specify before using this button");
                 return;
             }
-            if(!Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
+            if (!Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
             {
                 MessageBox.Show(string.Format("The save path\n{0}\ndoes not exist, please re-specify", Path.GetDirectoryName(DefaultSaveLocationSetting.Text)));
                 return;
@@ -865,16 +865,16 @@ namespace RelhaxModpack.Windows
                     AddExtension = true,
                     CheckPathExists = true,
                     DefaultExt = "xml",
-                    InitialDirectory = string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text)? Settings.ApplicationStartupPath :
-                    Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text))? DefaultSaveLocationSetting.Text : Settings.ApplicationStartupPath,
+                    InitialDirectory = string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ? Settings.ApplicationStartupPath :
+                    Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)) ? DefaultSaveLocationSetting.Text : Settings.ApplicationStartupPath,
                     Title = "Save Database"
                 };
             if (!(bool)SaveDatabaseDialog.ShowDialog())
                 return;
             //if what the user just specified is not the same as the current default, then ask to update it
-            if(!Path.GetDirectoryName(SaveDatabaseDialog.FileName).Equals(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
+            if (!Path.GetDirectoryName(SaveDatabaseDialog.FileName).Equals(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
                 if (MessageBox.Show("Use this as default save location?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
+                    DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
             //actually save
             throw new BadMemeException("TODO");
         }
@@ -992,10 +992,10 @@ namespace RelhaxModpack.Windows
         {
             if (EditorSettings.ShowConfirmationOnPackageAddRemoveMove)
             {
-                if(MessageBox.Show("Confirm this action?", "", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                if (MessageBox.Show("Confirm this action?", "", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
                     return;
             }
-                
+
             if (!(DatabaseTreeView.SelectedItem is TreeViewItem tvi2) || !(tvi2.Header is EditorComboBoxItem cbi2))
             {
                 MessageBox.Show("Please select a package to perform action on");
@@ -1016,7 +1016,7 @@ namespace RelhaxModpack.Windows
                 throw new BadMemeException("i hate you all");
             //put the drag drop to a method to access it here TODO
             //selectedItem is itemToMove, currentlyOver is what you just pointed to
-            if(DatabaseTreeView.SelectedItem is TreeViewItem itemToMove && itemToMove.Header is EditorComboBoxItem editorItemToMove
+            if (DatabaseTreeView.SelectedItem is TreeViewItem itemToMove && itemToMove.Header is EditorComboBoxItem editorItemToMove
                 && itemToMove.Parent is TreeViewItem parentItemToMove && addRemove.SelectedPackage.EditorTreeViewItem.Parent is TreeViewItem parentItemCurrentlyOver)
             {
                 PerformDatabaseMoveAdd(addRemove.SelectedPackage.EditorTreeViewItem, itemToMove, parentItemToMove, parentItemCurrentlyOver, editorItemToMove.Package,
@@ -1182,7 +1182,73 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Searchbox code
+        private void SearchBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            SearchBox.IsDropDownOpen = true;
+        }
 
+        private void SearchBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Down || e.Key == Key.Up)
+            {
+                //stop the selection from key events!!!
+                //https://www.codeproject.com/questions/183259/how-to-prevent-selecteditem-change-on-up-and-down (second answer)
+                e.Handled = true;
+                SearchBox.IsDropDownOpen = true;
+            }
+            else if (e.Key == Key.Enter)
+            {
+                OnSearchBoxCommitted(SearchBox.SelectedItem as EditorComboBoxItem, false);
+            }
+            else if (string.IsNullOrWhiteSpace(SearchBox.Text))
+            {
+                SearchBox.Items.Clear();
+                SearchBox.IsDropDownOpen = false;
+                SearchBox.SelectedIndex = -1;
+            }
+            else
+            {
+                //split the search into an array based on using '*' search
+                List<DatabasePackage> searchComponents = new List<DatabasePackage>();
+                foreach (string searchTerm in SearchBox.Text.Split('*'))
+                {
+                    //get a list of components that match the search term
+                    searchComponents.AddRange(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList).Where(term => term.PackageName.ToLower().Contains(searchTerm.ToLower())));
+                }
+                //assuming it maintains the order it previously had i.e. removing only when need to...
+                searchComponents = searchComponents.Distinct().ToList();
+                //clear and fill the search list again
+                SearchBox.Items.Clear();
+                foreach (SelectablePackage package in searchComponents)
+                {
+                    SearchBox.Items.Add(new EditorComboBoxItem(package, package.NameFormatted)
+                    {
+                        IsEnabled = true,
+                        Content = package.NameFormatted
+                    });
+                }
+                SearchBox.IsDropDownOpen = true;
+            }
+        }
+
+        private void SearchBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (SearchBox.IsDropDownOpen)
+            {
+                foreach (EditorComboBoxItem item in SearchBox.Items)
+                {
+                    if (item.IsHighlighted && item.IsMouseOver)
+                    {
+                        OnSearchBoxCommitted(item, true);
+                    }
+                }
+            }
+        }
+
+        private void OnSearchBoxCommitted(EditorComboBoxItem item, bool fromMouse)
+        {
+
+        }
         #endregion
 
         #region Upload/Download zipfile code

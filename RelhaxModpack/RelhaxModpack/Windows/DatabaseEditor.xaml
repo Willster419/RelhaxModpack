@@ -491,7 +491,7 @@
                     </Grid>
                 </TabItem>
             </TabControl>
-            <ComboBox x:Name="SearchBox" HorizontalAlignment="Stretch" VerticalAlignment="Top" IsEditable="True" Grid.Column="2"  Style="{DynamicResource EditorComboBoxStyle}"  />
+            <ComboBox x:Name="SearchBox" HorizontalAlignment="Stretch" VerticalAlignment="Top" IsEditable="True" Grid.Column="2"  Style="{DynamicResource EditorComboBoxStyle}" PreviewKeyDown="SearchBox_PreviewKeyDown" KeyUp="SearchBox_KeyUp" PreviewMouseDown="SearchBox_PreviewMouseDown" IsTextSearchEnabled="False"  />
         </Grid>
         <TextBlock x:Name="DragDropTest" HorizontalAlignment="Left" Margin="250,12,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top"/>
     </Grid>
