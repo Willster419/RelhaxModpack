@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.UIComponents
 {
-    public class EditorComboBoxItem
+    public class EditorSearchBoxItem : System.Windows.Controls.ComboBoxItem
     {
         public DatabasePackage Package { get; set; }
         public string DisplayName { get; set; }
-        public EditorComboBoxItem(DatabasePackage package, string display)
+        public EditorSearchBoxItem(DatabasePackage package, string display)
         {
             Package = package;
             DisplayName = display;

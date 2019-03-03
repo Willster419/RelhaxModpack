@@ -368,9 +368,9 @@
                         <CheckBox x:Name="SaveSelectionBeforeLeaveSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="4" Checked="SaveSelectionBeforeLeaveSetting_Checked"/>
                         <CheckBox x:Name="SortCategoriesSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="5" IsEnabled="False" Checked="SortCategoriesSetting_Checked"/>
                         <StackPanel HorizontalAlignment="Left" Grid.Column="1" Grid.Row="6">
-                            <RadioButton x:Name="ApplyBehaviorDefaultSetting" Content="Default" Checked="ApplyBehaviorDefaultSetting_Checked"/>
-                            <RadioButton x:Name="ApplyBehaviorApplyTriggersSaveSetting" Content="Apply triggers Save" Checked="ApplyBehaviorApplyTriggersSaveSetting_Checked"/>
-                            <RadioButton x:Name="ApplyBehaviorSaveTriggersApplySetting" Content="Save triggers Apply" Checked="ApplyBehaviorSaveTriggersApplySetting_Checked"/>
+                            <RadioButton x:Name="ApplyBehaviorDefaultSetting" Content="Default" Checked="ApplyBehaviorSetting_Checked"/>
+                            <RadioButton x:Name="ApplyBehaviorApplyTriggersSaveSetting" Content="Apply triggers Save" Checked="ApplyBehaviorSetting_Checked"/>
+                            <RadioButton x:Name="ApplyBehaviorSaveTriggersApplySetting" Content="Save triggers Apply" Checked="ApplyBehaviorSetting_Checked"/>
                         </StackPanel>
                         <TextBlock x:Name="ShowConfirmOnPackageApply" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Row="7" Text="Show confirmation on package apply"/>
                         <TextBlock x:Name="ShowConfirmOnPackageAddRemoveEdit" HorizontalAlignment="Stretch"  Grid.Row="8" TextWrapping="Wrap" Text="Show confirmation on package add/remove/move" VerticalAlignment="Center"/>

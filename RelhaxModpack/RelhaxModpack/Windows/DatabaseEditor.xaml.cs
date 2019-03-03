@@ -1198,7 +1198,7 @@ namespace RelhaxModpack.Windows
             }
             else if (e.Key == Key.Enter)
             {
-                OnSearchBoxCommitted(SearchBox.SelectedItem as EditorComboBoxItem, false);
+                OnSearchBoxCommitted(SearchBox.SelectedItem as EditorSearchBoxItem, false);
             }
             else if (string.IsNullOrWhiteSpace(SearchBox.Text))
             {
@@ -1219,12 +1219,12 @@ namespace RelhaxModpack.Windows
                 searchComponents = searchComponents.Distinct().ToList();
                 //clear and fill the search list again
                 SearchBox.Items.Clear();
-                foreach (SelectablePackage package in searchComponents)
+                foreach (DatabasePackage package in searchComponents)
                 {
-                    SearchBox.Items.Add(new EditorComboBoxItem(package, package.NameFormatted)
+                    SearchBox.Items.Add(new EditorSearchBoxItem(package, package.PackageName)
                     {
                         IsEnabled = true,
-                        Content = package.NameFormatted
+                        Content = package.PackageName
                     });
                 }
                 SearchBox.IsDropDownOpen = true;
@@ -1235,7 +1235,7 @@ namespace RelhaxModpack.Windows
         {
             if (SearchBox.IsDropDownOpen)
             {
-                foreach (EditorComboBoxItem item in SearchBox.Items)
+                foreach (EditorSearchBoxItem item in SearchBox.Items)
                 {
                     if (item.IsHighlighted && item.IsMouseOver)
                     {
@@ -1245,9 +1245,11 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void OnSearchBoxCommitted(EditorComboBoxItem item, bool fromMouse)
+        private void OnSearchBoxCommitted(EditorSearchBoxItem item, bool fromMouse)
         {
-
+            item.Package.EditorTreeViewItem.Focusable = true;
+            item.Package.EditorTreeViewItem.Focus();
+            Dispatcher.InvokeAsync(() => item.Package.EditorTreeViewItem.BringIntoView(), System.Windows.Threading.DispatcherPriority.Background);
         }
         #endregion
 
