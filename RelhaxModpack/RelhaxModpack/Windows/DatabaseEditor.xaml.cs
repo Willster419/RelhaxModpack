@@ -45,6 +45,7 @@ namespace RelhaxModpack.Windows
             "-----Dependencies-----",
         };
 
+        #region Stuff
         public DatabaseEditor()
         {
             InitializeComponent();
@@ -120,6 +121,9 @@ namespace RelhaxModpack.Windows
         {
             return Utils.GetMaxInstallGroupNumber(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
         }
+        #endregion
+
+        #region Copy Methods
 
         private DatabasePackage CopyGlobalDependency(DatabasePackage packageToCopy)
         {
@@ -205,58 +209,9 @@ namespace RelhaxModpack.Windows
             sp.ShowInSearchList = true;
             return sp;
         }
+        #endregion
 
-        private void OnLoadDatabaseClick(object sender, RoutedEventArgs e)
-        {
-            string fileToLoad = string.Empty;
-            //check if it's from the auto load function or not
-            if(sender != null)
-            {
-                //from gui button press
-                if (OpenDatabaseDialog == null)
-                    OpenDatabaseDialog = new OpenFileDialog()
-                    {
-                        AddExtension = true,
-                        CheckFileExists = true,
-                        CheckPathExists = true,
-                        DefaultExt = "xml",
-                        InitialDirectory = Settings.ApplicationStartupPath,
-                        Multiselect = false,
-                        Title = "Load Database"
-                    };
-                if ((bool)OpenDatabaseDialog.ShowDialog() && File.Exists(OpenDatabaseDialog.FileName))
-                {
-                    fileToLoad = OpenDatabaseDialog.FileName;
-                }
-                else
-                    return;
-            }
-            else
-            {
-                //from auto load function
-                fileToLoad = CommandLineSettings.EditorAutoLoadFileName;
-            }
-            //the file exists, load it
-            XmlDocument doc = new XmlDocument();
-            try
-            {
-                doc.Load(fileToLoad);
-            }
-            catch (XmlException ex)
-            {
-                Logging.Exception(ex.ToString());
-                MessageBox.Show(ex.ToString());
-                return;
-            }
-            if (!XMLUtils.ParseDatabase(doc, GlobalDependencies, Dependencies, ParsedCategoryList))
-            {
-                MessageBox.Show("Failed to load the database, check the logfile");
-                return;
-            }
-            Utils.BuildLinksRefrence(ParsedCategoryList, true);
-            Utils.BuildLevelPerPackage(ParsedCategoryList);
-            LoadUI(GlobalDependencies, Dependencies, ParsedCategoryList);
-        }
+        #region Other UI methods
 
         private void LoadUI(List<DatabasePackage> globalDependencies, List<Dependency> dependnecies, List<Category> parsedCategoryList, int numToAddEnd = 5)
         {
@@ -356,6 +311,19 @@ namespace RelhaxModpack.Windows
                     LoadUI(packageTVI, package.Packages);
             }
         }
+        #endregion
+
+        #region Other UI events
+        private void ApplyButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void LeftTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+        #endregion
 
         #region Drag Drop code
         private void PerformDatabaseMoveAdd(TreeViewItem itemCurrentlyOver, TreeViewItem itemToMove, TreeViewItem parentItemToMove, TreeViewItem parentItemOver,
@@ -691,34 +659,7 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        private void OnTreeViewGroupsDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if(sender is TreeView tv)
-            {
-                if(tv.SelectedItem is TreeViewItem tvi)
-                {
-                    if(tvi.Header is EditorComboBoxItem ecbi)
-                    {
-                        //bring up the window TODO
-                    }
-                }
-            }
-        }
-
-        private void LogAtInstallCB_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void VisibleCB_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void EnabledCB_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
+        #region Zip File Upload/Download buttons
 
         private void ZipDownload_Click(object sender, RoutedEventArgs e)
         {
@@ -729,6 +670,9 @@ namespace RelhaxModpack.Windows
         {
 
         }
+        #endregion
+
+        #region Database Save/Load buttons
 
         private void SaveDatabaseButton_Click(object sender, RoutedEventArgs e)
         {
@@ -739,6 +683,61 @@ namespace RelhaxModpack.Windows
         {
 
         }
+
+        private void OnLoadDatabaseClick(object sender, RoutedEventArgs e)
+        {
+            string fileToLoad = string.Empty;
+            //check if it's from the auto load function or not
+            if (sender != null)
+            {
+                //from gui button press
+                if (OpenDatabaseDialog == null)
+                    OpenDatabaseDialog = new OpenFileDialog()
+                    {
+                        AddExtension = true,
+                        CheckFileExists = true,
+                        CheckPathExists = true,
+                        DefaultExt = "xml",
+                        InitialDirectory = Settings.ApplicationStartupPath,
+                        Multiselect = false,
+                        Title = "Load Database"
+                    };
+                if ((bool)OpenDatabaseDialog.ShowDialog() && File.Exists(OpenDatabaseDialog.FileName))
+                {
+                    fileToLoad = OpenDatabaseDialog.FileName;
+                }
+                else
+                    return;
+            }
+            else
+            {
+                //from auto load function
+                fileToLoad = CommandLineSettings.EditorAutoLoadFileName;
+            }
+            //the file exists, load it
+            XmlDocument doc = new XmlDocument();
+            try
+            {
+                doc.Load(fileToLoad);
+            }
+            catch (XmlException ex)
+            {
+                Logging.Exception(ex.ToString());
+                MessageBox.Show(ex.ToString());
+                return;
+            }
+            if (!XMLUtils.ParseDatabase(doc, GlobalDependencies, Dependencies, ParsedCategoryList))
+            {
+                MessageBox.Show("Failed to load the database, check the logfile");
+                return;
+            }
+            Utils.BuildLinksRefrence(ParsedCategoryList, true);
+            Utils.BuildLevelPerPackage(ParsedCategoryList);
+            LoadUI(GlobalDependencies, Dependencies, ParsedCategoryList);
+        }
+        #endregion
+
+        #region Database Add/Move/Remove buttons
 
         private void RemoveDatabaseObjectButton_Click(object sender, RoutedEventArgs e)
         {
@@ -831,7 +830,9 @@ namespace RelhaxModpack.Windows
                     addRemove.SelectedPackage, DragDropEffects.Copy, !addRemove.AddSaveLevel);
             }
         }
+        #endregion
 
+        #region Right side package modify buttons
         private void DependenciesAddSelected_Click(object sender, RoutedEventArgs e)
         {
 
@@ -891,5 +892,6 @@ namespace RelhaxModpack.Windows
         {
 
         }
+        #endregion
     }
 }
