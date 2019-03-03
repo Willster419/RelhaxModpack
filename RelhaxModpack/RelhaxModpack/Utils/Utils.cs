@@ -640,7 +640,8 @@ namespace RelhaxModpack
                         Visible = true,
                         Enabled = true,
                         Level = -1,
-                        PackageName = string.Format("Category_{0}_Header", cat.Name.Replace(' ', '_'))
+                        PackageName = string.Format("Category_{0}_Header", cat.Name.Replace(' ', '_')),
+                        Packages = cat.Packages
                     };
                 }
                 foreach (SelectablePackage sp in cat.Packages)

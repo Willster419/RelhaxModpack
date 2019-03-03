@@ -121,6 +121,91 @@ namespace RelhaxModpack.Windows
             return Utils.GetMaxInstallGroupNumber(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
         }
 
+        private DatabasePackage CopyGlobalDependency(DatabasePackage packageToCopy)
+        {
+            DatabasePackage newPackage = new DatabasePackage()
+            {
+                PackageName = packageToCopy.PackageName,
+                Version = packageToCopy.Version,
+                Timestamp = packageToCopy.Timestamp,
+                ZipFile = packageToCopy.ZipFile,
+                Enabled = packageToCopy.Enabled,
+                CRC = packageToCopy.CRC,
+                StartAddress = packageToCopy.StartAddress,
+                EndAddress = packageToCopy.EndAddress,
+                LogAtInstall = packageToCopy.LogAtInstall,
+                Triggers = new List<string>(),
+                DevURL = packageToCopy.DevURL,
+                InstallGroup = packageToCopy.InstallGroup,
+                PatchGroup = packageToCopy.PatchGroup,
+                _Enabled = packageToCopy._Enabled
+            };
+            //foreach (string s in packageToCopy.Triggers)
+                //newPackage.Triggers.Add(s);
+            return newPackage;
+        }
+
+        private Dependency CopyDependency(DatabasePackage packageToCopy)
+        {
+            Dependency dep = new Dependency()
+            {
+                PackageName = packageToCopy.PackageName,
+                Version = packageToCopy.Version,
+                Timestamp = packageToCopy.Timestamp,
+                ZipFile = packageToCopy.ZipFile,
+                Enabled = packageToCopy.Enabled,
+                CRC = packageToCopy.CRC,
+                StartAddress = packageToCopy.StartAddress,
+                EndAddress = packageToCopy.EndAddress,
+                LogAtInstall = packageToCopy.LogAtInstall,
+                Triggers = new List<string>(),
+                DevURL = packageToCopy.DevURL,
+                InstallGroup = packageToCopy.InstallGroup,
+                PatchGroup = packageToCopy.PatchGroup,
+                _Enabled = packageToCopy._Enabled
+            };
+            dep.DatabasePackageLogic = new List<DatabaseLogic>();
+            dep.Dependencies = new List<DatabaseLogic>();
+            return dep;
+        }
+
+        private SelectablePackage CopySelectablePackage(DatabasePackage packageToCopy)
+        {
+            SelectablePackage sp = new SelectablePackage()
+            {
+                PackageName = packageToCopy.PackageName,
+                Version = packageToCopy.Version,
+                Timestamp = packageToCopy.Timestamp,
+                ZipFile = packageToCopy.ZipFile,
+                Enabled = packageToCopy.Enabled,
+                CRC = packageToCopy.CRC,
+                StartAddress = packageToCopy.StartAddress,
+                EndAddress = packageToCopy.EndAddress,
+                LogAtInstall = packageToCopy.LogAtInstall,
+                Triggers = new List<string>(),
+                DevURL = packageToCopy.DevURL,
+                InstallGroup = packageToCopy.InstallGroup,
+                PatchGroup = packageToCopy.PatchGroup,
+                _Enabled = packageToCopy._Enabled
+            };
+            sp.Type = "multi";
+            sp.Name = "WRITE_NEW_NAME";
+            sp.Visible = true;
+            sp.Size = 0;
+            sp.UpdateComment = string.Empty;
+            sp.Description = string.Empty;
+            sp.PopularMod = false;
+            sp._Checked = false;
+            sp.Level = -2;
+            sp.UserFiles = new List<UserFiles>();
+            sp.Packages = new List<SelectablePackage>();
+            sp.Medias = new List<Media>();
+            sp.Dependencies = new List<DatabaseLogic>();
+            sp.ConflictingPackages = new List<string>();
+            sp.ShowInSearchList = true;
+            return sp;
+        }
+
         private void OnLoadDatabaseClick(object sender, RoutedEventArgs e)
         {
             string fileToLoad = string.Empty;
@@ -283,32 +368,113 @@ namespace RelhaxModpack.Windows
             if (e.Source is TreeViewItem itemCurrentlyOver && treeView.SelectedItem is TreeViewItem itemToMove)
             {
                 //make sure source and destination have the correct header information
-                if (itemCurrentlyOver.Header is EditorComboBoxItem packageCurrentlyOver && itemToMove.Header is EditorComboBoxItem packageToMove)
+                if (itemCurrentlyOver.Header is EditorComboBoxItem editorPackageCurrentlyOver && itemToMove.Header is EditorComboBoxItem editorPackageToMove)
                 {
                     //make sure that the source and destination are not the same
-                    if (packageCurrentlyOver.Package.Equals(packageToMove.Package))
+                    if (editorPackageCurrentlyOver.Package.Equals(editorPackageToMove.Package))
                         return;
                     //remove the treeviewItem from the UI list
                     //add the package to the new area (below)
                     if (itemToMove.Parent is TreeViewItem parentItemToMove && itemCurrentlyOver.Parent is TreeViewItem parentItemOver)
                     {
-                        //remove the package from the internal list
-                        //add the treeviewitem to the new area (below)
-                        if (packageToMove.Package is SelectablePackage selectablePackageToMove && packageCurrentlyOver.Package is SelectablePackage selectablePackageCurrentlyOver)
-                        {
-                            switch(e.Effects)
-                            {
-                                case DragDropEffects.Copy:
+                        //save the references from the editorItems
+                        DatabasePackage packageToMove = editorPackageToMove.Package;
+                        DatabasePackage packageCurrentlyOver = editorPackageCurrentlyOver.Package;
 
-                                    break;
-                                case DragDropEffects.Move:
-                                    //internal before UI
-                                    selectablePackageToMove.Parent.Packages.Remove(selectablePackageToMove);
-                                    selectablePackageCurrentlyOver.Packages.Insert(selectablePackageCurrentlyOver.Packages.IndexOf(selectablePackageCurrentlyOver) + 1, selectablePackageToMove);
-                                    parentItemToMove.Items.Remove(itemToMove);
-                                    parentItemOver.Items.Insert(parentItemOver.Items.IndexOf(itemCurrentlyOver) + 1, itemToMove);
-                                    break;
+                        //if it's a move operation, then remove the element from it's original list
+                        if(e.Effects == DragDropEffects.Move)
+                        {
+                            if (packageToMove is SelectablePackage selectablePackageToMove)
+                                selectablePackageToMove.Parent.Packages.Remove(selectablePackageToMove);
+                            else if (packageToMove is Dependency dependencyToMove)
+                                Dependencies.Remove(dependencyToMove);
+                            else
+                                GlobalDependencies.Remove(packageToMove);
+                        }
+
+                        //if it's a copy operation, then make a deep copy new element
+                        //default to make a selectablePackage copy, then cast down as needed
+                        //then assign it back to packageToMove
+                        if(e.Effects == DragDropEffects.Copy)
+                        {
+                            if(packageCurrentlyOver is SelectablePackage)
+                            {
+                                packageToMove = CopySelectablePackage(packageToMove);
                             }
+                            else if (packageCurrentlyOver is Dependency)
+                            {
+                                packageToMove = CopyDependency(packageToMove);
+                            }
+                            else
+                            {
+                                packageToMove = CopyGlobalDependency(packageToMove);
+                            }
+                            //the packageName needs to stay unique as well
+                            int i = 0;
+                            string origName = packageToMove.PackageName;
+                            while (Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList).Where(package => package.PackageName.Equals(packageToMove.PackageName)).Count() > 0)
+                                packageToMove.PackageName = string.Format("{0}_{1}", origName, i++);
+                        }
+
+                        //insert packageToMove into corresponding list that it's over
+                        if(packageCurrentlyOver is SelectablePackage selectablePackageCurrentlyOverFOrInsert)
+                        {
+                            //we need to make a new item if it's subclassing. can't cast into a subclass
+                            if (!(packageToMove is SelectablePackage))
+                                packageToMove = CopySelectablePackage(packageToMove);
+                            //unless alt is pressed to copy new item inside
+                            if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
+                                selectablePackageCurrentlyOverFOrInsert.Packages.Add((SelectablePackage)packageToMove);
+                            else
+                                selectablePackageCurrentlyOverFOrInsert.Parent.Packages.Insert(selectablePackageCurrentlyOverFOrInsert.Parent.Packages.IndexOf(selectablePackageCurrentlyOverFOrInsert) + 1, (SelectablePackage)packageToMove);
+                        }
+                        else if (packageCurrentlyOver is Dependency dependnecyCurrentlyOverForInsert)
+                        {
+                            if (!(packageToMove is DatabasePackage))
+                                packageToMove = CopyDependency(packageToMove);
+                            Dependencies.Insert(Dependencies.IndexOf(dependnecyCurrentlyOverForInsert) + 1, (Dependency)packageToMove);
+                        }
+                        else
+                        {
+                            GlobalDependencies.Insert(GlobalDependencies.IndexOf(packageCurrentlyOver) + 1, (DatabasePackage)packageToMove);
+                        }
+
+                        //at this point if the destination is a selectale package, then it's refrences need to be updated
+                        if(packageCurrentlyOver is SelectablePackage selectablePackageCurrentlyOver)
+                        {
+                            //packageToMove needs to be casted to a SelectablePackage to have it's refrences updated
+                            SelectablePackage packageToMoveCast = (SelectablePackage)packageToMove;
+                            packageToMoveCast.TopParent = selectablePackageCurrentlyOver.TopParent;
+                            packageToMoveCast.ParentCategory = selectablePackageCurrentlyOver.ParentCategory;
+                            //if alt was used, it's inside the selectable package currently over
+                            if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
+                            {
+                                packageToMoveCast.Parent = selectablePackageCurrentlyOver;
+                            }
+                            else
+                            {
+                                packageToMoveCast.Parent = selectablePackageCurrentlyOver.Parent;
+                            }
+                        }
+
+                        //and edit the tree view list
+                        //same as before
+                        TreeViewItem realItemToMove = itemToMove;
+                        //if move, remove
+                        if(e.Effects == DragDropEffects.Move)
+                            parentItemToMove.Items.Remove(realItemToMove);
+
+                        //if copy, copy
+                        if (e.Effects == DragDropEffects.Copy)
+                            realItemToMove = new TreeViewItem() { Header = new EditorComboBoxItem(packageToMove, packageToMove.PackageName) };
+
+                        if ((Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt)) && packageCurrentlyOver is SelectablePackage)
+                        {
+                            itemCurrentlyOver.Items.Add(realItemToMove);
+                        }
+                        else
+                        {
+                            parentItemOver.Items.Insert(parentItemOver.Items.IndexOf(itemCurrentlyOver) + 1, realItemToMove);
                         }
                     }
                 }
@@ -321,6 +487,7 @@ namespace RelhaxModpack.Windows
                 return;
             TreeView treeView = (TreeView)sender;
             string moveOrCopy = string.Empty;
+            string belowOrInside = "below";
             if(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
             {
                 e.Effects = DragDropEffects.Copy;
@@ -331,6 +498,8 @@ namespace RelhaxModpack.Windows
                 e.Effects = DragDropEffects.Move;
                 moveOrCopy = "Move";
             }
+            if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
+                belowOrInside = "inside";
             DragDropTest.Text = "";
             DragDropTest.Visibility = Visibility.Hidden;
             //first check as the UI level, make sure we are looking at treeviewItems
@@ -347,7 +516,10 @@ namespace RelhaxModpack.Windows
                         DragDropTest.Text = "Item can't be itself!";
                         return;
                     }
-                    DragDropTest.Text = string.Format("{0} {1} below {2}", moveOrCopy, packageToMove.DisplayName, packageCurrentlyOver.DisplayName);
+                    //if the item we're moving is not a selectable package, it does not matter if alt is pressed or not
+                    if (!(packageCurrentlyOver.Package is SelectablePackage))
+                        belowOrInside = "below";
+                    DragDropTest.Text = string.Format("{0} {1} {2} {3}", moveOrCopy, packageToMove.DisplayName, belowOrInside, packageCurrentlyOver.DisplayName);
                     if (ItemToExpand != itemCurrentlyOver)
                     {
                         ItemToExpand = itemCurrentlyOver;
