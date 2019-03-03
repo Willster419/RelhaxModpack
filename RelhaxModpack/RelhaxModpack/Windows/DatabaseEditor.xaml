@@ -309,7 +309,7 @@
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center"/>
             <TabControl x:Name="LeftTabView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" SelectionChanged="LeftTabView_SelectionChanged">
                 <TabItem x:Name="DatabaseViewTab" Header="Database Tree View">
-                    <TreeView x:Name="DatabaseTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="True" Drop="OnTreeViewDatabaseDrop" DragOver="OnTreeViewDatabaseDragOver" MouseMove="OnTreeViewMouseMove" ScrollViewer.ScrollChanged="OnTreeViewScroll" PreviewMouseDown="OnTreeViewMouseDownPreview" PreviewMouseUp="OnTreeViewMouseUpPreview">
+                    <TreeView x:Name="DatabaseTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="True" Drop="OnTreeViewDatabaseDrop" DragOver="OnTreeViewDatabaseDragOver" MouseMove="OnTreeViewMouseMove" ScrollViewer.ScrollChanged="OnTreeViewScroll" PreviewMouseDown="OnTreeViewMouseDownPreview" PreviewMouseUp="OnTreeViewMouseUpPreview" SelectedItemChanged="DatabaseTreeView_SelectedItemChanged">
                         <TreeView.Resources>
                             <!-- Style the inactive selection the same as active -->
                             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
@@ -367,7 +367,7 @@
                         <TextBox x:Name="BigmodsPasswordSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="3"/>
                         <CheckBox x:Name="SaveSelectionBeforeLeaveSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="4"/>
                         <CheckBox x:Name="SortCategoriesSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="5" IsEnabled="False"/>
-                        <StackPanel HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="6">
+                        <StackPanel HorizontalAlignment="Left" Grid.Column="1" Grid.Row="6">
                             <RadioButton x:Name="ApplyBehaviorDefaultSetting" Content="Default"/>
                             <RadioButton x:Name="ApplyBehaviorApplyTriggersSaveSetting" Content="Apply triggers Save"/>
                             <RadioButton x:Name="ApplyBehaviorSaveTriggersApplySetting" Content="Save triggers Apply"/>
@@ -490,7 +490,7 @@
                     </Grid>
                 </TabItem>
             </TabControl>
-            <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Top" IsEditable="True" Grid.Column="2"  Style="{DynamicResource EditorComboBoxStyle}"  />
+            <ComboBox x:Name="SearchBox" HorizontalAlignment="Stretch" VerticalAlignment="Top" IsEditable="True" Grid.Column="2"  Style="{DynamicResource EditorComboBoxStyle}"  />
         </Grid>
         <TextBlock x:Name="DragDropTest" HorizontalAlignment="Left" Margin="250,12,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top"/>
     </Grid>

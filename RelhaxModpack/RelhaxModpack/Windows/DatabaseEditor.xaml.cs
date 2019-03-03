@@ -39,6 +39,7 @@ namespace RelhaxModpack.Windows
         private bool IsScrolling = false;
         private bool AlreadyLoggedMouseMove = false;
         private bool AlreadyLoggedScroll = false;
+        private bool Init = true;
         private string[] UIHeaders = new string[]
         {
             "-----Global Dependencies-----",
@@ -84,6 +85,11 @@ namespace RelhaxModpack.Windows
             }
             //hook up timer
             DragDropTimer.Tick += OnDragDropTimerTick;
+            //set the data for the combobox
+            SearchBox.Items.Clear();
+            foreach (DatabasePackage package in Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList))
+                SearchBox.Items.Add(package.PackageName);
+            Init = false;
         }
 
         private void OnDragDropTimerTick(object sender, EventArgs e)
@@ -215,16 +221,23 @@ namespace RelhaxModpack.Windows
 
         private void LoadUI(List<DatabasePackage> globalDependencies, List<Dependency> dependnecies, List<Category> parsedCategoryList, int numToAddEnd = 5)
         {
+            LoadDatabaseView(GlobalDependencies, Dependencies, ParsedCategoryList);
+            LoadInstallView(GlobalDependencies, Dependencies, ParsedCategoryList);
+            LoadPatchView(GlobalDependencies, Dependencies, ParsedCategoryList);
+        }
+
+        private void LoadDatabaseView(List<DatabasePackage> globalDependencies, List<Dependency> dependnecies, List<Category> parsedCategoryList, int numToAddEnd = 5)
+        {
             //clear and reset
             DatabaseTreeView.Items.Clear();
             //RESET UI TODO? or don't do it?
             //create treeviewItems for each entry
             //first make the globalDependencies header
-            TreeViewItem globalDependenciesHeader = new TreeViewItem() {Header = UIHeaders[0]};
+            TreeViewItem globalDependenciesHeader = new TreeViewItem() { Header = UIHeaders[0] };
             //add it to the main view
             DatabaseTreeView.Items.Add(globalDependenciesHeader);
             //loop to add all the global dependencies to a treeview item, which is a new comboboxitem, which is the package and displayname
-            foreach(DatabasePackage globalDependency in GlobalDependencies)
+            foreach (DatabasePackage globalDependency in GlobalDependencies)
             {
                 globalDependency.EditorTreeViewItem = new TreeViewItem() { Header = new EditorComboBoxItem(globalDependency, globalDependency.PackageName) };
                 globalDependenciesHeader.Items.Add(globalDependency.EditorTreeViewItem);
@@ -248,17 +261,20 @@ namespace RelhaxModpack.Windows
             }
 
             //adding the spacing that dirty wants...
-            for(int i = 0; i < numToAddEnd; i++)
+            for (int i = 0; i < numToAddEnd; i++)
             {
                 DatabaseTreeView.Items.Add(string.Empty);
             }
+        }
 
+        private void LoadInstallView(List<DatabasePackage> globalDependencies, List<Dependency> dependnecies, List<Category> parsedCategoryList, int numToAddEnd = 5)
+        {
             //load the install and patch groups
             InstallGroupsTreeView.Items.Clear();
             //make a flat list (can be used in patchGroup as well)
             List<DatabasePackage> allFlatList = Utils.GetFlatList(GlobalDependencies, dependnecies, null, parsedCategoryList);
             //make an array of group headers
-            TreeViewItem[] installGroupHeaders = new TreeViewItem[Utils.GetMaxInstallGroupNumber(allFlatList)+1];
+            TreeViewItem[] installGroupHeaders = new TreeViewItem[Utils.GetMaxInstallGroupNumber(allFlatList) + 1];
             //for each group header, get the list of packages that have an equal install group number
             for (int i = 0; i < installGroupHeaders.Count(); i++)
             {
@@ -276,10 +292,15 @@ namespace RelhaxModpack.Windows
             {
                 InstallGroupsTreeView.Items.Add(string.Empty);
             }
+        }
 
+        private void LoadPatchView(List<DatabasePackage> globalDependencies, List<Dependency> dependnecies, List<Category> parsedCategoryList, int numToAddEnd = 5)
+        {
             //do the same for patchgroups
             PatchGroupsTreeView.Items.Clear();
-            TreeViewItem[] patchGroupHeaders = new TreeViewItem[Utils.GetMaxPatchGroupNumber(allFlatList)+1];
+            //make a flat list (can be used in patchGroup as well)
+            List<DatabasePackage> allFlatList = Utils.GetFlatList(GlobalDependencies, dependnecies, null, parsedCategoryList);
+            TreeViewItem[] patchGroupHeaders = new TreeViewItem[Utils.GetMaxPatchGroupNumber(allFlatList) + 1];
             //for each group header, get the list of packages that have an equal patch group number
             for (int i = 0; i < patchGroupHeaders.Count(); i++)
             {
@@ -297,6 +318,7 @@ namespace RelhaxModpack.Windows
                 PatchGroupsTreeView.Items.Add(string.Empty);
             }
         }
+
         private void LoadUI(TreeViewItem parent, List<SelectablePackage> packages)
         {
             foreach(SelectablePackage package in packages)
@@ -311,6 +333,21 @@ namespace RelhaxModpack.Windows
                     LoadUI(packageTVI, package.Packages);
             }
         }
+
+        private void LoadSettingsToUI()
+        {
+
+        }
+
+        private void ShowDatabaseObject(DatabasePackage package)
+        {
+
+        }
+
+        private void SaveApplyDatabaseObject(DatabasePackage package)
+        {
+
+        }
         #endregion
 
         #region Other UI events
@@ -319,9 +356,53 @@ namespace RelhaxModpack.Windows
 
         }
 
-        private void LeftTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void DatabaseTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
 
+        }
+
+        private void LeftTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Init)
+                return;
+            if(LeftTabView.SelectedItem is TabItem selectedTab)
+            {
+                if(selectedTab.Equals(DatabaseViewTab))
+                {
+                    RightTab.IsEnabled = true;
+                    SearchBox.IsEnabled = true;
+                    RemoveDatabaseObjectButton.IsEnabled = true;
+                    MoveDatabaseObjectButton.IsEnabled = true;
+                    AddDatabaseObjectButton.IsEnabled = true;
+                    LoadDatabaseView(GlobalDependencies, Dependencies, ParsedCategoryList);
+                }
+                else if (selectedTab.Equals(InstallGroupsTab))
+                {
+                    RightTab.IsEnabled = false;
+                    SearchBox.IsEnabled = true;
+                    RemoveDatabaseObjectButton.IsEnabled = false;
+                    MoveDatabaseObjectButton.IsEnabled = false;
+                    AddDatabaseObjectButton.IsEnabled = false;
+                    LoadInstallView(GlobalDependencies, Dependencies, ParsedCategoryList);
+                }
+                else if (selectedTab.Equals(PatchGroupsTab))
+                {
+                    RightTab.IsEnabled = false;
+                    SearchBox.IsEnabled = true;
+                    RemoveDatabaseObjectButton.IsEnabled = false;
+                    MoveDatabaseObjectButton.IsEnabled = false;
+                    AddDatabaseObjectButton.IsEnabled = false;
+                    LoadPatchView(GlobalDependencies, Dependencies, ParsedCategoryList);
+                }
+                else if (selectedTab.Equals(SettingsTab))
+                {
+                    SearchBox.IsEnabled = false;
+                    RightTab.IsEnabled = false;
+                    RemoveDatabaseObjectButton.IsEnabled = false;
+                    MoveDatabaseObjectButton.IsEnabled = false;
+                    AddDatabaseObjectButton.IsEnabled = false;
+                }
+            }
         }
         #endregion
 
@@ -892,6 +973,10 @@ namespace RelhaxModpack.Windows
         {
 
         }
+        #endregion
+
+        #region Settings tab events
+
         #endregion
     }
 }
