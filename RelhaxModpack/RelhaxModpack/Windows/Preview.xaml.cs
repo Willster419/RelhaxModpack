@@ -20,7 +20,8 @@ namespace RelhaxModpack.Windows
     public partial class Preview : RelhaxWindow
     {
 
-        public SelectablePackage Package { get; set; } = null;
+        public SelectablePackage Package = null;
+        public bool EditorMode = false;
 
         public Preview()
         {
@@ -79,8 +80,13 @@ namespace RelhaxModpack.Windows
                 Translations.GetTranslatedString("noUpdateInfo") : Package.UpdateComment,
                 Package.Timestamp == 0 ? Translations.GetTranslatedString("noTimestamp") : Utils.ConvertFiletimeTimestampToDate(Package.Timestamp));
 
+            if(EditorMode)
+            {
+                WindowStartupLocation = WindowStartupLocation.Manual;
+
+            }
             //if the saved preview window point is within the screen, then load it to there
-            if (Utils.PointWithinScreen(ModpackSettings.PreviewX, ModpackSettings.PreviewY))
+            else if (Utils.PointWithinScreen(ModpackSettings.PreviewX, ModpackSettings.PreviewY))
             {
                 WindowStartupLocation = WindowStartupLocation.Manual;
                 //https://stackoverflow.com/questions/2734810/how-to-set-the-location-of-a-wpf-window

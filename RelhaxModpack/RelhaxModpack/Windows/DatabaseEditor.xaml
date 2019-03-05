@@ -1,10 +1,11 @@
-﻿<local:RelhaxWindow x:Class="RelhaxModpack.Windows.DatabaseEditor"
+﻿<local:RelhaxWindow
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
+        xmlns:RelhaxModpack="clr-namespace:RelhaxModpack" x:Class="RelhaxModpack.Windows.DatabaseEditor"
         mc:Ignorable="d"
         Title="DatabaseEditor" Height="700" Width="1000" MinHeight="480" MinWidth="640" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="OnApplicationLoad" Closed="OnApplicationClose">
     <local:RelhaxWindow.Resources>
@@ -382,7 +383,7 @@
                 </TabItem>
             </TabControl>
             <TabControl Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,20,0,0" x:Name="RightTab">
-                <TabItem Header="Basic">
+                <TabItem x:Name="BasicTab" Header="Basic">
                     <Grid Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#FFE5E5E5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100"/>
@@ -442,17 +443,17 @@
                         <Button Grid.Column="0" Grid.Row="16" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUload_Click" />
                     </Grid>
                 </TabItem>
-                <TabItem Header="Description">
+                <TabItem x:Name="DescriptionTab" Header="Description">
                     <Grid Background="#FFE5E5E5">
                         <TextBox x:Name="PackageDescriptionDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Update Notes">
+                <TabItem x:Name="UpdateNotesTab" Header="Update Notes">
                     <Grid Background="#FFE5E5E5">
                         <TextBox x:Name="PackageUpdateNotesDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Dependencies">
+                <TabItem x:Name="DependenciesTab" Header="Dependencies">
                     <Grid Background="#FFE5E5E5">
                         <ListBox x:Name="PackageDependenciesDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
                         <Button Content="Add selected" x:Name="DependenciesAddSelected" Tag="DependenciesAddSelected" HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="100" Click="DependenciesAddSelected_Click"/>
@@ -460,19 +461,24 @@
                         <ComboBox x:Name="LoadedDependenciesList" HorizontalAlignment="Left" Margin="105,184,0,0" VerticalAlignment="Top" Width="372" Height="20"/>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Medias">
+                <TabItem x:Name="MediasTab" Header="Medias">
                     <Grid Background="#FFE5E5E5">
                         <ListBox x:Name="PackageMediasDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
                         <Button Content="Add Media" x:Name="MediaAddMediaButton" Tag="MediaAddMediaButton" HorizontalAlignment="Left" Margin="0,253,0,0" VerticalAlignment="Top" Width="100" Click="MediaAddMediaButton_Click"/>
                         <Button Content="Apply Edit" x:Name="MediaApplyEditButton" Tag="MediaApplyEditButton" HorizontalAlignment="Left" Margin="105,253,0,0" VerticalAlignment="Top" Width="100" Click="MediaApplyEditButton_Click"/>
                         <Button Content="Remove Media" x:Name="MediaRemoveMediaButton" Tag="MediaRemoveMediaButton" HorizontalAlignment="Left" Margin="210,253,0,0" VerticalAlignment="Top" Width="100" Click="MediaRemoveMediaButton_Click"/>
-                        <ComboBox x:Name="MediaTypesList" HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="487" Height="20"/>
-                        <TextBox HorizontalAlignment="Left" Height="39" Margin="0,209,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="487"/>
+                        <ComboBox x:Name="MediaTypesList" HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="487" Height="20">
+                            <RelhaxModpack:MediaType>Picture</RelhaxModpack:MediaType>
+                            <RelhaxModpack:MediaType>Webpage</RelhaxModpack:MediaType>
+                            <RelhaxModpack:MediaType>MediaFile</RelhaxModpack:MediaType>
+                            <RelhaxModpack:MediaType>HTML</RelhaxModpack:MediaType>
+                        </ComboBox>
+                        <TextBox x:Name="MediaTypesURL" HorizontalAlignment="Left" Height="39" Margin="0,209,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="487"/>
                         <Button Content="Preview Selected Media" x:Name="MediaPreviewSelectedMediaButton" Tag="MediaPreviewSelectedMediaButton" HorizontalAlignment="Left" Margin="0,278,0,0" VerticalAlignment="Top" Width="135" Click="MediaPreviewSelectedMediaButton_Click"/>
                         <Button Content="Preview Edit Media" x:Name="MediaPreviewEditMediaButton" Tag="MediaPreviewEditMediaButton" HorizontalAlignment="Left" Margin="140,278,0,0" VerticalAlignment="Top" Width="110" Click="MediaPreviewEditMediaButton_Click"/>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Userdatas">
+                <TabItem x:Name="UserDatasTab" Header="Userdatas">
                     <Grid Background="#FFE5E5E5">
                         <ListBox x:Name="PackageUserdatasDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
                         <Button Content="Add Userdata" x:Name="UserdataApplyUsedataButton" Tag="UserdataApplyUsedataButton" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="100" Click="UserdataApplyUsedataButton_Click"/>
@@ -481,13 +487,13 @@
                         <TextBox x:Name="UserDataEditBox" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Triggers">
+                <TabItem x:Name="TriggersTab" Header="Triggers">
                     <Grid Background="#FFE5E5E5">
                         <ListBox x:Name="PackageTriggersDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
                         <Button Content="Add selected Trigger" x:Name="TriggerAddSelectedTrigger" Tag="TriggerAddSelectedTrigger" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="120" Click="TriggerAddSelectedTrigger_Click"/>
                         <Button Content="Remove Trigger" x:Name="TriggerRemoveTrigger" Tag="TriggerRemoveTrigger" HorizontalAlignment="Left" Margin="125,209,0,0" VerticalAlignment="Top" Width="120" Click="TriggerRemoveTrigger_Click"/>
                         <ComboBox x:Name="TriggerSelectionComboBox" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
-                        <TextBox HorizontalAlignment="Left" Height="83" Margin="0,498,0,0" TextWrapping="Wrap" Text="Currently Supported Triggers:&#xA;build_contour_icons - start the process of building the contour icons atlas files&#xA;create_shortcuts - start the process of creating the shortcuts" VerticalAlignment="Top" Width="487"/>
+                        <TextBox HorizontalAlignment="Left" Height="83" Margin="0,498,0,0" TextWrapping="Wrap" Text="Currently Supported Triggers:&#xA;build_contour_icons - start the process of building the contour icons atlas files&#xA;create_shortcuts - start the process of creating the shortcuts" VerticalAlignment="Top" Width="487" IsReadOnly="True"/>
                     </Grid>
                 </TabItem>
             </TabControl>

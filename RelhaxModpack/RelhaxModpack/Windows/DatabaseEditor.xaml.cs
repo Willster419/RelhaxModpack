@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Xml;
 using Microsoft.Win32;
 using RelhaxModpack.UIComponents;
+using System.Net;
 using Path = System.IO.Path;
 
 namespace RelhaxModpack.Windows
@@ -42,6 +43,7 @@ namespace RelhaxModpack.Windows
         private bool AlreadyLoggedScroll = false;
         private bool Init = true;
         private DatabasePackage SelectedItem = null;
+        private Preview Preview;
         private string[] UIHeaders = new string[]
         {
             "-----Global Dependencies-----",
@@ -279,8 +281,11 @@ namespace RelhaxModpack.Windows
             //make an array of group headers
             TreeViewItem[] installGroupHeaders = new TreeViewItem[Utils.GetMaxInstallGroupNumber(allFlatList) + 1];
             //for each group header, get the list of packages that have an equal install group number
+            //hey while we're at it let's add the items to the instal group dispaly box
+            PackageInstallGroupDisplay.Items.Clear();
             for (int i = 0; i < installGroupHeaders.Count(); i++)
             {
+                PackageInstallGroupDisplay.Items.Add(i);
                 installGroupHeaders[i] = new TreeViewItem() { Header = string.Format("---Install Group {0}---", i), Tag = i };
                 InstallGroupsTreeView.Items.Add(installGroupHeaders[i]);
                 installGroupHeaders[i].Items.Clear();
@@ -305,8 +310,10 @@ namespace RelhaxModpack.Windows
             List<DatabasePackage> allFlatList = Utils.GetFlatList(GlobalDependencies, dependnecies, null, parsedCategoryList);
             TreeViewItem[] patchGroupHeaders = new TreeViewItem[Utils.GetMaxPatchGroupNumber(allFlatList) + 1];
             //for each group header, get the list of packages that have an equal patch group number
+            PackagePatchGroupDisplay.Items.Clear();
             for (int i = 0; i < patchGroupHeaders.Count(); i++)
             {
+                PackagePatchGroupDisplay.Items.Add(i);
                 patchGroupHeaders[i] = new TreeViewItem() { Header = string.Format("---Patch Group {0}---", i), Tag = i };
                 PatchGroupsTreeView.Items.Add(patchGroupHeaders[i]);
                 patchGroupHeaders[i].Items.Clear();
@@ -355,12 +362,91 @@ namespace RelhaxModpack.Windows
 
         private void ShowDatabaseObject(DatabasePackage package)
         {
+            if (package == null)
+            {
+                Logging.Error("SaveApplyDatabaseObject() package parameter is null, this should not happen!!");
+                return;
+            }
             //load all items in the databasePackage level first
-
+            PackageNameDisplay.Text = string.Empty;
+            PackageNameDisplay.IsEnabled = false;
+            PackagePackageNameDisplay.Text = package.PackageName;
+            PackageStartAddressDisplay.Text = package.StartAddress;
+            PackageZipFileDisplay.Text = package.ZipFile;
+            PackageEndAddressDisplay.Text = package.EndAddress;
+            PackageDevURLDisplay.Text = package.DevURL;
+            PackageVersionDisplay.Text = package.Version;
+            PackageTypeDisplay.SelectedIndex = -1;
+            PackageTypeDisplay.IsEnabled = false;
+            PackageInstallGroupDisplay.SelectedIndex = -1;
+            foreach(int i in PackageInstallGroupDisplay.Items)
+            {
+                if (i == package.InstallGroup)
+                {
+                    PackageInstallGroupDisplay.SelectedItem = i;
+                    break;
+                }
+            }
+            PackagePatchGroupDisplay.SelectedIndex = -1;
+            foreach(int i in PackagePatchGroupDisplay.Items)
+            {
+                if(i == package.PatchGroup)
+                {
+                    PackagePatchGroupDisplay.SelectedItem = i;
+                    break;
+                }
+            }
+            PackageLevelDisplay.Text = string.Empty;
+            PackageLevelDisplay.IsEnabled = false;
+            PackageLastUpdatedDisplay.IsEnabled = false;
+            PackageLastUpdatedDisplay.Text = string.Empty;
+            PackageLogAtInstallDisplay.IsChecked = package.LogAtInstall;
+            PackageVisibleDisplay.IsChecked = false;
+            PackageVisibleDisplay.IsEnabled = false;
+            PackageEnabledDisplay.IsChecked = package.Enabled;
+            DescriptionTab.IsEnabled = false;
+            PackageDescriptionDisplay.Text = string.Empty;
+            UpdateNotesTab.IsEnabled = false;
+            PackageUpdateNotesDisplay.Text = string.Empty;
+            PackageDependenciesDisplay.Items.Clear();
+            DependenciesTab.IsEnabled = false;
+            PackageMediasDisplay.Items.Clear();
+            MediasTab.IsEnabled = false;
+            PackageUserdatasDisplay.Items.Clear();
+            UserDatasTab.IsEnabled = false;
+            PackageTriggersDisplay.Items.Clear();
+            foreach (string s in package.Triggers)
+                PackageTriggersDisplay.Items.Add(s);
             //then handle if dependency
-
+            if(package is Dependency dependency)
+            {
+                DependenciesTab.IsEnabled = true;
+                foreach (DatabaseLogic d in dependency.Dependencies)
+                    PackageDependenciesDisplay.Items.Add(d);
+            }
             //then handle if selectalbePackage
-
+            else if (package is SelectablePackage selectablePackage)
+            {
+                PackageNameDisplay.IsEnabled = true;
+                PackageNameDisplay.Text = selectablePackage.Name;
+                PackageLevelDisplay.IsEnabled = true;
+                PackageLevelDisplay.Text = selectablePackage.Level.ToString();
+                PackageLastUpdatedDisplay.IsEnabled = true;
+                PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(selectablePackage.Timestamp);
+                DescriptionTab.IsEnabled = true;
+                PackageDescriptionDisplay.Text = selectablePackage.Description;
+                UpdateNotesTab.IsEnabled = true;
+                PackageUpdateNotesDisplay.Text = selectablePackage.UpdateComment;
+                DependenciesTab.IsEnabled = true;
+                foreach (DatabaseLogic d in selectablePackage.Dependencies)
+                    PackageDependenciesDisplay.Items.Add(d);
+                MediasTab.IsEnabled = true;
+                foreach (Media media in selectablePackage.Medias)
+                    PackageMediasDisplay.Items.Add(media);
+                UserDatasTab.IsEnabled = true;
+                foreach (UserFiles data in selectablePackage.UserFiles)
+                    PackageUserdatasDisplay.Items.Add(data);
+            }
             //reload the list of all dependencies to make sure it's always accurate
             LoadedDependenciesList.Items.Clear();
             foreach (Dependency d in Dependencies)
@@ -375,9 +461,8 @@ namespace RelhaxModpack.Windows
                 return;
             }
             //save everything from the UI into the package
-
             //save package elements first
-
+            
             //see if it's a dependency
 
             //see if it's a selectablePackage
@@ -1094,7 +1179,44 @@ namespace RelhaxModpack.Windows
 
         private void MediaPreviewEditMediaButton_Click(object sender, RoutedEventArgs e)
         {
-
+            //input filtering
+            if(string.IsNullOrWhiteSpace(MediaTypesURL.Text))
+            {
+                MessageBox.Show("Media URL must exist");
+                return;
+            }
+            if(MediaTypesList.SelectedIndex == -1)
+            {
+                MessageBox.Show("Invalid Type");
+                return;
+            }
+            SelectablePackage package = new SelectablePackage()
+            {
+                PackageName = "TEST_PREVIEW",
+                Name = "TEST_PREVIEW"
+            };
+            package.Medias.Add(new Media()
+            {
+                URL = MediaTypesURL.Text,
+                MediaType = (MediaType)MediaTypesList.SelectedItem
+            });
+            if (Preview != null)
+            {
+                Preview = null;
+            }
+            Preview = new Preview()
+            {
+                Package = package,
+                EditorMode = true
+            };
+            try
+            {
+                Preview.ShowDialog();
+            }
+            finally
+            {
+                Preview = null;
+            }
         }
 
         private void UserdataApplyUsedataButton_Click(object sender, RoutedEventArgs e)
