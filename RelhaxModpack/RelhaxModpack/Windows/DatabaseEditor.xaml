@@ -499,8 +499,8 @@
                 <TabItem Header="Conflicting Packages">
                     <Grid Background="#FFE5E5E5">
                         <ListBox HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
-                        <Button Content="Conflicting Package Button 1" x:Name="ConflictingPackagesButton1" Tag="ConflictingPackagesButton1" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="120"/>
-                        <Button Content="Conflicting Package Button 2" x:Name="ConflictingPackagesButton2" Tag="ConflictingPackagesButton2" HorizontalAlignment="Left" Margin="125,209,0,0" VerticalAlignment="Top" Width="120"/>
+                        <Button Content="Conflicting Package Button 1" x:Name="ConflictingPackagesButton1" Tag="ConflictingPackagesButton1" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="120" Click="ConflictingPackagesButton1_Click"/>
+                        <Button Content="Conflicting Package Button 2" x:Name="ConflictingPackagesButton2" Tag="ConflictingPackagesButton2" HorizontalAlignment="Left" Margin="125,209,0,0" VerticalAlignment="Top" Width="120" Click="ConflictingPackagesButton2_Click"/>
                         <ComboBox x:Name="ConflictingPackagesComboBox" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
                         <TextBox HorizontalAlignment="Left" Height="63" Margin="0,498,0,0" TextWrapping="Wrap" Text="reeeeeeeeeeeee" VerticalAlignment="Top" Width="487"/>
                     </Grid>

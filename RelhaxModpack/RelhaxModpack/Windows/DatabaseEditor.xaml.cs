@@ -1410,5 +1410,15 @@ namespace RelhaxModpack.Windows
         #region Upload/Download zipfile code
 
         #endregion
+
+        private void ConflictingPackagesButton1_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ConflictingPackagesButton2_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
