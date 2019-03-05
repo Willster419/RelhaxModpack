@@ -100,6 +100,14 @@ namespace RelhaxModpack
         };
 
         public static readonly int NumLogicalProcesors = Environment.ProcessorCount;
+
+        public static readonly string[] SelectablePackageTypes = new string[]
+        {
+            "single1",
+            "single_dropdown1",
+            "single_dropdown2",
+            "multi"
+        };
         #endregion
 
         #region Statics

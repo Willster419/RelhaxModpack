@@ -916,6 +916,19 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.EditorAddRemove">
+            <summary>
+            Interaction logic for EditorAddRemove.xaml
+            </summary>
+            <summary>
+            EditorAddRemove
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.EditorAddRemove.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.FirstLoadAknowledgements">
             <summary>
             Interaction logic for FirstLoadAknowledgements.xaml
@@ -938,6 +951,19 @@
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.DeleteOldCache.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.MediaUpload">
+            <summary>
+            Interaction logic for MediaUpload.xaml
+            </summary>
+            <summary>
+            MediaUpload
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.MediaUpload.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>
@@ -1159,6 +1185,19 @@
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.VersionInfo.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.ZipUploadDownload">
+            <summary>
+            Interaction logic for ZipUploadDownload.xaml
+            </summary>
+            <summary>
+            ZipUploadDownload
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ZipUploadDownload.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>

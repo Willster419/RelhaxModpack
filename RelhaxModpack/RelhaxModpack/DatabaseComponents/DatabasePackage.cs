@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Controls;
 
 namespace RelhaxModpack
 {
@@ -66,6 +67,10 @@ namespace RelhaxModpack
         public string DevURL = "";
         public int InstallGroup = 0;
         public int PatchGroup = 0;
+
+        //used for the editor ONLY
+        public TreeViewItem EditorTreeViewItem = null;
+
         public override string ToString()
         {
             return PackageName;
