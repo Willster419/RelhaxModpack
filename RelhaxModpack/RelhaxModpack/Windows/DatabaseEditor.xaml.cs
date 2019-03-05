@@ -1174,7 +1174,39 @@ namespace RelhaxModpack.Windows
 
         private void MediaPreviewSelectedMediaButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if(PackageMediasDisplay.SelectedIndex == -1)
+            {
+                MessageBox.Show("Invalid Index");
+                return;
+            }
+            if (PackageMediasDisplay.SelectedItem is Media media)
+            {
+                SelectablePackage package = new SelectablePackage()
+                {
+                    PackageName = "TEST_PREVIEW",
+                    Name = "TEST_PREVIEW"
+                };
+                package.Medias.Add(media);
+                if (Preview != null)
+                {
+                    Preview = null;
+                }
+                Preview = new Preview()
+                {
+                    Package = package,
+                    EditorMode = true
+                };
+                try
+                {
+                    Preview.ShowDialog();
+                }
+                finally
+                {
+                    Preview = null;
+                }
+            }
+            else
+                throw new BadMemeException("no");
         }
 
         private void MediaPreviewEditMediaButton_Click(object sender, RoutedEventArgs e)
