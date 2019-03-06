@@ -496,13 +496,12 @@
                         <TextBox HorizontalAlignment="Left" Height="83" Margin="0,498,0,0" TextWrapping="Wrap" Text="Currently Supported Triggers:&#xA;build_contour_icons - start the process of building the contour icons atlas files&#xA;create_shortcuts - start the process of creating the shortcuts" VerticalAlignment="Top" Width="487" IsReadOnly="True"/>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Conflicting Packages">
+                <TabItem x:Name="ConflictingPackagesTab" Header="Conflicting Packages">
                     <Grid Background="#FFE5E5E5">
-                        <ListBox HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
-                        <Button Content="Conflicting Package Button 1" x:Name="ConflictingPackagesButton1" Tag="ConflictingPackagesButton1" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="120" Click="ConflictingPackagesButton1_Click"/>
-                        <Button Content="Conflicting Package Button 2" x:Name="ConflictingPackagesButton2" Tag="ConflictingPackagesButton2" HorizontalAlignment="Left" Margin="125,209,0,0" VerticalAlignment="Top" Width="120" Click="ConflictingPackagesButton2_Click"/>
-                        <ComboBox x:Name="ConflictingPackagesComboBox" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
+                        <ListBox x:Name="PackageConflictingPackagesDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
+                        <Button Content="Remove Conflicting package" x:Name="ConflictingPackagesButton1" Tag="ConflictingPackagesButton1" HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="171" Click="ConflictingPackagesButton1_Click"/>
                         <TextBox HorizontalAlignment="Left" Height="63" Margin="0,498,0,0" TextWrapping="Wrap" Text="reeeeeeeeeeeee" VerticalAlignment="Top" Width="487"/>
+                        <TextBox HorizontalAlignment="Left" Height="20" Margin="0,209,0,0" TextWrapping="Wrap" Text="To add a package to the list, search it above and right click it" VerticalAlignment="Top" Width="487"/>
                     </Grid>
                 </TabItem>
             </TabControl>

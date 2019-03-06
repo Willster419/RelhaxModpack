@@ -1393,7 +1393,14 @@ namespace RelhaxModpack.Windows
                 {
                     if (item.IsHighlighted && item.IsMouseOver)
                     {
-                        OnSearchBoxCommitted(item, true);
+                        if (e.RightButton == MouseButtonState.Pressed && ConflictingPackagesTab.IsVisible && SelectedItem != null)
+                        {
+                            PackageConflictingPackagesDisplay.Items.Add(item.Package.PackageName);
+                        }
+                        else
+                        {
+                            OnSearchBoxCommitted(item, true);
+                        }
                     }
                 }
             }
