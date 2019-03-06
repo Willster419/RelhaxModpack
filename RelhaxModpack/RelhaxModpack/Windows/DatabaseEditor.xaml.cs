@@ -1194,6 +1194,11 @@ namespace RelhaxModpack.Windows
 
         }
 
+        private void UploadMediaButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void MediaPreviewSelectedMediaButton_Click(object sender, RoutedEventArgs e)
         {
             if(PackageMediasDisplay.SelectedIndex == -1)

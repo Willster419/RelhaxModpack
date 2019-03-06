@@ -476,6 +476,7 @@
                         <TextBox x:Name="MediaTypesURL" HorizontalAlignment="Left" Height="39" Margin="0,209,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="487"/>
                         <Button Content="Preview Selected Media" x:Name="MediaPreviewSelectedMediaButton" Tag="MediaPreviewSelectedMediaButton" HorizontalAlignment="Left" Margin="0,278,0,0" VerticalAlignment="Top" Width="135" Click="MediaPreviewSelectedMediaButton_Click"/>
                         <Button Content="Preview Edit Media" x:Name="MediaPreviewEditMediaButton" Tag="MediaPreviewEditMediaButton" HorizontalAlignment="Left" Margin="140,278,0,0" VerticalAlignment="Top" Width="110" Click="MediaPreviewEditMediaButton_Click"/>
+                        <Button x:Name="UploadMediaButton" Content="Upload and add media" HorizontalAlignment="Left" Margin="0,303,0,0" VerticalAlignment="Top" Width="135" Click="UploadMediaButton_Click"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="UserDatasTab" Header="Userdatas">
