@@ -417,12 +417,30 @@ namespace RelhaxModpack.Windows
             PackageTriggersDisplay.Items.Clear();
             foreach (string s in package.Triggers)
                 PackageTriggersDisplay.Items.Add(s);
+            ConflictingPackagesTab.IsEnabled = false;
+            ConflictingPackagesTab.Content = "Conflicting Packages";
+            ConflictingPackagesMessagebox.Text = "To add a package to the list, search it above and right click it";
             //then handle if dependency
-            if(package is Dependency dependency)
+            if (package is Dependency dependency)
             {
                 DependenciesTab.IsEnabled = true;
                 foreach (DatabaseLogic d in dependency.Dependencies)
                     PackageDependenciesDisplay.Items.Add(d);
+                ConflictingPackagesTab.IsEnabled = true;
+                ConflictingPackagesTab.Content = "Dependency Usage";
+                ConflictingPackagesMessagebox.Text = "Above is list packages that use this dependency";
+                ConflictingPackagesRemoveConflictingPackage.IsEnabled = false;
+                List<DatabaseLogic> logics = new List<DatabaseLogic>();
+                foreach (Dependency d in Dependencies)
+                    if (d.Dependencies.Count > 0)
+                        logics.AddRange(d.Dependencies);
+                foreach (SelectablePackage spackage in Utils.GetFlatSelectablePackageList(ParsedCategoryList))
+                    if (spackage.Dependencies.Count > 0)
+                        logics.AddRange(spackage.Dependencies);
+                logics = logics.Where(log => log.PackageName.Equals(dependency.PackageName)).ToList();
+                PackageConflictingPackagesDisplay.Items.Clear();
+                foreach (DatabaseLogic dl in logics)
+                    PackageConflictingPackagesDisplay.Items.Add(dl);
             }
             //then handle if selectalbePackage
             else if (package is SelectablePackage selectablePackage)
@@ -446,6 +464,10 @@ namespace RelhaxModpack.Windows
                 UserDatasTab.IsEnabled = true;
                 foreach (UserFiles data in selectablePackage.UserFiles)
                     PackageUserdatasDisplay.Items.Add(data);
+                ConflictingPackagesTab.IsEnabled = true;
+                PackageConflictingPackagesDisplay.Items.Clear();
+                foreach (string s in selectablePackage.ConflictingPackages)
+                    PackageConflictingPackagesDisplay.Items.Add(s);
             }
             //reload the list of all dependencies to make sure it's always accurate
             LoadedDependenciesList.Items.Clear();
@@ -1275,6 +1297,11 @@ namespace RelhaxModpack.Windows
         {
 
         }
+
+        private void ConflictingPackagesRemoveConflictingPackage_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
         #endregion
 
         #region Settings tab events
@@ -1417,15 +1444,5 @@ namespace RelhaxModpack.Windows
         #region Upload/Download zipfile code
 
         #endregion
-
-        private void ConflictingPackagesButton1_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void ConflictingPackagesButton2_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }
