@@ -69,6 +69,7 @@ namespace RelhaxModpack.Windows
                 Logging.Info("Editor settings loaded success");
             }
             //check if we are loading the document auto from the command line
+            LoadSettingsToUI();
             if (!string.IsNullOrWhiteSpace(CommandLineSettings.EditorAutoLoadFileName))
             {
                 Logging.Info("Attempting to auto-load xml file from {0}", CommandLineSettings.EditorAutoLoadFileName);
@@ -96,6 +97,8 @@ namespace RelhaxModpack.Windows
                 TriggerSelectionComboBox.Items.Add(s);
             Init = false;
         }
+
+
 
         private void OnDragDropTimerTick(object sender, EventArgs e)
         {
