@@ -932,7 +932,39 @@ namespace RelhaxModpack.Windows
 
         private void ZipUload_Click(object sender, RoutedEventArgs e)
         {
-
+            string zipFileToUpload = string.Empty;
+            if (OpenZipFileDialog == null)
+                OpenZipFileDialog = new OpenFileDialog()
+                {
+                    AddExtension = true,
+                    CheckFileExists = true,
+                    CheckPathExists = true,
+                    DefaultExt = "zip",
+                    InitialDirectory = Settings.ApplicationStartupPath,
+                    Multiselect = false,
+                    Title = "Select zip file to upload"
+                };
+            if ((bool)OpenZipFileDialog.ShowDialog() && File.Exists(OpenZipFileDialog.FileName))
+            {
+                zipFileToUpload = OpenZipFileDialog.FileName;
+            }
+            else
+                return;
+            //make sure FTP credentials are at least entered
+            if(string.IsNullOrWhiteSpace(EditorSettings.BigmodsPassword) || string.IsNullOrWhiteSpace(EditorSettings.BigmodsUsername))
+            {
+                MessageBox.Show("Missing FTP credentails");
+                return;
+            }
+            //make and run the uploader instance
+            DatabaseEditorDownload name = new DatabaseEditorDownload()
+            {
+                ZipFilePathDisk = zipFileToUpload,
+                ZipFilePathOnline = string.Format("{0}{1}/{2}", PrivateStuff.FTPRoot, Settings.WoTModpackOnlineFolderVersion, Path.GetFileName(zipFileToUpload)),
+                Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
+                Upload = true
+            };
+            name.Show();
         }
         #endregion
 
@@ -1050,8 +1082,14 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show("Failed to load the database, check the logfile");
                 return;
             }
+            //build internal database links
             Utils.BuildLinksRefrence(ParsedCategoryList, true);
             Utils.BuildLevelPerPackage(ParsedCategoryList);
+            //set the onlineFolder and version
+            //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
+            //for the folder version: //modInfoAlpha.xml/@version
+            Settings.WoTClientVersion = XMLUtils.GetXMLStringFromXPath(doc, "//modInfoAlpha.xml/@version");
+            Settings.WoTModpackOnlineFolderVersion = XMLUtils.GetXMLStringFromXPath(doc, "//modInfoAlpha.xml/@onlineFolder");
             LoadUI(GlobalDependencies, Dependencies, ParsedCategoryList);
         }
         #endregion
@@ -1444,10 +1482,6 @@ namespace RelhaxModpack.Windows
             item.Package.EditorTreeViewItem.Focus();
             Dispatcher.InvokeAsync(() => item.Package.EditorTreeViewItem.BringIntoView(), System.Windows.Threading.DispatcherPriority.Background);
         }
-        #endregion
-
-        #region Upload/Download zipfile code
-
         #endregion
     }
 }
