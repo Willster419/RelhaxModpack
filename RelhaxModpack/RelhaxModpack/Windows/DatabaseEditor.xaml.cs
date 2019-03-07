@@ -346,8 +346,6 @@ namespace RelhaxModpack.Windows
 
         private void LoadSettingsToUI()
         {
-            WotmodsUsernameSetting.Text = EditorSettings.WotmodsUsername;
-            WotmodsPasswordSetting.Text = EditorSettings.WotmodsPassword;
             BigmodsUsernameSetting.Text = EditorSettings.BigmodsUsername;
             BigmodsPasswordSetting.Text = EditorSettings.BigmodsPassword;
             SaveSelectionBeforeLeaveSetting.IsChecked = EditorSettings.SaveSelectionBeforeLeave;
@@ -1348,16 +1346,6 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Settings tab events
-
-        private void WotmodsUsernameSetting_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            EditorSettings.WotmodsUsername = WotmodsUsernameSetting.Text;
-        }
-
-        private void WotmodsPasswordSetting_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            EditorSettings.WotmodsPassword = WotmodsPasswordSetting.Text;
-        }
 
         private void BigmodsUsernameSetting_TextChanged(object sender, TextChangedEventArgs e)
         {
