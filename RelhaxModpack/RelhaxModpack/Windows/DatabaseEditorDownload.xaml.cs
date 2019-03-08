@@ -51,14 +51,13 @@ namespace RelhaxModpack.Windows
             }
             ProgressBody.Text = string.Format("{0} {1} {2} FTP folder {3}", Upload ? "Uploading" : "Downloading",
                 Path.GetFileName(ZipFilePathDisk), Upload ? "to" : "from", Settings.WoTModpackOnlineFolderVersion);
-            ProgressHeader.Text = string.Format("{0} 0 of 0 kb", Upload ? "Downloaded" : "Uploaded");
+            ProgressHeader.Text = string.Format("{0} 0 of 0 kb", Upload ? "Uploaded" : "Downloaded");
             using (WebClient client = new WebClient() { Credentials=Credential })
             {
                 client.UploadProgressChanged += Client_UploadProgressChanged;
                 try
                 {
                     await client.UploadFileTaskAsync(ZipFilePathOnline, ZipFilePathDisk);
-                    
                 }
                 catch(Exception ex)
                 {
@@ -69,7 +68,8 @@ namespace RelhaxModpack.Windows
 
         private void Client_UploadProgressChanged(object sender, UploadProgressChangedEventArgs e)
         {
-            
+            ProgressProgressBar.Value = e.ProgressPercentage;
+            ProgressHeader.Text = string.Format("{0} {1} of {2} kb", Upload ? "Uploaded" : "Downloaded", e.BytesSent / 1024, e.TotalBytesToSend / 1024);
         }
 
         private void OpenFodlerButton_Click(object sender, RoutedEventArgs e)
