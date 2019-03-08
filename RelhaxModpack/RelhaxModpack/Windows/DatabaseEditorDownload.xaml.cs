@@ -55,7 +55,15 @@ namespace RelhaxModpack.Windows
             using (WebClient client = new WebClient() { Credentials=Credential })
             {
                 client.UploadProgressChanged += Client_UploadProgressChanged;
-                await client.UploadFileTaskAsync(ZipFilePathOnline, ZipFilePathDisk);
+                try
+                {
+                    await client.UploadFileTaskAsync(ZipFilePathOnline, ZipFilePathDisk);
+                    
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
             }
         }
 
