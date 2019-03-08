@@ -360,146 +360,6 @@ namespace RelhaxModpack.Windows
             ShowConfirmOnPackageAddRemoveEditSetting.IsChecked = EditorSettings.ShowConfirmationOnPackageAddRemoveMove;
             DefaultSaveLocationSetting.Text = EditorSettings.DefaultEditorSaveLocation;
         }
-
-        private void ShowDatabaseObject(DatabasePackage package)
-        {
-            if (package == null)
-            {
-                Logging.Error("SaveApplyDatabaseObject() package parameter is null, this should not happen!!");
-                return;
-            }
-            //load all items in the databasePackage level first
-            PackageNameDisplay.Text = string.Empty;
-            PackageNameDisplay.IsEnabled = false;
-            PackagePackageNameDisplay.Text = package.PackageName;
-            PackageStartAddressDisplay.Text = package.StartAddress;
-            PackageZipFileDisplay.Text = package.ZipFile;
-            PackageEndAddressDisplay.Text = package.EndAddress;
-            PackageDevURLDisplay.Text = package.DevURL;
-            PackageVersionDisplay.Text = package.Version;
-            PackageTypeDisplay.SelectedIndex = -1;
-            PackageTypeDisplay.IsEnabled = false;
-            PackageInstallGroupDisplay.SelectedIndex = -1;
-            foreach(int i in PackageInstallGroupDisplay.Items)
-            {
-                if (i == package.InstallGroup)
-                {
-                    PackageInstallGroupDisplay.SelectedItem = i;
-                    break;
-                }
-            }
-            PackagePatchGroupDisplay.SelectedIndex = -1;
-            foreach(int i in PackagePatchGroupDisplay.Items)
-            {
-                if(i == package.PatchGroup)
-                {
-                    PackagePatchGroupDisplay.SelectedItem = i;
-                    break;
-                }
-            }
-            PackageLevelDisplay.Text = string.Empty;
-            PackageLevelDisplay.IsEnabled = false;
-            PackageLastUpdatedDisplay.IsEnabled = false;
-            PackageLastUpdatedDisplay.Text = string.Empty;
-            PackageLogAtInstallDisplay.IsChecked = package.LogAtInstall;
-            PackageVisibleDisplay.IsChecked = false;
-            PackageVisibleDisplay.IsEnabled = false;
-            PackageEnabledDisplay.IsChecked = package.Enabled;
-            DescriptionTab.IsEnabled = false;
-            PackageDescriptionDisplay.Text = string.Empty;
-            UpdateNotesTab.IsEnabled = false;
-            PackageUpdateNotesDisplay.Text = string.Empty;
-            PackageDependenciesDisplay.Items.Clear();
-            DependenciesTab.IsEnabled = false;
-            PackageMediasDisplay.Items.Clear();
-            MediasTab.IsEnabled = false;
-            PackageUserdatasDisplay.Items.Clear();
-            UserDatasTab.IsEnabled = false;
-            PackageTriggersDisplay.Items.Clear();
-            foreach (string s in package.Triggers)
-                PackageTriggersDisplay.Items.Add(s);
-            ConflictingPackagesTab.IsEnabled = false;
-            ConflictingPackagesTab.Content = "Conflicting Packages";
-            ConflictingPackagesMessagebox.Text = "To add a package to the list, search it above and right click it";
-            //then handle if dependency
-            if (package is Dependency dependency)
-            {
-                DependenciesTab.IsEnabled = true;
-                foreach (DatabaseLogic d in dependency.Dependencies)
-                    PackageDependenciesDisplay.Items.Add(d);
-                ConflictingPackagesTab.IsEnabled = true;
-                ConflictingPackagesTab.Content = "Dependency Usage";
-                ConflictingPackagesMessagebox.Text = "Above is list packages that use this dependency";
-                ConflictingPackagesRemoveConflictingPackage.IsEnabled = false;
-                List<DatabaseLogic> logics = new List<DatabaseLogic>();
-                foreach (Dependency d in Dependencies)
-                    if (d.Dependencies.Count > 0)
-                        logics.AddRange(d.Dependencies);
-                foreach (SelectablePackage spackage in Utils.GetFlatSelectablePackageList(ParsedCategoryList))
-                    if (spackage.Dependencies.Count > 0)
-                        logics.AddRange(spackage.Dependencies);
-                logics = logics.Where(log => log.PackageName.Equals(dependency.PackageName)).ToList();
-                PackageConflictingPackagesDisplay.Items.Clear();
-                foreach (DatabaseLogic dl in logics)
-                    PackageConflictingPackagesDisplay.Items.Add(dl);
-            }
-            //then handle if selectalbePackage
-            else if (package is SelectablePackage selectablePackage)
-            {
-                PackageNameDisplay.IsEnabled = true;
-                PackageNameDisplay.Text = selectablePackage.Name;
-                PackageLevelDisplay.IsEnabled = true;
-                PackageLevelDisplay.Text = selectablePackage.Level.ToString();
-                PackageLastUpdatedDisplay.IsEnabled = true;
-                PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(selectablePackage.Timestamp);
-                DescriptionTab.IsEnabled = true;
-                PackageDescriptionDisplay.Text = selectablePackage.Description;
-                UpdateNotesTab.IsEnabled = true;
-                PackageUpdateNotesDisplay.Text = selectablePackage.UpdateComment;
-                DependenciesTab.IsEnabled = true;
-                foreach (DatabaseLogic d in selectablePackage.Dependencies)
-                    PackageDependenciesDisplay.Items.Add(d);
-                MediasTab.IsEnabled = true;
-                foreach (Media media in selectablePackage.Medias)
-                    PackageMediasDisplay.Items.Add(media);
-                UserDatasTab.IsEnabled = true;
-                foreach (UserFiles data in selectablePackage.UserFiles)
-                    PackageUserdatasDisplay.Items.Add(data);
-                ConflictingPackagesTab.IsEnabled = true;
-                PackageConflictingPackagesDisplay.Items.Clear();
-                foreach (string s in selectablePackage.ConflictingPackages)
-                    PackageConflictingPackagesDisplay.Items.Add(s);
-            }
-            //reload the list of all dependencies to make sure it's always accurate
-            LoadedDependenciesList.Items.Clear();
-            foreach (Dependency d in Dependencies)
-                LoadedDependenciesList.Items.Add(d);
-        }
-
-        private void SaveApplyDatabaseObject(DatabasePackage package)
-        {
-            if (package == null)
-            {
-                Logging.Error("SaveApplyDatabaseObject() package parameter is null, this should not happen!!");
-                return;
-            }
-            //save everything from the UI into the package
-            //save package elements first
-            
-            //see if it's a dependency
-
-            //see if it's a selectablePackage
-
-            //reload the list of all dependencies to make sure it's always accurate
-            LoadedDependenciesList.Items.Clear();
-            foreach (Dependency d in Dependencies)
-                LoadedDependenciesList.Items.Add(d);
-            //if user requests apply to also save to disk, then do that now
-            if (EditorSettings.ApplyBehavior == ApplyBehavior.ApplyTriggersSave)
-            {
-                SaveDatabaseButton_Click(null, null);
-            }
-        }
         #endregion
 
         #region Other UI events
@@ -583,6 +443,149 @@ namespace RelhaxModpack.Windows
                     System.Diagnostics.Process.Start(PackageDevURLDisplay.Text);
             }
             catch { }
+        }
+        #endregion
+
+        #region Load and Save internal database methods
+        private void ShowDatabaseObject(DatabasePackage package)
+        {
+            if (package == null)
+            {
+                Logging.Error("SaveApplyDatabaseObject() package parameter is null, this should not happen!!");
+                return;
+            }
+            //load all items in the databasePackage level first
+            PackageNameDisplay.Text = string.Empty;
+            PackageNameDisplay.IsEnabled = false;
+            PackagePackageNameDisplay.Text = package.PackageName;
+            PackageStartAddressDisplay.Text = package.StartAddress;
+            PackageZipFileDisplay.Text = package.ZipFile;
+            PackageEndAddressDisplay.Text = package.EndAddress;
+            PackageDevURLDisplay.Text = package.DevURL;
+            PackageVersionDisplay.Text = package.Version;
+            PackageTypeDisplay.SelectedIndex = -1;
+            PackageTypeDisplay.IsEnabled = false;
+            PackageInstallGroupDisplay.SelectedIndex = -1;
+            foreach (int i in PackageInstallGroupDisplay.Items)
+            {
+                if (i == package.InstallGroup)
+                {
+                    PackageInstallGroupDisplay.SelectedItem = i;
+                    break;
+                }
+            }
+            PackagePatchGroupDisplay.SelectedIndex = -1;
+            foreach (int i in PackagePatchGroupDisplay.Items)
+            {
+                if (i == package.PatchGroup)
+                {
+                    PackagePatchGroupDisplay.SelectedItem = i;
+                    break;
+                }
+            }
+            PackageLevelDisplay.Text = string.Empty;
+            PackageLevelDisplay.IsEnabled = false;
+            PackageLastUpdatedDisplay.IsEnabled = false;
+            PackageLastUpdatedDisplay.Text = string.Empty;
+            PackageLogAtInstallDisplay.IsChecked = package.LogAtInstall;
+            PackageVisibleDisplay.IsChecked = false;
+            PackageVisibleDisplay.IsEnabled = false;
+            PackageEnabledDisplay.IsChecked = package.Enabled;
+            PackageInternalNotesDisplay.Text = package.InternalNotes;
+            DescriptionTab.IsEnabled = false;
+            PackageDescriptionDisplay.Text = string.Empty;
+            UpdateNotesTab.IsEnabled = false;
+            PackageUpdateNotesDisplay.Text = string.Empty;
+            PackageDependenciesDisplay.Items.Clear();
+            DependenciesTab.IsEnabled = false;
+            PackageMediasDisplay.Items.Clear();
+            MediasTab.IsEnabled = false;
+            PackageUserdatasDisplay.Items.Clear();
+            UserDatasTab.IsEnabled = false;
+            PackageTriggersDisplay.Items.Clear();
+            foreach (string s in package.Triggers)
+                PackageTriggersDisplay.Items.Add(s);
+            ConflictingPackagesTab.IsEnabled = false;
+            ConflictingPackagesTab.Content = "Conflicting Packages";
+            ConflictingPackagesMessagebox.Text = "To add a package to the list, search it above and right click it";
+            //then handle if dependency
+            if (package is Dependency dependency)
+            {
+                DependenciesTab.IsEnabled = true;
+                foreach (DatabaseLogic d in dependency.Dependencies)
+                    PackageDependenciesDisplay.Items.Add(d);
+                ConflictingPackagesTab.IsEnabled = true;
+                ConflictingPackagesTab.Content = "Dependency Usage";
+                ConflictingPackagesMessagebox.Text = "Above is list packages that use this dependency";
+                ConflictingPackagesRemoveConflictingPackage.IsEnabled = false;
+                List<DatabaseLogic> logics = new List<DatabaseLogic>();
+                foreach (Dependency d in Dependencies)
+                    if (d.Dependencies.Count > 0)
+                        logics.AddRange(d.Dependencies);
+                foreach (SelectablePackage spackage in Utils.GetFlatSelectablePackageList(ParsedCategoryList))
+                    if (spackage.Dependencies.Count > 0)
+                        logics.AddRange(spackage.Dependencies);
+                logics = logics.Where(log => log.PackageName.Equals(dependency.PackageName)).ToList();
+                PackageConflictingPackagesDisplay.Items.Clear();
+                foreach (DatabaseLogic dl in logics)
+                    PackageConflictingPackagesDisplay.Items.Add(dl);
+            }
+            //then handle if selectalbePackage
+            else if (package is SelectablePackage selectablePackage)
+            {
+                PackageNameDisplay.IsEnabled = true;
+                PackageNameDisplay.Text = selectablePackage.Name;
+                PackageLevelDisplay.IsEnabled = true;
+                PackageLevelDisplay.Text = selectablePackage.Level.ToString();
+                PackageLastUpdatedDisplay.IsEnabled = true;
+                PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(selectablePackage.Timestamp);
+                DescriptionTab.IsEnabled = true;
+                PackageDescriptionDisplay.Text = selectablePackage.Description;
+                UpdateNotesTab.IsEnabled = true;
+                PackageUpdateNotesDisplay.Text = selectablePackage.UpdateComment;
+                DependenciesTab.IsEnabled = true;
+                foreach (DatabaseLogic d in selectablePackage.Dependencies)
+                    PackageDependenciesDisplay.Items.Add(d);
+                MediasTab.IsEnabled = true;
+                foreach (Media media in selectablePackage.Medias)
+                    PackageMediasDisplay.Items.Add(media);
+                UserDatasTab.IsEnabled = true;
+                foreach (UserFiles data in selectablePackage.UserFiles)
+                    PackageUserdatasDisplay.Items.Add(data);
+                ConflictingPackagesTab.IsEnabled = true;
+                PackageConflictingPackagesDisplay.Items.Clear();
+                foreach (string s in selectablePackage.ConflictingPackages)
+                    PackageConflictingPackagesDisplay.Items.Add(s);
+            }
+            //reload the list of all dependencies to make sure it's always accurate
+            LoadedDependenciesList.Items.Clear();
+            foreach (Dependency d in Dependencies)
+                LoadedDependenciesList.Items.Add(d);
+        }
+
+        private void SaveApplyDatabaseObject(DatabasePackage package)
+        {
+            if (package == null)
+            {
+                Logging.Error("SaveApplyDatabaseObject() package parameter is null, this should not happen!!");
+                return;
+            }
+            //save everything from the UI into the package
+            //save package elements first
+
+            //see if it's a dependency
+
+            //see if it's a selectablePackage
+
+            //reload the list of all dependencies to make sure it's always accurate
+            LoadedDependenciesList.Items.Clear();
+            foreach (Dependency d in Dependencies)
+                LoadedDependenciesList.Items.Add(d);
+            //if user requests apply to also save to disk, then do that now
+            if (EditorSettings.ApplyBehavior == ApplyBehavior.ApplyTriggersSave)
+            {
+                SaveDatabaseButton_Click(null, null);
+            }
         }
         #endregion
 

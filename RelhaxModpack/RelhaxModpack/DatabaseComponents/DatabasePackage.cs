@@ -67,6 +67,7 @@ namespace RelhaxModpack
         public string DevURL = "";
         public int InstallGroup = 0;
         public int PatchGroup = 0;
+        public string InternalNotes = "";
 
         //used for the editor ONLY
         public TreeViewItem EditorTreeViewItem = null;
