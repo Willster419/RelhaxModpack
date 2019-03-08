@@ -119,6 +119,7 @@
     <Compile Include="Logging\Logfile.cs" />
     <Compile Include="Logging\Logging.cs" />
     <Compile Include="PrivateStuff\relhaxmodpackprivatesettings\PrivateStuff.cs" />
+    <Compile Include="Settings\PatchSettings.cs" />
     <Compile Include="Settings\EditorSettings.cs" />
     <Compile Include="Settings\ModpackSettings.cs" />
     <Compile Include="Settings\CommandLineSettings.cs" />

@@ -104,6 +104,13 @@
                     <Button Content="JSON Regression Testing" HorizontalAlignment="Left" Margin="10,87,0,0" VerticalAlignment="Top" Width="155"/>
                 </Grid>
             </TabItem>
+            <TabItem Header="Settings">
+                <Grid Background="#FFE5E5E5">
+                    <Button Content="Button 1" HorizontalAlignment="Left" Margin="10,37,0,0" VerticalAlignment="Top" Width="155"/>
+                    <Button Content="Button 2" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top" Width="155"/>
+                    <Button Content="Button 3" HorizontalAlignment="Left" Margin="10,87,0,0" VerticalAlignment="Top" Width="155"/>
+                </Grid>
+            </TabItem>
         </TabControl>
         <TextBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsReadOnly="True">
         </TextBox>

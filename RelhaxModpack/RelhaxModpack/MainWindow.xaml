@@ -127,7 +127,7 @@
                             <TextBlock x:Name="AutoSyncCheckFrequencyTextBox"  TextWrapping="Wrap" Text="Frequency: every" />
                             <TextBox x:Name="AutoSyncFrequencyTexbox" Height="23" TextWrapping="Wrap" Text="xx" Width="25" Margin="5,0,0,0"/>
                             <ComboBox Margin="5,0,0,0" Width="67">
-                                <System:String>Minuets</System:String>
+                                <System:String>Minutes</System:String>
                                 <System:String>Hours</System:String>
                                 <System:String>Days</System:String>
                             </ComboBox>
