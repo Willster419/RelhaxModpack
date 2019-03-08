@@ -572,11 +572,52 @@ namespace RelhaxModpack.Windows
             }
             //save everything from the UI into the package
             //save package elements first
-
+            package.PackageName = PackagePackageNameDisplay.Text;
+            package.StartAddress = PackageStartAddressDisplay.Text;
+            package.ZipFile = PackageZipFileDisplay.Text;
+            package.EndAddress = PackageEndAddressDisplay.Text;
+            package.DevURL = PackageDevURLDisplay.Text;
+            package.Version = PackageVersionDisplay.Text;
+            package.InstallGroup = (int)PackageInstallGroupDisplay.SelectedItem;
+            package.PatchGroup = (int)PackagePatchGroupDisplay.SelectedItem;
+            package.LogAtInstall = (bool)PackageLogAtInstallDisplay.IsChecked;
+            package.Enabled = (bool)PackageEnabledDisplay.IsChecked;
+            package.InternalNotes = PackageInternalNotesDisplay.Text;
             //see if it's a dependency
-
+            if(package is Dependency dependency)
+            {
+                ConflictingPackagesTab.Content = "Dependency Usage";
+                ConflictingPackagesMessagebox.Text = "To add a package to the list, search it above and right click it";
+                PackageConflictingPackagesDisplay.Items.Clear();
+                dependency.Dependencies.Clear();
+                foreach (DatabaseLogic dl in PackageDependenciesDisplay.Items)
+                    dependency.Dependencies.Add(dl);
+            }
             //see if it's a selectablePackage
-
+            else if (package is SelectablePackage selectablePackage)
+            {
+                selectablePackage.Name = PackagePackageNameDisplay.Text;
+                selectablePackage.Type = (string)PackageTypeDisplay.SelectedItem;
+                if(false)//zip file changed
+                {
+                    //selectablePackage.Timestamp = DateTime.Now.ToFileTime;
+                    throw new BadMemeException("you should probably check what method grumpel used");
+                }
+                selectablePackage.Description = PackageDescriptionDisplay.Text;
+                selectablePackage.UpdateComment = PackageUpdateNotesDisplay.Text;
+                selectablePackage.Dependencies.Clear();
+                foreach (DatabaseLogic dl in PackageDependenciesDisplay.Items)
+                    selectablePackage.Dependencies.Add(dl);
+                selectablePackage.UserFiles.Clear();
+                foreach (UserFiles uf in PackageUserdatasDisplay.Items)
+                    selectablePackage.UserFiles.Add(uf);
+                selectablePackage.Medias.Clear();
+                foreach (Media m in PackageMediasDisplay.Items)
+                    selectablePackage.Medias.Add(m);
+                selectablePackage.ConflictingPackages.Clear();
+                foreach (string s in PackageConflictingPackagesDisplay.Items)
+                    selectablePackage.ConflictingPackages.Add(s);
+            }
             //reload the list of all dependencies to make sure it's always accurate
             LoadedDependenciesList.Items.Clear();
             foreach (Dependency d in Dependencies)
