@@ -157,71 +157,6 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region FTP methods
-        private void FTPMakeFolder(string addressWithDirectory, ICredentials credentials)
-        {
-            WebRequest folderRequest = WebRequest.Create(addressWithDirectory);
-            folderRequest.Method = WebRequestMethods.Ftp.MakeDirectory;
-            folderRequest.Credentials = credentials;
-            using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
-            { }
-        }
-
-        private async Task FTPMakeFolderAsync(string addressWithDirectory, ICredentials credentials)
-        {
-            WebRequest folderRequest = WebRequest.Create(addressWithDirectory);
-            folderRequest.Method = WebRequestMethods.Ftp.MakeDirectory;
-            folderRequest.Credentials = credentials;
-            using (FtpWebResponse webResponse = (FtpWebResponse)await folderRequest.GetResponseAsync())
-            { }
-        }
-
-        private string[] FTPListFilesFolders(string address, ICredentials credentials)
-        {
-            WebRequest folderRequest = WebRequest.Create(address);
-            folderRequest.Method = WebRequestMethods.Ftp.ListDirectory;
-            folderRequest.Credentials = credentials;
-            using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
-            {
-                Stream responseStream = response.GetResponseStream();
-                StreamReader reader = new StreamReader(responseStream);
-                string temp = reader.ReadToEnd();
-                return temp.Split(new[] { "\r\n" }, StringSplitOptions.None);
-            }
-        }
-
-        private async Task<string[]> FTPListFilesFoldersAsync(string address, ICredentials credentials)
-        {
-            WebRequest folderRequest = WebRequest.Create(address);
-            folderRequest.Method = WebRequestMethods.Ftp.ListDirectory;
-            folderRequest.Credentials = credentials;
-            using (FtpWebResponse response = (FtpWebResponse)await folderRequest.GetResponseAsync())
-            {
-                Stream responseStream = response.GetResponseStream();
-                StreamReader reader = new StreamReader(responseStream);
-                string temp = reader.ReadToEnd();
-                return temp.Split(new[] { "\r\n" }, StringSplitOptions.None);
-            }
-        }
-
-        private void FTPDeleteFile(string address, ICredentials credentials)
-        {
-            WebRequest folderRequest = WebRequest.Create(address);
-            folderRequest.Method = WebRequestMethods.Ftp.DeleteFile;
-            folderRequest.Credentials = credentials;
-            using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
-            { }
-        }
-
-        private async Task FTPDeleteFileAsync(string address, ICredentials credentials)
-        {
-            WebRequest folderRequest = WebRequest.Create(address);
-            folderRequest.Method = WebRequestMethods.Ftp.DeleteFile;
-            folderRequest.Credentials = credentials;
-            using (FtpWebResponse response = (FtpWebResponse)await folderRequest.GetResponseAsync())
-            { }
-        }
-
         private async Task<XmlNode> GetFilePropertiesAsync(string phpScriptAddress, string fileName, bool getMD5)
         {
             XmlDocument doc = new XmlDocument();
@@ -317,7 +252,6 @@ namespace RelhaxModpack.Windows
             FileDownloadProgresBar.Maximum = 100;
             DownloadProgressText.Text = string.Format("{0}kb of {1}kb", e.BytesReceived / 1024, e.TotalBytesToReceive / 1024);
         }
-        #endregion
 
         #region Boring stuff
         private void OnLoadModInfo(object sender, RoutedEventArgs e)
@@ -692,7 +626,7 @@ namespace RelhaxModpack.Windows
             CleanFoldersOnlineCancelStep3.Visibility = Visibility.Visible;
             List<string> filesToDelete = new List<string>();
             filesToDelete = CleanZipFoldersTextbox.Text.Split('\n').ToList();
-            string[] filesActuallyInFolder = await FTPListFilesFoldersAsync(string.Format("ftp://bigmods.relhaxmodpack.com/{0}/",
+            string[] filesActuallyInFolder = await Utils.FTPListFilesFoldersAsync(string.Format("ftp://bigmods.relhaxmodpack.com/{0}/",
                 selectedVersionInfos.WoTOnlineFolderVersion),CredentialsBigmods);
             int count = 1;
             foreach(string s in filesToDelete)
@@ -709,7 +643,7 @@ namespace RelhaxModpack.Windows
                     continue;
                 }
                 ReportProgress(string.Format("Deleting file {0} of {1}, {2}", count++, filesToDelete.Count, s));
-                await FTPDeleteFileAsync(string.Format("ftp://bigmods.relhaxmodpack.com/{0}/{1}",
+                await Utils.FTPDeleteFileAsync(string.Format("ftp://bigmods.relhaxmodpack.com/{0}/{1}",
                     selectedVersionInfos.WoTOnlineFolderVersion, s), CredentialsBigmods);
             }
             CleanZipFoldersTextbox.Clear();
@@ -1086,12 +1020,12 @@ namespace RelhaxModpack.Windows
             //check/create online backup folder for new wot version
             //needs to be done here because need to make sure folder at least exists for below section
             ReportProgress("Checking if modInfo backup folder exists for last supported version...");
-            string[] folders = await FTPListFilesFoldersAsync(ModInfoBackupsFolderLocation,Credentials);
+            string[] folders = await Utils.FTPListFilesFoldersAsync(ModInfoBackupsFolderLocation,Credentials);
             if (!(folders.Contains(LastSupportedTanksVersion)))
             {
                 ReportProgress("Does NOT exist, creating");
                 //create the folder
-                await FTPMakeFolderAsync(ModInfoBackupsFolderLocation + LastSupportedTanksVersion, Credentials);
+                await Utils.FTPMakeFolderAsync(ModInfoBackupsFolderLocation + LastSupportedTanksVersion, Credentials);
             }
             else
                 ReportProgress("DOES exist");
@@ -1110,7 +1044,7 @@ namespace RelhaxModpack.Windows
             {
                 BackupModInfoXmlToServer = "modInfo_" + LastSupportedTanksVersion + "_" + dateTimeFormat + "_" + ++itteraton + ".xml";
                 ReportProgress("Current Iteration: " + BackupModInfoXmlToServer);
-                string[] modInfoBackups = await FTPListFilesFoldersAsync(ModInfoBackupsFolderLocation + LastSupportedTanksVersion, Credentials);
+                string[] modInfoBackups = await Utils.FTPListFilesFoldersAsync(ModInfoBackupsFolderLocation + LastSupportedTanksVersion, Credentials);
                 if(!modInfoBackups.Contains(BackupModInfoXmlToServer))
                 {
                     fileExists = false;
@@ -1120,12 +1054,12 @@ namespace RelhaxModpack.Windows
             //make the name of the new database update version. similar to process above
             //first make the online backup folder for the new WoT version, if it does not alreayd eixst
             ReportProgress("Checking if backup modInfo folder exists for new supported version...");
-            string[] modInfoBackupFolders = await FTPListFilesFoldersAsync(ModInfoBackupsFolderLocation, Credentials);
+            string[] modInfoBackupFolders = await Utils.FTPListFilesFoldersAsync(ModInfoBackupsFolderLocation, Credentials);
             if (!(modInfoBackupFolders.Contains(Settings.WoTClientVersion)))
             {
                 ReportProgress("Does NOT exist, creating");
                 //create the folder
-                await FTPMakeFolderAsync(ModInfoBackupsFolderLocation + LastSupportedTanksVersion, Credentials);
+                await Utils.FTPMakeFolderAsync(ModInfoBackupsFolderLocation + LastSupportedTanksVersion, Credentials);
             }
             else
                 ReportProgress("DOES exist");
@@ -1138,7 +1072,7 @@ namespace RelhaxModpack.Windows
                 string tempModInfoFilename = string.Format("modInfo_{0}_{1}_{2}.xml",
                     Settings.WoTClientVersion, dateTimeFormat,++itteraton);
                 ReportProgress("Current Iteration: " + tempModInfoFilename);
-                string[] modInfoBackups = await FTPListFilesFoldersAsync(ModInfoBackupsFolderLocation + Settings.WoTClientVersion, Credentials);
+                string[] modInfoBackups = await Utils.FTPListFilesFoldersAsync(ModInfoBackupsFolderLocation + Settings.WoTClientVersion, Credentials);
                 if(!modInfoBackups.Contains(tempModInfoFilename))
                 {
                     fileExists = false;

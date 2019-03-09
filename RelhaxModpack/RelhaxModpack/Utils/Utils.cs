@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -1224,6 +1225,72 @@ namespace RelhaxModpack
         }
 
 
+        #endregion
+
+        #region FTP methods
+        public static void FTPMakeFolder(string addressWithDirectory, ICredentials credentials)
+        {
+            WebRequest folderRequest = WebRequest.Create(addressWithDirectory);
+            folderRequest.Method = WebRequestMethods.Ftp.MakeDirectory;
+            folderRequest.Credentials = credentials;
+            using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
+            { }
+        }
+
+        public static async Task FTPMakeFolderAsync(string addressWithDirectory, ICredentials credentials)
+        {
+            WebRequest folderRequest = WebRequest.Create(addressWithDirectory);
+            folderRequest.Method = WebRequestMethods.Ftp.MakeDirectory;
+            folderRequest.Credentials = credentials;
+            using (FtpWebResponse webResponse = (FtpWebResponse)await folderRequest.GetResponseAsync())
+            { }
+        }
+
+        public static string[] FTPListFilesFolders(string address, ICredentials credentials)
+        {
+            WebRequest folderRequest = WebRequest.Create(address);
+            folderRequest.Method = WebRequestMethods.Ftp.ListDirectory;
+            folderRequest.Credentials = credentials;
+            using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
+            {
+                Stream responseStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(responseStream);
+                string temp = reader.ReadToEnd();
+                return temp.Split(new[] { "\r\n" }, StringSplitOptions.None);
+            }
+        }
+
+        public static async Task<string[]> FTPListFilesFoldersAsync(string address, ICredentials credentials)
+        {
+            WebRequest folderRequest = WebRequest.Create(address);
+            folderRequest.Method = WebRequestMethods.Ftp.ListDirectory;
+            folderRequest.Credentials = credentials;
+            using (FtpWebResponse response = (FtpWebResponse)await folderRequest.GetResponseAsync())
+            {
+                Stream responseStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(responseStream);
+                string temp = reader.ReadToEnd();
+                return temp.Split(new[] { "\r\n" }, StringSplitOptions.None);
+            }
+        }
+
+        public static void FTPDeleteFile(string address, ICredentials credentials)
+        {
+            WebRequest folderRequest = WebRequest.Create(address);
+            folderRequest.Method = WebRequestMethods.Ftp.DeleteFile;
+            folderRequest.Credentials = credentials;
+            using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
+            { }
+        }
+
+        public static async Task FTPDeleteFileAsync(string address, ICredentials credentials)
+        {
+            WebRequest folderRequest = WebRequest.Create(address);
+            folderRequest.Method = WebRequestMethods.Ftp.DeleteFile;
+            folderRequest.Credentials = credentials;
+            using (FtpWebResponse response = (FtpWebResponse)await folderRequest.GetResponseAsync())
+            { }
+        }
         #endregion
 
         #region Gross shortcut stuff
