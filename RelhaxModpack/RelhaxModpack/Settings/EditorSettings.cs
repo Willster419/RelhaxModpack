@@ -15,10 +15,6 @@ namespace RelhaxModpack
 
     public class EditorSettings
     {
-        public string WotmodsUsername = string.Empty;
-
-        public string WotmodsPassword = string.Empty;
-
         public string BigmodsUsername = string.Empty;
 
         public string BigmodsPassword = string.Empty;
