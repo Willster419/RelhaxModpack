@@ -44,6 +44,7 @@ namespace RelhaxModpack.Windows
         private bool Init = true;
         private DatabasePackage SelectedItem = null;
         private Preview Preview;
+        private bool UnsavedChanges = false;
         private string[] UIHeaders = new string[]
         {
             "-----Global Dependencies-----",
@@ -118,6 +119,11 @@ namespace RelhaxModpack.Windows
 
         private void OnApplicationClose(object sender, EventArgs e)
         {
+            if(UnsavedChanges)
+            {
+                if (MessageBox.Show("You have unsaved changes, return to editor?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    return;
+            }
             if (!Logging.IsLogDisposed(Logfiles.Application))
             {
                 Logging.WriteToLog("Saving editor settings");
@@ -972,11 +978,48 @@ namespace RelhaxModpack.Windows
 
         private void ZipDownload_Click(object sender, RoutedEventArgs e)
         {
-
+            //make sure FTP credentials are at least entered
+            if (string.IsNullOrWhiteSpace(EditorSettings.BigmodsPassword) || string.IsNullOrWhiteSpace(EditorSettings.BigmodsUsername))
+            {
+                MessageBox.Show("Missing FTP credentails");
+                return;
+            }
+            if (SaveZipFileDialog == null)
+            {
+                SaveZipFileDialog = new SaveFileDialog()
+                {
+                    AddExtension = true,
+                    CheckPathExists = true,
+                    DefaultExt = "zip",
+                    OverwritePrompt = true,
+                    InitialDirectory = Settings.ApplicationStartupPath,
+                    Title = "Select destination for zip file",
+                    FileName = SelectedItem.ZipFile
+                };
+            }
+            if (!(bool)SaveZipFileDialog.ShowDialog())
+                return;
+            //make and run the uploader instance
+            DatabaseEditorDownload name = new DatabaseEditorDownload()
+            {
+                ZipFilePathDisk = SaveZipFileDialog.FileName,
+                ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.FTPRoot, Settings.WoTModpackOnlineFolderVersion),
+                ZipFileName = Path.GetFileName(SelectedItem.ZipFile),
+                Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
+                Upload = false,
+                PackageToUpdate = null
+            };
+            name.Show();
         }
 
         private void ZipUload_Click(object sender, RoutedEventArgs e)
         {
+            //make sure FTP credentials are at least entered
+            if (string.IsNullOrWhiteSpace(EditorSettings.BigmodsPassword) || string.IsNullOrWhiteSpace(EditorSettings.BigmodsUsername))
+            {
+                MessageBox.Show("Missing FTP credentails");
+                return;
+            }
             string zipFileToUpload = string.Empty;
             if (OpenZipFileDialog == null)
                 OpenZipFileDialog = new OpenFileDialog()
@@ -995,21 +1038,31 @@ namespace RelhaxModpack.Windows
             }
             else
                 return;
-            //make sure FTP credentials are at least entered
-            if(string.IsNullOrWhiteSpace(EditorSettings.BigmodsPassword) || string.IsNullOrWhiteSpace(EditorSettings.BigmodsUsername))
-            {
-                MessageBox.Show("Missing FTP credentails");
-                return;
-            }
             //make and run the uploader instance
             DatabaseEditorDownload name = new DatabaseEditorDownload()
             {
                 ZipFilePathDisk = zipFileToUpload,
-                ZipFilePathOnline = string.Format("{0}{1}/{2}", PrivateStuff.FTPRoot, Settings.WoTModpackOnlineFolderVersion, Path.GetFileName(zipFileToUpload)),
+                ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.FTPRoot, Settings.WoTModpackOnlineFolderVersion),
+                ZipFileName = Path.GetFileName(zipFileToUpload),
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
-                Upload = true
+                Upload = true,
+                PackageToUpdate = SelectedItem
             };
+            name.OnEditorUploadDownloadClosed += OnEditorUploadFinished;
             name.Show();
+        }
+
+        private void OnEditorUploadFinished(object sender, EditorUploadDownloadEventArgs e)
+        {
+            UnsavedChanges = true;
+            if (SelectedItem.Equals(e.Package))
+            {
+                PackageZipFileDisplay.Text = e.Package.ZipFile;
+                if(!SelectedItem.ZipFile.Equals(e.Package.ZipFile))
+                {
+                    throw new BadMemeException("You have made a mistake");
+                }
+            }
         }
         #endregion
 
@@ -1034,6 +1087,7 @@ namespace RelhaxModpack.Windows
             }
             //actually save
             throw new BadMemeException("TODO");
+            UnsavedChanges = false;
         }
 
         private void SaveAsDatabaseButton_Click(object sender, RoutedEventArgs e)
@@ -1061,6 +1115,7 @@ namespace RelhaxModpack.Windows
                     DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
             //actually save
             throw new BadMemeException("TODO");
+            UnsavedChanges = false;
         }
 
         private void SelectDefaultSaveLocationButton_Click(object sender, RoutedEventArgs e)
@@ -1073,7 +1128,7 @@ namespace RelhaxModpack.Windows
                     DefaultExt = "xml",
                     InitialDirectory = string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ? Settings.ApplicationStartupPath :
                     Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)) ? DefaultSaveLocationSetting.Text : Settings.ApplicationStartupPath,
-                    Title = "Save Database"
+                    Title = "Select path to save database to"
                 };
             if (!(bool)SaveDatabaseDialog.ShowDialog())
                 return;
@@ -1136,6 +1191,7 @@ namespace RelhaxModpack.Windows
             Settings.WoTClientVersion = XMLUtils.GetXMLStringFromXPath(doc, "//modInfoAlpha.xml/@version");
             Settings.WoTModpackOnlineFolderVersion = XMLUtils.GetXMLStringFromXPath(doc, "//modInfoAlpha.xml/@onlineFolder");
             LoadUI(GlobalDependencies, Dependencies, ParsedCategoryList);
+            UnsavedChanges = false;
         }
         #endregion
 
