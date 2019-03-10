@@ -178,9 +178,6 @@
     <Compile Include="Windows\DatabaseEditor.xaml.cs">
       <DependentUpon>DatabaseEditor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\DatabaseEditorAddMove.xaml.cs">
-      <DependentUpon>DatabaseEditorAddMove.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\DatabaseEditorDownload.xaml.cs">
       <DependentUpon>DatabaseEditorDownload.xaml</DependentUpon>
     </Compile>
@@ -236,10 +233,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\DatabaseEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\DatabaseEditorAddMove.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

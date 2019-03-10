@@ -1026,19 +1026,6 @@
             InitializeComponent
             </summary>
         </member>
-        <member name="T:RelhaxModpack.Windows.DatabaseEditorAddMove">
-            <summary>
-            Interaction logic for DatabaseEditorAddMove.xaml
-            </summary>
-            <summary>
-            DatabaseEditorAddMove
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.DatabaseEditorAddMove.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
         <member name="T:RelhaxModpack.Windows.DatabaseEditorDownload">
             <summary>
             Interaction logic for DatabaseEditorDownload.xaml
