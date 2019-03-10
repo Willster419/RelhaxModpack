@@ -678,12 +678,6 @@ namespace RelhaxModpack
                 }
             }
         }
-        public static void AssignCateogryPatchIDS(List<Category> parsedCategoryList)
-        {
-            int ID = 0;
-            foreach (Category cat in parsedCategoryList)
-                cat.PatchProcessCategoryID = ID++;
-        }
         public static void BuildLevelPerPackage(List<Category> ParsedCategoryList, int startingLevel = 0)
         {
             //root level direct form category is 0

@@ -10,7 +10,6 @@ namespace RelhaxModpack
     public class Category
     {
         public string Name = "";
-        public int PatchProcessCategoryID = 0;
         //the TabItem refrence for the UI
         public TabItem TabPage = null;
         //the holder for all packages of a catagory. UI only
