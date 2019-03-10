@@ -46,6 +46,7 @@ namespace RelhaxModpack.Windows
                 Header = "Medias",
                 Tag = FTPPath
             };
+            root.MouseDoubleClick += Item_MouseDoubleClick;
             FTPTreeView.Items.Add(root);
             await OpenFolderAsync(root);
             StatusTextBlock.Text = string.Empty;
@@ -117,12 +118,24 @@ namespace RelhaxModpack.Windows
                     continue;
                 if(!Path.HasExtension(s))
                 {
-                    itemToOpen.Items.Add(new TreeViewItem()
+                    TreeViewItem item = new TreeViewItem()
                     {
                         Header = s,
                         Tag = (itemToOpen.Tag as string) + s + "/"
-                    });
+                    };
+                    item.MouseDoubleClick += Item_MouseDoubleClick;
+                    itemToOpen.Items.Add(item);
                 }
+            }
+        }
+
+        private async void Item_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (FTPTreeView.SelectedItem is TreeViewItem selectedTreeViewItem)
+            {
+                StatusTextBlock.Text = "opening folder...";
+                await OpenFolderAsync(selectedTreeViewItem);
+                StatusTextBlock.Text = string.Empty;
             }
         }
     }
