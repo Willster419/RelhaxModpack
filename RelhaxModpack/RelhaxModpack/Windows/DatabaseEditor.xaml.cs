@@ -25,7 +25,7 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class DatabaseEditor : RelhaxWindow
     {
-
+        int temp = 0;
         private EditorSettings EditorSettings;
         private XmlDocument XmlDatabase;
         private List<DatabasePackage> GlobalDependencies = new List<DatabasePackage>();
@@ -1511,6 +1511,8 @@ namespace RelhaxModpack.Windows
 
         private void PackageDependenciesDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (PackageDependenciesDisplay.SelectedItem == null)
+                return;
             DatabaseLogic selectedLogic = (DatabaseLogic)PackageDependenciesDisplay.SelectedItem;
             LoadedLogicsList.SelectedItem = selectedLogic.Logic;
             DependenciesNotFlag.IsChecked = selectedLogic.NotFlag;
@@ -1581,6 +1583,8 @@ namespace RelhaxModpack.Windows
 
         private void PackageMediasDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (PackageMediasDisplay.SelectedItem == null)
+                return;
             Media media = (Media)PackageMediasDisplay.SelectedItem;
             MediaTypesList.SelectedItem = media.MediaType;
             MediaTypesURL.Text = media.URL;
@@ -1708,6 +1712,8 @@ namespace RelhaxModpack.Windows
 
         private void PackageUserdatasDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (PackageUserdatasDisplay.SelectedItem == null)
+                return;
             UserDataEditBox.Text = (string)PackageUserdatasDisplay.SelectedItem;
         }
 
@@ -1736,6 +1742,8 @@ namespace RelhaxModpack.Windows
 
         private void PackageTriggersDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (PackageTriggersDisplay.SelectedItem == null)
+                return;
             LoadedTriggersComboBox.SelectedIndex = -1;
             foreach(string s in LoadedTriggersComboBox.Items)
             {
@@ -1899,14 +1907,23 @@ namespace RelhaxModpack.Windows
             DragDropTest.Text = "";
             if (DragDropTest.Visibility == Visibility.Hidden)
                 DragDropTest.Visibility = Visibility.Visible;
-            if (e.Source is Media mediaOver && e.Data is Media mediaToMove)
+            //e.source is the list box curently
+            //e.original source is textblock, and data context is media item currently over
+
+            if (PackageMediasDisplay.SelectedItem is Media mediaToMove)
             {
-                if (mediaOver.URL.Equals(mediaToMove.URL))
+                if(e.OriginalSource is TextBlock block && block.DataContext is Media mediaOver)
                 {
-                    DragDropTest.Text = "Item can't be itself!";
-                    return;
+                    if (mediaOver.URL.Equals(mediaToMove.URL))
+                    {
+                        DragDropTest.Text = "Item can't be itself!";
+                        return;
+                    }
+                    //try to get the entire text to fit...
+                    string toMoveText = mediaToMove.URL.Length > 80 ? mediaToMove.URL.Substring(0, 80) : mediaToMove.URL;
+                    string overText = mediaOver.URL.Length > 90 ? mediaOver.URL.Substring(0, 90) : mediaOver.URL;
+                    DragDropTest.Text = string.Format("Move {0} below\n{1}", toMoveText, overText);
                 }
-                DragDropTest.Text = string.Format("Move {0} below {1}", mediaToMove.URL.Substring(0, 15), mediaOver.URL.Substring(0, 15));
             }
             else
                 DragDropTest.Text = "Both items must be media!";
@@ -1917,16 +1934,20 @@ namespace RelhaxModpack.Windows
             DragDropTest.Text = "";
             if (DragDropTest.Visibility == Visibility.Visible)
                 DragDropTest.Visibility = Visibility.Hidden;
-            if (e.Source is Media mediaOver && e.Data is Media mediaToMove)
+            //selected item is itemToMove
+            if (PackageMediasDisplay.SelectedItem is Media mediaToMove)
             {
-                PackageMediasDisplay.Items.Remove(mediaToMove);
-                PackageMediasDisplay.Items.Insert(PackageMediasDisplay.Items.IndexOf(mediaOver) + 1, mediaToMove);
+                if (e.OriginalSource is TextBlock block && block.DataContext is Media mediaOver)
+                {
+                    PackageMediasDisplay.Items.Remove(mediaToMove);
+                    PackageMediasDisplay.Items.Insert(PackageMediasDisplay.Items.IndexOf(mediaOver) + 1, mediaToMove);
+                }
             }
         }
 
         private void PackageMediasDisplay_MouseMove(object sender, MouseEventArgs e)
         {
-            if(e.LeftButton == MouseButtonState.Pressed && IsDragConfirmed(e.GetPosition(PackageMediasDisplay)))
+            if(e.LeftButton == MouseButtonState.Pressed && IsDragConfirmed(e.GetPosition(PackageMediasDisplay)) && !IsScrolling)
             {
                 if(PackageMediasDisplay.SelectedItem is Media media)
                 {
@@ -1945,7 +1966,20 @@ namespace RelhaxModpack.Windows
 
         private void PackageMediasDisplay_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
+            if (e.LeftButton == MouseButtonState.Released)
+            {
+                IsScrolling = false;
+                if (DragDropTest.Visibility == Visibility.Visible)
+                    DragDropTest.Visibility = Visibility.Hidden;
+            }
+        }
 
+        private void PackageMediasDisplay_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if (Mouse.LeftButton == MouseButtonState.Pressed)
+            {
+                IsScrolling = true;
+            }
         }
         #endregion
     }
