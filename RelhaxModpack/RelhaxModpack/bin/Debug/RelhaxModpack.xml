@@ -1176,19 +1176,6 @@
             InitializeComponent
             </summary>
         </member>
-        <member name="T:RelhaxModpack.Windows.ZipUploadDownload">
-            <summary>
-            Interaction logic for ZipUploadDownload.xaml
-            </summary>
-            <summary>
-            ZipUploadDownload
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.ZipUploadDownload.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
         <member name="T:RelhaxModpack.CiInfo">
             <summary>Info about the continuous integration server build that produced this binary.</summary> 
         </member>

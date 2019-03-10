@@ -213,9 +213,6 @@
     <Compile Include="Utils\XmlBinary\PrimitiveFileReader.cs" />
     <Compile Include="Utils\XmlBinary\XmlBinaryHandler.cs" />
     <Compile Include="Utils\XMLUtils.cs" />
-    <Compile Include="Windows\ZipUploadDownload.xaml.cs">
-      <DependentUpon>ZipUploadDownload.xaml</DependentUpon>
-    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -309,10 +306,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AdvancedProgress.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\ZipUploadDownload.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
