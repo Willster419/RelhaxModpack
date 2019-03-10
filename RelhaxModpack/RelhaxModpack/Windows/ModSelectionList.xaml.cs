@@ -434,6 +434,8 @@ namespace RelhaxModpack.Windows
                             cat.CategoryHeader.TreeView.Items.Clear();
                         cat.CategoryHeader.TreeViewItem.Items.Add(cat.CategoryHeader.ChildBorder);
                         cat.CategoryHeader.TreeViewItem.IsExpanded = true;
+                        //for root element, hook into expandable element
+                        cat.CategoryHeader.TreeViewItem.Collapsed += TreeViewItem_Collapsed;
                         //TODO BACKGROUND
                         RelhaxWPFCheckBox box = new RelhaxWPFCheckBox()
                         {
@@ -496,6 +498,22 @@ namespace RelhaxModpack.Windows
                 }
                 ModTabGroups.Items.Add(cat.TabPage);
             }
+        }
+
+        private void TreeViewItem_Collapsed(object sender, RoutedEventArgs e)
+        {
+            //trigger the colappsed such that itself is expanded but other elements are collapsed
+            TreeViewItem rootItem = sender as TreeViewItem;
+            RelhaxWPFCheckBox wpfCheckBox = rootItem.Header as RelhaxWPFCheckBox;
+            SelectablePackage rootPackage = wpfCheckBox.Package as SelectablePackage;
+            //itterate to collapse each other item, then expand itself
+            foreach(SelectablePackage package in rootPackage.Packages)
+            {
+                if (package.TreeViewItem != null)
+                    if (package.TreeViewItem.IsExpanded)
+                        package.TreeViewItem.IsExpanded = false;
+            }
+            rootPackage.TreeViewItem.IsExpanded = true;
         }
 
         private void OnUserModsTabSelected(object sender, RequestBringIntoViewEventArgs e)
