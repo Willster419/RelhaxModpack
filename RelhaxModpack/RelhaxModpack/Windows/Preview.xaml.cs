@@ -141,10 +141,15 @@ namespace RelhaxModpack.Windows
                     pictureViewer.MouseLeftButtonDown += PictureViewer_MouseLeftButtonDown;
                     MainPreviewBorder.Child = pictureViewer;
                     //quick set to internal loading thing
-                    pictureViewer.Source = UISettings.DrawingImageToWpfImage(UISettings.GetLoadingImage());
+                    pictureViewer.Source = UISettings.GetLoadingImageBitmap();
                     //http://dasselsoftwaredevelopment.com/code-samples/changing-the-source-of-an-image-in-c/
-                    await System.Threading.Tasks.Task.Factory.StartNew(() =>
-                    { pictureViewer.Source = new BitmapImage(new Uri(media.URL)); });
+                    /*
+                    Dispatcher.InvokeAsync(() =>
+                    {
+                        pictureViewer.Source = new BitmapImage(new Uri(media.URL));
+                    },
+                    System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+                    */
                     break;
                 case MediaType.Webpage:
                     WebBrowser browserr = new WebBrowser();

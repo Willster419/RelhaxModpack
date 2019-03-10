@@ -38,7 +38,7 @@ namespace RelhaxModpack
         #endregion
 
         #region Image handling for the Preview
-        public static System.Drawing.Image GetLoadingImage()
+        public static System.Drawing.Image GetLoadingImageImage()
         {
             switch (ModpackSettings.GIF)
             {
@@ -51,17 +51,19 @@ namespace RelhaxModpack
                     return Properties.Resources.loading_3rdguards;
             }
         }
-        public static BitmapImage DrawingImageToWpfImage(System.Drawing.Image image)
+        public static BitmapImage GetLoadingImageBitmap()
         {
-            //https://social.msdn.microsoft.com/Forums/vstudio/en-US/a6f74675-77f2-4dac-a7d9-971c77b0b5bf/convert-systemdrawingimage-to-systemwindowscontrolsimage
-            MemoryStream stream = new MemoryStream();
-            Properties.Resources.loading.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
-            BitmapImage bitIM = new BitmapImage();
-            bitIM.BeginInit();
-            bitIM.CacheOption = BitmapCacheOption.OnLoad;
-            bitIM.StreamSource = stream;
-            bitIM.EndInit();
-            return bitIM;
+            //https://stackoverflow.com/questions/350027/setting-wpf-image-source-in-code
+            switch (ModpackSettings.GIF)
+            {
+                default:
+                    Logging.Error("Unknown GIF setting: {0}, using default", ModpackSettings.GIF.ToString());
+                    return new BitmapImage(new Uri("loading.gif",UriKind.Relative));
+                case LoadingGifs.Standard:
+                    return new BitmapImage(new Uri("loading.gif", UriKind.Relative));
+                case LoadingGifs.ThirdGuards:
+                    return new BitmapImage(new Uri("loading_3rdguards.gif", UriKind.Relative));
+            }
         }
         #endregion
         /// <summary>

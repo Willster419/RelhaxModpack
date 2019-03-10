@@ -688,7 +688,7 @@ namespace RelhaxModpack
                     package.Level = startingLevel;
                     if (package.Packages.Count > 0)
                         //increase the level BEFORE it calls the method
-                        BuildLevelPerPackage(package.Packages, ++startingLevel);
+                        BuildLevelPerPackage(package.Packages, startingLevel+ 1);
                 }
             }
         }
@@ -699,7 +699,7 @@ namespace RelhaxModpack
                 package.Level = level;
                 if (package.Packages.Count > 0)
                     //increase the level BEFORE it calls the method
-                    BuildLevelPerPackage(package.Packages, ++level);
+                    BuildLevelPerPackage(package.Packages, level+1);
             }
         }
         public static List<Dependency> CalculateDependencies(List<Dependency> dependencies, List<SelectablePackage> packages)
