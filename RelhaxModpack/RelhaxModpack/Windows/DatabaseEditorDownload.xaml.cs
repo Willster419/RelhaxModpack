@@ -56,8 +56,16 @@ namespace RelhaxModpack.Windows
                     OpenFileButton.Visibility = Visibility.Visible;
                     break;
             }
-            ProgressBody.Text = string.Format("{0} {1} {2} FTP folder {3}", Upload ? "Uploading" : "Downloading",
+            if(PackageToUpdate == null)
+            {
+                ProgressBody.Text = string.Format("{0} {1} {2} FTP folder {3}", "Uploading",
+                ZipFileName, "to", "Medias/...");
+            }
+            else
+            {
+                ProgressBody.Text = string.Format("{0} {1} {2} FTP folder {3}", Upload ? "Uploading" : "Downloading",
                 Path.GetFileName(ZipFilePathDisk), Upload ? "to" : "from", Settings.WoTModpackOnlineFolderVersion);
+            }
             ProgressHeader.Text = string.Format("{0} 0 of 0 kb", Upload ? "Uploaded" : "Downloaded");
             CompleteFTPPath = string.Format("{0}{1}", ZipFilePathOnline, ZipFileName);
             using (client = new WebClient() { Credentials=Credential })
@@ -80,17 +88,25 @@ namespace RelhaxModpack.Windows
                         {
                             Logging.Debug("STARTING FTP UPLOAD");
                             await client.UploadFileTaskAsync(CompleteFTPPath, ZipFilePathDisk);
-                            Logging.Debug("FTP upload complete, changing zipFile entry for package {0} from", PackageToUpdate.PackageName);
-                            Logging.Debug("\"{0}\"{1}to{2}", PackageToUpdate.ZipFile, Environment.NewLine, Environment.NewLine);
-                            Logging.Debug("\"{0}\"", ZipFileName);
-                            PackageToUpdate.ZipFile = ZipFileName;
                             CancelButton.IsEnabled = false;
-                            if (OnEditorUploadDownloadClosed != null)
+                            if (PackageToUpdate != null)
                             {
-                                OnEditorUploadDownloadClosed(this, new EditorUploadDownloadEventArgs()
+                                Logging.Debug("FTP upload complete, changing zipFile entry for package {0} from", PackageToUpdate.PackageName);
+                                Logging.Debug("\"{0}\"{1}to{2}", PackageToUpdate.ZipFile, Environment.NewLine, Environment.NewLine);
+                                Logging.Debug("\"{0}\"", ZipFileName);
+                                PackageToUpdate.ZipFile = ZipFileName;
+                                if (OnEditorUploadDownloadClosed != null)
                                 {
-                                    Package = PackageToUpdate
-                                });
+                                    OnEditorUploadDownloadClosed(this, new EditorUploadDownloadEventArgs()
+                                    {
+                                        Package = PackageToUpdate
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                DialogResult = true;
+                                Close();
                             }
                         }
                         catch (Exception ex)

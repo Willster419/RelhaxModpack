@@ -929,6 +929,19 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.EditorSelectMediaUploadLocation">
+            <summary>
+            Interaction logic for EditorSelectMediaUploadLocation.xaml
+            </summary>
+            <summary>
+            EditorSelectMediaUploadLocation
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.EditorSelectMediaUploadLocation.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.FirstLoadAknowledgements">
             <summary>
             Interaction logic for FirstLoadAknowledgements.xaml

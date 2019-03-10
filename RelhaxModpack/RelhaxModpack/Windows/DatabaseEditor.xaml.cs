@@ -1624,9 +1624,29 @@ namespace RelhaxModpack.Windows
             else
                 return;
             //select path to upload to on server
-
+            EditorSelectMediaUploadLocation selectUploadLocation = new EditorSelectMediaUploadLocation()
+            {
+                Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
+            };
             //start upload
-
+            if (!(bool)selectUploadLocation.ShowDialog())
+                return;
+            DatabaseEditorDownload name = new DatabaseEditorDownload()
+            {
+                ZipFilePathDisk = pictureFileToUpload,
+                ZipFilePathOnline = selectUploadLocation.UploadPath,
+                ZipFileName = selectUploadLocation.UploadFileName,
+                Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
+                Upload = true,
+                PackageToUpdate = null
+            };
+            if (!(bool)name.ShowDialog())
+                return;
+            PackageMediasDisplay.Items.Add(new Media()
+            {
+                MediaType = MediaType.Picture,
+                URL = string.Format("{0}{1}", selectUploadLocation.UploadPath, selectUploadLocation.UploadFileName).Replace("ftp:", "http:")
+            });
         }
 
         private void MediaPreviewSelectedMediaButton_Click(object sender, RoutedEventArgs e)

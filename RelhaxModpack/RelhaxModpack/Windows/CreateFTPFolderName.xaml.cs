@@ -1,0 +1,82 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using System.IO;
+using Path = System.IO.Path;
+using System.Net;
+
+namespace RelhaxModpack.Windows
+{
+    /// <summary>
+    /// Interaction logic for CreateFTPFolderName.xaml
+    /// </summary>
+    public partial class CreateFTPFolderName : RelhaxWindow
+    {
+
+        public string FTPPath;
+        public NetworkCredential Credential;
+        public string FTPReturnPath;
+        public string FTPReturnFolderName;
+
+        public CreateFTPFolderName()
+        {
+            InitializeComponent();
+        }
+
+        private void FolderNameTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter && e.IsDown)
+            {
+                CreateFolder(FolderNameTextBox.Text);
+            }
+        }
+
+        private void OKButton_Click(object sender, RoutedEventArgs e)
+        {
+            CreateFolder(FolderNameTextBox.Text);
+        }
+
+        private async void CreateFolder(string folderName)
+        {
+            if(string.IsNullOrWhiteSpace(folderName))
+            {
+                MessageBox.Show("Invalid folder name");
+                return;
+            }
+            List<char> invalidChars = Path.GetInvalidFileNameChars().ToList();
+            invalidChars.AddRange(Path.GetInvalidPathChars().ToList());
+            foreach(char c in invalidChars)
+            {
+                if(folderName.Contains(c))
+                {
+                    MessageBox.Show(string.Format("value '{0}' is invalid for name", c));
+                    return;
+                }
+            }
+            CreatingFolderTextBlock.Visibility = Visibility.Visible;
+            try
+            {
+                await Utils.FTPMakeFolderAsync(string.Format("{0}{1}", FTPPath, folderName), Credential);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                return;
+            }
+            FTPReturnFolderName = folderName;
+            FTPReturnPath = string.Format("{0}{1}/", FTPPath, folderName);
+            DialogResult = true;
+            Close();
+        }
+    }
+}

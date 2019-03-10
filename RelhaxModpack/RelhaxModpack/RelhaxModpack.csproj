@@ -129,6 +129,9 @@
     <Compile Include="UIComponents\ComboBoxItem.cs" />
     <Compile Include="UIComponents\EditorComboBoxItem.cs" />
     <Compile Include="UIComponents\EditorSearchBoxItem.cs" />
+    <Compile Include="Windows\CreateFTPFolderName.xaml.cs">
+      <DependentUpon>CreateFTPFolderName.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\DeveloperSelectionsViewer.xaml.cs">
       <DependentUpon>DeveloperSelectionsViewer.xaml</DependentUpon>
     </Compile>
@@ -137,6 +140,9 @@
     </Compile>
     <Compile Include="Windows\EditorAddRemove.xaml.cs">
       <DependentUpon>EditorAddRemove.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\EditorSelectMediaUploadLocation.xaml.cs">
+      <DependentUpon>EditorSelectMediaUploadLocation.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\FirstLoadAknowledgements.xaml.cs">
       <DependentUpon>FirstLoadAknowledgements.xaml</DependentUpon>
@@ -229,6 +235,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\CreateFTPFolderName.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\DatabaseEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -250,6 +260,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\EditorAddRemove.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\EditorSelectMediaUploadLocation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
