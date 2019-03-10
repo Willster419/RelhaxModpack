@@ -1461,37 +1461,121 @@ namespace RelhaxModpack.Windows
         {
             if(LoadedDependenciesList.SelectedIndex < 0)
             {
-                MessageBox.Show("Invalid selection");
+                MessageBox.Show("Invalid dependency selection");
+                return;
+            }
+            if(LoadedLogicsList.SelectedIndex < 0)
+            {
+                MessageBox.Show("Invalid logic selection");
                 return;
             }
             if(SelectedItem is Dependency dependency)
             {
-                
+                //check the list of databaselogic in the item, make sure we're not trying to add a duplicate item
+                foreach(DatabaseLogic logic in dependency.Dependencies)
+                {
+                    if(logic.PackageName.Equals((LoadedDependenciesList.SelectedItem as Dependency).PackageName))
+                    {
+                        MessageBox.Show("Dependency already exists in package");
+                        return;
+                    }
+                }
+                dependency.Dependencies.Add(new DatabaseLogic()
+                {
+                    PackageName = (LoadedDependenciesList.SelectedItem as Dependency).PackageName,
+                    Logic = (Logic)LoadedLogicsList.SelectedItem,
+                    NotFlag = (bool)DependenciesNotFlag.IsChecked
+                }
+                );
             }
             else if (SelectedItem is SelectablePackage selectablePackage)
             {
-
+                //check the list of databaselogic in the item, make sure we're not trying to add a duplicate item
+                foreach (DatabaseLogic logic in selectablePackage.Dependencies)
+                {
+                    if (logic.PackageName.Equals((LoadedDependenciesList.SelectedItem as Dependency).PackageName))
+                    {
+                        MessageBox.Show("Dependency already exists in package");
+                        return;
+                    }
+                }
+                selectablePackage.Dependencies.Add(new DatabaseLogic()
+                {
+                    PackageName = (LoadedDependenciesList.SelectedItem as Dependency).PackageName,
+                    Logic = (Logic)LoadedLogicsList.SelectedItem,
+                    NotFlag = (bool)DependenciesNotFlag.IsChecked
+                }
+                );
             }
+        }
+
+        private void PackageDependenciesDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
 
         private void DependenciesRemoveSelected_Click(object sender, RoutedEventArgs e)
         {
-
+            PackageDependenciesDisplay.Items.Remove(PackageDependenciesDisplay.SelectedItem);
         }
 
         private void MediaAddMediaButton_Click(object sender, RoutedEventArgs e)
         {
-
+            //input filtering
+            if (string.IsNullOrWhiteSpace(MediaTypesURL.Text))
+            {
+                MessageBox.Show("Media URL must exist");
+                return;
+            }
+            if (MediaTypesList.SelectedIndex == -1)
+            {
+                MessageBox.Show("Invalid Type");
+                return;
+            }
+            foreach(Media media in PackageMediasDisplay.Items)
+            {
+                if(media.URL.Equals(MediaTypesURL.Text))
+                {
+                    MessageBox.Show("Media URL already exists in list");
+                }
+            }
+            PackageMediasDisplay.Items.Add(new Media()
+            {
+                MediaType = (MediaType)MediaTypesList.SelectedItem,
+                URL = MediaTypesURL.Text
+            });
         }
 
         private void MediaApplyEditButton_Click(object sender, RoutedEventArgs e)
+        {
+            //input filtering
+            if (string.IsNullOrWhiteSpace(MediaTypesURL.Text))
+            {
+                MessageBox.Show("Media URL must exist");
+                return;
+            }
+            if (MediaTypesList.SelectedIndex == -1)
+            {
+                MessageBox.Show("Invalid Type");
+                return;
+            }
+            if(PackageMediasDisplay.SelectedIndex < 0)
+            {
+                MessageBox.Show("Invalid media to apply edit to");
+                return;
+            }
+            (PackageMediasDisplay.SelectedItem as Media).MediaType = (MediaType)MediaTypesList.SelectedItem;
+            (PackageMediasDisplay.SelectedItem as Media).URL = MediaTypesURL.Text;
+        }
+
+        private void PackageMediasDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
 
         private void MediaRemoveMediaButton_Click(object sender, RoutedEventArgs e)
         {
-
+            PackageMediasDisplay.Items.Remove(PackageMediasDisplay.SelectedItem);
         }
 
         private void UploadMediaButton_Click(object sender, RoutedEventArgs e)
@@ -1578,34 +1662,78 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void UserdataApplyUsedataButton_Click(object sender, RoutedEventArgs e)
+        private void UserdataAddUserdataButton_Click(object sender, RoutedEventArgs e)
         {
-
+            foreach(string s in PackageUserdatasDisplay.Items)
+            {
+                if(s.Equals(UserDataEditBox.Text))
+                {
+                    MessageBox.Show("User data already exists");
+                    return;
+                }
+            }
+            PackageUserdatasDisplay.Items.Add(UserDataEditBox.Text);
         }
 
         private void UserdataApplyEditButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(PackageUserdatasDisplay.SelectedIndex < 0)
+            {
+                MessageBox.Show("Invalid selection");
+                return;
+            }
+            foreach (string s in PackageUserdatasDisplay.Items)
+            {
+                if (s.Equals(UserDataEditBox.Text))
+                {
+                    MessageBox.Show("Bad edit: user data already exists");
+                    return;
+                }
+            }
+            PackageUserdatasDisplay.Items[PackageUserdatasDisplay.SelectedIndex] = UserDataEditBox.Text;
+        }
+
+        private void PackageUserdatasDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
 
         private void UserdataRemoveUserdata_Click(object sender, RoutedEventArgs e)
         {
-
+            PackageUserdatasDisplay.Items.Remove(PackageUserdatasDisplay.SelectedItem);
         }
 
         private void TriggerAddSelectedTrigger_Click(object sender, RoutedEventArgs e)
+        {
+            if(LoadedTriggersComboBox.SelectedIndex < 0)
+            {
+                MessageBox.Show("Invalid selection");
+                return;
+            }
+            foreach(string s in PackageTriggersDisplay.Items)
+            {
+                if(s.Equals(LoadedTriggersComboBox.SelectedItem as string))
+                {
+                    MessageBox.Show("Bad edit: trigger already exists");
+                    return;
+                }
+            }
+            PackageTriggersDisplay.Items.Add(LoadedTriggersComboBox.SelectedItem as string);
+        }
+
+        private void PackageTriggersDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
 
         private void TriggerRemoveTrigger_Click(object sender, RoutedEventArgs e)
         {
-
+            PackageTriggersDisplay.Items.Remove(PackageTriggersDisplay.SelectedItem);
         }
 
         private void ConflictingPackagesRemoveConflictingPackage_Click(object sender, RoutedEventArgs e)
         {
-
+            PackageConflictingPackagesDisplay.Items.Remove(PackageConflictingPackagesDisplay.SelectedItem);
         }
         #endregion
 
