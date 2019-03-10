@@ -76,6 +76,9 @@
     <Compile Include="GlobalProgressBarTest.xaml.cs">
       <DependentUpon>GlobalProgressBarTest.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RelhaxCheckBox.xaml.cs">
+      <DependentUpon>RelhaxCheckBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="stretchtreeview.xaml.cs">
       <DependentUpon>stretchtreeview.xaml</DependentUpon>
     </Compile>
@@ -103,6 +106,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="OMCViewTesting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RelhaxCheckBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

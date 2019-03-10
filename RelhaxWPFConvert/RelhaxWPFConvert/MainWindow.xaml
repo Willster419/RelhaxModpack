@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxWPFConvert"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
+    <Window.Resources>
+    </Window.Resources>
     <ScrollViewer HorizontalScrollBarVisibility="Visible" MouseRightButtonUp="ScrollViewer_MouseRightButtonUp">
         <Grid Background="#FF0C0CE6" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible" PreviewMouseDown="Grid_PreviewMouseDown">
             <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="200" Margin="10,10,0,0" VerticalAlignment="Top" Width="500">
@@ -70,6 +72,9 @@
                     </TextBlock>
                 </StackPanel>
             </CheckBox>
+            <CheckBox x:Name="TestRedBox" Content="CheckBox" HorizontalAlignment="Left" Margin="555,182,0,0" VerticalAlignment="Top" IsEnabled="True"/>
+            <local:RelhaxCheckBox Content="RelhaxCheckBox" HorizontalAlignment="Left" Margin="555,230,0,0" VerticalAlignment="Top" IsEnabled="False"/>
+            <!-- <local:CustomBox x:Name="reee" Content="CheckBox" HorizontalAlignment="Left" Margin="546,218,0,0" VerticalAlignment="Top"  IsEnabled="{Binding IsChecked, ElementName=TestRedBox}"/> -->
         </Grid>
     </ScrollViewer>
 </Window>
