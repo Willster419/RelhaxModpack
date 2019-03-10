@@ -769,7 +769,7 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region Drag Drop code
+        #region Drag Drop code for treeviews
 
         private void PerformDatabaseMoveAdd(TreeViewItem itemCurrentlyOver, TreeViewItem itemToMove, TreeViewItem parentItemToMove, TreeViewItem parentItemOver,
             DatabasePackage packageToMove, DatabasePackage packageCurrentlyOver, DragDropEffects effects, bool addBelowItem)
@@ -1890,6 +1890,62 @@ namespace RelhaxModpack.Windows
             item.Package.EditorTreeViewItem.Focusable = true;
             item.Package.EditorTreeViewItem.Focus();
             Dispatcher.InvokeAsync(() => item.Package.EditorTreeViewItem.BringIntoView(), System.Windows.Threading.DispatcherPriority.Background);
+        }
+        #endregion
+
+        #region Drag drop code for media items
+        private void PackageMediasDisplay_DragOver(object sender, DragEventArgs e)
+        {
+            DragDropTest.Text = "";
+            if (DragDropTest.Visibility == Visibility.Hidden)
+                DragDropTest.Visibility = Visibility.Visible;
+            if (e.Source is Media mediaOver && e.Data is Media mediaToMove)
+            {
+                if (mediaOver.URL.Equals(mediaToMove.URL))
+                {
+                    DragDropTest.Text = "Item can't be itself!";
+                    return;
+                }
+                DragDropTest.Text = string.Format("Move {0} below {1}", mediaToMove.URL.Substring(0, 15), mediaOver.URL.Substring(0, 15));
+            }
+            else
+                DragDropTest.Text = "Both items must be media!";
+        }
+
+        private void PackageMediasDisplay_Drop(object sender, DragEventArgs e)
+        {
+            DragDropTest.Text = "";
+            if (DragDropTest.Visibility == Visibility.Visible)
+                DragDropTest.Visibility = Visibility.Hidden;
+            if (e.Source is Media mediaOver && e.Data is Media mediaToMove)
+            {
+                PackageMediasDisplay.Items.Remove(mediaToMove);
+                PackageMediasDisplay.Items.Insert(PackageMediasDisplay.Items.IndexOf(mediaOver) + 1, mediaToMove);
+            }
+        }
+
+        private void PackageMediasDisplay_MouseMove(object sender, MouseEventArgs e)
+        {
+            if(e.LeftButton == MouseButtonState.Pressed && IsDragConfirmed(e.GetPosition(PackageMediasDisplay)))
+            {
+                if(PackageMediasDisplay.SelectedItem is Media media)
+                {
+                    DragDrop.DoDragDrop(PackageMediasDisplay, media, DragDropEffects.Move);
+                }
+            }
+        }
+
+        private void PackageMediasDisplay_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                BeforeDragDropPoint = e.GetPosition(PackageMediasDisplay);
+            }
+        }
+
+        private void PackageMediasDisplay_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+
         }
         #endregion
     }

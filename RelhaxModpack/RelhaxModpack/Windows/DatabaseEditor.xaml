@@ -470,7 +470,7 @@
                 </TabItem>
                 <TabItem x:Name="MediasTab" Header="Medias">
                     <Grid Background="#FFE5E5E5">
-                        <ListBox x:Name="PackageMediasDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageMediasDisplay_SelectionChanged" />
+                        <ListBox x:Name="PackageMediasDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageMediasDisplay_SelectionChanged" AllowDrop="True" DragOver="PackageMediasDisplay_DragOver" Drop="PackageMediasDisplay_Drop" MouseMove="PackageMediasDisplay_MouseMove" PreviewMouseDown="PackageMediasDisplay_PreviewMouseDown" PreviewMouseUp="PackageMediasDisplay_PreviewMouseUp" />
                         <Button Content="Add Media" x:Name="MediaAddMediaButton" Tag="MediaAddMediaButton" HorizontalAlignment="Left" Margin="0,253,0,0" VerticalAlignment="Top" Width="100" Click="MediaAddMediaButton_Click"/>
                         <Button Content="Apply Edit" x:Name="MediaApplyEditButton" Tag="MediaApplyEditButton" HorizontalAlignment="Left" Margin="105,253,0,0" VerticalAlignment="Top" Width="100" Click="MediaApplyEditButton_Click"/>
                         <Button Content="Remove Media" x:Name="MediaRemoveMediaButton" Tag="MediaRemoveMediaButton" HorizontalAlignment="Left" Margin="210,253,0,0" VerticalAlignment="Top" Width="100" Click="MediaRemoveMediaButton_Click"/>
