@@ -1709,8 +1709,17 @@ namespace RelhaxModpack.Windows
                 {
                     if (item.IsHighlighted && item.IsMouseOver)
                     {
+                        //if it's the right mouse and we're in the conflicting packages view, the user is tryingto add the element
                         if (e.RightButton == MouseButtonState.Pressed && ConflictingPackagesTab.IsVisible && SelectedItem != null)
                         {
+                            foreach(string s in PackageConflictingPackagesDisplay.Items)
+                            {
+                                if(s.Equals(item.Package.PackageName))
+                                {
+                                    Logging.Debug("Mouse right click with trigger add, skipping adding cause already exists: {0}", item.Package.PackageName);
+                                    return;
+                                }
+                            }
                             PackageConflictingPackagesDisplay.Items.Add(item.Package.PackageName);
                         }
                         else
