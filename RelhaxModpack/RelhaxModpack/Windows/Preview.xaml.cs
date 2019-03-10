@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using RelhaxModpack.UIComponents;
 using System.Threading;
 using System.IO;
+using System.Net;
 
 namespace RelhaxModpack.Windows
 {
@@ -22,6 +23,7 @@ namespace RelhaxModpack.Windows
 
         public SelectablePackage Package = null;
         public bool EditorMode = false;
+        private MemoryStream ImageStream = null;
 
         public Preview()
         {
@@ -139,17 +141,32 @@ namespace RelhaxModpack.Windows
                     //https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.image?view=netframework-4.7.2
                     Image pictureViewer = new Image();
                     pictureViewer.MouseLeftButtonDown += PictureViewer_MouseLeftButtonDown;
-                    MainPreviewBorder.Child = pictureViewer;
+                    //MainPreviewBorder.Child = pictureViewer;
+                    MainPreviewBorder.Child = new ProgressBar()
+                    {
+                        Minimum = 0,
+                        Maximum = 1,
+                        Value = 0,
+                        HorizontalAlignment = HorizontalAlignment.Stretch,
+                        VerticalAlignment = VerticalAlignment.Top,
+                        Height = 20
+                    };
                     //quick set to internal loading thing
                     pictureViewer.Source = UISettings.GetLoadingImageBitmap();
-                    //http://dasselsoftwaredevelopment.com/code-samples/changing-the-source-of-an-image-in-c/
-                    /*
-                    Dispatcher.InvokeAsync(() =>
+                    //https://stackoverflow.com/questions/9173904/byte-array-to-image-conversion
+                    //https://stackoverflow.com/questions/18134234/how-to-convert-system-io-stream-into-an-image
+                    using (WebClient client = new WebClient() { })
                     {
-                        pictureViewer.Source = new BitmapImage(new Uri(media.URL));
-                    },
-                    System.Windows.Threading.DispatcherPriority.ApplicationIdle);
-                    */
+                        client.DownloadProgressChanged += Client_DownloadProgressChanged;
+                        byte[] image = await client.DownloadDataTaskAsync(media.URL);
+                        ImageStream = new MemoryStream(image);
+                        BitmapImage bitmapImage = new BitmapImage();
+                        bitmapImage.BeginInit();
+                        bitmapImage.StreamSource = ImageStream;
+                        bitmapImage.EndInit();
+                        pictureViewer.Source = bitmapImage;
+                        MainPreviewBorder.Child = pictureViewer;
+                    }
                     break;
                 case MediaType.Webpage:
                     WebBrowser browserr = new WebBrowser();
@@ -160,9 +177,29 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
+            if(MainPreviewBorder.Child is ProgressBar bar)
+            {
+                if (bar.Maximum != e.TotalBytesToReceive)
+                    bar.Maximum = e.TotalBytesToReceive;
+                bar.Value = e.BytesReceived;
+            }
+        }
+
         private void PictureViewer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            throw new NotImplementedException();
+            throw new BadMemeException("Finish your code jackass");
+        }
+
+        private void RelhaxWindow_Closed(object sender, EventArgs e)
+        {
+            Logging.Debug("Disposing image memory stream");
+            if(ImageStream != null)
+            {
+                ImageStream.Dispose();
+                ImageStream = null;
+            }
         }
     }
 }
