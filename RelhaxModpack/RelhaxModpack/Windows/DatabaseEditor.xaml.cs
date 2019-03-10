@@ -1511,7 +1511,18 @@ namespace RelhaxModpack.Windows
 
         private void PackageDependenciesDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            DatabaseLogic selectedLogic = (DatabaseLogic)PackageDependenciesDisplay.SelectedItem;
+            LoadedLogicsList.SelectedItem = selectedLogic.Logic;
+            DependenciesNotFlag.IsChecked = selectedLogic.NotFlag;
+            LoadedDependenciesList.SelectedIndex = -1;
+            foreach(Dependency dependency in LoadedDependenciesList.Items)
+            {
+                if (dependency.PackageName.Equals(selectedLogic.PackageName))
+                {
+                    LoadedDependenciesList.SelectedItem = dependency;
+                    break;
+                }
+            }
         }
 
         private void DependenciesRemoveSelected_Click(object sender, RoutedEventArgs e)
@@ -1570,7 +1581,9 @@ namespace RelhaxModpack.Windows
 
         private void PackageMediasDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            Media media = (Media)PackageMediasDisplay.SelectedItem;
+            MediaTypesList.SelectedItem = media.MediaType;
+            MediaTypesURL.Text = media.URL;
         }
 
         private void MediaRemoveMediaButton_Click(object sender, RoutedEventArgs e)
@@ -1695,7 +1708,7 @@ namespace RelhaxModpack.Windows
 
         private void PackageUserdatasDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            UserDataEditBox.Text = (string)PackageUserdatasDisplay.SelectedItem;
         }
 
         private void UserdataRemoveUserdata_Click(object sender, RoutedEventArgs e)
@@ -1723,7 +1736,14 @@ namespace RelhaxModpack.Windows
 
         private void PackageTriggersDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            LoadedTriggersComboBox.SelectedIndex = -1;
+            foreach(string s in LoadedTriggersComboBox.Items)
+            {
+                if(s.Equals(PackageTriggersDisplay.SelectedItem as string))
+                {
+                    LoadedTriggersComboBox.SelectedItem = s;
+                }
+            }
         }
 
         private void TriggerRemoveTrigger_Click(object sender, RoutedEventArgs e)
