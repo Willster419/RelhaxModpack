@@ -374,26 +374,41 @@ namespace RelhaxModpack.Windows
         {
             //check if we should ask a confirm first
             if (EditorSettings.ShowConfirmationOnPackageApply && MessageBox.Show("Confirm to apply changes?", "", MessageBoxButton.YesNo) == MessageBoxResult.OK)
+            {
                 if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem && selectedTreeViewItem.Header is EditorComboBoxItem editorSelectedItem)
                 {
-                    SaveApplyDatabaseObject(editorSelectedItem.Package);
+                    SaveApplyDatabaseObject(editorSelectedItem.Package,null);
                 }
+                else if (DatabaseTreeView.SelectedItem is TreeViewItem catTVI && catTVI.Header is Category cat)
+                {
+                    SaveApplyDatabaseObject(null, cat);
+                }
+            }
         }
 
         private void DatabaseTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            //first always check to make sure it's a package item
+            //check to make sure it's a package item or category item
             if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem && selectedTreeViewItem.Header is EditorComboBoxItem editorSelectedItem)
             {
                 //check if we should save the item before updating what the current entry is
                 if (EditorSettings.SaveSelectionBeforeLeave && SelectedItem != null)
                 {
-                    SaveApplyDatabaseObject(SelectedItem);
+                    SaveApplyDatabaseObject(SelectedItem, null);
                 }
                 //set the item as the new selectedItem
                 SelectedItem = editorSelectedItem.Package;
                 //display the new selectedItem
-                ShowDatabaseObject(SelectedItem);
+                ShowDatabaseObject(SelectedItem,null);
+            }
+            else if (DatabaseTreeView.SelectedItem is TreeViewItem selectedCatTVI && selectedCatTVI.Header is Category category)
+            {
+                //check if we should save the item before updating what the current entry is
+                if (EditorSettings.SaveSelectionBeforeLeave && SelectedItem != null)
+                {
+                    SaveApplyDatabaseObject(null,category);
+                }
+                ShowDatabaseObject(null, category);
             }
         }
 
@@ -453,25 +468,145 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Load and Save internal database methods
-        private void ShowDatabaseObject(DatabasePackage package)
+        private void ResetRightPanels(DatabasePackage package, Category category)
         {
-            if (package == null)
+            //for each tab, disable all components. then enable them back of tye type of database object
+            List<Control> controlsToDisable = new List<Control>();
+            foreach(TabItem tabItem in RightTab.Items)
             {
-                Logging.Error("SaveApplyDatabaseObject() package parameter is null, this should not happen!!");
+                foreach(FrameworkElement element in Utils.GetAllWindowComponentsLogical(tabItem,false))
+                {
+                    //if it's a common element used in the panel, then disable it
+                    if (element is CheckBox || element is ComboBox || element is Button || element is TextBox || element is ListBox)
+                        controlsToDisable.Add((Control)element);
+                    //also clear it's data for each type
+                    if (element is CheckBox box)
+                        box.IsChecked = false;
+                    else if (element is ComboBox cbox)
+                        cbox.Items.Clear();
+                    else if (element is TextBox tbox && !tbox.Name.Equals(nameof(CurrentSupportedTriggers)))
+                        tbox.Text = string.Empty;
+                    else if (element is ListBox lbox)
+                        lbox.Items.Clear();
+                }
+            }
+            //there's a couple that don't need to be disabled
+            if (controlsToDisable.Contains(CurrentSupportedTriggers))
+                controlsToDisable.Remove(CurrentSupportedTriggers);
+            else
+                throw new BadMemeException("but it's there i swear");
+            //disable the components
+            foreach (Control control in controlsToDisable)
+                control.IsEnabled = false;
+
+            //enable components by type
+            if(category != null)
+            {
+                foreach(FrameworkElement control in Utils.GetAllWindowComponentsLogical(DependenciesTab,false))
+                {
+                    if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
+                        control.IsEnabled = true;
+                }
+                PackageNameDisplay.IsEnabled = true;
+                ApplyButton.IsEnabled = true;
+            }
+            else if (package is DatabasePackage)
+            {
+                //basic tab is always difficult
+                PackagePackageNameDisplay.IsEnabled = true;
+                PackageStartAddressDisplay.IsEnabled = true;
+                PackageZipFileDisplay.IsEnabled = true;
+                PackageEndAddressDisplay.IsEnabled = true;
+                PackageDevURLDisplay.IsEnabled = true;
+                PackageVersionDisplay.IsEnabled = true;
+                PackageInstallGroupDisplay.IsEnabled = true;
+                PackagePatchGroupDisplay.IsEnabled = true;
+                PackageLastUpdatedDisplay.IsEnabled = true;
+                PackageLogAtInstallDisplay.IsEnabled = true;
+                PackageEnabledDisplay.IsEnabled = true;//kinda meta
+                ApplyButton.IsEnabled = true;
+                ZipDownload.IsEnabled = true;
+                ZipUload.IsEnabled = true;
+                //all have internal notes and triggers
+                foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(TriggersTab, false))
+                {
+                    if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
+                        control.IsEnabled = true;
+                }
+                foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(InternalNotesTab, false))
+                {
+                    if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
+                        control.IsEnabled = true;
+                }
+                if (package is Dependency dependency || package is SelectablePackage spackage)
+                {
+                    //dependency and selectable package both have dependencies
+                    foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(DependenciesTab, false))
+                    {
+                        if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
+                            control.IsEnabled = true;
+                    }
+                    //conflicting packages gets used for showing elements that are used by the dependency
+                    foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(ConflictingPackagesTab, false))
+                    {
+                        if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
+                            control.IsEnabled = true;
+                    }
+                    if (package is SelectablePackage)
+                    {
+                        //enable remaining elements on basic tab
+                        PackageNameDisplay.IsEnabled = true;
+                        PackageTypeDisplay.IsEnabled = true;
+                        PackageVisibleDisplay.IsEnabled = true;
+                        //enable remaining tabs
+                        foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(DescriptionTab, false))
+                        {
+                            if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
+                                control.IsEnabled = true;
+                        }
+                        foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(UpdateNotesTab, false))
+                        {
+                            if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
+                                control.IsEnabled = true;
+                        }
+                        foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(MediasTab, false))
+                        {
+                            if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
+                                control.IsEnabled = true;
+                        }
+                        foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(UserDatasTab, false))
+                        {
+                            if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
+                                control.IsEnabled = true;
+                        }
+                    }
+                }
+            }
+
+            //reload the list of all dependencies to make sure it's always accurate
+            LoadedDependenciesList.Items.Clear();
+            foreach (Dependency d in Dependencies)
+                LoadedDependenciesList.Items.Add(d);
+        }
+        private void ShowDatabaseObject(DatabasePackage package, Category category)
+        {
+            if(category != null)
+            {
+                ResetRightPanels(null,category);
+                foreach (DatabaseLogic logic in category.Dependencies)
+                    PackageDependenciesDisplay.Items.Add(logic);
+                PackageNameDisplay.Text = category.Name;
                 return;
             }
+            ResetRightPanels(package,null);
             //load all items in the databasePackage level first
-            PackageNameDisplay.Text = string.Empty;
-            PackageNameDisplay.IsEnabled = false;
+            //basic tab
             PackagePackageNameDisplay.Text = package.PackageName;
             PackageStartAddressDisplay.Text = package.StartAddress;
             PackageZipFileDisplay.Text = package.ZipFile;
             PackageEndAddressDisplay.Text = package.EndAddress;
             PackageDevURLDisplay.Text = package.DevURL;
             PackageVersionDisplay.Text = package.Version;
-            PackageTypeDisplay.SelectedIndex = -1;
-            PackageTypeDisplay.IsEnabled = false;
-            PackageInstallGroupDisplay.SelectedIndex = -1;
             foreach (int i in PackageInstallGroupDisplay.Items)
             {
                 if (i == package.InstallGroup)
@@ -480,7 +615,6 @@ namespace RelhaxModpack.Windows
                     break;
                 }
             }
-            PackagePatchGroupDisplay.SelectedIndex = -1;
             foreach (int i in PackagePatchGroupDisplay.Items)
             {
                 if (i == package.PatchGroup)
@@ -489,91 +623,72 @@ namespace RelhaxModpack.Windows
                     break;
                 }
             }
-            PackageLevelDisplay.Text = string.Empty;
-            PackageLevelDisplay.IsEnabled = false;
-            PackageLastUpdatedDisplay.IsEnabled = false;
-            PackageLastUpdatedDisplay.Text = string.Empty;
             PackageLogAtInstallDisplay.IsChecked = package.LogAtInstall;
-            PackageVisibleDisplay.IsChecked = false;
-            PackageVisibleDisplay.IsEnabled = false;
             PackageEnabledDisplay.IsChecked = package.Enabled;
+            //internal notes
             PackageInternalNotesDisplay.Text = package.InternalNotes;
-            DescriptionTab.IsEnabled = false;
-            PackageDescriptionDisplay.Text = string.Empty;
-            UpdateNotesTab.IsEnabled = false;
-            PackageUpdateNotesDisplay.Text = string.Empty;
-            PackageDependenciesDisplay.Items.Clear();
-            DependenciesTab.IsEnabled = false;
-            PackageMediasDisplay.Items.Clear();
-            MediasTab.IsEnabled = false;
-            PackageUserdatasDisplay.Items.Clear();
-            UserDatasTab.IsEnabled = false;
-            PackageTriggersDisplay.Items.Clear();
+            //triggers
             foreach (string s in package.Triggers)
                 PackageTriggersDisplay.Items.Add(s);
-            ConflictingPackagesTab.IsEnabled = false;
-            ConflictingPackagesTab.Content = "Conflicting Packages";
+            //reset the conflicting packages tab text just in case
+            ConflictingPackagesTab.Header = "Conflicting Packages";
             ConflictingPackagesMessagebox.Text = "To add a package to the list, search it above and right click it";
             //then handle if dependency
             if (package is Dependency dependency)
             {
-                DependenciesTab.IsEnabled = true;
                 foreach (DatabaseLogic d in dependency.Dependencies)
                     PackageDependenciesDisplay.Items.Add(d);
-                ConflictingPackagesTab.IsEnabled = true;
-                ConflictingPackagesTab.Content = "Dependency Usage";
+                ConflictingPackagesTab.Header = "Dependency Usage";
                 ConflictingPackagesMessagebox.Text = "Above is list packages that use this dependency";
-                ConflictingPackagesRemoveConflictingPackage.IsEnabled = false;
-                List<DatabaseLogic> logics = new List<DatabaseLogic>();
-                foreach (Dependency d in Dependencies)
-                    if (d.Dependencies.Count > 0)
-                        logics.AddRange(d.Dependencies);
-                foreach (SelectablePackage spackage in Utils.GetFlatSelectablePackageList(ParsedCategoryList))
-                    if (spackage.Dependencies.Count > 0)
-                        logics.AddRange(spackage.Dependencies);
-                logics = logics.Where(log => log.PackageName.Equals(dependency.PackageName)).ToList();
-                PackageConflictingPackagesDisplay.Items.Clear();
-                foreach (DatabaseLogic dl in logics)
-                    PackageConflictingPackagesDisplay.Items.Add(dl);
+                foreach(Dependency dependencyy in Dependencies)
+                {
+                    if (dependencyy.Equals(dependency))
+                        continue;
+                    foreach (DatabaseLogic logic in dependencyy.Dependencies)
+                        if (logic.PackageName.Equals(dependency.PackageName))
+                            //the fact i'm not breaking can help determine if a package has the dependency listed twice
+                            PackageConflictingPackagesDisplay.Items.Add(dependencyy);
+                }
+                foreach(SelectablePackage selectablePackage in Utils.GetFlatSelectablePackageList(ParsedCategoryList))
+                {
+                    foreach (DatabaseLogic logic in selectablePackage.Dependencies)
+                        if (logic.PackageName.Equals(dependency.PackageName))
+                            PackageConflictingPackagesDisplay.Items.Add(selectablePackage);
+                }
             }
             //then handle if selectalbePackage
             else if (package is SelectablePackage selectablePackage)
             {
-                PackageNameDisplay.IsEnabled = true;
                 PackageNameDisplay.Text = selectablePackage.Name;
-                PackageLevelDisplay.IsEnabled = true;
                 PackageLevelDisplay.Text = selectablePackage.Level.ToString();
-                PackageLastUpdatedDisplay.IsEnabled = true;
                 PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(selectablePackage.Timestamp);
-                DescriptionTab.IsEnabled = true;
                 PackageDescriptionDisplay.Text = selectablePackage.Description;
-                UpdateNotesTab.IsEnabled = true;
                 PackageUpdateNotesDisplay.Text = selectablePackage.UpdateComment;
-                DependenciesTab.IsEnabled = true;
                 foreach (DatabaseLogic d in selectablePackage.Dependencies)
                     PackageDependenciesDisplay.Items.Add(d);
-                MediasTab.IsEnabled = true;
                 foreach (Media media in selectablePackage.Medias)
                     PackageMediasDisplay.Items.Add(media);
-                UserDatasTab.IsEnabled = true;
                 foreach (UserFiles data in selectablePackage.UserFiles)
                     PackageUserdatasDisplay.Items.Add(data);
-                ConflictingPackagesTab.IsEnabled = true;
                 PackageConflictingPackagesDisplay.Items.Clear();
                 foreach (string s in selectablePackage.ConflictingPackages)
                     PackageConflictingPackagesDisplay.Items.Add(s);
             }
-            //reload the list of all dependencies to make sure it's always accurate
-            LoadedDependenciesList.Items.Clear();
-            foreach (Dependency d in Dependencies)
-                LoadedDependenciesList.Items.Add(d);
         }
 
-        private void SaveApplyDatabaseObject(DatabasePackage package)
+        private void SaveApplyDatabaseObject(DatabasePackage package, Category category)
         {
-            if (package == null)
+            if(category != null)
             {
-                Logging.Error("SaveApplyDatabaseObject() package parameter is null, this should not happen!!");
+                category.Name = PackageNameDisplay.Text;
+                category.Dependencies.Clear();
+                foreach (DatabaseLogic logic in PackageDependenciesDisplay.Items)
+                    category.Dependencies.Add(logic);
+                //if user requests apply to also save to disk, then do that now
+                if (EditorSettings.ApplyBehavior == ApplyBehavior.ApplyTriggersSave)
+                {
+                    SaveDatabaseButton_Click(null, null);
+                }
                 return;
             }
             //save everything from the UI into the package
@@ -604,30 +719,32 @@ namespace RelhaxModpack.Windows
             {
                 selectablePackage.Name = PackagePackageNameDisplay.Text;
                 selectablePackage.Type = (string)PackageTypeDisplay.SelectedItem;
-                if(false)//zip file changed
+                if(!selectablePackage.ZipFile.Equals(PackageZipFileDisplay.Text))
                 {
-                    //selectablePackage.Timestamp = DateTime.Now.ToFileTime;
-                    throw new BadMemeException("you should probably check what method grumpel used");
+                    selectablePackage.CRC = "f";
+                    selectablePackage.ZipFile = PackageZipFileDisplay.Text;
+                    selectablePackage.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
+                    PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(selectablePackage.Timestamp);
                 }
                 selectablePackage.Description = PackageDescriptionDisplay.Text;
                 selectablePackage.UpdateComment = PackageUpdateNotesDisplay.Text;
+
                 selectablePackage.Dependencies.Clear();
                 foreach (DatabaseLogic dl in PackageDependenciesDisplay.Items)
                     selectablePackage.Dependencies.Add(dl);
+
                 selectablePackage.UserFiles.Clear();
                 foreach (UserFiles uf in PackageUserdatasDisplay.Items)
                     selectablePackage.UserFiles.Add(uf);
+
                 selectablePackage.Medias.Clear();
                 foreach (Media m in PackageMediasDisplay.Items)
                     selectablePackage.Medias.Add(m);
+
                 selectablePackage.ConflictingPackages.Clear();
                 foreach (string s in PackageConflictingPackagesDisplay.Items)
                     selectablePackage.ConflictingPackages.Add(s);
             }
-            //reload the list of all dependencies to make sure it's always accurate
-            LoadedDependenciesList.Items.Clear();
-            foreach (Dependency d in Dependencies)
-                LoadedDependenciesList.Items.Add(d);
             //if user requests apply to also save to disk, then do that now
             if (EditorSettings.ApplyBehavior == ApplyBehavior.ApplyTriggersSave)
             {
@@ -978,6 +1095,12 @@ namespace RelhaxModpack.Windows
 
         private void ZipDownload_Click(object sender, RoutedEventArgs e)
         {
+            //make sure it actually has a zip file to download
+            if(string.IsNullOrWhiteSpace(SelectedItem.ZipFile))
+            {
+                MessageBox.Show("no zip file to download");
+                return;
+            }
             //make sure FTP credentials are at least entered
             if (string.IsNullOrWhiteSpace(EditorSettings.BigmodsPassword) || string.IsNullOrWhiteSpace(EditorSettings.BigmodsUsername))
             {
@@ -1070,11 +1193,6 @@ namespace RelhaxModpack.Windows
 
         private void SaveDatabaseButton_Click(object sender, RoutedEventArgs e)
         {
-            //if save triggers apply, then do it
-            if (EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && SelectedItem != null)
-            {
-                SaveApplyDatabaseObject(SelectedItem);
-            }
             if (string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text))
             {
                 MessageBox.Show("Default save location is empty, please specify before using this button");
@@ -1084,6 +1202,16 @@ namespace RelhaxModpack.Windows
             {
                 MessageBox.Show(string.Format("The save path\n{0}\ndoes not exist, please re-specify", Path.GetDirectoryName(DefaultSaveLocationSetting.Text)));
                 return;
+            }
+            //if save triggers apply, then do it
+            if (EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && SelectedItem != null)
+            {
+                SaveApplyDatabaseObject(SelectedItem, null);
+            }
+            else if (EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && DatabaseTreeView.SelectedItem != null &&
+                DatabaseTreeView.SelectedItem is TreeViewItem tvi && tvi.Header is Category cat)
+            {
+                SaveApplyDatabaseObject(null, cat);
             }
             //actually save
             throw new BadMemeException("TODO");
@@ -1095,7 +1223,12 @@ namespace RelhaxModpack.Windows
             //if save triggers apply, then do it
             if (EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && SelectedItem != null)
             {
-                SaveApplyDatabaseObject(SelectedItem);
+                SaveApplyDatabaseObject(SelectedItem,null);
+            }
+            else if (EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && DatabaseTreeView.SelectedItem != null &&
+                DatabaseTreeView.SelectedItem is TreeViewItem tvi && tvi.Header is Category cat)
+            {
+                SaveApplyDatabaseObject(null, cat);
             }
             if (SaveDatabaseDialog == null)
                 SaveDatabaseDialog = new SaveFileDialog()
@@ -1310,7 +1443,19 @@ namespace RelhaxModpack.Windows
 
         private void DependenciesAddSelected_Click(object sender, RoutedEventArgs e)
         {
+            if(LoadedDependenciesList.SelectedIndex < 0)
+            {
+                MessageBox.Show("Invalid selection");
+                return;
+            }
+            if(SelectedItem is Dependency dependency)
+            {
+                
+            }
+            else if (SelectedItem is SelectablePackage selectablePackage)
+            {
 
+            }
         }
 
         private void DependenciesRemoveSelected_Click(object sender, RoutedEventArgs e)

@@ -110,6 +110,14 @@ namespace RelhaxModpack
             GetAllWindowComponentsLogical(window, windowComponents);
             return windowComponents;
         }
+        public static List<FrameworkElement> GetAllWindowComponentsLogical(FrameworkElement rootElement, bool addRoot)
+        {
+            List<FrameworkElement> components = new List<FrameworkElement>();
+            if (addRoot)
+                components.Add(rootElement);
+            GetAllWindowComponentsLogical(rootElement, components);
+            return components;
+        }
         //A recursive method for navigating the visual tree
         private static void GetAllWindowComponentsVisual(FrameworkElement v, List<FrameworkElement> allWindowComponents)
         {
