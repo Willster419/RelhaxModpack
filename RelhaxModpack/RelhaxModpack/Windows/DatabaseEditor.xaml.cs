@@ -473,6 +473,7 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Load and Save internal database methods
+
         private void ResetRightPanels(DatabasePackage package, Category category)
         {
             //for each tab, disable all components. then enable them back of tye type of database object
@@ -490,9 +491,14 @@ namespace RelhaxModpack.Windows
                     else if (element is ComboBox cbox)
                     {
                         if (cbox.Name.Equals(nameof(PackageInstallGroupDisplay)) || cbox.Name.Equals(nameof(PackagePatchGroupDisplay)) ||
-                            cbox.Name.Equals(nameof(LoadedDependenciesList)) || cbox.Name.Equals(nameof(LoadedTriggersComboBox)))
+                            cbox.Name.Equals(nameof(LoadedDependenciesList)) || cbox.Name.Equals(nameof(LoadedTriggersComboBox)) ||
+                            cbox.Name.Equals(nameof(LoadedLogicsList)) || cbox.Name.Equals(nameof(PackageTypeDisplay)))
+                        {
+                            cbox.SelectedIndex = -1;
                             continue;
-                        cbox.Items.Clear();
+                        }
+                        else
+                            cbox.Items.Clear();
                     }
                     else if (element is TextBox tbox && !tbox.Name.Equals(nameof(CurrentSupportedTriggers)))
                         tbox.Text = string.Empty;

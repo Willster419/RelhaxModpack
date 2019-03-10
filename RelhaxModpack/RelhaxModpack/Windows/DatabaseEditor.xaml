@@ -457,9 +457,14 @@
                 <TabItem x:Name="DependenciesTab" Header="Dependencies">
                     <Grid Background="#FFE5E5E5">
                         <ListBox x:Name="PackageDependenciesDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
-                        <Button Content="Add selected" x:Name="DependenciesAddSelected" Tag="DependenciesAddSelected" HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="100" Click="DependenciesAddSelected_Click"/>
-                        <Button Content="Remove Selected" x:Name="DependenciesRemoveSelected" Tag="DependenciesRemoveSelected" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="100" Click="DependenciesRemoveSelected_Click"/>
-                        <ComboBox x:Name="LoadedDependenciesList" HorizontalAlignment="Left" Margin="105,184,0,0" VerticalAlignment="Top" Width="372" Height="20"/>
+                        <Button Content="Add selected" x:Name="DependenciesAddSelected" Tag="DependenciesAddSelected" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="100" Click="DependenciesAddSelected_Click"/>
+                        <Button Content="Remove Selected" x:Name="DependenciesRemoveSelected" Tag="DependenciesRemoveSelected" HorizontalAlignment="Left" Margin="0,235,0,0" VerticalAlignment="Top" Width="100" Click="DependenciesRemoveSelected_Click"/>
+                        <ComboBox x:Name="LoadedDependenciesList" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
+                        <TextBlock x:Name="DependenciesLogicTypeTextBlock" HorizontalAlignment="Left" Margin="105,211,0,0" TextWrapping="Wrap" Text="With Logic Type:" VerticalAlignment="Top"/>
+                        <ComboBox x:Name="LoadedLogicsList" HorizontalAlignment="Left" Margin="197,209,0,0" VerticalAlignment="Top" Width="50">
+                            <RelhaxModpack:Logic>OR</RelhaxModpack:Logic>
+                            <RelhaxModpack:Logic>AND</RelhaxModpack:Logic>
+                        </ComboBox>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="MediasTab" Header="Medias">
