@@ -84,18 +84,18 @@ namespace RelhaxModpack.Windows
                 }
             }
             //load the trigger box with trigger options
-            TriggerSelectionComboBox.Items.Clear();
+            LoadedTriggersComboBox.Items.Clear();
             foreach (Trigger t in InstallerComponents.InstallEngine.Triggers)
             {
-                TriggerSelectionComboBox.Items.Add(t.Name);
+                LoadedTriggersComboBox.Items.Add(t.Name);
             }
             //hook up timer
             DragDropTimer.Tick += OnDragDropTimerTick;
             SearchBox.Items.Clear();
             //set the items for the triggers combobox. this only needs to be done once anyways
-            TriggerSelectionComboBox.Items.Clear();
+            LoadedTriggersComboBox.Items.Clear();
             foreach (string s in InstallerComponents.InstallEngine.CompleteTriggerList)
-                TriggerSelectionComboBox.Items.Add(s);
+                LoadedTriggersComboBox.Items.Add(s);
             Init = false;
         }
 
@@ -373,15 +373,20 @@ namespace RelhaxModpack.Windows
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
             //check if we should ask a confirm first
-            if (EditorSettings.ShowConfirmationOnPackageApply && MessageBox.Show("Confirm to apply changes?", "", MessageBoxButton.YesNo) == MessageBoxResult.OK)
+            if (EditorSettings.ShowConfirmationOnPackageApply && MessageBox.Show("Confirm to apply changes?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem && selectedTreeViewItem.Header is EditorComboBoxItem editorSelectedItem)
                 {
                     SaveApplyDatabaseObject(editorSelectedItem.Package,null);
+                    selectedTreeViewItem.Header = null;
+                    selectedTreeViewItem.Header = editorSelectedItem;
                 }
                 else if (DatabaseTreeView.SelectedItem is TreeViewItem catTVI && catTVI.Header is Category cat)
                 {
                     SaveApplyDatabaseObject(null, cat);
+                    //detach and retach the header to update the UI
+                    catTVI.Header = null;
+                    catTVI.Header = cat;
                 }
             }
         }
@@ -483,7 +488,12 @@ namespace RelhaxModpack.Windows
                     if (element is CheckBox box)
                         box.IsChecked = false;
                     else if (element is ComboBox cbox)
+                    {
+                        if (cbox.Name.Equals(nameof(PackageInstallGroupDisplay)) || cbox.Name.Equals(nameof(PackagePatchGroupDisplay)) ||
+                            cbox.Name.Equals(nameof(LoadedDependenciesList)) || cbox.Name.Equals(nameof(LoadedTriggersComboBox)))
+                            continue;
                         cbox.Items.Clear();
+                    }
                     else if (element is TextBox tbox && !tbox.Name.Equals(nameof(CurrentSupportedTriggers)))
                         tbox.Text = string.Empty;
                     else if (element is ListBox lbox)
@@ -607,6 +617,7 @@ namespace RelhaxModpack.Windows
             PackageEndAddressDisplay.Text = package.EndAddress;
             PackageDevURLDisplay.Text = package.DevURL;
             PackageVersionDisplay.Text = package.Version;
+            PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
             foreach (int i in PackageInstallGroupDisplay.Items)
             {
                 if (i == package.InstallGroup)
@@ -661,7 +672,6 @@ namespace RelhaxModpack.Windows
             {
                 PackageNameDisplay.Text = selectablePackage.Name;
                 PackageLevelDisplay.Text = selectablePackage.Level.ToString();
-                PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(selectablePackage.Timestamp);
                 PackageDescriptionDisplay.Text = selectablePackage.Description;
                 PackageUpdateNotesDisplay.Text = selectablePackage.UpdateComment;
                 foreach (DatabaseLogic d in selectablePackage.Dependencies)

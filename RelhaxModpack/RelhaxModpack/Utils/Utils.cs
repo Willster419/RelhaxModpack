@@ -983,7 +983,10 @@ namespace RelhaxModpack
         /// <returns></returns>
         public static string ConvertFiletimeTimestampToDate(long timestamp)
         {
-            return DateTime.FromFileTime(timestamp).ToString();
+            if (timestamp > 0)
+                return DateTime.FromFileTime(timestamp).ToString();
+            else
+                return "(none)";
         }
         /// <summary>
         /// Encode a plain text string into base64 UTF8 encoding

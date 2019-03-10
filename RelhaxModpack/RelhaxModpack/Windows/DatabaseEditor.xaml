@@ -494,7 +494,7 @@
                         <ListBox x:Name="PackageTriggersDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
                         <Button Content="Add selected Trigger" x:Name="TriggerAddSelectedTrigger" Tag="TriggerAddSelectedTrigger" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="120" Click="TriggerAddSelectedTrigger_Click"/>
                         <Button Content="Remove Trigger" x:Name="TriggerRemoveTrigger" Tag="TriggerRemoveTrigger" HorizontalAlignment="Left" Margin="125,209,0,0" VerticalAlignment="Top" Width="120" Click="TriggerRemoveTrigger_Click"/>
-                        <ComboBox x:Name="TriggerSelectionComboBox" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
+                        <ComboBox x:Name="LoadedTriggersComboBox" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
                         <TextBox x:Name="CurrentSupportedTriggers" HorizontalAlignment="Left" Height="63" Margin="0,498,0,0" TextWrapping="Wrap" Text="Currently Supported Triggers:&#xA;build_contour_icons - start the process of building the contour icons atlas files&#xA;create_shortcuts - start the process of creating the shortcuts" VerticalAlignment="Top" Width="487" IsReadOnly="True"/>
                     </Grid>
                 </TabItem>
