@@ -25,7 +25,6 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class DatabaseEditor : RelhaxWindow
     {
-        int temp = 0;
         private EditorSettings EditorSettings;
         private XmlDocument XmlDatabase;
         private List<DatabasePackage> GlobalDependencies = new List<DatabasePackage>();
@@ -35,6 +34,7 @@ namespace RelhaxModpack.Windows
         private SaveFileDialog SaveDatabaseDialog;
         private OpenFileDialog OpenZipFileDialog;
         private SaveFileDialog SaveZipFileDialog;
+        private OpenFileDialog OpenPictureDialog;
         private System.Windows.Forms.Timer DragDropTimer = new System.Windows.Forms.Timer() { Enabled = false, Interval = 1000 };
         private TreeViewItem ItemToExpand;
         private Point BeforeDragDropPoint;
@@ -1597,6 +1597,35 @@ namespace RelhaxModpack.Windows
 
         private void UploadMediaButton_Click(object sender, RoutedEventArgs e)
         {
+            //initial checks
+            //make sure FTP credentials are at least entered
+            if (string.IsNullOrWhiteSpace(EditorSettings.BigmodsPassword) || string.IsNullOrWhiteSpace(EditorSettings.BigmodsUsername))
+            {
+                MessageBox.Show("Missing FTP credentails");
+                return;
+            }
+            //get the path to upload to
+            string pictureFileToUpload = string.Empty;
+            if (OpenPictureDialog == null)
+                OpenPictureDialog = new OpenFileDialog()
+                {
+                    AddExtension = true,
+                    CheckFileExists = true,
+                    CheckPathExists = true,
+                    //DefaultExt = "zip",
+                    InitialDirectory = Settings.ApplicationStartupPath,
+                    Multiselect = false,
+                    Title = "Select image file to upload"
+                };
+            if ((bool)OpenPictureDialog.ShowDialog() && File.Exists(OpenPictureDialog.FileName))
+            {
+                pictureFileToUpload = OpenPictureDialog.FileName;
+            }
+            else
+                return;
+            //select path to upload to on server
+
+            //start upload
 
         }
 
