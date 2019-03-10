@@ -379,7 +379,7 @@ namespace RelhaxModpack.Windows
                 {
                     SaveApplyDatabaseObject(editorSelectedItem.Package,null);
                     selectedTreeViewItem.Header = null;
-                    selectedTreeViewItem.Header = editorSelectedItem;
+                    selectedTreeViewItem.Header = new EditorComboBoxItem(editorSelectedItem.Package, editorSelectedItem.Package.PackageName);
                 }
                 else if (DatabaseTreeView.SelectedItem is TreeViewItem catTVI && catTVI.Header is Category cat)
                 {
