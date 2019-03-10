@@ -890,6 +890,19 @@
             The current status of the installer. Represents the current state of the installer. When it exists, it is also used as an exit code.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.CreateFTPFolderName">
+            <summary>
+            Interaction logic for CreateFTPFolderName.xaml
+            </summary>
+            <summary>
+            CreateFTPFolderName
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.CreateFTPFolderName.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.DeveloperSelectionsViewer">
             <summary>
             Interaction logic for DeveloperSelectionsViewer.xaml

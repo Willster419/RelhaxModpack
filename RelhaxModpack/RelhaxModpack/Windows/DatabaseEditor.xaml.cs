@@ -1627,6 +1627,7 @@ namespace RelhaxModpack.Windows
             EditorSelectMediaUploadLocation selectUploadLocation = new EditorSelectMediaUploadLocation()
             {
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
+                UploadFileName = Path.GetFileName(pictureFileToUpload)
             };
             //start upload
             if (!(bool)selectUploadLocation.ShowDialog())

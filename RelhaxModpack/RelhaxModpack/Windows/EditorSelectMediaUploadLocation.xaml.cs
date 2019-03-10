@@ -49,6 +49,7 @@ namespace RelhaxModpack.Windows
             FTPTreeView.Items.Add(root);
             await OpenFolderAsync(root);
             StatusTextBlock.Text = string.Empty;
+            FilenameTextBox.Text = UploadFileName;
         }
 
         private void MakeFolderButton_Click(object sender, RoutedEventArgs e)
@@ -110,6 +111,10 @@ namespace RelhaxModpack.Windows
             string[] folders = await Utils.FTPListFilesFoldersAsync(itemToOpen.Tag as string, Credential);
             foreach(string s in folders)
             {
+                if (string.IsNullOrWhiteSpace(s))
+                    continue;
+                if (s.Equals(".") || s.Equals(".."))
+                    continue;
                 if(!Path.HasExtension(s))
                 {
                     itemToOpen.Items.Add(new TreeViewItem()
