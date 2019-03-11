@@ -1,4 +1,4 @@
-﻿<CheckBox x:Class="RelhaxWPFConvert.RelhaxCheckBox"
+﻿<CheckBox x:Name="checkBox" x:Class="RelhaxWPFConvert.RelhaxCheckBox"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -29,7 +29,7 @@
         <SolidColorBrush x:Key="OptionMark.MouseOver.Background" Color="#FFF3F9FF"/>
         <SolidColorBrush x:Key="OptionMark.MouseOver.Border" Color="#FF5593FF"/>
         <SolidColorBrush x:Key="OptionMark.MouseOver.Glyph" Color="#FF212121"/>
-        <SolidColorBrush x:Key="OptionMark.Disabled.Background" Color="Red"/>
+        <SolidColorBrush x:Key="OptionMark.Disabled.Background" Color="{Binding CheckboxDisabledColor, ElementName=checkBox}"/>
         <SolidColorBrush x:Key="OptionMark.Disabled.Border" Color="Red"/>
         <SolidColorBrush x:Key="OptionMark.Disabled.Glyph" Color="#FF707070"/>
         <SolidColorBrush x:Key="OptionMark.Pressed.Background" Color="#FFD9ECFF"/>
