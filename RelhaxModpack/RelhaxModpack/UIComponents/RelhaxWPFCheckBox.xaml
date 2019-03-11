@@ -31,10 +31,10 @@
         <SolidColorBrush x:Key="OptionMark.MouseOver.Background" Color="#FFF3F9FF"/>
         <SolidColorBrush x:Key="OptionMark.MouseOver.Border" Color="#FF5593FF"/>
         <SolidColorBrush x:Key="OptionMark.MouseOver.Glyph" Color="#FF212121"/>
-        <SolidColorBrush x:Key="OptionMark.Disabled.Background" Color="Red"/>
+        <SolidColorBrush x:Key="OptionMark.Disabled.Background" Color="{Binding DisabledColor, ElementName=checkBox}"/>
         <!--ORIGINAL COLOR-->
         <!--<SolidColorBrush x:Key="OptionMark.Disabled.Border" Color="#FFBCBCBC"/>-->
-        <SolidColorBrush x:Key="OptionMark.Disabled.Border" Color="Red"/>
+        <SolidColorBrush x:Key="OptionMark.Disabled.Border" Color="Transparent"/>
         <SolidColorBrush x:Key="OptionMark.Disabled.Glyph" Color="#FF707070"/>
         <SolidColorBrush x:Key="OptionMark.Pressed.Background" Color="#FFD9ECFF"/>
         <SolidColorBrush x:Key="OptionMark.Pressed.Border" Color="#FF3C77DD"/>
