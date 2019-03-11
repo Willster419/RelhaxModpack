@@ -789,6 +789,45 @@
             Load the custom color definitions from XML
             </summary>
         </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxWPFCheckBox">
+            <summary>
+            Interaction logic for RelhaxWPFCheckBox.xaml
+            </summary>
+            <summary>
+            RelhaxWPFCheckBox
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxWPFComboBox">
+            <summary>
+            Interaction logic for RelhaxWPFComboBox.xaml
+            </summary>
+            <summary>
+            RelhaxWPFComboBox
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxWPFRadioButton">
+            <summary>
+            Interaction logic for RelhaxWPFRadioButton.xaml
+            </summary>
+            <summary>
+            RelhaxWPFRadioButton
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.UIComponents.RelhaxMediaPlayer">
             <summary>
             Interaction logic for RelhaxMediaPlayer.xaml

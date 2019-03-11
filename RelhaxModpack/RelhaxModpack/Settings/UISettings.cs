@@ -35,6 +35,7 @@ namespace RelhaxModpack
         public static SolidColorBrush SelectedTextColor = SystemColors.ControlTextBrush;
         public static SolidColorBrush NotSelectedTextColor = SystemColors.ControlTextBrush;
         public static LinearGradientBrush NotSelectedTabColor = null;
+        public static Color DisabledComponentColor = Colors.Red;
         #endregion
 
         #region Image handling for the Preview
