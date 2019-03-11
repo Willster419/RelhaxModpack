@@ -20,6 +20,8 @@ namespace RelhaxWPFConvert
     /// </summary>
     public partial class RelhaxCheckBox : CheckBox
     {
+        public SolidColorBrush CheckboxDisabledColorBrush { get; set; } = new SolidColorBrush(Colors.Red);
+
         public RelhaxCheckBox()
         {
             InitializeComponent();

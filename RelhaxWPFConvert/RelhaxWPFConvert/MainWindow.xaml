@@ -73,7 +73,7 @@
                 </StackPanel>
             </CheckBox>
             <CheckBox x:Name="TestRedBox" Content="CheckBox" HorizontalAlignment="Left" Margin="555,182,0,0" VerticalAlignment="Top" IsEnabled="True"/>
-            <local:RelhaxCheckBox Content="RelhaxCheckBox" HorizontalAlignment="Left" Margin="555,230,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=TestRedBox}"/>
+            <local:RelhaxCheckBox x:Name="testBox" Content="RelhaxCheckBox" HorizontalAlignment="Left" Margin="555,230,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=TestRedBox}"/>
         </Grid>
     </ScrollViewer>
 </Window>
