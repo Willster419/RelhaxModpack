@@ -16,79 +16,29 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0">
-            <TabItem Header="Regex">
+            <TabItem Header="Designer">
                 <Grid Background="#FFE5E5E5">
-                    <GroupBox Header="File location" HorizontalAlignment="Stretch" Height="125" VerticalAlignment="Top">
+                    <GroupBox Header="File location" HorizontalAlignment="Stretch" Height="87" VerticalAlignment="Top">
                         <StackPanel Orientation="Vertical">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Location on Disk" VerticalAlignment="Top" Height="21" Padding="0,3,0,0"/>
                                 <Button Content="Locate file to patch" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="125"/>
                             </StackPanel>
                             <TextBox HorizontalAlignment="Stretch" Height="42" TextWrapping="Wrap" VerticalAlignment="Top" />
-                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Location in zip file" VerticalAlignment="Top"/>
-                            <TextBox HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" />
                         </StackPanel>
                     </GroupBox>
-                    <TextBlock HorizontalAlignment="Left" Margin="5,125,0,0" TextWrapping="Wrap" Text="Patch Path Macro" VerticalAlignment="Top" Width="100" TextAlignment="Center"/>
-                    <ComboBox HorizontalAlignment="Left" Margin="5,141,0,0" VerticalAlignment="Top" Width="100"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="110,125,0,0" TextWrapping="Wrap" Text="Mode" VerticalAlignment="Top" Height="16" Width="120" TextAlignment="Center"/>
-                    <ComboBox HorizontalAlignment="Left" Margin="110,141,0,0" VerticalAlignment="Top" Width="120"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="5,168,0,0" TextWrapping="Wrap" Text="Line(s)" VerticalAlignment="Top"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="5,119,0,0" TextWrapping="Wrap" Text="Patch Path Macro" VerticalAlignment="Top" Width="100" TextAlignment="Center"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="110,119,0,0" VerticalAlignment="Top" Width="100"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="10,147,0,0" TextWrapping="Wrap" Text="Mode" VerticalAlignment="Top" Height="16" Width="120" TextAlignment="Center"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="110,147,0,0" VerticalAlignment="Top" Width="120"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="5,168,0,0" TextWrapping="Wrap" Text="Line(s)/path" VerticalAlignment="Top"/>
                     <TextBox HorizontalAlignment="Stretch" Height="23" Margin="5,184,0,0" TextWrapping="Wrap" VerticalAlignment="Top" />
                     <TextBlock HorizontalAlignment="Stretch" Margin="5,212,0,0" TextWrapping="Wrap" Text="Search" VerticalAlignment="Top"/>
                     <TextBox HorizontalAlignment="Stretch" Height="39" Margin="5,228,0,0" TextWrapping="Wrap" VerticalAlignment="Top" />
                     <TextBlock HorizontalAlignment="Stretch" Margin="5,272,0,0" TextWrapping="Wrap" Text="Replace" VerticalAlignment="Top"/>
                     <TextBox HorizontalAlignment="Stretch" Margin="5,288,0,0" TextWrapping="Wrap" VerticalAlignment="Stretch" />
-                </Grid>
-            </TabItem>
-            <TabItem Header="XML">
-                <Grid Background="#FFE5E5E5">
-                    <GroupBox Header="File location" HorizontalAlignment="Stretch" Height="125" VerticalAlignment="Top">
-                        <StackPanel Orientation="Vertical">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Location on Disk" VerticalAlignment="Top" Height="21" Padding="0,3,0,0"/>
-                                <Button Content="Locate file to patch" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="125"/>
-                            </StackPanel>
-                            <TextBox HorizontalAlignment="Stretch" Height="42" TextWrapping="Wrap" VerticalAlignment="Top" />
-                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Location in zip file" VerticalAlignment="Top"/>
-                            <TextBox HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" />
-                        </StackPanel>
-                    </GroupBox>
-                    <TextBlock HorizontalAlignment="Left" Margin="5,125,0,0" TextWrapping="Wrap" Text="Patch Path Macro" VerticalAlignment="Top" Width="100" TextAlignment="Center"/>
-                    <ComboBox HorizontalAlignment="Left" Margin="5,141,0,0" VerticalAlignment="Top" Width="100"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="110,125,0,0" TextWrapping="Wrap" Text="Mode" VerticalAlignment="Top" Height="16" Width="120" TextAlignment="Center"/>
-                    <ComboBox HorizontalAlignment="Left" Margin="110,141,0,0" VerticalAlignment="Top" Width="120"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="5,168,0,0" TextWrapping="Wrap" Text="Path" VerticalAlignment="Top"/>
-                    <TextBox HorizontalAlignment="Stretch" Height="23" Margin="5,184,0,0" TextWrapping="Wrap" VerticalAlignment="Top" />
-                    <TextBlock HorizontalAlignment="Stretch" Margin="5,212,0,0" TextWrapping="Wrap" Text="Search" VerticalAlignment="Top"/>
-                    <TextBox HorizontalAlignment="Stretch" Height="39" Margin="5,228,0,0" TextWrapping="Wrap" VerticalAlignment="Top" />
-                    <TextBlock HorizontalAlignment="Stretch" Margin="5,272,0,0" TextWrapping="Wrap" Text="Replace" VerticalAlignment="Top"/>
-                    <TextBox HorizontalAlignment="Stretch" Margin="5,288,0,0" TextWrapping="Wrap" VerticalAlignment="Stretch" />
-                </Grid>
-            </TabItem>
-            <TabItem Header="Json">
-                <Grid Background="#FFE5E5E5">
-                    <GroupBox Header="File location" HorizontalAlignment="Stretch" Height="125" VerticalAlignment="Top">
-                        <StackPanel Orientation="Vertical">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Location on Disk" VerticalAlignment="Top" Height="21" Padding="0,3,0,0"/>
-                                <Button Content="Locate file to patch" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="125"/>
-                            </StackPanel>
-                            <TextBox HorizontalAlignment="Stretch" Height="42" TextWrapping="Wrap" VerticalAlignment="Top" />
-                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Location in zip file" VerticalAlignment="Top"/>
-                            <TextBox HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" />
-                        </StackPanel>
-                    </GroupBox>
-                    <TextBlock HorizontalAlignment="Left" Margin="5,125,0,0" TextWrapping="Wrap" Text="Patch Path Macro" VerticalAlignment="Top" Width="100" TextAlignment="Center"/>
-                    <ComboBox HorizontalAlignment="Left" Margin="5,141,0,0" VerticalAlignment="Top" Width="100"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="110,125,0,0" TextWrapping="Wrap" Text="Mode" VerticalAlignment="Top" Height="16" Width="120" TextAlignment="Center"/>
-                    <ComboBox HorizontalAlignment="Left" Margin="110,141,0,0" VerticalAlignment="Top" Width="120"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="5,168,0,0" TextWrapping="Wrap" Text="Path" VerticalAlignment="Top"/>
-                    <TextBox HorizontalAlignment="Stretch" Height="23" Margin="5,184,0,0" TextWrapping="Wrap" VerticalAlignment="Top" />
-                    <TextBlock HorizontalAlignment="Stretch" Margin="5,212,0,0" TextWrapping="Wrap" Text="Search" VerticalAlignment="Top"/>
-                    <TextBox HorizontalAlignment="Stretch" Height="39" Margin="5,228,0,0" TextWrapping="Wrap" VerticalAlignment="Top" />
-                    <TextBlock HorizontalAlignment="Stretch" Margin="5,272,0,0" TextWrapping="Wrap" Text="Replace" VerticalAlignment="Top"/>
-                    <TextBox HorizontalAlignment="Stretch" Margin="5,288,0,0" TextWrapping="Wrap" VerticalAlignment="Stretch" />
+                    <TextBlock HorizontalAlignment="Left" Margin="10,92,0,0" TextWrapping="Wrap" Text="Patch Type" VerticalAlignment="Top"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="72,92,0,0" VerticalAlignment="Top" Width="120"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Patching Help">
@@ -98,17 +48,15 @@
             </TabItem>
             <TabItem Header="Regression Testing">
                 <Grid Background="#FFE5E5E5">
-                    <TextBlock HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Warning! This is for Developers ONLY! Do NOT use these unless you know what you are doing!!!" VerticalAlignment="Top" Foreground="#FFFD1111" FontWeight="Bold" TextAlignment="Center"/>
-                    <Button Content="Regex Regression Testing" HorizontalAlignment="Left" Margin="10,37,0,0" VerticalAlignment="Top" Width="155"/>
-                    <Button Content="XML Regression Testing" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top" Width="155"/>
-                    <Button Content="JSON Regression Testing" HorizontalAlignment="Left" Margin="10,87,0,0" VerticalAlignment="Top" Width="155"/>
+                    <TextBlock HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Warning! This tab is for application Developers ONLY!" VerticalAlignment="Top" Foreground="#FFFD1111" FontWeight="Bold" TextAlignment="Center"/>
+                    <Button Content="Regex Regression Testing" HorizontalAlignment="Left" Margin="10,21,0,0" VerticalAlignment="Top" Width="155"/>
+                    <Button Content="XML Regression Testing" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top" Width="155"/>
+                    <Button Content="JSON Regression Testing" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="155"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Settings">
                 <Grid Background="#FFE5E5E5">
-                    <Button Content="Button 1" HorizontalAlignment="Left" Margin="10,37,0,0" VerticalAlignment="Top" Width="155"/>
-                    <Button Content="Button 2" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top" Width="155"/>
-                    <Button Content="Button 3" HorizontalAlignment="Left" Margin="10,87,0,0" VerticalAlignment="Top" Width="155"/>
+                    
                 </Grid>
             </TabItem>
         </TabControl>
