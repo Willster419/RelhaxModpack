@@ -64,7 +64,7 @@ namespace RelhaxModpack
         /// <summary>
         /// the URL link of where you can view the webpage of the mod
         /// </summary>
-        public string DevURL = "";
+        public  string DevURL = "";
         public int InstallGroup = 0;
         public int PatchGroup = 0;
         public string InternalNotes = "";
