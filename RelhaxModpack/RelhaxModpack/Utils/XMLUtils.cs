@@ -222,7 +222,7 @@ namespace RelhaxModpack
 
         #region Database Loading
         public static bool ParseDatabase(XmlDocument modInfoDocument, List<DatabasePackage> globalDependencies,
-            List<Dependency> dependencies, List<Category> parsedCategoryList)
+            List<Dependency> dependencies, List<Category> parsedCategoryList, string location = null)
         {
             Logging.WriteToLog("start of ParseDatabase()", Logfiles.Application, LogLevel.Debug);
             //check all input parameters
@@ -246,8 +246,8 @@ namespace RelhaxModpack
             Logging.WriteToLog(nameof(versionString) + "=" + versionString, Logfiles.Application, LogLevel.Debug);
             switch(versionString)
             {
-                case "2.0":
-                    return ParseDatabaseV2(DocumentToXDocument(modInfoDocument), globalDependencies, dependencies, parsedCategoryList);
+                case "1.1":
+                    return ParseDatabase1V1(modInfoDocument, globalDependencies, dependencies, parsedCategoryList, location);
                 default:
                     //parse legacy database
                     List<Dependency> logicalDependencies = new List<Dependency>();
@@ -257,20 +257,55 @@ namespace RelhaxModpack
                     return true;
             }
         }
-        public static bool ParseDatabaseV2(XDocument modInfoDocument, List<DatabasePackage> globalDependencies,
-            List<Dependency> logicalDependencies, List<Category> parsedCategoryList)
+        public static bool ParseDatabase1V1(XmlDocument rootDocument, List<DatabasePackage> globalDependencies,
+            List<Dependency> logicalDependencies, List<Category> parsedCategoryList, string location)
         {
+            //load each document to make sure they all exist first
+            if(string.IsNullOrWhiteSpace(location))
+            {
+                Logging.Error("location string is empty in ParseDatabase1V1");
+                return false;
+            }
+            //document for global dependencies
+            string completeFilepath = Path.Combine(location, GetXMLStringFromXPath(rootDocument, "/modInfoAlpha.xml/globalDependencies@file"));
+            if (!File.Exists(completeFilepath))
+            {
+                Logging.Error("{0} file does not exist at {1}", "Global Dependency", completeFilepath);
+                return false;
+            }
+            XDocument globalDepsDoc = LoadXDocument(completeFilepath, XmlLoadType.FromFile);
+            //document for dependencies
+            completeFilepath = Path.Combine(location, GetXMLStringFromXPath(rootDocument, "/modInfoAlpha.xml/dependencies@file"));
+            if (!File.Exists(completeFilepath))
+            {
+                Logging.Error("{0} file does not exist at {1}", "Dependency", completeFilepath);
+                return false;
+            }
+            XDocument depsDoc = LoadXDocument(completeFilepath, XmlLoadType.FromFile);
+            //list of documents for categories
+            List<XDocument> categoryDocuments = new List<XDocument>();
+            foreach(XmlNode categoryNode in GetXMLNodesFromXPath(rootDocument, "//modInfoAlpha.xml/categories/category"))
+            {
+                completeFilepath = Path.Combine(location, categoryNode.Attributes["file"].Value);
+                if (!File.Exists(completeFilepath))
+                {
+                    Logging.Error("{0} file does not exist at {1}", "Category", completeFilepath);
+                    return false;
+                }
+                categoryDocuments.Add(LoadXDocument(completeFilepath, XmlLoadType.FromFile));
+            }
+
             throw new BadMemeException("should probably finish this, don't you think?");
             //parsing the global dependencies
-            bool globalParsed = ParseDatabaseV2GlobalDependencies(
-                modInfoDocument.XPathSelectElements("/modInfoAlpha.xml/globaldependencies/globaldependency").ToList(), globalDependencies);
+            //bool globalParsed = ParseDatabaseV2GlobalDependencies(
+                //rootDocument.XPathSelectElements("/modInfoAlpha.xml/globaldependencies/globaldependency").ToList(), globalDependencies);
             //parsing the logical dependnecies
-            bool logicalDepParsed = ParseDatabaseV2Dependencies(modInfoDocument.XPathSelectElements(
-                "/modInfoAlpha.xml/logicalDependencies/logicalDependency").ToList(), logicalDependencies);
+            //bool logicalDepParsed = ParseDatabaseV2Dependencies(rootDocument.XPathSelectElements(
+                //"/modInfoAlpha.xml/logicalDependencies/logicalDependency").ToList(), logicalDependencies);
             //parsing the categories
-            bool categoriesParsed = ParseDatabaseV2Categories(modInfoDocument.XPathSelectElements(
-                "/modInfoAlpha.xml/catagories/catagory").ToList(), parsedCategoryList);
-            return (globalParsed && logicalDepParsed && categoriesParsed) ? true : false;
+            //bool categoriesParsed = ParseDatabaseV2Categories(rootDocument.XPathSelectElements(
+                //"/modInfoAlpha.xml/catagories/catagory").ToList(), parsedCategoryList);
+            //return (globalParsed && logicalDepParsed && categoriesParsed) ? true : false;
         }
         private static bool ParseDatabaseV2GlobalDependencies(List<XElement> packageNodeHolder, List<DatabasePackage> globalDependencies)
         {
@@ -620,11 +655,36 @@ namespace RelhaxModpack
 
         #region Other XML stuffs
         //https://blogs.msdn.microsoft.com/xmlteam/2009/03/31/converting-from-xmldocument-to-xdocument/
-        private static XDocument DocumentToXDocument(XmlDocument doc)
+        public static XDocument DocumentToXDocument(XmlDocument doc)
         {
             if (doc == null)
                 return null;
             return XDocument.Parse(doc.OuterXml,LoadOptions.SetLineInfo);
+        }
+
+        public static XDocument LoadXDocument(string fileOrXml, XmlLoadType type)
+        {
+            if(type == XmlLoadType.FromFile && !File.Exists(fileOrXml))
+            {
+                Logging.Error("XmlLoadType set to file and file does not exist at {0}", fileOrXml);
+                return null;
+            }
+            try
+            {
+                switch(type)
+                {
+                    case XmlLoadType.FromFile:
+                        return XDocument.Load(fileOrXml, LoadOptions.SetLineInfo);
+                    case XmlLoadType.FromXml:
+                        return XDocument.Parse(fileOrXml, LoadOptions.SetLineInfo);
+                }
+            }
+            catch(XmlException ex)
+            {
+                Logging.Exception(ex.ToString());
+                return null;
+            }
+            return null;
         }
 
         public static XmlDocument LoadXmlDocument(string fileOrXml, XmlLoadType type)
