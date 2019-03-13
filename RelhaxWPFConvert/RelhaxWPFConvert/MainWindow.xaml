@@ -73,7 +73,13 @@
                 </StackPanel>
             </CheckBox>
             <CheckBox x:Name="TestRedBox" Content="CheckBox" HorizontalAlignment="Left" Margin="555,182,0,0" VerticalAlignment="Top" IsEnabled="True"/>
-            <local:RelhaxCheckBox x:Name="testBox" Content="RelhaxCheckBox" HorizontalAlignment="Left" Margin="555,230,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=TestRedBox}"/>
+            <local:RelhaxCheckBox x:Name="testBox1" Content="RelhaxCheckBox" HorizontalAlignment="Left" Margin="515,243,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=TestRedBox}"/>
+            <local:RelhaxCheckBox x:Name="testBox2" Content="RelhaxCheckBox" HorizontalAlignment="Left" Margin="659,264,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=TestRedBox}"/>
+            <local:RelhaxCheckBox x:Name="testBox3" Content="RelhaxCheckBox" HorizontalAlignment="Left" Margin="659,243,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=TestRedBox}"/>
+            <local:RelhaxCheckBox x:Name="testBox4" Content="RelhaxCheckBox" HorizontalAlignment="Left" Margin="659,223,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=TestRedBox}"/>
+            <local:RelhaxCheckBox x:Name="testBox5" Content="RelhaxCheckBox" HorizontalAlignment="Left" Margin="510,206,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=TestRedBox}"/>
+            <local:RelhaxCheckBox x:Name="testBox6" Content="RelhaxCheckBox" HorizontalAlignment="Left" Margin="659,203,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=TestRedBox}"/>
+            <local:RelhaxCheckBox x:Name="testBox7" Content="RelhaxCheckBox" HorizontalAlignment="Left" Margin="510,264,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=TestRedBox}"/>
         </Grid>
     </ScrollViewer>
 </Window>

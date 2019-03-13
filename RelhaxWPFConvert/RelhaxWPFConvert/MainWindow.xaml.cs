@@ -57,7 +57,7 @@ namespace RelhaxWPFConvert
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            testBox.CheckboxDisabledColor = Colors.Green;
+            testBox1.CheckboxDisabledColor = Colors.Green;
         }
     }
 }
