@@ -119,7 +119,7 @@ namespace RelhaxModpack.Windows
 
         private void OnApplicationClose(object sender, EventArgs e)
         {
-            if(UnsavedChanges)
+            if (UnsavedChanges)
             {
                 if (MessageBox.Show("You have unsaved changes, return to editor?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     return;
@@ -377,7 +377,7 @@ namespace RelhaxModpack.Windows
             {
                 if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem && selectedTreeViewItem.Header is EditorComboBoxItem editorSelectedItem)
                 {
-                    SaveApplyDatabaseObject(editorSelectedItem.Package,null);
+                    SaveApplyDatabaseObject(editorSelectedItem.Package, null);
                     selectedTreeViewItem.Header = null;
                     selectedTreeViewItem.Header = new EditorComboBoxItem(editorSelectedItem.Package, editorSelectedItem.Package.PackageName);
                 }
@@ -404,14 +404,14 @@ namespace RelhaxModpack.Windows
                 //set the item as the new selectedItem
                 SelectedItem = editorSelectedItem.Package;
                 //display the new selectedItem
-                ShowDatabaseObject(SelectedItem,null);
+                ShowDatabaseObject(SelectedItem, null);
             }
             else if (DatabaseTreeView.SelectedItem is TreeViewItem selectedCatTVI && selectedCatTVI.Header is Category category)
             {
                 //check if we should save the item before updating what the current entry is
                 if (EditorSettings.SaveSelectionBeforeLeave && SelectedItem != null)
                 {
-                    SaveApplyDatabaseObject(null,category);
+                    SaveApplyDatabaseObject(null, category);
                 }
                 ShowDatabaseObject(null, category);
             }
@@ -478,9 +478,9 @@ namespace RelhaxModpack.Windows
         {
             //for each tab, disable all components. then enable them back of tye type of database object
             List<Control> controlsToDisable = new List<Control>();
-            foreach(TabItem tabItem in RightTab.Items)
+            foreach (TabItem tabItem in RightTab.Items)
             {
-                foreach(FrameworkElement element in Utils.GetAllWindowComponentsLogical(tabItem,false))
+                foreach (FrameworkElement element in Utils.GetAllWindowComponentsLogical(tabItem, false))
                 {
                     //if it's a common element used in the panel, then disable it
                     if (element is CheckBox || element is ComboBox || element is Button || element is TextBox || element is ListBox)
@@ -516,9 +516,9 @@ namespace RelhaxModpack.Windows
                 control.IsEnabled = false;
 
             //enable components by type
-            if(category != null)
+            if (category != null)
             {
-                foreach(FrameworkElement control in Utils.GetAllWindowComponentsLogical(DependenciesTab,false))
+                foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(DependenciesTab, false))
                 {
                     if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                         control.IsEnabled = true;
@@ -606,15 +606,15 @@ namespace RelhaxModpack.Windows
         }
         private void ShowDatabaseObject(DatabasePackage package, Category category)
         {
-            if(category != null)
+            if (category != null)
             {
-                ResetRightPanels(null,category);
+                ResetRightPanels(null, category);
                 foreach (DatabaseLogic logic in category.Dependencies)
                     PackageDependenciesDisplay.Items.Add(logic);
                 PackageNameDisplay.Text = category.Name;
                 return;
             }
-            ResetRightPanels(package,null);
+            ResetRightPanels(package, null);
             //load all items in the databasePackage level first
             //basic tab
             PackagePackageNameDisplay.Text = package.PackageName;
@@ -657,7 +657,7 @@ namespace RelhaxModpack.Windows
                     PackageDependenciesDisplay.Items.Add(d);
                 ConflictingPackagesTab.Header = "Dependency Usage";
                 ConflictingPackagesMessagebox.Text = "Above is list packages that use this dependency";
-                foreach(Dependency dependencyy in Dependencies)
+                foreach (Dependency dependencyy in Dependencies)
                 {
                     if (dependencyy.Equals(dependency))
                         continue;
@@ -666,7 +666,7 @@ namespace RelhaxModpack.Windows
                             //the fact i'm not breaking can help determine if a package has the dependency listed twice
                             PackageConflictingPackagesDisplay.Items.Add(dependencyy);
                 }
-                foreach(SelectablePackage selectablePackage in Utils.GetFlatSelectablePackageList(ParsedCategoryList))
+                foreach (SelectablePackage selectablePackage in Utils.GetFlatSelectablePackageList(ParsedCategoryList))
                 {
                     foreach (DatabaseLogic logic in selectablePackage.Dependencies)
                         if (logic.PackageName.Equals(dependency.PackageName))
@@ -694,7 +694,7 @@ namespace RelhaxModpack.Windows
 
         private void SaveApplyDatabaseObject(DatabasePackage package, Category category)
         {
-            if(category != null)
+            if (category != null)
             {
                 category.Name = PackageNameDisplay.Text;
                 category.Dependencies.Clear();
@@ -721,7 +721,7 @@ namespace RelhaxModpack.Windows
             package.Enabled = (bool)PackageEnabledDisplay.IsChecked;
             package.InternalNotes = PackageInternalNotesDisplay.Text;
             //see if it's a dependency
-            if(package is Dependency dependency)
+            if (package is Dependency dependency)
             {
                 ConflictingPackagesTab.Content = "Dependency Usage";
                 ConflictingPackagesMessagebox.Text = "To add a package to the list, search it above and right click it";
@@ -735,7 +735,7 @@ namespace RelhaxModpack.Windows
             {
                 selectablePackage.Name = PackagePackageNameDisplay.Text;
                 selectablePackage.Type = (string)PackageTypeDisplay.SelectedItem;
-                if(!selectablePackage.ZipFile.Equals(PackageZipFileDisplay.Text))
+                if (!selectablePackage.ZipFile.Equals(PackageZipFileDisplay.Text))
                 {
                     selectablePackage.CRC = "f";
                     selectablePackage.ZipFile = PackageZipFileDisplay.Text;
@@ -1112,7 +1112,7 @@ namespace RelhaxModpack.Windows
         private void ZipDownload_Click(object sender, RoutedEventArgs e)
         {
             //make sure it actually has a zip file to download
-            if(string.IsNullOrWhiteSpace(SelectedItem.ZipFile))
+            if (string.IsNullOrWhiteSpace(SelectedItem.ZipFile))
             {
                 MessageBox.Show("no zip file to download");
                 return;
@@ -1197,7 +1197,7 @@ namespace RelhaxModpack.Windows
             if (SelectedItem.Equals(e.Package))
             {
                 PackageZipFileDisplay.Text = e.Package.ZipFile;
-                if(!SelectedItem.ZipFile.Equals(e.Package.ZipFile))
+                if (!SelectedItem.ZipFile.Equals(e.Package.ZipFile))
                 {
                     throw new BadMemeException("You have made a mistake");
                 }
@@ -1239,7 +1239,7 @@ namespace RelhaxModpack.Windows
             //if save triggers apply, then do it
             if (EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && SelectedItem != null)
             {
-                SaveApplyDatabaseObject(SelectedItem,null);
+                SaveApplyDatabaseObject(SelectedItem, null);
             }
             else if (EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && DatabaseTreeView.SelectedItem != null &&
                 DatabaseTreeView.SelectedItem is TreeViewItem tvi && tvi.Header is Category cat)
@@ -1459,22 +1459,22 @@ namespace RelhaxModpack.Windows
 
         private void DependenciesAddSelected_Click(object sender, RoutedEventArgs e)
         {
-            if(LoadedDependenciesList.SelectedIndex < 0)
+            if (LoadedDependenciesList.SelectedIndex < 0)
             {
                 MessageBox.Show("Invalid dependency selection");
                 return;
             }
-            if(LoadedLogicsList.SelectedIndex < 0)
+            if (LoadedLogicsList.SelectedIndex < 0)
             {
                 MessageBox.Show("Invalid logic selection");
                 return;
             }
-            if(SelectedItem is Dependency dependency)
+            if (SelectedItem is Dependency dependency)
             {
                 //check the list of databaselogic in the item, make sure we're not trying to add a duplicate item
-                foreach(DatabaseLogic logic in dependency.Dependencies)
+                foreach (DatabaseLogic logic in dependency.Dependencies)
                 {
-                    if(logic.PackageName.Equals((LoadedDependenciesList.SelectedItem as Dependency).PackageName))
+                    if (logic.PackageName.Equals((LoadedDependenciesList.SelectedItem as Dependency).PackageName))
                     {
                         MessageBox.Show("Dependency already exists in package");
                         return;
@@ -1517,7 +1517,7 @@ namespace RelhaxModpack.Windows
             LoadedLogicsList.SelectedItem = selectedLogic.Logic;
             DependenciesNotFlag.IsChecked = selectedLogic.NotFlag;
             LoadedDependenciesList.SelectedIndex = -1;
-            foreach(Dependency dependency in LoadedDependenciesList.Items)
+            foreach (Dependency dependency in LoadedDependenciesList.Items)
             {
                 if (dependency.PackageName.Equals(selectedLogic.PackageName))
                 {
@@ -1545,9 +1545,9 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show("Invalid Type");
                 return;
             }
-            foreach(Media media in PackageMediasDisplay.Items)
+            foreach (Media media in PackageMediasDisplay.Items)
             {
-                if(media.URL.Equals(MediaTypesURL.Text))
+                if (media.URL.Equals(MediaTypesURL.Text))
                 {
                     MessageBox.Show("Media URL already exists in list");
                 }
@@ -1572,7 +1572,7 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show("Invalid Type");
                 return;
             }
-            if(PackageMediasDisplay.SelectedIndex < 0)
+            if (PackageMediasDisplay.SelectedIndex < 0)
             {
                 MessageBox.Show("Invalid media to apply edit to");
                 return;
@@ -1652,7 +1652,7 @@ namespace RelhaxModpack.Windows
 
         private void MediaPreviewSelectedMediaButton_Click(object sender, RoutedEventArgs e)
         {
-            if(PackageMediasDisplay.SelectedIndex == -1)
+            if (PackageMediasDisplay.SelectedIndex == -1)
             {
                 MessageBox.Show("Invalid Index");
                 return;
@@ -1690,12 +1690,12 @@ namespace RelhaxModpack.Windows
         private void MediaPreviewEditMediaButton_Click(object sender, RoutedEventArgs e)
         {
             //input filtering
-            if(string.IsNullOrWhiteSpace(MediaTypesURL.Text))
+            if (string.IsNullOrWhiteSpace(MediaTypesURL.Text))
             {
                 MessageBox.Show("Media URL must exist");
                 return;
             }
-            if(MediaTypesList.SelectedIndex == -1)
+            if (MediaTypesList.SelectedIndex == -1)
             {
                 MessageBox.Show("Invalid Type");
                 return;
@@ -1731,9 +1731,9 @@ namespace RelhaxModpack.Windows
 
         private void UserdataAddUserdataButton_Click(object sender, RoutedEventArgs e)
         {
-            foreach(string s in PackageUserdatasDisplay.Items)
+            foreach (string s in PackageUserdatasDisplay.Items)
             {
-                if(s.Equals(UserDataEditBox.Text))
+                if (s.Equals(UserDataEditBox.Text))
                 {
                     MessageBox.Show("User data already exists");
                     return;
@@ -1744,7 +1744,7 @@ namespace RelhaxModpack.Windows
 
         private void UserdataApplyEditButton_Click(object sender, RoutedEventArgs e)
         {
-            if(PackageUserdatasDisplay.SelectedIndex < 0)
+            if (PackageUserdatasDisplay.SelectedIndex < 0)
             {
                 MessageBox.Show("Invalid selection");
                 return;
@@ -1774,14 +1774,14 @@ namespace RelhaxModpack.Windows
 
         private void TriggerAddSelectedTrigger_Click(object sender, RoutedEventArgs e)
         {
-            if(LoadedTriggersComboBox.SelectedIndex < 0)
+            if (LoadedTriggersComboBox.SelectedIndex < 0)
             {
                 MessageBox.Show("Invalid selection");
                 return;
             }
-            foreach(string s in PackageTriggersDisplay.Items)
+            foreach (string s in PackageTriggersDisplay.Items)
             {
-                if(s.Equals(LoadedTriggersComboBox.SelectedItem as string))
+                if (s.Equals(LoadedTriggersComboBox.SelectedItem as string))
                 {
                     MessageBox.Show("Bad edit: trigger already exists");
                     return;
@@ -1795,9 +1795,9 @@ namespace RelhaxModpack.Windows
             if (PackageTriggersDisplay.SelectedItem == null)
                 return;
             LoadedTriggersComboBox.SelectedIndex = -1;
-            foreach(string s in LoadedTriggersComboBox.Items)
+            foreach (string s in LoadedTriggersComboBox.Items)
             {
-                if(s.Equals(PackageTriggersDisplay.SelectedItem as string))
+                if (s.Equals(PackageTriggersDisplay.SelectedItem as string))
                 {
                     LoadedTriggersComboBox.SelectedItem = s;
                 }
@@ -1924,9 +1924,9 @@ namespace RelhaxModpack.Windows
                         //if it's the right mouse and we're in the conflicting packages view, the user is tryingto add the element
                         if (e.RightButton == MouseButtonState.Pressed && ConflictingPackagesTab.IsVisible && SelectedItem != null)
                         {
-                            foreach(string s in PackageConflictingPackagesDisplay.Items)
+                            foreach (string s in PackageConflictingPackagesDisplay.Items)
                             {
-                                if(s.Equals(item.Package.PackageName))
+                                if (s.Equals(item.Package.PackageName))
                                 {
                                     Logging.Debug("Mouse right click with trigger add, skipping adding cause already exists: {0}", item.Package.PackageName);
                                     return;
@@ -1962,7 +1962,7 @@ namespace RelhaxModpack.Windows
 
             if (PackageMediasDisplay.SelectedItem is Media mediaToMove)
             {
-                if(e.OriginalSource is TextBlock block && block.DataContext is Media mediaOver)
+                if (e.OriginalSource is TextBlock block && block.DataContext is Media mediaOver)
                 {
                     if (mediaOver.URL.Equals(mediaToMove.URL))
                     {
@@ -1997,9 +1997,9 @@ namespace RelhaxModpack.Windows
 
         private void PackageMediasDisplay_MouseMove(object sender, MouseEventArgs e)
         {
-            if(e.LeftButton == MouseButtonState.Pressed && IsDragConfirmed(e.GetPosition(PackageMediasDisplay)) && !IsScrolling)
+            if (e.LeftButton == MouseButtonState.Pressed && IsDragConfirmed(e.GetPosition(PackageMediasDisplay)) && !IsScrolling)
             {
-                if(PackageMediasDisplay.SelectedItem is Media media)
+                if (PackageMediasDisplay.SelectedItem is Media media)
                 {
                     DragDrop.DoDragDrop(PackageMediasDisplay, media, DragDropEffects.Move);
                 }
@@ -2032,5 +2032,20 @@ namespace RelhaxModpack.Windows
             }
         }
         #endregion
+
+        private void PackageDevURLDisplay_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DevURLDisplay_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void PackagePatchGroupDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
