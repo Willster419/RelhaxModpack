@@ -444,7 +444,7 @@
                 </TabItem>
                 <TabItem x:Name="DevURLTab" Header="Dev URL">
                     <Grid Background="#FFE5E5E5">
-                        <TextBox x:Name="DevURLDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextChanged="DevURLDisplay_TextChanged"/>
+                        <TextBox x:Name="PackageDevURLDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextChanged="DevURLDisplay_TextChanged"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="InternalNotesTab" Header="Internal Notes">
