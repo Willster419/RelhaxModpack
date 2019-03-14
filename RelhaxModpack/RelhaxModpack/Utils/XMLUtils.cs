@@ -260,8 +260,7 @@ namespace RelhaxModpack
                     return true;
             }
         }
-        public static bool ParseDatabase1V1(XmlDocument rootDocument, List<DatabasePackage> globalDependencies,
-            List<Dependency> logicalDependencies, List<Category> parsedCategoryList, string rootPath)
+        public static bool ParseDatabase1V1(XmlDocument rootDocument, List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList, string rootPath)
         {
             //load each document to make sure they all exist first
             if(string.IsNullOrWhiteSpace(rootPath))
@@ -298,18 +297,22 @@ namespace RelhaxModpack
                 categoryDocuments.Add(LoadXDocument(completeFilepath, XmlLoadType.FromFile));
             }
 
-            throw new BadMemeException("should probably finish this, don't you think?");
+            //TODO: make the whitelists of elements to parse
             //parsing the global dependencies
-            //bool globalParsed = ParseDatabase1V1Packages(
-            //rootDocument.XPathSelectElements("/modInfoAlpha.xml/globaldependencies/globaldependency").ToList(), globalDependencies);
+            bool globalParsed = ParseDatabase1V1Packages(globalDepsDoc.XPathSelectElements("//globaldependencies/globaldependency").ToList(), globalDependencies,null,null,typeof(DatabasePackage));
             //parsing the logical dependnecies
-            //bool logicalDepParsed = ParseDatabase1V1Packages(rootDocument.XPathSelectElements(
-            //"/modInfoAlpha.xml/logicalDependencies/logicalDependency").ToList(), logicalDependencies);
+            bool depsParsed = ParseDatabase1V1Packages(depsDoc.XPathSelectElements("//dependencies/dependency").ToList(), dependencies,null,null,typeof(Dependency));
             //parsing the categories
-            //bool categoriesParsed = ParseDatabase1V1Packages(rootDocument.XPathSelectElements(
-            //"/modInfoAlpha.xml/catagories/catagory").ToList(), parsedCategoryList);
-            //return (globalParsed && logicalDepParsed && categoriesParsed) ? true : false;
-
+            bool categoriesParsed = true;
+            for(int i = 0; i < categoryDocuments.Count; i++)
+            {
+                //need to get category info set from this method...
+                //if(!ParseDatabase1V1Packages(categoryDocuments[i].XPathSelectElements("//category/package").ToList(), parsedCategoryList[i].Packages))
+                //{
+                //    categoriesParsed = false;
+                //}
+            }
+            return globalParsed && depsParsed && categoriesParsed;
         }
         private static bool ParseDatabase1V1Packages(List<XElement> xmlPackageNodesList, IList genericPackageList,
             List<string> whiteListAttributes, List<string> whitelistNodes, Type packageType)
