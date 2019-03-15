@@ -8,6 +8,35 @@ namespace RelhaxModpack
     /// </summary>
     public class DatabasePackage
     {
+
+        private static readonly List<string> PackageElementsToXmlParseAttributes = new List<string>()
+        {
+            nameof(Version),
+            nameof(Timestamp),
+            nameof(ZipFile),
+            nameof(CRC),
+            nameof(StartAddress),
+            nameof(EndAddress),
+            nameof(LogAtInstall),
+            nameof(Triggers),
+            //nameof(DevURL),
+            nameof(InternalNotes)
+        };
+
+        private static readonly List<string> PackageElementsToXmlParseNodes = new List<string>()
+        {
+            nameof(PackageName),
+            nameof(_Enabled),
+            nameof(InstallGroup),
+            nameof(PatchGroup),
+        };
+
+        private static Dictionary<string, string> PackageElementsToXmlParseMapper = new Dictionary<string, string>()
+        {
+            //key, value
+            { nameof(_Enabled), nameof(Enabled) }
+        };
+
         /// <summary>
         /// a unique identifier for each component in the database. No two components will have the same PackageName
         /// </summary>
@@ -81,5 +110,28 @@ namespace RelhaxModpack
         /// </summary>
         public virtual string CompletePath
         { get {  return PackageName; } }
+
+        public static List<string> FieldsToXmlParseAttributes()
+        {
+            List<string> components = new List<string>(PackageElementsToXmlParseAttributes);
+            //https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.dictionary-2.values?view=netframework-4.7.2
+            foreach(KeyValuePair<string,string> keyValuePair in PackageElementsToXmlParseMapper)
+            {
+                if (components.Contains(keyValuePair.Key))
+                    components[components.IndexOf(keyValuePair.Key)] = keyValuePair.Value;
+            }
+            return components;
+        }
+
+        public static List<string> FieldsToXmlParseNodes()
+        {
+            List<string> components = new List<string>(PackageElementsToXmlParseNodes);
+            foreach (KeyValuePair<string, string> keyValuePair in PackageElementsToXmlParseMapper)
+            {
+                if (components.Contains(keyValuePair.Key))
+                    components[components.IndexOf(keyValuePair.Key)] = keyValuePair.Value;
+            }
+            return components;
+        }
     }
 }

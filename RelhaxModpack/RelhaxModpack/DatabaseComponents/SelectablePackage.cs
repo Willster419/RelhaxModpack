@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Controls;
 
 namespace RelhaxModpack
@@ -11,6 +12,28 @@ namespace RelhaxModpack
     /// </summary>
     public class SelectablePackage : DatabasePackage
     {
+
+        private static readonly List<string> SelectableElementsToXmlParseAttributes = new List<string>()
+        {
+            nameof(Name),
+            nameof(Type),
+            nameof(Visible)
+        };
+
+        private static readonly List<string> SelectableElementsToXmlParseNodes = new List<string>()
+        {
+            nameof(Size),
+            nameof(UpdateComment),
+            nameof(Description),
+            nameof(PopularMod),
+            nameof(ShowInSearchList),
+            nameof(UserFiles),
+            nameof(Packages),
+            nameof(Medias),
+            nameof(Dependencies),
+            nameof(ConflictingPackages)
+        };
+
         /// <summary>
         /// Constructior override for DatabasePackage. save memory by only enabling the components we need
         /// </summary>
@@ -456,6 +479,16 @@ namespace RelhaxModpack
                 }
             }
             return false;
+        }
+
+        new public static List<string> FieldsToXmlParseAttributes()
+        {
+            return DatabasePackage.FieldsToXmlParseAttributes().Concat(SelectableElementsToXmlParseAttributes).ToList();
+        }
+
+        new public static List<string> FieldsToXmlParseNodes()
+        {
+            return DatabasePackage.FieldsToXmlParseNodes().Concat(SelectableElementsToXmlParseNodes).ToList();
         }
     }
 }

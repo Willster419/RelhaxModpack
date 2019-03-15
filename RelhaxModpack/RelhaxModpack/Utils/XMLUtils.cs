@@ -297,20 +297,26 @@ namespace RelhaxModpack
                 categoryDocuments.Add(LoadXDocument(completeFilepath, XmlLoadType.FromFile));
             }
 
-            //TODO: make the whitelists of elements to parse
             //parsing the global dependencies
-            bool globalParsed = ParseDatabase1V1Packages(globalDepsDoc.XPathSelectElements("//globaldependencies/globaldependency").ToList(), globalDependencies,null,null,typeof(DatabasePackage));
+            bool globalParsed = ParseDatabase1V1Packages(globalDepsDoc.XPathSelectElements("//globaldependencies/globaldependency").ToList(), globalDependencies,
+                DatabasePackage.FieldsToXmlParseAttributes(),DatabasePackage.FieldsToXmlParseNodes(),typeof(DatabasePackage));
             //parsing the logical dependnecies
-            bool depsParsed = ParseDatabase1V1Packages(depsDoc.XPathSelectElements("//dependencies/dependency").ToList(), dependencies,null,null,typeof(Dependency));
+            bool depsParsed = ParseDatabase1V1Packages(depsDoc.XPathSelectElements("//dependencies/dependency").ToList(), dependencies,
+                Dependency.FieldsToXmlParseAttributes(), Dependency.FieldsToXmlParseNodes(), typeof(Dependency));
             //parsing the categories
             bool categoriesParsed = true;
             for(int i = 0; i < categoryDocuments.Count; i++)
             {
-                //need to get category info set from this method...
-                //if(!ParseDatabase1V1Packages(categoryDocuments[i].XPathSelectElements("//category/package").ToList(), parsedCategoryList[i].Packages))
-                //{
-                //    categoriesParsed = false;
-                //}
+                Category cat = new Category
+                {
+                    Name = categoryDocuments[i].Root.FirstAttribute.Value
+                };
+                if (!ParseDatabase1V1Packages(categoryDocuments[i].XPathSelectElements("//category/package").ToList(), parsedCategoryList[i].Packages,
+                    SelectablePackage.FieldsToXmlParseAttributes(), SelectablePackage.FieldsToXmlParseNodes(), typeof(SelectablePackage)))
+                {
+                    categoriesParsed = false;
+                }
+                parsedCategoryList.Add(cat);
             }
             return globalParsed && depsParsed && categoriesParsed;
         }
@@ -323,7 +329,7 @@ namespace RelhaxModpack
             //get all fields from the class
             FieldInfo[] fieldsInClass = packageType.GetFields();
 
-            //for each xml globalDependency entry
+            //for each xml package entry
             foreach(XElement xmlPackageNode in xmlPackageNodesList)
             {
                 //make the instance based on the custom class type
