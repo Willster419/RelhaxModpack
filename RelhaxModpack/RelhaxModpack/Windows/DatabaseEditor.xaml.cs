@@ -1315,18 +1315,14 @@ namespace RelhaxModpack.Windows
                 fileToLoad = CommandLineSettings.EditorAutoLoadFileName;
             }
             //the file exists, load it
-            XmlDocument doc = new XmlDocument();
-            try
+            XmlDocument doc = XMLUtils.LoadXmlDocument(fileToLoad, XmlLoadType.FromFile);
+            if(doc == null)
             {
-                doc.Load(fileToLoad);
-            }
-            catch (XmlException ex)
-            {
-                Logging.Exception(ex.ToString());
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show("Failed to load the database, check the logfile");
+                Logging.Error("doc is null from LoadXmlDocument(fileToload, xmlType)");
                 return;
             }
-            if (!XMLUtils.ParseDatabase(doc, GlobalDependencies, Dependencies, ParsedCategoryList))
+            if (!XMLUtils.ParseDatabase(doc, GlobalDependencies, Dependencies, ParsedCategoryList, Path.GetDirectoryName(fileToLoad)))
             {
                 MessageBox.Show("Failed to load the database, check the logfile");
                 return;

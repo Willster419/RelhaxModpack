@@ -269,21 +269,25 @@ namespace RelhaxModpack
                 return false;
             }
             //document for global dependencies
-            string completeFilepath = Path.Combine(rootPath, GetXMLStringFromXPath(rootDocument, "/modInfoAlpha.xml/globalDependencies@file"));
+            string completeFilepath = Path.Combine(rootPath, GetXMLStringFromXPath(rootDocument, "/modInfoAlpha.xml/globalDependencies/@file"));
             if (!File.Exists(completeFilepath))
             {
                 Logging.Error("{0} file does not exist at {1}", "Global Dependency", completeFilepath);
                 return false;
             }
             XDocument globalDepsDoc = LoadXDocument(completeFilepath, XmlLoadType.FromFile);
+            if (globalDepsDoc == null)
+                throw new BadMemeException("this should not be null");
             //document for dependencies
-            completeFilepath = Path.Combine(rootPath, GetXMLStringFromXPath(rootDocument, "/modInfoAlpha.xml/dependencies@file"));
+            completeFilepath = Path.Combine(rootPath, GetXMLStringFromXPath(rootDocument, "/modInfoAlpha.xml/dependencies/@file"));
             if (!File.Exists(completeFilepath))
             {
                 Logging.Error("{0} file does not exist at {1}", "Dependency", completeFilepath);
                 return false;
             }
             XDocument depsDoc = LoadXDocument(completeFilepath, XmlLoadType.FromFile);
+            if (depsDoc == null)
+                throw new BadMemeException("this should not be null");
             //list of documents for categories
             List<XDocument> categoryDocuments = new List<XDocument>();
             foreach(XmlNode categoryNode in GetXMLNodesFromXPath(rootDocument, "//modInfoAlpha.xml/categories/category"))
@@ -294,14 +298,17 @@ namespace RelhaxModpack
                     Logging.Error("{0} file does not exist at {1}", "Category", completeFilepath);
                     return false;
                 }
-                categoryDocuments.Add(LoadXDocument(completeFilepath, XmlLoadType.FromFile));
+                XDocument catDoc = LoadXDocument(completeFilepath, XmlLoadType.FromFile);
+                if (catDoc == null)
+                    throw new BadMemeException("this should not be null");
+                categoryDocuments.Add(catDoc);
             }
 
             //parsing the global dependencies
-            bool globalParsed = ParseDatabase1V1Packages(globalDepsDoc.XPathSelectElements("//globaldependencies/globaldependency").ToList(), globalDependencies,
+            bool globalParsed = ParseDatabase1V1Packages(globalDepsDoc.XPathSelectElements("//GlobalDependencies/GlobalDependency").ToList(), globalDependencies,
                 DatabasePackage.FieldsToXmlParseAttributes(),DatabasePackage.FieldsToXmlParseNodes(),typeof(DatabasePackage));
             //parsing the logical dependnecies
-            bool depsParsed = ParseDatabase1V1Packages(depsDoc.XPathSelectElements("//dependencies/dependency").ToList(), dependencies,
+            bool depsParsed = ParseDatabase1V1Packages(depsDoc.XPathSelectElements("//Dependencies/Dependency").ToList(), dependencies,
                 Dependency.FieldsToXmlParseAttributes(), Dependency.FieldsToXmlParseNodes(), typeof(Dependency));
             //parsing the categories
             bool categoriesParsed = true;
@@ -311,7 +318,7 @@ namespace RelhaxModpack
                 {
                     Name = categoryDocuments[i].Root.FirstAttribute.Value
                 };
-                if (!ParseDatabase1V1Packages(categoryDocuments[i].XPathSelectElements("//category/package").ToList(), parsedCategoryList[i].Packages,
+                if (!ParseDatabase1V1Packages(categoryDocuments[i].XPathSelectElements("//Category/Package").ToList(), cat.Packages,
                     SelectablePackage.FieldsToXmlParseAttributes(), SelectablePackage.FieldsToXmlParseNodes(), typeof(SelectablePackage)))
                 {
                     categoriesParsed = false;
@@ -326,8 +333,8 @@ namespace RelhaxModpack
             //make the refrence for the base type of package it could be
             DatabasePackage packageOfAnyType;
 
-            //get all fields from the class
-            FieldInfo[] fieldsInClass = packageType.GetFields();
+            //get all fields and properties from the class
+            MemberInfo[] membersInClass = packageType.GetMembers();
 
             //for each xml package entry
             foreach(XElement xmlPackageNode in xmlPackageNodesList)
@@ -354,120 +361,105 @@ namespace RelhaxModpack
                 List<string> unknownListAttributes = new List<string>();
                 foreach(XAttribute attribute in xmlPackageNode.Attributes())
                 {
-                    //get the fieldInfo object representing the same name corresponding field in the memory database entry
-                    FieldInfo packageField = fieldsInClass.Where(field => field.Name.Equals(attribute.Name)).ToArray()[0];
+                    //get the fieldInfo or propertyInfo object representing the same name corresponding field or property in the memory database entry
+                    MemberInfo[] matchingPackageMembers = membersInClass.Where(mem => mem.Name.Equals(attribute.Name.LocalName)).ToArray();
+                    if(matchingPackageMembers.Count() == 0)
+                    {
+                        Logging.Debug("member {0} from xml attribute does not exist in fieldInfo", attribute.Name);
+                        unknownListAttributes.Add(attribute.Name.LocalName);
+                        continue;
+                    }
+                    MemberInfo packageMember = matchingPackageMembers[0];
                     //make sure it's a part of the whitelist of attributes we actually want to try to load
-                    if(whiteListAttributes.Contains(packageField.Name))
+                    if(whiteListAttributes.Contains(packageMember.Name))
                     {
                         //remove the entry name cause it's loaded (or fail loading)
-                        whiteListAttributes.Remove(packageField.Name);
+                        whiteListAttributes.Remove(packageMember.Name);
                         //try to set it
-                        try
+                        if(!Utils.SetPackageMember(packageOfAnyType,packageMember,attribute.Value))
                         {
-                            var converter = TypeDescriptor.GetConverter(packageField.FieldType);
-                            packageField.SetValue(packageOfAnyType, converter.ConvertFrom(attribute.Value));
-                        }
-                        catch (Exception ex)
-                        {
-                            //Logging.Error("An error occured while setting the ")
-                            continue;
+                            Logging.Error("Failed to set member {0}, default (if exists) was used instead, PackageName: {1}, LineNumber {2}",
+                                attribute.Name.LocalName, packageOfAnyType.PackageName, ((IXmlLineInfo)xmlPackageNode).LineNumber);
                         }
                     }
                     else
                     {
                         //unkonwn attribute, add it to the unknown list
-                        unknownListAttributes.Add(packageField.Name);
+                        unknownListAttributes.Add(packageMember.Name);
                     }
                 }
                 //list any unknown attrubutes here
                 foreach(string unknownAttribute in unknownListAttributes)
                 {
                     //log it here
-
+                    Logging.Error("Unknown Attribute from xml node not in whitelist or memberInfo: {0}, PackageName: {1}, LineNumber {2}",
+                        unknownAttribute, packageOfAnyType.PackageName, ((IXmlLineInfo)xmlPackageNode).LineNumber);
                 }
                 //list any attributes not included here (error, should be included)
                 foreach(string notIncludedAttribute in whiteListAttributes)
                 {
                     //log it here
+                    Logging.Error("Missing required attribute not in xmlInfo: {0}, PackageName: {1}, LineNumber {2}",
+                        notIncludedAttribute, packageOfAnyType.PackageName, ((IXmlLineInfo)xmlPackageNode).LineNumber);
                 }
 
                 //now deal with node values. no need to log what isn't set
                 List<string> unknownListNodes = new List<string>();
                 foreach(XElement element in xmlPackageNode.Elements())
                 {
-                    FieldInfo packageField = fieldsInClass.Where(field => field.Name.Equals(element.Name)).ToArray()[0];
-                    if (whitelistNodes.Contains(packageField.Name))
+                    MemberInfo[] matchingPackageMembers = membersInClass.Where(field => field.Name.Equals(element.Name.LocalName)).ToArray();
+                    if (matchingPackageMembers.Count() == 0)
                     {
-                        //HOWEVER, if the object is a list type, we need to parse the list
+                        Logging.Debug("field {0} from xml attribute does not exist in fieldInfo", element.Name);
+                        unknownListAttributes.Add(element.Name.LocalName);
+                        continue;
+                    }
+                    MemberInfo packageMember = matchingPackageMembers[0];
+                    if (whitelistNodes.Contains(packageMember.Name))
+                    {
+                        whitelistNodes.Remove(packageMember.Name);
+                        //BUT, if it's a package entry, we need to recursivly procsses it
+                        SelectablePackage throwAwayPackage = packageOfAnyType as SelectablePackage;
+                        if (throwAwayPackage != null)
+                        {
+                            //need hard code special case for Packages
+                            if (element.Name.LocalName.Equals(nameof(throwAwayPackage.Packages)))
+                            {
+                                ParseDatabase1V1Packages(xmlPackageNode.Element(element.Name).Elements().ToList(), throwAwayPackage.Packages,
+                                    SelectablePackage.FieldsToXmlParseAttributes(), SelectablePackage.FieldsToXmlParseNodes(), packageType);
+                            }
+                        }
+                        //HOWEVER, if the object is a list type, we need to parse the list first
                         //https://stackoverflow.com/questions/4115968/how-to-tell-whether-a-type-is-a-list-or-array-or-ienumerable-or
-                        if (typeof(IEnumerable).IsAssignableFrom(packageField.FieldType))
+                        if(packageMember is FieldInfo packageField && typeof(IEnumerable).IsAssignableFrom(packageField.FieldType) && !packageField.FieldType.Equals(typeof(string)))
                         {
-                            //BUT, if it's a package entry, we need to recursivly procsses it
-                            SelectablePackage throwAwayPackage = packageOfAnyType as SelectablePackage;
-                            if (throwAwayPackage != null)
+                            if(!Utils.SetListEntriesField(packageOfAnyType,packageField, xmlPackageNode.Element(element.Name).Elements()))
                             {
-                                if (element.Name.Equals(nameof(throwAwayPackage.Packages)))
-                                {
-                                    ParseDatabase1V1Packages(xmlPackageNode.Element(element.Name).Elements().ToList(), throwAwayPackage.Packages, null, null, packageType);
-                                }
-                            }
-                            //get a list type to add stuff to
-                            //https://stackoverflow.com/questions/25757121/c-sharp-how-to-set-propertyinfo-value-when-its-type-is-a-listt-and-i-have-a-li
-                            object obj = packageField.GetValue(packageOfAnyType);
-                            IList list = (IList)packageField.GetValue(obj);
-                            //we now have the empty list, now get type type of list it is
-                            //https://stackoverflow.com/questions/34211815/how-to-get-the-underlying-type-of-an-ilist-item
-                            Type listObjectType = list.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GenericTypeArguments.Length == 1)
-                                .FirstOrDefault(i => i.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GenericTypeArguments[0];
-                            //now for each xml element, get the value information and set it
-                            //if it originates from the 
-                            foreach (XElement listElement in xmlPackageNode.Element(element.Name).Elements())
-                            {
-                                //2 types of options for what this list could be: single node values (string, just node value), node of many values (custon type, many values)
-                                if (listElement.Attributes().Count() > 0)//custom class type
-                                {
-                                    object listEntry = Activator.CreateInstance(listObjectType);
-                                    //get list of fields in this entry object
-                                    FieldInfo[] fieldsInObjectInstance = listObjectType.GetFields();
-                                    foreach (XAttribute listEntryAttribute in listElement.Attributes())
-                                    {
-                                        var converter = TypeDescriptor.GetConverter(packageField.FieldType);
-                                        FieldInfo listobjectField = fieldsInObjectInstance.Where(field => field.Name.Equals(listEntryAttribute.Name)).ToArray()[0];
-                                        listobjectField.SetValue(listEntry, converter.ConvertFrom(listEntryAttribute.Value));
-                                    }
-                                }
-                                else//single primitive entry type
-                                {
-                                    list.Add(listElement.Value);
-                                }
+                                Logging.Error("Failed to parse values for list object: {0}, PackageName: {1}, LineNumber {2}",
+                                    element.Name, packageOfAnyType.PackageName, ((IXmlLineInfo)element).LineNumber);
                             }
                         }
-                        try
+                        else if (packageMember is PropertyInfo packageProperty && typeof(IEnumerable).IsAssignableFrom(packageProperty.PropertyType) && !packageProperty.PropertyType.Equals(typeof(string)))
                         {
-                            whitelistNodes.Remove(packageField.Name);
-                            var converter = TypeDescriptor.GetConverter(packageField.FieldType);
-                            packageField.SetValue(packageOfAnyType, converter.ConvertFrom(element.Value));
+                            throw new NotImplementedException("Literally just copy and paste the method again in Utils from FieldInfo");
                         }
-                        catch (Exception ex)
+                        if (!Utils.SetPackageMember(packageOfAnyType, packageMember, element.Value))
                         {
-                            //Logging.Error("An error occured while setting the ")
-                            continue;
+                            Logging.Error("Failed to set member {0}, default (if exists) was used instead, PackageName: {1}, LineNumber {2}",
+                                element.Name.LocalName, packageOfAnyType.PackageName, ((IXmlLineInfo)element).LineNumber);
                         }
                     }
                     else
                     {
-                        unknownListNodes.Add(packageField.Name);
+                        unknownListNodes.Add(packageMember.Name);
                     }
                 }
+                //list any unknown attrubutes here
                 foreach (string unknownAttribute in unknownListNodes)
                 {
                     //log it here
-
-                }
-                foreach (string notIncludedAttribute in whitelistNodes)
-                {
-                    //log it here
-
+                    Logging.Error("Unknown Element from xml node not in whitelist or memberInfo: {0}, PackageName: {1}, LineNumber {2}",
+                        unknownAttribute, packageOfAnyType.PackageName, ((IXmlLineInfo)xmlPackageNode).LineNumber);
                 }
                 //oh yeah, add it to the internal memory list
                 //globalDependencies.Add(globalDependency);

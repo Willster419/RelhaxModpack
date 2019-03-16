@@ -3,11 +3,13 @@ using Microsoft.Win32;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -15,6 +17,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Xml.Linq;
 
 namespace RelhaxModpack
 {
@@ -922,6 +925,79 @@ namespace RelhaxModpack
                 if (package.PatchGroup > maxPatchGroup)
                     maxPatchGroup = package.PatchGroup;
             return maxPatchGroup;
+        }
+
+        public static bool SetPackageMember(DatabasePackage packageOfAnyType, MemberInfo packageFieldOrProperty, string valueToSet)
+        {
+            try
+            {
+                if(packageFieldOrProperty is FieldInfo packageField)
+                {
+                    var converter = TypeDescriptor.GetConverter(packageField.FieldType);
+                    packageField.SetValue(packageOfAnyType, converter.ConvertFrom(valueToSet));
+                    return true;
+                }
+                else if(packageFieldOrProperty is PropertyInfo packageProperty)
+                {
+                    var converter = TypeDescriptor.GetConverter(packageProperty.PropertyType);
+                    packageProperty.SetValue(packageOfAnyType, converter.ConvertFrom(valueToSet));
+                    return true;
+                }
+                else
+                {
+                    Logging.Debug("invalid type of memberinfo of member {0}", packageFieldOrProperty.Name);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex.ToString());
+                return false;
+            }
+        }
+
+        public static bool SetListEntriesField(DatabasePackage packageOfAnyType, FieldInfo packageField, IEnumerable<XElement> xmlpackageElements)
+        {
+            //get a list type to add stuff to
+            //https://stackoverflow.com/questions/25757121/c-sharp-how-to-set-propertyinfo-value-when-its-type-is-a-listt-and-i-have-a-li
+            object obj = packageField.GetValue(packageOfAnyType);
+            //IList list = (IList)packageField.GetValue(obj);
+            IList list = (IList)obj;
+            //we now have the empty list, now get type type of list it is
+            //https://stackoverflow.com/questions/34211815/how-to-get-the-underlying-type-of-an-ilist-item
+            Type listObjectType = list.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GenericTypeArguments.Length == 1)
+                .FirstOrDefault(i => i.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GenericTypeArguments[0];
+            //now for each xml element, get the value information and set it
+            //if it originates from the 
+            foreach (XElement listElement in xmlpackageElements)
+            {
+                //2 types of options for what this list could be: single node values (string, just node value), node of many values (custon type, many values)
+                if (listElement.Attributes().Count() > 0)//custom class type
+                {
+                    object listEntry = Activator.CreateInstance(listObjectType);
+                    //get list of fields in this entry object
+                    FieldInfo[] fieldsInObjectInstance = listObjectType.GetFields();
+                    foreach (XAttribute listEntryAttribute in listElement.Attributes())
+                    {
+                        try
+                        {
+                            var converter = TypeDescriptor.GetConverter(packageField.FieldType);
+                            FieldInfo[] matchingListobjectsField = fieldsInObjectInstance.Where(field => field.Name.Equals(listEntryAttribute.Name.LocalName)).ToArray();
+                            FieldInfo listobjectField = matchingListobjectsField[0];
+                            listobjectField.SetValue(listEntry, converter.ConvertFrom(listEntryAttribute.Value));
+                        }
+                        catch (Exception ex)
+                        {
+                            Logging.Exception(ex.ToString());
+                        }
+                    }
+                }
+                else//single primitive entry type
+                {
+                    list.Add(listElement.Value);
+                }
+            }
+            return true;
         }
         #endregion
 
