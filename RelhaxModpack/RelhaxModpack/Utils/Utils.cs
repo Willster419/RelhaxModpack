@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace RelhaxModpack
@@ -927,7 +928,7 @@ namespace RelhaxModpack
             return maxPatchGroup;
         }
 
-        public static bool SetPackageMember(DatabasePackage packageOfAnyType, MemberInfo packageFieldOrProperty, string valueToSet)
+        public static bool SetObjectMember(object packageOfAnyType, MemberInfo packageFieldOrProperty, string valueToSet)
         {
             try
             {
@@ -977,13 +978,24 @@ namespace RelhaxModpack
                     object listEntry = Activator.CreateInstance(listObjectType);
                     //get list of fields in this entry object
                     FieldInfo[] fieldsInObjectInstance = listObjectType.GetFields();
+                    List<string> missingMembers = new List<string>();
+                    List<string> unknownMembers = new List<string>();
+                    foreach (FieldInfo info in fieldsInObjectInstance)
+                        missingMembers.Add(info.Name);
                     foreach (XAttribute listEntryAttribute in listElement.Attributes())
                     {
+                        FieldInfo[] matchingListobjectsField = fieldsInObjectInstance.Where(field => field.Name.Equals(listEntryAttribute.Name.LocalName)).ToArray();
+                        if (matchingListobjectsField.Count() == 0)
+                        {
+                            //no matching entries from xml attribute name to fieldInfo of custom type
+                            unknownMembers.Add(listEntryAttribute.Name.LocalName);
+                            continue;
+                        }
+                        FieldInfo listobjectField = matchingListobjectsField[0];
+                        missingMembers.Remove(listobjectField.Name);
                         try
                         {
-                            var converter = TypeDescriptor.GetConverter(packageField.FieldType);
-                            FieldInfo[] matchingListobjectsField = fieldsInObjectInstance.Where(field => field.Name.Equals(listEntryAttribute.Name.LocalName)).ToArray();
-                            FieldInfo listobjectField = matchingListobjectsField[0];
+                            var converter = TypeDescriptor.GetConverter(listobjectField.FieldType);
                             listobjectField.SetValue(listEntry, converter.ConvertFrom(listEntryAttribute.Value));
                         }
                         catch (Exception ex)
@@ -991,6 +1003,17 @@ namespace RelhaxModpack
                             Logging.Exception(ex.ToString());
                         }
                     }
+                    foreach(string missingMember in missingMembers)
+                    {
+                        //exist in member class info, but not set from xml attributes
+                        Logging.Error("Missing xml attribute: {0}, package: {1}, line{2}", missingMember, packageOfAnyType.PackageName, ((IXmlLineInfo)listElement).LineNumber);
+                    }
+                    foreach(string unknownMember in unknownMembers)
+                    {
+                        //exist in xml attributes, but not known member in memberInfo
+                        Logging.Error("unknown xml attribute: {0}, package: {1}, line{2}", unknownMember, packageOfAnyType.PackageName, ((IXmlLineInfo)listElement).LineNumber);
+                    }
+                    list.Add(listEntry);
                 }
                 else//single primitive entry type
                 {

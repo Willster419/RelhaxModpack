@@ -328,7 +328,7 @@ namespace RelhaxModpack
             return globalParsed && depsParsed && categoriesParsed;
         }
         private static bool ParseDatabase1V1Packages(List<XElement> xmlPackageNodesList, IList genericPackageList,
-            List<string> whiteListAttributes, List<string> whitelistNodes, Type packageType)
+            List<string> whitelistAttributes, List<string> whitelistNodes, Type packageType)
         {
             //make the refrence for the base type of package it could be
             DatabasePackage packageOfAnyType;
@@ -359,7 +359,8 @@ namespace RelhaxModpack
 
                 //first deal with the xml attributes in the entry
                 List<string> unknownListAttributes = new List<string>();
-                foreach(XAttribute attribute in xmlPackageNode.Attributes())
+                List<string> missingAttributes = new List<string>(whitelistAttributes);
+                foreach (XAttribute attribute in xmlPackageNode.Attributes())
                 {
                     //get the fieldInfo or propertyInfo object representing the same name corresponding field or property in the memory database entry
                     MemberInfo[] matchingPackageMembers = membersInClass.Where(mem => mem.Name.Equals(attribute.Name.LocalName)).ToArray();
@@ -371,12 +372,12 @@ namespace RelhaxModpack
                     }
                     MemberInfo packageMember = matchingPackageMembers[0];
                     //make sure it's a part of the whitelist of attributes we actually want to try to load
-                    if(whiteListAttributes.Contains(packageMember.Name))
+                    if(missingAttributes.Contains(packageMember.Name))
                     {
                         //remove the entry name cause it's loaded (or fail loading)
-                        whiteListAttributes.Remove(packageMember.Name);
+                        missingAttributes.Remove(packageMember.Name);
                         //try to set it
-                        if(!Utils.SetPackageMember(packageOfAnyType,packageMember,attribute.Value))
+                        if(!Utils.SetObjectMember(packageOfAnyType,packageMember,attribute.Value))
                         {
                             Logging.Error("Failed to set member {0}, default (if exists) was used instead, PackageName: {1}, LineNumber {2}",
                                 attribute.Name.LocalName, packageOfAnyType.PackageName, ((IXmlLineInfo)xmlPackageNode).LineNumber);
@@ -396,11 +397,11 @@ namespace RelhaxModpack
                         unknownAttribute, packageOfAnyType.PackageName, ((IXmlLineInfo)xmlPackageNode).LineNumber);
                 }
                 //list any attributes not included here (error, should be included)
-                foreach(string notIncludedAttribute in whiteListAttributes)
+                foreach(string missingAttribute in missingAttributes)
                 {
                     //log it here
                     Logging.Error("Missing required attribute not in xmlInfo: {0}, PackageName: {1}, LineNumber {2}",
-                        notIncludedAttribute, packageOfAnyType.PackageName, ((IXmlLineInfo)xmlPackageNode).LineNumber);
+                        missingAttribute, packageOfAnyType.PackageName, ((IXmlLineInfo)xmlPackageNode).LineNumber);
                 }
 
                 //now deal with node values. no need to log what isn't set
@@ -419,19 +420,15 @@ namespace RelhaxModpack
                     {
                         whitelistNodes.Remove(packageMember.Name);
                         //BUT, if it's a package entry, we need to recursivly procsses it
-                        SelectablePackage throwAwayPackage = packageOfAnyType as SelectablePackage;
-                        if (throwAwayPackage != null)
+                        if (packageOfAnyType is SelectablePackage throwAwayPackage && element.Name.LocalName.Equals(nameof(throwAwayPackage.Packages)))
                         {
                             //need hard code special case for Packages
-                            if (element.Name.LocalName.Equals(nameof(throwAwayPackage.Packages)))
-                            {
-                                ParseDatabase1V1Packages(xmlPackageNode.Element(element.Name).Elements().ToList(), throwAwayPackage.Packages,
-                                    SelectablePackage.FieldsToXmlParseAttributes(), SelectablePackage.FieldsToXmlParseNodes(), packageType);
-                            }
+                            ParseDatabase1V1Packages(xmlPackageNode.Element(element.Name).Elements().ToList(), throwAwayPackage.Packages,
+                                SelectablePackage.FieldsToXmlParseAttributes(), SelectablePackage.FieldsToXmlParseNodes(), packageType);
                         }
                         //HOWEVER, if the object is a list type, we need to parse the list first
                         //https://stackoverflow.com/questions/4115968/how-to-tell-whether-a-type-is-a-list-or-array-or-ienumerable-or
-                        if(packageMember is FieldInfo packageField && typeof(IEnumerable).IsAssignableFrom(packageField.FieldType) && !packageField.FieldType.Equals(typeof(string)))
+                        else if(packageMember is FieldInfo packageField && typeof(IEnumerable).IsAssignableFrom(packageField.FieldType) && !packageField.FieldType.Equals(typeof(string)))
                         {
                             if(!Utils.SetListEntriesField(packageOfAnyType,packageField, xmlPackageNode.Element(element.Name).Elements()))
                             {
@@ -441,9 +438,9 @@ namespace RelhaxModpack
                         }
                         else if (packageMember is PropertyInfo packageProperty && typeof(IEnumerable).IsAssignableFrom(packageProperty.PropertyType) && !packageProperty.PropertyType.Equals(typeof(string)))
                         {
-                            throw new NotImplementedException("Literally just copy and paste the method again in Utils from FieldInfo");
+                            throw new BadMemeException("Literally just copy and paste the method again in Utils from FieldInfo");
                         }
-                        if (!Utils.SetPackageMember(packageOfAnyType, packageMember, element.Value))
+                        else if (!Utils.SetObjectMember(packageOfAnyType, packageMember, element.Value))
                         {
                             Logging.Error("Failed to set member {0}, default (if exists) was used instead, PackageName: {1}, LineNumber {2}",
                                 element.Name.LocalName, packageOfAnyType.PackageName, ((IXmlLineInfo)element).LineNumber);
