@@ -430,7 +430,7 @@
                             <RelhaxModpack:SelectionTypes>multi</RelhaxModpack:SelectionTypes>
                         </ComboBox>
                         <ComboBox x:Name="PackageInstallGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="8" Grid.Column="1" VerticalAlignment="Center"/>
-                        <ComboBox x:Name="PackagePatchGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" SelectionChanged="PackagePatchGroupDisplay_SelectionChanged"/>
+                        <ComboBox x:Name="PackagePatchGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="9" Grid.Column="1" VerticalAlignment="Center"/>
                         <TextBlock x:Name="PackageLevelDisplay" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="10" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
                         <TextBlock x:Name="PackageLastUpdatedDisplay" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="11" TextWrapping="Wrap" VerticalAlignment="Center"/>
                         <StackPanel Grid.Column="0" Grid.Row="13" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
@@ -450,7 +450,8 @@
                 </TabItem>
                 <TabItem x:Name="DevURLTab" Header="Dev URL">
                     <Grid Background="#FFE5E5E5">
-                        <TextBox x:Name="PackageDevURLDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextChanged="DevURLDisplay_TextChanged" SelectionChanged="PackageDevURLDisplay_SelectionChanged"/>
+                        <TextBox x:Name="PackageDevURLDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,21,0,0"/>
+                        <TextBlock x:Name="PackageDevURLHeader" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Enter DevUrl's here, separated by new lines" VerticalAlignment="Top"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="InternalNotesTab" Header="Internal Notes">

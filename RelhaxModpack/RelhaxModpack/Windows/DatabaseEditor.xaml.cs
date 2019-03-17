@@ -621,7 +621,6 @@ namespace RelhaxModpack.Windows
             PackageStartAddressDisplay.Text = package.StartAddress;
             PackageZipFileDisplay.Text = package.ZipFile;
             PackageEndAddressDisplay.Text = package.EndAddress;
-            PackageDevURLDisplay.Text = package.DevURL;
             PackageVersionDisplay.Text = package.Version;
             PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
             foreach (int i in PackageInstallGroupDisplay.Items)
@@ -642,8 +641,12 @@ namespace RelhaxModpack.Windows
             }
             PackageLogAtInstallDisplay.IsChecked = package.LogAtInstall;
             PackageEnabledDisplay.IsChecked = package.Enabled;
+            //devURL
+            //each url is seperated by newline characters "\n"
+            //should be displayed with newlines already, so no change needed
+            PackageDevURLDisplay.Text = package.DevURL;
             //internal notes
-            PackageInternalNotesDisplay.Text = package.InternalNotes;
+            PackageInternalNotesDisplay.Text = Utils.MacroReplace(package.InternalNotes,ReplacementTypes.TextUnescape);
             //triggers
             foreach (string s in package.Triggers)
                 PackageTriggersDisplay.Items.Add(s);
@@ -678,8 +681,8 @@ namespace RelhaxModpack.Windows
             {
                 PackageNameDisplay.Text = selectablePackage.Name;
                 PackageLevelDisplay.Text = selectablePackage.Level.ToString();
-                PackageDescriptionDisplay.Text = selectablePackage.Description;
-                PackageUpdateNotesDisplay.Text = selectablePackage.UpdateComment;
+                PackageDescriptionDisplay.Text = Utils.MacroReplace(selectablePackage.Description,ReplacementTypes.TextUnescape);
+                PackageUpdateNotesDisplay.Text = Utils.MacroReplace(selectablePackage.UpdateComment,ReplacementTypes.TextUnescape);
                 foreach (DatabaseLogic d in selectablePackage.Dependencies)
                     PackageDependenciesDisplay.Items.Add(d);
                 foreach (Media media in selectablePackage.Medias)
@@ -713,13 +716,14 @@ namespace RelhaxModpack.Windows
             package.StartAddress = PackageStartAddressDisplay.Text;
             package.ZipFile = PackageZipFileDisplay.Text;
             package.EndAddress = PackageEndAddressDisplay.Text;
+            //devURL is separated by newlines for array list, so it's not necessary to escape
             package.DevURL = PackageDevURLDisplay.Text;
             package.Version = PackageVersionDisplay.Text;
             package.InstallGroup = (int)PackageInstallGroupDisplay.SelectedItem;
             package.PatchGroup = (int)PackagePatchGroupDisplay.SelectedItem;
             package.LogAtInstall = (bool)PackageLogAtInstallDisplay.IsChecked;
             package.Enabled = (bool)PackageEnabledDisplay.IsChecked;
-            package.InternalNotes = PackageInternalNotesDisplay.Text;
+            package.InternalNotes = Utils.MacroReplace(PackageInternalNotesDisplay.Text,ReplacementTypes.TextEscape);
             //see if it's a dependency
             if (package is Dependency dependency)
             {
@@ -742,8 +746,8 @@ namespace RelhaxModpack.Windows
                     selectablePackage.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
                     PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(selectablePackage.Timestamp);
                 }
-                selectablePackage.Description = PackageDescriptionDisplay.Text;
-                selectablePackage.UpdateComment = PackageUpdateNotesDisplay.Text;
+                selectablePackage.Description = Utils.MacroReplace(PackageDescriptionDisplay.Text,ReplacementTypes.TextEscape);
+                selectablePackage.UpdateComment = Utils.MacroReplace(PackageUpdateNotesDisplay.Text,ReplacementTypes.TextEscape);
 
                 selectablePackage.Dependencies.Clear();
                 foreach (DatabaseLogic dl in PackageDependenciesDisplay.Items)
@@ -2030,20 +2034,5 @@ namespace RelhaxModpack.Windows
             }
         }
         #endregion
-
-        private void PackageDevURLDisplay_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void DevURLDisplay_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
-        private void PackagePatchGroupDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
     }
 }
