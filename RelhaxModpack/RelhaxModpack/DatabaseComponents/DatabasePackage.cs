@@ -27,7 +27,7 @@ namespace RelhaxModpack
             nameof(StartAddress),
             nameof(EndAddress),
             nameof(Triggers),
-            //nameof(DevURL),
+            nameof(DevURL),
             nameof(InternalNotes)
         };
 

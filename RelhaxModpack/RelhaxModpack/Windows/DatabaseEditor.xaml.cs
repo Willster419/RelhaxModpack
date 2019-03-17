@@ -574,6 +574,8 @@ namespace RelhaxModpack.Windows
                         PackageNameDisplay.IsEnabled = true;
                         PackageTypeDisplay.IsEnabled = true;
                         PackageVisibleDisplay.IsEnabled = true;
+                        PackagePopularModDisplay.IsEnabled = true;
+                        PackageShowInSearchListDisplay.IsEnabled = true;
                         //enable remaining tabs
                         foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(DescriptionTab, false))
                         {
@@ -604,6 +606,7 @@ namespace RelhaxModpack.Windows
             foreach (Dependency d in Dependencies)
                 LoadedDependenciesList.Items.Add(d);
         }
+
         private void ShowDatabaseObject(DatabasePackage package, Category category)
         {
             if (category != null)
@@ -679,6 +682,8 @@ namespace RelhaxModpack.Windows
             //then handle if selectalbePackage
             else if (package is SelectablePackage selectablePackage)
             {
+                PackagePopularModDisplay.IsChecked = selectablePackage.PopularMod;
+                PackageShowInSearchListDisplay.IsChecked = selectablePackage.ShowInSearchList;
                 PackageNameDisplay.Text = selectablePackage.Name;
                 PackageLevelDisplay.Text = selectablePackage.Level.ToString();
                 PackageDescriptionDisplay.Text = Utils.MacroReplace(selectablePackage.Description,ReplacementTypes.TextUnescape);
@@ -737,6 +742,8 @@ namespace RelhaxModpack.Windows
             //see if it's a selectablePackage
             else if (package is SelectablePackage selectablePackage)
             {
+                selectablePackage.ShowInSearchList = (bool)PackageShowInSearchListDisplay.IsChecked;
+                selectablePackage.PopularMod = (bool)PackagePopularModDisplay.IsChecked;
                 selectablePackage.Name = PackagePackageNameDisplay.Text;
                 selectablePackage.Type = (SelectionTypes)PackageTypeDisplay.SelectedItem;
                 if (!selectablePackage.ZipFile.Equals(PackageZipFileDisplay.Text))
