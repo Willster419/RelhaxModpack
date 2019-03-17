@@ -402,7 +402,7 @@ namespace RelhaxModpack.Windows
                     Name = string.Format("----------[{0}]----------", cat.Name),
                     TabIndex = cat.TabPage,
                     ParentCategory = cat,
-                    Type = "multi",
+                    Type = SelectionTypes.multi,
                     Visible = true,
                     Enabled = true,
                     Level = -1,
@@ -576,8 +576,7 @@ namespace RelhaxModpack.Windows
                 }
                 switch(package.Type)
                 {
-                    case "single":
-                    case "single1":
+                    case SelectionTypes.single1:
                         package.UIComponent = new RelhaxWPFRadioButton()
                         {
                             ToolTip = package.ToolTipString,
@@ -595,14 +594,13 @@ namespace RelhaxModpack.Windows
                             IsChecked = false
                         };
                         break;
-                    case "single_dropdown":
-                    case "single_dropdown1":
+                    case SelectionTypes.single_dropdown1:
                         DoComboboxStuff(package, 0);
                         break;
-                    case "single_dropdown2":
+                    case SelectionTypes.single_dropdown2:
                         DoComboboxStuff(package, 1);
                         break;
-                    case "multi":
+                    case SelectionTypes.multi:
                         package.UIComponent = new RelhaxWPFCheckBox()
                         {
                             ToolTip = package.ToolTipString,

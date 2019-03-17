@@ -7,6 +7,15 @@ using System.Windows.Controls;
 
 namespace RelhaxModpack
 {
+
+    public enum SelectionTypes
+    {
+        none,
+        single1,
+        single_dropdown1,
+        single_dropdown2,
+        multi
+    }
     /// <summary>
     /// A package that has UI elements, and is eithor a mod or config that can be selected in the UI
     /// </summary>
@@ -81,7 +90,7 @@ namespace RelhaxModpack
         /// <summary>
         /// the type of selectable package logic to follow (options are single1, single_dropdown1, single_dropdown2, multi)
         /// </summary>
-        public string Type = "";
+        public SelectionTypes Type = SelectionTypes.none;
         /// <summary>
         /// the refrence for the direct parent of this package
         /// </summary>

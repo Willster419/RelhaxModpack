@@ -422,7 +422,13 @@
                         <TextBox x:Name="PackageZipFileDisplay" HorizontalAlignment="Stretch" Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox x:Name="PackageEndAddressDisplay" HorizontalAlignment="Stretch" Grid.Row="5" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox x:Name="PackageVersionDisplay" HorizontalAlignment="Stretch" Grid.Row="6" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                        <ComboBox x:Name="PackageTypeDisplay" HorizontalAlignment="Stretch" Grid.Row="7" Grid.Column="1" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="PackageTypeDisplay" HorizontalAlignment="Stretch" Grid.Row="7" Grid.Column="1" VerticalAlignment="Center">
+                            <RelhaxModpack:SelectionTypes>none</RelhaxModpack:SelectionTypes>
+                            <RelhaxModpack:SelectionTypes>single1</RelhaxModpack:SelectionTypes>
+                            <RelhaxModpack:SelectionTypes>single_dropdown1</RelhaxModpack:SelectionTypes>
+                            <RelhaxModpack:SelectionTypes>single_dropdown2</RelhaxModpack:SelectionTypes>
+                            <RelhaxModpack:SelectionTypes>multi</RelhaxModpack:SelectionTypes>
+                        </ComboBox>
                         <ComboBox x:Name="PackageInstallGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="8" Grid.Column="1" VerticalAlignment="Center"/>
                         <ComboBox x:Name="PackagePatchGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" SelectionChanged="PackagePatchGroupDisplay_SelectionChanged"/>
                         <TextBlock x:Name="PackageLevelDisplay" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="10" TextWrapping="Wrap" VerticalAlignment="Stretch"/>

@@ -881,7 +881,27 @@ namespace RelhaxModpack
                                                     m.CRC = modNode.Value;
                                                     break;
                                                 case "type":
-                                                    m.Type = modNode.Value;
+                                                    switch (modNode.Value)
+                                                    {
+                                                        case "multi":
+                                                            m.Type = SelectionTypes.multi;
+                                                            break;
+                                                        case "single":
+                                                            m.Type = SelectionTypes.single1;
+                                                            break;
+                                                        case "single1":
+                                                            m.Type = SelectionTypes.single1;
+                                                            break;
+                                                        case "single_dropdown":
+                                                            m.Type = SelectionTypes.single_dropdown1;
+                                                            break;
+                                                        case "single_dropdown1":
+                                                            m.Type = SelectionTypes.single_dropdown1;
+                                                            break;
+                                                        case "single_dropdown2":
+                                                            m.Type = SelectionTypes.single_dropdown2;
+                                                            break;
+                                                    }
                                                     break;
                                                 case "enabled":
                                                     m.Enabled = Utils.ParseBool(modNode.Value, false);
@@ -1283,7 +1303,27 @@ namespace RelhaxModpack
                                     c.DevURL = configNode.Value;
                                     break;
                                 case "type":
-                                    c.Type = configNode.Value;
+                                    switch (configNode.Value)
+                                    {
+                                        case "multi":
+                                            c.Type = SelectionTypes.multi;
+                                            break;
+                                        case "single":
+                                            c.Type = SelectionTypes.single1;
+                                            break;
+                                        case "single1":
+                                            c.Type = SelectionTypes.single1;
+                                            break;
+                                        case "single_dropdown":
+                                            c.Type = SelectionTypes.single_dropdown1;
+                                            break;
+                                        case "single_dropdown1":
+                                            c.Type = SelectionTypes.single_dropdown1;
+                                            break;
+                                        case "single_dropdown2":
+                                            c.Type = SelectionTypes.single_dropdown2;
+                                            break;
+                                    }
                                     break;
                                 case "packages":
                                     ProcessConfigs(configNode, m, false, c.Level+1 ,c);
@@ -1788,8 +1828,8 @@ namespace RelhaxModpack
                         modPackageName.InnerText = m.PackageName.Trim();
                     modRoot.AppendChild(modPackageName);
                     XmlElement modType = doc.CreateElement("type");
-                    if (!string.IsNullOrWhiteSpace(m.Type))
-                        modType.InnerText = m.Type.Trim();
+                    if (m.Type != SelectionTypes.none)
+                        modType.InnerText = m.Type.ToString().Trim();
                     modRoot.AppendChild(modType);
                     //optional
                     if (!string.IsNullOrWhiteSpace(m.Version))
@@ -1953,8 +1993,8 @@ namespace RelhaxModpack
                     configPackageName.InnerText = cc.PackageName.Trim();
                 configRoot.AppendChild(configPackageName);
                 XmlElement configType = doc.CreateElement("type");
-                if (!string.IsNullOrWhiteSpace(cc.Type))
-                    configType.InnerText = cc.Type;
+                if (cc.Type != SelectionTypes.none)
+                    configType.InnerText = cc.Type.ToString().Trim();
                 configRoot.AppendChild(configType);
                 //optional
                 if(!string.IsNullOrWhiteSpace(cc.Version))

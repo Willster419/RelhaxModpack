@@ -212,7 +212,7 @@ namespace RelhaxModpack.Windows
                 PatchGroup = packageToCopy.PatchGroup,
                 _Enabled = packageToCopy._Enabled
             };
-            sp.Type = "multi";
+            sp.Type = SelectionTypes.multi;
             sp.Name = "WRITE_NEW_NAME";
             sp.Visible = true;
             sp.Size = 0;
@@ -734,7 +734,7 @@ namespace RelhaxModpack.Windows
             else if (package is SelectablePackage selectablePackage)
             {
                 selectablePackage.Name = PackagePackageNameDisplay.Text;
-                selectablePackage.Type = (string)PackageTypeDisplay.SelectedItem;
+                selectablePackage.Type = (SelectionTypes)PackageTypeDisplay.SelectedItem;
                 if (!selectablePackage.ZipFile.Equals(PackageZipFileDisplay.Text))
                 {
                     selectablePackage.CRC = "f";

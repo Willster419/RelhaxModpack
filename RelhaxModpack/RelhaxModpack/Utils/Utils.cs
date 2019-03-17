@@ -649,7 +649,7 @@ namespace RelhaxModpack
                         Name = string.Format("----------[{0}]----------", cat.Name),
                         TabIndex = cat.TabPage,
                         ParentCategory = cat,
-                        Type = "multi",
+                        Type = SelectionTypes.multi,
                         Visible = true,
                         Enabled = true,
                         Level = -1,
