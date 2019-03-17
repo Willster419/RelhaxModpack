@@ -2194,7 +2194,6 @@ namespace RelhaxModpack
             PropertyInfo[] properties = null;
             XmlElement PackageHolder = null;
             DatabasePackage samplePackageDefaults = null;
-            string elementNameToSaveAs = string.Empty;
 
             if (packagesToSave is List<DatabasePackage>)
             {
@@ -2202,7 +2201,6 @@ namespace RelhaxModpack
                 membersToXmlSaveAsNodes = new List<string>(DatabasePackage.FieldsToXmlParseNodes());
                 fields = typeof(DatabasePackage).GetFields();
                 properties = typeof(DatabasePackage).GetProperties();
-                elementNameToSaveAs = "GlobalDependency";
                 samplePackageDefaults = new DatabasePackage();
             }
             else if (packagesToSave is List<Dependency>)
@@ -2211,7 +2209,6 @@ namespace RelhaxModpack
                 membersToXmlSaveAsNodes = new List<string>(Dependency.FieldsToXmlParseNodes());
                 fields = typeof(Dependency).GetFields();
                 properties = typeof(Dependency).GetProperties();
-                elementNameToSaveAs="Dependency";
                 samplePackageDefaults = new Dependency();
             }
             else if (packagesToSave is List<SelectablePackage>)
@@ -2220,7 +2217,6 @@ namespace RelhaxModpack
                 membersToXmlSaveAsNodes = new List<string>(SelectablePackage.FieldsToXmlParseNodes());
                 fields = typeof(SelectablePackage).GetFields();
                 properties = typeof(SelectablePackage).GetProperties();
-                elementNameToSaveAs="Package";
                 samplePackageDefaults = new SelectablePackage();
             }
 
@@ -2230,7 +2226,7 @@ namespace RelhaxModpack
                 DatabasePackage packageToSaveOfAnyType = (DatabasePackage)packagesToSave[i];
                 SelectablePackage packageOnlyUsedForNames = packageToSaveOfAnyType as SelectablePackage;
                 //make the element to save to
-                PackageHolder = docToMakeElementsFrom.CreateElement(elementNameToSaveAs);
+                PackageHolder = docToMakeElementsFrom.CreateElement(nameToSaveElementsBy);
                 foreach (FieldInfo fieldInType in fields)
                 {
                     if(membersToXmlSaveAsAttributes.Contains(fieldInType.Name))
@@ -2242,7 +2238,9 @@ namespace RelhaxModpack
                         //first check if it's packages
                         if (fieldInType.Name.Equals(nameof(packageOnlyUsedForNames.Packages)))
                         {
-                            SaveDatabaseList1V1(packageOnlyUsedForNames.Packages, PackageHolder, docToMakeElementsFrom, nameToSaveElementsBy);
+                            XmlElement packagesHolder = docToMakeElementsFrom.CreateElement(nameof(packageOnlyUsedForNames.Packages));
+                            SaveDatabaseList1V1(packageOnlyUsedForNames.Packages, packagesHolder, docToMakeElementsFrom, nameToSaveElementsBy);
+                            PackageHolder.AppendChild(packagesHolder);
                         }
                         //if it is a list type like media or
                         else if (typeof(IEnumerable).IsAssignableFrom(fieldInType.FieldType) && !fieldInType.FieldType.Equals(typeof(string)))
