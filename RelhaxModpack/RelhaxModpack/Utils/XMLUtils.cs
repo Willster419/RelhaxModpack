@@ -366,6 +366,9 @@ namespace RelhaxModpack
                     throw new BadMemeException("fuck you");
                 }
 
+                //make a copy of the list of whitelist nodes
+                List<string> whitelistNodesReal = new List<string>(whitelistNodes);
+
                 //first deal with the xml attributes in the entry
                 List<string> unknownListAttributes = new List<string>();
                 List<string> missingAttributes = new List<string>(whitelistAttributes);
@@ -425,14 +428,14 @@ namespace RelhaxModpack
                         continue;
                     }
                     MemberInfo packageMember = matchingPackageMembers[0];
-                    if (whitelistNodes.Contains(packageMember.Name))
+                    if (whitelistNodesReal.Contains(packageMember.Name))
                     {
-                        whitelistNodes.Remove(packageMember.Name);
+                        whitelistNodesReal.Remove(packageMember.Name);
                         //BUT, if it's a package entry, we need to recursivly procsses it
                         if (packageOfAnyType is SelectablePackage throwAwayPackage && element.Name.LocalName.Equals(nameof(throwAwayPackage.Packages)))
                         {
                             //need hard code special case for Packages
-                            ParseDatabase1V1Packages(xmlPackageNode.Element(element.Name).Elements().ToList(), throwAwayPackage.Packages,
+                            ParseDatabase1V1Packages(element.Elements().ToList(), throwAwayPackage.Packages,
                                 SelectablePackage.FieldsToXmlParseAttributes(), SelectablePackage.FieldsToXmlParseNodes(), packageType);
                         }
                         //HOWEVER, if the object is a list type, we need to parse the list first
@@ -2236,7 +2239,7 @@ namespace RelhaxModpack
                     else if (membersToXmlSaveAsNodes.Contains(fieldInType.Name))
                     {
                         //first check if it's packages
-                        if (fieldInType.Name.Equals(nameof(packageOnlyUsedForNames.Packages)))
+                        if (fieldInType.Name.Equals(nameof(packageOnlyUsedForNames.Packages)) && packageOnlyUsedForNames.Packages.Count > 0)
                         {
                             XmlElement packagesHolder = docToMakeElementsFrom.CreateElement(nameof(packageOnlyUsedForNames.Packages));
                             SaveDatabaseList1V1(packageOnlyUsedForNames.Packages, packagesHolder, docToMakeElementsFrom, nameToSaveElementsBy);
