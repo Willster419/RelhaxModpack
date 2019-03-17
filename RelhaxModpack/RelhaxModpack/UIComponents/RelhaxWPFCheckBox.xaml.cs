@@ -21,19 +21,24 @@ namespace RelhaxModpack.UIComponents
     /// </summary>
     public partial class RelhaxWPFCheckBox : CheckBox, IPackageUIComponent, INotifyPropertyChanged
     {
+
         public RelhaxWPFCheckBox()
         {
             InitializeComponent();
         }
+
         public SelectablePackage Package { get; set; }
+
         public void OnEnabledChanged(bool Enabled)
         {
             IsEnabled = Enabled;
         }
+
         public void OnCheckedChanged(bool Checked)
         {
             IsChecked = Checked;
         }
+
         public Brush TextColor
         {
             get
@@ -41,6 +46,7 @@ namespace RelhaxModpack.UIComponents
             set
             { Foreground = value; }
         }
+
         public Brush PanelColor
         {
             get
@@ -53,8 +59,11 @@ namespace RelhaxModpack.UIComponents
                     Package.ParentBorder.Background = value;
             }
         }
+
         #region Data UI Binding
+
         private Color _DisabledColor = Colors.DarkGray;
+
         public Color DisabledColor
         {
             get
@@ -67,8 +76,21 @@ namespace RelhaxModpack.UIComponents
                 OnPropertyChanged(nameof(DisabledColor));
             }
         }
+
+        private Visibility _PopularModVisability = Visibility.Hidden;
+        public Visibility PopularModVisability
+        {
+            get { return _PopularModVisability; }
+            set
+            {
+                _PopularModVisability = value;
+                OnPropertyChanged(nameof(PopularModVisability));
+            }
+        }
+
         //https://stackoverflow.com/questions/34651123/wpf-binding-a-background-color-initializes-but-not-updating
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged(string propertyName)
         {
             var handle = PropertyChanged;

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:RelhaxModpack.UIComponents"
              xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
-             mc:Ignorable="d" Style="{DynamicResource RelhaxRadiobuttonStyle}" >
+             mc:Ignorable="d" Style="{DynamicResource RelhaxRadiobuttonStyle}" Visibility="{Binding PopularModVisability, ElementName=radioButton}" >
     <RadioButton.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -50,6 +50,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
                             </Grid.ColumnDefinitions>
                             <Border x:Name="radioButtonBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="100" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1,1,2,1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
                                 <Grid x:Name="markGrid" Margin="2">
@@ -57,6 +58,7 @@
                                 </Grid>
                             </Border>
                             <ContentPresenter x:Name="contentPresenter" Grid.Column="1" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            <Image x:Name="PopularModStar" Grid.Column="2"  Width="16" Height="16" VerticalAlignment="Top" Source="/RelhaxModpack;component/Resources/Images/popular_icon.png"/>
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="HasContent" Value="true">
