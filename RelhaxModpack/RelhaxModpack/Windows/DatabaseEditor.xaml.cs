@@ -1263,7 +1263,8 @@ namespace RelhaxModpack.Windows
                 if (MessageBox.Show("Use this as default save location?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
             //actually save
-            throw new BadMemeException("TODO");
+            XMLUtils.SaveDatabase(SaveDatabaseDialog.FileName, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
+                GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
             UnsavedChanges = false;
         }
 

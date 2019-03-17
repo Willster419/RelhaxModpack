@@ -26,6 +26,15 @@ namespace RelhaxModpack
         /// </summary>
         FromXml
     }
+
+    public enum DatabaseXmlVersion
+    {
+
+        Legacy,
+
+        OnePointOne
+    }
+
     /// <summary>
     /// Utility class for all XML static methods
     /// </summary>
@@ -293,6 +302,10 @@ namespace RelhaxModpack
             foreach(XmlNode categoryNode in GetXMLNodesFromXPath(rootDocument, "//modInfoAlpha.xml/categories/category"))
             {
                 completeFilepath = Path.Combine(rootPath, categoryNode.Attributes["file"].Value);
+                parsedCategoryList.Add(new Category()
+                {
+                    XmlFilename = categoryNode.Attributes["file"].Value
+                });
                 if (!File.Exists(completeFilepath))
                 {
                     Logging.Error("{0} file does not exist at {1}", "Category", completeFilepath);
@@ -314,16 +327,12 @@ namespace RelhaxModpack
             bool categoriesParsed = true;
             for(int i = 0; i < categoryDocuments.Count; i++)
             {
-                Category cat = new Category
-                {
-                    Name = categoryDocuments[i].Root.FirstAttribute.Value
-                };
-                if (!ParseDatabase1V1Packages(categoryDocuments[i].XPathSelectElements("//Category/Package").ToList(), cat.Packages,
+                parsedCategoryList[i].Name = categoryDocuments[i].Root.FirstAttribute.Value;
+                if (!ParseDatabase1V1Packages(categoryDocuments[i].XPathSelectElements("//Category/Package").ToList(), parsedCategoryList[i].Packages,
                     SelectablePackage.FieldsToXmlParseAttributes(), SelectablePackage.FieldsToXmlParseNodes(), typeof(SelectablePackage)))
                 {
                     categoriesParsed = false;
                 }
-                parsedCategoryList.Add(cat);
             }
             return globalParsed && depsParsed && categoriesParsed;
         }
@@ -1195,6 +1204,7 @@ namespace RelhaxModpack
                 parsedCatagoryList.Add(cat);
             }
         }
+        
         //recursivly processes the configs
         public static void ProcessConfigs(XElement holder, SelectablePackage m, bool parentIsMod, int level, SelectablePackage con = null)
         {
@@ -1509,15 +1519,13 @@ namespace RelhaxModpack
         {
             return s.TrimEnd().Replace(@"\", @"&#92;").Replace("\r", @"\r").Replace("\t", @"\t").Replace("\n", @"\n");
         }
+        
         //saves the mod database
-        public static void SaveDatabaseLegacy(string saveLocation, string gameVersion, string onlineFolderVersion, List<Dependency> globalDependencies, List<Dependency> dependencies, List<Dependency> logicalDependencies, List<Category> parsedCatagoryList)
+        public static void SaveDatabaseLegacy(string saveLocation, XmlDocument doc, List<DatabasePackage> globalDependencies,
+            List<Dependency> dependencies, List<Dependency> logicalDependencies, List<Category> parsedCatagoryList)
         {
-            XmlDocument doc = new XmlDocument();
             //database root modInfo.xml
-            XmlElement root = doc.CreateElement("modInfoAlpha.xml");
-            root.SetAttribute("version", gameVersion);
-            root.SetAttribute("onlineFolder", onlineFolderVersion);
-            doc.AppendChild(root);
+            XmlElement root = doc.DocumentElement;
             //global dependencies
             XmlElement globalDependenciesXml = doc.CreateElement("globaldependencies");
             foreach (Dependency d in globalDependencies)
@@ -2066,26 +2074,183 @@ namespace RelhaxModpack
         #region Database Saving
         //saving database in a way that doesn't suck
         public static void SaveDatabase(string saveLocation, string gameVersion, string onlineFolderVersion, List<DatabasePackage> globalDependencies,
-        List<Dependency> dependencies, List<Category> parsedCatagoryList)
+        List<Dependency> dependencies, List<Category> parsedCatagoryList, DatabaseXmlVersion versionToSaveAs)
         {
             //make root of document
             XmlDocument doc = new XmlDocument();
             //database root modInfo.xml
             XmlElement root = doc.CreateElement("modInfo.xml");
-            root.SetAttribute("version", gameVersion);
-            root.SetAttribute("onlineFolder", onlineFolderVersion);
+            root.SetAttribute("version", gameVersion.Trim());
+            root.SetAttribute("onlineFolder", onlineFolderVersion.Trim());
+            //append the version information, game and online folder
             doc.AppendChild(root);
-            //save global depednecies
-            //idea: method to handle root leemnts here, but make a "save element" and from there do more if(element is SelectablePackage)
-            //save dependencies
-            throw new BadMemeException("You should probably finishe this lol");
-            //save categories
-            
-            //save databse
-            if(File.Exists(saveLocation))
-                File.Delete(saveLocation);
-            doc.Save(saveLocation);
+            switch (versionToSaveAs)
+            {
+                case DatabaseXmlVersion.Legacy:
+                    //when legacy, saveLocation is a single file
+                    if(Path.HasExtension(saveLocation))
+                        SaveDatabaseLegacy(saveLocation, doc, globalDependencies, dependencies.Where(dep => !dep.PackageName.Contains("ogical")).ToList(),
+                            dependencies.Where(dep => dep.PackageName.Contains("ogical")).ToList(), parsedCatagoryList);
+                    else
+                        SaveDatabaseLegacy(Path.Combine(saveLocation, "modInfo.xml"), doc, globalDependencies, dependencies.Where(dep => !dep.PackageName.Contains("ogical")).ToList(),
+                            dependencies.Where(dep => dep.PackageName.Contains("ogical")).ToList(), parsedCatagoryList);
+                    break;
+                case DatabaseXmlVersion.OnePointOne:
+                    //in 1.1, saveLocation is a document path
+                    if (Path.HasExtension(saveLocation))
+                        SaveDatabase1V1(Path.GetDirectoryName(saveLocation), doc, globalDependencies, dependencies, parsedCatagoryList);
+                    else
+                        SaveDatabase1V1(saveLocation, doc, globalDependencies, dependencies, parsedCatagoryList);
+                    break;
+            }            
         }
+
+        public static void SaveDatabase1V1(string savePath, XmlDocument doc, List<DatabasePackage> globalDependencies,
+        List<Dependency> dependencies, List<Category> parsedCatagoryList)
+        {
+            //save the root/header database file
+            XmlElement root = doc.DocumentElement;
+            root.SetAttribute("documentVersion", "1.1");
+
+            XmlElement xmlGlobalDependencies = doc.CreateElement("globalDependencies");
+            xmlGlobalDependencies.SetAttribute("file", "globalDependencies.xml");
+            root.AppendChild(xmlGlobalDependencies);
+
+            XmlElement xmlDependencies = doc.CreateElement("dependencies");
+            xmlGlobalDependencies.SetAttribute("file", "dependencies.xml");
+            root.AppendChild(xmlDependencies);
+
+            XmlElement xmlCategories = doc.CreateElement("categories");
+            foreach(Category cat in parsedCatagoryList)
+            {
+                XmlElement xmlCategory = doc.CreateElement("category");
+                xmlCategory.SetAttribute("file", cat.XmlFilename);
+                xmlCategories.AppendChild(xmlCategory);
+            }
+            root.AppendChild(xmlCategories);
+            doc.Save(Path.Combine(savePath, "database.xml"));
+
+            //save each of the other lists
+            XmlDocument xmlGlobalDependenciesFile = new XmlDocument();
+            XmlElement xmlGlobalDependenciesFileRoot = xmlGlobalDependenciesFile.CreateElement("GlobalDependencies");
+            SaveDatabaseList1V1(globalDependencies, xmlGlobalDependenciesFileRoot, xmlGlobalDependenciesFile, "GlobalDependency");
+            xmlGlobalDependenciesFile.Save(Path.Combine(savePath, "globalDependencies.xml"));
+
+            XmlDocument xmlDependenciesFile = new XmlDocument();
+            XmlElement xmlDependenciesFileRoot = xmlDependenciesFile.CreateElement("Dependencies");
+            SaveDatabaseList1V1(globalDependencies, xmlGlobalDependenciesFileRoot, xmlDependenciesFile, "Dependency");
+            xmlDependenciesFile.Save(Path.Combine(savePath, "dependencies.xml"));
+
+            //for each cateory do the same thing
+            foreach (Category cat in parsedCatagoryList)
+            {
+                XmlDocument xmlCategoryFile = new XmlDocument();
+                XmlElement xmlCategoryFileRoot = xmlCategoryFile.CreateElement("Category");
+                xmlCategoryFileRoot.SetAttribute("Name", cat.Name);
+                SaveDatabaseList1V1(cat.Packages, xmlCategoryFileRoot, xmlCategoryFile, "Package");
+                xmlCategoryFile.Save(Path.Combine(savePath, cat.XmlFilename));
+            }
+
+        }
+
+        private static void SaveDatabaseList1V1(IList packagesToSave, XmlElement documentRootElement, XmlDocument docToMakeElementsFrom, string nameToSaveElementsBy)
+        {
+            //save based on each type it is
+            List<string> membersToXmlSaveAsAttributes = null;
+            List<string> membersToXmlSaveAsNodes = null;
+            FieldInfo[] fields = null;
+            PropertyInfo[] properties = null;
+            XmlElement PackageHolder = null;
+
+            if (packagesToSave is List<DatabasePackage>)
+            {
+                membersToXmlSaveAsAttributes = new List<string>(DatabasePackage.FieldsToXmlParseAttributes());
+                membersToXmlSaveAsNodes = new List<string>(DatabasePackage.FieldsToXmlParseNodes());
+                fields = typeof(DatabasePackage).GetFields();
+                properties = typeof(DatabasePackage).GetProperties();
+                PackageHolder = docToMakeElementsFrom.CreateElement("GlobalDependency");
+            }
+            else if (packagesToSave is List<Dependency>)
+            {
+                membersToXmlSaveAsAttributes = new List<string>(Dependency.FieldsToXmlParseAttributes());
+                membersToXmlSaveAsNodes = new List<string>(Dependency.FieldsToXmlParseNodes());
+                fields = typeof(Dependency).GetFields();
+                properties = typeof(Dependency).GetProperties();
+                PackageHolder = docToMakeElementsFrom.CreateElement("Dependency");
+            }
+            else if (packagesToSave is List<SelectablePackage>)
+            {
+                membersToXmlSaveAsAttributes = new List<string>(SelectablePackage.FieldsToXmlParseAttributes());
+                membersToXmlSaveAsNodes = new List<string>(SelectablePackage.FieldsToXmlParseNodes());
+                fields = typeof(SelectablePackage).GetFields();
+                properties = typeof(SelectablePackage).GetProperties();
+                PackageHolder = docToMakeElementsFrom.CreateElement("Package");
+            }
+
+            for (int i = 0; i < packagesToSave.Count; i++)
+            {
+                //it's at least a databasePackage
+                DatabasePackage packageToSaveOfAnyType = (DatabasePackage)packagesToSave[i];
+                SelectablePackage packageOnlyUsedForNames = packageToSaveOfAnyType as SelectablePackage;
+                foreach (FieldInfo fieldInType in fields)
+                {
+                    if(membersToXmlSaveAsAttributes.Contains(fieldInType.Name))
+                    {
+                        PackageHolder.SetAttribute(fieldInType.Name, fieldInType.GetValue(packageToSaveOfAnyType).ToString());
+                    }
+                    else if (membersToXmlSaveAsNodes.Contains(fieldInType.Name))
+                    {
+                        //first check if it's packages
+                        if (fieldInType.Name.Equals(nameof(packageOnlyUsedForNames.Packages)))
+                        {
+                            SaveDatabaseList1V1(packageOnlyUsedForNames.Packages, PackageHolder, docToMakeElementsFrom, nameToSaveElementsBy);
+                        }
+                        //if it is a list type like media or
+                        else if (typeof(IEnumerable).IsAssignableFrom(fieldInType.FieldType) && !fieldInType.FieldType.Equals(typeof(string)))
+                        {
+                            //get the list type to allow for itterate
+                            IList list = (IList)fieldInType.GetValue(packageToSaveOfAnyType);
+                            //get the types of objects stored in this list
+                            Type objectTypeInList = list.GetType().GetInterfaces().Where(j => j.IsGenericType && j.GenericTypeArguments.Length == 1)
+                                .FirstOrDefault(j => j.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GenericTypeArguments[0];
+                            //elementFieldHolder is holder for list type like "Medias"
+                            XmlElement elementFieldHolder = docToMakeElementsFrom.CreateElement(fieldInType.Name);
+                            for(int k = 0; k < list.Count; k++)
+                            {
+                                //list element value like "Media"
+                                XmlElement elementFieldValue = docToMakeElementsFrom.CreateElement(objectTypeInList.Name);
+                                //could be a custom type with many fields, or a single type with no fields
+                                FieldInfo[] fieldsInCustomType = objectTypeInList.GetFields();
+                                if (fieldsInCustomType.Count() == 0)
+                                {
+                                    //single type like int or string
+                                    elementFieldValue.Value = list[k].ToString();
+                                }
+                                else
+                                {
+                                    //custom type like media
+                                    foreach (FieldInfo field in objectTypeInList.GetFields())
+                                    {
+                                        //at this time all custom classes only use fields and are stored as attributes
+                                        elementFieldValue.SetAttribute(field.Name, field.GetValue(list[k]).ToString());
+                                    }
+                                }
+                                elementFieldHolder.AppendChild(elementFieldValue);
+                            }
+                            PackageHolder.AppendChild(elementFieldHolder);
+                        }
+                        else
+                        {
+                            XmlElement element = docToMakeElementsFrom.CreateElement(fieldInType.Name);
+                            element.Value = fieldInType.GetValue(packageToSaveOfAnyType).ToString();
+                            PackageHolder.AppendChild(element);
+                        }
+                    }
+                }
+            }
+
+        }
+
         private static void SavePackage(XmlDocument root, XmlElement holder, DatabasePackage package)
         {
             //make the root element

@@ -1193,7 +1193,7 @@ namespace RelhaxModpack.Windows
             ReportProgress("Updating selected modInfo.xml");
             File.Delete(SelectModInfo.FileName);
             XMLUtils.SaveDatabase(SelectModInfo.FileName, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
-                globalDependencies, dependencies, parsedCategoryList);
+                globalDependencies, dependencies, parsedCategoryList, DatabaseXmlVersion.OnePointOne);
             ReportProgress("Checking if supported_clients needs to be updated for new WoT version");
             if (!LastSupportedTanksVersion.Equals(Settings.WoTClientVersion))
             {
