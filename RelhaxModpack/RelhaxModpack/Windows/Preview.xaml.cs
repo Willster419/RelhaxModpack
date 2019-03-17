@@ -82,6 +82,8 @@ namespace RelhaxModpack.Windows
 
             //set the name of the window to be the package name
             Title = Package.NameFormatted;
+            if (Package.PopularMod)
+                Title = string.Format("{0} ({1})", Title, Translations.GetTranslatedString("popular"));
 
             //make the linked labels in the link box
             for(int i =0; i < Package.Medias.Count; i++)
