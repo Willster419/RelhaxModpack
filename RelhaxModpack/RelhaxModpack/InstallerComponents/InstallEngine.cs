@@ -501,7 +501,7 @@ namespace RelhaxModpack.InstallerComponents
             foreach(SelectablePackage package in packagesWithData)
             {
                 Logging.WriteToLog(string.Format("Backup data of package {0} starting", package.PackageName));
-                foreach(UserFiles files in package.UserFiles)
+                foreach(UserFile files in package.UserFiles)
                 {
                     //use the search parameter to get the actual files to move
                     //remove the mistake i made over a year ago of the double slashes
@@ -703,7 +703,7 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     Logging.WriteToLog(string.Format("folder {0} does not exist, skipping", package.PackageName), Logfiles.Application, LogLevel.Debug);
                 }
-                foreach (UserFiles files in package.UserFiles)
+                foreach (UserFile files in package.UserFiles)
                 {
                     foreach(string savedFile in files.Files_saved)
                     {

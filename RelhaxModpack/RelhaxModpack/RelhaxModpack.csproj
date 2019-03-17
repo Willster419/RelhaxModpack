@@ -109,7 +109,7 @@
     <Compile Include="DatabaseComponents\PackageComparer.cs" />
     <Compile Include="DatabaseComponents\SelectablePackage.cs" />
     <Compile Include="DatabaseComponents\Trigger.cs" />
-    <Compile Include="DatabaseComponents\UserFiles.cs" />
+    <Compile Include="DatabaseComponents\UserFile.cs" />
     <Compile Include="InstallerComponents\Atlas.cs" />
     <Compile Include="InstallerComponents\InstallEngine.cs" />
     <Compile Include="InstallerComponents\Patch.cs" />

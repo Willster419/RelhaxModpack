@@ -920,7 +920,7 @@ namespace RelhaxModpack
                                                                     continue;
                                                                 if (innerText.Equals(""))
                                                                     continue;
-                                                                UserFiles uf = new UserFiles();
+                                                                UserFile uf = new UserFile();
                                                                 uf.Pattern = innerText;
                                                                 if (userDataNode.Attribute("before") != null)
                                                                     uf.placeBeforeExtraction = Utils.ParseBool(userDataNode.Attribute("before").Value, false);
@@ -1296,7 +1296,7 @@ namespace RelhaxModpack
                                                     continue;
                                                 if (innerText.Equals(""))
                                                     continue;
-                                                UserFiles uf = new UserFiles();
+                                                UserFile uf = new UserFile();
                                                 uf.Pattern = innerText;
                                                 if (userDataNode.Attribute("before") != null)
                                                     uf.placeBeforeExtraction = Utils.ParseBool(userDataNode.Attribute("before").Value, false);
@@ -1847,7 +1847,7 @@ namespace RelhaxModpack
                     if(m.UserFiles.Count > 0)
                     {
                         XmlElement modDatas = doc.CreateElement("userDatas");
-                        foreach (UserFiles us in m.UserFiles)
+                        foreach (UserFile us in m.UserFiles)
                         {
                             XmlElement userData = doc.CreateElement("userData");
                             userData.InnerText = us.Pattern.Trim();
@@ -2012,7 +2012,7 @@ namespace RelhaxModpack
                 if(cc.UserFiles.Count > 0)
                 {
                     XmlElement configDatas = doc.CreateElement("userDatas");
-                    foreach (UserFiles us in cc.UserFiles)
+                    foreach (UserFile us in cc.UserFiles)
                     {
                         XmlElement userData = doc.CreateElement("userData");
                         userData.InnerText = us.Pattern.Trim();
@@ -2078,6 +2078,9 @@ namespace RelhaxModpack
         {
             //make root of document
             XmlDocument doc = new XmlDocument();
+            //https://stackoverflow.com/questions/334256/how-do-i-add-a-custom-xmldeclaration-with-xmldocument-xmldeclaration
+            XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
+            doc.AppendChild(xmlDeclaration);
             //database root modInfo.xml
             XmlElement root = doc.CreateElement("modInfo.xml");
             root.SetAttribute("version", gameVersion.Trim());
@@ -2098,14 +2101,14 @@ namespace RelhaxModpack
                 case DatabaseXmlVersion.OnePointOne:
                     //in 1.1, saveLocation is a document path
                     if (Path.HasExtension(saveLocation))
-                        SaveDatabase1V1(Path.GetDirectoryName(saveLocation), doc, globalDependencies, dependencies, parsedCatagoryList);
+                        SaveDatabase1V1(Path.GetDirectoryName(saveLocation), doc, xmlDeclaration, globalDependencies, dependencies, parsedCatagoryList);
                     else
-                        SaveDatabase1V1(saveLocation, doc, globalDependencies, dependencies, parsedCatagoryList);
+                        SaveDatabase1V1(saveLocation, doc, xmlDeclaration, globalDependencies, dependencies, parsedCatagoryList);
                     break;
             }            
         }
 
-        public static void SaveDatabase1V1(string savePath, XmlDocument doc, List<DatabasePackage> globalDependencies,
+        public static void SaveDatabase1V1(string savePath, XmlDocument doc, XmlDeclaration xmlDeclaration, List<DatabasePackage> globalDependencies,
         List<Dependency> dependencies, List<Category> parsedCatagoryList)
         {
             //save the root/header database file
@@ -2124,6 +2127,11 @@ namespace RelhaxModpack
             foreach(Category cat in parsedCatagoryList)
             {
                 XmlElement xmlCategory = doc.CreateElement("category");
+                if (string.IsNullOrWhiteSpace(cat.XmlFilename))
+                {
+                    cat.XmlFilename = cat.Name.Replace(" ", string.Empty);
+                    cat.XmlFilename = cat.XmlFilename.Replace("/", "_") + ".xml";
+                }
                 xmlCategory.SetAttribute("file", cat.XmlFilename);
                 xmlCategories.AppendChild(xmlCategory);
             }
@@ -2132,22 +2140,46 @@ namespace RelhaxModpack
 
             //save each of the other lists
             XmlDocument xmlGlobalDependenciesFile = new XmlDocument();
+            xmlDeclaration = xmlGlobalDependenciesFile.CreateXmlDeclaration("1.0", "UTF-8", "yes");
+            xmlGlobalDependenciesFile.AppendChild(xmlDeclaration);
             XmlElement xmlGlobalDependenciesFileRoot = xmlGlobalDependenciesFile.CreateElement("GlobalDependencies");
             SaveDatabaseList1V1(globalDependencies, xmlGlobalDependenciesFileRoot, xmlGlobalDependenciesFile, "GlobalDependency");
+            xmlGlobalDependenciesFile.AppendChild(xmlGlobalDependenciesFileRoot);
             xmlGlobalDependenciesFile.Save(Path.Combine(savePath, "globalDependencies.xml"));
 
             XmlDocument xmlDependenciesFile = new XmlDocument();
+            xmlDeclaration = xmlDependenciesFile.CreateXmlDeclaration("1.0", "UTF-8", "yes");
+            xmlDependenciesFile.AppendChild(xmlDeclaration);
             XmlElement xmlDependenciesFileRoot = xmlDependenciesFile.CreateElement("Dependencies");
-            SaveDatabaseList1V1(globalDependencies, xmlGlobalDependenciesFileRoot, xmlDependenciesFile, "Dependency");
+            SaveDatabaseList1V1(dependencies, xmlDependenciesFileRoot, xmlDependenciesFile, "Dependency");
+            xmlDependenciesFile.AppendChild(xmlDependenciesFileRoot);
             xmlDependenciesFile.Save(Path.Combine(savePath, "dependencies.xml"));
 
             //for each cateory do the same thing
             foreach (Category cat in parsedCatagoryList)
             {
                 XmlDocument xmlCategoryFile = new XmlDocument();
+                xmlDeclaration = xmlCategoryFile.CreateXmlDeclaration("1.0", "UTF-8", "yes");
+                xmlCategoryFile.AppendChild(xmlDeclaration);
                 XmlElement xmlCategoryFileRoot = xmlCategoryFile.CreateElement("Category");
                 xmlCategoryFileRoot.SetAttribute("Name", cat.Name);
+                //need to incorporate the fact that categories have dependencies
+                if (cat.Dependencies.Count > 0)
+                {
+                    XmlElement xmlCategoryDependencies = xmlCategoryFile.CreateElement("Dependencies");
+                    foreach(DatabaseLogic logic in cat.Dependencies)
+                    {
+                        XmlElement xmlCategoryDependency = xmlCategoryFile.CreateElement("Dependency");
+                        foreach(FieldInfo info in typeof(DatabaseLogic).GetFields())
+                        {
+                            xmlCategoryDependency.SetAttribute(info.Name,info.GetValue(logic).ToString());
+                        }
+                        xmlCategoryDependencies.AppendChild(xmlCategoryDependency);
+                    }
+                    xmlCategoryFileRoot.AppendChild(xmlCategoryDependencies);
+                }
                 SaveDatabaseList1V1(cat.Packages, xmlCategoryFileRoot, xmlCategoryFile, "Package");
+                xmlCategoryFile.AppendChild(xmlCategoryFileRoot);
                 xmlCategoryFile.Save(Path.Combine(savePath, cat.XmlFilename));
             }
 
@@ -2161,6 +2193,8 @@ namespace RelhaxModpack
             FieldInfo[] fields = null;
             PropertyInfo[] properties = null;
             XmlElement PackageHolder = null;
+            DatabasePackage samplePackageDefaults = null;
+            string elementNameToSaveAs = string.Empty;
 
             if (packagesToSave is List<DatabasePackage>)
             {
@@ -2168,7 +2202,8 @@ namespace RelhaxModpack
                 membersToXmlSaveAsNodes = new List<string>(DatabasePackage.FieldsToXmlParseNodes());
                 fields = typeof(DatabasePackage).GetFields();
                 properties = typeof(DatabasePackage).GetProperties();
-                PackageHolder = docToMakeElementsFrom.CreateElement("GlobalDependency");
+                elementNameToSaveAs = "GlobalDependency";
+                samplePackageDefaults = new DatabasePackage();
             }
             else if (packagesToSave is List<Dependency>)
             {
@@ -2176,7 +2211,8 @@ namespace RelhaxModpack
                 membersToXmlSaveAsNodes = new List<string>(Dependency.FieldsToXmlParseNodes());
                 fields = typeof(Dependency).GetFields();
                 properties = typeof(Dependency).GetProperties();
-                PackageHolder = docToMakeElementsFrom.CreateElement("Dependency");
+                elementNameToSaveAs="Dependency";
+                samplePackageDefaults = new Dependency();
             }
             else if (packagesToSave is List<SelectablePackage>)
             {
@@ -2184,7 +2220,8 @@ namespace RelhaxModpack
                 membersToXmlSaveAsNodes = new List<string>(SelectablePackage.FieldsToXmlParseNodes());
                 fields = typeof(SelectablePackage).GetFields();
                 properties = typeof(SelectablePackage).GetProperties();
-                PackageHolder = docToMakeElementsFrom.CreateElement("Package");
+                elementNameToSaveAs="Package";
+                samplePackageDefaults = new SelectablePackage();
             }
 
             for (int i = 0; i < packagesToSave.Count; i++)
@@ -2192,6 +2229,8 @@ namespace RelhaxModpack
                 //it's at least a databasePackage
                 DatabasePackage packageToSaveOfAnyType = (DatabasePackage)packagesToSave[i];
                 SelectablePackage packageOnlyUsedForNames = packageToSaveOfAnyType as SelectablePackage;
+                //make the element to save to
+                PackageHolder = docToMakeElementsFrom.CreateElement(elementNameToSaveAs);
                 foreach (FieldInfo fieldInType in fields)
                 {
                     if(membersToXmlSaveAsAttributes.Contains(fieldInType.Name))
@@ -2210,6 +2249,9 @@ namespace RelhaxModpack
                         {
                             //get the list type to allow for itterate
                             IList list = (IList)fieldInType.GetValue(packageToSaveOfAnyType);
+                            //if there's no items, then don't bother
+                            if (list.Count == 0)
+                                continue;
                             //get the types of objects stored in this list
                             Type objectTypeInList = list.GetType().GetInterfaces().Where(j => j.IsGenericType && j.GenericTypeArguments.Length == 1)
                                 .FirstOrDefault(j => j.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GenericTypeArguments[0];
@@ -2218,13 +2260,17 @@ namespace RelhaxModpack
                             for(int k = 0; k < list.Count; k++)
                             {
                                 //list element value like "Media"
-                                XmlElement elementFieldValue = docToMakeElementsFrom.CreateElement(objectTypeInList.Name);
+                                string objectInListName = objectTypeInList.Name;
+                                //hard code compatibility "DatabaseLogic" -> "Dependency"
+                                if (objectInListName.Equals(nameof(DatabaseLogic)))
+                                    objectInListName = nameof(Dependency);
+                                XmlElement elementFieldValue = docToMakeElementsFrom.CreateElement(objectInListName);
                                 //could be a custom type with many fields, or a single type with no fields
                                 FieldInfo[] fieldsInCustomType = objectTypeInList.GetFields();
                                 if (fieldsInCustomType.Count() == 0)
                                 {
                                     //single type like int or string
-                                    elementFieldValue.Value = list[k].ToString();
+                                    elementFieldValue.InnerText = list[k].ToString();
                                 }
                                 else
                                 {
@@ -2242,13 +2288,33 @@ namespace RelhaxModpack
                         else
                         {
                             XmlElement element = docToMakeElementsFrom.CreateElement(fieldInType.Name);
-                            element.Value = fieldInType.GetValue(packageToSaveOfAnyType).ToString();
-                            PackageHolder.AppendChild(element);
+                            element.InnerText = fieldInType.GetValue(packageToSaveOfAnyType).ToString();
+                            string defaultFieldValue = fieldInType.GetValue(samplePackageDefaults).ToString();
+                            //only save node values when they are not default
+                            if (!element.InnerText.Equals(defaultFieldValue))
+                                PackageHolder.AppendChild(element);
+                           
                         }
                     }
                 }
+                foreach (PropertyInfo propertyInType in properties)
+                {
+                    if (membersToXmlSaveAsAttributes.Contains(propertyInType.Name))
+                    {
+                        PackageHolder.SetAttribute(propertyInType.Name, propertyInType.GetValue(packageToSaveOfAnyType).ToString());
+                    }
+                    else if (membersToXmlSaveAsNodes.Contains(propertyInType.Name))
+                    {
+                        XmlElement element = docToMakeElementsFrom.CreateElement(propertyInType.Name);
+                        element.InnerText = propertyInType.GetValue(packageToSaveOfAnyType).ToString();
+                        string defaultFieldValue = propertyInType.GetValue(samplePackageDefaults).ToString();
+                        if (!element.InnerText.Equals(defaultFieldValue))
+                            PackageHolder.AppendChild(element);
+                    }
+                }
+                //save them to the holder
+                documentRootElement.AppendChild(PackageHolder);
             }
-
         }
 
         private static void SavePackage(XmlDocument root, XmlElement holder, DatabasePackage package)
@@ -2302,7 +2368,7 @@ namespace RelhaxModpack
                 {
                     XmlElement userFilesHolder = root.CreateElement("userFiles");
                     element.AppendChild(userFilesHolder);
-                    foreach(UserFiles file in selectablePackage.UserFiles)
+                    foreach(UserFile file in selectablePackage.UserFiles)
                     {
                         XmlElement userFile = root.CreateElement("userFile");
                         userFile.InnerText = file.Pattern;

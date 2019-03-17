@@ -12,11 +12,11 @@ namespace RelhaxModpack
     }
     public class DatabaseLogic
     {
-        public string PackageName { get; set; } = "";
+        public string PackageName = "";
         public bool Enabled { get; set; } = false;
         public bool Checked { get; set; } = false;
-        public bool NotFlag { get; set; } = false;
-        public Logic Logic { get; set; } = Logic.OR;
+        public bool NotFlag = false;
+        public Logic Logic = Logic.OR;
         public override string ToString()
         {
             return PackageName;

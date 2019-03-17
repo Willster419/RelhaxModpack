@@ -299,7 +299,7 @@ namespace RelhaxModpack
         /// <summary>
         /// the list of cache files that should be backed up before wiping the directory
         /// </summary>
-        public List<UserFiles> UserFiles = new List<UserFiles>();
+        public List<UserFile> UserFiles = new List<UserFile>();
         /// <summary>
         /// the list of child SelectablePackage entries in this instance of SelectablePackages
         /// </summary>

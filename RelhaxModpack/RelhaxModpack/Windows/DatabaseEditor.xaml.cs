@@ -221,7 +221,7 @@ namespace RelhaxModpack.Windows
             sp.PopularMod = false;
             sp._Checked = false;
             sp.Level = -2;
-            sp.UserFiles = new List<UserFiles>();
+            sp.UserFiles = new List<UserFile>();
             sp.Packages = new List<SelectablePackage>();
             sp.Medias = new List<Media>();
             sp.Dependencies = new List<DatabaseLogic>();
@@ -684,7 +684,7 @@ namespace RelhaxModpack.Windows
                     PackageDependenciesDisplay.Items.Add(d);
                 foreach (Media media in selectablePackage.Medias)
                     PackageMediasDisplay.Items.Add(media);
-                foreach (UserFiles data in selectablePackage.UserFiles)
+                foreach (UserFile data in selectablePackage.UserFiles)
                     PackageUserdatasDisplay.Items.Add(data);
                 PackageConflictingPackagesDisplay.Items.Clear();
                 foreach (string s in selectablePackage.ConflictingPackages)
@@ -750,7 +750,7 @@ namespace RelhaxModpack.Windows
                     selectablePackage.Dependencies.Add(dl);
 
                 selectablePackage.UserFiles.Clear();
-                foreach (UserFiles uf in PackageUserdatasDisplay.Items)
+                foreach (UserFile uf in PackageUserdatasDisplay.Items)
                     selectablePackage.UserFiles.Add(uf);
 
                 selectablePackage.Medias.Clear();
@@ -1259,7 +1259,8 @@ namespace RelhaxModpack.Windows
             if (!(bool)SaveDatabaseDialog.ShowDialog())
                 return;
             //if what the user just specified is not the same as the current default, then ask to update it
-            if (!Path.GetDirectoryName(SaveDatabaseDialog.FileName).Equals(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
+            if(string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ||
+                !Path.GetDirectoryName(SaveDatabaseDialog.FileName).Equals(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
                 if (MessageBox.Show("Use this as default save location?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
             //actually save
