@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:RelhaxModpack.UIComponents"
              xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
-             mc:Ignorable="d" Style="{DynamicResource RelhaxRadiobuttonStyle}" Visibility="{Binding PopularModVisability, ElementName=radioButton}" >
+             mc:Ignorable="d" Style="{DynamicResource RelhaxRadiobuttonStyle}">
     <RadioButton.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -58,7 +58,7 @@
                                 </Grid>
                             </Border>
                             <ContentPresenter x:Name="contentPresenter" Grid.Column="1" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                            <Image x:Name="PopularModStar" Grid.Column="2"  Width="16" Height="16" VerticalAlignment="Top" Source="/RelhaxModpack;component/Resources/Images/popular_icon.png"/>
+                            <Image x:Name="PopularModStar" Grid.Column="2"  Width="16" Height="16" VerticalAlignment="Top" Source="/RelhaxModpack;component/Resources/Images/popular_icon.png" Visibility="{Binding PopularModVisability, ElementName=radioButton}"/>
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="HasContent" Value="true">
