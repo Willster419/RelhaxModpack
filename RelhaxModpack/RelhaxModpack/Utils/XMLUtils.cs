@@ -2082,7 +2082,7 @@ namespace RelhaxModpack
             XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
             doc.AppendChild(xmlDeclaration);
             //database root modInfo.xml
-            XmlElement root = doc.CreateElement("modInfo.xml");
+            XmlElement root = doc.CreateElement("modInfoAlpha.xml");
             root.SetAttribute("version", gameVersion.Trim());
             root.SetAttribute("onlineFolder", onlineFolderVersion.Trim());
             //append the version information, game and online folder
@@ -2095,7 +2095,7 @@ namespace RelhaxModpack
                         SaveDatabaseLegacy(saveLocation, doc, globalDependencies, dependencies.Where(dep => !dep.PackageName.Contains("ogical")).ToList(),
                             dependencies.Where(dep => dep.PackageName.Contains("ogical")).ToList(), parsedCatagoryList);
                     else
-                        SaveDatabaseLegacy(Path.Combine(saveLocation, "modInfo.xml"), doc, globalDependencies, dependencies.Where(dep => !dep.PackageName.Contains("ogical")).ToList(),
+                        SaveDatabaseLegacy(Path.Combine(saveLocation, "modInfoAlpha.xml"), doc, globalDependencies, dependencies.Where(dep => !dep.PackageName.Contains("ogical")).ToList(),
                             dependencies.Where(dep => dep.PackageName.Contains("ogical")).ToList(), parsedCatagoryList);
                     break;
                 case DatabaseXmlVersion.OnePointOne:
@@ -2120,7 +2120,7 @@ namespace RelhaxModpack
             root.AppendChild(xmlGlobalDependencies);
 
             XmlElement xmlDependencies = doc.CreateElement("dependencies");
-            xmlGlobalDependencies.SetAttribute("file", "dependencies.xml");
+            xmlDependencies.SetAttribute("file", "dependencies.xml");
             root.AppendChild(xmlDependencies);
 
             XmlElement xmlCategories = doc.CreateElement("categories");
