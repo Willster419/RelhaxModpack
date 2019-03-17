@@ -366,6 +366,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Resource Include="PrivateStuff\github_readme_link.txt" />
+    <Resource Include="Resources\Images\popular_icon.png" />
     <Content Include="Resources\Licences\modpack_license_agrement.txt" />
     <None Include="Properties\RelhaxModpack.ruleset" />
   </ItemGroup>

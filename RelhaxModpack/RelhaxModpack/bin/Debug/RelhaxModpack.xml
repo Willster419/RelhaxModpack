@@ -1746,6 +1746,11 @@
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Properties.Resources.popular_icon">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:RelhaxModpack.Properties.Resources.report">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
