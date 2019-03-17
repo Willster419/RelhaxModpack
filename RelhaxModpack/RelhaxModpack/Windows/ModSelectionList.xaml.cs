@@ -794,6 +794,9 @@ namespace RelhaxModpack.Windows
             SelectablePackage spc = null;
             if (ipc is RelhaxWPFComboBox cb2)
             {
+                //don't change the selection if the user did not want to change the option
+                if (!cb2.IsDropDownOpen)
+                    return;
                 ComboBoxItem cbi = (ComboBoxItem)cb2.SelectedItem;
                 spc = cbi.Package;
             }
