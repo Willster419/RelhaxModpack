@@ -2230,15 +2230,33 @@ namespace RelhaxModpack
                 SelectablePackage packageOnlyUsedForNames = packageToSaveOfAnyType as SelectablePackage;
                 //make the element to save to
                 PackageHolder = docToMakeElementsFrom.CreateElement(nameToSaveElementsBy);
-                foreach (FieldInfo fieldInType in fields)
+                //iterate through each of the attributes and nodes in the arrays to allow for listing in custom order
+                foreach(string memberAttribute in membersToXmlSaveAsAttributes)
                 {
-                    if(membersToXmlSaveAsAttributes.Contains(fieldInType.Name))
+                    //first check if it is in fields, then if it is in properties
+                    FieldInfo[] fieldMatches = fields.Where(f => f.Name.Equals(memberAttribute)).ToArray();
+                    PropertyInfo[] propertyMatches = properties.Where(p => p.Name.Equals(memberAttribute)).ToArray();
+                    if (fieldMatches.Count() == 1)
                     {
-                        PackageHolder.SetAttribute(fieldInType.Name, Utils.MacroReplace(fieldInType.GetValue(packageToSaveOfAnyType).ToString(),ReplacementTypes.TextEscape));
+                        FieldInfo fieldInType = fieldMatches[0];
+                        PackageHolder.SetAttribute(fieldInType.Name, Utils.MacroReplace(fieldInType.GetValue(packageToSaveOfAnyType).ToString(), ReplacementTypes.TextEscape));
                     }
-                    else if (membersToXmlSaveAsNodes.Contains(fieldInType.Name))
+                    else if (propertyMatches.Count() == 1)
                     {
-                        //first check if it's packages
+                        PropertyInfo propertyInType = propertyMatches[0];
+                        PackageHolder.SetAttribute(propertyInType.Name, propertyInType.GetValue(packageToSaveOfAnyType).ToString());
+                    }
+                    else
+                        throw new BadMemeException("this should not happen. something is very wrong");
+                }
+                foreach (string memberNode in membersToXmlSaveAsNodes)
+                {
+                    FieldInfo[] fieldMatches = fields.Where(f => f.Name.Equals(memberNode)).ToArray();
+                    PropertyInfo[] propertyMatches = properties.Where(p => p.Name.Equals(memberNode)).ToArray();
+                    if (fieldMatches.Count() == 1)
+                    {
+                        FieldInfo fieldInType = fieldMatches[0];
+                        //check if it's a package list of packages
                         if (fieldInType.Name.Equals(nameof(packageOnlyUsedForNames.Packages)) && packageOnlyUsedForNames.Packages.Count > 0)
                         {
                             XmlElement packagesHolder = docToMakeElementsFrom.CreateElement(nameof(packageOnlyUsedForNames.Packages));
@@ -2258,7 +2276,7 @@ namespace RelhaxModpack
                                 .FirstOrDefault(j => j.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GenericTypeArguments[0];
                             //elementFieldHolder is holder for list type like "Medias"
                             XmlElement elementFieldHolder = docToMakeElementsFrom.CreateElement(fieldInType.Name);
-                            for(int k = 0; k < list.Count; k++)
+                            for (int k = 0; k < list.Count; k++)
                             {
                                 //list element value like "Media"
                                 string objectInListName = objectTypeInList.Name;
@@ -2297,24 +2315,20 @@ namespace RelhaxModpack
                                 element.InnerText = Utils.MacroReplace(element.InnerText, ReplacementTypes.TextEscape);
                                 PackageHolder.AppendChild(element);
                             }
-                           
                         }
                     }
-                }
-                foreach (PropertyInfo propertyInType in properties)
-                {
-                    if (membersToXmlSaveAsAttributes.Contains(propertyInType.Name))
+                    else if (propertyMatches.Count() == 1)
                     {
-                        PackageHolder.SetAttribute(propertyInType.Name, propertyInType.GetValue(packageToSaveOfAnyType).ToString());
-                    }
-                    else if (membersToXmlSaveAsNodes.Contains(propertyInType.Name))
-                    {
+                        PropertyInfo propertyInType = propertyMatches[0];
+                        //at this time, properties don't store list attributes nor are packages lists
                         XmlElement element = docToMakeElementsFrom.CreateElement(propertyInType.Name);
                         element.InnerText = propertyInType.GetValue(packageToSaveOfAnyType).ToString();
                         string defaultFieldValue = propertyInType.GetValue(samplePackageDefaults).ToString();
                         if (!element.InnerText.Equals(defaultFieldValue))
                             PackageHolder.AppendChild(element);
                     }
+                    else
+                        throw new BadMemeException("this should not happen. something is very wrong");
                 }
                 //save them to the holder
                 documentRootElement.AppendChild(PackageHolder);

@@ -23,15 +23,15 @@ namespace RelhaxModpack
         private static readonly List<string> SelectableElementsToXmlParseNodes = new List<string>()
         {
             nameof(Size),
-            nameof(UpdateComment),
             nameof(Description),
+            nameof(UpdateComment),
             nameof(PopularMod),
             nameof(ShowInSearchList),
-            nameof(UserFiles),
-            nameof(Packages),
             nameof(Medias),
+            nameof(UserFiles),
+            nameof(ConflictingPackages),
             nameof(Dependencies),
-            nameof(ConflictingPackages)
+            nameof(Packages)
         };
 
         /// <summary>

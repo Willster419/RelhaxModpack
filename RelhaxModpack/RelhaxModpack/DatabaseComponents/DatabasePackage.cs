@@ -20,12 +20,12 @@ namespace RelhaxModpack
         private static readonly List<string> PackageElementsToXmlParseNodes = new List<string>()
         {
             nameof(Version),
-            nameof(Timestamp),
             nameof(ZipFile),
             nameof(CRC),
+            nameof(Timestamp),
+            nameof(LogAtInstall),
             nameof(StartAddress),
             nameof(EndAddress),
-            nameof(LogAtInstall),
             nameof(Triggers),
             //nameof(DevURL),
             nameof(InternalNotes)
