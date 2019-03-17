@@ -957,11 +957,12 @@ namespace RelhaxModpack
             }
         }
 
-        public static bool SetListEntriesField(DatabasePackage packageOfAnyType, FieldInfo packageField, IEnumerable<XElement> xmlpackageElements)
+        public static bool SetListEntriesField(object objectThatHasListProperty, FieldInfo nameOfListField, IEnumerable<XElement> xmlListItems)
         {
             //get a list type to add stuff to
             //https://stackoverflow.com/questions/25757121/c-sharp-how-to-set-propertyinfo-value-when-its-type-is-a-listt-and-i-have-a-li
-            object obj = packageField.GetValue(packageOfAnyType);
+            object obj = nameOfListField.GetValue(objectThatHasListProperty);
+            DatabasePackage packageOfAnyType = objectThatHasListProperty as DatabasePackage;
             //IList list = (IList)packageField.GetValue(obj);
             IList list = (IList)obj;
             //we now have the empty list, now get type type of list it is
@@ -970,7 +971,7 @@ namespace RelhaxModpack
                 .FirstOrDefault(i => i.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GenericTypeArguments[0];
             //now for each xml element, get the value information and set it
             //if it originates from the 
-            foreach (XElement listElement in xmlpackageElements)
+            foreach (XElement listElement in xmlListItems)
             {
                 //2 types of options for what this list could be: single node values (string, just node value), node of many values (custon type, many values)
                 if (listElement.Attributes().Count() > 0)//custom class type
@@ -1006,12 +1007,18 @@ namespace RelhaxModpack
                     foreach(string missingMember in missingMembers)
                     {
                         //exist in member class info, but not set from xml attributes
-                        Logging.Error("Missing xml attribute: {0}, package: {1}, line{2}", missingMember, packageOfAnyType.PackageName, ((IXmlLineInfo)listElement).LineNumber);
+                        if(packageOfAnyType!= null)
+                            Logging.Error("Missing xml attribute: {0}, package: {1}, line{2}", missingMember, packageOfAnyType.PackageName, ((IXmlLineInfo)listElement).LineNumber);
+                        else
+                            Logging.Error("Missing xml attribute: {0}, object: {1}, line{2}", missingMember, objectThatHasListProperty.ToString(), ((IXmlLineInfo)listElement).LineNumber);
                     }
                     foreach(string unknownMember in unknownMembers)
                     {
                         //exist in xml attributes, but not known member in memberInfo
-                        Logging.Error("unknown xml attribute: {0}, package: {1}, line{2}", unknownMember, packageOfAnyType.PackageName, ((IXmlLineInfo)listElement).LineNumber);
+                        if (packageOfAnyType != null)
+                            Logging.Error("unknown xml attribute: {0}, package: {1}, line{2}", unknownMember, packageOfAnyType.PackageName, ((IXmlLineInfo)listElement).LineNumber);
+                        else
+                            Logging.Error("unknown xml attribute: {0}, object: {1}, line{2}", unknownMember, objectThatHasListProperty.ToString(), ((IXmlLineInfo)listElement).LineNumber);
                     }
                     list.Add(listEntry);
                 }

@@ -301,19 +301,29 @@ namespace RelhaxModpack
             List<XDocument> categoryDocuments = new List<XDocument>();
             foreach(XmlNode categoryNode in GetXMLNodesFromXPath(rootDocument, "//modInfoAlpha.xml/categories/category"))
             {
+                //make string path
                 completeFilepath = Path.Combine(rootPath, categoryNode.Attributes["file"].Value);
-                parsedCategoryList.Add(new Category()
-                {
-                    XmlFilename = categoryNode.Attributes["file"].Value
-                });
+                //check if file exists
                 if (!File.Exists(completeFilepath))
                 {
                     Logging.Error("{0} file does not exist at {1}", "Category", completeFilepath);
                     return false;
                 }
+                //load xdocument of category from category file
                 XDocument catDoc = LoadXDocument(completeFilepath, XmlLoadType.FromFile);
                 if (catDoc == null)
                     throw new BadMemeException("this should not be null");
+                //make new category object
+                Category cat = new Category()
+                {
+                    XmlFilename = categoryNode.Attributes["file"].Value
+                };
+                //get the list of dependencies in the category
+                IEnumerable<XElement> listOfDependencies = catDoc.XPathSelectElements("//Category/Dependencies/Dependency");
+                Utils.SetListEntriesField(cat, cat.GetType().GetField(nameof(cat.Dependencies)), listOfDependencies);
+                //add object cat to list
+                parsedCategoryList.Add(cat);
+                //add xml cat to list
                 categoryDocuments.Add(catDoc);
             }
 
