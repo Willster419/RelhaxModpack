@@ -30,7 +30,7 @@
         <SolidColorBrush x:Key="OptionMark.MouseOver.Border" Color="#FF5593FF"/>
         <SolidColorBrush x:Key="OptionMark.MouseOver.Glyph" Color="#FF212121"/>
         <SolidColorBrush x:Key="OptionMark.Disabled.Background" Color="{Binding CheckboxDisabledColor, ElementName=checkBox}"/>
-        <SolidColorBrush x:Key="OptionMark.Disabled.Border" Color="{Binding CheckboxDisabledColor, ElementName=checkBox}"/>
+        <SolidColorBrush x:Key="OptionMark.Disabled.Border" Color="#FF707070"/>
         <SolidColorBrush x:Key="OptionMark.Disabled.Glyph" Color="#FF707070"/>
         <SolidColorBrush x:Key="OptionMark.Pressed.Background" Color="#FFD9ECFF"/>
         <SolidColorBrush x:Key="OptionMark.Pressed.Border" Color="#FF3C77DD"/>
@@ -49,6 +49,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
                             </Grid.ColumnDefinitions>
                             <Border x:Name="checkBoxBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
                                 <Grid x:Name="markGrid">
@@ -57,6 +58,7 @@
                                 </Grid>
                             </Border>
                             <ContentPresenter x:Name="contentPresenter" Grid.Column="1" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            <Image x:Name="PopularModStar" Grid.Column="2"  Width="16" Height="16" VerticalAlignment="Top" Source="Resources/popular_icon.png" Visibility="{Binding PopularModVisability, ElementName=checkBox}" />
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="HasContent" Value="true">

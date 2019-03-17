@@ -25,14 +25,22 @@ namespace RelhaxWPFConvert
         private Color _CheckboxDisabledColor = Colors.Red;
         public Color CheckboxDisabledColor
         {
-            get
-            {
-                return _CheckboxDisabledColor;
-            }
+            get { return _CheckboxDisabledColor; }
             set
             {
                 _CheckboxDisabledColor = value;
                 OnPropertyChanged(nameof(CheckboxDisabledColor));
+            }
+        }
+
+        private Visibility _PopularModVisability = Visibility.Hidden;
+        public Visibility PopularModVisability
+        {
+            get { return _PopularModVisability; }
+            set
+            {
+                _PopularModVisability = value;
+                OnPropertyChanged(nameof(PopularModVisability));
             }
         }
 
