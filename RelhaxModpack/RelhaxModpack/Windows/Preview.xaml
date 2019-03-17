@@ -31,9 +31,13 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="25"/>
                 </Grid.RowDefinitions>
+                <!--
                 <TextBlock x:Name="DevUrlBlock" Grid.Row="4" Margin="0,0,10,10" TextWrapping="Wrap" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="131" TextAlignment="Right">
                     <Hyperlink x:Name="DevUrlLink">Developer Website</Hyperlink>
                 </TextBlock>
+                -->
+                <TextBlock x:Name="DevUrlHeader" Tag="DevUrlHeader" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Bottom" HorizontalAlignment="Left" Text="Developer Links" Margin="0,0,0,4"/>
+                <StackPanel x:Name="DevUrlHolder" HorizontalAlignment="Stretch" Height="16" Margin="89,0,0,4" Grid.Row="1" VerticalAlignment="Bottom"/>
                 <Grid >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="2*" MinHeight="20"/>

@@ -647,7 +647,7 @@ namespace RelhaxModpack.Windows
             //devURL
             //each url is seperated by newline characters "\n"
             //should be displayed with newlines already, so no change needed
-            PackageDevURLDisplay.Text = package.DevURL;
+            PackageDevURLDisplay.Text = Utils.MacroReplace(package.DevURL,ReplacementTypes.TextUnescape);
             //internal notes
             PackageInternalNotesDisplay.Text = Utils.MacroReplace(package.InternalNotes,ReplacementTypes.TextUnescape);
             //triggers
@@ -722,7 +722,7 @@ namespace RelhaxModpack.Windows
             package.ZipFile = PackageZipFileDisplay.Text;
             package.EndAddress = PackageEndAddressDisplay.Text;
             //devURL is separated by newlines for array list, so it's not necessary to escape
-            package.DevURL = PackageDevURLDisplay.Text;
+            package.DevURL = Utils.MacroReplace(PackageDevURLDisplay.Text,ReplacementTypes.TextEscape);
             package.Version = PackageVersionDisplay.Text;
             package.InstallGroup = (int)PackageInstallGroupDisplay.SelectedItem;
             package.PatchGroup = (int)PackagePatchGroupDisplay.SelectedItem;

@@ -51,12 +51,34 @@ namespace RelhaxModpack.Windows
             //check if devURL element should be enabled or not
             if(string.IsNullOrWhiteSpace(Package.DevURL))
             {
-                DevUrlBlock.IsEnabled = false;
-                DevUrlBlock.Visibility = Visibility.Hidden;
+                DevUrlHeader.IsEnabled = false;
+                DevUrlHeader.Visibility = Visibility.Hidden;
+                DevUrlHolder.IsEnabled = false;
+                DevUrlHolder.Visibility = Visibility.Hidden;
             }
-
-            //set the loading properties
-            //TODO: this lol
+            else
+            {
+                //devURL is now array of elements separated by newline
+                //load the stack with textblocks with tooltips for the URLs
+                string[] devURLS = Package.DevURL.Split('\n');
+                for(int i = 0; i < devURLS.Count(); i++)
+                {
+                    //make a textbox
+                    TextBlock block = new TextBlock()
+                    {
+                        ToolTip = devURLS[i].Trim()
+                    };
+                    //https://stackoverflow.com/questions/21214450/how-to-add-a-hyperlink-in-a-textblock-in-code?noredirect=1&lq=1
+                    block.Inlines.Clear();
+                    Hyperlink h = new Hyperlink(new Run(i.ToString()))
+                    {
+                        NavigateUri = new Uri(devURLS[i].Trim())
+                    };
+                    h.RequestNavigate += OnHyperLinkClick;
+                    block.Inlines.Add(h);
+                    DevUrlHolder.Children.Add(block);
+                }
+            }
 
             //set the name of the window to be the package name
             Title = Package.NameFormatted;
@@ -65,7 +87,7 @@ namespace RelhaxModpack.Windows
             for(int i =0; i < Package.Medias.Count; i++)
             {
                 //make the custom class element to host it
-                UIComponents.RelhaxPreviewIndex previewIndex = new UIComponents.RelhaxPreviewIndex()
+                RelhaxPreviewIndex previewIndex = new RelhaxPreviewIndex()
                 {
                     Media = Package.Medias[i],
                     Text = i.ToString()
@@ -85,7 +107,6 @@ namespace RelhaxModpack.Windows
             if(EditorMode)
             {
                 WindowStartupLocation = WindowStartupLocation.Manual;
-
             }
             //if the saved preview window point is within the screen, then load it to there
             else if (Utils.PointWithinScreen(ModpackSettings.PreviewX, ModpackSettings.PreviewY))
@@ -110,7 +131,19 @@ namespace RelhaxModpack.Windows
                 DisplayMedia(Package.Medias[0]);
         }
 
-        private void PreviewIndex_OnPreviewLinkClick(object sender, UIComponents.RelhaxPreviewIndexEventArgs e)
+        private void OnHyperLinkClick(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(e.Uri.OriginalString);
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex.ToString());
+            }
+        }
+
+        private void PreviewIndex_OnPreviewLinkClick(object sender, RelhaxPreviewIndexEventArgs e)
         {
             if (e.Media == null)
                 throw new BadMemeException("MEDIA IS NULL HOW IS THAT EVEN POSSIBLE REEEEE");
