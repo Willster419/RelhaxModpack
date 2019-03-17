@@ -2235,7 +2235,7 @@ namespace RelhaxModpack
                 {
                     if(membersToXmlSaveAsAttributes.Contains(fieldInType.Name))
                     {
-                        PackageHolder.SetAttribute(fieldInType.Name, fieldInType.GetValue(packageToSaveOfAnyType).ToString());
+                        PackageHolder.SetAttribute(fieldInType.Name, Utils.MacroReplace(fieldInType.GetValue(packageToSaveOfAnyType).ToString(),ReplacementTypes.TextEscape));
                     }
                     else if (membersToXmlSaveAsNodes.Contains(fieldInType.Name))
                     {
@@ -2292,7 +2292,10 @@ namespace RelhaxModpack
                             string defaultFieldValue = fieldInType.GetValue(samplePackageDefaults).ToString();
                             //only save node values when they are not default
                             if (!element.InnerText.Equals(defaultFieldValue))
+                            {
+                                element.InnerText = Utils.MacroReplace(element.InnerText, ReplacementTypes.TextEscape);
                                 PackageHolder.AppendChild(element);
+                            }
                            
                         }
                     }
