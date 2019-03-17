@@ -588,6 +588,7 @@ namespace RelhaxModpack.Windows
                             VerticalContentAlignment = VerticalAlignment.Center,
                             Content = package.NameDisplay,
                             IsEnabled = package.IsStructureEnabled,
+                            PopularModVisability = package.PopularMod? Visibility.Visible : Visibility.Hidden,
                             //the UI building code ONLY deals with BUILDING the UI, not loading configuration options!!
                             //so make it false and later when loading selection it will mark it
                             //BACKGROUND FORGROUND TODO
@@ -611,7 +612,8 @@ namespace RelhaxModpack.Windows
                             VerticalContentAlignment = VerticalAlignment.Center,
                             Content = package.NameDisplay,
                             IsEnabled = package.IsStructureEnabled,
-                            IsChecked = false
+                            IsChecked = false,
+                            PopularModVisability = package.PopularMod ? Visibility.Visible : Visibility.Hidden
                             //BACKGROUND FORGROUND TODO
                         };
                         break;
