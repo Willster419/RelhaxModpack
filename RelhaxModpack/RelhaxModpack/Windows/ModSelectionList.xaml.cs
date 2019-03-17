@@ -1003,13 +1003,44 @@ namespace RelhaxModpack.Windows
             if (e is MouseEventArgs m)
                 if (m.RightButton != MouseButtonState.Pressed)
                     return;
-            if (sender is IPackageUIComponent ipc)
+            if (sender is IPackageUIComponent packageSender)
             {
-                SelectablePackage spc = ipc.Package;
-                if (ipc is RelhaxWPFComboBox cb2)
+                SelectablePackage spc = packageSender.Package;
+                if (packageSender is RelhaxWPFComboBox comboboxSender)
                 {
-                    ComboBoxItem cbi = (ComboBoxItem)cb2.SelectedItem;
-                    spc = cbi.Package;
+                    //check to see if a specific item is highlighted
+                    //if so, it means that the user wants to preview a specific version
+                    //if not, then the user clicked on the combobox as a whole, so show all items in the box
+                    bool itemHighlighted = false;
+                    foreach(ComboBoxItem itemInBox in comboboxSender.Items)
+                    {
+                        if (itemInBox.IsHighlighted)
+                        {
+                            itemHighlighted = true;
+                            spc = itemInBox.Package;
+                        }
+                    }
+                    if(!itemHighlighted)
+                    {
+                        //make a new temporary package with a custom preview items list
+                        //get a temp known good package, doesn't matter what cause we want the parent
+                        ComboBoxItem cbi = (ComboBoxItem)comboboxSender.Items[0];
+                        //parent of item in combobox is header
+                        SelectablePackage parentPackage = cbi.Package.Parent;
+                        spc = new SelectablePackage()
+                        {
+                            PackageName = parentPackage.PackageName,
+                            Name = string.Format("{0}: {1}",Translations.GetTranslatedString("dropDownItemsInside"), parentPackage.Name),
+                            Version = parentPackage.Version,
+                            Description = parentPackage.Description,
+                            UpdateComment = parentPackage.UpdateComment
+                        };
+                        spc.Medias.Clear();
+                        foreach(SelectablePackage packageToGetMediaFrom in parentPackage.Packages)
+                        {
+                            spc.Medias.AddRange(packageToGetMediaFrom.Medias);
+                        }
+                    }
                 }
                 if (spc.DevURL == null)
                     spc.DevURL = "";
