@@ -45,6 +45,12 @@ namespace RelhaxModpack.Windows
         private bool IgnoreSearchBoxFocus = false;
         private List<SelectablePackage> userMods;
         private Preview p;
+        const int FLASH_TICK_INTERVAL = 250;
+        const int NUM_FLASH_TICKS = 5;
+        private int numTicks = 0;
+        private Brush OriginalBrush = null;
+        private Brush HighlightBrush = new SolidColorBrush(Colors.Blue);
+        private System.Windows.Forms.Timer FlashTimer = new System.Windows.Forms.Timer() { Interval=FLASH_TICK_INTERVAL };
 
         #region Boring stuff
         public ModSelectionList()
@@ -132,6 +138,8 @@ namespace RelhaxModpack.Windows
                 this.Close();
                 return;
             }
+            //hook up the flashing timer
+            FlashTimer.Tick += OnFlastTimerTick;
             loadingProgress.Close();
             loadingProgress = null;
             LoadingConfig = false;
@@ -140,7 +148,41 @@ namespace RelhaxModpack.Windows
             this.WindowState = WindowState.Normal;
         }
 
-        
+        private void OnFlastTimerTick(object sender, EventArgs e)
+        {
+            SelectablePackage packageToChange = FlashTimer.Tag as SelectablePackage;
+            if (packageToChange == null)
+                throw new BadMemeException("How did you fuck this up??");
+            Control control = packageToChange.UIComponent as Control;
+            if (control == null)
+                throw new BadMemeException("thinking face");
+            switch (numTicks++)
+            {
+                case 0:
+                    //backup the current color and set the background to the flash color
+                    OriginalBrush = control.Foreground;
+                    control.Foreground = HighlightBrush;
+                    break;
+                case NUM_FLASH_TICKS:
+                    //stop the timer and reset everyting
+                    FlashTimer.Stop();
+                    numTicks = 0;
+                    control.Foreground = OriginalBrush;
+                    OriginalBrush = null;
+                    break;
+                default:
+                    //toggle the color
+                    if(control.Foreground.Equals(HighlightBrush))
+                    {
+                        control.Foreground = OriginalBrush;
+                    }
+                    else if (control.Foreground.Equals(OriginalBrush))
+                    {
+                        control.Foreground = HighlightBrush;
+                    }
+                    break;
+            }
+        }
 
         private async Task<bool> ActuallyLoadModSelectionListAsync(IProgress<RelhaxProgress> progress)
         {
@@ -1530,7 +1572,7 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void OnSearchCBSelectionCommitted(ComboBoxItem committedItem, bool fromMouse)
+        private async void OnSearchCBSelectionCommitted(ComboBoxItem committedItem, bool fromMouse)
         {
             //test to make sure the UIComponent is a control (it should be, but at least a test to make sure it's not null)
             if (committedItem.Package.UIComponent is Control ctrl)
@@ -1541,7 +1583,11 @@ namespace RelhaxModpack.Windows
                 //https://stackoverflow.com/questions/38532196/bringintoview-is-not-working
                 //Note that due to the dispatcher's priority queue, the content may not be available as soon as you make changes (such as select a tab).
                 //In that case, you may want to post the bring-into-view request in a lower priority:
-                Dispatcher.InvokeAsync(() => ctrl.BringIntoView(), System.Windows.Threading.DispatcherPriority.Background);
+                await Dispatcher.InvokeAsync(() => ctrl.BringIntoView(), System.Windows.Threading.DispatcherPriority.Background);
+                //start the timer to show the item
+                FlashTimer.Tag = committedItem.Package;
+                OnFlastTimerTick(null, null);
+                FlashTimer.Start();
             }
             else if (committedItem.Package.UIComponent == null)
                 throw new BadMemeException("WHYYYYYYYY!?!?");
