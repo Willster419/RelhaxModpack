@@ -395,7 +395,7 @@ namespace RelhaxModpack.Windows
                     
                 };
                 //Sorts the mods
-                Utils.SortModsList(cat.Packages);
+                Utils.SortModsListLegacy(cat.Packages);
                 //make and attach the category header
                 cat.CategoryHeader = new SelectablePackage()
                 {

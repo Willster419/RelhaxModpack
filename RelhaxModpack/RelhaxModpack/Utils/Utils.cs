@@ -628,8 +628,34 @@ namespace RelhaxModpack
             }
             return duplicatesList;
         }
+
+        //processes sorting categories by using the sorting property and
+        public static void SortDatabase(List<Category> parsedCategoryList)
+        {
+            //the first level of packages are always sorted
+            foreach(Category cat in parsedCategoryList)
+            {
+                SortDatabase(cat.Packages);
+            }
+        }
+
+        private static void SortDatabase(List<SelectablePackage> packages)
+        {
+            //sorts packages in alphabetical order
+            packages.Sort(SelectablePackage.CompareMods);
+            //if set in the database, child elements can be sorted as well
+            foreach(SelectablePackage child in packages)
+            {
+                if (child.SortChildPackages)
+                {
+                    Logging.Debug("Sorting packages of package {0}", child.PackageName);
+                    SortDatabase(child.Packages);
+                }
+            }
+        }
+
         //sorts a list of mods alphabetaicaly
-        public static void SortModsList(List<SelectablePackage> modList)
+        public static void SortModsListLegacy(List<SelectablePackage> modList)
         {
             //sortModsList
             modList.Sort(SelectablePackage.CompareMods);

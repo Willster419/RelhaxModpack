@@ -132,6 +132,10 @@ namespace RelhaxModpack
         /// </summary>
         public bool PopularMod = false;
         /// <summary>
+        /// Flag to determine any packages of this package should be sorted (by name)
+        /// </summary>
+        public bool SortChildPackages = false;
+        /// <summary>
         /// Used as internal flag for if application settings is checked "SaveDisabledModsInSelection". Allows for disabled mods to be saved back to the user's selection
         /// </summary>
         public bool FlagForSelectionSave = false;
