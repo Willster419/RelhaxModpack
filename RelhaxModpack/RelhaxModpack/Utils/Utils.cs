@@ -642,7 +642,7 @@ namespace RelhaxModpack
         private static void SortDatabase(List<SelectablePackage> packages)
         {
             //sorts packages in alphabetical order
-            packages.Sort(SelectablePackage.CompareMods);
+            packages.Sort(SelectablePackage.CompareModsName);
             //if set in the database, child elements can be sorted as well
             foreach(SelectablePackage child in packages)
             {
@@ -654,12 +654,6 @@ namespace RelhaxModpack
             }
         }
 
-        //sorts a list of mods alphabetaicaly
-        public static void SortModsListLegacy(List<SelectablePackage> modList)
-        {
-            //sortModsList
-            modList.Sort(SelectablePackage.CompareMods);
-        }
         /// <summary>
         /// Links all the refrences (like parent, etc) for each class object making it possible to traverse the list tree in memory
         /// </summary>

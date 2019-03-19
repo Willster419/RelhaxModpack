@@ -254,7 +254,7 @@ namespace RelhaxModpack.Windows
             Utils.BuildLinksRefrence(ParsedCategoryList, false);
             Utils.BuildLevelPerPackage(ParsedCategoryList);
             List<DatabasePackage> flatList = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList);
-            //check db cache of local files
+            //check db cache of local files in downlaod zip folder
             loadProgress.ChildCurrent++;
             loadProgress.ReportMessage = Translations.GetTranslatedString("verifyingDownloadCache");
             progress.Report(loadProgress);
@@ -277,6 +277,8 @@ namespace RelhaxModpack.Windows
                 if (!package.CRC.Equals(oldCRCFromDownloadsFolder))
                     package.DownloadFlag = true;
             }
+            //sort the database before UI display
+            Utils.SortDatabase(ParsedCategoryList);
             //build UI
             loadProgress.ChildCurrent = 0;
             loadProgress.ReportMessage = Translations.GetTranslatedString("loadingUI");
@@ -394,8 +396,6 @@ namespace RelhaxModpack.Windows
                     //Width = 0
                     
                 };
-                //Sorts the mods
-                Utils.SortModsListLegacy(cat.Packages);
                 //make and attach the category header
                 cat.CategoryHeader = new SelectablePackage()
                 {

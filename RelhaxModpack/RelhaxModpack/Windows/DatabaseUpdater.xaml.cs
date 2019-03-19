@@ -1138,7 +1138,7 @@ namespace RelhaxModpack.Windows
             }
             //do list magic to get all added, removed, disabled, etc package lists
             //used for disabled, removed, added mods
-            PackageComparer pc = new PackageComparer();
+            PackageComparerByPackageName pc = new PackageComparerByPackageName();
             //if in before but not after = removed
             removedPackages = flatListOld.Except(flatListCurrent, pc).ToList();
             //if not in before but after = added

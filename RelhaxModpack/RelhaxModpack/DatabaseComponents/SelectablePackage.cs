@@ -461,14 +461,20 @@ namespace RelhaxModpack
             }
         }
         /// <summary>
-        /// Allows for alphabetical sorting of mods
+        /// Allows for alphabetical sorting of packages by PackageName
         /// </summary>
         /// <param name="x">a package</param>
         /// <param name="y">another package</param>
         /// <returns></returns>
-        public static int CompareMods(SelectablePackage x, SelectablePackage y)
+        public static int CompareModsPackageName(SelectablePackage x, SelectablePackage y)
         {
-            return x.Name.CompareTo(y.Name);
+            return x.PackageName.CompareTo(y.PackageName);
+        }
+
+        //Allows for alphabetical sorting of packages by NameFormatted property
+        public static int CompareModsName(SelectablePackage x, SelectablePackage y)
+        {
+            return x.NameFormatted.CompareTo(y.NameFormatted);
         }
         /// <summary>
         /// Allows for display in a combobox and when debugging

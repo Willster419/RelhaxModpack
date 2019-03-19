@@ -245,6 +245,11 @@ namespace RelhaxModpack.Windows
             //clear and reset
             DatabaseTreeView.Items.Clear();
             //RESET UI TODO? or don't do it?
+
+            //if user requests, sort the lists like the selection list does
+            if (EditorSettings.SortDatabaseList)
+                Utils.SortDatabase(parsedCategoryList);
+
             //create treeviewItems for each entry
             //first make the globalDependencies header
             TreeViewItem globalDependenciesHeader = new TreeViewItem() { Header = UIHeaders[0] };

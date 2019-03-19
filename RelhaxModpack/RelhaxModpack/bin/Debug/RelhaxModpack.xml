@@ -167,6 +167,11 @@
             Flag to determine if the mod (and children? TODO) should be used in the 
             </summary>
         </member>
+        <member name="F:RelhaxModpack.SelectablePackage.SortChildPackages">
+            <summary>
+            Flag to determine any packages of this package should be sorted (by name)
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.SelectablePackage.FlagForSelectionSave">
             <summary>
             Used as internal flag for if application settings is checked "SaveDisabledModsInSelection". Allows for disabled mods to be saved back to the user's selection
@@ -295,9 +300,9 @@
             Returns the display tooltip string, or the translation string for "no description"
             </summary>
         </member>
-        <member name="M:RelhaxModpack.SelectablePackage.CompareMods(RelhaxModpack.SelectablePackage,RelhaxModpack.SelectablePackage)">
+        <member name="M:RelhaxModpack.SelectablePackage.CompareModsPackageName(RelhaxModpack.SelectablePackage,RelhaxModpack.SelectablePackage)">
             <summary>
-            Allows for alphabetical sorting of mods
+            Allows for alphabetical sorting of packages by PackageName
             </summary>
             <param name="x">a package</param>
             <param name="y">another package</param>

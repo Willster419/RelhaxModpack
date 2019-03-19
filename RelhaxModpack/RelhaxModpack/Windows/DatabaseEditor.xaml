@@ -341,7 +341,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="20"/>
                             <RowDefinition Height="20"/>
-                            <RowDefinition Height="26"/>
+                            <RowDefinition Height="30"/>
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="45"/>
                             <RowDefinition Height="30"/>
@@ -363,7 +363,7 @@
                         <TextBox x:Name="BigmodsUsernameSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" TextChanged="BigmodsUsernameSetting_TextChanged"/>
                         <TextBox x:Name="BigmodsPasswordSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" TextChanged="BigmodsPasswordSetting_TextChanged"/>
                         <CheckBox x:Name="SaveSelectionBeforeLeaveSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" Checked="SaveSelectionBeforeLeaveSetting_Checked"/>
-                        <CheckBox x:Name="SortCategoriesSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="3" IsEnabled="False" Checked="SortCategoriesSetting_Checked"/>
+                        <CheckBox x:Name="SortCategoriesSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="3" Checked="SortCategoriesSetting_Checked"/>
                         <StackPanel HorizontalAlignment="Left" Grid.Column="1" Grid.Row="4">
                             <RadioButton x:Name="ApplyBehaviorDefaultSetting" Content="Default" Checked="ApplyBehaviorSetting_Checked"/>
                             <RadioButton x:Name="ApplyBehaviorApplyTriggersSaveSetting" Content="Apply triggers Save" Checked="ApplyBehaviorSetting_Checked"/>
