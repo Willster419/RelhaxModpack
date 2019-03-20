@@ -18,32 +18,24 @@
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0">
             <TabItem Header="Designer">
                 <Grid Background="#FFE5E5E5">
-                    <GroupBox Header="File location" HorizontalAlignment="Stretch" Height="87" VerticalAlignment="Top">
-                        <StackPanel Orientation="Vertical">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Location on Disk" VerticalAlignment="Top" Height="21" Padding="0,3,0,0"/>
-                                <Button Content="Locate file to patch" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="125"/>
-                            </StackPanel>
-                            <TextBox HorizontalAlignment="Stretch" Height="42" TextWrapping="Wrap" VerticalAlignment="Top" />
-                        </StackPanel>
-                    </GroupBox>
-                    <TextBlock HorizontalAlignment="Left" Margin="5,119,0,0" TextWrapping="Wrap" Text="Patch Path Macro" VerticalAlignment="Top" Width="100" TextAlignment="Center"/>
-                    <ComboBox HorizontalAlignment="Left" Margin="110,119,0,0" VerticalAlignment="Top" Width="100"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="10,147,0,0" TextWrapping="Wrap" Text="Mode" VerticalAlignment="Top" Height="16" Width="120" TextAlignment="Center"/>
-                    <ComboBox HorizontalAlignment="Left" Margin="110,147,0,0" VerticalAlignment="Top" Width="120"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="5,74,0,0" TextWrapping="Wrap" Text="Patch Path Macro" VerticalAlignment="Top" Width="100" TextAlignment="Center"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="110,74,0,0" VerticalAlignment="Top" Width="120"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="10,139,0,0" TextWrapping="Wrap" Text="Mode" VerticalAlignment="Top" Height="16" TextAlignment="Center"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="110,133,0,0" VerticalAlignment="Top" Width="120"/>
                     <TextBlock HorizontalAlignment="Left" Margin="5,168,0,0" TextWrapping="Wrap" Text="Line(s)/path" VerticalAlignment="Top"/>
                     <TextBox HorizontalAlignment="Stretch" Height="23" Margin="5,184,0,0" TextWrapping="Wrap" VerticalAlignment="Top" />
                     <TextBlock HorizontalAlignment="Stretch" Margin="5,212,0,0" TextWrapping="Wrap" Text="Search" VerticalAlignment="Top"/>
                     <TextBox HorizontalAlignment="Stretch" Height="39" Margin="5,228,0,0" TextWrapping="Wrap" VerticalAlignment="Top" />
                     <TextBlock HorizontalAlignment="Stretch" Margin="5,272,0,0" TextWrapping="Wrap" Text="Replace" VerticalAlignment="Top"/>
-                    <TextBox HorizontalAlignment="Stretch" Margin="5,288,0,0" TextWrapping="Wrap" VerticalAlignment="Stretch" />
-                    <TextBlock HorizontalAlignment="Left" Margin="10,92,0,0" TextWrapping="Wrap" Text="Patch Type" VerticalAlignment="Top"/>
-                    <ComboBox HorizontalAlignment="Left" Margin="72,92,0,0" VerticalAlignment="Top" Width="120"/>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Patching Help">
-                <Grid Background="#FFE5E5E5">
-                    <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="TODO" VerticalAlignment="Top"/>
+                    <TextBox HorizontalAlignment="Stretch" Margin="5,288,0,25" TextWrapping="Wrap" VerticalAlignment="Stretch" />
+                    <TextBlock HorizontalAlignment="Left" Margin="5,106,0,0" TextWrapping="Wrap" Text="Patch Type" VerticalAlignment="Top"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="110,106,0,0" VerticalAlignment="Top" Width="120"/>
+                    <Button Content="Test Patch..." HorizontalAlignment="Left" Margin="213,376,0,0" VerticalAlignment="Top" Width="75"/>
+                    <Button Content="Apply Changes" HorizontalAlignment="Left" Margin="293,376,0,0" VerticalAlignment="Top" Width="97"/>
+                    <TextBox HorizontalAlignment="Stretch" Height="42" TextWrapping="Wrap" VerticalAlignment="Top" Margin="0,27,0,0" />
+                    <Button Content="Locate file to patch" HorizontalAlignment="Left" Margin="93,1,0,0" VerticalAlignment="Top" Width="125"/>
+                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Location on Disk" VerticalAlignment="Top" Height="21" Padding="0,3,0,0"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="223,0,0,0" VerticalAlignment="Top" Width="120"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Regression Testing">
@@ -54,16 +46,56 @@
                     <Button Content="JSON Regression Testing" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="155"/>
                 </Grid>
             </TabItem>
+        </TabControl>
+        <!-- create the second tab with patching help, log output, settings -->
+        <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1">
+            <TabItem Header="Patches list">
+                <Grid Background="#FFE5E5E5">
+                    <ListBox HorizontalAlignment="Stretch"  Margin="0,21,0,0" VerticalAlignment="Stretch" />
+                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Loaded patches from XML file (click an drag to order)" VerticalAlignment="Top"/>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="Log Output">
+                <Grid Background="#FFE5E5E5">
+                    <Button Content="Clear Log" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75"/>
+                    <TextBox HorizontalAlignment="Stretch" Margin="0,0,0,20" TextWrapping="Wrap" VerticalAlignment="Stretch" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Patching Help">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
             <TabItem Header="Settings">
                 <Grid Background="#FFE5E5E5">
-                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <!-- https://stackoverflow.com/questions/6312371/how-to-use-a-literal-curly-brace-in-xaml -->
+                    <TextBlock HorizontalAlignment="Left"    VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" TextWrapping="Wrap" Text="{}{versiondir}"/>
+                    <TextBox   HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" TextWrapping="Wrap"/>
+                    <TextBlock HorizontalAlignment="Left"    VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" TextWrapping="Wrap" Text="{}{app}"/>
+                    <TextBox   HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap"/>
+                    <TextBlock HorizontalAlignment="Left"    VerticalAlignment="Center" Grid.Column="0" Grid.Row="2" TextWrapping="Wrap" Text="Save on selection change"/>
+                    <CheckBox  HorizontalAlignment="Left"    VerticalAlignment="Center" Grid.Column="1" Grid.Row="2"/>
+                    <TextBlock HorizontalAlignment="Left"    VerticalAlignment="Center" Grid.Column="0" Grid.Row="3" TextWrapping="Wrap" Text="Apply Behavior"/>
+                    <!--put more apply behavior here-->
+                    <TextBlock HorizontalAlignment="Left"    VerticalAlignment="Center" Grid.Column="0" Grid.Row="7" TextWrapping="Wrap" Text="Switch to log tab when testing"/>
+                    <CheckBox  HorizontalAlignment="Left"    VerticalAlignment="Center" Grid.Column="1" Grid.Row="8"/>
                 </Grid>
             </TabItem>
         </TabControl>
-        <TextBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsReadOnly="True">
-        </TextBox>
         <Button Content="Load patch XML" HorizontalAlignment="Left" Margin="3,3,0,0" Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Top" Width="93"/>
         <Button Content="Save patch XML" HorizontalAlignment="Left" Margin="101,3,0,0" Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Top" Width="95"/>
-        <Button Content="Save patch to zip file" HorizontalAlignment="Left" Margin="201,3,0,0" Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Top" Width="123"/>
     </Grid>
 </local:RelhaxWindow>
