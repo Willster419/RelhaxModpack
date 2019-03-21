@@ -33,6 +33,8 @@ namespace RelhaxModpack
 
         public const string EditorSettingsFilename = "EditorSettings.xml";
 
+        public const string PatcherSettingsFilename = "PatchSettings.xml";
+
         public const string LastSavedConfigFilename = "lastInstalledConfig.xml";
 
         public const string BetaDatabaseURL = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/modInfo.xml";
