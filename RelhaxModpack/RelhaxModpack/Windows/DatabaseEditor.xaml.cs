@@ -63,7 +63,7 @@ namespace RelhaxModpack.Windows
             Logging.Info("Loading editor settings");
             if (!Settings.LoadSettings(Settings.EditorSettingsFilename, typeof(EditorSettings), null, EditorSettings))
             {
-                Logging.Info("Failed to load editor settings, using defaults");
+                Logging.Warning("Failed to load editor settings, using defaults");
             }
             else
             {
