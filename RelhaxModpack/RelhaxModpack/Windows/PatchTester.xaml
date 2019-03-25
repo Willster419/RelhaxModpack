@@ -60,10 +60,10 @@
             </TabItem>
         </TabControl>
         <!-- create the second tab with patching help, log output, settings -->
-        <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1">
+        <TabControl x:Name="RightSideTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1">
             <TabItem x:Name="PatchesListTab" Header="Patches list">
                 <Grid Background="#FFE5E5E5">
-                    <ListBox x:Name="PatchesList" HorizontalAlignment="Stretch"  Margin="0,21,0,20" VerticalAlignment="Stretch" />
+                    <ListBox x:Name="PatchesList" HorizontalAlignment="Stretch"  Margin="0,21,0,20" VerticalAlignment="Stretch" SelectionChanged="PatchesList_SelectionChanged" ScrollViewer.ScrollChanged="LogOutput_ScrollChanged" PreviewMouseUp="LogOutput_PreviewMouseUp" PreviewMouseDown="LogOutput_PreviewMouseDown" MouseMove="LogOutput_MouseMove" DragOver="LogOutput_DragOver" Drop="LogOutput_Drop"/>
                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Loaded patches from XML file (click and drag to order)" VerticalAlignment="Top"/>
                     <Button x:Name="RemovePatchButton" Content="Remove Patch" HorizontalAlignment="Left" Margin="295,376,0,0" VerticalAlignment="Top" Width="95" Click="RemovePatchButton_Click"/>
                     <Button x:Name="AddPatchButton" Content="Add new patch" HorizontalAlignment="Left" Margin="195,376,0,0" VerticalAlignment="Top" Width="95" Click="AddPatchButton_Click"/>

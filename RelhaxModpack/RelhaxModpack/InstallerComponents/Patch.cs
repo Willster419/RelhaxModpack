@@ -29,6 +29,8 @@
         public string Search = string.Empty;
         //the text to replace the found search text with
         public string Replace = string.Empty;
+        //for json, if it should use the new method of seperating the path for getting the xvm refrences
+        public bool FollowPath = false;
         public string DumpPatchInfoForLog
         {
             get

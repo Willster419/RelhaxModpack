@@ -13,9 +13,9 @@ namespace RelhaxModpack
 
         public bool SwitchToLogWhenTestingPatch = true;
 
-        public string AppMacroPath = string.Empty;
+        public string AppMacro = string.Empty;
 
-        public string VersiondirPath = string.Empty;
+        public string VersiondirMacro = string.Empty;
 
         public ApplyBehavior ApplyBehavior = ApplyBehavior.Default;
 
