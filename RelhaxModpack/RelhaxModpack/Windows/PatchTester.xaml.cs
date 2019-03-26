@@ -10,6 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Xml;
 using Microsoft.Win32;
+using System.IO;
 
 namespace RelhaxModpack.Windows
 {
@@ -271,11 +272,91 @@ namespace RelhaxModpack.Windows
             {
                 RightSideTabControl.SelectedItem = LogOutputTab;
             }
-            Logging.Debug("Checking UI patch elements...");
+            Logging.Info("TestPatch() start");
+            Logging.Info("Checking UI elements for valid patch information...");
             //make new patch element
+            Patch patchToTest = new Patch();
             //check input from UI left panel side
+
+            //file location
+            Logging.Info("File to Patch location mode: {0}", FilePathType.SelectedItem == null ? "(null)" : FilePathType.SelectedItem);
+            switch(FilePathType.SelectedItem.ToString())
+            {
+                case "Absolute":
+                    Logging.Info("Checking if absolute file path {0} exists...", FileToPatchTextbox.Text);
+                    if(File.Exists(FileToPatchTextbox.Text))
+                    {
+                        Logging.Info("File Exists!");
+                    }
+                    else
+                    {
+                        Logging.Info("File does not exist, aborting");
+                        return;
+                    }
+                    break;
+                case "Relative":
+                    Logging.Info("Using relative macro {0}", PatchPathCombobox.SelectedItem == null ? "(null)" : PatchPathCombobox.SelectedItem);
+                    string completePathForPatchFile = string.Empty;
+                    switch(PatchPathCombobox.SelectedItem.ToString())
+                    {
+                        case "app":
+                            if (Directory.Exists(PatchSettings.AppMacro))
+                            {
+                                Logging.Info("app macro folder path exists...");
+                                if(FileToPatchTextbox.Text.Contains("versiondir") && string.IsNullOrWhiteSpace(PatchSettings.VersiondirMacro))
+                                {
+                                    Logging.Info("versiondir macro found, but versiondir patch seting macro is blank, aborting");
+                                    return;
+                                }
+                                completePathForPatchFile = PatchSettings.AppMacro + FileToPatchTextbox.Text;
+                                completePathForPatchFile = Utils.MacroReplace(completePathForPatchFile, ReplacementTypes.ZipFilePath);
+                            }
+                            else
+                            {
+                                Logging.Info("app macro folder path does not exist, aborting");
+                                return;
+                            }
+                            break;
+                        case "appData":
+                            if (Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)))
+                            {
+                                Logging.Info("appData macro folder path exists...");
+                                completePathForPatchFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + FileToPatchTextbox.Text;
+                            }
+                            else
+                            {
+                                Logging.Info("appData macro folder path does not exist, aborting");
+                                return;
+                            }
+                            break;
+                        default:
+                            Logging.Info("Invalid path macro");
+                            return;
+                    }
+                    Logging.Info("relative path built as {0}", completePathForPatchFile);
+                    if(File.Exists(completePathForPatchFile))
+                    {
+                        Logging.Info("File exists!");
+                        patchToTest.File = FileToPatchTextbox.Text;
+                        patchToTest.CompletePath = completePathForPatchFile;
+                    }
+                    else
+                    {
+                        Logging.Info("File does not exist, aborting (did you forget to add \"\\\" to the beginning of the path?");
+                    }
+                    break;
+                default:
+                    Logging.Info("Invalid file path type, aborting");
+                    return;
+            }
+            //check patch type
+            //check patch mode
+            //check followPath true ONLY for json
+            //check patch, search, replace
+
             //put patch into patch test methods
-            //modify test methods to allow for writing to log element passed in
+            //(also means to comment the patch methods more)
+            //add setting for patch if from editor, if true (for duration of patch method) enable verbose logging
         }
 
         private void ApplyChangesButton_Click(object sender, RoutedEventArgs e)
