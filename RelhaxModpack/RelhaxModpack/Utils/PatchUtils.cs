@@ -29,7 +29,6 @@ namespace RelhaxModpack
     public static class PatchUtils
     {
         #region Statics
-        private static int GenericTraverse = 0;
         //note that the "\\" is for escaping. it means that \\ is acually "\"
         private static string XVMBootFileLoc1 = "\\res_mods\\configs\\xvm\\xvm.xc";
         private static string XVMBootFileLoc2 = "\\mods\\configs\\xvm\\xvm.xc";
