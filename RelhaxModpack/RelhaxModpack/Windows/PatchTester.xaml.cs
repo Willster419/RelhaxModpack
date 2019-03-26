@@ -152,13 +152,28 @@ namespace RelhaxModpack.Windows
 
             }
             //if the selection is json, enable the follow path selection box. else disable
-            if(PatchTypeCombobox.SelectedItem.Equals("json"))
+            PatchModeCombobox.Items.Clear();
+            if (PatchTypeCombobox.SelectedItem.Equals("json"))
             {
                 PatchFollowPathSetting.IsEnabled = true;
+                //also fill mode with json options
+                foreach(string s in validJsonModes)
+                {
+                    PatchModeCombobox.Items.Add(s);
+                }
+            }
+            else if (PatchTypeCombobox.SelectedItem.Equals("xml"))
+            {
+                PatchFollowPathSetting.IsEnabled = false;
+                foreach (string s in validXmlModes)
+                {
+                    PatchModeCombobox.Items.Add(s);
+                }
             }
             else
             {
                 PatchFollowPathSetting.IsEnabled = false;
+
             }
         }
 
