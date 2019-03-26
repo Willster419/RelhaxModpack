@@ -179,21 +179,39 @@ namespace RelhaxModpack.Windows
 
         private void DisplayPatch(Patch patch)
         {
-            FileToPatchTextbox.Text = patch.File;
-            PatchPathCombobox.SelectedItem = patch.PatchPath;
-            PatchTypeCombobox.SelectedItem = patch.Type;
-            PatchModeCombobox.SelectedItem = patch.Mode;
+            //reset to nothing, then only set if the patch option is valid
+            FileToPatchTextbox.Text = string.Empty;
+            PatchPathCombobox.SelectedItem = null;
+            PatchTypeCombobox.SelectedItem = null;
+            PatchModeCombobox.SelectedItem = null;
+            PatchFollowPathSetting.IsChecked = false;
+            PatchLinesPathTextbox.Text = string.Empty;
+            PatchSearchTextbox.Text = string.Empty;
+            PatchReplaceTextbox.Text = string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(patch.File))
+                FileToPatchTextbox.Text = patch.File;
+            if (!string.IsNullOrWhiteSpace(patch.PatchPath))
+                PatchPathCombobox.SelectedItem = patch.PatchPath;
+            if (!string.IsNullOrWhiteSpace(patch.Type))
+                PatchTypeCombobox.SelectedItem = patch.Type;
+            if (!string.IsNullOrWhiteSpace(patch.Mode))
+                PatchModeCombobox.SelectedItem = patch.Mode;
             PatchFollowPathSetting.IsChecked = patch.FollowPath;
             if (patch.Type.Equals("regex"))
             {
-                PatchLinesPathTextbox.Text = string.Join(",", patch.Lines);
+                if (patch.Lines.Count() > 0)
+                    PatchLinesPathTextbox.Text = string.Join(",", patch.Lines);
             }
             else
             {
-                PatchLinesPathTextbox.Text = patch.Path;
+                if (!string.IsNullOrWhiteSpace(patch.Path))
+                    PatchLinesPathTextbox.Text = patch.Path;
             }
-            PatchSearchTextbox.Text = patch.Search;
-            PatchReplaceTextbox.Text = patch.Replace;
+            if (!string.IsNullOrWhiteSpace(patch.Search))
+                PatchSearchTextbox.Text = patch.Search;
+            if (!string.IsNullOrWhiteSpace(patch.Replace))
+                PatchReplaceTextbox.Text = patch.Replace;
         }
 
         private void SaveApplyPatch(Patch patch)
