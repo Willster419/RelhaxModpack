@@ -60,6 +60,8 @@ namespace RelhaxModpack
                 case "json":
                     JSONPatch(p);
                     break;
+                case "xvm":
+                    throw new BadMemeException("xvm patches are not supported, please use the json patch method");
             }
         }
         #endregion
@@ -987,62 +989,6 @@ namespace RelhaxModpack
                 .Replace(@"[dollar]", @"$")
                 .Replace(@"[rbracket]", @"}");
             File.WriteAllText(p.CompletePath, toWrite);
-        }
-        //returns the folder(s) to get to the xvm config folder directory
-        //TODO: use this for followPath setting which itself is TODO
-        public static string GetXVMBootLoc(string tanksLocation, string customBootFileLoc = null)
-        {
-            throw new BadMemeException("you broke this remember?");
-            string[] possibleXVMBootLocs = new string[] { XVMBootFileLoc1, XVMBootFileLoc2 };
-            bool bootfileFound = false;
-            string bootFile = string.Empty;
-            foreach (string s in possibleXVMBootLocs)
-            {
-                bootFile = tanksLocation + s;
-                //TODO: WHY DOES PATH COMBING NOT WORK
-                //string bootFile = Path.Combine(tanksLocation, XVMBootFileLoc1);
-                if (customBootFileLoc != null)
-                    bootFile = customBootFileLoc;
-                if (!File.Exists(bootFile))
-                {
-                    Logging.WriteToLog(string.Format("xvm config boot file does not exist at {0}", bootFile), Logfiles.Application, LogLevel.Warning);
-                }
-                else
-                    bootfileFound = true;
-            }
-            if(!bootfileFound)
-            {
-                Logging.WriteToLog("boot file never found, aborting patch", Logfiles.Application, LogLevel.Warning);
-                return null;
-            }
-            Logging.WriteToLog("xvm boot file located to parse");
-            string fileContents = File.ReadAllText(bootFile);
-            //patch block comments out
-            fileContents = Regex.Replace(fileContents, @"\/\*.*\*\/", "", RegexOptions.Singleline);
-            //patch single line comments out
-            string[] removeComments = fileContents.Split('\n');
-            StringBuilder bootBuilder = new StringBuilder();
-            foreach (string s in removeComments)
-            {
-                if (Regex.IsMatch(s, @"\/\/.*$"))
-                    continue;
-                bootBuilder.Append(s + "\n");
-            }
-            //fileContents = bootBuilder.ToString();
-            //read to the actual file path
-            //GenericTraverse = 0;
-            //ReadUntilGeneric(fileContents, @"^[ \t]*\$[ \t]*{[ \t]*""");
-            //now read untill the next quote for the temp path
-            //string filePath = ReadUntilGeneric(fileContents, "\"");
-            //flip the folder path things
-            //filePath = Regex.Replace(filePath, "/", "\\");
-            //remove the last one
-            //filePath = filePath.Substring(0, filePath.Length - 1);
-            //filePath = filePath.Trim();
-            //GenericTraverse = 0;
-            //string theNewPath = Path.GetDirectoryName(filePath);
-            //return theNewPath;
-            return null;
         }
         #endregion
     }
