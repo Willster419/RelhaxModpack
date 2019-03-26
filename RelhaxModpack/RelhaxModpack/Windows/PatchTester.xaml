@@ -27,14 +27,14 @@
                     </ComboBox>
                     <TextBlock x:Name="PatchPathHeader" HorizontalAlignment="Left" Margin="0,74,0,0" TextWrapping="Wrap" Text="Patch Path Macro" VerticalAlignment="Top" TextAlignment="Center" Height="22"/>
                     <ComboBox x:Name="PatchPathCombobox" HorizontalAlignment="Left" Margin="130,74,0,0" VerticalAlignment="Top" Width="120">
-                        <System:String>{App}</System:String>
-                        <System:String>{AppData}</System:String>
+                        <System:String>app</System:String>
+                        <System:String>appData</System:String>
                     </ComboBox>
                     <TextBlock x:Name="PatchTypeHeader" HorizontalAlignment="Left" Margin="0,101,0,0" TextWrapping="Wrap" Text="Patch Type" VerticalAlignment="Top" Height="22"/>
                     <ComboBox x:Name="PatchTypeCombobox" HorizontalAlignment="Left" Margin="130,101,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="PatchTypeCombobox_SelectionChanged">
-                        <System:String>JSON</System:String>
-                        <System:String>XML</System:String>
-                        <System:String>Regex</System:String>
+                        <System:String>json</System:String>
+                        <System:String>xml</System:String>
+                        <System:String>regex</System:String>
                     </ComboBox>
                     <TextBlock x:Name="PatchModeHeader" HorizontalAlignment="Left" Margin="0,128,0,0" TextWrapping="Wrap" Text="Mode" VerticalAlignment="Top" Height="22"/>
                     <ComboBox x:Name="PatchModeCombobox" HorizontalAlignment="Left" Margin="130,128,0,0" VerticalAlignment="Top" Width="120"/>

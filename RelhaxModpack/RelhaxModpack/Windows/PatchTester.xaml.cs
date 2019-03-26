@@ -32,6 +32,22 @@ namespace RelhaxModpack.Windows
         //for drag drop
         private bool IsPatchListScrolling = false;
         private Point BeforeDragDropPoint;
+        private string[] validXmlModes = new string[]
+        {
+            "add",
+            "edit",
+            "remove"
+        };
+        private string[] validJsonModes = new string[]
+        {
+            "add",
+            "arrayAdd",
+            "remove",
+            "arrayRemove",
+            "edit",
+            "arrayEdit",
+            "arrayClear"
+        };
 
         public PatchTester()
         {
@@ -125,10 +141,25 @@ namespace RelhaxModpack.Windows
 
         private void PatchTypeCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!PatchTypeCombobox.IsDropDownOpen)
-                return;
-            //update the text of the lines or patch path
-            PatchLinesPathHeader.Text = ((string)PatchTypeCombobox.SelectedItem).Equals("Regex") ? "Lines" : "Path";
+            if (PatchTypeCombobox.IsDropDownOpen)
+            {
+                //user selection
+
+            }
+            else
+            {
+                //program (internal) selection
+
+            }
+            //if the selection is json, enable the follow path selection box. else disable
+            if(PatchTypeCombobox.SelectedItem.Equals("json"))
+            {
+                PatchFollowPathSetting.IsEnabled = true;
+            }
+            else
+            {
+                PatchFollowPathSetting.IsEnabled = false;
+            }
         }
 
         private void DisplayPatch(Patch patch)
@@ -138,7 +169,7 @@ namespace RelhaxModpack.Windows
             PatchTypeCombobox.SelectedItem = patch.Type;
             PatchModeCombobox.SelectedItem = patch.Mode;
             PatchFollowPathSetting.IsChecked = patch.FollowPath;
-            if (patch.Type.Equals("Regex"))
+            if (patch.Type.Equals("regex"))
             {
                 PatchLinesPathTextbox.Text = string.Join(",", patch.Lines);
             }
@@ -260,25 +291,47 @@ namespace RelhaxModpack.Windows
                         switch(element.Name)
                         {
                             case "type":
-                                patch.Type = element.InnerText;
+                                switch(element.InnerText.ToLower().Trim())
+                                {
+                                    case "xvm":
+                                        throw new BadMemeException("XVM IS NOT SUPPORTED PLEASE STOP USING IT");
+                                        break;
+                                    //legacy compatibility, regx -> regex
+                                    case "regx":
+                                        patch.Type = "regex";
+                                        break;
+                                    default:
+                                        patch.Type = element.InnerText.ToLower().Trim();
+                                        break;
+                                }
                                 break;
                             case "patchPath":
-                                patch.PatchPath = element.InnerText;
+                                //remove "{" and "}"
+                                string patchPathValue = element.InnerText.Replace("{", string.Empty).Replace("}", string.Empty).Trim();
+                                switch (patchPathValue.ToLower().Trim())
+                                {
+                                    case "appdata":
+                                        patch.PatchPath = "appData";
+                                        break;
+                                    default:
+                                        patch.PatchPath = element.InnerText.ToLower().Trim();
+                                        break;
+                                }
                                 break;
                             case "file":
-                                patch.File = element.InnerText;
+                                patch.File = element.InnerText.Trim();
                                 break;
                             case "path":
-                                patch.Path = element.InnerText;
+                                patch.Path = element.InnerText.Trim();
                                 break;
                             case "line":
                                 patch.Lines = element.InnerText.Split(',');
                                 break;
                             case "search":
-                                patch.Search = element.InnerText;
+                                patch.Search = element.InnerText.Trim();
                                 break;
                             case "replace":
-                                patch.Replace = Utils.MacroReplace(element.InnerText,ReplacementTypes.TextUnescape);
+                                patch.Replace = Utils.MacroReplace(element.InnerText,ReplacementTypes.TextUnescape).Trim();
                                 break;
                         }
                     }
