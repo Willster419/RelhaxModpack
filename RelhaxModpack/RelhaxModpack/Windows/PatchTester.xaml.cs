@@ -83,6 +83,8 @@ namespace RelhaxModpack.Windows
             PatchesList.Items.Clear();
             AddPatchButton_Click(null, null);
             PatchesList.SelectedIndex = 0;
+            //attach the log output to the logfile
+            Logging.TextBox = LogOutput;
         }
 
         #region Settings
@@ -269,7 +271,7 @@ namespace RelhaxModpack.Windows
             {
                 RightSideTabControl.SelectedItem = LogOutputTab;
             }
-            WriteToLog("Checking UI patch elements...", LogLevel.Debug);
+            Logging.Debug("Checking UI patch elements...");
             //make new patch element
             //check input from UI left panel side
             //put patch into patch test methods
@@ -521,11 +523,5 @@ namespace RelhaxModpack.Windows
         }
 
         #endregion
-
-        private void WriteToLog(string message, LogLevel logLevel)
-        {
-            LogOutput.AppendText(message);
-            Logging.WriteToLog(message, Logfiles.Application, logLevel);
-        }
     }
 }

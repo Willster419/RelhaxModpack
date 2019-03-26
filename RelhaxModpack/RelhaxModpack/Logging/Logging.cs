@@ -95,6 +95,7 @@ namespace RelhaxModpack
         /// </summary>
         private static Logfile UninstallLogfile;
         private static bool FailedToWriteToLogWindowShown = false;
+        public static System.Windows.Controls.TextBox TextBox;
         /// <summary>
         /// Initialize the logging subsystem for the appilcation
         /// </summary>
@@ -212,9 +213,20 @@ namespace RelhaxModpack
                 return;
             }
             if (logfiles == Logfiles.Application)
-                fileToWriteTo.Write(message, logLevel);
+            {
+                if (TextBox != null)
+                {
+                    TextBox.AppendText(fileToWriteTo.Write(message, logLevel));
+                }
+                else
+                {
+                    fileToWriteTo.Write(message, logLevel);
+                }
+            }
             else
+            {
                 fileToWriteTo.Write(message);
+            }
         }
 
         public static void WriteToLog(string messageFormat, Logfiles logfile, LogLevel level, params object[] args)

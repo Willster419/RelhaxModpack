@@ -58,11 +58,11 @@ namespace RelhaxModpack
         /// </summary>
         /// <param name="message">The line to write</param>
         /// <param name="logLevel">The level of severity of the log message. Default is info level.</param>
-        public void Write(string message, LogLevel logLevel = LogLevel.Info)
+        public string Write(string message, LogLevel logLevel = LogLevel.Info)
         {
             //only alpha and beta application distributions should log debug messages
             if (Settings.ApplicationVersion == ApplicationVersions.Stable && logLevel == LogLevel.Debug && !ModpackSettings.VerboseLogging)
-                return;
+                return string.Empty;
             string logMessageLevel = string.Empty;
             switch(logLevel)
             {
@@ -86,6 +86,7 @@ namespace RelhaxModpack
             string formattedDateTime = DateTime.Now.ToString(Timestamp);
             message = string.Format("{0}   {1}{2}", formattedDateTime, logMessageLevel, message);
             Write(message);
+            return message;
         }
         public void Write(string message)
         {
