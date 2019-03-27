@@ -43,6 +43,15 @@ namespace RelhaxModpack
                 Logging.Warning("File {0} not found", p.CompletePath);
                 return;
             }
+
+            //if from the editor, enable verbose logging (allows it to get debug log statements)
+            bool tempVerboseLoggingSetting = ModpackSettings.VerboseLogging;
+            if(p.FromEditor && !ModpackSettings.VerboseLogging)
+            {
+                Logging.Debug("p.FromEditor=true and ModpackSettings.VerboseLogging=false, setting to true for duration of patch method");
+                ModpackSettings.VerboseLogging = true;
+            }
+
             //macro parsing needs to go here
             Logging.Info(p.DumpPatchInfoForLog,Logfiles.Application);
 
@@ -62,11 +71,14 @@ namespace RelhaxModpack
                 case "xvm":
                     throw new BadMemeException("xvm patches are not supported, please use the json patch method");
             }
+            //set the verbose setting back
+            Logging.Info("temp logging setting={0}, ModpackSettings.VerboseLogging={1}, setting logging back to temp");
+            ModpackSettings.VerboseLogging = tempVerboseLoggingSetting;
         }
         #endregion
 
         #region XML
-        public static void XMLPatch(Patch p)
+        private static void XMLPatch(Patch p)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(p.CompletePath);
@@ -219,7 +231,7 @@ namespace RelhaxModpack
         #region REGEX
         //method to patch a standard text or json file
         //fileLocation is relative to res_mods folder
-        public static void RegxPatch(Patch p, int lineNumber = 0)
+        private static void RegxPatch(Patch p, int lineNumber = 0)
         {
             //replace all "fake escape characters" with real escape characters
             //TODO: fix newlines and add warning for search and replace
@@ -309,7 +321,7 @@ namespace RelhaxModpack
 
         #region JSON
         //method to parse json files
-        public static void JSONPatch(Patch p)
+        private static void JSONPatch(Patch p)
         {
             //try to convert the new value to a bool or an int or double first
             bool newValueBool = false;

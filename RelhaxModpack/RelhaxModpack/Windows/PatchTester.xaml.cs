@@ -350,13 +350,73 @@ namespace RelhaxModpack.Windows
                     return;
             }
             //check patch type
+            if(PatchTypeCombobox.SelectedItem == null)
+            {
+                Logging.Info("Invalid Patch Type, aborting");
+                return;
+            }
+            patchToTest.Type = PatchTypeCombobox.SelectedItem as string;
             //check patch mode
+            switch(patchToTest.Type)
+            {
+                case "regex":
+                case "regx":
+                    if(!string.IsNullOrWhiteSpace(PatchModeCombobox.SelectedItem as string))
+                    {
+                        Logging.Info("Type=regex, invalid patch type: {0}", PatchModeCombobox.SelectedItem as string);
+                        Logging.Info("valid types are: (null)");
+                        return;
+                    }
+                    break;
+                case "xml":
+                    if(!validXmlModes.Contains(PatchModeCombobox.SelectedItem as string))
+                    {
+                        Logging.Info("Type=xml, invalid patch type: {0}", PatchModeCombobox.SelectedItem as string);
+                        Logging.Info("valid types are: {0}",string.Join(",",validXmlModes));
+                        return;
+                    }
+                    break;
+                case "json":
+                    if (!validXmlModes.Contains(PatchModeCombobox.SelectedItem as string))
+                    {
+                        Logging.Info("Type=json, invalid patch type: {0}", PatchModeCombobox.SelectedItem as string);
+                        Logging.Info("valid types are: {0}", string.Join(",", validJsonModes));
+                        return;
+                    }
+                    break;
+                default:
+                    throw new BadMemeException("congratulations you have autism");
+            }
+            patchToTest.Mode = PatchModeCombobox.SelectedItem as string;
             //check followPath true ONLY for json
+            if(!patchToTest.Type.Equals("json") && (bool)PatchFollowPathSetting.IsChecked)
+            {
+                Logging.Info("Types=json, followPathSetting must be false!");
+                return;
+            }
             //check patch, search, replace
-
+            if(string.IsNullOrWhiteSpace(PatchLinesPathTextbox.Text))
+            {
+                Logging.Info("invalid patch path or lines");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(PatchReplaceTextbox.Text) && string.IsNullOrWhiteSpace(PatchSearchTextbox.Text))
+            {
+                Logging.Info("patch repalce and search are blank, invalid patch");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(PatchSearchTextbox.Text))
+            {
+                Logging.Warning("patch search is blank (is this the intent?)");
+            }
+            if (string.IsNullOrWhiteSpace(PatchReplaceTextbox.Text))
+            {
+                Logging.Info("patch replace is blank (is this the intent?)");
+            }
             //put patch into patch test methods
-            //(also means to comment the patch methods more)
-            //add setting for patch if from editor, if true (for duration of patch method) enable verbose logging
+            //set patch from editor to true to enable verbose logging
+            patchToTest.FromEditor = true;
+            PatchUtils.RunPatch(patchToTest);
         }
 
         private void ApplyChangesButton_Click(object sender, RoutedEventArgs e)

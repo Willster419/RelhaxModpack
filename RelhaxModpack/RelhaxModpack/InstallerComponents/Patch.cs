@@ -31,6 +31,8 @@
         public string Replace = string.Empty;
         //for json, if it should use the new method of seperating the path for getting the xvm refrences
         public bool FollowPath = false;
+        //if from editor, enable verbose logging for the duration of that patch
+        public bool FromEditor = false;
         public string DumpPatchInfoForLog
         {
             get
