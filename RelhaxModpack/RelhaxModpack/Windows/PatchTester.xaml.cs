@@ -30,6 +30,7 @@ namespace RelhaxModpack.Windows
         private SaveFileDialog SelectAppPathDialog;
         private SaveFileDialog SelectVersionDirDialog;
         private bool UnsavedChanges = false;
+        private bool init = true;
         //for drag drop
         private bool IsPatchListScrolling = false;
         private Point BeforeDragDropPoint;
@@ -86,6 +87,7 @@ namespace RelhaxModpack.Windows
             PatchesList.SelectedIndex = 0;
             //attach the log output to the logfile
             Logging.TextBox = LogOutput;
+            init = false;
         }
 
         #region Settings
@@ -154,6 +156,8 @@ namespace RelhaxModpack.Windows
                 //program (internal) selection
 
             }
+            if (PatchTypeCombobox.SelectedItem == null)
+                return;
             //if the selection is json, enable the follow path selection box. else disable
             PatchModeCombobox.Items.Clear();
             if (PatchTypeCombobox.SelectedItem.Equals("json"))
@@ -377,7 +381,7 @@ namespace RelhaxModpack.Windows
                     }
                     break;
                 case "json":
-                    if (!validXmlModes.Contains(PatchModeCombobox.SelectedItem as string))
+                    if (!validJsonModes.Contains(PatchModeCombobox.SelectedItem as string))
                     {
                         Logging.Info("Type=json, invalid patch type: {0}", PatchModeCombobox.SelectedItem as string);
                         Logging.Info("valid types are: {0}", string.Join(",", validJsonModes));
@@ -429,9 +433,15 @@ namespace RelhaxModpack.Windows
 
         private void PatchesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (init)
+                return;
             if(PatchSettings.SaveSelectionBeforeLeave && PatchesList.SelectedItem != null)
             {
                 SaveApplyPatch(PatchesList.SelectedItem as Patch);
+            }
+            if(PatchesList.SelectedItem as Patch != null)
+            {
+                DisplayPatch(PatchesList.SelectedItem as Patch);
             }
         }
 
@@ -450,7 +460,7 @@ namespace RelhaxModpack.Windows
                     DefaultExt = "xml"
                 };
             }
-            if(!(bool)OpenPatchfileDialog.ShowDialog())
+            if((bool)OpenPatchfileDialog.ShowDialog())
             {
                 XmlDocument doc = XMLUtils.LoadXmlDocument(OpenPatchfileDialog.FileName, XmlLoadType.FromFile);
                 if(doc == null)
@@ -522,14 +532,14 @@ namespace RelhaxModpack.Windows
             {
                 SavePatchfileDialog = new SaveFileDialog()
                 {
-                    Title = "Select a file to test patches on",
+                    Title = "Save xml patch",
                     AddExtension = true,
                     CheckPathExists = true,
                     RestoreDirectory = true,
                     DefaultExt = "xml",
                 };
             }
-            if(!(bool)SavePatchfileDialog.ShowDialog())
+            if((bool)SavePatchfileDialog.ShowDialog())
             {
                 if(PatchSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && PatchesList.SelectedItem != null)
                 {
