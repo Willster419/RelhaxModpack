@@ -91,6 +91,7 @@ namespace RelhaxModpack
                 if (node.NodeType == XmlNodeType.XmlDeclaration)
                 {
                     hadHeader = true;
+                    break;
                 }
             }
             //determines which version of pathing will be done
@@ -99,6 +100,7 @@ namespace RelhaxModpack
                 case "add":
                     //check to see if it's already there
                     //make the full node path
+                    Logging.Debug("checking if xml element to add alreay exists, creating full xml path");
                     string[] tempp = p.Replace.Split('/');
                     string fullNodePath = p.Path;
                     for (int i = 0; i < tempp.Count() - 1; i++)
@@ -106,6 +108,7 @@ namespace RelhaxModpack
                         fullNodePath = fullNodePath + "/" + tempp[i];
                     }
                     //in each node check if the element exist with the replace innerText
+                    Logging.Debug("full path created as '{0}'", fullNodePath);
                     XmlNodeList currentSoundBanksAdd = doc.SelectNodes(fullNodePath);
                     foreach (XmlElement e in currentSoundBanksAdd)
                     {
@@ -113,12 +116,21 @@ namespace RelhaxModpack
                         //remove any tabs and whitespaces first before testing
                         innerText = innerText.Trim();
                         if (e.InnerText.Equals(innerText))
+                        {
+                            Logging.Debug("found entry with matching trimmed text, aborting");
                             return;
+                        }
                     }
+                    Logging.Debug("entry not found, preceding with add");
                     //get to the node where to add the element
                     XmlNode reff = doc.SelectSingleNode(p.Path);
+                    if(reff == null)
+                    {
+                        Logging.Warning("patch path returns null!");
+                    }
                     //create node(s) to add to the element
                     string[] temp = p.Replace.Split('/');
+                    Logging.Debug("Total inner xml entries to make: {0}", temp.Count());
                     List<XmlElement> nodes = new List<XmlElement>();
                     for (int i = 0; i < temp.Count() - 1; i++)
                     {
@@ -127,6 +139,7 @@ namespace RelhaxModpack
                         {
                             //last node with actual data to add
                             string data = temp[temp.Count() - 1];
+                            Logging.Debug("TODO: make xml macro replace system");
                             data = data.Replace(@"[sl]", @"/");
                             ele.InnerText = data;
                         }
@@ -146,6 +159,7 @@ namespace RelhaxModpack
                         XmlElement child = nodes[i];
                         parrent.InsertAfter(child, parrent.FirstChild);
                     }
+                    Logging.Debug("saving to disk");
                     //save it
                     if (File.Exists(p.CompletePath))
                         File.Delete(p.CompletePath);
@@ -154,24 +168,33 @@ namespace RelhaxModpack
 
                 case "edit":
                     //check to see if it's already there
+                    Logging.Debug("checking if element already exists");
                     XmlNodeList currentSoundBanksEdit = doc.SelectNodes(p.Path);
                     foreach (XmlElement e in currentSoundBanksEdit)
                     {
                         string innerText = e.InnerText;
                         innerText = innerText.Trim();
                         if (e.InnerText.Equals(p.Replace))
+                        {
+                            Logging.Debug("element inner text equals replace value, aborting");
                             return;
+                        }
                     }
                     //find and replace
-                    //XmlNodeList rel1Edit = doc.SelectNodes(xpath);
+                    Logging.Debug("element text does not equal replace, continue");
                     foreach (XmlElement eee in currentSoundBanksEdit)
                     {
                         if (Regex.IsMatch(eee.InnerText, p.Search))
                         {
                             eee.InnerText = p.Replace;
                         }
+                        else
+                        {
+                            Logging.Warning("Regex never matched");
+                        }
                     }
                     //save it
+                    Logging.Debug("saving to disk");
                     if (File.Exists(p.CompletePath)) File.Delete(p.CompletePath);
                     doc.Save(p.CompletePath);
                     break;
@@ -185,13 +208,22 @@ namespace RelhaxModpack
                         {
                             e.RemoveAll();
                         }
+                        else
+                        {
+                            Logging.Warning("Regex never matched");
+                        }
                     }
                     //save it
-                    if (File.Exists(p.CompletePath)) File.Delete(p.CompletePath);
+                    Logging.Debug("first temp save to disk");
+                    if (File.Exists(p.CompletePath))
+                        File.Delete(p.CompletePath);
                     doc.Save(p.CompletePath);
                     //remove empty elements
+                    Logging.Debug("Removing any empty xml elements");
+                    Logging.Debug("TODO: removing empty elements can be optimized");
                     XDocument doc2 = XDocument.Load(p.CompletePath);
                     doc2.Descendants().Where(e => string.IsNullOrEmpty(e.Value)).Remove();
+                    Logging.Debug("saving to disk");
                     if (File.Exists(p.CompletePath))
                         File.Delete(p.CompletePath);
                     doc2.Save(p.CompletePath);
@@ -206,14 +238,17 @@ namespace RelhaxModpack
                 if (node.NodeType == XmlNodeType.XmlDeclaration)
                 {
                     hasHeader = true;
+                    break;
                 }
             }
             //if not had header and has header, remove header
             //if had header and has header, no change
             //if not had header and not has header, no change
             //if had header and not has header, no change
+            Logging.Debug("hadHeader={0}, hasHeader={1}", hadHeader, hasHeader);
             if (!hadHeader && hasHeader)
             {
+                Logging.Debug("removing header");
                 XmlDocument doc4 = new XmlDocument();
                 doc4.Load(p.CompletePath);
                 foreach (XmlNode node in doc4)
@@ -221,6 +256,7 @@ namespace RelhaxModpack
                     if (node.NodeType == XmlNodeType.XmlDeclaration)
                     {
                         doc4.RemoveChild(node);
+                        break;
                     }
                 }
                 doc4.Save(p.CompletePath);
@@ -238,6 +274,9 @@ namespace RelhaxModpack
             p.Search = p.Search.Replace(@"\n", "newline");
             p.Search = p.Search.Replace(@"\r", "\r");
             p.Search = p.Search.Replace(@"\t", "\t");
+
+            Logging.Debug("TODO: fixed macro replace system");
+            //p.Search = Utils.MacroReplace(p.Search, ReplacementTypes.TextUnescape);
 
             //load file from disk...
             string file = File.ReadAllText(p.CompletePath);
@@ -261,7 +300,7 @@ namespace RelhaxModpack
                 }
                 if (!everReplaced)
                 {
-                    Logging.WriteToLog("Regex never matched, is this the intent?", Logfiles.Application, LogLevel.Warning);
+                    Logging.WriteToLog("Regex never matched", Logfiles.Application, LogLevel.Warning);
                     return;
                 }
             }
@@ -330,6 +369,9 @@ namespace RelhaxModpack
             bool useBool = false;
             bool useInt = false;
             bool useDouble = false;
+            Logging.Debug("TODO: update json patch replace syntax");
+            Logging.Debug("TODO: re-write value type replace system");
+            Logging.Debug("TODO: fix handling of \"ref\" json keywords");
             //legacy compatibility: many json patches don't have a valid regex systax for p.search, assume they mean a forced replace
             if (p.Search.Equals(""))
                 p.Search = @".*";
@@ -703,9 +745,12 @@ namespace RelhaxModpack
                         }
                         Jresults.Add((JValue)jt);
                     }
-                    //Logging.Manager("DEBUG: number of Jvalues: " + Jresults.Count);
+                    Logging.Debug("number of Jvalues: {0}", Jresults.Count);
                     if (Jresults.Count == 0)
+                    {
+                        Logging.Debug("Jresults count is 0 (is this the intent?)");
                         return;
+                    }
                     foreach(JValue jv in Jresults)
                     {
                         string jsonValue = "" + jv.Value;
@@ -953,6 +998,7 @@ namespace RelhaxModpack
             else
             {
                 Logging.WriteToLog(string.Format("ERROR: Unknown json patch mode, {0}", p.Mode),Logfiles.Application,LogLevel.Error);
+                return;
             }
 
             StringBuilder rebuilder = new StringBuilder();
