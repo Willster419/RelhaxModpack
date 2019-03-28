@@ -216,7 +216,7 @@ namespace RelhaxModpack
             {
                 if (TextBox != null)
                 {
-                    TextBox.AppendText(fileToWriteTo.Write(message, logLevel));
+                    TextBox.AppendText(fileToWriteTo.Write(message, logLevel) + System.Environment.NewLine);
                 }
                 else
                 {

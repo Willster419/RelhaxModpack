@@ -55,5 +55,16 @@
                 }
             }
         }
+        public override string ToString()
+        {
+            if (FromEditor)
+            {
+                return string.Format("type={0},mode={1},lines/path={2}", Type, Mode, Lines == null ? Path: string.Join(",", Lines));
+            }
+            else
+            {
+                return base.ToString();
+            }
+        }
     }
 }

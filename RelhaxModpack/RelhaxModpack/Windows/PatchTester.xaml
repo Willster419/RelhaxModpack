@@ -13,8 +13,9 @@
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="*" MinWidth="300"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*" MinWidth="300"/>
         </Grid.ColumnDefinitions>
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0">
             <TabItem x:Name="DesignerTab" Header="Designer">
@@ -44,8 +45,8 @@
                     <TextBox x:Name="PatchSearchTextbox" HorizontalAlignment="Stretch" Height="39" Margin="0,228,0,0" TextWrapping="Wrap" VerticalAlignment="Top" />
                     <TextBlock x:Name="PatchReplaceHeader" HorizontalAlignment="Stretch" Margin="0,272,0,0" TextWrapping="Wrap" Text="Replace" VerticalAlignment="Top"/>
                     <TextBox x:Name="PatchReplaceTextbox" HorizontalAlignment="Stretch" Margin="0,288,0,25" TextWrapping="Wrap" VerticalAlignment="Stretch" />
-                    <Button x:Name="TestPatchButton" Content="Test Patch..." HorizontalAlignment="Left" Margin="213,376,0,0" VerticalAlignment="Top" Width="75" Click="TestPatchButton_Click"/>
-                    <Button x:Name="ApplyChangesButton" Content="Apply Changes" HorizontalAlignment="Left" Margin="293,376,0,0" VerticalAlignment="Top" Width="97" Click="ApplyChangesButton_Click"/>
+                    <Button x:Name="TestPatchButton" Content="Test Patch..." HorizontalAlignment="Right" Margin="0,0,102,0" VerticalAlignment="Bottom" Width="75" Click="TestPatchButton_Click"/>
+                    <Button x:Name="ApplyChangesButton" Content="Apply Changes" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="97" Click="ApplyChangesButton_Click"/>
                     <TextBox x:Name="FileToPatchTextbox" HorizontalAlignment="Stretch" Height="42" TextWrapping="Wrap" VerticalAlignment="Top" Margin="0,27,0,0" />
                     <CheckBox x:Name="PatchFollowPathSetting" Content="Follow Path (for allowing inside xvm files)" HorizontalAlignment="Left" Margin="130,156,0,0" VerticalAlignment="Top"/>
                 </Grid>
@@ -59,14 +60,16 @@
                 </Grid>
             </TabItem>
         </TabControl>
+        <!-- create the splitter to allow for dynamic resizing like the editor -->
+        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center"/>
         <!-- create the second tab with patching help, log output, settings -->
-        <TabControl x:Name="RightSideTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1">
+        <TabControl x:Name="RightSideTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2">
             <TabItem x:Name="PatchesListTab" Header="Patches list">
                 <Grid Background="#FFE5E5E5">
                     <ListBox x:Name="PatchesList" HorizontalAlignment="Stretch"  Margin="0,21,0,20" VerticalAlignment="Stretch" SelectionChanged="PatchesList_SelectionChanged" ScrollViewer.ScrollChanged="LogOutput_ScrollChanged" PreviewMouseUp="LogOutput_PreviewMouseUp" PreviewMouseDown="LogOutput_PreviewMouseDown" MouseMove="LogOutput_MouseMove" DragOver="LogOutput_DragOver" Drop="LogOutput_Drop"/>
                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Loaded patches from XML file (click and drag to order)" VerticalAlignment="Top"/>
-                    <Button x:Name="RemovePatchButton" Content="Remove Patch" HorizontalAlignment="Left" Margin="295,376,0,0" VerticalAlignment="Top" Width="95" Click="RemovePatchButton_Click"/>
-                    <Button x:Name="AddPatchButton" Content="Add new patch" HorizontalAlignment="Left" Margin="195,376,0,0" VerticalAlignment="Top" Width="95" Click="AddPatchButton_Click"/>
+                    <Button x:Name="RemovePatchButton" Content="Remove Patch" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="95" Click="RemovePatchButton_Click"/>
+                    <Button x:Name="AddPatchButton" Content="Add new patch" HorizontalAlignment="Right" Margin="0,0,100,0" VerticalAlignment="Bottom" Width="95" Click="AddPatchButton_Click"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="LogOutputTab" Header="Log Output">

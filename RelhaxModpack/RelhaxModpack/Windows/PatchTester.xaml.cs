@@ -284,6 +284,11 @@ namespace RelhaxModpack.Windows
 
             //file location
             Logging.Info("File to Patch location mode: {0}", FilePathType.SelectedItem == null ? "(null)" : FilePathType.SelectedItem);
+            if(FilePathType.SelectedItem == null)
+            {
+                Logging.Info("Invalid file path type");
+                return;
+            }
             switch(FilePathType.SelectedItem.ToString())
             {
                 case "Absolute":
@@ -291,6 +296,8 @@ namespace RelhaxModpack.Windows
                     if(File.Exists(FileToPatchTextbox.Text))
                     {
                         Logging.Info("File Exists!");
+                        patchToTest.File = FileToPatchTextbox.Text;
+                        patchToTest.CompletePath = FileToPatchTextbox.Text;
                     }
                     else
                     {
@@ -360,8 +367,14 @@ namespace RelhaxModpack.Windows
                 return;
             }
             patchToTest.Type = PatchTypeCombobox.SelectedItem as string;
+            //check if path/lines is valid (has string values)
+            if (string.IsNullOrWhiteSpace(PatchLinesPathTextbox.Text))
+            {
+                Logging.Info("invalid patch path or lines");
+                return;
+            }
             //check patch mode
-            switch(patchToTest.Type)
+            switch (patchToTest.Type)
             {
                 case "regex":
                 case "regx":
@@ -371,6 +384,8 @@ namespace RelhaxModpack.Windows
                         Logging.Info("valid types are: (null)");
                         return;
                     }
+                    //set the lines
+                    patchToTest.Lines = PatchLinesPathTextbox.Text.Split(',');
                     break;
                 case "xml":
                     if(!validXmlModes.Contains(PatchModeCombobox.SelectedItem as string))
@@ -379,6 +394,7 @@ namespace RelhaxModpack.Windows
                         Logging.Info("valid types are: {0}",string.Join(",",validXmlModes));
                         return;
                     }
+                    patchToTest.Path = PatchLinesPathTextbox.Text;
                     break;
                 case "json":
                     if (!validJsonModes.Contains(PatchModeCombobox.SelectedItem as string))
@@ -387,6 +403,7 @@ namespace RelhaxModpack.Windows
                         Logging.Info("valid types are: {0}", string.Join(",", validJsonModes));
                         return;
                     }
+                    patchToTest.Path = PatchLinesPathTextbox.Text;
                     break;
                 default:
                     throw new BadMemeException("congratulations you have autism");
@@ -398,12 +415,7 @@ namespace RelhaxModpack.Windows
                 Logging.Info("Types=json, followPathSetting must be false!");
                 return;
             }
-            //check patch, search, replace
-            if(string.IsNullOrWhiteSpace(PatchLinesPathTextbox.Text))
-            {
-                Logging.Info("invalid patch path or lines");
-                return;
-            }
+            //check search and replace
             if (string.IsNullOrWhiteSpace(PatchReplaceTextbox.Text) && string.IsNullOrWhiteSpace(PatchSearchTextbox.Text))
             {
                 Logging.Info("patch repalce and search are blank, invalid patch");
@@ -413,13 +425,16 @@ namespace RelhaxModpack.Windows
             {
                 Logging.Warning("patch search is blank (is this the intent?)");
             }
+            patchToTest.Search = PatchSearchTextbox.Text;
             if (string.IsNullOrWhiteSpace(PatchReplaceTextbox.Text))
             {
                 Logging.Info("patch replace is blank (is this the intent?)");
             }
+            patchToTest.Replace = PatchReplaceTextbox.Text;
             //put patch into patch test methods
             //set patch from editor to true to enable verbose logging
-            patchToTest.FromEditor = true;
+            if(!patchToTest.FromEditor)
+                patchToTest.FromEditor = true;
             PatchUtils.RunPatch(patchToTest);
         }
 
@@ -471,7 +486,7 @@ namespace RelhaxModpack.Windows
                 PatchesList.Items.Clear();
                 foreach(XmlNode node in XMLUtils.GetXMLNodesFromXPath(doc,"//patchs/patch"))
                 {
-                    Patch patch = new Patch();
+                    Patch patch = new Patch() { FromEditor = true };
                     foreach(XmlElement element in ((XmlElement)node).ChildNodes)
                     {
                         switch(element.Name)
@@ -503,6 +518,9 @@ namespace RelhaxModpack.Windows
                                         patch.PatchPath = element.InnerText.ToLower().Trim();
                                         break;
                                 }
+                                break;
+                            case "mode":
+                                patch.Mode = element.InnerText.Trim();
                                 break;
                             case "file":
                                 patch.File = element.InnerText.Trim();
@@ -558,6 +576,10 @@ namespace RelhaxModpack.Windows
                     type.InnerText = patch.Type;
                     xmlPatch.AppendChild(type);
 
+                    XmlElement mode = doc.CreateElement("mode");
+                    mode.InnerText = patch.Mode;
+                    xmlPatch.AppendChild(mode);
+
                     XmlElement patchPath = doc.CreateElement("patchPath");
                     patchPath.InnerText = patch.PatchPath;
                     xmlPatch.AppendChild(patchPath);
@@ -606,7 +628,7 @@ namespace RelhaxModpack.Windows
 
         private void AddPatchButton_Click(object sender, RoutedEventArgs e)
         {
-            PatchesList.Items.Add(new Patch() { });
+            PatchesList.Items.Add(new Patch() { FromEditor = true });
         }
         #endregion
 

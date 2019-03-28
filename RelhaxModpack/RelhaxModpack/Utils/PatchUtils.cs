@@ -71,8 +71,9 @@ namespace RelhaxModpack
                 case "xvm":
                     throw new BadMemeException("xvm patches are not supported, please use the json patch method");
             }
+            Logging.Debug("patch complete");
             //set the verbose setting back
-            Logging.Info("temp logging setting={0}, ModpackSettings.VerboseLogging={1}, setting logging back to temp");
+            Logging.Debug("temp logging setting={0}, ModpackSettings.VerboseLogging={1}, setting logging back to temp");
             ModpackSettings.VerboseLogging = tempVerboseLoggingSetting;
         }
         #endregion
@@ -261,6 +262,7 @@ namespace RelhaxModpack
                 }
                 doc4.Save(p.CompletePath);
             }
+            Logging.Debug("xml patch completed successfully");
         }
         #endregion
 
@@ -355,6 +357,7 @@ namespace RelhaxModpack
             //save the file back into the string and then the file
             file = sb.ToString();
             File.WriteAllText(p.CompletePath, file);
+            Logging.Debug("regex patch completed successfully");
         }
         #endregion
 
@@ -1046,6 +1049,7 @@ namespace RelhaxModpack
                 .Replace(@"[dollar]", @"$")
                 .Replace(@"[rbracket]", @"}");
             File.WriteAllText(p.CompletePath, toWrite);
+            Logging.Debug("json patch completed successfully");
         }
         #endregion
     }
