@@ -633,7 +633,7 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Drag drop code
-        private void LogOutput_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        private void PatchesList_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             if(Mouse.LeftButton == MouseButtonState.Pressed)
             {
@@ -641,7 +641,7 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void LogOutput_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        private void PatchesList_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Released)
             {
@@ -649,7 +649,7 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void LogOutput_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private void PatchesList_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
@@ -657,7 +657,7 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void LogOutput_MouseMove(object sender, MouseEventArgs e)
+        private void PatchesList_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed && IsDragConfirmed(e.GetPosition(PatchesList)) && !IsPatchListScrolling)
             {
@@ -668,16 +668,16 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void LogOutput_DragOver(object sender, DragEventArgs e)
+        private void PatchesList_DragOver(object sender, DragEventArgs e)
         {
 
         }
 
-        private void LogOutput_Drop(object sender, DragEventArgs e)
+        private void PatchesList_Drop(object sender, DragEventArgs e)
         {
             if(PatchesList.SelectedItem is Patch patchToMove)
             {
-                if(e.OriginalSource is Patch patchOver)
+                if(e.OriginalSource is TextBlock block && block.DataContext is Patch patchOver)
                 {
                     PatchesList.Items.Remove(patchToMove);
                     PatchesList.Items.Insert(PatchesList.Items.IndexOf(patchOver) + 1, patchToMove);

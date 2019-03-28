@@ -66,7 +66,7 @@
         <TabControl x:Name="RightSideTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2">
             <TabItem x:Name="PatchesListTab" Header="Patches list">
                 <Grid Background="#FFE5E5E5">
-                    <ListBox x:Name="PatchesList" HorizontalAlignment="Stretch"  Margin="0,21,0,20" VerticalAlignment="Stretch" SelectionChanged="PatchesList_SelectionChanged" ScrollViewer.ScrollChanged="LogOutput_ScrollChanged" PreviewMouseUp="LogOutput_PreviewMouseUp" PreviewMouseDown="LogOutput_PreviewMouseDown" MouseMove="LogOutput_MouseMove" DragOver="LogOutput_DragOver" Drop="LogOutput_Drop"/>
+                    <ListBox x:Name="PatchesList" HorizontalAlignment="Stretch"  Margin="0,21,0,20" VerticalAlignment="Stretch" SelectionChanged="PatchesList_SelectionChanged" ScrollViewer.ScrollChanged="PatchesList_ScrollChanged" PreviewMouseUp="PatchesList_PreviewMouseUp" PreviewMouseDown="PatchesList_PreviewMouseDown" MouseMove="PatchesList_MouseMove" DragOver="PatchesList_DragOver" Drop="PatchesList_Drop" AllowDrop="True"/>
                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Loaded patches from XML file (click and drag to order)" VerticalAlignment="Top"/>
                     <Button x:Name="RemovePatchButton" Content="Remove Patch" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="95" Click="RemovePatchButton_Click"/>
                     <Button x:Name="AddPatchButton" Content="Add new patch" HorizontalAlignment="Right" Margin="0,0,100,0" VerticalAlignment="Bottom" Width="95" Click="AddPatchButton_Click"/>
@@ -75,7 +75,7 @@
             <TabItem x:Name="LogOutputTab" Header="Log Output">
                 <Grid Background="#FFE5E5E5">
                     <Button x:Name="ClearLogButton" Content="Clear Log" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Click="ClearLogButton_Click"/>
-                    <TextBox x:Name="LogOutput" HorizontalAlignment="Stretch" Margin="0,0,0,20" TextWrapping="Wrap" VerticalAlignment="Stretch" />
+                    <TextBox x:Name="LogOutput" HorizontalAlignment="Stretch" Margin="0,0,0,20" TextWrapping="Wrap" VerticalAlignment="Stretch" AllowDrop="False" />
                 </Grid>
             </TabItem>
             <TabItem x:Name="PatchingHelpTab" Header="Patching Help">
