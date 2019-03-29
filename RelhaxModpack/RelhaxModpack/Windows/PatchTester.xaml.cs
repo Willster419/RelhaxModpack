@@ -696,5 +696,31 @@ namespace RelhaxModpack.Windows
         }
 
         #endregion
+
+        #region Regression Testing
+        private void RegexRegressionTesting_Click(object sender, RoutedEventArgs e)
+        {
+            if (PatchSettings.SwitchToLogWhenTestingPatch)
+            {
+                RightSideTabControl.SelectedItem = LogOutputTab;
+            }
+        }
+
+        private void XmlRegressionTesting_Click(object sender, RoutedEventArgs e)
+        {
+            if (PatchSettings.SwitchToLogWhenTestingPatch)
+            {
+                RightSideTabControl.SelectedItem = LogOutputTab;
+            }
+        }
+
+        private void JsonRegressionTesting_Click(object sender, RoutedEventArgs e)
+        {
+            if (PatchSettings.SwitchToLogWhenTestingPatch)
+            {
+                RightSideTabControl.SelectedItem = LogOutputTab;
+            }
+        }
+        #endregion
     }
 }

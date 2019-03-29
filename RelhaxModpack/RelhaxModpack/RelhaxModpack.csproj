@@ -138,6 +138,7 @@
     <Compile Include="UIComponents\RelhaxWPFRadioButton.xaml.cs">
       <DependentUpon>RelhaxWPFRadioButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\Regression.cs" />
     <Compile Include="Windows\CreateFTPFolderName.xaml.cs">
       <DependentUpon>CreateFTPFolderName.xaml</DependentUpon>
     </Compile>

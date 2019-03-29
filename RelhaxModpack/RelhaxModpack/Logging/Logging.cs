@@ -77,7 +77,7 @@ namespace RelhaxModpack
         /// </summary>
         public const string UninstallLogFilename = "uninstallRelhaxFiles.log";
         public const string UninstallLogFilenameBackup = "uninstallRelhaxFiles.bak";
-        private const string ApplicationLogfileTimestamp = "yyyy-MM-dd HH:mm:ss.fff";
+        public const string ApplicationLogfileTimestamp = "yyyy-MM-dd HH:mm:ss.fff";
         /// <summary>
         /// The header and end that shows the start and stop of the application log file
         /// </summary>

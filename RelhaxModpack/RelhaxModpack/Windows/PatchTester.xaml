@@ -54,9 +54,9 @@
             <TabItem x:Name="RegressionTestingTab" Header="Regression Testing">
                 <Grid Background="#FFE5E5E5">
                     <TextBlock HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Warning! This tab is for application Developers ONLY!" VerticalAlignment="Top" Foreground="#FFFD1111" FontWeight="Bold" TextAlignment="Center"/>
-                    <Button Content="Regex Regression Testing" HorizontalAlignment="Left" Margin="10,21,0,0" VerticalAlignment="Top" Width="155"/>
-                    <Button Content="XML Regression Testing" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top" Width="155"/>
-                    <Button Content="JSON Regression Testing" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="155"/>
+                    <Button x:Name="RegexRegressionTesting" Content="Regex Regression Testing" HorizontalAlignment="Left" Margin="10,21,0,0" VerticalAlignment="Top" Width="155" Click="RegexRegressionTesting_Click"/>
+                    <Button x:Name="XmlRegressionTesting" Content="XML Regression Testing" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top" Width="155" Click="XmlRegressionTesting_Click"/>
+                    <Button x:Name="JsonRegressionTesting" Content="JSON Regression Testing" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="155" Click="JsonRegressionTesting_Click"/>
                 </Grid>
             </TabItem>
         </TabControl>
