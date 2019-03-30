@@ -53,7 +53,7 @@
             </TabItem>
             <TabItem x:Name="RegressionTestingTab" Header="Regression Testing">
                 <Grid Background="#FFE5E5E5">
-                    <TextBlock HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Warning! This tab is for application Developers ONLY!" VerticalAlignment="Top" Foreground="#FFFD1111" FontWeight="Bold" TextAlignment="Center"/>
+                    <TextBlock HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Warning! For application Developers ONLY!" VerticalAlignment="Top" Foreground="#FFFD1111" FontWeight="Bold" TextAlignment="Left" Margin="10,0,0,0"/>
                     <Button x:Name="RegexRegressionTesting" Content="Regex Regression Testing" HorizontalAlignment="Left" Margin="10,21,0,0" VerticalAlignment="Top" Width="155" Click="RegexRegressionTesting_Click"/>
                     <Button x:Name="XmlRegressionTesting" Content="XML Regression Testing" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top" Width="155" Click="XmlRegressionTesting_Click"/>
                     <Button x:Name="JsonRegressionTesting" Content="JSON Regression Testing" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="155" Click="JsonRegressionTesting_Click"/>
@@ -75,7 +75,7 @@
             <TabItem x:Name="LogOutputTab" Header="Log Output">
                 <Grid Background="#FFE5E5E5">
                     <Button x:Name="ClearLogButton" Content="Clear Log" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Click="ClearLogButton_Click"/>
-                    <TextBox x:Name="LogOutput" HorizontalAlignment="Stretch" Margin="0,0,0,20" TextWrapping="Wrap" VerticalAlignment="Stretch" AllowDrop="False" />
+                    <TextBox x:Name="LogOutput" HorizontalAlignment="Stretch" Margin="0,0,0,20" TextWrapping="Wrap" VerticalAlignment="Stretch" AllowDrop="False" VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" />
                 </Grid>
             </TabItem>
             <TabItem x:Name="PatchingHelpTab" Header="Patching Help">
