@@ -221,7 +221,7 @@ namespace RelhaxModpack
                 string temp = fileToWriteTo.Write(message, logLevel);
                 if(OnLoggingUIThreadReport != null)
                 {
-                    OnLoggingUIThreadReport(message);
+                    OnLoggingUIThreadReport(temp);
                 }
             }
             else
