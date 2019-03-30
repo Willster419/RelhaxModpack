@@ -1078,24 +1078,24 @@ namespace RelhaxModpack.Windows
                 },
                 new UnitTest()
                 {
-                    Description = "arrayClear test 1: basic clear of jValue \"test\"",
+                    Description = "arrayClear test 1: basic clear of jValue \"username\"",
                     ShouldPass = true,
                     Patch = new Patch()
                     {
                         Path = "$.ignorelist",
-                        Search = "test",
+                        Search = "username",
                         Replace = "",
                         Mode = "arrayClear"
                     }
                 },
                 new UnitTest()
                 {
-                    Description = "arrayClear test 2: basic clear of jValue \"test\" (does not exist)",
+                    Description = "arrayClear test 2: basic clear of jValue \"username\" (does not exist)",
                     ShouldPass = true,
                     Patch = new Patch()
                     {
                         Path = "$.ignorelist",
-                        Search = "test",
+                        Search = "username",
                         Replace = "",
                         Mode = "arrayClear"
                     }
