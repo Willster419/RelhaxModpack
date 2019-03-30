@@ -86,6 +86,7 @@ namespace RelhaxModpack.Windows
             AddPatchButton_Click(null, null);
             PatchesList.SelectedIndex = 0;
             //attach the log output to the logfile
+            Logging.Dispatcher = Dispatcher;
             Logging.OnLoggingUIThreadReport += Logging_OnLoggingUIThreadReport;
             init = false;
         }
