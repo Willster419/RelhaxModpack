@@ -29,6 +29,7 @@ namespace RelhaxModpack
         private string CheckFilenamePrefix = "check_";
         private string RegressionFolderPath;
         private string RegressionTypeString = "";
+        private string RegressionExtension = "";
 
         public Regression(RegressionTypes regressionType, List<UnitTest> unitTestsToRun)
         {
@@ -36,22 +37,25 @@ namespace RelhaxModpack
             switch (regressionType)
             {
                 case RegressionTypes.json:
-                    Startfile = Startfile + ".json";
                     RegressionTypeString = "json";
+                    RegressionExtension = string.Format(".{0}",RegressionTypeString);
+                    Startfile = string.Format("{0}{1}", Startfile, RegressionExtension);
                     RegressionFolderPath = Path.Combine("patch_regressions", RegressionTypeString);
                     RegressionLogfile = new Logfile(Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", RegressionTypeString,
                         DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") , ".log")),Logging.ApplicationLogfileTimestamp);
                     break;
                 case RegressionTypes.regex:
-                    Startfile = Startfile + ".txt";
                     RegressionTypeString = "regex";
+                    RegressionExtension = string.Format(".{0}", "txt");
+                    Startfile = string.Format("{0}{1}", Startfile, RegressionExtension);
                     RegressionFolderPath = Path.Combine("patch_regressions", RegressionTypeString);
                     RegressionLogfile = new Logfile(Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", RegressionTypeString,
                         DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), ".log")), Logging.ApplicationLogfileTimestamp);
                     break;
                 case RegressionTypes.xml:
-                    Startfile = Startfile + ".xml";
                     RegressionTypeString = "xml";
+                    RegressionExtension = string.Format(".{0}", RegressionTypeString);
+                    Startfile = string.Format("{0}{1}", Startfile, RegressionExtension);
                     RegressionFolderPath = Path.Combine("patch_regressions", RegressionTypeString);
                     RegressionLogfile = new Logfile(Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", RegressionTypeString,
                         DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), ".log")), Logging.ApplicationLogfileTimestamp);
@@ -90,10 +94,10 @@ namespace RelhaxModpack
                 Logging.Error(Path.Combine(RegressionFolderPath, Startfile));
                 return false;
             }
-            for(int i = 0; i < UnitTests.Count; i++)
+            for(int i = 1; i < UnitTests.Count+1; i++)
             {
-                string checkfile = Path.Combine(RegressionFolderPath, string.Format("{0}{1}{2}", CheckFilenamePrefix, ++i, Path.GetExtension(Startfile)));
-                if (false)//!File.Exists(checkfile)
+                string checkfile = Path.Combine(RegressionFolderPath, string.Format("{0}{1}{2}", CheckFilenamePrefix, i.ToString("D2"), RegressionExtension));
+                if (!File.Exists(checkfile))//!File.Exists(checkfile)
                 {
                     Logging.Error("checkfile does not exist!");
                     Logging.Error(checkfile);
@@ -103,22 +107,25 @@ namespace RelhaxModpack
 
             //make a new file to be the one to make changes to
             //path get extension gets the dot
-            string filenameToTest = "testfile" + Path.GetExtension(Startfile);
-            if (File.Exists(Path.Combine(RegressionFolderPath, filenameToTest)))
-                File.Delete(Path.Combine(RegressionFolderPath, filenameToTest));
-            File.Copy(Path.Combine(RegressionFolderPath, Startfile), Path.Combine(RegressionFolderPath, filenameToTest));
+            string filenameToTest = "testfile" + RegressionExtension;
+            string filenameToTestPath = Path.Combine(RegressionFolderPath, filenameToTest);
+            if (File.Exists(filenameToTestPath))
+                File.Delete(filenameToTestPath);
+            File.Copy(Path.Combine(RegressionFolderPath, Startfile), filenameToTestPath);
 
             WriteToLogfiles("----- Unit tests start -----");
 
+            bool breakOutEarly = false;
             foreach (UnitTest unitTest in UnitTests)
             {
-                unitTest.Patch.CompletePath = Path.Combine(RegressionFolderPath, filenameToTest);
+                unitTest.Patch.CompletePath = filenameToTestPath;
+                unitTest.Patch.File = filenameToTestPath;
                 unitTest.Patch.Type = RegressionTypeString;
-                WriteToLogfiles("Running test {0} of {1}: {2}{3}{4}", ++NumPassed, UnitTests.Count, unitTest.Description, Environment.NewLine, unitTest.Patch.DumpPatchInfoForLog);
+                WriteToLogfiles("Running test {0} of {1}: {2}", ++NumPassed, UnitTests.Count, unitTest.Description);
                 PatchUtils.RunPatch(unitTest.Patch);
                 WriteToLogfiles("Checking results...");
-                string patchRun = File.ReadAllText(Path.Combine(RegressionFolderPath, filenameToTest));
-                string checkfile = Path.Combine(RegressionFolderPath, string.Format("{0}{1}{2}", CheckFilenamePrefix, NumPassed, Path.GetExtension(Startfile)));
+                string patchRun = File.ReadAllText(filenameToTestPath);
+                string checkfile = Path.Combine(RegressionFolderPath, string.Format("{0}{1}{2}", CheckFilenamePrefix, NumPassed.ToString("D2"), Path.GetExtension(Startfile)));
                 string patchTestAgainst = File.ReadAllText(checkfile);
                 if (patchTestAgainst.Equals(patchRun))
                 {
@@ -127,11 +134,22 @@ namespace RelhaxModpack
                 else
                 {
                     WriteToLogfiles("Failed!");
+                    breakOutEarly = true;
                     break;
                 }
             }
 
-            WriteToLogfiles("----- Unit tests finish -----");
+            if (breakOutEarly)
+            {
+                WriteToLogfiles("----- Unit tests finish (fail)-----");
+            }
+            else
+            {
+                WriteToLogfiles("----- Unit tests finish (pass)-----");
+                //delete the test file, we don't need it. (it's the same text as the last check file anyways)
+                if (File.Exists(filenameToTestPath))
+                    File.Delete(filenameToTestPath);
+            }
             //dispose log file
             RegressionLogfile.Dispose();
 
