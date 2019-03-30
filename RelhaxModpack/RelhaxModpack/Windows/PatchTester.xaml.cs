@@ -1127,6 +1127,7 @@ namespace RelhaxModpack.Windows
                     ShouldPass = true,
                     Patch = new Patch()
                     {
+                        //type set in regression test
                         Path = "//audio_mods.xml/loadBanks",
                         Search = "",
                         Replace = "bank/sound_bank_name",
@@ -1247,7 +1248,7 @@ namespace RelhaxModpack.Windows
                         Lines = new string[] { "3", "5" },
                         Search = "should match",
                         Replace = "replaced",
-                        Mode = "regex"
+                        Type = "regex"
                     }
                 },
                 new UnitTest()
@@ -1259,7 +1260,7 @@ namespace RelhaxModpack.Windows
                         Lines = new string[] { },
                         Search = "should match",
                         Replace = "replaced",
-                        Mode = "regex"
+                        Type = "regex"
                     }
                 }
             };

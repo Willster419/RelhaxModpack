@@ -28,6 +28,7 @@ namespace RelhaxModpack
         private string Startfile = "startfile";
         private string CheckFilenamePrefix = "check_";
         private string RegressionFolderPath;
+        private string RegressionTypeString = "";
 
         public Regression(RegressionTypes regressionType, List<UnitTest> unitTestsToRun)
         {
@@ -36,18 +37,24 @@ namespace RelhaxModpack
             {
                 case RegressionTypes.json:
                     Startfile = Startfile + ".json";
-                    RegressionFolderPath = Path.Combine("patch_regressions", "json");
-                    RegressionLogfile = new Logfile(Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", "json", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") , ".log")),Logging.ApplicationLogfileTimestamp);
+                    RegressionTypeString = "json";
+                    RegressionFolderPath = Path.Combine("patch_regressions", RegressionTypeString);
+                    RegressionLogfile = new Logfile(Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", RegressionTypeString,
+                        DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") , ".log")),Logging.ApplicationLogfileTimestamp);
                     break;
                 case RegressionTypes.regex:
                     Startfile = Startfile + ".txt";
-                    RegressionFolderPath = Path.Combine("patch_regressions", "regex");
-                    RegressionLogfile = new Logfile(Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", "json", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), ".log")), Logging.ApplicationLogfileTimestamp);
+                    RegressionTypeString = "regex";
+                    RegressionFolderPath = Path.Combine("patch_regressions", RegressionTypeString);
+                    RegressionLogfile = new Logfile(Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", RegressionTypeString,
+                        DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), ".log")), Logging.ApplicationLogfileTimestamp);
                     break;
                 case RegressionTypes.xml:
                     Startfile = Startfile + ".xml";
-                    RegressionFolderPath = Path.Combine("patch_regressions", "xml");
-                    RegressionLogfile = new Logfile(Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", "json", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), ".log")), Logging.ApplicationLogfileTimestamp);
+                    RegressionTypeString = "xml";
+                    RegressionFolderPath = Path.Combine("patch_regressions", RegressionTypeString);
+                    RegressionLogfile = new Logfile(Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", RegressionTypeString,
+                        DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), ".log")), Logging.ApplicationLogfileTimestamp);
                     break;
             }
         }
@@ -85,8 +92,8 @@ namespace RelhaxModpack
             }
             for(int i = 0; i < UnitTests.Count; i++)
             {
-                string checkfile = Path.Combine(RegressionFolderPath, string.Format("{0}{1}.{2}", CheckFilenamePrefix, ++i, Path.GetExtension(Startfile)));
-                if (!File.Exists(checkfile))
+                string checkfile = Path.Combine(RegressionFolderPath, string.Format("{0}{1}{2}", CheckFilenamePrefix, ++i, Path.GetExtension(Startfile)));
+                if (false)//!File.Exists(checkfile)
                 {
                     Logging.Error("checkfile does not exist!");
                     Logging.Error(checkfile);
@@ -95,19 +102,23 @@ namespace RelhaxModpack
             }
 
             //make a new file to be the one to make changes to
-            string filenameToTest = "testfile" + "." + Path.GetExtension(Startfile);
+            //path get extension gets the dot
+            string filenameToTest = "testfile" + Path.GetExtension(Startfile);
+            if (File.Exists(Path.Combine(RegressionFolderPath, filenameToTest)))
+                File.Delete(Path.Combine(RegressionFolderPath, filenameToTest));
             File.Copy(Path.Combine(RegressionFolderPath, Startfile), Path.Combine(RegressionFolderPath, filenameToTest));
 
             WriteToLogfiles("----- Unit tests start -----");
 
             foreach (UnitTest unitTest in UnitTests)
             {
-                WriteToLogfiles("Running test {0} of {1}: {2}{3}{4}", ++NumPassed, UnitTests.Count, unitTest.Description, Environment.NewLine, unitTest.Patch.DumpPatchInfoForLog);
                 unitTest.Patch.CompletePath = Path.Combine(RegressionFolderPath, filenameToTest);
+                unitTest.Patch.Type = RegressionTypeString;
+                WriteToLogfiles("Running test {0} of {1}: {2}{3}{4}", ++NumPassed, UnitTests.Count, unitTest.Description, Environment.NewLine, unitTest.Patch.DumpPatchInfoForLog);
                 PatchUtils.RunPatch(unitTest.Patch);
                 WriteToLogfiles("Checking results...");
                 string patchRun = File.ReadAllText(Path.Combine(RegressionFolderPath, filenameToTest));
-                string checkfile = Path.Combine(RegressionFolderPath, string.Format("{0}{1}.{2}", CheckFilenamePrefix, NumPassed, Path.GetExtension(Startfile)));
+                string checkfile = Path.Combine(RegressionFolderPath, string.Format("{0}{1}{2}", CheckFilenamePrefix, NumPassed, Path.GetExtension(Startfile)));
                 string patchTestAgainst = File.ReadAllText(checkfile);
                 if (patchTestAgainst.Equals(patchRun))
                 {

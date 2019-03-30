@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.IO;
+using System.Windows;
 
 namespace RelhaxModpack
 {
@@ -47,8 +48,12 @@ namespace RelhaxModpack
             {
                 fileStream = new FileStream(Filepath, FileMode.Append, FileAccess.Write);
             }
-            catch
+            catch (Exception ex)
             {
+                if(ModpackSettings.VerboseLogging || ModpackSettings.ApplicationDistroVersion != ApplicationVersions.Stable)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
                 return false;
             }
             return true;
