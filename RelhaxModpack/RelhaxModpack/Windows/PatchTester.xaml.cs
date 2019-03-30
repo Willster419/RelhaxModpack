@@ -740,7 +740,378 @@ namespace RelhaxModpack.Windows
         {
             return new List<UnitTest>()
             {
-
+                new UnitTest()
+                {
+                    Description = "add test 1: basic add",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$",
+                        Search = "",
+                        Replace = "awesome/false",
+                        Mode = "add"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "add test 2: repeat of basic add. should do nothing",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$",
+                        Search = "",
+                        Replace = "awesome/false",
+                        Mode = "add"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "add test 3: same path as basic add, but different value to insert. should update the value",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$",
+                        Search = "",
+                        Replace = "awesome/true",
+                        Mode = "add"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "add test 4: add of a new object as well as the path. should create object paths to value",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$",
+                        Search = "",
+                        Replace = "memes/awesome/true",
+                        Mode = "add"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "add test 5: add of a new property to part object path that already exists. should add the value without overwriting the path",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$",
+                        Search = "",
+                        Replace = "memes/dank/true",
+                        Mode = "add"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "add test 6: add of a new blank array",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$",
+                        Search = "",
+                        Replace = "memelist[array]",
+                        Mode = "add"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "add test 7: add of a new blank object",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$",
+                        Search = "",
+                        Replace = "objectname[object]",
+                        Mode = "add"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "add test 8: add of new property with slash escape",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$",
+                        Search = "",
+                        Replace = "memeville/spaces[sl]hangar_premium_v2",
+                        Mode = "add"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "edit test 1: edit attempt of path that does not exist. should note it log and abort",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$.fakePath",
+                        Search = "",
+                        Replace = "null",
+                        Mode = "edit"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "edit test 2: object edit attempt of array. should note in log and abort",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$.nations",
+                        Search = "",
+                        Replace = "null",
+                        Mode = "edit"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "edit test 3: edit attempt of simple path. should change the one value",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$.mode",
+                        Search = "normal",
+                        Replace = "epic",
+                        Mode = "edit"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "edit test 4: edit attempt of simple path. should change the one value (false, should report value entry same and exit)",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$.mode",
+                        Search = "epic",
+                        Replace = "epic",
+                        Mode = "edit"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "array edit test 1: edit of array of values. should change the last value in the array",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$.ignorelist[*]",
+                        Search = "ttest",
+                        Replace = "test",
+                        Mode = "arrayEdit"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "array edit test 2: edit of array of objects. should parse every value of 421 or above to be 420 (regex style)",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = @"$.screensavers..starttime",
+                        Search = @"^[4-9][2-9][0-9]$",
+                        Replace = "420",
+                        Mode = "arrayEdit"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "array edit test 3: edit of array of objects. should parse every value of 419 or below to be 420 (regex style)",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = @"$.screensavers..starttime",
+                        Search = @"^([0123]?[0-9]?[0-9]|4[01][0-9]|41[0-9])$",
+                        Replace = "420",
+                        Mode = "arrayEdit"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "array edit test 4: edit array of objects. should parse every value less than 420 to be 420 (jsonpath style)",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = @"$.screensavers2[?(@.starttime < 420)].starttime",
+                        Search = ".*",
+                        Replace = "420",
+                        Mode = "arrayEdit"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "array edit test 5: edit array of objects. should parse every value more than 420 to be 420 (jsonpath style)",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = @"$.screensavers2[?(@.starttime > 420)].starttime",
+                        Search = ".*",
+                        Replace = "420",
+                        Mode = "arrayEdit"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "remove test 1: basic remove test with property",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$.game_greeting2",
+                        Search = ".*",
+                        Replace = "",
+                        Mode = "remove"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "remove test 2: advanced remove test with property matching (should not remove as text not matched)",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$.game_greeting",
+                        Search = "not match this text",
+                        Replace = "",
+                        Mode = "remove"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "remove test 3: advanced remove test with property matching (should remove, text matched)",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$.game_greeting",
+                        Search = "match this text",
+                        Replace = "",
+                        Mode = "remove"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "arrayAdd test 1: basic add of jValue at index 0",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$.ignorelist",
+                        Search = ".*",
+                        Replace = "spaces[sl]urmom[index=0]",
+                        Mode = "arrayAdd"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "arrayAdd test 2: basic add of jValue at index -1 (last)",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$.ignorelist",
+                        Search = ".*",
+                        Replace = "spaces[sl]urmom2[index=-1]",
+                        Mode = "arrayAdd"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "arrayAdd test 3: attempt add of object to array of JValue, should fail",
+                    ShouldPass = false,
+                    Patch = new Patch()
+                    {
+                        Path = "$.ignorelist",
+                        Search = ".*",
+                        Replace = "enable/true[index=0]",
+                        Mode = "arrayAdd"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "arrayAdd test 4: attempt add of jValue to array of object, should fail",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$.sample_object_array",
+                        Search = ".*",
+                        Replace = "spaces[sl]urmom[index=0]",
+                        Mode = "arrayAdd"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "arrayAdd test 5: basic add of object",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$.sample_object_array",
+                        Search = ".*",
+                        Replace = "enable/true[index=0]",
+                        Mode = "arrayAdd"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "arrayRemove test 1: basic remove of jValue \"test\"",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$.ignorelist",
+                        Search = "test",
+                        Replace = "",
+                        Mode = "arrayRemove"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "arrayRemove test 2: basic remove of jValue \"test3\" (does not exist, should fail)",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$.ignorelist",
+                        Search = "test3",
+                        Replace = "",
+                        Mode = "arrayRemove"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "arrayRemove test 3: basic remove of jObject \"enable:true\"",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$.sample_object_array",
+                        Search = ".*",
+                        Replace = "",
+                        Mode = "arrayRemove"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "arrayClear test 1: basic clear of jValue \"test\"",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$.ignorelist",
+                        Search = "test",
+                        Replace = "",
+                        Mode = "arrayClear"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "arrayClear test 2: basic clear of jValue \"test\" (does not exist)",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$.ignorelist",
+                        Search = "test",
+                        Replace = "",
+                        Mode = "arrayClear"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "arrayClear test 3: basic clear of object \".*\" (all)",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "$.screensavers.starttime",
+                        Search = ".*",
+                        Replace = "",
+                        Mode = "arrayClear"
+                    }
+                }
             };
         }
         #endregion
@@ -750,7 +1121,114 @@ namespace RelhaxModpack.Windows
         {
             return new List<UnitTest>()
             {
-
+                new UnitTest()
+                {
+                    Description = "add test 1: adding element with value",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "//audio_mods.xml/loadBanks",
+                        Search = "",
+                        Replace = "bank/sound_bank_name",
+                        Mode = "add"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "add test 2: adding element with levels (with value)",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "//audio_mods.xml/events",
+                        Search = "",
+                        Replace = "event/name/vo_ally_killed_by_player",
+                        Mode = "add"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "add test 3: adding in element where child inner text equals",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "/audio_mods.xml/events/event[name = \"vo_ally_killed_by_player\"]",
+                        Search = "",
+                        Replace = "mod/simple_sounds_teamkill",
+                        Mode = "add"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "add test 4: adding element with escape for slash",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "//audio_mods.xml/RTPCs",
+                        Search = "",
+                        Replace = "RTPC/RTPC[sl]volume_slider_name",
+                        Mode = "add"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "edit test 1: edit of a value matching parameter to new value",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "//audio_mods.xml/random_property",
+                        Search = "value",
+                        Replace = "better_value",
+                        Mode = "edit"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "edit test 2: edit of a value matching parameter to a new value (but match does not exist)",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "//audio_mods.xml/random_property",
+                        Search = "fake_value",
+                        Replace = "more_fake_value",
+                        Mode = "edit"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "edit test 3: edit of matching any value to a new value",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "//audio_mods.xml/random_property2",
+                        Search = "",
+                        Replace = "new_value",
+                        Mode = "edit"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "remove test 1: remove matching element name",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "//audio_mods.xml/prop_to_remove",
+                        Search = "",
+                        Replace = "",
+                        Mode = "remove"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "remove test 2: remove matching element name and value",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Path = "//audio_mods.xml/prop_to_remove2",
+                        Search = "remove_me",
+                        Replace = "",
+                        Mode = "remove"
+                    }
+                }
             };
         }
         #endregion
@@ -760,7 +1238,30 @@ namespace RelhaxModpack.Windows
         {
             return new List<UnitTest>()
             {
-
+                new UnitTest()
+                {
+                    Description = "multiple matches, only replaces on specified lines",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Lines = new string[] { "3", "5" },
+                        Search = "should match",
+                        Replace = "replaced",
+                        Mode = "regex"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "multiple matches, replaces all lines",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        Lines = new string[] { },
+                        Search = "should match",
+                        Replace = "replaced",
+                        Mode = "regex"
+                    }
+                }
             };
         }
         #endregion

@@ -17,6 +17,7 @@ namespace RelhaxModpack
     {
         public Patch Patch;
         public string Description;
+        public bool ShouldPass;
     }
     public class Regression
     {
