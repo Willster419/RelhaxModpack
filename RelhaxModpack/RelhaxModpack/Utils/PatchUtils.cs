@@ -762,14 +762,16 @@ namespace RelhaxModpack
                     List<JValue> Jresults = new List<JValue>();
                     foreach(JToken jt in results)
                     {
-                        if(!(jt is JValue))
+                        if(jt is JValue Jvalue)
                         {
-                            //Logging.WriteToLog("ERROR: returned token for p.path is not a JValue, aborting patch");
+                            Jresults.Add(Jvalue);
+                        }
+                        else
+                        {
                             Logging.WriteToLog(string.Format("Expected results of type JValue, returned {0}", jt.Type.ToString()),
                                 Logfiles.Application, LogLevel.Error);
                             return;
                         }
-                        Jresults.Add((JValue)jt);
                     }
                     Logging.Debug("number of Jvalues: {0}", Jresults.Count);
                     if (Jresults.Count == 0)
