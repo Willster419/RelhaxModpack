@@ -100,7 +100,6 @@ namespace RelhaxModpack
         private static Logfile UninstallLogfile;
         private static bool FailedToWriteToLogWindowShown = false;
         public static event LoggingUIThreadReport OnLoggingUIThreadReport;
-        public static System.Windows.Threading.Dispatcher Dispatcher;
         /// <summary>
         /// Initialize the logging subsystem for the appilcation
         /// </summary>
@@ -165,11 +164,8 @@ namespace RelhaxModpack
             switch (logfile)
             {
                 case Logfiles.Application:
-                    if (ApplicationLogfile != null)
-                    {
-                        ApplicationLogfile.Dispose();
-                        ApplicationLogfile = null;
-                    }
+                    ApplicationLogfile.Dispose();
+                    ApplicationLogfile = null;
                     break;
                 case Logfiles.Installer:
                     InstallLogfile.Dispose();
@@ -223,9 +219,9 @@ namespace RelhaxModpack
             if (logfiles == Logfiles.Application)
             {
                 string temp = fileToWriteTo.Write(message, logLevel);
-                if(Dispatcher != null && OnLoggingUIThreadReport != null)
+                if(OnLoggingUIThreadReport != null)
                 {
-                    Dispatcher.Invoke(OnLoggingUIThreadReport, DispatcherPriority.Normal, temp);
+                    OnLoggingUIThreadReport(message);
                 }
             }
             else

@@ -86,7 +86,6 @@ namespace RelhaxModpack.Windows
             AddPatchButton_Click(null, null);
             PatchesList.SelectedIndex = 0;
             //attach the log output to the logfile
-            Logging.Dispatcher = Dispatcher;
             Logging.OnLoggingUIThreadReport += Logging_OnLoggingUIThreadReport;
             init = false;
         }
@@ -714,33 +713,39 @@ namespace RelhaxModpack.Windows
             Logging.Info("Regex regressions end");
         }
 
-        private void XmlRegressionTesting_Click(object sender, RoutedEventArgs e)
+        private async void XmlRegressionTesting_Click(object sender, RoutedEventArgs e)
         {
             if (PatchSettings.SwitchToLogWhenTestingPatch)
             {
                 RightSideTabControl.SelectedItem = LogOutputTab;
             }
             Logging.Info("Xml regressions start");
-            Regression regression = new Regression(RegressionTypes.xml, BuildXmlUnittests());
-            regression.RunRegressions();
+            await Task.Run(() =>
+            {
+                Regression regression = new Regression(RegressionTypes.xml, BuildXmlUnittests());
+                regression.RunRegressions();
+            });
             Logging.Info("Xml regressions end");
         }
 
-        private void JsonRegressionTesting_Click(object sender, RoutedEventArgs e)
+        private async void JsonRegressionTesting_Click(object sender, RoutedEventArgs e)
         {
             if (PatchSettings.SwitchToLogWhenTestingPatch)
             {
                 RightSideTabControl.SelectedItem = LogOutputTab;
             }
             Logging.Info("Json regressions start");
-            Regression regression = new Regression(RegressionTypes.json, BuildJsonUnittests());
-            regression.RunRegressions();
+            await Task.Run(() =>
+            {
+                Regression regression = new Regression(RegressionTypes.json, BuildJsonUnittests());
+                regression.RunRegressions();
+            });
             Logging.Info("Json regressions end");
         }
 
         private void Logging_OnLoggingUIThreadReport(string message)
         {
-            LogOutput.AppendText(message);
+            Dispatcher.BeginInvoke(new Action(() => { LogOutput.AppendText(message + Environment.NewLine); }));
         }
         #endregion
 
