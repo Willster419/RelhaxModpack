@@ -717,7 +717,7 @@ namespace RelhaxModpack.Windows
                 RightSideTabControl.SelectedItem = LogOutputTab;
             }
             Logging.Info("Xml regressions start");
-            Regression regression = new Regression(RegressionTypes.xml, BuildRegexUnittests());
+            Regression regression = new Regression(RegressionTypes.xml, BuildXmlUnittests());
             regression.RunRegressions();
             Logging.Info("Xml regressions end");
         }
@@ -729,7 +729,7 @@ namespace RelhaxModpack.Windows
                 RightSideTabControl.SelectedItem = LogOutputTab;
             }
             Logging.Info("Json regressions start");
-            Regression regression = new Regression(RegressionTypes.json, BuildRegexUnittests());
+            Regression regression = new Regression(RegressionTypes.json, BuildJsonUnittests());
             regression.RunRegressions();
             Logging.Info("Json regressions end");
         }
