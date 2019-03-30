@@ -86,7 +86,7 @@ namespace RelhaxModpack.Windows
             AddPatchButton_Click(null, null);
             PatchesList.SelectedIndex = 0;
             //attach the log output to the logfile
-            Logging.TextBox = LogOutput;
+            Logging.OnLoggingUIThreadReport += Logging_OnLoggingUIThreadReport;
             init = false;
         }
 
@@ -698,15 +698,18 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Regression Testing
-        private void RegexRegressionTesting_Click(object sender, RoutedEventArgs e)
+        private async void RegexRegressionTesting_Click(object sender, RoutedEventArgs e)
         {
             if (PatchSettings.SwitchToLogWhenTestingPatch)
             {
                 RightSideTabControl.SelectedItem = LogOutputTab;
             }
             Logging.Info("Regex regressions start");
-            Regression regression = new Regression(RegressionTypes.regex, BuildRegexUnittests());
-            regression.RunRegressions();
+            await Task.Run(() =>
+            {
+                Regression regression = new Regression(RegressionTypes.regex, BuildRegexUnittests());
+                regression.RunRegressions();
+            });
             Logging.Info("Regex regressions end");
         }
 
@@ -732,6 +735,11 @@ namespace RelhaxModpack.Windows
             Regression regression = new Regression(RegressionTypes.json, BuildJsonUnittests());
             regression.RunRegressions();
             Logging.Info("Json regressions end");
+        }
+
+        private void Logging_OnLoggingUIThreadReport(string message)
+        {
+            LogOutput.AppendText(message);
         }
         #endregion
 

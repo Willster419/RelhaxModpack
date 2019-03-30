@@ -51,6 +51,9 @@ namespace RelhaxModpack
         /// </summary>
         ApplicationHalt
     }
+
+    public delegate void LoggingUIThreadReport(string message);
+
     /// <summary>
     /// A static constant refrence to common logging variables and common log refrences
     /// </summary>
@@ -95,7 +98,7 @@ namespace RelhaxModpack
         /// </summary>
         private static Logfile UninstallLogfile;
         private static bool FailedToWriteToLogWindowShown = false;
-        public static System.Windows.Controls.TextBox TextBox;
+        public static event LoggingUIThreadReport OnLoggingUIThreadReport;
         /// <summary>
         /// Initialize the logging subsystem for the appilcation
         /// </summary>
@@ -214,13 +217,10 @@ namespace RelhaxModpack
             }
             if (logfiles == Logfiles.Application)
             {
-                if (TextBox != null)
+                string temp = fileToWriteTo.Write(message, logLevel);
+                if (OnLoggingUIThreadReport != null)
                 {
-                    TextBox.AppendText(fileToWriteTo.Write(message, logLevel) + System.Environment.NewLine);
-                }
-                else
-                {
-                    fileToWriteTo.Write(message, logLevel);
+                    OnLoggingUIThreadReport(temp);
                 }
             }
             else

@@ -7,18 +7,21 @@ using System.IO;
 
 namespace RelhaxModpack
 {
+
     public enum RegressionTypes
     {
         json,
         xml,
         regex
     }
+
     public class UnitTest
     {
         public Patch Patch;
         public string Description;
         public bool ShouldPass;
     }
+
     public class Regression
     {
 
