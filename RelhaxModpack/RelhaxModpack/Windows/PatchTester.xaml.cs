@@ -704,6 +704,10 @@ namespace RelhaxModpack.Windows
             {
                 RightSideTabControl.SelectedItem = LogOutputTab;
             }
+            Logging.Info("Regex regressions start");
+            Regression regression = new Regression(RegressionTypes.regex, BuildRegexUnittests());
+            regression.RunRegressions();
+            Logging.Info("Regex regressions end");
         }
 
         private void XmlRegressionTesting_Click(object sender, RoutedEventArgs e)
@@ -712,6 +716,10 @@ namespace RelhaxModpack.Windows
             {
                 RightSideTabControl.SelectedItem = LogOutputTab;
             }
+            Logging.Info("Xml regressions start");
+            Regression regression = new Regression(RegressionTypes.xml, BuildRegexUnittests());
+            regression.RunRegressions();
+            Logging.Info("Xml regressions end");
         }
 
         private void JsonRegressionTesting_Click(object sender, RoutedEventArgs e)
@@ -720,6 +728,40 @@ namespace RelhaxModpack.Windows
             {
                 RightSideTabControl.SelectedItem = LogOutputTab;
             }
+            Logging.Info("Json regressions start");
+            Regression regression = new Regression(RegressionTypes.json, BuildRegexUnittests());
+            regression.RunRegressions();
+            Logging.Info("Json regressions end");
+        }
+        #endregion
+
+        #region json regressions
+        private List<UnitTest> BuildJsonUnittests()
+        {
+            return new List<UnitTest>()
+            {
+
+            };
+        }
+        #endregion
+
+        #region xml regressions
+        private List<UnitTest> BuildXmlUnittests()
+        {
+            return new List<UnitTest>()
+            {
+
+            };
+        }
+        #endregion
+
+        #region regex regressions
+        private List<UnitTest> BuildRegexUnittests()
+        {
+            return new List<UnitTest>()
+            {
+
+            };
         }
         #endregion
     }
