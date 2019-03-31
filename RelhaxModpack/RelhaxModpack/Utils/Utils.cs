@@ -39,6 +39,8 @@ namespace RelhaxModpack
     public static class Utils
     {
         #region Statics
+        public const int TO_SECONDS = 1000;
+        public const int TO_MINUETS = 60;
         public static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
         public const long BYTES_TO_MBYTES = 1048576;
         //MACROS
