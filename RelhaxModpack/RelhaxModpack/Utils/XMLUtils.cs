@@ -735,7 +735,7 @@ namespace RelhaxModpack
                                     ld.PackageName = Utils.RandomString(30);
                                     Logging.WriteToLog("PackageName is random generated: " + ld.PackageName);              // to avoid exceptions
                                 }
-                                d.DatabasePackageLogic.Add(ld);
+                                d.Dependencies.Add(ld);
                             }
                             break;
                         default:
@@ -1626,6 +1626,10 @@ namespace RelhaxModpack
                 globalDepEnabled.InnerText = "" + d.Enabled;
                 globalDependencyRoot.AppendChild(globalDepEnabled);
 
+                XmlElement globalDepAppendExtraction = doc.CreateElement("appendExtraction");
+                globalDepAppendExtraction.InnerText = "" + d.AppendExtraction;
+                globalDependencyRoot.AppendChild(globalDepAppendExtraction);
+
                 XmlElement globalDepPackageName = doc.CreateElement("packageName");
                 if (!string.IsNullOrWhiteSpace(d.PackageName))
                     globalDepPackageName.InnerText = d.PackageName.Trim();
@@ -1688,6 +1692,10 @@ namespace RelhaxModpack
                 XmlElement depEnabled = doc.CreateElement("enabled");
                 depEnabled.InnerText = "" + d.Enabled;
                 dependencyRoot.AppendChild(depEnabled);
+
+                XmlElement depAppendExtraction = doc.CreateElement("appendExtraction");
+                depAppendExtraction.InnerText = "" + d.AppendExtraction;
+                dependencyRoot.AppendChild(depAppendExtraction);
 
                 XmlElement depPackageName = doc.CreateElement("packageName");
                 if (!string.IsNullOrWhiteSpace(d.PackageName))
@@ -1824,6 +1832,11 @@ namespace RelhaxModpack
                 XmlElement catagoryName = doc.CreateElement("name");
                 catagoryName.InnerText = c.Name.Trim();
                 catagoryRoot.AppendChild(catagoryName);
+
+                XmlElement categoryInstallGroup = doc.CreateElement("installGroup");
+                categoryInstallGroup.InnerText = "" + c.InstallGroup;
+                catagoryRoot.AppendChild(categoryInstallGroup);
+
                 //dependencies for catagory
                 XmlElement catagoryDependencies = doc.CreateElement("dependencies");
                 foreach (DatabaseLogic d in c.Dependencies)
