@@ -17,6 +17,9 @@ namespace RelhaxModpack
         public SelectablePackage CategoryHeader = null;
         public List<SelectablePackage> Packages = new List<SelectablePackage>();
 
+        //legacy compatibility: the install group number of the category
+        public int InstallGroup = 0;
+
         public TreeView @TreeView;
         //list of dependencies required if anything is
         //selected from this catagory

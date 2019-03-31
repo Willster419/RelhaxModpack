@@ -92,6 +92,9 @@ namespace RelhaxModpack
         public int PatchGroup = 0;
         public string InternalNotes = "";
 
+        //legacy compatibility: append extraction flag
+        public bool AppendExtraction = false;
+
         //used for the editor ONLY
         public TreeViewItem EditorTreeViewItem = null;
 

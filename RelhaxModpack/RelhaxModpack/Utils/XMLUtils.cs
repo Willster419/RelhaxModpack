@@ -598,6 +598,9 @@ namespace RelhaxModpack
                         case "enabled":
                             d.Enabled = Utils.ParseBool(globs.Value, false);
                             break;
+                        case "appendExtraction":
+                            d.AppendExtraction = Utils.ParseBool(globs.Value.Trim(), false);
+                            break;
                         case "packageName":
                             d.PackageName = globs.Value.Trim();
                             if (string.IsNullOrEmpty(d.PackageName))
@@ -646,6 +649,7 @@ namespace RelhaxModpack
                 List<string> optionalDepNodList = new List<string>() { "startAddress", "endAddress", "devURL", "timestamp" , "logicalDependencies", "logAtInstall" };
                 List<string> unknownNodeList = new List<string>() { };
                 Dependency d = new Dependency();
+                d.wasLogicalDependencyLegacy = false;
                 foreach (XElement globs in dependencyNode.Elements())
                 {
                     switch (globs.Name.ToString())
@@ -674,6 +678,9 @@ namespace RelhaxModpack
                         case "enabled":
                             d.Enabled = Utils.ParseBool(globs.Value, false);
                             break;
+                        case "appendExtraction":
+                            d.AppendExtraction = Utils.ParseBool(globs.Value.Trim(), false);
+                            break;
                         case "packageName":
                             d.PackageName = globs.Value.Trim();
                             if (string.IsNullOrEmpty(d.PackageName))
@@ -691,6 +698,7 @@ namespace RelhaxModpack
                             {
                                 string[] logDepNodeList = new string[] { "packageName", "negateFlag" };
                                 DatabaseLogic ld = new DatabaseLogic();
+                                ld.Logic = Logic.AND;
                                 foreach (XElement logDependencyNode in logDependencyHolder.Elements())
                                 {
                                     logDepNodeList = logDepNodeList.Except(new string[] { logDependencyNode.Name.ToString() }).ToArray();
@@ -767,6 +775,7 @@ namespace RelhaxModpack
                 List<string> optionalDepNodList = new List<string>() { "startAddress", "endAddress", "devURL", "timestamp", "logAtInstall" };
                 List<string> unknownNodeList = new List<string>() { };
                 Dependency d = new Dependency();
+                d.wasLogicalDependencyLegacy = true;
                 foreach (XElement globs in dependencyNode.Elements())
                 {
                     switch (globs.Name.ToString())
@@ -847,6 +856,9 @@ namespace RelhaxModpack
                     {
                         case "name":
                             cat.Name = catagoryNode.Value;
+                            break;
+                        case "installGroup":
+                            cat.InstallGroup = Utils.ParseInt(catagoryNode.Value.Trim(), 0);
                             break;
                         case "packages":
                             foreach (XElement modHolder in catagoryNode.Elements())
@@ -1575,13 +1587,26 @@ namespace RelhaxModpack
         
         //saves the mod database
         public static void SaveDatabaseLegacy(string saveLocation, XmlDocument doc, List<DatabasePackage> globalDependencies,
-            List<Dependency> dependencies, List<Dependency> logicalDependencies, List<Category> parsedCatagoryList)
+            List<Dependency> dependencies, List<Category> parsedCatagoryList)
         {
+            //V2 compatibility: dependencies need to be sorted into logical and regular for legacy database
+            List<Dependency> logicalDependencies = dependencies.Where(dep => dep.wasLogicalDependencyLegacy).ToList();
+            dependencies = dependencies.Where(dep => !dep.wasLogicalDependencyLegacy).ToList();
+
+            // Create an XML declaration. (except it already has it, so don't)
+            //XmlDeclaration xmldecl;
+            //xmldecl = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
+
+            // Add the new node to the document.
+            //XmlElement cDoc = doc.DocumentElement;
+            //doc.InsertBefore(xmldecl, cDoc);
+
             //database root modInfo.xml
             XmlElement root = doc.DocumentElement;
+
             //global dependencies
             XmlElement globalDependenciesXml = doc.CreateElement("globaldependencies");
-            foreach (Dependency d in globalDependencies)
+            foreach (DatabasePackage d in globalDependencies)
             {
                 //declare dependency root
                 XmlElement globalDependencyRoot = doc.CreateElement("globaldependency");
@@ -1749,6 +1774,10 @@ namespace RelhaxModpack
                 if (!d.ZipFile.Trim().Equals(""))
                     logicalDepPackageName.InnerText = d.PackageName.Trim();
                 logicalDependencyRoot.AppendChild(logicalDepPackageName);
+
+                XmlElement logicalDepLogic = doc.CreateElement("logic");
+                logicalDepLogic.InnerText = "AND";//hard-coded for legacy
+                logicalDependencyRoot.AppendChild(logicalDepLogic);
 
                 //optional
                 if (d.Timestamp > 0)
@@ -1960,14 +1989,6 @@ namespace RelhaxModpack
             }
             root.AppendChild(catagoriesHolder);
 
-            // Create an XML declaration.
-            XmlDeclaration xmldecl;
-            xmldecl = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
-
-            // Add the new node to the document.
-            XmlElement cDoc = doc.DocumentElement;
-            doc.InsertBefore(xmldecl, cDoc);
-
             // save database file
             doc.Save(saveLocation);
         }
@@ -2145,11 +2166,9 @@ namespace RelhaxModpack
                 case DatabaseXmlVersion.Legacy:
                     //when legacy, saveLocation is a single file
                     if(Path.HasExtension(saveLocation))
-                        SaveDatabaseLegacy(saveLocation, doc, globalDependencies, dependencies.Where(dep => !dep.PackageName.Contains("ogical")).ToList(),
-                            dependencies.Where(dep => dep.PackageName.Contains("ogical")).ToList(), parsedCatagoryList);
+                        SaveDatabaseLegacy(saveLocation, doc, globalDependencies, dependencies, parsedCatagoryList);
                     else
-                        SaveDatabaseLegacy(Path.Combine(saveLocation, "modInfoAlpha.xml"), doc, globalDependencies, dependencies.Where(dep => !dep.PackageName.Contains("ogical")).ToList(),
-                            dependencies.Where(dep => dep.PackageName.Contains("ogical")).ToList(), parsedCatagoryList);
+                        SaveDatabaseLegacy(Path.Combine(saveLocation, "modInfoAlpha.xml"), doc, globalDependencies, dependencies, parsedCatagoryList);
                     break;
                 case DatabaseXmlVersion.OnePointOne:
                     //in 1.1, saveLocation is a document path

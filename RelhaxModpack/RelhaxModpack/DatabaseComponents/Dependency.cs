@@ -18,6 +18,8 @@ namespace RelhaxModpack
         public List<DatabaseLogic> DatabasePackageLogic = new List<DatabaseLogic>();
         //list of dependnecies this dependency calls on
         public List<DatabaseLogic> Dependencies = new List<DatabaseLogic>();
+        //legacy compatibility feature: set this for when loading from legacy database type and is was of type "logicalDependency"
+        public bool wasLogicalDependencyLegacy = false;
         //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/versioning-with-the-override-and-new-keywords
 
         public Dependency()
