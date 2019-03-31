@@ -126,9 +126,9 @@ namespace RelhaxModpack
                 unitTest.Patch.Type = RegressionTypeString;
                 WriteToLogfiles("Running test {0} of {1}: {2}", ++NumPassed, UnitTests.Count, unitTest.Description);
                 PatchUtils.RunPatch(unitTest.Patch);
-                WriteToLogfiles("Checking results...");
-                string patchRun = File.ReadAllText(filenameToTestPath);
                 string checkfile = Path.Combine(RegressionFolderPath, string.Format("{0}{1}{2}", CheckFilenamePrefix, NumPassed.ToString("D2"), Path.GetExtension(Startfile)));
+                WriteToLogfiles("Checking results against check file {0}...",Path.GetFileName(checkfile));
+                string patchRun = File.ReadAllText(filenameToTestPath);
                 string patchTestAgainst = File.ReadAllText(checkfile);
                 if (patchTestAgainst.Equals(patchRun))
                 {
