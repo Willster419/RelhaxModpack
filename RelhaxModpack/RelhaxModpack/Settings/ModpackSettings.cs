@@ -116,6 +116,7 @@ namespace RelhaxModpack
         public static bool SaveDisabledMods = true;
         public static bool DisplayUserModsWarning = true;
         public static bool VerboseLogging = false;
+        public static bool AllowStatisticDataGather = true;
         /// <summary>
         /// toggle for each view if the borders around the child selection options should show
         /// </summary>

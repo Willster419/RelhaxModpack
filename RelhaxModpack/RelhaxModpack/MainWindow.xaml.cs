@@ -20,6 +20,7 @@ using System.Diagnostics;
 using Ionic.Zip;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Net.Http;
 
 namespace RelhaxModpack
 {
@@ -855,6 +856,52 @@ namespace RelhaxModpack
             foreach (SelectablePackage sp in flatList)
                 flatListSelect.Add(sp);
             List<Dependency> dependneciesToInstall = new List<Dependency>(Utils.CalculateDependencies(dependencies, flatListSelect));
+            //make a flat list of all packages to install (including those without a zip file) for statistic data gathering
+            if(ModpackSettings.AllowStatisticDataGather)
+            {
+                List<DatabasePackage> packagesToGather = new List<DatabasePackage>();
+                packagesToGather.AddRange(globalDependencies.Where(globalDep => globalDep.Enabled).ToList());
+                packagesToGather.AddRange(dependneciesToInstall.Where(dep => dep.Enabled).ToList());
+                packagesToGather.AddRange(flatListSelect.Where(fl => fl.Enabled && fl.Checked).ToList());
+                //https://stackoverflow.com/questions/13781468/get-list-of-properties-from-list-of-objects
+                List<string> packageNamesToUpload = packagesToGather.Select(pack => pack.PackageName).ToList();
+                //https://stackoverflow.com/questions/10292730/httpclient-getasync-with-network-credentials
+                using (HttpClientHandler handler = new HttpClientHandler()
+                {
+                    Credentials = PrivateStuff.BigmodsNetworkCredential,
+                    ClientCertificateOptions = ClientCertificateOption.Automatic,
+                    PreAuthenticate = true
+                })
+                using (HttpClient client = new HttpClient(handler) { BaseAddress = new Uri(PrivateStuff.BigmodsDownloadStatURL) })
+                {
+                    //https://stackoverflow.com/questions/15176538/net-httpclient-how-to-post-string-value
+                    FormUrlEncodedContent content = new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("packageNames", string.Join(",",packageNamesToUpload))
+                    });
+                    //remove first await when running later, this is just for testing
+                    Task.Run(async () => 
+                    {
+                        try
+                        {
+                            HttpResponseMessage result = await client.PostAsync("", content);
+                            Logging.Debug("Statistic data HTTP response code: {0}", result.StatusCode.ToString());
+                            if(!result.IsSuccessStatusCode)
+                            {
+                                Logging.Warning("Failed to send statistic data. Response code={0}, reason={1}", result.StatusCode.ToString(), result.ReasonPhrase);
+                            }
+                            string resultContent = await result.Content.ReadAsStringAsync();
+                        }
+                        catch(Exception ex)
+                        {
+                            Logging.Error("an error occured sending statistic data");
+                            Logging.Error(ex.ToString());
+                        }
+
+                    });
+                    //for debug as well
+                }
+            }
             //make a flat list of all packages to install that will actually be installed
             List<DatabasePackage> packagesToInstall = new List<DatabasePackage>();
             packagesToInstall.AddRange(globalDependencies.Where(globalDep => globalDep.Enabled && !string.IsNullOrWhiteSpace(globalDep.ZipFile)).ToList());
