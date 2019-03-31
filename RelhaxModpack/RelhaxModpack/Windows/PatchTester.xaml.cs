@@ -33,6 +33,7 @@ namespace RelhaxModpack.Windows
         private bool init = true;
         //for drag drop
         private bool IsPatchListScrolling = false;
+        private bool RegressionsRunning = false;
         private Point BeforeDragDropPoint;
         private string[] validXmlModes = new string[]
         {
@@ -245,6 +246,11 @@ namespace RelhaxModpack.Windows
             {
                 SavePatchXmlButton_Click(null, null);
             }
+        }
+        private void LogOutput_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if(RegressionsRunning)
+                LogOutput.ScrollToEnd();
         }
         #endregion
 
@@ -700,6 +706,7 @@ namespace RelhaxModpack.Windows
         #region Regression Testing
         private async void RegexRegressionTesting_Click(object sender, RoutedEventArgs e)
         {
+            RegressionsRunning = true;
             if (PatchSettings.SwitchToLogWhenTestingPatch)
             {
                 RightSideTabControl.SelectedItem = LogOutputTab;
@@ -711,10 +718,12 @@ namespace RelhaxModpack.Windows
                 regression.RunRegressions();
             });
             Logging.Info("Regex regressions end");
+            Dispatcher.Invoke(new Action(() => { RegressionsRunning = false; }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
         }
 
         private async void XmlRegressionTesting_Click(object sender, RoutedEventArgs e)
         {
+            RegressionsRunning = true;
             if (PatchSettings.SwitchToLogWhenTestingPatch)
             {
                 RightSideTabControl.SelectedItem = LogOutputTab;
@@ -726,10 +735,12 @@ namespace RelhaxModpack.Windows
                 regression.RunRegressions();
             });
             Logging.Info("Xml regressions end");
+            Dispatcher.Invoke(new Action(() => { RegressionsRunning = false; }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
         }
 
         private async void JsonRegressionTesting_Click(object sender, RoutedEventArgs e)
         {
+            RegressionsRunning = true;
             if (PatchSettings.SwitchToLogWhenTestingPatch)
             {
                 RightSideTabControl.SelectedItem = LogOutputTab;
@@ -741,10 +752,15 @@ namespace RelhaxModpack.Windows
                 regression.RunRegressions();
             });
             Logging.Info("Json regressions end");
+            Dispatcher.Invoke(new Action(() => { RegressionsRunning = false; }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
         }
 
         private void Logging_OnLoggingUIThreadReport(string message)
         {
+            //https://www.tutorialspoint.com/csharp/csharp_delegates.htm
+            //https://docs.microsoft.com/en-us/dotnet/api/system.windows.threading.dispatcher.invoke?redirectedfrom=MSDN&view=netframework-4.6.1#examples
+            //https://stackoverflow.com/questions/1951927/events-in-c-sharp-definition-and-example
+            //https://stackoverflow.com/questions/4936459/dispatcher-begininvoke-cannot-convert-lambda-to-system-delegate
             Dispatcher.BeginInvoke(new Action(() => { LogOutput.AppendText(message + Environment.NewLine); }));
         }
         #endregion
@@ -916,8 +932,8 @@ namespace RelhaxModpack.Windows
                     ShouldPass = true,
                     Patch = new Patch()
                     {
-                        Path = @"$.screensavers..starttime",
-                        Search = @"^[4-9][2-9][0-9]$",
+                        Path = @"$.screensavers.starttime[*]",
+                        Search = @"^[4-9][2-9][0-9]\d*$",
                         Replace = "420",
                         Mode = "arrayEdit"
                     }
@@ -928,7 +944,7 @@ namespace RelhaxModpack.Windows
                     ShouldPass = true,
                     Patch = new Patch()
                     {
-                        Path = @"$.screensavers..starttime",
+                        Path = @"$.screensavers.starttime[*]",
                         Search = @"^([0123]?[0-9]?[0-9]|4[01][0-9]|41[0-9])$",
                         Replace = "420",
                         Mode = "arrayEdit"
@@ -940,7 +956,7 @@ namespace RelhaxModpack.Windows
                     ShouldPass = true,
                     Patch = new Patch()
                     {
-                        Path = @"$.screensavers2[?(@.starttime < 420)].starttime",
+                        Path = @"$.screensavers2.starttime[?(@<420)]",
                         Search = ".*",
                         Replace = "420",
                         Mode = "arrayEdit"
@@ -952,7 +968,7 @@ namespace RelhaxModpack.Windows
                     ShouldPass = true,
                     Patch = new Patch()
                     {
-                        Path = @"$.screensavers2[?(@.starttime > 420)].starttime",
+                        Path = @"$.screensavers2.starttime[?(@>420)]",
                         Search = ".*",
                         Replace = "420",
                         Mode = "arrayEdit"

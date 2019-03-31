@@ -75,7 +75,7 @@
             <TabItem x:Name="LogOutputTab" Header="Log Output">
                 <Grid Background="#FFE5E5E5">
                     <Button x:Name="ClearLogButton" Content="Clear Log" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Click="ClearLogButton_Click"/>
-                    <TextBox x:Name="LogOutput" HorizontalAlignment="Stretch" Margin="0,0,0,20" TextWrapping="Wrap" VerticalAlignment="Stretch" AllowDrop="False" VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" />
+                    <TextBox x:Name="LogOutput" HorizontalAlignment="Stretch" Margin="0,0,0,20" TextWrapping="Wrap" VerticalAlignment="Stretch" AllowDrop="False" VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" ScrollViewer.ScrollChanged="LogOutput_ScrollChanged"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="PatchingHelpTab" Header="Patching Help">
