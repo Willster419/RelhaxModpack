@@ -53,8 +53,6 @@ namespace RelhaxModpack.Windows
         string LastSupportedModInfoXml = "";
         //the new database version to upload
         string DatabaseUpdateVersion = "";
-        //made from the above info, the name of the xml file of the last supported to be uploaded to the backups folder on the server
-        string BackupModInfoXmlToServer = "";
         //the version number of the last supported WoT client, used for making backup online folder
         string LastSupportedTanksVersion = "";
 
@@ -188,7 +186,6 @@ namespace RelhaxModpack.Windows
                 SupportedClients,
                 ManagerVersion,
                 DatabaseXml,
-                BackupModInfoXmlToServer,
                 CurrentModInfoXml,
                 LastSupportedModInfoXml
             };
@@ -553,7 +550,6 @@ namespace RelhaxModpack.Windows
 
             //init strings
             CurrentModInfoXml = string.Empty;
-            BackupModInfoXmlToServer = string.Empty;
             DatabaseUpdateVersion = string.Empty;
             LastSupportedModInfoXml = string.Empty;
             LastSupportedTanksVersion = string.Empty;
@@ -888,6 +884,7 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
+        #region Util methods
 
         private async Task RunPhpScript(NetworkCredential credentials, string URL, int timeoutMilliseconds)
         {
@@ -907,7 +904,6 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        #region MD5 hashing
         private async void GenerateMD5Button_Click(object sender, RoutedEventArgs e)
         {
             LogOutput.Clear();
