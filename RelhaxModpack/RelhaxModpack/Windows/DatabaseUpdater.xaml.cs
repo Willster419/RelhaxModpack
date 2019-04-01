@@ -586,8 +586,25 @@ namespace RelhaxModpack.Windows
                 XmlDocument doc = XMLUtils.LoadXmlDocument(xml, XmlLoadType.FromXml);
                 XmlNode database_version_text = doc.SelectSingleNode("//version/database");
                 //database update text is like this: <WoTVersion>_<Date>_<itteration>
-                int lastItteration = int.Parse(database_version_text.InnerText.Split('_')[2]);
-                DatabaseUpdateVersion = string.Format("{0}_{1}_{2}", Settings.WoTClientVersion, dateTimeFormat, ++lastItteration);
+                //only update the iteration if the WoT version and date match
+                string lastWoTClientVersion = database_version_text.InnerText.Split('_')[0];
+                string lastDate = database_version_text.InnerText.Split('_')[1];
+                ReportProgress(string.Format("lastWoTClientVersion = {0}", lastWoTClientVersion));
+                ReportProgress(string.Format("lastDate = {0}", lastDate));
+                ReportProgress(string.Format("currentWoTClientVersion = {0}", Settings.WoTClientVersion));
+                ReportProgress(string.Format("currentDate = {0}", dateTimeFormat));
+                if (lastWoTClientVersion.Equals(Settings.WoTClientVersion) && lastDate.Equals(dateTimeFormat))
+                {
+                    ReportProgress("lastWoTVersion and date match, so incrementing the version");
+                    int lastItteration = int.Parse(database_version_text.InnerText.Split('_')[2]);
+                    DatabaseUpdateVersion = string.Format("{0}_{1}_{2}", Settings.WoTClientVersion, dateTimeFormat, ++lastItteration);
+                }
+                else
+                {
+                    ReportProgress("lastWoTVersion and/or date NOT match, not incrementing the version (starts at 1)");
+                    DatabaseUpdateVersion = string.Format("{0}_{1}_1", Settings.WoTClientVersion, dateTimeFormat);
+                }
+                ReportProgress(string.Format("DatabaseUpdateVersion = {0}", DatabaseUpdateVersion));
             }
 
             //download and parse supported_clients to make XML name of last supported wot version for comparison
