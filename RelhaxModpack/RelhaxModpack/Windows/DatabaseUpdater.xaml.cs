@@ -876,11 +876,11 @@ namespace RelhaxModpack.Windows
         private async Task RunPhpScript(NetworkCredential credentials, string URL, int timeoutMilliseconds)
         {
             using (client = new PatientWebClient()
-            { Credentials = PrivateStuff.WotmodsNetworkCredential, Timeout = timeoutMilliseconds })
+            { Credentials = credentials, Timeout = timeoutMilliseconds })
             {
                 try
                 {
-                    string result = await client.DownloadStringTaskAsync(PrivateStuff.CreateManagerInfoPHP);
+                    string result = await client.DownloadStringTaskAsync(URL);
                     LogOutput.Text = result.Replace("<br />", "\n");
                 }
                 catch (WebException wex)
