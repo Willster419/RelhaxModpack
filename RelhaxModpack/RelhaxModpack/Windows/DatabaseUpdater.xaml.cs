@@ -791,6 +791,10 @@ namespace RelhaxModpack.Windows
                 //upload manager_version.xml
                 ReportProgress("Uploading new manager_version.xml");
                 await client.UploadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + ManagerVersion, ManagerVersion);
+
+                //upload databaseUpdate.txt
+                ReportProgress("uploading new databaseUpdate.txt");
+                await client.UploadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + DatabaseUpdateTxt, DatabaseUpdateTxt);
             }
 
             //check if supported_clients.xml needs to be updated for a new version
@@ -817,20 +821,6 @@ namespace RelhaxModpack.Windows
             else
             {
                 ReportProgress("DOES NOT need to be uploaded");
-            }
-
-            //update manager_info.xml
-            ReportProgress("Updating manager_version.xml");
-            using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
-            {
-                client.DownloadFile(PrivateStuff.FTPManagerInfoRoot + ManagerVersion, ManagerVersion);
-                XmlDocument doc = new XmlDocument();
-                doc.Load(ManagerVersion);
-                XmlNode database_version_text = doc.SelectSingleNode("//version/database");
-                database_version_text.InnerText = DatabaseUpdateVersion;
-                doc.Save(ManagerVersion);
-                client.UploadFile(PrivateStuff.FTPManagerInfoRoot + ManagerVersion, ManagerVersion);
-                File.Delete(ManagerVersion);
             }
             ReportProgress("Done");
         }
