@@ -321,7 +321,7 @@ namespace RelhaxModpack.Windows
             using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
             {
                 string xml = await client.DownloadStringTaskAsync(PrivateStuff.FTPManagerInfoRoot + SupportedClients);
-                doc = XMLUtils.LoadXmlDocument("", XmlLoadType.FromXml);
+                doc = XMLUtils.LoadXmlDocument(xml, XmlLoadType.FromXml);
             }
             //parse each online folder to list type string
             ReportProgress("Parsing " + SupportedClients);
