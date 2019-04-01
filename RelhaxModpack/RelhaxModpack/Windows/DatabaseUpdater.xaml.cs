@@ -851,17 +851,17 @@ namespace RelhaxModpack.Windows
             await RunPhpScript(PrivateStuff.WotmodsNetworkCredential, PrivateStuff.CreateManagerInfoPHP, 100000);
         }
 
-        private void UpdateDatabasestep9_NA_ENG_Click(object sender, RoutedEventArgs e)
+        private void UpdateDatabasestep8_NA_ENG_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/624499-");
         }
 
-        private void UpdateDatabaseStep9_EU_ENG_Click(object sender, RoutedEventArgs e)
+        private void UpdateDatabaseStep8_EU_ENG_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/623269-");
         }
 
-        private void UpdateDatabaseStep9_EU_GER_Click(object sender, RoutedEventArgs e)
+        private void UpdateDatabaseStep8_EU_GER_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
         }
