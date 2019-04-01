@@ -835,18 +835,18 @@ namespace RelhaxModpack.Windows
             ReportProgress("Done");
         }
 
-        private async void UpdateDatabaseStep6_Click(object sender, RoutedEventArgs e)
+        private async void UpdateDatabaseStep5_Click(object sender, RoutedEventArgs e)
         {
             LogOutput.Clear();
-            ReportProgress("Starting update database step 6...");
+            ReportProgress("Starting update database step 5...");
             ReportProgress("Running script to create mod info");
             await RunPhpScript(PrivateStuff.WotmodsNetworkCredential, PrivateStuff.CreateModInfoPHP, 100000);
         }
 
-        private async void UpdateDatabaseStep7_Click(object sender, RoutedEventArgs e)
+        private async void UpdateDatabaseStep6_Click(object sender, RoutedEventArgs e)
         {
             LogOutput.Clear();
-            ReportProgress("Starting Update database step 7...");
+            ReportProgress("Starting Update database step 6...");
             ReportProgress("Running script to create manager info");
             await RunPhpScript(PrivateStuff.WotmodsNetworkCredential, PrivateStuff.CreateManagerInfoPHP, 100000);
         }
