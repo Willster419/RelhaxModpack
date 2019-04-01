@@ -685,9 +685,10 @@ namespace RelhaxModpack.Windows
             updatedPackages = updatedPackages.Except(disabledPackages, pc).ToList();
             updatedPackages = updatedPackages.Except(addedPackages, pc).ToList();
             //put them to stringBuilder and write text to disk
-            ReportProgress(string.Format("Number of Added packages: {0}\nNumber of Updated packages: {1}\n" +
-                "Number of Disabled packages: {2}\nNumber of Removed packages: {3}\n",
-                addedPackages.Count, updatedPackages.Count, disabledPackages.Count, removedPackages.Count));
+            ReportProgress(string.Format("Number of Added packages: {0}", addedPackages.Count));
+            ReportProgress(string.Format("Number of Updated packages: {0}", updatedPackages.Count));
+            ReportProgress(string.Format("Number of Disabled packages: {0}", disabledPackages.Count));
+            ReportProgress(string.Format("Number of Removed packages: {0}", removedPackages.Count));
             //abort if missing files
             if(missingPackages.Count > 0)
             {
