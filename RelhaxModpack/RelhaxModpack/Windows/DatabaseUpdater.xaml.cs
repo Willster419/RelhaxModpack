@@ -839,19 +839,6 @@ namespace RelhaxModpack.Windows
             ReportProgress("Done");
         }
 
-        private async void UpdateDatabaseStep5_Click(object sender, RoutedEventArgs e)
-        {
-            //upload databaseUpdate.txt
-            LogOutput.Clear();
-            ReportProgress("Starting update database step 5...");
-            ReportProgress("Uploading databaseUpdate.txt");
-            using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
-            {
-                await client.UploadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + DatabaseUpdateTxt, DatabaseUpdateTxt);
-            }
-            ReportProgress("Uploaded successfully");
-        }
-
         private async void UpdateDatabaseStep6_Click(object sender, RoutedEventArgs e)
         {
             LogOutput.Clear();

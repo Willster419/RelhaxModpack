@@ -32,11 +32,10 @@
                         <Button x:Name="UpdateDatabaseStep1" Content="Step 1: Load modInfo.xml" HorizontalContentAlignment="Left" Click="OnLoadModInfo"/>
                         <Button x:Name="UpdateDatabaseStep2" Content="Step 2: Update via PHP script" HorizontalContentAlignment="Left"  Click="UpdateDatabaseStep2_Click"/>
                         <Button x:Name="UpdateDatabaseStep3" Content="Step 3: Prepare database update" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep3_Click"/>
-                        <Button x:Name="UpdateDatabaseStep4" Content="Step 4: Upload changed files and save databaseUpdate.txt to disk" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep4_Click"/>
-                        <Button x:Name="UpdateDatabaseStep5" Content="Step 5: Upload databaseUpdate.txt (in case manual changes)" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep5_Click"/>
-                        <Button x:Name="UpdateDatabaseStep6" Content="Step 6: Run script CreateModInfo.php" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep6_Click"/>
-                        <Button x:Name="UpdateDatabaseStep7" Content="Step 7: Run script CreateManagerInfo.php" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep7_Click"/>
-                        <TextBox x:Name="UpdateDatabaseStep8" Height="35" TextWrapping="Wrap" Text="Step 8: Commit modInfo.xml and databaseUpdate.txt update with message: &quot;made database public @123gauss&quot;" IsReadOnly="True"/>
+                        <Button x:Name="UpdateDatabaseStep4" Content="Step 4: Upload changed" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep4_Click"/>
+                        <Button x:Name="UpdateDatabaseStep6" Content="Step 5: Run script CreateModInfo.php" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep6_Click"/>
+                        <Button x:Name="UpdateDatabaseStep7" Content="Step 6: Run script CreateManagerInfo.php" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep7_Click"/>
+                        <TextBox x:Name="UpdateDatabaseStep8" Height="35" TextWrapping="Wrap" Text="Step 7: Commit modInfo.xml and databaseUpdate.txt update with message: &quot;made database public @123gauss&quot;" IsReadOnly="True"/>
                         <StackPanel Orientation="Horizontal">
                             <TextBox x:Name="UpdateDatabaseStep9" Height="23" TextWrapping="Wrap" Text="Step 9: Post database update on discord/forums" Margin="0,0,5,0" IsReadOnly="True"/>
                             <Button x:Name="UpdateDatabasestep9_NA_ENG" Content="NA"  Margin="0,0,0,0" Click="UpdateDatabasestep9_NA_ENG_Click"/>
