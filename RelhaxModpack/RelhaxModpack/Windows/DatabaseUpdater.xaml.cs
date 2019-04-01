@@ -510,7 +510,7 @@ namespace RelhaxModpack.Windows
             ReportProgress("Starting Update database step 2...");
             ReportProgress("Running script to update online hash database...");
             //a PatientWebClient should allow a timeout value of 5 mins (or more)
-            await RunPhpScript(PrivateStuff.BigmodsNetworkCredential, PrivateStuff.UpdateDatabaseOnlinePHP, 30 * Utils.TO_SECONDS * Utils.TO_MINUETS);
+            await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.UpdateDatabaseOnlinePHP, 30 * Utils.TO_SECONDS * Utils.TO_MINUETS);
         }
         
         
@@ -574,12 +574,8 @@ namespace RelhaxModpack.Windows
                     ReportProgress(s);
                 return;
             }
-            ReportProgress("Downloading list of supported clients for last supported WoT client");
 
-            //make the name of current (to be supported) XML file for uploading later (TODO: put this in later section, step 4?)
-            CurrentModInfoXml = "modInfo_" + Settings.WoTClientVersion + ".xml";
-
-            //make the name of the new database update version (TODO: put this in later section, step 4?)
+            //make the name of the new database update version
             ReportProgress("Making new database version string");
             //download manager_version.xml to get the string value of latest database version
             using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
@@ -590,11 +586,12 @@ namespace RelhaxModpack.Windows
                 XmlNode database_version_text = doc.SelectSingleNode("//version/database");
                 //database update text is like this: <WoTVersion>_<Date>_<itteration>
                 int lastItteration = int.Parse(database_version_text.InnerText.Split('_')[2]);
-                DatabaseUpdateVersion = string.Format("{0}_{1}_{2}.xml", Settings.WoTClientVersion, dateTimeFormat, ++lastItteration);
+                DatabaseUpdateVersion = string.Format("{0}_{1}_{2}", Settings.WoTClientVersion, dateTimeFormat, ++lastItteration);
             }
 
             //download and parse supported_clients to make XML name of last supported wot version for comparison
             //legacy compatibility: keep this here to delete just in case
+            ReportProgress("Downloading list of supported clients for last supported WoT client");
             if (File.Exists(SupportedClients))
                 File.Delete(SupportedClients);
             using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
@@ -660,7 +657,7 @@ namespace RelhaxModpack.Windows
                         throw new BadMemeException("newCRC string is null, and you suck at writing code");
                     if (!package.CRC.Equals(newCRC))
                     {
-                        package.CRC = databaseEntry.Attributes["md5"].Value;
+                        package.CRC = newCRC;
                         updatedPackages.Add(package);
                     }
                 }
@@ -774,6 +771,8 @@ namespace RelhaxModpack.Windows
             }
 
             //save and upload new modInfo file (will override the current name if exist[which it should unless new WoT client version supported])
+            //make the name of current (to be supported) XML file for uploading later
+            CurrentModInfoXml = "modInfo_" + Settings.WoTClientVersion + ".xml";
             using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
             {
                 ReportProgress("Saving and uploading new modInfo.xml to live server folder");
