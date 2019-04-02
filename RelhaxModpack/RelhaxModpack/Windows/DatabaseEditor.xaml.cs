@@ -468,12 +468,27 @@ namespace RelhaxModpack.Windows
 
         private void PackageDevURLDisplay_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            try
+            //since it is multiple lines, split into array
+            string[] DevURLs = PackageDevURLDisplay.Text.Split(new string[] { "\r\n" },StringSplitOptions.RemoveEmptyEntries);
+            int lastCount = 1;
+            foreach(string DevURL in DevURLs)
             {
-                if (!string.IsNullOrWhiteSpace(PackageDevURLDisplay.Text))
-                    System.Diagnostics.Process.Start(PackageDevURLDisplay.Text);
+                lastCount += DevURL.Length;
+                if(PackageDevURLDisplay.SelectionStart <= lastCount)
+                {
+                    Logging.Debug("DevURL selection parsed at selectionStart={0} (total={1}, current={2}, lines total={3}), opening URL as {4}",
+                            PackageDevURLDisplay.SelectionStart, PackageDevURLDisplay.Text.Length, DevURL.Length, DevURLs.Count(), DevURL.Trim());
+                    try
+                    {
+                        System.Diagnostics.Process.Start(DevURL.Trim());
+                    }
+                    catch
+                    {
+                        Logging.Error("Failed to open DevURL {0}", DevURL.Trim());
+                    }
+                    return;
+                }
             }
-            catch { }
         }
         #endregion
 
