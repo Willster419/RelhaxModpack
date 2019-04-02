@@ -447,7 +447,7 @@
                 </TabItem>
                 <TabItem x:Name="DescriptionTab" Header="Description">
                     <Grid Background="#FFE5E5E5">
-                        <TextBox x:Name="PackageDescriptionDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                        <TextBox x:Name="PackageDescriptionDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="DevURLTab" Header="Dev URL">
@@ -458,12 +458,12 @@
                 </TabItem>
                 <TabItem x:Name="InternalNotesTab" Header="Internal Notes">
                     <Grid Background="#FFE5E5E5">
-                        <TextBox x:Name="PackageInternalNotesDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                        <TextBox x:Name="PackageInternalNotesDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="UpdateNotesTab" Header="Update Notes">
                     <Grid Background="#FFE5E5E5">
-                        <TextBox x:Name="PackageUpdateNotesDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                        <TextBox x:Name="PackageUpdateNotesDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="DependenciesTab" Header="Dependencies">
