@@ -6,7 +6,7 @@
              Activated="Application_Activated"
              Deactivated="Application_Deactivated"
              Exit="Application_Exit"
-             Startup="Application_Startup">
+             Startup="Application_Startup" DispatcherUnhandledException="Application_DispatcherUnhandledException">
     <Application.Resources>
          
     </Application.Resources>

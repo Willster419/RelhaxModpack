@@ -152,5 +152,13 @@ namespace RelhaxModpack
                     break;
             }
         }
+
+        //https://stackoverflow.com/questions/793100/globally-catch-exceptions-in-a-wpf-application
+        private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            if (!Logging.IsLogDisposed(Logfiles.Application) && Logging.IsLogOpen(Logfiles.Application))
+                Logging.WriteToLog(e.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
+            MessageBox.Show(e.ToString());
+        }
     }
 }
