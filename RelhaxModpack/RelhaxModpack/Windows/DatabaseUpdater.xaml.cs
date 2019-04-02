@@ -196,6 +196,12 @@ namespace RelhaxModpack.Windows
                     File.Delete(s);
             }
         }
+
+        private void PaswordTextbox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                PasswordButton_Click(null, null);
+        }
         #endregion
 
         #region Database output
