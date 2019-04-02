@@ -1301,24 +1301,7 @@ namespace RelhaxModpack.Windows
             UnsavedChanges = false;
         }
 
-        private void SelectDefaultSaveLocationButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (SaveDatabaseDialog == null)
-                SaveDatabaseDialog = new SaveFileDialog()
-                {
-                    AddExtension = true,
-                    CheckPathExists = false,
-                    DefaultExt = "xml",
-                    InitialDirectory = string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ? Settings.ApplicationStartupPath :
-                    Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)) ? DefaultSaveLocationSetting.Text : Settings.ApplicationStartupPath,
-                    Title = "Select path to save database to. NOTE: It is only selecting path, does not save"
-                };
-            if (!(bool)SaveDatabaseDialog.ShowDialog())
-                return;
-            DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
-        }
-
-        private void OnLoadDatabaseClick(object sender, RoutedEventArgs e)
+        private void LoadAsDatabaseButton_Click(object sender, RoutedEventArgs e)
         {
             string fileToLoad = string.Empty;
             //check if it's from the auto load function or not
@@ -1350,7 +1333,7 @@ namespace RelhaxModpack.Windows
             }
             //the file exists, load it
             XmlDocument doc = XMLUtils.LoadXmlDocument(fileToLoad, XmlLoadType.FromFile);
-            if(doc == null)
+            if (doc == null)
             {
                 MessageBox.Show("Failed to load the database, check the logfile");
                 Logging.Error("doc is null from LoadXmlDocument(fileToload, xmlType)");
@@ -1371,6 +1354,61 @@ namespace RelhaxModpack.Windows
             Settings.WoTModpackOnlineFolderVersion = XMLUtils.GetXMLStringFromXPath(doc, "//modInfoAlpha.xml/@onlineFolder");
             LoadUI(GlobalDependencies, Dependencies, ParsedCategoryList);
             UnsavedChanges = false;
+        }
+
+        private void OnLoadDatabaseClick(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text))
+            {
+                MessageBox.Show("Default save location is empty, please specify before using this button");
+                return;
+            }
+            if (!Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
+            {
+                MessageBox.Show(string.Format("The save path\n{0}\ndoes not exist, please re-specify", Path.GetDirectoryName(DefaultSaveLocationSetting.Text)));
+                return;
+            }
+            //actually load
+            //the file exists, load it
+            XmlDocument doc = XMLUtils.LoadXmlDocument(DefaultSaveLocationSetting.Text, XmlLoadType.FromFile);
+            if (doc == null)
+            {
+                MessageBox.Show("Failed to load the database, check the logfile");
+                Logging.Error("doc is null from LoadXmlDocument(fileToload, xmlType)");
+                return;
+            }
+            if (!XMLUtils.ParseDatabase(doc, GlobalDependencies, Dependencies, ParsedCategoryList, Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
+            {
+                MessageBox.Show("Failed to load the database, check the logfile");
+                return;
+            }
+            //build internal database links
+            Utils.BuildLinksRefrence(ParsedCategoryList, true);
+            Utils.BuildLevelPerPackage(ParsedCategoryList);
+            //set the onlineFolder and version
+            //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
+            //for the folder version: //modInfoAlpha.xml/@version
+            Settings.WoTClientVersion = XMLUtils.GetXMLStringFromXPath(doc, "//modInfoAlpha.xml/@version");
+            Settings.WoTModpackOnlineFolderVersion = XMLUtils.GetXMLStringFromXPath(doc, "//modInfoAlpha.xml/@onlineFolder");
+            LoadUI(GlobalDependencies, Dependencies, ParsedCategoryList);
+            UnsavedChanges = false;
+        }
+
+        private void SelectDefaultSaveLocationButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (SaveDatabaseDialog == null)
+                SaveDatabaseDialog = new SaveFileDialog()
+                {
+                    AddExtension = true,
+                    CheckPathExists = false,
+                    DefaultExt = "xml",
+                    InitialDirectory = string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ? Settings.ApplicationStartupPath :
+                    Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)) ? DefaultSaveLocationSetting.Text : Settings.ApplicationStartupPath,
+                    Title = "Select path to save database to. NOTE: It is only selecting path, does not save"
+                };
+            if (!(bool)SaveDatabaseDialog.ShowDialog())
+                return;
+            DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
         }
         #endregion
 
