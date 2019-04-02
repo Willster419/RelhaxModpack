@@ -708,6 +708,7 @@ namespace RelhaxModpack.Windows
                 PackagePopularModDisplay.IsChecked = selectablePackage.PopularMod;
                 PackageShowInSearchListDisplay.IsChecked = selectablePackage.ShowInSearchList;
                 PackageNameDisplay.Text = selectablePackage.Name;
+                PackageTypeDisplay.SelectedItem = selectablePackage.Type;
                 PackageLevelDisplay.Text = selectablePackage.Level.ToString();
                 PackageDescriptionDisplay.Text = Utils.MacroReplace(selectablePackage.Description,ReplacementTypes.TextUnescape);
                 PackageUpdateNotesDisplay.Text = Utils.MacroReplace(selectablePackage.UpdateComment,ReplacementTypes.TextUnescape);
@@ -1366,9 +1367,9 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show("Default save location is empty, please specify before using this button");
                 return;
             }
-            if (!Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
+            if (!File.Exists(DefaultSaveLocationSetting.Text))
             {
-                MessageBox.Show(string.Format("The save path\n{0}\ndoes not exist, please re-specify", Path.GetDirectoryName(DefaultSaveLocationSetting.Text)));
+                MessageBox.Show(string.Format("The file\n{0}\ndoes not exist", DefaultSaveLocationSetting.Text));
                 return;
             }
             //actually load
