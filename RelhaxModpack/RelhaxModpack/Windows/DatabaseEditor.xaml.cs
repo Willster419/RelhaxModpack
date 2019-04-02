@@ -1261,7 +1261,7 @@ namespace RelhaxModpack.Windows
                 SaveApplyDatabaseObject(null, cat);
             }
             //actually save
-            XMLUtils.SaveDatabase(SaveDatabaseDialog.FileName, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
+            XMLUtils.SaveDatabase(DefaultSaveLocationSetting.Text, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
                 GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.Legacy);//temp set for old database for now
             UnsavedChanges = false;
         }
