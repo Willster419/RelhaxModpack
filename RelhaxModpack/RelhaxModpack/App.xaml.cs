@@ -96,7 +96,12 @@ namespace RelhaxModpack
                     //stop application logging system
                     CloseApplicationLog(false);
                     //start updater logging system
-                    Logging.InitApplicationLogging(Logfiles.Application, Logging.ApplicationUpdaterLogFilename);
+                    if (!Logging.InitApplicationLogging(Logfiles.Application, Logging.ApplicationUpdaterLogFilename))
+                    {
+                        MessageBox.Show("Failed to initialize logfile (Do you have multiple windows open?");
+                        Current.Shutdown((int)ReturnCodes.LogfileError);
+                        return;
+                    }
                     Logging.WriteToLog(Logging.ApplicationlogStartStop);
                     updater.ShowDialog();
                     //stop updater logging system
@@ -109,7 +114,12 @@ namespace RelhaxModpack
                     //stop application logging system
                     CloseApplicationLog(false);
                     //start updater logging system
-                    Logging.InitApplicationLogging(Logfiles.Application, Logging.ApplicationEditorLogFilename);
+                    if (!Logging.InitApplicationLogging(Logfiles.Application, Logging.ApplicationEditorLogFilename))
+                    {
+                        MessageBox.Show("Failed to initialize logfile (Do you have multiple windows open?");
+                        Current.Shutdown((int)ReturnCodes.LogfileError);
+                        return;
+                    }
                     Logging.WriteToLog(Logging.ApplicationlogStartStop);
                     editor.ShowDialog();
                     //stop updater logging system
@@ -122,7 +132,12 @@ namespace RelhaxModpack
                     //stop application logging system
                     CloseApplicationLog(false);
                     //start updater logging system
-                    Logging.InitApplicationLogging(Logfiles.Application, Logging.ApplicationPatchDesignerLogFilename);
+                    if (!Logging.InitApplicationLogging(Logfiles.Application, Logging.ApplicationPatchDesignerLogFilename))
+                    {
+                        MessageBox.Show("Failed to initialize logfile (Do you have multiple windows open?");
+                        Current.Shutdown((int)ReturnCodes.LogfileError);
+                        return;
+                    }
                     Logging.WriteToLog(Logging.ApplicationlogStartStop);
                     patcher.ShowDialog();
                     //stop updater logging system
