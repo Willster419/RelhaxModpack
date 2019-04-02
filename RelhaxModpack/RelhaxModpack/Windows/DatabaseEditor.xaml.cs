@@ -1400,7 +1400,10 @@ namespace RelhaxModpack.Windows
                 SaveDatabaseDialog = new SaveFileDialog()
                 {
                     AddExtension = true,
-                    CheckPathExists = false,
+                    CheckPathExists = true,
+                    //https://stackoverflow.com/questions/5512752/how-to-stop-overwriteprompt-when-creating-savefiledialog-using-getsavefilename
+                    OverwritePrompt = false,
+                    CheckFileExists = false,
                     DefaultExt = "xml",
                     InitialDirectory = string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ? Settings.ApplicationStartupPath :
                     Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)) ? DefaultSaveLocationSetting.Text : Settings.ApplicationStartupPath,
