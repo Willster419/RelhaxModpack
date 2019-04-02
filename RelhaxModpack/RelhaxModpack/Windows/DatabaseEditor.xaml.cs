@@ -1261,7 +1261,8 @@ namespace RelhaxModpack.Windows
                 SaveApplyDatabaseObject(null, cat);
             }
             //actually save
-            throw new BadMemeException("TODO");
+            XMLUtils.SaveDatabase(SaveDatabaseDialog.FileName, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
+                GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.Legacy);//temp set for old database for now
             UnsavedChanges = false;
         }
 
@@ -1306,11 +1307,11 @@ namespace RelhaxModpack.Windows
                 SaveDatabaseDialog = new SaveFileDialog()
                 {
                     AddExtension = true,
-                    CheckPathExists = true,
+                    CheckPathExists = false,
                     DefaultExt = "xml",
                     InitialDirectory = string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ? Settings.ApplicationStartupPath :
                     Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)) ? DefaultSaveLocationSetting.Text : Settings.ApplicationStartupPath,
-                    Title = "Select path to save database to"
+                    Title = "Select path to save database to. NOTE: It is only selecting path, does not save"
                 };
             if (!(bool)SaveDatabaseDialog.ShowDialog())
                 return;
