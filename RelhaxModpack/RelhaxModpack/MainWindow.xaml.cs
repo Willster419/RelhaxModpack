@@ -111,15 +111,19 @@ namespace RelhaxModpack
         {
             if(!Logging.IsLogDisposed(Logfiles.Application))
             {
-                Logging.WriteToLog("Saving settings");
+                if(Logging.IsLogOpen(Logfiles.Application))
+                    Logging.WriteToLog("Saving settings");
                 if (Settings.SaveSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude,null))
-                    Logging.WriteToLog("Settings saved");
-                Logging.WriteToLog("Disposing tray icon");
+                    if (Logging.IsLogOpen(Logfiles.Application))
+                        Logging.WriteToLog("Settings saved");
+                if (Logging.IsLogOpen(Logfiles.Application))
+                    Logging.WriteToLog("Disposing tray icon");
                 if (RelhaxIcon != null)
                 {
                     RelhaxIcon.Dispose();
                     RelhaxIcon = null;
                 }
+                Logging.DisposeLogging(Logfiles.Application);
             }
         }
 

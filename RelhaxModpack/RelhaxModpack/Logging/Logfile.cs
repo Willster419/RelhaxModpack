@@ -22,6 +22,7 @@ namespace RelhaxModpack
         /// The date and time format for writing each line in the logfile
         /// </summary>
         public string Timestamp { get; private set; }
+        public bool CanWrite { get { return fileStream == null ? false : true; } }
         //The filestream object to write/create the logfile. Requires disposal support
         private FileStream fileStream;
         /// <summary>
@@ -101,7 +102,7 @@ namespace RelhaxModpack
             if (string.IsNullOrEmpty(Filepath))
                 throw new BadMemeException("You're bad at logfiles");
             if (fileStream == null)
-                throw new BadMemeException("You're still bad at logfiles");
+                return;
             message = message + Environment.NewLine;
             //actually write message to log
             fileStream.Write(Encoding.UTF8.GetBytes(message), 0, Encoding.UTF8.GetByteCount(message));
@@ -125,7 +126,8 @@ namespace RelhaxModpack
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.
-                fileStream.Dispose();
+                if(fileStream != null)
+                    fileStream.Dispose();
                 fileStream = null;
 
                 disposedValue = true;

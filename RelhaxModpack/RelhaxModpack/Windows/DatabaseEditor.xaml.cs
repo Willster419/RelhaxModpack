@@ -126,9 +126,12 @@ namespace RelhaxModpack.Windows
             }
             if (!Logging.IsLogDisposed(Logfiles.Application))
             {
-                Logging.WriteToLog("Saving editor settings");
+                if(Logging.IsLogOpen(Logfiles.Application))
+                    Logging.WriteToLog("Saving editor settings");
                 if (Settings.SaveSettings(Settings.EditorSettingsFilename, typeof(EditorSettings), null, EditorSettings))
-                    Logging.WriteToLog("Editor settings saved");
+                    if (Logging.IsLogOpen(Logfiles.Application))
+                        Logging.WriteToLog("Editor settings saved");
+                Logging.DisposeLogging(Logfiles.Application);
             }
         }
 

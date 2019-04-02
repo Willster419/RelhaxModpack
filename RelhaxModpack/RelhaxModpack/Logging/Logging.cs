@@ -156,6 +156,19 @@ namespace RelhaxModpack
                     return ApplicationLogfile == null ? true : false;
             }
         }
+        public static bool IsLogOpen(Logfiles file)
+        {
+            switch (file)
+            {
+                case Logfiles.Installer:
+                    return InstallLogfile.CanWrite;
+                case Logfiles.Uninstaller:
+                    return UninstallLogfile.CanWrite;
+                case Logfiles.Application:
+                default:
+                    return ApplicationLogfile.CanWrite;
+            }
+        }
         /// <summary>
         /// Dispose of the application logging subsystem
         /// </summary>
