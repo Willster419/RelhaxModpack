@@ -1355,7 +1355,7 @@ namespace RelhaxModpack
 
         #region Install Utils
 
-        public static void CreateShortcut(Shortcut shortcut)
+        public static void CreateShortcut(Shortcut shortcut, StringBuilder sb)
         {
             Logging.Info("Creating shortcut {0}",shortcut.Name);
             //build the full macro for path (target) and name (also filename)
@@ -1404,11 +1404,13 @@ namespace RelhaxModpack
                 System.Runtime.InteropServices.ComTypes.IPersistFile file = (System.Runtime.InteropServices.ComTypes.IPersistFile)link;
                 file.Save(shortcutPath, false);
             }
+            //getting here means that the target is updated or created, so log it to the installer
+            sb.AppendLine(shortcutPath);
         }
 
         public static void CreateAtlas(Atlas atlas)
         {
-
+            throw new BadMemeException("TODO");
         }
 
 

@@ -387,6 +387,8 @@ namespace RelhaxModpack.InstallerComponents
             Logging.WriteToLog(string.Format("Creating of shortcuts, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             List<Shortcut> shortcuts = MakeShortcutList();
+            StringBuilder shortcutBuilder = new StringBuilder();
+            shortcutBuilder.AppendLine("/*   Shortcuts   */");
             if (shortcuts.Count > 0)
             {
                 concurrentTasksAfterMainExtractoin[taskIndex++] = Task.Factory.StartNew(() =>
@@ -394,8 +396,11 @@ namespace RelhaxModpack.InstallerComponents
                     foreach (Shortcut shortcut in shortcuts)
                     {
                         if (shortcut.Enabled)
-                            Utils.CreateShortcut(shortcut);
+                        {
+                            Utils.CreateShortcut(shortcut, shortcutBuilder);
+                        }
                     }
+                    Logging.Installer(shortcutBuilder.ToString());
                 });
             }
             else
