@@ -380,7 +380,7 @@ namespace RelhaxModpack.InstallerComponents
             else
                 Logging.WriteToLog("...skipped (no patch entries parsed)");
 
-            //step 9: create create shortcuts (async option)
+            //step 9: create shortcuts (async option)
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
             InstallFinishedArgs.ExitCodes++;
@@ -393,7 +393,8 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     foreach (Shortcut shortcut in shortcuts)
                     {
-                        Utils.CreateShortcut(shortcut);
+                        if (shortcut.Enabled)
+                            Utils.CreateShortcut(shortcut);
                     }
                 });
             }
@@ -1157,7 +1158,7 @@ namespace RelhaxModpack.InstallerComponents
                         //apply "normal" file properties just in case the user's wot install directory is special
                         Utils.ApplyNormalFileProperties(completePath);
                         //ok NOW actually add the file to the patch list
-                        
+                        AddShortcutsFromFile(shortcuts, filename);
                     }
                 }
             }

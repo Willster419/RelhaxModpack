@@ -19,6 +19,8 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Xml;
 using System.Xml.Linq;
+using IWshRuntimeLibrary;
+using File = System.IO.File;
 
 namespace RelhaxModpack
 {
@@ -1355,7 +1357,53 @@ namespace RelhaxModpack
 
         public static void CreateShortcut(Shortcut shortcut)
         {
-
+            Logging.Info("Creating shortcut {0}",shortcut.Name);
+            //build the full macro for path (target) and name (also filename)
+            string target = MacroReplace(shortcut.Path, ReplacementTypes.FilePath);
+            string filename = string.Format("{0}.lnk", shortcut.Name);
+            string shortcutPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            shortcutPath = Path.Combine(shortcutPath, filename);
+            Logging.Info("target={0}", target);
+            Logging.Info("shortcutPath={0}", shortcutPath);
+            if(!File.Exists(target))
+            {
+                Logging.Warning("target does not exist, skipping shortcut", target);
+                return;
+            }
+            if(File.Exists(shortcutPath))
+            {
+                Logging.Debug("shortcut path exists, checking if update needed");
+                WshShell shell = new WshShell();
+                IWshShortcut link = (IWshShortcut)shell.CreateShortcut(shortcutPath);
+                Logging.Debug("new target = {0}, old target = {1}", target, link.TargetPath);
+                if(!target.Equals(link.TargetPath))
+                {
+                    //needs update
+                    Logging.Debug("updating target");
+                    link.TargetPath = target;
+                    link.Save();
+                }
+                else
+                {
+                    //no updat needed
+                    Logging.Debug("no update needed");
+                    return;
+                }
+            }
+            else
+            {
+                Logging.Debug("shortcut path does not exist, creating");
+                IShellLink link = (IShellLink)new ShellLink();
+                // setup shortcut information
+                link.SetDescription("created by the Relhax Manager");
+                link.SetPath(target);
+                link.SetIconLocation(target, 0);
+                link.SetWorkingDirectory(Path.GetDirectoryName(target));
+                //The arguments used when executing the exe (none used for now)
+                link.SetArguments("");
+                System.Runtime.InteropServices.ComTypes.IPersistFile file = (System.Runtime.InteropServices.ComTypes.IPersistFile)link;
+                file.Save(shortcutPath, false);
+            }
         }
 
         public static void CreateAtlas(Atlas atlas)
