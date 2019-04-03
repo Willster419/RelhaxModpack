@@ -157,8 +157,8 @@ namespace RelhaxModpack
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             if (!Logging.IsLogDisposed(Logfiles.Application) && Logging.IsLogOpen(Logfiles.Application))
-                Logging.WriteToLog(e.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
-            MessageBox.Show(e.ToString());
+                Logging.WriteToLog(e.Exception.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
+            MessageBox.Show(e.Exception.ToString());
         }
     }
 }

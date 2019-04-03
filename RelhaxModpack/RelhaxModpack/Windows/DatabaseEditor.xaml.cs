@@ -1105,7 +1105,7 @@ namespace RelhaxModpack.Windows
             if (!(sender is TreeView tv))
                 return;
             TreeView treeView = (TreeView)sender;
-            Logging.Debug("MouseDown, leftButton={0}, saving mouse location if pressed", e.LeftButton.ToString());
+            //Logging.Debug("MouseDown, leftButton={0}, saving mouse location if pressed", e.LeftButton.ToString());
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 BeforeDragDropPoint = e.GetPosition(treeView);
@@ -1117,7 +1117,7 @@ namespace RelhaxModpack.Windows
             //https://stackoverflow.com/questions/14583234/disable-drag-and-drop-when-scrolling
             if (!AlreadyLoggedScroll)
             {
-                Logging.Debug("ScrollChanged event fire, LeftButton={0}, setting IsScrolling to true if pressed", Mouse.LeftButton.ToString());
+                //Logging.Debug("ScrollChanged event fire, LeftButton={0}, setting IsScrolling to true if pressed", Mouse.LeftButton.ToString());
                 AlreadyLoggedScroll = true;
             }
             if (Mouse.LeftButton == MouseButtonState.Pressed)
@@ -1130,7 +1130,7 @@ namespace RelhaxModpack.Windows
 
         private void OnTreeViewMouseUpPreview(object sender, MouseButtonEventArgs e)
         {
-            Logging.Debug("MouseUp, leftButton={0}, setting IsScrolling to false", e.LeftButton.ToString());
+            //Logging.Debug("MouseUp, leftButton={0}, setting IsScrolling to false", e.LeftButton.ToString());
             if (e.LeftButton == MouseButtonState.Released)
             {
                 IsScrolling = false;

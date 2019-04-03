@@ -118,9 +118,9 @@ namespace RelhaxModpack.Windows
                         client.DownloadProgressChanged += Client_DownloadProgressChanged;
                         try
                         {
-                            Logging.Debug("STARING FTP DOWNLOAD");
+                            Logging.Debug("STARTING FTP DOWNLOAD");
                             await client.DownloadFileTaskAsync(CompleteFTPPath, ZipFileName);
-                            Logging.Debug("FTP download complete");
+                            Logging.Debug("FTP download complete ({0})",ZipFileName);
                             CancelButton.IsEnabled = false;
                             OpenFileButton.IsEnabled = true;
                             OpenFodlerButton.IsEnabled = true;
