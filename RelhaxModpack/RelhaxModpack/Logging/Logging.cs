@@ -297,5 +297,25 @@ namespace RelhaxModpack
         {
             WriteToLog(message, Logfiles.Application, LogLevel.Exception, args);
         }
+
+        public static void Installer(string message)
+        {
+            WriteToLog(message, Logfiles.Installer, LogLevel.Info);//logLevel does not matter if it's not the application
+        }
+
+        public static void Installer(string message, params object[] args)
+        {
+            WriteToLog(message, Logfiles.Installer, LogLevel.Info, args);
+        }
+
+        public static void Uninstaller(string message)
+        {
+            WriteToLog(message, Logfiles.Uninstaller, LogLevel.Info);
+        }
+
+        public static void Uninstaller(string message, params object[] args)
+        {
+            WriteToLog(message, Logfiles.Uninstaller, LogLevel.Info);
+        }
     }
 }
