@@ -255,7 +255,9 @@ namespace RelhaxModpack
             //determine which version of the document we are loading. allows for loading of different versions if structure change
             //a blank value is assumed to be pre 2.0 version of the database
             string versionString = GetXMLStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@documentVersion");
-            Logging.WriteToLog(nameof(versionString) + "=" + versionString, Logfiles.Application, LogLevel.Debug);
+            Logging.WriteToLog(nameof(versionString) + "=" + (string.IsNullOrEmpty(versionString)? "(null)" : versionString), Logfiles.Application, LogLevel.Debug);
+            if (string.IsNullOrEmpty(versionString))
+                Logging.Warning("versionString is null or empty, treating as legacy");
             switch(versionString)
             {
                 case "1.1":
