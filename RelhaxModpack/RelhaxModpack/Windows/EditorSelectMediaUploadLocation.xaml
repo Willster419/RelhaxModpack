@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="EditorSelectMediaUploadLocation" Height="500" Width="600" MinHeight="300" MinWidth="400" Closed="RelhaxWindow_Closed" Loaded="RelhaxWindow_Loaded">
+        Title="Select Media Upload location" Height="500" Width="600" MinHeight="300" MinWidth="400" Closed="RelhaxWindow_Closed" Loaded="RelhaxWindow_Loaded">
     <Grid>
         <TreeView x:Name="FTPTreeView" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="0,0,0,75" />
         <Button x:Name="OpenFolderButton" Content="Open Selected Folder" HorizontalAlignment="Right" Margin="0,0,166,5" VerticalAlignment="Bottom" Width="131" Click="OpenFolderButton_Click"/>
