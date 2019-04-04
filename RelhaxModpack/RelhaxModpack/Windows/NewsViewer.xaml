@@ -9,14 +9,14 @@
     <Grid>
         
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <TabItem x:Name="application_Update_Tab" Header="Application">
+            <TabItem Tag="application_Update_Tab" x:Name="application_Update_Tab" Header="Application">
                 <Grid>
                     <TextBox x:Name="application_Update_Text" Tag="application_Update_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
                         This is where the text goes for the Application updates
                     </TextBox>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="database_Update_Tab" Header="Database">
+            <TabItem Tag="database_Update_Tab" x:Name="database_Update_Tab" Header="Database">
                 <Grid Background="#FFE5E5E5">
                     <TextBox x:Name="database_Update_Text" Tag="database_Update_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
                         This is where the text goes for the Database updates

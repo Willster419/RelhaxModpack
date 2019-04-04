@@ -13,9 +13,9 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
-        <Button Content="No" HorizontalAlignment="Left" Margin="10,0,0,5" Grid.Row="2" VerticalAlignment="Bottom" Width="75" Click="OnNoButtonClick"/>
-        <Button Content="Yes" HorizontalAlignment="Right" Margin="0,0,10,5" Grid.Row="2" VerticalAlignment="Bottom" Width="75" Click="OnYesButtonClick"/>
-        <TextBlock x:Name="DeleteOldFilesHeader" HorizontalAlignment="Stretch" Margin="10,10,10,10" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Stretch" />
+        <Button Content="No" Tag="DeleteOldFilesNo" x:Name="DeleteOldFilesNo" HorizontalAlignment="Left" Margin="10,0,0,5" Grid.Row="2" VerticalAlignment="Bottom" Width="75" Click="OnNoButtonClick"/>
+        <Button Content="Yes" Tag="DeleteOldFilesYes" x:Name="DeleteOldFilesYes" HorizontalAlignment="Right" Margin="0,0,10,5" Grid.Row="2" VerticalAlignment="Bottom" Width="75" Click="OnYesButtonClick"/>
+        <TextBlock Tag="DeleteOldFilesHeader" x:Name="DeleteOldFilesHeader" HorizontalAlignment="Stretch" Margin="10,10,10,10" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Stretch" />
 
     </Grid>
 </local:RelhaxWindow>

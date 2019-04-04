@@ -12,8 +12,8 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
-        <Button Content="No" HorizontalAlignment="Left" Margin="10,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Click="OnNoButtonClick"/>
-        <Button Content="Yes" HorizontalAlignment="Right" Margin="0,0,10,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Click="OnYesButtonClick"/>
+        <Button Tag="GenericNo" x:Name="GenericNo" Content="No" HorizontalAlignment="Left" Margin="10,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Click="OnNoButtonClick"/>
+        <Button Tag="GenericYes" x:Name="GenericYes" Content="Yes" HorizontalAlignment="Right" Margin="0,0,10,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Click="OnYesButtonClick"/>
 
     </Grid>
 </local:RelhaxWindow>

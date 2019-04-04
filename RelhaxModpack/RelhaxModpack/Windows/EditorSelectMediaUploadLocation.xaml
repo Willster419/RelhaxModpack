@@ -7,12 +7,12 @@
         mc:Ignorable="d"
         Title="EditorSelectMediaUploadLocation" Height="500" Width="600" MinHeight="300" MinWidth="400" Closed="RelhaxWindow_Closed" Loaded="RelhaxWindow_Loaded">
     <Grid>
-        <TreeView x:Name="FTPTreeView" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="0,0,0,75" />
-        <Button x:Name="OpenFolderButton" Content="Open Selected Folder" HorizontalAlignment="Right" Margin="0,0,166,5" VerticalAlignment="Bottom" Width="131" Click="OpenFolderButton_Click"/>
-        <Button x:Name="SelectFolderUploadButton" Content="Select Folder for Upload" HorizontalAlignment="Right" Margin="0,0,10,5" VerticalAlignment="Bottom" Width="151" Click="SelectFolderUploadButton_Click"/>
-        <TextBox x:Name="FilenameTextBox" HorizontalAlignment="Stretch" Height="23" Margin="10,0,10,35" TextWrapping="Wrap" VerticalAlignment="Bottom" />
-        <TextBlock x:Name="FilenameHeaderTextBlock" HorizontalAlignment="Left" Margin="10,394,0,0" TextWrapping="Wrap" Text="File name" VerticalAlignment="Top"/>
-        <Button x:Name="MakeFolderButton" Content="Make Fodler under selected" HorizontalAlignment="Right" Margin="0,0,302,5" VerticalAlignment="Bottom" Width="158" Click="MakeFolderButton_Click"/>
-        <TextBlock x:Name="StatusTextBlock" HorizontalAlignment="Left" Margin="10,0,0,7" TextWrapping="Wrap" VerticalAlignment="Bottom" />
+        <TreeView Tag="FTPTreeView" x:Name="FTPTreeView" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="0,0,0,75" />
+        <Button Tag="OpenFolderButton" x:Name="OpenFolderButton" Content="Open Selected Folder" HorizontalAlignment="Right" Margin="0,0,166,5" VerticalAlignment="Bottom" Width="131" Click="OpenFolderButton_Click"/>
+        <Button Tag="SelectFolderUploadButton" x:Name="SelectFolderUploadButton" Content="Select Folder for Upload" HorizontalAlignment="Right" Margin="0,0,10,5" VerticalAlignment="Bottom" Width="151" Click="SelectFolderUploadButton_Click"/>
+        <TextBox Tag="FilenameTextBox" x:Name="FilenameTextBox" HorizontalAlignment="Stretch" Height="23" Margin="10,0,10,35" TextWrapping="Wrap" VerticalAlignment="Bottom" />
+        <TextBlock Tag="FilenameHeaderTextBlock" x:Name="FilenameHeaderTextBlock" HorizontalAlignment="Left" Margin="10,394,0,0" TextWrapping="Wrap" Text="File name" VerticalAlignment="Top"/>
+        <Button Tag="MakeFolderButton" x:Name="MakeFolderButton" Content="Make Fodler under selected" HorizontalAlignment="Right" Margin="0,0,302,5" VerticalAlignment="Bottom" Width="158" Click="MakeFolderButton_Click"/>
+        <TextBlock Tag="StatusTextBlock" x:Name="StatusTextBlock" HorizontalAlignment="Left" Margin="10,0,0,7" TextWrapping="Wrap" VerticalAlignment="Bottom" />
     </Grid>
 </local:RelhaxWindow>
