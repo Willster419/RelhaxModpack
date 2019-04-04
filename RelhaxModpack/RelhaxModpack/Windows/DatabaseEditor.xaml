@@ -363,8 +363,8 @@
                         <TextBlock x:Name="ApplyBehaviorTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Apply Behavior" VerticalAlignment="Center" Grid.Column="0" Grid.Row="4"/>
                         <TextBox x:Name="BigmodsUsernameSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" TextChanged="BigmodsUsernameSetting_TextChanged"/>
                         <TextBox x:Name="BigmodsPasswordSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" TextChanged="BigmodsPasswordSetting_TextChanged"/>
-                        <CheckBox x:Name="SaveSelectionBeforeLeaveSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" Checked="SaveSelectionBeforeLeaveSetting_Checked"/>
-                        <CheckBox x:Name="SortCategoriesSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="3" Checked="SortCategoriesSetting_Checked"/>
+                        <CheckBox x:Name="SaveSelectionBeforeLeaveSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" Click="SaveSelectionBeforeLeaveSetting_Click"/>
+                        <CheckBox x:Name="SortCategoriesSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="3" Click="SortCategoriesSetting_Click"/>
                         <StackPanel HorizontalAlignment="Left" Grid.Column="1" Grid.Row="4">
                             <RadioButton x:Name="ApplyBehaviorDefaultSetting" Content="Default" Checked="ApplyBehaviorSetting_Checked"/>
                             <RadioButton x:Name="ApplyBehaviorApplyTriggersSaveSetting" Content="Apply triggers Save" Checked="ApplyBehaviorSetting_Checked"/>
@@ -372,8 +372,8 @@
                         </StackPanel>
                         <TextBlock x:Name="ShowConfirmOnPackageApply" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Row="5" Text="Show confirmation on package apply"/>
                         <TextBlock x:Name="ShowConfirmOnPackageAddRemoveEdit" HorizontalAlignment="Stretch"  Grid.Row="6" TextWrapping="Wrap" Text="Show confirmation on package add/remove/move" VerticalAlignment="Center"/>
-                        <CheckBox x:Name="ShowConfirmOnPackageApplySetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="5" VerticalAlignment="Center" Checked="ShowConfirmOnPackageApplySetting_Checked"/>
-                        <CheckBox x:Name="ShowConfirmOnPackageAddRemoveEditSetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="6" VerticalAlignment="Center" Checked="ShowConfirmOnPackageAddRemoveEditSetting_Checked"/>
+                        <CheckBox x:Name="ShowConfirmOnPackageApplySetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="5" VerticalAlignment="Center" Click="ShowConfirmOnPackageApplySetting_Click"/>
+                        <CheckBox x:Name="ShowConfirmOnPackageAddRemoveEditSetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="6" VerticalAlignment="Center" Click="ShowConfirmOnPackageAddRemoveEditSetting_Click"/>
                         <Button x:Name="SelectDefaultSaveLocationButton" Content="Select default save location" HorizontalAlignment="Stretch" Grid.Row="7" VerticalAlignment="Center" Click="SelectDefaultSaveLocationButton_Click" />
                         <TextBox x:Name="DefaultSaveLocationSetting" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="7" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="DefaultSaveLocationSetting_TextChanged" />
                     </Grid>

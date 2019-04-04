@@ -769,7 +769,7 @@ namespace RelhaxModpack.Windows
             {
                 selectablePackage.ShowInSearchList = (bool)PackageShowInSearchListDisplay.IsChecked;
                 selectablePackage.PopularMod = (bool)PackagePopularModDisplay.IsChecked;
-                selectablePackage.Name = PackagePackageNameDisplay.Text;
+                selectablePackage.Name = PackageNameDisplay.Text;
                 selectablePackage.Type = (SelectionTypes)PackageTypeDisplay.SelectedItem;
                 if (!selectablePackage.ZipFile.Equals(PackageZipFileDisplay.Text))
                 {
@@ -1908,12 +1908,12 @@ namespace RelhaxModpack.Windows
             EditorSettings.DefaultEditorSaveLocation = DefaultSaveLocationSetting.Text;
         }
 
-        private void SaveSelectionBeforeLeaveSetting_Checked(object sender, RoutedEventArgs e)
+        private void SaveSelectionBeforeLeaveSetting_Click(object sender, RoutedEventArgs e)
         {
             EditorSettings.SaveSelectionBeforeLeave = (bool)SaveSelectionBeforeLeaveSetting.IsChecked;
         }
 
-        private void SortCategoriesSetting_Checked(object sender, RoutedEventArgs e)
+        private void SortCategoriesSetting_Click(object sender, RoutedEventArgs e)
         {
             EditorSettings.SortDatabaseList = (bool)SortCategoriesSetting.IsChecked;
         }
@@ -1928,12 +1928,12 @@ namespace RelhaxModpack.Windows
                 EditorSettings.ApplyBehavior = ApplyBehavior.SaveTriggersApply;
         }
 
-        private void ShowConfirmOnPackageApplySetting_Checked(object sender, RoutedEventArgs e)
+        private void ShowConfirmOnPackageApplySetting_Click(object sender, RoutedEventArgs e)
         {
             EditorSettings.ShowConfirmationOnPackageApply = (bool)ShowConfirmOnPackageApplySetting.IsChecked;
         }
 
-        private void ShowConfirmOnPackageAddRemoveEditSetting_Checked(object sender, RoutedEventArgs e)
+        private void ShowConfirmOnPackageAddRemoveEditSetting_Click(object sender, RoutedEventArgs e)
         {
             EditorSettings.ShowConfirmationOnPackageAddRemoveMove = (bool)ShowConfirmOnPackageAddRemoveEditSetting.IsChecked;
         }
