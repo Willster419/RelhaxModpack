@@ -161,9 +161,6 @@
     <Compile Include="Windows\DeleteOldCache.xaml.cs">
       <DependentUpon>DeleteOldCache.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\MediaUpload.xaml.cs">
-      <DependentUpon>MediaUpload.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\NewsViewer.xaml.cs">
       <DependentUpon>NewsViewer.xaml</DependentUpon>
     </Compile>
@@ -299,10 +296,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\InstallFinished.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\MediaUpload.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
