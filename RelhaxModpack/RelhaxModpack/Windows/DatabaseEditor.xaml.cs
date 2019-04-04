@@ -710,6 +710,7 @@ namespace RelhaxModpack.Windows
                 PackageNameDisplay.Text = selectablePackage.Name;
                 PackageTypeDisplay.SelectedItem = selectablePackage.Type;
                 PackageLevelDisplay.Text = selectablePackage.Level.ToString();
+                PackageVisibleDisplay.IsChecked = selectablePackage.Visible;
                 PackageDescriptionDisplay.Text = Utils.MacroReplace(selectablePackage.Description,ReplacementTypes.TextUnescape);
                 PackageUpdateNotesDisplay.Text = Utils.MacroReplace(selectablePackage.UpdateComment,ReplacementTypes.TextUnescape);
                 foreach (DatabaseLogic d in selectablePackage.Dependencies)
