@@ -404,6 +404,9 @@ namespace RelhaxModpack.Windows
             //check to make sure it's a package item or category item
             if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem && selectedTreeViewItem.Header is EditorComboBoxItem editorSelectedItem)
             {
+                //if the mouse is not over, then it was not user initiated
+                if (!(selectedTreeViewItem.IsMouseOver || Keyboard.IsKeyDown(Key.Enter)))
+                    return;
                 //check if we should save the item before updating what the current entry is
                 if (EditorSettings.SaveSelectionBeforeLeave && SelectedItem != null)
                 {
@@ -416,6 +419,8 @@ namespace RelhaxModpack.Windows
             }
             else if (DatabaseTreeView.SelectedItem is TreeViewItem selectedCatTVI && selectedCatTVI.Header is Category category)
             {
+                if (!(selectedCatTVI.IsMouseOver || Keyboard.IsKeyDown(Key.Enter)))
+                    return;
                 //check if we should save the item before updating what the current entry is
                 if (EditorSettings.SaveSelectionBeforeLeave && SelectedItem != null)
                 {
@@ -499,6 +504,7 @@ namespace RelhaxModpack.Windows
 
         private void ResetRightPanels(DatabasePackage package, Category category)
         {
+            Logging.Debug("ResetRightPanels(), selectedItem is null = {0}", (SelectedItem == null));
             //for each tab, disable all components. then enable them back of tye type of database object
             List<Control> controlsToDisable = new List<Control>();
             foreach (TabItem tabItem in RightTab.Items)
@@ -632,6 +638,10 @@ namespace RelhaxModpack.Windows
 
         private void ShowDatabaseObject(DatabasePackage package, Category category)
         {
+            if(package != null)
+                Logging.Debug("ShowDatabaseObject(), selectedItem is null = {0}, package showing = {1}", (SelectedItem == null),package.PackageName);
+            else
+                Logging.Debug("ShowDatabaseObject(), selectedItem is null = {0}, package showing = null (category)", (SelectedItem == null));
             if (category != null)
             {
                 ResetRightPanels(null, category);
@@ -727,6 +737,10 @@ namespace RelhaxModpack.Windows
 
         private void SaveApplyDatabaseObject(DatabasePackage package, Category category)
         {
+            if(package != null)
+                Logging.Debug("SaveApplyDatabaseObject(), selectedItem is null = {0}, package save apply target = {1}", (SelectedItem == null), package.PackageName);
+            else
+                Logging.Debug("SaveApplyDatabaseObject(), selectedItem is null = {0}, package save apply target = null (category)", (SelectedItem == null));
             if (category != null)
             {
                 category.Name = PackageNameDisplay.Text;
@@ -931,6 +945,9 @@ namespace RelhaxModpack.Windows
             SearchBox.Items.Clear();
             //rebulid the levels as well
             Utils.BuildLevelPerPackage(ParsedCategoryList);
+            //and keep focus over the item we just moved
+            if (!realItemToMove.IsSelected)
+                realItemToMove.IsSelected = true;
         }
 
         private void OnTreeViewDatabaseDrop(object sender, DragEventArgs e)
