@@ -84,55 +84,60 @@ namespace RelhaxModpack.Windows
         #region Password auth stuff
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            PasswordButton_Click(sender, e);
-        }
-
-        private void PasswordButton_Click(object sender, RoutedEventArgs e)
-        {
-            AuthStatusTextblock.Text = "Current status: Checking...";
-            AuthStatusTextblock.Foreground = new SolidColorBrush(Colors.Yellow);
-            if(AttemptAuth())
-            {
-                AuthStatusTextblock.Text = "Current status: Authorized";
-                AuthStatusTextblock.Foreground = new SolidColorBrush(Colors.Green);
-                authorized = true;
-            }
-            else
-            {
-                AuthStatusTextblock.Text = "Current status: Denied";
-                AuthStatusTextblock.Foreground = new SolidColorBrush(Colors.Red);
-                authorized = false;
-            }
-        }
-
-        private bool AttemptAuth()
-        {
             //check if key filename was changed from command line
-            if(!string.IsNullOrWhiteSpace(CommandLineSettings.UpdateKeyFileName))
+            if (!string.IsNullOrWhiteSpace(CommandLineSettings.UpdateKeyFileName))
             {
                 Logging.Debug("User specified from command line new key filename to use: {0}", CommandLineSettings.UpdateKeyFileName);
                 KeyFilename = CommandLineSettings.UpdateKeyFileName;
             }
-            if (File.Exists(KeyFilename))
+            if(File.Exists(KeyFilename))
             {
-                Logging.WriteToLog("Attempting to auth from AttemptAuth()");
-                //compare local password to online version
-                using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
-                {
-                    string onlinePassword = client.DownloadString(PrivateStuff.KeyAddress);
-                    string localPassword = File.ReadAllText(KeyFilename);
-                    if (onlinePassword.Equals(localPassword))
-                    {
-                        Logging.WriteToLog("authorized from AttemptAuth()");
-                        return true;
-                    }
-                    else
-                        Logging.WriteToLog("not authorized from AttemptAuth()");
-                }
+                Logging.Debug("File for auth exists, attempting authorization");
+                Logging.Debug(KeyFilename);
+                AttemptAuthFromFile(KeyFilename);
             }
             else
-                Logging.Error("Key file {0} not found", KeyFilename);
-            return false;
+            {
+                Logging.Info("Loading without pre-file authorization");
+            }
+        }
+
+        private void PasswordButton_Click(object sender, RoutedEventArgs e)
+        {
+            AttemptAuthFromString(PaswordTextbox.Text);
+        }
+
+        private async Task<bool> AttemptAuthFromFile(string filepath)
+        {
+            Logging.Info("attempting authorization", filepath);
+            return await AttemptAuthFromString(File.ReadAllText(filepath));
+        }
+
+        private async Task<bool> AttemptAuthFromString(string key)
+        {
+            AuthStatusTextblock.Text = "Current status: Checking...";
+            AuthStatusTextblock.Foreground = new SolidColorBrush(Colors.Yellow);
+            //compare local password to online version
+            using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
+            {
+                string onlinePassword = await client.DownloadStringTaskAsync(PrivateStuff.KeyAddress);
+                if (onlinePassword.Equals(key))
+                {
+                    Logging.WriteToLog("authorized, keys match");
+                    AuthStatusTextblock.Text = "Current status: Authorized";
+                    AuthStatusTextblock.Foreground = new SolidColorBrush(Colors.Green);
+                    authorized = true;
+                    return true;
+                }
+                else
+                {
+                    Logging.WriteToLog("not authorized, keys do not match");
+                    AuthStatusTextblock.Text = "Current status: Denied";
+                    AuthStatusTextblock.Foreground = new SolidColorBrush(Colors.Red);
+                    authorized = false;
+                    return false;
+                }
+            }
         }
         #endregion
 
