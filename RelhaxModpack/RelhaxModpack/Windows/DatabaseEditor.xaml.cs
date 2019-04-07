@@ -430,6 +430,11 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        private void SelectDatabaseTreeViewItem()
+        {
+
+        }
+
         private void LeftTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (Init)
@@ -443,7 +448,16 @@ namespace RelhaxModpack.Windows
                     RemoveDatabaseObjectButton.IsEnabled = true;
                     MoveDatabaseObjectButton.IsEnabled = true;
                     AddDatabaseObjectButton.IsEnabled = true;
-                    LoadDatabaseView(GlobalDependencies, Dependencies, ParsedCategoryList);
+                    //check if the database is actually loaded before Loading the database view
+                    if(GlobalDependencies.Count == 0)
+                    {
+                        Logging.Info("Database is not yet loaded, skipping UI loading");
+                    }
+                    else
+                    {
+                        Logging.Info("Database is loaded, UI loading()");
+                        LoadDatabaseView(GlobalDependencies, Dependencies, ParsedCategoryList);
+                    }
                 }
                 else if (selectedTab.Equals(InstallGroupsTab))
                 {
@@ -452,7 +466,15 @@ namespace RelhaxModpack.Windows
                     RemoveDatabaseObjectButton.IsEnabled = false;
                     MoveDatabaseObjectButton.IsEnabled = false;
                     AddDatabaseObjectButton.IsEnabled = false;
-                    LoadInstallView(GlobalDependencies, Dependencies, ParsedCategoryList);
+                    if (GlobalDependencies.Count == 0)
+                    {
+                        Logging.Info("Database is not yet loaded, skipping UI loading");
+                    }
+                    else
+                    {
+                        Logging.Info("Database is loaded, UI loading()");
+                        LoadInstallView(GlobalDependencies, Dependencies, ParsedCategoryList);
+                    }
                 }
                 else if (selectedTab.Equals(PatchGroupsTab))
                 {
@@ -461,7 +483,15 @@ namespace RelhaxModpack.Windows
                     RemoveDatabaseObjectButton.IsEnabled = false;
                     MoveDatabaseObjectButton.IsEnabled = false;
                     AddDatabaseObjectButton.IsEnabled = false;
-                    LoadPatchView(GlobalDependencies, Dependencies, ParsedCategoryList);
+                    if (GlobalDependencies.Count == 0)
+                    {
+                        Logging.Info("Database is not yet loaded, skipping UI loading");
+                    }
+                    else
+                    {
+                        Logging.Info("Database is loaded, UI loading()");
+                        LoadPatchView(GlobalDependencies, Dependencies, ParsedCategoryList);
+                    }
                 }
                 else if (selectedTab.Equals(SettingsTab))
                 {
