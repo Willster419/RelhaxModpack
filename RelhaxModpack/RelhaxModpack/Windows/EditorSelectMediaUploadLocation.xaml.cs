@@ -103,6 +103,8 @@ namespace RelhaxModpack.Windows
                 StatusTextBlock.Text = "opening folder...";
                 await OpenFolderAsync(selectedTreeViewItem);
                 StatusTextBlock.Text = string.Empty;
+                if (selectedTreeViewItem.IsExpanded)
+                    selectedTreeViewItem.IsExpanded = true;
             }
         }
 
@@ -131,11 +133,13 @@ namespace RelhaxModpack.Windows
 
         private async void Item_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (FTPTreeView.SelectedItem is TreeViewItem selectedTreeViewItem)
+            if (FTPTreeView.SelectedItem is TreeViewItem selectedTreeViewItem && selectedTreeViewItem.Equals(sender))
             {
                 StatusTextBlock.Text = "opening folder...";
                 await OpenFolderAsync(selectedTreeViewItem);
                 StatusTextBlock.Text = string.Empty;
+                if (selectedTreeViewItem.IsExpanded)
+                    selectedTreeViewItem.IsExpanded = true;
             }
         }
     }
