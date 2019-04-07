@@ -381,7 +381,7 @@ namespace RelhaxModpack.Windows
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
             //check if we should ask a confirm first
-            if (EditorSettings.ShowConfirmationOnPackageApply && MessageBox.Show("Confirm to apply changes?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            if ((EditorSettings.ShowConfirmationOnPackageApply && MessageBox.Show("Confirm to apply changes?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes) || !EditorSettings.ShowConfirmationOnPackageApply)
             {
                 if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem && selectedTreeViewItem.Header is EditorComboBoxItem editorSelectedItem)
                 {
@@ -407,20 +407,32 @@ namespace RelhaxModpack.Windows
                 //if the mouse is not over, then it was not user initiated
                 if (!(selectedTreeViewItem.IsMouseOver || Keyboard.IsKeyDown(Key.Enter)))
                     return;
+                SelectDatabaseTreeViewItem(editorSelectedItem.Package, null);
+            }
+            else if (DatabaseTreeView.SelectedItem is TreeViewItem selectedCatTVI && selectedCatTVI.Header is Category category)
+            {
+                if (!(selectedCatTVI.IsMouseOver || Keyboard.IsKeyDown(Key.Enter)))
+                    return;
+                SelectDatabaseTreeViewItem(null, category);
+            }
+        }
+
+        private void SelectDatabaseTreeViewItem(DatabasePackage package, Category category)
+        {
+            if(package != null)
+            {
                 //check if we should save the item before updating what the current entry is
                 if (EditorSettings.SaveSelectionBeforeLeave && SelectedItem != null)
                 {
                     SaveApplyDatabaseObject(SelectedItem, null);
                 }
                 //set the item as the new selectedItem
-                SelectedItem = editorSelectedItem.Package;
+                SelectedItem = package;
                 //display the new selectedItem
                 ShowDatabaseObject(SelectedItem, null);
             }
-            else if (DatabaseTreeView.SelectedItem is TreeViewItem selectedCatTVI && selectedCatTVI.Header is Category category)
+            else
             {
-                if (!(selectedCatTVI.IsMouseOver || Keyboard.IsKeyDown(Key.Enter)))
-                    return;
                 //check if we should save the item before updating what the current entry is
                 if (EditorSettings.SaveSelectionBeforeLeave && SelectedItem != null)
                 {
@@ -428,11 +440,6 @@ namespace RelhaxModpack.Windows
                 }
                 ShowDatabaseObject(null, category);
             }
-        }
-
-        private void SelectDatabaseTreeViewItem()
-        {
-
         }
 
         private void LeftTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -973,11 +980,16 @@ namespace RelhaxModpack.Windows
                 parentItemOver.Items.Insert(parentItemOver.Items.IndexOf(itemCurrentlyOver) + 1, realItemToMove);
             }
             SearchBox.Items.Clear();
-            //rebulid the levels as well
+            //rebuild the levels as well
             Utils.BuildLevelPerPackage(ParsedCategoryList);
             //and keep focus over the item we just moved
             if (!realItemToMove.IsSelected)
+            {
+                //this will cause it in the UI to be highlighted, but internal selection code will reject it because it's not "user initiated"
                 realItemToMove.IsSelected = true;
+                //so make it programatically selected this one time
+                SelectDatabaseTreeViewItem(packageToMove, null);
+            }
         }
 
         private void OnTreeViewDatabaseDrop(object sender, DragEventArgs e)
