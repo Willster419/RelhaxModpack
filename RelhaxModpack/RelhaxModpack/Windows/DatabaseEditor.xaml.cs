@@ -1739,8 +1739,8 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show("Missing FTP credentails");
                 return;
             }
+
             //get the path to upload to
-            string pictureFileToUpload = string.Empty;
             if (OpenPictureDialog == null)
                 OpenPictureDialog = new OpenFileDialog()
                 {
@@ -1749,40 +1749,47 @@ namespace RelhaxModpack.Windows
                     CheckPathExists = true,
                     //DefaultExt = "zip",
                     InitialDirectory = Settings.ApplicationStartupPath,
-                    Multiselect = false,
+                    Multiselect = true,
                     Title = "Select image file to upload"
                 };
-            if ((bool)OpenPictureDialog.ShowDialog() && File.Exists(OpenPictureDialog.FileName))
-            {
-                pictureFileToUpload = OpenPictureDialog.FileName;
-            }
-            else
+            if (!(bool)OpenPictureDialog.ShowDialog())
                 return;
+
             //select path to upload to on server
             EditorSelectMediaUploadLocation selectUploadLocation = new EditorSelectMediaUploadLocation()
             {
-                Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
-                UploadFileName = Path.GetFileName(pictureFileToUpload)
+                Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword)
             };
-            //start upload
             if (!(bool)selectUploadLocation.ShowDialog())
                 return;
-            DatabaseEditorDownload name = new DatabaseEditorDownload()
+
+            //start upload
+            foreach(string mediaToUploadPath in OpenPictureDialog.FileNames)
             {
-                ZipFilePathDisk = pictureFileToUpload,
-                ZipFilePathOnline = selectUploadLocation.UploadPath,
-                ZipFileName = selectUploadLocation.UploadFileName,
-                Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
-                Upload = true,
-                PackageToUpdate = null
-            };
-            if (!(bool)name.ShowDialog())
-                return;
-            PackageMediasDisplay.Items.Add(new Media()
-            {
-                MediaType = MediaType.Picture,
-                URL = string.Format("{0}{1}", selectUploadLocation.UploadPath, selectUploadLocation.UploadFileName).Replace("ftp:", "http:")
-            });
+                string mediaToUploadFilename = Path.GetFileName(mediaToUploadPath);
+                DatabaseEditorDownload name = new DatabaseEditorDownload()
+                {
+                    ZipFilePathDisk = mediaToUploadPath,
+                    ZipFilePathOnline = selectUploadLocation.UploadPath,
+                    ZipFileName = mediaToUploadFilename,
+                    Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
+                    Upload = true,
+                    PackageToUpdate = null
+                };
+                if ((bool)name.ShowDialog())
+                {
+                    Logging.Info("Upload of {0} success, adding entry in editor", mediaToUploadFilename);
+                    PackageMediasDisplay.Items.Add(new Media()
+                    {
+                        MediaType = MediaType.Picture,
+                        URL = string.Format("{0}{1}", selectUploadLocation.UploadPath, mediaToUploadFilename).Replace("ftp:", "http:")
+                    });
+                }
+                else
+                {
+                    Logging.Warning("File {0} failed to upload, skipping adding media", mediaToUploadFilename);
+                }
+            }
         }
 
         private void MediaPreviewSelectedMediaButton_Click(object sender, RoutedEventArgs e)

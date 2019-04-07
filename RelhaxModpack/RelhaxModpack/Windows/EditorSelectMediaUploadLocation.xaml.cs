@@ -23,7 +23,6 @@ namespace RelhaxModpack.Windows
 
         private string FTPPath = PrivateStuff.FTPMediaRoot;
         public NetworkCredential Credential;
-        public string UploadFileName;
         public string UploadPath;
         private TreeViewItem root;
 
@@ -50,7 +49,6 @@ namespace RelhaxModpack.Windows
             FTPTreeView.Items.Add(root);
             await OpenFolderAsync(root);
             StatusTextBlock.Text = string.Empty;
-            FilenameTextBox.Text = UploadFileName;
         }
 
         private void MakeFolderButton_Click(object sender, RoutedEventArgs e)
@@ -77,20 +75,9 @@ namespace RelhaxModpack.Windows
 
         private void SelectFolderUploadButton_Click(object sender, RoutedEventArgs e)
         {
-            List<char> invalidChars = Path.GetInvalidFileNameChars().ToList();
-            invalidChars.AddRange(Path.GetInvalidPathChars().ToList());
-            foreach (char c in invalidChars)
-            {
-                if (FilenameTextBox.Text.Contains(c))
-                {
-                    MessageBox.Show(string.Format("value '{0}' is invalid for name", c));
-                    return;
-                }
-            }
             if (FTPTreeView.SelectedItem is TreeViewItem selectedTreeViewItem)
             {
                 UploadPath = selectedTreeViewItem.Tag as string;
-                UploadFileName = FilenameTextBox.Text;
                 DialogResult = true;
                 Close();
             }
@@ -103,7 +90,7 @@ namespace RelhaxModpack.Windows
                 StatusTextBlock.Text = "opening folder...";
                 await OpenFolderAsync(selectedTreeViewItem);
                 StatusTextBlock.Text = string.Empty;
-                if (selectedTreeViewItem.IsExpanded)
+                if (!selectedTreeViewItem.IsExpanded)
                     selectedTreeViewItem.IsExpanded = true;
             }
         }
@@ -138,7 +125,7 @@ namespace RelhaxModpack.Windows
                 StatusTextBlock.Text = "opening folder...";
                 await OpenFolderAsync(selectedTreeViewItem);
                 StatusTextBlock.Text = string.Empty;
-                if (selectedTreeViewItem.IsExpanded)
+                if (!selectedTreeViewItem.IsExpanded)
                     selectedTreeViewItem.IsExpanded = true;
             }
         }

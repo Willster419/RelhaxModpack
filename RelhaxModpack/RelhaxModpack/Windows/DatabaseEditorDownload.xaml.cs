@@ -88,7 +88,9 @@ namespace RelhaxModpack.Windows
                         {
                             Logging.Debug("STARTING FTP UPLOAD");
                             await client.UploadFileTaskAsync(CompleteFTPPath, ZipFilePathDisk);
+                            Logging.Debug("FTP UPLOAD COMPLETE");
                             CancelButton.IsEnabled = false;
+                            //if we're uploading a package zip file, then PackageToUpdate is not null, and fire the event
                             if (PackageToUpdate != null)
                             {
                                 Logging.Debug("FTP upload complete, changing zipFile entry for package {0} from", PackageToUpdate.PackageName);
