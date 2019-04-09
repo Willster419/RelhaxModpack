@@ -86,6 +86,12 @@
                 </CheckBox>
             </Grid>
         </TabItem>
+        <TabItem Header="Async Progress Reporting">
+            <Grid Background="#FFE5E5E5">
+                <Button x:Name="BackgroundTaskStartButton" Content="Start Async Background Task" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="165" Click="BackgroundTaskStartButton_Click"/>
+                <TextBlock x:Name="BackgroundTaskReport" HorizontalAlignment="Left" Margin="10,35,0,0" TextWrapping="Wrap" Text="Task Not started" VerticalAlignment="Top" Width="165"/>
+                <ProgressBar x:Name="BackgroundTaskProgress" HorizontalAlignment="Left" Height="16" Margin="10,56,0,0" VerticalAlignment="Top" Width="165" Value="0" Minimum="0" Maximum="10"/>
+            </Grid>
+        </TabItem>
     </TabControl>
-
 </Window>

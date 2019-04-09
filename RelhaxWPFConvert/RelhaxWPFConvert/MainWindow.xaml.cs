@@ -59,5 +59,13 @@ namespace RelhaxWPFConvert
         {
             testBox1.CheckboxDisabledColor = Colors.Green;
         }
+
+        #region Task Reporting
+
+        private void BackgroundTaskStartButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        #endregion
     }
 }
