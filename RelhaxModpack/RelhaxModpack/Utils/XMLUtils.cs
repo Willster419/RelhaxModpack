@@ -553,6 +553,7 @@ namespace RelhaxModpack
 
         public static void UnpackXmlFile(XmlUnpack xmlUnpack, StringBuilder unpackBuilder)
         {
+            Logging.Info(xmlUnpack.ToString());
             throw new BadMemeException("need to implement this still");
             //TODO
         }

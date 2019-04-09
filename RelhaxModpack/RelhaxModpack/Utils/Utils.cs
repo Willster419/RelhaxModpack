@@ -1357,6 +1357,7 @@ namespace RelhaxModpack
 
         public static void CreateShortcut(Shortcut shortcut, StringBuilder sb)
         {
+            Logging.Info(shortcut.ToString());
             Logging.Info("Creating shortcut {0}",shortcut.Name);
             //build the full macro for path (target) and name (also filename)
             string target = MacroReplace(shortcut.Path, ReplacementTypes.FilePath);
