@@ -765,7 +765,10 @@ namespace RelhaxModpack.InstallerComponents
                         numExtracted++;
                         if (string.IsNullOrWhiteSpace(package.ZipFile))
                             continue;
-                        Unzip(package, threadNum);
+                        StringBuilder zipLogger = new StringBuilder();
+                        zipLogger.AppendLine(string.Format("/*   {0}   */",package.ZipFile));
+                        Unzip(package, threadNum, zipLogger);
+                        Logging.Installer(zipLogger.ToString());
                         //after zip file extraction, process triggers (if enabled)
                         if(!ModpackSettings.DisableTriggers)
                         {
@@ -782,14 +785,11 @@ namespace RelhaxModpack.InstallerComponents
 
         }
 
-        private void Unzip(DatabasePackage package, int threadNum)
+        private void Unzip(DatabasePackage package, int threadNum, StringBuilder zipLogger)
         {
-            //do any zip file processing, then extract
-            if (string.IsNullOrWhiteSpace(package.ZipFile))
-                throw new BadMemeException("fuck you");
             //for each zip file, put it in a try catch to see if we can catch any issues in case of a one-off IO error
             string zipFilePath = Path.Combine(Settings.RelhaxDownloadsFolder, package.ZipFile);
-            for(int i = 3; i > 0; i--)
+            for(int i = 3; i > 0; i--)//3 strikes and you're out
             {
                 try
                 {
@@ -828,6 +828,10 @@ namespace RelhaxModpack.InstallerComponents
                         for (int j = 0; j < zip.Entries.Count; j++)
                         {
                             string zipFilename = zip[j].FileName;
+                            //create logging entry
+                            string loggingCompletePath = string.Empty;
+                            string extractPath = string.Empty;
+
                             //check each entry if it's going to a custom extraction location by form of macro
                             //default is nothing, goes to root (World_of_Tanks) directory
                             //if macro is found, extract to a different folder
@@ -842,6 +846,7 @@ namespace RelhaxModpack.InstallerComponents
                                 {
                                     zip[j].FileName = zipFilename;
                                     zip[j].Extract(Settings.AppDataFolder, ExtractExistingFileAction.OverwriteSilently);
+                                    extractPath = Settings.AppDataFolder;
                                 }
                             }
                             //_RelhaxRoot = app startup directory
@@ -852,13 +857,17 @@ namespace RelhaxModpack.InstallerComponents
                                 {
                                     zip[j].FileName = zipFilename;
                                     zip[j].Extract(Settings.ApplicationStartupPath, ExtractExistingFileAction.OverwriteSilently);
+                                    extractPath = Settings.ApplicationStartupPath;
                                 }
                             }
                             //default is World_of_Tanks directory
                             else
                             {
                                 zip[j].Extract(Settings.WoTDirectory, ExtractExistingFileAction.OverwriteSilently);
+                                extractPath = Settings.WoTDirectory;
                             }
+                            loggingCompletePath = Path.Combine(extractPath, zipFilename.Replace(@"/", @"\"));
+                            zipLogger.AppendLine(package.LogAtInstall ? loggingCompletePath : "#" + loggingCompletePath);
                         }
                     }
                     //set i to 0 so that it breaks out of the loop
