@@ -346,7 +346,7 @@ namespace RelhaxModpack.InstallerComponents
             InstallFinishedArgs.ExitCodes++;
             Logging.WriteToLog(string.Format("Unpack of xml files, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
-            List<XmlUnpack> xmlUnpacks = MakeXmlUnpackListList();
+            List<XmlUnpack> xmlUnpacks = MakeXmlUnpackList();
             if (xmlUnpacks.Count > 0)
             {
                 foreach(XmlUnpack xmlUnpack in xmlUnpacks)
@@ -1045,6 +1045,7 @@ namespace RelhaxModpack.InstallerComponents
             return true;
         }
 
+        #region Patch list parsing
         private List<Patch> MakePatchList()
         {
             //get a list of all files in the dedicated patch directory
@@ -1134,37 +1135,36 @@ namespace RelhaxModpack.InstallerComponents
                 patches.Add(p);
             }
         }
+        #endregion
+
+        #region Shortcut parsing
 
         private List<Shortcut> MakeShortcutList()
         {
             List<Shortcut> shortcuts = new List<Shortcut>();
-            //get a list of all files in the dedicated patch directory
+            //get a list of all files in the dedicated shortcuts directory
             //foreach one add it to the patch list
             string[] shortcut_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName), SearchOption.TopDirectoryOnly,
                 @"*.xml", 50, 3, true);
             if (shortcut_files == null)
-                Logging.WriteToLog("Failed to parse shortcuts from patch directory (see above lines for more info", Logfiles.Application, LogLevel.Error);
+                Logging.WriteToLog("Failed to parse shortcuts from directory", Logfiles.Application, LogLevel.Error);
+            else if (shortcut_files.Count() == 0)
+            {
+                Logging.Info("No shortcut files to operate on");
+            }
             else
             {
-                Logging.WriteToLog(string.Format("Number of shortcut files: {0}", shortcut_files.Count()), Logfiles.Application, LogLevel.Debug);
-                //if there wern't any, don't bother doing anything
-                if (shortcut_files.Count() > 0)
+                Logging.WriteToLog(string.Format("Number of shortcut xml instruction files: {0}", shortcut_files.Count()), Logfiles.Application, LogLevel.Debug);
+                //if there weren't any, don't bother doing anything
+                string completePath = string.Empty;
+                foreach (string filename in shortcut_files)
                 {
-                    string completePath = string.Empty;
-                    foreach (string filename in shortcut_files)
-                    {
-                        completePath = Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName, filename);
-                        //just double check...
-                        if (!File.Exists(completePath))
-                        {
-                            Logging.WriteToLog("shortcut file does not exist?? " + completePath, Logfiles.Application, LogLevel.Warning);
-                            continue;
-                        }
-                        //apply "normal" file properties just in case the user's wot install directory is special
-                        Utils.ApplyNormalFileProperties(completePath);
-                        //ok NOW actually add the file to the patch list
-                        AddShortcutsFromFile(shortcuts, filename);
-                    }
+                    completePath = Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName, filename);
+                    //apply "normal" file properties just in case the user's wot install directory is special
+                    Utils.ApplyNormalFileProperties(completePath);
+                    //ok NOW actually add the file to the patch list
+                    Logging.Info("Adding shortcuts from shortcutFile {1}", Logfiles.Application, filename);
+                    AddShortcutsFromFile(shortcuts, filename);
                 }
             }
             return shortcuts;
@@ -1172,19 +1172,22 @@ namespace RelhaxModpack.InstallerComponents
 
         private void AddShortcutsFromFile(List<Shortcut> shortcuts, string filename)
         {
-            //make an xml document to get all shortuts
+            //make an xml document to get all shortcuts
             XmlDocument doc = XMLUtils.LoadXmlDocument(filename, XmlLoadType.FromFile);
             if (doc == null)
+            {
+                Logging.Error("Failed to parse xml shortcut file, skipping");
                 return;
+            } 
             //make new patch object for each entry
             //remember to add lots of logging
             XmlNodeList XMLshortcuts = XMLUtils.GetXMLNodesFromXPath(doc, "//shortcuts/shortcut");
             if (XMLshortcuts == null || XMLshortcuts.Count == 0)
             {
-                Logging.Error("File {0} contains no shortcut entries", filename);
+                Logging.Warning("File {0} contains no shortcut entries", filename);
                 return;
             }
-            Logging.Info("Adding {0} patches from shortcutFile {1}", Logfiles.Application, XMLshortcuts.Count, filename);
+            Logging.Info("Adding {0} shortcuts from shortcutFile {1}", Logfiles.Application, XMLshortcuts.Count, filename);
             foreach (XmlNode patchNode in XMLshortcuts)
             {
                 Shortcut sc = new Shortcut();
@@ -1209,9 +1212,11 @@ namespace RelhaxModpack.InstallerComponents
                 shortcuts.Add(sc);
             }
         }
+        #endregion
 
+        #region xml unpack
         //XML Unpack
-        private List<XmlUnpack> MakeXmlUnpackListList()
+        private List<XmlUnpack> MakeXmlUnpackList()
         {
             List<XmlUnpack> XmlUnpacks = new List<XmlUnpack>();
             //get a list of all files in the dedicated patch directory
@@ -1219,7 +1224,7 @@ namespace RelhaxModpack.InstallerComponents
             string[] unpack_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.XmlUnpackFolderName), SearchOption.TopDirectoryOnly,
                 @"*.xml", 50, 3, true);
             if (unpack_files == null)
-                Logging.WriteToLog("Failed to parse shortcuts from shortcut directory (see above lines for more info", Logfiles.Application, LogLevel.Error);
+                Logging.WriteToLog("Failed to parse xml unpacks from unpack directory", Logfiles.Application, LogLevel.Error);
             else
             {
                 Logging.WriteToLog(string.Format("Number of XmlUnpack files: {0}", unpack_files.Count()), Logfiles.Application, LogLevel.Debug);
@@ -1230,15 +1235,10 @@ namespace RelhaxModpack.InstallerComponents
                     foreach (string filename in unpack_files)
                     {
                         completePath = Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName, filename);
-                        //just double check...
-                        if (!File.Exists(completePath))
-                        {
-                            Logging.WriteToLog("XmlUnpack file does not exist?? " + completePath, Logfiles.Application, LogLevel.Warning);
-                            continue;
-                        }
                         //apply "normal" file properties just in case the user's wot install directory is special
                         Utils.ApplyNormalFileProperties(completePath);
                         //ok NOW actually add the file to the patch list
+                        Logging.Info("Adding xml unpack entries from file {1}", Logfiles.Application, filename);
                         AddXmlUnpackFromFile(XmlUnpacks, filename);
                     }
                 }
@@ -1252,7 +1252,10 @@ namespace RelhaxModpack.InstallerComponents
             //make an xml document to get all Xml Unpacks
             XmlDocument doc = XMLUtils.LoadXmlDocument(filename, XmlLoadType.FromFile);
             if (doc == null)
+            {
+                Logging.Error("failed to parse xml file");
                 return;
+            }
             //make new patch object for each entry
             //remember to add lots of logging
             XmlNodeList XMLUnpacks = XMLUtils.GetXMLNodesFromXPath(doc, "//files/file");
@@ -1261,7 +1264,7 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.Error("File {0} contains no XmlUnapck entries", filename);
                 return;
             }
-            Logging.Info("Adding {0} patches from XmlUnpack file {1}", Logfiles.Application, XMLUnpacks.Count, filename);
+            Logging.Info("Adding {0} xml unpack entries from file {1}", Logfiles.Application, XMLUnpacks.Count, filename);
             foreach (XmlNode patchNode in XMLUnpacks)
             {
                 XmlUnpack xmlup = new XmlUnpack();
@@ -1292,7 +1295,9 @@ namespace RelhaxModpack.InstallerComponents
                 XmlUnpacks.Add(xmlup);
             }
         }
+        #endregion
 
+        #region atlas parsing
         //Atlas parsing
         private List<Atlas> MakeAtlasList()
         {
@@ -1302,7 +1307,7 @@ namespace RelhaxModpack.InstallerComponents
             string[] atlas_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.AtlasCreationFoldername), SearchOption.TopDirectoryOnly,
                 @"*.xml", 50, 3, true);
             if (atlas_files == null)
-                Logging.WriteToLog("Failed to parse atlases from atlas directory (see above lines for more info", Logfiles.Application, LogLevel.Error);
+                Logging.WriteToLog("Failed to parse atlases from atlas directory", Logfiles.Application, LogLevel.Error);
             else
             {
                 Logging.WriteToLog(string.Format("Number of atlas files: {0}", atlas_files.Count()), Logfiles.Application, LogLevel.Debug);
@@ -1313,15 +1318,10 @@ namespace RelhaxModpack.InstallerComponents
                     foreach (string filename in atlas_files)
                     {
                         completePath = Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName, filename);
-                        //just double check...
-                        if (!File.Exists(completePath))
-                        {
-                            Logging.WriteToLog("atlas file does not exist?? " + completePath, Logfiles.Application, LogLevel.Warning);
-                            continue;
-                        }
                         //apply "normal" file properties just in case the user's wot install directory is special
                         Utils.ApplyNormalFileProperties(completePath);
                         //ok NOW actually add the file to the patch list
+                        Logging.Info("Adding atlas entries from file {1}", Logfiles.Application, filename);
                         AddAtlasFromFile(atlases, filename);
                     }
                 }
@@ -1341,10 +1341,10 @@ namespace RelhaxModpack.InstallerComponents
             XmlNodeList XMLAtlases = XMLUtils.GetXMLNodesFromXPath(doc, "//atlases/atlas");
             if (XMLAtlases == null || XMLAtlases.Count == 0)
             {
-                Logging.Error("File {0} contains no XmlUnapck entries", filename);
+                Logging.Error("File {0} contains no atlas entries", filename);
                 return;
             }
-            Logging.Info("Adding {0} patches from XmlUnpack file {1}", Logfiles.Application, XMLAtlases.Count, filename);
+            Logging.Info("Adding {0} atlas entries from file {1}", Logfiles.Application, XMLAtlases.Count, filename);
             foreach (XmlNode atlasNode in XMLAtlases)
             {
                 Atlas sc = new Atlas();
@@ -1406,6 +1406,8 @@ namespace RelhaxModpack.InstallerComponents
                 atlases.Add(sc);
             }
         }
+        #endregion
+
         #endregion
 
         #region IDisposable Support
