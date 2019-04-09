@@ -326,14 +326,19 @@ namespace RelhaxModpack.InstallerComponents
             InstallFinishedArgs.ExitCodes++;
             Logging.WriteToLog(string.Format("Restore of userdata, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
-            //if statement TODO
             if (ModpackSettings.SaveUserData)
             {
-                if (!RestoreData(packagesWithData))
+                if (packagesWithData.Count > 0)
                 {
-                    ReportProgress();
-                    ReportFinish();
-                    return;
+                    StringBuilder restoreDataBuilder = new StringBuilder();
+                    restoreDataBuilder.AppendLine("/*   Restored data   */");
+                    if (!RestoreData(packagesWithData, restoreDataBuilder))
+                    {
+                        ReportProgress();
+                        ReportFinish();
+                        return;
+                    }
+                    Logging.Installer(restoreDataBuilder.ToString());
                 }
                 Logging.Info("Restore of data complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
             }
@@ -349,10 +354,13 @@ namespace RelhaxModpack.InstallerComponents
             List<XmlUnpack> xmlUnpacks = MakeXmlUnpackList();
             if (xmlUnpacks.Count > 0)
             {
-                foreach(XmlUnpack xmlUnpack in xmlUnpacks)
+                StringBuilder unpackBuilder = new StringBuilder();
+                unpackBuilder.AppendLine("/*   Unpack xml files   */");
+                foreach (XmlUnpack xmlUnpack in xmlUnpacks)
                 {
-                    XMLUtils.UnpackXmlFile(xmlUnpack);
+                    XMLUtils.UnpackXmlFile(xmlUnpack, unpackBuilder);
                 }
+                Logging.Uninstaller(unpackBuilder.ToString());
             }
             else
                 Logging.WriteToLog("...skipped (no XmlUnpack entries parsed");
@@ -369,6 +377,7 @@ namespace RelhaxModpack.InstallerComponents
             List<Patch> pathces = MakePatchList();
             if (pathces.Count > 0)
             {
+                //no need to installer log patches, since it's operating on files that already exist
                 concurrentTasksAfterMainExtractoin[taskIndex++] = Task.Factory.StartNew(() =>
                 {
                     foreach (Patch patch in pathces)
@@ -387,10 +396,10 @@ namespace RelhaxModpack.InstallerComponents
             Logging.WriteToLog(string.Format("Creating of shortcuts, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             List<Shortcut> shortcuts = MakeShortcutList();
-            StringBuilder shortcutBuilder = new StringBuilder();
-            shortcutBuilder.AppendLine("/*   Shortcuts   */");
             if (shortcuts.Count > 0)
             {
+                StringBuilder shortcutBuilder = new StringBuilder();
+                shortcutBuilder.AppendLine("/*   Shortcuts   */");
                 concurrentTasksAfterMainExtractoin[taskIndex++] = Task.Factory.StartNew(() =>
                 {
                     foreach (Shortcut shortcut in shortcuts)
@@ -695,7 +704,7 @@ namespace RelhaxModpack.InstallerComponents
             return true;
         }
 
-        private bool RestoreData(List<SelectablePackage> packagesWithData)
+        private bool RestoreData(List<SelectablePackage> packagesWithData, StringBuilder restoreDataBuilder)
         {
             foreach (SelectablePackage package in packagesWithData)
             {
@@ -719,6 +728,7 @@ namespace RelhaxModpack.InstallerComponents
                             if (File.Exists(savedFile))
                                 File.Delete(savedFile);
                             File.Move(filePath, savedFile);
+                            restoreDataBuilder.AppendLine(savedFile);
                         }
                     }
                 }
@@ -897,10 +907,14 @@ namespace RelhaxModpack.InstallerComponents
             List<Atlas> atlases = MakeAtlasList();
             if (atlases.Count > 0)
             {
+                StringBuilder atlasBuilder = new StringBuilder();
+                atlasBuilder.AppendLine("/*   Atlases   */");
                 foreach (Atlas atlas in atlases)
                 {
                     Utils.CreateAtlas(atlas);
+                    atlasBuilder.AppendLine(atlas.MapFile);
                 }
+                Logging.Installer(atlasBuilder.ToString());
             }
             else
                 Logging.Warning("building contour icons triggered, but none exist! (is this the intent)");

@@ -9,6 +9,7 @@ using System.Xml.XPath;
 using System.Windows;
 using System.Reflection;
 using System.ComponentModel;
+using System.Text;
 
 namespace RelhaxModpack
 {
@@ -550,7 +551,7 @@ namespace RelhaxModpack
             return doc;
         }
 
-        public static void UnpackXmlFile(XmlUnpack xmlUnpack)
+        public static void UnpackXmlFile(XmlUnpack xmlUnpack, StringBuilder unpackBuilder)
         {
             throw new BadMemeException("need to implement this still");
             //TODO
