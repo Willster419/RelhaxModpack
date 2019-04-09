@@ -419,10 +419,7 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     concurrentTasksAfterMainExtractoin[taskIndex++] = Task.Factory.StartNew(() =>
                     {
-                        foreach (Atlas atlas in atlases)
-                        {
-                            Utils.CreateAtlas(atlas);
-                        }
+                        BuildContourIcons();
                     });
                 }
                 else
@@ -906,7 +903,7 @@ namespace RelhaxModpack.InstallerComponents
                 }
             }
             else
-                Logging.Error("building contour icons triggered, but none exist!");
+                Logging.Warning("building contour icons triggered, but none exist! (is this the intent)");
         }
 
         private void ProcessTriggers(List<string> packageTriggers)
