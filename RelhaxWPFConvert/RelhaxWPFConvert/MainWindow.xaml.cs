@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -62,7 +63,51 @@ namespace RelhaxWPFConvert
 
         #region Task Reporting
 
-        private void BackgroundTaskStartButton_Click(object sender, RoutedEventArgs e)
+        //scruct for task reporting
+        public struct CustomProgress
+        {
+            public string update;
+            public int value;
+        }
+
+        private async void BackgroundTaskStartButton_Click(object sender, RoutedEventArgs e)
+        {
+            //create the progress object and access the async method
+            Progress<CustomProgress> progress = new Progress<CustomProgress>();
+            progress.ProgressChanged += Progress_ProgressChanged;
+            await PerformTaskAsync(progress);
+            BackgroundTaskReport.Text = "Complete";
+        }
+
+        private void Progress_ProgressChanged(object sender, CustomProgress e)
+        {
+            BackgroundTaskReport.Text = e.update;
+            BackgroundTaskProgress.Value = e.value;
+        }
+
+        //custom async method
+        public Task PerformTaskAsync(IProgress<CustomProgress> progress)
+        {
+            Task t = new Task(IntenseMethodThatTakesCPUTime);
+            Task t2 = Task.Run(() => 
+            {
+                CustomProgress prog = new CustomProgress();
+                prog.update = "Processing wait 0 of 10";
+                prog.value = 0;
+                progress.Report(prog);
+                for(int i = 0; i < 10; i++)
+                {
+                    //https://docs.microsoft.com/en-us/dotnet/api/system.threading.tasks.task?view=netframework-4.7.2
+                    System.Threading.Thread.Sleep(500);
+                    prog.update = string.Format("Processing wait {0} of 10", i+1);
+                    prog.value = i + 1;
+                    progress.Report(prog);
+                }
+            });
+            return t2;
+        }
+
+        public void IntenseMethodThatTakesCPUTime()
         {
 
         }
