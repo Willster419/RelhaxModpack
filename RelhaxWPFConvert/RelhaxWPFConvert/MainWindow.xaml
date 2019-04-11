@@ -86,11 +86,17 @@
                 </CheckBox>
             </Grid>
         </TabItem>
-        <TabItem Header="Async Progress Reporting">
+        <TabItem Header="Progress Reporting">
             <Grid Background="#FFE5E5E5">
                 <Button x:Name="BackgroundTaskStartButton" Content="Start Async Background Task" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="165" Click="BackgroundTaskStartButton_Click"/>
                 <TextBlock x:Name="BackgroundTaskReport" HorizontalAlignment="Left" Margin="10,35,0,0" TextWrapping="Wrap" Text="Task Not started" VerticalAlignment="Top" Width="165"/>
                 <ProgressBar x:Name="BackgroundTaskProgress" HorizontalAlignment="Left" Height="16" Margin="10,56,0,0" VerticalAlignment="Top" Width="165" Value="0" Minimum="0" Maximum="10"/>
+                <Button x:Name="ForgroundTaskStartButton" Content="Start Forground Task" HorizontalAlignment="Left" Margin="180,10,0,0" VerticalAlignment="Top" Width="165" Click="ForgroundTaskStartButton_Click"/>
+                <TextBlock x:Name="ForgroundTaskReport" HorizontalAlignment="Left" Margin="180,35,0,0" TextWrapping="Wrap" Text="Task Not started" VerticalAlignment="Top" Width="165"/>
+                <ProgressBar x:Name="ForgroundTaskProgress" HorizontalAlignment="Left" Height="16" Margin="180,56,0,0" VerticalAlignment="Top" Width="165" Value="0" Minimum="0" Maximum="10"/>
+                <Button x:Name="HybridTaskStartButton" Content="Start Hybrid Task" HorizontalAlignment="Left" Margin="350,10,0,0" VerticalAlignment="Top" Width="165" Click="HybradTaskStartButton_Click"/>
+                <TextBlock x:Name="HybridTaskReport" HorizontalAlignment="Left" Margin="350,35,0,0" TextWrapping="Wrap" Text="Task Not started" VerticalAlignment="Top" Width="165"/>
+                <ProgressBar x:Name="HybridTaskProgress" HorizontalAlignment="Left" Height="16" Margin="350,56,0,0" VerticalAlignment="Top" Width="165" Value="0" Minimum="0" Maximum="10"/>
             </Grid>
         </TabItem>
     </TabControl>
