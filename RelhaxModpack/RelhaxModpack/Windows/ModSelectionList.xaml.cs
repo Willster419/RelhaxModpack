@@ -58,7 +58,7 @@ namespace RelhaxModpack.Windows
             InitializeComponent();
         }
 
-        private void OnWindowLoadReportProgress(RelhaxProgress progress)
+        private void OnWindowLoadReportProgress(object sender, RelhaxProgress progress)
         {
             if (loadingProgress != null)
             {
@@ -102,7 +102,7 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region UI INIT STUFF
-        private async void OnWindowLoad(object sender, RoutedEventArgs e)
+        private void OnWindowLoad(object sender, RoutedEventArgs e)
         {
             LoadingConfig = true;
             //init the lists
@@ -121,10 +121,11 @@ namespace RelhaxModpack.Windows
             //create and run async task
             try
             {
-                Logging.WriteToLog("Starting async task: " + nameof(ActuallyLoadModSelectionListAsync) + "()");
+                Logging.WriteToLog("Starting async task: " + nameof(LoadModSelectionListNonUI) + "()");
                 //https://blogs.msdn.microsoft.com/dotnet/2012/06/06/async-in-4-5-enabling-progress-and-cancellation-in-async-apis/
-                Progress<RelhaxProgress> progressIndicator = new Progress<RelhaxProgress>(OnWindowLoadReportProgress);
-                bool result = await ActuallyLoadModSelectionListAsync(progressIndicator);
+                Progress<RelhaxProgress> progressIndicator = new Progress<RelhaxProgress>();
+                progressIndicator.ProgressChanged += OnWindowLoadReportProgress;
+                bool result = LoadModSelectionListNonUI(progressIndicator);
                 if (!result)
                     throw new BadMemeException("Result was false reeeeeee!!");
             }
@@ -184,159 +185,173 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private async Task<bool> ActuallyLoadModSelectionListAsync(IProgress<RelhaxProgress> progress)
+        private bool LoadModSelectionListNonUI(IProgress<RelhaxProgress> progress)
         {
-            RelhaxProgress loadProgress = new RelhaxProgress()
+            Task<bool> part1 = Task.Run(() =>
             {
-                ChildTotal = 4,
-                ChildCurrent = 1,
-                ReportMessage = Translations.GetTranslatedString("downloadingDatabase")
-            };
-            progress.Report(loadProgress);
-            //download online modInfo into xml file
-            XmlDocument modInfoDocument = new XmlDocument();
-            string modInfoXml = "";
-            //get is based on different types of database mode
-            switch(ModpackSettings.DatabaseDistroVersion)
-            {
-                case DatabaseVersions.Stable:
-                    //make string
-                    string modInfoxmlURL = Settings.DefaultStartAddress + "modInfo.dat";
-                    modInfoxmlURL = modInfoxmlURL.Replace("{onlineFolder}", Settings.WoTModpackOnlineFolderVersion);
-                    //download dat file
-                    string tempDownloadLocation = Path.Combine(Settings.RelhaxTempFolder, "modInfo.dat");
-                    using (WebClient client = new WebClient())
-                    {
-                        try
+                RelhaxProgress loadProgress = new RelhaxProgress()
+                {
+                    ChildTotal = 4,
+                    ChildCurrent = 1,
+                    ReportMessage = Translations.GetTranslatedString("downloadingDatabase")
+                };
+                progress.Report(loadProgress);
+                //download online modInfo into xml file
+                XmlDocument modInfoDocument = new XmlDocument();
+                string modInfoXml = "";
+                //get is based on different types of database mode
+                switch (ModpackSettings.DatabaseDistroVersion)
+                {
+                    case DatabaseVersions.Stable:
+                        //make string
+                        string modInfoxmlURL = Settings.DefaultStartAddress + "modInfo.dat";
+                        modInfoxmlURL = modInfoxmlURL.Replace("{onlineFolder}", Settings.WoTModpackOnlineFolderVersion);
+                        //download dat file
+                        string tempDownloadLocation = Path.Combine(Settings.RelhaxTempFolder, "modInfo.dat");
+                        using (WebClient client = new WebClient())
                         {
-                            await client.DownloadFileTaskAsync(modInfoxmlURL, tempDownloadLocation);
+                            try
+                            {
+                                client.DownloadFile(modInfoxmlURL, tempDownloadLocation);
+                            }
+                            catch (Exception ex)
+                            {
+                                Logging.WriteToLog("Failed to download managerInfo.dat from " + modInfoxmlURL + "\n" + ex.ToString(),
+                                    Logfiles.Application, LogLevel.Exception);
+                                return false;
+                            }
                         }
-                        catch (Exception ex)
+                        //extract modinfo xml string
+                        modInfoXml = Utils.GetStringFromZip(tempDownloadLocation, "modInfo.xml");
+                        break;
+                    case DatabaseVersions.Beta:
+                        //load string constant url from manager info xml
+                        string managerInfoXml = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
+                        if (string.IsNullOrWhiteSpace(managerInfoXml))
                         {
-                            Logging.WriteToLog("Failed to download managerInfo.dat from " + modInfoxmlURL + "\n" + ex.ToString(),
+                            Logging.WriteToLog("Failed to parse manager_version.xml from string from zipfile", Logfiles.Application, LogLevel.Exception);
+                            MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " manager_version.xml");
+                            return false;
+                        }
+                        //get download URL of static beta database location
+                        string downloadURL = XMLUtils.GetXMLStringFromXPath(managerInfoXml, "//version/database_beta_url", "manager_version.xml");
+                        if (string.IsNullOrWhiteSpace(downloadURL))
+                        {
+                            Logging.WriteToLog("Failed to get xpath value //version/database_beta_url from manager_version.xml",
                                 Logfiles.Application, LogLevel.Exception);
                             return false;
                         }
-                    }
-                    //extract modinfo xml string
-                    modInfoXml = Utils.GetStringFromZip(tempDownloadLocation, "modInfo.xml");
-                    break;
-                case DatabaseVersions.Beta:
-                    //load string constant url from manager info xml
-                    string managerInfoXml = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
-                    if (string.IsNullOrWhiteSpace(managerInfoXml))
-                    {
-                        Logging.WriteToLog("Failed to parse manager_version.xml from string from zipfile", Logfiles.Application, LogLevel.Exception);
-                        MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " manager_version.xml");
-                        return false;
-                    }
-                    //get download URL of static beta database location
-                    string downloadURL = XMLUtils.GetXMLStringFromXPath(managerInfoXml, "//version/database_beta_url", "manager_version.xml");
-                    if(string.IsNullOrWhiteSpace(downloadURL))
-                    {
-                        Logging.WriteToLog("Failed to get xpath value //version/database_beta_url from manager_version.xml",
-                            Logfiles.Application, LogLevel.Exception);
-                        return false;
-                    }
-                    //download document from string
-                    using (WebClient client = new WebClient())
-                    {
-                        modInfoXml = await client.DownloadStringTaskAsync(downloadURL);
-                    }
-                    break;
-                case DatabaseVersions.Test:
-                    //make string
-                    string modInfoFilePath = ModpackSettings.CustomModInfoPath;
-                    if(string.IsNullOrWhiteSpace(modInfoFilePath))
-                    {
-                        modInfoFilePath = System.IO.Path.Combine(Settings.ApplicationStartupPath, "modInfo.xml");
-                    }
-                    //load modinfo xml
-                    if (System.IO.File.Exists(modInfoFilePath))
-                        modInfoXml = System.IO.File.ReadAllText(modInfoFilePath);
-                    else
-                    {
-                        Logging.WriteToLog("modInfo.xml does not exist at " + modInfoFilePath, Logfiles.Application, LogLevel.Error);
-                        return false;
-                    }
-                    break;
-            }
-            if (string.IsNullOrWhiteSpace(modInfoXml))
-            {
-                Logging.WriteToLog("Failed to read modInfoxml xml string", Logfiles.Application, LogLevel.Exception);
-                MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
-                return false;
-            }
-            try
-            {
-                modInfoDocument.LoadXml(modInfoXml);
-            }
-            catch (XmlException ex)
-            {
-                Logging.WriteToLog("Failed to parse modInfoxml from xml string\n" + ex.ToString(), Logfiles.Application, LogLevel.Exception);
-                MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
-                return false;
-            }
-            //if not stable db, update current version and online folder version from modInfoxml itself
-            if(ModpackSettings.DatabaseDistroVersion != DatabaseVersions.Stable)
-            {
-                Settings.WoTModpackOnlineFolderVersion = XMLUtils.GetXMLStringFromXPath(modInfoDocument, "//modInfoAlpha.xml@onlineFolder");
-                Settings.WoTClientVersion = XMLUtils.GetXMLStringFromXPath(modInfoDocument, "//modInfoAlpha.xml@version");
-            }
-            //parse the modInfoXml to list in memory
-            loadProgress.ChildCurrent++;
-            loadProgress.ReportMessage = Translations.GetTranslatedString("parsingDatabase");
-            progress.Report(loadProgress);
-            if(!XMLUtils.ParseDatabase(modInfoDocument,GlobalDependencies,Dependencies,ParsedCategoryList))
-            {
-                Logging.WriteToLog("Failed to parse database",Logfiles.Application,LogLevel.Error);
-                MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
-                return false;
-            }
-            Utils.BuildLinksRefrence(ParsedCategoryList, false);
-            Utils.BuildLevelPerPackage(ParsedCategoryList);
-            List<DatabasePackage> flatList = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList);
-            //check db cache of local files in downlaod zip folder
-            loadProgress.ChildCurrent++;
-            loadProgress.ReportMessage = Translations.GetTranslatedString("verifyingDownloadCache");
-            progress.Report(loadProgress);
-            //the below does not work yet TODO: CHECK?
-            List<DatabasePackage> flatListZips = flatList.Where(package => !string.IsNullOrWhiteSpace(package.ZipFile)).ToList();
-            foreach(DatabasePackage package in flatListZips)
-            {
-                string zipFile = Path.Combine(Settings.RelhaxDownloadsFolder, package.ZipFile);
-                //only look for a crc if the cache file exists
-                if (!File.Exists(zipFile))
-                    continue;
-                string name = package.PackageName;
-                if(package is SelectablePackage sp)
-                {
-                    name = sp.NameFormatted;
+                        //download document from string
+                        using (WebClient client = new WebClient())
+                        {
+                            modInfoXml = client.DownloadString(downloadURL);
+                        }
+                        break;
+                    case DatabaseVersions.Test:
+                        //make string
+                        string modInfoFilePath = ModpackSettings.CustomModInfoPath;
+                        if (string.IsNullOrWhiteSpace(modInfoFilePath))
+                        {
+                            modInfoFilePath = System.IO.Path.Combine(Settings.ApplicationStartupPath, "modInfo.xml");
+                        }
+                        //load modinfo xml
+                        if (System.IO.File.Exists(modInfoFilePath))
+                            modInfoXml = System.IO.File.ReadAllText(modInfoFilePath);
+                        else
+                        {
+                            Logging.WriteToLog("modInfo.xml does not exist at " + modInfoFilePath, Logfiles.Application, LogLevel.Error);
+                            return false;
+                        }
+                        break;
                 }
-                loadProgress.ReportMessage=string.Format(Translations.GetTranslatedString("loading") + " " + name);
+                if (string.IsNullOrWhiteSpace(modInfoXml))
+                {
+                    Logging.WriteToLog("Failed to read modInfoxml xml string", Logfiles.Application, LogLevel.Exception);
+                    MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
+                    return false;
+                }
+                try
+                {
+                    modInfoDocument.LoadXml(modInfoXml);
+                }
+                catch (XmlException ex)
+                {
+                    Logging.WriteToLog("Failed to parse modInfoxml from xml string\n" + ex.ToString(), Logfiles.Application, LogLevel.Exception);
+                    MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
+                    return false;
+                }
+                //if not stable db, update current version and online folder version from modInfoxml itself
+                if (ModpackSettings.DatabaseDistroVersion != DatabaseVersions.Stable)
+                {
+                    Settings.WoTModpackOnlineFolderVersion = XMLUtils.GetXMLStringFromXPath(modInfoDocument, "//modInfoAlpha.xml@onlineFolder");
+                    Settings.WoTClientVersion = XMLUtils.GetXMLStringFromXPath(modInfoDocument, "//modInfoAlpha.xml@version");
+                }
+                //parse the modInfoXml to list in memory
+                loadProgress.ChildCurrent++;
+                loadProgress.ReportMessage = Translations.GetTranslatedString("parsingDatabase");
                 progress.Report(loadProgress);
-                string oldCRCFromDownloadsFolder = await Utils.CreateMD5HashAsync(Path.Combine(Settings.RelhaxDownloadsFolder, package.ZipFile));
-                if (!package.CRC.Equals(oldCRCFromDownloadsFolder))
-                    package.DownloadFlag = true;
-            }
-            //sort the database before UI display
-            Utils.SortDatabase(ParsedCategoryList);
-            //build UI
-            loadProgress.ChildCurrent = 0;
-            loadProgress.ReportMessage = Translations.GetTranslatedString("loadingUI");
-            progress.Report(loadProgress);
+                if (!XMLUtils.ParseDatabase(modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
+                {
+                    Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
+                    MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
+                    return false;
+                }
+                Utils.BuildLinksRefrence(ParsedCategoryList, false);
+                Utils.BuildLevelPerPackage(ParsedCategoryList);
+                List<DatabasePackage> flatList = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList);
+                //check db cache of local files in downlaod zip folder
+                loadProgress.ChildCurrent++;
+                loadProgress.ReportMessage = Translations.GetTranslatedString("verifyingDownloadCache");
+                progress.Report(loadProgress);
+                //the below does not work yet TODO: CHECK?
+                List<DatabasePackage> flatListZips = flatList.Where(package => !string.IsNullOrWhiteSpace(package.ZipFile)).ToList();
+                foreach (DatabasePackage package in flatListZips)
+                {
+                    string zipFile = Path.Combine(Settings.RelhaxDownloadsFolder, package.ZipFile);
+                    //only look for a crc if the cache file exists
+                    if (!File.Exists(zipFile))
+                        continue;
+                    string name = package.PackageName;
+                    if (package is SelectablePackage sp)
+                    {
+                        name = sp.NameFormatted;
+                    }
+                    loadProgress.ReportMessage = string.Format(Translations.GetTranslatedString("loading") + " " + name);
+                    progress.Report(loadProgress);
+                    string oldCRCFromDownloadsFolder = Utils.CreateMD5Hash(Path.Combine(Settings.RelhaxDownloadsFolder, package.ZipFile));
+                    if (!package.CRC.Equals(oldCRCFromDownloadsFolder))
+                        package.DownloadFlag = true;
+                }
+                //sort the database before UI display
+                Utils.SortDatabase(ParsedCategoryList);
+                //build UI
+                loadProgress.ChildCurrent = 0;
+                loadProgress.ReportMessage = Translations.GetTranslatedString("loadingUI");
+                progress.Report(loadProgress);
+                return true;
+            });
+            part1.Wait();
+            bool result = part1.Result;
+            if (!result)
+                return false;
+            //UI part
+            LoadModSelectionListUI();
+            //another non UI part?
+
+            return true;
+        }
+
+        private bool LoadModSelectionListUI()
+        {
             //initialize the categories lists
-            BuildUIInit(ref progress, ref loadProgress, ParsedCategoryList);
+            BuildUIInit(ParsedCategoryList);
             //link everything again now that the category exists
             Utils.BuildLinksRefrence(ParsedCategoryList, false);
             //initialize the user mods
             BuildUserMods();
-            //add the packages for each category
-            loadProgress.ChildTotal = Utils.GetFlatList(null, null, null, ParsedCategoryList).Count;
-            loadProgress.ChildTotal += userMods.Count;
-            foreach(Category cat in ParsedCategoryList)
+            foreach (Category cat in ParsedCategoryList)
             {
-                AddPackage(ref progress, ref loadProgress, cat.Packages);
+                AddPackage(cat.Packages);
             }
             //add the user mods
             AddUserMods();
@@ -345,7 +360,7 @@ namespace RelhaxModpack.Windows
             TanksPath.Text = string.Format(Translations.GetTranslatedString("installingTo"), Settings.WoTDirectory);
             TanksVersionLabel.Text = string.Format(Translations.GetTranslatedString("installingAsWoT"), Settings.WoTClientVersion);
             //determind if the collapse and expand buttons should be visible
-            switch(ModpackSettings.ModSelectionView)
+            switch (ModpackSettings.ModSelectionView)
             {
                 case SelectionView.DefaultV2:
                     CollapseAllButton.IsEnabled = false;
@@ -416,7 +431,7 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void BuildUIInit(ref IProgress<RelhaxProgress> progress, ref RelhaxProgress loadProgress, List<Category> parsedCategoryList)
+        private void BuildUIInit(List<Category> parsedCategoryList)
         {
             //one time init of stuff goes here (init the tabGroup would have been nice if needed here)
             //just in case
@@ -567,7 +582,7 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void AddPackage(ref IProgress<RelhaxProgress> progress, ref RelhaxProgress loadProgress, List<SelectablePackage> packages)
+        private void AddPackage(List<SelectablePackage> packages)
         {
             foreach(SelectablePackage package in packages)
             {
@@ -576,12 +591,8 @@ namespace RelhaxModpack.Windows
                 //but first check if we actually want to add it. if the program isn't forcing them to be enabled
                 //and the mod reports being disabled, then don't add it to the UI
                 //the counter needs to still be kept up to date with the list (the whole list includes invisible mods!)
-                loadProgress.ChildCurrent++;
                 if (!ModpackSettings.ForceVisible && !package.Visible)
                     continue;
-                //now that we are actually adding it, report some progress
-                loadProgress.ReportMessage = string.Format("{0} {1}", Translations.GetTranslatedString("loading"), package.NameFormatted);
-                progress.Report(loadProgress);
                 //ok now actuallt load the UI stuff
                 //parse command line stuff. if we're forcinfg it to be enabled or visable
                 if (ModpackSettings.ForceVisible && !package.IsStructureVisible)
@@ -701,7 +712,7 @@ namespace RelhaxModpack.Windows
                         //so add the child border to the parent (where this package is) stackpanel
                         package.ParentStackPanel.Children.Add(package.ChildBorder);
                     }
-                    AddPackage(ref progress, ref loadProgress, package.Packages);
+                    AddPackage(package.Packages);
                 }
             }
         }

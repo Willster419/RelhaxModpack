@@ -53,7 +53,10 @@ namespace RelhaxModpack
             {
                 case SelectionView.DefaultV2:
                     RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
-                    ContentControl = new ContentControl();
+                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        ContentControl = new ContentControl();
+                    });
                     break;
                 case SelectionView.Legacy:
                     TreeViewItem = new StretchingTreeViewItem()
