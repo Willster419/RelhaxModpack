@@ -378,70 +378,6 @@ namespace RelhaxModpack.Windows
 
         #region Other UI events
 
-        private void ApplyButton_Click(object sender, RoutedEventArgs e)
-        {
-            //check if we should ask a confirm first
-            if ((EditorSettings.ShowConfirmationOnPackageApply && MessageBox.Show("Confirm to apply changes?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes) || !EditorSettings.ShowConfirmationOnPackageApply)
-            {
-                if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem && selectedTreeViewItem.Header is EditorComboBoxItem editorSelectedItem)
-                {
-                    SaveApplyDatabaseObject(editorSelectedItem.Package, null);
-                    selectedTreeViewItem.Header = null;
-                    selectedTreeViewItem.Header = new EditorComboBoxItem(editorSelectedItem.Package, editorSelectedItem.Package.PackageName);
-                }
-                else if (DatabaseTreeView.SelectedItem is TreeViewItem catTVI && catTVI.Header is Category cat)
-                {
-                    SaveApplyDatabaseObject(null, cat);
-                    //detach and retach the header to update the UI
-                    catTVI.Header = null;
-                    catTVI.Header = cat;
-                }
-            }
-        }
-
-        private void DatabaseTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            //check to make sure it's a package item or category item
-            if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem && selectedTreeViewItem.Header is EditorComboBoxItem editorSelectedItem)
-            {
-                //if the mouse is not over, then it was not user initiated
-                if (!(selectedTreeViewItem.IsMouseOver || Keyboard.IsKeyDown(Key.Enter)))
-                    return;
-                SelectDatabaseTreeViewItem(editorSelectedItem.Package, null);
-            }
-            else if (DatabaseTreeView.SelectedItem is TreeViewItem selectedCatTVI && selectedCatTVI.Header is Category category)
-            {
-                if (!(selectedCatTVI.IsMouseOver || Keyboard.IsKeyDown(Key.Enter)))
-                    return;
-                SelectDatabaseTreeViewItem(null, category);
-            }
-        }
-
-        private void SelectDatabaseTreeViewItem(DatabasePackage package, Category category)
-        {
-            if(package != null)
-            {
-                //check if we should save the item before updating what the current entry is
-                if (EditorSettings.SaveSelectionBeforeLeave && SelectedItem != null)
-                {
-                    SaveApplyDatabaseObject(SelectedItem, null);
-                }
-                //set the item as the new selectedItem
-                SelectedItem = package;
-                //display the new selectedItem
-                ShowDatabaseObject(SelectedItem, null);
-            }
-            else
-            {
-                //check if we should save the item before updating what the current entry is
-                if (EditorSettings.SaveSelectionBeforeLeave && SelectedItem != null)
-                {
-                    SaveApplyDatabaseObject(null, category);
-                }
-                ShowDatabaseObject(null, category);
-            }
-        }
-
         private void LeftTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (Init)
@@ -535,9 +471,6 @@ namespace RelhaxModpack.Windows
                 }
             }
         }
-        #endregion
-
-        #region Load and Save internal database methods
 
         private void ResetRightPanels(DatabasePackage package, Category category)
         {
@@ -671,6 +604,75 @@ namespace RelhaxModpack.Windows
             LoadedDependenciesList.Items.Clear();
             foreach (Dependency d in Dependencies)
                 LoadedDependenciesList.Items.Add(d);
+        }
+        #endregion
+
+        #region Load and Save internal database methods
+
+
+        private void ApplyButton_Click(object sender, RoutedEventArgs e)
+        {
+            //check if we should ask a confirm first
+            if ((EditorSettings.ShowConfirmationOnPackageApply && MessageBox.Show("Confirm to apply changes?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes) || !EditorSettings.ShowConfirmationOnPackageApply)
+            {
+                if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem && selectedTreeViewItem.Header is EditorComboBoxItem editorSelectedItem)
+                {
+                    SaveApplyDatabaseObject(editorSelectedItem.Package, null);
+                    selectedTreeViewItem.Header = null;
+                    selectedTreeViewItem.Header = new EditorComboBoxItem(editorSelectedItem.Package, editorSelectedItem.Package.PackageName);
+                }
+                else if (DatabaseTreeView.SelectedItem is TreeViewItem catTVI && catTVI.Header is Category cat)
+                {
+                    SaveApplyDatabaseObject(null, cat);
+                    //detach and retach the header to update the UI
+                    catTVI.Header = null;
+                    catTVI.Header = cat;
+                }
+            }
+        }
+
+        private void DatabaseTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            //check to make sure it's a package item or category item
+            if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem && selectedTreeViewItem.Header is EditorComboBoxItem editorSelectedItem)
+            {
+                //if the mouse is not over, then it was not user initiated
+                if (!(selectedTreeViewItem.IsMouseOver || Keyboard.IsKeyDown(Key.Enter)))
+                    return;
+                SelectDatabaseTreeViewItem(editorSelectedItem.Package, null);
+            }
+            else if (DatabaseTreeView.SelectedItem is TreeViewItem selectedCatTVI && selectedCatTVI.Header is Category category)
+            {
+                if (!(selectedCatTVI.IsMouseOver || Keyboard.IsKeyDown(Key.Enter)))
+                    return;
+                SelectDatabaseTreeViewItem(null, category);
+            }
+        }
+
+        private void SelectDatabaseTreeViewItem(DatabasePackage package, Category category)
+        {
+            //this can be programmatic OR user initiated
+            if (package != null)
+            {
+                //check if we should save the item before updating what the current entry is
+                if (EditorSettings.SaveSelectionBeforeLeave && SelectedItem != null)
+                {
+                    SaveApplyDatabaseObject(SelectedItem, null);
+                }
+                //set the item as the new selectedItem
+                SelectedItem = package;
+                //display the new selectedItem
+                ShowDatabaseObject(SelectedItem, null);
+            }
+            else
+            {
+                //check if we should save the item before updating what the current entry is
+                if (EditorSettings.SaveSelectionBeforeLeave)
+                {
+                    SaveApplyDatabaseObject(null, category);
+                }
+                ShowDatabaseObject(null, category);
+            }
         }
 
         private void ShowDatabaseObject(DatabasePackage package, Category category)
