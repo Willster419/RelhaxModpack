@@ -665,7 +665,7 @@ namespace RelhaxModpack.Windows
                 //set the item as the new selectedItem
                 SelectedItem = package;
                 //display the new selectedItem
-                ShowDatabaseObject(SelectedItem, null);
+                ShowDatabasePackage(SelectedItem);
             }
             else
             {
@@ -674,24 +674,22 @@ namespace RelhaxModpack.Windows
                 {
                     SaveApplyDatabaseObject(null, category);
                 }
-                ShowDatabaseObject(null, category);
+                ShowDatabaseCategory(category);
             }
         }
 
-        private void ShowDatabaseObject(DatabasePackage package, Category category)
+        private void ShowDatabaseCategory(Category category)
         {
-            if(package != null)
-                Logging.Debug("ShowDatabaseObject(), selectedItem is null = {0}, package showing = {1}", (SelectedItem == null),package.PackageName);
-            else
-                Logging.Debug("ShowDatabaseObject(), selectedItem is null = {0}, package showing = null (category)", (SelectedItem == null));
-            if (category != null)
-            {
-                ResetRightPanels(null);
-                foreach (DatabaseLogic logic in category.Dependencies)
-                    PackageDependenciesDisplay.Items.Add(logic);
-                PackageNameDisplay.Text = category.Name;
-                return;
-            }
+            Logging.Debug("ShowDatabaseCategory(), category showing = {0}", category.Name);
+            ResetRightPanels(null);
+            foreach (DatabaseLogic logic in category.Dependencies)
+                PackageDependenciesDisplay.Items.Add(logic);
+            PackageNameDisplay.Text = category.Name;
+        }
+
+        private void ShowDatabasePackage(DatabasePackage package)
+        {
+            Logging.Debug("ShowDatabaseObject(), package showing = {0}", package.PackageName);
             ResetRightPanels(package);
             //load all items in the databasePackage level first
             //basic tab
