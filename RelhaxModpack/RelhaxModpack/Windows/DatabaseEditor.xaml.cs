@@ -612,70 +612,77 @@ namespace RelhaxModpack.Windows
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
             //check if we should ask a confirm first
-            if ((EditorSettings.ShowConfirmationOnPackageApply && MessageBox.Show("Confirm to apply changes?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes) || !EditorSettings.ShowConfirmationOnPackageApply)
+            if(EditorSettings.ShowConfirmationOnPackageApply)
             {
-                //first make sure databaseTreeView selected item is treeviewitem
-                if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem)
+                if(MessageBox.Show("Confirm to apply changes?", "", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                    return;
+            }
+            //first make sure databaseTreeView selected item is treeviewitem
+            if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem)
+            {
+                if (selectedTreeViewItem.Header is EditorComboBoxItem editorSelectedItem)
                 {
-                    if (selectedTreeViewItem.Header is EditorComboBoxItem editorSelectedItem)
-                    {
-                        SaveApplyDatabaseObject(editorSelectedItem.Package, null);
-                        selectedTreeViewItem.Header = null;
-                        selectedTreeViewItem.Header = new EditorComboBoxItem(editorSelectedItem.Package, editorSelectedItem.Package.PackageName);
-                    }
-                    else if(selectedTreeViewItem.Header is Category cat)
-                    {
-                        SaveApplyDatabaseObject(null, cat);
-                        //detach and retach the header to update the UI
-                        selectedTreeViewItem.Header = null;
-                        selectedTreeViewItem.Header = cat;
-                    }
+                    ApplyDatabaseObject(editorSelectedItem.Package);
+                    selectedTreeViewItem.Header = null;
+                    selectedTreeViewItem.Header = new EditorComboBoxItem(editorSelectedItem.Package, editorSelectedItem.Package.PackageName);
+                }
+                else if (selectedTreeViewItem.Header is Category cat)
+                {
+                    ApplyDatabaseObject(cat);
+                    //detach and retach the header to update the UI
+                    selectedTreeViewItem.Header = null;
+                    selectedTreeViewItem.Header = cat;
                 }
             }
         }
 
         private void DatabaseTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            //check to make sure it's a package item or category item
-            if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem && selectedTreeViewItem.Header is EditorComboBoxItem editorSelectedItem)
+            //check to make sure it's a TreeViewItem (should always be)
+            if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem)
             {
                 //if the mouse is not over, then it was not user initiated
                 if (!(selectedTreeViewItem.IsMouseOver || Keyboard.IsKeyDown(Key.Enter)))
                     return;
-                SelectDatabaseTreeViewItem(editorSelectedItem.Package, null);
-            }
-            else if (DatabaseTreeView.SelectedItem is TreeViewItem selectedCatTVI && selectedCatTVI.Header is Category category)
-            {
-                if (!(selectedCatTVI.IsMouseOver || Keyboard.IsKeyDown(Key.Enter)))
-                    return;
-                SelectDatabaseTreeViewItem(null, category);
+                SelectDatabaseObject(selectedTreeViewItem.Header);
             }
         }
 
-        private void SelectDatabaseTreeViewItem(DatabasePackage package, Category category)
+        private void SelectDatabaseObject(object obj)
         {
-            //this can be programmatic OR user initiated
-            if (package != null)
+            //check if we should save the item before updating what the current entry is
+            if (EditorSettings.SaveSelectionBeforeLeave && SelectedItem != null)
             {
-                //check if we should save the item before updating what the current entry is
-                if (EditorSettings.SaveSelectionBeforeLeave && SelectedItem != null)
-                {
-                    SaveApplyDatabaseObject(SelectedItem, null);
-                }
-                //set the item as the new selectedItem
-                SelectedItem = package;
-                //display the new selectedItem
-                ShowDatabasePackage(SelectedItem);
+                ApplyDatabaseObject(obj);
             }
-            else
-            {
-                //check if we should save the item before updating what the current entry is
-                if (EditorSettings.SaveSelectionBeforeLeave)
-                {
-                    SaveApplyDatabaseObject(null, category);
-                }
+            if (obj is Category category)
+                SelectDatabaseCategory(category);
+            else if (obj is DatabasePackage package)
+                SelectDatabasePackage(package);
+        }
+
+        private void SelectDatabaseCategory(Category category)
+        {
+            //set the item as the new selectedItem
+            //SelectedItem = package;
+            //display the new selectedItem
+            ShowDatabaseObject(SelectedItem);
+        }
+
+        private void SelectDatabasePackage(DatabasePackage package)
+        {
+            //set the item as the new selectedItem
+            SelectedItem = package;
+            //display the new selectedItem
+            ShowDatabaseObject(SelectedItem);
+        }
+
+        private void ShowDatabaseObject(object obj)
+        {
+            if (obj is Category category)
                 ShowDatabaseCategory(category);
-            }
+            else if (obj is DatabasePackage package)
+                ShowDatabasePackage(package);
         }
 
         private void ShowDatabaseCategory(Category category)
@@ -775,25 +782,31 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void SaveApplyDatabaseObject(DatabasePackage package, Category category)
+        private void ApplyDatabaseObject(object obj)
         {
-            if(package != null)
-                Logging.Debug("SaveApplyDatabaseObject(), selectedItem is null = {0}, package save apply target = {1}", (SelectedItem == null), package.PackageName);
-            else
-                Logging.Debug("SaveApplyDatabaseObject(), selectedItem is null = {0}, package save apply target = null (category)", (SelectedItem == null));
-            if (category != null)
+            if (obj is Category category)
+                ApplyDatabaseCategory(category);
+            else if (obj is DatabasePackage package)
+                ApplyDatabasePackage(package);
+        }
+
+        private void ApplyDatabaseCategory(Category category)
+        {
+            Logging.Debug("ApplyDatabaseCategory(), category saving= {0}", category.Name);
+            category.Name = PackageNameDisplay.Text;
+            category.Dependencies.Clear();
+            foreach (DatabaseLogic logic in PackageDependenciesDisplay.Items)
+                category.Dependencies.Add(logic);
+            //if user requests apply to also save to disk, then do that now
+            if (EditorSettings.ApplyBehavior == ApplyBehavior.ApplyTriggersSave)
             {
-                category.Name = PackageNameDisplay.Text;
-                category.Dependencies.Clear();
-                foreach (DatabaseLogic logic in PackageDependenciesDisplay.Items)
-                    category.Dependencies.Add(logic);
-                //if user requests apply to also save to disk, then do that now
-                if (EditorSettings.ApplyBehavior == ApplyBehavior.ApplyTriggersSave)
-                {
-                    SaveDatabaseButton_Click(null, null);
-                }
-                return;
+                SaveDatabaseButton_Click(null, null);
             }
+        }
+
+        private void ApplyDatabasePackage(DatabasePackage package)
+        {
+            Logging.Debug("ApplyDatabasePackage(), package saving = {0}", package.PackageName);
             //save everything from the UI into the package
             //save package elements first
             package.PackageName = PackagePackageNameDisplay.Text;
@@ -991,7 +1004,7 @@ namespace RelhaxModpack.Windows
                 //this will cause it in the UI to be highlighted, but internal selection code will reject it because it's not "user initiated"
                 realItemToMove.IsSelected = true;
                 //so make it programatically selected this one time
-                SelectDatabaseTreeViewItem(packageToMove, null);
+                SelectDatabaseObject(packageToMove);
             }
         }
 
@@ -1320,12 +1333,12 @@ namespace RelhaxModpack.Windows
             //if save triggers apply, then do it
             if (EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && SelectedItem != null)
             {
-                SaveApplyDatabaseObject(SelectedItem, null);
+                ApplyDatabaseObject(SelectedItem);
             }
             else if (EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && DatabaseTreeView.SelectedItem != null &&
                 DatabaseTreeView.SelectedItem is TreeViewItem tvi && tvi.Header is Category cat)
             {
-                SaveApplyDatabaseObject(null, cat);
+                ApplyDatabaseObject(cat);
             }
             //actually save
             XMLUtils.SaveDatabase(DefaultSaveLocationSetting.Text, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
@@ -1338,12 +1351,12 @@ namespace RelhaxModpack.Windows
             //if save triggers apply, then do it
             if (EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && SelectedItem != null)
             {
-                SaveApplyDatabaseObject(SelectedItem, null);
+                ApplyDatabaseObject(SelectedItem);
             }
             else if (EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && DatabaseTreeView.SelectedItem != null &&
                 DatabaseTreeView.SelectedItem is TreeViewItem tvi && tvi.Header is Category cat)
             {
-                SaveApplyDatabaseObject(null, cat);
+                ApplyDatabaseObject(cat);
             }
             if (SaveDatabaseDialog == null)
                 SaveDatabaseDialog = new SaveFileDialog()
