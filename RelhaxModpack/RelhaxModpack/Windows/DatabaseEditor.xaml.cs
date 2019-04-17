@@ -473,7 +473,7 @@ namespace RelhaxModpack.Windows
 
         private void ResetRightPanels(DatabasePackage package)
         {
-            Logging.Debug("ResetRightPanels(), package type = {0}, name= {1}", package.GetType(), package.PackageName);
+            Logging.Debug("ResetRightPanels(), package type = {0}, name= {1}", package == null? "(null)": package.GetType().ToString(), package == null ? "(null)" : package.PackageName);
             //for each tab, disable all components. then enable them back of tye type of database object
             List<Control> controlsToDisable = new List<Control>();
             foreach (TabItem tabItem in RightTab.Items)
@@ -664,6 +664,8 @@ namespace RelhaxModpack.Windows
                 ShowDatabaseCategory(category);
             else if (obj is DatabasePackage package)
                 ShowDatabasePackage(package);
+            else if (obj is EditorComboBoxItem editorComboBoxItem)
+                ShowDatabasePackage(editorComboBoxItem.Package);
         }
 
         private void ShowDatabaseCategory(Category category)
