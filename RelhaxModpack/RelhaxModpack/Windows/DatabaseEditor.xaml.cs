@@ -472,7 +472,7 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void ResetRightPanels(DatabasePackage package, Category category)
+        private void ResetRightPanels(DatabasePackage package)
         {
             Logging.Debug("ResetRightPanels(), selectedItem is null = {0}", (SelectedItem == null));
             //for each tab, disable all components. then enable them back of tye type of database object
@@ -515,7 +515,7 @@ namespace RelhaxModpack.Windows
                 control.IsEnabled = false;
 
             //enable components by type
-            if (category != null)
+            if (package == null)
             {
                 foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(DependenciesTab, false))
                 {
@@ -609,24 +609,27 @@ namespace RelhaxModpack.Windows
 
         #region Load and Save internal database methods
 
-
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
             //check if we should ask a confirm first
             if ((EditorSettings.ShowConfirmationOnPackageApply && MessageBox.Show("Confirm to apply changes?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes) || !EditorSettings.ShowConfirmationOnPackageApply)
             {
-                if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem && selectedTreeViewItem.Header is EditorComboBoxItem editorSelectedItem)
+                //first make sure databaseTreeView selected item is treeviewitem
+                if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem)
                 {
-                    SaveApplyDatabaseObject(editorSelectedItem.Package, null);
-                    selectedTreeViewItem.Header = null;
-                    selectedTreeViewItem.Header = new EditorComboBoxItem(editorSelectedItem.Package, editorSelectedItem.Package.PackageName);
-                }
-                else if (DatabaseTreeView.SelectedItem is TreeViewItem catTVI && catTVI.Header is Category cat)
-                {
-                    SaveApplyDatabaseObject(null, cat);
-                    //detach and retach the header to update the UI
-                    catTVI.Header = null;
-                    catTVI.Header = cat;
+                    if (selectedTreeViewItem.Header is EditorComboBoxItem editorSelectedItem)
+                    {
+                        SaveApplyDatabaseObject(editorSelectedItem.Package, null);
+                        selectedTreeViewItem.Header = null;
+                        selectedTreeViewItem.Header = new EditorComboBoxItem(editorSelectedItem.Package, editorSelectedItem.Package.PackageName);
+                    }
+                    else if(selectedTreeViewItem.Header is Category cat)
+                    {
+                        SaveApplyDatabaseObject(null, cat);
+                        //detach and retach the header to update the UI
+                        selectedTreeViewItem.Header = null;
+                        selectedTreeViewItem.Header = cat;
+                    }
                 }
             }
         }
@@ -683,13 +686,13 @@ namespace RelhaxModpack.Windows
                 Logging.Debug("ShowDatabaseObject(), selectedItem is null = {0}, package showing = null (category)", (SelectedItem == null));
             if (category != null)
             {
-                ResetRightPanels(null, category);
+                ResetRightPanels(null);
                 foreach (DatabaseLogic logic in category.Dependencies)
                     PackageDependenciesDisplay.Items.Add(logic);
                 PackageNameDisplay.Text = category.Name;
                 return;
             }
-            ResetRightPanels(package, null);
+            ResetRightPanels(package);
             //load all items in the databasePackage level first
             //basic tab
             PackagePackageNameDisplay.Text = package.PackageName;
