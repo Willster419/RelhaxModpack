@@ -26,7 +26,6 @@ namespace RelhaxModpack.Windows
     public partial class DatabaseEditor : RelhaxWindow
     {
         private EditorSettings EditorSettings;
-        private XmlDocument XmlDatabase;
         private List<DatabasePackage> GlobalDependencies = new List<DatabasePackage>();
         private List<Dependency> Dependencies = new List<Dependency>();
         private List<Category> ParsedCategoryList = new List<Category>();
