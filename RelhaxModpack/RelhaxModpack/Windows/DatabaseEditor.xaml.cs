@@ -42,7 +42,7 @@ namespace RelhaxModpack.Windows
         private bool AlreadyLoggedMouseMove = false;
         private bool AlreadyLoggedScroll = false;
         private bool Init = true;
-        private DatabasePackage SelectedItem = null;
+        private object SelectedItem = null;
         private Preview Preview;
         private bool UnsavedChanges = false;
         private string[] UIHeaders = new string[]
@@ -474,7 +474,7 @@ namespace RelhaxModpack.Windows
 
         private void ResetRightPanels(DatabasePackage package)
         {
-            Logging.Debug("ResetRightPanels(), selectedItem is null = {0}", (SelectedItem == null));
+            Logging.Debug("ResetRightPanels(), package type = {0}, name= {1}", package.GetType(), package.PackageName);
             //for each tab, disable all components. then enable them back of tye type of database object
             List<Control> controlsToDisable = new List<Control>();
             foreach (TabItem tabItem in RightTab.Items)
@@ -653,27 +653,9 @@ namespace RelhaxModpack.Windows
             //check if we should save the item before updating what the current entry is
             if (EditorSettings.SaveSelectionBeforeLeave && SelectedItem != null)
             {
-                ApplyDatabaseObject(obj);
+                ApplyDatabaseObject(SelectedItem);
             }
-            if (obj is Category category)
-                SelectDatabaseCategory(category);
-            else if (obj is DatabasePackage package)
-                SelectDatabasePackage(package);
-        }
-
-        private void SelectDatabaseCategory(Category category)
-        {
-            //set the item as the new selectedItem
-            //SelectedItem = package;
-            //display the new selectedItem
-            ShowDatabaseObject(SelectedItem);
-        }
-
-        private void SelectDatabasePackage(DatabasePackage package)
-        {
-            //set the item as the new selectedItem
-            SelectedItem = package;
-            //display the new selectedItem
+            SelectedItem = obj;
             ShowDatabaseObject(SelectedItem);
         }
 
@@ -788,6 +770,11 @@ namespace RelhaxModpack.Windows
                 ApplyDatabaseCategory(category);
             else if (obj is DatabasePackage package)
                 ApplyDatabasePackage(package);
+            //if user requests apply to also save to disk, then do that now
+            if (EditorSettings.ApplyBehavior == ApplyBehavior.ApplyTriggersSave)
+            {
+                SaveDatabaseButton_Click(null, null);
+            }
         }
 
         private void ApplyDatabaseCategory(Category category)
@@ -797,11 +784,6 @@ namespace RelhaxModpack.Windows
             category.Dependencies.Clear();
             foreach (DatabaseLogic logic in PackageDependenciesDisplay.Items)
                 category.Dependencies.Add(logic);
-            //if user requests apply to also save to disk, then do that now
-            if (EditorSettings.ApplyBehavior == ApplyBehavior.ApplyTriggersSave)
-            {
-                SaveDatabaseButton_Click(null, null);
-            }
         }
 
         private void ApplyDatabasePackage(DatabasePackage package)
@@ -863,11 +845,6 @@ namespace RelhaxModpack.Windows
                 selectablePackage.ConflictingPackages.Clear();
                 foreach (string s in PackageConflictingPackagesDisplay.Items)
                     selectablePackage.ConflictingPackages.Add(s);
-            }
-            //if user requests apply to also save to disk, then do that now
-            if (EditorSettings.ApplyBehavior == ApplyBehavior.ApplyTriggersSave)
-            {
-                SaveDatabaseButton_Click(null, null);
             }
         }
         #endregion
@@ -1223,7 +1200,7 @@ namespace RelhaxModpack.Windows
         private void ZipDownload_Click(object sender, RoutedEventArgs e)
         {
             //make sure it actually has a zip file to download
-            if (string.IsNullOrWhiteSpace(SelectedItem.ZipFile))
+            if (string.IsNullOrWhiteSpace((SelectedItem as DatabasePackage).ZipFile))
             {
                 MessageBox.Show("no zip file to download");
                 return;
@@ -1244,7 +1221,7 @@ namespace RelhaxModpack.Windows
                     OverwritePrompt = true,
                     InitialDirectory = Settings.ApplicationStartupPath,
                     Title = "Select destination for zip file",
-                    FileName = SelectedItem.ZipFile
+                    FileName = (SelectedItem as DatabasePackage).ZipFile
                 };
             }
             if (!(bool)SaveZipFileDialog.ShowDialog())
@@ -1254,7 +1231,7 @@ namespace RelhaxModpack.Windows
             {
                 ZipFilePathDisk = SaveZipFileDialog.FileName,
                 ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.FTPRoot, Settings.WoTModpackOnlineFolderVersion),
-                ZipFileName = Path.GetFileName(SelectedItem.ZipFile),
+                ZipFileName = Path.GetFileName((SelectedItem as DatabasePackage).ZipFile),
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
                 Upload = false,
                 PackageToUpdate = null
@@ -1296,7 +1273,7 @@ namespace RelhaxModpack.Windows
                 ZipFileName = Path.GetFileName(zipFileToUpload),
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
                 Upload = true,
-                PackageToUpdate = SelectedItem
+                PackageToUpdate = (SelectedItem as DatabasePackage)
             };
             name.OnEditorUploadDownloadClosed += OnEditorUploadFinished;
             name.Show();
@@ -1308,7 +1285,7 @@ namespace RelhaxModpack.Windows
             if (SelectedItem.Equals(e.Package))
             {
                 PackageZipFileDisplay.Text = e.Package.ZipFile;
-                if (!SelectedItem.ZipFile.Equals(e.Package.ZipFile))
+                if (!(SelectedItem as DatabasePackage).ZipFile.Equals(e.Package.ZipFile))
                 {
                     throw new BadMemeException("You have made a mistake");
                 }
@@ -1335,11 +1312,6 @@ namespace RelhaxModpack.Windows
             {
                 ApplyDatabaseObject(SelectedItem);
             }
-            else if (EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && DatabaseTreeView.SelectedItem != null &&
-                DatabaseTreeView.SelectedItem is TreeViewItem tvi && tvi.Header is Category cat)
-            {
-                ApplyDatabaseObject(cat);
-            }
             //actually save
             XMLUtils.SaveDatabase(DefaultSaveLocationSetting.Text, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
                 GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.Legacy);//temp set for old database for now
@@ -1352,11 +1324,6 @@ namespace RelhaxModpack.Windows
             if (EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && SelectedItem != null)
             {
                 ApplyDatabaseObject(SelectedItem);
-            }
-            else if (EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && DatabaseTreeView.SelectedItem != null &&
-                DatabaseTreeView.SelectedItem is TreeViewItem tvi && tvi.Header is Category cat)
-            {
-                ApplyDatabaseObject(cat);
             }
             if (SaveDatabaseDialog == null)
                 SaveDatabaseDialog = new SaveFileDialog()
