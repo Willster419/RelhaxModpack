@@ -637,13 +637,17 @@ namespace RelhaxModpack.Windows
 
         private void DatabaseTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            //set handled parameter so that the parent events don't fire
+            e.Handled = true;
             //check to make sure it's a TreeViewItem (should always be)
             if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem)
             {
                 //if the mouse is not over, then it was not user initiated
                 if (!(selectedTreeViewItem.IsMouseOver || Keyboard.IsKeyDown(Key.Enter)))
                     return;
+                Logging.Debug("SelectedItemChanged(), selectedTreeViewItem.Header={0}", selectedTreeViewItem.Header);
                 SelectDatabaseObject(selectedTreeViewItem.Header);
+                
             }
         }
 
@@ -1150,7 +1154,8 @@ namespace RelhaxModpack.Windows
             else if (!AlreadyLoggedMouseMove)
             {
                 AlreadyLoggedMouseMove = true;
-                Logging.Debug("MouseMove DragDrop movement not accepted, leftButton={0}, isDragConfirmed={1}, IsScrolling={2}", e.LeftButton.ToString(), isDragConfirmed.ToString(), IsScrolling.ToString());
+                //yeah...that got annoying real quick
+                //Logging.Debug("MouseMove DragDrop movement not accepted, leftButton={0}, isDragConfirmed={1}, IsScrolling={2}", e.LeftButton.ToString(), isDragConfirmed.ToString(), IsScrolling.ToString());
             }
         }
 
