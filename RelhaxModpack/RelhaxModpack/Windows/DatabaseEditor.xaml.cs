@@ -775,6 +775,8 @@ namespace RelhaxModpack.Windows
                 ApplyDatabaseCategory(category);
             else if (obj is DatabasePackage package)
                 ApplyDatabasePackage(package);
+            else if (obj is EditorComboBoxItem editorComboBoxItem)
+                ApplyDatabasePackage(editorComboBoxItem.Package);
             //if user requests apply to also save to disk, then do that now
             if (EditorSettings.ApplyBehavior == ApplyBehavior.ApplyTriggersSave)
             {
