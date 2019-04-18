@@ -260,7 +260,7 @@ namespace RelhaxModpack.Windows
             //loop to add all the global dependencies to a treeview item, which is a new comboboxitem, which is the package and displayname
             foreach (DatabasePackage globalDependency in GlobalDependencies)
             {
-                globalDependency.EditorTreeViewItem = new TreeViewItem() { Header = new EditorComboBoxItem(globalDependency, globalDependency.PackageName) };
+                globalDependency.EditorTreeViewItem = new TreeViewItem() { Header = new EditorComboBoxItem(globalDependency) };
                 globalDependenciesHeader.Items.Add(globalDependency.EditorTreeViewItem);
             }
 
@@ -269,7 +269,7 @@ namespace RelhaxModpack.Windows
             DatabaseTreeView.Items.Add(dependenciesHeader);
             foreach (DatabasePackage dependency in Dependencies)
             {
-                dependency.EditorTreeViewItem = new TreeViewItem() { Header = new EditorComboBoxItem(dependency, dependency.PackageName) };
+                dependency.EditorTreeViewItem = new TreeViewItem() { Header = new EditorComboBoxItem(dependency) };
                 dependenciesHeader.Items.Add(dependency.EditorTreeViewItem);
             }
 
@@ -308,7 +308,7 @@ namespace RelhaxModpack.Windows
                 foreach (DatabasePackage packageWithEqualGroupNumber in allFlatList.Where(package => package.InstallGroup == i).ToList())
                 {
                     //add them to the install group headers
-                    installGroupHeaders[i].Items.Add(new TreeViewItem() { Header = new EditorComboBoxItem(packageWithEqualGroupNumber, packageWithEqualGroupNumber.PackageName) });
+                    installGroupHeaders[i].Items.Add(new TreeViewItem() { Header = new EditorComboBoxItem(packageWithEqualGroupNumber) });
                 }
             }
             //adding the spacing that dirty wants...
@@ -335,7 +335,7 @@ namespace RelhaxModpack.Windows
                 patchGroupHeaders[i].Items.Clear();
                 foreach (DatabasePackage packageWithEqualGroupNumber in allFlatList.Where(package => package.PatchGroup == i).ToList())
                 {
-                    patchGroupHeaders[i].Items.Add(new TreeViewItem() { Header = new EditorComboBoxItem(packageWithEqualGroupNumber, packageWithEqualGroupNumber.PackageName) });
+                    patchGroupHeaders[i].Items.Add(new TreeViewItem() { Header = new EditorComboBoxItem(packageWithEqualGroupNumber) });
                 }
             }
             //adding the spacing that dirty wants...
@@ -350,7 +350,7 @@ namespace RelhaxModpack.Windows
             foreach (SelectablePackage package in packages)
             {
                 //make a TVI for it
-                TreeViewItem packageTVI = new TreeViewItem() { Header = new EditorComboBoxItem(package, package.PackageName) };
+                TreeViewItem packageTVI = new TreeViewItem() { Header = new EditorComboBoxItem(package) };
                 //add the new tvi refrence to the package
                 package.EditorTreeViewItem = packageTVI;
                 //and have the parent add it
@@ -619,19 +619,10 @@ namespace RelhaxModpack.Windows
             //first make sure databaseTreeView selected item is treeviewitem
             if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem)
             {
-                if (selectedTreeViewItem.Header is EditorComboBoxItem editorSelectedItem)
-                {
-                    ApplyDatabaseObject(editorSelectedItem.Package);
-                    selectedTreeViewItem.Header = null;
-                    selectedTreeViewItem.Header = new EditorComboBoxItem(editorSelectedItem.Package, editorSelectedItem.Package.PackageName);
-                }
-                else if (selectedTreeViewItem.Header is Category cat)
-                {
-                    ApplyDatabaseObject(cat);
-                    //detach and retach the header to update the UI
-                    selectedTreeViewItem.Header = null;
-                    selectedTreeViewItem.Header = cat;
-                }
+                ApplyDatabaseObject(selectedTreeViewItem.Header);
+                object tempRef = selectedTreeViewItem.Header;
+                selectedTreeViewItem.Header = null;
+                selectedTreeViewItem.Header = tempRef;
             }
         }
 
@@ -966,7 +957,7 @@ namespace RelhaxModpack.Windows
             //if copy, copy
             if (effects == DragDropEffects.Copy)
             {
-                realItemToMove = new TreeViewItem() { Header = new EditorComboBoxItem(packageToMove, packageToMove.PackageName) };
+                realItemToMove = new TreeViewItem() { Header = new EditorComboBoxItem(packageToMove) };
                 //and also add it to the new packageToMove
                 packageToMove.EditorTreeViewItem = realItemToMove;
             }
