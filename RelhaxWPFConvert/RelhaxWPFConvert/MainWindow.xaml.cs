@@ -191,5 +191,10 @@ namespace RelhaxWPFConvert
             return t2;
         }
         #endregion
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            headerModifyTest.Header = "VALUE";
+        }
     }
 }
