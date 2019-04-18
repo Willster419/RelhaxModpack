@@ -620,6 +620,7 @@ namespace RelhaxModpack.Windows
             if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem)
             {
                 ApplyDatabaseObject(selectedTreeViewItem.Header);
+                //trigger a UI update
                 object tempRef = selectedTreeViewItem.Header;
                 selectedTreeViewItem.Header = null;
                 selectedTreeViewItem.Header = tempRef;
@@ -637,17 +638,23 @@ namespace RelhaxModpack.Windows
                 if (!(selectedTreeViewItem.IsMouseOver || Keyboard.IsKeyDown(Key.Enter)))
                     return;
                 Logging.Debug("SelectedItemChanged(), selectedTreeViewItem.Header={0}", selectedTreeViewItem.Header);
-                SelectDatabaseObject(selectedTreeViewItem.Header);
-                
+                SelectDatabaseObject(selectedTreeViewItem.Header, e.OldValue as TreeViewItem);
             }
         }
 
-        private void SelectDatabaseObject(object obj)
+        private void SelectDatabaseObject(object obj, TreeViewItem previousTreeViewItemOfSelectedItem)
         {
             //check if we should save the item before updating what the current entry is
             if (EditorSettings.SaveSelectionBeforeLeave && SelectedItem != null)
             {
                 ApplyDatabaseObject(SelectedItem);
+                if(previousTreeViewItemOfSelectedItem != null)
+                {
+                    //trigger a UI update
+                    object tempRef = previousTreeViewItemOfSelectedItem.Header;
+                    previousTreeViewItemOfSelectedItem.Header = null;
+                    previousTreeViewItemOfSelectedItem.Header = tempRef;
+                }
             }
             SelectedItem = obj;
             ShowDatabaseObject(SelectedItem);
@@ -979,7 +986,7 @@ namespace RelhaxModpack.Windows
                 //this will cause it in the UI to be highlighted, but internal selection code will reject it because it's not "user initiated"
                 realItemToMove.IsSelected = true;
                 //so make it programatically selected this one time
-                SelectDatabaseObject(packageToMove);
+                SelectDatabaseObject(packageToMove, null);
             }
         }
 
