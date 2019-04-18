@@ -1575,6 +1575,7 @@ namespace RelhaxModpack.Windows
             {
                 PerformDatabaseMoveAdd(addRemove.SelectedPackage.EditorTreeViewItem, itemToMove, parentItemToMove, parentItemCurrentlyOver, editorItemToMove.Package,
                     addRemove.SelectedPackage, DragDropEffects.Copy, !addRemove.AddSaveLevel);
+                DatabaseTreeView.Items.Refresh();
             }
         }
         #endregion
