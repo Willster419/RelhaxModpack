@@ -312,7 +312,7 @@ namespace RelhaxModpack
                 }
             }
         }
-        //TODO
+        
         public static string SizeSuffix(ulong value, uint decimalPlaces = 1, bool sizeSuffix = false)
         {
             if (value == 0)
@@ -351,6 +351,13 @@ namespace RelhaxModpack
             else
                 return string.Format("{0:n" + decimalPlaces + "}", adjustedSize);
         }
+
+        public static long GetFilesize(string filepath)
+        {
+            //https://stackoverflow.com/questions/1380839/how-do-you-get-the-file-size-in-c
+            return new FileInfo(filepath).Length;
+        }
+
         /// <summary>
         /// Checks if a filename has invalid characters and replaces them with underscores
         /// </summary>
