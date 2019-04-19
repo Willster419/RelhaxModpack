@@ -16,6 +16,14 @@ using System.Windows.Threading;
 
 namespace RelhaxWPFConvert
 {
+    public enum MediaType
+    {
+        Unknown = 0,
+        Picture = 1,
+        Webpage = 2,
+        MediaFile = 3,
+        HTML = 4
+    }
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
