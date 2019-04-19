@@ -1207,7 +1207,7 @@ namespace RelhaxModpack.Windows
         private void ZipDownload_Click(object sender, RoutedEventArgs e)
         {
             //make sure it actually has a zip file to download
-            if (string.IsNullOrWhiteSpace((SelectedItem as DatabasePackage).ZipFile))
+            if (string.IsNullOrWhiteSpace((SelectedItem as EditorComboBoxItem).Package.ZipFile))
             {
                 MessageBox.Show("no zip file to download");
                 return;
@@ -1228,7 +1228,7 @@ namespace RelhaxModpack.Windows
                     OverwritePrompt = true,
                     InitialDirectory = Settings.ApplicationStartupPath,
                     Title = "Select destination for zip file",
-                    FileName = (SelectedItem as DatabasePackage).ZipFile
+                    FileName = (SelectedItem as EditorComboBoxItem).Package.ZipFile
                 };
             }
             if (!(bool)SaveZipFileDialog.ShowDialog())
@@ -1238,7 +1238,7 @@ namespace RelhaxModpack.Windows
             {
                 ZipFilePathDisk = SaveZipFileDialog.FileName,
                 ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.FTPRoot, Settings.WoTModpackOnlineFolderVersion),
-                ZipFileName = Path.GetFileName((SelectedItem as DatabasePackage).ZipFile),
+                ZipFileName = Path.GetFileName((SelectedItem as EditorComboBoxItem).Package.ZipFile),
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
                 Upload = false,
                 PackageToUpdate = null
