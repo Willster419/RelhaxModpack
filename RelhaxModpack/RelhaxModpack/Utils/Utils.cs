@@ -1488,6 +1488,38 @@ namespace RelhaxModpack
             using (FtpWebResponse response = (FtpWebResponse)await folderRequest.GetResponseAsync())
             { }
         }
+
+        public static long FTPGetFilesize(string address, ICredentials credentials)
+        {
+            long result = -1;
+            // Get the object used to communicate with the server.
+            //https://stackoverflow.com/questions/4591059/download-file-from-ftp-with-progress-totalbytestoreceive-is-always-1
+            WebRequest request = WebRequest.Create(address);
+            request.Method = WebRequestMethods.Ftp.GetFileSize;
+            request.Credentials = credentials;
+            using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
+            {
+                //Stream responseStream = response.GetResponseStream();
+                result = response.ContentLength;
+            }
+            return result;
+        }
+
+        public static async Task<long> FTPGetFilesizeAsync(string address, ICredentials credentials)
+        {
+            long result = -1;
+            // Get the object used to communicate with the server.
+            //https://stackoverflow.com/questions/4591059/download-file-from-ftp-with-progress-totalbytestoreceive-is-always-1
+            WebRequest request = WebRequest.Create(address);
+            request.Method = WebRequestMethods.Ftp.GetFileSize;
+            request.Credentials = credentials;
+            using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
+            {
+                //Stream responseStream = response.GetResponseStream();
+                result = response.ContentLength;
+            }
+            return result;
+        }
         #endregion
 
         #region Gross shortcut stuff

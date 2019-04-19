@@ -33,6 +33,7 @@ namespace RelhaxModpack.Windows
         public bool Upload;
         public DatabasePackage PackageToUpdate;
         public event EditorUploadDownloadClosed OnEditorUploadDownloadClosed;
+        private long FTPDownloadFilesize = -1;
 
         private WebClient client;
         private string CompleteFTPPath;
@@ -56,13 +57,21 @@ namespace RelhaxModpack.Windows
                     OpenFileButton.Visibility = Visibility.Visible;
                     break;
             }
-            if(PackageToUpdate == null)
+            if(!Upload)
             {
+                //download
+                ProgressBody.Text = string.Format("{0} {1} {2} FTP folder {3}", Upload ? "Uploading" : "Downloading",
+                Path.GetFileName(ZipFilePathDisk), Upload ? "to" : "from", Settings.WoTModpackOnlineFolderVersion);
+            }
+            else if(PackageToUpdate == null)
+            {
+                //upload to medias
                 ProgressBody.Text = string.Format("{0} {1} {2} FTP folder {3}", "Uploading",
                 ZipFileName, "to", "Medias/...");
             }
             else
             {
+                //upload to bigmods
                 ProgressBody.Text = string.Format("{0} {1} {2} FTP folder {3}", Upload ? "Uploading" : "Downloading",
                 Path.GetFileName(ZipFilePathDisk), Upload ? "to" : "from", Settings.WoTModpackOnlineFolderVersion);
             }
@@ -130,6 +139,7 @@ namespace RelhaxModpack.Windows
                         Logging.Debug("STARTING FTP DOWNLOAD");
                         try
                         {
+                            FTPDownloadFilesize = await Utils.FTPGetFilesizeAsync(CompleteFTPPath, Credential);
                             await client.DownloadFileTaskAsync(CompleteFTPPath, ZipFilePathDisk);
                             Logging.Debug("FTP download complete ({0})",ZipFileName);
                         }
@@ -172,8 +182,9 @@ namespace RelhaxModpack.Windows
 
         private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            if (ProgressProgressBar.Maximum != e.TotalBytesToReceive)
-                ProgressProgressBar.Maximum = e.TotalBytesToReceive;
+            //https://stackoverflow.com/questions/4591059/download-file-from-ftp-with-progress-totalbytestoreceive-is-always-1
+            if (ProgressProgressBar.Maximum != FTPDownloadFilesize)
+                ProgressProgressBar.Maximum = FTPDownloadFilesize;
             ProgressProgressBar.Value = e.BytesReceived;
             ProgressHeader.Text = string.Format("{0} {1} kb of {2} kb", "Downloaded", e.BytesReceived / 1024, e.TotalBytesToReceive / 1024);
         }
