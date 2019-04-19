@@ -490,7 +490,8 @@ namespace RelhaxModpack.Windows
                     {
                         if (cbox.Name.Equals(nameof(PackageInstallGroupDisplay)) || cbox.Name.Equals(nameof(PackagePatchGroupDisplay)) ||
                             cbox.Name.Equals(nameof(LoadedDependenciesList)) || cbox.Name.Equals(nameof(LoadedTriggersComboBox)) ||
-                            cbox.Name.Equals(nameof(LoadedLogicsList)) || cbox.Name.Equals(nameof(PackageTypeDisplay)))
+                            cbox.Name.Equals(nameof(LoadedLogicsList)) || cbox.Name.Equals(nameof(PackageTypeDisplay)) ||
+                            cbox.Name.Equals(nameof(MediaTypesList)))
                         {
                             cbox.SelectedIndex = -1;
                             continue;
@@ -1704,6 +1705,9 @@ namespace RelhaxModpack.Windows
             }
             (PackageMediasDisplay.SelectedItem as Media).MediaType = (MediaType)MediaTypesList.SelectedItem;
             (PackageMediasDisplay.SelectedItem as Media).URL = MediaTypesURL.Text;
+            //update the UI
+            //PackageMediasDisplay.UpdateLayout();
+            PackageMediasDisplay.Items.Refresh();
         }
 
         private void PackageMediasDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1863,15 +1867,15 @@ namespace RelhaxModpack.Windows
 
         private void UserdataAddUserdataButton_Click(object sender, RoutedEventArgs e)
         {
-            foreach (string s in PackageUserdatasDisplay.Items)
+            foreach (UserFile userfile in PackageUserdatasDisplay.Items)
             {
-                if (s.Equals(UserDataEditBox.Text))
+                if (userfile.Pattern.Equals(UserDataEditBox.Text))
                 {
-                    MessageBox.Show("User data already exists");
+                    MessageBox.Show("Bad edit: user data already exists");
                     return;
                 }
             }
-            PackageUserdatasDisplay.Items.Add(UserDataEditBox.Text);
+            PackageUserdatasDisplay.Items.Add(new UserFile { Pattern = UserDataEditBox.Text });
         }
 
         private void UserdataApplyEditButton_Click(object sender, RoutedEventArgs e)
@@ -1881,22 +1885,23 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show("Invalid selection");
                 return;
             }
-            foreach (string s in PackageUserdatasDisplay.Items)
+            foreach (UserFile userfile in PackageUserdatasDisplay.Items)
             {
-                if (s.Equals(UserDataEditBox.Text))
+                if (userfile.Pattern.Equals(UserDataEditBox.Text))
                 {
                     MessageBox.Show("Bad edit: user data already exists");
                     return;
                 }
             }
-            PackageUserdatasDisplay.Items[PackageUserdatasDisplay.SelectedIndex] = UserDataEditBox.Text;
+            (PackageUserdatasDisplay.SelectedItem as UserFile).Pattern = UserDataEditBox.Text;
+            PackageUserdatasDisplay.Items.Refresh();
         }
 
         private void PackageUserdatasDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (PackageUserdatasDisplay.SelectedItem == null)
                 return;
-            UserDataEditBox.Text = (string)PackageUserdatasDisplay.SelectedItem;
+            UserDataEditBox.Text = (PackageUserdatasDisplay.SelectedItem as UserFile).Pattern;
         }
 
         private void UserdataRemoveUserdata_Click(object sender, RoutedEventArgs e)
