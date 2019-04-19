@@ -111,21 +111,29 @@ namespace RelhaxModpack.Windows
                 WindowStartupLocation = WindowStartupLocation.Manual;
             }
             //if the saved preview window point is within the screen, then load it to there
-            else if (Utils.PointWithinScreen(ModpackSettings.PreviewX, ModpackSettings.PreviewY))
+            else
             {
-                WindowStartupLocation = WindowStartupLocation.Manual;
-                //https://stackoverflow.com/questions/2734810/how-to-set-the-location-of-a-wpf-window
-                Left = ModpackSettings.PreviewX;
-                Top = ModpackSettings.PreviewY;
+                if (Utils.PointWithinScreen(ModpackSettings.PreviewX, ModpackSettings.PreviewY))
+                {
+                    //set for manual window location setting
+                    WindowStartupLocation = WindowStartupLocation.Manual;
+                    //set starting location
+                    //https://stackoverflow.com/questions/2734810/how-to-set-the-location-of-a-wpf-window
+                    Left = ModpackSettings.PreviewX;
+                    Top = ModpackSettings.PreviewY;
+                }
+                else
+                {
+                    Logging.Info("[{0}]: Position {1}x{2} is outside screen dimensions, use center of window owner",
+                        Logfiles.Application, nameof(Preview), ModpackSettings.PreviewX, ModpackSettings.PreviewY);
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                }
                 //set width and height
                 Width = ModpackSettings.PreviewWidth;
                 Height = ModpackSettings.PreviewHeight;
-            }
-            else
-            {
-                Logging.Info("[{0}]: Position {1}x{2} is outside screen dimensions, use center of window owner",
-                    Logfiles.Application, nameof(Preview),ModpackSettings.PreviewX,ModpackSettings.PreviewY);
-                WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                //set if full screen
+                if (ModpackSettings.PreviewFullscreen)
+                    WindowState = WindowState.Maximized;
             }
 
             //finally if there is at least one media element, display it
@@ -224,11 +232,27 @@ namespace RelhaxModpack.Windows
 
         private void PictureViewer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            throw new BadMemeException("Finish your code jackass");
+            if (WindowState != WindowState.Maximized)
+                WindowState = WindowState.Maximized;
+            else
+                WindowState = WindowState.Normal;
         }
 
         private void RelhaxWindow_Closed(object sender, EventArgs e)
         {
+            //save window location, size and fullscreen property (if not in editor mode)
+            if(!EditorMode)
+            {
+                ModpackSettings.PreviewFullscreen = WindowState == WindowState.Maximized ? true : false;
+                ModpackSettings.PreviewHeight = (int)Height;
+                ModpackSettings.PreviewWidth = (int)Width;
+                if(Utils.PointWithinScreen((int)Left, (int)Top))
+                {
+                    ModpackSettings.PreviewX = (int)Left;
+                    ModpackSettings.PreviewY = (int)Top;
+                }
+            }
+
             Logging.Debug("Disposing image memory stream");
             if(ImageStream != null)
             {
