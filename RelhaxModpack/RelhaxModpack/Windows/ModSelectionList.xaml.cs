@@ -470,6 +470,13 @@ namespace RelhaxModpack.Windows
                 switch(ModpackSettings.ModSelectionView)
                 {
                     case SelectionView.Legacy:
+                        cat.CategoryHeader.TreeViewItem = new StretchingTreeViewItem()
+                        {
+                            Background = System.Windows.Media.Brushes.Transparent,
+                            HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
+                            HorizontalContentAlignment = System.Windows.HorizontalAlignment.Stretch
+                        };
+                        cat.CategoryHeader.RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
                         cat.CategoryHeader.TreeView = new StretchingTreeView()
                         {
                             Background = Brushes.Transparent,
@@ -509,6 +516,8 @@ namespace RelhaxModpack.Windows
                         cat.CategoryHeader.Packages = cat.Packages;
                         break;
                     case SelectionView.DefaultV2:
+                        cat.CategoryHeader.RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
+                        cat.CategoryHeader.ContentControl = new ContentControl();
                         cat.CategoryHeader.ParentStackPanel = new StackPanel();
                         cat.CategoryHeader.ParentBorder = new Border()
                         {

@@ -67,22 +67,6 @@ namespace RelhaxModpack
         public SelectablePackage()
         {
             InstallGroup = 4;
-            switch (ModpackSettings.ModSelectionView)
-            {
-                case SelectionView.DefaultV2:
-                    RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
-                    ContentControl = new ContentControl();
-                    break;
-                case SelectionView.Legacy:
-                    TreeViewItem = new StretchingTreeViewItem()
-                    {
-                        Background = System.Windows.Media.Brushes.Transparent,
-                        HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
-                        HorizontalContentAlignment = System.Windows.HorizontalAlignment.Stretch
-                    };
-                    RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
-                    break;
-            }
         }
         /// <summary>
         /// the name of the package
