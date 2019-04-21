@@ -386,7 +386,7 @@ namespace RelhaxModpack
         /// <summary>
         /// the TabPage refrence
         /// </summary>
-        public TabItem TabIndex = null;
+        public TabItem TabIndex;
         #endregion
 
         #region Other Properties and Methods
