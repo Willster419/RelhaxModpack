@@ -185,7 +185,7 @@ namespace RelhaxModpack.Windows
             loadingProgress.Show();
             this.Hide();
 
-            //create and run async task (fire and forget style, keeps the UI open)
+            //create and run async task (fire and forget style, keeps the UI thread open during the task operation)
             try
             {
                 Logging.WriteToLog("Starting async task: " + nameof(LoadModSelectionListAsync) + "()");
@@ -206,13 +206,6 @@ namespace RelhaxModpack.Windows
                 this.Close();
                 return;
             }
-            //hook up the flashing timer
-            FlashTimer.Tick += OnFlastTimerTick;
-            loadingProgress.Close();
-            loadingProgress = null;
-            LoadingUI = false;
-            this.Show();
-            this.WindowState = WindowState.Normal;
         }
 
         private bool LoadModSelectionListAsync(IProgress<RelhaxProgress> progress)
@@ -420,6 +413,20 @@ namespace RelhaxModpack.Windows
             //else if auto install
             //else if saveLastConfig
             //else {load default checked}
+
+            //like hook up the flashing timer
+            FlashTimer.Tick += OnFlastTimerTick;
+
+            //close the loading window and show this one
+            loadingProgress.Close();
+            loadingProgress = null;
+
+            //set the loading flag back to false
+            LoadingUI = false;
+
+            //show the UI for selection list
+            this.Show();
+            this.WindowState = WindowState.Normal;
             return true;
         }
 
