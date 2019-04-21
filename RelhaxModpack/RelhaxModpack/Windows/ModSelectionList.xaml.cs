@@ -362,14 +362,14 @@ namespace RelhaxModpack.Windows
                 progress.Report(loadProgress);
                 return true;
             });
+            
+            //wait and get result
+            //note that we are now back on the UI thread
             part1.Wait();
-            bool result = part1.Result;
-            if (!result)
+            if (!part1.Result)
                 return false;
             //UI part
             LoadModSelectionListUI();
-            //another non UI part?
-
             return true;
         }
 
