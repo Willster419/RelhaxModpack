@@ -823,13 +823,6 @@ namespace RelhaxModpack
                     }
                 }
             }
-            //check to make sure that the md5hashdatabase is valid before using it
-            Logging.WriteToLog("Checking md5 database file");
-            if ((File.Exists(Settings.MD5HashDatabaseXmlFile)) && (!XMLUtils.IsValidXml(Settings.MD5HashDatabaseXmlFile)))
-            {
-                Logging.WriteToLog("database file in invalid, deleting", Logfiles.Application, LogLevel.Warning);
-                File.Delete(Settings.MD5HashDatabaseXmlFile);
-            }
             //show the mod selection list
             modSelectionList = new ModSelectionList();
             //https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c

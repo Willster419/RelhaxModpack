@@ -344,9 +344,6 @@ namespace RelhaxModpack.Windows
                     }
                 }
 
-                //and save the file
-                Md5HashDocument.Save(Settings.MD5HashDatabaseXmlFile);
-
                 //make a sublist of only packages where a zipfile exists (in the database)
                 List<DatabasePackage> flatListZips = flatList.Where(package => !string.IsNullOrWhiteSpace(package.ZipFile)).ToList();
                 foreach (DatabasePackage package in flatListZips)
@@ -368,6 +365,9 @@ namespace RelhaxModpack.Windows
                     if (!package.CRC.Equals(oldCRCFromDownloadsFolder))
                         package.DownloadFlag = true;
                 }
+
+                //and save the file
+                Md5HashDocument.Save(Settings.MD5HashDatabaseXmlFile);
 
                 //sort the database for UI display
                 Utils.SortDatabase(ParsedCategoryList);
@@ -678,6 +678,26 @@ namespace RelhaxModpack.Windows
                         break;
                 }
                 ModTabGroups.Items.Add(cat.TabPage);
+
+                //init some required UI components for all selectablePackages inside it
+                foreach(SelectablePackage package in cat.GetFlatPackageList())
+                {
+                    package.RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
+                    switch (ModpackSettings.ModSelectionView)
+                    {
+                        case SelectionView.DefaultV2:
+                            package.ContentControl = new ContentControl();
+                            break;
+                        case SelectionView.Legacy:
+                            package.TreeViewItem = new StretchingTreeViewItem()
+                            {
+                                Background = System.Windows.Media.Brushes.Transparent,
+                                HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
+                                HorizontalContentAlignment = System.Windows.HorizontalAlignment.Stretch
+                            };
+                            break;
+                    }
+                }
             }
         }
 
