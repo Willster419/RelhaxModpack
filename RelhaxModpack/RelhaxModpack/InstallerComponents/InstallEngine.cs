@@ -1263,6 +1263,16 @@ namespace RelhaxModpack.InstallerComponents
                     }
                 }
             }
+
+            //perform macro replacement on all xml unpack entries
+            foreach(XmlUnpack xmlUnpack in XmlUnpacks)
+            {
+                xmlUnpack.DirectoryInArchive = Utils.MacroReplace(xmlUnpack.DirectoryInArchive, ReplacementTypes.FilePath);
+                xmlUnpack.FileName = Utils.MacroReplace(xmlUnpack.FileName, ReplacementTypes.FilePath);
+                xmlUnpack.ExtractDirectory = Utils.MacroReplace(xmlUnpack.ExtractDirectory, ReplacementTypes.FilePath);
+                xmlUnpack.NewFileName = Utils.MacroReplace(xmlUnpack.NewFileName, ReplacementTypes.FilePath);
+            }
+
             return XmlUnpacks;
         }
 

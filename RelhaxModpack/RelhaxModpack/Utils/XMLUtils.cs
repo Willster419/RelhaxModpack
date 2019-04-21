@@ -10,6 +10,7 @@ using System.Windows;
 using System.Reflection;
 using System.ComponentModel;
 using System.Text;
+using Ionic.Zip;
 
 namespace RelhaxModpack
 {
@@ -553,9 +554,56 @@ namespace RelhaxModpack
 
         public static void UnpackXmlFile(XmlUnpack xmlUnpack, StringBuilder unpackBuilder)
         {
+            //log info for debugging if need be
             Logging.Info(xmlUnpack.ToString());
-            throw new BadMemeException("need to implement this still");
-            //TODO
+
+            //check if new destination name for replacing
+            string destinationFilename = string.IsNullOrWhiteSpace(xmlUnpack.NewFileName) ? xmlUnpack.FileName : xmlUnpack.NewFileName;
+            string destinationCompletePath = Path.Combine(xmlUnpack.ExtractDirectory, destinationFilename);
+            string sourceCompletePath = Path.Combine(xmlUnpack.DirectoryInArchive, xmlUnpack.FileName);
+
+            //if the destination file already exists, then don't copy it over
+            if(File.Exists(destinationCompletePath))
+            {
+                Logging.Info("Replacement file already exists, skipping");
+                return;
+            }
+
+            //if the package entry is empty, then it's just a file copy
+            if(string.IsNullOrWhiteSpace(xmlUnpack.Pkg))
+            {
+                if (File.Exists(sourceCompletePath))
+                    File.Copy(sourceCompletePath, destinationCompletePath);
+                Logging.Info("file copied");
+            }
+            else
+            {
+                if(!File.Exists(xmlUnpack.Pkg))
+                {
+                    Logging.Error("packagefile does not exist, skipping");
+                    return;
+                }
+                using (ZipFile zip = new ZipFile(xmlUnpack.Pkg))
+                {
+                    //get the files that match the specified path from the xml entry
+                    string zipPath = Path.Combine(xmlUnpack.DirectoryInArchive, xmlUnpack.FileName).Replace(@"\", @"/");
+                    ZipEntry[] matchingEntries = zip.Where(zipp => zipp.FileName.Equals(zipPath)).ToArray();
+                    Logging.Debug("matching zip entries: {0}", matchingEntries.Count());
+                    if(matchingEntries.Count() > 0)
+                    {
+                        foreach(ZipEntry entry in matchingEntries)
+                        {
+                            //change the name to the destination
+                            entry.FileName = destinationFilename;
+
+                            //extract to disk and log
+                            entry.Extract(xmlUnpack.ExtractDirectory, ExtractExistingFileAction.DoNotOverwrite);
+                            unpackBuilder.AppendLine(destinationCompletePath);
+                            Logging.Info("entry extracted: {0}", destinationFilename);
+                        }
+                    }
+                }
+            }
         }
         #endregion
 
