@@ -1641,11 +1641,6 @@
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Properties.Resources.DotNetZip">
-            <summary>
-              Looks up a localized resource of type System.Byte[].
-            </summary>
-        </member>
         <member name="P:RelhaxModpack.Properties.Resources.EMail">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
@@ -1708,11 +1703,6 @@
                   the copyright owner that is [rest of string was truncated]&quot;;.
              </summary>
         </member>
-        <member name="P:RelhaxModpack.Properties.Resources.NAudio">
-            <summary>
-              Looks up a localized resource of type System.Byte[].
-            </summary>
-        </member>
         <member name="P:RelhaxModpack.Properties.Resources.NAudio1">
              <summary>
                Looks up a localized string similar to Microsoft Public License (Ms-PL)
@@ -1727,11 +1717,6 @@
             
             A &quot;contributor&quot; is any person that distributes its contribution [rest of string was truncated]&quot;;.
              </summary>
-        </member>
-        <member name="P:RelhaxModpack.Properties.Resources.Newtonsoft_Json">
-            <summary>
-              Looks up a localized resource of type System.Byte[].
-            </summary>
         </member>
         <member name="P:RelhaxModpack.Properties.Resources.play_pause">
             <summary>

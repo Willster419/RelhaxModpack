@@ -357,6 +357,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -413,9 +414,6 @@
     <Resource Include="Resources\Licences\NAudio.txt" />
     <Resource Include="Resources\Licences\SpriteSheetPacker.txt" />
     <Resource Include="Resources\Licences\TeximpNet.txt" />
-    <Content Include="Resources\Libraries\DotNetZip.dll" />
-    <Content Include="Resources\Libraries\NAudio.dll" />
-    <Content Include="Resources\Libraries\Newtonsoft.Json.dll" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="IWshRuntimeLibrary">
