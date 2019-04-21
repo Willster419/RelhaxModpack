@@ -1066,7 +1066,7 @@ namespace RelhaxModpack
             }
         }
 
-        //handles processing of downloads and nothing more...
+        //handles processing of downloads
         private async Task ProcessDownloadsAsync(List<DatabasePackage> packagesToDownload)
         {
             using (WebClient client = new WebClient())
