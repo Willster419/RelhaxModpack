@@ -28,6 +28,7 @@ namespace RelhaxModpack.InstallerComponents
         PatchError,
         ShortcustError,
         ContourIconAtlasError,
+        FontInstallError,
         CleanupError,
         UnknownError
     }
@@ -367,7 +368,7 @@ namespace RelhaxModpack.InstallerComponents
 
             //step 8: patch files (async option)
             //make the task array here. so far can be a maximum of 3 items
-            Task[] concurrentTasksAfterMainExtractoin = new Task[3];
+            Task[] concurrentTasksAfterMainExtractoin = new Task[4];
             int taskIndex = 0;
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
@@ -435,6 +436,26 @@ namespace RelhaxModpack.InstallerComponents
                     Logging.WriteToLog("...skipped (no atlas entries parsed)");
             }
 
+            //get the font installation done here
+            if(ModpackSettings.DisableTriggers)
+            {
+                //step 11: install fonts (async operation)
+                OldTime = InstallStopWatch.Elapsed;
+                Progress.TotalCurrent++;
+                InstallFinishedArgs.ExitCodes++;
+                Logging.WriteToLog(string.Format("Installing of fonts, current install time = {0} msec",
+                    InstallStopWatch.Elapsed.TotalMilliseconds));
+                string[] fontsToInstall = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername), SearchOption.TopDirectoryOnly, @"*", 50, 3, true);
+                if (fontsToInstall == null || fontsToInstall.Count() == 0)
+                    Logging.WriteToLog("...skipped (no font files to install)");
+                else
+                {
+                    concurrentTasksAfterMainExtractoin[taskIndex++] = Task.Factory.StartNew(() =>
+                    {
+                        InstallFonts(fontsToInstall);
+                    });
+                }
+            }
             
             //barrier goes here to make sure cleanup is the last thing to do
             Task.WaitAll(concurrentTasksAfterMainExtractoin);
@@ -734,6 +755,69 @@ namespace RelhaxModpack.InstallerComponents
                 }
             }
             return true;
+        }
+
+        private void InstallFonts(string[] fontsToInstall)
+        {
+            Logging.Debug("checking system installed fonts to remove duplicates");
+            string[] fontscurrentlyInstalled = Utils.DirectorySearch(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), SearchOption.TopDirectoryOnly);
+            string[] fontsNamesCurrentlyInstalled = fontscurrentlyInstalled.Select(s => Path.GetFileName(s).ToLower()).ToArray();
+            //remove any fonts whos filename match what is already installed
+            for (int i = 0; i < fontsToInstall.Count(); i++)
+            {
+                string fontToInstallNameLower = Path.GetFileName(fontsToInstall[i]).ToLower();
+                if(fontsNamesCurrentlyInstalled.Contains(fontToInstallNameLower))
+                {
+                    //empty the entry
+                    fontsToInstall[i] = string.Empty;
+                }
+            }
+
+            //get the new array of fonts to install that don't already exist
+            string[] realFontsToInstall = fontsToInstall.Where(font => !string.IsNullOrWhiteSpace(font)).ToArray();
+
+            Logging.Debug("fontsToInstallReal count: {0}", realFontsToInstall.Count());
+
+            if(realFontsToInstall.Count() > 0)
+            {
+                //extract he exe to install fonts
+                Logging.Debug("extracting fontReg for font install");
+                string fontRegPath = Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername, "FontReg.exe");
+                if(!File.Exists(fontRegPath))
+                {
+                    //get fontreg from the zip file
+                    using (ZipFile zip = new ZipFile(Settings.ManagerInfoDatFile))
+                    {
+                        zip.ExtractSelectedEntries("FontReg.exe", null, Path.GetDirectoryName(fontRegPath));
+                    }
+                }
+                Logging.Info("Attemping to install fonts: {0}", string.Join(",", realFontsToInstall));
+                ProcessStartInfo info = new ProcessStartInfo
+                {
+                    FileName = fontRegPath,
+                    UseShellExecute = true,
+                    Verb = "runas", // Provides Run as Administrator
+                    Arguments = "/copy",
+                    WorkingDirectory = Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername)
+                };
+                try
+                {
+                    Process installFontss = new Process
+                    {
+                        StartInfo = info
+                    };
+                    installFontss.Start();
+                    installFontss.WaitForExit();
+                    Logging.Info("FontReg.exe ExitCode: " + installFontss.ExitCode);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Error("could not start font installer:{0}{1}", Environment.NewLine, ex.ToString());
+                    MessageBox.Show(Translations.GetTranslatedString("fontsPromptError_1") + Settings.WoTDirectory + Translations.GetTranslatedString("fontsPromptError_2"));
+                    Logging.Info("Installation done, but fonts install failed");
+                    return;
+                }
+            }
         }
 
         private bool Cleanup()
