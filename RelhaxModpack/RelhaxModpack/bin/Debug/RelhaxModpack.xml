@@ -102,11 +102,6 @@
             the name of the package with the version macro replaced for use display
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.TabIndex">
-            <summary>
-            the TabPage refrence
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.SelectablePackage.ParentCategory">
             <summary>
             the Category refrence
@@ -125,21 +120,6 @@
         <member name="F:RelhaxModpack.SelectablePackage.TopParent">
             <summary>
             the refrence for the absolute top of the package tree
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.SelectablePackage.UIComponent">
-            <summary>
-            the UI element refrence for this package
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.SelectablePackage.ParentUIComponent">
-            <summary>
-            the UI element refrence for the direct parent of this package
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.SelectablePackage.TopParentUIComponent">
-            <summary>
-            the UI element refrence for the absolute top of the package tree
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.Visible">
@@ -199,6 +179,52 @@
             Category header is -1, each child is +1 from there
             </summary>
         </member>
+        <member name="F:RelhaxModpack.SelectablePackage.UserFiles">
+            <summary>
+            the list of cache files that should be backed up before wiping the directory
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Packages">
+            <summary>
+            the list of child SelectablePackage entries in this instance of SelectablePackages
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Medias">
+            <summary>
+            list of media preview items associated with this package, shown in the preview window on right click of component
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Dependencies">
+            <summary>
+            A list of packages (from dependencies list) that this package is dependent on in order to be installed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ConflictingPackages">
+            <summary>
+            A list of any SelectablePackages that conflict with this mod. A conflict will result the package not being processed.
+            Refer to examples for more information
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ShowInSearchList">
+            <summary>
+            Toggle if the package should appear in the search list
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.UIComponent">
+            <summary>
+            the UI element refrence for this package
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ParentUIComponent">
+            <summary>
+            the UI element refrence for the direct parent of this package
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.TopParentUIComponent">
+            <summary>
+            the UI element refrence for the absolute top of the package tree
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.SelectablePackage.RelhaxWPFComboBoxList">
             <summary>
             The list of WPF combo boxes DESCIBE MORE TODO
@@ -239,35 +265,9 @@
             the treeview that this package is in. legacy wpf component
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.UserFiles">
+        <member name="F:RelhaxModpack.SelectablePackage.TabIndex">
             <summary>
-            the list of cache files that should be backed up before wiping the directory
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.SelectablePackage.Packages">
-            <summary>
-            the list of child SelectablePackage entries in this instance of SelectablePackages
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.SelectablePackage.Medias">
-            <summary>
-            list of media preview items associated with this package, shown in the preview window on right click of component
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.SelectablePackage.Dependencies">
-            <summary>
-            A list of packages (from dependencies list) that this package is dependent on in order to be installed
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.SelectablePackage.ConflictingPackages">
-            <summary>
-            A list of any SelectablePackages that conflict with this mod. A conflict will result the package not being processed.
-            Refer to examples for more information
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.SelectablePackage.ShowInSearchList">
-            <summary>
-            Toggle if the package should appear in the search list
+            the TabPage refrence
             </summary>
         </member>
         <member name="P:RelhaxModpack.SelectablePackage.CompletePath">

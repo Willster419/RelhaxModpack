@@ -12,10 +12,15 @@ namespace RelhaxModpack
     /// </summary>
     public class Trigger
     {
+
         public string Name { get; set; }
+
         public int Total { get; set; }
+
         public int NumberProcessed { get; set; }
+
         public bool Fired { get; set; }
+
         public Task TriggerTask { get; set; }
     }
 }
