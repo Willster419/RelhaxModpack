@@ -195,6 +195,8 @@ namespace RelhaxWPFConvert
                     prog.value = i + 1;
                     progress.Report(prog);
                 }
+                //this is also not allowed
+                //BackgroundTaskReport.Text = "Complete";
             });
             return t2;
         }

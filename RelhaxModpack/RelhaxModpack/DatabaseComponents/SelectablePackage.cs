@@ -27,6 +27,7 @@ namespace RelhaxModpack
     public class SelectablePackage : DatabasePackage
     {
         #region XML Parsing
+
         private static readonly List<string> SelectableElementsToXmlParseAttributes = new List<string>()
         {
             nameof(Name),
@@ -320,23 +321,22 @@ namespace RelhaxModpack
         public bool ShowInSearchList = true;
         #endregion
 
-        #region UI Properties
-        #region Shared
-
+        #region UI Properties Shared
         /// <summary>
         /// the UI element refrence for this package
         /// </summary>
-        public IPackageUIComponent UIComponent = null;
+        public IPackageUIComponent UIComponent;
 
         /// <summary>
         /// the UI element refrence for the direct parent of this package
         /// </summary>
-        public IPackageUIComponent ParentUIComponent = null;
+        public IPackageUIComponent ParentUIComponent;
 
         /// <summary>
         /// the UI element refrence for the absolute top of the package tree
         /// </summary>
-        public IPackageUIComponent TopParentUIComponent = null;
+        public IPackageUIComponent TopParentUIComponent;
+
         /// <summary>
         /// The list of WPF combo boxes DESCIBE MORE TODO
         /// </summary>
@@ -363,8 +363,7 @@ namespace RelhaxModpack
         public StackPanel ParentStackPanel;
         #endregion
 
-        #region Default
-        //only for DEFAULT V2
+        #region UI Properties Default View
         /// <summary>
         /// ContentControl item to allow for right-clicking of disabled components. defaultv2 wpf component
         /// </summary>
@@ -373,7 +372,7 @@ namespace RelhaxModpack
         public ScrollViewer @ScrollViewer;
         #endregion
 
-        #region OMC Legacy
+        #region UI Properties OMC Legacy View
         /// <summary>
         /// the treeviewitem that corresponds to this package. legacy wpf component
         /// </summary>
@@ -388,7 +387,6 @@ namespace RelhaxModpack
         /// the TabPage refrence
         /// </summary>
         public TabItem TabIndex = null;
-        #endregion
         #endregion
 
         #region Other Properties and Methods

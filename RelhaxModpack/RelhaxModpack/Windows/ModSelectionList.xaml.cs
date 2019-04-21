@@ -99,6 +99,42 @@ namespace RelhaxModpack.Windows
                 });
             }
         }
+
+        private void OnFlastTimerTick(object sender, EventArgs e)
+        {
+            SelectablePackage packageToChange = FlashTimer.Tag as SelectablePackage;
+            if (packageToChange == null)
+                throw new BadMemeException("How did you fuck this up??");
+            Control control = packageToChange.UIComponent as Control;
+            if (control == null)
+                throw new BadMemeException("thinking face");
+            switch (numTicks++)
+            {
+                case 0:
+                    //backup the current color and set the background to the flash color
+                    OriginalBrush = control.Foreground;
+                    control.Foreground = HighlightBrush;
+                    break;
+                case NUM_FLASH_TICKS:
+                    //stop the timer and reset everyting
+                    FlashTimer.Stop();
+                    numTicks = 0;
+                    control.Foreground = OriginalBrush;
+                    OriginalBrush = null;
+                    break;
+                default:
+                    //toggle the color
+                    if (control.Foreground.Equals(HighlightBrush))
+                    {
+                        control.Foreground = OriginalBrush;
+                    }
+                    else if (control.Foreground.Equals(OriginalBrush))
+                    {
+                        control.Foreground = HighlightBrush;
+                    }
+                    break;
+            }
+        }
         #endregion
 
         #region UI INIT STUFF
@@ -144,45 +180,8 @@ namespace RelhaxModpack.Windows
             loadingProgress.Close();
             loadingProgress = null;
             LoadingConfig = false;
-            //this.WindowState = WindowState.Normal;
             this.Show();
             this.WindowState = WindowState.Normal;
-        }
-
-        private void OnFlastTimerTick(object sender, EventArgs e)
-        {
-            SelectablePackage packageToChange = FlashTimer.Tag as SelectablePackage;
-            if (packageToChange == null)
-                throw new BadMemeException("How did you fuck this up??");
-            Control control = packageToChange.UIComponent as Control;
-            if (control == null)
-                throw new BadMemeException("thinking face");
-            switch (numTicks++)
-            {
-                case 0:
-                    //backup the current color and set the background to the flash color
-                    OriginalBrush = control.Foreground;
-                    control.Foreground = HighlightBrush;
-                    break;
-                case NUM_FLASH_TICKS:
-                    //stop the timer and reset everyting
-                    FlashTimer.Stop();
-                    numTicks = 0;
-                    control.Foreground = OriginalBrush;
-                    OriginalBrush = null;
-                    break;
-                default:
-                    //toggle the color
-                    if(control.Foreground.Equals(HighlightBrush))
-                    {
-                        control.Foreground = OriginalBrush;
-                    }
-                    else if (control.Foreground.Equals(OriginalBrush))
-                    {
-                        control.Foreground = HighlightBrush;
-                    }
-                    break;
-            }
         }
 
         private bool LoadModSelectionListNonUI(IProgress<RelhaxProgress> progress)
