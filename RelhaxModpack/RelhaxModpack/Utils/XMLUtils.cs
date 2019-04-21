@@ -11,6 +11,7 @@ using System.Reflection;
 using System.ComponentModel;
 using System.Text;
 using Ionic.Zip;
+using RelhaxModpack.XmlBinary;
 
 namespace RelhaxModpack
 {
@@ -603,6 +604,16 @@ namespace RelhaxModpack
                         }
                     }
                 }
+            }
+            Logging.Info("unpacking xml binary file (if binary)");
+            try
+            {
+                XmlBinaryHandler binaryHandler = new XmlBinaryHandler();
+                binaryHandler.UnpackXmlFile(destinationCompletePath);
+            }
+            catch (Exception xmlUnpackExceptino)
+            {
+                Logging.Exception(xmlUnpackExceptino.ToString());
             }
         }
         #endregion
