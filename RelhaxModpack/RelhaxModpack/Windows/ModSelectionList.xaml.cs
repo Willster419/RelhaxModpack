@@ -234,16 +234,7 @@ namespace RelhaxModpack.Windows
                         string tempDownloadLocation = Path.Combine(Settings.RelhaxTempFolder, "modInfo.dat");
                         using (WebClient client = new WebClient())
                         {
-                            try
-                            {
-                                client.DownloadFile(modInfoxmlURL, tempDownloadLocation);
-                            }
-                            catch (Exception ex)
-                            {
-                                Logging.WriteToLog("Failed to download managerInfo.dat from " + modInfoxmlURL + "\n" + ex.ToString(),
-                                    Logfiles.Application, LogLevel.Exception);
-                                return false;
-                            }
+                            client.DownloadFile(modInfoxmlURL, tempDownloadLocation);
                         }
                         //extract modinfo xml string
                         modInfoXml = Utils.GetStringFromZip(tempDownloadLocation, "modInfo.xml");
@@ -278,11 +269,11 @@ namespace RelhaxModpack.Windows
                         string modInfoFilePath = ModpackSettings.CustomModInfoPath;
                         if (string.IsNullOrWhiteSpace(modInfoFilePath))
                         {
-                            modInfoFilePath = System.IO.Path.Combine(Settings.ApplicationStartupPath, "modInfo.xml");
+                            modInfoFilePath = Path.Combine(Settings.ApplicationStartupPath, "modInfo.xml");
                         }
                         //load modinfo xml
-                        if (System.IO.File.Exists(modInfoFilePath))
-                            modInfoXml = System.IO.File.ReadAllText(modInfoFilePath);
+                        if (File.Exists(modInfoFilePath))
+                            modInfoXml = File.ReadAllText(modInfoFilePath);
                         else
                         {
                             Logging.WriteToLog("modInfo.xml does not exist at " + modInfoFilePath, Logfiles.Application, LogLevel.Error);
@@ -290,6 +281,7 @@ namespace RelhaxModpack.Windows
                         }
                         break;
                 }
+
                 //check to make sure the xml string has xml in it
                 if (string.IsNullOrWhiteSpace(modInfoXml))
                 {
@@ -297,6 +289,11 @@ namespace RelhaxModpack.Windows
                     MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
                     return false;
                 }
+
+                //report progress change to reading the database
+                loadProgress.ChildCurrent++;
+                loadProgress.ReportMessage = Translations.GetTranslatedString("readingDatabase");
+                progress.Report(loadProgress);
 
                 //load the xml document into xml object
                 XmlDocument modInfoDocument = XMLUtils.LoadXmlDocument(modInfoXml, XmlLoadType.FromXml);
@@ -315,9 +312,6 @@ namespace RelhaxModpack.Windows
                 }
 
                 //parse the modInfoXml to list in memory
-                loadProgress.ChildCurrent++;
-                loadProgress.ReportMessage = Translations.GetTranslatedString("parsingDatabase");
-                progress.Report(loadProgress);
                 if (!XMLUtils.ParseDatabase(modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
                 {
                     Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
@@ -337,17 +331,19 @@ namespace RelhaxModpack.Windows
                 List<DatabasePackage> flatListZips = flatList.Where(package => !string.IsNullOrWhiteSpace(package.ZipFile)).ToList();
                 foreach (DatabasePackage package in flatListZips)
                 {
+                    //make path for the zipfile
                     string zipFile = Path.Combine(Settings.RelhaxDownloadsFolder, package.ZipFile);
+
                     //only look for a crc if the cache file exists
                     if (!File.Exists(zipFile))
                         continue;
-                    string name = package.PackageName;
-                    if (package is SelectablePackage sp)
-                    {
-                        name = sp.NameFormatted;
-                    }
-                    loadProgress.ReportMessage = string.Format(Translations.GetTranslatedString("loading") + " " + name);
+
+                    //since file exists, report progress here
+                    loadProgress.ReportMessage = string.Format("{0} {1} {2}",
+                        Translations.GetTranslatedString("verifyingDownloadCache"), Translations.GetTranslatedString("of"), package.PackageName);
                     progress.Report(loadProgress);
+
+                    //compares the crcs of the files
                     string oldCRCFromDownloadsFolder = Utils.CreateMD5Hash(Path.Combine(Settings.RelhaxDownloadsFolder, package.ZipFile));
                     if (!package.CRC.Equals(oldCRCFromDownloadsFolder))
                         package.DownloadFlag = true;
