@@ -163,23 +163,6 @@ namespace RelhaxModpack.Windows
                 ModpackSettings.DisplayUserModsWarning = false;
             }
         }
-
-        //https://stackoverflow.com/questions/37787388/how-to-force-a-ui-update-during-a-lengthy-task-on-the-ui-thread
-        //https://stackoverflow.com/questions/2329978/the-calling-thread-must-be-sta-because-many-ui-components-require-this
-        void AllowUIToUpdate()
-        {
-            DispatcherFrame frame = new DispatcherFrame();
-            Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Render, new DispatcherOperationCallback(delegate (object parameter)
-            {
-                frame.Continue = false;
-                return null;
-            }), null);
-
-            Dispatcher.PushFrame(frame);
-            //EDIT:
-            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
-                                          new Action(delegate { }));
-        }
         #endregion
 
         #region UI INIT STUFF
@@ -395,7 +378,7 @@ namespace RelhaxModpack.Windows
                 loadProgress.ChildCurrent = 0;
                 loadProgress.ReportMessage = Translations.GetTranslatedString("loadingUI");
                 progress.Report(loadProgress);
-                AllowUIToUpdate();
+                Utils.AllowUIToUpdate();
 
                 //run UI init code
                 //note that this will syncronously stop the task, and schedule on the UI thread
@@ -418,7 +401,7 @@ namespace RelhaxModpack.Windows
                     loadProgress.ChildCurrent++;
                     loadProgress.ReportMessage = string.Format("{0} {1}", Translations.GetTranslatedString("loading"), cat.Name);
                     progress.Report(loadProgress);
-                    AllowUIToUpdate();
+                    Utils.AllowUIToUpdate();
 
                     //then schedule the UI work
                     Application.Current.Dispatcher.Invoke(() =>
@@ -430,7 +413,7 @@ namespace RelhaxModpack.Windows
                 //perform any final loading to do
                 loadProgress.ReportMessage = Translations.GetTranslatedString("preparingUI");
                 progress.Report(loadProgress);
-                AllowUIToUpdate();
+                Utils.AllowUIToUpdate();
 
                 //then schedule the UI work
                 Application.Current.Dispatcher.Invoke(() =>
