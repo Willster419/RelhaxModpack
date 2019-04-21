@@ -193,9 +193,7 @@ namespace RelhaxModpack.Windows
                 //https://blogs.msdn.microsoft.com/dotnet/2012/06/06/async-in-4-5-enabling-progress-and-cancellation-in-async-apis/
                 Progress<RelhaxProgress> progressIndicator = new Progress<RelhaxProgress>();
                 progressIndicator.ProgressChanged += OnWindowLoadReportProgress;
-                bool result = LoadModSelectionListAsync(progressIndicator);
-                if (!result)
-                    throw new BadMemeException("Result was false reeeeeee!!");
+                LoadModSelectionListAsync(progressIndicator);
             }
             catch (Exception ex)
             {
@@ -209,9 +207,9 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private bool LoadModSelectionListAsync(IProgress<RelhaxProgress> progress)
+        private Task LoadModSelectionListAsync(IProgress<RelhaxProgress> progress)
         {
-            Task<bool> part1 = Task.Run(() =>
+            return Task.Run(() =>
             {
                 //progress init setup
                 RelhaxProgress loadProgress = new RelhaxProgress()
@@ -368,81 +366,95 @@ namespace RelhaxModpack.Windows
                         package.DownloadFlag = true;
                 }
 
-                //sort the database before UI display
+                //sort the database for UI display
                 Utils.SortDatabase(ParsedCategoryList);
 
                 //build UI
                 loadProgress.ChildCurrent = 0;
                 loadProgress.ReportMessage = Translations.GetTranslatedString("loadingUI");
                 progress.Report(loadProgress);
+
+                //run UI init code
+                //note that this will syncronously stop the task, and schedule on the UI thread
+                //the working theory is that the reporting code should be scudeuled and therefore occur before the UI thread begins work
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    //initialize the categories lists
+                    InitDatabaseUI(ParsedCategoryList);
+                    //link everything again now that the category exists
+                    Utils.BuildLinksRefrence(ParsedCategoryList, false);
+                    //initialize the user mods
+                    InitUsermods();
+                });
+
+                //for each category, report category progres then schedule to load it
+                loadProgress.ChildTotal = ParsedCategoryList.Count;
+                foreach (Category cat in ParsedCategoryList)
+                {
+                    //report the progress
+                    loadProgress.ChildCurrent++;
+                    loadProgress.ReportMessage = string.Format("{0} {1}", Translations.GetTranslatedString("loading"), cat.Name);
+                    progress.Report(loadProgress);
+
+                    //then schedule the UI work
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        AddPackage(cat.Packages);
+                    });
+                }
+
+                //perform any final loading to do
+                loadProgress.ReportMessage = Translations.GetTranslatedString("preparingUI");
+                progress.Report(loadProgress);
+
+                //then schedule the UI work
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    //add the user mods
+                    AddUserMods();
+                    //finish loading
+                    //update the text on the list
+                    TanksPath.Text = string.Format(Translations.GetTranslatedString("installingTo"), Settings.WoTDirectory);
+                    TanksVersionLabel.Text = string.Format(Translations.GetTranslatedString("installingAsWoT"), Settings.WoTClientVersion);
+                    //determind if the collapse and expand buttons should be visible
+                    switch (ModpackSettings.ModSelectionView)
+                    {
+                        case SelectionView.DefaultV2:
+                            CollapseAllButton.IsEnabled = false;
+                            CollapseAllButton.Visibility = Visibility.Hidden;
+                            ExpandAllButton.IsEnabled = false;
+                            ExpandAllButton.Visibility = Visibility.Hidden;
+                            break;
+                        case SelectionView.Legacy:
+                            CollapseAllButton.IsEnabled = true;
+                            CollapseAllButton.Visibility = Visibility.Visible;
+                            ExpandAllButton.IsEnabled = true;
+                            ExpandAllButton.Visibility = Visibility.Visible;
+                            break;
+                    }
+                    //deal with ceate used files??
+                    //save database hash?
+                    //if mods sync
+                    //else if auto install
+                    //else if saveLastConfig
+                    //else {load default checked}
+
+                    //like hook up the flashing timer
+                    FlashTimer.Tick += OnFlastTimerTick;
+
+                    //close the loading window and show this one
+                    loadingProgress.Close();
+                    loadingProgress = null;
+
+                    //set the loading flag back to false
+                    LoadingUI = false;
+
+                    //show the UI for selection list
+                    this.Show();
+                    this.WindowState = WindowState.Normal;
+                });
                 return true;
             });
-            
-            //wait and get result
-            //note that we are now back on the UI thread
-            part1.Wait();
-            if (!part1.Result)
-                return false;
-            //UI part
-            LoadModSelectionListUI();
-            return true;
-        }
-
-        private bool LoadModSelectionListUI()
-        {
-            //initialize the categories lists
-            InitDatabaseUI(ParsedCategoryList);
-            //link everything again now that the category exists
-            Utils.BuildLinksRefrence(ParsedCategoryList, false);
-            //initialize the user mods
-            InitUsermods();
-            foreach (Category cat in ParsedCategoryList)
-            {
-                AddPackage(cat.Packages);
-            }
-            //add the user mods
-            AddUserMods();
-            //finish loading
-            //update the text on the list
-            TanksPath.Text = string.Format(Translations.GetTranslatedString("installingTo"), Settings.WoTDirectory);
-            TanksVersionLabel.Text = string.Format(Translations.GetTranslatedString("installingAsWoT"), Settings.WoTClientVersion);
-            //determind if the collapse and expand buttons should be visible
-            switch (ModpackSettings.ModSelectionView)
-            {
-                case SelectionView.DefaultV2:
-                    CollapseAllButton.IsEnabled = false;
-                    CollapseAllButton.Visibility = Visibility.Hidden;
-                    ExpandAllButton.IsEnabled = false;
-                    ExpandAllButton.Visibility = Visibility.Hidden;
-                    break;
-                case SelectionView.Legacy:
-                    CollapseAllButton.IsEnabled = true;
-                    CollapseAllButton.Visibility = Visibility.Visible;
-                    ExpandAllButton.IsEnabled = true;
-                    ExpandAllButton.Visibility = Visibility.Visible;
-                    break;
-            }
-            //deal with ceate used files??
-            //save database hash?
-            //if mods sync
-            //else if auto install
-            //else if saveLastConfig
-            //else {load default checked}
-
-            //like hook up the flashing timer
-            FlashTimer.Tick += OnFlastTimerTick;
-
-            //close the loading window and show this one
-            loadingProgress.Close();
-            loadingProgress = null;
-
-            //set the loading flag back to false
-            LoadingUI = false;
-
-            //show the UI for selection list
-            this.Show();
-            this.WindowState = WindowState.Normal;
-            return true;
         }
 
         private void InitUsermods()
