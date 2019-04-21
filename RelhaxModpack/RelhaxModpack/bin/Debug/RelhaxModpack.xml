@@ -606,7 +606,7 @@
             toggle if the program should force the user to manually point to the WoT location
             </summary>
         </member>
-        <member name="F:RelhaxModpack.ModpackSettings.SaveLastConfig">
+        <member name="F:RelhaxModpack.ModpackSettings.SaveLastSelection">
             <summary>
             toggle if the application should automatically save the last selected config to also be automatically loaded upon selection load
             </summary>

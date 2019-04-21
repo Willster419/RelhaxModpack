@@ -436,28 +436,49 @@ namespace RelhaxModpack.Windows
                             break;
                     }
 
-
                     //process loading selections after loading UI
+                    XmlDocument SelectionsDocument;
+                    bool shouldLoadSomething = false;
                     if ((ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall) && ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Stable)
                     {
                         //load the custom selection file
-
+                        SelectionsDocument = XMLUtils.LoadXmlDocument(ModpackSettings.AutoOneclickSelectionFilePath, XmlLoadType.FromFile);
+                        shouldLoadSomething = true;
                     }
                     else if (ModpackSettings.SaveLastSelection)
                     {
                         if (!File.Exists(Settings.LastInstalledConfigFilepath))
                         {
                             Logging.Warning("LastInstalledConfigFile does not exist, loading as first time with check default mods");
+                            SelectionsDocument = XMLUtils.LoadXmlDocument(Utils.GetStringFromZip(Settings.ManagerInfoDatFile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromXml);
+                            shouldLoadSomething = true;
                         }
                         else
                         {
-
+                            SelectionsDocument = XMLUtils.LoadXmlDocument(Settings.LastInstalledConfigFilepath, XmlLoadType.FromFile);
+                            shouldLoadSomething = true;
                         }
                     }
                     else
                     {
                         //load default checked mods
+                        SelectionsDocument = XMLUtils.LoadXmlDocument(Utils.GetStringFromZip(Settings.ManagerInfoDatFile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromXml);
+                        shouldLoadSomething = true;
+                    }
 
+                    //check if errors and if should load something
+                    if(shouldLoadSomething)
+                    {
+                        if(SelectionsDocument != null)
+                        {
+                            LoadSelection(SelectionsDocument, true);
+                        }
+                        else
+                        {
+                            Logging.Error("Failed to load SelectionsDocument, AutoInstall={0}, OneClickInstall={1}, DatabaseDistro={2}, SaveSelection={3}",
+                            ModpackSettings.AutoInstall, ModpackSettings.OneClickInstall, ModpackSettings.DatabaseDistroVersion, ModpackSettings.SaveLastSelection);
+                            Logging.Error("Failed to load SelectionsDocument, AutoSelectionFilePath={0}", ModpackSettings.AutoOneclickSelectionFilePath);
+                        }
                     }
 
                     //like hook up the flashing timer

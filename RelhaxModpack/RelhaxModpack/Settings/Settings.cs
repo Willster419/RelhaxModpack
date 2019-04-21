@@ -83,6 +83,8 @@ namespace RelhaxModpack
 
         public static readonly string MD5HashDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "MD5HashDatabase.xml");
 
+        public const string DefaultCheckedSelectionfile = "default_checked.xml";
+
         public static readonly string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, "managerInfo.dat");
 
         public static readonly string LastInstalledConfigFilepath = Path.Combine(RelhaxUserConfigsFolder, LastSavedConfigFilename);
