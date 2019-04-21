@@ -17,6 +17,7 @@ using RelhaxModpack.UIComponents;
 using System.Xml.Linq;
 using ComboBoxItem = RelhaxModpack.UIComponents.ComboBoxItem;
 using System.Windows.Threading;
+using System.Collections;
 
 namespace RelhaxModpack.Windows
 {
@@ -1398,7 +1399,8 @@ namespace RelhaxModpack.Windows
             //get the string version of the document, determine what to do from there
             string selectionVersion = "";
             //attribute example: "//root/element/@attribute"
-            selectionVersion = XMLUtils.GetXMLStringFromXPath(document, "//mods@ver");
+            selectionVersion = XMLUtils.GetXMLStringFromXPath(document, "//mods/@ver");
+            Logging.Debug("SelectionVersion={0}", selectionVersion);
             switch(selectionVersion)
             {
                 case "2.0":
@@ -1408,7 +1410,8 @@ namespace RelhaxModpack.Windows
                 default:
                     //log we don't know wtf it is
                     Logging.WriteToLog("Unknown selection version: " + selectionVersion + ", aborting");
-                    MessageBox.Show(string.Format(Translations.GetTranslatedString("unknownselectionFileFormat"),selectionVersion));
+                    if(!silent)
+                        MessageBox.Show(string.Format(Translations.GetTranslatedString("unknownselectionFileFormat"),selectionVersion));
                     return;
             }
         }
@@ -1417,9 +1420,15 @@ namespace RelhaxModpack.Windows
         {
             //first uncheck everyting
             Utils.ClearSelections(ParsedCategoryList);
+
             //get a list of all the mods currently in the selection
-            XmlNodeList xmlSelections = XMLUtils.GetXMLNodesFromXPath(document, "//mods/name");
-            XmlNodeList xmluserSelections = XMLUtils.GetXMLNodesFromXPath(document, "//userMods/mod");
+            XmlNodeList xmlSelections = document.SelectNodes("//mods/relhaxMods/mod");
+            XmlNodeList xmluserSelections = document.SelectNodes("//mods/userMods/mod");
+
+            //logging
+            Logging.Debug("xmlSelections count: {0}", xmlSelections.Count);
+            Logging.Debug("xmluserSelections count: {0}", xmluserSelections.Count);
+
             //save a list string of all the packagenames in the list for later
             List<string> stringSelections = new List<string>();
             List<string> stringUserSelections = new List<string>();
@@ -1429,6 +1438,7 @@ namespace RelhaxModpack.Windows
                 stringSelections.Add(node.InnerText);
             foreach(XmlNode node in xmluserSelections)
                 stringUserSelections.Add(node.InnerText);
+
             //check the mods in the actual list if it's in the list
             foreach(SelectablePackage package in Utils.GetFlatList(null,null,null,ParsedCategoryList))
             {
