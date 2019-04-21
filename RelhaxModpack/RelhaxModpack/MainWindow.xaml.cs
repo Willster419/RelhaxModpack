@@ -566,7 +566,7 @@ namespace RelhaxModpack
 
         private void OnSaveLastInstallChanged(object sender, RoutedEventArgs e)
         {
-            ModpackSettings.SaveLastConfig = (bool)SaveLastInstallCB.IsChecked;
+            ModpackSettings.SaveLastSelection = (bool)SaveLastInstallCB.IsChecked;
         }
 
         private void OnUseBetaAppChanged(object sender, RoutedEventArgs e)
@@ -682,7 +682,27 @@ namespace RelhaxModpack
             //settings for export mode
             if(ModpackSettings.ExportMode)
             {
-                //TODO
+                throw new BadMemeException("TODO");
+            }
+            else if (ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall)
+            {
+                //load the custom selection file, if it exists
+                if (!File.Exists(ModpackSettings.AutoOneclickSelectionFilePath))
+                {
+                    MessageBox.Show(Translations.GetTranslatedString("autoOneclickSelectionFileNotExist"));
+                    ToggleUIButtons(true);
+                    return;
+                }
+            }
+            if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Beta)
+            {
+                //if mods sync
+                if (ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall)
+                {
+                    MessageBox.Show(Translations.GetTranslatedString("noAutoOneclickWithBeta"));
+                    ToggleUIButtons(true);
+                    return;
+                }
             }
             //parse WoT root directory
             Logging.WriteToLog("started looking for WoT root directory", Logfiles.Application, LogLevel.Debug);

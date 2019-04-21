@@ -344,6 +344,9 @@ namespace RelhaxModpack.Windows
                     }
                 }
 
+                //and save the file
+                Md5HashDocument.Save(Settings.MD5HashDatabaseXmlFile);
+
                 //make a sublist of only packages where a zipfile exists (in the database)
                 List<DatabasePackage> flatListZips = flatList.Where(package => !string.IsNullOrWhiteSpace(package.ZipFile)).ToList();
                 foreach (DatabasePackage package in flatListZips)
@@ -432,12 +435,30 @@ namespace RelhaxModpack.Windows
                             ExpandAllButton.Visibility = Visibility.Visible;
                             break;
                     }
-                    //deal with ceate used files??
-                    //save database hash?
-                    //if mods sync
-                    //else if auto install
-                    //else if saveLastConfig
-                    //else {load default checked}
+
+
+                    //process loading selections after loading UI
+                    if ((ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall) && ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Stable)
+                    {
+                        //load the custom selection file
+
+                    }
+                    else if (ModpackSettings.SaveLastSelection)
+                    {
+                        if (!File.Exists(Settings.LastInstalledConfigFilepath))
+                        {
+                            Logging.Warning("LastInstalledConfigFile does not exist, loading as first time with check default mods");
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                    else
+                    {
+                        //load default checked mods
+
+                    }
 
                     //like hook up the flashing timer
                     FlashTimer.Tick += OnFlastTimerTick;
