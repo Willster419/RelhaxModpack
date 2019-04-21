@@ -41,7 +41,7 @@ namespace RelhaxModpack.Windows
         private bool continueInstallation  = false;
         private ProgressIndicator loadingProgress;
         public event SelectionListClosedDelegate OnSelectionListReturn;
-        private bool LoadingConfig = false;
+        private bool LoadingUI = false;
         private bool IgnoreSearchBoxFocus = false;
         private List<SelectablePackage> userMods;
         private Preview p;
@@ -135,16 +135,44 @@ namespace RelhaxModpack.Windows
                     break;
             }
         }
+
+        private void TreeViewItem_Collapsed(object sender, RoutedEventArgs e)
+        {
+            //trigger the colappsed such that itself is expanded but other elements are collapsed
+            TreeViewItem rootItem = sender as TreeViewItem;
+            RelhaxWPFCheckBox wpfCheckBox = rootItem.Header as RelhaxWPFCheckBox;
+            SelectablePackage rootPackage = wpfCheckBox.Package as SelectablePackage;
+            //itterate to collapse each other item, then expand itself
+            foreach (SelectablePackage package in rootPackage.Packages)
+            {
+                if (package.TreeViewItem != null)
+                    if (package.TreeViewItem.IsExpanded)
+                        package.TreeViewItem.IsExpanded = false;
+            }
+            rootPackage.TreeViewItem.IsExpanded = true;
+        }
+
+        private void OnUserModsTabSelected(object sender, RequestBringIntoViewEventArgs e)
+        {
+            if (ModpackSettings.DisplayUserModsWarning)
+            {
+                MessageBox.Show(Translations.GetTranslatedString("FirstTimeUserModsWarning"));
+                ModpackSettings.DisplayUserModsWarning = false;
+            }
+        }
         #endregion
 
         #region UI INIT STUFF
         private void OnWindowLoad(object sender, RoutedEventArgs e)
         {
-            LoadingConfig = true;
+            //set the flag for currently loading the UI. It prevents search box or UI interaction code from happening as a failsafe
+            LoadingUI = true;
+
             //init the lists
             ParsedCategoryList = new List<Category>();
             GlobalDependencies = new List<DatabasePackage>();
             Dependencies = new List<Dependency>();
+
             //create and show loading window
             loadingProgress = new ProgressIndicator()
             {
@@ -152,16 +180,19 @@ namespace RelhaxModpack.Windows
                 ProgressMinimum = 0,
                 Message = Translations.GetTranslatedString("loading")
             };
+
+            //show the list and hide this window
             loadingProgress.Show();
             this.Hide();
-            //create and run async task
+
+            //create and run async task (fire and forget style, keeps the UI open)
             try
             {
-                Logging.WriteToLog("Starting async task: " + nameof(LoadModSelectionListNonUI) + "()");
+                Logging.WriteToLog("Starting async task: " + nameof(LoadModSelectionListAsync) + "()");
                 //https://blogs.msdn.microsoft.com/dotnet/2012/06/06/async-in-4-5-enabling-progress-and-cancellation-in-async-apis/
                 Progress<RelhaxProgress> progressIndicator = new Progress<RelhaxProgress>();
                 progressIndicator.ProgressChanged += OnWindowLoadReportProgress;
-                bool result = LoadModSelectionListNonUI(progressIndicator);
+                bool result = LoadModSelectionListAsync(progressIndicator);
                 if (!result)
                     throw new BadMemeException("Result was false reeeeeee!!");
             }
@@ -179,15 +210,16 @@ namespace RelhaxModpack.Windows
             FlashTimer.Tick += OnFlastTimerTick;
             loadingProgress.Close();
             loadingProgress = null;
-            LoadingConfig = false;
+            LoadingUI = false;
             this.Show();
             this.WindowState = WindowState.Normal;
         }
 
-        private bool LoadModSelectionListNonUI(IProgress<RelhaxProgress> progress)
+        private bool LoadModSelectionListAsync(IProgress<RelhaxProgress> progress)
         {
             Task<bool> part1 = Task.Run(() =>
             {
+                //progress init setup
                 RelhaxProgress loadProgress = new RelhaxProgress()
                 {
                     ChildTotal = 4,
@@ -195,12 +227,12 @@ namespace RelhaxModpack.Windows
                     ReportMessage = Translations.GetTranslatedString("downloadingDatabase")
                 };
                 progress.Report(loadProgress);
-                //download online modInfo into xml file
-                XmlDocument modInfoDocument = new XmlDocument();
+
+                //get the XML database loaded into a string based on database version type (from server download, from github, from testfile
                 string modInfoXml = "";
-                //get is based on different types of database mode
                 switch (ModpackSettings.DatabaseDistroVersion)
                 {
+                    //from server download
                     case DatabaseVersions.Stable:
                         //make string
                         string modInfoxmlURL = Settings.DefaultStartAddress + "modInfo.dat";
@@ -223,6 +255,7 @@ namespace RelhaxModpack.Windows
                         //extract modinfo xml string
                         modInfoXml = Utils.GetStringFromZip(tempDownloadLocation, "modInfo.xml");
                         break;
+                    //from github
                     case DatabaseVersions.Beta:
                         //load string constant url from manager info xml
                         string managerInfoXml = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
@@ -246,6 +279,7 @@ namespace RelhaxModpack.Windows
                             modInfoXml = client.DownloadString(downloadURL);
                         }
                         break;
+                    //from testfile
                     case DatabaseVersions.Test:
                         //make string
                         string modInfoFilePath = ModpackSettings.CustomModInfoPath;
@@ -263,28 +297,30 @@ namespace RelhaxModpack.Windows
                         }
                         break;
                 }
+                //check to make sure the xml string has xml in it
                 if (string.IsNullOrWhiteSpace(modInfoXml))
                 {
                     Logging.WriteToLog("Failed to read modInfoxml xml string", Logfiles.Application, LogLevel.Exception);
                     MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
                     return false;
                 }
-                try
+
+                //load the xml document into xml object
+                XmlDocument modInfoDocument = XMLUtils.LoadXmlDocument(modInfoXml, XmlLoadType.FromXml);
+                if(modInfoDocument == null)
                 {
-                    modInfoDocument.LoadXml(modInfoXml);
-                }
-                catch (XmlException ex)
-                {
-                    Logging.WriteToLog("Failed to parse modInfoxml from xml string\n" + ex.ToString(), Logfiles.Application, LogLevel.Exception);
+                    Logging.Error("Failed to parse modInfoxml from xml string");
                     MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
                     return false;
                 }
-                //if not stable db, update current version and online folder version from modInfoxml itself
+
+                //if not stable db, update WoT current version and online folder version macros from modInfoxml itself
                 if (ModpackSettings.DatabaseDistroVersion != DatabaseVersions.Stable)
                 {
                     Settings.WoTModpackOnlineFolderVersion = XMLUtils.GetXMLStringFromXPath(modInfoDocument, "//modInfoAlpha.xml@onlineFolder");
                     Settings.WoTClientVersion = XMLUtils.GetXMLStringFromXPath(modInfoDocument, "//modInfoAlpha.xml@version");
                 }
+
                 //parse the modInfoXml to list in memory
                 loadProgress.ChildCurrent++;
                 loadProgress.ReportMessage = Translations.GetTranslatedString("parsingDatabase");
@@ -295,14 +331,16 @@ namespace RelhaxModpack.Windows
                     MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
                     return false;
                 }
+
+                //map and link all refrences inside the package objects for use later
                 Utils.BuildLinksRefrence(ParsedCategoryList, false);
                 Utils.BuildLevelPerPackage(ParsedCategoryList);
                 List<DatabasePackage> flatList = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList);
+
                 //check db cache of local files in downlaod zip folder
                 loadProgress.ChildCurrent++;
                 loadProgress.ReportMessage = Translations.GetTranslatedString("verifyingDownloadCache");
                 progress.Report(loadProgress);
-                //the below does not work yet TODO: CHECK?
                 List<DatabasePackage> flatListZips = flatList.Where(package => !string.IsNullOrWhiteSpace(package.ZipFile)).ToList();
                 foreach (DatabasePackage package in flatListZips)
                 {
@@ -321,8 +359,10 @@ namespace RelhaxModpack.Windows
                     if (!package.CRC.Equals(oldCRCFromDownloadsFolder))
                         package.DownloadFlag = true;
                 }
+
                 //sort the database before UI display
                 Utils.SortDatabase(ParsedCategoryList);
+
                 //build UI
                 loadProgress.ChildCurrent = 0;
                 loadProgress.ReportMessage = Translations.GetTranslatedString("loadingUI");
@@ -343,11 +383,11 @@ namespace RelhaxModpack.Windows
         private bool LoadModSelectionListUI()
         {
             //initialize the categories lists
-            BuildUIInit(ParsedCategoryList);
+            InitDatabaseUI(ParsedCategoryList);
             //link everything again now that the category exists
             Utils.BuildLinksRefrence(ParsedCategoryList, false);
             //initialize the user mods
-            BuildUserMods();
+            InitUsermods();
             foreach (Category cat in ParsedCategoryList)
             {
                 AddPackage(cat.Packages);
@@ -383,7 +423,7 @@ namespace RelhaxModpack.Windows
             return true;
         }
 
-        private void BuildUserMods()
+        private void InitUsermods()
         {
             //get a list of all zip files in the folder
             string[] zipFilesUserMods = Directory.GetFiles(Settings.RelhaxUserModsFolder, @"*.zip");
@@ -430,7 +470,7 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void BuildUIInit(List<Category> parsedCategoryList)
+        private void InitDatabaseUI(List<Category> parsedCategoryList)
         {
             //one time init of stuff goes here (init the tabGroup would have been nice if needed here)
             //just in case
@@ -562,31 +602,6 @@ namespace RelhaxModpack.Windows
                         break;
                 }
                 ModTabGroups.Items.Add(cat.TabPage);
-            }
-        }
-
-        private void TreeViewItem_Collapsed(object sender, RoutedEventArgs e)
-        {
-            //trigger the colappsed such that itself is expanded but other elements are collapsed
-            TreeViewItem rootItem = sender as TreeViewItem;
-            RelhaxWPFCheckBox wpfCheckBox = rootItem.Header as RelhaxWPFCheckBox;
-            SelectablePackage rootPackage = wpfCheckBox.Package as SelectablePackage;
-            //itterate to collapse each other item, then expand itself
-            foreach(SelectablePackage package in rootPackage.Packages)
-            {
-                if (package.TreeViewItem != null)
-                    if (package.TreeViewItem.IsExpanded)
-                        package.TreeViewItem.IsExpanded = false;
-            }
-            rootPackage.TreeViewItem.IsExpanded = true;
-        }
-
-        private void OnUserModsTabSelected(object sender, RequestBringIntoViewEventArgs e)
-        {
-            if(ModpackSettings.DisplayUserModsWarning)
-            {
-                MessageBox.Show(Translations.GetTranslatedString("FirstTimeUserModsWarning"));
-                ModpackSettings.DisplayUserModsWarning = false;
             }
         }
 
@@ -774,11 +789,11 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region UI Interaction
+        #region UI Interaction With Database
         //generic handler to disable the auto check like in forms, but for WPF
         void OnWPFComponentCheck(object sender, RoutedEventArgs e)
         {
-            if (LoadingConfig)
+            if (LoadingUI)
                 return;
             if (sender is RelhaxWPFCheckBox cb)
             {
@@ -803,7 +818,7 @@ namespace RelhaxModpack.Windows
         //https://stackoverflow.com/questions/25763954/event-when-combobox-is-selected
         private void DropDownSelectSelfFix(object sender, EventArgs e)
         {
-            if (LoadingConfig || IgnoreSearchBoxFocus)
+            if (LoadingUI || IgnoreSearchBoxFocus)
                 return;
             IPackageUIComponent ipc = (IPackageUIComponent)sender;
             SelectablePackage spc = null;
@@ -821,7 +836,7 @@ namespace RelhaxModpack.Windows
         //when a single/single1 mod is selected
         void OnSinglePackageClick(object sender, EventArgs e)
         {
-            if (LoadingConfig || IgnoreSearchBoxFocus)
+            if (LoadingUI || IgnoreSearchBoxFocus)
                 return;
             IPackageUIComponent ipc = (IPackageUIComponent)sender;
             SelectablePackage spc = ipc.Package;
@@ -849,7 +864,7 @@ namespace RelhaxModpack.Windows
         //when a single_dropdown mod is selected
         void OnSingleDDPackageClick(object sender, EventArgs e)
         {
-            if (LoadingConfig || IgnoreSearchBoxFocus)
+            if (LoadingUI || IgnoreSearchBoxFocus)
                 return;
             IPackageUIComponent ipc = (IPackageUIComponent)sender;
             SelectablePackage spc = null;
@@ -883,7 +898,7 @@ namespace RelhaxModpack.Windows
         //when a multi mod is selected
         void OnMultiPackageClick(object sender, EventArgs e)
         {
-            if (LoadingConfig || IgnoreSearchBoxFocus)
+            if (LoadingUI || IgnoreSearchBoxFocus)
                 return;
             IPackageUIComponent ipc = (IPackageUIComponent)sender;
             SelectablePackage spc = ipc.Package;
@@ -1062,7 +1077,7 @@ namespace RelhaxModpack.Windows
         //generic hander for when any mouse button is clicked for MouseDown Events
         void Generic_MouseDown(object sender, EventArgs e)
         {
-            if (LoadingConfig)
+            if (LoadingUI)
                 return;
             if (e is MouseEventArgs m)
                 if (m.RightButton != MouseButtonState.Pressed)
@@ -1125,7 +1140,7 @@ namespace RelhaxModpack.Windows
         //Handler for allowing right click of disabled mods (WPF)
         private void Lsl_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (LoadingConfig)
+            if (LoadingUI)
                 return;
             IPackageUIComponent pkg = null;
             if (e.OriginalSource is ContentPresenter cp)
