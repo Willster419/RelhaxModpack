@@ -51,8 +51,10 @@ namespace RelhaxModpack
 
         private void TheMainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            //first hide the window
             Hide();
-            //load please wait thing
+
+            //load the progress report window
             ProgressIndicator progressIndicator = new ProgressIndicator()
             {
                 Message = Translations.GetTranslatedString("loadingTranslations"),
@@ -61,28 +63,55 @@ namespace RelhaxModpack
             };
             progressIndicator.Show();
             progressIndicator.UpdateProgress(0);
+            Utils.AllowUIToUpdate();
+
             //load translation hashes and set default language
             Translations.SetLanguage(Languages.English);
             Translations.LoadTranslations();
+
             //apply translations to this window
             Translations.LocalizeWindow(this,true);
+
             //create tray icons and menus
             CreateTray();
+
             //load and apply modpack settings
             progressIndicator.UpdateProgress(2, Translations.GetTranslatedString("loadingSettings"));
+            Utils.AllowUIToUpdate();
             Settings.LoadSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude,null);
+
             //apply settings to UI elements
             UISettings.LoadSettings(true);
             UISettings.ApplyUIColorSettings(this);
+
             //check command line settings
             CommandLineSettings.ParseCommandLineConflicts();
+
             //apply third party settings
             ThirdPartySettings.LoadSettings(Settings.ThirdPartySettingsFileName);
-            //verify folder paths
-            progressIndicator.UpdateProgress(3, Translations.GetTranslatedString("folderStructure"));
+
             //verify folder stucture for all folders in the directory
-            VerifyApplicationFolderStructure();
-            //set the application appData direcotry
+            progressIndicator.UpdateProgress(3, Translations.GetTranslatedString("folderStructure"));
+            Utils.AllowUIToUpdate();
+            Logging.WriteToLog("Verifying folder structure");
+            foreach (string s in Settings.FoldersToCheck)
+            {
+                try
+                {
+                    if (!Directory.Exists(s))
+                        Directory.CreateDirectory(s);
+                }
+                catch (Exception ex)
+                {
+                    Logging.WriteToLog("Failed to check application folder structure\n" + ex.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
+                    MessageBox.Show(Translations.GetTranslatedString("failedVerifyFolderStructure"));
+                    Application.Current.Shutdown();
+                    return;
+                }
+            }
+            Logging.WriteToLog("Structure verified");
+
+            //set the application appData directory
             Settings.AppDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 "Wargaming.net", "WorldOfTanks");
             if(!Directory.Exists(Settings.AppDataFolder))
@@ -91,12 +120,12 @@ namespace RelhaxModpack
                     Logfiles.Application,LogLevel.Warning);
                 Directory.CreateDirectory(Settings.AppDataFolder);
             }
-            //Build application macros TODO
 
             //check for updates to database and application
             progressIndicator.UpdateProgress(4, Translations.GetTranslatedString("checkForUpdates"));
             CheckForApplicationUpdates();
             CheckForDatabaseUpdates(false, true);
+
             //get the number of processor cores
             MulticoreExtractionCoresCountLabel.Text = string.Format(Translations.GetTranslatedString("detectedCores"), Settings.NumLogicalProcesors);
 
@@ -215,7 +244,7 @@ namespace RelhaxModpack
         #endregion
 
         #region Update Code
-        private void CheckForDatabaseUpdates(bool refreshManagerInfo, bool init)
+        private async void CheckForDatabaseUpdates(bool refreshManagerInfo, bool init)
         {
             Logging.WriteToLog("Checking for database updates");
             //TODO: consider just getting it from online?
@@ -228,7 +257,7 @@ namespace RelhaxModpack
                     {
                         if (File.Exists(Settings.ManagerInfoDatFile))
                             File.Delete(Settings.ManagerInfoDatFile);
-                        client.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat", Settings.ManagerInfoDatFile);
+                        await client.DownloadFileTaskAsync("http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat", Settings.ManagerInfoDatFile);
 
                     }
                     catch (Exception e)
@@ -274,7 +303,7 @@ namespace RelhaxModpack
             Logging.WriteToLog("Checking for database updates complete");
         }
 
-        private void CheckForApplicationUpdates()
+        private async void CheckForApplicationUpdates()
         {
             //check if skipping updates
             Logging.WriteToLog("Started check for application updates");
@@ -284,6 +313,7 @@ namespace RelhaxModpack
                 Logging.WriteToLog("Skipping updates", Logfiles.Application, LogLevel.Warning);
                 return;
             }
+
             //delete the last one and download a new one
             using (WebClient client = new WebClient())
             {
@@ -291,7 +321,7 @@ namespace RelhaxModpack
                 {
                     if (File.Exists(Settings.ManagerInfoDatFile))
                         File.Delete(Settings.ManagerInfoDatFile);
-                    client.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat", Settings.ManagerInfoDatFile);
+                    await client.DownloadFileTaskAsync("http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat", Settings.ManagerInfoDatFile);
 
                 }
                 catch (Exception e)
@@ -304,6 +334,7 @@ namespace RelhaxModpack
                     return;
                 }
             }
+
             //get the version info string
             string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
             if(string.IsNullOrEmpty(xmlString))
@@ -313,9 +344,11 @@ namespace RelhaxModpack
                 Close();
                 return;
             }
+
             //load the document info
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(xmlString);
+
             //if the request distro version is alpha, correct it to stable
             if (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Alpha)
             {
@@ -323,6 +356,7 @@ namespace RelhaxModpack
                     Logfiles.Application, LogLevel.Debug);
                 ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
             }
+
             //make a copy of the curent application version and set it to stable if alphs
             ApplicationVersions version = Settings.ApplicationVersion;
             if (version == ApplicationVersions.Alpha)
@@ -331,6 +365,7 @@ namespace RelhaxModpack
                     Logfiles.Application, LogLevel.Debug);
                 version = ApplicationVersions.Stable;
             }
+
             //4 possibilities:
             //stable->stable (update check)
             //stable->beta (auto out of date)
@@ -1204,26 +1239,6 @@ namespace RelhaxModpack
                 Translations.GetTranslatedString("downloading"), TotalProgressBar.Value, Translations.GetTranslatedString("of"),
                 TotalProgressBar.Maximum, downloadProgress.ChildCurrentProgress, e.BytesReceived / (1024 * 1024), Translations.GetTranslatedString("of"),
                 e.TotalBytesToReceive / (1024 * 1024), "ETA:", remaining_seconds, Translations.GetTranslatedString("seconds"));
-        }
-
-        private bool VerifyApplicationFolderStructure()
-        {
-            Logging.WriteToLog("Verifying folder structure");
-            foreach (string s in Settings.FoldersToCheck)
-            {
-                try
-                {
-                    if (!Directory.Exists(s))
-                        Directory.CreateDirectory(s);
-                }
-                catch (Exception e)
-                {
-                    Logging.WriteToLog("Failed to check application folder structure\n" + e.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
-                    return false;
-                }
-            }
-            Logging.WriteToLog("Structure verified");
-            return true;
         }
 
         private void ToggleUIButtons(bool toggle)
