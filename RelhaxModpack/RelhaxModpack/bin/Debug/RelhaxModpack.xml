@@ -752,6 +752,21 @@
             The application distribution version to use. When selected, it won't take affect until application restart
             </summary>
         </member>
+        <member name="F:RelhaxModpack.ModpackSettings.MinimizeToSystemTray">
+            <summary>
+            toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ModsAutoSyncEnable">
+            <summary>
+            toggle for enabling auto sync of mods
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ModsAutoSyncLoad">
+            <summary>
+            toggle to load auto sync of mods
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Settings">
             <summary>
             Handles all generic constants and statics used throughout the application
