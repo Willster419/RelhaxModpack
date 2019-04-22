@@ -77,9 +77,13 @@ namespace RelhaxModpack
 
         public enum MapTypes
         {
+
             None,
+
             WGXmlMap,
+
             XmlMap,
+
             TxtMap,
         }
 
@@ -100,8 +104,11 @@ namespace RelhaxModpack
 
         public enum State
         {
+
             None = 0,
+
             True,
+
             False
         }
     }

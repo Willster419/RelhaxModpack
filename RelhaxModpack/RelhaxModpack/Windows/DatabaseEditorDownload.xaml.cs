@@ -33,6 +33,7 @@ namespace RelhaxModpack.Windows
         public bool Upload;
         public DatabasePackage PackageToUpdate;
         public event EditorUploadDownloadClosed OnEditorUploadDownloadClosed;
+        private long FTPDownloadFilesize = -1;
 
         private WebClient client;
         private string CompleteFTPPath;
@@ -56,17 +57,25 @@ namespace RelhaxModpack.Windows
                     OpenFileButton.Visibility = Visibility.Visible;
                     break;
             }
-            if(PackageToUpdate == null)
+            if(!Upload)
             {
+                //download
+                ProgressBody.Text = string.Format("{0} {1} {2} FTP folder {3}", Upload ? "Uploading" : "Downloading",
+                Path.GetFileName(ZipFilePathDisk), Upload ? "to" : "from", Settings.WoTModpackOnlineFolderVersion);
+            }
+            else if(PackageToUpdate == null)
+            {
+                //upload to medias
                 ProgressBody.Text = string.Format("{0} {1} {2} FTP folder {3}", "Uploading",
                 ZipFileName, "to", "Medias/...");
             }
             else
             {
+                //upload to bigmods
                 ProgressBody.Text = string.Format("{0} {1} {2} FTP folder {3}", Upload ? "Uploading" : "Downloading",
                 Path.GetFileName(ZipFilePathDisk), Upload ? "to" : "from", Settings.WoTModpackOnlineFolderVersion);
             }
-            ProgressHeader.Text = string.Format("{0} 0 of 0 kb", Upload ? "Uploaded" : "Downloaded");
+            ProgressHeader.Text = string.Format("{0} 0 kb of 0 kb", Upload ? "Uploaded" : "Downloaded");
             CompleteFTPPath = string.Format("{0}{1}", ZipFilePathOnline, ZipFileName);
             using (client = new WebClient() { Credentials=Credential })
             {
@@ -84,11 +93,14 @@ namespace RelhaxModpack.Windows
                             return;
                         }
                         client.UploadProgressChanged += Client_UploadProgressChanged;
+                        //write handler for if upload or download was canceled
+                        client.UploadFileCompleted += Client_DownloadUploadFileCompleted;
+                        Logging.Debug("STARTING FTP UPLOAD");
                         try
                         {
-                            Logging.Debug("STARTING FTP UPLOAD");
                             await client.UploadFileTaskAsync(CompleteFTPPath, ZipFilePathDisk);
-                            CancelButton.IsEnabled = false;
+                            Logging.Debug("FTP UPLOAD COMPLETE");
+                            //if we're uploading a package zip file, then PackageToUpdate is not null, and fire the event
                             if (PackageToUpdate != null)
                             {
                                 Logging.Debug("FTP upload complete, changing zipFile entry for package {0} from", PackageToUpdate.PackageName);
@@ -111,24 +123,58 @@ namespace RelhaxModpack.Windows
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(ex.ToString());
+                            Logging.Info("FTP UPLOAD Failed");
+                            Logging.Info(ex.ToString());
+                            //MessageBox.Show(ex.ToString());
+                        }
+                        finally
+                        {
+                            CancelButton.IsEnabled = false;
                         }
                         break;
                     case false:
                         client.DownloadProgressChanged += Client_DownloadProgressChanged;
+                        //write handler for if upload or download was canceled
+                        client.DownloadFileCompleted += Client_DownloadUploadFileCompleted;
+                        Logging.Debug("STARTING FTP DOWNLOAD");
                         try
                         {
-                            Logging.Debug("STARTING FTP DOWNLOAD");
-                            await client.DownloadFileTaskAsync(CompleteFTPPath, ZipFileName);
+                            FTPDownloadFilesize = await Utils.FTPGetFilesizeAsync(CompleteFTPPath, Credential);
+                            await client.DownloadFileTaskAsync(CompleteFTPPath, ZipFilePathDisk);
                             Logging.Debug("FTP download complete ({0})",ZipFileName);
+                        }
+                        catch (Exception ex)
+                        {
+                            Logging.Info("FTP download failed");
+                            Logging.Info(ex.ToString());
+                            //MessageBox.Show(ex.ToString());
+                        }
+                        finally
+                        {
                             CancelButton.IsEnabled = false;
                             OpenFileButton.IsEnabled = true;
                             OpenFodlerButton.IsEnabled = true;
                         }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.ToString());
-                        }
+                        break;
+                }
+            }
+        }
+
+        private async void Client_DownloadUploadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+        {
+            if(e.Cancelled)
+            {
+                Logging.Debug("FTP upload or download cancel detected from UI thread, handling");
+                switch (Upload)
+                {
+                    case true:
+                        //delete file on server
+                        Logging.Debug("deleting file on server");
+                        await Utils.FTPDeleteFileAsync(CompleteFTPPath, Credential);
+                        break;
+                    case false:
+                        Logging.Debug("deleting file on disk");
+                        File.Delete(ZipFilePathDisk);
                         break;
                 }
             }
@@ -136,10 +182,11 @@ namespace RelhaxModpack.Windows
 
         private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            if (ProgressProgressBar.Maximum != e.TotalBytesToReceive)
-                ProgressProgressBar.Maximum = e.TotalBytesToReceive;
+            //https://stackoverflow.com/questions/4591059/download-file-from-ftp-with-progress-totalbytestoreceive-is-always-1
+            if (ProgressProgressBar.Maximum != FTPDownloadFilesize)
+                ProgressProgressBar.Maximum = FTPDownloadFilesize;
             ProgressProgressBar.Value = e.BytesReceived;
-            ProgressHeader.Text = string.Format("{0} {1} of {2} kb", Upload ? "Uploaded" : "Downloaded", e.BytesReceived / 1024, e.TotalBytesToReceive / 1024);
+            ProgressHeader.Text = string.Format("{0} {1} kb of {2} kb", "Downloaded", e.BytesReceived / 1024, e.TotalBytesToReceive / 1024);
         }
 
         private void Client_UploadProgressChanged(object sender, UploadProgressChangedEventArgs e)
@@ -147,7 +194,7 @@ namespace RelhaxModpack.Windows
             if (ProgressProgressBar.Maximum != e.TotalBytesToSend)
                 ProgressProgressBar.Maximum = e.TotalBytesToSend;
             ProgressProgressBar.Value = e.BytesSent;
-            ProgressHeader.Text = string.Format("{0} {1} of {2} kb", Upload ? "Uploaded" : "Downloaded", e.BytesSent / 1024, e.TotalBytesToSend / 1024);
+            ProgressHeader.Text = string.Format("{0} {1} kb of {2} kb", "Uploaded", e.BytesSent / 1024, e.TotalBytesToSend / 1024);
         }
 
         private void OpenFodlerButton_Click(object sender, RoutedEventArgs e)
@@ -184,24 +231,12 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private async void CancelButton_Click(object sender, RoutedEventArgs e)
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             Logging.Debug("Cancel pressed, Upload={0}", Upload.ToString());
             ProgressHeader.Text = "Canceled";
             Logging.Debug("Canceling upload or download operation");
             client.CancelAsync();
-            switch(Upload)
-            {
-                case true:
-                    //delete file on server
-                    Logging.Debug("deleting file on server");
-                    await Utils.FTPDeleteFileAsync(CompleteFTPPath, Credential);
-                    break;
-                case false:
-                    Logging.Debug("deleting file on disk");
-                    File.Delete(ZipFilePathDisk);
-                    break;
-            }
         }
     }
 }

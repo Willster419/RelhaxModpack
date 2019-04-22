@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="EditorAddRemove" Height="200" Width="250" Loaded="RelhaxWindow_Loaded">
+        Title="Add or Move Package" Height="200" Width="250" Loaded="RelhaxWindow_Loaded">
     <Grid>
         <TextBlock Tag="CategoryTextBox" x:Name="CategoryTextBox" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Select the Category to add to" VerticalAlignment="Top"/>
         <ComboBox Tag="CategoryComboBox" x:Name="CategoryComboBox" HorizontalAlignment="Stretch" Margin="10,31,10,0" VerticalAlignment="Top" SelectionChanged="CategoryComboBox_SelectionChanged" />

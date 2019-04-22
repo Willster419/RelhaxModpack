@@ -127,9 +127,6 @@
   <data name="donation" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Images\donation.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="DotNetZip" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Libraries\DotNetZip.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="EMail" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Images\EMail.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -160,14 +157,8 @@
   <data name="modpack_license_agrement" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Licences\modpack_license_agrement.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="NAudio" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Libraries\NAudio.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="NAudio1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Licences\NAudio.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="Newtonsoft_Json" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Libraries\Newtonsoft.Json.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="play_pause" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Images\play_pause.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

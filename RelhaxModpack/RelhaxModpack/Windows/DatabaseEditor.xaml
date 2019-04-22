@@ -310,7 +310,7 @@
             </Grid.ColumnDefinitions>
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center"/>
             <TabControl x:Name="LeftTabView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" SelectionChanged="LeftTabView_SelectionChanged">
-                <TabItem Tag="DatabaseViewTab" x:Name="DatabaseViewTab" Header="Database Tree View">
+                <TabItem x:Name="DatabaseViewTab" Header="Database Tree View">
                     <TreeView x:Name="DatabaseTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="True" Drop="OnTreeViewDatabaseDrop" DragOver="OnTreeViewDatabaseDragOver" MouseMove="OnTreeViewMouseMove" ScrollViewer.ScrollChanged="OnTreeViewScroll" PreviewMouseDown="OnTreeViewMouseDownPreview" PreviewMouseUp="OnTreeViewMouseUpPreview" SelectedItemChanged="DatabaseTreeView_SelectedItemChanged">
                         <TreeView.Resources>
                             <!-- Style the inactive selection the same as active -->
@@ -319,7 +319,7 @@
                         </TreeView.Resources>
                     </TreeView>
                 </TabItem>
-                <TabItem Tag="InstallGroupsTab" x:Name="InstallGroupsTab" Header="Install Groups">
+                <TabItem x:Name="InstallGroupsTab" Header="Install Groups">
                     <TreeView x:Name="InstallGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="True"  MouseMove="OnTreeViewMouseMove" ScrollViewer.ScrollChanged="OnTreeViewScroll" PreviewMouseDown="OnTreeViewMouseDownPreview" PreviewMouseUp="OnTreeViewMouseUpPreview" Drop="OnTreeViewGroupsDrop" DragOver="OnTreeViewGroupsDragOver" >
                         <TreeView.Resources>
                             <!-- Style the inactive selection the same as active -->
@@ -328,7 +328,7 @@
                         </TreeView.Resources>
                     </TreeView>
                 </TabItem>
-                <TabItem Tag="PatchGroupsTab" x:Name="PatchGroupsTab" Header="Patch Groups">
+                <TabItem x:Name="PatchGroupsTab" Header="Patch Groups">
                     <TreeView x:Name="PatchGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="True" Drop="OnTreeViewGroupsDrop" DragOver="OnTreeViewGroupsDragOver" MouseMove="OnTreeViewMouseMove" ScrollViewer.ScrollChanged="OnTreeViewScroll" PreviewMouseDown="OnTreeViewMouseDownPreview" PreviewMouseUp="OnTreeViewMouseUpPreview" >
                         <TreeView.Resources>
                             <!-- Style the inactive selection the same as active -->
@@ -337,7 +337,7 @@
                         </TreeView.Resources>
                     </TreeView>
                 </TabItem>
-                <TabItem Tag="SettingsTab" x:Name="SettingsTab" Header="Settings">
+                <TabItem x:Name="SettingsTab" Header="Settings">
                     <Grid Background="#FFE5E5E5">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="20"/>
@@ -356,31 +356,31 @@
                             <ColumnDefinition Width="150"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Tag="BigmodsUsernameTextBox" x:Name="BigmodsUsernameTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Bigmods Username" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0"/>
-                        <TextBlock Tag="BigmodsPasswordTextBox" x:Name="BigmodsPasswordTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Bigmods Password" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1"/>
-                        <TextBlock Tag="SaveSelectionBeforeLeaveTextBox" x:Name="SaveSelectionBeforeLeaveTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Save Selection information before leave (auto apply)" VerticalAlignment="Center" Grid.Column="0" Grid.Row="2"/>
-                        <TextBlock Tag="SortCategoriesTextBox" x:Name="SortCategoriesTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Sort each category&#xA;(includes dependencies)" VerticalAlignment="Center" Grid.Column="0" Grid.Row="3" Height="31"/>
-                        <TextBlock Tag="ApplyBehaviorTextBox" x:Name="ApplyBehaviorTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Apply Behavior" VerticalAlignment="Center" Grid.Column="0" Grid.Row="4"/>
-                        <TextBox Tag="BigmodsUsernameSetting" x:Name="BigmodsUsernameSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" TextChanged="BigmodsUsernameSetting_TextChanged"/>
-                        <TextBox Tag="BigmodsPasswordSetting" x:Name="BigmodsPasswordSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" TextChanged="BigmodsPasswordSetting_TextChanged"/>
-                        <CheckBox Tag="SaveSelectionBeforeLeaveSetting" x:Name="SaveSelectionBeforeLeaveSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" Checked="SaveSelectionBeforeLeaveSetting_Checked"/>
-                        <CheckBox Tag="SortCategoriesSetting" x:Name="SortCategoriesSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="3" Checked="SortCategoriesSetting_Checked"/>
+                        <TextBlock x:Name="BigmodsUsernameTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Bigmods Username" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0"/>
+                        <TextBlock x:Name="BigmodsPasswordTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Bigmods Password" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1"/>
+                        <TextBlock x:Name="SaveSelectionBeforeLeaveTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Save Selection information before leave (auto apply)" VerticalAlignment="Center" Grid.Column="0" Grid.Row="2"/>
+                        <TextBlock x:Name="SortCategoriesTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Sort each category&#xA;(includes dependencies)" VerticalAlignment="Center" Grid.Column="0" Grid.Row="3" Height="31"/>
+                        <TextBlock x:Name="ApplyBehaviorTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Apply Behavior" VerticalAlignment="Center" Grid.Column="0" Grid.Row="4"/>
+                        <TextBox x:Name="BigmodsUsernameSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" TextChanged="BigmodsUsernameSetting_TextChanged"/>
+                        <TextBox x:Name="BigmodsPasswordSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" TextChanged="BigmodsPasswordSetting_TextChanged"/>
+                        <CheckBox x:Name="SaveSelectionBeforeLeaveSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" Click="SaveSelectionBeforeLeaveSetting_Click"/>
+                        <CheckBox x:Name="SortCategoriesSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="3" Click="SortCategoriesSetting_Click"/>
                         <StackPanel HorizontalAlignment="Left" Grid.Column="1" Grid.Row="4">
-                            <RadioButton Tag="ApplyBehaviorDefaultSetting" x:Name="ApplyBehaviorDefaultSetting" Content="Default" Checked="ApplyBehaviorSetting_Checked"/>
-                            <RadioButton Tag="ApplyBehaviorApplyTriggersSaveSetting" x:Name="ApplyBehaviorApplyTriggersSaveSetting" Content="Apply triggers Save" Checked="ApplyBehaviorSetting_Checked"/>
-                            <RadioButton Tag="ApplyBehaviorSaveTriggersApplySetting" x:Name="ApplyBehaviorSaveTriggersApplySetting" Content="Save triggers Apply" Checked="ApplyBehaviorSetting_Checked"/>
+                            <RadioButton x:Name="ApplyBehaviorDefaultSetting" Content="Default" Checked="ApplyBehaviorSetting_Checked"/>
+                            <RadioButton x:Name="ApplyBehaviorApplyTriggersSaveSetting" Content="Apply triggers Save" Checked="ApplyBehaviorSetting_Checked"/>
+                            <RadioButton x:Name="ApplyBehaviorSaveTriggersApplySetting" Content="Save triggers Apply" Checked="ApplyBehaviorSetting_Checked"/>
                         </StackPanel>
-                        <TextBlock Tag="ShowConfirmOnPackageApply" x:Name="ShowConfirmOnPackageApply" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Row="5" Text="Show confirmation on package apply"/>
-                        <TextBlock Tag="ShowConfirmOnPackageAddRemoveEdit" x:Name="ShowConfirmOnPackageAddRemoveEdit" HorizontalAlignment="Stretch"  Grid.Row="6" TextWrapping="Wrap" Text="Show confirmation on package add/remove/move" VerticalAlignment="Center"/>
-                        <CheckBox Tag="ShowConfirmOnPackageApplySetting" x:Name="ShowConfirmOnPackageApplySetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="5" VerticalAlignment="Center" Checked="ShowConfirmOnPackageApplySetting_Checked"/>
-                        <CheckBox Tag="ShowConfirmOnPackageAddRemoveEditSetting" x:Name="ShowConfirmOnPackageAddRemoveEditSetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="6" VerticalAlignment="Center" Checked="ShowConfirmOnPackageAddRemoveEditSetting_Checked"/>
-                        <Button Tag="SelectDefaultSaveLocationButton" x:Name="SelectDefaultSaveLocationButton" Content="Select default save location" HorizontalAlignment="Stretch" Grid.Row="7" VerticalAlignment="Center" Click="SelectDefaultSaveLocationButton_Click" />
-                        <TextBox Tag="DefaultSaveLocationSetting" x:Name="DefaultSaveLocationSetting" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="7" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="DefaultSaveLocationSetting_TextChanged" />
+                        <TextBlock x:Name="ShowConfirmOnPackageApply" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Row="5" Text="Show confirmation on package apply"/>
+                        <TextBlock x:Name="ShowConfirmOnPackageAddRemoveEdit" HorizontalAlignment="Stretch"  Grid.Row="6" TextWrapping="Wrap" Text="Show confirmation on package add/remove/move" VerticalAlignment="Center"/>
+                        <CheckBox x:Name="ShowConfirmOnPackageApplySetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="5" VerticalAlignment="Center" Click="ShowConfirmOnPackageApplySetting_Click"/>
+                        <CheckBox x:Name="ShowConfirmOnPackageAddRemoveEditSetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="6" VerticalAlignment="Center" Click="ShowConfirmOnPackageAddRemoveEditSetting_Click"/>
+                        <Button x:Name="SelectDefaultSaveLocationButton" Content="Select default save location" HorizontalAlignment="Stretch" Grid.Row="7" VerticalAlignment="Center" Click="SelectDefaultSaveLocationButton_Click" />
+                        <TextBox x:Name="DefaultSaveLocationSetting" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="7" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="DefaultSaveLocationSetting_TextChanged" />
                     </Grid>
                 </TabItem>
             </TabControl>
             <TabControl Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,20,0,0" x:Name="RightTab">
-                <TabItem Tag="BasicTab" x:Name="BasicTab" Header="Basic">
+                <TabItem x:Name="BasicTab" Header="Basic">
                     <Grid Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#FFE5E5E5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100"/>
@@ -406,34 +406,34 @@
                             <RowDefinition Height="20"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Tag="PackageDisplayNameTextBlock" x:Name="PackageDisplayNameTextBlock" HorizontalAlignment="Stretch" Grid.Row="1" TextWrapping="Wrap" Text="Name" VerticalAlignment="Center"/>
-                        <TextBlock Tag="PackageNameTextBlock" x:Name="PackageNameTextBlock" HorizontalAlignment="Stretch" Grid.Row="2" TextWrapping="Wrap" Text="Package Name" VerticalAlignment="Center"/>
-                        <TextBlock Tag="PackageStartAddressTextBlock" x:Name="PackageStartAddressTextBlock" HorizontalAlignment="Stretch" Grid.Row="3" TextWrapping="Wrap" Text="Start Address" VerticalAlignment="Center"/>
-                        <TextBlock Tag="PackageZipFileTextBlock" x:Name="PackageZipFileTextBlock" HorizontalAlignment="Stretch" Grid.Row="4" TextWrapping="Wrap" Text="Zip File" VerticalAlignment="Center"/>
-                        <TextBlock Tag="PackageEndAddressTextBlock" x:Name="PackageEndAddressTextBlock" HorizontalAlignment="Stretch" Grid.Row="5" TextWrapping="Wrap" Text="End Address" VerticalAlignment="Center"/>
-                        <TextBlock Tag="PackageVersionTextBlock" x:Name="PackageVersionTextBlock" HorizontalAlignment="Stretch" Grid.Row="6" TextWrapping="Wrap" Text="Version" VerticalAlignment="Center"/>
-                        <TextBlock Tag="PakageTypeTextBlock" x:Name="PakageTypeTextBlock" HorizontalAlignment="Stretch" Grid.Row="7" TextWrapping="Wrap" Text="Type" VerticalAlignment="Center"/>
-                        <TextBlock Tag="PackageInstallGroupTextBlock" x:Name="PackageInstallGroupTextBlock" HorizontalAlignment="Stretch" Grid.Row="8" TextWrapping="Wrap" Text="Install Group" VerticalAlignment="Center"/>
-                        <TextBlock Tag="PackagePatchGroupTextBlock" x:Name="PackagePatchGroupTextBlock" HorizontalAlignment="Stretch" Grid.Row="9" TextWrapping="Wrap" Text="Patch Group" VerticalAlignment="Center"/>
-                        <TextBlock Tag="PackageLevelTextBlock" x:Name="PackageLevelTextBlock" HorizontalAlignment="Stretch" Grid.Row="10" TextWrapping="Wrap" Text="Level:" VerticalAlignment="Center"/>
-                        <TextBlock Tag="PackagLastUpdatedTextBlock" x:Name="PackagLastUpdatedTextBlock" HorizontalAlignment="Stretch" Grid.Row="11" TextWrapping="Wrap" Text="Last Updated:" VerticalAlignment="Center"/>
-                        <TextBox Tag="PackageNameDisplay" x:Name="PackageNameDisplay" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                        <TextBox Tag="PackagePackageNameDisplay" x:Name="PackagePackageNameDisplay" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                        <TextBox Tag="PackageStartAddressDisplay" x:Name="PackageStartAddressDisplay" HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                        <TextBox Tag="PackageZipFileDisplay" x:Name="PackageZipFileDisplay" HorizontalAlignment="Stretch" Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                        <TextBox Tag="PackageEndAddressDisplay" x:Name="PackageEndAddressDisplay" HorizontalAlignment="Stretch" Grid.Row="5" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                        <TextBox Tag="PackageVersionDisplay" x:Name="PackageVersionDisplay" HorizontalAlignment="Stretch" Grid.Row="6" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                        <ComboBox Tag="PackageTypeDisplay" x:Name="PackageTypeDisplay" HorizontalAlignment="Stretch" Grid.Row="7" Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock x:Name="PackageDisplayNameTextBlock" HorizontalAlignment="Stretch" Grid.Row="1" TextWrapping="Wrap" Text="Name" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageNameTextBlock" HorizontalAlignment="Stretch" Grid.Row="2" TextWrapping="Wrap" Text="Package Name" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageStartAddressTextBlock" HorizontalAlignment="Stretch" Grid.Row="3" TextWrapping="Wrap" Text="Start Address" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageZipFileTextBlock" HorizontalAlignment="Stretch" Grid.Row="4" TextWrapping="Wrap" Text="Zip File" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageEndAddressTextBlock" HorizontalAlignment="Stretch" Grid.Row="5" TextWrapping="Wrap" Text="End Address" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageVersionTextBlock" HorizontalAlignment="Stretch" Grid.Row="6" TextWrapping="Wrap" Text="Version" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PakageTypeTextBlock" HorizontalAlignment="Stretch" Grid.Row="7" TextWrapping="Wrap" Text="Type" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageInstallGroupTextBlock" HorizontalAlignment="Stretch" Grid.Row="8" TextWrapping="Wrap" Text="Install Group" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackagePatchGroupTextBlock" HorizontalAlignment="Stretch" Grid.Row="9" TextWrapping="Wrap" Text="Patch Group" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageLevelTextBlock" HorizontalAlignment="Stretch" Grid.Row="10" TextWrapping="Wrap" Text="Level:" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackagLastUpdatedTextBlock" HorizontalAlignment="Stretch" Grid.Row="11" TextWrapping="Wrap" Text="Last Updated:" VerticalAlignment="Center"/>
+                        <TextBox x:Name="PackageNameDisplay" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <TextBox x:Name="PackagePackageNameDisplay" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <TextBox x:Name="PackageStartAddressDisplay" HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <TextBox x:Name="PackageZipFileDisplay" HorizontalAlignment="Stretch" Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <TextBox x:Name="PackageEndAddressDisplay" HorizontalAlignment="Stretch" Grid.Row="5" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <TextBox x:Name="PackageVersionDisplay" HorizontalAlignment="Stretch" Grid.Row="6" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <ComboBox x:Name="PackageTypeDisplay" HorizontalAlignment="Stretch" Grid.Row="7" Grid.Column="1" VerticalAlignment="Center">
                             <RelhaxModpack:SelectionTypes>none</RelhaxModpack:SelectionTypes>
                             <RelhaxModpack:SelectionTypes>single1</RelhaxModpack:SelectionTypes>
                             <RelhaxModpack:SelectionTypes>single_dropdown1</RelhaxModpack:SelectionTypes>
                             <RelhaxModpack:SelectionTypes>single_dropdown2</RelhaxModpack:SelectionTypes>
                             <RelhaxModpack:SelectionTypes>multi</RelhaxModpack:SelectionTypes>
                         </ComboBox>
-                        <ComboBox Tag="PackageInstallGroupDisplay" x:Name="PackageInstallGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="8" Grid.Column="1" VerticalAlignment="Center"/>
-                        <ComboBox Tag="PackagePatchGroupDisplay" x:Name="PackagePatchGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="9" Grid.Column="1" VerticalAlignment="Center"/>
-                        <TextBlock Tag="PackageLevelDisplay" x:Name="PackageLevelDisplay" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="10" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
-                        <TextBlock Tag="PackageLastUpdatedDisplay" x:Name="PackageLastUpdatedDisplay" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="11" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="PackageInstallGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="8" Grid.Column="1" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="PackagePatchGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="9" Grid.Column="1" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageLevelDisplay" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="10" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
+                        <TextBlock x:Name="PackageLastUpdatedDisplay" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="11" TextWrapping="Wrap" VerticalAlignment="Center"/>
                         <StackPanel Grid.Column="0" Grid.Row="13" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
                             <CheckBox Content="Log At Install" Tag="LogAtInstallCB" x:Name="PackageLogAtInstallDisplay"/>
                             <CheckBox Content="Visible" x:Name="PackageVisibleDisplay" Tag="VisibleCB" Margin="10,0,0,0"/>
@@ -446,43 +446,43 @@
                         <Button Grid.Column="0" Grid.Row="16" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUload_Click" />
                     </Grid>
                 </TabItem>
-                <TabItem Tag="DescriptionTab" x:Name="DescriptionTab" Header="Description">
+                <TabItem x:Name="DescriptionTab" Header="Description">
                     <Grid Background="#FFE5E5E5">
                         <TextBox x:Name="PackageDescriptionDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True" AcceptsReturn="True" AcceptsTab="True"/>
                     </Grid>
                 </TabItem>
-                <TabItem Tag="DevURLTab" x:Name="DevURLTab" Header="Dev URL" Height="22" VerticalAlignment="Bottom">
+                <TabItem x:Name="DevURLTab" Header="Dev URL">
                     <Grid Background="#FFE5E5E5">
                         <!--https://stackoverflow.com/questions/2650144/multiline-for-wpf-textbox-->
                         <TextBox x:Name="PackageDevURLDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,21,0,0" AcceptsReturn="True" AcceptsTab="True" MouseDoubleClick="PackageDevURLDisplay_MouseDoubleClick"/>
                         <TextBlock x:Name="PackageDevURLHeader" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Enter DevUrl's here, separated by new lines" VerticalAlignment="Top"/>
                     </Grid>
                 </TabItem>
-                <TabItem Tag="InternalNotesTab" x:Name="InternalNotesTab" Header="Internal Notes">
+                <TabItem x:Name="InternalNotesTab" Header="Internal Notes">
                     <Grid Background="#FFE5E5E5">
                         <TextBox x:Name="PackageInternalNotesDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True" AcceptsReturn="True" AcceptsTab="True"/>
                     </Grid>
                 </TabItem>
-                <TabItem Tag="UpdateNotesTab" x:Name="UpdateNotesTab" Header="Update Notes">
+                <TabItem x:Name="UpdateNotesTab" Header="Update Notes">
                     <Grid Background="#FFE5E5E5">
                         <TextBox x:Name="PackageUpdateNotesDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True" AcceptsReturn="True" AcceptsTab="True"/>
                     </Grid>
                 </TabItem>
-                <TabItem Tag="DependenciesTab" x:Name="DependenciesTab" Header="Dependencies">
+                <TabItem x:Name="DependenciesTab" Header="Dependencies">
                     <Grid Background="#FFE5E5E5">
                         <ListBox x:Name="PackageDependenciesDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageDependenciesDisplay_SelectionChanged" />
                         <Button Content="Add selected" x:Name="DependenciesAddSelected" Tag="DependenciesAddSelected" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="100" Click="DependenciesAddSelected_Click"/>
                         <Button Content="Remove Selected" x:Name="DependenciesRemoveSelected" Tag="DependenciesRemoveSelected" HorizontalAlignment="Left" Margin="0,235,0,0" VerticalAlignment="Top" Width="100" Click="DependenciesRemoveSelected_Click"/>
-                        <ComboBox Tag="LoadedDependenciesList" x:Name="LoadedDependenciesList" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
+                        <ComboBox x:Name="LoadedDependenciesList" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
                         <TextBlock x:Name="DependenciesLogicTypeTextBlock" HorizontalAlignment="Left" Margin="105,211,0,0" TextWrapping="Wrap" Text="With Logic Type:" VerticalAlignment="Top"/>
-                        <ComboBox Tag="LoadedLogicsList" x:Name="LoadedLogicsList" HorizontalAlignment="Left" Margin="197,209,0,0" VerticalAlignment="Top" Width="50">
+                        <ComboBox x:Name="LoadedLogicsList" HorizontalAlignment="Left" Margin="197,209,0,0" VerticalAlignment="Top" Width="50">
                             <RelhaxModpack:Logic>OR</RelhaxModpack:Logic>
                             <RelhaxModpack:Logic>AND</RelhaxModpack:Logic>
                         </ComboBox>
-                        <CheckBox Tag="DependenciesNotFlag" x:Name="DependenciesNotFlag" Content="Not Flag" HorizontalAlignment="Left" Margin="252,212,0,0" VerticalAlignment="Top"/>
+                        <CheckBox x:Name="DependenciesNotFlag" Content="Not Flag" HorizontalAlignment="Left" Margin="252,212,0,0" VerticalAlignment="Top"/>
                     </Grid>
                 </TabItem>
-                <TabItem Tag="MediasTab" x:Name="MediasTab" Header="Medias">
+                <TabItem x:Name="MediasTab" Header="Medias">
                     <Grid Background="#FFE5E5E5">
                         <ListBox x:Name="PackageMediasDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageMediasDisplay_SelectionChanged" AllowDrop="True" DragOver="PackageMediasDisplay_DragOver" Drop="PackageMediasDisplay_Drop" MouseMove="PackageMediasDisplay_MouseMove" PreviewMouseDown="PackageMediasDisplay_PreviewMouseDown" PreviewMouseUp="PackageMediasDisplay_PreviewMouseUp" ScrollViewer.ScrollChanged="PackageMediasDisplay_ScrollChanged"/>
                         <Button Content="Add Media" x:Name="MediaAddMediaButton" Tag="MediaAddMediaButton" HorizontalAlignment="Left" Margin="0,253,0,0" VerticalAlignment="Top" Width="100" Click="MediaAddMediaButton_Click"/>
@@ -500,7 +500,7 @@
                         <Button x:Name="UploadMediaButton" Content="Upload and add media" HorizontalAlignment="Left" Margin="0,303,0,0" VerticalAlignment="Top" Width="135" Click="UploadMediaButton_Click"/>
                     </Grid>
                 </TabItem>
-                <TabItem Tag="UserDatasTab" x:Name="UserDatasTab" Header="Userdatas">
+                <TabItem x:Name="UserDatasTab" Header="Userdatas">
                     <Grid Background="#FFE5E5E5">
                         <ListBox x:Name="PackageUserdatasDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageUserdatasDisplay_SelectionChanged" />
                         <Button Content="Add Userdata" x:Name="UserdataApplyUsedataButton" Tag="UserdataApplyUsedataButton" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="100" Click="UserdataAddUserdataButton_Click"/>
@@ -509,16 +509,16 @@
                         <TextBox x:Name="UserDataEditBox" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
                     </Grid>
                 </TabItem>
-                <TabItem Tag="TriggersTab" x:Name="TriggersTab" Header="Triggers">
+                <TabItem x:Name="TriggersTab" Header="Triggers">
                     <Grid Background="#FFE5E5E5">
-                        <ListBox Tag="PackageTriggersDisplay" x:Name="PackageTriggersDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageTriggersDisplay_SelectionChanged" />
+                        <ListBox x:Name="PackageTriggersDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageTriggersDisplay_SelectionChanged" />
                         <Button Content="Add selected Trigger" x:Name="TriggerAddSelectedTrigger" Tag="TriggerAddSelectedTrigger" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="120" Click="TriggerAddSelectedTrigger_Click"/>
                         <Button Content="Remove Trigger" x:Name="TriggerRemoveTrigger" Tag="TriggerRemoveTrigger" HorizontalAlignment="Left" Margin="125,209,0,0" VerticalAlignment="Top" Width="120" Click="TriggerRemoveTrigger_Click"/>
                         <ComboBox x:Name="LoadedTriggersComboBox" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
                         <TextBox x:Name="CurrentSupportedTriggers" HorizontalAlignment="Left" Height="63" Margin="0,498,0,0" TextWrapping="Wrap" Text="Currently Supported Triggers:&#xA;build_contour_icons - start the process of building the contour icons atlas files&#xA;create_shortcuts - start the process of creating the shortcuts" VerticalAlignment="Top" Width="487" IsReadOnly="True"/>
                     </Grid>
                 </TabItem>
-                <TabItem Tag="ConflictingPackagesTab" x:Name="ConflictingPackagesTab" Header="Conflicting Packages">
+                <TabItem x:Name="ConflictingPackagesTab" Header="Conflicting Packages">
                     <Grid Background="#FFE5E5E5">
                         <ListBox x:Name="PackageConflictingPackagesDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
                         <Button Content="Remove Conflicting package" x:Name="ConflictingPackagesRemoveConflictingPackage" Tag="ConflictingPackagesButton1" HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="171" Click="ConflictingPackagesRemoveConflictingPackage_Click"/>

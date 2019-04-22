@@ -100,16 +100,6 @@ namespace RelhaxModpack.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] DotNetZip {
-            get {
-                object obj = ResourceManager.GetObject("DotNetZip", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap EMail {
@@ -221,16 +211,6 @@ namespace RelhaxModpack.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] NAudio {
-            get {
-                object obj = ResourceManager.GetObject("NAudio", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Microsoft Public License (Ms-PL)
         ///
         ///This license governs use of the accompanying software. If you use the software, you accept this license. If you do not accept the license, do not use the software.
@@ -246,16 +226,6 @@ namespace RelhaxModpack.Properties {
         internal static string NAudio1 {
             get {
                 return ResourceManager.GetString("NAudio1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] Newtonsoft_Json {
-            get {
-                object obj = ResourceManager.GetObject("Newtonsoft_Json", resourceCulture);
-                return ((byte[])(obj));
             }
         }
         

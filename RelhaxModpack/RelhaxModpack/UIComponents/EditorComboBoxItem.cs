@@ -9,11 +9,16 @@ namespace RelhaxModpack.UIComponents
     public class EditorComboBoxItem
     {
         public DatabasePackage Package { get; set; }
-        public string DisplayName { get; set; }
-        public EditorComboBoxItem(DatabasePackage package, string display)
+        public string DisplayName
+        {
+            get
+            {
+                return Package == null ? "(null)" : Package.PackageName;
+            }
+        }
+        public EditorComboBoxItem(DatabasePackage package)
         {
             Package = package;
-            DisplayName = display;
         }
         public override string ToString()
         {

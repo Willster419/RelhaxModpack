@@ -16,19 +16,19 @@
         <TextBlock x:Name="SearchTB" HorizontalAlignment="Right" Margin="0,52,270,0" TextWrapping="Wrap" Text="Search for a mod..." VerticalAlignment="Top" Height="22" Width="251" TextAlignment="Right" Padding="3" Tag="SearchTB" />
         <ComboBox x:Name="SearchCB" HorizontalAlignment="Right" Margin="0,52,10,0" VerticalAlignment="Top" Width="255" PreviewKeyDown="SearchCB_PreviewKeyDown" KeyUp="SearchCB_KeyUp" IsEditable="True" IsTextSearchEnabled="False" PreviewMouseDown="SearchCB_PreviewMouseDown"/>
         <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnContinueInstallation" Tag="ContinueButton" >
-            <TextBlock x:Name="ContinueButtonLabel" Text="Text that can take up to two lines" TextWrapping="Wrap" TextAlignment="Center"/>
+            <TextBlock x:Name="ContinueButtonLabel" Text="Continue" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
         <Button HorizontalAlignment="Right" Margin="0,0,135,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnCancelInstallation" Tag="CancelButton" >
-            <TextBlock x:Name="CancelButtonLabel" Text="Text that can take up to two lines" TextWrapping="Wrap" TextAlignment="Center"/>
+            <TextBlock x:Name="CancelButtonLabel" Text="Cancel" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
         <Button HorizontalAlignment="Right" Margin="0,0,260,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnSaveSelectionClick" Tag="SaveSelectionButton" >
-            <TextBlock x:Name="SaveSelectionButtonLabel" Text="Text that can take up to two lines" TextWrapping="Wrap" TextAlignment="Center"/>
+            <TextBlock x:Name="SaveSelectionButtonLabel" Text="Save selection to file" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
         <Button HorizontalAlignment="Right" Margin="0,0,385,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnLoadSelectionClick" Tag="LoadSelectionButton" >
-            <TextBlock x:Name="LoadSelectionButtonLabel" Text="Text that can take up to two lines" TextWrapping="Wrap" TextAlignment="Center"/>
+            <TextBlock x:Name="LoadSelectionButtonLabel" Text="Load Selection" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
         <Button HorizontalAlignment="Right" Margin="0,0,510,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnClearSelectionsClick" Tag="ClearSelectionsButton">
-            <TextBlock x:Name="ClearSelectionsButtonLabel" Text="Text that can take up to two lines" TextWrapping="Wrap" TextAlignment="Center"/>
+            <TextBlock x:Name="ClearSelectionsButtonLabel" Text="Clear Selections" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
         <CheckBox Content="This tab only" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,79,10,0" x:Name="SearchThisTabOnlyCB" Tag="SearchThisTabOnlyCB"/>
     </Grid>

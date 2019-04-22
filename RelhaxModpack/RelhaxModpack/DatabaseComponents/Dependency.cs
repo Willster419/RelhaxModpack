@@ -8,28 +8,16 @@ namespace RelhaxModpack
     //i.e. and sound mods require the sound memory to be increased
     public class Dependency : DatabasePackage
     {
+        #region XML parsing
 
         private static readonly List<string> DependencyElementsToXmlParseNodes = new List<string>()
         {
             nameof(Dependencies)
         };
 
-        //list of linked mods and configs that use this dependency at install time
-        public List<DatabaseLogic> DatabasePackageLogic = new List<DatabaseLogic>();
-        //list of dependnecies this dependency calls on
-        public List<DatabaseLogic> Dependencies = new List<DatabaseLogic>();
-        //legacy compatibility feature: set this for when loading from legacy database type and is was of type "logicalDependency"
-        public bool wasLogicalDependencyLegacy = false;
-        //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/versioning-with-the-override-and-new-keywords
-
-        public Dependency()
-        {
-            //https://stackoverflow.com/questions/326223/overriding-fields-or-properties-in-subclasses
-            InstallGroup = 2;
-        }
-
         new public static List<string> FieldsToXmlParseAttributes()
         {
+            //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/versioning-with-the-override-and-new-keywords
             return DatabasePackage.FieldsToXmlParseAttributes();
         }
 
@@ -37,5 +25,25 @@ namespace RelhaxModpack
         {
             return DatabasePackage.FieldsToXmlParseNodes().Concat(DependencyElementsToXmlParseNodes).ToList();
         }
+        #endregion
+
+        #region Database Properties
+
+        //list of linked mods and configs that use this dependency at install time
+        public List<DatabaseLogic> DatabasePackageLogic = new List<DatabaseLogic>();
+
+        //list of dependnecies this dependency calls on
+        public List<DatabaseLogic> Dependencies = new List<DatabaseLogic>();
+
+        //legacy compatibility feature: set this for when loading from legacy database type and is was of type "logicalDependency"
+        public bool wasLogicalDependencyLegacy = false;
+        
+        public Dependency()
+        {
+            //https://stackoverflow.com/questions/326223/overriding-fields-or-properties-in-subclasses
+            //the custom constructor will be called after the base one
+            InstallGroup = 2;
+        }
+        #endregion
     }
 }

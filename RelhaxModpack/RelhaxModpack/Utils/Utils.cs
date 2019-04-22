@@ -21,6 +21,7 @@ using System.Xml;
 using System.Xml.Linq;
 using IWshRuntimeLibrary;
 using File = System.IO.File;
+using System.Windows.Threading;
 
 namespace RelhaxModpack
 {
@@ -195,6 +196,23 @@ namespace RelhaxModpack
                 return true;
             return false;
         }
+
+        //https://stackoverflow.com/questions/37787388/how-to-force-a-ui-update-during-a-lengthy-task-on-the-ui-thread
+        //https://stackoverflow.com/questions/2329978/the-calling-thread-must-be-sta-because-many-ui-components-require-this
+        public static void AllowUIToUpdate()
+        {
+            DispatcherFrame frame = new DispatcherFrame();
+            Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Render, new DispatcherOperationCallback(delegate (object parameter)
+            {
+                frame.Continue = false;
+                return null;
+            }), null);
+
+            Dispatcher.PushFrame(frame);
+            //EDIT:
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
+                                          new Action(delegate { }));
+        }
         #endregion
 
         #region File Utilities
@@ -312,7 +330,7 @@ namespace RelhaxModpack
                 }
             }
         }
-        //TODO
+        
         public static string SizeSuffix(ulong value, uint decimalPlaces = 1, bool sizeSuffix = false)
         {
             if (value == 0)
@@ -351,6 +369,13 @@ namespace RelhaxModpack
             else
                 return string.Format("{0:n" + decimalPlaces + "}", adjustedSize);
         }
+
+        public static long GetFilesize(string filepath)
+        {
+            //https://stackoverflow.com/questions/1380839/how-do-you-get-the-file-size-in-c
+            return new FileInfo(filepath).Length;
+        }
+
         /// <summary>
         /// Checks if a filename has invalid characters and replaces them with underscores
         /// </summary>
@@ -1357,6 +1382,7 @@ namespace RelhaxModpack
 
         public static void CreateShortcut(Shortcut shortcut, StringBuilder sb)
         {
+            Logging.Info(shortcut.ToString());
             Logging.Info("Creating shortcut {0}",shortcut.Name);
             //build the full macro for path (target) and name (also filename)
             string target = MacroReplace(shortcut.Path, ReplacementTypes.FilePath);
@@ -1479,6 +1505,38 @@ namespace RelhaxModpack
             folderRequest.Credentials = credentials;
             using (FtpWebResponse response = (FtpWebResponse)await folderRequest.GetResponseAsync())
             { }
+        }
+
+        public static long FTPGetFilesize(string address, ICredentials credentials)
+        {
+            long result = -1;
+            // Get the object used to communicate with the server.
+            //https://stackoverflow.com/questions/4591059/download-file-from-ftp-with-progress-totalbytestoreceive-is-always-1
+            WebRequest request = WebRequest.Create(address);
+            request.Method = WebRequestMethods.Ftp.GetFileSize;
+            request.Credentials = credentials;
+            using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
+            {
+                //Stream responseStream = response.GetResponseStream();
+                result = response.ContentLength;
+            }
+            return result;
+        }
+
+        public static async Task<long> FTPGetFilesizeAsync(string address, ICredentials credentials)
+        {
+            long result = -1;
+            // Get the object used to communicate with the server.
+            //https://stackoverflow.com/questions/4591059/download-file-from-ftp-with-progress-totalbytestoreceive-is-always-1
+            WebRequest request = WebRequest.Create(address);
+            request.Method = WebRequestMethods.Ftp.GetFileSize;
+            request.Credentials = credentials;
+            using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
+            {
+                //Stream responseStream = response.GetResponseStream();
+                result = response.ContentLength;
+            }
+            return result;
         }
         #endregion
 

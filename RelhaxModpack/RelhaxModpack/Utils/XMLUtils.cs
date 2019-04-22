@@ -9,6 +9,9 @@ using System.Xml.XPath;
 using System.Windows;
 using System.Reflection;
 using System.ComponentModel;
+using System.Text;
+using Ionic.Zip;
+using RelhaxModpack.XmlBinary;
 
 namespace RelhaxModpack
 {
@@ -255,7 +258,9 @@ namespace RelhaxModpack
             //determine which version of the document we are loading. allows for loading of different versions if structure change
             //a blank value is assumed to be pre 2.0 version of the database
             string versionString = GetXMLStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@documentVersion");
-            Logging.WriteToLog(nameof(versionString) + "=" + versionString, Logfiles.Application, LogLevel.Debug);
+            Logging.WriteToLog(nameof(versionString) + "=" + (string.IsNullOrEmpty(versionString)? "(null)" : versionString), Logfiles.Application, LogLevel.Debug);
+            if (string.IsNullOrEmpty(versionString))
+                Logging.Warning("versionString is null or empty, treating as legacy");
             switch(versionString)
             {
                 case "1.1":
@@ -548,10 +553,68 @@ namespace RelhaxModpack
             return doc;
         }
 
-        public static void UnpackXmlFile(XmlUnpack xmlUnpack)
+        public static void UnpackXmlFile(XmlUnpack xmlUnpack, StringBuilder unpackBuilder)
         {
-            throw new BadMemeException("need to implement this still");
-            //TODO
+            //log info for debugging if need be
+            Logging.Info(xmlUnpack.ToString());
+
+            //check if new destination name for replacing
+            string destinationFilename = string.IsNullOrWhiteSpace(xmlUnpack.NewFileName) ? xmlUnpack.FileName : xmlUnpack.NewFileName;
+            string destinationCompletePath = Path.Combine(xmlUnpack.ExtractDirectory, destinationFilename);
+            string sourceCompletePath = Path.Combine(xmlUnpack.DirectoryInArchive, xmlUnpack.FileName);
+
+            //if the destination file already exists, then don't copy it over
+            if(File.Exists(destinationCompletePath))
+            {
+                Logging.Info("Replacement file already exists, skipping");
+                return;
+            }
+
+            //if the package entry is empty, then it's just a file copy
+            if(string.IsNullOrWhiteSpace(xmlUnpack.Pkg))
+            {
+                if (File.Exists(sourceCompletePath))
+                    File.Copy(sourceCompletePath, destinationCompletePath);
+                Logging.Info("file copied");
+            }
+            else
+            {
+                if(!File.Exists(xmlUnpack.Pkg))
+                {
+                    Logging.Error("packagefile does not exist, skipping");
+                    return;
+                }
+                using (ZipFile zip = new ZipFile(xmlUnpack.Pkg))
+                {
+                    //get the files that match the specified path from the xml entry
+                    string zipPath = Path.Combine(xmlUnpack.DirectoryInArchive, xmlUnpack.FileName).Replace(@"\", @"/");
+                    ZipEntry[] matchingEntries = zip.Where(zipp => zipp.FileName.Equals(zipPath)).ToArray();
+                    Logging.Debug("matching zip entries: {0}", matchingEntries.Count());
+                    if(matchingEntries.Count() > 0)
+                    {
+                        foreach(ZipEntry entry in matchingEntries)
+                        {
+                            //change the name to the destination
+                            entry.FileName = destinationFilename;
+
+                            //extract to disk and log
+                            entry.Extract(xmlUnpack.ExtractDirectory, ExtractExistingFileAction.DoNotOverwrite);
+                            unpackBuilder.AppendLine(destinationCompletePath);
+                            Logging.Info("entry extracted: {0}", destinationFilename);
+                        }
+                    }
+                }
+            }
+            Logging.Info("unpacking xml binary file (if binary)");
+            try
+            {
+                XmlBinaryHandler binaryHandler = new XmlBinaryHandler();
+                binaryHandler.UnpackXmlFile(destinationCompletePath);
+            }
+            catch (Exception xmlUnpackExceptino)
+            {
+                Logging.Exception(xmlUnpackExceptino.ToString());
+            }
         }
         #endregion
 
