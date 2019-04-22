@@ -29,7 +29,6 @@ namespace RelhaxModpack
     public static class PatchUtils
     {
         #region Statics
-        private static int GenericTraverse = 0;
         //note that the "\\" is for escaping. it means that \\ is acually "\"
         private static string XVMBootFileLoc1 = "\\res_mods\\configs\\xvm\\xvm.xc";
         private static string XVMBootFileLoc2 = "\\mods\\configs\\xvm\\xvm.xc";
@@ -44,6 +43,15 @@ namespace RelhaxModpack
                 Logging.Warning("File {0} not found", p.CompletePath);
                 return;
             }
+
+            //if from the editor, enable verbose logging (allows it to get debug log statements)
+            bool tempVerboseLoggingSetting = ModpackSettings.VerboseLogging;
+            if(p.FromEditor && !ModpackSettings.VerboseLogging)
+            {
+                Logging.Debug("p.FromEditor=true and ModpackSettings.VerboseLogging=false, setting to true for duration of patch method");
+                ModpackSettings.VerboseLogging = true;
+            }
+
             //macro parsing needs to go here
             Logging.Info(p.DumpPatchInfoForLog,Logfiles.Application);
 
@@ -52,7 +60,26 @@ namespace RelhaxModpack
             {
                 case "regex":
                 case "regx":
-                    RegxPatch(p);
+                    if (p.Lines == null || p.Lines.Count() == 0)
+                    {
+                        Logging.Debug("Running regex patch as all lines, line by line");
+                        RegxPatch(p, null);
+                    }
+                    else if (p.Lines.Count() == 1 && p.Lines[0].Trim().Equals("-1"))
+                    {
+                        Logging.Debug("Running regex patch as whole file");
+                        RegxPatch(p, new int[] { -1 });
+                    }
+                    else
+                    {
+                        Logging.Debug("Running regex patch as specified lines, line by line");
+                        int[] lines = new int[p.Lines.Count()];
+                        for (int i = 0; i < p.Lines.Count(); i++)
+                        {
+                            lines[i] = int.Parse(p.Lines[i].Trim());
+                        }
+                        RegxPatch(p, lines);
+                    }
                     break;
                 case "xml":
                     XMLPatch(p);
@@ -60,12 +87,18 @@ namespace RelhaxModpack
                 case "json":
                     JSONPatch(p);
                     break;
+                case "xvm":
+                    throw new BadMemeException("xvm patches are not supported, please use the json patch method");
             }
+            Logging.Debug("patch complete");
+            //set the verbose setting back
+            Logging.Debug("temp logging setting={0}, ModpackSettings.VerboseLogging={1}, setting logging back to temp");
+            ModpackSettings.VerboseLogging = tempVerboseLoggingSetting;
         }
         #endregion
 
         #region XML
-        public static void XMLPatch(Patch p)
+        private static void XMLPatch(Patch p)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(p.CompletePath);
@@ -78,6 +111,7 @@ namespace RelhaxModpack
                 if (node.NodeType == XmlNodeType.XmlDeclaration)
                 {
                     hadHeader = true;
+                    break;
                 }
             }
             //determines which version of pathing will be done
@@ -86,6 +120,7 @@ namespace RelhaxModpack
                 case "add":
                     //check to see if it's already there
                     //make the full node path
+                    Logging.Debug("checking if xml element to add alreay exists, creating full xml path");
                     string[] tempp = p.Replace.Split('/');
                     string fullNodePath = p.Path;
                     for (int i = 0; i < tempp.Count() - 1; i++)
@@ -93,6 +128,7 @@ namespace RelhaxModpack
                         fullNodePath = fullNodePath + "/" + tempp[i];
                     }
                     //in each node check if the element exist with the replace innerText
+                    Logging.Debug("full path created as '{0}'", fullNodePath);
                     XmlNodeList currentSoundBanksAdd = doc.SelectNodes(fullNodePath);
                     foreach (XmlElement e in currentSoundBanksAdd)
                     {
@@ -100,12 +136,21 @@ namespace RelhaxModpack
                         //remove any tabs and whitespaces first before testing
                         innerText = innerText.Trim();
                         if (e.InnerText.Equals(innerText))
+                        {
+                            Logging.Debug("found entry with matching trimmed text, aborting");
                             return;
+                        }
                     }
+                    Logging.Debug("entry not found, preceding with add");
                     //get to the node where to add the element
                     XmlNode reff = doc.SelectSingleNode(p.Path);
+                    if(reff == null)
+                    {
+                        Logging.Warning("patch path returns null!");
+                    }
                     //create node(s) to add to the element
                     string[] temp = p.Replace.Split('/');
+                    Logging.Debug("Total inner xml entries to make: {0}", temp.Count());
                     List<XmlElement> nodes = new List<XmlElement>();
                     for (int i = 0; i < temp.Count() - 1; i++)
                     {
@@ -114,6 +159,7 @@ namespace RelhaxModpack
                         {
                             //last node with actual data to add
                             string data = temp[temp.Count() - 1];
+                            Logging.Debug("TODO: make xml macro replace system");
                             data = data.Replace(@"[sl]", @"/");
                             ele.InnerText = data;
                         }
@@ -133,6 +179,7 @@ namespace RelhaxModpack
                         XmlElement child = nodes[i];
                         parrent.InsertAfter(child, parrent.FirstChild);
                     }
+                    Logging.Debug("saving to disk");
                     //save it
                     if (File.Exists(p.CompletePath))
                         File.Delete(p.CompletePath);
@@ -141,24 +188,33 @@ namespace RelhaxModpack
 
                 case "edit":
                     //check to see if it's already there
+                    Logging.Debug("checking if element already exists");
                     XmlNodeList currentSoundBanksEdit = doc.SelectNodes(p.Path);
                     foreach (XmlElement e in currentSoundBanksEdit)
                     {
                         string innerText = e.InnerText;
                         innerText = innerText.Trim();
                         if (e.InnerText.Equals(p.Replace))
+                        {
+                            Logging.Debug("element inner text equals replace value, aborting");
                             return;
+                        }
                     }
                     //find and replace
-                    //XmlNodeList rel1Edit = doc.SelectNodes(xpath);
+                    Logging.Debug("element text does not equal replace, continue");
                     foreach (XmlElement eee in currentSoundBanksEdit)
                     {
                         if (Regex.IsMatch(eee.InnerText, p.Search))
                         {
                             eee.InnerText = p.Replace;
                         }
+                        else
+                        {
+                            Logging.Warning("Regex never matched");
+                        }
                     }
                     //save it
+                    Logging.Debug("saving to disk");
                     if (File.Exists(p.CompletePath)) File.Delete(p.CompletePath);
                     doc.Save(p.CompletePath);
                     break;
@@ -172,13 +228,22 @@ namespace RelhaxModpack
                         {
                             e.RemoveAll();
                         }
+                        else
+                        {
+                            Logging.Warning("Regex never matched");
+                        }
                     }
                     //save it
-                    if (File.Exists(p.CompletePath)) File.Delete(p.CompletePath);
+                    Logging.Debug("first temp save to disk");
+                    if (File.Exists(p.CompletePath))
+                        File.Delete(p.CompletePath);
                     doc.Save(p.CompletePath);
                     //remove empty elements
+                    Logging.Debug("Removing any empty xml elements");
+                    Logging.Debug("TODO: removing empty elements can be optimized");
                     XDocument doc2 = XDocument.Load(p.CompletePath);
                     doc2.Descendants().Where(e => string.IsNullOrEmpty(e.Value)).Remove();
+                    Logging.Debug("saving to disk");
                     if (File.Exists(p.CompletePath))
                         File.Delete(p.CompletePath);
                     doc2.Save(p.CompletePath);
@@ -193,14 +258,17 @@ namespace RelhaxModpack
                 if (node.NodeType == XmlNodeType.XmlDeclaration)
                 {
                     hasHeader = true;
+                    break;
                 }
             }
             //if not had header and has header, remove header
             //if had header and has header, no change
             //if not had header and not has header, no change
             //if had header and not has header, no change
+            Logging.Debug("hadHeader={0}, hasHeader={1}", hadHeader, hasHeader);
             if (!hadHeader && hasHeader)
             {
+                Logging.Debug("removing header");
                 XmlDocument doc4 = new XmlDocument();
                 doc4.Load(p.CompletePath);
                 foreach (XmlNode node in doc4)
@@ -208,17 +276,19 @@ namespace RelhaxModpack
                     if (node.NodeType == XmlNodeType.XmlDeclaration)
                     {
                         doc4.RemoveChild(node);
+                        break;
                     }
                 }
                 doc4.Save(p.CompletePath);
             }
+            Logging.Debug("xml patch completed successfully");
         }
         #endregion
 
         #region REGEX
         //method to patch a standard text or json file
         //fileLocation is relative to res_mods folder
-        public static void RegxPatch(Patch p, int lineNumber = 0)
+        private static void RegxPatch(Patch p, int[] lines)
         {
             //replace all "fake escape characters" with real escape characters
             //TODO: fix newlines and add warning for search and replace
@@ -226,39 +296,43 @@ namespace RelhaxModpack
             p.Search = p.Search.Replace(@"\r", "\r");
             p.Search = p.Search.Replace(@"\t", "\t");
 
+            Logging.Debug("TODO: fixed macro replace system");
+            //p.Search = Utils.MacroReplace(p.Search, ReplacementTypes.TextUnescape);
+
             //load file from disk...
             string file = File.ReadAllText(p.CompletePath);
             //parse each line into an index array
             string[] fileParsed = file.Split('\n');
             StringBuilder sb = new StringBuilder();
-            if (lineNumber == 0)
-            //search entire file and replace each instance
+            try
             {
-                bool everReplaced = false;
-                for (int i = 0; i < fileParsed.Count(); i++)
+                if (lines == null)
                 {
-                    if (Regex.IsMatch(fileParsed[i], p.Search))
+                    //search entire file and replace each instance
+                    bool everReplaced = false;
+                    for (int i = 0; i < fileParsed.Count(); i++)
                     {
-                        fileParsed[i] = Regex.Replace(fileParsed[i], p.Search, p.Replace);
-                        fileParsed[i] = Regex.Replace(fileParsed[i], "newline", "\n");
-                        //fileParsed[i] = Regex.Replace(fileParsed[i], @"\n", "\n");
-                        everReplaced = true;
+                        if (Regex.IsMatch(fileParsed[i], p.Search))
+                        {
+                            Logging.Debug("line {0} matched ({1})", i + 1, fileParsed[i]);
+                            fileParsed[i] = Regex.Replace(fileParsed[i], p.Search, p.Replace);
+                            fileParsed[i] = Regex.Replace(fileParsed[i], "newline", "\n");
+                            //fileParsed[i] = Regex.Replace(fileParsed[i], @"\n", "\n");
+                            everReplaced = true;
+                        }
+                        sb.Append(fileParsed[i] + "\n");
                     }
-                    sb.Append(fileParsed[i] + "\n");
+                    if (!everReplaced)
+                    {
+                        Logging.WriteToLog("Regex never matched", Logfiles.Application, LogLevel.Warning);
+                        return;
+                    }
                 }
-                if (!everReplaced)
+                else if (lines.Count() == 1 && lines[0] == -1)
+                //search entire file and string and make one giant regex replacement
                 {
-                    Logging.WriteToLog("Regex never matched, is this the intent?", Logfiles.Application, LogLevel.Warning);
-                    return;
-                }
-            }
-            else if (lineNumber == -1)
-            //search entire file and string and make one giant regex replacement
-            {
-                //but remove newlines first
-                file = Regex.Replace(file, "\n", "newline");
-                try
-                {
+                    //but remove newlines first
+                    file = Regex.Replace(file, "\n", "newline");
                     if (Regex.IsMatch(file, p.Search))
                     {
                         file = Regex.Replace(file, p.Search, p.Replace);
@@ -272,43 +346,47 @@ namespace RelhaxModpack
                         return;
                     }
                 }
-                catch (ArgumentException)
+                else
                 {
-                    Logging.WriteToLog("Invalid regex command", Logfiles.Application, LogLevel.Error);
+                    bool everReplaced = false;
+                    for (int i = 0; i < fileParsed.Count(); i++)
+                    {
+                        //factor for "off by one" (no line number 0 in the text file)
+                        if (lines.Contains(i+1))
+                        {
+                            if (Regex.IsMatch(fileParsed[i], p.Search))
+                            {
+                                Logging.Debug("line {0} matched ({1})", i + 1, fileParsed[i]);
+                                fileParsed[i] = Regex.Replace(fileParsed[i], p.Search, p.Replace);
+                                fileParsed[i] = Regex.Replace(fileParsed[i], "newline", "\n");
+                                //fileParsed[i] = Regex.Replace(fileParsed[i], @"\n", "\n");
+                                everReplaced = true;
+                            }
+                        }
+                        sb.Append(fileParsed[i] + "\n");
+                    }
+                    if (!everReplaced)
+                    {
+                        Logging.WriteToLog("Regex never matched", Logfiles.Application, LogLevel.Warning);
+                        return;
+                    }
                 }
             }
-            else
+            catch (ArgumentException ex)
             {
-                bool everReplaced = false;
-                for (int i = 0; i < fileParsed.Count(); i++)
-                {
-                    if (i == lineNumber - 1)
-                    {
-                        string value = fileParsed[i];
-                        if (Regex.IsMatch(value, p.Search))
-                        {
-                            fileParsed[i] = Regex.Replace(fileParsed[i], p.Search, p.Replace);
-                            fileParsed[i] = Regex.Replace(fileParsed[i], "newline", "\n");
-                            //fileParsed[i] = Regex.Replace(fileParsed[i], @"\n", "\n");
-                        }
-                    }
-                    sb.Append(fileParsed[i] + "\n");
-                }
-                if (!everReplaced)
-                {
-                    Logging.WriteToLog("Regex never matched, is this the intent?", Logfiles.Application, LogLevel.Warning);
-                    return;
-                }
+                Logging.WriteToLog("Invalid regex command", Logfiles.Application, LogLevel.Error);
+                Logging.Debug(ex.ToString());
             }
             //save the file back into the string and then the file
             file = sb.ToString();
             File.WriteAllText(p.CompletePath, file);
+            Logging.Debug("regex patch completed successfully");
         }
         #endregion
 
         #region JSON
         //method to parse json files
-        public static void JSONPatch(Patch p)
+        private static void JSONPatch(Patch p)
         {
             //try to convert the new value to a bool or an int or double first
             bool newValueBool = false;
@@ -317,6 +395,9 @@ namespace RelhaxModpack
             bool useBool = false;
             bool useInt = false;
             bool useDouble = false;
+            Logging.Debug("TODO: update json patch replace syntax");
+            Logging.Debug("TODO: re-write value type replace system");
+            Logging.Debug("TODO: fix handling of \"ref\" json keywords");
             //legacy compatibility: many json patches don't have a valid regex systax for p.search, assume they mean a forced replace
             if (p.Search.Equals(""))
                 p.Search = @".*";
@@ -681,18 +762,23 @@ namespace RelhaxModpack
                     List<JValue> Jresults = new List<JValue>();
                     foreach(JToken jt in results)
                     {
-                        if(!(jt is JValue))
+                        if(jt is JValue Jvalue)
                         {
-                            //Logging.WriteToLog("ERROR: returned token for p.path is not a JValue, aborting patch");
+                            Jresults.Add(Jvalue);
+                        }
+                        else
+                        {
                             Logging.WriteToLog(string.Format("Expected results of type JValue, returned {0}", jt.Type.ToString()),
                                 Logfiles.Application, LogLevel.Error);
                             return;
                         }
-                        Jresults.Add((JValue)jt);
                     }
-                    //Logging.Manager("DEBUG: number of Jvalues: " + Jresults.Count);
+                    Logging.Debug("number of Jvalues: {0}", Jresults.Count);
                     if (Jresults.Count == 0)
+                    {
+                        Logging.Debug("Jresults count is 0 (is this the intent?)");
                         return;
+                    }
                     foreach(JValue jv in Jresults)
                     {
                         string jsonValue = "" + jv.Value;
@@ -940,6 +1026,7 @@ namespace RelhaxModpack
             else
             {
                 Logging.WriteToLog(string.Format("ERROR: Unknown json patch mode, {0}", p.Mode),Logfiles.Application,LogLevel.Error);
+                return;
             }
 
             StringBuilder rebuilder = new StringBuilder();
@@ -987,62 +1074,7 @@ namespace RelhaxModpack
                 .Replace(@"[dollar]", @"$")
                 .Replace(@"[rbracket]", @"}");
             File.WriteAllText(p.CompletePath, toWrite);
-        }
-        //returns the folder(s) to get to the xvm config folder directory
-        //TODO: use this for followPath setting which itself is TODO
-        public static string GetXVMBootLoc(string tanksLocation, string customBootFileLoc = null)
-        {
-            throw new BadMemeException("you broke this remember?");
-            string[] possibleXVMBootLocs = new string[] { XVMBootFileLoc1, XVMBootFileLoc2 };
-            bool bootfileFound = false;
-            string bootFile = string.Empty;
-            foreach (string s in possibleXVMBootLocs)
-            {
-                bootFile = tanksLocation + s;
-                //TODO: WHY DOES PATH COMBING NOT WORK
-                //string bootFile = Path.Combine(tanksLocation, XVMBootFileLoc1);
-                if (customBootFileLoc != null)
-                    bootFile = customBootFileLoc;
-                if (!File.Exists(bootFile))
-                {
-                    Logging.WriteToLog(string.Format("xvm config boot file does not exist at {0}", bootFile), Logfiles.Application, LogLevel.Warning);
-                }
-                else
-                    bootfileFound = true;
-            }
-            if(!bootfileFound)
-            {
-                Logging.WriteToLog("boot file never found, aborting patch", Logfiles.Application, LogLevel.Warning);
-                return null;
-            }
-            Logging.WriteToLog("xvm boot file located to parse");
-            string fileContents = File.ReadAllText(bootFile);
-            //patch block comments out
-            fileContents = Regex.Replace(fileContents, @"\/\*.*\*\/", "", RegexOptions.Singleline);
-            //patch single line comments out
-            string[] removeComments = fileContents.Split('\n');
-            StringBuilder bootBuilder = new StringBuilder();
-            foreach (string s in removeComments)
-            {
-                if (Regex.IsMatch(s, @"\/\/.*$"))
-                    continue;
-                bootBuilder.Append(s + "\n");
-            }
-            //fileContents = bootBuilder.ToString();
-            //read to the actual file path
-            //GenericTraverse = 0;
-            //ReadUntilGeneric(fileContents, @"^[ \t]*\$[ \t]*{[ \t]*""");
-            //now read untill the next quote for the temp path
-            //string filePath = ReadUntilGeneric(fileContents, "\"");
-            //flip the folder path things
-            //filePath = Regex.Replace(filePath, "/", "\\");
-            //remove the last one
-            //filePath = filePath.Substring(0, filePath.Length - 1);
-            //filePath = filePath.Trim();
-            //GenericTraverse = 0;
-            //string theNewPath = Path.GetDirectoryName(filePath);
-            //return theNewPath;
-            return null;
+            Logging.Debug("json patch completed successfully");
         }
         #endregion
     }

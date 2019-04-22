@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace RelhaxModpack
 {
@@ -51,6 +52,9 @@ namespace RelhaxModpack
         /// </summary>
         ApplicationHalt
     }
+
+    public delegate void LoggingUIThreadReport(string message);
+
     /// <summary>
     /// A static constant refrence to common logging variables and common log refrences
     /// </summary>
@@ -77,7 +81,7 @@ namespace RelhaxModpack
         /// </summary>
         public const string UninstallLogFilename = "uninstallRelhaxFiles.log";
         public const string UninstallLogFilenameBackup = "uninstallRelhaxFiles.bak";
-        private const string ApplicationLogfileTimestamp = "yyyy-MM-dd HH:mm:ss.fff";
+        public const string ApplicationLogfileTimestamp = "yyyy-MM-dd HH:mm:ss.fff";
         /// <summary>
         /// The header and end that shows the start and stop of the application log file
         /// </summary>
@@ -95,6 +99,7 @@ namespace RelhaxModpack
         /// </summary>
         private static Logfile UninstallLogfile;
         private static bool FailedToWriteToLogWindowShown = false;
+        public static event LoggingUIThreadReport OnLoggingUIThreadReport;
         /// <summary>
         /// Initialize the logging subsystem for the appilcation
         /// </summary>
@@ -149,6 +154,19 @@ namespace RelhaxModpack
                 case Logfiles.Application:
                 default:
                     return ApplicationLogfile == null ? true : false;
+            }
+        }
+        public static bool IsLogOpen(Logfiles file)
+        {
+            switch (file)
+            {
+                case Logfiles.Installer:
+                    return InstallLogfile.CanWrite;
+                case Logfiles.Uninstaller:
+                    return UninstallLogfile.CanWrite;
+                case Logfiles.Application:
+                default:
+                    return ApplicationLogfile.CanWrite;
             }
         }
         /// <summary>
@@ -212,9 +230,17 @@ namespace RelhaxModpack
                 return;
             }
             if (logfiles == Logfiles.Application)
-                fileToWriteTo.Write(message, logLevel);
+            {
+                string temp = fileToWriteTo.Write(message, logLevel);
+                if(OnLoggingUIThreadReport != null)
+                {
+                    OnLoggingUIThreadReport(temp);
+                }
+            }
             else
+            {
                 fileToWriteTo.Write(message);
+            }
         }
 
         public static void WriteToLog(string messageFormat, Logfiles logfile, LogLevel level, params object[] args)
@@ -270,6 +296,26 @@ namespace RelhaxModpack
         public static void Exception(string message, params object[] args)
         {
             WriteToLog(message, Logfiles.Application, LogLevel.Exception, args);
+        }
+
+        public static void Installer(string message)
+        {
+            WriteToLog(message, Logfiles.Installer, LogLevel.Info);//logLevel does not matter if it's not the application
+        }
+
+        public static void Installer(string message, params object[] args)
+        {
+            WriteToLog(message, Logfiles.Installer, LogLevel.Info, args);
+        }
+
+        public static void Uninstaller(string message)
+        {
+            WriteToLog(message, Logfiles.Uninstaller, LogLevel.Info);
+        }
+
+        public static void Uninstaller(string message, params object[] args)
+        {
+            WriteToLog(message, Logfiles.Uninstaller, LogLevel.Info);
         }
     }
 }

@@ -108,14 +108,19 @@ namespace RelhaxModpack
         /// <summary>
         /// toggle if the application should automatically save the last selected config to also be automatically loaded upon selection load
         /// </summary>
-        public static bool SaveLastConfig = false;
+        public static bool SaveLastSelection = false;
         /// <summary>
         /// toggle if the application should save user cache save data like session stats, or auto equip configs
         /// </summary>
         public static bool SaveUserData = false;
+
         public static bool SaveDisabledMods = true;
+
         public static bool DisplayUserModsWarning = true;
+
         public static bool VerboseLogging = false;
+
+        public static bool AllowStatisticDataGather = true;
         /// <summary>
         /// toggle for each view if the borders around the child selection options should show
         /// </summary>
@@ -160,9 +165,16 @@ namespace RelhaxModpack
         /// toggle export mode
         /// </summary>
         public static bool ExportMode = false;
+
         public static bool ForceEnabled = false;
+
         public static bool ForceVisible = false;
+
         public static bool DisableTriggers = false;
+
+        public static bool OneClickInstall = false;
+
+        public static bool AutoInstall = false;
         /// <summary>
         /// Toggle the advanced installation progress window
         /// </summary>
@@ -204,6 +216,9 @@ namespace RelhaxModpack
         /// the width, in pixels, of the Preview window
         /// </summary>
         public static int PreviewWidth = 450;
+
+        public static string AutoOneclickSelectionFilePath = string.Empty;
+
         /// <summary>
         /// The Gif to use when loading previews
         /// </summary>
@@ -262,7 +277,7 @@ namespace RelhaxModpack
                         ForceManuel = bool.Parse(setting.InnerText);
                         break;
                     case "saveLastConfig":
-                        SaveLastConfig = bool.Parse(setting.InnerText);
+                        SaveLastSelection = bool.Parse(setting.InnerText);
                         break;
                     case "saveUserData":
                         SaveUserData = bool.Parse(setting.InnerText);

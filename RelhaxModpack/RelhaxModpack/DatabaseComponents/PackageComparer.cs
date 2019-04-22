@@ -5,7 +5,8 @@ using System.Text;
 
 namespace RelhaxModpack
 {
-    public class PackageComparer : IEqualityComparer<DatabasePackage>
+    //comparing by package name
+    public class PackageComparerByPackageName : IEqualityComparer<DatabasePackage>
     {
 
         public bool Equals(DatabasePackage x, DatabasePackage y)
@@ -18,6 +19,23 @@ namespace RelhaxModpack
         public int GetHashCode(DatabasePackage package)
         {
             return package.PackageName.GetHashCode();
+        }
+    }
+
+    //comparing by name
+    public class PackageComparerByName : IEqualityComparer<SelectablePackage>
+    {
+
+        public bool Equals(SelectablePackage x, SelectablePackage y)
+        {
+            if (string.IsNullOrWhiteSpace(x.NameFormatted) && string.IsNullOrWhiteSpace(y.NameFormatted))
+                return true;
+            return x.NameFormatted.Equals(y.NameFormatted);
+        }
+
+        public int GetHashCode(SelectablePackage package)
+        {
+            return package.NameFormatted.GetHashCode();
         }
     }
 }

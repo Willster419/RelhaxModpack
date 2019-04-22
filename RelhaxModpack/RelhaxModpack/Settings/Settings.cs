@@ -33,6 +33,8 @@ namespace RelhaxModpack
 
         public const string EditorSettingsFilename = "EditorSettings.xml";
 
+        public const string PatcherSettingsFilename = "PatchSettings.xml";
+
         public const string LastSavedConfigFilename = "lastInstalledConfig.xml";
 
         public const string BetaDatabaseURL = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/modInfo.xml";
@@ -79,7 +81,11 @@ namespace RelhaxModpack
 
         public const string AtlasCreationFoldername = "_atlases";
 
+        public const string FontsToInstallFoldername = "_fonts";
+
         public static readonly string MD5HashDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "MD5HashDatabase.xml");
+
+        public const string DefaultCheckedSelectionfile = "default_checked.xml";
 
         public static readonly string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, "managerInfo.dat");
 
@@ -100,6 +106,14 @@ namespace RelhaxModpack
         };
 
         public static readonly int NumLogicalProcesors = Environment.ProcessorCount;
+
+        public static readonly string[] SelectablePackageTypes = new string[]
+        {
+            "single1",
+            "single_dropdown1",
+            "single_dropdown2",
+            "multi"
+        };
         #endregion
 
         #region Statics

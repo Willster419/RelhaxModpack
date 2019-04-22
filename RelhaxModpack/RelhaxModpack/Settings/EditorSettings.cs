@@ -15,10 +15,6 @@ namespace RelhaxModpack
 
     public class EditorSettings
     {
-        public string WotmodsUsername = string.Empty;
-
-        public string WotmodsPassword = string.Empty;
-
         public string BigmodsUsername = string.Empty;
 
         public string BigmodsPassword = string.Empty;
@@ -28,6 +24,12 @@ namespace RelhaxModpack
         public bool SortDatabaseList = false;
 
         public ApplyBehavior ApplyBehavior = ApplyBehavior.Default;
+
+        public bool ShowConfirmationOnPackageApply = true;
+
+        public bool ShowConfirmationOnPackageAddRemoveMove = true;
+
+        public string DefaultEditorSaveLocation = string.Empty;
 
         public EditorSettings() { }
     }

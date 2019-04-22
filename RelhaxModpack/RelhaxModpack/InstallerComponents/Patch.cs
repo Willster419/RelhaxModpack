@@ -29,6 +29,10 @@
         public string Search = string.Empty;
         //the text to replace the found search text with
         public string Replace = string.Empty;
+        //for json, if it should use the new method of seperating the path for getting the xvm refrences
+        public bool FollowPath = false;
+        //if from editor, enable verbose logging for the duration of that patch
+        public bool FromEditor = false;
         public string DumpPatchInfoForLog
         {
             get
@@ -49,6 +53,17 @@
                     default:
                         return string.Format("ERROR: unknown type: {0}",Type);
                 }
+            }
+        }
+        public override string ToString()
+        {
+            if (FromEditor)
+            {
+                return string.Format("type={0},mode={1},lines/path={2}", Type, Mode, Lines == null ? Path: string.Join(",", Lines));
+            }
+            else
+            {
+                return base.ToString();
             }
         }
     }

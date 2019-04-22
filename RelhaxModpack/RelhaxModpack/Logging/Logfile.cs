@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.IO;
+using System.Windows;
 
 namespace RelhaxModpack
 {
@@ -21,6 +22,7 @@ namespace RelhaxModpack
         /// The date and time format for writing each line in the logfile
         /// </summary>
         public string Timestamp { get; private set; }
+        public bool CanWrite { get { return fileStream == null ? false : true; } }
         //The filestream object to write/create the logfile. Requires disposal support
         private FileStream fileStream;
         /// <summary>
@@ -47,8 +49,12 @@ namespace RelhaxModpack
             {
                 fileStream = new FileStream(Filepath, FileMode.Append, FileAccess.Write);
             }
-            catch
+            catch (Exception ex)
             {
+                if(ModpackSettings.VerboseLogging || ModpackSettings.ApplicationDistroVersion != ApplicationVersions.Stable)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
                 return false;
             }
             return true;
@@ -58,11 +64,11 @@ namespace RelhaxModpack
         /// </summary>
         /// <param name="message">The line to write</param>
         /// <param name="logLevel">The level of severity of the log message. Default is info level.</param>
-        public void Write(string message, LogLevel logLevel = LogLevel.Info)
+        public string Write(string message, LogLevel logLevel = LogLevel.Info)
         {
             //only alpha and beta application distributions should log debug messages
             if (Settings.ApplicationVersion == ApplicationVersions.Stable && logLevel == LogLevel.Debug && !ModpackSettings.VerboseLogging)
-                return;
+                return string.Empty;
             string logMessageLevel = string.Empty;
             switch(logLevel)
             {
@@ -86,6 +92,7 @@ namespace RelhaxModpack
             string formattedDateTime = DateTime.Now.ToString(Timestamp);
             message = string.Format("{0}   {1}{2}", formattedDateTime, logMessageLevel, message);
             Write(message);
+            return message;
         }
         public void Write(string message)
         {
@@ -95,7 +102,7 @@ namespace RelhaxModpack
             if (string.IsNullOrEmpty(Filepath))
                 throw new BadMemeException("You're bad at logfiles");
             if (fileStream == null)
-                throw new BadMemeException("You're still bad at logfiles");
+                return;
             message = message + Environment.NewLine;
             //actually write message to log
             fileStream.Write(Encoding.UTF8.GetBytes(message), 0, Encoding.UTF8.GetByteCount(message));
@@ -119,7 +126,8 @@ namespace RelhaxModpack
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.
-                fileStream.Dispose();
+                if(fileStream != null)
+                    fileStream.Dispose();
                 fileStream = null;
 
                 disposedValue = true;

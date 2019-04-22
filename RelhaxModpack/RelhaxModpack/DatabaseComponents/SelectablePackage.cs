@@ -2,42 +2,77 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Controls;
 
 namespace RelhaxModpack
 {
+
+    public enum SelectionTypes
+    {
+
+        none,
+
+        single1,
+
+        single_dropdown1,
+
+        single_dropdown2,
+
+        multi
+    }
     /// <summary>
     /// A package that has UI elements, and is eithor a mod or config that can be selected in the UI
     /// </summary>
     public class SelectablePackage : DatabasePackage
     {
+        #region XML Parsing
+
+        private static readonly List<string> SelectableElementsToXmlParseAttributes = new List<string>()
+        {
+            nameof(Name),
+            nameof(Type),
+            nameof(Visible)
+        };
+
+        private static readonly List<string> SelectableElementsToXmlParseNodes = new List<string>()
+        {
+            nameof(Size),
+            nameof(Description),
+            nameof(UpdateComment),
+            nameof(PopularMod),
+            nameof(ShowInSearchList),
+            nameof(Medias),
+            nameof(UserFiles),
+            nameof(ConflictingPackages),
+            nameof(Dependencies),
+            nameof(Packages)
+        };
+
+        new public static List<string> FieldsToXmlParseAttributes()
+        {
+            return DatabasePackage.FieldsToXmlParseAttributes().Concat(SelectableElementsToXmlParseAttributes).ToList();
+        }
+
+        new public static List<string> FieldsToXmlParseNodes()
+        {
+            return DatabasePackage.FieldsToXmlParseNodes().Concat(SelectableElementsToXmlParseNodes).ToList();
+        }
+        #endregion
+
+        #region Database Properties
         /// <summary>
         /// Constructior override for DatabasePackage. save memory by only enabling the components we need
         /// </summary>
         public SelectablePackage()
         {
             InstallGroup = 4;
-            switch (ModpackSettings.ModSelectionView)
-            {
-                case SelectionView.DefaultV2:
-                    RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
-                    ContentControl = new ContentControl();
-                    break;
-                case SelectionView.Legacy:
-                    TreeViewItem = new StretchingTreeViewItem()
-                    {
-                        Background = System.Windows.Media.Brushes.Transparent,
-                        HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
-                        HorizontalContentAlignment = System.Windows.HorizontalAlignment.Stretch
-                    };
-                    RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
-                    break;
-            }
         }
         /// <summary>
         /// the name of the package
         /// </summary>
         public string Name = "";
+
         /// <summary>
         /// the name of the package with the version macro replaced for use display
         /// </summary>
@@ -47,66 +82,67 @@ namespace RelhaxModpack
                     return Name.Replace("{version}",Version);
                 }
         }
-        /// <summary>
-        /// the TabPage refrence
-        /// </summary>
-        public TabItem TabIndex = null;
+
         /// <summary>
         /// the Category refrence
         /// </summary>
         public Category ParentCategory = null;
+
         /// <summary>
         /// the type of selectable package logic to follow (options are single1, single_dropdown1, single_dropdown2, multi)
         /// </summary>
-        public string Type = "";
+        public SelectionTypes Type = SelectionTypes.none;
+
         /// <summary>
         /// the refrence for the direct parent of this package
         /// </summary>
         public SelectablePackage Parent = null;
+
         /// <summary>
         /// the refrence for the absolute top of the package tree
         /// </summary>
         public SelectablePackage TopParent = null;
-        /// <summary>
-        /// the UI element refrence for this package
-        /// </summary>
-        public IPackageUIComponent UIComponent = null;
-        /// <summary>
-        /// the UI element refrence for the direct parent of this package
-        /// </summary>
-        public IPackageUIComponent ParentUIComponent = null;
-        /// <summary>
-        /// the UI element refrence for the absolute top of the package tree
-        /// </summary>
-        public IPackageUIComponent TopParentUIComponent = null;
+
         /// <summary>
         /// a flag to determine wether or not the mod should be shown in UI
         /// </summary>
         public bool Visible = false;
+
         /// <summary>
         /// size of the mod zip file
         /// </summary>
         public ulong Size = 0;
+
         /// <summary>
         /// update comments of the package
         /// </summary>
         public string UpdateComment = "";
+
         /// <summary>
         /// description of the package
         /// </summary>
         public string Description = "";
+
         /// <summary>
         /// Flag to determine if the mod (and children? TODO) should be used in the 
         /// </summary>
         public bool PopularMod = false;
+
+        /// <summary>
+        /// Flag to determine any packages of this package should be sorted (by name)
+        /// </summary>
+        public bool SortChildPackages = false;
+
         /// <summary>
         /// Used as internal flag for if application settings is checked "SaveDisabledModsInSelection". Allows for disabled mods to be saved back to the user's selection
         /// </summary>
         public bool FlagForSelectionSave = false;
+
         /// <summary>
         /// field for whether the package is selected to install
         /// </summary>
         protected internal bool _Checked = false;
+
         /// <summary>
         /// property for if the package is selected by the user to install. handles all color change and single_dropdown updating code
         /// </summary>
@@ -214,6 +250,7 @@ namespace RelhaxModpack
                 }
             }
         }
+
         /// <summary>
         /// Overrides DatabasePackage.Enabled property. Used to toggle if the mod should be selectable and installed in the selection list.
         /// The override also enables the triggering of the UI components to reflect the user's selection changes.
@@ -228,77 +265,115 @@ namespace RelhaxModpack
                     UIComponent.OnEnabledChanged(value);
             }
         }
+
         /// <summary>
         /// The level in the database tree where the package resides.
         /// Category header is -1, each child is +1 from there
         /// </summary>
         public int Level = -2;
 
-        //Components for WPF (BOTH)
+        /// <summary>
+        /// the list of cache files that should be backed up before wiping the directory
+        /// </summary>
+        public List<UserFile> UserFiles = new List<UserFile>();
+
+        /// <summary>
+        /// the list of child SelectablePackage entries in this instance of SelectablePackages
+        /// </summary>
+        public List<SelectablePackage> Packages = new List<SelectablePackage>();
+
+        /// <summary>
+        /// list of media preview items associated with this package, shown in the preview window on right click of component
+        /// </summary>
+        public List<Media> Medias = new List<Media>();
+
+        //list of dependnecys this package calls for
+        /// <summary>
+        /// A list of packages (from dependencies list) that this package is dependent on in order to be installed
+        /// </summary>
+        public List<DatabaseLogic> Dependencies = new List<DatabaseLogic>();
+
+        /// <summary>
+        /// A list of any SelectablePackages that conflict with this mod. A conflict will result the package not being processed.
+        /// Refer to examples for more information
+        /// </summary>
+        public List<string> ConflictingPackages = new List<string>();
+
+        /// <summary>
+        /// Toggle if the package should appear in the search list
+        /// </summary>
+        public bool ShowInSearchList = true;
+        #endregion
+
+        #region UI Properties Shared
+        /// <summary>
+        /// the UI element refrence for this package
+        /// </summary>
+        public IPackageUIComponent UIComponent;
+
+        /// <summary>
+        /// the UI element refrence for the direct parent of this package
+        /// </summary>
+        public IPackageUIComponent ParentUIComponent;
+
+        /// <summary>
+        /// the UI element refrence for the absolute top of the package tree
+        /// </summary>
+        public IPackageUIComponent TopParentUIComponent;
+
         /// <summary>
         /// The list of WPF combo boxes DESCIBE MORE TODO
         /// </summary>
         public RelhaxWPFComboBox[] RelhaxWPFComboBoxList;
+
         /// <summary>
         /// the border for the legacy view to allow for putting all subchilderen in the border. sits inside treeviewitem. wpf component
         /// </summary>
         public Border ChildBorder;
+
         /// <summary>
         /// the stackpanel to allow the child treeviewitems to stack upon each other. sits inside the border. wpf component
         /// </summary>
         public StackPanel ChildStackPanel;
+
         /// <summary>
         /// the border that this component is in. wpf componment
         /// </summary>
         public Border ParentBorder;
+
         /// <summary>
         /// the stackpanel that this item is inside. wpf component
         /// </summary>
         public StackPanel ParentStackPanel;
+        #endregion
 
-        //only for DEFAULT V2
+        #region UI Properties Default View
         /// <summary>
         /// ContentControl item to allow for right-clicking of disabled components. defaultv2 wpf component
         /// </summary>
         public ContentControl @ContentControl;
-        public ScrollViewer @ScrollViewer;
 
-        //only for LEGACY
+        public ScrollViewer @ScrollViewer;
+        #endregion
+
+        #region UI Properties OMC Legacy View
         /// <summary>
         /// the treeviewitem that corresponds to this package. legacy wpf component
         /// </summary>
         public StretchingTreeViewItem @TreeViewItem;
+
         /// <summary>
         /// the treeview that this package is in. legacy wpf component
         /// </summary>
         public StretchingTreeView @TreeView;
 
         /// <summary>
-        /// the list of cache files that should be backed up before wiping the directory
+        /// the TabPage refrence
         /// </summary>
-        public List<UserFiles> UserFiles = new List<UserFiles>();
-        /// <summary>
-        /// the list of child SelectablePackage entries in this instance of SelectablePackages
-        /// </summary>
-        public List<SelectablePackage> Packages = new List<SelectablePackage>();
-        /// <summary>
-        /// list of media preview items associated with this package, shown in the preview window on right click of component
-        /// </summary>
-        public List<Media> Medias = new List<Media>();
-        //list of dependnecys this package calls for
-        /// <summary>
-        /// A list of packages (from dependencies list) that this package is dependent on in order to be installed
-        /// </summary>
-        public List<DatabaseLogic> Dependencies = new List<DatabaseLogic>();
-        /// <summary>
-        /// A list of any SelectablePackages that conflict with this mod. A conflict will result the package not being processed.
-        /// Refer to examples for more information
-        /// </summary>
-        public List<string> ConflictingPackages = new List<string>();
-        /// <summary>
-        /// Toggle if the package should appear in the search list
-        /// </summary>
-        public bool ShowInSearchList = true;
+        public TabItem TabIndex;
+        #endregion
+
+        #region Other Properties and Methods
         /// <summary>
         /// provides a nice complete path that is more human readable than a packagePath
         /// </summary>
@@ -323,6 +398,7 @@ namespace RelhaxModpack
                 return string.Join("->",parentPackages);
             }
         }
+
         /// <summary>
         /// Determines if the UI package structure to this package is of all visible components.
         /// </summary>
@@ -349,6 +425,7 @@ namespace RelhaxModpack
                 return structureVisible;
             }
         }
+
         /// <summary>
         /// Determines if the UI package structure to this package is of all enabled components.
         /// </summary>
@@ -374,6 +451,7 @@ namespace RelhaxModpack
                 return structureEnabled;
             }
         }
+
         /// <summary>
         /// Returns the display name of the package for the UI, with version macros replaced and any other statuses appended
         /// </summary>
@@ -401,6 +479,7 @@ namespace RelhaxModpack
                 return nameDisplay.Replace("_","__");
             }
         }
+
         /// <summary>
         /// Returns a string representation of the timestamp of when the zip file of this package was last modified
         /// </summary>
@@ -411,6 +490,7 @@ namespace RelhaxModpack
                 return Utils.ConvertFiletimeTimestampToDate(Timestamp);
             }
         }
+
         /// <summary>
         /// Returns the display tooltip string, or the translation string for "no description"
         /// </summary>
@@ -424,16 +504,24 @@ namespace RelhaxModpack
                     toolTipResult, Translations.GetTranslatedString("lastUpdated"), TimeStampString).Replace("_","__");
             }
         }
+
         /// <summary>
-        /// Allows for alphabetical sorting of mods
+        /// Allows for alphabetical sorting of packages by PackageName
         /// </summary>
         /// <param name="x">a package</param>
         /// <param name="y">another package</param>
         /// <returns></returns>
-        public static int CompareMods(SelectablePackage x, SelectablePackage y)
+        public static int CompareModsPackageName(SelectablePackage x, SelectablePackage y)
         {
-            return x.Name.CompareTo(y.Name);
+            return x.PackageName.CompareTo(y.PackageName);
         }
+
+        //Allows for alphabetical sorting of packages by NameFormatted property
+        public static int CompareModsName(SelectablePackage x, SelectablePackage y)
+        {
+            return x.NameFormatted.CompareTo(y.NameFormatted);
+        }
+
         /// <summary>
         /// Allows for display in a combobox and when debugging
         /// </summary>
@@ -442,6 +530,7 @@ namespace RelhaxModpack
         {
             return NameFormatted;
         }
+
         /// <summary>
         /// check if the color change should be changed on or off, based on if any other packages at this level are enabled and checked
         /// </summary>
@@ -457,5 +546,6 @@ namespace RelhaxModpack
             }
             return false;
         }
+        #endregion
     }
 }

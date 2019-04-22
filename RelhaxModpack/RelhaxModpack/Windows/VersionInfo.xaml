@@ -11,7 +11,7 @@
         <TextBox x:Name="ApplicationUpdateNotes" HorizontalAlignment="Right" Height="182" Margin="0,0,10,56" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="472" Tag="ApplicationUpdateNotes"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,0,0,10" TextWrapping="Wrap" Text="If you are having problems updating, please" VerticalAlignment="Bottom" Tag="HavingProblemsTextBlock"/>
         <TextBlock HorizontalAlignment="Left" Margin="247,0,0,10" TextWrapping="Wrap" VerticalAlignment="Bottom">
-            <Hyperlink x:Name="ManualUpdateLink" NavigateUri="https://github.com/Willster419/RelhaxModpack/releases/latest" RequestNavigate="OnHyperlinkClick">Click Here</Hyperlink>
+            <Hyperlink Tag="ManualUpdateLink" x:Name="ManualUpdateLink" NavigateUri="https://github.com/Willster419/RelhaxModpack/releases/latest" RequestNavigate="OnHyperlinkClick">Click Here</Hyperlink>
         </TextBlock>
         <Button x:Name="NoButton" Content="No" HorizontalAlignment="Left" Margin="10,0,0,31" VerticalAlignment="Bottom" Width="75" Tag="NoButton" Click="OnNoButtonClick"/>
         <Button x:Name="YesButton" Content="Yes" HorizontalAlignment="Right" Margin="0,0,10,31" VerticalAlignment="Bottom" Width="75" Tag="YesButton" Click="OnYesButtonClick"/>

@@ -5,11 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="DatabaseEditorDownload" Height="120" Width="300" MinHeight="120" MinWidth="300">
+        Title="Download/Update file" Height="150" Width="300" MinHeight="120" MinWidth="300" Loaded="RelhaxWindow_Loaded">
     <Grid>
-        <TextBlock HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Downloaded X of Y kb" VerticalAlignment="Top"/>
-        <ProgressBar HorizontalAlignment="Stretch" Height="20" Margin="10,31,10,0" VerticalAlignment="Top" />
-        <Button Content="Open File" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75"/>
-        <Button Content="Open Fodler" HorizontalAlignment="Right" Margin="0,0,90,10" VerticalAlignment="Bottom" Width="75"/>
+        <TextBlock x:Name="ProgressHeader" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Downloaded X of Y kb" VerticalAlignment="Top"/>
+        <ProgressBar x:Name="ProgressProgressBar" HorizontalAlignment="Stretch" Height="20" Margin="10,30,10,0" VerticalAlignment="Top" />
+        <Button x:Name="OpenFileButton" Content="Open File" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="OpenFileButton_Click" IsEnabled="False"/>
+        <Button x:Name="OpenFodlerButton" Content="Open Fodler" HorizontalAlignment="Right" Margin="0,0,90,10" VerticalAlignment="Bottom" Width="75" Click="OpenFodlerButton_Click" IsEnabled="False"/>
+        <TextBox x:Name="ProgressBody" HorizontalAlignment="Stretch" Margin="10,54,10,30" TextWrapping="Wrap" Text="Download Filename.zip to online_folder" VerticalAlignment="Stretch" />
+        <Button x:Name="CancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75" Height="19" Click="CancelButton_Click"/>
     </Grid>
 </local:RelhaxWindow>

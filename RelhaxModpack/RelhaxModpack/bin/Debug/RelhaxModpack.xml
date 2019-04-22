@@ -102,11 +102,6 @@
             the name of the package with the version macro replaced for use display
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.TabIndex">
-            <summary>
-            the TabPage refrence
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.SelectablePackage.ParentCategory">
             <summary>
             the Category refrence
@@ -125,21 +120,6 @@
         <member name="F:RelhaxModpack.SelectablePackage.TopParent">
             <summary>
             the refrence for the absolute top of the package tree
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.SelectablePackage.UIComponent">
-            <summary>
-            the UI element refrence for this package
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.SelectablePackage.ParentUIComponent">
-            <summary>
-            the UI element refrence for the direct parent of this package
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.SelectablePackage.TopParentUIComponent">
-            <summary>
-            the UI element refrence for the absolute top of the package tree
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.Visible">
@@ -167,6 +147,11 @@
             Flag to determine if the mod (and children? TODO) should be used in the 
             </summary>
         </member>
+        <member name="F:RelhaxModpack.SelectablePackage.SortChildPackages">
+            <summary>
+            Flag to determine any packages of this package should be sorted (by name)
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.SelectablePackage.FlagForSelectionSave">
             <summary>
             Used as internal flag for if application settings is checked "SaveDisabledModsInSelection". Allows for disabled mods to be saved back to the user's selection
@@ -192,6 +177,52 @@
             <summary>
             The level in the database tree where the package resides.
             Category header is -1, each child is +1 from there
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.UserFiles">
+            <summary>
+            the list of cache files that should be backed up before wiping the directory
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Packages">
+            <summary>
+            the list of child SelectablePackage entries in this instance of SelectablePackages
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Medias">
+            <summary>
+            list of media preview items associated with this package, shown in the preview window on right click of component
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Dependencies">
+            <summary>
+            A list of packages (from dependencies list) that this package is dependent on in order to be installed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ConflictingPackages">
+            <summary>
+            A list of any SelectablePackages that conflict with this mod. A conflict will result the package not being processed.
+            Refer to examples for more information
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ShowInSearchList">
+            <summary>
+            Toggle if the package should appear in the search list
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.UIComponent">
+            <summary>
+            the UI element refrence for this package
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ParentUIComponent">
+            <summary>
+            the UI element refrence for the direct parent of this package
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.TopParentUIComponent">
+            <summary>
+            the UI element refrence for the absolute top of the package tree
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.RelhaxWPFComboBoxList">
@@ -234,35 +265,9 @@
             the treeview that this package is in. legacy wpf component
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.UserFiles">
+        <member name="F:RelhaxModpack.SelectablePackage.TabIndex">
             <summary>
-            the list of cache files that should be backed up before wiping the directory
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.SelectablePackage.Packages">
-            <summary>
-            the list of child SelectablePackage entries in this instance of SelectablePackages
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.SelectablePackage.Medias">
-            <summary>
-            list of media preview items associated with this package, shown in the preview window on right click of component
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.SelectablePackage.Dependencies">
-            <summary>
-            A list of packages (from dependencies list) that this package is dependent on in order to be installed
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.SelectablePackage.ConflictingPackages">
-            <summary>
-            A list of any SelectablePackages that conflict with this mod. A conflict will result the package not being processed.
-            Refer to examples for more information
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.SelectablePackage.ShowInSearchList">
-            <summary>
-            Toggle if the package should appear in the search list
+            the TabPage refrence
             </summary>
         </member>
         <member name="P:RelhaxModpack.SelectablePackage.CompletePath">
@@ -295,9 +300,9 @@
             Returns the display tooltip string, or the translation string for "no description"
             </summary>
         </member>
-        <member name="M:RelhaxModpack.SelectablePackage.CompareMods(RelhaxModpack.SelectablePackage,RelhaxModpack.SelectablePackage)">
+        <member name="M:RelhaxModpack.SelectablePackage.CompareModsPackageName(RelhaxModpack.SelectablePackage,RelhaxModpack.SelectablePackage)">
             <summary>
-            Allows for alphabetical sorting of mods
+            Allows for alphabetical sorting of packages by PackageName
             </summary>
             <param name="x">a package</param>
             <param name="y">another package</param>
@@ -601,7 +606,7 @@
             toggle if the program should force the user to manually point to the WoT location
             </summary>
         </member>
-        <member name="F:RelhaxModpack.ModpackSettings.SaveLastConfig">
+        <member name="F:RelhaxModpack.ModpackSettings.SaveLastSelection">
             <summary>
             toggle if the application should automatically save the last selected config to also be automatically loaded upon selection load
             </summary>
@@ -789,6 +794,45 @@
             Load the custom color definitions from XML
             </summary>
         </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxWPFCheckBox">
+            <summary>
+            Interaction logic for RelhaxWPFCheckBox.xaml
+            </summary>
+            <summary>
+            RelhaxWPFCheckBox
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxWPFComboBox">
+            <summary>
+            Interaction logic for RelhaxWPFComboBox.xaml
+            </summary>
+            <summary>
+            RelhaxWPFComboBox
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxWPFRadioButton">
+            <summary>
+            Interaction logic for RelhaxWPFRadioButton.xaml
+            </summary>
+            <summary>
+            RelhaxWPFRadioButton
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.UIComponents.RelhaxMediaPlayer">
             <summary>
             Interaction logic for RelhaxMediaPlayer.xaml
@@ -890,6 +934,19 @@
             The current status of the installer. Represents the current state of the installer. When it exists, it is also used as an exit code.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.CreateFTPFolderName">
+            <summary>
+            Interaction logic for CreateFTPFolderName.xaml
+            </summary>
+            <summary>
+            CreateFTPFolderName
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.CreateFTPFolderName.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.DeveloperSelectionsViewer">
             <summary>
             Interaction logic for DeveloperSelectionsViewer.xaml
@@ -925,6 +982,19 @@
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.EditorAddRemove.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.EditorSelectMediaUploadLocation">
+            <summary>
+            Interaction logic for EditorSelectMediaUploadLocation.xaml
+            </summary>
+            <summary>
+            EditorSelectMediaUploadLocation
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.EditorSelectMediaUploadLocation.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>
@@ -1009,19 +1079,6 @@
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.DatabaseEditor.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Windows.DatabaseEditorAddMove">
-            <summary>
-            Interaction logic for DatabaseEditorAddMove.xaml
-            </summary>
-            <summary>
-            DatabaseEditorAddMove
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.DatabaseEditorAddMove.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>
@@ -1584,11 +1641,6 @@
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Properties.Resources.DotNetZip">
-            <summary>
-              Looks up a localized resource of type System.Byte[].
-            </summary>
-        </member>
         <member name="P:RelhaxModpack.Properties.Resources.EMail">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
@@ -1651,11 +1703,6 @@
                   the copyright owner that is [rest of string was truncated]&quot;;.
              </summary>
         </member>
-        <member name="P:RelhaxModpack.Properties.Resources.NAudio">
-            <summary>
-              Looks up a localized resource of type System.Byte[].
-            </summary>
-        </member>
         <member name="P:RelhaxModpack.Properties.Resources.NAudio1">
              <summary>
                Looks up a localized string similar to Microsoft Public License (Ms-PL)
@@ -1671,12 +1718,12 @@
             A &quot;contributor&quot; is any person that distributes its contribution [rest of string was truncated]&quot;;.
              </summary>
         </member>
-        <member name="P:RelhaxModpack.Properties.Resources.Newtonsoft_Json">
+        <member name="P:RelhaxModpack.Properties.Resources.play_pause">
             <summary>
-              Looks up a localized resource of type System.Byte[].
+              Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Properties.Resources.play_pause">
+        <member name="P:RelhaxModpack.Properties.Resources.popular_icon">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>

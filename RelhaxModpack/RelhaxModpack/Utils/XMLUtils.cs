@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
@@ -6,6 +7,11 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using System.Windows;
+using System.Reflection;
+using System.ComponentModel;
+using System.Text;
+using Ionic.Zip;
+using RelhaxModpack.XmlBinary;
 
 namespace RelhaxModpack
 {
@@ -23,6 +29,15 @@ namespace RelhaxModpack
         /// </summary>
         FromXml
     }
+
+    public enum DatabaseXmlVersion
+    {
+
+        Legacy,
+
+        OnePointOne
+    }
+
     /// <summary>
     /// Utility class for all XML static methods
     /// </summary>
@@ -222,7 +237,7 @@ namespace RelhaxModpack
 
         #region Database Loading
         public static bool ParseDatabase(XmlDocument modInfoDocument, List<DatabasePackage> globalDependencies,
-            List<Dependency> dependencies, List<Category> parsedCategoryList)
+            List<Dependency> dependencies, List<Category> parsedCategoryList, string location = null)
         {
             Logging.WriteToLog("start of ParseDatabase()", Logfiles.Application, LogLevel.Debug);
             //check all input parameters
@@ -243,11 +258,13 @@ namespace RelhaxModpack
             //determine which version of the document we are loading. allows for loading of different versions if structure change
             //a blank value is assumed to be pre 2.0 version of the database
             string versionString = GetXMLStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@documentVersion");
-            Logging.WriteToLog(nameof(versionString) + "=" + versionString, Logfiles.Application, LogLevel.Debug);
+            Logging.WriteToLog(nameof(versionString) + "=" + (string.IsNullOrEmpty(versionString)? "(null)" : versionString), Logfiles.Application, LogLevel.Debug);
+            if (string.IsNullOrEmpty(versionString))
+                Logging.Warning("versionString is null or empty, treating as legacy");
             switch(versionString)
             {
-                case "2.0":
-                    return ParseDatabaseV2(DocumentToXDocument(modInfoDocument), globalDependencies, dependencies, parsedCategoryList);
+                case "1.1":
+                    return ParseDatabase1V1(modInfoDocument, globalDependencies, dependencies, parsedCategoryList, location);
                 default:
                     //parse legacy database
                     List<Dependency> logicalDependencies = new List<Dependency>();
@@ -257,374 +274,257 @@ namespace RelhaxModpack
                     return true;
             }
         }
-        public static bool ParseDatabaseV2(XDocument modInfoDocument, List<DatabasePackage> globalDependencies,
-            List<Dependency> logicalDependencies, List<Category> parsedCategoryList)
+        public static bool ParseDatabase1V1(XmlDocument rootDocument, List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList, string rootPath)
         {
-            throw new BadMemeException("should probably finish this, don't you think?");
-            //parsing the global dependencies
-            bool globalParsed = ParseDatabaseV2GlobalDependencies(
-                modInfoDocument.XPathSelectElements("/modInfoAlpha.xml/globaldependencies/globaldependency").ToList(), globalDependencies);
-            //parsing the logical dependnecies
-            bool logicalDepParsed = ParseDatabaseV2Dependencies(modInfoDocument.XPathSelectElements(
-                "/modInfoAlpha.xml/logicalDependencies/logicalDependency").ToList(), logicalDependencies);
-            //parsing the categories
-            bool categoriesParsed = ParseDatabaseV2Categories(modInfoDocument.XPathSelectElements(
-                "/modInfoAlpha.xml/catagories/catagory").ToList(), parsedCategoryList);
-            return (globalParsed && logicalDepParsed && categoriesParsed) ? true : false;
-        }
-        private static bool ParseDatabaseV2GlobalDependencies(List<XElement> packageNodeHolder, List<DatabasePackage> globalDependencies)
-        {
-            //first for loop is for each "dependency" object holder
-            foreach(XElement dependency in packageNodeHolder)
+            //load each document to make sure they all exist first
+            if(string.IsNullOrWhiteSpace(rootPath))
             {
-                DatabasePackage globalDependency = new DatabasePackage();
-                
+                Logging.Error("location string is empty in ParseDatabase1V1");
+                return false;
             }
-            return true;
-        }
-        private static bool ParseDatabaseV2Dependencies(List<XElement> packageNodeHolder, List<Dependency> logicalDependencies)
-        {
-            foreach (XElement dependency in packageNodeHolder)
+            //document for global dependencies
+            string completeFilepath = Path.Combine(rootPath, GetXMLStringFromXPath(rootDocument, "/modInfoAlpha.xml/globalDependencies/@file"));
+            if (!File.Exists(completeFilepath))
             {
-                
-
+                Logging.Error("{0} file does not exist at {1}", "Global Dependency", completeFilepath);
+                return false;
             }
-            return true;
-        }
-        private static bool ParseDatabaseV2Categories(List<XElement> packageNodeHolder, List<Category> categories)
-        {
-            //TODO
-            foreach (XElement dependency in packageNodeHolder)
+            XDocument globalDepsDoc = LoadXDocument(completeFilepath, XmlLoadType.FromFile);
+            if (globalDepsDoc == null)
+                throw new BadMemeException("this should not be null");
+            //document for dependencies
+            completeFilepath = Path.Combine(rootPath, GetXMLStringFromXPath(rootDocument, "/modInfoAlpha.xml/dependencies/@file"));
+            if (!File.Exists(completeFilepath))
             {
-                
-
+                Logging.Error("{0} file does not exist at {1}", "Dependency", completeFilepath);
+                return false;
             }
-            return true;
-        }
-        #region Components of packages for database parsing V2
-        //for base package
-        public static readonly string[] BaseRequiredNodesV2 = new string[] { "PackageName" };
-        public static readonly string[] BaseOptionalNodesV2 = new string[] { "Version", "Timestamp", "ZipFile", "CRC", "StartAddress",
-            "EndAddress", "AppendExtraction", "LogAtInstall", "DevURL", "ExtractionLevel", "Enabled" };//all of these have defaults
-        //for dependency
-        //--nothing--
-        //for selectable package
-        public static readonly string[] SelectablePackageRequiredNodesV2 = new string[] { "Name", "Type" };
-        public static readonly string[] SelectablePackagOptionalNodesV2 = new string[] { "UserFiles", "Packages", "Medias",
-            "Visible", "Size", "UpdateComment", "Description" };
-        //for depdendency and selectable package
-        public static readonly string[] DependencySelectableOptionalNodesV2 = new string[] { "Dependencies" };
-        //for categories
-        public static readonly string[] CategoryRequiredNodesV2 = new string[] { "name", "dependencies" };
-        #endregion
-        private static void DynamicXMLDatabasePackageParse(XElement xmlPackage, ref DatabasePackage package)
-        {
-            //first treat it as regular package
-            //check for all fields in it
-            List<string> copyOfRequiredBaseNodes = new List<string>(BaseRequiredNodesV2.ToList());
-            List<string> unknownElements = new List<string>();
-            //start with databasePackage
-            foreach(XElement xmlPackageProperty in xmlPackage.Elements())//Properties of the package
+            XDocument depsDoc = LoadXDocument(completeFilepath, XmlLoadType.FromFile);
+            if (depsDoc == null)
+                throw new BadMemeException("this should not be null");
+            //list of documents for categories
+            List<XDocument> categoryDocuments = new List<XDocument>();
+            foreach(XmlNode categoryNode in GetXMLNodesFromXPath(rootDocument, "//modInfoAlpha.xml/categories/category"))
             {
-                string elementName = xmlPackageProperty.Name.LocalName;
-                if (copyOfRequiredBaseNodes.Contains(elementName))
+                //make string path
+                completeFilepath = Path.Combine(rootPath, categoryNode.Attributes["file"].Value);
+                //check if file exists
+                if (!File.Exists(completeFilepath))
                 {
-                    //switch
-                    switch (elementName)
-                    {
-                        case "PackageName":
-                            package.PackageName = xmlPackageProperty.Value.Trim();
-                            break;
-                    }
-                    copyOfRequiredBaseNodes.Remove(elementName);
+                    Logging.Error("{0} file does not exist at {1}", "Category", completeFilepath);
+                    return false;
                 }
-                else if (BaseOptionalNodesV2.Contains(elementName))
+                //load xdocument of category from category file
+                XDocument catDoc = LoadXDocument(completeFilepath, XmlLoadType.FromFile);
+                if (catDoc == null)
+                    throw new BadMemeException("this should not be null");
+                //make new category object
+                Category cat = new Category()
                 {
-                    //switch
-                    switch (elementName)
-                    {
-                        case "PackageName":
-                            package.PackageName = xmlPackageProperty.Value.Trim();
-                            break;
-                        case "Version":
-                            package.Version = xmlPackageProperty.Value.Trim();
-                            break;
-                        case "Timestamp"://long
-                            package.Timestamp = Utils.ParseLong(xmlPackageProperty.Value.Trim(),0);
-                            break;
-                        case "ZipFile":
-                            package.ZipFile = xmlPackageProperty.Value.Trim();
-                            break;
-                        case "CRC":
-                            package.CRC = xmlPackageProperty.Value.Trim();
-                            break;
-                        case "StartAddress":
-                            package.StartAddress = xmlPackageProperty.Value.Trim();
-                            break;
-                        case "EndAddress":
-                            package.EndAddress = xmlPackageProperty.Value.Trim();
-                            break;
-                        case "LogAtInstall"://bool
-                            package.LogAtInstall = Utils.ParseBool(xmlPackageProperty.Value.Trim(),false);
-                            break;
-                        case "DevURL":
-                            package.DevURL = xmlPackageProperty.Value.Trim();
-                            break;
-                        case "ExtractionLevel"://int
-                            package.InstallGroup = Utils.ParseInt(xmlPackageProperty.Value.Trim(),5);
-                            break;
-                        case "Enabled"://bool
-                            package.Enabled = Utils.ParseBool(xmlPackageProperty.Value.Trim(),false);
-                            break;
-                    }
-                }
-            }
-            //check for mising required nodes of databasePackage
-            if (copyOfRequiredBaseNodes.Count > 0)
-            {
-                foreach (string s in copyOfRequiredBaseNodes)
-                {
-                    //write it's missing
-                    string lineNumber = "" + ((IXmlLineInfo)xmlPackage).LineNumber;
-                    Logging.WriteToLog(string.Format("property name={0}, line number={1},", s, lineNumber),Logfiles.Application,LogLevel.Error);
-                }
-            }
-            //check if it's a dependency or package
-            if (package is Dependency dependency)
-            {
-                foreach (XElement xmlPackageProperty in xmlPackage.Elements())
-                {
-                    string elementName = xmlPackageProperty.Name.LocalName;
-                    //{ "Dependencies" }
-                    if (DependencySelectableOptionalNodesV2.Contains(elementName))
-                    {
-                        switch (elementName)
-                        {
-                            case "Dependencies":
-                                ProcessDependencies(xmlPackageProperty, dependency.Dependencies);
-                                break;
-                        }
-                    }
-                }
-                //no required dependency specific nodes...
-            }
-            else if (package is SelectablePackage selectablePackage)
-            {
-                List<string> copyOfRequiredSelectablePackages = new List<string>(SelectablePackageRequiredNodesV2.ToList());
-                foreach (XElement xmlPackageProperty in xmlPackage.Elements())
-                {
-                    string elementName = xmlPackageProperty.Name.LocalName;
-                    //{ "Name", "Type" }
-                    if (SelectablePackageRequiredNodesV2.Contains(elementName))
-                    {
-                        //switch
-                        switch (elementName)
-                        {
-                            case "name":
-                                selectablePackage.Name = xmlPackageProperty.Value.Trim();
-                                break;
-                            case "type":
-                                selectablePackage.Type = xmlPackageProperty.Value.Trim();
-                                break;
-                        }
-                        copyOfRequiredSelectablePackages.Remove(elementName);
-                    }
-                    //{ "UserFiles", "Packages", "Medias", "Visible", "Size", "UpdateComment", "Description" }
-                    else if (SelectablePackagOptionalNodesV2.Contains(elementName))
-                    {
-                        switch (elementName)
-                        {
-                            case "visible":
-                            case "visable":
-                                selectablePackage.Visible = Utils.ParseBool(xmlPackageProperty.Value.Trim(), false);
-                                break;
-                            case "size":
-                                selectablePackage.Size = Utils.ParseuLong(xmlPackageProperty.Value.Trim(), 0);
-                                break;
-                            case "updateComment"://TODO: need ot macro unescape text
-                                selectablePackage.UpdateComment = xmlPackageProperty.Value.Trim();
-                                break;
-                            case "description":
-                                selectablePackage.Description = xmlPackageProperty.Value.Trim();
-                                break;
-                                break;
-                            case "userFiles":
-                                ProcessUserFiles(xmlPackageProperty, selectablePackage.UserFiles);
-                                break;
-                            case "medias":
-                                ProcessMedias(xmlPackageProperty, selectablePackage.Medias);
-                                break;
-                            case "packages":
-                                throw new BadMemeException("THIS IS STILL TODO - RECURSIVE PACKAGE PROCESSING");
-                                break;
-                        }
-                    }
-                    //{ "Dependencies" }
-                    else if (DependencySelectableOptionalNodesV2.Contains(elementName))
-                    {
-                        switch (elementName)
-                        {
-                            case "Dependencies":
-                                ProcessDependencies(xmlPackageProperty, selectablePackage.Dependencies);
-                                break;
-                        }
-                    }
-                }
-                //check for missing required nodes of package
-                if (copyOfRequiredSelectablePackages.Count > 0)
-                {
-                    foreach (string s in copyOfRequiredSelectablePackages)
-                    {
-                        //write it's missing
-                        string lineNumber = "" + ((IXmlLineInfo)xmlPackage).LineNumber;
-                        Logging.WriteToLog(string.Format("property name={0}, line number={1},", s, lineNumber), Logfiles.Application, LogLevel.Error);
-                    }
-                }
-            }
-            //TODO: maybe put this in it's own method?
-            //process if any extra unknown nodes are left
-            List<string> allPossiblePackageNodes = new List<string>();
-            //BaseRequiredNodesV2
-            //BaseOptionalNodesV2
-            //SelectablePackageRequiredNodesV2
-            //SelectablePackagOptionalNodesV2
-            //DependencySelectableOptionalNodesV2
-            allPossiblePackageNodes.AddRange(BaseRequiredNodesV2);
-            allPossiblePackageNodes.AddRange(BaseOptionalNodesV2);
-            if (package is Dependency || package is SelectablePackage)
-            {
-                allPossiblePackageNodes.AddRange(DependencySelectableOptionalNodesV2);
-                if(package is SelectablePackage)
-                {
-                    allPossiblePackageNodes.AddRange(SelectablePackageRequiredNodesV2);
-                    allPossiblePackageNodes.AddRange(SelectablePackagOptionalNodesV2);
-                }
-            }
-            foreach (XElement xmlPackageProperty in xmlPackage.Elements())
-            {
-                string elementName = xmlPackageProperty.Name.LocalName;
-                string lineNumber = "" + ((IXmlLineInfo)xmlPackageProperty).LineNumber;
-                if (!allPossiblePackageNodes.Contains(elementName))
-                    unknownElements.Add(string.Format("node name={0}, line number={1}",elementName,lineNumber));
-            }
-            if(unknownElements.Count > 0)
-            {
-                foreach (string s in unknownElements)
-                    Logging.WriteToLog("Parsing database error," + s, Logfiles.Application, LogLevel.Error);
-            }
-        }
-
-        public static readonly string[] UserfilesRequiredNodesV2 = new string[] { "Pattern" };
-        private static void ProcessUserFiles(XElement userFilesHolder, List<UserFiles> userfiles)
-        {
-            //NOTE FOR ALL THESE: the holder is the holder, inside is each element
-            foreach(XElement userfileElement in userFilesHolder.Elements())
-            {
-                //inside element values is the actual userdata element
-                UserFiles files = new UserFiles
-                {
-                    Pattern = userfileElement.Value
+                    XmlFilename = categoryNode.Attributes["file"].Value
                 };
-                //TODO: make into attributes?
-                userfiles.Add(files);
+                //get the list of dependencies in the category
+                IEnumerable<XElement> listOfDependencies = catDoc.XPathSelectElements("//Category/Dependencies/Dependency");
+                Utils.SetListEntriesField(cat, cat.GetType().GetField(nameof(cat.Dependencies)), listOfDependencies);
+                //add object cat to list
+                parsedCategoryList.Add(cat);
+                //add xml cat to list
+                categoryDocuments.Add(catDoc);
             }
-        }
-        public static readonly string[] MediaRequiredNodesV2 = new string[] { "URL", "type" };
-        private static void ProcessMedias(XElement mediasHolder, List<Media> medias)
-        {
-            foreach(XElement mediaElement in mediasHolder.Elements())
+
+            //parsing the global dependencies
+            bool globalParsed = ParseDatabase1V1Packages(globalDepsDoc.XPathSelectElements("//GlobalDependencies/GlobalDependency").ToList(), globalDependencies,
+                DatabasePackage.FieldsToXmlParseAttributes(),DatabasePackage.FieldsToXmlParseNodes(),typeof(DatabasePackage));
+            //parsing the logical dependnecies
+            bool depsParsed = ParseDatabase1V1Packages(depsDoc.XPathSelectElements("//Dependencies/Dependency").ToList(), dependencies,
+                Dependency.FieldsToXmlParseAttributes(), Dependency.FieldsToXmlParseNodes(), typeof(Dependency));
+            //parsing the categories
+            bool categoriesParsed = true;
+            for(int i = 0; i < categoryDocuments.Count; i++)
             {
-                Media media = new Media();
-                List<string> unknownElements = new List<string>();
-                List<string> copyOfMediaRequiredNodes = new List<string>(MediaRequiredNodesV2.ToList());
-                foreach(XElement mediaProperties in mediaElement.Elements())
+                parsedCategoryList[i].Name = categoryDocuments[i].Root.FirstAttribute.Value;
+                if (!ParseDatabase1V1Packages(categoryDocuments[i].XPathSelectElements("//Category/Package").ToList(), parsedCategoryList[i].Packages,
+                    SelectablePackage.FieldsToXmlParseAttributes(), SelectablePackage.FieldsToXmlParseNodes(), typeof(SelectablePackage)))
                 {
-                    string elementName = mediaProperties.Name.LocalName;
-                    if (MediaRequiredNodesV2.Contains(elementName))
+                    categoriesParsed = false;
+                }
+            }
+            return globalParsed && depsParsed && categoriesParsed;
+        }
+        private static bool ParseDatabase1V1Packages(List<XElement> xmlPackageNodesList, IList genericPackageList,
+            List<string> whitelistAttributes, List<string> whitelistNodes, Type packageType)
+        {
+            //make the refrence for the base type of package it could be
+            DatabasePackage packageOfAnyType;
+
+            //get all fields and properties from the class
+            MemberInfo[] membersInClass = packageType.GetMembers();
+
+            //for each xml package entry
+            foreach(XElement xmlPackageNode in xmlPackageNodesList)
+            {
+                //make the instance based on the custom class type
+                if (packageType.Equals(typeof(DatabasePackage)))
+                {
+                    packageOfAnyType = new DatabasePackage();
+                }
+                else if (packageType.Equals(typeof(Dependency)))
+                {
+                    packageOfAnyType = new Dependency();
+                }
+                else if (packageType.Equals(typeof(SelectablePackage)))
+                {
+                    packageOfAnyType = new SelectablePackage();
+                }
+                else
+                {
+                    throw new BadMemeException("fuck you");
+                }
+
+                //make a copy of the list of whitelist nodes
+                List<string> whitelistNodesReal = new List<string>(whitelistNodes);
+
+                //first deal with the xml attributes in the entry
+                List<string> unknownListAttributes = new List<string>();
+                List<string> missingAttributes = new List<string>(whitelistAttributes);
+                foreach (XAttribute attribute in xmlPackageNode.Attributes())
+                {
+                    //get the fieldInfo or propertyInfo object representing the same name corresponding field or property in the memory database entry
+                    MemberInfo[] matchingPackageMembers = membersInClass.Where(mem => mem.Name.Equals(attribute.Name.LocalName)).ToArray();
+                    if(matchingPackageMembers.Count() == 0)
                     {
-                        switch(elementName)
+                        Logging.Debug("member {0} from xml attribute does not exist in fieldInfo", attribute.Name);
+                        unknownListAttributes.Add(attribute.Name.LocalName);
+                        continue;
+                    }
+                    MemberInfo packageMember = matchingPackageMembers[0];
+                    //make sure it's a part of the whitelist of attributes we actually want to try to load
+                    if(missingAttributes.Contains(packageMember.Name))
+                    {
+                        //remove the entry name cause it's loaded (or fail loading)
+                        missingAttributes.Remove(packageMember.Name);
+                        //try to set it
+                        if(!Utils.SetObjectMember(packageOfAnyType,packageMember,attribute.Value))
                         {
-                            case "URL":
-                                media.URL = mediaProperties.Value.Trim();
-                                break;
-                            case "type":
-                                media.MediaType = (MediaType) Utils.ParseInt(mediaProperties.Value.Trim(),1);
-                                break;
+                            Logging.Error("Failed to set member {0}, default (if exists) was used instead, PackageName: {1}, LineNumber {2}",
+                                attribute.Name.LocalName, packageOfAnyType.PackageName, ((IXmlLineInfo)xmlPackageNode).LineNumber);
                         }
-                        copyOfMediaRequiredNodes.Remove(elementName);
                     }
                     else
-                        unknownElements.Add(elementName);
-                }
-                if (copyOfMediaRequiredNodes.Count > 0)
-                    ListNotUsedRequired(mediaElement, copyOfMediaRequiredNodes);
-                if (unknownElements.Count > 0)
-                    ListUnknown(mediaElement, unknownElements);
-                medias.Add(media);
-            }
-        }
-        public static readonly string[] DependnecyLogicRequiredNodesV2 = new string[] { "negateFlag", "packageName", "logicType" };
-        private static void ProcessDependencies(XElement logicsHodler, List<DatabaseLogic> logics)
-        {
-            foreach (XElement logicsElement in logicsHodler.Elements())
-            {
-                DatabaseLogic logic = new DatabaseLogic();
-                List<string> unknownElements = new List<string>();
-                List<string> copyOfDependencyLigicRequiredNodes = new List<string>(DependnecyLogicRequiredNodesV2.ToList());
-                foreach (XElement logicProperties in logicsElement.Elements())
-                {
-                    string elementName = logicProperties.Name.LocalName;
-                    if (DependnecyLogicRequiredNodesV2.Contains(elementName))
                     {
-                        switch (elementName)
+                        //unkonwn attribute, add it to the unknown list
+                        unknownListAttributes.Add(packageMember.Name);
+                    }
+                }
+                //list any unknown attrubutes here
+                foreach(string unknownAttribute in unknownListAttributes)
+                {
+                    //log it here
+                    Logging.Error("Unknown Attribute from xml node not in whitelist or memberInfo: {0}, PackageName: {1}, LineNumber {2}",
+                        unknownAttribute, packageOfAnyType.PackageName, ((IXmlLineInfo)xmlPackageNode).LineNumber);
+                }
+                //list any attributes not included here (error, should be included)
+                foreach(string missingAttribute in missingAttributes)
+                {
+                    //log it here
+                    Logging.Error("Missing required attribute not in xmlInfo: {0}, PackageName: {1}, LineNumber {2}",
+                        missingAttribute, packageOfAnyType.PackageName, ((IXmlLineInfo)xmlPackageNode).LineNumber);
+                }
+
+                //now deal with node values. no need to log what isn't set
+                List<string> unknownListNodes = new List<string>();
+                foreach(XElement element in xmlPackageNode.Elements())
+                {
+                    MemberInfo[] matchingPackageMembers = membersInClass.Where(field => field.Name.Equals(element.Name.LocalName)).ToArray();
+                    if (matchingPackageMembers.Count() == 0)
+                    {
+                        Logging.Debug("field {0} from xml attribute does not exist in fieldInfo", element.Name);
+                        unknownListAttributes.Add(element.Name.LocalName);
+                        continue;
+                    }
+                    MemberInfo packageMember = matchingPackageMembers[0];
+                    if (whitelistNodesReal.Contains(packageMember.Name))
+                    {
+                        whitelistNodesReal.Remove(packageMember.Name);
+                        //BUT, if it's a package entry, we need to recursivly procsses it
+                        if (packageOfAnyType is SelectablePackage throwAwayPackage && element.Name.LocalName.Equals(nameof(throwAwayPackage.Packages)))
                         {
-                            case "negateFlag":
-                                logic.NotFlag = Utils.ParseBool(logicProperties.Value.Trim(), false);
-                                break;
-                            case "packageName":
-                                logic.PackageName = logicProperties.Value.Trim();
-                                break;
-                            case "logicType":
-                                logic.Logic = (Logic)Utils.ParseInt(logicProperties.Value.Trim(), 0);
-                                break;
+                            //need hard code special case for Packages
+                            ParseDatabase1V1Packages(element.Elements().ToList(), throwAwayPackage.Packages,
+                                SelectablePackage.FieldsToXmlParseAttributes(), SelectablePackage.FieldsToXmlParseNodes(), packageType);
                         }
-                        copyOfDependencyLigicRequiredNodes.Remove(elementName);
+                        //HOWEVER, if the object is a list type, we need to parse the list first
+                        //https://stackoverflow.com/questions/4115968/how-to-tell-whether-a-type-is-a-list-or-array-or-ienumerable-or
+                        else if(packageMember is FieldInfo packageField && typeof(IEnumerable).IsAssignableFrom(packageField.FieldType) && !packageField.FieldType.Equals(typeof(string)))
+                        {
+                            if(!Utils.SetListEntriesField(packageOfAnyType,packageField, xmlPackageNode.Element(element.Name).Elements()))
+                            {
+                                Logging.Error("Failed to parse values for list object: {0}, PackageName: {1}, LineNumber {2}",
+                                    element.Name, packageOfAnyType.PackageName, ((IXmlLineInfo)element).LineNumber);
+                            }
+                        }
+                        else if (packageMember is PropertyInfo packageProperty && typeof(IEnumerable).IsAssignableFrom(packageProperty.PropertyType) && !packageProperty.PropertyType.Equals(typeof(string)))
+                        {
+                            throw new BadMemeException("Literally just copy and paste the method again in Utils from FieldInfo");
+                        }
+                        else if (!Utils.SetObjectMember(packageOfAnyType, packageMember, element.Value))
+                        {
+                            Logging.Error("Failed to set member {0}, default (if exists) was used instead, PackageName: {1}, LineNumber {2}",
+                                element.Name.LocalName, packageOfAnyType.PackageName, ((IXmlLineInfo)element).LineNumber);
+                        }
                     }
                     else
-                        unknownElements.Add(elementName);
+                    {
+                        unknownListNodes.Add(packageMember.Name);
+                    }
                 }
-                if (copyOfDependencyLigicRequiredNodes.Count > 0)
-                    ListNotUsedRequired(logicsElement, copyOfDependencyLigicRequiredNodes);
-                if (unknownElements.Count > 0)
-                    ListUnknown(logicsElement, unknownElements);
-                logics.Add(logic);
+                //list any unknown attrubutes here
+                foreach (string unknownAttribute in unknownListNodes)
+                {
+                    //log it here
+                    Logging.Error("Unknown Element from xml node not in whitelist or memberInfo: {0}, PackageName: {1}, LineNumber {2}",
+                        unknownAttribute, packageOfAnyType.PackageName, ((IXmlLineInfo)xmlPackageNode).LineNumber);
+                }
+                //oh yeah, add it to the internal memory list
+                //globalDependencies.Add(globalDependency);
+                genericPackageList.Add(packageOfAnyType);
             }
-        }
-        private static void ListNotUsedRequired(XElement node, List<string> missingRequriedProperties)
-        {
-            foreach (string s in missingRequriedProperties)
-            {
-                Logging.WriteToLog(string.Format("missing required xml property: name={0}, value={1}, line={2}", node.Name.LocalName, node.Value,
-                    ((IXmlLineInfo)node).LineNumber), Logfiles.Application, LogLevel.Error);
-            }
-        }
-        private static void ListUnknown(XElement node, List<string> unknownElements)
-        {
-            foreach (string s in unknownElements)
-            {
-                Logging.WriteToLog(string.Format("unknown xml property: name={0}, value={1}, line={2}", node.Name.LocalName, node.Value,
-                    ((IXmlLineInfo)node).LineNumber), Logfiles.Application, LogLevel.Error);
-            }
+            return true;
         }
         #endregion
 
         #region Other XML stuffs
         //https://blogs.msdn.microsoft.com/xmlteam/2009/03/31/converting-from-xmldocument-to-xdocument/
-        private static XDocument DocumentToXDocument(XmlDocument doc)
+        public static XDocument DocumentToXDocument(XmlDocument doc)
         {
             if (doc == null)
                 return null;
             return XDocument.Parse(doc.OuterXml,LoadOptions.SetLineInfo);
+        }
+
+        public static XDocument LoadXDocument(string fileOrXml, XmlLoadType type)
+        {
+            if(type == XmlLoadType.FromFile && !File.Exists(fileOrXml))
+            {
+                Logging.Error("XmlLoadType set to file and file does not exist at {0}", fileOrXml);
+                return null;
+            }
+            try
+            {
+                switch(type)
+                {
+                    case XmlLoadType.FromFile:
+                        return XDocument.Load(fileOrXml, LoadOptions.SetLineInfo);
+                    case XmlLoadType.FromXml:
+                        return XDocument.Parse(fileOrXml, LoadOptions.SetLineInfo);
+                }
+            }
+            catch(XmlException ex)
+            {
+                Logging.Exception(ex.ToString());
+                return null;
+            }
+            return null;
         }
 
         public static XmlDocument LoadXmlDocument(string fileOrXml, XmlLoadType type)
@@ -653,10 +553,68 @@ namespace RelhaxModpack
             return doc;
         }
 
-        public static void UnpackXmlFile(XmlUnpack xmlUnpack)
+        public static void UnpackXmlFile(XmlUnpack xmlUnpack, StringBuilder unpackBuilder)
         {
-            throw new BadMemeException("need to implement this still");
-            //TODO
+            //log info for debugging if need be
+            Logging.Info(xmlUnpack.ToString());
+
+            //check if new destination name for replacing
+            string destinationFilename = string.IsNullOrWhiteSpace(xmlUnpack.NewFileName) ? xmlUnpack.FileName : xmlUnpack.NewFileName;
+            string destinationCompletePath = Path.Combine(xmlUnpack.ExtractDirectory, destinationFilename);
+            string sourceCompletePath = Path.Combine(xmlUnpack.DirectoryInArchive, xmlUnpack.FileName);
+
+            //if the destination file already exists, then don't copy it over
+            if(File.Exists(destinationCompletePath))
+            {
+                Logging.Info("Replacement file already exists, skipping");
+                return;
+            }
+
+            //if the package entry is empty, then it's just a file copy
+            if(string.IsNullOrWhiteSpace(xmlUnpack.Pkg))
+            {
+                if (File.Exists(sourceCompletePath))
+                    File.Copy(sourceCompletePath, destinationCompletePath);
+                Logging.Info("file copied");
+            }
+            else
+            {
+                if(!File.Exists(xmlUnpack.Pkg))
+                {
+                    Logging.Error("packagefile does not exist, skipping");
+                    return;
+                }
+                using (ZipFile zip = new ZipFile(xmlUnpack.Pkg))
+                {
+                    //get the files that match the specified path from the xml entry
+                    string zipPath = Path.Combine(xmlUnpack.DirectoryInArchive, xmlUnpack.FileName).Replace(@"\", @"/");
+                    ZipEntry[] matchingEntries = zip.Where(zipp => zipp.FileName.Equals(zipPath)).ToArray();
+                    Logging.Debug("matching zip entries: {0}", matchingEntries.Count());
+                    if(matchingEntries.Count() > 0)
+                    {
+                        foreach(ZipEntry entry in matchingEntries)
+                        {
+                            //change the name to the destination
+                            entry.FileName = destinationFilename;
+
+                            //extract to disk and log
+                            entry.Extract(xmlUnpack.ExtractDirectory, ExtractExistingFileAction.DoNotOverwrite);
+                            unpackBuilder.AppendLine(destinationCompletePath);
+                            Logging.Info("entry extracted: {0}", destinationFilename);
+                        }
+                    }
+                }
+            }
+            Logging.Info("unpacking xml binary file (if binary)");
+            try
+            {
+                XmlBinaryHandler binaryHandler = new XmlBinaryHandler();
+                binaryHandler.UnpackXmlFile(destinationCompletePath);
+            }
+            catch (Exception xmlUnpackExceptino)
+            {
+                Logging.Exception(xmlUnpackExceptino.ToString());
+            }
         }
         #endregion
 
@@ -702,6 +660,9 @@ namespace RelhaxModpack
                             break;
                         case "enabled":
                             d.Enabled = Utils.ParseBool(globs.Value, false);
+                            break;
+                        case "appendExtraction":
+                            d.AppendExtraction = Utils.ParseBool(globs.Value.Trim(), false);
                             break;
                         case "packageName":
                             d.PackageName = globs.Value.Trim();
@@ -751,6 +712,7 @@ namespace RelhaxModpack
                 List<string> optionalDepNodList = new List<string>() { "startAddress", "endAddress", "devURL", "timestamp" , "logicalDependencies", "logAtInstall" };
                 List<string> unknownNodeList = new List<string>() { };
                 Dependency d = new Dependency();
+                d.wasLogicalDependencyLegacy = false;
                 foreach (XElement globs in dependencyNode.Elements())
                 {
                     switch (globs.Name.ToString())
@@ -779,6 +741,9 @@ namespace RelhaxModpack
                         case "enabled":
                             d.Enabled = Utils.ParseBool(globs.Value, false);
                             break;
+                        case "appendExtraction":
+                            d.AppendExtraction = Utils.ParseBool(globs.Value.Trim(), false);
+                            break;
                         case "packageName":
                             d.PackageName = globs.Value.Trim();
                             if (string.IsNullOrEmpty(d.PackageName))
@@ -796,6 +761,7 @@ namespace RelhaxModpack
                             {
                                 string[] logDepNodeList = new string[] { "packageName", "negateFlag" };
                                 DatabaseLogic ld = new DatabaseLogic();
+                                ld.Logic = Logic.AND;
                                 foreach (XElement logDependencyNode in logDependencyHolder.Elements())
                                 {
                                     logDepNodeList = logDepNodeList.Except(new string[] { logDependencyNode.Name.ToString() }).ToArray();
@@ -832,7 +798,7 @@ namespace RelhaxModpack
                                     ld.PackageName = Utils.RandomString(30);
                                     Logging.WriteToLog("PackageName is random generated: " + ld.PackageName);              // to avoid exceptions
                                 }
-                                d.DatabasePackageLogic.Add(ld);
+                                d.Dependencies.Add(ld);
                             }
                             break;
                         default:
@@ -872,6 +838,7 @@ namespace RelhaxModpack
                 List<string> optionalDepNodList = new List<string>() { "startAddress", "endAddress", "devURL", "timestamp", "logAtInstall" };
                 List<string> unknownNodeList = new List<string>() { };
                 Dependency d = new Dependency();
+                d.wasLogicalDependencyLegacy = true;
                 foreach (XElement globs in dependencyNode.Elements())
                 {
                     switch (globs.Name.ToString())
@@ -953,6 +920,9 @@ namespace RelhaxModpack
                         case "name":
                             cat.Name = catagoryNode.Value;
                             break;
+                        case "installGroup":
+                            cat.InstallGroup = Utils.ParseInt(catagoryNode.Value.Trim(), 0);
+                            break;
                         case "packages":
                             foreach (XElement modHolder in catagoryNode.Elements())
                             {
@@ -996,7 +966,27 @@ namespace RelhaxModpack
                                                     m.CRC = modNode.Value;
                                                     break;
                                                 case "type":
-                                                    m.Type = modNode.Value;
+                                                    switch (modNode.Value)
+                                                    {
+                                                        case "multi":
+                                                            m.Type = SelectionTypes.multi;
+                                                            break;
+                                                        case "single":
+                                                            m.Type = SelectionTypes.single1;
+                                                            break;
+                                                        case "single1":
+                                                            m.Type = SelectionTypes.single1;
+                                                            break;
+                                                        case "single_dropdown":
+                                                            m.Type = SelectionTypes.single_dropdown1;
+                                                            break;
+                                                        case "single_dropdown1":
+                                                            m.Type = SelectionTypes.single_dropdown1;
+                                                            break;
+                                                        case "single_dropdown2":
+                                                            m.Type = SelectionTypes.single_dropdown2;
+                                                            break;
+                                                    }
                                                     break;
                                                 case "enabled":
                                                     m.Enabled = Utils.ParseBool(modNode.Value, false);
@@ -1038,7 +1028,7 @@ namespace RelhaxModpack
                                                                     continue;
                                                                 if (innerText.Equals(""))
                                                                     continue;
-                                                                UserFiles uf = new UserFiles();
+                                                                UserFile uf = new UserFile();
                                                                 uf.Pattern = innerText;
                                                                 if (userDataNode.Attribute("before") != null)
                                                                     uf.placeBeforeExtraction = Utils.ParseBool(userDataNode.Attribute("before").Value, false);
@@ -1322,6 +1312,7 @@ namespace RelhaxModpack
                 parsedCatagoryList.Add(cat);
             }
         }
+        
         //recursivly processes the configs
         public static void ProcessConfigs(XElement holder, SelectablePackage m, bool parentIsMod, int level, SelectablePackage con = null)
         {
@@ -1397,7 +1388,27 @@ namespace RelhaxModpack
                                     c.DevURL = configNode.Value;
                                     break;
                                 case "type":
-                                    c.Type = configNode.Value;
+                                    switch (configNode.Value)
+                                    {
+                                        case "multi":
+                                            c.Type = SelectionTypes.multi;
+                                            break;
+                                        case "single":
+                                            c.Type = SelectionTypes.single1;
+                                            break;
+                                        case "single1":
+                                            c.Type = SelectionTypes.single1;
+                                            break;
+                                        case "single_dropdown":
+                                            c.Type = SelectionTypes.single_dropdown1;
+                                            break;
+                                        case "single_dropdown1":
+                                            c.Type = SelectionTypes.single_dropdown1;
+                                            break;
+                                        case "single_dropdown2":
+                                            c.Type = SelectionTypes.single_dropdown2;
+                                            break;
+                                    }
                                     break;
                                 case "packages":
                                     ProcessConfigs(configNode, m, false, c.Level+1 ,c);
@@ -1413,7 +1424,7 @@ namespace RelhaxModpack
                                                     continue;
                                                 if (innerText.Equals(""))
                                                     continue;
-                                                UserFiles uf = new UserFiles();
+                                                UserFile uf = new UserFile();
                                                 uf.Pattern = innerText;
                                                 if (userDataNode.Attribute("before") != null)
                                                     uf.placeBeforeExtraction = Utils.ParseBool(userDataNode.Attribute("before").Value, false);
@@ -1636,18 +1647,29 @@ namespace RelhaxModpack
         {
             return s.TrimEnd().Replace(@"\", @"&#92;").Replace("\r", @"\r").Replace("\t", @"\t").Replace("\n", @"\n");
         }
+        
         //saves the mod database
-        public static void SaveDatabaseLegacy(string saveLocation, string gameVersion, string onlineFolderVersion, List<Dependency> globalDependencies, List<Dependency> dependencies, List<Dependency> logicalDependencies, List<Category> parsedCatagoryList)
+        public static void SaveDatabaseLegacy(string saveLocation, XmlDocument doc, List<DatabasePackage> globalDependencies,
+            List<Dependency> dependencies, List<Category> parsedCatagoryList)
         {
-            XmlDocument doc = new XmlDocument();
+            //V2 compatibility: dependencies need to be sorted into logical and regular for legacy database
+            List<Dependency> logicalDependencies = dependencies.Where(dep => dep.wasLogicalDependencyLegacy).ToList();
+            dependencies = dependencies.Where(dep => !dep.wasLogicalDependencyLegacy).ToList();
+
+            // Create an XML declaration. (except it already has it, so don't)
+            //XmlDeclaration xmldecl;
+            //xmldecl = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
+
+            // Add the new node to the document.
+            //XmlElement cDoc = doc.DocumentElement;
+            //doc.InsertBefore(xmldecl, cDoc);
+
             //database root modInfo.xml
-            XmlElement root = doc.CreateElement("modInfoAlpha.xml");
-            root.SetAttribute("version", gameVersion);
-            root.SetAttribute("onlineFolder", onlineFolderVersion);
-            doc.AppendChild(root);
+            XmlElement root = doc.DocumentElement;
+
             //global dependencies
             XmlElement globalDependenciesXml = doc.CreateElement("globaldependencies");
-            foreach (Dependency d in globalDependencies)
+            foreach (DatabasePackage d in globalDependencies)
             {
                 //declare dependency root
                 XmlElement globalDependencyRoot = doc.CreateElement("globaldependency");
@@ -1666,6 +1688,10 @@ namespace RelhaxModpack
                 XmlElement globalDepEnabled = doc.CreateElement("enabled");
                 globalDepEnabled.InnerText = "" + d.Enabled;
                 globalDependencyRoot.AppendChild(globalDepEnabled);
+
+                XmlElement globalDepAppendExtraction = doc.CreateElement("appendExtraction");
+                globalDepAppendExtraction.InnerText = "" + d.AppendExtraction;
+                globalDependencyRoot.AppendChild(globalDepAppendExtraction);
 
                 XmlElement globalDepPackageName = doc.CreateElement("packageName");
                 if (!string.IsNullOrWhiteSpace(d.PackageName))
@@ -1729,6 +1755,10 @@ namespace RelhaxModpack
                 XmlElement depEnabled = doc.CreateElement("enabled");
                 depEnabled.InnerText = "" + d.Enabled;
                 dependencyRoot.AppendChild(depEnabled);
+
+                XmlElement depAppendExtraction = doc.CreateElement("appendExtraction");
+                depAppendExtraction.InnerText = "" + d.AppendExtraction;
+                dependencyRoot.AppendChild(depAppendExtraction);
 
                 XmlElement depPackageName = doc.CreateElement("packageName");
                 if (!string.IsNullOrWhiteSpace(d.PackageName))
@@ -1816,6 +1846,10 @@ namespace RelhaxModpack
                     logicalDepPackageName.InnerText = d.PackageName.Trim();
                 logicalDependencyRoot.AppendChild(logicalDepPackageName);
 
+                XmlElement logicalDepLogic = doc.CreateElement("logic");
+                logicalDepLogic.InnerText = "AND";//hard-coded for legacy
+                logicalDependencyRoot.AppendChild(logicalDepLogic);
+
                 //optional
                 if (d.Timestamp > 0)
                 {
@@ -1861,6 +1895,11 @@ namespace RelhaxModpack
                 XmlElement catagoryName = doc.CreateElement("name");
                 catagoryName.InnerText = c.Name.Trim();
                 catagoryRoot.AppendChild(catagoryName);
+
+                XmlElement categoryInstallGroup = doc.CreateElement("installGroup");
+                categoryInstallGroup.InnerText = "" + c.InstallGroup;
+                catagoryRoot.AppendChild(categoryInstallGroup);
+
                 //dependencies for catagory
                 XmlElement catagoryDependencies = doc.CreateElement("dependencies");
                 foreach (DatabaseLogic d in c.Dependencies)
@@ -1904,8 +1943,8 @@ namespace RelhaxModpack
                         modPackageName.InnerText = m.PackageName.Trim();
                     modRoot.AppendChild(modPackageName);
                     XmlElement modType = doc.CreateElement("type");
-                    if (!string.IsNullOrWhiteSpace(m.Type))
-                        modType.InnerText = m.Type.Trim();
+                    if (m.Type != SelectionTypes.none)
+                        modType.InnerText = m.Type.ToString().Trim();
                     modRoot.AppendChild(modType);
                     //optional
                     if (!string.IsNullOrWhiteSpace(m.Version))
@@ -1966,7 +2005,7 @@ namespace RelhaxModpack
                     if(m.UserFiles.Count > 0)
                     {
                         XmlElement modDatas = doc.CreateElement("userDatas");
-                        foreach (UserFiles us in m.UserFiles)
+                        foreach (UserFile us in m.UserFiles)
                         {
                             XmlElement userData = doc.CreateElement("userData");
                             userData.InnerText = us.Pattern.Trim();
@@ -2026,14 +2065,6 @@ namespace RelhaxModpack
             }
             root.AppendChild(catagoriesHolder);
 
-            // Create an XML declaration.
-            XmlDeclaration xmldecl;
-            xmldecl = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
-
-            // Add the new node to the document.
-            XmlElement cDoc = doc.DocumentElement;
-            doc.InsertBefore(xmldecl, cDoc);
-
             // save database file
             doc.Save(saveLocation);
         }
@@ -2069,8 +2100,8 @@ namespace RelhaxModpack
                     configPackageName.InnerText = cc.PackageName.Trim();
                 configRoot.AppendChild(configPackageName);
                 XmlElement configType = doc.CreateElement("type");
-                if (!string.IsNullOrWhiteSpace(cc.Type))
-                    configType.InnerText = cc.Type;
+                if (cc.Type != SelectionTypes.none)
+                    configType.InnerText = cc.Type.ToString().Trim();
                 configRoot.AppendChild(configType);
                 //optional
                 if(!string.IsNullOrWhiteSpace(cc.Version))
@@ -2131,7 +2162,7 @@ namespace RelhaxModpack
                 if(cc.UserFiles.Count > 0)
                 {
                     XmlElement configDatas = doc.CreateElement("userDatas");
-                    foreach (UserFiles us in cc.UserFiles)
+                    foreach (UserFile us in cc.UserFiles)
                     {
                         XmlElement userData = doc.CreateElement("userData");
                         userData.InnerText = us.Pattern.Trim();
@@ -2193,150 +2224,259 @@ namespace RelhaxModpack
         #region Database Saving
         //saving database in a way that doesn't suck
         public static void SaveDatabase(string saveLocation, string gameVersion, string onlineFolderVersion, List<DatabasePackage> globalDependencies,
-        List<Dependency> dependencies, List<Category> parsedCatagoryList)
+        List<Dependency> dependencies, List<Category> parsedCatagoryList, DatabaseXmlVersion versionToSaveAs)
         {
             //make root of document
             XmlDocument doc = new XmlDocument();
+            //https://stackoverflow.com/questions/334256/how-do-i-add-a-custom-xmldeclaration-with-xmldocument-xmldeclaration
+            XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
+            doc.AppendChild(xmlDeclaration);
             //database root modInfo.xml
-            XmlElement root = doc.CreateElement("modInfo.xml");
-            root.SetAttribute("version", gameVersion);
-            root.SetAttribute("onlineFolder", onlineFolderVersion);
+            XmlElement root = doc.CreateElement("modInfoAlpha.xml");
+            root.SetAttribute("version", gameVersion.Trim());
+            root.SetAttribute("onlineFolder", onlineFolderVersion.Trim());
+            //append the version information, game and online folder
             doc.AppendChild(root);
-            //save global depednecies
-            //idea: method to handle root leemnts here, but make a "save element" and from there do more if(element is SelectablePackage)
-            //save dependencies
-            throw new BadMemeException("You should probably finishe this lol");
-            //save categories
-            
-            //save databse
-            if(File.Exists(saveLocation))
-                File.Delete(saveLocation);
-            doc.Save(saveLocation);
+            switch (versionToSaveAs)
+            {
+                case DatabaseXmlVersion.Legacy:
+                    //when legacy, saveLocation is a single file
+                    if(Path.HasExtension(saveLocation))
+                        SaveDatabaseLegacy(saveLocation, doc, globalDependencies, dependencies, parsedCatagoryList);
+                    else
+                        SaveDatabaseLegacy(Path.Combine(saveLocation, "modInfoAlpha.xml"), doc, globalDependencies, dependencies, parsedCatagoryList);
+                    break;
+                case DatabaseXmlVersion.OnePointOne:
+                    //in 1.1, saveLocation is a document path
+                    if (Path.HasExtension(saveLocation))
+                        SaveDatabase1V1(Path.GetDirectoryName(saveLocation), doc, xmlDeclaration, globalDependencies, dependencies, parsedCatagoryList);
+                    else
+                        SaveDatabase1V1(saveLocation, doc, xmlDeclaration, globalDependencies, dependencies, parsedCatagoryList);
+                    break;
+            }            
         }
-        private static void SavePackage(XmlDocument root, XmlElement holder, DatabasePackage package)
+
+        public static void SaveDatabase1V1(string savePath, XmlDocument doc, XmlDeclaration xmlDeclaration, List<DatabasePackage> globalDependencies,
+        List<Dependency> dependencies, List<Category> parsedCatagoryList)
         {
-            //make the root element
-            XmlElement element = root.CreateElement("globalDependency");
-            SaveProperty(root, element, nameof(package.PackageName), package.PackageName, "there should always be a packageName lol", true);
-            SaveProperty(root, element, nameof(package.Version), package.Version, "", true);
-            SaveProperty(root, element, nameof(package.Timestamp), package.Timestamp.ToString(), ((long)0).ToString(), true);
-            SaveProperty(root, element, nameof(package.ZipFile), package.ZipFile, "", true);
-            SaveProperty(root, element, nameof(package.Enabled), package.Enabled.ToString(), false.ToString(), true);
-            SaveProperty(root, element, nameof(package.CRC), package.CRC, "", true);
-            SaveProperty(root, element, nameof(package.StartAddress), package.StartAddress, Settings.DefaultStartAddress, true);
-            SaveProperty(root, element, nameof(package.EndAddress), package.EndAddress, Settings.DefaultEndAddress, true);
-            SaveProperty(root, element, nameof(package.LogAtInstall), package.LogAtInstall.ToString(), true.ToString(), true);
-            SaveProperty(root, element, nameof(package.DevURL), package.DevURL, "", true);
-            SaveProperty(root, element, nameof(package.InstallGroup), package.InstallGroup.ToString(), ((int)5).ToString(), true);
-            //save the basic elements (if they exist, otherwise defaults will be used on load)
-            if (package is Dependency dependency)
+            //save the root/header database file
+            XmlElement root = doc.DocumentElement;
+            root.SetAttribute("documentVersion", "1.1");
+
+            XmlElement xmlGlobalDependencies = doc.CreateElement("globalDependencies");
+            xmlGlobalDependencies.SetAttribute("file", "globalDependencies.xml");
+            root.AppendChild(xmlGlobalDependencies);
+
+            XmlElement xmlDependencies = doc.CreateElement("dependencies");
+            xmlDependencies.SetAttribute("file", "dependencies.xml");
+            root.AppendChild(xmlDependencies);
+
+            XmlElement xmlCategories = doc.CreateElement("categories");
+            foreach(Category cat in parsedCatagoryList)
             {
-                //handle dependency specific stuff
-                //like the Depedndencies
-                if(dependency.Dependencies.Count > 0)
+                XmlElement xmlCategory = doc.CreateElement("category");
+                if (string.IsNullOrWhiteSpace(cat.XmlFilename))
                 {
-                    //create holder and hold them
-                    XmlElement dependenciesHolder = root.CreateElement("dependencies");
-                    element.AppendChild(dependenciesHolder);
-                    foreach(DatabaseLogic logics in dependency.Dependencies)
-                    {
-                        XmlElement dependencyLogic = root.CreateElement("dependency");
-                        SaveProperty(root, dependencyLogic, nameof(logics.PackageName), logics.PackageName, "should always have this", false);
-                        SaveProperty(root, dependencyLogic, nameof(logics.Enabled), logics.Enabled.ToString(), false.ToString(), false);
-                        SaveProperty(root, dependencyLogic, nameof(logics.Checked), logics.Checked.ToString(), false.ToString(), false);
-                        SaveProperty(root, dependencyLogic, nameof(logics.NotFlag), logics.NotFlag.ToString(), false.ToString(), false);
-                        SaveProperty(root, dependencyLogic, nameof(logics.Logic), logics.Logic.ToString(), Logic.OR.ToString(), false);
-                    }
+                    cat.XmlFilename = cat.Name.Replace(" ", string.Empty);
+                    cat.XmlFilename = cat.XmlFilename.Replace("/", "_") + ".xml";
                 }
+                xmlCategory.SetAttribute("file", cat.XmlFilename);
+                xmlCategories.AppendChild(xmlCategory);
             }
-            else if (package is SelectablePackage selectablePackage)
+            root.AppendChild(xmlCategories);
+            doc.Save(Path.Combine(savePath, "database.xml"));
+
+            //save each of the other lists
+            XmlDocument xmlGlobalDependenciesFile = new XmlDocument();
+            xmlDeclaration = xmlGlobalDependenciesFile.CreateXmlDeclaration("1.0", "UTF-8", "yes");
+            xmlGlobalDependenciesFile.AppendChild(xmlDeclaration);
+            XmlElement xmlGlobalDependenciesFileRoot = xmlGlobalDependenciesFile.CreateElement("GlobalDependencies");
+            SaveDatabaseList1V1(globalDependencies, xmlGlobalDependenciesFileRoot, xmlGlobalDependenciesFile, "GlobalDependency");
+            xmlGlobalDependenciesFile.AppendChild(xmlGlobalDependenciesFileRoot);
+            xmlGlobalDependenciesFile.Save(Path.Combine(savePath, "globalDependencies.xml"));
+
+            XmlDocument xmlDependenciesFile = new XmlDocument();
+            xmlDeclaration = xmlDependenciesFile.CreateXmlDeclaration("1.0", "UTF-8", "yes");
+            xmlDependenciesFile.AppendChild(xmlDeclaration);
+            XmlElement xmlDependenciesFileRoot = xmlDependenciesFile.CreateElement("Dependencies");
+            SaveDatabaseList1V1(dependencies, xmlDependenciesFileRoot, xmlDependenciesFile, "Dependency");
+            xmlDependenciesFile.AppendChild(xmlDependenciesFileRoot);
+            xmlDependenciesFile.Save(Path.Combine(savePath, "dependencies.xml"));
+
+            //for each cateory do the same thing
+            foreach (Category cat in parsedCatagoryList)
             {
-                //handle package specific stuff
-                SaveProperty(root, element, nameof(selectablePackage.Name), selectablePackage.Name, "", true, element[nameof(package.PackageName)]);
-                SaveProperty(root, element, nameof(selectablePackage.Type), selectablePackage.Type, "", true, element[nameof(selectablePackage.Name)]);
-                SaveProperty(root, element, nameof(selectablePackage.Visible), selectablePackage.Visible.ToString(), false.ToString(), true, element[nameof(selectablePackage.Enabled)]);
-                SaveProperty(root, element, nameof(selectablePackage.Size), selectablePackage.Size.ToString(), ((int)0).ToString(), true, element[nameof(selectablePackage.CRC)]);
-                SaveProperty(root, element, nameof(selectablePackage.UpdateComment), selectablePackage.UpdateComment, "", true);
-                SaveProperty(root, element, nameof(selectablePackage.Description), selectablePackage.Description, "", true);
-                SaveProperty(root, element, nameof(selectablePackage.Checked), selectablePackage.Checked.ToString(), false.ToString(), true, element[nameof(selectablePackage.Enabled)]);
-                SaveProperty(root, element, nameof(selectablePackage.ShowInSearchList), selectablePackage.ShowInSearchList.ToString(), false.ToString(), true);
-                if(selectablePackage.UserFiles.Count > 0)
+                XmlDocument xmlCategoryFile = new XmlDocument();
+                xmlDeclaration = xmlCategoryFile.CreateXmlDeclaration("1.0", "UTF-8", "yes");
+                xmlCategoryFile.AppendChild(xmlDeclaration);
+                XmlElement xmlCategoryFileRoot = xmlCategoryFile.CreateElement("Category");
+                xmlCategoryFileRoot.SetAttribute("Name", cat.Name);
+                //need to incorporate the fact that categories have dependencies
+                if (cat.Dependencies.Count > 0)
                 {
-                    XmlElement userFilesHolder = root.CreateElement("userFiles");
-                    element.AppendChild(userFilesHolder);
-                    foreach(UserFiles file in selectablePackage.UserFiles)
+                    XmlElement xmlCategoryDependencies = xmlCategoryFile.CreateElement("Dependencies");
+                    foreach(DatabaseLogic logic in cat.Dependencies)
                     {
-                        XmlElement userFile = root.CreateElement("userFile");
-                        userFile.InnerText = file.Pattern;
-                        userFilesHolder.AppendChild(userFile);
+                        XmlElement xmlCategoryDependency = xmlCategoryFile.CreateElement("Dependency");
+                        foreach(FieldInfo info in typeof(DatabaseLogic).GetFields())
+                        {
+                            xmlCategoryDependency.SetAttribute(info.Name,info.GetValue(logic).ToString());
+                        }
+                        xmlCategoryDependencies.AppendChild(xmlCategoryDependency);
                     }
+                    xmlCategoryFileRoot.AppendChild(xmlCategoryDependencies);
                 }
-                if(selectablePackage.Medias.Count > 0)
-                {
-                    XmlElement mediasHolder = root.CreateElement("medias");
-                    element.AppendChild(mediasHolder);
-                    foreach(Media media in selectablePackage.Medias)
-                    {
-                        XmlElement mediaElement = root.CreateElement("media");
-                        SaveProperty(root, mediaElement, nameof(media.MediaType), media.MediaType.ToString(), MediaType.Picture.ToString(), false);
-                        SaveProperty(root, mediaElement, nameof(media.URL), media.URL, "", false);
-                        mediasHolder.AppendChild(mediaElement);
-                    }
-                }
-                if (selectablePackage.Dependencies.Count > 0)
-                {
-                    //create holder and hold them
-                    XmlElement dependenciesHolder = root.CreateElement("dependencies");
-                    element.AppendChild(dependenciesHolder);
-                    foreach (DatabaseLogic logics in selectablePackage.Dependencies)
-                    {
-                        XmlElement dependencyLogic = root.CreateElement("dependency");
-                        SaveProperty(root, dependencyLogic, nameof(logics.PackageName), logics.PackageName, "should always have this", false);
-                        SaveProperty(root, dependencyLogic, nameof(logics.Enabled), logics.Enabled.ToString(), false.ToString(), false);
-                        SaveProperty(root, dependencyLogic, nameof(logics.Checked), logics.Checked.ToString(), false.ToString(), false);
-                        SaveProperty(root, dependencyLogic, nameof(logics.NotFlag), logics.NotFlag.ToString(), false.ToString(), false);
-                        SaveProperty(root, dependencyLogic, nameof(logics.Logic), logics.Logic.ToString(), Logic.OR.ToString(), false);
-                        dependenciesHolder.AppendChild(dependencyLogic);
-                    }
-                }
-                if (selectablePackage.Packages.Count > 0)
-                {
-                    //create sub packages holder
-                    XmlElement subPackagesHoder = root.CreateElement("packages");
-                    element.AppendChild(subPackagesHoder);
-                    foreach(SelectablePackage sp in selectablePackage.Packages)
-                    {
-                        XmlElement subPackage = root.CreateElement("package");
-                        SavePackage(root, subPackage, sp);
-                        subPackagesHoder.AppendChild(subPackage);
-                    }
-                }
+                SaveDatabaseList1V1(cat.Packages, xmlCategoryFileRoot, xmlCategoryFile, "Package");
+                xmlCategoryFile.AppendChild(xmlCategoryFileRoot);
+                xmlCategoryFile.Save(Path.Combine(savePath, cat.XmlFilename));
             }
-            //append to holder
-            holder.AppendChild(element);
+
         }
-        private static void SaveProperty(XmlDocument doc, XmlElement packageHolder, string propertyName, string propertyValue, string propertyDefault, bool elementType, XmlElement elementToInsertAfter = null)
+
+        private static void SaveDatabaseList1V1(IList packagesToSave, XmlElement documentRootElement, XmlDocument docToMakeElementsFrom, string nameToSaveElementsBy)
         {
-            //if the input value is the same as the default, don't even bother making it. saves space (and time to load it).
-            if(propertyDefault.Equals(propertyValue))
-              return;
-            //TODO
-            //if element, make->set->append
-            if (elementType)
+            //save based on each type it is
+            List<string> membersToXmlSaveAsAttributes = null;
+            List<string> membersToXmlSaveAsNodes = null;
+            FieldInfo[] fields = null;
+            PropertyInfo[] properties = null;
+            XmlElement PackageHolder = null;
+            DatabasePackage samplePackageDefaults = null;
+
+            if (packagesToSave is List<DatabasePackage>)
             {
-                XmlElement element = doc.CreateElement(propertyName);
-                element.InnerText = propertyValue;
-                if (elementToInsertAfter != null)
-                    packageHolder.InsertAfter(element, elementToInsertAfter);
-                else
-                    packageHolder.AppendChild(element);
+                membersToXmlSaveAsAttributes = new List<string>(DatabasePackage.FieldsToXmlParseAttributes());
+                membersToXmlSaveAsNodes = new List<string>(DatabasePackage.FieldsToXmlParseNodes());
+                fields = typeof(DatabasePackage).GetFields();
+                properties = typeof(DatabasePackage).GetProperties();
+                samplePackageDefaults = new DatabasePackage();
             }
-            //else if attribute, make->set->append
-            else
+            else if (packagesToSave is List<Dependency>)
             {
-                XmlAttribute attribute = doc.CreateAttribute(propertyName);
-                attribute.Value = propertyValue;
-                packageHolder.Attributes.Append(attribute);
+                membersToXmlSaveAsAttributes = new List<string>(Dependency.FieldsToXmlParseAttributes());
+                membersToXmlSaveAsNodes = new List<string>(Dependency.FieldsToXmlParseNodes());
+                fields = typeof(Dependency).GetFields();
+                properties = typeof(Dependency).GetProperties();
+                samplePackageDefaults = new Dependency();
+            }
+            else if (packagesToSave is List<SelectablePackage>)
+            {
+                membersToXmlSaveAsAttributes = new List<string>(SelectablePackage.FieldsToXmlParseAttributes());
+                membersToXmlSaveAsNodes = new List<string>(SelectablePackage.FieldsToXmlParseNodes());
+                fields = typeof(SelectablePackage).GetFields();
+                properties = typeof(SelectablePackage).GetProperties();
+                samplePackageDefaults = new SelectablePackage();
+            }
+
+            for (int i = 0; i < packagesToSave.Count; i++)
+            {
+                //it's at least a databasePackage
+                DatabasePackage packageToSaveOfAnyType = (DatabasePackage)packagesToSave[i];
+                SelectablePackage packageOnlyUsedForNames = packageToSaveOfAnyType as SelectablePackage;
+                //make the element to save to
+                PackageHolder = docToMakeElementsFrom.CreateElement(nameToSaveElementsBy);
+                //iterate through each of the attributes and nodes in the arrays to allow for listing in custom order
+                foreach(string memberAttribute in membersToXmlSaveAsAttributes)
+                {
+                    //first check if it is in fields, then if it is in properties
+                    FieldInfo[] fieldMatches = fields.Where(f => f.Name.Equals(memberAttribute)).ToArray();
+                    PropertyInfo[] propertyMatches = properties.Where(p => p.Name.Equals(memberAttribute)).ToArray();
+                    if (fieldMatches.Count() == 1)
+                    {
+                        FieldInfo fieldInType = fieldMatches[0];
+                        PackageHolder.SetAttribute(fieldInType.Name, Utils.MacroReplace(fieldInType.GetValue(packageToSaveOfAnyType).ToString(), ReplacementTypes.TextEscape));
+                    }
+                    else if (propertyMatches.Count() == 1)
+                    {
+                        PropertyInfo propertyInType = propertyMatches[0];
+                        PackageHolder.SetAttribute(propertyInType.Name, propertyInType.GetValue(packageToSaveOfAnyType).ToString());
+                    }
+                    else
+                        throw new BadMemeException("this should not happen. something is very wrong");
+                }
+                foreach (string memberNode in membersToXmlSaveAsNodes)
+                {
+                    FieldInfo[] fieldMatches = fields.Where(f => f.Name.Equals(memberNode)).ToArray();
+                    PropertyInfo[] propertyMatches = properties.Where(p => p.Name.Equals(memberNode)).ToArray();
+                    if (fieldMatches.Count() == 1)
+                    {
+                        FieldInfo fieldInType = fieldMatches[0];
+                        //check if it's a package list of packages
+                        if (fieldInType.Name.Equals(nameof(packageOnlyUsedForNames.Packages)) && packageOnlyUsedForNames.Packages.Count > 0)
+                        {
+                            XmlElement packagesHolder = docToMakeElementsFrom.CreateElement(nameof(packageOnlyUsedForNames.Packages));
+                            SaveDatabaseList1V1(packageOnlyUsedForNames.Packages, packagesHolder, docToMakeElementsFrom, nameToSaveElementsBy);
+                            PackageHolder.AppendChild(packagesHolder);
+                        }
+                        //if it is a list type like media or
+                        else if (typeof(IEnumerable).IsAssignableFrom(fieldInType.FieldType) && !fieldInType.FieldType.Equals(typeof(string)))
+                        {
+                            //get the list type to allow for itterate
+                            IList list = (IList)fieldInType.GetValue(packageToSaveOfAnyType);
+                            //if there's no items, then don't bother
+                            if (list.Count == 0)
+                                continue;
+                            //get the types of objects stored in this list
+                            Type objectTypeInList = list.GetType().GetInterfaces().Where(j => j.IsGenericType && j.GenericTypeArguments.Length == 1)
+                                .FirstOrDefault(j => j.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GenericTypeArguments[0];
+                            //elementFieldHolder is holder for list type like "Medias"
+                            XmlElement elementFieldHolder = docToMakeElementsFrom.CreateElement(fieldInType.Name);
+                            for (int k = 0; k < list.Count; k++)
+                            {
+                                //list element value like "Media"
+                                string objectInListName = objectTypeInList.Name;
+                                //hard code compatibility "DatabaseLogic" -> "Dependency"
+                                if (objectInListName.Equals(nameof(DatabaseLogic)))
+                                    objectInListName = nameof(Dependency);
+                                XmlElement elementFieldValue = docToMakeElementsFrom.CreateElement(objectInListName);
+                                //could be a custom type with many fields, or a single type with no fields
+                                FieldInfo[] fieldsInCustomType = objectTypeInList.GetFields();
+                                if (fieldsInCustomType.Count() == 0)
+                                {
+                                    //single type like int or string
+                                    elementFieldValue.InnerText = list[k].ToString();
+                                }
+                                else
+                                {
+                                    //custom type like media
+                                    foreach (FieldInfo field in objectTypeInList.GetFields())
+                                    {
+                                        //at this time all custom classes only use fields and are stored as attributes
+                                        elementFieldValue.SetAttribute(field.Name, field.GetValue(list[k]).ToString());
+                                    }
+                                }
+                                elementFieldHolder.AppendChild(elementFieldValue);
+                            }
+                            PackageHolder.AppendChild(elementFieldHolder);
+                        }
+                        else
+                        {
+                            XmlElement element = docToMakeElementsFrom.CreateElement(fieldInType.Name);
+                            element.InnerText = fieldInType.GetValue(packageToSaveOfAnyType).ToString();
+                            string defaultFieldValue = fieldInType.GetValue(samplePackageDefaults).ToString();
+                            //only save node values when they are not default
+                            if (!element.InnerText.Equals(defaultFieldValue))
+                            {
+                                element.InnerText = Utils.MacroReplace(element.InnerText, ReplacementTypes.TextEscape);
+                                PackageHolder.AppendChild(element);
+                            }
+                        }
+                    }
+                    else if (propertyMatches.Count() == 1)
+                    {
+                        PropertyInfo propertyInType = propertyMatches[0];
+                        //at this time, properties don't store list attributes nor are packages lists
+                        XmlElement element = docToMakeElementsFrom.CreateElement(propertyInType.Name);
+                        element.InnerText = propertyInType.GetValue(packageToSaveOfAnyType).ToString();
+                        string defaultFieldValue = propertyInType.GetValue(samplePackageDefaults).ToString();
+                        if (!element.InnerText.Equals(defaultFieldValue))
+                            PackageHolder.AppendChild(element);
+                    }
+                    else
+                        throw new BadMemeException("this should not happen. something is very wrong");
+                }
+                //save them to the holder
+                documentRootElement.AppendChild(PackageHolder);
             }
         }
         #endregion

@@ -19,9 +19,9 @@
             <TabItem x:Name="AuthStatusTab" Header="Auth Status">
                 <Grid Background="#FFE5E5E5">
                     <TextBlock x:Name="PasswordLabel" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Please Enter password to use this tool" VerticalAlignment="Top"/>
-                    <TextBox x:Name="PaswordTextbox" HorizontalAlignment="Left" Height="23" Margin="10,26,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200"/>
-                    <Button x:Name="PasswordButton" Content="Button" HorizontalAlignment="Left" Margin="10,49,0,0" VerticalAlignment="Top" Width="75" Click="PasswordButton_Click"/>
-                    <TextBlock x:Name="AuthStatusTextblock" HorizontalAlignment="Left" Margin="90,51,0,0" TextWrapping="Wrap" Text="Current status: Denied" VerticalAlignment="Top" Foreground="#FFEE1111"/>
+                    <TextBox x:Name="PaswordTextbox" HorizontalAlignment="Stretch" Height="46" Margin="10,26,10,0" TextWrapping="Wrap" VerticalAlignment="Top" KeyDown="PaswordTextbox_KeyDown"/>
+                    <Button x:Name="PasswordButton" Content="Check" HorizontalAlignment="Left" Margin="10,78,0,0" VerticalAlignment="Top" Width="75" Click="PasswordButton_Click"/>
+                    <TextBlock x:Name="AuthStatusTextblock" HorizontalAlignment="Left" Margin="90,80,0,0" TextWrapping="Wrap" Text="Current status: Denied" VerticalAlignment="Top" Foreground="#FFEE1111"/>
 
                 </Grid>
             </TabItem>
@@ -30,23 +30,17 @@
                     <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
                         <TextBox x:Name="UpdateDatabaseStep0" Height="23" TextWrapping="Wrap" Text="Step 0: Pull latest database!!!" TextAlignment="Left" IsReadOnly="True"/>
                         <Button x:Name="UpdateDatabaseStep1" Content="Step 1: Load modInfo.xml" HorizontalContentAlignment="Left" Click="OnLoadModInfo"/>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                            <TextBlock Text="Step 2:" Margin="2,0,0,0"/>
-                            <Button x:Name="UpdateDatabaseStep2XML" Content="Update via database.xml" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep2XML_Click" Margin="2,0,2,0"/>
-                            <TextBlock Text="OR"/>
-                            <Button x:Name="UpdateDatabaseStep2PHP" Content="Update via PHP script" HorizontalAlignment="Left" Margin="2,0,2,0" Click="UpdateDatabaseStep2PHP_Click"/>
-                        </StackPanel>
+                        <Button x:Name="UpdateDatabaseStep2" Content="Step 2: Update via PHP script" HorizontalContentAlignment="Left"  Click="UpdateDatabaseStep2_Click"/>
                         <Button x:Name="UpdateDatabaseStep3" Content="Step 3: Prepare database update" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep3_Click"/>
-                        <Button x:Name="UpdateDatabaseStep4" Content="Step 4: Upload changed files and save databaseUpdate.txt to disk" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep4_Click"/>
-                        <Button x:Name="UpdateDatabaseStep5" Content="Step 5: Upload databaseUpdate.txt (in case manual changes)" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep5_Click"/>
-                        <Button x:Name="UpdateDatabaseStep6" Content="Step 6: Run script CreateModInfo.php" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep6_Click"/>
-                        <Button x:Name="UpdateDatabaseStep7" Content="Step 7: Run script CreateManagerInfo.php" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep7_Click"/>
-                        <TextBox x:Name="UpdateDatabaseStep8" Height="35" TextWrapping="Wrap" Text="Step 8: Commit modInfo.xml and databaseUpdate.txt update with message: &quot;made database public @123gauss&quot;" IsReadOnly="True"/>
+                        <Button x:Name="UpdateDatabaseStep4" Content="Step 4: Upload changed" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep4_Click"/>
+                        <Button x:Name="UpdateDatabaseStep5" Content="Step 5: Run script CreateModInfo.php" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep5_Click"/>
+                        <Button x:Name="UpdateDatabaseStep6" Content="Step 6: Run script CreateManagerInfo.php" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep6_Click"/>
+                        <TextBox x:Name="UpdateDatabaseStep7" Height="35" TextWrapping="Wrap" Text="Step 7: Commit modInfo.xml and databaseUpdate.txt update with message: &quot;made database public @123gauss&quot;" IsReadOnly="True"/>
                         <StackPanel Orientation="Horizontal">
-                            <TextBox x:Name="UpdateDatabaseStep9" Height="23" TextWrapping="Wrap" Text="Step 9: Post database update on discord/forums" Margin="0,0,5,0" IsReadOnly="True"/>
-                            <Button x:Name="UpdateDatabasestep9_NA_ENG" Content="NA"  Margin="0,0,0,0" Click="UpdateDatabasestep9_NA_ENG_Click"/>
-                            <Button x:Name="UpdateDatabaseStep9_EU_ENG" Content="EU ENG"  Margin="5,0,0,0" Click="UpdateDatabaseStep9_EU_ENG_Click"/>
-                            <Button x:Name="UpdateDatabaseStep9_EU_GER" Content="EU GER"  Margin="5,0,0,0" Click="UpdateDatabaseStep9_EU_GER_Click"/>
+                            <TextBox x:Name="UpdateDatabaseStep8" Height="23" TextWrapping="Wrap" Text="Step 8: Post database update on discord/forums" Margin="0,0,5,0" IsReadOnly="True"/>
+                            <Button x:Name="UpdateDatabasestep8_NA_ENG" Content="NA"  Margin="0,0,0,0" Click="UpdateDatabasestep8_NA_ENG_Click"/>
+                            <Button x:Name="UpdateDatabaseStep8_EU_ENG" Content="EU ENG"  Margin="5,0,0,0" Click="UpdateDatabaseStep8_EU_ENG_Click"/>
+                            <Button x:Name="UpdateDatabaseStep8_EU_GER" Content="EU GER"  Margin="5,0,0,0" Click="UpdateDatabaseStep8_EU_GER_Click"/>
                         </StackPanel>
                     </StackPanel>
                     <ProgressBar x:Name="TotalUpdateProgressBar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="22"/>

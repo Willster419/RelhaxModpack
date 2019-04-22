@@ -47,14 +47,14 @@
             
             <CheckBox HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="38" Width="372" IsChecked="True">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock x:Name="agreement_Anon_Data" TextWrapping="Wrap" Text="I understand that Relhax V2 anonymously collects data to improve the application based on usage data." Height="37" Width="353"/>
+                    <TextBlock x:Name="agreement_Anon_Data" TextWrapping="Wrap" Text="I understand that Relhax V2 anonymously collects data to improve the application based on usage data, and can be disabled" Height="37" Width="353"/>
                 </StackPanel>
             </CheckBox>
 
         </StackPanel>
 
 
-        <Button Content="Continue" x:Name="continue_Button" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="99" Click="Continue_Button_Click"/>
+        <Button Content="Continue" Tag="continue_Button" x:Name="continue_Button" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="99" Click="Continue_Button_Click"/>
 
     </Grid>
 </local:RelhaxWindow>

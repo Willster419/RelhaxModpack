@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Costura.Fody.3.3.3\build\Costura.Fody.props" Condition="Exists('..\packages\Costura.Fody.3.3.3\build\Costura.Fody.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -69,8 +70,11 @@
     <ApplicationIcon>Resources\modpack_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DotNetZip, Version=1.13.0.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetZip.1.13.0\lib\net40\DotNetZip.dll</HintPath>
+    <Reference Include="Costura, Version=3.3.3.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Costura.Fody.3.3.3\lib\net40\Costura.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetZip, Version=1.13.3.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.1.13.3\lib\net40\DotNetZip.dll</HintPath>
     </Reference>
     <Reference Include="NAudio, Version=1.8.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NAudio.1.8.5\lib\net35\NAudio.dll</HintPath>
@@ -109,7 +113,7 @@
     <Compile Include="DatabaseComponents\PackageComparer.cs" />
     <Compile Include="DatabaseComponents\SelectablePackage.cs" />
     <Compile Include="DatabaseComponents\Trigger.cs" />
-    <Compile Include="DatabaseComponents\UserFiles.cs" />
+    <Compile Include="DatabaseComponents\UserFile.cs" />
     <Compile Include="InstallerComponents\Atlas.cs" />
     <Compile Include="InstallerComponents\InstallEngine.cs" />
     <Compile Include="InstallerComponents\Patch.cs" />
@@ -119,6 +123,7 @@
     <Compile Include="Logging\Logfile.cs" />
     <Compile Include="Logging\Logging.cs" />
     <Compile Include="PrivateStuff\relhaxmodpackprivatesettings\PrivateStuff.cs" />
+    <Compile Include="Settings\PatchSettings.cs" />
     <Compile Include="Settings\EditorSettings.cs" />
     <Compile Include="Settings\ModpackSettings.cs" />
     <Compile Include="Settings\CommandLineSettings.cs" />
@@ -127,6 +132,20 @@
     <Compile Include="Settings\UISettings.cs" />
     <Compile Include="UIComponents\ComboBoxItem.cs" />
     <Compile Include="UIComponents\EditorComboBoxItem.cs" />
+    <Compile Include="UIComponents\EditorSearchBoxItem.cs" />
+    <Compile Include="UIComponents\RelhaxWPFCheckBox.xaml.cs">
+      <DependentUpon>RelhaxWPFCheckBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UIComponents\RelhaxWPFComboBox.xaml.cs">
+      <DependentUpon>RelhaxWPFComboBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UIComponents\RelhaxWPFRadioButton.xaml.cs">
+      <DependentUpon>RelhaxWPFRadioButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\Regression.cs" />
+    <Compile Include="Windows\CreateFTPFolderName.xaml.cs">
+      <DependentUpon>CreateFTPFolderName.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\DeveloperSelectionsViewer.xaml.cs">
       <DependentUpon>DeveloperSelectionsViewer.xaml</DependentUpon>
     </Compile>
@@ -135,6 +154,9 @@
     </Compile>
     <Compile Include="Windows\EditorAddRemove.xaml.cs">
       <DependentUpon>EditorAddRemove.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\EditorSelectMediaUploadLocation.xaml.cs">
+      <DependentUpon>EditorSelectMediaUploadLocation.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\FirstLoadAknowledgements.xaml.cs">
       <DependentUpon>FirstLoadAknowledgements.xaml</DependentUpon>
@@ -151,9 +173,6 @@
     </Compile>
     <Compile Include="UIComponents\RelhaxPreviewIndex.cs" />
     <Compile Include="UIComponents\RelhaxProgress.cs" />
-    <Compile Include="UIComponents\RelhaxWPFCheckBox.cs" />
-    <Compile Include="UIComponents\RelhaxWPFComboBox.cs" />
-    <Compile Include="UIComponents\RelhaxWPFRadioButton.cs" />
     <Compile Include="UIComponents\StretchingTreeView.cs" />
     <Compile Include="UIComponents\StretchingTreeViewItem.cs" />
     <Compile Include="Windows\AdvancedProgress.xaml.cs">
@@ -172,9 +191,6 @@
     </Compile>
     <Compile Include="Windows\DatabaseEditor.xaml.cs">
       <DependentUpon>DatabaseEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\DatabaseEditorAddMove.xaml.cs">
-      <DependentUpon>DatabaseEditorAddMove.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\DatabaseEditorDownload.xaml.cs">
       <DependentUpon>DatabaseEditorDownload.xaml</DependentUpon>
@@ -223,15 +239,27 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UIComponents\RelhaxWPFCheckBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\RelhaxWPFComboBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\RelhaxWPFRadioButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\AddPicturesZip.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\DatabaseEditor.xaml">
+    <Page Include="Windows\CreateFTPFolderName.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\DatabaseEditorAddMove.xaml">
+    <Page Include="Windows\DatabaseEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -252,6 +280,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\EditorAddRemove.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\EditorSelectMediaUploadLocation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -325,6 +357,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -332,6 +365,8 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Resource Include="PrivateStuff\github_readme_link.txt" />
+    <Resource Include="Resources\Images\popular_icon.png" />
+    <Resource Include="Resources\Licences\Fody.txt" />
     <Content Include="Resources\Licences\modpack_license_agrement.txt" />
     <None Include="Properties\RelhaxModpack.ruleset" />
   </ItemGroup>
@@ -379,11 +414,18 @@
     <Resource Include="Resources\Licences\NAudio.txt" />
     <Resource Include="Resources\Licences\SpriteSheetPacker.txt" />
     <Resource Include="Resources\Licences\TeximpNet.txt" />
-    <Content Include="Resources\Libraries\DotNetZip.dll" />
-    <Content Include="Resources\Libraries\NAudio.dll" />
-    <Content Include="Resources\Libraries\Newtonsoft.Json.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <COMReference Include="IWshRuntimeLibrary">
+      <Guid>{F935DC20-1CF0-11D0-ADB9-00C04FD58A0B}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>echo namespace RelhaxModpack &gt; "$(ProjectDir)\Utils\CiInfo.cs"
@@ -401,4 +443,12 @@ echo } &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"</PreBuildEvent>
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Costura.Fody.3.3.3\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.3.3.3\build\Costura.Fody.props'))" />
+    <Error Condition="!Exists('..\packages\Fody.4.2.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.4.2.1\build\Fody.targets'))" />
+  </Target>
+  <Import Project="..\packages\Fody.4.2.1\build\Fody.targets" Condition="Exists('..\packages\Fody.4.2.1\build\Fody.targets')" />
 </Project>

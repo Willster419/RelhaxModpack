@@ -7,11 +7,11 @@
         mc:Ignorable="d"
         Title="Install Finished" Height="200" Width="250" MinHeight="200" MinWidth="250">
     <Grid>
-        <TextBlock HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Installation Complete, would you like to..." VerticalAlignment="Top" TextAlignment="Center"/>
-        <Button Content="Start World of Tanks" HorizontalAlignment="Stretch" Margin="10,31,10,0" VerticalAlignment="Top" />
-        <Button Content="Start WoT Launcher" HorizontalAlignment="Stretch" Margin="10,56,10,0" VerticalAlignment="Top" />
-        <Button Content="Start WG Game Center" HorizontalAlignment="Stretch" Margin="10,81,10,0" VerticalAlignment="Top" />
-        <Button Content="Open XVM Statistics Website" HorizontalAlignment="Stretch" Margin="10,131,10,0" VerticalAlignment="Top" />
-        <Button Content="Close the application" HorizontalAlignment="Stretch" Margin="10,106,10,0" VerticalAlignment="Top" />
+        <TextBlock Tag="InstallationCompleteText" x:Name="InstallationCompleteText" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Installation Complete, would you like to..." VerticalAlignment="Top" TextAlignment="Center"/>
+        <Button Tag="InstallationCompleteStartWoT" x:Name="InstallationCompleteStartWoT" Content="Start World of Tanks" HorizontalAlignment="Stretch" Margin="10,31,10,0" VerticalAlignment="Top" />
+        <Button Tag="InstallationCompleteStartLauncher" x:Name="InstallationCompleteStartLauncher" Content="Start WoT Launcher" HorizontalAlignment="Stretch" Margin="10,56,10,0" VerticalAlignment="Top" />
+        <Button Tag="InstallationCompleteStartGameCenter" x:Name="InstallationCompleteStartGameCenter" Content="Start WG Game Center" HorizontalAlignment="Stretch" Margin="10,81,10,0" VerticalAlignment="Top" />
+        <Button Tag="InstallationCompleteOpenXVM" x:Name="InstallationCompleteOpenXVM" Content="Open XVM Statistics Website" HorizontalAlignment="Stretch" Margin="10,131,10,0" VerticalAlignment="Top" />
+        <Button Tag="InstallationCompleteCloseApp" x:Name="InstallationCompleteCloseApp" Content="Close the application" HorizontalAlignment="Stretch" Margin="10,106,10,0" VerticalAlignment="Top" />
     </Grid>
 </local:RelhaxWindow>

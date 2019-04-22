@@ -3,10 +3,13 @@ using Microsoft.Win32;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -14,6 +17,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Xml;
+using System.Xml.Linq;
+using IWshRuntimeLibrary;
+using File = System.IO.File;
+using System.Windows.Threading;
 
 namespace RelhaxModpack
 {
@@ -34,6 +42,8 @@ namespace RelhaxModpack
     public static class Utils
     {
         #region Statics
+        public const int TO_SECONDS = 1000;
+        public const int TO_MINUETS = 60;
         public static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
         public const long BYTES_TO_MBYTES = 1048576;
         //MACROS
@@ -109,6 +119,14 @@ namespace RelhaxModpack
             GetAllWindowComponentsLogical(window, windowComponents);
             return windowComponents;
         }
+        public static List<FrameworkElement> GetAllWindowComponentsLogical(FrameworkElement rootElement, bool addRoot)
+        {
+            List<FrameworkElement> components = new List<FrameworkElement>();
+            if (addRoot)
+                components.Add(rootElement);
+            GetAllWindowComponentsLogical(rootElement, components);
+            return components;
+        }
         //A recursive method for navigating the visual tree
         private static void GetAllWindowComponentsVisual(FrameworkElement v, List<FrameworkElement> allWindowComponents)
         {
@@ -177,6 +195,23 @@ namespace RelhaxModpack
             if (totalWidth > p.X && totalHeight > p.Y)
                 return true;
             return false;
+        }
+
+        //https://stackoverflow.com/questions/37787388/how-to-force-a-ui-update-during-a-lengthy-task-on-the-ui-thread
+        //https://stackoverflow.com/questions/2329978/the-calling-thread-must-be-sta-because-many-ui-components-require-this
+        public static void AllowUIToUpdate()
+        {
+            DispatcherFrame frame = new DispatcherFrame();
+            Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Render, new DispatcherOperationCallback(delegate (object parameter)
+            {
+                frame.Continue = false;
+                return null;
+            }), null);
+
+            Dispatcher.PushFrame(frame);
+            //EDIT:
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
+                                          new Action(delegate { }));
         }
         #endregion
 
@@ -295,7 +330,7 @@ namespace RelhaxModpack
                 }
             }
         }
-        //TODO
+        
         public static string SizeSuffix(ulong value, uint decimalPlaces = 1, bool sizeSuffix = false)
         {
             if (value == 0)
@@ -334,6 +369,13 @@ namespace RelhaxModpack
             else
                 return string.Format("{0:n" + decimalPlaces + "}", adjustedSize);
         }
+
+        public static long GetFilesize(string filepath)
+        {
+            //https://stackoverflow.com/questions/1380839/how-do-you-get-the-file-size-in-c
+            return new FileInfo(filepath).Length;
+        }
+
         /// <summary>
         /// Checks if a filename has invalid characters and replaces them with underscores
         /// </summary>
@@ -615,12 +657,32 @@ namespace RelhaxModpack
             }
             return duplicatesList;
         }
-        //sorts a list of mods alphabetaicaly
-        public static void SortModsList(List<SelectablePackage> modList)
+
+        //processes sorting categories by using the sorting property and
+        public static void SortDatabase(List<Category> parsedCategoryList)
         {
-            //sortModsList
-            modList.Sort(SelectablePackage.CompareMods);
+            //the first level of packages are always sorted
+            foreach(Category cat in parsedCategoryList)
+            {
+                SortDatabase(cat.Packages);
+            }
         }
+
+        private static void SortDatabase(List<SelectablePackage> packages)
+        {
+            //sorts packages in alphabetical order
+            packages.Sort(SelectablePackage.CompareModsName);
+            //if set in the database, child elements can be sorted as well
+            foreach(SelectablePackage child in packages)
+            {
+                if (child.SortChildPackages)
+                {
+                    Logging.Debug("Sorting packages of package {0}", child.PackageName);
+                    SortDatabase(child.Packages);
+                }
+            }
+        }
+
         /// <summary>
         /// Links all the refrences (like parent, etc) for each class object making it possible to traverse the list tree in memory
         /// </summary>
@@ -636,7 +698,7 @@ namespace RelhaxModpack
                         Name = string.Format("----------[{0}]----------", cat.Name),
                         TabIndex = cat.TabPage,
                         ParentCategory = cat,
-                        Type = "multi",
+                        Type = SelectionTypes.multi,
                         Visible = true,
                         Enabled = true,
                         Level = -1,
@@ -669,12 +731,6 @@ namespace RelhaxModpack
                 }
             }
         }
-        public static void AssignCateogryPatchIDS(List<Category> parsedCategoryList)
-        {
-            int ID = 0;
-            foreach (Category cat in parsedCategoryList)
-                cat.PatchProcessCategoryID = ID++;
-        }
         public static void BuildLevelPerPackage(List<Category> ParsedCategoryList, int startingLevel = 0)
         {
             //root level direct form category is 0
@@ -685,7 +741,7 @@ namespace RelhaxModpack
                     package.Level = startingLevel;
                     if (package.Packages.Count > 0)
                         //increase the level BEFORE it calls the method
-                        BuildLevelPerPackage(package.Packages, ++startingLevel);
+                        BuildLevelPerPackage(package.Packages, startingLevel+ 1);
                 }
             }
         }
@@ -696,19 +752,19 @@ namespace RelhaxModpack
                 package.Level = level;
                 if (package.Packages.Count > 0)
                     //increase the level BEFORE it calls the method
-                    BuildLevelPerPackage(package.Packages, ++level);
+                    BuildLevelPerPackage(package.Packages, level+1);
             }
         }
         public static List<Dependency> CalculateDependencies(List<Dependency> dependencies, List<SelectablePackage> packages)
         {
             //flat list is packages
-            //1- build the list of calling modsthat need it
+            //1- build the list of calling mods that need it
             List<Dependency> dependenciesToInstall = new List<Dependency>();
-            Logging.WriteToLog("Starting step 1 of 3 in depednency calculation: adding selectable packages to dependency",
-                Logfiles.Application, LogLevel.Debug);
+            Logging.Debug("Starting step 1 of 3 in dependency calculation: adding selectable packages that use each dependency");
             foreach(Dependency dependency in dependencies)
             {
-                //for each dependnecy, go throuhg each pacakge, and in each package...
+                //for each dependency, go through each package, and in each package...
+                Logging.Debug("processing dependency {0}", dependency.PackageName);
                 foreach(SelectablePackage package in packages)
                 {
                     //got though each logic property. if the package called is this dependency, then add it to it's list
@@ -716,8 +772,7 @@ namespace RelhaxModpack
                     {
                         if(logic.PackageName.Equals(dependency.PackageName))
                         {
-                            Logging.WriteToLog(string.Format("Adding package {0} of logic {1} to dependnecy {2}",
-                                package.NameFormatted, logic.Logic, dependency.PackageName), Logfiles.Application, LogLevel.Debug);
+                            Logging.Debug("SelectablePackage {0} uses this dependency (logic type {1})", package.PackageName, logic.Logic);
                             dependency.DatabasePackageLogic.Add(new DatabaseLogic()
                             {
                                 PackageName = logic.PackageName,
@@ -730,26 +785,29 @@ namespace RelhaxModpack
                     }
                 }
             }
-            //2- append with list of dependnecies that need it, regaurdless if it's an error or not
-            foreach(Dependency dependency in dependencies)
+            Logging.Debug("step 1 complete");
+
+            //2- append with list of dependencies that need it, regardless if it's an error or not
+            Logging.Debug("Starting step 2 of 3 in dependency calculation: adding dependencies that use each dependency");
+            foreach (Dependency dependency in dependencies)
             {
-                //for each dependency go thorugh each depenedncy's package logic and if it's called then add it
+                Logging.Debug("processing dependency {0}", dependency.PackageName);
+                //for each dependency go through each dependency's package logic and if it's called then add it
                 foreach(Dependency processingDependency in dependencies)
                 {
-                    if (processingDependency.Equals(dependency))
+                    if (processingDependency.PackageName.Equals(dependency.PackageName))
                         continue;
                     foreach(DatabaseLogic logic in processingDependency.Dependencies)
                     {
                         if(logic.PackageName.Equals(dependency.PackageName))
                         {
-                            Logging.WriteToLog(string.Format("Adding dependnecy {0} of logic {1} to dependnecy {2}",
-                                processingDependency.PackageName, logic.Logic, dependency.PackageName), Logfiles.Application, LogLevel.Debug);
+                            Logging.Debug("Dependency {0} uses this dependency (logic type {1})", processingDependency.PackageName, logic.Logic);
                             dependency.DatabasePackageLogic.Add(new DatabaseLogic()
                             {
                                 PackageName = logic.PackageName,
                                 Enabled = processingDependency.Enabled,
-                                //be default, depenedneices that are dependent on dependnecies start as false until proven needed
-                                Checked = false,
+                                //by default, dependences that are dependent on dependencies start as false until proven needed
+                                Checked = true,//originally false, may need to set back?
                                 Logic = logic.Logic,
                                 NotFlag = logic.NotFlag
                             });
@@ -757,33 +815,37 @@ namespace RelhaxModpack
                     }
                 }
             }
+            Logging.Debug("step 2 complete");
+
+            //3 - run calculations IN DEPENDENCY LIST ORDER FROM TOP DOWN
             List<Dependency> notProcessedDependnecies = new List<Dependency>(dependencies);
-            //3 - run calculations IN ORDER FROM TOP DOWN
-            foreach(Dependency dependency in dependencies)
+            Logging.Debug("Starting step 3 of 3 in dependency calculation: calculating dependencies from top down (perspective to list)");
+            foreach (Dependency dependency in dependencies)
             {
-                //first check if this dependnecy is refrencing a dependency that has not yet been processed
+                //first check if this dependency is referencing a dependency that has not yet been processed
                 //if so then note it in the log
+                Logging.Debug("Calculating if dependency {0} will be installed",dependency.PackageName);
                 foreach(DatabaseLogic login in dependency.DatabasePackageLogic)
                 {
                     List<Dependency> matches = notProcessedDependnecies.Where(dep => login.PackageName.Equals(dep.PackageName)).ToList();
                     if(matches.Count > 0)
                     {
-                        string errorMessage = string.Format("dependnecy {0} is refrencing the dependency {1} which has not yet been processed!" +
-                            "This will lead to LOGIC ERRORS in database calculation! (Tip: this dependnecy ({0}) should be BELOW {1} in the" +
+                        string errorMessage = string.Format("dependency {0} is referencing the dependency {1} which has not yet been processed!" +
+                            "This will lead to logic errors in database calculation! (Tip: this dependency ({0}) should be BELOW ({1}) in the" +
                             "list of dependencies in the editor. (Order matters!)",dependency.PackageName, login.PackageName);
-                        Logging.WriteToLog(errorMessage, Logfiles.Application, LogLevel.Info);
-                        if (ModpackSettings.DatabaseDistroVersion != DatabaseVersions.Stable)
+                        Logging.Debug(errorMessage);
+                        if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                             MessageBox.Show(errorMessage);
                     }
                 }
                 //two types of logics - OR and AND (with nots)
-                //each can be calculated seperatly
+                //each can be calculated separately
                 List<DatabaseLogic> localOR = dependency.DatabasePackageLogic.Where(logic => logic.Logic == Logic.OR).ToList();
                 List<DatabaseLogic> logicalAND = dependency.DatabasePackageLogic.Where(logic => logic.Logic == Logic.AND).ToList();
                 bool ORsPass = false;
                 bool ANDSPass = false;
                 //calc the ORs first
-                Logging.WriteToLog("processing OR logic of dependency " + dependency.PackageName, Logfiles.Application, LogLevel.Debug);
+                Logging.Debug("processing OR logic");
                 foreach(DatabaseLogic orLogic in localOR)
                 {
                     //OR logic - if any mod/dependnecy is checked, then it's installed and can stop there
@@ -797,25 +859,25 @@ namespace RelhaxModpack
                     }
                     if(orLogic.Checked && !orLogic.NotFlag)
                     {
-                        Logging.WriteToLog(string.Format("package {0} is checked and (NOT notFlag) = true, sets orLogic to pass!", orLogic.PackageName),
+                        Logging.WriteToLog(string.Format("package {0} is checked and notflag is low (= true), sets orLogic to pass!", orLogic.PackageName),
                             Logfiles.Application, LogLevel.Debug);
                         ORsPass = true;
                         break;
                     }
                     else if (!orLogic.Checked && orLogic.NotFlag)
                     {
-                        Logging.WriteToLog(string.Format("package {0} is NOT checked and (notFlag) = true, sets orLogic to pass!", orLogic.PackageName),
+                        Logging.WriteToLog(string.Format("package {0} is NOT checked and notFlag is high (= false), sets orLogic to pass!", orLogic.PackageName),
                             Logfiles.Application, LogLevel.Debug);
                         ORsPass = true;
                         break;
                     }
                     else
                     {
-                        Logging.WriteToLog(string.Format("package {0}, checked={1}, notFlag={2}, does not set orLogic to pass, skipping",
+                        Logging.WriteToLog(string.Format("package {0}, checked={1}, notFlag={2}, does not set orLogic to pass",
                             orLogic.PackageName, orLogic.Checked, orLogic.NotFlag), Logfiles.Application, LogLevel.Debug);
                     }
                 }
-                Logging.WriteToLog("processing AND logic of dependnecy " + dependency.PackageName, Logfiles.Application, LogLevel.Debug);
+                Logging.WriteToLog("processing AND logic of dependency " + dependency.PackageName, Logfiles.Application, LogLevel.Debug);
                 foreach(DatabaseLogic andLogic in logicalAND)
                 {
                     if(!andLogic.Enabled)
@@ -844,16 +906,16 @@ namespace RelhaxModpack
                         break;
                     }
                 }
-                string final = string.Format("final result for depenedncy {0}: AND={1}, OR={2}", dependency.PackageName, ANDSPass, ORsPass);
+                string final = string.Format("final result for dependency {0}: AND={1}, OR={2}", dependency.PackageName, ANDSPass, ORsPass);
                 if(ANDSPass || ORsPass)//TODO: maybe make this configurable to AND?
                 {
-                    Logging.WriteToLog(string.Format("{0} (AND or OR) = TRUE, dependnecy WILL be installed!", final),
+                    Logging.WriteToLog(string.Format("{0} (AND or OR) = TRUE, dependency WILL be installed!", final),
                         Logfiles.Application, LogLevel.Debug);
                     dependenciesToInstall.Add(dependency);
                 }
                 else
                 {
-                    Logging.WriteToLog(string.Format("{0} (AND or OR) = FALSE, dependnecy WILL NOT be installed!", final),
+                    Logging.WriteToLog(string.Format("{0} (AND or OR) = FALSE, dependency WILL NOT be installed!", final),
                         Logfiles.Application, LogLevel.Debug);
                 }
                 notProcessedDependnecies.RemoveAt(0);
@@ -920,6 +982,108 @@ namespace RelhaxModpack
                     maxPatchGroup = package.PatchGroup;
             return maxPatchGroup;
         }
+
+        public static bool SetObjectMember(object packageOfAnyType, MemberInfo packageFieldOrProperty, string valueToSet)
+        {
+            try
+            {
+                if(packageFieldOrProperty is FieldInfo packageField)
+                {
+                    var converter = TypeDescriptor.GetConverter(packageField.FieldType);
+                    packageField.SetValue(packageOfAnyType, converter.ConvertFrom(valueToSet));
+                    return true;
+                }
+                else if(packageFieldOrProperty is PropertyInfo packageProperty)
+                {
+                    var converter = TypeDescriptor.GetConverter(packageProperty.PropertyType);
+                    packageProperty.SetValue(packageOfAnyType, converter.ConvertFrom(valueToSet));
+                    return true;
+                }
+                else
+                {
+                    Logging.Debug("invalid type of memberinfo of member {0}", packageFieldOrProperty.Name);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex.ToString());
+                return false;
+            }
+        }
+
+        public static bool SetListEntriesField(object objectThatHasListProperty, FieldInfo nameOfListField, IEnumerable<XElement> xmlListItems)
+        {
+            //get a list type to add stuff to
+            //https://stackoverflow.com/questions/25757121/c-sharp-how-to-set-propertyinfo-value-when-its-type-is-a-listt-and-i-have-a-li
+            object obj = nameOfListField.GetValue(objectThatHasListProperty);
+            DatabasePackage packageOfAnyType = objectThatHasListProperty as DatabasePackage;
+            //IList list = (IList)packageField.GetValue(obj);
+            IList list = (IList)obj;
+            //we now have the empty list, now get type type of list it is
+            //https://stackoverflow.com/questions/34211815/how-to-get-the-underlying-type-of-an-ilist-item
+            Type listObjectType = list.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GenericTypeArguments.Length == 1)
+                .FirstOrDefault(i => i.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GenericTypeArguments[0];
+            //now for each xml element, get the value information and set it
+            //if it originates from the 
+            foreach (XElement listElement in xmlListItems)
+            {
+                //2 types of options for what this list could be: single node values (string, just node value), node of many values (custon type, many values)
+                if (listElement.Attributes().Count() > 0)//custom class type
+                {
+                    object listEntry = Activator.CreateInstance(listObjectType);
+                    //get list of fields in this entry object
+                    FieldInfo[] fieldsInObjectInstance = listObjectType.GetFields();
+                    List<string> missingMembers = new List<string>();
+                    List<string> unknownMembers = new List<string>();
+                    foreach (FieldInfo info in fieldsInObjectInstance)
+                        missingMembers.Add(info.Name);
+                    foreach (XAttribute listEntryAttribute in listElement.Attributes())
+                    {
+                        FieldInfo[] matchingListobjectsField = fieldsInObjectInstance.Where(field => field.Name.Equals(listEntryAttribute.Name.LocalName)).ToArray();
+                        if (matchingListobjectsField.Count() == 0)
+                        {
+                            //no matching entries from xml attribute name to fieldInfo of custom type
+                            unknownMembers.Add(listEntryAttribute.Name.LocalName);
+                            continue;
+                        }
+                        FieldInfo listobjectField = matchingListobjectsField[0];
+                        missingMembers.Remove(listobjectField.Name);
+                        try
+                        {
+                            var converter = TypeDescriptor.GetConverter(listobjectField.FieldType);
+                            listobjectField.SetValue(listEntry, converter.ConvertFrom(listEntryAttribute.Value));
+                        }
+                        catch (Exception ex)
+                        {
+                            Logging.Exception(ex.ToString());
+                        }
+                    }
+                    foreach(string missingMember in missingMembers)
+                    {
+                        //exist in member class info, but not set from xml attributes
+                        if(packageOfAnyType!= null)
+                            Logging.Error("Missing xml attribute: {0}, package: {1}, line{2}", missingMember, packageOfAnyType.PackageName, ((IXmlLineInfo)listElement).LineNumber);
+                        else
+                            Logging.Error("Missing xml attribute: {0}, object: {1}, line{2}", missingMember, objectThatHasListProperty.ToString(), ((IXmlLineInfo)listElement).LineNumber);
+                    }
+                    foreach(string unknownMember in unknownMembers)
+                    {
+                        //exist in xml attributes, but not known member in memberInfo
+                        if (packageOfAnyType != null)
+                            Logging.Error("unknown xml attribute: {0}, package: {1}, line{2}", unknownMember, packageOfAnyType.PackageName, ((IXmlLineInfo)listElement).LineNumber);
+                        else
+                            Logging.Error("unknown xml attribute: {0}, object: {1}, line{2}", unknownMember, objectThatHasListProperty.ToString(), ((IXmlLineInfo)listElement).LineNumber);
+                    }
+                    list.Add(listEntry);
+                }
+                else//single primitive entry type
+                {
+                    list.Add(listElement.Value);
+                }
+            }
+            return true;
+        }
         #endregion
 
         #region Generic Utils
@@ -974,7 +1138,10 @@ namespace RelhaxModpack
         /// <returns></returns>
         public static string ConvertFiletimeTimestampToDate(long timestamp)
         {
-            return DateTime.FromFileTime(timestamp).ToString();
+            if (timestamp > 0)
+                return DateTime.FromFileTime(timestamp).ToString();
+            else
+                return "(none)";
         }
         /// <summary>
         /// Encode a plain text string into base64 UTF8 encoding
@@ -1213,17 +1380,164 @@ namespace RelhaxModpack
 
         #region Install Utils
 
-        public static void CreateShortcut(Shortcut shortcut)
+        public static void CreateShortcut(Shortcut shortcut, StringBuilder sb)
         {
-
+            Logging.Info(shortcut.ToString());
+            Logging.Info("Creating shortcut {0}",shortcut.Name);
+            //build the full macro for path (target) and name (also filename)
+            string target = MacroReplace(shortcut.Path, ReplacementTypes.FilePath);
+            string filename = string.Format("{0}.lnk", shortcut.Name);
+            string shortcutPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            shortcutPath = Path.Combine(shortcutPath, filename);
+            Logging.Info("target={0}", target);
+            Logging.Info("shortcutPath={0}", shortcutPath);
+            if(!File.Exists(target))
+            {
+                Logging.Warning("target does not exist, skipping shortcut", target);
+                return;
+            }
+            if(File.Exists(shortcutPath))
+            {
+                Logging.Debug("shortcut path exists, checking if update needed");
+                WshShell shell = new WshShell();
+                IWshShortcut link = (IWshShortcut)shell.CreateShortcut(shortcutPath);
+                Logging.Debug("new target = {0}, old target = {1}", target, link.TargetPath);
+                if(!target.Equals(link.TargetPath))
+                {
+                    //needs update
+                    Logging.Debug("updating target");
+                    link.TargetPath = target;
+                    link.Save();
+                }
+                else
+                {
+                    //no updat needed
+                    Logging.Debug("no update needed");
+                    return;
+                }
+            }
+            else
+            {
+                Logging.Debug("shortcut path does not exist, creating");
+                IShellLink link = (IShellLink)new ShellLink();
+                // setup shortcut information
+                link.SetDescription("created by the Relhax Manager");
+                link.SetPath(target);
+                link.SetIconLocation(target, 0);
+                link.SetWorkingDirectory(Path.GetDirectoryName(target));
+                //The arguments used when executing the exe (none used for now)
+                link.SetArguments("");
+                System.Runtime.InteropServices.ComTypes.IPersistFile file = (System.Runtime.InteropServices.ComTypes.IPersistFile)link;
+                file.Save(shortcutPath, false);
+            }
+            //getting here means that the target is updated or created, so log it to the installer
+            sb.AppendLine(shortcutPath);
         }
 
         public static void CreateAtlas(Atlas atlas)
         {
-
+            throw new BadMemeException("TODO");
         }
 
 
+        #endregion
+
+        #region FTP methods
+        public static void FTPMakeFolder(string addressWithDirectory, ICredentials credentials)
+        {
+            WebRequest folderRequest = WebRequest.Create(addressWithDirectory);
+            folderRequest.Method = WebRequestMethods.Ftp.MakeDirectory;
+            folderRequest.Credentials = credentials;
+            using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
+            { }
+        }
+
+        public static async Task FTPMakeFolderAsync(string addressWithDirectory, ICredentials credentials)
+        {
+            WebRequest folderRequest = WebRequest.Create(addressWithDirectory);
+            folderRequest.Method = WebRequestMethods.Ftp.MakeDirectory;
+            folderRequest.Credentials = credentials;
+            using (FtpWebResponse webResponse = (FtpWebResponse)await folderRequest.GetResponseAsync())
+            { }
+        }
+
+        public static string[] FTPListFilesFolders(string address, ICredentials credentials)
+        {
+            WebRequest folderRequest = WebRequest.Create(address);
+            folderRequest.Method = WebRequestMethods.Ftp.ListDirectory;
+            folderRequest.Credentials = credentials;
+            using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
+            {
+                Stream responseStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(responseStream);
+                string temp = reader.ReadToEnd();
+                return temp.Split(new[] { "\r\n" }, StringSplitOptions.None);
+            }
+        }
+
+        public static async Task<string[]> FTPListFilesFoldersAsync(string address, ICredentials credentials)
+        {
+            WebRequest folderRequest = WebRequest.Create(address);
+            folderRequest.Method = WebRequestMethods.Ftp.ListDirectory;
+            folderRequest.Credentials = credentials;
+            using (FtpWebResponse response = (FtpWebResponse)await folderRequest.GetResponseAsync())
+            {
+                Stream responseStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(responseStream);
+                string temp = reader.ReadToEnd();
+                return temp.Split(new[] { "\r\n" }, StringSplitOptions.None);
+            }
+        }
+
+        public static void FTPDeleteFile(string address, ICredentials credentials)
+        {
+            WebRequest folderRequest = WebRequest.Create(address);
+            folderRequest.Method = WebRequestMethods.Ftp.DeleteFile;
+            folderRequest.Credentials = credentials;
+            using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
+            { }
+        }
+
+        public static async Task FTPDeleteFileAsync(string address, ICredentials credentials)
+        {
+            WebRequest folderRequest = WebRequest.Create(address);
+            folderRequest.Method = WebRequestMethods.Ftp.DeleteFile;
+            folderRequest.Credentials = credentials;
+            using (FtpWebResponse response = (FtpWebResponse)await folderRequest.GetResponseAsync())
+            { }
+        }
+
+        public static long FTPGetFilesize(string address, ICredentials credentials)
+        {
+            long result = -1;
+            // Get the object used to communicate with the server.
+            //https://stackoverflow.com/questions/4591059/download-file-from-ftp-with-progress-totalbytestoreceive-is-always-1
+            WebRequest request = WebRequest.Create(address);
+            request.Method = WebRequestMethods.Ftp.GetFileSize;
+            request.Credentials = credentials;
+            using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
+            {
+                //Stream responseStream = response.GetResponseStream();
+                result = response.ContentLength;
+            }
+            return result;
+        }
+
+        public static async Task<long> FTPGetFilesizeAsync(string address, ICredentials credentials)
+        {
+            long result = -1;
+            // Get the object used to communicate with the server.
+            //https://stackoverflow.com/questions/4591059/download-file-from-ftp-with-progress-totalbytestoreceive-is-always-1
+            WebRequest request = WebRequest.Create(address);
+            request.Method = WebRequestMethods.Ftp.GetFileSize;
+            request.Credentials = credentials;
+            using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
+            {
+                //Stream responseStream = response.GetResponseStream();
+                result = response.ContentLength;
+            }
+            return result;
+        }
         #endregion
 
         #region Gross shortcut stuff

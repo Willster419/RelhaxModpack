@@ -68,26 +68,24 @@ namespace RelhaxModpack.Windows
 
         private void CategoryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (CategoryComboBox.IsDropDownOpen)
-                return;
             if(CategoryComboBox.SelectedItem is string s)
             {
                 if(s.Equals(GlobalDependenciesCategoryHeader))
                 {
                     foreach (DatabasePackage package in GlobalDependencies)
-                        PackageComboBox.Items.Add(new EditorComboBoxItem(package, package.PackageName));
+                        PackageComboBox.Items.Add(new EditorComboBoxItem(package));
                 }
                 else if (s.Equals(DependenciesCategoryHeader))
                 {
                     foreach (DatabasePackage package in Dependencies)
-                        PackageComboBox.Items.Add(new EditorComboBoxItem(package, package.PackageName));
+                        PackageComboBox.Items.Add(new EditorComboBoxItem(package));
                 }
             }
             else if(CategoryComboBox.SelectedItem is Category cat)
             {
                 PackageComboBox.Items.Clear();
                 foreach (DatabasePackage package in cat.GetFlatPackageList())
-                    PackageComboBox.Items.Add(new EditorComboBoxItem(package, package.PackageName));
+                    PackageComboBox.Items.Add(new EditorComboBoxItem(package));
             }
         }
 

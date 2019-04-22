@@ -28,6 +28,7 @@ namespace RelhaxModpack.InstallerComponents
         PatchError,
         ShortcustError,
         ContourIconAtlasError,
+        FontInstallError,
         CleanupError,
         UnknownError
     }
@@ -72,6 +73,11 @@ namespace RelhaxModpack.InstallerComponents
 
         //names of triggers
         public const string TriggerContouricons = "build_contour_icons";
+
+        public static readonly string[] CompleteTriggerList = new string[]
+        {
+            TriggerContouricons
+        };
 
         //trigger array
         public static List<Trigger> Triggers = new List<Trigger>
@@ -321,14 +327,19 @@ namespace RelhaxModpack.InstallerComponents
             InstallFinishedArgs.ExitCodes++;
             Logging.WriteToLog(string.Format("Restore of userdata, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
-            //if statement TODO
             if (ModpackSettings.SaveUserData)
             {
-                if (!RestoreData(packagesWithData))
+                if (packagesWithData.Count > 0)
                 {
-                    ReportProgress();
-                    ReportFinish();
-                    return;
+                    StringBuilder restoreDataBuilder = new StringBuilder();
+                    restoreDataBuilder.AppendLine("/*   Restored data   */");
+                    if (!RestoreData(packagesWithData, restoreDataBuilder))
+                    {
+                        ReportProgress();
+                        ReportFinish();
+                        return;
+                    }
+                    Logging.Installer(restoreDataBuilder.ToString());
                 }
                 Logging.Info("Restore of data complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
             }
@@ -341,20 +352,23 @@ namespace RelhaxModpack.InstallerComponents
             InstallFinishedArgs.ExitCodes++;
             Logging.WriteToLog(string.Format("Unpack of xml files, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
-            List<XmlUnpack> xmlUnpacks = MakeXmlUnpackListList();
+            List<XmlUnpack> xmlUnpacks = MakeXmlUnpackList();
             if (xmlUnpacks.Count > 0)
             {
-                foreach(XmlUnpack xmlUnpack in xmlUnpacks)
+                StringBuilder unpackBuilder = new StringBuilder();
+                unpackBuilder.AppendLine("/*   Unpack xml files   */");
+                foreach (XmlUnpack xmlUnpack in xmlUnpacks)
                 {
-                    XMLUtils.UnpackXmlFile(xmlUnpack);
+                    XMLUtils.UnpackXmlFile(xmlUnpack, unpackBuilder);
                 }
+                Logging.Uninstaller(unpackBuilder.ToString());
             }
             else
                 Logging.WriteToLog("...skipped (no XmlUnpack entries parsed");
 
             //step 8: patch files (async option)
             //make the task array here. so far can be a maximum of 3 items
-            Task[] concurrentTasksAfterMainExtractoin = new Task[3];
+            Task[] concurrentTasksAfterMainExtractoin = new Task[4];
             int taskIndex = 0;
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
@@ -364,6 +378,7 @@ namespace RelhaxModpack.InstallerComponents
             List<Patch> pathces = MakePatchList();
             if (pathces.Count > 0)
             {
+                //no need to installer log patches, since it's operating on files that already exist
                 concurrentTasksAfterMainExtractoin[taskIndex++] = Task.Factory.StartNew(() =>
                 {
                     foreach (Patch patch in pathces)
@@ -375,7 +390,7 @@ namespace RelhaxModpack.InstallerComponents
             else
                 Logging.WriteToLog("...skipped (no patch entries parsed)");
 
-            //step 9: create create shortcuts (async option)
+            //step 9: create shortcuts (async option)
             OldTime = InstallStopWatch.Elapsed;
             Progress.TotalCurrent++;
             InstallFinishedArgs.ExitCodes++;
@@ -384,12 +399,18 @@ namespace RelhaxModpack.InstallerComponents
             List<Shortcut> shortcuts = MakeShortcutList();
             if (shortcuts.Count > 0)
             {
+                StringBuilder shortcutBuilder = new StringBuilder();
+                shortcutBuilder.AppendLine("/*   Shortcuts   */");
                 concurrentTasksAfterMainExtractoin[taskIndex++] = Task.Factory.StartNew(() =>
                 {
                     foreach (Shortcut shortcut in shortcuts)
                     {
-                        Utils.CreateShortcut(shortcut);
+                        if (shortcut.Enabled)
+                        {
+                            Utils.CreateShortcut(shortcut, shortcutBuilder);
+                        }
                     }
+                    Logging.Installer(shortcutBuilder.ToString());
                 });
             }
             else
@@ -408,16 +429,33 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     concurrentTasksAfterMainExtractoin[taskIndex++] = Task.Factory.StartNew(() =>
                     {
-                        foreach (Atlas atlas in atlases)
-                        {
-                            Utils.CreateAtlas(atlas);
-                        }
+                        BuildContourIcons();
                     });
                 }
                 else
                     Logging.WriteToLog("...skipped (no atlas entries parsed)");
             }
 
+            //get the font installation done here
+            if(ModpackSettings.DisableTriggers)
+            {
+                //step 11: install fonts (async operation)
+                OldTime = InstallStopWatch.Elapsed;
+                Progress.TotalCurrent++;
+                InstallFinishedArgs.ExitCodes++;
+                Logging.WriteToLog(string.Format("Installing of fonts, current install time = {0} msec",
+                    InstallStopWatch.Elapsed.TotalMilliseconds));
+                string[] fontsToInstall = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername), SearchOption.TopDirectoryOnly, @"*", 50, 3, true);
+                if (fontsToInstall == null || fontsToInstall.Count() == 0)
+                    Logging.WriteToLog("...skipped (no font files to install)");
+                else
+                {
+                    concurrentTasksAfterMainExtractoin[taskIndex++] = Task.Factory.StartNew(() =>
+                    {
+                        InstallFonts(fontsToInstall);
+                    });
+                }
+            }
             
             //barrier goes here to make sure cleanup is the last thing to do
             Task.WaitAll(concurrentTasksAfterMainExtractoin);
@@ -496,7 +534,7 @@ namespace RelhaxModpack.InstallerComponents
             foreach(SelectablePackage package in packagesWithData)
             {
                 Logging.WriteToLog(string.Format("Backup data of package {0} starting", package.PackageName));
-                foreach(UserFiles files in package.UserFiles)
+                foreach(UserFile files in package.UserFiles)
                 {
                     //use the search parameter to get the actual files to move
                     //remove the mistake i made over a year ago of the double slashes
@@ -687,7 +725,7 @@ namespace RelhaxModpack.InstallerComponents
             return true;
         }
 
-        private bool RestoreData(List<SelectablePackage> packagesWithData)
+        private bool RestoreData(List<SelectablePackage> packagesWithData, StringBuilder restoreDataBuilder)
         {
             foreach (SelectablePackage package in packagesWithData)
             {
@@ -698,7 +736,7 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     Logging.WriteToLog(string.Format("folder {0} does not exist, skipping", package.PackageName), Logfiles.Application, LogLevel.Debug);
                 }
-                foreach (UserFiles files in package.UserFiles)
+                foreach (UserFile files in package.UserFiles)
                 {
                     foreach(string savedFile in files.Files_saved)
                     {
@@ -711,11 +749,75 @@ namespace RelhaxModpack.InstallerComponents
                             if (File.Exists(savedFile))
                                 File.Delete(savedFile);
                             File.Move(filePath, savedFile);
+                            restoreDataBuilder.AppendLine(savedFile);
                         }
                     }
                 }
             }
             return true;
+        }
+
+        private void InstallFonts(string[] fontsToInstall)
+        {
+            Logging.Debug("checking system installed fonts to remove duplicates");
+            string[] fontscurrentlyInstalled = Utils.DirectorySearch(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), SearchOption.TopDirectoryOnly);
+            string[] fontsNamesCurrentlyInstalled = fontscurrentlyInstalled.Select(s => Path.GetFileName(s).ToLower()).ToArray();
+            //remove any fonts whos filename match what is already installed
+            for (int i = 0; i < fontsToInstall.Count(); i++)
+            {
+                string fontToInstallNameLower = Path.GetFileName(fontsToInstall[i]).ToLower();
+                if(fontsNamesCurrentlyInstalled.Contains(fontToInstallNameLower))
+                {
+                    //empty the entry
+                    fontsToInstall[i] = string.Empty;
+                }
+            }
+
+            //get the new array of fonts to install that don't already exist
+            string[] realFontsToInstall = fontsToInstall.Where(font => !string.IsNullOrWhiteSpace(font)).ToArray();
+
+            Logging.Debug("fontsToInstallReal count: {0}", realFontsToInstall.Count());
+
+            if(realFontsToInstall.Count() > 0)
+            {
+                //extract he exe to install fonts
+                Logging.Debug("extracting fontReg for font install");
+                string fontRegPath = Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername, "FontReg.exe");
+                if(!File.Exists(fontRegPath))
+                {
+                    //get fontreg from the zip file
+                    using (ZipFile zip = new ZipFile(Settings.ManagerInfoDatFile))
+                    {
+                        zip.ExtractSelectedEntries("FontReg.exe", null, Path.GetDirectoryName(fontRegPath));
+                    }
+                }
+                Logging.Info("Attemping to install fonts: {0}", string.Join(",", realFontsToInstall));
+                ProcessStartInfo info = new ProcessStartInfo
+                {
+                    FileName = fontRegPath,
+                    UseShellExecute = true,
+                    Verb = "runas", // Provides Run as Administrator
+                    Arguments = "/copy",
+                    WorkingDirectory = Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername)
+                };
+                try
+                {
+                    Process installFontss = new Process
+                    {
+                        StartInfo = info
+                    };
+                    installFontss.Start();
+                    installFontss.WaitForExit();
+                    Logging.Info("FontReg.exe ExitCode: " + installFontss.ExitCode);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Error("could not start font installer:{0}{1}", Environment.NewLine, ex.ToString());
+                    MessageBox.Show(Translations.GetTranslatedString("fontsPromptError_1") + Settings.WoTDirectory + Translations.GetTranslatedString("fontsPromptError_2"));
+                    Logging.Info("Installation done, but fonts install failed");
+                    return;
+                }
+            }
         }
 
         private bool Cleanup()
@@ -747,7 +849,10 @@ namespace RelhaxModpack.InstallerComponents
                         numExtracted++;
                         if (string.IsNullOrWhiteSpace(package.ZipFile))
                             continue;
-                        Unzip(package, threadNum);
+                        StringBuilder zipLogger = new StringBuilder();
+                        zipLogger.AppendLine(string.Format("/*   {0}   */",package.ZipFile));
+                        Unzip(package, threadNum, zipLogger);
+                        Logging.Installer(zipLogger.ToString());
                         //after zip file extraction, process triggers (if enabled)
                         if(!ModpackSettings.DisableTriggers)
                         {
@@ -764,14 +869,11 @@ namespace RelhaxModpack.InstallerComponents
 
         }
 
-        private void Unzip(DatabasePackage package, int threadNum)
+        private void Unzip(DatabasePackage package, int threadNum, StringBuilder zipLogger)
         {
-            //do any zip file processing, then extract
-            if (string.IsNullOrWhiteSpace(package.ZipFile))
-                throw new BadMemeException("fuck you");
             //for each zip file, put it in a try catch to see if we can catch any issues in case of a one-off IO error
             string zipFilePath = Path.Combine(Settings.RelhaxDownloadsFolder, package.ZipFile);
-            for(int i = 3; i > 0; i--)
+            for(int i = 3; i > 0; i--)//3 strikes and you're out
             {
                 try
                 {
@@ -810,6 +912,10 @@ namespace RelhaxModpack.InstallerComponents
                         for (int j = 0; j < zip.Entries.Count; j++)
                         {
                             string zipFilename = zip[j].FileName;
+                            //create logging entry
+                            string loggingCompletePath = string.Empty;
+                            string extractPath = string.Empty;
+
                             //check each entry if it's going to a custom extraction location by form of macro
                             //default is nothing, goes to root (World_of_Tanks) directory
                             //if macro is found, extract to a different folder
@@ -824,6 +930,7 @@ namespace RelhaxModpack.InstallerComponents
                                 {
                                     zip[j].FileName = zipFilename;
                                     zip[j].Extract(Settings.AppDataFolder, ExtractExistingFileAction.OverwriteSilently);
+                                    extractPath = Settings.AppDataFolder;
                                 }
                             }
                             //_RelhaxRoot = app startup directory
@@ -834,13 +941,17 @@ namespace RelhaxModpack.InstallerComponents
                                 {
                                     zip[j].FileName = zipFilename;
                                     zip[j].Extract(Settings.ApplicationStartupPath, ExtractExistingFileAction.OverwriteSilently);
+                                    extractPath = Settings.ApplicationStartupPath;
                                 }
                             }
                             //default is World_of_Tanks directory
                             else
                             {
                                 zip[j].Extract(Settings.WoTDirectory, ExtractExistingFileAction.OverwriteSilently);
+                                extractPath = Settings.WoTDirectory;
                             }
+                            loggingCompletePath = Path.Combine(extractPath, zipFilename.Replace(@"/", @"\"));
+                            zipLogger.AppendLine(package.LogAtInstall ? loggingCompletePath : "#" + loggingCompletePath);
                         }
                     }
                     //set i to 0 so that it breaks out of the loop
@@ -889,13 +1000,17 @@ namespace RelhaxModpack.InstallerComponents
             List<Atlas> atlases = MakeAtlasList();
             if (atlases.Count > 0)
             {
+                StringBuilder atlasBuilder = new StringBuilder();
+                atlasBuilder.AppendLine("/*   Atlases   */");
                 foreach (Atlas atlas in atlases)
                 {
                     Utils.CreateAtlas(atlas);
+                    atlasBuilder.AppendLine(atlas.MapFile);
                 }
+                Logging.Installer(atlasBuilder.ToString());
             }
             else
-                Logging.Error("building contour icons triggered, but none exist!");
+                Logging.Warning("building contour icons triggered, but none exist! (is this the intent)");
         }
 
         private void ProcessTriggers(List<string> packageTriggers)
@@ -1034,6 +1149,7 @@ namespace RelhaxModpack.InstallerComponents
             return true;
         }
 
+        #region Patch list parsing
         private List<Patch> MakePatchList()
         {
             //get a list of all files in the dedicated patch directory
@@ -1123,37 +1239,36 @@ namespace RelhaxModpack.InstallerComponents
                 patches.Add(p);
             }
         }
+        #endregion
+
+        #region Shortcut parsing
 
         private List<Shortcut> MakeShortcutList()
         {
             List<Shortcut> shortcuts = new List<Shortcut>();
-            //get a list of all files in the dedicated patch directory
+            //get a list of all files in the dedicated shortcuts directory
             //foreach one add it to the patch list
             string[] shortcut_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName), SearchOption.TopDirectoryOnly,
                 @"*.xml", 50, 3, true);
             if (shortcut_files == null)
-                Logging.WriteToLog("Failed to parse shortcuts from patch directory (see above lines for more info", Logfiles.Application, LogLevel.Error);
+                Logging.WriteToLog("Failed to parse shortcuts from directory", Logfiles.Application, LogLevel.Error);
+            else if (shortcut_files.Count() == 0)
+            {
+                Logging.Info("No shortcut files to operate on");
+            }
             else
             {
-                Logging.WriteToLog(string.Format("Number of shortcut files: {0}", shortcut_files.Count()), Logfiles.Application, LogLevel.Debug);
-                //if there wern't any, don't bother doing anything
-                if (shortcut_files.Count() > 0)
+                Logging.WriteToLog(string.Format("Number of shortcut xml instruction files: {0}", shortcut_files.Count()), Logfiles.Application, LogLevel.Debug);
+                //if there weren't any, don't bother doing anything
+                string completePath = string.Empty;
+                foreach (string filename in shortcut_files)
                 {
-                    string completePath = string.Empty;
-                    foreach (string filename in shortcut_files)
-                    {
-                        completePath = Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName, filename);
-                        //just double check...
-                        if (!File.Exists(completePath))
-                        {
-                            Logging.WriteToLog("shortcut file does not exist?? " + completePath, Logfiles.Application, LogLevel.Warning);
-                            continue;
-                        }
-                        //apply "normal" file properties just in case the user's wot install directory is special
-                        Utils.ApplyNormalFileProperties(completePath);
-                        //ok NOW actually add the file to the patch list
-                        
-                    }
+                    completePath = Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName, filename);
+                    //apply "normal" file properties just in case the user's wot install directory is special
+                    Utils.ApplyNormalFileProperties(completePath);
+                    //ok NOW actually add the file to the patch list
+                    Logging.Info("Adding shortcuts from shortcutFile {1}", Logfiles.Application, filename);
+                    AddShortcutsFromFile(shortcuts, filename);
                 }
             }
             return shortcuts;
@@ -1161,19 +1276,22 @@ namespace RelhaxModpack.InstallerComponents
 
         private void AddShortcutsFromFile(List<Shortcut> shortcuts, string filename)
         {
-            //make an xml document to get all shortuts
+            //make an xml document to get all shortcuts
             XmlDocument doc = XMLUtils.LoadXmlDocument(filename, XmlLoadType.FromFile);
             if (doc == null)
+            {
+                Logging.Error("Failed to parse xml shortcut file, skipping");
                 return;
+            } 
             //make new patch object for each entry
             //remember to add lots of logging
             XmlNodeList XMLshortcuts = XMLUtils.GetXMLNodesFromXPath(doc, "//shortcuts/shortcut");
             if (XMLshortcuts == null || XMLshortcuts.Count == 0)
             {
-                Logging.Error("File {0} contains no shortcut entries", filename);
+                Logging.Warning("File {0} contains no shortcut entries", filename);
                 return;
             }
-            Logging.Info("Adding {0} patches from shortcutFile {1}", Logfiles.Application, XMLshortcuts.Count, filename);
+            Logging.Info("Adding {0} shortcuts from shortcutFile {1}", Logfiles.Application, XMLshortcuts.Count, filename);
             foreach (XmlNode patchNode in XMLshortcuts)
             {
                 Shortcut sc = new Shortcut();
@@ -1198,9 +1316,11 @@ namespace RelhaxModpack.InstallerComponents
                 shortcuts.Add(sc);
             }
         }
+        #endregion
 
+        #region xml unpack
         //XML Unpack
-        private List<XmlUnpack> MakeXmlUnpackListList()
+        private List<XmlUnpack> MakeXmlUnpackList()
         {
             List<XmlUnpack> XmlUnpacks = new List<XmlUnpack>();
             //get a list of all files in the dedicated patch directory
@@ -1208,7 +1328,7 @@ namespace RelhaxModpack.InstallerComponents
             string[] unpack_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.XmlUnpackFolderName), SearchOption.TopDirectoryOnly,
                 @"*.xml", 50, 3, true);
             if (unpack_files == null)
-                Logging.WriteToLog("Failed to parse shortcuts from shortcut directory (see above lines for more info", Logfiles.Application, LogLevel.Error);
+                Logging.WriteToLog("Failed to parse xml unpacks from unpack directory", Logfiles.Application, LogLevel.Error);
             else
             {
                 Logging.WriteToLog(string.Format("Number of XmlUnpack files: {0}", unpack_files.Count()), Logfiles.Application, LogLevel.Debug);
@@ -1219,19 +1339,24 @@ namespace RelhaxModpack.InstallerComponents
                     foreach (string filename in unpack_files)
                     {
                         completePath = Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName, filename);
-                        //just double check...
-                        if (!File.Exists(completePath))
-                        {
-                            Logging.WriteToLog("XmlUnpack file does not exist?? " + completePath, Logfiles.Application, LogLevel.Warning);
-                            continue;
-                        }
                         //apply "normal" file properties just in case the user's wot install directory is special
                         Utils.ApplyNormalFileProperties(completePath);
                         //ok NOW actually add the file to the patch list
+                        Logging.Info("Adding xml unpack entries from file {1}", Logfiles.Application, filename);
                         AddXmlUnpackFromFile(XmlUnpacks, filename);
                     }
                 }
             }
+
+            //perform macro replacement on all xml unpack entries
+            foreach(XmlUnpack xmlUnpack in XmlUnpacks)
+            {
+                xmlUnpack.DirectoryInArchive = Utils.MacroReplace(xmlUnpack.DirectoryInArchive, ReplacementTypes.FilePath);
+                xmlUnpack.FileName = Utils.MacroReplace(xmlUnpack.FileName, ReplacementTypes.FilePath);
+                xmlUnpack.ExtractDirectory = Utils.MacroReplace(xmlUnpack.ExtractDirectory, ReplacementTypes.FilePath);
+                xmlUnpack.NewFileName = Utils.MacroReplace(xmlUnpack.NewFileName, ReplacementTypes.FilePath);
+            }
+
             return XmlUnpacks;
         }
 
@@ -1241,7 +1366,10 @@ namespace RelhaxModpack.InstallerComponents
             //make an xml document to get all Xml Unpacks
             XmlDocument doc = XMLUtils.LoadXmlDocument(filename, XmlLoadType.FromFile);
             if (doc == null)
+            {
+                Logging.Error("failed to parse xml file");
                 return;
+            }
             //make new patch object for each entry
             //remember to add lots of logging
             XmlNodeList XMLUnpacks = XMLUtils.GetXMLNodesFromXPath(doc, "//files/file");
@@ -1250,7 +1378,7 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.Error("File {0} contains no XmlUnapck entries", filename);
                 return;
             }
-            Logging.Info("Adding {0} patches from XmlUnpack file {1}", Logfiles.Application, XMLUnpacks.Count, filename);
+            Logging.Info("Adding {0} xml unpack entries from file {1}", Logfiles.Application, XMLUnpacks.Count, filename);
             foreach (XmlNode patchNode in XMLUnpacks)
             {
                 XmlUnpack xmlup = new XmlUnpack();
@@ -1281,7 +1409,9 @@ namespace RelhaxModpack.InstallerComponents
                 XmlUnpacks.Add(xmlup);
             }
         }
+        #endregion
 
+        #region atlas parsing
         //Atlas parsing
         private List<Atlas> MakeAtlasList()
         {
@@ -1291,7 +1421,7 @@ namespace RelhaxModpack.InstallerComponents
             string[] atlas_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.AtlasCreationFoldername), SearchOption.TopDirectoryOnly,
                 @"*.xml", 50, 3, true);
             if (atlas_files == null)
-                Logging.WriteToLog("Failed to parse atlases from atlas directory (see above lines for more info", Logfiles.Application, LogLevel.Error);
+                Logging.WriteToLog("Failed to parse atlases from atlas directory", Logfiles.Application, LogLevel.Error);
             else
             {
                 Logging.WriteToLog(string.Format("Number of atlas files: {0}", atlas_files.Count()), Logfiles.Application, LogLevel.Debug);
@@ -1302,15 +1432,10 @@ namespace RelhaxModpack.InstallerComponents
                     foreach (string filename in atlas_files)
                     {
                         completePath = Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName, filename);
-                        //just double check...
-                        if (!File.Exists(completePath))
-                        {
-                            Logging.WriteToLog("atlas file does not exist?? " + completePath, Logfiles.Application, LogLevel.Warning);
-                            continue;
-                        }
                         //apply "normal" file properties just in case the user's wot install directory is special
                         Utils.ApplyNormalFileProperties(completePath);
                         //ok NOW actually add the file to the patch list
+                        Logging.Info("Adding atlas entries from file {1}", Logfiles.Application, filename);
                         AddAtlasFromFile(atlases, filename);
                     }
                 }
@@ -1330,10 +1455,10 @@ namespace RelhaxModpack.InstallerComponents
             XmlNodeList XMLAtlases = XMLUtils.GetXMLNodesFromXPath(doc, "//atlases/atlas");
             if (XMLAtlases == null || XMLAtlases.Count == 0)
             {
-                Logging.Error("File {0} contains no XmlUnapck entries", filename);
+                Logging.Error("File {0} contains no atlas entries", filename);
                 return;
             }
-            Logging.Info("Adding {0} patches from XmlUnpack file {1}", Logfiles.Application, XMLAtlases.Count, filename);
+            Logging.Info("Adding {0} atlas entries from file {1}", Logfiles.Application, XMLAtlases.Count, filename);
             foreach (XmlNode atlasNode in XMLAtlases)
             {
                 Atlas sc = new Atlas();
@@ -1395,6 +1520,8 @@ namespace RelhaxModpack.InstallerComponents
                 atlases.Add(sc);
             }
         }
+        #endregion
+
         #endregion
 
         #region IDisposable Support

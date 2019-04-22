@@ -5,49 +5,65 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxWPFConvert"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <ScrollViewer HorizontalScrollBarVisibility="Visible" MouseRightButtonUp="ScrollViewer_MouseRightButtonUp">
-        <Grid Background="#FF0C0CE6" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible" PreviewMouseDown="Grid_PreviewMouseDown">
-            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="200" Margin="10,10,0,0" VerticalAlignment="Top" Width="500">
-                <StackPanel>
-                    <CheckBox Content="CheckBox"/>
-                    <CheckBox Content="CheckBox"/>
-                    <Border BorderBrush="Black" BorderThickness="2" Height="102" Padding="13,0,0,0">
+        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
+    <TabControl>
+        <TabItem Header="Scroll views">
+            <ScrollViewer HorizontalScrollBarVisibility="Visible" MouseRightButtonUp="ScrollViewer_MouseRightButtonUp">
+                <Grid x:Name="theGrid" Background="#FF0C0CE6" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible" PreviewMouseDown="Grid_PreviewMouseDown">
+                    <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="200" Margin="10,10,0,0" VerticalAlignment="Top" Width="500">
                         <StackPanel>
                             <CheckBox Content="CheckBox"/>
-                            <CheckBox Content="CheckBox" HorizontalAlignment="Left"/>
-                            <ContentControl HorizontalAlignment="Left" MouseRightButtonUp="ContentControl_MouseRightButtonUp">
-                                <CheckBox Content="CheckBox" Foreground="BlanchedAlmond" HorizontalAlignment="Left" IsEnabled="False" MouseDown="CheckBox_MouseDown" PreviewMouseRightButtonDown="CheckBox_PreviewMouseRightButtonDown"/>
-                            </ContentControl>
-                            <ComboBox MaxWidth="200" HorizontalAlignment="Left" MinWidth="100">
-                                <ComboBoxItem Content="Item 1" PreviewMouseDown="ComboBoxItem_PreviewMouseDown"/>
-                                <ComboBoxItem Content="Item 2" IsEnabled="False" PreviewMouseDown="ComboBoxItem_PreviewMouseDown"/>
-                                <ComboBoxItem Content="Item 3"/>
-                            </ComboBox>
+                            <CheckBox Content="CheckBox"/>
+                            <Border BorderBrush="Black" BorderThickness="2" Height="102" Padding="13,0,0,0">
+                                <StackPanel>
+                                    <CheckBox Content="CheckBox"/>
+                                    <CheckBox Content="CheckBox" HorizontalAlignment="Left"/>
+                                    <ContentControl HorizontalAlignment="Left" MouseRightButtonUp="ContentControl_MouseRightButtonUp">
+                                        <CheckBox Content="CheckBox" Foreground="BlanchedAlmond" HorizontalAlignment="Left" IsEnabled="False" MouseDown="CheckBox_MouseDown" PreviewMouseRightButtonDown="CheckBox_PreviewMouseRightButtonDown"/>
+                                    </ContentControl>
+                                    <ComboBox MaxWidth="200" HorizontalAlignment="Left" MinWidth="100">
+                                        <ComboBoxItem Content="Item 1" PreviewMouseDown="ComboBoxItem_PreviewMouseDown"/>
+                                        <ComboBoxItem Content="Item 2" IsEnabled="False" PreviewMouseDown="ComboBoxItem_PreviewMouseDown"/>
+                                        <ComboBoxItem Content="Item 3"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </Border>
                         </StackPanel>
                     </Border>
-                </StackPanel>
-            </Border>
-            <local:StretchingTreeView HorizontalAlignment="Left" Height="161" Margin="10,215,0,0" VerticalAlignment="Top" Width="500" HorizontalContentAlignment="Stretch">
-                <local:StretchingTreeViewItem Header="UI COMPONENT" Padding="0" Margin="0" IsExpanded="True" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
-                    <Border BorderBrush="Black" BorderThickness="1" Padding="0" Margin="-22,0,0,0" HorizontalAlignment="Stretch">
-                        <StackPanel HorizontalAlignment="Stretch">
-                            <CheckBox Content="TEST" HorizontalAlignment="Left"/>
-                            <CheckBox Content="TEST"/>
-                            <CheckBox Content="TEST"/>
-                            <local:StretchingTreeViewItem Header="" Padding="0" Margin="0" IsExpanded="True">
-                                <Border BorderBrush="Black" BorderThickness="1" Padding="0" Margin="-22,-15,0,0">
-                                    <StackPanel>
-                                        <CheckBox Content="TEST"/>
-                                        <CheckBox Content="TEST"/>
-                                        <CheckBox Content="TEST"/>
-                                    </StackPanel>
-                                </Border>
-                            </local:StretchingTreeViewItem>
-                        </StackPanel>
-                    </Border>
-                </local:StretchingTreeViewItem>
-            </local:StretchingTreeView>
+                    <local:StretchingTreeView HorizontalAlignment="Left" Height="161" Margin="10,215,0,0" VerticalAlignment="Top" Width="500" HorizontalContentAlignment="Stretch">
+                        <local:StretchingTreeViewItem Header="UI COMPONENT" Padding="0" Margin="0" IsExpanded="True" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                            <Border BorderBrush="Black" BorderThickness="1" Padding="0" Margin="-22,0,0,0" HorizontalAlignment="Stretch">
+                                <StackPanel HorizontalAlignment="Stretch">
+                                    <CheckBox Content="TEST" HorizontalAlignment="Left"/>
+                                    <CheckBox Content="TEST"/>
+                                    <CheckBox Content="TEST"/>
+                                    <local:StretchingTreeViewItem Header="" Padding="0" Margin="0" IsExpanded="True">
+                                        <Border BorderBrush="Black" BorderThickness="1" Padding="0" Margin="-22,-15,0,0">
+                                            <StackPanel>
+                                                <CheckBox Content="TEST"/>
+                                                <CheckBox Content="TEST"/>
+                                                <CheckBox Content="TEST"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </local:StretchingTreeViewItem>
+                                </StackPanel>
+                            </Border>
+                        </local:StretchingTreeViewItem>
+                    </local:StretchingTreeView>
+                    <TreeView HorizontalAlignment="Left" Height="100" Margin="515,10,0,0" VerticalAlignment="Top" Width="159">
+                        <TreeViewItem x:Name="headerModifyTest" Header="Test"/>
+                    </TreeView>
+                    <Button Content="Button" HorizontalAlignment="Left" Margin="515,115,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="515,140,0,0" VerticalAlignment="Top" Width="159">
+                        <local:MediaType>Picture</local:MediaType>
+                        <local:MediaType>Webpage</local:MediaType>
+                        <local:MediaType>HTML</local:MediaType>
+
+                    </ComboBox>
+                </Grid>
+            </ScrollViewer>
+        </TabItem>
+        <TabItem Header="Custom Tabviewer">
             <TabControl HorizontalAlignment="Left" Height="100" Margin="515,10,0,0" VerticalAlignment="Top" Width="250">
                 <TabItem Header="TabItem1">
                     <TabItem.Background>
@@ -62,14 +78,36 @@
                     <Grid Background="#FFE5E5E5"/>
                 </TabItem>
             </TabControl>
-            <CheckBox HorizontalAlignment="Left" Margin="546,144,0,0" VerticalAlignment="Top">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="You agree to the "/>
-                    <TextBlock>
+        </TabItem>
+        <TabItem Header="Custom Checkboxes">
+            <Grid>
+                <CheckBox x:Name="TestRedBox" Content="CheckBox" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsEnabled="True"/>
+                <local:RelhaxCheckBox x:Name="testBox1" Content="RelhaxCheckBox" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=TestRedBox}"/>
+                <local:RelhaxCheckBox x:Name="testBox4" Content="Mod Name that is popular" HorizontalAlignment="Left" Margin="263,10,0,0" VerticalAlignment="Top" PopularModVisability="Visible"/>
+                <local:RelhaxCheckBox x:Name="testBox5" Content="RelhaxCheckBox" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=TestRedBox}"/>
+                <local:RelhaxCheckBox x:Name="testBox6" Content="RelhaxCheckBox" HorizontalAlignment="Left" Margin="10,90,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=TestRedBox}"/>
+                <CheckBox HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="You agree to the "/>
+                        <TextBlock>
                         <Hyperlink>License Agreement</Hyperlink>
-                    </TextBlock>
-                </StackPanel>
-            </CheckBox>
-        </Grid>
-    </ScrollViewer>
+                        </TextBlock>
+                    </StackPanel>
+                </CheckBox>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Progress Reporting">
+            <Grid Background="#FFE5E5E5">
+                <Button x:Name="BackgroundTaskStartButton" Content="Start Async Background Task" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="165" Click="BackgroundTaskStartButton_Click"/>
+                <TextBlock x:Name="BackgroundTaskReport" HorizontalAlignment="Left" Margin="10,35,0,0" TextWrapping="Wrap" Text="Task Not started" VerticalAlignment="Top" Width="165"/>
+                <ProgressBar x:Name="BackgroundTaskProgress" HorizontalAlignment="Left" Height="16" Margin="10,56,0,0" VerticalAlignment="Top" Width="165" Value="0" Minimum="0" Maximum="10"/>
+                <Button x:Name="ForgroundTaskStartButton" Content="Start Forground Task" HorizontalAlignment="Left" Margin="180,10,0,0" VerticalAlignment="Top" Width="165" Click="ForgroundTaskStartButton_Click"/>
+                <TextBlock x:Name="ForgroundTaskReport" HorizontalAlignment="Left" Margin="180,35,0,0" TextWrapping="Wrap" Text="Task Not started" VerticalAlignment="Top" Width="165"/>
+                <ProgressBar x:Name="ForgroundTaskProgress" HorizontalAlignment="Left" Height="16" Margin="180,56,0,0" VerticalAlignment="Top" Width="165" Value="0" Minimum="0" Maximum="10"/>
+                <Button x:Name="HybridTaskStartButton" Content="Start Hybrid Task" HorizontalAlignment="Left" Margin="350,10,0,0" VerticalAlignment="Top" Width="165" Click="HybradTaskStartButton_Click"/>
+                <TextBlock x:Name="HybridTaskReport" HorizontalAlignment="Left" Margin="350,35,0,0" TextWrapping="Wrap" Text="Task Not started" VerticalAlignment="Top" Width="165"/>
+                <ProgressBar x:Name="HybridTaskProgress" HorizontalAlignment="Left" Height="16" Margin="350,56,0,0" VerticalAlignment="Top" Width="165" Value="0" Minimum="0" Maximum="10"/>
+            </Grid>
+        </TabItem>
+    </TabControl>
 </Window>

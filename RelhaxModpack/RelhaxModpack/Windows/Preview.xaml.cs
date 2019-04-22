@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using RelhaxModpack.UIComponents;
 using System.Threading;
 using System.IO;
+using System.Net;
 
 namespace RelhaxModpack.Windows
 {
@@ -20,7 +21,9 @@ namespace RelhaxModpack.Windows
     public partial class Preview : RelhaxWindow
     {
 
-        public SelectablePackage Package { get; set; } = null;
+        public SelectablePackage Package = null;
+        public bool EditorMode = false;
+        private MemoryStream ImageStream = null;
 
         public Preview()
         {
@@ -48,21 +51,45 @@ namespace RelhaxModpack.Windows
             //check if devURL element should be enabled or not
             if(string.IsNullOrWhiteSpace(Package.DevURL))
             {
-                DevUrlBlock.IsEnabled = false;
-                DevUrlBlock.Visibility = Visibility.Hidden;
+                DevUrlHeader.IsEnabled = false;
+                DevUrlHeader.Visibility = Visibility.Hidden;
+                DevUrlHolder.IsEnabled = false;
+                DevUrlHolder.Visibility = Visibility.Hidden;
             }
-
-            //set the loading properties
-            //TODO: this lol
+            else
+            {
+                //devURL is now array of elements separated by newline
+                //load the stack with textblocks with tooltips for the URLs
+                string[] devURLS = Package.DevURL.Split('\n');
+                for(int i = 0; i < devURLS.Count(); i++)
+                {
+                    //make a textbox
+                    TextBlock block = new TextBlock()
+                    {
+                        ToolTip = devURLS[i].Trim()
+                    };
+                    //https://stackoverflow.com/questions/21214450/how-to-add-a-hyperlink-in-a-textblock-in-code?noredirect=1&lq=1
+                    block.Inlines.Clear();
+                    Hyperlink h = new Hyperlink(new Run(i.ToString()))
+                    {
+                        NavigateUri = new Uri(devURLS[i].Trim())
+                    };
+                    h.RequestNavigate += OnHyperLinkClick;
+                    block.Inlines.Add(h);
+                    DevUrlHolder.Children.Add(block);
+                }
+            }
 
             //set the name of the window to be the package name
             Title = Package.NameFormatted;
+            if (Package.PopularMod)
+                Title = string.Format("{0} ({1})", Title, Translations.GetTranslatedString("popular"));
 
             //make the linked labels in the link box
             for(int i =0; i < Package.Medias.Count; i++)
             {
                 //make the custom class element to host it
-                UIComponents.RelhaxPreviewIndex previewIndex = new UIComponents.RelhaxPreviewIndex()
+                RelhaxPreviewIndex previewIndex = new RelhaxPreviewIndex()
                 {
                     Media = Package.Medias[i],
                     Text = i.ToString()
@@ -79,22 +106,34 @@ namespace RelhaxModpack.Windows
                 Translations.GetTranslatedString("noUpdateInfo") : Package.UpdateComment,
                 Package.Timestamp == 0 ? Translations.GetTranslatedString("noTimestamp") : Utils.ConvertFiletimeTimestampToDate(Package.Timestamp));
 
-            //if the saved preview window point is within the screen, then load it to there
-            if (Utils.PointWithinScreen(ModpackSettings.PreviewX, ModpackSettings.PreviewY))
+            if(EditorMode)
             {
                 WindowStartupLocation = WindowStartupLocation.Manual;
-                //https://stackoverflow.com/questions/2734810/how-to-set-the-location-of-a-wpf-window
-                Left = ModpackSettings.PreviewX;
-                Top = ModpackSettings.PreviewY;
+            }
+            //if the saved preview window point is within the screen, then load it to there
+            else
+            {
+                if (Utils.PointWithinScreen(ModpackSettings.PreviewX, ModpackSettings.PreviewY))
+                {
+                    //set for manual window location setting
+                    WindowStartupLocation = WindowStartupLocation.Manual;
+                    //set starting location
+                    //https://stackoverflow.com/questions/2734810/how-to-set-the-location-of-a-wpf-window
+                    Left = ModpackSettings.PreviewX;
+                    Top = ModpackSettings.PreviewY;
+                }
+                else
+                {
+                    Logging.Info("[{0}]: Position {1}x{2} is outside screen dimensions, use center of window owner",
+                        Logfiles.Application, nameof(Preview), ModpackSettings.PreviewX, ModpackSettings.PreviewY);
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                }
                 //set width and height
                 Width = ModpackSettings.PreviewWidth;
                 Height = ModpackSettings.PreviewHeight;
-            }
-            else
-            {
-                Logging.Info("[{0}]: Position {1}x{2} is outside screen dimensions, use center of window owner",
-                    Logfiles.Application, nameof(Preview),ModpackSettings.PreviewX,ModpackSettings.PreviewY);
-                WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                //set if full screen
+                if (ModpackSettings.PreviewFullscreen)
+                    WindowState = WindowState.Maximized;
             }
 
             //finally if there is at least one media element, display it
@@ -102,7 +141,19 @@ namespace RelhaxModpack.Windows
                 DisplayMedia(Package.Medias[0]);
         }
 
-        private void PreviewIndex_OnPreviewLinkClick(object sender, UIComponents.RelhaxPreviewIndexEventArgs e)
+        private void OnHyperLinkClick(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(e.Uri.OriginalString);
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex.ToString());
+            }
+        }
+
+        private void PreviewIndex_OnPreviewLinkClick(object sender, RelhaxPreviewIndexEventArgs e)
         {
             if (e.Media == null)
                 throw new BadMemeException("MEDIA IS NULL HOW IS THAT EVEN POSSIBLE REEEEE");
@@ -133,12 +184,32 @@ namespace RelhaxModpack.Windows
                     //https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.image?view=netframework-4.7.2
                     Image pictureViewer = new Image();
                     pictureViewer.MouseLeftButtonDown += PictureViewer_MouseLeftButtonDown;
-                    MainPreviewBorder.Child = pictureViewer;
+                    //MainPreviewBorder.Child = pictureViewer;
+                    MainPreviewBorder.Child = new ProgressBar()
+                    {
+                        Minimum = 0,
+                        Maximum = 1,
+                        Value = 0,
+                        HorizontalAlignment = HorizontalAlignment.Stretch,
+                        VerticalAlignment = VerticalAlignment.Top,
+                        Height = 20
+                    };
                     //quick set to internal loading thing
-                    pictureViewer.Source = UISettings.DrawingImageToWpfImage(UISettings.GetLoadingImage());
-                    //http://dasselsoftwaredevelopment.com/code-samples/changing-the-source-of-an-image-in-c/
-                    await System.Threading.Tasks.Task.Factory.StartNew(() =>
-                    { pictureViewer.Source = new BitmapImage(new Uri(media.URL)); });
+                    pictureViewer.Source = UISettings.GetLoadingImageBitmap();
+                    //https://stackoverflow.com/questions/9173904/byte-array-to-image-conversion
+                    //https://stackoverflow.com/questions/18134234/how-to-convert-system-io-stream-into-an-image
+                    using (WebClient client = new WebClient() { })
+                    {
+                        client.DownloadProgressChanged += Client_DownloadProgressChanged;
+                        byte[] image = await client.DownloadDataTaskAsync(media.URL);
+                        ImageStream = new MemoryStream(image);
+                        BitmapImage bitmapImage = new BitmapImage();
+                        bitmapImage.BeginInit();
+                        bitmapImage.StreamSource = ImageStream;
+                        bitmapImage.EndInit();
+                        pictureViewer.Source = bitmapImage;
+                        MainPreviewBorder.Child = pictureViewer;
+                    }
                     break;
                 case MediaType.Webpage:
                     WebBrowser browserr = new WebBrowser();
@@ -149,9 +220,45 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
+            if(MainPreviewBorder.Child is ProgressBar bar)
+            {
+                if (bar.Maximum != e.TotalBytesToReceive)
+                    bar.Maximum = e.TotalBytesToReceive;
+                bar.Value = e.BytesReceived;
+            }
+        }
+
         private void PictureViewer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            throw new NotImplementedException();
+            if (WindowState != WindowState.Maximized)
+                WindowState = WindowState.Maximized;
+            else
+                WindowState = WindowState.Normal;
+        }
+
+        private void RelhaxWindow_Closed(object sender, EventArgs e)
+        {
+            //save window location, size and fullscreen property (if not in editor mode)
+            if(!EditorMode)
+            {
+                ModpackSettings.PreviewFullscreen = WindowState == WindowState.Maximized ? true : false;
+                ModpackSettings.PreviewHeight = (int)Height;
+                ModpackSettings.PreviewWidth = (int)Width;
+                if(Utils.PointWithinScreen((int)Left, (int)Top))
+                {
+                    ModpackSettings.PreviewX = (int)Left;
+                    ModpackSettings.PreviewY = (int)Top;
+                }
+            }
+
+            Logging.Debug("Disposing image memory stream");
+            if(ImageStream != null)
+            {
+                ImageStream.Dispose();
+                ImageStream = null;
+            }
         }
     }
 }

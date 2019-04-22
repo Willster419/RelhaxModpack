@@ -100,16 +100,6 @@ namespace RelhaxModpack.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] DotNetZip {
-            get {
-                object obj = ResourceManager.GetObject("DotNetZip", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap EMail {
@@ -221,16 +211,6 @@ namespace RelhaxModpack.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] NAudio {
-            get {
-                object obj = ResourceManager.GetObject("NAudio", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Microsoft Public License (Ms-PL)
         ///
         ///This license governs use of the accompanying software. If you use the software, you accept this license. If you do not accept the license, do not use the software.
@@ -250,21 +230,21 @@ namespace RelhaxModpack.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static byte[] Newtonsoft_Json {
+        internal static System.Drawing.Bitmap play_pause {
             get {
-                object obj = ResourceManager.GetObject("Newtonsoft_Json", resourceCulture);
-                return ((byte[])(obj));
+                object obj = ResourceManager.GetObject("play_pause", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap play_pause {
+        internal static System.Drawing.Bitmap popular_icon {
             get {
-                object obj = ResourceManager.GetObject("play_pause", resourceCulture);
+                object obj = ResourceManager.GetObject("popular_icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
