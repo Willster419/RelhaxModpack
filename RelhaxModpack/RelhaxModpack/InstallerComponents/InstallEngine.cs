@@ -73,16 +73,19 @@ namespace RelhaxModpack.InstallerComponents
 
         //names of triggers
         public const string TriggerContouricons = "build_contour_icons";
+        public const string TriggerInstallFonts = "install_fonts";
 
         public static readonly string[] CompleteTriggerList = new string[]
         {
-            TriggerContouricons
+            TriggerContouricons,
+            TriggerInstallFonts
         };
 
         //trigger array
         public static List<Trigger> Triggers = new List<Trigger>
         {
-            new Trigger(){ Fired = false, Name = TriggerContouricons, NumberProcessed = 0, Total = 0, TriggerTask = null }
+            new Trigger(){ Fired = false, Name = TriggerContouricons, NumberProcessed = 0, Total = 0, TriggerTask = null },
+            new Trigger(){ Fired = false, Name = TriggerInstallFonts, NumberProcessed = 0, Total = 0, TriggerTask = null }
         };
 
         //other
@@ -1049,6 +1052,16 @@ namespace RelhaxModpack.InstallerComponents
                             {
                                 case TriggerContouricons:
                                     match.TriggerTask = Task.Run(() => BuildContourIcons());
+                                    break;
+                                case TriggerInstallFonts:
+                                    match.TriggerTask = Task.Run(() =>
+                                    {
+                                        string[] fontsToInstall = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername), SearchOption.TopDirectoryOnly, @"*", 50, 3, true);
+                                        if (fontsToInstall == null || fontsToInstall.Count() == 0)
+                                            Logging.WriteToLog("...skipped (no font files to install)");
+                                        else
+                                            InstallFonts(fontsToInstall);
+                                    });
                                     break;
                                 default:
                                     Logging.Error("Invalid trigger name for switch block: {0}", match.Name);
