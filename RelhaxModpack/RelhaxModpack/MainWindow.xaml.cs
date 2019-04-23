@@ -889,14 +889,23 @@ namespace RelhaxModpack
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Restart();
             //check if wot is running
-            while (Utils.IsProcessRunning("TODO",Settings.WoTDirectory))
+            AskCloseWoT askCloseWoT = null;
+            while (Utils.IsProcessRunning(Settings.WoTProcessName,Settings.WoTDirectory))
             {
-                System.Threading.Thread.Sleep(100);
                 //create window to determine if cancel, wait, kill TODO
-
+                if (askCloseWoT == null)
+                    askCloseWoT = new AskCloseWoT();
+                //a positive result means that we are going to retry the loop
+                //it could mean the user hit retry (close true), or hit force close (succeeded, and try again anyways)
+                if(!(bool)askCloseWoT.ShowDialog())
+                {
+                    ToggleUIButtons(true);
+                    return;
+                }
+                System.Threading.Thread.Sleep(100);
             }
             //build macro hash for install?
-
+            Utils.BuildFilepathMacroList();
             //perform dependency calculations
             //get a flat list of packages to install
             List<DatabasePackage> flatList = Utils.GetFlatList(null, null, null, parsedCategoryList);

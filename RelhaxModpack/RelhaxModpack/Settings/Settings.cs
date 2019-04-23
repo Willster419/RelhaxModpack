@@ -95,6 +95,8 @@ namespace RelhaxModpack
 
         public static readonly string RelhaxLogFilepath = Path.Combine(ApplicationStartupPath, Logging.ApplicationLogFilename);
 
+        public const string WoTProcessName = "WorldOfTanks";
+
         public static readonly string[] FoldersToCheck = new string[]
         {
             RelhaxDownloadsFolder,

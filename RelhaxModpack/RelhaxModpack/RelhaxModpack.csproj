@@ -142,6 +142,9 @@
       <DependentUpon>RelhaxWPFRadioButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\Regression.cs" />
+    <Compile Include="Windows\AskCloseWoT.xaml.cs">
+      <DependentUpon>AskCloseWoT.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\CreateFTPFolderName.xaml.cs">
       <DependentUpon>CreateFTPFolderName.xaml</DependentUpon>
     </Compile>
@@ -251,6 +254,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AddPicturesZip.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AskCloseWoT.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

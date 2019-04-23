@@ -938,6 +938,19 @@
             The current status of the installer. Represents the current state of the installer. When it exists, it is also used as an exit code.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.AskCloseWoT">
+            <summary>
+            Interaction logic for AskCloseWoT.xaml
+            </summary>
+            <summary>
+            AskCloseWoT
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.AskCloseWoT.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.CreateFTPFolderName">
             <summary>
             Interaction logic for CreateFTPFolderName.xaml

@@ -1164,12 +1164,13 @@ namespace RelhaxModpack
             var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
             return Encoding.UTF8.GetString(base64EncodedBytes);
         }
-        public static bool IsProcessRunning(string processName, string pathToMatch = "")
+
+        public static Process GetProcess(string processName, string pathToMatch = "")
         {
             //check if path of exe is the same as the one we're looking at
             //first check to make sure wot path is legit
             bool checkWithPath = true;
-            if(string.IsNullOrEmpty(pathToMatch))
+            if (string.IsNullOrEmpty(pathToMatch))
             {
                 Logging.WriteToLog(nameof(pathToMatch) + "Is empty, cannot check for direct path, only checking for num processes",
                     Logfiles.Application, LogLevel.Error);
@@ -1179,16 +1180,16 @@ namespace RelhaxModpack
             //TO GET PROCESS NAME: Process.GetCurrentProcess().ProcessName
             Process[] processes = Process.GetProcessesByName(processName);
             //check if three are any at all
-            if(processes.Length == 0)
+            if (processes.Length == 0)
             {
-                return false;
+                return null;
             }
             //first check if the number is 1 or less, if so stop here
             else if (processes.Length == 1)
-                return false;
+                return null;
             //if not checking for path, we don't know if is the direct path, 
             else if (!checkWithPath)
-                return true;
+                return processes[0];
             else
             {
                 foreach (Process p in processes)
@@ -1197,10 +1198,16 @@ namespace RelhaxModpack
                     {
                         Logging.WriteToLog(string.Format("Matched process name {0} to path {1}", p.ProcessName, pathToMatch),
                             Logfiles.Application, LogLevel.Debug);
+                        return p;
                     }
                 }
             }
-            return false;
+            return null;
+        }
+
+        public static bool IsProcessRunning(string processName, string pathToMatch = "")
+        {
+            return GetProcess(processName, pathToMatch) == null ? false : true;
         }
         
         public static List<DatabasePackage> GetFlatList(List<DatabasePackage> globalDependnecies = null, List<Dependency> dependencies = null,
