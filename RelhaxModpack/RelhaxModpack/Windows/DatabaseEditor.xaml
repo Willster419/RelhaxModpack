@@ -436,10 +436,11 @@
                         <TextBlock x:Name="PackageLastUpdatedDisplay" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="11" TextWrapping="Wrap" VerticalAlignment="Center"/>
                         <StackPanel Grid.Column="0" Grid.Row="13" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
                             <CheckBox Content="Log At Install" Tag="LogAtInstallCB" x:Name="PackageLogAtInstallDisplay"/>
-                            <CheckBox Content="Visible" x:Name="PackageVisibleDisplay" Tag="VisibleCB" Margin="10,0,0,0"/>
-                            <CheckBox Content="Enabled" x:Name="PackageEnabledDisplay" Tag="EnabledCB" Margin="10,0,0,0"/>
-                            <CheckBox Content="Popular Mod" x:Name="PackagePopularModDisplay" Tag="PopularModCB" Margin="10,0,0,0"/>
-                            <CheckBox Content="Show In Search" x:Name="PackageShowInSearchListDisplay" Tag="PopularModCB" Margin="10,0,0,0"/>
+                            <CheckBox Content="Visible" x:Name="PackageVisibleDisplay" Tag="VisibleCB" Margin="8,0,0,0"/>
+                            <CheckBox Content="Enabled" x:Name="PackageEnabledDisplay" Tag="EnabledCB" Margin="8,0,0,0"/>
+                            <CheckBox Content="Popular" x:Name="PackagePopularModDisplay" Tag="PopularModCB" Margin="8,0,0,0"/>
+                            <CheckBox Content="Grey Area" x:Name="PackageGreyAreaModDisplay" Tag="PackageGreyAreaModDisplay" Margin="8,0,0,0"/>
+                            <CheckBox Content="Show In Search" x:Name="PackageShowInSearchListDisplay" Tag="PopularModCB" Margin="8,0,0,0"/>
                         </StackPanel>
                         <Button Grid.Column="0" Grid.Row="14" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Apply" x:Name="ApplyButton" Click="ApplyButton_Click"/>
                         <Button Grid.Column="0" Grid.Row="15" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Content="Download Zip" x:Name="ZipDownload" Tag="ZipUload" Click="ZipDownload_Click" />

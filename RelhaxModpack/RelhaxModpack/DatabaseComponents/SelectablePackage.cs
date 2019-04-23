@@ -41,6 +41,7 @@ namespace RelhaxModpack
             nameof(Description),
             nameof(UpdateComment),
             nameof(PopularMod),
+            nameof(GreyAreaMod),
             nameof(ShowInSearchList),
             nameof(Medias),
             nameof(UserFiles),
@@ -127,6 +128,8 @@ namespace RelhaxModpack
         /// Flag to determine if the mod (and children? TODO) should be used in the 
         /// </summary>
         public bool PopularMod = false;
+
+        public bool GreyAreaMod = false;
 
         /// <summary>
         /// Flag to determine any packages of this package should be sorted (by name)
