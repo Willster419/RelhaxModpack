@@ -128,7 +128,6 @@
     <Compile Include="Settings\ModpackSettings.cs" />
     <Compile Include="Settings\CommandLineSettings.cs" />
     <Compile Include="Settings\Settings.cs" />
-    <Compile Include="Settings\ThirdPartySettings.cs" />
     <Compile Include="Settings\UISettings.cs" />
     <Compile Include="UIComponents\ComboBoxItem.cs" />
     <Compile Include="UIComponents\EditorComboBoxItem.cs" />

@@ -788,17 +788,6 @@
             Alhpa should NEVER be built for public distribution unless direct testing!
             </summary>
         </member>
-        <member name="T:RelhaxModpack.ThirdPartySettings">
-            <summary>
-            Contains all properties that can be over-ridden or used when a 3rd party modpacker wants
-            to use the Relhax install engine
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.ThirdPartySettings.LoadSettings(System.String)">
-            <summary>
-            Load the custom 3rd party settings from XML, if they exist
-            </summary>
-        </member>
         <member name="T:RelhaxModpack.UISettings">
             <summary>
             Handles all custom UI settings
