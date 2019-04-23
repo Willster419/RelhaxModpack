@@ -88,6 +88,17 @@ namespace RelhaxModpack.UIComponents
             }
         }
 
+        private Visibility _GreyAreaVisability = Visibility.Hidden;
+        public Visibility GreyAreaVisability
+        {
+            get { return _GreyAreaVisability; }
+            set
+            {
+                _GreyAreaVisability = value;
+                OnPropertyChanged(nameof(GreyAreaVisability));
+            }
+        }
+
         //https://stackoverflow.com/questions/34651123/wpf-binding-a-background-color-initializes-but-not-updating
         public event PropertyChangedEventHandler PropertyChanged;
 
