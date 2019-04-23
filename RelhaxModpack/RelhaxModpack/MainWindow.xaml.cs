@@ -1033,7 +1033,7 @@ namespace RelhaxModpack
             };
             engine.OnInstallProgress += Engine_OnInstallProgress;
             engine.OnInstallFinish += Engine_OnInstallFinish;
-            //call the engine to install
+            engine.RunInstallationAsync();
         }
 
         private async void Engine_OnInstallFinish(object sender, InstallerComponents.RelhaxInstallFinishedEventArgs e)
