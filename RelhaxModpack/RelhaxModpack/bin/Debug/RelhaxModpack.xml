@@ -1681,6 +1681,11 @@
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Properties.Resources.grey_area_mod">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:RelhaxModpack.Properties.Resources.Home">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.

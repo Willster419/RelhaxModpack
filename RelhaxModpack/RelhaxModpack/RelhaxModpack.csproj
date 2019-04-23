@@ -367,6 +367,7 @@
     <Resource Include="PrivateStuff\github_readme_link.txt" />
     <Resource Include="Resources\Images\popular_icon.png" />
     <Resource Include="Resources\Licences\Fody.txt" />
+    <Resource Include="Resources\Images\grey_area_mod.png" />
     <Content Include="Resources\Licences\modpack_license_agrement.txt" />
     <None Include="Properties\RelhaxModpack.ruleset" />
   </ItemGroup>
