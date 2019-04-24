@@ -523,189 +523,6 @@ namespace RelhaxModpack
         }
         #endregion
 
-        #region All the dumb events for all the changing of settings
-        private void OnSelectionViewChanged(object sender, RoutedEventArgs e)
-        {
-            //selection view code for each new view goes here
-            if ((bool)SelectionDefault.IsChecked)
-                ModpackSettings.ModSelectionView = SelectionView.DefaultV2;
-            else if ((bool)SelectionLegacy.IsChecked)
-                ModpackSettings.ModSelectionView = SelectionView.Legacy;
-        }
-
-        private void OnMulticoreExtractionChanged(object sender, RoutedEventArgs e)
-        {
-            ModpackSettings.MulticoreExtraction = (bool)MulticoreExtractionCB.IsChecked;
-        }
-
-        private void OnCreateShortcutsChanged(object sender, RoutedEventArgs e)
-        {
-            ModpackSettings.CreateShortcuts = (bool)CreateShortcutsCB.IsChecked;
-        }
-
-        private void OnSaveUserDataChanged(object sender, RoutedEventArgs e)
-        {
-            ModpackSettings.SaveUserData = (bool)SaveUserDataCB.IsChecked;
-        }
-
-        private void OnClearWoTCacheChanged(object sender, RoutedEventArgs e)
-        {
-            ModpackSettings.ClearCache = (bool)ClearCacheCB.IsChecked;
-        }
-
-        private void OnClearLogFilesChanged(object sender, RoutedEventArgs e)
-        {
-            ModpackSettings.DeleteLogs = (bool)ClearLogFilesCB.IsChecked;
-        }
-
-        private void OnCleanInstallChanged(object sender, RoutedEventArgs e)
-        {
-            ModpackSettings.CleanInstallation = (bool)CleanInstallCB.IsChecked;
-        }
-
-        private void OnImmidateExtarctionChanged(object sender, RoutedEventArgs e)
-        {
-            ModpackSettings.DownloadInstantExtraction = (bool)InstantExtractionCB.IsChecked;
-        }
-
-        private void OnShowInstallCompleteWindowChanged(object sender, RoutedEventArgs e)
-        {
-            ModpackSettings.ShowInstallCompleteWindow = (bool)ShowInstallCompleteWindowCB.IsChecked;
-        }
-
-        private void OnBackupModsChanged(object sender, RoutedEventArgs e)
-        {
-            ModpackSettings.BackupModFolder = (bool)BackupModsCB.IsChecked;
-        }
-
-        private void OnPreviewLoadingImageChange(object sender, RoutedEventArgs e)
-        {
-            if ((bool)ThirdGuardsLoadingImageRB.IsChecked)
-                ModpackSettings.GIF = LoadingGifs.ThirdGuards;
-            else if ((bool)StandardImageRB.IsChecked)
-                ModpackSettings.GIF = LoadingGifs.Standard;
-        }
-
-        private void OnForceManuelGameDetectionChanged(object sender, RoutedEventArgs e)
-        {
-            ModpackSettings.ForceManuel = (bool)ForceManuelGameDetectionCB.IsChecked;
-        }
-
-        private void OnInformIfNoNewDatabaseChanged(object sender, RoutedEventArgs e)
-        {
-            ModpackSettings.NotifyIfSameDatabase = (bool)NotifyIfSameDatabaseCB.IsChecked;
-        }
-
-        private void OnSaveLastInstallChanged(object sender, RoutedEventArgs e)
-        {
-            ModpackSettings.SaveLastSelection = (bool)SaveLastInstallCB.IsChecked;
-        }
-
-        private void OnUseBetaAppChanged(object sender, RoutedEventArgs e)
-        {
-            if ((bool)UseBetaApplicationCB.IsChecked)
-                ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Beta;
-            else if (!(bool)UseBetaApplicationCB.IsChecked)
-                ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
-        }
-
-        private async void OnUseBetaDatabaseChanged(object sender, RoutedEventArgs e)
-        {
-            if ((bool)UseBetaDatabaseCB.IsChecked)
-            {
-                UseBetaDatabaseCB.IsEnabled = false;
-                //get the branches. the default selected should be master
-                UseBetaDatabaseBranches.IsEnabled = false;
-                UseBetaDatabaseBranches.Items.Clear();
-                UseBetaDatabaseBranches.Items.Add(Translations.GetTranslatedString("loadingBranches"));
-                UseBetaDatabaseBranches.SelectedIndex = 0;
-                string jsonText = string.Empty;
-                using (PatientWebClient client = new PatientWebClient() { Timeout = 1500 })
-                {
-                    try
-                    {
-                        client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
-                        jsonText = await client.DownloadStringTaskAsync(Settings.BetaDatabaseBranchesURL);
-                    }
-                    catch (WebException wex)
-                    {
-                        Logging.Exception(wex.ToString());
-                    }
-                }
-                if(string.IsNullOrWhiteSpace(jsonText))
-                {
-                    //just load master and call it good. it should always be there
-                    UseBetaDatabaseBranches.Items.Clear();
-                    UseBetaDatabaseBranches.Items.Add("master");
-                    UseBetaDatabaseBranches.SelectedIndex = 0;
-                    UseBetaDatabaseBranches.IsEnabled = true;
-                    UseBetaDatabaseCB.IsEnabled = true;
-                    return;
-                }
-                JArray root = null;
-                try
-                {
-                    root = JArray.Parse(jsonText);
-                }
-                catch (JsonException jex)
-                {
-                    Logging.Exception(jex.ToString());
-                    UseBetaDatabaseBranches.Items.Clear();
-                    UseBetaDatabaseBranches.Items.Add("master");
-                    UseBetaDatabaseBranches.SelectedIndex = 0;
-                    UseBetaDatabaseBranches.IsEnabled = true;
-                    UseBetaDatabaseCB.IsEnabled = true;
-                    return;
-                }
-                List<string> branches = new List<string>();
-                foreach(JObject branch in root.Children())
-                {
-                    JValue value = (JValue)branch["name"];
-                    branches.Add((string)value.Value);
-                }
-                branches.Reverse();
-                UseBetaDatabaseBranches.Items.Clear();
-                foreach (string s in branches)
-                    UseBetaDatabaseBranches.Items.Add(s);
-                ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Beta;
-                //default to master selected
-                UseBetaDatabaseBranches.SelectedIndex = 0;
-                UseBetaDatabaseBranches.IsEnabled = true;
-                UseBetaDatabaseCB.IsEnabled = true;
-            }
-            else
-            {
-                ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Stable;
-            }
-        }
-
-        private void OnDefaultBordersV2Changed(object sender, RoutedEventArgs e)
-        {
-            ModpackSettings.EnableBordersDefaultV2View = (bool)EnableBordersDefaultV2CB.IsChecked;
-        }
-
-        private void OnDefaultSelectColorChanged(object sender, RoutedEventArgs e)
-        {
-            ModpackSettings.EnableColorChangeDefaultV2View = (bool)EnableColorChangeDefaultV2CB.IsChecked;
-        }
-
-        private void OnLegacyBordersChanged(object sender, RoutedEventArgs e)
-        {
-            ModpackSettings.EnableBordersLegacyView = (bool)EnableBordersLegacyCB.IsChecked;
-        }
-
-        private void OnLegacySelectColorChenged(object sender, RoutedEventArgs e)
-        {
-            ModpackSettings.EnableColorChangeLegacyView = (bool)EnableColorChangeLegacyCB.IsChecked;
-        }
-
-        private void OnLanguageSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Translations.SetLanguage((Languages)LanguagesSelector.SelectedIndex);
-            Translations.LocalizeWindow(this, true);
-        }
-        #endregion
-
         #region Installation
         private void InstallModpackButton_Click(object sender, RoutedEventArgs e)
         {
@@ -1389,69 +1206,254 @@ namespace RelhaxModpack
                 throw new BadMemeException("aids. on a stick");
         }
 
-        private void VerboseLoggingCB_Checked(object sender, RoutedEventArgs e)
+        
+
+        private void CancelDownloadButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+        #endregion
+
+        #region All the dumb events for all the changing of settings
+        private void OnSelectionViewChanged(object sender, RoutedEventArgs e)
+        {
+            //selection view code for each new view goes here
+            if ((bool)SelectionDefault.IsChecked)
+                ModpackSettings.ModSelectionView = SelectionView.DefaultV2;
+            else if ((bool)SelectionLegacy.IsChecked)
+                ModpackSettings.ModSelectionView = SelectionView.Legacy;
+        }
+
+        private void OnMulticoreExtractionChanged(object sender, RoutedEventArgs e)
+        {
+            ModpackSettings.MulticoreExtraction = (bool)MulticoreExtractionCB.IsChecked;
+        }
+
+        private void OnCreateShortcutsChanged(object sender, RoutedEventArgs e)
+        {
+            ModpackSettings.CreateShortcuts = (bool)CreateShortcutsCB.IsChecked;
+        }
+
+        private void OnSaveUserDataChanged(object sender, RoutedEventArgs e)
+        {
+            ModpackSettings.SaveUserData = (bool)SaveUserDataCB.IsChecked;
+        }
+
+        private void OnClearWoTCacheChanged(object sender, RoutedEventArgs e)
+        {
+            ModpackSettings.ClearCache = (bool)ClearCacheCB.IsChecked;
+        }
+
+        private void OnClearLogFilesChanged(object sender, RoutedEventArgs e)
+        {
+            ModpackSettings.DeleteLogs = (bool)ClearLogFilesCB.IsChecked;
+        }
+
+        private void OnCleanInstallChanged(object sender, RoutedEventArgs e)
+        {
+            ModpackSettings.CleanInstallation = (bool)CleanInstallCB.IsChecked;
+        }
+
+        private void OnImmidateExtarctionChanged(object sender, RoutedEventArgs e)
+        {
+            ModpackSettings.DownloadInstantExtraction = (bool)InstantExtractionCB.IsChecked;
+        }
+
+        private void OnShowInstallCompleteWindowChanged(object sender, RoutedEventArgs e)
+        {
+            ModpackSettings.ShowInstallCompleteWindow = (bool)ShowInstallCompleteWindowCB.IsChecked;
+        }
+
+        private void OnBackupModsChanged(object sender, RoutedEventArgs e)
+        {
+            ModpackSettings.BackupModFolder = (bool)BackupModsCB.IsChecked;
+        }
+
+        private void OnPreviewLoadingImageChange(object sender, RoutedEventArgs e)
+        {
+            if ((bool)ThirdGuardsLoadingImageRB.IsChecked)
+                ModpackSettings.GIF = LoadingGifs.ThirdGuards;
+            else if ((bool)StandardImageRB.IsChecked)
+                ModpackSettings.GIF = LoadingGifs.Standard;
+        }
+
+        private void OnForceManuelGameDetectionChanged(object sender, RoutedEventArgs e)
+        {
+            ModpackSettings.ForceManuel = (bool)ForceManuelGameDetectionCB.IsChecked;
+        }
+
+        private void OnInformIfNoNewDatabaseChanged(object sender, RoutedEventArgs e)
+        {
+            ModpackSettings.NotifyIfSameDatabase = (bool)NotifyIfSameDatabaseCB.IsChecked;
+        }
+
+        private void OnSaveLastInstallChanged(object sender, RoutedEventArgs e)
+        {
+            ModpackSettings.SaveLastSelection = (bool)SaveLastInstallCB.IsChecked;
+        }
+
+        private void OnUseBetaAppChanged(object sender, RoutedEventArgs e)
+        {
+            if ((bool)UseBetaApplicationCB.IsChecked)
+                ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Beta;
+            else if (!(bool)UseBetaApplicationCB.IsChecked)
+                ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
+        }
+
+        private async void OnUseBetaDatabaseChanged(object sender, RoutedEventArgs e)
+        {
+            if ((bool)UseBetaDatabaseCB.IsChecked)
+            {
+                UseBetaDatabaseCB.IsEnabled = false;
+                //get the branches. the default selected should be master
+                UseBetaDatabaseBranches.IsEnabled = false;
+                UseBetaDatabaseBranches.Items.Clear();
+                UseBetaDatabaseBranches.Items.Add(Translations.GetTranslatedString("loadingBranches"));
+                UseBetaDatabaseBranches.SelectedIndex = 0;
+                string jsonText = string.Empty;
+                using (PatientWebClient client = new PatientWebClient() { Timeout = 1500 })
+                {
+                    try
+                    {
+                        client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
+                        jsonText = await client.DownloadStringTaskAsync(Settings.BetaDatabaseBranchesURL);
+                    }
+                    catch (WebException wex)
+                    {
+                        Logging.Exception(wex.ToString());
+                    }
+                }
+                if (string.IsNullOrWhiteSpace(jsonText))
+                {
+                    //just load master and call it good. it should always be there
+                    UseBetaDatabaseBranches.Items.Clear();
+                    UseBetaDatabaseBranches.Items.Add("master");
+                    UseBetaDatabaseBranches.SelectedIndex = 0;
+                    UseBetaDatabaseBranches.IsEnabled = true;
+                    UseBetaDatabaseCB.IsEnabled = true;
+                    return;
+                }
+                JArray root = null;
+                try
+                {
+                    root = JArray.Parse(jsonText);
+                }
+                catch (JsonException jex)
+                {
+                    Logging.Exception(jex.ToString());
+                    UseBetaDatabaseBranches.Items.Clear();
+                    UseBetaDatabaseBranches.Items.Add("master");
+                    UseBetaDatabaseBranches.SelectedIndex = 0;
+                    UseBetaDatabaseBranches.IsEnabled = true;
+                    UseBetaDatabaseCB.IsEnabled = true;
+                    return;
+                }
+                List<string> branches = new List<string>();
+                foreach (JObject branch in root.Children())
+                {
+                    JValue value = (JValue)branch["name"];
+                    branches.Add((string)value.Value);
+                }
+                branches.Reverse();
+                UseBetaDatabaseBranches.Items.Clear();
+                foreach (string s in branches)
+                    UseBetaDatabaseBranches.Items.Add(s);
+                ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Beta;
+                //default to master selected
+                UseBetaDatabaseBranches.SelectedIndex = 0;
+                UseBetaDatabaseBranches.IsEnabled = true;
+                UseBetaDatabaseCB.IsEnabled = true;
+            }
+            else
+            {
+                ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Stable;
+            }
+        }
+
+        private void OnDefaultBordersV2Changed(object sender, RoutedEventArgs e)
+        {
+            ModpackSettings.EnableBordersDefaultV2View = (bool)EnableBordersDefaultV2CB.IsChecked;
+        }
+
+        private void OnDefaultSelectColorChanged(object sender, RoutedEventArgs e)
+        {
+            ModpackSettings.EnableColorChangeDefaultV2View = (bool)EnableColorChangeDefaultV2CB.IsChecked;
+        }
+
+        private void OnLegacyBordersChanged(object sender, RoutedEventArgs e)
+        {
+            ModpackSettings.EnableBordersLegacyView = (bool)EnableBordersLegacyCB.IsChecked;
+        }
+
+        private void OnLegacySelectColorChenged(object sender, RoutedEventArgs e)
+        {
+            ModpackSettings.EnableColorChangeLegacyView = (bool)EnableColorChangeLegacyCB.IsChecked;
+        }
+
+        private void OnLanguageSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Translations.SetLanguage((Languages)LanguagesSelector.SelectedIndex);
+            Translations.LocalizeWindow(this, true);
+        }
+
+        private void VerboseLoggingCB_Click(object sender, RoutedEventArgs e)
         {
             ModpackSettings.VerboseLogging = (bool)VerboseLoggingCB.IsChecked;
         }
 
-        private void DisableTriggersCB_Checked(object sender, RoutedEventArgs e)
+        private void DisableTriggersCB_Click(object sender, RoutedEventArgs e)
         {
             ModpackSettings.DisableTriggers = (bool)DisableTriggersCB.IsChecked;
         }
 
-        private void AskDownloadCacheDelete_Checked(object sender, RoutedEventArgs e)
+        private void DeleteOldCacheFiles_Click(object sender, RoutedEventArgs e)
         {
-            ModpackSettings.AskToDeleteCache = (bool)AskDownloadCacheDelete.IsChecked;
+            ModpackSettings.AskToDeleteCache = (bool)DeleteOldCacheFiles.IsChecked;
         }
 
-        private void MinimizeToSystemTray_Checked(object sender, RoutedEventArgs e)
+        private void MinimizeToSystemTray_Click(object sender, RoutedEventArgs e)
         {
             ModpackSettings.MinimizeToSystemTray = (bool)MinimizeToSystemTray.IsChecked;
         }
 
         private void UninstallDefault_Checked(object sender, RoutedEventArgs e)
         {
-           
+            ModpackSettings.UninstallMode = UninstallModes.Default;
         }
 
         private void UninstallQuick_Checked(object sender, RoutedEventArgs e)
         {
-
+            ModpackSettings.UninstallMode = UninstallModes.Quick;
         }
 
-        private void EnableModsAutoSyncCheckBox_Checked(object sender, RoutedEventArgs e)
+        private void EnableModsAutoSyncCheckBox_Click(object sender, RoutedEventArgs e)
         {
             ModpackSettings.ModsAutoSyncEnable = (bool)EnableModsAutoSyncCheckBox.IsChecked;
         }
 
         private void LoadAutoSyncSelectionFile_Click(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
-        private void ForceEnabledCB_Checked(object sender, RoutedEventArgs e)
+        private void ForceEnabledCB_Clicked(object sender, RoutedEventArgs e)
         {
             ModpackSettings.ForceEnabled = (bool)ForceEnabledCB.IsChecked;
         }
 
-        private void ForceVisibleCB_Checked(object sender, RoutedEventArgs e)
+        private void ForceVisibleCB_Click(object sender, RoutedEventArgs e)
         {
             ModpackSettings.ForceVisible = (bool)ForceVisibleCB.IsChecked;
         }
 
-        private void ExportModeCB_Checked(object sender, RoutedEventArgs e)
+        private void ExportModeCB_Click(object sender, RoutedEventArgs e)
         {
             ModpackSettings.ExportMode = (bool)ExportModeCB.IsChecked;
         }
 
-        private void SaveDisabledModsInSelection_Checked(object sender, RoutedEventArgs e)
-        {
-            ModpackSettings.SaveDisabledMods = (bool)SaveDisabledModsInSelection.IsChecked;
-        }
-
         private void ThemeDefault_Checked(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
         private void ThemeDark_Checked(object sender, RoutedEventArgs e)
@@ -1464,11 +1466,17 @@ namespace RelhaxModpack
 
         }
 
-        private void CancelDownloadButton_Click(object sender, RoutedEventArgs e)
+        private void SaveDisabledModsInSelection_Click(object sender, RoutedEventArgs e)
         {
-            
+            ModpackSettings.SaveDisabledMods = (bool)SaveDisabledModsInSelection.IsChecked;
+        }
+
+        private void AutoInstallCheckbox_Click(object sender, RoutedEventArgs e)
+        {
+
         }
         #endregion
+
 
     }
 }

@@ -85,7 +85,7 @@
                             <RadioButton Content="Default" Margin="20,0,0,0" Tag="StandardImageRB" x:Name="StandardImageRB" Click="OnPreviewLoadingImageChange"/>
                             <RadioButton Content="3rdguards" Margin="5,0,0,0" Tag="ThirdGuardsLoadingImageRB" x:Name="ThirdGuardsLoadingImageRB" Click="OnPreviewLoadingImageChange"/>
                         </StackPanel>
-                        <CheckBox x:Name="SaveDisabledModsInSelection" Tag="SaveDisabledModsInSelection" Content="Keep disabled mods when saving selection" Checked="SaveDisabledModsInSelection_Checked"/>
+                        <CheckBox x:Name="SaveDisabledModsInSelection" Tag="SaveDisabledModsInSelection" Content="Keep disabled mods when saving selection" Click="SaveDisabledModsInSelection_Click"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
                         <TextBlock Text="Select theme:" />
@@ -114,14 +114,14 @@
                             <RadioButton Content="Default" x:Name="UninstallDefault" Tag="UninstallDefault" Margin="20,0,0,0" Checked="UninstallDefault_Checked"/>
                             <RadioButton Content="Quick" x:Name="UninstallQuick" Tag="UninstallQuick" Margin="5,0,0,0" Checked="UninstallQuick_Checked"/>
                         </StackPanel>
-                        <CheckBox Content="Minimze to system tray" x:Name="MinimizeToSystemTray" Tag="MinimizeToSystemTray" Checked="MinimizeToSystemTray_Checked"/>
-                        <CheckBox x:Name="AskDownloadCacheDelete" Content="Delete old cache files" Tag="AskDownloadCacheDelete" Checked="AskDownloadCacheDelete_Checked"/>
-                        <CheckBox x:Name="VerboseLoggingCB" Tag="VerboseLoggingCB" Content="Verbose Logging" Checked="VerboseLoggingCB_Checked"/>
-                        <CheckBox x:Name="DisableTriggersCB" Tag="DisableTriggersCB" Content="Disable Triggers" Checked="DisableTriggersCB_Checked"/>
+                        <CheckBox Content="Minimze to system tray" x:Name="MinimizeToSystemTray" Tag="MinimizeToSystemTray" Click="MinimizeToSystemTray_Click"/>
+                        <CheckBox x:Name="DeleteOldCacheFiles" Content="Delete old cache files" Tag="DeleteOldCacheFiles" Click="DeleteOldCacheFiles_Click"/>
+                        <CheckBox x:Name="VerboseLoggingCB" Tag="VerboseLoggingCB" Content="Verbose Logging" Click="VerboseLoggingCB_Click"/>
+                        <CheckBox x:Name="DisableTriggersCB" Tag="DisableTriggersCB" Content="Disable Triggers" Click="DisableTriggersCB_Click"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1">    
-                        <CheckBox x:Name="EnableModsAutoSyncCheckBox" Tag="EnableModsAutoSyncCheckbox" Content="Enable auto install" IsEnabled="True" Checked="EnableModsAutoSyncCheckBox_Checked"/>
-                        <CheckBox x:Name="AutoInstallCheckbox" Tag="AutoInstallCheckbox" Content="Enable one-click install" IsEnabled="True" />
+                        <CheckBox x:Name="EnableModsAutoSyncCheckBox" Tag="EnableModsAutoSyncCheckbox" Content="Enable auto install" IsEnabled="True" Click="EnableModsAutoSyncCheckBox_Click"/>
+                        <CheckBox x:Name="AutoInstallCheckbox" Tag="AutoInstallCheckbox" Content="Enable one-click install" IsEnabled="True" Click="AutoInstallCheckbox_Click" />
                         <TextBox Tag="AutoSyncSelectionFileTextBox"  x:Name="AutoSyncSelectionFileTextBox" Height="46" TextWrapping="Wrap" Margin="0,3,0,0" />
                         <Button x:Name="LoadAutoSyncSelectionFile" Tag="LoadAutoSyncSelectionFile" Content="Load selection file" HorizontalAlignment="Left" Margin="0,3,0,0" Width="120" Click="LoadAutoSyncSelectionFile_Click"/>
                         <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
@@ -134,9 +134,9 @@
                             </ComboBox>
                         </StackPanel>
                         <TextBlock x:Name="DeveloperSettingsHeader" Tag="DeveloperSettingsHeader" Text="Developer Settings"/>
-                        <CheckBox x:Name="ForceEnabledCB" Tag="ForceEnabledCB" Content="Force all components enabled" Margin="20,0,0,0" Checked="ForceEnabledCB_Checked"/>
-                        <CheckBox x:Name="ForceVisibleCB" Tag="ForceVisibleCB" Content="Force all components visible" Margin="20,0,0,0" Checked="ForceVisibleCB_Checked"/>
-                        <CheckBox x:Name="ExportModeCB" Tag="ExportModeCB" Content="Export mode" Margin="20,0,0,0" Checked="ExportModeCB_Checked"/>
+                        <CheckBox x:Name="ForceEnabledCB" Tag="ForceEnabledCB" Content="Force all components enabled" Margin="20,0,0,0" Click="ForceEnabledCB_Clicked"/>
+                        <CheckBox x:Name="ForceVisibleCB" Tag="ForceVisibleCB" Content="Force all components visible" Margin="20,0,0,0" Click="ForceVisibleCB_Click"/>
+                        <CheckBox x:Name="ExportModeCB" Tag="ExportModeCB" Content="Export mode" Margin="20,0,0,0" Click="ExportModeCB_Click"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
