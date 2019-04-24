@@ -842,7 +842,7 @@ namespace RelhaxModpack.InstallerComponents
                 int numExtracted = 0;
                 foreach (DatabasePackage package in packagesToExtract)
                 {
-                    if (ModpackSettings.DownloadInstantExtraction && package.DownloadFlag)
+                    if (ModpackSettings.InstallWhileDownloading && package.DownloadFlag)
                     {
                         continue;
                     }

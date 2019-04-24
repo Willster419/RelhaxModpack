@@ -62,7 +62,7 @@
                         <CheckBox Content="Create shortcuts" Tag="CreateShortcutsCB" x:Name="CreateShortcutsCB" Click="OnCreateShortcutsChanged"/>
                         <CheckBox Content="Multicore extraction mode (Beta)" IsEnabled="True" Tag="MulticoreExtractionCB" x:Name="MulticoreExtractionCB" Click="OnMulticoreExtractionChanged"/>
                         <TextBlock Text="Detected Cores: {0}" Tag="MulticoreExtractionCoresCountLabel" x:Name="MulticoreExtractionCoresCountLabel" IsEnabled="True" Padding="20,0,0,0"/>
-                        <CheckBox Content="Extract while downloading (Beta)" IsEnabled="True" Tag="InstantExtractionCB" x:Name="InstantExtractionCB" Click="OnImmidateExtarctionChanged"/>
+                        <CheckBox Content="Extract while downloading (Beta)" IsEnabled="True" Tag="InstantExtractionCB" x:Name="InstallWhileDownloadingCB" Click="OnImmidateExtarctionChanged"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1"/>
                 </Grid>
@@ -118,11 +118,12 @@
                         <CheckBox x:Name="DeleteOldCacheFiles" Content="Delete old cache files" Tag="DeleteOldCacheFiles" Click="DeleteOldCacheFiles_Click"/>
                         <CheckBox x:Name="VerboseLoggingCB" Tag="VerboseLoggingCB" Content="Verbose Logging" Click="VerboseLoggingCB_Click"/>
                         <CheckBox x:Name="DisableTriggersCB" Tag="DisableTriggersCB" Content="Disable Triggers" Click="DisableTriggersCB_Click"/>
+                        <CheckBox x:Name="AllowStatsGatherCB" Tag="AllowStatsGatherCB" Content="Allow Statistics gathering of mod usage" Click="AllowStatsGatherCB_Click" />
                     </StackPanel>
                     <StackPanel Grid.Column="1">    
-                        <CheckBox x:Name="EnableModsAutoSyncCheckBox" Tag="EnableModsAutoSyncCheckbox" Content="Enable auto install" IsEnabled="True" Click="EnableModsAutoSyncCheckBox_Click"/>
-                        <CheckBox x:Name="AutoInstallCheckbox" Tag="AutoInstallCheckbox" Content="Enable one-click install" IsEnabled="True" Click="AutoInstallCheckbox_Click" />
-                        <TextBox Tag="AutoSyncSelectionFileTextBox"  x:Name="AutoSyncSelectionFileTextBox" Height="46" TextWrapping="Wrap" Margin="0,3,0,0" />
+                        <CheckBox x:Name="AutoInstallCB" Tag="EnableModsAutoSyncCheckbox" Content="Enable auto install" IsEnabled="True" Click="OneClickInstallCB_Click"/>
+                        <CheckBox x:Name="OneClickInstallCB" Tag="AutoInstallCheckbox" Content="Enable one-click install" IsEnabled="True" Click="AutoInstallCB_Click" />
+                        <TextBox Tag="AutoSyncSelectionFileTextBox"  x:Name="AutoInstallOneClickInstallSelectionFilePath" Height="46" TextWrapping="Wrap" Margin="0,3,0,0" />
                         <Button x:Name="LoadAutoSyncSelectionFile" Tag="LoadAutoSyncSelectionFile" Content="Load selection file" HorizontalAlignment="Left" Margin="0,3,0,0" Width="120" Click="LoadAutoSyncSelectionFile_Click"/>
                         <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
                             <TextBlock Tag="AutoSyncCheckFrequencyTextBox" x:Name="AutoSyncCheckFrequencyTextBox"  TextWrapping="Wrap" Text="Frequency: every" />

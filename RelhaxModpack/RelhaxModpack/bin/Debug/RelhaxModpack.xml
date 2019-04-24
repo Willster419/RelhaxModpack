@@ -656,7 +656,7 @@
             toggle if the program will create desktop shortcuts
             </summary>
         </member>
-        <member name="F:RelhaxModpack.ModpackSettings.DownloadInstantExtraction">
+        <member name="F:RelhaxModpack.ModpackSettings.InstallWhileDownloading">
             <summary>
             toggle the ability for the modpack to extract a package as soon as it is downloaded
             </summary>
@@ -676,7 +676,7 @@
             Toggle the advanced installation progress window
             </summary>
         </member>
-        <member name="F:RelhaxModpack.ModpackSettings.AskToDeleteCache">
+        <member name="F:RelhaxModpack.ModpackSettings.DeleteCacheFiles">
             <summary>
             True - After an installation the application will ask to delete old download cache files
             False - After an installation the application will always delete old download cache files
@@ -755,16 +755,6 @@
         <member name="F:RelhaxModpack.ModpackSettings.MinimizeToSystemTray">
             <summary>
             toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.ModsAutoSyncEnable">
-            <summary>
-            toggle for enabling auto sync of mods
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.ModsAutoSyncLoad">
-            <summary>
-            toggle to load auto sync of mods
             </summary>
         </member>
         <member name="T:RelhaxModpack.Settings">

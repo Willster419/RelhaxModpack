@@ -156,7 +156,7 @@ namespace RelhaxModpack
         /// <summary>
         /// toggle the ability for the modpack to extract a package as soon as it is downloaded
         /// </summary>
-        public static bool DownloadInstantExtraction = false;
+        public static bool InstallWhileDownloading = false;
         /// <summary>
         /// toggle the ability to have multiple extractions happening at the same time
         /// </summary>
@@ -170,7 +170,7 @@ namespace RelhaxModpack
 
         public static bool ForceVisible = false;
 
-        public static bool DisableTriggers = false;
+        public static bool DisableTriggers = true;
 
         public static bool OneClickInstall = false;
 
@@ -183,7 +183,7 @@ namespace RelhaxModpack
         /// True - After an installation the application will ask to delete old download cache files
         /// False - After an installation the application will always delete old download cache files
         /// </summary>
-        public static bool AskToDeleteCache = false;
+        public static bool DeleteCacheFiles = false;
         /// <summary>
         /// toggle for if the Preview window should be shown in fullscreen mode
         /// </summary>
@@ -247,14 +247,6 @@ namespace RelhaxModpack
         /// toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
         /// </summary>
         public static bool MinimizeToSystemTray = false;
-        /// <summary>
-        /// toggle for enabling auto sync of mods
-        /// </summary>
-        public static bool ModsAutoSyncEnable = false;
-        /// <summary>
-        /// toggle to load auto sync of mods
-        /// </summary>
-        public static bool ModsAutoSyncLoad = false;
         #endregion
 
         #region legacy compatability

@@ -79,6 +79,7 @@ namespace RelhaxModpack
             progressIndicator.UpdateProgress(2, Translations.GetTranslatedString("loadingSettings"));
             Utils.AllowUIToUpdate();
             Settings.LoadSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude,null);
+            ApplySettingsToUI();
 
             //apply settings to UI elements
             UISettings.LoadSettings(true);
@@ -506,7 +507,7 @@ namespace RelhaxModpack
         private void OnUpdateDownloadProgresChange(object sender, DownloadProgressChangedEventArgs e)
         {
             //if it's in instant extraction mode, don't show download progress
-            if (ModpackSettings.DownloadInstantExtraction)
+            if (ModpackSettings.InstallWhileDownloading)
                 return;
             //if it's not running, start it
             if (!stopwatch.IsRunning)
@@ -802,14 +803,14 @@ namespace RelhaxModpack
             TimeSpan lastTime = stopwatch.Elapsed;
             Logging.WriteToLog(string.Format("Took {0} msec to process lists", stopwatch.ElapsedMilliseconds));
             //first, if we have downloads to do and doing them the standard way, then start processing them
-            if(packagesToDownload.Count > 0 && !ModpackSettings.DownloadInstantExtraction)
+            if(packagesToDownload.Count > 0 && !ModpackSettings.InstallWhileDownloading)
             {
                 Logging.WriteToLog("download while install = false and packages to download, starting ProcessDownloads()");
                 ProcessDownloads(packagesToDownload);
                 Logging.WriteToLog(string.Format("download time took {0} msec", stopwatch.Elapsed.TotalMilliseconds - lastTime.TotalMilliseconds));
                 lastTime = stopwatch.Elapsed;
             }
-            else if(packagesToDownload.Count > 0 && ModpackSettings.DownloadInstantExtraction)
+            else if(packagesToDownload.Count > 0 && ModpackSettings.InstallWhileDownloading)
             {
                 Logging.WriteToLog("download while install = true and packages to download, starting ProcessDownloadsAsync()");
                 ProcessDownloadsAsync(packagesToDownload);
@@ -870,7 +871,7 @@ namespace RelhaxModpack
                 {
                     //there are files to delete
                     //if ask if false, assume we are deleting old files
-                    if(ModpackSettings.AskToDeleteCache)
+                    if(ModpackSettings.DeleteCacheFiles)
                     {
                         DeleteOldCache oldCache = new DeleteOldCache();
                         if(!(bool)oldCache.ShowDialog())
@@ -1160,7 +1161,7 @@ namespace RelhaxModpack
             }
             //any to include here
             AutoSyncFrequencyTexbox.IsEnabled = toggle;
-            AutoSyncSelectionFileTextBox.IsEnabled = toggle;
+            AutoInstallCB.IsEnabled = toggle;
         }
 
         
@@ -1256,7 +1257,7 @@ namespace RelhaxModpack
 
         private void OnImmidateExtarctionChanged(object sender, RoutedEventArgs e)
         {
-            ModpackSettings.DownloadInstantExtraction = (bool)InstantExtractionCB.IsChecked;
+            ModpackSettings.InstallWhileDownloading = (bool)InstallWhileDownloadingCB.IsChecked;
         }
 
         private void OnShowInstallCompleteWindowChanged(object sender, RoutedEventArgs e)
@@ -1408,7 +1409,7 @@ namespace RelhaxModpack
 
         private void DeleteOldCacheFiles_Click(object sender, RoutedEventArgs e)
         {
-            ModpackSettings.AskToDeleteCache = (bool)DeleteOldCacheFiles.IsChecked;
+            ModpackSettings.DeleteCacheFiles = (bool)DeleteOldCacheFiles.IsChecked;
         }
 
         private void MinimizeToSystemTray_Click(object sender, RoutedEventArgs e)
@@ -1426,9 +1427,9 @@ namespace RelhaxModpack
             ModpackSettings.UninstallMode = UninstallModes.Quick;
         }
 
-        private void EnableModsAutoSyncCheckBox_Click(object sender, RoutedEventArgs e)
+        private void OneClickInstallCB_Click(object sender, RoutedEventArgs e)
         {
-            ModpackSettings.ModsAutoSyncEnable = (bool)EnableModsAutoSyncCheckBox.IsChecked;
+            ModpackSettings.OneClickInstall = (bool)OneClickInstallCB.IsChecked;
         }
 
         private void LoadAutoSyncSelectionFile_Click(object sender, RoutedEventArgs e)
@@ -1471,12 +1472,52 @@ namespace RelhaxModpack
             ModpackSettings.SaveDisabledMods = (bool)SaveDisabledModsInSelection.IsChecked;
         }
 
-        private void AutoInstallCheckbox_Click(object sender, RoutedEventArgs e)
+        private void AutoInstallCB_Click(object sender, RoutedEventArgs e)
         {
+            ModpackSettings.AutoInstall = (bool)AutoInstallCB.IsChecked;
+        }
 
+        private void AllowStatsGatherCB_Click(object sender, RoutedEventArgs e)
+        {
+            ModpackSettings.AllowStatisticDataGather = (bool)AllowStatsGatherCB.IsChecked;
+        }
+
+        private void ApplySettingsToUI()
+        {
+            //apply the internal setting to what the UI setting is
+            //UI component = internal setting
+            //simple settings first
+            NotifyIfSameDatabaseCB.IsChecked = ModpackSettings.NotifyIfSameDatabase;
+            BackupModsCB.IsChecked = ModpackSettings.BackupModFolder;
+            CleanInstallCB.IsChecked = ModpackSettings.CleanInstallation;
+            ForceManuelGameDetectionCB.IsChecked = ModpackSettings.ForceManuel;
+            SaveLastInstallCB.IsChecked = ModpackSettings.SaveLastSelection;
+            SaveUserDataCB.IsChecked = ModpackSettings.SaveUserData;
+            SaveDisabledModsInSelection.IsChecked = ModpackSettings.SaveDisabledMods;
+            VerboseLoggingCB.IsChecked = ModpackSettings.VerboseLogging;
+            AllowStatsGatherCB.IsChecked = ModpackSettings.AllowStatisticDataGather;
+            EnableBordersDefaultV2CB.IsChecked = ModpackSettings.EnableBordersDefaultV2View;
+            EnableColorChangeDefaultV2CB.IsChecked = ModpackSettings.EnableColorChangeDefaultV2View;
+            EnableBordersLegacyCB.IsChecked = ModpackSettings.EnableBordersLegacyView;
+            EnableColorChangeLegacyCB.IsChecked = ModpackSettings.EnableColorChangeLegacyView;
+            ShowInstallCompleteWindowCB.IsChecked = ModpackSettings.ShowInstallCompleteWindow;
+            ClearCacheCB.IsChecked = ModpackSettings.ClearCache;
+            ClearLogFilesCB.IsChecked = ModpackSettings.DeleteLogs;
+            CreateShortcutsCB.IsChecked = ModpackSettings.CreateShortcuts;
+            InstallWhileDownloadingCB.IsChecked = ModpackSettings.InstallWhileDownloading;
+            MulticoreExtractionCB.IsChecked = ModpackSettings.MulticoreExtraction;
+            ExportModeCB.IsChecked = ModpackSettings.ExportMode;
+            ForceEnabledCB.IsChecked = ModpackSettings.ForceEnabled;
+            ForceVisibleCB.IsChecked = ModpackSettings.ForceVisible;
+            DisableTriggersCB.IsChecked = ModpackSettings.DisableTriggers;
+            OneClickInstallCB.IsChecked = ModpackSettings.OneClickInstall;
+            AutoInstallCB.IsChecked = ModpackSettings.AutoInstall;
+            DeleteOldCacheFiles.IsChecked = ModpackSettings.DeleteCacheFiles;
+            if(!string.IsNullOrWhiteSpace(ModpackSettings.AutoOneclickSelectionFilePath))
+                AutoInstallOneClickInstallSelectionFilePath.Text = ModpackSettings.AutoOneclickSelectionFilePath;
         }
         #endregion
 
-
+        
     }
 }
