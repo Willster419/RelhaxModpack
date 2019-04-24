@@ -1266,7 +1266,80 @@ namespace RelhaxModpack
         #region UI events
         private void UninstallModpackButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            //toggle the buttons and reset the UI
+            ToggleUIButtons(false);
+            ResetUI();
+
+            //parse WoT root directory
+            Logging.WriteToLog("started looking for WoT root directory", Logfiles.Application, LogLevel.Debug);
+            if (!Utils.AutoFindWoTDirectory(ref Settings.WoTDirectory) || ModpackSettings.ForceManuel)
+            {
+                Logging.WriteToLog("auto detect failed or user requests manual", Logfiles.Application, LogLevel.Debug);
+                Microsoft.Win32.OpenFileDialog manualWoTFind = new Microsoft.Win32.OpenFileDialog()
+                {
+                    InitialDirectory = string.IsNullOrWhiteSpace(Settings.WoTDirectory) ? Settings.ApplicationStartupPath : Settings.WoTDirectory,
+                    AddExtension = true,
+                    CheckFileExists = true,
+                    CheckPathExists = true,
+                    Filter = "WorldOfTanks.exe|WorldOfTanks.exe",
+                    Multiselect = false,
+                    RestoreDirectory = true,
+                    ValidateNames = true
+                };
+                if ((bool)manualWoTFind.ShowDialog())
+                {
+                    Settings.WoTDirectory = manualWoTFind.FileName;
+                }
+                else
+                {
+                    Logging.WriteToLog("User Canceled installation");
+                    ToggleUIButtons(true);
+                    return;
+                }
+            }
+            Settings.WoTDirectory = Path.GetDirectoryName(Settings.WoTDirectory);
+            Logging.WriteToLog("Wot root directory parsed as " + Settings.WoTDirectory);
+
+            //get the version of tanks in the format of the res_mods version folder i.e. 0.9.17.0.3
+            string versionTemp = XMLUtils.GetXMLStringFromXPath(Path.Combine(Settings.WoTDirectory, "version.xml"), "//version.xml/version");
+            Settings.WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2);
+
+            //verify the uninstall
+            if (MessageBox.Show(string.Format(Translations.GetTranslatedString("verifyUninstallVersionAndLocation"),Settings.WoTDirectory, ModpackSettings.UninstallMode.ToString()),
+                Translations.GetTranslatedString("confirm"), MessageBoxButton.YesNo) == MessageBoxResult.No)
+            {
+                ToggleUIButtons(true);
+                return;
+            }
+
+            //create and run uninstall engine
+            InstallerComponents.InstallEngine engine = new InstallerComponents.InstallEngine()
+            {
+                AwaitCallback = false,
+            };
+            engine.OnInstallProgress += Engine_OnUninstallProgress;
+            engine.OnInstallFinish += Engine_OnUninstallFinish;
+            engine.RunUninstallationAsync();
+        }
+
+        private void Engine_OnUninstallFinish(object sender, InstallerComponents.RelhaxInstallFinishedEventArgs e)
+        {
+            if(e.ExitCodes == InstallerComponents.InstallerExitCodes.Success)
+            {
+                InstallProgressTextBox.Text = Translations.GetTranslatedString("uninstallSuccess");
+                MessageBox.Show(Translations.GetTranslatedString("uninstallSuccess"));
+            }
+            else
+            {
+                InstallProgressTextBox.Text = Translations.GetTranslatedString("uninstallFail");
+                MessageBox.Show(Translations.GetTranslatedString("uninstallFail"));
+            }
+            ToggleUIButtons(true);
+        }
+
+        private void Engine_OnUninstallProgress(object sender, RelhaxInstallerProgress e)
+        {
+            //TODO
         }
 
         private void DiagnosticUtilitiesButton_Click(object sender, RoutedEventArgs e)
