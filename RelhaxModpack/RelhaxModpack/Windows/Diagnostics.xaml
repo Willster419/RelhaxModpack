@@ -5,14 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="Diagnostics" MinHeight="300" MinWidth="600" Height="300" Width="600" Loaded="RelhaxWindow_Loaded">
-    <Grid>
+        Title="Diagnostics" MinHeight="300" MinWidth="535" Height="300" Width="535" Loaded="RelhaxWindow_Loaded">
+    <Grid >
         <TextBox x:Name="MainTextBox" Tag="MainTextBox" HorizontalAlignment="Stretch" Height="65" Margin="10,10,10,0" TextWrapping="Wrap" Text="Helpful explanation window" VerticalAlignment="Top"/>
         <TextBlock Tag="SelectedInstallation" x:Name="SelectedInstallation" HorizontalAlignment="Stretch" Margin="10,80,0,0" TextWrapping="Wrap" Text="Selected WoT Installation" VerticalAlignment="Top" />
-        <Button Tag="ChangeInstall" x:Name="ChangeInstall" Content="Change Installation" HorizontalAlignment="Left" Margin="10,101,0,0" VerticalAlignment="Top" Width="250" Click="ChangeInstall_Click"/>
-        <TextBox Tag="StatusTextBox" x:Name="StatusTextBox" HorizontalAlignment="Stretch" Height="50" Margin="10,209,0,0" TextWrapping="Wrap" VerticalAlignment="Top" />
-        <Button Tag="LaunchWoTLauncher" x:Name="LaunchWoTLauncher" Content="Start WoT Launcher Repair" HorizontalAlignment="Left" Margin="10,126,0,0" VerticalAlignment="Top" Width="250" Click="LaunchWoTLauncher_Click"/>
-        <Button Tag="CollectLogInfo" x:Name="CollectLogInfo" Content="Collect log info" HorizontalAlignment="Left" Margin="10,151,0,0" VerticalAlignment="Top" Width="250" Click="CollectLogInfo_Click"/>
-        <Button Tag="ClearDownloadCache" x:Name="ClearDownloadCache" Content="Clear Download Cache" HorizontalAlignment="Left" Margin="10,176,0,0" VerticalAlignment="Top" Width="250" Click="ClearDownloadCache_Click"/>
+        <TextBox Tag="StatusTextBox" x:Name="StatusTextBox" HorizontalAlignment="Stretch" Height="50" Margin="10,209,10,0" TextWrapping="Wrap" VerticalAlignment="Top" />
+        <Grid HorizontalAlignment="Left" Height="103" Margin="10,101,0,0" VerticalAlignment="Top" Width="507">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Tag="ChangeInstall" x:Name="ChangeInstall" Content="Change Selected Installation" HorizontalAlignment="Stretch" Margin="2,0,2,0" VerticalAlignment="Top" Click="ChangeInstall_Click" MouseEnter="OnButtonMouseEnter" MouseLeave="ChangeInstall_MouseLeave"/>
+            <Button Tag="LaunchWoTLauncher" x:Name="LaunchWoTLauncher" Content="Start WoT launcher repair" HorizontalAlignment="Stretch" Margin="2,0,2,0" VerticalAlignment="Top"  Click="LaunchWoTLauncher_Click" Grid.Row="1" MouseEnter="OnButtonMouseEnter" MouseLeave="ChangeInstall_MouseLeave"/>
+            <Button Tag="ClearDownloadCache" x:Name="ClearDownloadCache" Content="Clear download cache" HorizontalAlignment="Stretch" Margin="2,0,2,0" VerticalAlignment="Top" Click="ClearDownloadCache_Click" Grid.Column="1" MouseEnter="OnButtonMouseEnter" MouseLeave="ChangeInstall_MouseLeave"/>
+            <Button Tag="CollectLogInfo" x:Name="CollectLogInfo" Content="Collect log info" HorizontalAlignment="Stretch" Margin="2,0,2,0" VerticalAlignment="Top"  Click="CollectLogInfo_Click" Grid.Row="2" MouseEnter="OnButtonMouseEnter" MouseLeave="ChangeInstall_MouseLeave"/>
+            <Button Tag="ClearDownloadCacheDatabase" x:Name="ClearDownloadCacheDatabase" Content="Clear download cache database" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="2,0,2,0" Grid.Column="1" Grid.Row="1" MouseEnter="OnButtonMouseEnter" MouseLeave="ChangeInstall_MouseLeave" Click="ClearDownloadCacheDatabase_Click"/>
+        </Grid>
     </Grid>
 </local:RelhaxWindow>

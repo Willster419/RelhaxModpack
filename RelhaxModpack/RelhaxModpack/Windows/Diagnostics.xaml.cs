@@ -31,7 +31,32 @@ namespace RelhaxModpack.Windows
 
         private void ChangeInstall_Click(object sender, RoutedEventArgs e)
         {
+            //show a standard WoT selection window from manual fine WoT.exe
+            Microsoft.Win32.OpenFileDialog manualWoTFind = new Microsoft.Win32.OpenFileDialog()
+            {
+                InitialDirectory = string.IsNullOrWhiteSpace(Settings.WoTDirectory) ? Settings.ApplicationStartupPath : Settings.WoTDirectory,
+                AddExtension = true,
+                CheckFileExists = true,
+                CheckPathExists = true,
+                Filter = "WorldOfTanks.exe|WorldOfTanks.exe",
+                Multiselect = false,
+                RestoreDirectory = true,
+                ValidateNames = true
+            };
+            if ((bool)manualWoTFind.ShowDialog())
+            {
+                Settings.WoTDirectory = manualWoTFind.FileName;
+            }
+            else
+            {
+                Logging.WriteToLog("User Canceled installation");
+            }
 
+            //check to make sure a selected tanks installation is selected
+            if (string.IsNullOrWhiteSpace(Settings.WoTDirectory))
+                ToggleUIOptions(false);
+            else
+                ToggleUIOptions(true);
         }
 
         private void LaunchWoTLauncher_Click(object sender, RoutedEventArgs e)
@@ -142,6 +167,31 @@ namespace RelhaxModpack.Windows
                 StatusTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("failedToClearDownloadCache"), Environment.NewLine, Settings.RelhaxDownloadsFolder);
             }
             StatusTextBox.Text = Translations.GetTranslatedString("cleaningDownloadCacheComplete");
+        }
+
+        private async void ClearDownloadCacheDatabase_Click(object sender, RoutedEventArgs e)
+        {
+            StatusTextBox.Text = Translations.GetTranslatedString("clearingDownloadCacheDatabase ");
+            try
+            {
+                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolder, false, 3, 100, "*.xml");
+            }
+            catch (IOException ioex)
+            {
+                StatusTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("failedToClearDownloadCache"), Environment.NewLine, Settings.RelhaxDownloadsFolder);
+            }
+            StatusTextBox.Text = Translations.GetTranslatedString("cleaningDownloadCacheComplete");
+        }
+
+        private void OnButtonMouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            Button button = (Button)sender;
+            MainTextBox.Text = Translations.GetTranslatedString(string.Format("Diagnostics{0}ToolTip", button.Name));
+        }
+
+        private void ChangeInstall_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            MainTextBox.Text = Translations.GetTranslatedString("DiagnosticsMainToolTip");
         }
     }
 }
