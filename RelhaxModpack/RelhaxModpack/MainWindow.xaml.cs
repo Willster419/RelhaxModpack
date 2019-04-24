@@ -706,6 +706,7 @@ namespace RelhaxModpack
         }
         #endregion
 
+        #region Installation
         private void InstallModpackButton_Click(object sender, RoutedEventArgs e)
         {
             //toggle buttons and reset UI
@@ -1209,61 +1210,9 @@ namespace RelhaxModpack
                 }
             }
         }
+        #endregion
 
-        private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        {
-            //update the ETA
-            //ignore the first hit of this method, because the timer started while the connection was
-            //setting up, and not actually downloading in constant stream
-            if(current_bytes_downloaded + current_download_time + last_bytes_downloaded + last_download_time == 0)
-            {
-                //set a starting point for the "current" download timer value and size downloaded
-                current_bytes_downloaded = e.BytesReceived;
-                current_download_time = downloadTimer.Elapsed.TotalMilliseconds;
-                return;
-            }
-            //otherwise use standard estimating procedures
-            //set current to last and get new currents
-            last_bytes_downloaded = current_bytes_downloaded;
-            last_download_time = current_download_time;
-            current_bytes_downloaded = e.BytesReceived;
-            current_download_time = downloadTimer.Elapsed.TotalMilliseconds;
-            //get the current bytes per millisecond
-            double bytes_per_millisecond = (current_bytes_downloaded-last_bytes_downloaded) / (current_download_time-last_download_time);
-            double bytes_per_second = bytes_per_millisecond / 1000;
-            double kbytes_per_second = bytes_per_second / 1024;
-            double mbytes_per_second = kbytes_per_second / 1024;
-            //if we have a download rate, and a remaining size, then we can get a remaining time!
-            double remaining_bytes = e.TotalBytesToReceive - e.BytesReceived;
-            double remaining_milliseconds = remaining_bytes / bytes_per_millisecond;
-            double remaining_seconds = remaining_milliseconds / 1000;
-            ChildProgressBar.Maximum = e.TotalBytesToReceive;
-            ChildProgressBar.Minimum = 0;
-            ChildProgressBar.Value = e.BytesReceived;
-            //also report to the download message process
-            InstallProgressTextBox.Text = string.Format("{0} {1} {2} {3}\n{4}\n{5} {6} {7}\n{8} {9} {10}",
-                Translations.GetTranslatedString("downloading"), TotalProgressBar.Value, Translations.GetTranslatedString("of"),
-                TotalProgressBar.Maximum, downloadProgress.ChildCurrentProgress, e.BytesReceived / (1024 * 1024), Translations.GetTranslatedString("of"),
-                e.TotalBytesToReceive / (1024 * 1024), "ETA:", remaining_seconds, Translations.GetTranslatedString("seconds"));
-        }
-
-        private void ToggleUIButtons(bool toggle)
-        {
-            List<FrameworkElement> controlsToToggle = Utils.GetAllWindowComponentsLogical(this, false);
-            //any to remove here
-            if (controlsToToggle.Contains(CancelDownloadButton))
-                controlsToToggle.Remove(CancelDownloadButton);
-            foreach (FrameworkElement control in controlsToToggle)
-            {
-                if (control is Button || control is CheckBox || control is RadioButton)
-                    control.IsEnabled = toggle;
-            }
-            //any to include here
-            AutoSyncFrequencyTexbox.IsEnabled = toggle;
-            AutoSyncSelectionFileTextBox.IsEnabled = toggle;
-        }
-
-        #region UI events
+        #region Uninstall
         private void UninstallModpackButton_Click(object sender, RoutedEventArgs e)
         {
             //toggle the buttons and reset the UI
@@ -1305,7 +1254,7 @@ namespace RelhaxModpack
             Settings.WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2);
 
             //verify the uninstall
-            if (MessageBox.Show(string.Format(Translations.GetTranslatedString("verifyUninstallVersionAndLocation"),Settings.WoTDirectory, ModpackSettings.UninstallMode.ToString()),
+            if (MessageBox.Show(string.Format(Translations.GetTranslatedString("verifyUninstallVersionAndLocation"), Settings.WoTDirectory, ModpackSettings.UninstallMode.ToString()),
                 Translations.GetTranslatedString("confirm"), MessageBoxButton.YesNo) == MessageBoxResult.No)
             {
                 ToggleUIButtons(true);
@@ -1324,7 +1273,7 @@ namespace RelhaxModpack
 
         private void Engine_OnUninstallFinish(object sender, InstallerComponents.RelhaxInstallFinishedEventArgs e)
         {
-            if(e.ExitCodes == InstallerComponents.InstallerExitCodes.Success)
+            if (e.ExitCodes == InstallerComponents.InstallerExitCodes.Success)
             {
                 InstallProgressTextBox.Text = Translations.GetTranslatedString("uninstallSuccess");
                 MessageBox.Show(Translations.GetTranslatedString("uninstallSuccess"));
@@ -1341,6 +1290,63 @@ namespace RelhaxModpack
         {
             //TODO
         }
+        #endregion
+
+        #region UI events
+        private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
+            //update the ETA
+            //ignore the first hit of this method, because the timer started while the connection was
+            //setting up, and not actually downloading in constant stream
+            if (current_bytes_downloaded + current_download_time + last_bytes_downloaded + last_download_time == 0)
+            {
+                //set a starting point for the "current" download timer value and size downloaded
+                current_bytes_downloaded = e.BytesReceived;
+                current_download_time = downloadTimer.Elapsed.TotalMilliseconds;
+                return;
+            }
+            //otherwise use standard estimating procedures
+            //set current to last and get new currents
+            last_bytes_downloaded = current_bytes_downloaded;
+            last_download_time = current_download_time;
+            current_bytes_downloaded = e.BytesReceived;
+            current_download_time = downloadTimer.Elapsed.TotalMilliseconds;
+            //get the current bytes per millisecond
+            double bytes_per_millisecond = (current_bytes_downloaded - last_bytes_downloaded) / (current_download_time - last_download_time);
+            double bytes_per_second = bytes_per_millisecond / 1000;
+            double kbytes_per_second = bytes_per_second / 1024;
+            double mbytes_per_second = kbytes_per_second / 1024;
+            //if we have a download rate, and a remaining size, then we can get a remaining time!
+            double remaining_bytes = e.TotalBytesToReceive - e.BytesReceived;
+            double remaining_milliseconds = remaining_bytes / bytes_per_millisecond;
+            double remaining_seconds = remaining_milliseconds / 1000;
+            ChildProgressBar.Maximum = e.TotalBytesToReceive;
+            ChildProgressBar.Minimum = 0;
+            ChildProgressBar.Value = e.BytesReceived;
+            //also report to the download message process
+            InstallProgressTextBox.Text = string.Format("{0} {1} {2} {3}\n{4}\n{5} {6} {7}\n{8} {9} {10}",
+                Translations.GetTranslatedString("downloading"), TotalProgressBar.Value, Translations.GetTranslatedString("of"),
+                TotalProgressBar.Maximum, downloadProgress.ChildCurrentProgress, e.BytesReceived / (1024 * 1024), Translations.GetTranslatedString("of"),
+                e.TotalBytesToReceive / (1024 * 1024), "ETA:", remaining_seconds, Translations.GetTranslatedString("seconds"));
+        }
+
+        private void ToggleUIButtons(bool toggle)
+        {
+            List<FrameworkElement> controlsToToggle = Utils.GetAllWindowComponentsLogical(this, false);
+            //any to remove here
+            if (controlsToToggle.Contains(CancelDownloadButton))
+                controlsToToggle.Remove(CancelDownloadButton);
+            foreach (FrameworkElement control in controlsToToggle)
+            {
+                if (control is Button || control is CheckBox || control is RadioButton)
+                    control.IsEnabled = toggle;
+            }
+            //any to include here
+            AutoSyncFrequencyTexbox.IsEnabled = toggle;
+            AutoSyncSelectionFileTextBox.IsEnabled = toggle;
+        }
+
+        
 
         private void DiagnosticUtilitiesButton_Click(object sender, RoutedEventArgs e)
         {
@@ -1463,7 +1469,6 @@ namespace RelhaxModpack
             
         }
         #endregion
-
 
     }
 }
