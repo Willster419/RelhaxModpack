@@ -24,9 +24,24 @@ namespace RelhaxModpack.Windows
             InitializeComponent();
         }
 
-        private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
+        private async void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            //write that we're currently loading
+            DatabaseUpdateText.Text = ApplicationUpdateText.Text = Translations.GetTranslatedString("loading");
 
+            //get the strings
+            using (PatientWebClient client = new PatientWebClient())
+            {
+                if(ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Stable)
+                    DatabaseUpdateText.Text = await Task.Run(() => { return Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "databaseUpdate.txt"); });
+                else
+                    DatabaseUpdateText.Text = await client.DownloadStringTaskAsync(Settings.DatabaseNotesUrl);
+
+                if (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Stable)
+                    ApplicationUpdateText.Text = await Task.Run(() => { return Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "releaseNotes.txt"); });
+                else
+                    ApplicationUpdateText.Text = await client.DownloadStringTaskAsync(Settings.ApplicationNotesBetaUrl);
+            }
         }
     }
 }

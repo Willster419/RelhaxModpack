@@ -5,26 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="NewsViewer" Height="451" Width="420" MinWidth="420" MinHeight="451" Loaded="RelhaxWindow_Loaded">
+        Title="NewsViewer" Height="450" Width="420" MinWidth="420" MinHeight="450" Loaded="RelhaxWindow_Loaded">
     <Grid>
-        
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <TabItem Tag="database_Update_Tab" x:Name="database_Update_Tab" Header="Database">
+                <Grid Background="#FFE5E5E5">
+                    <TextBox x:Name="DatabaseUpdateText" Tag="database_Update_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
+                        This is where the text goes for the Database updates
+                    </TextBox>
+                </Grid>
+            </TabItem>
             <TabItem Tag="application_Update_Tab" x:Name="application_Update_Tab" Header="Application">
                 <Grid>
-                    <TextBox x:Name="application_Update_Text" Tag="application_Update_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
+                    <TextBox x:Name="ApplicationUpdateText" Tag="application_Update_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
                         This is where the text goes for the Application updates
                     </TextBox>
                 </Grid>
             </TabItem>
-            <TabItem Tag="database_Update_Tab" x:Name="database_Update_Tab" Header="Database">
-                <Grid Background="#FFE5E5E5">
-                    <TextBox x:Name="database_Update_Text" Tag="database_Update_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
-                        This is where the text goes for the Database updates
-                    </TextBox>
-                </Grid>
-
-            </TabItem>
         </TabControl>
-
     </Grid>
 </local:RelhaxWindow>

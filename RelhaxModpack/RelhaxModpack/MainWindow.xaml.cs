@@ -40,6 +40,7 @@ namespace RelhaxModpack
         private RelhaxProgress downloadProgress = null;
         private AdvancedProgress AdvancedProgressWindow;
         bool closingFromFailure = false;
+        NewsViewer newsViewer = null;
 
         /// <summary>
         /// Creates the instance of the MainWindow class
@@ -1168,12 +1169,26 @@ namespace RelhaxModpack
 
         private void DiagnosticUtilitiesButton_Click(object sender, RoutedEventArgs e)
         {
-         
+            Diagnostics diagnostics = new Diagnostics();
+            diagnostics.ShowDialog();
         }
 
         private void ViewNewsButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if (newsViewer == null)
+            {
+                newsViewer = new NewsViewer();
+                newsViewer.Show();
+            }
+            else if (newsViewer.IsLoaded)
+            {
+                newsViewer.Focus();
+            }
+            else
+            {
+                newsViewer = new NewsViewer();
+                newsViewer.Show();
+            }
         }
 
         private void DumpColorSettingsButton_Click(object sender, RoutedEventArgs e)

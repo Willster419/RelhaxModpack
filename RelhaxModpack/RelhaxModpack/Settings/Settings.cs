@@ -55,6 +55,10 @@ namespace RelhaxModpack
         public const string SelectionsRoot = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/selection_files/";
         public const string SelectionsXml = "selections.xml";
 
+        public const string ApplicationNotesStableUrl = "https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/RelicModManager/bin/Debug/releaseNotes.txt";
+        public const string ApplicationNotesBetaUrl = "https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/RelicModManager/bin/Debug/releaseNotes_beta.txt";
+        public const string DatabaseNotesUrl = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/databaseUpdate.txt";
+
         /// <summary>
         /// The current distribution version of the application
         /// Alhpa should NEVER be built for public distribution unless direct testing!
