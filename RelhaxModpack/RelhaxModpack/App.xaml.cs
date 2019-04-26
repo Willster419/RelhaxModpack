@@ -41,6 +41,7 @@ namespace RelhaxModpack
     /// </summary>
     public partial class App : Application
     {
+        ExceptionCaptureDisplay exceptionCaptureDisplay = new ExceptionCaptureDisplay();
         //when application is brought to forground
         private void Application_Activated(object sender, EventArgs e)
         {
@@ -158,7 +159,8 @@ namespace RelhaxModpack
         {
             if (!Logging.IsLogDisposed(Logfiles.Application) && Logging.IsLogOpen(Logfiles.Application))
                 Logging.WriteToLog(e.Exception.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
-            MessageBox.Show(e.Exception.ToString());
+            exceptionCaptureDisplay.ExceptionText = e.Exception.ToString();
+            exceptionCaptureDisplay.ShowDialog();
         }
     }
 }

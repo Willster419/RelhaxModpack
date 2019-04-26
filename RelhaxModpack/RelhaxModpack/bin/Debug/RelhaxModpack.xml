@@ -1006,6 +1006,19 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.ExceptionCaptureDisplay">
+            <summary>
+            Interaction logic for ExceptionCaptureDisplay.xaml
+            </summary>
+            <summary>
+            ExceptionCaptureDisplay
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ExceptionCaptureDisplay.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.FirstLoadAknowledgements">
             <summary>
             Interaction logic for FirstLoadAknowledgements.xaml
@@ -1116,19 +1129,6 @@
             InitializeComponent
             </summary>
         </member>
-        <member name="T:RelhaxModpack.Windows.GenericYesNoWindow">
-            <summary>
-            Interaction logic for GenericYesNoWindow.xaml
-            </summary>
-            <summary>
-            GenericYesNoWindow
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.GenericYesNoWindow.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
         <member name="T:RelhaxModpack.Windows.InstallFinished">
             <summary>
             Interaction logic for InstallFinished.xaml
@@ -1164,19 +1164,6 @@
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.PatchTester.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Windows.SelectionViewer">
-            <summary>
-            Interaction logic for SelectionViewer.xaml
-            </summary>
-            <summary>
-            SelectionViewer
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.SelectionViewer.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>

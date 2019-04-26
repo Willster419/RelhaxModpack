@@ -160,6 +160,9 @@
     <Compile Include="Windows\EditorSelectMediaUploadLocation.xaml.cs">
       <DependentUpon>EditorSelectMediaUploadLocation.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ExceptionCaptureDisplay.xaml.cs">
+      <DependentUpon>ExceptionCaptureDisplay.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\FirstLoadAknowledgements.xaml.cs">
       <DependentUpon>FirstLoadAknowledgements.xaml</DependentUpon>
     </Compile>
@@ -200,9 +203,6 @@
     <Compile Include="Windows\DatabaseUpdater.xaml.cs">
       <DependentUpon>DatabaseUpdater.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\GenericYesNoWindow.xaml.cs">
-      <DependentUpon>GenericYesNoWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\InstallFinished.xaml.cs">
       <DependentUpon>InstallFinished.xaml</DependentUpon>
     </Compile>
@@ -211,9 +211,6 @@
     </Compile>
     <Compile Include="Windows\PatchTester.xaml.cs">
       <DependentUpon>PatchTester.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\GenericWindow.xaml.cs">
-      <DependentUpon>GenericWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\Preview.xaml.cs">
       <DependentUpon>Preview.xaml</DependentUpon>
@@ -293,6 +290,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\ExceptionCaptureDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\FirstLoadAknowledgements.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -300,10 +301,6 @@
     <Page Include="Windows\DeleteOldCache.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\GenericYesNoWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\InstallFinished.xaml">
       <SubType>Designer</SubType>
@@ -318,10 +315,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\PatchTester.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\GenericWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
