@@ -218,9 +218,6 @@ namespace RelhaxWPFConvert
 
 
         #region Bitmap DDS testing
-        
-        
-        
 
         private void DdsToBitmap_Click(object sender, RoutedEventArgs e)
         {
@@ -362,7 +359,6 @@ namespace RelhaxWPFConvert
             bmp2.UnlockBits(bmpData);
             bmp2.Dispose();
         }
-
         #endregion
     }
 }
