@@ -27,7 +27,7 @@ namespace RelhaxModpack
         /// <summary>
         /// loading xml from a text string
         /// </summary>
-        FromXml
+        FromString
     }
 
     public enum DatabaseXmlVersion
@@ -515,7 +515,7 @@ namespace RelhaxModpack
                 {
                     case XmlLoadType.FromFile:
                         return XDocument.Load(fileOrXml, LoadOptions.SetLineInfo);
-                    case XmlLoadType.FromXml:
+                    case XmlLoadType.FromString:
                         return XDocument.Parse(fileOrXml, LoadOptions.SetLineInfo);
                 }
             }
@@ -537,7 +537,7 @@ namespace RelhaxModpack
                     case XmlLoadType.FromFile:
                         doc.Load(fileOrXml);
                         break;
-                    case XmlLoadType.FromXml:
+                    case XmlLoadType.FromString:
                         doc.LoadXml(fileOrXml);
                         break;
                 }

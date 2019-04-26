@@ -297,7 +297,7 @@ namespace RelhaxModpack.Windows
                 progress.Report(loadProgress);
 
                 //load the xml document into xml object
-                XmlDocument modInfoDocument = XMLUtils.LoadXmlDocument(modInfoXml, XmlLoadType.FromXml);
+                XmlDocument modInfoDocument = XMLUtils.LoadXmlDocument(modInfoXml, XmlLoadType.FromString);
                 if(modInfoDocument == null)
                 {
                     Logging.Error("Failed to parse modInfoxml from xml string");
@@ -455,7 +455,7 @@ namespace RelhaxModpack.Windows
                         if (!File.Exists(Settings.LastInstalledConfigFilepath))
                         {
                             Logging.Warning("LastInstalledConfigFile does not exist, loading as first time with check default mods");
-                            SelectionsDocument = XMLUtils.LoadXmlDocument(Utils.GetStringFromZip(Settings.ManagerInfoDatFile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromXml);
+                            SelectionsDocument = XMLUtils.LoadXmlDocument(Utils.GetStringFromZip(Settings.ManagerInfoDatFile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
                             shouldLoadSomething = true;
                         }
                         else
@@ -467,7 +467,7 @@ namespace RelhaxModpack.Windows
                     else
                     {
                         //load default checked mods
-                        SelectionsDocument = XMLUtils.LoadXmlDocument(Utils.GetStringFromZip(Settings.ManagerInfoDatFile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromXml);
+                        SelectionsDocument = XMLUtils.LoadXmlDocument(Utils.GetStringFromZip(Settings.ManagerInfoDatFile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
                         shouldLoadSomething = true;
                     }
 

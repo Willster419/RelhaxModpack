@@ -123,7 +123,10 @@ namespace RelhaxModpack
             //check for updates to database and application
             progressIndicator.UpdateProgress(4, Translations.GetTranslatedString("checkForUpdates"));
             CheckForApplicationUpdates();
-            CheckForDatabaseUpdates(false, true);
+            CheckForDatabaseUpdates(false);
+
+            //set the application information text box
+            ApplicationVersionLabel.Text = Translations.GetTranslatedString("applicationVersion") + " " + Utils.GetApplicationVersion();
 
             //get the number of processor cores
             MulticoreExtractionCoresCountLabel.Text = string.Format(Translations.GetTranslatedString("detectedCores"), Settings.NumLogicalProcesors);
@@ -198,18 +201,32 @@ namespace RelhaxModpack
 
         private void OnMenuClickChekUpdates(object sender, EventArgs e)
         {
-            //make and show progress indicator
-            ProgressIndicator progressIndicator = new ProgressIndicator()
+            CheckForDatabaseUpdatesPeriodic(false);
+        }
+
+        private void CheckForDatabaseUpdatesPeriodic(bool quiet)
+        {
+            Logging.Debug("starting periodic check for database updates");
+            if(!quiet)
             {
-                Message = Translations.GetTranslatedString("checkForUpdates"),
-                ProgressMinimum = 0,
-                ProgressMaximum = 1
-            };
-            progressIndicator.Show();
-            CheckForDatabaseUpdates(false,false);
-            //clean up progress inicaogr
-            progressIndicator.Close();
-            progressIndicator = null;
+                //make and show progress indicator
+                ProgressIndicator progressIndicator = new ProgressIndicator()
+                {
+                    Message = Translations.GetTranslatedString("checkForUpdates"),
+                    ProgressMinimum = 0,
+                    ProgressMaximum = 1
+                };
+                progressIndicator.Show();
+                CheckForDatabaseUpdates(true);
+                //clean up progress inicaogr
+                progressIndicator.Close();
+                progressIndicator = null;
+            }
+            else
+            {
+                CheckForDatabaseUpdates(true);
+            }
+            Logging.Debug("database periodic check complete");
         }
 
         private void OnMenuItemRestoreClick(object sender, EventArgs e)
@@ -243,61 +260,52 @@ namespace RelhaxModpack
         #endregion
 
         #region Update Code
-        private async void CheckForDatabaseUpdates(bool refreshManagerInfo, bool init)
+        private async void CheckForDatabaseUpdates(bool refreshModInfo)
         {
-            Logging.WriteToLog("Checking for database updates");
-            //TODO: consider just getting it from online?
-            if(refreshManagerInfo)
-            {
-                //delete the last one and download a new one
-                using (WebClient client = new WebClient())
-                {
-                    try
-                    {
-                        if (File.Exists(Settings.ManagerInfoDatFile))
-                            File.Delete(Settings.ManagerInfoDatFile);
-                        await client.DownloadFileTaskAsync("http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat", Settings.ManagerInfoDatFile);
+            Logging.WriteToLog("Checking for database updates in CheckForDatabaseUpdates()");
 
-                    }
-                    catch (Exception e)
-                    {
-                        Logging.WriteToLog(string.Format("Failed to check for updates: \n{0}", e), Logfiles.Application, LogLevel.ApplicationHalt);
-                        Application.Current.Shutdown();
-                        Close();
-                        return;
-                    }
-                }
-            }
-            //get the version info string
-            string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
-            if (string.IsNullOrEmpty(xmlString))
+            //if we are gettign a new ModInfo then do that
+            XmlDocument doc = null;
+            if (refreshModInfo)
             {
-                Logging.WriteToLog("Failed to get get xml string from managerInfo.dat", Logfiles.Application, LogLevel.ApplicationHalt);
-                return;
-            }
-            //load the document info
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(xmlString);
-            //get new DB update version
-            string databaseNewVersion = XMLUtils.GetXMLStringFromXPath(doc, "//version/database");
-            if(init)
-            {
-                //auto apply and don't annouce
-                Settings.DatabaseVersion = databaseNewVersion;
+                doc = await GetManagerInfoDocumentAsync();
             }
             else
             {
-                Logging.WriteToLog(string.Format("Comparing database versions, old={0}, new={1}", Settings.DatabaseVersion, databaseNewVersion));
-                //compare and annouce if not equal
-                if (!Settings.DatabaseVersion.Equals(databaseNewVersion))
+                //only get if from the downloaded version
+                //get the version info string
+                string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
+                if (string.IsNullOrEmpty(xmlString))
                 {
-                    Logging.WriteToLog("new version of database applied");
-                    Settings.DatabaseVersion = databaseNewVersion;
-                    DatabaseVersionLabel.Text = Translations.GetTranslatedString("databaseVersion") + " " + Settings.DatabaseVersion;
-                    MessageBox.Show(Translations.GetTranslatedString("newDBApplied"));
+                    Logging.WriteToLog("Failed to get get xml string from managerInfo.dat", Logfiles.Application, LogLevel.ApplicationHalt);
+                    return;
                 }
-                else
-                    Logging.WriteToLog("database versions are the same");
+
+                //load the document info
+                doc = XMLUtils.LoadXmlDocument(xmlString, XmlLoadType.FromString);
+            }
+
+            //get new DB update version and compare
+            string databaseNewVersion = XMLUtils.GetXMLStringFromXPath(doc, "//version/database");
+            Logging.WriteToLog(string.Format("Comparing database versions, old={0}, new={1}", Settings.DatabaseVersion, databaseNewVersion));
+            if(string.IsNullOrWhiteSpace(Settings.DatabaseVersion))
+            {
+                //auto apply and don't annouce. this usually happends when the application is loading for first time
+                Logging.Info("Settings.DatabaseVersion is empty, setting init value");
+                Settings.DatabaseVersion = databaseNewVersion;
+                DatabaseVersionLabel.Text = Translations.GetTranslatedString("databaseVersion") + " " + Settings.DatabaseVersion;
+            }
+            else if (!Settings.DatabaseVersion.Equals(databaseNewVersion))
+            {
+                //this happends when user clicks to manually check for updates or from the auto install feature
+                Logging.WriteToLog("new version of database applied");
+                Settings.DatabaseVersion = databaseNewVersion;
+                DatabaseVersionLabel.Text = Translations.GetTranslatedString("databaseVersion") + " " + Settings.DatabaseVersion;
+                MessageBox.Show(Translations.GetTranslatedString("newDBApplied"));
+            }
+            else
+            {
+                Logging.WriteToLog("database versions are the same");
             }
             Logging.WriteToLog("Checking for database updates complete");
         }
@@ -313,57 +321,16 @@ namespace RelhaxModpack
                 return;
             }
 
-            //delete the last one and download a new one
-            using (WebClient client = new WebClient())
-            {
-                try
-                {
-                    if (File.Exists(Settings.ManagerInfoDatFile))
-                        File.Delete(Settings.ManagerInfoDatFile);
-                    await client.DownloadFileTaskAsync("http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat", Settings.ManagerInfoDatFile);
-
-                }
-                catch (Exception e)
-                {
-                    Logging.WriteToLog(string.Format("Failed to check for updates: \n{0}", e), Logfiles.Application, LogLevel.ApplicationHalt);
-                    MessageBox.Show(Translations.GetTranslatedString("failedCheckUpdates"));
-                    closingFromFailure = true;
-                    Application.Current.Shutdown();
-                    Close();
-                    return;
-                }
-            }
-
-            //get the version info string
-            string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
-            if(string.IsNullOrEmpty(xmlString))
-            {
-                Logging.WriteToLog("Failed to get get xml string from managerInfo.dat", Logfiles.Application, LogLevel.ApplicationHalt);
-                Application.Current.Shutdown();
-                Close();
-                return;
-            }
-
-            //load the document info
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(xmlString);
+            XmlDocument doc = await GetManagerInfoDocumentAsync();
 
             //if the request distro version is alpha, correct it to stable
             if (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Alpha)
             {
                 Logging.WriteToLog(nameof(ModpackSettings.ApplicationDistroVersion) + "is Alpha, setting to stable for safety",
-                    Logfiles.Application, LogLevel.Debug);
+                    Logfiles.Application, LogLevel.Warning);
                 ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
             }
-
-            //make a copy of the curent application version and set it to stable if alphs
-            ApplicationVersions version = Settings.ApplicationVersion;
-            if (version == ApplicationVersions.Alpha)
-            {
-                Logging.WriteToLog("temp version of " + nameof(Settings.ApplicationVersion) + " is Alpha, setting to stable for safety",
-                    Logfiles.Application, LogLevel.Debug);
-                version = ApplicationVersions.Stable;
-            }
+            
 
             //4 possibilities:
             //stable->stable (update check)
@@ -371,8 +338,27 @@ namespace RelhaxModpack
             //beta->stable (auto out of date)
             //beta->beta (update check)
             bool outOfDate = false;
+
+            //make a copy of the curent application version and set it to stable if alphs
+            ApplicationVersions version = Settings.ApplicationVersion;
+
+            //check if the documentation xml file is there, if so then we should say in alpha
+            if (version == ApplicationVersions.Alpha && !File.Exists("RelhaxModpack.xml"))
+            {
+                Logging.WriteToLog("temp version of " + nameof(Settings.ApplicationVersion) + " is Alpha and RelhaxModpack.xml does NOT exist, setting to stable for safety",
+                    Logfiles.Application, LogLevel.Warning);
+                version = ApplicationVersions.Stable;
+            }
+
             //declare these out hereso the logger can access them
             string applicationBuildVersion = Utils.GetApplicationVersion();
+
+            if(version == ApplicationVersions.Alpha)
+            {
+                Logging.Debug("application version is {0} on alpha build, skipping update check");
+                return;
+            }
+
             //if current application build does not equal requestion distribution channel
             if (version != ModpackSettings.ApplicationDistroVersion)
             {
@@ -393,7 +379,7 @@ namespace RelhaxModpack
             }
             if(!outOfDate)
             {
-                Logging.WriteToLog("Application up to date");
+                Logging.WriteToLog("Application up to date or is alpha build");
                 return;
             }
             Logging.WriteToLog("Application is out of date, display update window");
@@ -447,6 +433,43 @@ namespace RelhaxModpack
                 Close();
                 return;
             }
+        }
+
+        private async Task<XmlDocument> GetManagerInfoDocumentAsync()
+        {
+            XmlDocument doc = null;
+            //delete the last one and download a new one
+            using (WebClient client = new WebClient())
+            {
+                try
+                {
+                    if (File.Exists(Settings.ManagerInfoDatFile))
+                        File.Delete(Settings.ManagerInfoDatFile);
+                    await client.DownloadFileTaskAsync("http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat", Settings.ManagerInfoDatFile);
+
+                }
+                catch (Exception e)
+                {
+                    Logging.WriteToLog(string.Format("Failed to check for updates: \n{0}", e), Logfiles.Application, LogLevel.ApplicationHalt);
+                    MessageBox.Show(Translations.GetTranslatedString("failedCheckUpdates"));
+                    closingFromFailure = true;
+                    Application.Current.Shutdown();
+                    Close();
+                    return null;
+                }
+            }
+
+            //get the version info string
+            string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
+            if (string.IsNullOrEmpty(xmlString))
+            {
+                Logging.WriteToLog("Failed to get get xml string from managerInfo.dat", Logfiles.Application, LogLevel.ApplicationHalt);
+                Application.Current.Shutdown();
+                Close();
+                return null;
+            }
+
+            return XMLUtils.LoadXmlDocument(xmlString, XmlLoadType.FromString);
         }
 
         private void ResetUI()

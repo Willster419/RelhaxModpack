@@ -1486,7 +1486,7 @@
             loading xml from a file on disk
             </summary>
         </member>
-        <member name="F:RelhaxModpack.XmlLoadType.FromXml">
+        <member name="F:RelhaxModpack.XmlLoadType.FromString">
             <summary>
             loading xml from a text string
             </summary>
