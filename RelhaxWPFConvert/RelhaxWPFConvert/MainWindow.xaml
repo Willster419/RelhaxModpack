@@ -109,5 +109,12 @@
                 <ProgressBar x:Name="HybridTaskProgress" HorizontalAlignment="Left" Height="16" Margin="350,56,0,0" VerticalAlignment="Top" Width="165" Value="0" Minimum="0" Maximum="10"/>
             </Grid>
         </TabItem>
+        <TabItem Header="DDS to bitmap">
+            <Grid Background="#FFE5E5E5">
+                <Button x:Name="DdsToBitmap" Content="DDS -&gt; Bitmap" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="96" Click="DdsToBitmap_Click"/>
+                <Button x:Name="BitmapToDds" Content="Bitmap -&gt; DDS" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="96" Click="BitmapToDds_Click"/>
+                <Image x:Name="TestImageDisplay" HorizontalAlignment="Left" Height="100" Margin="10,60,0,0" VerticalAlignment="Top" Width="100"/>
+            </Grid>
+        </TabItem>
     </TabControl>
 </Window>
