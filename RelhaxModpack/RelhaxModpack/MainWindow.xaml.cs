@@ -1322,8 +1322,6 @@ namespace RelhaxModpack
                 throw new BadMemeException("aids. on a stick");
         }
 
-        
-
         private void CancelDownloadButton_Click(object sender, RoutedEventArgs e)
         {
             

@@ -48,7 +48,7 @@
                     <Button Tag="TestPatchButton" x:Name="TestPatchButton" Content="Test Patch..." HorizontalAlignment="Right" Margin="0,0,102,0" VerticalAlignment="Bottom" Width="75" Click="TestPatchButton_Click"/>
                     <Button Tag="ApplyChangesButton" x:Name="ApplyChangesButton" Content="Apply Changes" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="97" Click="ApplyChangesButton_Click"/>
                     <TextBox Tag="FileToPatchTextbox" x:Name="FileToPatchTextbox" HorizontalAlignment="Stretch" Height="42" TextWrapping="Wrap" VerticalAlignment="Top" Margin="0,27,0,0" />
-                    <CheckBox Tag="PatchFollowPathSetting" x:Name="PatchFollowPathSetting" Content="Follow Path (for allowing inside xvm files)" HorizontalAlignment="Left" Margin="130,156,0,0" VerticalAlignment="Top"/>
+                    <CheckBox Tag="PatchFollowPathSetting" x:Name="PatchFollowPathSetting" Content="Follow Path (for allowing inside xvm files)" HorizontalAlignment="Left" Margin="130,156,0,0" VerticalAlignment="Top" IsEnabled="False"/>
                 </Grid>
             </TabItem>
             <TabItem Tag="RegressionTestingTab" x:Name="RegressionTestingTab" Header="Regression Testing">
