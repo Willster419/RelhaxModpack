@@ -201,7 +201,7 @@
                 <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Tag="LanguagesSelector" x:Name="LanguagesSelector" SelectionChanged="OnLanguageSelectionChanged">
                 </ComboBox>
             </GroupBox>
-            <Button Tag="CancelDownloadButton" x:Name="CancelDownloadButton" Content="Cancel" HorizontalAlignment="Left" Margin="235,14,0,0" VerticalAlignment="Top" Width="118" Height="31" Click="CancelDownloadButton_Click"/>
+            <Button Tag="CancelDownloadButton" x:Name="CancelDownloadButton" Content="Cancel" HorizontalAlignment="Left" Margin="235,14,0,0" VerticalAlignment="Top" Width="118" Height="31" Click="CancelDownloadButton_Click" Visibility="Hidden" IsEnabled="False"/>
         </Grid>
     </Grid>
 </Window>

@@ -894,7 +894,12 @@ namespace RelhaxModpack
             if(packagesToDownload.Count > 0 && !ModpackSettings.InstallWhileDownloading)
             {
                 Logging.WriteToLog("download while install = false and packages to download, starting ProcessDownloads()");
+                //toggle the button before and after as well
+                CancelDownloadButton.Visibility = Visibility.Visible;
+                CancelDownloadButton.IsEnabled = true;
                 ProcessDownloads(packagesToDownload);
+                CancelDownloadButton.IsEnabled = false;
+                CancelDownloadButton.Visibility = Visibility.Hidden;
                 Logging.WriteToLog(string.Format("download time took {0} msec", stopwatch.Elapsed.TotalMilliseconds - lastTime.TotalMilliseconds));
                 lastTime = stopwatch.Elapsed;
             }
@@ -1079,7 +1084,6 @@ namespace RelhaxModpack
                         current_download_time = 0;
                         //restarting the time should be the last thing to happen before starting file download
                         //kind of like a timing constraint
-
                         downloadTimer.Restart();
                         try
                         {
@@ -1089,28 +1093,39 @@ namespace RelhaxModpack
                         }
                         catch (WebException ex)
                         {
-                            Logging.WriteToLog("failed to download the file " + package.ZipFile + "\n" + ex.ToString(),
-                                Logfiles.Application, LogLevel.Error);
-                            //show abort retry ignore window TODO
-                            MessageBoxResult result = MessageBox.Show(string.Format("{0} \"{1}\" {2}",
-                                Translations.GetTranslatedString("failedToDownload1"),
-                                package.ZipFile, Translations.GetTranslatedString("failedToDownload2")),
-                                Translations.GetTranslatedString("failedToDownloadHeader"), MessageBoxButton.YesNoCancel);
-                            switch(result)
+                            if(ex.Status == WebExceptionStatus.RequestCanceled)
                             {
-                                case MessageBoxResult.Yes:
-                                    //keep retry as true
-                                    break;
-                                case MessageBoxResult.No:
-                                    //skip this file
-                                    retry = false;
-                                    break;
-                                case MessageBoxResult.Cancel:
-                                    //stop the installation alltogether
-                                    //cancel token stuff TODO
-                                    retry = false;
-                                    break;
+                                Logging.Info("Download canceled, stopping installation");
+                                ToggleUIButtons(true);
                             }
+                            else
+                            {
+                                Logging.WriteToLog("failed to download the file " + package.ZipFile + "\n" + ex.ToString(),
+                                                                Logfiles.Application, LogLevel.Error);
+                                //show abort retry ignore window TODO
+                                MessageBoxResult result = MessageBox.Show(string.Format("{0} \"{1}\" {2}",
+                                    Translations.GetTranslatedString("failedToDownload1"),
+                                    package.ZipFile, Translations.GetTranslatedString("failedToDownload2")),
+                                    Translations.GetTranslatedString("failedToDownloadHeader"), MessageBoxButton.YesNoCancel);
+                                switch (result)
+                                {
+                                    case MessageBoxResult.Yes:
+                                        //keep retry as true
+                                        break;
+                                    case MessageBoxResult.No:
+                                        //skip this file
+                                        retry = false;
+                                        break;
+                                    case MessageBoxResult.Cancel:
+                                        //stop the installation alltogether
+                                        //cancel token stuff TODO
+                                        retry = false;
+                                        break;
+                                }
+                            }
+                            //if it failed or not, the file should be deleted
+                            if (File.Exists(fileToSaveTo))
+                                File.Delete(fileToSaveTo);
                         }
                     }
                 }
@@ -1247,9 +1262,8 @@ namespace RelhaxModpack
                 if (control is Button || control is CheckBox || control is RadioButton)
                     control.IsEnabled = toggle;
             }
-            //any to include here
+            //any to include here that arent any of the above class types
             AutoSyncFrequencyTexbox.IsEnabled = toggle;
-            AutoInstallCB.IsEnabled = toggle;
         }
 
         private void OnLinkButtonClick(object sender, RoutedEventArgs e)
