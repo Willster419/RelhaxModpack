@@ -37,6 +37,10 @@ namespace RelhaxModpack
 
         public const string LastSavedConfigFilename = "lastInstalledConfig.xml";
 
+        public static string DefaultStartAddress = @"http://wotmods.relhaxmodpack.com/WoT/{onlineFolder}/";
+
+        public static string DefaultEndAddress = @"";
+
         public const string BetaDatabaseURL = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/modInfo.xml";
 
         public const string DatabaseOnlineFolderXpath = "//modInfoAlpha.xml/@onlineFolder";
@@ -132,12 +136,6 @@ namespace RelhaxModpack
         public static string DatabaseVersion = "";
         public static bool FirstLoad = false;
         public static bool FirstLoadToV2 = false;
-        #endregion
-
-        #region Settings that can be over-ridden by loading thirdPartySettings
-        //TODO: make some of these properties so that the get can return eithor the modpack standalone or third party version
-        public static string DefaultStartAddress = @"http://wotmods.relhaxmodpack.com/WoT/{onlineFolder}/";
-        public static string DefaultEndAddress = @"";
         #endregion
 
         #region Settings parsing to/from XML file
