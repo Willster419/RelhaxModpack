@@ -1674,6 +1674,7 @@ namespace RelhaxModpack
             OneClickInstallCB.IsChecked = ModpackSettings.OneClickInstall;
             AutoInstallCB.IsChecked = ModpackSettings.AutoInstall;
             DeleteOldCacheFiles.IsChecked = ModpackSettings.DeleteCacheFiles;
+            MinimizeToSystemTray.IsChecked = ModpackSettings.MinimizeToSystemTray;
             if(!string.IsNullOrWhiteSpace(ModpackSettings.AutoOneclickSelectionFilePath))
                 AutoInstallOneClickInstallSelectionFilePath.Text = ModpackSettings.AutoOneclickSelectionFilePath;
             //setup the languages selector
