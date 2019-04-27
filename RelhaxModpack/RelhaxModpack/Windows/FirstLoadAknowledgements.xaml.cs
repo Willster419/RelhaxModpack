@@ -22,13 +22,7 @@ namespace RelhaxModpack.Windows
     {
         public FirstLoadAknowledgements() => InitializeComponent();
 
-
-
-
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
+        public bool UserAgreed { get; set; } = false;
 
         private void Link_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
             //Link clicking event that opens the browser
@@ -42,9 +36,9 @@ namespace RelhaxModpack.Windows
 
         }
 
-        private void Continue_Button_Click(object sender, RoutedEventArgs e)
+        private void CheckForContinueButton(object sender, RoutedEventArgs e)
         {
-
+            UserAgreed = continue_Button.IsEnabled = (bool)license_Agree.IsChecked && (bool)collect_stats.IsChecked && (bool)mod_hoster.IsChecked && (bool)support.IsChecked;
         }
     }
 }
