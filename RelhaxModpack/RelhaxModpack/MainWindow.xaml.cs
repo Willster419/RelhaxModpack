@@ -66,8 +66,16 @@ namespace RelhaxModpack
             progressIndicator.UpdateProgress(0);
             Utils.AllowUIToUpdate();
 
+            //load translations into cobobox
+            LanguagesSelector.Items.Clear();
+            LanguagesSelector.Items.Add(Translations.LanguageEnglish);
+            LanguagesSelector.Items.Add(Translations.LanguageFrench);
+            LanguagesSelector.Items.Add(Translations.LanguageGerman);
+            LanguagesSelector.Items.Add(Translations.LanguagePolish);
+
             //load translation hashes and set default language
             Translations.SetLanguage(Languages.English);
+            LanguagesSelector.SelectedIndex = 0;
             Translations.LoadTranslations();
 
             //apply translations to this window
@@ -184,6 +192,14 @@ namespace RelhaxModpack
                         else
                             Logging.Info("skipped (old log does not exist)");
                         Logging.Info("upgrade to V2 complete, welcome to the future!");
+                    }
+
+                    //else process settins for first time load
+                    else if (Settings.FirstLoad)
+                    {
+                        Logging.Info("running processes for first time loading");
+                        Translations.SetLanguageOnFirstLoad();
+                        ApplySettingsToUI();
                     }
                 }
             }
@@ -1512,7 +1528,22 @@ namespace RelhaxModpack
 
         private void OnLanguageSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Translations.SetLanguage((Languages)LanguagesSelector.SelectedIndex);
+            //Translations.SetLanguage((Languages)LanguagesSelector.SelectedIndex);
+            switch (LanguagesSelector.SelectedItem as string)
+            {
+                case Translations.LanguageEnglish:
+                    Translations.SetLanguage(Languages.English);
+                    break;
+                case Translations.LanguageFrench:
+                    Translations.SetLanguage(Languages.French);
+                    break;
+                case Translations.LanguageGerman:
+                    Translations.SetLanguage(Languages.German);
+                    break;
+                case Translations.LanguagePolish:
+                    Translations.SetLanguage(Languages.Polish);
+                    break;
+            }
             Translations.LocalizeWindow(this, true);
         }
 
@@ -1624,6 +1655,22 @@ namespace RelhaxModpack
             DeleteOldCacheFiles.IsChecked = ModpackSettings.DeleteCacheFiles;
             if(!string.IsNullOrWhiteSpace(ModpackSettings.AutoOneclickSelectionFilePath))
                 AutoInstallOneClickInstallSelectionFilePath.Text = ModpackSettings.AutoOneclickSelectionFilePath;
+            //setup the languages selector
+            switch(ModpackSettings.Language)
+            {
+                case Languages.English:
+                    LanguagesSelector.SelectedItem = Translations.LanguageEnglish;
+                    break;
+                case Languages.French:
+                    LanguagesSelector.SelectedItem = Translations.LanguageFrench;
+                    break;
+                case Languages.German:
+                    LanguagesSelector.SelectedItem = Translations.LanguageGerman;
+                    break;
+                case Languages.Polish:
+                    LanguagesSelector.SelectedItem = Translations.LanguagePolish;
+                    break;
+            }
         }
 
         #endregion

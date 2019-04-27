@@ -172,7 +172,6 @@ namespace RelhaxModpack
             catch (XmlException ex)
             {
                 Logging.Error("Failed to load {0}, using defaults set in class{1}{2}{3}", xmlfile, SettingsClass.GetType().ToString(), Environment.NewLine, ex.ToString());
-                Translations.SetLanguageOnFirstLoad();
                 return false;
             }
             //using child of child rather than xpath gets around the fact that the root element name has changed or can change

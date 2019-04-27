@@ -49,6 +49,10 @@ namespace RelhaxModpack
             "toggleButtonDescription"
         };
         private const string TranslationNeeded = "TODO";
+        public const string LanguageEnglish = "English";
+        public const string LanguagePolish = "Polski";
+        public const string LanguageGerman = "Deutsch";
+        public const string LanguageFrench = "Français";
         private static Dictionary<string, string> English = new Dictionary<string, string>();
         private static Dictionary<string, string> Gernam = new Dictionary<string, string>();
         private static Dictionary<string, string> Polish = new Dictionary<string, string>();
