@@ -217,22 +217,31 @@ namespace RelhaxModpack
 
         private void TheMainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if(!Logging.IsLogDisposed(Logfiles.Application))
+            if(ModpackSettings.MinimizeToSystemTray)
             {
-                if(Logging.IsLogOpen(Logfiles.Application))
-                    Logging.WriteToLog("Saving settings");
-                if(!closingFromFailure)
-                    if (Settings.SaveSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude,null))
-                        if (Logging.IsLogOpen(Logfiles.Application))
-                            Logging.WriteToLog("Settings saved");
-                if (Logging.IsLogOpen(Logfiles.Application))
-                    Logging.WriteToLog("Disposing tray icon");
-                if (RelhaxIcon != null)
+                Logging.Debug("minimizing to system try");
+                Hide();
+                e.Cancel = true;
+            }
+            else
+            {
+                if (!Logging.IsLogDisposed(Logfiles.Application))
                 {
-                    RelhaxIcon.Dispose();
-                    RelhaxIcon = null;
+                    if (Logging.IsLogOpen(Logfiles.Application))
+                        Logging.WriteToLog("Saving settings");
+                    if (!closingFromFailure)
+                        if (Settings.SaveSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null))
+                            if (Logging.IsLogOpen(Logfiles.Application))
+                                Logging.WriteToLog("Settings saved");
+                    if (Logging.IsLogOpen(Logfiles.Application))
+                        Logging.WriteToLog("Disposing tray icon");
+                    if (RelhaxIcon != null)
+                    {
+                        RelhaxIcon.Dispose();
+                        RelhaxIcon = null;
+                    }
+                    Logging.DisposeLogging(Logfiles.Application);
                 }
-                Logging.DisposeLogging(Logfiles.Application);
             }
         }
 
@@ -309,10 +318,7 @@ namespace RelhaxModpack
 
         private void OnMenuItemRestoreClick(object sender, EventArgs e)
         {
-            if (WindowState != WindowState.Normal)
-                WindowState = WindowState.Normal;
-            //https://stackoverflow.com/questions/257587/bring-a-window-to-the-front-in-wpf
-            this.Activate();
+            Restore();
         }
 
         private void OnIconMouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -327,13 +333,28 @@ namespace RelhaxModpack
                     }
                     break;
                 case System.Windows.Forms.MouseButtons.Left:
-                    //if the application is not displayed on the screen (minimized, for example), then show it.
-                    if (WindowState != WindowState.Normal)
-                        WindowState = WindowState.Normal;
-                    //https://stackoverflow.com/questions/257587/bring-a-window-to-the-front-in-wpf
-                    this.Activate();
+                    Restore();
                     break;
             }
+        }
+
+        private void Restore()
+        {
+            if(ModpackSettings.MinimizeToSystemTray)
+            {
+                if (Visibility == Visibility.Hidden)
+                    this.Show();
+                else
+                    this.Activate();
+            }
+            else
+            {
+                //https://stackoverflow.com/questions/257587/bring-a-window-to-the-front-in-wpf
+                this.Activate();
+            }
+            //if the application is not displayed on the screen (minimized, for example), then show it.
+            if (WindowState != WindowState.Normal)
+                WindowState = WindowState.Normal;
         }
         #endregion
 
