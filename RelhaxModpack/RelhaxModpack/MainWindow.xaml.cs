@@ -1188,7 +1188,20 @@ namespace RelhaxModpack
             AutoInstallCB.IsEnabled = toggle;
         }
 
-        
+        private void OnLinkButtonClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Logging.Debug("launching button, link={0}", (sender as LinkButton).Link);
+                System.Diagnostics.Process.Start((sender as LinkButton).Link);
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex.ToString());
+                if (Settings.ApplicationVersion != ApplicationVersions.Stable)
+                    MessageBox.Show(ex.ToString());
+            }
+        }
 
         private void DiagnosticUtilitiesButton_Click(object sender, RoutedEventArgs e)
         {
@@ -1554,8 +1567,7 @@ namespace RelhaxModpack
             if(!string.IsNullOrWhiteSpace(ModpackSettings.AutoOneclickSelectionFilePath))
                 AutoInstallOneClickInstallSelectionFilePath.Text = ModpackSettings.AutoOneclickSelectionFilePath;
         }
-        #endregion
 
-        
+        #endregion
     }
 }

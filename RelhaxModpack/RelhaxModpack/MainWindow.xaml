@@ -4,7 +4,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:RelhaxModpack"
-    xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="TheMainWindow" x:Class="RelhaxModpack.MainWindow"
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
+    xmlns:uicomponents="clr-namespace:RelhaxModpack.UIComponents" x:Name="TheMainWindow" x:Class="RelhaxModpack.MainWindow"
     mc:Ignorable="d"
     Title="Relhax" Height="650" Width="550" MinWidth="550" MinHeight="650" MaxHeight="650" MaxWidth="550" ResizeMode="CanMinimize"
     Loaded="TheMainWindow_Loaded"
@@ -157,36 +158,36 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="Forms_ENG_EUButton" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0">
+            <uicomponents:LinkButton x:Name="Forms_ENG_EUButton" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Click="OnLinkButtonClick" Link="http://forum.worldoftanks.eu/index.php?/topic/623269-">
                 <Image Source="Resources/Images/flag gb.png" Stretch="None" x:Name="EU_ENG_forms_image"/>
-            </Button>
-            <Button Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="Forms_GER_EUButton">
+            </uicomponents:LinkButton>
+            <uicomponents:LinkButton Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="Forms_GER_EUButton" Click="OnLinkButtonClick" Link="http://forum.worldoftanks.eu/index.php?/topic/624499-">
                 <Image Source="Resources/Images/flag de.png" Stretch="None"/>
-            </Button>
-            <Button Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="Forms_ENG_NAButton">
+            </uicomponents:LinkButton>
+            <uicomponents:LinkButton Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="Forms_ENG_NAButton" Click="OnLinkButtonClick" Link="http://forum.worldoftanks.com/index.php?/topic/535868-">
                 <Image Source="Resources/Images/flag us.png" Stretch="None"/>
-            </Button>
-            <Button Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="FacebookButton">
+            </uicomponents:LinkButton>
+            <uicomponents:LinkButton Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="FacebookButton" Click="OnLinkButtonClick" Link="https://www.facebook.com/relhax.modpack.1">
                 <Image Source="Resources/Images/facebook brand.png" Stretch="None"/>
-            </Button>
-            <Button Grid.Column="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="TwitterButton">
+            </uicomponents:LinkButton>
+            <uicomponents:LinkButton Grid.Column="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="TwitterButton" Click="OnLinkButtonClick" Link="https://twitter.com/relhaxmodpack">
                 <Image Source="Resources/Images/twitter brand.png" Stretch="None"/>
-            </Button>
-            <Button Grid.Column="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="DiscordButton">
+            </uicomponents:LinkButton>
+            <uicomponents:LinkButton Grid.Column="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="DiscordButton" Click="OnLinkButtonClick" Link="https://discord.gg/58fdPvK">
                 <Image Source="Resources/Images/discord brand.png" Stretch="None"/>
-            </Button>
-            <Button Grid.Column="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="HomepageButton">
+            </uicomponents:LinkButton>
+            <uicomponents:LinkButton Grid.Column="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="HomepageButton" Click="OnLinkButtonClick" Link="https://relhaxmodpack.com/">
                 <Image Source="Resources/Images/Home.png" Stretch="None"/>
-            </Button>
-            <Button Grid.Column="9" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="FindBugAddModButton">
+            </uicomponents:LinkButton>
+            <uicomponents:LinkButton Grid.Column="9" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="FindBugAddModButton" Click="OnLinkButtonClick" Link="https://forums.relhaxmodpack.com/">
                 <Image Source="Resources/Images/report.png" Stretch="None"/>
-            </Button>
-            <Button Grid.Column="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="SendEmailButton">
+            </uicomponents:LinkButton>
+            <uicomponents:LinkButton Grid.Column="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="SendEmailButton" Click="OnLinkButtonClick" Link="mailto:info@relhaxmodpack.com">
                 <Image Source="Resources/Images/EMail.png" Stretch="None"/>
-            </Button>
-            <Button Grid.Column="11" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="DonateButton">
+            </uicomponents:LinkButton>
+            <uicomponents:LinkButton Grid.Column="11" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="DonateButton" Click="OnLinkButtonClick" Link="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=76KNV8KXKYNG2">
                 <Image Source="Resources/Images/donation.png" Stretch="None"/>
-            </Button>
+            </uicomponents:LinkButton>
         </Grid>
         <Grid HorizontalAlignment="Stretch" Height="39" Margin="10,572,10,0" VerticalAlignment="Top" >
             <Grid.RowDefinitions>
