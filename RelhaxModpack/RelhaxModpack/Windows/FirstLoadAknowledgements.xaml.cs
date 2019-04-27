@@ -33,7 +33,8 @@ namespace RelhaxModpack.Windows
 
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
-
+            if (Settings.FirstLoadToV2)
+                v2_upgrade_notice_text.Visibility = Visibility.Visible;
         }
 
         private void CheckForContinueButton(object sender, RoutedEventArgs e)

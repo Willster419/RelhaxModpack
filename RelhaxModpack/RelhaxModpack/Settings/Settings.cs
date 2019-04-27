@@ -23,7 +23,7 @@ namespace RelhaxModpack
         /// <summary>
         /// The absolute name of the application settings file
         /// </summary>
-        public const string ModpackSettingsFileName = "RelhaxSettings.xml";
+        public const string ModpackSettingsFileName = "RelhaxSettingsV2.xml";
 
         public const string OldModpackSettingsFilename = "RelHaxSettings.xml";
 
@@ -73,8 +73,6 @@ namespace RelhaxModpack
 
         public static readonly string RelhaxModBackupFolder = Path.Combine(ApplicationStartupPath, "RelhaxModBackup");
 
-        public static readonly string RelhaxLibrariesFolder = Path.Combine(ApplicationStartupPath, "RelhaxLibraries");
-
         public static readonly string RelhaxUserConfigsFolder = Path.Combine(ApplicationStartupPath, "RelhaxUserConfigs");
 
         public static readonly string RelhaxUserModsFolder = Path.Combine(ApplicationStartupPath, "RelhaxUserMods");
@@ -109,7 +107,6 @@ namespace RelhaxModpack
         {
             RelhaxDownloadsFolder,
             RelhaxModBackupFolder,
-            RelhaxLibrariesFolder,
             RelhaxUserConfigsFolder,
             RelhaxUserModsFolder,
             RelhaxTempFolder
@@ -138,10 +135,22 @@ namespace RelhaxModpack
         public static bool FirstLoadToV2 = false;
         #endregion
 
+        public static void ProcessFirstLoadings()
+        {
+            FirstLoad = !File.Exists(ModpackSettingsFileName) && !File.Exists(OldModpackSettingsFilename);
+            FirstLoadToV2 = !File.Exists(ModpackSettingsFileName) && File.Exists(OldModpackSettingsFilename);
+        }
+
         #region Settings parsing to/from XML file
 
         public static bool LoadSettings(string xmlfile, Type SettingsClass, string[] propertiesToExclude, object classInstance)
         {
+            //first check if the file even exists
+            if (!File.Exists(xmlfile))
+            {
+                Logging.Warning("Xml settings file {0} does not exist, using defaults set in class{1}{2}", xmlfile, SettingsClass.GetType().ToString(), Environment.NewLine);
+                return false;
+            }
             //get all fields from the class
             FieldInfo[] fields = SettingsClass.GetFields();
             //get all types from the types in the class
@@ -155,11 +164,6 @@ namespace RelhaxModpack
             }
             //now we have a list of all "types" that exist in the class
             //parse the xml list
-            if(!File.Exists(xmlfile))
-            {
-                Logging.Warning("Xml settings file {0} does not exist, using defaults set in class{1}{2}", xmlfile, SettingsClass.GetType().ToString(), Environment.NewLine);
-                return false;
-            }
             XmlDocument doc = new XmlDocument();
             try
             {

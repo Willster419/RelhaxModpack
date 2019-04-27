@@ -50,7 +50,7 @@ namespace RelhaxModpack
             InitializeComponent();
         }
 
-        private void TheMainWindow_Loaded(object sender, RoutedEventArgs e)
+        private async void TheMainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             //first hide the window
             Hide();
@@ -104,6 +104,7 @@ namespace RelhaxModpack
                 {
                     Logging.WriteToLog("Failed to check application folder structure\n" + ex.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
                     MessageBox.Show(Translations.GetTranslatedString("failedVerifyFolderStructure"));
+                    closingFromFailure = true;
                     Application.Current.Shutdown();
                     return;
                 }
@@ -122,7 +123,7 @@ namespace RelhaxModpack
 
             //check for updates to database and application
             progressIndicator.UpdateProgress(4, Translations.GetTranslatedString("checkForUpdates"));
-            CheckForApplicationUpdates();
+            bool isApplicationUpToDate = await CheckForApplicationUpdates();
             CheckForDatabaseUpdates(false);
 
             //set the application information text box
@@ -131,10 +132,70 @@ namespace RelhaxModpack
             //get the number of processor cores
             MulticoreExtractionCoresCountLabel.Text = string.Format(Translations.GetTranslatedString("detectedCores"), Settings.NumLogicalProcesors);
 
+            //if the application is up to date, then check if we need to display the welcome message to the user
+            if(isApplicationUpToDate && !closingFromFailure)
+            {
+                Logging.Debug("application is up to date, checking to display welcome message");
+                Settings.ProcessFirstLoadings();
+                Logging.Debug("FirstLoading = {0}, FirstLoadingV2 = {1}", Settings.FirstLoad.ToString(), Settings.FirstLoadToV2.ToString());
+                if(Settings.FirstLoad || Settings.FirstLoadToV2)
+                {
+                    //display the welcome window and make sure the user agrees to it
+                    FirstLoadAknowledgements firstLoadAknowledgements = new FirstLoadAknowledgements();
+                    firstLoadAknowledgements.ShowDialog();
+                    if(!firstLoadAknowledgements.UserAgreed)
+                    {
+                        Logging.Debug("user did not agree to application load conditions, closing");
+                        Application.Current.Shutdown();
+                        closingFromFailure = true;
+                        return;
+                    }
+
+                    //if user agreed and its the first time loading in v2, the do the structure upgrade
+                    else if(Settings.FirstLoadToV2)
+                    {
+                        progressIndicator.UpdateProgress(2, Translations.GetTranslatedString("upgradingStructure"));
+                        Utils.AllowUIToUpdate();
+                        Logging.Info("starting upgrade to V2");
+
+                        //process libraries folder
+                        Logging.Info("deleting libraries folder");
+                        string oldLibrariesFolder = Path.Combine(Settings.ApplicationStartupPath, "RelhaxLibraries");
+                        Utils.DirectoryDelete(oldLibrariesFolder, true);
+
+                        //process xml settings file
+                        //delete the new one, move the old one, reload settings
+                        Logging.Info("moving, loading settings");
+                        File.Move(Settings.OldModpackSettingsFilename, Settings.ModpackSettingsFileName);
+                        Settings.LoadSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null);
+                        ApplySettingsToUI();
+
+                        //process log file
+                        Logging.Info("moving and re-init of logging system");
+                        if (File.Exists(Logging.OldApplicationLogFilename))
+                        {
+                            Logging.DisposeLogging(Logfiles.Application);
+                            string tempNewLogText = File.ReadAllText(Logging.ApplicationLogFilename);
+                            File.Delete(Logging.ApplicationLogFilename);
+                            File.Move(Logging.OldApplicationLogFilename, Logging.ApplicationLogFilename);
+                            File.AppendAllText(Logging.ApplicationLogFilename, tempNewLogText);
+                            Logging.InitApplicationLogging(Logfiles.Application, Logging.ApplicationLogFilename);
+                        }
+                        else
+                            Logging.Info("skipped (old log does not exist)");
+                        Logging.Info("upgrade to V2 complete, welcome to the future!");
+                    }
+                }
+            }
             //dispose of please wait here
-            progressIndicator.Close();
-            progressIndicator = null;
-            if(!closingFromFailure)
+            if (progressIndicator != null)
+            {
+                progressIndicator.Close();
+                progressIndicator = null;
+            }
+
+            //show the UI if not closing the application out of failure
+            if (!closingFromFailure)
                 Show();
         }
 
@@ -144,9 +205,10 @@ namespace RelhaxModpack
             {
                 if(Logging.IsLogOpen(Logfiles.Application))
                     Logging.WriteToLog("Saving settings");
-                if (Settings.SaveSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude,null))
-                    if (Logging.IsLogOpen(Logfiles.Application))
-                        Logging.WriteToLog("Settings saved");
+                if(!closingFromFailure)
+                    if (Settings.SaveSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude,null))
+                        if (Logging.IsLogOpen(Logfiles.Application))
+                            Logging.WriteToLog("Settings saved");
                 if (Logging.IsLogOpen(Logfiles.Application))
                     Logging.WriteToLog("Disposing tray icon");
                 if (RelhaxIcon != null)
@@ -310,15 +372,16 @@ namespace RelhaxModpack
             Logging.WriteToLog("Checking for database updates complete");
         }
 
-        private async void CheckForApplicationUpdates()
+        private async Task<bool> CheckForApplicationUpdates()
         {
             //check if skipping updates
             Logging.WriteToLog("Started check for application updates");
-            if(CommandLineSettings.SkipUpdate && ModpackSettings.DatabaseDistroVersion != DatabaseVersions.Test)
+            if(CommandLineSettings.SkipUpdate)
             {
-                MessageBox.Show(Translations.GetTranslatedString("skipUpdateWarning"));
+                if(Settings.ApplicationVersion != ApplicationVersions.Alpha)
+                    MessageBox.Show(Translations.GetTranslatedString("skipUpdateWarning"));
                 Logging.WriteToLog("Skipping updates", Logfiles.Application, LogLevel.Warning);
-                return;
+                return true;
             }
 
             XmlDocument doc = await GetManagerInfoDocumentAsync();
@@ -356,7 +419,7 @@ namespace RelhaxModpack
             if(version == ApplicationVersions.Alpha)
             {
                 Logging.Debug("application version is {0} on alpha build, skipping update check");
-                return;
+                return true;
             }
 
             //if current application build does not equal requestion distribution channel
@@ -380,7 +443,7 @@ namespace RelhaxModpack
             if(!outOfDate)
             {
                 Logging.WriteToLog("Application up to date or is alpha build");
-                return;
+                return true;
             }
             Logging.WriteToLog("Application is out of date, display update window");
             VersionInfo versionInfo = new VersionInfo();
@@ -399,7 +462,7 @@ namespace RelhaxModpack
                             Logging.WriteToLog("User canceled update, because he does not want to end the parallel running Relhax instance.");
                             Application.Current.Shutdown();
                             Close();
-                            return;
+                            return false;
                         }
                     }
                     else
@@ -431,8 +494,9 @@ namespace RelhaxModpack
                 Logging.WriteToLog("User pressed x or said no");
                 Application.Current.Shutdown();
                 Close();
-                return;
+                return false;
             }
+            return false;
         }
 
         private async Task<XmlDocument> GetManagerInfoDocumentAsync()

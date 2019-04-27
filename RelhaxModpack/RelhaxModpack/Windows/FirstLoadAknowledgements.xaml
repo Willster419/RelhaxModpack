@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="First Load Aknowledgements" Height="203" Width="605" ResizeMode="NoResize" Loaded="RelhaxWindow_Loaded">
+        Title="First Load Aknowledgements" Height="235" Width="600" ResizeMode="NoResize" Loaded="RelhaxWindow_Loaded">
 
 
     <Grid>
 
         <StackPanel>
             
-            <CheckBox x:Name="license_Agree" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Click="CheckForContinueButton">
+            <CheckBox x:Name="license_Agree" HorizontalAlignment="Stretch" Margin="10,10,10,0" VerticalAlignment="Top" Click="CheckForContinueButton">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                     <TextBlock x:Name="AgreementLicense" TextWrapping="Wrap" Text="You have read and agree to the "/>
                     
@@ -23,7 +23,7 @@
                 </StackPanel>
             </CheckBox>
 
-            <CheckBox HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="10,10,0,0" x:Name="support" Click="CheckForContinueButton">
+            <CheckBox HorizontalAlignment="Stretch"  VerticalAlignment="Top" Margin="10,10,10,0" x:Name="support" Click="CheckForContinueButton">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                     <TextBlock x:Name="agreement_Support" TextWrapping="Wrap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Text="If you need support you can either visit our "/>
 
@@ -39,15 +39,19 @@
                 </StackPanel>
             </CheckBox>
 
-            <CheckBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" x:Name="mod_hoster" Click="CheckForContinueButton">
+            <CheckBox HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="10,10,10,0" x:Name="mod_hoster" Click="CheckForContinueButton">
                 <TextBlock x:Name="agreement_Hoster" TextWrapping="Wrap"   VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                 Text="I understand Relhax is a mod hoster and installation service and Relhax does not maintain every mod found in this Modpack" Width="351">
+                 Text="I understand Relhax is a mod hoster and installation service and Relhax does not maintain every mod found in this Modpack" >
                 </TextBlock>
             </CheckBox>
 
-            <CheckBox HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="50" Width="372" x:Name="collect_stats" Click="CheckForContinueButton">
+            <CheckBox HorizontalAlignment="Stretch" Margin="10,10,10,0" VerticalAlignment="Top"  x:Name="collect_stats" Click="CheckForContinueButton">
                 <TextBlock x:Name="agreement_Anon_Data" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="I understand that Relhax V2 collects anonymous usage data to improve the application, and can be disabled in the advanced settings tab" />
             </CheckBox>
+
+            <TextBlock x:Name="v2_upgrade_notice_text" TextWrapping="Wrap" HorizontalAlignment="Stretch" Padding="20,5,0,0"
+                 Text="It looks like you are running an upgrade from V1 to V2 for the first time. Pressing continue will result in an upgrade to file structure that cannot be reverted. It is recommended to make a backup of your V1 folder before continuing." Margin="10,0" Foreground="Red" Visibility="Hidden"  >
+            </TextBlock>
 
         </StackPanel>
 
