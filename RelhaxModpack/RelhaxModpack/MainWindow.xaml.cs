@@ -1559,17 +1559,7 @@ namespace RelhaxModpack
             ModpackSettings.ExportMode = (bool)ExportModeCB.IsChecked;
         }
 
-        private void ThemeDefault_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void ThemeDark_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void ThemeCustom_Checked(object sender, RoutedEventArgs e)
+        private void Theme_Checked(object sender, RoutedEventArgs e)
         {
 
         }

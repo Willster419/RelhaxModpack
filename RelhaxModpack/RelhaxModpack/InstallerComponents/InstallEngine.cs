@@ -513,21 +513,12 @@ namespace RelhaxModpack.InstallerComponents
                 throw new BadMemeException("how does this already exist, like seriously");
             Directory.CreateDirectory(fullFolderPath);
             //make zip files maybe? TODO
-            if (false)
-            { 
-                using (Ionic.Zip.ZipFile backupZip = new Ionic.Zip.ZipFile(fullFolderPath + ".zip"))
-                {
-                    backupZip.AddDirectory(Path.Combine(Settings.WoTDirectory, "mods"));
-                    backupZip.AddDirectory(Path.Combine(Settings.WoTDirectory, "res_mods"));
-                    backupZip.Save();
-                }
-            }
-            else
+            throw new BadMemeException("TODO");
+            using (Ionic.Zip.ZipFile backupZip = new Ionic.Zip.ZipFile(fullFolderPath + ".zip"))
             {
-                //copy the files over
-                //progress TODO
-                Utils.DirectoryCopy(Path.Combine(Settings.WoTDirectory, "mods"), Path.Combine(fullFolderPath, "mods"),true);
-                Utils.DirectoryCopy(Path.Combine(Settings.WoTDirectory, "res_mods"), Path.Combine(fullFolderPath, "res_mods"), true);
+                backupZip.AddDirectory(Path.Combine(Settings.WoTDirectory, "mods"));
+                backupZip.AddDirectory(Path.Combine(Settings.WoTDirectory, "res_mods"));
+                backupZip.Save();
             }
             return true;
         }

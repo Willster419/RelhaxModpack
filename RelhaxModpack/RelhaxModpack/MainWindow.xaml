@@ -79,16 +79,16 @@
                         <CheckBox Content="Inform if no new database available" Tag="NotifyIfSameDatabaseCB" x:Name="NotifyIfSameDatabaseCB" Click="OnInformIfNoNewDatabaseChanged"/>
                         <CheckBox Content="Force manual game detection" Tag="ForceManuelGameDetectionCB" x:Name="ForceManuelGameDetectionCB" Click="OnForceManuelGameDetectionChanged"/>
                         <CheckBox Content="Show install complete window" Tag="ShowInstallCompleteWindowCB" x:Name="ShowInstallCompleteWindowCB" Click="OnShowInstallCompleteWindowChanged"/>
-                        <CheckBox Content="Backup mods folder upon installation" Tag="BackupModsCB" x:Name="BackupModsCB" Click="OnBackupModsChanged" IsEnabled="False"/>
+                        <CheckBox Content="Backup mods folder before installation" Tag="BackupModsCB" x:Name="BackupModsCB" Click="OnBackupModsChanged" IsEnabled="False"/>
                         <TextBlock Text="Backups: X - Total Size: Y MB" Margin="20,0,0,0" />
                         <CheckBox x:Name="SaveDisabledModsInSelection" Tag="SaveDisabledModsInSelection" Content="Keep disabled mods when saving selection" Click="SaveDisabledModsInSelection_Click"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
                         <TextBlock Text="Select theme:" />
                         <StackPanel Orientation="Vertical" Margin="15,0,0,0">
-                            <RadioButton Content="Default" x:Name="ThemeDefault" Tag="ThemeDefault" Checked="ThemeDefault_Checked" />
-                            <RadioButton Content="Dark" x:Name="ThemeDark" Tag="ThemeDark" Checked="ThemeDark_Checked" />
-                            <RadioButton Content="Custom...(TODO)" x:Name="ThemeCustom" Tag="ThemeCustom" Checked="ThemeCustom_Checked" />
+                            <RadioButton Content="Default" x:Name="ThemeDefault" Tag="ThemeDefault" Checked="Theme_Checked" IsEnabled="False" IsChecked="True"/>
+                            <RadioButton Content="Dark" x:Name="ThemeDark" Tag="ThemeDark" Checked="Theme_Checked" IsEnabled="False"/>
+                            <RadioButton Content="Custom...(TODO)" x:Name="ThemeCustom" Tag="ThemeCustom" Checked="Theme_Checked" IsEnabled="False"/>
                         </StackPanel>
                         <Button Content="Dump color settings to xml" Tag="DumpColorSettingsButton" Name="DumpColorSettingsButton" Click="DumpColorSettingsButton_Click"/>
                     </StackPanel>
@@ -104,7 +104,7 @@
                         <!-- Use a margin of 20 to give it a tree affect-->
                         <CheckBox Content="Use beta database" Tag="UseBetaDatabaseCB" x:Name="UseBetaDatabaseCB" Click="OnUseBetaDatabaseChanged"/>
                         <ComboBox Tag="UseBetaDatabaseBranches" x:Name="UseBetaDatabaseBranches" SelectionChanged="OnBetaDatabaseSelectionChanged" Margin="20,0,0,0" IsEnabled="False"/>
-                        <CheckBox Content="Use beta application" Tag="UseBetaApplicationCB" x:Name="UseBetaApplicationCB" Click="OnUseBetaAppChanged"/>
+                        <CheckBox Content="Use beta application" Tag="UseBetaApplicationCB" x:Name="UseBetaApplicationCB" Click="OnUseBetaAppChanged" IsEnabled="False"/>
                         <TextBlock Text="Uninstall mode:" Tag="UninstallModeGroupBox" x:Name="UninstallModeGroupBox"/>
                         <StackPanel Orientation="Horizontal">
                             <RadioButton Content="Default" x:Name="UninstallDefault" Tag="UninstallDefault" Margin="20,0,0,0" Checked="UninstallDefault_Checked"/>
@@ -113,18 +113,18 @@
                         <CheckBox Content="Minimze to system tray" x:Name="MinimizeToSystemTray" Tag="MinimizeToSystemTray" Click="MinimizeToSystemTray_Click"/>
                         <CheckBox x:Name="DeleteOldCacheFiles" Content="Delete old cache files" Tag="DeleteOldCacheFiles" Click="DeleteOldCacheFiles_Click"/>
                         <CheckBox x:Name="VerboseLoggingCB" Tag="VerboseLoggingCB" Content="Verbose Logging" Click="VerboseLoggingCB_Click"/>
-                        <CheckBox x:Name="DisableTriggersCB" Tag="DisableTriggersCB" Content="Disable Triggers" Click="DisableTriggersCB_Click"/>
+                        <CheckBox x:Name="DisableTriggersCB" Tag="DisableTriggersCB" Content="Disable Triggers" Click="DisableTriggersCB_Click" IsChecked="True" IsEnabled="False"/>
                         <CheckBox x:Name="AllowStatsGatherCB" Tag="AllowStatsGatherCB" Content="Allow Statistics gathering of mod usage" Click="AllowStatsGatherCB_Click" />
                     </StackPanel>
                     <StackPanel Grid.Column="1">    
-                        <CheckBox x:Name="AutoInstallCB" Tag="EnableModsAutoSyncCheckbox" Content="Enable auto install" IsEnabled="True" Click="OneClickInstallCB_Click"/>
-                        <CheckBox x:Name="OneClickInstallCB" Tag="AutoInstallCheckbox" Content="Enable one-click install" IsEnabled="True" Click="AutoInstallCB_Click" />
+                        <CheckBox x:Name="AutoInstallCB" Tag="EnableModsAutoSyncCheckbox" Content="Enable auto install" IsEnabled="False" Click="OneClickInstallCB_Click" />
+                        <CheckBox x:Name="OneClickInstallCB" Tag="AutoInstallCheckbox" Content="Enable one-click install" IsEnabled="False" Click="AutoInstallCB_Click" />
                         <TextBox Tag="AutoSyncSelectionFileTextBox"  x:Name="AutoInstallOneClickInstallSelectionFilePath" Height="46" TextWrapping="Wrap" Margin="0,3,0,0" />
-                        <Button x:Name="LoadAutoSyncSelectionFile" Tag="LoadAutoSyncSelectionFile" Content="Load selection file" HorizontalAlignment="Left" Margin="0,3,0,0" Width="120" Click="LoadAutoSyncSelectionFile_Click"/>
+                        <Button x:Name="LoadAutoSyncSelectionFile" Tag="LoadAutoSyncSelectionFile" Content="Load selection file" HorizontalAlignment="Left" Margin="0,3,0,0" Width="120" Click="LoadAutoSyncSelectionFile_Click" IsEnabled="False"/>
                         <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
                             <TextBlock Tag="AutoSyncCheckFrequencyTextBox" x:Name="AutoSyncCheckFrequencyTextBox"  TextWrapping="Wrap" Text="Frequency: every" />
-                            <TextBox Tag="AutoSyncFrequencyTexbox" x:Name="AutoSyncFrequencyTexbox" Height="23" TextWrapping="Wrap" Text="xx" Width="25" Margin="5,0,0,0"/>
-                            <ComboBox Margin="5,0,0,0" Width="67">
+                            <TextBox Tag="AutoSyncFrequencyTexbox" x:Name="AutoSyncFrequencyTexbox" Height="23" TextWrapping="Wrap" Text="xx" Width="25" Margin="5,0,0,0" IsEnabled="False"/>
+                            <ComboBox Margin="5,0,0,0" Width="67" IsEnabled="False">
                                 <System:String>Minutes</System:String>
                                 <System:String>Hours</System:String>
                                 <System:String>Days</System:String>
@@ -133,7 +133,7 @@
                         <TextBlock x:Name="DeveloperSettingsHeader" Tag="DeveloperSettingsHeader" Text="Developer Settings"/>
                         <CheckBox x:Name="ForceEnabledCB" Tag="ForceEnabledCB" Content="Force all components enabled" Margin="20,0,0,0" Click="ForceEnabledCB_Clicked"/>
                         <CheckBox x:Name="ForceVisibleCB" Tag="ForceVisibleCB" Content="Force all components visible" Margin="20,0,0,0" Click="ForceVisibleCB_Click"/>
-                        <CheckBox x:Name="ExportModeCB" Tag="ExportModeCB" Content="Export mode" Margin="20,0,0,0" Click="ExportModeCB_Click"/>
+                        <CheckBox x:Name="ExportModeCB" Tag="ExportModeCB" Content="Export mode" Margin="20,0,0,0" Click="ExportModeCB_Click" IsEnabled="False"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
