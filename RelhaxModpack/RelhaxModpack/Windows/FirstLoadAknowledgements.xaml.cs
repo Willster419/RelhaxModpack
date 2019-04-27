@@ -40,5 +40,10 @@ namespace RelhaxModpack.Windows
         {
             UserAgreed = continue_Button.IsEnabled = (bool)license_Agree.IsChecked && (bool)collect_stats.IsChecked && (bool)mod_hoster.IsChecked && (bool)support.IsChecked;
         }
+
+        private void Continue_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

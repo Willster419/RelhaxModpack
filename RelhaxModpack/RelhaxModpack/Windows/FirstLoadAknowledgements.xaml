@@ -52,7 +52,7 @@
         </StackPanel>
 
 
-        <Button Content="Continue" Tag="continue_Button" x:Name="continue_Button" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="99" Click="Continue_Button_Click" IsEnabled="False"/>
+        <Button Content="Continue" Tag="continue_Button" x:Name="continue_Button" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="99" IsEnabled="False" Click="Continue_Button_Click"/>
 
     </Grid>
 </local:RelhaxWindow>
