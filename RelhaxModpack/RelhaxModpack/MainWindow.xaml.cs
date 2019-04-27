@@ -41,6 +41,7 @@ namespace RelhaxModpack
         private AdvancedProgress AdvancedProgressWindow;
         bool closingFromFailure = false;
         NewsViewer newsViewer = null;
+        private WebClient client = null;
 
         /// <summary>
         /// Creates the instance of the MainWindow class
@@ -1097,6 +1098,7 @@ namespace RelhaxModpack
             ParentProgressBar.Value = 0;
             using(WebClient client = new WebClient())
             {
+                this.client = client;
                 client.DownloadProgressChanged += Client_DownloadProgressChanged;
                 string fileToDownload = string.Empty;
                 string fileToSaveTo = string.Empty;
@@ -1375,7 +1377,8 @@ namespace RelhaxModpack
 
         private void CancelDownloadButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            if (this.client != null)
+                this.client.CancelAsync();
         }
         #endregion
 
