@@ -420,7 +420,8 @@ namespace RelhaxModpack
             uint retryCounter = 0;
             foreach (string file in Directory.GetFiles(folderPath,pattern,SearchOption.TopDirectoryOnly))
             {
-                while(retryCounter < numRetrys)
+                retryCounter = 0;
+                while (retryCounter < numRetrys)
                 {
                     try
                     {
@@ -442,6 +443,23 @@ namespace RelhaxModpack
                 foreach (string dir in Directory.GetDirectories(folderPath,pattern,SearchOption.TopDirectoryOnly))
                 {
                     DirectoryDelete(dir, deleteSubfolders, numRetrys,timeout);
+                }
+            }
+            //delete the folder as well
+            retryCounter = 0;
+            while (retryCounter < numRetrys)
+            {
+                try
+                {
+                    Directory.Delete(folderPath);
+                    retryCounter = numRetrys;
+                }
+                catch (Exception ex)
+                {
+                    Logging.WriteToLog(string.Format("failed to delete {0} (empty folder), retryCount={1}, message:\n{2}", folderPath, retryCounter, ex.Message),
+                        Logfiles.Application, LogLevel.Error);
+                    retryCounter++;
+                    System.Threading.Thread.Sleep((int)timeout);
                 }
             }
         }
