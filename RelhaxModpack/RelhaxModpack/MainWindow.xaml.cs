@@ -1321,14 +1321,6 @@ namespace RelhaxModpack
             ModpackSettings.BackupModFolder = (bool)BackupModsCB.IsChecked;
         }
 
-        private void OnPreviewLoadingImageChange(object sender, RoutedEventArgs e)
-        {
-            if ((bool)ThirdGuardsLoadingImageRB.IsChecked)
-                ModpackSettings.GIF = LoadingGifs.ThirdGuards;
-            else if ((bool)StandardImageRB.IsChecked)
-                ModpackSettings.GIF = LoadingGifs.Standard;
-        }
-
         private void OnForceManuelGameDetectionChanged(object sender, RoutedEventArgs e)
         {
             ModpackSettings.ForceManuel = (bool)ForceManuelGameDetectionCB.IsChecked;

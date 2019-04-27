@@ -220,10 +220,6 @@ namespace RelhaxModpack
         public static string AutoOneclickSelectionFilePath = string.Empty;
 
         /// <summary>
-        /// The Gif to use when loading previews
-        /// </summary>
-        public static LoadingGifs GIF = LoadingGifs.Standard;
-        /// <summary>
         /// The Uninstall mode to use when uninstalling or installing with the clean install option
         /// </summary>
         public static UninstallModes UninstallMode = UninstallModes.Default;
@@ -297,9 +293,6 @@ namespace RelhaxModpack
                         break;
                     case "previewY":
                         PreviewY = int.Parse(setting.InnerText);
-                        break;
-                    case "loadingGif":
-                        GIF = (LoadingGifs)int.Parse(setting.InnerText);
                         break;
                     case "language":
                         Language = (Languages)int.Parse(setting.InnerText);

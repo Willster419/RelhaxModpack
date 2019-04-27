@@ -81,11 +81,6 @@
                         <CheckBox Content="Show install complete window" Tag="ShowInstallCompleteWindowCB" x:Name="ShowInstallCompleteWindowCB" Click="OnShowInstallCompleteWindowChanged"/>
                         <CheckBox Content="Backup mods folder upon installation" Tag="BackupModsCB" x:Name="BackupModsCB" Click="OnBackupModsChanged" IsEnabled="False"/>
                         <TextBlock Text="Backups: X - Total Size: Y MB" Margin="20,0,0,0" />
-                        <TextBlock Text="Preview Loading Image:" />
-                        <StackPanel Orientation="Horizontal">
-                            <RadioButton Content="Default" Margin="20,0,0,0" Tag="StandardImageRB" x:Name="StandardImageRB" Click="OnPreviewLoadingImageChange"/>
-                            <RadioButton Content="3rdguards" Margin="5,0,0,0" Tag="ThirdGuardsLoadingImageRB" x:Name="ThirdGuardsLoadingImageRB" Click="OnPreviewLoadingImageChange"/>
-                        </StackPanel>
                         <CheckBox x:Name="SaveDisabledModsInSelection" Tag="SaveDisabledModsInSelection" Content="Keep disabled mods when saving selection" Click="SaveDisabledModsInSelection_Click"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1">

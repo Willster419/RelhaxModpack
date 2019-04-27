@@ -38,35 +38,6 @@ namespace RelhaxModpack
         public static Color DisabledComponentColor = Colors.Red;
         #endregion
 
-        #region Image handling for the Preview
-        public static System.Drawing.Image GetLoadingImageImage()
-        {
-            switch (ModpackSettings.GIF)
-            {
-                default:
-                    Logging.Error("Unknown GIF setting: {0}, using default", ModpackSettings.GIF.ToString());
-                    return Properties.Resources.loading;
-                case LoadingGifs.Standard:
-                    return Properties.Resources.loading;
-                case LoadingGifs.ThirdGuards:
-                    return Properties.Resources.loading_3rdguards;
-            }
-        }
-        public static BitmapImage GetLoadingImageBitmap()
-        {
-            //https://stackoverflow.com/questions/350027/setting-wpf-image-source-in-code
-            switch (ModpackSettings.GIF)
-            {
-                default:
-                    Logging.Error("Unknown GIF setting: {0}, using default", ModpackSettings.GIF.ToString());
-                    return new BitmapImage(new Uri("loading.gif",UriKind.Relative));
-                case LoadingGifs.Standard:
-                    return new BitmapImage(new Uri("loading.gif", UriKind.Relative));
-                case LoadingGifs.ThirdGuards:
-                    return new BitmapImage(new Uri("loading_3rdguards.gif", UriKind.Relative));
-            }
-        }
-        #endregion
         /// <summary>
         /// Load the custom color definitions from XML
         /// </summary>

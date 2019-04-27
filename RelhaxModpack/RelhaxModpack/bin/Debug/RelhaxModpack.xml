@@ -722,11 +722,6 @@
             the width, in pixels, of the Preview window
             </summary>
         </member>
-        <member name="F:RelhaxModpack.ModpackSettings.GIF">
-            <summary>
-            The Gif to use when loading previews
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.ModpackSettings.UninstallMode">
             <summary>
             The Uninstall mode to use when uninstalling or installing with the clean install option
@@ -1666,16 +1661,6 @@
             </summary>
         </member>
         <member name="P:RelhaxModpack.Properties.Resources.Home">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Properties.Resources.loading">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Properties.Resources.loading_3rdguards">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>

@@ -194,8 +194,6 @@ namespace RelhaxModpack.Windows
                         VerticalAlignment = VerticalAlignment.Top,
                         Height = 20
                     };
-                    //quick set to internal loading thing
-                    pictureViewer.Source = UISettings.GetLoadingImageBitmap();
                     //https://stackoverflow.com/questions/9173904/byte-array-to-image-conversion
                     //https://stackoverflow.com/questions/18134234/how-to-convert-system-io-stream-into-an-image
                     using (WebClient client = new WebClient() { })

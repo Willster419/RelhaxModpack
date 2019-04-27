@@ -390,10 +390,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\loading.gif" />
-    <Resource Include="Resources\Images\loading_3rdguards.gif" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\play_pause.png" />
     <Resource Include="Resources\Images\stop2.png" />
   </ItemGroup>
