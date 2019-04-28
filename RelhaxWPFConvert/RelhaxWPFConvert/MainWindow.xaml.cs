@@ -107,11 +107,12 @@ namespace RelhaxWPFConvert
         public Task PerformTaskAsync(IProgress<CustomProgress> progress)
         {
             Task t = new Task(IntenseMethodThatTakesCPUTime);
-            Task t2 = Task.Run(() => 
+            Task t2 = Task.Run(() =>
             {
                 CustomProgress prog = new CustomProgress();
                 prog.update = "Processing wait 0 of 10";
                 prog.value = 0;
+                CustomProgress prog2 = new CustomProgress() { value = 8 };
                 progress.Report(prog);
                 for(int i = 0; i < 10; i++)
                 {
@@ -119,7 +120,10 @@ namespace RelhaxWPFConvert
                     System.Threading.Thread.Sleep(500);
                     prog.update = string.Format("Processing wait {0} of 10", i+1);
                     prog.value = i + 1;
-                    progress.Report(prog);
+                    if (i == 4)
+                        progress.Report(prog2);
+                    else
+                        progress.Report(prog);
                 }
             });
             return t2;
