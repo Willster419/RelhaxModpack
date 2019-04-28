@@ -964,14 +964,21 @@ namespace RelhaxModpack.InstallerComponents
 
         private bool RestoreData(List<SelectablePackage> packagesWithData, StringBuilder restoreDataBuilder)
         {
+            //progress reporting
+            Prog.ChildTotal = packagesWithData.Count;
+            Prog.ChildCurrent = 0;
             foreach (SelectablePackage package in packagesWithData)
             {
+                //actually report
+                Prog.ChildCurrent++;
+                Progress.Report(Prog);
                 Logging.WriteToLog(string.Format("Restore data of package {0} starting", package.PackageName));
+
                 //check if the package name exists first
                 string tempBackupFolder = Path.Combine(Settings.RelhaxTempFolder, package.PackageName);
                 if(!Directory.Exists(tempBackupFolder))
                 {
-                    Logging.WriteToLog(string.Format("folder {0} does not exist, skipping", package.PackageName), Logfiles.Application, LogLevel.Debug);
+                    Logging.WriteToLog(string.Format("folder {0} does not exist, skipping", package.PackageName), Logfiles.Application, LogLevel.Error);
                 }
                 foreach (UserFile files in package.UserFiles)
                 {
