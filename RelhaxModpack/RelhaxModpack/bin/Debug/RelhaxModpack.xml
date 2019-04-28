@@ -29,6 +29,11 @@
             used to determine when the package entry was last modified
             </summary>
         </member>
+        <member name="F:RelhaxModpack.DatabasePackage.Size">
+            <summary>
+            size of the zip file
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.DatabasePackage.ZipFile">
             <summary>
             the zip file to extract (can be "")
@@ -125,11 +130,6 @@
         <member name="F:RelhaxModpack.SelectablePackage.Visible">
             <summary>
             a flag to determine wether or not the mod should be shown in UI
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.SelectablePackage.Size">
-            <summary>
-            size of the mod zip file
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.UpdateComment">
