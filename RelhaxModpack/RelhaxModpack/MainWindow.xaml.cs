@@ -825,14 +825,18 @@ namespace RelhaxModpack
             }
         }
 
-        private void OnBeginInstallation(List<Category> parsedCategoryList, List<Dependency> dependencies, List<DatabasePackage> globalDependencies)
+        private async void OnBeginInstallation(List<Category> parsedCategoryList, List<Dependency> dependencies, List<DatabasePackage> globalDependencies)
         {
+            //rookie mistake checks
             if (parsedCategoryList == null || dependencies == null || globalDependencies == null ||
                 parsedCategoryList.Count == 0 || dependencies.Count == 0 || globalDependencies.Count == 0)
                 throw new BadMemeException("You suck at starting installations LEARN2CODE");
+
+            //start the timer
             Logging.WriteToLog("Starting an installation (timer starts now)");
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Restart();
+
             //check if wot is running
             AskCloseWoT askCloseWoT = null;
             while (Utils.IsProcessRunning(Settings.WoTProcessName,Settings.WoTDirectory))
@@ -849,17 +853,21 @@ namespace RelhaxModpack
                 }
                 System.Threading.Thread.Sleep(100);
             }
-            //build macro hash for install?
+
+            //build macro hash for install
             Utils.BuildFilepathMacroList();
+
             //perform dependency calculations
             //get a flat list of packages to install
             List<DatabasePackage> flatList = Utils.GetFlatList(null, null, null, parsedCategoryList);
             List<SelectablePackage> flatListSelect = new List<SelectablePackage>();
+
             //convert it to correct class type
             foreach (SelectablePackage sp in flatList)
                 flatListSelect.Add(sp);
             Logging.Debug("starting Utils.CalculateDependencies()");
             List<Dependency> dependneciesToInstall = new List<Dependency>(Utils.CalculateDependencies(dependencies, flatListSelect));
+
             //make a flat list of all packages to install (including those without a zip file) for statistic data gathering
             if(ModpackSettings.AllowStatisticDataGather)
             {
@@ -869,6 +877,7 @@ namespace RelhaxModpack
                 packagesToGather.AddRange(flatListSelect.Where(fl => fl.Enabled && fl.Checked).ToList());
                 //https://stackoverflow.com/questions/13781468/get-list-of-properties-from-list-of-objects
                 List<string> packageNamesToUpload = packagesToGather.Select(pack => pack.PackageName).ToList();
+
                 //https://stackoverflow.com/questions/10292730/httpclient-getasync-with-network-credentials
                 using (HttpClientHandler handler = new HttpClientHandler()
                 {
@@ -876,6 +885,7 @@ namespace RelhaxModpack
                     ClientCertificateOptions = ClientCertificateOption.Automatic,
                     PreAuthenticate = true
                 })
+
                 using (HttpClient client = new HttpClient(handler) { BaseAddress = new Uri(PrivateStuff.BigmodsDownloadStatURL) })
                 {
                     //https://stackoverflow.com/questions/15176538/net-httpclient-how-to-post-string-value
@@ -884,21 +894,21 @@ namespace RelhaxModpack
                         new KeyValuePair<string, string>("packageNames", string.Join(",",packageNamesToUpload))
                     });
                     //remove first await when running later, this is just for testing
-                    Task.Run(async () => 
+                    Task.Run( async () =>
                     {
                         try
                         {
                             HttpResponseMessage result = await client.PostAsync("", content);
                             Logging.Debug("Statistic data HTTP response code: {0}", result.StatusCode.ToString());
-                            if(!result.IsSuccessStatusCode)
+                            if (!result.IsSuccessStatusCode)
                             {
                                 Logging.Warning("Failed to send statistic data. Response code={0}, reason={1}", result.StatusCode.ToString(), result.ReasonPhrase);
                             }
                             string resultContent = await result.Content.ReadAsStringAsync();
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
-                            Logging.Error("an error occured sending statistic data");
+                            Logging.Error("an error occurred sending statistic data");
                             Logging.Error(ex.ToString());
                         }
 
@@ -906,14 +916,17 @@ namespace RelhaxModpack
                     //for debug as well
                 }
             }
+
             //make a flat list of all packages to install that will actually be installed
             List<DatabasePackage> packagesToInstall = new List<DatabasePackage>();
             packagesToInstall.AddRange(globalDependencies.Where(globalDep => globalDep.Enabled && !string.IsNullOrWhiteSpace(globalDep.ZipFile)).ToList());
             packagesToInstall.AddRange(dependneciesToInstall.Where(dep => dep.Enabled && !string.IsNullOrWhiteSpace(dep.ZipFile)).ToList());
             List<SelectablePackage> selectablePackagesToInstall = flatListSelect.Where(fl => fl.Enabled && fl.Checked && !string.IsNullOrWhiteSpace(fl.ZipFile)).ToList();
             packagesToInstall.AddRange(selectablePackagesToInstall);
+
             //while we're at it let's make a list of packages that need to be downloaded
             List<DatabasePackage> packagesToDownload = packagesToInstall.Where(pack => pack.DownloadFlag).ToList();
+
             //and check if we need to actuall install anything lol
             if (selectablePackagesToInstall.Count == 0)
             {
@@ -924,10 +937,12 @@ namespace RelhaxModpack
             }
             //perform list install order calculations
             List<DatabasePackage>[] orderedPackagesToInstall = Utils.CreateOrderedInstallList(packagesToInstall);
+
             //we now have a list of enabled, checked and actual zip file mods that we are going to install based on install groups
             //log the time to process lists
             TimeSpan lastTime = stopwatch.Elapsed;
             Logging.WriteToLog(string.Format("Took {0} msec to process lists", stopwatch.ElapsedMilliseconds));
+
             //first, if we have downloads to do and doing them the standard way, then start processing them
             if(packagesToDownload.Count > 0 && !ModpackSettings.InstallWhileDownloading)
             {
@@ -946,6 +961,7 @@ namespace RelhaxModpack
                 Logging.WriteToLog("download while install = true and packages to download, starting ProcessDownloadsAsync()");
                 ProcessDownloadsAsync(packagesToDownload);
             }
+
             //now let's start the install procedures
             //like if we need to make the advanced install window
             //but null it at all times
@@ -956,6 +972,7 @@ namespace RelhaxModpack
                 AdvancedProgressWindow= new AdvancedProgress();
                 AdvancedProgressWindow.Show();
             }
+
             //make sure each trigger list for each package is unique
             foreach(DatabasePackage package in packagesToInstall)
             {
@@ -976,48 +993,43 @@ namespace RelhaxModpack
                 FlatListSelectablePackages = flatListSelect,
                 OrderedPackagesToInstall = orderedPackagesToInstall,
                 PackagesToInstall = packagesToInstall,
-                AwaitCallback = false,
                 ParsedCategoryList = parsedCategoryList,
                 Dependencies = dependencies,
                 GlobalDependencies = globalDependencies
             };
-            engine.OnInstallProgress += Engine_OnInstallProgress;
-            engine.OnInstallFinish += Engine_OnInstallFinish;
-            engine.RunInstallationAsync();
-        }
 
-        private async void Engine_OnInstallFinish(object sender, InstallerComponents.RelhaxInstallFinishedEventArgs e)
-        {
-            if(e.ExitCodes == InstallerComponents.InstallerExitCodes.Success)
+            //create progress object
+            Progress<RelhaxInstallerProgress> progress = new Progress<RelhaxInstallerProgress>();
+            progress.ProgressChanged += OnInstallProgressChanged;
+
+            InstallerComponents.RelhaxInstallFinishedEventArgs results = await engine.RunInstallationAsync(progress);
+
+            //after waiting for the installation...
+            if (results.ExitCodes == InstallerComponents.InstallerExitCodes.Success)
             {
                 //get a list of all zip files in the database, compare it with the files in the download cache folder
                 //get a list of zip files in the cache that aren't in the database, these are old and can be deleted
                 List<string> zipFilesInDatabase = new List<string>();
-                foreach (DatabasePackage package in Utils.GetFlatList(e.GlobalDependencies, e.Dependencies, null, e.ParsedCategoryList))
-                    if(!string.IsNullOrWhiteSpace(package.ZipFile))
+                foreach (DatabasePackage package in Utils.GetFlatList(results.GlobalDependencies, results.Dependencies, null, results.ParsedCategoryList))
+                    if (!string.IsNullOrWhiteSpace(package.ZipFile))
                         zipFilesInDatabase.Add(package.ZipFile);
                 List<string> zipFilesInCache = Utils.DirectorySearch(Settings.RelhaxDownloadsFolder, SearchOption.TopDirectoryOnly, "*.zip").ToList();
                 List<string> oldZipFilesNotInDatabase = zipFilesInCache.Except(zipFilesInDatabase).ToList();
-                if(oldZipFilesNotInDatabase.Count > 0)
+                if (oldZipFilesNotInDatabase.Count > 0)
                 {
                     //there are files to delete
                     //if ask if false, assume we are deleting old files
-                    if(ModpackSettings.DeleteCacheFiles)
+                    if (ModpackSettings.DeleteCacheFiles)
                     {
-                        DeleteOldCache oldCache = new DeleteOldCache();
-                        if(!(bool)oldCache.ShowDialog())
+                        InstallProgressTextBox.Text = Translations.GetTranslatedString("DeletingOldCache");
+                        await Task.Run(() =>
                         {
-                            return;
-                        }
+                            foreach (string zipfile in oldZipFilesNotInDatabase)
+                                Utils.FileDelete(Path.Combine(Settings.RelhaxDownloadsFolder, zipfile));
+                        });
                     }
-                    InstallProgressTextBox.Text = Translations.GetTranslatedString("DeletingOldCache");
-                    await Task.Run(() =>
-                    {
-                        foreach (string zipfile in oldZipFilesNotInDatabase)
-                            Utils.FileDelete(Path.Combine(Settings.RelhaxDownloadsFolder, zipfile));
-                    });
                 }
-                if(ModpackSettings.ShowInstallCompleteWindow)
+                if (ModpackSettings.ShowInstallCompleteWindow)
                 {
                     InstallFinished installFinished = new InstallFinished();
                     installFinished.ShowDialog();
@@ -1031,19 +1043,18 @@ namespace RelhaxModpack
             else
             {
                 //explain why if failed
-                //messagebox
-
+                MessageBox.Show(string.Format("{0}{1}{2}", Translations.GetTranslatedString("installFailed"), Environment.NewLine, results.ExitCodes.ToString()));
                 //and log
-                Logging.WriteToLog(string.Format("Installer failed to install, exit code {0}\n{1}", e.ExitCodes.ToString(), e.ErrorMessage),
+                Logging.WriteToLog(string.Format("Installer failed to install, exit code {0}\n{1}", results.ExitCodes.ToString(), results.ErrorMessage),
                     Logfiles.Application, LogLevel.Exception);
             }
         }
 
-        private void Engine_OnInstallProgress(object sender, RelhaxInstallerProgress e)
+        private void OnInstallProgressChanged(object sender, RelhaxInstallerProgress e)
         {
-            if(ModpackSettings.AdvancedInstalProgress )
+            if (ModpackSettings.AdvancedInstalProgress)
             {
-                if(AdvancedProgressWindow == null)
+                if (AdvancedProgressWindow == null)
                 {
                     throw new BadMemeException("but how");
                 }
