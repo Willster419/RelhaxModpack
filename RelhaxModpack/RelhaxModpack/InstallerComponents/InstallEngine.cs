@@ -518,6 +518,24 @@ namespace RelhaxModpack.InstallerComponents
             prog.ChildCurrent = 0;
             progress.Report(prog);
 
+            //backup old uninstall logfile
+            string backupUninstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilenameBackup);
+            string uninstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilename);
+            if (File.Exists(backupUninstallLogfile))
+                Utils.FileDelete(backupUninstallLogfile);
+            if (File.Exists(uninstallLogfile))
+                File.Move(uninstallLogfile, backupUninstallLogfile);
+            //create the uninstall logfile and write header info
+            if (!Logging.InitApplicationLogging(Logfiles.Uninstaller, uninstallLogfile))
+            {
+                Logging.Error("Failed to init the uninstall logfile");
+            }
+            else
+            {
+                Logging.WriteToLog(string.Format(@"/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */", DateTime.Now), Logfiles.Uninstaller, LogLevel.Info);
+                Logging.WriteToLog(@"/*  files and folders deleted  */", Logfiles.Uninstaller, LogLevel.Info);
+            }
+
             bool success = true;
             foreach(string file in ListOfAllItems)
             {
@@ -526,6 +544,8 @@ namespace RelhaxModpack.InstallerComponents
                 progress.Report(prog);
                 if (!Utils.FileDelete(file))
                     success = false;
+                else
+                    Logging.WriteToLog(file, Logfiles.Uninstaller, LogLevel.Info);
             }
 
             //re-create the folders at the end
