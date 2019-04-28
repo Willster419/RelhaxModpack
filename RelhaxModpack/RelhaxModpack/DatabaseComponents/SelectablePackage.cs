@@ -37,7 +37,6 @@ namespace RelhaxModpack
 
         private static readonly List<string> SelectableElementsToXmlParseNodes = new List<string>()
         {
-            nameof(Size),
             nameof(Description),
             nameof(UpdateComment),
             nameof(PopularMod),
@@ -108,11 +107,6 @@ namespace RelhaxModpack
         /// a flag to determine wether or not the mod should be shown in UI
         /// </summary>
         public bool Visible = false;
-
-        /// <summary>
-        /// size of the mod zip file
-        /// </summary>
-        public ulong Size = 0;
 
         /// <summary>
         /// update comments of the package

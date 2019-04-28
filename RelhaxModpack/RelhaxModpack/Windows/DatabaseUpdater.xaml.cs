@@ -675,11 +675,20 @@ namespace RelhaxModpack.Windows
                 {
                     string newCRC = databaseEntry.Attributes["md5"].Value;
                     if (string.IsNullOrWhiteSpace(newCRC))
-                        throw new BadMemeException("newCRC string is null, and you suck at writing code");
+                        throw new BadMemeException("newCRC string is null or whitespace, and you suck at writing code");
                     if (!package.CRC.Equals(newCRC))
                     {
                         package.CRC = newCRC;
                         updatedPackages.Add(package);
+                    }
+                    //legacy compatibility check: size parameters need to be updated
+                    ulong fakeSize = Utils.ParseuLong(databaseEntry.Attributes["size"].Value, 0);
+                    if (package.Size == 0 || fakeSize == 0 || package.Size != fakeSize)
+                    {
+                        //update the current size of the package
+                        package.Size = fakeSize;
+                        if (package.Size == 0)
+                            throw new BadMemeException("you made a mistake");
                     }
                 }
                 else if (package.CRC.Equals("f") || string.IsNullOrWhiteSpace(package.CRC))

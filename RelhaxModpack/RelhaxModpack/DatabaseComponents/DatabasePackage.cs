@@ -21,6 +21,7 @@ namespace RelhaxModpack
 
         private static readonly List<string> PackageElementsToXmlParseNodes = new List<string>()
         {
+            nameof(Size),
             nameof(Version),
             nameof(ZipFile),
             nameof(CRC),
@@ -60,6 +61,11 @@ namespace RelhaxModpack
         /// used to determine when the package entry was last modified
         /// </summary>
         public long Timestamp = 0;
+
+        /// <summary>
+        /// size of the zip file
+        /// </summary>
+        public ulong Size = 0;
 
         /// <summary>
         /// the zip file to extract (can be "")

@@ -924,7 +924,7 @@ namespace RelhaxModpack.InstallerComponents
                 //first sort the packages by the size parameter
                 //https://stackoverflow.com/questions/3309188/how-to-sort-a-listt-by-a-property-in-the-object
                 //TODO: the size of all objects MUST BE KNOWN??
-                //List<DatabasePackage> packagesSortedBySize = packages.OrderByDescending(pack => pack.)
+                packages = packages.OrderByDescending(pack => pack.Size).ToList();
                 //for not just go with the packages as they are, they should already be in alphabetical order
 
                 //make a list of packages again, but size is based on number of logical processors and/or multi-core install mods
