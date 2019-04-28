@@ -219,7 +219,9 @@ namespace RelhaxModpack.InstallerComponents
             OldTime = InstallStopWatch.Elapsed;
             Prog.TotalCurrent++;
             InstallFinishedArgs.ExitCodes = InstallerExitCodes.BackupModsError;
+            Prog.InstallStatus = InstallerExitCodes.BackupModsError;
             Progress.Report(Prog);
+
             Logging.WriteToLog("Backup of mods, current install time = 0 msec");
             if (ModpackSettings.BackupModFolder)
             {
@@ -237,7 +239,10 @@ namespace RelhaxModpack.InstallerComponents
             OldTime = InstallStopWatch.Elapsed;
             Prog.TotalCurrent++;
             InstallFinishedArgs.ExitCodes = InstallerExitCodes.BackupDataError;
-            Logging.WriteToLog(string.Format("Backup of userdata, current install time = {0} msec",
+            Prog.InstallStatus = InstallerExitCodes.BackupDataError;
+            Progress.Report(Prog);
+
+            Logging.WriteToLog(string.Format("Backup of user data, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.SaveUserData)
             {
@@ -245,7 +250,7 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     return InstallFinishedArgs;
                 }
-                Logging.Info("Back of userdata complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
+                Logging.Info("Back of user data complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
             }
             else
                 Logging.WriteToLog("...skipped");
@@ -254,6 +259,9 @@ namespace RelhaxModpack.InstallerComponents
             OldTime = InstallStopWatch.Elapsed;
             Prog.TotalCurrent++;
             InstallFinishedArgs.ExitCodes = InstallerExitCodes.ClearCacheError;
+            Prog.InstallStatus = InstallerExitCodes.ClearCacheError;
+            Progress.Report(Prog);
+
             Logging.WriteToLog(string.Format("Cleaning of cache folders, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.ClearCache)
@@ -271,6 +279,9 @@ namespace RelhaxModpack.InstallerComponents
             OldTime = InstallStopWatch.Elapsed;
             Prog.TotalCurrent++;
             InstallFinishedArgs.ExitCodes = InstallerExitCodes.ClearLogsError;
+            Prog.InstallStatus = InstallerExitCodes.ClearLogsError;
+            Progress.Report(Prog);
+
             Logging.WriteToLog(string.Format("Cleaning of logs, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.DeleteLogs)
@@ -288,7 +299,10 @@ namespace RelhaxModpack.InstallerComponents
             OldTime = InstallStopWatch.Elapsed;
             Prog.TotalCurrent++;
             InstallFinishedArgs.ExitCodes = InstallerExitCodes.CleanModsError;
-            Logging.WriteToLog(string.Format("Cleaning of mods foldres, current install time = {0} msec",
+            Prog.InstallStatus = InstallerExitCodes.CleanModsError;
+            Progress.Report(Prog);
+
+            Logging.WriteToLog(string.Format("Cleaning of mods folders, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.CleanInstallation)
             {
@@ -305,7 +319,10 @@ namespace RelhaxModpack.InstallerComponents
             OldTime = InstallStopWatch.Elapsed;
             Prog.TotalCurrent++;
             InstallFinishedArgs.ExitCodes = InstallerExitCodes.ExtractionError;
-            Logging.WriteToLog(string.Format("Exctacting mods, current install time = {0} msec",
+            Prog.InstallStatus = InstallerExitCodes.ExtractionError;
+            Progress.Report(Prog);
+
+            Logging.WriteToLog(string.Format("Extracting mods, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             if(!ExtractFilesAsyncSetup())
             {
@@ -317,7 +334,10 @@ namespace RelhaxModpack.InstallerComponents
             OldTime = InstallStopWatch.Elapsed;
             Prog.TotalCurrent++;
             InstallFinishedArgs.ExitCodes = InstallerExitCodes.RestoreUserdataError;
-            Logging.WriteToLog(string.Format("Restore of userdata, current install time = {0} msec",
+            Prog.InstallStatus = InstallerExitCodes.RestoreUserdataError;
+            Progress.Report(Prog);
+
+            Logging.WriteToLog(string.Format("Restore of user data, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.SaveUserData)
             {
@@ -340,6 +360,9 @@ namespace RelhaxModpack.InstallerComponents
             OldTime = InstallStopWatch.Elapsed;
             Prog.TotalCurrent++;
             InstallFinishedArgs.ExitCodes = InstallerExitCodes.XmlUnpackError;
+            Prog.InstallStatus = InstallerExitCodes.XmlUnpackError;
+            Progress.Report(Prog);
+
             Logging.WriteToLog(string.Format("Unpack of xml files, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             List<XmlUnpack> xmlUnpacks = MakeXmlUnpackList();
@@ -363,6 +386,9 @@ namespace RelhaxModpack.InstallerComponents
             OldTime = InstallStopWatch.Elapsed;
             Prog.TotalCurrent++;
             InstallFinishedArgs.ExitCodes = InstallerExitCodes.PatchError;
+            Prog.InstallStatus = InstallerExitCodes.PatchError;
+            Progress.Report(Prog);
+
             Logging.WriteToLog(string.Format("Patching of files, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             List<Patch> pathces = MakePatchList();
@@ -384,6 +410,9 @@ namespace RelhaxModpack.InstallerComponents
             OldTime = InstallStopWatch.Elapsed;
             Prog.TotalCurrent++;
             InstallFinishedArgs.ExitCodes = InstallerExitCodes.ShortcustError;
+            Prog.InstallStatus = InstallerExitCodes.ShortcustError;
+            Progress.Report(Prog);
+
             Logging.WriteToLog(string.Format("Creating of shortcuts, current install time = {0} msec",
                 InstallStopWatch.Elapsed.TotalMilliseconds));
             List<Shortcut> shortcuts = MakeShortcutList();
@@ -406,12 +435,15 @@ namespace RelhaxModpack.InstallerComponents
             else
                 Logging.WriteToLog("...skipped (no shortcut entries parsed)");
 
-            //step 10: create atlasas (async option)
+            //step 10: create atlases (async option)
             if (ModpackSettings.DisableTriggers)
             {
                 OldTime = InstallStopWatch.Elapsed;
                 Prog.TotalCurrent++;
                 InstallFinishedArgs.ExitCodes = InstallerExitCodes.ContourIconAtlasError;
+                Prog.InstallStatus = InstallerExitCodes.ContourIconAtlasError;
+                Progress.Report(Prog);
+
                 Logging.WriteToLog(string.Format("Creating of atlases, current install time = {0} msec",
                     InstallStopWatch.Elapsed.TotalMilliseconds));
                 List<Atlas> atlases = MakeAtlasList();
@@ -432,6 +464,9 @@ namespace RelhaxModpack.InstallerComponents
                 OldTime = InstallStopWatch.Elapsed;
                 Prog.TotalCurrent++;
                 InstallFinishedArgs.ExitCodes = InstallerExitCodes.FontInstallError;
+                Prog.InstallStatus = InstallerExitCodes.FontInstallError;
+                Progress.Report(Prog);
+
                 Logging.WriteToLog(string.Format("Installing of fonts, current install time = {0} msec",
                     InstallStopWatch.Elapsed.TotalMilliseconds));
                 string[] fontsToInstall = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername), SearchOption.TopDirectoryOnly, @"*", 50, 3, true);
@@ -453,6 +488,9 @@ namespace RelhaxModpack.InstallerComponents
             OldTime = InstallStopWatch.Elapsed;
             Prog.TotalCurrent++;
             InstallFinishedArgs.ExitCodes = InstallerExitCodes.CleanupError;
+            Prog.InstallStatus = InstallerExitCodes.CleanupError;
+            Progress.Report(Prog);
+
             Logging.WriteToLog(string.Format("Cleanup, current install time = {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds));
             Cleanup();
             Logging.Info("Cleanup complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
@@ -694,9 +732,10 @@ namespace RelhaxModpack.InstallerComponents
                 foreach(UserFile files in package.UserFiles)
                 {
                     //use the search parameter to get the actual files to move
-                    //remove the mistake i made over a year ago of the double slashes
+                    //remove the mistake I made over a year ago of the double slashes
                     string searchPattern = files.Pattern.Replace(@"\\", @"\");
-                    //legacy compatibility: eithor the item will be with a macro start or not.
+
+                    //legacy compatibility: either the item will be with a macro start or not.
                     //they need to be treated differently
                     string root_directory = "";
                     string actual_search = "";
@@ -704,10 +743,11 @@ namespace RelhaxModpack.InstallerComponents
                     {
                         //it has macros, and the first one is the base path. remove and macro it
                         //root_directory = macro using split of }
+                        
                     }
                     else
                     {
-                        //it's an old style (or at least can assume that it's assuming root WoT direcotry
+                        //it's an old style (or at least can assume that it's assuming root WoT directory)
                         root_directory = Settings.WoTDirectory;
                         //actual_search = Utils.MacroParse();
 
@@ -740,31 +780,51 @@ namespace RelhaxModpack.InstallerComponents
                 return true;
             }
             Logging.WriteToLog("Appdata folder exists, backing up user settings and clearing cache");
+
             //make the temp folder if it does not already exist
             string AppPathTempFolder = Path.Combine(Settings.RelhaxTempFolder, "AppDataBackup");
+            //delete if possibly from previous install
             if (Directory.Exists(AppPathTempFolder))
                 Directory.Delete(AppPathTempFolder, true);
+            //and make the folder at the end
             Directory.CreateDirectory(AppPathTempFolder);
-            string[] fileFolderNames = { "preferences.xml", "preferences_ct.xml", "modsettings.dat", "xvm", "pmod" };
+
+            //backup files and folders that should be kept that aren't cache
+            string[] fileNames = { "preferences.xml", "preferences_ct.xml", "modsettings.dat" };
+            string[] folderNames = { "xvm", "pmod" };
+
             //check if the directories are files or folders
             //if files they can move directly
             //if folders they have to be re-created on the destination and files moved manually
             Logging.WriteToLog("Starting clearing cache step 1 of 3: backing up old files", Logfiles.Application, LogLevel.Debug);
-            foreach(string file in fileFolderNames)
+            foreach(string file in fileNames)
             {
                 Logging.WriteToLog("Processing cache file/folder to move: " + file, Logfiles.Application, LogLevel.Debug);
                 if(File.Exists(Path.Combine(Settings.AppDataFolder, file)))
                 {
-                    File.Move(Path.Combine(Settings.AppDataFolder, file), Path.Combine(AppPathTempFolder, file));
-                }
-                else if (Directory.Exists(Path.Combine(Settings.AppDataFolder, file)))
+                    try { File.Move(Path.Combine(Settings.AppDataFolder, file), Path.Combine(AppPathTempFolder, file)); }
+                    catch (Exception ex)
+                    {
+                        Logging.Exception(ex.ToString());
+                        return false;
+                    }
+                } 
+                else
                 {
-                    //Utils.DirectoryMove(Path.Combine(Settings.AppDataFolder, file,) Path.Combine(AppPathTempFolder, file), true, null);
+                    Logging.Info("File does not exist in step clearCache: {0}", file);
+                }
+            }
+
+            foreach(string folder in folderNames)
+            {
+                if (Directory.Exists(Path.Combine(Settings.AppDataFolder, folder)))
+                {
+                    Utils.DirectoryMove(Path.Combine(Settings.AppDataFolder, folder), Path.Combine(AppPathTempFolder, folder), true);
                     throw new BadMemeException("i think you forgot to do something here...");
                 }
                 else
                 {
-                    Logging.WriteToLog("File or folder does not exist in step clearCache: " + file,Logfiles.Application,LogLevel.Debug);
+                    Logging.Info("Folder does not exist in step clearCache: {0}", folder);
                 }
             }
 
@@ -775,21 +835,33 @@ namespace RelhaxModpack.InstallerComponents
             //then put the above files back
             Logging.WriteToLog("Starting clearing cache step 3 of 3: restoring old files", Logfiles.Application, LogLevel.Debug);
             Directory.CreateDirectory(Settings.AppDataFolder);
-            foreach (string file in fileFolderNames)
+            foreach (string file in fileNames)
             {
                 Logging.WriteToLog("Processing cache file/folder to move: " + file, Logfiles.Application, LogLevel.Debug);
                 if (File.Exists(Path.Combine(AppPathTempFolder, file)))
                 {
-                    File.Move(Path.Combine(AppPathTempFolder, file), Path.Combine(Settings.AppDataFolder, file));
-                }
-                else if (Directory.Exists(Path.Combine(AppPathTempFolder, file)))
-                {
-                    //Utils.DirectoryMove(Path.Combine(AppPathTempFolder, file), Path.Combine(Settings.AppDataFolder, file), true, null);
-                    Utils.DirectoryMove(Path.Combine(AppPathTempFolder, file), Path.Combine(Settings.AppDataFolder, file), true);
+                    try { File.Move(Path.Combine(AppPathTempFolder, file), Path.Combine(Settings.AppDataFolder, file)); }
+                    catch (Exception ex)
+                    {
+                        Logging.Exception(ex.ToString());
+                        return false;
+                    }
                 }
                 else
                 {
-                    Logging.WriteToLog("File or folder does not exist in step clearCache: " + file, Logfiles.Application, LogLevel.Debug);
+                    Logging.Info("File does not exist in step clearCache: {0}", file);
+                }
+            }
+
+            foreach (string folder in folderNames)
+            {
+                if (Directory.Exists(Path.Combine(AppPathTempFolder, folder)))
+                {
+                    Utils.DirectoryMove(Path.Combine(AppPathTempFolder, folder), Path.Combine(Settings.AppDataFolder, folder), true);
+                }
+                else
+                {
+                    Logging.Info("Folder does not exist in step clearCache: {0}", folder);
                 }
             }
             return true;
@@ -807,9 +879,10 @@ namespace RelhaxModpack.InstallerComponents
             };
             foreach(string s in logsToDelete)
             {
-                Logging.WriteToLog("Processing log file (if exists) " + s, Logfiles.Application, LogLevel.Debug);
+                Logging.WriteToLog("Processing log file (if exists) " + s, Logfiles.Application, LogLevel.Info);
                 if (File.Exists(s))
-                    File.Delete(s);
+                    if (!Utils.FileDelete(s))
+                        return false;
             }
             return true;
         }
@@ -822,7 +895,7 @@ namespace RelhaxModpack.InstallerComponents
                     Logging.WriteToLog("Running uninstall modes method Default");
                     return UninstallModsDefault();
                 case UninstallModes.Quick:
-                    Logging.WriteToLog("Running uninstall modes method Quick (Advnaced)");
+                    Logging.WriteToLog("Running uninstall modes method Quick (Advanced)");
                     return UninstallModsQuick();
                 default:
                     Logging.WriteToLog("Unknown uninstall mode: " + ModpackSettings.UninstallMode.ToString());
@@ -832,28 +905,32 @@ namespace RelhaxModpack.InstallerComponents
 
         private bool ExtractFilesAsyncSetup()
         {
-            //this is the only really new one. for each install group, spawn a bunch of threads to start the instal process
-            //get the number of threads we will use for each of the install stepps
+            //this is the only really new one. for each install group, spawn a bunch of threads to start the install process
+            //get the number of threads we will use for each of the install steps
             int numThreads = ModpackSettings.MulticoreExtraction ? Settings.NumLogicalProcesors : 1;
+
             Logging.WriteToLog(string.Format("Number of threads to use for install is {0}, (MulticoreExtraction={1}, LogicalProcesosrs={2}",
                 numThreads, ModpackSettings.MulticoreExtraction, Settings.NumLogicalProcesors));
+
             for (int i = 0; i < OrderedPackagesToInstall.Count(); i++)
             {
                 Logging.WriteToLog("Install Group " + i + " starts now");
+
                 //get the list of packages to install
+                //this list represents all the packages in this install group that can be installed at the same time
+                //i.e. there are NO conflicting zip file paths in ALL of the files (all the entries in all zip files are mutually exclusive)
                 List<DatabasePackage> packages = new List<DatabasePackage>(OrderedPackagesToInstall[i]);
-                //this list represents all te packages in this group that can all be installed at the same time
-                //i.e. there are NO conflicting zip file paths in ALL of the files, in other works all the files are mutually exclusive
 
                 //first sort the packages by the size parameter
                 //https://stackoverflow.com/questions/3309188/how-to-sort-a-listt-by-a-property-in-the-object
                 //TODO: the size of all objects MUST BE KNOWN??
                 //List<DatabasePackage> packagesSortedBySize = packages.OrderByDescending(pack => pack.)
-                //for not just go with the packages as they are, they should alrady be in alphabetical order
+                //for not just go with the packages as they are, they should already be in alphabetical order
 
-                //make a list of packages again, but size is based on number of logical processors and/or multicore install mdos
+                //make a list of packages again, but size is based on number of logical processors and/or multi-core install mods
                 //if a user has 8 cores, then make a lists of packages to install
                 List<DatabasePackage>[] packageThreads = new List<DatabasePackage>[numThreads];
+
                 //assign each package one at a time into a package thread
                 for(int j = 0; j < packages.Count; j++)
                 {
@@ -862,18 +939,21 @@ namespace RelhaxModpack.InstallerComponents
                     Logging.WriteToLog(string.Format("j index = {0} package {1} has been assigned to packageThread {2}", j, packages[j].PackageName,
                         threadSelector), Logfiles.Application, LogLevel.Debug);
                 }
-                //now the fun starts. these all can run at once
+
+                //now the fun starts. these all can run at once. yeah.
                 //https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/task-based-asynchronous-programming
                 Task[] tasks = new Task[numThreads];
                 if (tasks.Count() != packageThreads.Count())
                     throw new BadMemeException("ohhhhhhhhh, NOW you f*cked UP!");
+
                 for(int k = 0; k < tasks.Count(); k++)
                 {
                     Logging.WriteToLog(string.Format("thread {0} starting task, packages to extract={1}", k, packageThreads[k].Count));
-                    //tasks[k] = ExtractFilesAsync(packageThreads[k], k);
                     //use the task factory to create tasks(threads) for each logical cores
                     tasks[k] = Task.Factory.StartNew(() => ExtractFiles(packageThreads[k], k));
                 }
+
+                //and log it all
                 Logging.WriteToLog(string.Format("all threads started on group {0}, master thread now waiting on Task.WaitAll(tasks)",i),
                     Logfiles.Application,LogLevel.Debug);
                 Task.WaitAll(tasks);
