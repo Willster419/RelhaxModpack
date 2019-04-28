@@ -36,6 +36,8 @@ namespace RelhaxModpack.InstallerComponents
     {
         GettingFilelistError,
         UninstallError,
+        ProcessingEmptyFolders,
+        PerformFinalClearup,
         Success
     }
     public class RelhaxInstallFinishedEventArgs : EventArgs
@@ -94,10 +96,11 @@ namespace RelhaxModpack.InstallerComponents
         };
 
         //other
-        private RelhaxInstallFinishedEventArgs InstallFinishedArgs = new RelhaxInstallFinishedEventArgs();
         private Stopwatch InstallStopWatch = new Stopwatch();
         private TimeSpan OldTime;
-        private RelhaxInstallerProgress Progress = new RelhaxInstallerProgress();
+        private RelhaxInstallFinishedEventArgs InstallFinishedArgs = new RelhaxInstallFinishedEventArgs();
+        private IProgress<RelhaxInstallerProgress> Progress = null;
+        private RelhaxInstallerProgress Prog = null;
         #endregion
 
         #region More boring stuff
@@ -105,39 +108,14 @@ namespace RelhaxModpack.InstallerComponents
         {
             //init the install engine
         }
-        private void ReportProgress()
-        {
-            if(OnInstallProgress != null)
-            {
-                OnInstallProgress(this, Progress);
-            }
-        }
-        private void ReportFinish()
-        {
-            if(OnInstallFinish != null)
-            {
-                InstallFinishedArgs.ParsedCategoryList = ParsedCategoryList;
-                InstallFinishedArgs.Dependencies = Dependencies;
-                InstallFinishedArgs.GlobalDependencies = GlobalDependencies;
-                OnInstallFinish(this, InstallFinishedArgs);
-            }
-        }
         #endregion
 
         #region Installer entry points
 
-        public async void RunInstallationAsync()
+        public Task<RelhaxInstallFinishedEventArgs> RunInstallationAsync(IProgress<RelhaxInstallerProgress> progress)
         {
-            if (AwaitCallback)
-            {
-                await Task.Factory.StartNew(() => LOLActuallyRunInstallationAsync());
-                InstallFinishedArgs.ExitCodes = InstallerExitCodes.Success;
-                ReportFinish();
-            }
-            else
-            {
-                Task.Factory.StartNew(() => LOLActuallyRunInstallationAsync());
-            }
+            Task<RelhaxInstallFinishedEventArgs> task = Task.Run(() => RunInstallation(progress));
+            return task;
         }
         
         public Task<RelhaxInstallFinishedEventArgs> RunUninstallationAsync(IProgress<RelhaxInstallerProgress> progress)
@@ -150,38 +128,48 @@ namespace RelhaxModpack.InstallerComponents
         {
             Logging.Info("Uninstall process starts on new thread with mode {0}", ModpackSettings.UninstallMode.ToString());
             //make the progress report object
-            RelhaxInstallerProgress prog = new RelhaxInstallerProgress();
+            Prog = new RelhaxInstallerProgress();
+            Progress = progress;
 
             //run the uninstall methods
             bool success = true;
             switch (ModpackSettings.UninstallMode)
             {
                 case UninstallModes.Default:
-                    success = UninstallModsDefault(progress, prog);
+                    success = UninstallModsDefault();
                     break;
                 case UninstallModes.Quick:
-                    success = UninstallModsQuick(progress, prog);
+                    success = UninstallModsQuick();
                     break;
             }
+
             if (success)
                 InstallFinishedArgs.ExitCodes = InstallerExitCodes.Success;
             else
                 InstallFinishedArgs.ExitCodes = InstallerExitCodes.UnknownError;
+
+            InstallFinishedArgs.ParsedCategoryList = ParsedCategoryList;
+            InstallFinishedArgs.Dependencies = Dependencies;
+            InstallFinishedArgs.GlobalDependencies = GlobalDependencies;
+
             return InstallFinishedArgs;
         }
         #endregion
 
         #region Main Install method
-        private async void LOLActuallyRunInstallationAsync()
+        private RelhaxInstallFinishedEventArgs RunInstallation(IProgress<RelhaxInstallerProgress> progress)
         {
+            //rookie mistake checks
             if(OrderedPackagesToInstall == null || OrderedPackagesToInstall.Count() == 0)
                 throw new BadMemeException("WOW you really suck at programming");
             if (OnInstallFinish == null || OnInstallProgress == null)
                 throw new BadMemeException("HOW DAFAQ DID YOU FAQ THIS UP???");
+
             Logging.WriteToLog("Installation starts now from RunInstallation() in Install Engine");
             //do more stuff here im sure like init log files
             //also check enalbed just to be safe
             List<SelectablePackage> selectedPackages = FlatListSelectablePackages.Where(package => package.Checked && package.Enabled).ToList();
+
             //do any list processing here
             if(!ModpackSettings.DisableTriggers)
             {
@@ -214,8 +202,10 @@ namespace RelhaxModpack.InstallerComponents
                     }
                 }
             }
+
             //process packages with data (cache) for cache backup and restore
             List<SelectablePackage> packagesWithData = selectedPackages.Where(package => package.UserFiles.Count > 0).ToList();
+
             //and reset the stopwatch
             InstallStopWatch.Reset();
 
@@ -423,9 +413,9 @@ namespace RelhaxModpack.InstallerComponents
             else
                 Logging.WriteToLog("...skipped (no shortcut entries parsed)");
 
-            if(ModpackSettings.DisableTriggers)
+            //step 10: create atlasas (async option)
+            if (ModpackSettings.DisableTriggers)
             {
-                //step 10: create atlasas (async option)
                 OldTime = InstallStopWatch.Elapsed;
                 Progress.TotalCurrent++;
                 InstallFinishedArgs.ExitCodes++;
@@ -443,10 +433,9 @@ namespace RelhaxModpack.InstallerComponents
                     Logging.WriteToLog("...skipped (no atlas entries parsed)");
             }
 
-            //get the font installation done here
-            if(ModpackSettings.DisableTriggers)
+            //step 11: install fonts (async operation)
+            if (ModpackSettings.DisableTriggers)
             {
-                //step 11: install fonts (async operation)
                 OldTime = InstallStopWatch.Elapsed;
                 Progress.TotalCurrent++;
                 InstallFinishedArgs.ExitCodes++;
@@ -491,32 +480,25 @@ namespace RelhaxModpack.InstallerComponents
                 }
             }
 
-            //and i guess we're done
-            //if were'not causing the main thread to await, then yeah report that we'er done
-            if (!AwaitCallback)
-            {
-                InstallFinishedArgs.ExitCodes = InstallerExitCodes.Success;
-                ReportFinish();
-            }
-
             //report to log install is finished
             Logging.Info("Install finished, total install time = {0} msec", Logfiles.Application, InstallStopWatch.Elapsed.TotalMilliseconds);
+            return InstallFinishedArgs;
         }
         #endregion
 
-        #region Main Uninstall method
-        private bool UninstallModsQuick(IProgress<RelhaxInstallerProgress> progress, RelhaxInstallerProgress prog)
+        #region Main Uninstall methods
+        private bool UninstallModsQuick()
         {
-            prog.UninstallStatus = UninstallerExitCodes.GettingFilelistError;
-            progress.Report(prog);
+            Prog.UninstallStatus = UninstallerExitCodes.GettingFilelistError;
+            Progress.Report(Prog);
             //get a list of all files and folders in mods and res_mods
             List<string> ListOfAllItems = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "res_mods"), SearchOption.AllDirectories).ToList();
             ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "mods"), SearchOption.AllDirectories).ToList());
 
             //start init progress reporting. for uninstall, only use child current, total and filename
-            prog.ChildTotal = ListOfAllItems.Count;
-            prog.ChildCurrent = 0;
-            progress.Report(prog);
+            Prog.ChildTotal = ListOfAllItems.Count;
+            Prog.ChildCurrent = 0;
+            Progress.Report(Prog);
 
             //backup old uninstall logfile
             string backupUninstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilenameBackup);
@@ -525,23 +507,27 @@ namespace RelhaxModpack.InstallerComponents
                 Utils.FileDelete(backupUninstallLogfile);
             if (File.Exists(uninstallLogfile))
                 File.Move(uninstallLogfile, backupUninstallLogfile);
+
             //create the uninstall logfile and write header info
             if (!Logging.InitApplicationLogging(Logfiles.Uninstaller, uninstallLogfile))
             {
                 Logging.Error("Failed to init the uninstall logfile");
+                return false;
             }
             else
             {
                 Logging.WriteToLog(string.Format(@"/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */", DateTime.Now), Logfiles.Uninstaller, LogLevel.Info);
+                Logging.WriteToLog(string.Format("/* Uninstall Method: {0} */", ModpackSettings.UninstallMode.ToString()), Logfiles.Uninstaller, LogLevel.Info);
                 Logging.WriteToLog(@"/*  files and folders deleted  */", Logfiles.Uninstaller, LogLevel.Info);
             }
 
             bool success = true;
+            Prog.UninstallStatus = UninstallerExitCodes.UninstallError;
             foreach(string file in ListOfAllItems)
             {
-                prog.ChildCurrent++;
-                prog.Filename = file.Split(new string[] { Settings.WoTDirectory }, StringSplitOptions.RemoveEmptyEntries)[1];
-                progress.Report(prog);
+                Prog.ChildCurrent++;
+                Prog.Filename = file;
+                Progress.Report(Prog);
                 if (!Utils.FileDelete(file))
                     success = false;
                 else
@@ -551,31 +537,50 @@ namespace RelhaxModpack.InstallerComponents
             //re-create the folders at the end
             Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, "res_mods", Settings.WoTClientVersion));
             Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, "mods", Settings.WoTClientVersion));
+
             if (success)
-                prog.UninstallStatus = UninstallerExitCodes.Success;
+                Prog.UninstallStatus = UninstallerExitCodes.Success;
             else
-                prog.UninstallStatus = UninstallerExitCodes.UninstallError;
-            prog.ChildCurrent = prog.ChildTotal;
-            progress.Report(prog);
-            return true;
+                Prog.UninstallStatus = UninstallerExitCodes.UninstallError;
+
+            InstallFinishedArgs.ParsedCategoryList = ParsedCategoryList;
+            InstallFinishedArgs.Dependencies = Dependencies;
+            InstallFinishedArgs.GlobalDependencies = GlobalDependencies;
+
+            Prog.ChildCurrent = Prog.ChildTotal;
+            Progress.Report(Prog);
+            return success;
         }
 
-        private bool UninstallModsDefault(IProgress<RelhaxInstallerProgress> progress, RelhaxInstallerProgress prog)
+        private bool UninstallModsDefault()
         {
+            //setup progress
+            Prog.UninstallStatus = UninstallerExitCodes.GettingFilelistError;
+            Progress.Report(Prog);
+
             //get a list of all files and folders in the install log (assuming checking for logfile already done and exists)
             List<string> ListOfAllItems = File.ReadAllLines(Path.Combine(Settings.WoTDirectory, "logs", Logging.InstallLogFilename)).ToList();
+
             //combine with a list of all files and folders in mods and res_mods
             ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "res_mods"), SearchOption.AllDirectories).ToList());
             ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "mods"), SearchOption.AllDirectories).ToList());
+
             //merge then sort and then reverse
             ListOfAllItems = ListOfAllItems.Distinct().ToList();
             ListOfAllItems.Sort();
             ListOfAllItems.Reverse();
+
             //split off into files and folders and shortcuts
             List<string> ListOfAllDirectories = ListOfAllItems.Where(item => Directory.Exists(item)).ToList();
             List<string> ListOfAllFiles = ListOfAllItems.Where(item => File.Exists(item)).ToList();
             List<string> ListOfAllShortcuts = ListOfAllFiles.Where(file => Path.GetExtension(file).Equals(".lnk")).ToList();
             ListOfAllFiles = ListOfAllFiles.Except(ListOfAllShortcuts).ToList();
+
+            //start init progress reporting. for uninstall, only use child current, total and filename
+            Prog.ChildTotal = ListOfAllItems.Count;
+            Prog.ChildCurrent = 0;
+            Progress.Report(Prog);
+
             //backup old uninstall logfile
             string backupUninstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilenameBackup);
             string uninstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilename);
@@ -583,6 +588,7 @@ namespace RelhaxModpack.InstallerComponents
                 Utils.FileDelete(backupUninstallLogfile);
             if (File.Exists(uninstallLogfile))
                 File.Move(uninstallLogfile, backupUninstallLogfile);
+
             //create the uninstall logfile and write header info
             if (!Logging.InitApplicationLogging(Logfiles.Uninstaller, uninstallLogfile))
             {
@@ -591,17 +597,27 @@ namespace RelhaxModpack.InstallerComponents
             else
             {
                 Logging.WriteToLog(string.Format(@"/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */", DateTime.Now), Logfiles.Uninstaller, LogLevel.Info);
+                Logging.WriteToLog(string.Format("/* Uninstall Method: {0} */", ModpackSettings.UninstallMode.ToString()), Logfiles.Uninstaller, LogLevel.Info);
                 Logging.WriteToLog(@"/*  files and folders deleted  */", Logfiles.Uninstaller, LogLevel.Info);
             }
+
             //delete all files (not shortcuts)
+            bool success = true;
+            Prog.UninstallStatus = UninstallerExitCodes.UninstallError;
             foreach (string file in ListOfAllFiles)
             {
+                Prog.ChildCurrent++;
+                Prog.Filename = file;
+                Progress.Report(Prog);
                 if (File.Exists(file))
                 {
-                    Utils.FileDelete(file);
-                    Logging.WriteToLog(file, Logfiles.Uninstaller, LogLevel.Info);
+                    if (!Utils.FileDelete(file))
+                        success = false;
+                    else
+                        Logging.WriteToLog(file, Logfiles.Uninstaller, LogLevel.Info);
                 }
             }
+
             //deal with shortcuts
             //if settings.createShortcuts, then don't delete them (at least here, for now)
             //otherwise delete them
@@ -612,12 +628,17 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     if (File.Exists(file))
                     {
-                        Utils.FileDelete(file);
-                        Logging.WriteToLog(file, Logfiles.Uninstaller, LogLevel.Info);
+                        if (!Utils.FileDelete(file))
+                            success = false;
+                        else
+                            Logging.WriteToLog(file, Logfiles.Uninstaller, LogLevel.Info);
                     }
                 }
             }
+
             //delete all empty folders
+            Prog.UninstallStatus = UninstallerExitCodes.ProcessingEmptyFolders;
+            Progress.Report(Prog);
             foreach (string folder in ListOfAllDirectories)
             {
                 if (Directory.Exists(folder))
@@ -626,16 +647,28 @@ namespace RelhaxModpack.InstallerComponents
                     Logging.WriteToLog(folder, Logfiles.Uninstaller, LogLevel.Info);
                 }
             }
-            //final wipe like quick uninstall of mods and res_mods
-            foreach (string path in new string[] { "res_mods", "mods" })
-            {
-                //progress reporting TODO...
-                Utils.DirectoryDelete(Path.Combine(Settings.WoTDirectory, path), true);
-                Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, path, Settings.WoTClientVersion));
-            }
-            return true;
+
+            //final wipe of the folders
+            Prog.UninstallStatus = UninstallerExitCodes.PerformFinalClearup;
+            Progress.Report(Prog);
+            if (!Utils.DirectoryDelete(Path.Combine(Settings.WoTDirectory, "res_mods"), true))
+                success = false;
+            if (!Utils.DirectoryDelete(Path.Combine(Settings.WoTDirectory, "mods"), true))
+                success = false;
+
+            //re-create the folders at the end
+            Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, "res_mods", Settings.WoTClientVersion));
+            Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, "mods", Settings.WoTClientVersion));
+
+            if (success)
+                Prog.UninstallStatus = UninstallerExitCodes.Success;
+            else
+                Prog.UninstallStatus = UninstallerExitCodes.UninstallError;
+            Prog.ChildCurrent = Prog.ChildTotal;
+            Progress.Report(Prog);
+            return success;
         }
-        #region
+        #endregion
 
         #region Installer methods
         private bool BackupMods()
