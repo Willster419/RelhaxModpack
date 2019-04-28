@@ -390,9 +390,9 @@ namespace RelhaxModpack
             return fileName;
         }
 
-        public static void FileDelete(string file, uint numRetrys = 3, uint timeout = 100)
+        public static bool FileDelete(string file, uint numRetrys = 3, uint timeout = 100)
         {
-            DirectoryDelete(Path.GetDirectoryName(file), false, numRetrys, timeout, file);
+            return DirectoryDelete(Path.GetDirectoryName(file), false, numRetrys, timeout, file);
         }
 
         /// <summary>
@@ -402,8 +402,9 @@ namespace RelhaxModpack
         /// <param name="deleteSubfolders">set to true to delete files recursivly inside each subdirectory</param>
         /// <param name="numRetrys">The number of times the method should retry to delete a file</param>
         /// <param name="timeout">The ammount of time in milliseconds to wait before trying again to delete files</param>
-        public static void DirectoryDelete(string folderPath, bool deleteSubfolders, uint numRetrys = 3, uint timeout = 100, string pattern = "*")
+        public static bool DirectoryDelete(string folderPath, bool deleteSubfolders, uint numRetrys = 3, uint timeout = 100, string pattern = "*")
         {
+            bool overallSuccess = true;
             //check to make sure the number of retries is between 1 and 10
             if (numRetrys < 1)
             {
@@ -434,6 +435,11 @@ namespace RelhaxModpack
                             Logfiles.Application,LogLevel.Error);
                         retryCounter++;
                         System.Threading.Thread.Sleep((int)timeout);
+                        if(retryCounter == numRetrys)
+                        {
+                            Logging.Debug("retries = counter, fully failed to delete file {0}",file);
+                            overallSuccess = false;
+                        }
                     }
                 }
             }
@@ -442,7 +448,8 @@ namespace RelhaxModpack
             {
                 foreach (string dir in Directory.GetDirectories(folderPath,pattern,SearchOption.TopDirectoryOnly))
                 {
-                    DirectoryDelete(dir, deleteSubfolders, numRetrys,timeout);
+                    if (!DirectoryDelete(dir, deleteSubfolders, numRetrys, timeout))
+                        overallSuccess = false;
                 }
             }
             //delete the folder as well
@@ -460,8 +467,14 @@ namespace RelhaxModpack
                         Logfiles.Application, LogLevel.Error);
                     retryCounter++;
                     System.Threading.Thread.Sleep((int)timeout);
+                    if (retryCounter == numRetrys)
+                    {
+                        Logging.Debug("retries = counter, fully failed to delete file {0}",folderPath);
+                        overallSuccess = false;
+                    }
                 }
             }
+            return overallSuccess;
         }
 
         public static async Task DirectoryDeleteAsync(string folderPath, bool deleteSubfolders, uint numRetrys = 3, uint timeout = 100, string pattern = "*")

@@ -32,6 +32,12 @@ namespace RelhaxModpack.InstallerComponents
         CleanupError,
         UnknownError
     }
+    public enum UninstallerExitCodes
+    {
+        GettingFilelistError,
+        UninstallError,
+        Success
+    }
     public class RelhaxInstallFinishedEventArgs : EventArgs
     {
         public InstallerExitCodes ExitCodes;
@@ -60,7 +66,6 @@ namespace RelhaxModpack.InstallerComponents
         /// Flat list of all selectable packages
         /// </summary>
         public List<SelectablePackage> FlatListSelectablePackages;
-        public bool AwaitCallback = false;
 
         //for passing back to application (DO NOT USE)
         public List<Category> ParsedCategoryList;
@@ -120,6 +125,7 @@ namespace RelhaxModpack.InstallerComponents
         #endregion
 
         #region Installer entry points
+
         public async void RunInstallationAsync()
         {
             if (AwaitCallback)
@@ -133,37 +139,35 @@ namespace RelhaxModpack.InstallerComponents
                 Task.Factory.StartNew(() => LOLActuallyRunInstallationAsync());
             }
         }
-        //TODO: uninstall code
-        public async void RunUninstallationAsync()
+        
+        public Task<RelhaxInstallFinishedEventArgs> RunUninstallationAsync(IProgress<RelhaxInstallerProgress> progress)
         {
-            if (AwaitCallback)
-            {
-                await Task.Run(() => ActuallyRunUninstallationAsync());
-                InstallFinishedArgs.ExitCodes = InstallerExitCodes.Success;
-                ReportFinish();
-            }
-            else
-            {
-                Task.Run(() => ActuallyRunUninstallationAsync());
-            }
+            Task<RelhaxInstallFinishedEventArgs> task = Task.Run(() => RunUninstallation(progress));
+            return task;
         }
-        private async void ActuallyRunUninstallationAsync()
+
+        private RelhaxInstallFinishedEventArgs RunUninstallation(IProgress<RelhaxInstallerProgress> progress)
         {
-            Logging.Info("Uninstall process starts with mode {0}", ModpackSettings.UninstallMode.ToString());
+            Logging.Info("Uninstall process starts on new thread with mode {0}", ModpackSettings.UninstallMode.ToString());
+            //make the progress report object
+            RelhaxInstallerProgress prog = new RelhaxInstallerProgress();
+
+            //run the uninstall methods
+            bool success = true;
             switch (ModpackSettings.UninstallMode)
             {
                 case UninstallModes.Default:
-                    UninstallModsDefault();
+                    success = UninstallModsDefault(progress, prog);
                     break;
                 case UninstallModes.Quick:
-                    UninstallModsQuick();
+                    success = UninstallModsQuick(progress, prog);
                     break;
             }
-            if (!AwaitCallback)
-            {
+            if (success)
                 InstallFinishedArgs.ExitCodes = InstallerExitCodes.Success;
-                ReportFinish();
-            }
+            else
+                InstallFinishedArgs.ExitCodes = InstallerExitCodes.UnknownError;
+            return InstallFinishedArgs;
         }
         #endregion
 
@@ -499,6 +503,119 @@ namespace RelhaxModpack.InstallerComponents
             Logging.Info("Install finished, total install time = {0} msec", Logfiles.Application, InstallStopWatch.Elapsed.TotalMilliseconds);
         }
         #endregion
+
+        #region Main Uninstall method
+        private bool UninstallModsQuick(IProgress<RelhaxInstallerProgress> progress, RelhaxInstallerProgress prog)
+        {
+            prog.UninstallStatus = UninstallerExitCodes.GettingFilelistError;
+            progress.Report(prog);
+            //get a list of all files and folders in mods and res_mods
+            List<string> ListOfAllItems = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "res_mods"), SearchOption.AllDirectories).ToList();
+            ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "mods"), SearchOption.AllDirectories).ToList());
+
+            //start init progress reporting. for uninstall, only use child current, total and filename
+            prog.ChildTotal = ListOfAllItems.Count;
+            prog.ChildCurrent = 0;
+            progress.Report(prog);
+
+            bool success = true;
+            foreach(string file in ListOfAllItems)
+            {
+                prog.ChildCurrent++;
+                prog.Filename = file.Split(new string[] { Settings.WoTDirectory }, StringSplitOptions.RemoveEmptyEntries)[1];
+                progress.Report(prog);
+                if (!Utils.FileDelete(file))
+                    success = false;
+            }
+
+            //re-create the folders at the end
+            Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, "res_mods", Settings.WoTClientVersion));
+            Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, "mods", Settings.WoTClientVersion));
+            if (success)
+                prog.UninstallStatus = UninstallerExitCodes.Success;
+            else
+                prog.UninstallStatus = UninstallerExitCodes.UninstallError;
+            prog.ChildCurrent = prog.ChildTotal;
+            progress.Report(prog);
+            return true;
+        }
+
+        private bool UninstallModsDefault(IProgress<RelhaxInstallerProgress> progress, RelhaxInstallerProgress prog)
+        {
+            //get a list of all files and folders in the install log (assuming checking for logfile already done and exists)
+            List<string> ListOfAllItems = File.ReadAllLines(Path.Combine(Settings.WoTDirectory, "logs", Logging.InstallLogFilename)).ToList();
+            //combine with a list of all files and folders in mods and res_mods
+            ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "res_mods"), SearchOption.AllDirectories).ToList());
+            ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "mods"), SearchOption.AllDirectories).ToList());
+            //merge then sort and then reverse
+            ListOfAllItems = ListOfAllItems.Distinct().ToList();
+            ListOfAllItems.Sort();
+            ListOfAllItems.Reverse();
+            //split off into files and folders and shortcuts
+            List<string> ListOfAllDirectories = ListOfAllItems.Where(item => Directory.Exists(item)).ToList();
+            List<string> ListOfAllFiles = ListOfAllItems.Where(item => File.Exists(item)).ToList();
+            List<string> ListOfAllShortcuts = ListOfAllFiles.Where(file => Path.GetExtension(file).Equals(".lnk")).ToList();
+            ListOfAllFiles = ListOfAllFiles.Except(ListOfAllShortcuts).ToList();
+            //backup old uninstall logfile
+            string backupUninstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilenameBackup);
+            string uninstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilename);
+            if (File.Exists(backupUninstallLogfile))
+                Utils.FileDelete(backupUninstallLogfile);
+            if (File.Exists(uninstallLogfile))
+                File.Move(uninstallLogfile, backupUninstallLogfile);
+            //create the uninstall logfile and write header info
+            if (!Logging.InitApplicationLogging(Logfiles.Uninstaller, uninstallLogfile))
+            {
+                Logging.Error("Failed to init the uninstall logfile");
+            }
+            else
+            {
+                Logging.WriteToLog(string.Format(@"/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */", DateTime.Now), Logfiles.Uninstaller, LogLevel.Info);
+                Logging.WriteToLog(@"/*  files and folders deleted  */", Logfiles.Uninstaller, LogLevel.Info);
+            }
+            //delete all files (not shortcuts)
+            foreach (string file in ListOfAllFiles)
+            {
+                if (File.Exists(file))
+                {
+                    Utils.FileDelete(file);
+                    Logging.WriteToLog(file, Logfiles.Uninstaller, LogLevel.Info);
+                }
+            }
+            //deal with shortcuts
+            //if settings.createShortcuts, then don't delete them (at least here, for now)
+            //otherwise delete them
+            if (!ModpackSettings.CreateShortcuts)
+            {
+                Logging.Debug("Deleting shortcuts");
+                foreach (string file in ListOfAllShortcuts)
+                {
+                    if (File.Exists(file))
+                    {
+                        Utils.FileDelete(file);
+                        Logging.WriteToLog(file, Logfiles.Uninstaller, LogLevel.Info);
+                    }
+                }
+            }
+            //delete all empty folders
+            foreach (string folder in ListOfAllDirectories)
+            {
+                if (Directory.Exists(folder))
+                {
+                    Utils.ProcessDirectory(folder);
+                    Logging.WriteToLog(folder, Logfiles.Uninstaller, LogLevel.Info);
+                }
+            }
+            //final wipe like quick uninstall of mods and res_mods
+            foreach (string path in new string[] { "res_mods", "mods" })
+            {
+                //progress reporting TODO...
+                Utils.DirectoryDelete(Path.Combine(Settings.WoTDirectory, path), true);
+                Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, path, Settings.WoTClientVersion));
+            }
+            return true;
+        }
+        #region
 
         #region Installer methods
         private bool BackupMods()
@@ -1064,94 +1181,6 @@ namespace RelhaxModpack.InstallerComponents
             }
         }
 
-        private bool UninstallModsQuick()
-        {
-            //lol just wipe mods and res_mods and call it a day
-            //logging TODO...
-            foreach(string path in new string[] { "res_mods", "mods" })
-            {
-                //progress reporting TODO...
-                Utils.DirectoryDelete(Path.Combine(Settings.WoTDirectory, path),true);
-                Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, path, Settings.WoTClientVersion));
-            }
-            return true;
-        }
-
-        private bool UninstallModsDefault()
-        {
-            //get a list of all files and folders in the install log (assuming checking for logfile already done and exists)
-            List<string> ListOfAllItems = File.ReadAllLines(Path.Combine(Settings.WoTDirectory, "logs", Logging.InstallLogFilename)).ToList();
-            //combine with a list of all files and folders in mods and res_mods
-            ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "res_mods"), SearchOption.AllDirectories).ToList());
-            ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "mods"), SearchOption.AllDirectories).ToList());
-            //merge then sort and then reverse
-            ListOfAllItems = ListOfAllItems.Distinct().ToList();
-            ListOfAllItems.Sort();
-            ListOfAllItems.Reverse();
-            //split off into files and folders and shortcuts
-            List<string> ListOfAllDirectories = ListOfAllItems.Where(item => Directory.Exists(item)).ToList();
-            List<string> ListOfAllFiles = ListOfAllItems.Where(item => File.Exists(item)).ToList();
-            List<string> ListOfAllShortcuts = ListOfAllFiles.Where(file => Path.GetExtension(file).Equals(".lnk")).ToList();
-            ListOfAllFiles = ListOfAllFiles.Except(ListOfAllShortcuts).ToList();
-            //backup old uninstall logfile
-            string backupUninstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilenameBackup);
-            string uninstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilename);
-            if (File.Exists(backupUninstallLogfile))
-                Utils.FileDelete(backupUninstallLogfile);
-            if (File.Exists(uninstallLogfile))
-                File.Move(uninstallLogfile, backupUninstallLogfile);
-            //create the uninstall logfile and write header info
-            if(!Logging.InitApplicationLogging(Logfiles.Uninstaller,uninstallLogfile))
-            {
-                Logging.Error("Failed to init the uninstall logfile");
-            }
-            else
-            {
-                Logging.WriteToLog(string.Format(@"/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */", DateTime.Now), Logfiles.Uninstaller, LogLevel.Info);
-                Logging.WriteToLog(@"/*  files and folders deleted  */", Logfiles.Uninstaller, LogLevel.Info);
-            }
-            //delete all files (not shortcuts)
-            foreach(string file in ListOfAllFiles)
-            {
-                if (File.Exists(file))
-                {
-                    Utils.FileDelete(file);
-                    Logging.WriteToLog(file, Logfiles.Uninstaller, LogLevel.Info);
-                }
-            }
-            //deal with shortcuts
-            //if settings.createShortcuts, then don't delete them (at least here, for now)
-            //otherwise delete them
-            if(!ModpackSettings.CreateShortcuts)
-            {
-                Logging.Debug("Deleting shortcuts");
-                foreach (string file in ListOfAllShortcuts)
-                {
-                    if (File.Exists(file))
-                    {
-                        Utils.FileDelete(file);
-                        Logging.WriteToLog(file, Logfiles.Uninstaller, LogLevel.Info);
-                    }
-                }
-            }
-            //delete all empty folders
-            foreach(string folder in ListOfAllDirectories)
-            {
-                if (Directory.Exists(folder))
-                {
-                    Utils.ProcessDirectory(folder);
-                    Logging.WriteToLog(folder, Logfiles.Uninstaller, LogLevel.Info);
-                }
-            }
-            //final wipe like quick uninstall of mods and res_mods
-            foreach (string path in new string[] { "res_mods", "mods" })
-            {
-                //progress reporting TODO...
-                Utils.DirectoryDelete(Path.Combine(Settings.WoTDirectory, path), true);
-                Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, path, Settings.WoTClientVersion));
-            }
-            return true;
-        }
 
         #region Patch list parsing
         private List<Patch> MakePatchList()

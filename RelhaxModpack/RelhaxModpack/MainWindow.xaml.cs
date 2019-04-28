@@ -1173,7 +1173,7 @@ namespace RelhaxModpack
         #endregion
 
         #region Uninstall
-        private void UninstallModpackButton_Click(object sender, RoutedEventArgs e)
+        private async void UninstallModpackButton_Click(object sender, RoutedEventArgs e)
         {
             //toggle the buttons and reset the UI
             ToggleUIButtons(false);
@@ -1221,19 +1221,17 @@ namespace RelhaxModpack
                 return;
             }
 
-            //create and run uninstall engine
-            InstallerComponents.InstallEngine engine = new InstallerComponents.InstallEngine()
-            {
-                AwaitCallback = false,
-            };
-            engine.OnInstallProgress += Engine_OnUninstallProgress;
-            engine.OnInstallFinish += Engine_OnUninstallFinish;
-            engine.RunUninstallationAsync();
-        }
+            //create progress object
+            Progress<RelhaxInstallerProgress> progress = new Progress<RelhaxInstallerProgress>();
+            progress.ProgressChanged += UninstallProgressChanged;
 
-        private void Engine_OnUninstallFinish(object sender, InstallerComponents.RelhaxInstallFinishedEventArgs e)
-        {
-            if (e.ExitCodes == InstallerComponents.InstallerExitCodes.Success)
+            //create and run uninstall engine
+            InstallerComponents.InstallEngine engine = new InstallerComponents.InstallEngine();
+            InstallerComponents.RelhaxInstallFinishedEventArgs results = await engine.RunUninstallationAsync(progress);
+
+            //report results
+            ChildProgressBar.Value = ChildProgressBar.Maximum;
+            if (results.ExitCodes == InstallerComponents.InstallerExitCodes.Success)
             {
                 InstallProgressTextBox.Text = Translations.GetTranslatedString("uninstallSuccess");
                 MessageBox.Show(Translations.GetTranslatedString("uninstallSuccess"));
@@ -1246,9 +1244,22 @@ namespace RelhaxModpack
             ToggleUIButtons(true);
         }
 
-        private void Engine_OnUninstallProgress(object sender, RelhaxInstallerProgress e)
+        private void UninstallProgressChanged(object sender, RelhaxInstallerProgress e)
         {
-            //TODO
+            //no advanced progress for this one
+            if (ChildProgressBar.Maximum != e.ChildTotal)
+                ChildProgressBar.Maximum = e.ChildTotal;
+            if (ChildProgressBar.Value != e.ChildCurrent)
+                ChildProgressBar.Value = e.ChildCurrent;
+            if(e.UninstallStatus == InstallerComponents.UninstallerExitCodes.GettingFilelistError)
+            {
+                InstallProgressTextBox.Text = Translations.GetTranslatedString("gettingUninstallFilesList");
+            }
+            else if (e.UninstallStatus == InstallerComponents.UninstallerExitCodes.UninstallError)
+            {
+                InstallProgressTextBox.Text = string.Format("{0} {1} {2} {3}{4}{5}", Translations.GetTranslatedString("uninstallingFile"), e.ChildCurrent,
+                    Translations.GetTranslatedString("of"), e.ChildTotal, Environment.NewLine, e.Filename);
+            }
         }
         #endregion
 
