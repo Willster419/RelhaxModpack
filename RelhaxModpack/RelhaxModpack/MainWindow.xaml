@@ -193,9 +193,9 @@
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Database Version V{version}" VerticalAlignment="Center" Grid.Row="1" x:Name="DatabaseVersionLabel"/>
         </Grid>
         <Grid HorizontalAlignment="Stretch" Height="184" Margin="10,340,10,0" VerticalAlignment="Top" >
-            <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,168,2,0" VerticalAlignment="Top" x:Name="TotalProgressBar"/>
+            <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,128,2,0" VerticalAlignment="Top" x:Name="TotalProgressBar"/>
             <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,148,2,0" VerticalAlignment="Top" x:Name="ParentProgressBar"/>
-            <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,128,2,0" VerticalAlignment="Top" x:Name="ChildProgressBar"/>
+            <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,168,2,0" VerticalAlignment="Top" x:Name="ChildProgressBar"/>
             <TextBox HorizontalAlignment="Stretch" Height="73" Margin="2,50,2,0" VerticalAlignment="Top" x:Name="InstallProgressTextBox"></TextBox>
             <GroupBox Header="Language" HorizontalAlignment="Left" Height="45" Margin="360,4,0,0" VerticalAlignment="Top" Width="150" x:Name="LanguageSelectionGB">
                 <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Tag="LanguagesSelector" x:Name="LanguagesSelector" SelectionChanged="OnLanguageSelectionChanged">
