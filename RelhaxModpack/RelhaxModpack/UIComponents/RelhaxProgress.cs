@@ -58,6 +58,12 @@ namespace RelhaxModpack.UIComponents
         /// During zip file extraction, the entry inside the zip file being processed
         /// </summary>
         public string EntryFilename = string.Empty;
+
+        public uint EntriesProcessed = 0;
+
+        public uint EntriesTotal = 0;
+
+        public uint ThreadID = 0;
         /// <summary>
         /// The current status of the installer. Represents the current state of the installer. When it exists, it is also used as an exit code.
         /// </summary>

@@ -49,6 +49,14 @@ namespace RelhaxModpack.InstallerComponents
         public List<Dependency> Dependencies;
         public List<DatabasePackage> GlobalDependencies;
     }
+    public class RelhaxZipFile : ZipFile
+    {
+        public int ThreadID;
+
+        public RelhaxZipFile(string fileName) : base(fileName)
+        {
+        }
+    }
     public delegate void InstallFinishedDelegate(object sender, RelhaxInstallFinishedEventArgs e);
     public delegate void InstallProgressDelegate(object sender, RelhaxInstallerProgress e);
     #endregion
@@ -905,6 +913,10 @@ namespace RelhaxModpack.InstallerComponents
 
         private bool ExtractFilesAsyncSetup()
         {
+            //progress reporting
+            Prog.ChildCurrent = Prog.ChildTotal = Prog.ParrentCurrent = Prog.ParrentTotal = 0;
+            Progress.Report(Prog);
+
             //this is the only really new one. for each install group, spawn a bunch of threads to start the install process
             //get the number of threads we will use for each of the install steps
             int numThreads = ModpackSettings.MulticoreExtraction ? Settings.NumLogicalProcesors : 1;
@@ -912,14 +924,22 @@ namespace RelhaxModpack.InstallerComponents
             Logging.WriteToLog(string.Format("Number of threads to use for install is {0}, (MulticoreExtraction={1}, LogicalProcesosrs={2}",
                 numThreads, ModpackSettings.MulticoreExtraction, Settings.NumLogicalProcesors));
 
+            //setup progress reporting for parent
+            Prog.ParrentTotal = OrderedPackagesToInstall.Count();
+
             for (int i = 0; i < OrderedPackagesToInstall.Count(); i++)
             {
                 Logging.WriteToLog("Install Group " + i + " starts now");
+                Prog.ParrentCurrent++;
+                Progress.Report(Prog);
 
                 //get the list of packages to install
                 //this list represents all the packages in this install group that can be installed at the same time
                 //i.e. there are NO conflicting zip file paths in ALL of the files (all the entries in all zip files are mutually exclusive)
                 List<DatabasePackage> packages = new List<DatabasePackage>(OrderedPackagesToInstall[i]);
+
+                //set it for the progress report
+                Prog.ChildTotal = packages.Count;
 
                 //first sort the packages by the size parameter
                 //https://stackoverflow.com/questions/3309188/how-to-sort-a-listt-by-a-property-in-the-object
@@ -1110,7 +1130,12 @@ namespace RelhaxModpack.InstallerComponents
                 else
                     System.Threading.Thread.Sleep(200);
             }
-
+            //report progress on the thread. in case multiple threads, make sure you lock it
+            lock(Prog)
+            {
+                Prog.ChildCurrent++;
+                Progress.Report(Prog);
+            }
         }
 
         private void Unzip(DatabasePackage package, int threadNum, StringBuilder zipLogger)
@@ -1121,8 +1146,9 @@ namespace RelhaxModpack.InstallerComponents
             {
                 try
                 {
-                    using (ZipFile zip = new ZipFile(zipFilePath))
+                    using (RelhaxZipFile zip = new RelhaxZipFile(zipFilePath))
                     {
+                        zip.ThreadID = threadNum;
                         //update args and logging here...
                         //first for loop takes care of any path replacing in the zipfile
                         for(int j = 0; j < zip.Entries.Count; j++)
@@ -1234,7 +1260,17 @@ namespace RelhaxModpack.InstallerComponents
 
         private void OnZipfileExtractProgress(object sender, ExtractProgressEventArgs e)
         {
-            //TODO
+            lock(Progress)
+            {
+                Prog.BytesTotal = e.TotalBytesToTransfer;
+                Prog.BytesProcessed = e.BytesTransferred;
+                Prog.EntriesProcessed = (uint)e.EntriesExtracted;
+                Prog.EntriesTotal = (uint)e.EntriesTotal;
+                Prog.EntryFilename = e.CurrentEntry.FileName;
+                Prog.Filename = e.ArchiveName;
+                Prog.ThreadID = (uint)(sender as RelhaxZipFile).ThreadID;
+                Progress.Report(Prog);
+            }
         }
 
         private void BuildContourIcons()
