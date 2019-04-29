@@ -964,11 +964,15 @@ namespace RelhaxModpack
             foreach (DatabasePackage package in packagesToInstall)
                 if (package.InstallGroup > maxGrops)
                     maxGrops = package.InstallGroup;
+
             //make the list to return
-            List<DatabasePackage>[] orderedList = new List<DatabasePackage>[maxGrops];
+            //make it maxGroups +1 because group 4 exists, but making a aray of 4 is 0-3
+            List<DatabasePackage>[] orderedList = new List<DatabasePackage>[maxGrops+1];
+
             //new up the lists
             for (int i = 0; i < orderedList.Count(); i++)
                 orderedList[i] = new List<DatabasePackage>();
+
             foreach(DatabasePackage package in packagesToInstall)
             {
                 orderedList[package.InstallGroup].Add(package);
