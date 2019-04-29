@@ -57,8 +57,6 @@ namespace RelhaxModpack.InstallerComponents
         {
         }
     }
-    public delegate void InstallFinishedDelegate(object sender, RelhaxInstallFinishedEventArgs e);
-    public delegate void InstallProgressDelegate(object sender, RelhaxInstallerProgress e);
     #endregion
 
     public class InstallEngine : IDisposable
@@ -82,10 +80,6 @@ namespace RelhaxModpack.InstallerComponents
         public List<Category> ParsedCategoryList;
         public List<Dependency> Dependencies;
         public List<DatabasePackage> GlobalDependencies;
-
-        //delegates
-        public event InstallFinishedDelegate OnInstallFinish;
-        public event InstallProgressDelegate OnInstallProgress;
 
         //names of triggers
         public const string TriggerContouricons = "build_contour_icons";
@@ -176,8 +170,6 @@ namespace RelhaxModpack.InstallerComponents
             //rookie mistake checks
             if(OrderedPackagesToInstall == null || OrderedPackagesToInstall.Count() == 0)
                 throw new BadMemeException("WOW you really suck at programming");
-            if (OnInstallFinish == null || OnInstallProgress == null)
-                throw new BadMemeException("HOW DAFAQ DID YOU FAQ THIS UP???");
 
             Logging.WriteToLog("Installation starts now from RunInstallation() in Install Engine");
             //do more stuff here I'm sure like init log files
