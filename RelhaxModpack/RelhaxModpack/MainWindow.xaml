@@ -82,6 +82,7 @@
                         <CheckBox Content="Backup mods folder before installation" Tag="BackupModsCB" x:Name="BackupModsCB" Click="OnBackupModsChanged" IsEnabled="False"/>
                         <TextBlock Text="Backups: X - Total Size: Y MB" Margin="20,0,0,0" />
                         <CheckBox x:Name="SaveDisabledModsInSelection" Tag="SaveDisabledModsInSelection" Content="Keep disabled mods when saving selection" Click="SaveDisabledModsInSelection_Click"/>
+                        <CheckBox x:Name="AdvancedInstallationProgress" Tag="AdvancedInstallationProgress" Content="Show advanced installation window" IsEnabled="False" Click="AdvancedInstallationProgress_Click"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
                         <TextBlock Text="Select theme:" />

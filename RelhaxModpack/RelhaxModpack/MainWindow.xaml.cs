@@ -1739,6 +1739,11 @@ namespace RelhaxModpack
             ModpackSettings.AllowStatisticDataGather = (bool)AllowStatsGatherCB.IsChecked;
         }
 
+        private void AdvancedInstallationProgress_Click(object sender, RoutedEventArgs e)
+        {
+            ModpackSettings.AdvancedInstalProgress = (bool)AdvancedInstallationProgress.IsChecked;
+        }
+
         private void ApplySettingsToUI()
         {
             //apply the internal setting to what the UI setting is
@@ -1790,7 +1795,6 @@ namespace RelhaxModpack
                     break;
             }
         }
-
         #endregion
     }
 }
