@@ -66,7 +66,7 @@ namespace RelhaxModpack.Windows
                 return;
             //TODO: this code needs to be checked, see if it actually works
             Logging.Debug("Starting WoTLauncher with argument \"-integrity_default_client\"",nameof(Diagnostics));
-            StatusTextBox.Text = Translations.GetTranslatedString("startingLauncherRepairMode");
+            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("startingLauncherRepairMode");
             string filename = Path.Combine(Settings.WoTDirectory, "WoTLauncher.exe");
             string formattedArguement = "-integrity_default_client";
             Logging.Info("Complete command: {0} {1}", nameof(Diagnostics), filename, formattedArguement);
@@ -77,10 +77,10 @@ namespace RelhaxModpack.Windows
             catch (Exception ex)
             {
                 Logging.Exception("LaunchWoTLauncher_Click", ex);
-                StatusTextBox.Text = Translations.GetTranslatedString("failedStartLauncherRepairMode");
+                DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("failedStartLauncherRepairMode");
                 return;
             }
-            StatusTextBox.Text = Translations.GetTranslatedString("launcherRepairModeStarted");
+            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("launcherRepairModeStarted");
         }
 
         private void CollectLogInfo_Click(object sender, RoutedEventArgs e)
@@ -89,7 +89,7 @@ namespace RelhaxModpack.Windows
                 return;
             //setup UI
             Logging.Info("started collection of log files");
-            StatusTextBox.Text = Translations.GetTranslatedString("collectionLogInfo");
+            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("collectionLogInfo");
             //create the list of files to collect (should always collect these)
             List<string> filesToCollect = new List<string>()
             {
@@ -138,13 +138,13 @@ namespace RelhaxModpack.Windows
                         string.Format("RelhaxModpackLogs_{0}.zip", DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")));
                     zip.Save(zipSavePath);
                     Logging.Info("zip file saved to {0}", nameof(Diagnostics), zipSavePath);
-                    StatusTextBox.Text = string.Format("zip file saved to {0}", zipSavePath);
+                    DiagnosticsStatusTextBox.Text = string.Format("zip file saved to {0}", zipSavePath);
                 }
             }
             catch(ZipException zex)
             {
                 Logging.Exception(zex.ToString());
-                StatusTextBox.Text = Translations.GetTranslatedString("failedCreateZipfile");
+                DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("failedCreateZipfile");
             }
         }
 
@@ -156,7 +156,7 @@ namespace RelhaxModpack.Windows
 
         private async void ClearDownloadCache_Click(object sender, RoutedEventArgs e)
         {
-            StatusTextBox.Text = Translations.GetTranslatedString("clearingDownloadCache");
+            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("clearingDownloadCache");
             try
             {
                 await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolder, false, 3, 100, "*.zip");
@@ -164,34 +164,23 @@ namespace RelhaxModpack.Windows
             }
             catch (IOException ioex)
             {
-                StatusTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("failedToClearDownloadCache"), Environment.NewLine, Settings.RelhaxDownloadsFolder);
+                DiagnosticsStatusTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("failedToClearDownloadCache"), Environment.NewLine, Settings.RelhaxDownloadsFolder);
             }
-            StatusTextBox.Text = Translations.GetTranslatedString("cleaningDownloadCacheComplete");
+            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleaningDownloadCacheComplete");
         }
 
         private async void ClearDownloadCacheDatabase_Click(object sender, RoutedEventArgs e)
         {
-            StatusTextBox.Text = Translations.GetTranslatedString("clearingDownloadCacheDatabase ");
+            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("clearingDownloadCacheDatabase ");
             try
             {
                 await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolder, false, 3, 100, "*.xml");
             }
             catch (IOException ioex)
             {
-                StatusTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("failedToClearDownloadCache"), Environment.NewLine, Settings.RelhaxDownloadsFolder);
+                DiagnosticsStatusTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("failedToClearDownloadCache"), Environment.NewLine, Settings.RelhaxDownloadsFolder);
             }
-            StatusTextBox.Text = Translations.GetTranslatedString("cleaningDownloadCacheComplete");
-        }
-
-        private void OnButtonMouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            Button button = (Button)sender;
-            MainTextBox.Text = Translations.GetTranslatedString(string.Format("Diagnostics{0}ToolTip", button.Name));
-        }
-
-        private void ChangeInstall_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            MainTextBox.Text = Translations.GetTranslatedString("DiagnosticsMainToolTip");
+            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleaningDownloadCacheComplete");
         }
     }
 }

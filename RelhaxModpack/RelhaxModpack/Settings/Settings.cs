@@ -200,7 +200,7 @@ namespace RelhaxModpack
             {
                 //verify that the setting name in xml matches a fieldInfo property in the class
                 FieldInfo[] matches = fields.Where(f => f.Name.Equals(settings[i].Name)).ToArray();
-                Logging.WriteToLog("" + matches.Count() + " matches for xml setting name " + settings[i].Name, Logfiles.Application, LogLevel.Debug);
+                //Logging.WriteToLog("" + matches.Count() + " matches for xml setting name " + settings[i].Name, Logfiles.Application, LogLevel.Debug);
                 if(matches.Count() > 1)
                 {
                     throw new BadMemeException("ugh");

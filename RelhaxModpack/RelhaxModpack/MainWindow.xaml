@@ -61,9 +61,10 @@
                         <CheckBox Content="Clear WoT cache data" Tag="ClearCacheCB" x:Name="ClearCacheCB" Click="OnClearWoTCacheChanged"/>
                         <CheckBox Content="Save user created data" Tag="SaveUserDataCB" x:Name="SaveUserDataCB" Click="OnSaveUserDataChanged" IsEnabled="False"/>
                         <CheckBox Content="Create shortcuts" Tag="CreateShortcutsCB" x:Name="CreateShortcutsCB" Click="OnCreateShortcutsChanged"/>
-                        <CheckBox Content="Multicore extraction mode (Beta)" IsEnabled="True" Tag="MulticoreExtractionCB" x:Name="MulticoreExtractionCB" Click="OnMulticoreExtractionChanged"/>
+                        <CheckBox Content="Multicore extraction mode" IsEnabled="True" Tag="MulticoreExtractionCB" x:Name="MulticoreExtractionCB" Click="OnMulticoreExtractionChanged"/>
                         <TextBlock Text="Detected Cores: {0}" Tag="MulticoreExtractionCoresCountLabel" x:Name="MulticoreExtractionCoresCountLabel" IsEnabled="True" Padding="20,0,0,0"/>
-                        <CheckBox Content="Extract while downloading (Beta)" IsEnabled="True" Tag="InstantExtractionCB" x:Name="InstallWhileDownloadingCB" Click="OnImmidateExtarctionChanged"/>
+                        <CheckBox Content="Extract while downloading" IsEnabled="True" Tag="InstallWhileDownloadingCB" x:Name="InstallWhileDownloadingCB" Click="OnImmidateExtarctionChanged"/>
+                        <CheckBox x:Name="DeleteOldCacheFiles" Content="Delete old cache files" Tag="DeleteOldCacheFiles" Click="DeleteOldCacheFiles_Click"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1"/>
                 </Grid>
@@ -89,7 +90,7 @@
                         <StackPanel Orientation="Vertical" Margin="15,0,0,0">
                             <RadioButton Content="Default" x:Name="ThemeDefault" Tag="ThemeDefault" Checked="Theme_Checked" IsEnabled="False" IsChecked="True"/>
                             <RadioButton Content="Dark" x:Name="ThemeDark" Tag="ThemeDark" Checked="Theme_Checked" IsEnabled="False"/>
-                            <RadioButton Content="Custom...(TODO)" x:Name="ThemeCustom" Tag="ThemeCustom" Checked="Theme_Checked" IsEnabled="False"/>
+                            <RadioButton Content="Custom" x:Name="ThemeCustom" Tag="ThemeCustom" Checked="Theme_Checked" IsEnabled="False"/>
                         </StackPanel>
                         <Button Content="Dump color settings to xml" Tag="DumpColorSettingsButton" Name="DumpColorSettingsButton" Click="DumpColorSettingsButton_Click"/>
                     </StackPanel>
@@ -112,10 +113,9 @@
                             <RadioButton Content="Quick" x:Name="UninstallQuick" Tag="UninstallQuick" Margin="5,0,0,0" Checked="UninstallQuick_Checked"/>
                         </StackPanel>
                         <CheckBox Content="Minimze to system tray" x:Name="MinimizeToSystemTray" Tag="MinimizeToSystemTray" Click="MinimizeToSystemTray_Click"/>
-                        <CheckBox x:Name="DeleteOldCacheFiles" Content="Delete old cache files" Tag="DeleteOldCacheFiles" Click="DeleteOldCacheFiles_Click"/>
                         <CheckBox x:Name="VerboseLoggingCB" Tag="VerboseLoggingCB" Content="Verbose Logging" Click="VerboseLoggingCB_Click"/>
                         <CheckBox x:Name="DisableTriggersCB" Tag="DisableTriggersCB" Content="Disable Triggers" Click="DisableTriggersCB_Click" IsChecked="True" IsEnabled="False"/>
-                        <CheckBox x:Name="AllowStatsGatherCB" Tag="AllowStatsGatherCB" Content="Allow Statistics gathering of mod usage" Click="AllowStatsGatherCB_Click" />
+                        <CheckBox x:Name="AllowStatsGatherCB" Tag="AllowStatsGatherCB" Content="Allow statistics gathering of mod usage" Click="AllowStatsGatherCB_Click" />
                     </StackPanel>
                     <StackPanel Grid.Column="1">    
                         <CheckBox x:Name="AutoInstallCB" Tag="EnableModsAutoSyncCheckbox" Content="Enable auto install" IsEnabled="False" Click="OneClickInstallCB_Click" />

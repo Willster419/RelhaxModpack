@@ -49,17 +49,18 @@ namespace RelhaxModpack
         public MainWindow()
         {
             InitializeComponent();
+            WindowState = WindowState.Minimized;
         }
 
         private async void TheMainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             //first hide the window
-            Hide();
+            //Hide();
 
             //load the progress report window
             ProgressIndicator progressIndicator = new ProgressIndicator()
             {
-                Message = Translations.GetTranslatedString("loadingTranslations"),
+                Message = "Loading Translations",// Translations.GetTranslatedString("loadingTranslations"),
                 ProgressMinimum = 0,
                 ProgressMaximum = 4
             };
@@ -75,9 +76,12 @@ namespace RelhaxModpack
             LanguagesSelector.Items.Add(Translations.LanguagePolish);
 
             //load translation hashes and set default language
+            Translations.LoadTranslations();
             Translations.SetLanguage(Languages.English);
             LanguagesSelector.SelectedIndex = 0;
-            Translations.LoadTranslations();
+
+            //apply translations to loading window
+            progressIndicator.Message = Translations.GetTranslatedString("loadingTranslations");
 
             //apply translations to this window
             Translations.LocalizeWindow(this,true);
@@ -99,7 +103,7 @@ namespace RelhaxModpack
             CommandLineSettings.ParseCommandLineConflicts();
 
             //verify folder stucture for all folders in the directory
-            progressIndicator.UpdateProgress(3, Translations.GetTranslatedString("folderStructure"));
+            progressIndicator.UpdateProgress(3, Translations.GetTranslatedString("verDirStructure"));
             Utils.AllowUIToUpdate();
             Logging.WriteToLog("Verifying folder structure");
             foreach (string s in Settings.FoldersToCheck)
@@ -139,7 +143,7 @@ namespace RelhaxModpack
             ApplicationVersionLabel.Text = Translations.GetTranslatedString("applicationVersion") + " " + Utils.GetApplicationVersion();
 
             //get the number of processor cores
-            MulticoreExtractionCoresCountLabel.Text = string.Format(Translations.GetTranslatedString("detectedCores"), Settings.NumLogicalProcesors);
+            MulticoreExtractionCoresCountLabel.Text = string.Format(Translations.GetTranslatedString("MulticoreExtractionCoresCountLabel"), Settings.NumLogicalProcesors);
 
             //if the application is up to date, then check if we need to display the welcome message to the user
             if(isApplicationUpToDate && !closingFromFailure)
@@ -213,7 +217,10 @@ namespace RelhaxModpack
 
             //show the UI if not closing the application out of failure
             if (!closingFromFailure)
-                Show();
+            {
+                WindowState = WindowState.Normal;
+                //Show();
+            }
         }
 
         private void TheMainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
