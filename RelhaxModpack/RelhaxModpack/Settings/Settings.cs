@@ -112,6 +112,21 @@ namespace RelhaxModpack
             RelhaxTempFolder
         };
 
+        /// <summary>
+        /// default maximum sprite sheet width (pixels)
+        /// </summary>
+        public const int DefaultMaximumSheetWidth = 4096;
+
+        /// <summary>
+        /// default maximum sprite sheet height (pixels)
+        /// </summary>
+        public const int DefaultMaximumSheetHeight = 4096;
+
+        /// <summary>
+        /// default image padding
+        /// </summary>
+        public const int DefaultImagePadding = 1;
+
         public static readonly int NumLogicalProcesors = Environment.ProcessorCount;
 
         public static readonly string[] SelectablePackageTypes = new string[]

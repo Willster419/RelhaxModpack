@@ -1284,6 +1284,13 @@ namespace RelhaxModpack.InstallerComponents
                 atlasBuilder.AppendLine("/*   Atlases   */");
                 foreach (Atlas atlas in atlases)
                 {
+                    //replace macros
+                    atlas.Pkg = Utils.MacroReplace(atlas.Pkg, ReplacementTypes.FilePath);
+                    atlas.AtlasSaveDirectory = Utils.MacroReplace(atlas.AtlasSaveDirectory, ReplacementTypes.FilePath);
+                    for(int i = 0; i < atlas.ImageFolderList.Count; i++)
+                    {
+                        atlas.ImageFolderList[i] = Utils.MacroReplace(atlas.ImageFolderList[i], ReplacementTypes.FilePath);
+                    }
                     Utils.CreateAtlas(atlas);
                     atlasBuilder.AppendLine(atlas.MapFile);
                 }
@@ -1685,9 +1692,6 @@ namespace RelhaxModpack.InstallerComponents
                             break;
                         case "generateMap":
                             sc.GenerateMap = Utils.ParseEnum(property.InnerText,Atlas.State.True);
-                            break;
-                        case "mapType":
-                            sc.MapType = Utils.ParseEnum(property.InnerText, Atlas.MapTypes.WGXmlMap);
                             break;
                         case "powOf2":
                             sc.PowOf2 = Utils.ParseEnum(property.InnerText,Atlas.State.False);

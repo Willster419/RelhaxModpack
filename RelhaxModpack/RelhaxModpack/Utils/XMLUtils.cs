@@ -570,41 +570,8 @@ namespace RelhaxModpack
                 return;
             }
 
-            //if the package entry is empty, then it's just a file copy
-            if(string.IsNullOrWhiteSpace(xmlUnpack.Pkg))
-            {
-                if (File.Exists(sourceCompletePath))
-                    File.Copy(sourceCompletePath, destinationCompletePath);
-                Logging.Info("file copied");
-            }
-            else
-            {
-                if(!File.Exists(xmlUnpack.Pkg))
-                {
-                    Logging.Error("packagefile does not exist, skipping");
-                    return;
-                }
-                using (ZipFile zip = new ZipFile(xmlUnpack.Pkg))
-                {
-                    //get the files that match the specified path from the xml entry
-                    string zipPath = Path.Combine(xmlUnpack.DirectoryInArchive, xmlUnpack.FileName).Replace(@"\", @"/");
-                    ZipEntry[] matchingEntries = zip.Where(zipp => zipp.FileName.Equals(zipPath)).ToArray();
-                    Logging.Debug("matching zip entries: {0}", matchingEntries.Count());
-                    if(matchingEntries.Count() > 0)
-                    {
-                        foreach(ZipEntry entry in matchingEntries)
-                        {
-                            //change the name to the destination
-                            entry.FileName = destinationFilename;
+            Unpack(xmlUnpack.Pkg, sourceCompletePath, destinationCompletePath);
 
-                            //extract to disk and log
-                            entry.Extract(xmlUnpack.ExtractDirectory, ExtractExistingFileAction.DoNotOverwrite);
-                            unpackBuilder.AppendLine(destinationCompletePath);
-                            Logging.Info("entry extracted: {0}", destinationFilename);
-                        }
-                    }
-                }
-            }
             Logging.Info("unpacking xml binary file (if binary)");
             try
             {
@@ -614,6 +581,47 @@ namespace RelhaxModpack
             catch (Exception xmlUnpackExceptino)
             {
                 Logging.Exception(xmlUnpackExceptino.ToString());
+            }
+        }
+
+        public static void Unpack(string package, string sourceCompletePath, string destinationCompletePath)
+        {
+            string destinationFilename = Path.GetFileName(destinationCompletePath);
+            string destinationDirectory = Path.GetDirectoryName(destinationCompletePath);
+
+            //if the package entry is empty, then it's just a file copy
+            if (string.IsNullOrWhiteSpace(package))
+            {
+                if (File.Exists(sourceCompletePath))
+                    File.Copy(sourceCompletePath, destinationCompletePath);
+                Logging.Info("file copied");
+            }
+            else
+            {
+                if (!File.Exists(package))
+                {
+                    Logging.Error("packagefile does not exist, skipping");
+                    return;
+                }
+                using (ZipFile zip = new ZipFile(package))
+                {
+                    //get the files that match the specified path from the xml entry
+                    string zipPath = sourceCompletePath.Replace(@"\", @"/");
+                    ZipEntry[] matchingEntries = zip.Where(zipp => zipp.FileName.Equals(zipPath)).ToArray();
+                    Logging.Debug("matching zip entries: {0}", matchingEntries.Count());
+                    if (matchingEntries.Count() > 0)
+                    {
+                        foreach (ZipEntry entry in matchingEntries)
+                        {
+                            //change the name to the destination
+                            entry.FileName = destinationFilename;
+
+                            //extract to disk and log
+                            entry.Extract(destinationDirectory, ExtractExistingFileAction.DoNotOverwrite);
+                            Logging.Info("entry extracted: {0}", destinationFilename);
+                        }
+                    }
+                }
             }
         }
         #endregion

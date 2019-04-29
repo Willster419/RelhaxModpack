@@ -22,6 +22,9 @@ using System.Xml.Linq;
 using IWshRuntimeLibrary;
 using File = System.IO.File;
 using System.Windows.Threading;
+using RelhaxModpack.AtlasesCreator;
+using System.Drawing;
+using Size = System.Drawing.Size;
 
 namespace RelhaxModpack
 {
@@ -1474,10 +1477,176 @@ namespace RelhaxModpack
 
         public static void CreateAtlas(Atlas atlas)
         {
-            throw new BadMemeException("TODO");
+            //create the save directory if it does not already exist
+            if (!Directory.Exists(atlas.AtlasSaveDirectory))
+                Directory.CreateDirectory(atlas.AtlasSaveDirectory);
+
+            //set the mapfile name
+            atlas.MapFile = string.Format("{0}.xml", Path.GetFileNameWithoutExtension(atlas.AtlasFile));
+
+            Stopwatch stopwatch = new Stopwatch();
+            //extract the map and atlas files
+            Logging.Info("atlas file {0} unpack of atlas and map starting", Path.GetFileName(atlas.AtlasFile));
+            stopwatch.Restart();
+            XMLUtils.Unpack(atlas.Pkg, Path.Combine(atlas.DirectoryInArchive, atlas.AtlasFile), Path.Combine(atlas.TempAltasPresentDirectory, atlas.AtlasFile));
+            XMLUtils.Unpack(atlas.Pkg, Path.Combine(atlas.DirectoryInArchive, atlas.MapFile), Path.Combine(atlas.TempAltasPresentDirectory, atlas.MapFile));
+            stopwatch.Stop();
+            Logging.Info("atlas file {0} unpack completed in {1} msec", Path.GetFileName(atlas.AtlasFile), stopwatch.ElapsedMilliseconds);
+
+            //extract atlas bitmaps from original atlas file
+            string tempAtlasImageFile = Path.Combine(atlas.TempAltasPresentDirectory, atlas.AtlasFile);
+            string tempAtlasMapFile = Path.Combine(atlas.TempAltasPresentDirectory, atlas.MapFile);
+            Logging.Info("atlas file {0} image parsing starting", Path.GetFileName(atlas.AtlasFile));
+            stopwatch.Restart();
+            Size originalAtlasSize = new Size();
+            using (Bitmap atlasImage = ImageHandler.LoadBitmapFromDDS(tempAtlasImageFile))
+            {
+                originalAtlasSize = atlasImage.Size;
+                atlas.TextureList = MapExporter.Load(tempAtlasMapFile);
+                //load the texture bitmaps to memory to possibly be overwritten later by mods
+                foreach(Texture texture in atlas.TextureList)
+                {
+                    texture.AtlasImage = new Bitmap(texture.width, texture.height, atlasImage.PixelFormat);
+                    // copy pixels over to avoid antialiasing or any other side effects of drawing
+                    // the subimages to the output image using Graphics
+                    for (int x = 0; x < texture.width; x++)
+                        for (int y = 0; y < texture.height; y++)
+                            texture.AtlasImage.SetPixel(x, y, atlasImage.GetPixel(texture.x + x, texture.y + y));
+                }
+            }
+            stopwatch.Stop();
+            Logging.Info("atlas file {0} parsing completed in {1} msec", Path.GetFileName(atlas.AtlasFile), stopwatch.ElapsedMilliseconds);
+
+            //prepare atlas objects for processing
+            atlas.AtlasFile = Path.Combine(atlas.AtlasSaveDirectory, atlas.AtlasFile);
+            atlas.MapFile = Path.Combine(atlas.AtlasSaveDirectory, atlas.MapFile);
+
+            // if the arguments in width and/or height of the atlases-creator-config-xml-file are 0 (or below) or not given, work with the original file dimensions to get working width and height
+            if ((atlas.AtlasHeight < 1) | (atlas.AtlasWidth < 1))
+            {
+                //fix atlas width and size parameters if they are wrong
+                if (atlas.AtlasWidth < 1)
+                    throw new BadMemeException("grumpel...");
+
+                if (atlas.AtlasHeight < 1)
+                    throw new BadMemeException("grumpel...");
+
+                //
+                if ((originalAtlasSize.Height * originalAtlasSize.Width) == (atlas.AtlasWidth * atlas.AtlasHeight))
+                {
+                    atlas.AtlasHeight = (int)(atlas.AtlasHeight * 1.5);
+                }
+                else
+                {
+                    // this is to be sure that the image size that will be created, is at least the original size
+                    while ((originalAtlasSize.Height * originalAtlasSize.Width) > (atlas.AtlasWidth * atlas.AtlasHeight))
+                        atlas.AtlasHeight = (int)(atlas.AtlasHeight * 1.2);
+                }
+            }
+
+            //
+            if ((originalAtlasSize.Height * originalAtlasSize.Width) > (atlas.AtlasWidth * atlas.AtlasHeight))
+                Logging.Warning(string.Format("WARNING! defined {0} size is smaller then original size\r\noriginal h x w: {1} x {2}\r\ndefined h x w: {3} x {4}"
+                    , atlas.AtlasFile, originalAtlasSize.Height, originalAtlasSize.Width, atlas.AtlasHeight, atlas.AtlasWidth));
+            else
+                Logging.Info(string.Format("defined max size of {0} with: {1} (h) x {2} (w)", atlas.AtlasFile, atlas.AtlasHeight, atlas.AtlasWidth));
+
+            //override bitmaps with what exists in the mods folders
+            Logging.Info("atlas file {0} mod images parsing starting", Path.GetFileName(atlas.AtlasFile));
+            stopwatch.Restart();
+            List<Texture> modTextures = new List<Texture>();
+            foreach (string folder in atlas.ImageFolderList)
+            {
+                if(!Directory.Exists(folder))
+                {
+                    Logging.Warning("directory {0} does not exist in atlas parsing, skipping", folder);
+                    continue;
+                }
+
+                //get every image file in the folder
+                File.SetAttributes(folder, FileAttributes.Normal);
+                FileInfo[] customContourIcons = new string[] { "*.jpg", "*.png", "*.bmp" }
+                            .SelectMany(i => new DirectoryInfo(folder).GetFiles(i, SearchOption.TopDirectoryOnly))
+                            .ToArray();
+
+                foreach(FileInfo customContourIcon in customContourIcons)
+                {
+                    //load the custom image into the texture list
+                    string filename = Path.GetFileNameWithoutExtension(customContourIcon.Name);
+                    //load the bitmap as well
+                    Bitmap newImage = System.Drawing.Image.FromFile(customContourIcon.FullName) as Bitmap;
+                    //don't care about the x an y for the mod textures
+                    modTextures.Add(new Texture()
+                    {
+                        name = filename,
+                        height = newImage.Height,
+                        width = newImage.Width,
+                        x = 0,
+                        y = 0,
+                        AtlasImage = newImage
+                    });
+                }
+            }
+            stopwatch.Stop();
+            Logging.Info("atlas file {0} mod images parsing completed in {1} msec", Path.GetFileName(atlas.AtlasFile), stopwatch.ElapsedMilliseconds);
+
+            //check if any custom mod contour icons were parsed
+            if (modTextures.Count > 0)
+                Logging.Info("{0} custom icons parsed for atlas file {1}!", modTextures.Count, Path.GetFileName(atlas.AtlasFile));
+            else
+            {
+                Logging.Info("0 custom icons parsed for atlas file {1}! no need to make a custom atlas!", modTextures.Count, Path.GetFileName(atlas.AtlasFile));
+                if(File.Exists(tempAtlasImageFile)) File.Delete(tempAtlasImageFile);
+                if (File.Exists(tempAtlasMapFile)) File.Delete(tempAtlasMapFile);
+                foreach (Texture texture in atlas.TextureList)
+                    texture.AtlasImage.Dispose();
+                return;
+            }
+
+            //replace the original atlas textures with the mod ones
+            Logging.Info("atlas file {0} mod images replacing starting", Path.GetFileName(atlas.AtlasFile));
+            stopwatch.Restart();
+            for (int i = 0; i < modTextures.Count; i++)
+            {
+                //get the matching texture, if it exists
+                Texture[] originalResults = atlas.TextureList.Where(texturee => texturee.name.Equals(modTextures[i].name)).ToArray();
+                if (originalResults.Count() > 1)
+                    throw new BadMemeException("REEEE");
+                if(originalResults.Count() == 0 && atlas.AllowToAddAdditionalImages)
+                {
+                    Logging.Info("allowToAddAdditionalImages is true, adding custom image {0}", modTextures[i].name);
+                    atlas.TextureList.Add(modTextures[i]);
+                }
+                else if (originalResults.Count() == 0 && !atlas.AllowToAddAdditionalImages)
+                {
+                    Logging.Info("allowToAddAdditionalImages is false, NOT adding custom image {0}", modTextures[i].name);
+                }
+                else
+                {
+                    //here means the count is one, replace the atlas texture with this one
+                    originalResults[0].AtlasImage.Dispose();
+                    originalResults[0].AtlasImage = modTextures[i].AtlasImage;
+                    originalResults[0].x = 0;
+                    originalResults[0].y = 0;
+                    originalResults[0].height = modTextures[i].AtlasImage.Height;
+                    originalResults[0].width = modTextures[i].AtlasImage.Width;
+                }
+            }
+            stopwatch.Stop();
+            Logging.Info("atlas file {0} mod images replacing completed in {1} msec", Path.GetFileName(atlas.AtlasFile), stopwatch.ElapsedMilliseconds);
+
+            //(finally) run the atlas creator program
+            Logging.Info("atlas file {0} building starting", Path.GetFileName(atlas.AtlasFile));
+            stopwatch.Restart();
+            AtlasCreator creator = new AtlasCreator();
+
+            if(creator.CreateAtlas(atlas) != FailCode.None)
+            {
+                Logging.Error("Failed to create atlas file: {0}", atlas.MapFile);
+            }
+            stopwatch.Stop();
+            Logging.Info("atlas file {0} building completed in {1} msec", Path.GetFileName(atlas.AtlasFile), stopwatch.ElapsedMilliseconds);
         }
-
-
         #endregion
 
         #region FTP methods

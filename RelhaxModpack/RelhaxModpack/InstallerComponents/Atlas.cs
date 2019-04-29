@@ -18,12 +18,8 @@ namespace RelhaxModpack
         public string Pkg { get; set; } = "";
         // fileName of the atlas file to extract
         public string AtlasFile { get; set; } = "";
-        // imageHandler for this atlas
-        //public AtlasesCreator.IImageHandler imageHandler = null;
         // fileName of the atlas map file to extract
         public string MapFile { get; set; } = "";
-        // mapHandler for this atlas
-        //public AtlasesCreator.IMapExporter mapExporter = null;
         // path inside the pkg file to the filename to process
         public string DirectoryInArchive { get; set; } = "";
         // path to atlas file outside the archive (after extraction located here)
@@ -44,8 +40,6 @@ namespace RelhaxModpack
         public bool FastImagePacker { get; set; } = true;
         // generate map file
         public State GenerateMap { get; set; } = State.None;
-        // map file type
-        public MapTypes MapType { get; set; } = MapTypes.None;
         // maybe new fileName
         public List<string> ImageFolderList { get; set; } = new List<string>();
         //the list of textures in each atlas
@@ -69,37 +63,9 @@ namespace RelhaxModpack
                 Square == State.None ? "(empty)" : Square == State.True ? "True" : "False",
                 FastImagePacker ? "True" : "False",
                 GenerateMap == State.None ? "(empty)" : GenerateMap == State.True ? "True" : "False",
-                MapType == MapTypes.None ? "(none selected)" : MapTypeName(MapType),
                 ImageFolderList.Count == 0 ? "(empty)" : ImageFolderList.ToString(),
                 //TextureList.Count == 0 ? "(empty)" : TextureList.Count.ToString(),
                 AllowToAddAdditionalImages ? "True" : "False");
-        }
-
-        public enum MapTypes
-        {
-
-            None,
-
-            WGXmlMap,
-
-            XmlMap,
-
-            TxtMap,
-        }
-
-        public static string MapTypeName(MapTypes mt)
-        {
-            switch (mt)
-            {
-                case MapTypes.WGXmlMap:
-                    return "WgXml";
-                case MapTypes.XmlMap:
-                    return "Xml";
-                case MapTypes.TxtMap:
-                    return "Txt";
-                default:
-                    return MapTypeName(MapTypes.WGXmlMap);
-            }
         }
 
         public enum State

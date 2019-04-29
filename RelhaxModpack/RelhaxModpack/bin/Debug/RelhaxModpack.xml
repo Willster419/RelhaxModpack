@@ -4,6 +4,216 @@
         <name>RelhaxModpack</name>
     </assembly>
     <members>
+        <member name="T:RelhaxModpack.AtlasesCreator.ImageHandler">
+            <summary>
+            Handles loading and saving a DDS image in bitmap form
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker">
+            <summary>Rectangle packer using an algorithm by Javier Arevalo</summary>
+            <remarks>
+              <para>
+                Original code by Javier Arevalo (jare at iguanademos dot com). Rewritten
+                to C# / .NET by Markus Ewald (cygon at nuclex dot org). The following comments
+                were written by the original author when he published his algorithm.
+              </para>
+              <para>
+                You have a bunch of rectangular pieces. You need to arrange them in a
+                rectangular surface so that they don't overlap, keeping the total area of the
+                rectangle as small as possible. This is fairly common when arranging characters
+                in a bitmapped font, lightmaps for a 3D engine, and I guess other situations as
+                well.
+              </para>
+              <para>
+                The idea of this algorithm is that, as we add rectangles, we can pre-select
+                "interesting" places where we can try to add the next rectangles. For optimal
+                results, the rectangles should be added in order. I initially tried using area
+                as a sorting criteria, but it didn't work well with very tall or very flat
+                rectangles. I then tried using the longest dimension as a selector, and it
+                worked much better. So much for intuition...
+              </para>
+              <para>
+                These "interesting" places are just to the right and just below the currently
+                added rectangle. The first rectangle, obviously, goes at the top left, the next
+                one would go either to the right or below this one, and so on. It is a weird way
+                to do it, but it seems to work very nicely.
+              </para>
+              <para>
+                The way we search here is fairly brute-force, the fact being that for most
+                off-line purposes the performance seems more than adequate. I have generated a
+                Japanese font with around 8500 characters and all the time was spent generating
+                the bitmaps.
+              </para>
+              <para>
+                Also, for all we care, we could grow the parent rectangle in a different way
+                than power of two. It just happens that power of 2 is very convenient for
+                graphics hardware textures.
+              </para>
+              <para>
+                I'd be interested in hearing of other approaches to this problem. Make sure
+                to post them on http://www.flipcode.com
+              </para>
+            </remarks>
+        </member>
+        <member name="T:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.AnchorRankComparer">
+            <summary>Compares the 'rank' of anchoring points</summary>
+            <remarks>
+              Anchoring points are potential locations for the placement of new rectangles.
+              Each time a rectangle is inserted, an anchor point is generated on its upper
+              right end and another one at its lower left end. The anchor points are kept
+              in a list that is ordered by their closeness to the upper left corner of the
+              packing area (their 'rank') so the packer favors positions that are closer to
+              the upper left for new rectangles.
+            </remarks>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.AnchorRankComparer.Default">
+            <summary>Provides a default instance for the anchor rank comparer</summary>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.AnchorRankComparer.Compare(System.Drawing.Point,System.Drawing.Point)">
+            <summary>Compares the rank of two anchors against each other</summary>
+            <param name="left">Left anchor point that will be compared</param>
+            <param name="right">Right anchor point that will be compared</param>
+            <returns>The relation of the two anchor point's ranks to each other</returns>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.actualPackingAreaHeight">
+            <summary>Current height of the packing area</summary>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.actualPackingAreaWidth">
+            <summary>Current width of the packing area</summary>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.anchors">
+            <summary>Anchoring points where new rectangles can potentially be placed</summary>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.packedRectangles">
+            <summary>Rectangles contained in the packing area</summary>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.#ctor(System.Int32,System.Int32)">
+            <summary>Initializes a new rectangle packer</summary>
+            <param name="packingAreaWidth">Maximum width of the packing area</param>
+            <param name="packingAreaHeight">Maximum height of the packing area</param>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.TryPack(System.Int32,System.Int32,System.Drawing.Point@)">
+            <summary>Tries to allocate space for a rectangle in the packing area</summary>
+            <param name="rectangleWidth">Width of the rectangle to allocate</param>
+            <param name="rectangleHeight">Height of the rectangle to allocate</param>
+            <param name="placement">Output parameter receiving the rectangle's placement</param>
+            <returns>True if space for the rectangle could be allocated</returns>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.OptimizePlacement(System.Drawing.Point@,System.Int32,System.Int32)">
+            <summary>
+              Optimizes the rectangle's placement by moving it either left or up to fill
+              any gaps resulting from rectangles blocking the anchors of the most optimal
+              placements.
+            </summary>
+            <param name="placement">Placement to be optimized</param>
+            <param name="rectangleWidth">Width of the rectangle to be optimized</param>
+            <param name="rectangleHeight">Height of the rectangle to be optimized</param>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.SelectAnchorRecursive(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+              Searches for a free anchor and recursively enlarges the packing area
+              if none can be found.
+            </summary>
+            <param name="rectangleWidth">Width of the rectangle to be placed</param>
+            <param name="rectangleHeight">Height of the rectangle to be placed</param>
+            <param name="testedPackingAreaWidth">Width of the tested packing area</param>
+            <param name="testedPackingAreaHeight">Height of the tested packing area</param>
+            <returns>
+              Index of the anchor the rectangle is to be placed at or -1 if the rectangle
+              does not fit in the packing area anymore.
+            </returns>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.FindFirstFreeAnchor(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>Locates the first free anchor at which the rectangle fits</summary>
+            <param name="rectangleWidth">Width of the rectangle to be placed</param>
+            <param name="rectangleHeight">Height of the rectangle to be placed</param>
+            <param name="testedPackingAreaWidth">Total width of the packing area</param>
+            <param name="testedPackingAreaHeight">Total height of the packing area</param>
+            <returns>The index of the first free anchor or -1 if none is found</returns>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.IsFree(System.Drawing.Rectangle@,System.Int32,System.Int32)">
+            <summary>
+              Determines whether the rectangle can be placed in the packing area
+              at its current location.
+            </summary>
+            <param name="rectangle">Rectangle whose position to check</param>
+            <param name="testedPackingAreaWidth">Total width of the packing area</param>
+            <param name="testedPackingAreaHeight">Total height of the packing area</param>
+            <returns>True if the rectangle can be placed at its current position</returns>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.InsertAnchor(System.Drawing.Point)">
+            <summary>Inserts a new anchor point into the anchor list</summary>
+            <param name="anchor">Anchor point that will be inserted</param>
+            <remarks>
+              This method tries to keep the anchor list ordered by ranking the anchors
+              depending on the distance from the top left corner in the packing area.
+            </remarks>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ImagePacker.PackImage(System.Collections.Generic.IEnumerable{RelhaxModpack.Texture},RelhaxModpack.Atlas.State,RelhaxModpack.Atlas.State,System.Boolean,System.Int32,System.Int32,System.Int32,System.Drawing.Bitmap@,System.Collections.Generic.Dictionary{System.String,System.Drawing.Rectangle}@)">
+            <summary>
+            Packs a collection of images into a single image.
+            </summary>
+            <param name="imageFiles">The list of Textures of the images to be combined.</param>
+            <param name="requirePowerOfTwo">Whether or not the output image must have a power of two size.</param>
+            <param name="requireSquareImage">Whether or not the output image must be a square.</param>
+            <param name="fastImagePacker">Accept the first successful image packing.</param>
+            <param name="maximumWidth">The maximum width of the output image.</param>
+            <param name="maximumHeight">The maximum height of the output image.</param>
+            <param name="imagePadding">The amount of blank space to insert in between individual images.</param>
+            <param name="outputImage">The resulting output image.</param>
+            <param name="outputMap">The resulting output map of placement rectangles for the images.</param>
+            <returns>0 if the packing was successful, error code otherwise.</returns>
+        </member>
+        <member name="T:RelhaxModpack.AtlasesCreator.Packing.OutOfSpaceException">
+            <summary>Insufficient space left in packing area to contain a given object</summary>
+            <remarks>
+              An exception being sent to you from deep space. Erm, no, wait, it's an exception
+              that occurs when a packing algorithm runs out of space and is unable to fit
+              the object you tried to pack into the remaining packing area.
+            </remarks>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.OutOfSpaceException.#ctor(System.String)">
+            <summary>Initializes the exception with an error message</summary>
+            <param name="message">Error message describing the cause of the exception</param>
+        </member>
+        <member name="T:RelhaxModpack.AtlasesCreator.Packing.RectanglePacker">
+            <summary>Base class for rectangle packing algorithms</summary>
+            <remarks>
+              <para>
+                By uniting all rectangle packers under this common base class, you can
+                easily switch between different algorithms to find the most efficient or
+                performant one for a given job.
+              </para>
+              <para>
+                An almost exhaustive list of packing algorithms can be found here:
+                http://www.csc.liv.ac.uk/~epa/surveyhtml.html
+              </para>
+            </remarks>
+        </member>
+        <member name="P:RelhaxModpack.AtlasesCreator.Packing.RectanglePacker.PackingAreaWidth">
+            <summary>Maximum width the packing area is allowed to have</summary>
+        </member>
+        <member name="P:RelhaxModpack.AtlasesCreator.Packing.RectanglePacker.PackingAreaHeight">
+            <summary>Maximum height the packing area is allowed to have</summary>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.RectanglePacker.#ctor(System.Int32,System.Int32)">
+            <summary>Initializes a new rectangle packer</summary>
+            <param name="packingAreaWidth">Width of the packing area</param>
+            <param name="packingAreaHeight">Height of the packing area</param>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.RectanglePacker.Pack(System.Int32,System.Int32)">
+            <summary>Allocates space for a rectangle in the packing area</summary>
+            <param name="rectangleWidth">Width of the rectangle to allocate</param>
+            <param name="rectangleHeight">Height of the rectangle to allocate</param>
+            <returns>The location at which the rectangle has been placed</returns>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.RectanglePacker.TryPack(System.Int32,System.Int32,System.Drawing.Point@)">
+            <summary>Tries to allocate space for a rectangle in the packing area</summary>
+            <param name="rectangleWidth">Width of the rectangle to allocate</param>
+            <param name="rectangleHeight">Height of the rectangle to allocate</param>
+            <param name="placement">Output parameter receiving the rectangle's placement</param>
+            <returns>True if space for the rectangle could be allocated</returns>
+        </member>
         <member name="T:RelhaxModpack.Category">
             <summary>
             a catagory is what makes up each tab in the mod selection dislpay window. It holds the first level of list of SelectablePackages
@@ -771,6 +981,21 @@
             <summary>
             The current distribution version of the application
             Alhpa should NEVER be built for public distribution unless direct testing!
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.DefaultMaximumSheetWidth">
+            <summary>
+            default maximum sprite sheet width (pixels)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.DefaultMaximumSheetHeight">
+            <summary>
+            default maximum sprite sheet height (pixels)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.DefaultImagePadding">
+            <summary>
+            default image padding
             </summary>
         </member>
         <member name="T:RelhaxModpack.UISettings">

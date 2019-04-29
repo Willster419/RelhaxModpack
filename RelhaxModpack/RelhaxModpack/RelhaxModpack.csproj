@@ -108,6 +108,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AtlasesCreator\AtlasCreator.cs" />
+    <Compile Include="AtlasesCreator\ImageHandler.cs" />
+    <Compile Include="AtlasesCreator\MapExporter.cs" />
+    <Compile Include="AtlasesCreator\Packing\ArevaloRectanglePacker.cs" />
+    <Compile Include="AtlasesCreator\Packing\ImagePacker.cs" />
+    <Compile Include="AtlasesCreator\Packing\OutOfSpaceException.cs" />
+    <Compile Include="AtlasesCreator\Packing\RectanglePacker.cs" />
     <Compile Include="DatabaseComponents\Category.cs" />
     <Compile Include="DatabaseComponents\DatabaseLogic.cs" />
     <Compile Include="DatabaseComponents\DatabasePackage.cs" />
@@ -426,6 +433,7 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>echo namespace RelhaxModpack &gt; "$(ProjectDir)\Utils\CiInfo.cs"
