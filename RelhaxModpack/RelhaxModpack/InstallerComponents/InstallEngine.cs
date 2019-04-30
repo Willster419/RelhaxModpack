@@ -735,36 +735,60 @@ namespace RelhaxModpack.InstallerComponents
                     //remove the mistake I made over a year ago of the double slashes
                     string searchPattern = files.Pattern.Replace(@"\\", @"\");
 
-                    //legacy compatibility: either the item will be with a macro start or not.
+                    //legacy compatibility: the path will either start with a macro or with the raw path
+                    //examples:
+                    //new:         {appData}\Roaming\Wargaming.net\WorldOfTanks\xvm\users\*
+                    //another new: \\mods\\configs\\promod\\artylog\\modCache.json
+                    //             {app}\autoequip.json
+                    //old:         \res_mods\mods\shared_resources\xvm\res\clanicons\CT\clan\*.png
+                    //             mods\configs\battle_assistant\mod_battle_assistant.txt
                     //they need to be treated differently
                     string root_directory = "";
                     string actual_search = "";
-                    if (searchPattern[0].Equals('{'))
+
+                    //build the entire directory path, still including the search
+                    if (searchPattern[0].Equals(@"{"))
                     {
-                        //it has macros, and the first one is the base path. remove and macro it
-                        //root_directory = macro using split of }
-                        
+                        //it does not have the macro, so add it. (assume {app} macro)
+                        Logging.Debug("pattern starts with \"{\", continue");
+                    }
+                    else if (searchPattern[0].Equals(@"\"))
+                    {
+                        Logging.Debug("pattern starts with \"\\\", adding macro and continue");
+                        searchPattern = @"{app}" + searchPattern;
                     }
                     else
                     {
-                        //it's an old style (or at least can assume that it's assuming root WoT directory)
-                        root_directory = Settings.WoTDirectory;
-                        //actual_search = Utils.MacroParse();
-
+                        Logging.Debug("pattern starts with folder name, adding macro and folder slash and continue");
+                        searchPattern = @"{app}\" + searchPattern;
                     }
-                    throw new BadMemeException("TODO");
-                    files.Files_saved = Directory.GetFiles(root_directory, actual_search, SearchOption.AllDirectories).ToList();
-                    //make root directory to store the temp files
-                    if(files.Files_saved.Count > 0)
+                    Logging.Debug("path with macro: {0}", searchPattern);
+
+                    //replace the macro to make the complete path
+                    searchPattern = Utils.MacroReplace(searchPattern, ReplacementTypes.FilePath);
+                    Logging.Debug("complete path: {0}", searchPattern);
+
+                    //get the list of files to replace
+                    string[] filesToSave = Utils.DirectorySearch(Path.GetDirectoryName(searchPattern), SearchOption.AllDirectories, Path.GetFileName(searchPattern), 5, 3, false);
+
+                    //check if we have files to move
+                    if(filesToSave.Count() == 0)
                     {
-                        if (!Directory.Exists(Path.Combine(Settings.RelhaxTempFolder, package.PackageName)))
-                            Directory.CreateDirectory(Path.Combine(Settings.RelhaxTempFolder, package.PackageName));
-                        foreach(string s in files.Files_saved)
-                        {
-                            File.Move(s, Path.Combine(Path.Combine(Settings.RelhaxTempFolder, package.PackageName, Path.GetFileName(s))));
-                        }
+                        Logging.Info("no files found to backup");
+                        continue;
+                    }
+
+                    //make the temp directory to place the files based on this package
+                    string tempFolderPath = Path.Combine(Settings.RelhaxTempFolder, package.PackageName);
+                    Directory.CreateDirectory(tempFolderPath);
+
+                    //move each file
+                    foreach(string file in filesToSave)
+                    {
+                        File.Move(file, Path.Combine(tempFolderPath, Path.GetFileName(file)));
                     }
                 }
+                Logging.Info("backup data of {0} finished", package.PackageName);
             }
             return true;
         }
