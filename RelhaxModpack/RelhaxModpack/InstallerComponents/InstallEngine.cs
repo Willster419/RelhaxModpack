@@ -144,10 +144,10 @@ namespace RelhaxModpack.InstallerComponents
             switch (ModpackSettings.UninstallMode)
             {
                 case UninstallModes.Default:
-                    success = UninstallModsDefault();
+                    success = UninstallModsDefault(true);
                     break;
                 case UninstallModes.Quick:
-                    success = UninstallModsQuick();
+                    success = UninstallModsQuick(true);
                     break;
             }
 
@@ -518,7 +518,7 @@ namespace RelhaxModpack.InstallerComponents
         #endregion
 
         #region Main Uninstall methods
-        private bool UninstallModsQuick()
+        private bool UninstallModsQuick(bool logIt)
         {
             Prog.UninstallStatus = UninstallerExitCodes.GettingFilelistError;
             Progress.Report(Prog);
@@ -531,26 +531,29 @@ namespace RelhaxModpack.InstallerComponents
             Prog.ChildCurrent = 0;
             Progress.Report(Prog);
 
-            //backup old uninstall logfile
-            string backupUninstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilenameBackup);
-            string uninstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilename);
-            if (File.Exists(backupUninstallLogfile))
-                Utils.FileDelete(backupUninstallLogfile);
-            if (File.Exists(uninstallLogfile))
-                File.Move(uninstallLogfile, backupUninstallLogfile);
+            if(logIt)
+            {
+                string backupUninstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilenameBackup);
+                string uninstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilename);
+                if (File.Exists(backupUninstallLogfile))
+                    Utils.FileDelete(backupUninstallLogfile);
+                if (File.Exists(uninstallLogfile))
+                    File.Move(uninstallLogfile, backupUninstallLogfile);
 
-            //create the uninstall logfile and write header info
-            if (!Logging.InitApplicationLogging(Logfiles.Uninstaller, uninstallLogfile))
-            {
-                Logging.Error("Failed to init the uninstall logfile");
-                return false;
+                //create the uninstall logfile and write header info
+                if (!Logging.InitApplicationLogging(Logfiles.Uninstaller, uninstallLogfile))
+                {
+                    Logging.Error("Failed to init the uninstall logfile");
+                    return false;
+                }
+                else
+                {
+                    Logging.WriteToLog(string.Format(@"/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */", DateTime.Now), Logfiles.Uninstaller, LogLevel.Info);
+                    Logging.WriteToLog(string.Format("/* Uninstall Method: {0} */", ModpackSettings.UninstallMode.ToString()), Logfiles.Uninstaller, LogLevel.Info);
+                    Logging.WriteToLog(@"/*  files and folders deleted  */", Logfiles.Uninstaller, LogLevel.Info);
+                }
             }
-            else
-            {
-                Logging.WriteToLog(string.Format(@"/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */", DateTime.Now), Logfiles.Uninstaller, LogLevel.Info);
-                Logging.WriteToLog(string.Format("/* Uninstall Method: {0} */", ModpackSettings.UninstallMode.ToString()), Logfiles.Uninstaller, LogLevel.Info);
-                Logging.WriteToLog(@"/*  files and folders deleted  */", Logfiles.Uninstaller, LogLevel.Info);
-            }
+            //backup old uninstall logfile
 
             bool success = true;
             Prog.UninstallStatus = UninstallerExitCodes.UninstallError;
@@ -562,7 +565,10 @@ namespace RelhaxModpack.InstallerComponents
                 if (!Utils.FileDelete(file))
                     success = false;
                 else
-                    Logging.WriteToLog(file, Logfiles.Uninstaller, LogLevel.Info);
+                {
+                    if(logIt)
+                        Logging.WriteToLog(file, Logfiles.Uninstaller, LogLevel.Info);
+                }
             }
 
             //re-create the folders at the end
@@ -583,7 +589,7 @@ namespace RelhaxModpack.InstallerComponents
             return success;
         }
 
-        private bool UninstallModsDefault()
+        private bool UninstallModsDefault(bool logIt)
         {
             //setup progress
             Prog.UninstallStatus = UninstallerExitCodes.GettingFilelistError;
@@ -612,24 +618,27 @@ namespace RelhaxModpack.InstallerComponents
             Prog.ChildCurrent = 0;
             Progress.Report(Prog);
 
-            //backup old uninstall logfile
-            string backupUninstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilenameBackup);
-            string uninstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilename);
-            if (File.Exists(backupUninstallLogfile))
-                Utils.FileDelete(backupUninstallLogfile);
-            if (File.Exists(uninstallLogfile))
-                File.Move(uninstallLogfile, backupUninstallLogfile);
+            if(logIt)
+            {
+                //backup old uninstall logfile
+                string backupUninstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilenameBackup);
+                string uninstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilename);
+                if (File.Exists(backupUninstallLogfile))
+                    Utils.FileDelete(backupUninstallLogfile);
+                if (File.Exists(uninstallLogfile))
+                    File.Move(uninstallLogfile, backupUninstallLogfile);
 
-            //create the uninstall logfile and write header info
-            if (!Logging.InitApplicationLogging(Logfiles.Uninstaller, uninstallLogfile))
-            {
-                Logging.Error("Failed to init the uninstall logfile");
-            }
-            else
-            {
-                Logging.WriteToLog(string.Format(@"/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */", DateTime.Now), Logfiles.Uninstaller, LogLevel.Info);
-                Logging.WriteToLog(string.Format("/* Uninstall Method: {0} */", ModpackSettings.UninstallMode.ToString()), Logfiles.Uninstaller, LogLevel.Info);
-                Logging.WriteToLog(@"/*  files and folders deleted  */", Logfiles.Uninstaller, LogLevel.Info);
+                //create the uninstall logfile and write header info
+                if (!Logging.InitApplicationLogging(Logfiles.Uninstaller, uninstallLogfile))
+                {
+                    Logging.Error("Failed to init the uninstall logfile");
+                }
+                else
+                {
+                    Logging.WriteToLog(string.Format(@"/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */", DateTime.Now), Logfiles.Uninstaller, LogLevel.Info);
+                    Logging.WriteToLog(string.Format("/* Uninstall Method: {0} */", ModpackSettings.UninstallMode.ToString()), Logfiles.Uninstaller, LogLevel.Info);
+                    Logging.WriteToLog(@"/*  files and folders deleted  */", Logfiles.Uninstaller, LogLevel.Info);
+                }
             }
 
             //delete all files (not shortcuts)
@@ -645,7 +654,10 @@ namespace RelhaxModpack.InstallerComponents
                     if (!Utils.FileDelete(file))
                         success = false;
                     else
-                        Logging.WriteToLog(file, Logfiles.Uninstaller, LogLevel.Info);
+                    {
+                        if(logIt)
+                            Logging.WriteToLog(file, Logfiles.Uninstaller, LogLevel.Info);
+                    }
                 }
             }
 
@@ -662,7 +674,10 @@ namespace RelhaxModpack.InstallerComponents
                         if (!Utils.FileDelete(file))
                             success = false;
                         else
-                            Logging.WriteToLog(file, Logfiles.Uninstaller, LogLevel.Info);
+                        {
+                            if(logIt)
+                                Logging.WriteToLog(file, Logfiles.Uninstaller, LogLevel.Info);
+                        }
                     }
                 }
             }
@@ -675,7 +690,8 @@ namespace RelhaxModpack.InstallerComponents
                 if (Directory.Exists(folder))
                 {
                     Utils.ProcessDirectory(folder);
-                    Logging.WriteToLog(folder, Logfiles.Uninstaller, LogLevel.Info);
+                    if(logIt)
+                        Logging.WriteToLog(folder, Logfiles.Uninstaller, LogLevel.Info);
                 }
             }
 
@@ -695,6 +711,7 @@ namespace RelhaxModpack.InstallerComponents
                 Prog.UninstallStatus = UninstallerExitCodes.Success;
             else
                 Prog.UninstallStatus = UninstallerExitCodes.UninstallError;
+
             Prog.ChildCurrent = Prog.ChildTotal;
             Progress.Report(Prog);
             return success;
@@ -809,7 +826,7 @@ namespace RelhaxModpack.InstallerComponents
             string AppPathTempFolder = Path.Combine(Settings.RelhaxTempFolder, "AppDataBackup");
             //delete if possibly from previous install
             if (Directory.Exists(AppPathTempFolder))
-                Directory.Delete(AppPathTempFolder, true);
+                Utils.DirectoryDelete(AppPathTempFolder, true);
             //and make the folder at the end
             Directory.CreateDirectory(AppPathTempFolder);
 
@@ -844,7 +861,6 @@ namespace RelhaxModpack.InstallerComponents
                 if (Directory.Exists(Path.Combine(Settings.AppDataFolder, folder)))
                 {
                     Utils.DirectoryMove(Path.Combine(Settings.AppDataFolder, folder), Path.Combine(AppPathTempFolder, folder), true);
-                    throw new BadMemeException("i think you forgot to do something here...");
                 }
                 else
                 {
@@ -854,7 +870,7 @@ namespace RelhaxModpack.InstallerComponents
 
             //now delete the temp folder
             Logging.WriteToLog("Starting clearing cache step 2 of 3: actually clearing cache", Logfiles.Application, LogLevel.Debug);
-            Directory.Delete(Settings.AppDataFolder, true);
+            Utils.DirectoryDelete(Settings.AppDataFolder, true);
 
             //then put the above files back
             Logging.WriteToLog("Starting clearing cache step 3 of 3: restoring old files", Logfiles.Application, LogLevel.Debug);
@@ -917,10 +933,10 @@ namespace RelhaxModpack.InstallerComponents
             {
                 case UninstallModes.Default:
                     Logging.WriteToLog("Running uninstall modes method Default");
-                    return UninstallModsDefault();
+                    return UninstallModsDefault(false);
                 case UninstallModes.Quick:
                     Logging.WriteToLog("Running uninstall modes method Quick (Advanced)");
-                    return UninstallModsQuick();
+                    return UninstallModsQuick(false);
                 default:
                     Logging.WriteToLog("Unknown uninstall mode: " + ModpackSettings.UninstallMode.ToString());
                     return false;

@@ -395,7 +395,42 @@ namespace RelhaxModpack
 
         public static bool FileDelete(string file, uint numRetrys = 3, uint timeout = 100)
         {
-            return DirectoryDelete(Path.GetDirectoryName(file), false, numRetrys, timeout, file);
+            bool overallSuccess = true;
+            //check to make sure the number of retries is between 1 and 10
+            if (numRetrys < 1)
+            {
+                Logging.WriteToLog(string.Format("numRetrys is invalid (below 1), setting to 1 (numRetryes={0})", numRetrys),
+                    Logfiles.Application, LogLevel.Warning);
+                numRetrys = 1;
+            }
+            if (numRetrys > 10)
+            {
+                Logging.WriteToLog(string.Format("numRetrys is invalid (above 10), setting to 10 (numRetryes={0})", numRetrys),
+                    Logfiles.Application, LogLevel.Warning);
+                numRetrys = 10;
+            }
+            uint retryCounter = 0;
+            while (retryCounter < numRetrys)
+            {
+                try
+                {
+                    File.Delete(file);
+                    retryCounter = numRetrys;
+                }
+                catch (Exception ex)
+                {
+                    Logging.WriteToLog(string.Format("failed to delete {0}, retryCount={1}, message:\n{2}", file, retryCounter, ex.Message),
+                        Logfiles.Application, LogLevel.Error);
+                    retryCounter++;
+                    System.Threading.Thread.Sleep((int)timeout);
+                    if (retryCounter == numRetrys)
+                    {
+                        Logging.Debug("retries = counter, fully failed to delete file {0}", file);
+                        overallSuccess = false;
+                    }
+                }
+            }
+            return overallSuccess;
         }
 
         /// <summary>
@@ -488,36 +523,47 @@ namespace RelhaxModpack
 
         public static void DirectoryMove(string source, string destination, bool recursive, uint numRetrys = 3, uint timeout = 100, string pattern = "*")
         {
+            //make the destination if it does not already exist
+            if (!Directory.Exists(destination))
+                Directory.CreateDirectory(destination);
+
             //DirectoryMove works by getting a directory list of all directories in the source to create,
             //then making the directories, moving the files, and then deleting the old directories
             List<string> directoreisToCreate = Directory.GetDirectories(source, pattern,
                 recursive? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).ToList();
+
             //create them at the target
-            foreach(string s in directoreisToCreate)
+            foreach(string fullPath in directoreisToCreate)
             {
-                if(!Directory.Exists(Path.Combine(destination,s)))
+                //trim out the base path so we only have the new path left
+                string partPath = fullPath.Substring(source.Length+1);
+                string newPath = Path.Combine(destination, partPath);
+                if(!Directory.Exists(newPath))
                 {
-                    Directory.CreateDirectory(Path.Combine(destination, s));
+                    Directory.CreateDirectory(newPath);
                 }
             }
+
             //move the files over
             List<string> filesToMove = Directory.GetFiles(source, pattern,
                 recursive? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).ToList();
             foreach(string file in filesToMove)
             {
-                File.Move(Path.Combine(source, file), Path.Combine(destination, file));
+                string partPath = file.Substring(source.Length + 1);
+                string newPath = Path.Combine(destination, partPath);
+                File.Move(file, newPath);
             }
+
             //delete all the other old empty source directories
             directoreisToCreate.Sort();
-            foreach(string s in directoreisToCreate)
+            directoreisToCreate.Reverse();
+            foreach(string fullPath in directoreisToCreate)
             {
-                if(Directory.Exists(Path.Combine(source,s)))
+                if(Directory.Exists(fullPath))
                 {
-                    if (Directory.GetFiles(Path.Combine(source, s)).Count() > 0)
+                    if (Directory.GetFiles(fullPath,"*",SearchOption.AllDirectories).Count() > 0)
                         throw new BadMemeException("waaaaaaa?");
-                    Directory.Delete(Path.Combine(source, s));
-                    //TODO: will this work in it's curent setup
-                    //TODO: add while and retry and stuff
+                    Directory.Delete(fullPath);
                 }
             }
         }
