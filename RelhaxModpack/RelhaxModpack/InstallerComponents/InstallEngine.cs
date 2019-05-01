@@ -1010,11 +1010,18 @@ namespace RelhaxModpack.InstallerComponents
                 if (tasks.Count() != packageThreads.Count())
                     throw new BadMemeException("ohhhhhhhhh, NOW you f*cked UP!");
 
-                for(int k = 0; k < tasks.Count(); k++)
+                //start the threads
+                for (int k = 0; k < tasks.Count(); k++)
                 {
                     Logging.WriteToLog(string.Format("thread {0} starting task, packages to extract={1}", k, packageThreads[k].Count));
                     //use the task factory to create tasks(threads) for each logical cores
-                    tasks[k] = Task.Factory.StartNew(() => ExtractFiles(packageThreads[k], k));
+                    tasks[k] = Task.Run(() =>
+                    {
+                        ExtractFiles(packageThreads[k], k);
+                    });
+                    Logging.Debug("thread {0} waiting to be started", k);
+                    while (tasks[k].Status != TaskStatus.Running) ;
+                    Logging.Debug("thread {0} running, starting next task", k);
                 }
 
                 //and log it all
@@ -1190,9 +1197,9 @@ namespace RelhaxModpack.InstallerComponents
             {
                 try
                 {
-                    using (RelhaxZipFile zip = new RelhaxZipFile(zipFilePath))
+                    using (ZipFile zip = new ZipFile(zipFilePath))
                     {
-                        zip.ThreadID = threadNum;
+                        //zip.ThreadID = threadNum;
                         //update args and logging here...
                         //first for loop takes care of any path replacing in the zipfile
                         for(int j = 0; j < zip.Entries.Count; j++)
@@ -1312,7 +1319,7 @@ namespace RelhaxModpack.InstallerComponents
                 Prog.EntriesTotal = (uint)e.EntriesTotal;
                 Prog.EntryFilename = e.CurrentEntry.FileName;
                 Prog.Filename = e.ArchiveName;
-                Prog.ThreadID = (uint)(sender as RelhaxZipFile).ThreadID;
+                //Prog.ThreadID = (uint)(sender as RelhaxZipFile).ThreadID;
                 Progress.Report(Prog);
             }
         }
