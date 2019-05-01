@@ -1211,6 +1211,8 @@ namespace RelhaxModpack
                     bool retry = true;
                     while (retry)
                     {
+                        //replace the start address macro
+                        package.StartAddress = package.StartAddress.Replace("{onlineFolder}", Settings.WoTModpackOnlineFolderVersion);
                         fileToDownload = package.StartAddress + package.ZipFile + package.EndAddress;
                         fileToSaveTo = Path.Combine(Settings.RelhaxDownloadsFolder, package.ZipFile);
                         current_bytes_downloaded = 0;
