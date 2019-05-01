@@ -308,8 +308,8 @@ namespace RelhaxModpack.Windows
                 //if not stable db, update WoT current version and online folder version macros from modInfoxml itself
                 if (ModpackSettings.DatabaseDistroVersion != DatabaseVersions.Stable)
                 {
-                    Settings.WoTModpackOnlineFolderVersion = XMLUtils.GetXMLStringFromXPath(modInfoDocument, "//modInfoAlpha.xml@onlineFolder");
-                    Settings.WoTClientVersion = XMLUtils.GetXMLStringFromXPath(modInfoDocument, "//modInfoAlpha.xml@version");
+                    Settings.WoTModpackOnlineFolderVersion = XMLUtils.GetXMLStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@onlineFolder");
+                    Settings.WoTClientVersion = XMLUtils.GetXMLStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@version");
                 }
 
                 //parse the modInfoXml to list in memory
