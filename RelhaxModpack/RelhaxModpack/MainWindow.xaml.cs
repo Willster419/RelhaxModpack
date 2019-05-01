@@ -783,6 +783,13 @@ namespace RelhaxModpack
                     Settings.WoTClientVersion = supportedVersionsXML[supportedVersionsXML.Count - 1].InnerText;
                     Settings.WoTModpackOnlineFolderVersion = supportedVersionsXML[supportedVersionsXML.Count - 1].Attributes["folder"].Value;
                 }
+
+                //if the version does not match, then we need to set the online download version (even if we are in test mode)
+                if(!supportedVersionsString.Contains(Settings.WoTClientVersion))
+                {
+                    Settings.WoTModpackOnlineFolderVersion = supportedVersionsXML[supportedVersionsXML.Count - 1].Attributes["folder"].Value;
+                }
+
                 //if the user wants to, check if the database has actually changed
                 if (ModpackSettings.NotifyIfSameDatabase)
                 {
