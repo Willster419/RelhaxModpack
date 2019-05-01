@@ -229,7 +229,7 @@ namespace RelhaxModpack.Windows
                     //from server download
                     case DatabaseVersions.Stable:
                         //make string
-                        string modInfoxmlURL = Settings.DefaultStartAddress + "modInfo.dat";
+                        string modInfoxmlURL = Settings.WotmodsDatabaseDatRoot + "modInfo.dat";
                         modInfoxmlURL = modInfoxmlURL.Replace("{onlineFolder}", Settings.WoTModpackOnlineFolderVersion);
                         //download dat file
                         string tempDownloadLocation = Path.Combine(Settings.RelhaxTempFolder, "modInfo.dat");
@@ -355,7 +355,11 @@ namespace RelhaxModpack.Windows
 
                     //only look for a crc if the cache file exists
                     if (!File.Exists(zipFile))
+                    {
+                        //set the download flag since it doesn't exist
+                        package.DownloadFlag = true;
                         continue;
+                    }
 
                     //since file exists, report progress here
                     loadProgress.ReportMessage = string.Format("{0} {1} {2}",

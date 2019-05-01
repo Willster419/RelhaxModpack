@@ -37,7 +37,9 @@ namespace RelhaxModpack
 
         public const string LastSavedConfigFilename = "lastInstalledConfig.xml";
 
-        public static string DefaultStartAddress = @"http://wotmods.relhaxmodpack.com/WoT/{onlineFolder}/";
+        public static string DefaultStartAddress = @"http://bigmods.relhaxmodpack.com/WoT/{onlineFolder}/";
+
+        public static string WotmodsDatabaseDatRoot = @"http://wotmods.relhaxmodpack.com/WoT/{onlineFolder}/";
 
         public static string DefaultEndAddress = @"";
 
