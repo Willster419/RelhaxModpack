@@ -571,6 +571,12 @@ namespace RelhaxModpack.InstallerComponents
                 }
             }
 
+            //recrusive delete
+            if (!Utils.DirectoryDelete(Path.Combine(Settings.WoTDirectory, "res_mods"), true))
+                success = false;
+            if (!Utils.DirectoryDelete(Path.Combine(Settings.WoTDirectory, "mods"), true))
+                success = false;
+
             //re-create the folders at the end
             Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, "res_mods", Settings.WoTClientVersion));
             Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, "mods", Settings.WoTClientVersion));
@@ -983,8 +989,14 @@ namespace RelhaxModpack.InstallerComponents
                 //if a user has 8 cores, then make a lists of packages to install
                 List<DatabasePackage>[] packageThreads = new List<DatabasePackage>[numThreads];
 
+                //new up the lists before we can assign to them
+                for (int j = 0; j < packageThreads.Count(); j++)
+                {
+                    packageThreads[j] = new List<DatabasePackage>();
+                }
+
                 //assign each package one at a time into a package thread
-                for(int j = 0; j < packages.Count; j++)
+                for (int j = 0; j < packages.Count; j++)
                 {
                     int threadSelector = j % numThreads;
                     packageThreads[threadSelector].Add(packages[j]);
