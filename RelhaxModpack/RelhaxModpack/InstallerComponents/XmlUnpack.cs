@@ -19,14 +19,14 @@
         //for the tostring thing
         public override string ToString()
         {
-            return string.Format("NativeProcessingFile: {0}\nActualPatchName: {1}\nPkg: {2}\nDirectoryInArchive: {3}\nFileName: {4}\nExtractDirectory: {5}\nNewFileName: {6}",
-                NativeProcessingFile.Equals("") ? "(empty)" : NativeProcessingFile,
-                ActualPatchName.Equals("") ? "(empty)" : ActualPatchName,
-                Pkg.Equals("") ? "(empty)" : Pkg,
-                DirectoryInArchive.Equals("") ? "(empty)" : DirectoryInArchive,
-                FileName.Equals("") ? "(empty)" : FileName,
-                ExtractDirectory.Equals("") ? "(empty)" : ExtractDirectory,
-                NewFileName.Equals("") ? "(empty)" : NewFileName);
+            return string.Format("NativeProcessingFile={0}, ActualPatchName={1}, Pkg={2}, DirectoryInArchive={3}, FileName={4}, ExtractDirectory={5}, NewFileName={6}",
+                NativeProcessingFile,
+                ActualPatchName,
+                Pkg,
+                DirectoryInArchive,
+                FileName,
+                ExtractDirectory,
+                NewFileName);
         }
     }
 }
