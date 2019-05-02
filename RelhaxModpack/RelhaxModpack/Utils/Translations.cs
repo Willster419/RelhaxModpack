@@ -2090,19 +2090,40 @@ namespace RelhaxModpack
             #endregion
 
             #region Installer Messages
-            //Component: extractingPackage
+            //Component: installClearCache
             //
-            English.Add("extractingPackage", "Extracting package");
-            Gernam.Add("extractingPackage", "Entpacke Paket");
-            Polish.Add("extractingPackage", "Wypakowywanie paczki");
-            French.Add("extractingPackage", "Extraction du package");
+            English.Add("installClearCache", "Deleting WoT cache");
+            Gernam.Add("installClearCache", "WoT Zwischenspeicher löschen");
+            Polish.Add("installClearCache", "Usuwanie cache WoTa");
+            French.Add("installClearCache", "Suppression du cache WoT");
 
-            //Component: parallelExtraction
+            //Component: installClearLogs
             //
-            English.Add("parallelExtraction", "Completed parallel extraction threads:");
-            Gernam.Add("parallelExtraction", "Parallele Entpack-Prozeduren beendet:");
-            Polish.Add("parallelExtraction", "Zakończono jednoczesne wypakowywanie:");// IMHO Thread is a word that IT guys understand in this case, so i skipped it. The meaning is still the same.
-            French.Add("parallelExtraction", "Threads d'extraction parallèles terminés:");
+            English.Add("installClearCache", "Deleting WoT logs");
+            Gernam.Add("installClearCache", TranslationNeeded);
+            Polish.Add("installClearCache", TranslationNeeded);
+            French.Add("installClearCache", TranslationNeeded);
+
+            //Component: installCleanMods
+            //
+            English.Add("installClearCache", "Cleaning mods folders");
+            Gernam.Add("installClearCache", TranslationNeeded);
+            Polish.Add("installClearCache", TranslationNeeded);
+            French.Add("installClearCache", TranslationNeeded);
+
+            //Component: installExtractingMods
+            //
+            English.Add("installExtractingMods", "Extracting package");
+            Gernam.Add("installExtractingMods", "Entpacke Paket");
+            Polish.Add("installExtractingMods", "Wypakowywanie paczki");
+            French.Add("installExtractingMods", "Extraction du package");
+
+            //Component: installXmlUnpack
+            //
+            English.Add("installXmlUnpack", "Unpacking local XML file");
+            Gernam.Add("installXmlUnpack", "Entpacke lokale XML Dateien");
+            Polish.Add("installXmlUnpack", "Rozpakowywanie lokalnego pliku XML");
+            French.Add("installXmlUnpack", "Décompresser le fichier XML local");
 
             //Component: extractingPackage
             //
@@ -2153,14 +2174,6 @@ namespace RelhaxModpack
             Polish.Add("scanningModsFolders", TranslationNeeded);
             French.Add("scanningModsFolders", TranslationNeeded);
 
-
-            //Component: deletingWOTCache
-            //
-            English.Add("deletingWOTCache", "Deleting WoT cache");
-            Gernam.Add("deletingWOTCache", "WoT Zwischenspeicher löschen");
-            Polish.Add("deletingWOTCache", "Usuwanie cache WoTa");
-            French.Add("deletingWOTCache", "Suppression du cache WoT");
-
             //Component: restoringUserData
             //
             English.Add("restoringUserData", "Restoring user data");
@@ -2175,20 +2188,12 @@ namespace RelhaxModpack
             Polish.Add("restoringSystemData", TranslationNeeded);
             French.Add("restoringSystemData", TranslationNeeded);
 
-
             //Component restoringData before (function moveFileEx)
             //
             English.Add("writingInstallationLogfile", "writing {0} files to installation-logfile ...");
             Gernam.Add("writingInstallationLogfile", "schreibe {0} Dateieinträge in die Installations-Logdatei ...");
             Polish.Add("writingInstallationLogfile", TranslationNeeded);
             French.Add("writingInstallationLogfile", TranslationNeeded);
-
-            //Component: unpackingXMLFiles
-            //
-            English.Add("unpackingXMLFiles", "Unpacking local XML file");
-            Gernam.Add("unpackingXMLFiles", "Entpacke lokale XML Dateien");
-            Polish.Add("unpackingXMLFiles", "Rozpakowywanie lokalnego pliku XML");
-            French.Add("unpackingXMLFiles", "Décompresser le fichier XML local");
 
             //Component: patchingFile
             //
@@ -2203,13 +2208,6 @@ namespace RelhaxModpack
             Gernam.Add("extractingUserMod", "Benutzer Modifikationen entpacken");
             Polish.Add("extractingUserMod", "Wypakowywanie modyfikacji");
             French.Add("extractingUserMod", "Extraction des mods utilisateur");
-
-            //Component: userPatchingFile
-            //
-            English.Add("userPatchingFile", "User patching file");
-            Gernam.Add("userPatchingFile", "Benutzer Datei wird geändert");
-            Polish.Add("userPatchingFile", "Aktualizowanie plików użytkownika");
-            French.Add("userPatchingFile", "Fichier utilisateur patch");
 
             //Component: ExtractAtlases
             English.Add("AtlasExtraction", "Extracting Atlas file");
@@ -2228,12 +2226,6 @@ namespace RelhaxModpack
             Gernam.Add("AtlasCreating", "Erstelle Atlas Datei");
             Polish.Add("AtlasCreating", "Tworzenie pliku Atlas");
             French.Add("AtlasCreating", "Creations des fichiers Atlas");
-
-            //Component: CreatingAtlases
-            English.Add("AtlasOptimations", "Optimizations");
-            Gernam.Add("AtlasOptimations", "Optimierungen");
-            Polish.Add("AtlasOptimations", "Optymalizacje");
-            French.Add("AtlasOptimations", "Optimisation");
 
             //Component: installingUserFonts
             //
