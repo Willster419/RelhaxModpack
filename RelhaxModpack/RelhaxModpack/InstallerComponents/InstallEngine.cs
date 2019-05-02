@@ -1010,6 +1010,8 @@ namespace RelhaxModpack.InstallerComponents
                 if (tasks.Count() != packageThreads.Count())
                     throw new BadMemeException("ohhhhhhhhh, NOW you f*cked UP!");
 
+                bool valueLocked = false;
+
                 //start the threads
                 for (int k = 0; k < tasks.Count(); k++)
                 {
@@ -1017,10 +1019,13 @@ namespace RelhaxModpack.InstallerComponents
                     //use the task factory to create tasks(threads) for each logical cores
                     tasks[k] = Task.Run(() =>
                     {
-                        ExtractFiles(packageThreads[k], k);
+                        int temp = k;
+                        valueLocked = true;
+                        ExtractFiles(packageThreads[temp], temp);
                     });
                     Logging.Debug("thread {0} waiting to be started", k);
-                    while (tasks[k].Status != TaskStatus.Running) ;
+                    while (!valueLocked) ;
+                    valueLocked = false;
                     Logging.Debug("thread {0} running, starting next task", k);
                 }
 
@@ -1197,9 +1202,9 @@ namespace RelhaxModpack.InstallerComponents
             {
                 try
                 {
-                    using (ZipFile zip = new ZipFile(zipFilePath))
+                    using (RelhaxZipFile zip = new RelhaxZipFile(zipFilePath))
                     {
-                        //zip.ThreadID = threadNum;
+                        zip.ThreadID = threadNum;
                         //update args and logging here...
                         //first for loop takes care of any path replacing in the zipfile
                         for(int j = 0; j < zip.Entries.Count; j++)
@@ -1319,7 +1324,7 @@ namespace RelhaxModpack.InstallerComponents
                 Prog.EntriesTotal = (uint)e.EntriesTotal;
                 Prog.EntryFilename = e.CurrentEntry.FileName;
                 Prog.Filename = e.ArchiveName;
-                //Prog.ThreadID = (uint)(sender as RelhaxZipFile).ThreadID;
+                Prog.ThreadID = (uint)(sender as RelhaxZipFile).ThreadID;
                 Progress.Report(Prog);
             }
         }
@@ -1615,6 +1620,7 @@ namespace RelhaxModpack.InstallerComponents
                 xmlUnpack.FileName = Utils.MacroReplace(xmlUnpack.FileName, ReplacementTypes.FilePath);
                 xmlUnpack.ExtractDirectory = Utils.MacroReplace(xmlUnpack.ExtractDirectory, ReplacementTypes.FilePath);
                 xmlUnpack.NewFileName = Utils.MacroReplace(xmlUnpack.NewFileName, ReplacementTypes.FilePath);
+                xmlUnpack.Pkg = Utils.MacroReplace(xmlUnpack.Pkg, ReplacementTypes.FilePath);
             }
 
             return XmlUnpacks;
