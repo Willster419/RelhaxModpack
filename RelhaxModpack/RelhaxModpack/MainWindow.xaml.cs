@@ -816,6 +816,10 @@ namespace RelhaxModpack
             }
             //show the mod selection list
             modSelectionList = new ModSelectionList();
+            //set the owner
+            //https://stackoverflow.com/questions/21756542/why-is-window-showdialog-not-blocking-in-taskscheduler-task
+            //https://docs.microsoft.com/en-us/dotnet/api/system.windows.window.owner?view=netframework-4.8
+            modSelectionList.Owner = Window.GetWindow(this);
             //https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c
             modSelectionList.OnSelectionListReturn += ModSelectionList_OnSelectionListReturn;
             modSelectionList.Visibility = Visibility.Hidden;
@@ -964,7 +968,7 @@ namespace RelhaxModpack
                 //toggle the button before and after as well
                 CancelDownloadButton.Visibility = Visibility.Visible;
                 CancelDownloadButton.IsEnabled = true;
-                ProcessDownloads(packagesToDownload);
+                await ProcessDownloads(packagesToDownload);
                 CancelDownloadButton.IsEnabled = false;
                 CancelDownloadButton.Visibility = Visibility.Hidden;
                 Logging.WriteToLog(string.Format("download time took {0} msec", stopwatch.Elapsed.TotalMilliseconds - lastTime.TotalMilliseconds));
@@ -1185,7 +1189,7 @@ namespace RelhaxModpack
             }
         }
 
-        private async void ProcessDownloads(List<DatabasePackage> packagesToDownload)
+        private async Task ProcessDownloads(List<DatabasePackage> packagesToDownload)
         {
             //remmeber this is on the UI thread so we can update the progress via this
             //and also update the UI info
