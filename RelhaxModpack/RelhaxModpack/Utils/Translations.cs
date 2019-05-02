@@ -2099,17 +2099,17 @@ namespace RelhaxModpack
 
             //Component: installClearLogs
             //
-            English.Add("installClearCache", "Deleting WoT logs");
-            Gernam.Add("installClearCache", TranslationNeeded);
-            Polish.Add("installClearCache", TranslationNeeded);
-            French.Add("installClearCache", TranslationNeeded);
+            English.Add("installClearLogs", "Deleting WoT logs");
+            Gernam.Add("installClearLogs", TranslationNeeded);
+            Polish.Add("installClearLogs", TranslationNeeded);
+            French.Add("installClearLogs", TranslationNeeded);
 
             //Component: installCleanMods
             //
-            English.Add("installClearCache", "Cleaning mods folders");
-            Gernam.Add("installClearCache", TranslationNeeded);
-            Polish.Add("installClearCache", TranslationNeeded);
-            French.Add("installClearCache", TranslationNeeded);
+            English.Add("installCleanMods", "Cleaning mods folders");
+            Gernam.Add("installCleanMods", TranslationNeeded);
+            Polish.Add("installCleanMods", TranslationNeeded);
+            French.Add("installCleanMods", TranslationNeeded);
 
             //Component: installExtractingMods
             //
