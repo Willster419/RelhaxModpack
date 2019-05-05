@@ -561,7 +561,7 @@ namespace RelhaxModpack.InstallerComponents
             OldTime = InstallStopWatch.Elapsed;
             InstallFinishedArgs.ExitCodes = InstallerExitCodes.Success;
             Prog.InstallStatus = InstallerExitCodes.Success;
-            Logging.Info("Install finished, total install time = {0} msec", Logfiles.Application, (int)InstallStopWatch.Elapsed.TotalMilliseconds);
+            Logging.Info("Install finished, total install time = {0} msec", (int)InstallStopWatch.Elapsed.TotalMilliseconds);
             InstallStopWatch.Stop();
             return InstallFinishedArgs;
         }
