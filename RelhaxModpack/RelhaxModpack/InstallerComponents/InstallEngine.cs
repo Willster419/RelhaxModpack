@@ -30,6 +30,7 @@ namespace RelhaxModpack.InstallerComponents
         ShortcustError,
         ContourIconAtlasError,
         FontInstallError,
+        TrimDownloadCacheError,
         CleanupError,
         UnknownError
     }
@@ -53,9 +54,7 @@ namespace RelhaxModpack.InstallerComponents
     {
         public int ThreadID;
 
-        public RelhaxZipFile(string fileName) : base(fileName)
-        {
-        }
+        public RelhaxZipFile(string fileName) : base(fileName) { }
     }
     #endregion
 
@@ -76,7 +75,7 @@ namespace RelhaxModpack.InstallerComponents
         /// </summary>
         public List<SelectablePackage> FlatListSelectablePackages;
 
-        //for passing back to application (DO NOT USE)
+        //for passing back to application (DO NOT WRITE TO)
         public List<Category> ParsedCategoryList;
         public List<Dependency> Dependencies;
         public List<DatabasePackage> GlobalDependencies;
@@ -484,7 +483,27 @@ namespace RelhaxModpack.InstallerComponents
             //barrier goes here to make sure cleanup is the last thing to do
             Task.WaitAll(concurrentTasksAfterMainExtractoin.Where(task => task != null).ToArray());
 
-            //step 9: cleanup (whatever that implies lol)
+            //step 12: trim download cache folder
+            OldTime = InstallStopWatch.Elapsed;
+            Prog.TotalCurrent++;
+            InstallFinishedArgs.ExitCodes = InstallerExitCodes.TrimDownloadCacheError;
+            Prog.InstallStatus = InstallerExitCodes.TrimDownloadCacheError;
+            Progress.Report(Prog);
+
+            Logging.WriteToLog(string.Format("Trim download cache, current install time = {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds));
+            if(ModpackSettings.DeleteCacheFiles)
+            {
+                if (!TrimDownloadCache())
+                {
+                    return InstallFinishedArgs;
+                }
+                Logging.Info("Trim download cache complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
+            }
+            else
+                Logging.WriteToLog("...skipped (ModpackSettings.DeleteCacheFiles = false)");
+
+
+            //step 13: cleanup (whatever that implies lol)
             OldTime = InstallStopWatch.Elapsed;
             Prog.TotalCurrent++;
             InstallFinishedArgs.ExitCodes = InstallerExitCodes.CleanupError;
@@ -1144,9 +1163,46 @@ namespace RelhaxModpack.InstallerComponents
             }
         }
 
+        private bool TrimDownloadCache()
+        {
+            //get a list of all packages in the database with zip files
+            List<DatabasePackage> allFlatList = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList).Where(package => !string.IsNullOrWhiteSpace(package.ZipFile)).ToList();
+
+            //convert it to a list of strings
+            List<string> zipFilesInDatabase = allFlatList.Select(package => package.ZipFile).ToList();
+
+            //get a list of all files in the download cache folder
+            List<string> zipFilesInCache = Utils.DirectorySearch(Settings.RelhaxDownloadsFolder, SearchOption.TopDirectoryOnly, "*.zip").ToList();
+            if(zipFilesInCache == null)
+            {
+                Logging.Error("failed to get list of zip files in download cache, skipping this step");
+                return false;
+            }
+
+            //update the list to only have the filename, not the complete path
+            zipFilesInCache = zipFilesInCache.Select(str => Path.GetFileName(str)).ToList();
+
+            //get a list of zip files in the cache that aren't in the database, these are old and can be deleted
+            List<string> oldZipFilesNotInDatabase = zipFilesInCache.Except(zipFilesInDatabase).ToList();
+
+            //if there are any in the above list, it means they are old and can be deleted
+            if (oldZipFilesNotInDatabase.Count > 0)
+            {
+                foreach (string zipfile in oldZipFilesNotInDatabase)
+                    Utils.FileDelete(Path.Combine(Settings.RelhaxDownloadsFolder, zipfile));
+            }
+            return true;
+        }
+
         private bool Cleanup()
         {
-            //TODO: is this needed?
+            foreach(string folder in Settings.FoldersToCleanup)
+            {
+                Logging.Debug("cleaning folder {0}, if exists", folder);
+                string folderPath = Path.Combine(Settings.WoTDirectory, folder);
+                if (Directory.Exists(folderPath))
+                    Utils.DirectoryDelete(folderPath, true);
+            }
             return true;
         }
         #endregion

@@ -1025,28 +1025,6 @@ namespace RelhaxModpack
             //after waiting for the installation...
             if (results.ExitCodes == InstallerComponents.InstallerExitCodes.Success)
             {
-                //get a list of all zip files in the database, compare it with the files in the download cache folder
-                //get a list of zip files in the cache that aren't in the database, these are old and can be deleted
-                List<string> zipFilesInDatabase = new List<string>();
-                foreach (DatabasePackage package in Utils.GetFlatList(results.GlobalDependencies, results.Dependencies, null, results.ParsedCategoryList))
-                    if (!string.IsNullOrWhiteSpace(package.ZipFile))
-                        zipFilesInDatabase.Add(package.ZipFile);
-                List<string> zipFilesInCache = Utils.DirectorySearch(Settings.RelhaxDownloadsFolder, SearchOption.TopDirectoryOnly, "*.zip").ToList();
-                List<string> oldZipFilesNotInDatabase = zipFilesInCache.Except(zipFilesInDatabase).ToList();
-                if (oldZipFilesNotInDatabase.Count > 0)
-                {
-                    //there are files to delete
-                    //if ask if false, assume we are deleting old files
-                    if (ModpackSettings.DeleteCacheFiles)
-                    {
-                        InstallProgressTextBox.Text = Translations.GetTranslatedString("DeletingOldCache");
-                        await Task.Run(() =>
-                        {
-                            foreach (string zipfile in oldZipFilesNotInDatabase)
-                                Utils.FileDelete(Path.Combine(Settings.RelhaxDownloadsFolder, zipfile));
-                        });
-                    }
-                }
                 if (ModpackSettings.ShowInstallCompleteWindow)
                 {
                     InstallFinished installFinished = new InstallFinished();
@@ -1057,6 +1035,7 @@ namespace RelhaxModpack
                     MessageBox.Show(Translations.GetTranslatedString("InstallationFinished"));
                 }
                 InstallProgressTextBox.Text = string.Empty;
+                ToggleUIButtons(true);
             }
             else
             {
@@ -1065,6 +1044,7 @@ namespace RelhaxModpack
                 //and log
                 Logging.WriteToLog(string.Format("Installer failed to install, exit code {0}\n{1}", results.ExitCodes.ToString(), results.ErrorMessage),
                     Logfiles.Application, LogLevel.Exception);
+                ToggleUIButtons(true);
             }
         }
 
