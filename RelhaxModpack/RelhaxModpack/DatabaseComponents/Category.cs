@@ -87,6 +87,17 @@ namespace RelhaxModpack
                     GetFlatPackageList(flatPackageList, selectablePackage.Packages);
             }
         }
+
+        public bool AnyPackagesChecked()
+        {
+            foreach(SelectablePackage package in GetFlatPackageList())
+            {
+                if (package.Checked)
+                    return true;
+            }
+
+            return false;
+        }
         #endregion
     }
 }

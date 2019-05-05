@@ -17,9 +17,9 @@ namespace RelhaxModpack
 
         public string PackageName = "";
 
-        public bool Enabled { get; set; } = false;
+        //public bool Enabled { get; set; } = false;
 
-        public bool Checked { get; set; } = false;
+        public bool willBeInstalled { get; set; } = false;
 
         public bool NotFlag = false;
 
