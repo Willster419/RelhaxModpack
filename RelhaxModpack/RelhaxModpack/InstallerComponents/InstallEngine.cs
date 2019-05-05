@@ -1547,12 +1547,22 @@ namespace RelhaxModpack.InstallerComponents
             //get a list of all files in the dedicated patch directory
             //foreach one add it to the patch list
             List<Patch> patches = new List<Patch>();
+
+            //if the patches folder does not exist, then there are no patches to load or run
+            if (!Directory.Exists(Path.Combine(Settings.WoTDirectory, Settings.PatchFolderName)))
+            {
+                Logging.Debug("\"{0}\" folder does not exist, skipping", Settings.PatchFolderName);
+                Logging.Debug("Number of patches: {0}", patches.Count());
+                return patches;
+            }
+
+            //get the list of all patches in the directory
             string[] patch_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.PatchFolderName), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
             if (patch_files == null)
                 Logging.WriteToLog("Failed to parse patches from patch directory (see above lines for more info", Logfiles.Application, LogLevel.Error);
             else
             {
-                Logging.WriteToLog(string.Format("Number of patch files: {0}",patch_files.Count()), Logfiles.Application, LogLevel.Debug);
+                Logging.Debug("Number of patch files: {0}",patch_files.Count());
                 //if there wern't any, don't bother doing anything
                 if(patch_files.Count() > 0)
                 {
@@ -1637,6 +1647,15 @@ namespace RelhaxModpack.InstallerComponents
         private List<Shortcut> MakeShortcutList()
         {
             List<Shortcut> shortcuts = new List<Shortcut>();
+
+            //if the patches folder does not exist, then there are no patches to load or run
+            if (!Directory.Exists(Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName)))
+            {
+                Logging.Debug("\"{0}\" folder does not exist, skipping", Settings.ShortcutFolderName);
+                Logging.WriteToLog(string.Format("Number of shortcuts: {0}", shortcuts.Count()), Logfiles.Application, LogLevel.Debug);
+                return shortcuts;
+            }
+
             //get a list of all files in the dedicated shortcuts directory
             //foreach one add it to the patch list
             string[] shortcut_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
@@ -1713,6 +1732,15 @@ namespace RelhaxModpack.InstallerComponents
         private List<XmlUnpack> MakeXmlUnpackList()
         {
             List<XmlUnpack> XmlUnpacks = new List<XmlUnpack>();
+
+            //if the patches folder does not exist, then there are no patches to load or run
+            if (!Directory.Exists(Path.Combine(Settings.WoTDirectory, Settings.XmlUnpackFolderName)))
+            {
+                Logging.Debug("\"{0}\" folder does not exist, skipping", Settings.XmlUnpackFolderName);
+                Logging.WriteToLog(string.Format("Number of XmlUnpack files: {0}", XmlUnpacks.Count()), Logfiles.Application, LogLevel.Debug);
+                return XmlUnpacks;
+            }
+
             //get a list of all files in the dedicated patch directory
             //foreach one add it to the patch list
             string[] unpack_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.XmlUnpackFolderName), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
@@ -1805,6 +1833,15 @@ namespace RelhaxModpack.InstallerComponents
         private List<Atlas> MakeAtlasList()
         {
             List<Atlas> atlases = new List<Atlas>();
+
+            //if the patches folder does not exist, then there are no patches to load or run
+            if (!Directory.Exists(Path.Combine(Settings.WoTDirectory, Settings.AtlasCreationFoldername)))
+            {
+                Logging.Debug("\"{0}\" folder does not exist, skipping", Settings.AtlasCreationFoldername);
+                Logging.WriteToLog(string.Format("Number of atlases: {0}", atlases.Count()), Logfiles.Application, LogLevel.Debug);
+                return atlases;
+            }
+
             //get a list of all files in the dedicated patch directory
             //foreach one add it to the patch list
             string[] atlas_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.AtlasCreationFoldername), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
