@@ -538,7 +538,7 @@ namespace RelhaxModpack
 
             //Component: DisableTriggersCB
             //
-            English.Add("DisableTriggersCB", "Verbose Logging");
+            English.Add("DisableTriggersCB", "Disable Triggers");
             Gernam.Add("DisableTriggersCB", TranslationNeeded);
             Polish.Add("DisableTriggersCB", TranslationNeeded);
             French.Add("DisableTriggersCB", TranslationNeeded);
@@ -546,7 +546,7 @@ namespace RelhaxModpack
             //Component: DisableTriggersCBDescription
             //
             English.Add("DisableTriggersCBDescription", "When checked, some installation tasks will happen at the end after extraction is complete." +
-                " When unchecked, it will start some tasks (like building the contout icons), after all assets required for it have been extracted." +
+                " When unchecked, it will start some tasks (like building the contour icons), after all assets required for it have been extracted." +
                 " If you are using \"User Mods\", it is recommended to turn this off.");
             Gernam.Add("DisableTriggersCBDescription", TranslationNeeded);
             Polish.Add("DisableTriggersCBDescription", TranslationNeeded);
