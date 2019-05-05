@@ -1571,27 +1571,12 @@
             <param name="password"></param>
             <returns></returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.ProcessDirectory(System.String)">
-            <summary>
-            deletes all empty directories from a given path
-            </summary>
-            <param name="startLocation">the path to start in</param>
-        </member>
         <member name="M:RelhaxModpack.Utils.GetValidFilename(System.String)">
             <summary>
             Checks if a filename has invalid characters and replaces them with underscores
             </summary>
             <param name="fileName"></param>
             <returns></returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.DirectoryDelete(System.String,System.Boolean,System.UInt32,System.UInt32,System.String)">
-            <summary>
-            Deletes files in a directory
-            </summary>
-            <param name="folderPath">The path to delete files from</param>
-            <param name="deleteSubfolders">set to true to delete files recursivly inside each subdirectory</param>
-            <param name="numRetrys">The number of times the method should retry to delete a file</param>
-            <param name="timeout">The ammount of time in milliseconds to wait before trying again to delete files</param>
         </member>
         <member name="M:RelhaxModpack.Utils.ParseBool(System.String,System.Boolean)">
             <summary>

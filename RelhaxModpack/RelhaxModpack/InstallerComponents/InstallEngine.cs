@@ -595,8 +595,8 @@ namespace RelhaxModpack.InstallerComponents
                     Logging.WriteToLog(@"/*  files and folders deleted  */", Logfiles.Uninstaller, LogLevel.Info);
                 }
             }
-            //backup old uninstall logfile
 
+            //backup old uninstall logfile
             bool success = true;
             Prog.UninstallStatus = UninstallerExitCodes.UninstallError;
             foreach(string file in ListOfAllItems)
@@ -750,6 +750,16 @@ namespace RelhaxModpack.InstallerComponents
                 }
             }
 
+            //final wipe of the folders
+            Prog.UninstallStatus = UninstallerExitCodes.PerformFinalClearup;
+            Progress.Report(Prog);
+            if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "res_mods")))
+                if (!Utils.DirectoryDelete(Path.Combine(Settings.WoTDirectory, "res_mods"), true))
+                    success = false;
+            if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "mods")))
+                if (!Utils.DirectoryDelete(Path.Combine(Settings.WoTDirectory, "mods"), true))
+                    success = false;
+
             //delete all empty folders
             Prog.UninstallStatus = UninstallerExitCodes.ProcessingEmptyFolders;
             Progress.Report(Prog);
@@ -757,21 +767,11 @@ namespace RelhaxModpack.InstallerComponents
             {
                 if (Directory.Exists(folder))
                 {
-                    Utils.ProcessDirectory(folder);
+                    Utils.ProcessEmptyDirectories(folder, false);
                     if(logIt)
                         Logging.WriteToLog(folder, Logfiles.Uninstaller, LogLevel.Info);
                 }
             }
-
-            //final wipe of the folders
-            Prog.UninstallStatus = UninstallerExitCodes.PerformFinalClearup;
-            Progress.Report(Prog);
-            if(Directory.Exists(Path.Combine(Settings.WoTDirectory, "res_mods")))
-                if (!Utils.DirectoryDelete(Path.Combine(Settings.WoTDirectory, "res_mods"), true))
-                    success = false;
-            if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "mods")))
-                if (!Utils.DirectoryDelete(Path.Combine(Settings.WoTDirectory, "mods"), true))
-                    success = false;
 
             //re-create the folders at the end
             Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, "res_mods", Settings.WoTClientVersion));
@@ -1711,8 +1711,7 @@ namespace RelhaxModpack.InstallerComponents
                     foreach (string filename in unpack_files)
                     {
                         completePath = Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName, filename);
-                        //apply "normal" file properties just in case the user's wot install directory is special
-                        Utils.ApplyNormalFileProperties(completePath);
+
                         //ok NOW actually add the file to the patch list
                         Logging.Info("Adding xml unpack entries from file {1}", Logfiles.Application, filename);
                         AddXmlUnpackFromFile(XmlUnpacks, filename);

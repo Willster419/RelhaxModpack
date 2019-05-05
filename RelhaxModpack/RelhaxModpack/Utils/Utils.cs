@@ -314,34 +314,40 @@ namespace RelhaxModpack
             }
             return textStr;
         }
-        /// <summary>
-        /// deletes all empty directories from a given path
-        /// </summary>
-        /// <param name="startLocation">the path to start in</param>
-        public static void ProcessDirectory(string startLocation)
+
+        public static void ProcessEmptyDirectories(string startLocation, bool recursive)
         {
             //if the root does not exist then stop now
             if (!Directory.Exists(startLocation))
                 return;
 
-            //get the list of all directories inside it and recursivly process
-            foreach (string directory in Directory.GetDirectories(startLocation))
+            if(recursive)
             {
-                ProcessDirectory(directory);
-                if (Directory.GetFiles(directory).Length == 0 &&
-                    Directory.GetDirectories(directory).Length == 0)
+                //get the list of all directories inside it and recursivly process
+                List<string> directories = DirectorySearch(startLocation, SearchOption.AllDirectories).ToList().Where(direct => Directory.Exists(direct)).ToList();
+                directories.Sort();
+                directories.Reverse();
+
+                foreach (string directory in directories)
                 {
-                    Logging.WriteToLog(string.Format("Deleting empty directory {0}", directory),Logfiles.Application, LogLevel.Debug);
-                    DirectoryDelete(directory, false);
+                    if (Directory.GetFiles(directory).Length == 0 &&
+                        Directory.GetDirectories(directory).Length == 0)
+                    {
+                        Logging.WriteToLog(string.Format("Deleting empty directory {0}", directory), Logfiles.Application, LogLevel.Debug);
+                        DirectoryDelete(directory, false);
+                    }
                 }
             }
 
             //and process the root
-            if (Directory.GetFiles(startLocation).Length == 0 &&
-                    Directory.GetDirectories(startLocation).Length == 0)
+            if (Directory.Exists(startLocation))
             {
-                Logging.WriteToLog(string.Format("Deleting empty directory {0}", startLocation), Logfiles.Application, LogLevel.Debug);
-                DirectoryDelete(startLocation, false);
+                if (Directory.GetFiles(startLocation).Length == 0 &&
+                    Directory.GetDirectories(startLocation).Length == 0)
+                {
+                    Logging.WriteToLog(string.Format("Deleting empty directory {0}", startLocation), Logfiles.Application, LogLevel.Debug);
+                    DirectoryDelete(startLocation, false);
+                }
             }
         }
         
@@ -444,14 +450,7 @@ namespace RelhaxModpack
             return overallSuccess;
         }
 
-        /// <summary>
-        /// Deletes files in a directory
-        /// </summary>
-        /// <param name="folderPath">The path to delete files from</param>
-        /// <param name="deleteSubfolders">set to true to delete files recursivly inside each subdirectory</param>
-        /// <param name="numRetrys">The number of times the method should retry to delete a file</param>
-        /// <param name="timeout">The ammount of time in milliseconds to wait before trying again to delete files</param>
-        public static bool DirectoryDelete(string folderPath, bool deleteSubfolders, uint numRetrys = 3, uint timeout = 100, string pattern = "*")
+        public static bool DirectoryDelete(string folderPath, bool deleteSubfolders, bool deleteRoot = true, uint numRetrys = 3, uint timeout = 100, string pattern = "*")
         {
             bool overallSuccess = true;
             //check to make sure the number of retries is between 1 and 10
@@ -497,39 +496,42 @@ namespace RelhaxModpack
             {
                 foreach (string dir in Directory.GetDirectories(folderPath,pattern,SearchOption.TopDirectoryOnly))
                 {
-                    if (!DirectoryDelete(dir, deleteSubfolders, numRetrys, timeout))
+                    if (!DirectoryDelete(dir, deleteSubfolders, true, numRetrys, timeout))
                         overallSuccess = false;
                 }
             }
-            //delete the folder as well
-            retryCounter = 0;
-            while (retryCounter < numRetrys)
+            //delete the folder as well (if requested)
+            if(deleteRoot)
             {
-                try
+                retryCounter = 0;
+                while (retryCounter < numRetrys)
                 {
-                    Directory.Delete(folderPath);
-                    retryCounter = numRetrys;
-                }
-                catch (Exception ex)
-                {
-                    Logging.WriteToLog(string.Format("failed to delete {0} (empty folder), retryCount={1}, message:\n{2}", folderPath, retryCounter, ex.Message),
-                        Logfiles.Application, LogLevel.Error);
-                    retryCounter++;
-                    System.Threading.Thread.Sleep((int)timeout);
-                    if (retryCounter == numRetrys)
+                    try
                     {
-                        Logging.Debug("retries = counter, fully failed to delete file {0}",folderPath);
-                        overallSuccess = false;
+                        Directory.Delete(folderPath);
+                        retryCounter = numRetrys;
+                    }
+                    catch (Exception ex)
+                    {
+                        Logging.WriteToLog(string.Format("failed to delete {0} (empty folder), retryCount={1}, message:\n{2}", folderPath, retryCounter, ex.Message),
+                            Logfiles.Application, LogLevel.Error);
+                        retryCounter++;
+                        System.Threading.Thread.Sleep((int)timeout);
+                        if (retryCounter == numRetrys)
+                        {
+                            Logging.Debug("retries = counter, fully failed to delete file {0}", folderPath);
+                            overallSuccess = false;
+                        }
                     }
                 }
             }
             return overallSuccess;
         }
 
-        public static async Task DirectoryDeleteAsync(string folderPath, bool deleteSubfolders, uint numRetrys = 3, uint timeout = 100, string pattern = "*")
+        public static async Task DirectoryDeleteAsync(string folderPath, bool deleteSubfolders, bool deleteRoot = true, uint numRetrys = 3, uint timeout = 100, string pattern = "*")
         {
             //Task taskA = Task.Run( () => Console.WriteLine("Hello from taskA."));
-            await Task.Run(() => DirectoryDelete(folderPath, deleteSubfolders, numRetrys, timeout, pattern));
+            await Task.Run(() => DirectoryDelete(folderPath, deleteSubfolders, deleteRoot, numRetrys, timeout, pattern));
         }
 
         public static void DirectoryMove(string source, string destination, bool recursive, uint numRetrys = 3, uint timeout = 100, string pattern = "*")
@@ -624,7 +626,7 @@ namespace RelhaxModpack
                         return null;
                     }
                     if (applyFolderProperties)
-                        File.SetAttributes(directoryPath, FileAttributes.Normal);
+                        File.SetAttributes(directoryPath, FileAttributes.Directory);
                     //add the directory path itself to the search
                     List<string> files = Directory.GetFiles(directoryPath, searchPattern, option).ToList();
                     files.Insert(0, directoryPath);

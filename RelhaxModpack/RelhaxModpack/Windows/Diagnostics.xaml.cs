@@ -159,8 +159,8 @@ namespace RelhaxModpack.Windows
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("clearingDownloadCache");
             try
             {
-                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolder, false, 3, 100, "*.zip");
-                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolder, false, 3, 100, "*.xml");
+                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolder, false, false, 3, 100, "*.zip");
+                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolder, false, false, 3, 100, "*.xml");
             }
             catch (IOException ioex)
             {
@@ -174,7 +174,7 @@ namespace RelhaxModpack.Windows
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("clearingDownloadCacheDatabase ");
             try
             {
-                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolder, false, 3, 100, "*.xml");
+                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolder, false, false, 3, 100, "*.xml");
             }
             catch (IOException ioex)
             {
