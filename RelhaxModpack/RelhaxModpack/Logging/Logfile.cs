@@ -75,6 +75,9 @@ namespace RelhaxModpack
                 case LogLevel.Debug:
                     logMessageLevel = "DEBUG: ";
                     break;
+                case LogLevel.Info:
+                    logMessageLevel = "INFO: ";
+                    break;
                 case LogLevel.Warning:
                     logMessageLevel = "WARNING: ";
                     break;
