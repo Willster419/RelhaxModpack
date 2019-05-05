@@ -51,7 +51,8 @@ namespace RelhaxModpack
             "AutoSyncFrequencyTexbox",
             "DeveloperSettingsHeaderDescription",
             "AutoSyncCheckFrequencyTextBox",
-            "AutoSyncCheckFrequencyTextBoxDescription"
+            "AutoSyncCheckFrequencyTextBoxDescription",
+            "DiagnosticsStatusTextBox"
         };
         private const string TranslationNeeded = "TODO";
         private static readonly string Blank = string.Empty;
@@ -2472,6 +2473,20 @@ namespace RelhaxModpack
             Gernam.Add("launcherRepairModeStarted", "Reparaturmodus wurde erfolgreich gestartet");
             Polish.Add("launcherRepairModeStarted", "Uruchomiono tryb naprawy");
             French.Add("launcherRepairModeStarted", "Mode de réparation démarrer avec succès");
+
+            //Component: ClearDownloadCache
+            //
+            English.Add("ClearDownloadCache", "Clear download cache");
+            Gernam.Add("ClearDownloadCache", TranslationNeeded);
+            Polish.Add("ClearDownloadCache", TranslationNeeded);
+            French.Add("ClearDownloadCache", TranslationNeeded);
+
+            //Component: ClearDownloadCacheDatabase
+            //
+            English.Add("ClearDownloadCache", "Delete download cache database file");
+            Gernam.Add("ClearDownloadCache", TranslationNeeded);
+            Polish.Add("ClearDownloadCache", TranslationNeeded);
+            French.Add("ClearDownloadCache", TranslationNeeded);
 
             //Component: ChangeInstall
             //

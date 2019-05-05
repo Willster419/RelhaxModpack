@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="Diagnostics" MinHeight="300" MinWidth="535" Height="300" Width="535" Loaded="RelhaxWindow_Loaded" LocalizeWindow="True" ApplyToolTips="True" ApplyColorSettings="True">
+        Title="Diagnostics" MinHeight="300" MinWidth="550" Height="300" Width="550" Loaded="RelhaxWindow_Loaded" LocalizeWindow="True" ApplyToolTips="True" ApplyColorSettings="True">
     <Grid >
         <TextBox x:Name="DiagnosticsMainTextBox" Tag="DiagnosticsMainTextBox" HorizontalAlignment="Stretch" Height="65" Margin="10,10,10,0" TextWrapping="Wrap" Text="Helpful explanation window" VerticalAlignment="Top" IsReadOnly="True"/>
         <TextBlock Tag="SelectedInstallation" x:Name="SelectedInstallation" HorizontalAlignment="Stretch" Margin="10,80,0,0" TextWrapping="Wrap" Text="Selected WoT Installation" VerticalAlignment="Top" />
         <TextBox Tag="DiagnosticsStatusTextBox" x:Name="DiagnosticsStatusTextBox" HorizontalAlignment="Stretch" Height="50" Margin="10,209,10,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True"/>
-        <Grid HorizontalAlignment="Left" Height="103" Margin="10,101,0,0" VerticalAlignment="Top" Width="507">
+        <Grid HorizontalAlignment="Stretch" Height="103" Margin="10,101,10,0" VerticalAlignment="Top" >
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -24,7 +24,7 @@
             <Button Tag="LaunchWoTLauncher" x:Name="LaunchWoTLauncher" Content="Start WoT launcher repair" HorizontalAlignment="Stretch" Margin="2,0,2,0" VerticalAlignment="Top"  Click="LaunchWoTLauncher_Click" Grid.Row="1" />
             <Button Tag="ClearDownloadCache" x:Name="ClearDownloadCache" Content="Clear download cache" HorizontalAlignment="Stretch" Margin="2,0,2,0" VerticalAlignment="Top" Click="ClearDownloadCache_Click" Grid.Column="1" />
             <Button Tag="CollectLogInfo" x:Name="CollectLogInfo" Content="Collect log info" HorizontalAlignment="Stretch" Margin="2,0,2,0" VerticalAlignment="Top"  Click="CollectLogInfo_Click" Grid.Row="2" />
-            <Button Tag="ClearDownloadCacheDatabase" x:Name="ClearDownloadCacheDatabase" Content="Clear download cache database" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="2,0,2,0" Grid.Column="1" Grid.Row="1"  Click="ClearDownloadCacheDatabase_Click"/>
+            <Button Tag="ClearDownloadCacheDatabase" x:Name="ClearDownloadCacheDatabase" Content="Delete download cache database file" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="2,0,2,0" Grid.Column="1" Grid.Row="1"  Click="ClearDownloadCacheDatabase_Click"/>
         </Grid>
     </Grid>
 </local:RelhaxWindow>
