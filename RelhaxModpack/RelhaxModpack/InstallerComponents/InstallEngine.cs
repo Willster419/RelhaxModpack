@@ -503,7 +503,7 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.WriteToLog("...skipped (ModpackSettings.DeleteCacheFiles = false)");
 
 
-            //step 13: cleanup (whatever that implies lol)
+            //step 13: cleanup
             OldTime = InstallStopWatch.Elapsed;
             Prog.TotalCurrent++;
             InstallFinishedArgs.ExitCodes = InstallerExitCodes.CleanupError;
@@ -511,10 +511,17 @@ namespace RelhaxModpack.InstallerComponents
             Progress.Report(Prog);
 
             Logging.WriteToLog(string.Format("Cleanup, current install time = {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds));
-            Cleanup();
-            Logging.Info("Cleanup complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
-            
-            if(!ModpackSettings.DisableTriggers)
+            if(!ModpackSettings.ExportMode)
+            {
+                if (!Cleanup())
+                    return InstallFinishedArgs;
+                Logging.Info("Cleanup complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
+            }
+            else
+                Logging.WriteToLog("...skipped (ModpackSettings.ExportMode = true)");
+
+
+            if (!ModpackSettings.DisableTriggers)
             {
                 //check if any triggers are still running
                 foreach (Trigger trigger in Triggers)
