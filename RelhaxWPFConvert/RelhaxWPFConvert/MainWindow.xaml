@@ -94,6 +94,13 @@
                         </TextBlock>
                     </StackPanel>
                 </CheckBox>
+                <GroupBox Header="Not blocking dialog issue" HorizontalAlignment="Left" Height="74" Margin="263,30,0,0" VerticalAlignment="Top" Width="176">
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <Button x:Name="DialogNotBlocksButton" Content="Not blocking" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Width="75" Click="DialogNotBlocksButton_Click"/>
+                        <TextBlock x:Name="IsDialogReturnedButton" HorizontalAlignment="Left" Margin="0,35,0,0" TextWrapping="Wrap" Text="The dialog has not returned" VerticalAlignment="Top" Width="155"/>
+                        <Button x:Name="DialogBlocksButton" Content="Blocking" HorizontalAlignment="Left" Margin="80,10,0,0" VerticalAlignment="Top" Width="75" Click="DialogBlocksButton_Click"/>
+                    </Grid>
+                </GroupBox>
             </Grid>
         </TabItem>
         <TabItem Header="Progress Reporting">

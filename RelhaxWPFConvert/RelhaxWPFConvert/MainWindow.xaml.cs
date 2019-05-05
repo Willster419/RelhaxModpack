@@ -364,5 +364,34 @@ namespace RelhaxWPFConvert
             bmp2.Dispose();
         }
         #endregion
+
+        #region dialog not blocking
+        private void DialogNotBlocksButton_Click(object sender, RoutedEventArgs e)
+        {
+            IsDialogReturnedButton.Text = "The dialog has not returned";
+            TestSubWindow testSubWindow = new TestSubWindow();
+            testSubWindow.Owner = GetWindow(this);
+            testSubWindow.Visibility = Visibility.Hidden;
+            testSubWindow.Hide();
+            testSubWindow.ShowDialog();
+            IsDialogReturnedButton.Text = "The dialog has returned";
+            testSubWindow.WindowState = WindowState.Normal;
+            testSubWindow.Show();
+        }
+        #endregion
+
+        private void DialogBlocksButton_Click(object sender, RoutedEventArgs e)
+        {
+            IsDialogReturnedButton.Text = "The dialog has not returned";
+            TestSubWindow testSubWindow = new TestSubWindow();
+            testSubWindow.Owner = GetWindow(this);
+            //testSubWindow.Visibility = Visibility.Hidden;
+            //setting visability stops the dialog from blocking
+            testSubWindow.Hide();
+            testSubWindow.ShowDialog();
+            IsDialogReturnedButton.Text = "The dialog has returned";
+            testSubWindow.WindowState = WindowState.Normal;
+            //testSubWindow.Show();
+        }
     }
 }
