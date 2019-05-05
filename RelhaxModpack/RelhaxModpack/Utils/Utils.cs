@@ -1548,7 +1548,7 @@ namespace RelhaxModpack
             Logging.Info(shortcut.ToString());
             Logging.Info("Creating shortcut {0}",shortcut.Name);
             //build the full macro for path (target) and name (also filename)
-            string target = MacroReplace(shortcut.Path, ReplacementTypes.FilePath);
+            string target = MacroReplace(shortcut.Path, ReplacementTypes.FilePath).Replace(@"/",@"\");
             string filename = string.Format("{0}.lnk", shortcut.Name);
             string shortcutPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
             shortcutPath = Path.Combine(shortcutPath, filename);

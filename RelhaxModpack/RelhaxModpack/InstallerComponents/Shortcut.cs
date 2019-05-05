@@ -7,13 +7,13 @@ namespace RelhaxModpack
 {
     public class Shortcut
     {
-        public string Path { get; set; } = string.Empty;
-        public string Name { get; set; } = string.Empty;
-        public bool Enabled { get; set; } = false;
+        public string Path = string.Empty;
+        public string Name = string.Empty;
+        public bool Enabled = false;
 
         public override string ToString()
         {
-            return string.Format("{0} - {1} - {2}", Enabled == true ? "X": "O", Name, Path);
+            return string.Format("Title={0} Target={1}", Name, Path);
         }
     }
 
