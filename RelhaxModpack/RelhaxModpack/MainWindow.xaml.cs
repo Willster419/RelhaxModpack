@@ -192,7 +192,7 @@ namespace RelhaxModpack
                             File.Delete(Logging.ApplicationLogFilename);
                             File.Move(Logging.OldApplicationLogFilename, Logging.ApplicationLogFilename);
                             File.AppendAllText(Logging.ApplicationLogFilename, tempNewLogText);
-                            Logging.InitApplicationLogging(Logfiles.Application, Logging.ApplicationLogFilename);
+                            Logging.Init(Logfiles.Application, Logging.ApplicationLogFilename);
                         }
                         else
                             Logging.Info("skipped (old log does not exist)");

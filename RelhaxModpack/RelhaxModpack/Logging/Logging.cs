@@ -104,7 +104,7 @@ namespace RelhaxModpack
         /// Initialize the logging subsystem for the appilcation
         /// </summary>
         /// <returns>True if sucessfull initialization, false otherwise</returns>
-        public static bool InitApplicationLogging(Logfiles logfile, string logfilePath)
+        public static bool Init(Logfiles logfile, string logfilePath)
         {
             Logfile fileToWriteTo = null;
             //assign it here first to make sure it's null

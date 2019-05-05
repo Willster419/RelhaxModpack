@@ -120,7 +120,16 @@ namespace RelhaxModpack.InstallerComponents
             Prog = new RelhaxInstallerProgress();
             Progress = progress;
 
-            Task<RelhaxInstallFinishedEventArgs> task = Task.Run(() => RunInstallation());
+            Task<RelhaxInstallFinishedEventArgs> task = Task.Run(() =>
+            {
+                RelhaxInstallFinishedEventArgs t = RunInstallation();
+
+                //stop the logfile if it was started
+                if (Logging.IsLogOpen(Logfiles.Installer))
+                    Logging.DisposeLogging(Logfiles.Installer);
+
+                return t;
+            });
             return task;
         }
         
@@ -313,6 +322,17 @@ namespace RelhaxModpack.InstallerComponents
             }
             else
                 Logging.WriteToLog("...skipped");
+
+            //backup the last installed log file
+            string backupInstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.InstallLogFilenameBackup);
+            string installLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.InstallLogFilename);
+            if (File.Exists(backupInstallLogfile))
+                Utils.FileDelete(backupInstallLogfile);
+            if (File.Exists(installLogfile))
+                File.Move(installLogfile, backupInstallLogfile);
+
+            //start the logfile for the installer
+            Logging.Init(Logfiles.Installer, installLogfile);
 
             //step 6: extract mods
             OldTime = InstallStopWatch.Elapsed;
@@ -583,7 +603,7 @@ namespace RelhaxModpack.InstallerComponents
                     File.Move(uninstallLogfile, backupUninstallLogfile);
 
                 //create the uninstall logfile and write header info
-                if (!Logging.InitApplicationLogging(Logfiles.Uninstaller, uninstallLogfile))
+                if (!Logging.Init(Logfiles.Uninstaller, uninstallLogfile))
                 {
                     Logging.Error("Failed to init the uninstall logfile");
                     return false;
@@ -697,7 +717,7 @@ namespace RelhaxModpack.InstallerComponents
                     File.Move(uninstallLogfile, backupUninstallLogfile);
 
                 //create the uninstall logfile and write header info
-                if (!Logging.InitApplicationLogging(Logfiles.Uninstaller, uninstallLogfile))
+                if (!Logging.Init(Logfiles.Uninstaller, uninstallLogfile))
                 {
                     Logging.Error("Failed to init the uninstall logfile");
                 }

@@ -702,7 +702,7 @@
             Provides a refrence to an instalce of an uninstall log file
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Logging.InitApplicationLogging(RelhaxModpack.Logfiles,System.String)">
+        <member name="M:RelhaxModpack.Logging.Init(RelhaxModpack.Logfiles,System.String)">
             <summary>
             Initialize the logging subsystem for the appilcation
             </summary>

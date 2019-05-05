@@ -76,7 +76,7 @@ namespace RelhaxModpack
         {
             //init loggine here
             //"The application failed to open a logfile. Eithor check your file permissions or move the application to a folder with write access"
-            if (!Logging.InitApplicationLogging(Logfiles.Application, Logging.ApplicationLogFilename))
+            if (!Logging.Init(Logfiles.Application, Logging.ApplicationLogFilename))
             {
                 MessageBox.Show(Translations.GetTranslatedString("appFailedCreateLogfile"));
                 Shutdown((int)ReturnCodes.LogfileError);
@@ -97,7 +97,7 @@ namespace RelhaxModpack
                     //stop application logging system
                     CloseApplicationLog(false);
                     //start updater logging system
-                    if (!Logging.InitApplicationLogging(Logfiles.Application, Logging.ApplicationUpdaterLogFilename))
+                    if (!Logging.Init(Logfiles.Application, Logging.ApplicationUpdaterLogFilename))
                     {
                         MessageBox.Show("Failed to initialize logfile (Do you have multiple windows open?");
                         Current.Shutdown((int)ReturnCodes.LogfileError);
@@ -115,7 +115,7 @@ namespace RelhaxModpack
                     //stop application logging system
                     CloseApplicationLog(false);
                     //start updater logging system
-                    if (!Logging.InitApplicationLogging(Logfiles.Application, Logging.ApplicationEditorLogFilename))
+                    if (!Logging.Init(Logfiles.Application, Logging.ApplicationEditorLogFilename))
                     {
                         MessageBox.Show("Failed to initialize logfile (Do you have multiple windows open?");
                         Current.Shutdown((int)ReturnCodes.LogfileError);
@@ -133,7 +133,7 @@ namespace RelhaxModpack
                     //stop application logging system
                     CloseApplicationLog(false);
                     //start updater logging system
-                    if (!Logging.InitApplicationLogging(Logfiles.Application, Logging.ApplicationPatchDesignerLogFilename))
+                    if (!Logging.Init(Logfiles.Application, Logging.ApplicationPatchDesignerLogFilename))
                     {
                         MessageBox.Show("Failed to initialize logfile (Do you have multiple windows open?");
                         Current.Shutdown((int)ReturnCodes.LogfileError);
