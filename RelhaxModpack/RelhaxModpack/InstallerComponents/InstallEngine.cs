@@ -392,7 +392,7 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     XMLUtils.UnpackXmlFile(xmlUnpack, unpackBuilder);
                 }
-                Logging.Uninstaller(unpackBuilder.ToString());
+                Logging.Installer(unpackBuilder.ToString());
             }
             else
                 Logging.WriteToLog("...skipped (no XmlUnpack entries parsed");
