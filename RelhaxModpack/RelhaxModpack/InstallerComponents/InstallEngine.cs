@@ -237,7 +237,7 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     return InstallFinishedArgs;
                 }
-                Logging.WriteToLog(string.Format("Backup of mods complete, took {0} msec", (int)((int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds))));
+                Logging.WriteToLog(string.Format("Backup of mods complete, took {0} msec",(int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds)));
             }
             else
                 Logging.WriteToLog("...skipped");
@@ -250,7 +250,7 @@ namespace RelhaxModpack.InstallerComponents
             Progress.Report(Prog);
 
             Logging.WriteToLog(string.Format("Backup of user data, current install time = {0} msec",
-                InstallStopWatch.Elapsed.TotalMilliseconds));
+                (int)InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.SaveUserData)
             {
                 if(!BackupData(packagesWithData))
@@ -270,14 +270,14 @@ namespace RelhaxModpack.InstallerComponents
             Progress.Report(Prog);
 
             Logging.WriteToLog(string.Format("Cleaning of cache folders, current install time = {0} msec",
-                InstallStopWatch.Elapsed.TotalMilliseconds));
+                (int)InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.ClearCache)
             {
                 if(!ClearCache())
                 {
                     return InstallFinishedArgs;
                 }
-                Logging.Info("Wipe of cache complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
+                Logging.Info("Cleaning of cache complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
             }
             else
                 Logging.WriteToLog("...skipped");
@@ -290,14 +290,14 @@ namespace RelhaxModpack.InstallerComponents
             Progress.Report(Prog);
 
             Logging.WriteToLog(string.Format("Cleaning of logs, current install time = {0} msec",
-                InstallStopWatch.Elapsed.TotalMilliseconds));
+                (int)InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.DeleteLogs)
             {
                 if(!ClearLogs())
                 {
                     return InstallFinishedArgs;
                 }
-                Logging.Info("Clear of Logs complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
+                Logging.Info("Cleaning of Logs complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
             }
             else
                 Logging.WriteToLog("...skipped");
@@ -310,14 +310,14 @@ namespace RelhaxModpack.InstallerComponents
             Progress.Report(Prog);
 
             Logging.WriteToLog(string.Format("Cleaning of mods folders, current install time = {0} msec",
-                InstallStopWatch.Elapsed.TotalMilliseconds));
+                (int)InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.CleanInstallation)
             {
                 if (!ClearModsFolders())
                 {
                     return InstallFinishedArgs;
                 }
-                Logging.Info("Clear of mods folders complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
+                Logging.Info("Cleaning of mods folders complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
             }
             else
                 Logging.WriteToLog("...skipped");
@@ -341,7 +341,7 @@ namespace RelhaxModpack.InstallerComponents
             Progress.Report(Prog);
 
             Logging.WriteToLog(string.Format("Extracting mods, current install time = {0} msec",
-                InstallStopWatch.Elapsed.TotalMilliseconds));
+                (int)InstallStopWatch.Elapsed.TotalMilliseconds));
             if(!ExtractFilesAsyncSetup())
             {
                 return InstallFinishedArgs;
@@ -355,8 +355,7 @@ namespace RelhaxModpack.InstallerComponents
             Prog.InstallStatus = InstallerExitCodes.RestoreUserdataError;
             Progress.Report(Prog);
 
-            Logging.WriteToLog(string.Format("Restore of user data, current install time = {0} msec",
-                InstallStopWatch.Elapsed.TotalMilliseconds));
+            Logging.WriteToLog(string.Format("Restore of user data, current install time = {0} msec", (int)InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.SaveUserData)
             {
                 if (packagesWithData.Count > 0)
@@ -381,8 +380,7 @@ namespace RelhaxModpack.InstallerComponents
             Prog.InstallStatus = InstallerExitCodes.XmlUnpackError;
             Progress.Report(Prog);
 
-            Logging.WriteToLog(string.Format("Unpack of xml files, current install time = {0} msec",
-                InstallStopWatch.Elapsed.TotalMilliseconds));
+            Logging.WriteToLog(string.Format("Unpack of xml files, current install time = {0} msec", (int)InstallStopWatch.Elapsed.TotalMilliseconds));
             List<XmlUnpack> xmlUnpacks = MakeXmlUnpackList();
             if (xmlUnpacks.Count > 0)
             {
@@ -393,6 +391,7 @@ namespace RelhaxModpack.InstallerComponents
                     XMLUtils.UnpackXmlFile(xmlUnpack, unpackBuilder);
                 }
                 Logging.Installer(unpackBuilder.ToString());
+                Logging.Info("Unpack of xml files complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
             }
             else
                 Logging.WriteToLog("...skipped (no XmlUnpack entries parsed");
@@ -408,7 +407,7 @@ namespace RelhaxModpack.InstallerComponents
             Progress.Report(Prog);
 
             Logging.WriteToLog(string.Format("Patching of files, current install time = {0} msec",
-                InstallStopWatch.Elapsed.TotalMilliseconds));
+                (int)InstallStopWatch.Elapsed.TotalMilliseconds));
             List<Patch> pathces = MakePatchList();
             if (pathces.Count > 0)
             {
@@ -419,20 +418,20 @@ namespace RelhaxModpack.InstallerComponents
                     {
                         PatchUtils.RunPatch(patch);
                     }
+                    Logging.Info("Patching of files complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
                 });
             }
             else
                 Logging.WriteToLog("...skipped (no patch entries parsed)");
 
             //step 9: create shortcuts (async option)
-            OldTime = InstallStopWatch.Elapsed;
             Prog.TotalCurrent++;
             InstallFinishedArgs.ExitCodes = InstallerExitCodes.ShortcustError;
             Prog.InstallStatus = InstallerExitCodes.ShortcustError;
             Progress.Report(Prog);
 
             Logging.WriteToLog(string.Format("Creating of shortcuts, current install time = {0} msec",
-                InstallStopWatch.Elapsed.TotalMilliseconds));
+                (int)InstallStopWatch.Elapsed.TotalMilliseconds));
             List<Shortcut> shortcuts = MakeShortcutList();
             if (shortcuts.Count > 0)
             {
@@ -448,6 +447,7 @@ namespace RelhaxModpack.InstallerComponents
                         }
                     }
                     Logging.Installer(shortcutBuilder.ToString());
+                    Logging.Info("Creating of shortcuts complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
                 });
             }
             else
@@ -456,20 +456,20 @@ namespace RelhaxModpack.InstallerComponents
             //step 10: create atlases (async option)
             if (ModpackSettings.DisableTriggers)
             {
-                OldTime = InstallStopWatch.Elapsed;
                 Prog.TotalCurrent++;
                 InstallFinishedArgs.ExitCodes = InstallerExitCodes.ContourIconAtlasError;
                 Prog.InstallStatus = InstallerExitCodes.ContourIconAtlasError;
                 Progress.Report(Prog);
 
-                Logging.WriteToLog(string.Format("Creating of atlases, current install time = {0} msec",
-                    InstallStopWatch.Elapsed.TotalMilliseconds));
+                Logging.WriteToLog(string.Format("Creating of atlases, current install time = {0} msec", (int)InstallStopWatch.Elapsed.TotalMilliseconds));
                 List<Atlas> atlases = MakeAtlasList();
                 if (atlases.Count > 0)
                 {
+                    //NOTE: stringbuilder logging is done inside BuildContourIcons()
                     concurrentTasksAfterMainExtractoin[taskIndex++] = Task.Factory.StartNew(() =>
                     {
                         BuildContourIcons();
+                        Logging.Info("Creating of atlases complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
                     });
                 }
                 else
@@ -479,14 +479,13 @@ namespace RelhaxModpack.InstallerComponents
             //step 11: install fonts (async operation)
             if (ModpackSettings.DisableTriggers)
             {
-                OldTime = InstallStopWatch.Elapsed;
                 Prog.TotalCurrent++;
                 InstallFinishedArgs.ExitCodes = InstallerExitCodes.FontInstallError;
                 Prog.InstallStatus = InstallerExitCodes.FontInstallError;
                 Progress.Report(Prog);
 
                 Logging.WriteToLog(string.Format("Installing of fonts, current install time = {0} msec",
-                    InstallStopWatch.Elapsed.TotalMilliseconds));
+                    (int)InstallStopWatch.Elapsed.TotalMilliseconds));
                 string[] fontsToInstall = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername), SearchOption.TopDirectoryOnly, false, @"*", 50, 3, true);
                 if (fontsToInstall == null || fontsToInstall.Count() == 0)
                     Logging.WriteToLog("...skipped (no font files to install)");
@@ -495,12 +494,14 @@ namespace RelhaxModpack.InstallerComponents
                     concurrentTasksAfterMainExtractoin[taskIndex++] = Task.Factory.StartNew(() =>
                     {
                         InstallFonts(fontsToInstall);
+                        Logging.Info("Installing of fonts complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
                     });
                 }
             }
             
             //barrier goes here to make sure cleanup is the last thing to do
             Task.WaitAll(concurrentTasksAfterMainExtractoin.Where(task => task != null).ToArray());
+            Logging.Info("All async operations after extraction complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
 
             //step 12: trim download cache folder
             OldTime = InstallStopWatch.Elapsed;
@@ -509,7 +510,7 @@ namespace RelhaxModpack.InstallerComponents
             Prog.InstallStatus = InstallerExitCodes.TrimDownloadCacheError;
             Progress.Report(Prog);
 
-            Logging.WriteToLog(string.Format("Trim download cache, current install time = {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds));
+            Logging.WriteToLog(string.Format("Trim download cache, current install time = {0} msec", (int)InstallStopWatch.Elapsed.TotalMilliseconds));
             if(ModpackSettings.DeleteCacheFiles)
             {
                 if (!TrimDownloadCache())
@@ -529,7 +530,7 @@ namespace RelhaxModpack.InstallerComponents
             Prog.InstallStatus = InstallerExitCodes.CleanupError;
             Progress.Report(Prog);
 
-            Logging.WriteToLog(string.Format("Cleanup, current install time = {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds));
+            Logging.WriteToLog(string.Format("Cleanup, current install time = {0} msec", (int)InstallStopWatch.Elapsed.TotalMilliseconds));
             if(!ModpackSettings.ExportMode)
             {
                 if (!Cleanup())
@@ -547,9 +548,9 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     if (trigger.TriggerTask != null)
                     {
-                        Logging.Debug("Start waiting for task {0} to complete at time {1}", trigger.Name, InstallStopWatch.Elapsed.TotalMilliseconds);
+                        Logging.Debug("Start waiting for task {0} to complete at time {1}", trigger.Name, (int)InstallStopWatch.Elapsed.TotalMilliseconds);
                         trigger.TriggerTask.Wait();
-                        Logging.Debug("Task {0} finished or was already done at time {1}", trigger.Name, InstallStopWatch.Elapsed.TotalMilliseconds);
+                        Logging.Debug("Task {0} finished or was already done at time {1}", trigger.Name, (int)InstallStopWatch.Elapsed.TotalMilliseconds);
                     }
                     else
                         Logging.Debug("Trigger task {0} is null, skipping", trigger.Name);
@@ -560,7 +561,7 @@ namespace RelhaxModpack.InstallerComponents
             OldTime = InstallStopWatch.Elapsed;
             InstallFinishedArgs.ExitCodes = InstallerExitCodes.Success;
             Prog.InstallStatus = InstallerExitCodes.Success;
-            Logging.Info("Install finished, total install time = {0} msec", Logfiles.Application, InstallStopWatch.Elapsed.TotalMilliseconds);
+            Logging.Info("Install finished, total install time = {0} msec", Logfiles.Application, (int)InstallStopWatch.Elapsed.TotalMilliseconds);
             InstallStopWatch.Stop();
             return InstallFinishedArgs;
         }
@@ -1458,7 +1459,7 @@ namespace RelhaxModpack.InstallerComponents
         private void BuildContourIcons()
         {
             Logging.WriteToLog(string.Format("Creating of atlases, current install time = {0} msec",
-                InstallStopWatch.Elapsed.TotalMilliseconds));
+                (int)InstallStopWatch.Elapsed.TotalMilliseconds));
             List<Atlas> atlases = MakeAtlasList();
             if (atlases.Count > 0)
             {

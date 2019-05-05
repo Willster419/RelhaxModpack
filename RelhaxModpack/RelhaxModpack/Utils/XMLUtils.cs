@@ -571,6 +571,7 @@ namespace RelhaxModpack
             }
 
             Unpack(xmlUnpack.Pkg, sourceCompletePath, destinationCompletePath);
+            unpackBuilder.AppendLine(destinationCompletePath);
 
             Logging.Info("unpacking xml binary file (if binary)");
             try
