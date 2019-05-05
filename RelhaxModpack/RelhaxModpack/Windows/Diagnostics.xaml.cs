@@ -45,7 +45,7 @@ namespace RelhaxModpack.Windows
             };
             if ((bool)manualWoTFind.ShowDialog())
             {
-                Settings.WoTDirectory = manualWoTFind.FileName;
+                Settings.WoTDirectory = Path.GetDirectoryName(manualWoTFind.FileName);
             }
             else
             {
@@ -64,12 +64,12 @@ namespace RelhaxModpack.Windows
             //just to make sure
             if (string.IsNullOrWhiteSpace(Settings.WoTDirectory))
                 return;
-            //TODO: this code needs to be checked, see if it actually works
-            Logging.Debug("Starting WoTLauncher with argument \"-integrity_default_client\"",nameof(Diagnostics));
+
+            Logging.Debug("Starting WoTLauncher with argument \"-integrity_default_client\"");
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("startingLauncherRepairMode");
             string filename = Path.Combine(Settings.WoTDirectory, "WoTLauncher.exe");
             string formattedArguement = "-integrity_default_client";
-            Logging.Info("Complete command: {0} {1}", nameof(Diagnostics), filename, formattedArguement);
+            Logging.Info("Complete command: {0} {1}", filename, formattedArguement);
             try
             {
                 Process.Start(filename, formattedArguement);
@@ -113,7 +113,7 @@ namespace RelhaxModpack.Windows
             }
             apz = null;
             //check in the list to make sure that the entries are valid and paths exist
-            Logging.Debug("Filtering list of files to collect",nameof(Diagnostics));
+            Logging.Debug("Filtering list of files to collect");
             filesToCollect = filesToCollect.Where(fileEntry => !string.IsNullOrWhiteSpace(fileEntry) && File.Exists(fileEntry)).ToList();
             try
             {
@@ -122,22 +122,41 @@ namespace RelhaxModpack.Windows
                     foreach (string s in filesToCollect)
                     {
                         int duplicate = 0;
+
+                        //get just the filename (it will be added to the zip file as just the name)
                         string fileNameToAdd = Path.GetFileName(s);
-                        Logging.Debug("Attempting to add filename {0} in zip entry", nameof(Diagnostics), fileNameToAdd);
+
+                        //run a loop to check if the file already exists in the zip with the same name, if it does then pad it until it does not
+                        Logging.Debug("Attempting to add filename {0} in zip entry", fileNameToAdd);
                         while (zip.ContainsEntry(fileNameToAdd))
                         {
-                            fileNameToAdd = string.Format("{0}_{1}.{2}",
-                                Path.GetFileNameWithoutExtension(fileNameToAdd), duplicate++, Path.GetExtension(fileNameToAdd));
-                            Logging.Debug("exists, using filename {0}", nameof(Diagnostics), fileNameToAdd);
+                            fileNameToAdd = string.Format("{0}_{1}.{2}", Path.GetFileNameWithoutExtension(fileNameToAdd), duplicate++, Path.GetExtension(fileNameToAdd));
+                            Logging.Debug("exists, using filename {0}", fileNameToAdd);
                         }
-                        zip.AddFile(fileNameToAdd);
-                        Logging.Debug("filename {0} added", nameof(Diagnostics), fileNameToAdd);
+
+                        //after padding, put the full path back together
+                        fileNameToAdd = Path.Combine(Path.GetDirectoryName(s), fileNameToAdd);
+
+                        //one last check to make sure it exists
+                        if(!File.Exists(fileNameToAdd))
+                        {
+                            Logging.Error("the file {0} was parsed to exist but after loop modification, it does not!", fileNameToAdd);
+                            continue;
+                        }
+                        else
+                        {
+                            //and the file to the zip file and grab the entry refrence
+                            ZipEntry entry = zip.AddFile(fileNameToAdd);
+                            //then use it to modify the name of the entry in the zip file
+                            entry.FileName = Path.GetFileName(fileNameToAdd);
+                            Logging.Info("file {0} added, entry name in zip = {1}", fileNameToAdd, entry.FileName);
+                        }
                     }
                     string zipSavePath = Path.Combine(
                         Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
                         string.Format("RelhaxModpackLogs_{0}.zip", DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")));
                     zip.Save(zipSavePath);
-                    Logging.Info("zip file saved to {0}", nameof(Diagnostics), zipSavePath);
+                    Logging.Info("zip file saved to {0}", zipSavePath);
                     DiagnosticsStatusTextBox.Text = string.Format("zip file saved to {0}", zipSavePath);
                 }
             }
