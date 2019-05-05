@@ -2420,17 +2420,24 @@ namespace RelhaxModpack
 
             //Component: CollectLogInfo
             //
-            English.Add("CollectLogInfo", "Collect all log files into a zip file to report a problem");
-            Gernam.Add("CollectLogInfo", "Erstelle eine Zip Datei mit allen Protokolldateien um ein Problem zu melden.");
-            Polish.Add("CollectLogInfo", "Zbierz pliki logów w plik zip, by zgłosić problem");
-            French.Add("CollectLogInfo", "Collecté tous les fichiers log dans un fichier zip pour reporter un problème");
+            English.Add("CollectLogInfo", "Collect log files into a zip file to report a problem");
+            Gernam.Add("CollectLogInfo", TranslationNeeded);
+            Polish.Add("CollectLogInfo", TranslationNeeded);
+            French.Add("CollectLogInfo", TranslationNeeded);
 
             //Component: SelectedInstallation
             //
-            English.Add("SelectedInstallation", "Currently Selected Installation: ");
-            Gernam.Add("SelectedInstallation", "Aktuell gewählte Installation");
-            Polish.Add("SelectedInstallation", "Obecnie Wybrana Instalacja: ");
-            French.Add("SelectedInstallation", "Installation actuellement sélectionner: ");
+            English.Add("SelectedInstallation", "Currently Selected Installation:");
+            Gernam.Add("SelectedInstallation", "Aktuell gewählte Installation:");
+            Polish.Add("SelectedInstallation", "Obecnie Wybrana Instalacja:");
+            French.Add("SelectedInstallation", "Installation actuellement sélectionner:");
+
+            //Component: SelectedInstallationNone
+            //
+            English.Add("SelectedInstallationNone", "(none)");
+            Gernam.Add("SelectedInstallationNone", TranslationNeeded);
+            Polish.Add("SelectedInstallationNone", TranslationNeeded);
+            French.Add("SelectedInstallationNone", TranslationNeeded);
 
             //Component: collectionLogInfo
             //
@@ -2483,17 +2490,38 @@ namespace RelhaxModpack
 
             //Component: ClearDownloadCacheDatabase
             //
-            English.Add("ClearDownloadCache", "Delete download cache database file");
-            Gernam.Add("ClearDownloadCache", TranslationNeeded);
-            Polish.Add("ClearDownloadCache", TranslationNeeded);
-            French.Add("ClearDownloadCache", TranslationNeeded);
+            English.Add("ClearDownloadCacheDatabase", "Delete download cache database file");
+            Gernam.Add("ClearDownloadCacheDatabase", TranslationNeeded);
+            Polish.Add("ClearDownloadCacheDatabase", TranslationNeeded);
+            French.Add("ClearDownloadCacheDatabase", TranslationNeeded);
+
+            //Component: ClearDownloadCacheDescription
+            //
+            English.Add("ClearDownloadCacheDescription", "Delete all files in the \"RelhaxDownloads\" folder");
+            Gernam.Add("ClearDownloadCacheDescription", TranslationNeeded);
+            Polish.Add("ClearDownloadCacheDescription", TranslationNeeded);
+            French.Add("ClearDownloadCacheDescription", TranslationNeeded);
+
+            //Component: ClearDownloadCacheDatabaseDescription
+            //
+            English.Add("ClearDownloadCacheDatabaseDescription", "Delete the xml database file. This will cause all zip files to be re-checked for integrity.\nAll invalid files will be re-downloaded if selected in your next installation.");
+            Gernam.Add("ClearDownloadCacheDatabaseDescription", TranslationNeeded);
+            Polish.Add("ClearDownloadCacheDatabaseDescription", TranslationNeeded);
+            French.Add("ClearDownloadCacheDatabaseDescription", TranslationNeeded);
 
             //Component: ChangeInstall
             //
-            English.Add("ChangeInstall", "Change selected WoT install");
-            Gernam.Add("ChangeInstall", "Ändere aktuelle WoT Installation");
-            Polish.Add("ChangeInstall", "Zmień zaznaczoną instalację WoT");
-            French.Add("ChangeInstall", "Changer le dossier d'installation WoT");
+            English.Add("ChangeInstall", "Change the currently selected WoT installation");
+            Gernam.Add("ChangeInstall", TranslationNeeded);
+            Polish.Add("ChangeInstall", TranslationNeeded);
+            French.Add("ChangeInstall", TranslationNeeded);
+
+            //Component: ChangeInstallDescription
+            //
+            English.Add("ChangeInstallDescription", "This will change which log files will get added to the diagnostics zip file");
+            Gernam.Add("ChangeInstallDescription", TranslationNeeded);
+            Polish.Add("ChangeInstallDescription", TranslationNeeded);
+            French.Add("ChangeInstallDescription", TranslationNeeded);
 
             //Component: zipSavedTo
             //

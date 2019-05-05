@@ -27,6 +27,9 @@ namespace RelhaxModpack.Windows
                 ToggleUIOptions(false);
             else
                 ToggleUIOptions(true);
+
+            //set the currently selected installation text
+            SelectedInstallation.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("SelectedInstallation"), Translations.GetTranslatedString("SelectedInstallationNone"));
         }
 
         private void ChangeInstall_Click(object sender, RoutedEventArgs e)
@@ -46,10 +49,11 @@ namespace RelhaxModpack.Windows
             if ((bool)manualWoTFind.ShowDialog())
             {
                 Settings.WoTDirectory = Path.GetDirectoryName(manualWoTFind.FileName);
+                SelectedInstallation.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("SelectedInstallation"), Settings.WoTDirectory);
             }
             else
             {
-                Logging.WriteToLog("User Canceled installation");
+                Logging.WriteToLog("User Canceled selection");
             }
 
             //check to make sure a selected tanks installation is selected
