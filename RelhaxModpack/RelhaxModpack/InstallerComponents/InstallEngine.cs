@@ -468,7 +468,7 @@ namespace RelhaxModpack.InstallerComponents
 
                 Logging.WriteToLog(string.Format("Installing of fonts, current install time = {0} msec",
                     InstallStopWatch.Elapsed.TotalMilliseconds));
-                string[] fontsToInstall = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername), SearchOption.TopDirectoryOnly, @"*", 50, 3, true);
+                string[] fontsToInstall = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername), SearchOption.TopDirectoryOnly, false, @"*", 50, 3, true);
                 if (fontsToInstall == null || fontsToInstall.Count() == 0)
                     Logging.WriteToLog("...skipped (no font files to install)");
                 else
@@ -556,16 +556,16 @@ namespace RelhaxModpack.InstallerComponents
             //get a list of all files and folders in mods and res_mods
             List<string> ListOfAllItems = new List<string>();
             if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "res_mods")))
-                ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "res_mods"), SearchOption.AllDirectories).ToList());
+                ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "res_mods"), SearchOption.AllDirectories,true).ToList());
             if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "mods")))
-                ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "mods"), SearchOption.AllDirectories).ToList());
+                ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "mods"), SearchOption.AllDirectories,true).ToList());
 
             //combine with a list of any installer engine created folders
             foreach (string folder in Settings.FoldersToCleanup)
             {
                 string folderPath = Path.Combine(Settings.WoTDirectory, folder);
                 if (Directory.Exists(folderPath))
-                    ListOfAllItems.AddRange(Utils.DirectorySearch(folderPath, SearchOption.AllDirectories));
+                    ListOfAllItems.AddRange(Utils.DirectorySearch(folderPath, SearchOption.AllDirectories,true));
             }
 
             //start init progress reporting. for uninstall, only use child current, total and filename
@@ -658,16 +658,16 @@ namespace RelhaxModpack.InstallerComponents
 
             //combine with a list of all files and folders in mods and res_mods
             if(Directory.Exists(Path.Combine(Settings.WoTDirectory, "res_mods")))
-                ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "res_mods"), SearchOption.AllDirectories).ToList());
+                ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "res_mods"), SearchOption.AllDirectories,true).ToList());
             if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "mods")))
-                ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "mods"), SearchOption.AllDirectories).ToList());
+                ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "mods"), SearchOption.AllDirectories,true).ToList());
 
             //combine with a list of any installer engine created folders
             foreach(string folder in Settings.FoldersToCleanup)
             {
                 string folderPath = Path.Combine(Settings.WoTDirectory, folder);
                 if (Directory.Exists(folderPath))
-                    ListOfAllItems.AddRange(Utils.DirectorySearch(folderPath, SearchOption.AllDirectories));
+                    ListOfAllItems.AddRange(Utils.DirectorySearch(folderPath, SearchOption.AllDirectories,true));
             }
 
             //merge then sort and then reverse
@@ -862,7 +862,7 @@ namespace RelhaxModpack.InstallerComponents
                     Logging.Debug("complete path: {0}", searchPattern);
 
                     //get the list of files to replace
-                    string[] filesToSave = Utils.DirectorySearch(Path.GetDirectoryName(searchPattern), SearchOption.AllDirectories, Path.GetFileName(searchPattern), 5, 3, false);
+                    string[] filesToSave = Utils.DirectorySearch(Path.GetDirectoryName(searchPattern), SearchOption.AllDirectories, false, Path.GetFileName(searchPattern), 5, 3, false);
 
                     //check if we have files to move
                     if(filesToSave.Count() == 0)
@@ -1150,7 +1150,7 @@ namespace RelhaxModpack.InstallerComponents
         private void InstallFonts(string[] fontsToInstall)
         {
             Logging.Debug("checking system installed fonts to remove duplicates");
-            string[] fontscurrentlyInstalled = Utils.DirectorySearch(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), SearchOption.TopDirectoryOnly);
+            string[] fontscurrentlyInstalled = Utils.DirectorySearch(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), SearchOption.TopDirectoryOnly,false);
             string[] fontsNamesCurrentlyInstalled = fontscurrentlyInstalled.Select(s => Path.GetFileName(s).ToLower()).ToArray();
             //remove any fonts whos filename match what is already installed
             for (int i = 0; i < fontsToInstall.Count(); i++)
@@ -1219,7 +1219,7 @@ namespace RelhaxModpack.InstallerComponents
             List<string> zipFilesInDatabase = allFlatList.Select(package => package.ZipFile).ToList();
 
             //get a list of all files in the download cache folder
-            List<string> zipFilesInCache = Utils.DirectorySearch(Settings.RelhaxDownloadsFolder, SearchOption.TopDirectoryOnly, "*.zip").ToList();
+            List<string> zipFilesInCache = Utils.DirectorySearch(Settings.RelhaxDownloadsFolder, SearchOption.TopDirectoryOnly, false, "*.zip").ToList();
             if(zipFilesInCache == null)
             {
                 Logging.Error("failed to get list of zip files in download cache, skipping this step");
@@ -1503,7 +1503,7 @@ namespace RelhaxModpack.InstallerComponents
                                 case TriggerInstallFonts:
                                     match.TriggerTask = Task.Run(() =>
                                     {
-                                        string[] fontsToInstall = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername), SearchOption.TopDirectoryOnly, @"*", 50, 3, true);
+                                        string[] fontsToInstall = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername), SearchOption.TopDirectoryOnly, false, @"*", 50, 3, true);
                                         if (fontsToInstall == null || fontsToInstall.Count() == 0)
                                             Logging.WriteToLog("...skipped (no font files to install)");
                                         else
@@ -1527,8 +1527,7 @@ namespace RelhaxModpack.InstallerComponents
             //get a list of all files in the dedicated patch directory
             //foreach one add it to the patch list
             List<Patch> patches = new List<Patch>();
-            string[] patch_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.PatchFolderName), SearchOption.TopDirectoryOnly,
-                @"*.xml", 50, 3, true);
+            string[] patch_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.PatchFolderName), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
             if (patch_files == null)
                 Logging.WriteToLog("Failed to parse patches from patch directory (see above lines for more info", Logfiles.Application, LogLevel.Error);
             else
@@ -1620,8 +1619,7 @@ namespace RelhaxModpack.InstallerComponents
             List<Shortcut> shortcuts = new List<Shortcut>();
             //get a list of all files in the dedicated shortcuts directory
             //foreach one add it to the patch list
-            string[] shortcut_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName), SearchOption.TopDirectoryOnly,
-                @"*.xml", 50, 3, true);
+            string[] shortcut_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
             if (shortcut_files == null)
                 Logging.WriteToLog("Failed to parse shortcuts from directory", Logfiles.Application, LogLevel.Error);
             else if (shortcut_files.Count() == 0)
@@ -1697,8 +1695,7 @@ namespace RelhaxModpack.InstallerComponents
             List<XmlUnpack> XmlUnpacks = new List<XmlUnpack>();
             //get a list of all files in the dedicated patch directory
             //foreach one add it to the patch list
-            string[] unpack_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.XmlUnpackFolderName), SearchOption.TopDirectoryOnly,
-                @"*.xml", 50, 3, true);
+            string[] unpack_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.XmlUnpackFolderName), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
             if (unpack_files == null)
                 Logging.WriteToLog("Failed to parse xml unpacks from unpack directory", Logfiles.Application, LogLevel.Error);
             else
@@ -1790,8 +1787,7 @@ namespace RelhaxModpack.InstallerComponents
             List<Atlas> atlases = new List<Atlas>();
             //get a list of all files in the dedicated patch directory
             //foreach one add it to the patch list
-            string[] atlas_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.AtlasCreationFoldername), SearchOption.TopDirectoryOnly,
-                @"*.xml", 50, 3, true);
+            string[] atlas_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.AtlasCreationFoldername), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
             if (atlas_files == null)
                 Logging.WriteToLog("Failed to parse atlases from atlas directory", Logfiles.Application, LogLevel.Error);
             else

@@ -324,7 +324,7 @@ namespace RelhaxModpack
             if(recursive)
             {
                 //get the list of all directories inside it and recursivly process
-                List<string> directories = DirectorySearch(startLocation, SearchOption.AllDirectories).ToList().Where(direct => Directory.Exists(direct)).ToList();
+                List<string> directories = DirectorySearch(startLocation, SearchOption.AllDirectories,false).ToList().Where(direct => Directory.Exists(direct)).ToList();
                 directories.Sort();
                 directories.Reverse();
 
@@ -602,7 +602,7 @@ namespace RelhaxModpack
             }
         }
 
-        public static string[] DirectorySearch(string directoryPath, SearchOption option, string searchPattern = "*",
+        public static string[] DirectorySearch(string directoryPath, SearchOption option, bool includeDirectoryRoot, string searchPattern = "*",
             uint timeout = 5, uint numRetrys = 3, bool applyFolderProperties = true)
         {
             //filter input
@@ -629,7 +629,8 @@ namespace RelhaxModpack
                         File.SetAttributes(directoryPath, FileAttributes.Directory);
                     //add the directory path itself to the search
                     List<string> files = Directory.GetFiles(directoryPath, searchPattern, option).ToList();
-                    files.Insert(0, directoryPath);
+                    if(includeDirectoryRoot)
+                        files.Insert(0, directoryPath);
                     return files.ToArray();
                 }
                 catch (Exception e)
