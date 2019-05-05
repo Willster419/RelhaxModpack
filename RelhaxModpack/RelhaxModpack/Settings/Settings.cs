@@ -91,13 +91,16 @@ namespace RelhaxModpack
 
         public const string FontsToInstallFoldername = "_fonts";
 
+        public const string ReadmeFromZipfileFolderName = "_readme";
+
         public static readonly string[] FoldersToCleanup = new string[]
         {
             PatchFolderName,
             ShortcutFolderName,
             XmlUnpackFolderName,
             AtlasCreationFoldername,
-            FontsToInstallFoldername
+            FontsToInstallFoldername,
+            ReadmeFromZipfileFolderName
         };
 
         public static readonly string MD5HashDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "MD5HashDatabase.xml");
