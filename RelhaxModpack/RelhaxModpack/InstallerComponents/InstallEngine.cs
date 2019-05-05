@@ -552,9 +552,18 @@ namespace RelhaxModpack.InstallerComponents
         {
             Prog.UninstallStatus = UninstallerExitCodes.GettingFilelistError;
             Progress.Report(Prog);
+
             //get a list of all files and folders in mods and res_mods
             List<string> ListOfAllItems = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "res_mods"), SearchOption.AllDirectories).ToList();
             ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "mods"), SearchOption.AllDirectories).ToList());
+
+            //combine with a list of any installer engine created folders
+            foreach (string folder in Settings.FoldersToCleanup)
+            {
+                string folderPath = Path.Combine(Settings.WoTDirectory, folder);
+                if (Directory.Exists(folderPath))
+                    ListOfAllItems.AddRange(Utils.DirectorySearch(folderPath, SearchOption.AllDirectories));
+            }
 
             //start init progress reporting. for uninstall, only use child current, total and filename
             Prog.ChildTotal = ListOfAllItems.Count;
@@ -637,6 +646,14 @@ namespace RelhaxModpack.InstallerComponents
             //combine with a list of all files and folders in mods and res_mods
             ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "res_mods"), SearchOption.AllDirectories).ToList());
             ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "mods"), SearchOption.AllDirectories).ToList());
+
+            //combine with a list of any installer engine created folders
+            foreach(string folder in Settings.FoldersToCleanup)
+            {
+                string folderPath = Path.Combine(Settings.WoTDirectory, folder);
+                if (Directory.Exists(folderPath))
+                    ListOfAllItems.AddRange(Utils.DirectorySearch(folderPath, SearchOption.AllDirectories));
+            }
 
             //merge then sort and then reverse
             ListOfAllItems = ListOfAllItems.Distinct().ToList();
