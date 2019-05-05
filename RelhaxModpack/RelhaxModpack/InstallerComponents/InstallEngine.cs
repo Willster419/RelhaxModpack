@@ -213,7 +213,7 @@ namespace RelhaxModpack.InstallerComponents
             List<SelectablePackage> packagesWithData = selectedPackages.Where(package => package.UserFiles.Count > 0).ToList();
 
             //and reset the stopwatch
-            InstallStopWatch.Reset();
+            InstallStopWatch.Restart();
 
             //step 1 on install: backup user mods
             OldTime = InstallStopWatch.Elapsed;
@@ -482,7 +482,7 @@ namespace RelhaxModpack.InstallerComponents
             }
             
             //barrier goes here to make sure cleanup is the last thing to do
-            Task.WaitAll(concurrentTasksAfterMainExtractoin);
+            Task.WaitAll(concurrentTasksAfterMainExtractoin.Where(task => task != null).ToArray());
 
             //step 9: cleanup (whatever that implies lol)
             OldTime = InstallStopWatch.Elapsed;
@@ -512,7 +512,11 @@ namespace RelhaxModpack.InstallerComponents
             }
 
             //report to log install is finished
+            OldTime = InstallStopWatch.Elapsed;
+            InstallFinishedArgs.ExitCodes = InstallerExitCodes.Success;
+            Prog.InstallStatus = InstallerExitCodes.Success;
             Logging.Info("Install finished, total install time = {0} msec", Logfiles.Application, InstallStopWatch.Elapsed.TotalMilliseconds);
+            InstallStopWatch.Stop();
             return InstallFinishedArgs;
         }
         #endregion
