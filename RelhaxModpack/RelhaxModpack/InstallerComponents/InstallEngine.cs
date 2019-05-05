@@ -237,8 +237,7 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     return InstallFinishedArgs;
                 }
-                Logging.WriteToLog(string.Format("Backup of mods complete, took {0} msec",
-                    InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
+                Logging.WriteToLog(string.Format("Backup of mods complete, took {0} msec", (int)((int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds))));
             }
             else
                 Logging.WriteToLog("...skipped");
@@ -258,7 +257,7 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     return InstallFinishedArgs;
                 }
-                Logging.Info("Back of user data complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
+                Logging.Info("Back of user data complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
             }
             else
                 Logging.WriteToLog("...skipped");
@@ -278,7 +277,7 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     return InstallFinishedArgs;
                 }
-                Logging.Info("Wipe of cache complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
+                Logging.Info("Wipe of cache complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
             }
             else
                 Logging.WriteToLog("...skipped");
@@ -298,7 +297,7 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     return InstallFinishedArgs;
                 }
-                Logging.Info("Clear of Logs complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
+                Logging.Info("Clear of Logs complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
             }
             else
                 Logging.WriteToLog("...skipped");
@@ -318,7 +317,7 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     return InstallFinishedArgs;
                 }
-                Logging.Info("Clear of mods folders complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
+                Logging.Info("Clear of mods folders complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
             }
             else
                 Logging.WriteToLog("...skipped");
@@ -347,7 +346,7 @@ namespace RelhaxModpack.InstallerComponents
             {
                 return InstallFinishedArgs;
             }
-            Logging.Info("Extraction complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
+            Logging.Info("Extraction complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
 
             //step 7: restore data
             OldTime = InstallStopWatch.Elapsed;
@@ -370,7 +369,7 @@ namespace RelhaxModpack.InstallerComponents
                     }
                     Logging.Installer(restoreDataBuilder.ToString());
                 }
-                Logging.Info("Restore of data complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
+                Logging.Info("Restore of data complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
             }
             else
                 Logging.WriteToLog("...skipped");
@@ -517,7 +516,7 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     return InstallFinishedArgs;
                 }
-                Logging.Info("Trim download cache complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
+                Logging.Info("Trim download cache complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
             }
             else
                 Logging.WriteToLog("...skipped (ModpackSettings.DeleteCacheFiles = false)");
@@ -535,7 +534,7 @@ namespace RelhaxModpack.InstallerComponents
             {
                 if (!Cleanup())
                     return InstallFinishedArgs;
-                Logging.Info("Cleanup complete, took {0} msec", InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds);
+                Logging.Info("Cleanup complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
             }
             else
                 Logging.WriteToLog("...skipped (ModpackSettings.ExportMode = true)");
