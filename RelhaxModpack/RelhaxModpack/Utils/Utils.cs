@@ -320,17 +320,28 @@ namespace RelhaxModpack
         /// <param name="startLocation">the path to start in</param>
         public static void ProcessDirectory(string startLocation)
         {
+            //if the root does not exist then stop now
             if (!Directory.Exists(startLocation))
                 return;
-            foreach (var directory in Directory.GetDirectories(startLocation))
+
+            //get the list of all directories inside it and recursivly process
+            foreach (string directory in Directory.GetDirectories(startLocation))
             {
                 ProcessDirectory(directory);
                 if (Directory.GetFiles(directory).Length == 0 &&
                     Directory.GetDirectories(directory).Length == 0)
                 {
                     Logging.WriteToLog(string.Format("Deleting empty directory {0}", directory),Logfiles.Application, LogLevel.Debug);
-                    Directory.Delete(directory, false);
+                    DirectoryDelete(directory, false);
                 }
+            }
+
+            //and process the root
+            if (Directory.GetFiles(startLocation).Length == 0 &&
+                    Directory.GetDirectories(startLocation).Length == 0)
+            {
+                Logging.WriteToLog(string.Format("Deleting empty directory {0}", startLocation), Logfiles.Application, LogLevel.Debug);
+                DirectoryDelete(startLocation, false);
             }
         }
         
@@ -614,7 +625,10 @@ namespace RelhaxModpack
                     }
                     if (applyFolderProperties)
                         File.SetAttributes(directoryPath, FileAttributes.Normal);
-                    return Directory.GetFiles(directoryPath, searchPattern, option);
+                    //add the directory path itself to the search
+                    List<string> files = Directory.GetFiles(directoryPath, searchPattern, option).ToList();
+                    files.Insert(0, directoryPath);
+                    return files.ToArray();
                 }
                 catch (Exception e)
                 {
