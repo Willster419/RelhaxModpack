@@ -1100,40 +1100,40 @@ namespace RelhaxModpack
                 switch (e.InstallStatus)
                 {
                     case InstallerComponents.InstallerExitCodes.BackupModsError:
-                        InstallProgressTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("installBackupMods"), Environment.NewLine, e.Filename);
+                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("installBackupMods"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.BackupDataError:
-                        InstallProgressTextBox.Text = Translations.GetTranslatedString("installBackupData");
+                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("installBackupData"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.ClearCacheError:
-                        InstallProgressTextBox.Text = Translations.GetTranslatedString("installClearCache");
+                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("installClearCache"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.ClearLogsError:
-                        InstallProgressTextBox.Text = Translations.GetTranslatedString("installClearLogs");
+                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("installClearLogs"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.CleanModsError:
-                        InstallProgressTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("installCleanMods"), Environment.NewLine, e.Filename);
+                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("installCleanMods"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.ExtractionError:
-                        InstallProgressTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("installExtractingMods"), Environment.NewLine, e.Filename);
+                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("installExtractingMods"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.UserExtractionError:
-                        InstallProgressTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("extractingUserMod"), Environment.NewLine, e.Filename);
+                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("extractingUserMod"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.RestoreUserdataError:
-                        InstallProgressTextBox.Text = Translations.GetTranslatedString("installRestoreUserdata");
+                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("installRestoreUserdata"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.XmlUnpackError:
-                        InstallProgressTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("installXmlUnpack"), Environment.NewLine, e.Filename);
+                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("installXmlUnpack"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.PatchError:
-                        InstallProgressTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("installPatchFiles"), Environment.NewLine, e.Filename);
+                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("installPatchFiles"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.ShortcustError:
-                        InstallProgressTextBox.Text = Translations.GetTranslatedString("installShortcuts");
+                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("installShortcuts"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.ContourIconAtlasError:
-                        InstallProgressTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("installContourIconAtlas"), Environment.NewLine, e.Filename);
+                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("installContourIconAtlas"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.FontInstallError:
                         InstallProgressTextBox.Text = Translations.GetTranslatedString("installFonts");

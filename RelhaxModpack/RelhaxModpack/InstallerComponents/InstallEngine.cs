@@ -840,9 +840,23 @@ namespace RelhaxModpack.InstallerComponents
 
         private bool BackupData(List<SelectablePackage> packagesWithData)
         {
+            //setup progress reporting
+            //total is backup data operation (not touched)
+            //parent is number of packages with data
+            //child is the file being backed up in this package
+            //using file parameter
+            Prog.ParrentTotal = packagesWithData.Count;
+            Prog.ParrentCurrent = 0;
+            Prog.ChildCurrent = 0;
+            Prog.ChildTotal = 0;
+            Progress.Report(Prog);
+
             foreach(SelectablePackage package in packagesWithData)
             {
-                Logging.WriteToLog(string.Format("Backup data of package {0} starting", package.PackageName));
+                Logging.Info("Backup data of package {0} starting", package.PackageName);
+                Prog.ParrentCurrent++;
+                Prog.ParrentCurrentProgress = package.NameFormatted;
+                Progress.Report(Prog);
                 foreach(UserFile files in package.UserFiles)
                 {
                     //use the search parameter to get the actual files to move
@@ -851,11 +865,11 @@ namespace RelhaxModpack.InstallerComponents
 
                     //legacy compatibility: the path will either start with a macro or with the raw path
                     //examples:
-                    //new:         {appData}\Roaming\Wargaming.net\WorldOfTanks\xvm\users\*
-                    //another new: \\mods\\configs\\promod\\artylog\\modCache.json
-                    //             {app}\autoequip.json
-                    //old:         \res_mods\mods\shared_resources\xvm\res\clanicons\CT\clan\*.png
-                    //             mods\configs\battle_assistant\mod_battle_assistant.txt
+                    //new: {appData}\Roaming\Wargaming.net\WorldOfTanks\xvm\users\*
+                    //old: \\mods\\configs\\promod\\artylog\\modCache.json
+                    //new: {app}\autoequip.json
+                    //old: \res_mods\mods\shared_resources\xvm\res\clanicons\CT\clan\*.png
+                    //old: mods\configs\battle_assistant\mod_battle_assistant.txt
                     //they need to be treated differently
                     string root_directory = "";
                     string actual_search = "";
@@ -892,6 +906,9 @@ namespace RelhaxModpack.InstallerComponents
                         continue;
                     }
 
+                    //update progress
+                    Prog.ChildTotal = filesToSave.Count();
+
                     //make the temp directory to place the files based on this package
                     string tempFolderPath = Path.Combine(Settings.RelhaxTempFolder, package.PackageName);
                     Directory.CreateDirectory(tempFolderPath);
@@ -899,6 +916,9 @@ namespace RelhaxModpack.InstallerComponents
                     //move each file
                     foreach(string file in filesToSave)
                     {
+                        Prog.ChildCurrent++;
+                        Prog.Filename = file;
+                        Progress.Report(Prog);
                         File.Move(file, Path.Combine(tempFolderPath, Path.GetFileName(file)));
                     }
                 }
