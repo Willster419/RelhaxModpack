@@ -2280,13 +2280,6 @@ namespace RelhaxModpack
             Polish.Add("deletingFiles", "Usuwanie plików");
             French.Add("deletingFiles", "Suppression de fichiers");
 
-            //Component DeleteMods
-            //
-            English.Add("scanningModsFolders", "scanning mods folders ...");
-            Gernam.Add("scanningModsFolders", "Durchsuche Mod Verzeichnisse ...");
-            Polish.Add("scanningModsFolders", TranslationNeeded);
-            French.Add("scanningModsFolders", TranslationNeeded);
-
             //Component: 
             //
             English.Add("uninstalling", "Uninstalling");
