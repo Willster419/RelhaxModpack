@@ -1046,7 +1046,7 @@ namespace RelhaxModpack
                 }
                 else
                 {
-                    MessageBox.Show(Translations.GetTranslatedString("InstallationFinished"));
+                    MessageBox.Show(Translations.GetTranslatedString("installationFinished"));
                 }
                 InstallProgressTextBox.Text = string.Empty;
                 ToggleUIButtons(true);
@@ -1099,9 +1099,6 @@ namespace RelhaxModpack
                 //standard progress
                 switch (e.InstallStatus)
                 {
-                    case InstallerComponents.InstallerExitCodes.DownloadModsError:
-                        InstallProgressTextBox.Text = Translations.GetTranslatedString("installDownloadMods");
-                        break;
                     case InstallerComponents.InstallerExitCodes.BackupModsError:
                         InstallProgressTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("installBackupMods"), Environment.NewLine, e.Filename);
                         break;
@@ -1119,6 +1116,9 @@ namespace RelhaxModpack
                         break;
                     case InstallerComponents.InstallerExitCodes.ExtractionError:
                         InstallProgressTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("installExtractingMods"), Environment.NewLine, e.Filename);
+                        break;
+                    case InstallerComponents.InstallerExitCodes.UserExtractionError:
+                        InstallProgressTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("extractingUserMod"), Environment.NewLine, e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.RestoreUserdataError:
                         InstallProgressTextBox.Text = Translations.GetTranslatedString("installRestoreUserdata");
@@ -1140,12 +1140,6 @@ namespace RelhaxModpack
                         break;
                     case InstallerComponents.InstallerExitCodes.CleanupError:
                         InstallProgressTextBox.Text = Translations.GetTranslatedString("installCleanup");
-                        break;
-                    case InstallerComponents.InstallerExitCodes.Success:
-                        InstallProgressTextBox.Text = Translations.GetTranslatedString("installSuccess");
-                        break;
-                    case InstallerComponents.InstallerExitCodes.UnknownError:
-                        InstallProgressTextBox.Text = Translations.GetTranslatedString("installUnknownError");
                         break;
                 }
             }

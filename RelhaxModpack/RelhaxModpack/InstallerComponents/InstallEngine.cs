@@ -24,6 +24,7 @@ namespace RelhaxModpack.InstallerComponents
         ClearLogsError,
         CleanModsError,
         ExtractionError,
+        UserExtractionError,
         RestoreUserdataError,
         XmlUnpackError,
         PatchError,

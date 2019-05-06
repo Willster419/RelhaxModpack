@@ -1765,55 +1765,6 @@ namespace RelhaxModpack
 
             //Component: 
             //
-            English.Add("uninstalling", "Uninstalling");
-            Gernam.Add("uninstalling", "Deinstallieren");
-            Polish.Add("uninstalling", "Deinstalacja w toku");
-            French.Add("uninstalling", "Désinstallation");
-
-            //Component: 
-            //
-            English.Add("installingFonts", "Installing fonts");
-            Gernam.Add("installingFonts", "Installieren von Schriftarten");
-            Polish.Add("installingFonts", "Instalowanie czcionek");
-            French.Add("installingFonts", "Installation des polices");
-
-            //Component: 
-            //
-            English.Add("loadingExtractionText", "Loading extraction text");
-            Gernam.Add("loadingExtractionText", "Extraktionstext laden");
-            Polish.Add("loadingExtractionText", "Ładowanie tekstu");
-            French.Add("loadingExtractionText", "Chargement du texte d'extraction");
-
-            //Component: 
-            //
-            English.Add("extractingRelhaxMods", "Extracting Relhax mods");
-            Gernam.Add("extractingRelhaxMods", "Extrahieren von Relhax mods");
-            Polish.Add("extractingRelhaxMods", "Wypakowywanie modyfikacji mods");
-            French.Add("extractingRelhaxMods", "Extraction des mods Relhax");
-
-            //Component: 
-            //
-            English.Add("extractingUserMods", "Extracting user mods");
-            Gernam.Add("extractingUserMods", "Extrahieren von benutzerdefinierten mods");
-            Polish.Add("extractingUserMods", "Wypakowywanie modyfikacji użytkownika");
-            French.Add("extractingUserMods", "Extraction des mods d'utilisateur");
-
-            //Component: 
-            //
-            English.Add("copyingFile", "Copying file");
-            Gernam.Add("copyingFile", "Kopieren von Dateien");
-            Polish.Add("copyingFile", "Kopiowanie plików");
-            French.Add("copyingFile", "Copie des fichiers");
-
-            //Component: 
-            //
-            English.Add("deletingFile", "Deleting file");
-            Gernam.Add("deletingFile", "Lösche Datei");
-            Polish.Add("deletingFile", "Usuwanie plików");
-            French.Add("deletingFile", "Supression du fichier");
-
-            //Component: 
-            //
             English.Add("of", "of");
             Gernam.Add("of", "von");
             Polish.Add("of", "z");
@@ -2162,6 +2113,21 @@ namespace RelhaxModpack
             #endregion
 
             #region Installer Messages
+
+            //Component: installBackupMods
+            //
+            English.Add("installBackupMods", "Backing up mod file");
+            Gernam.Add("installBackupMods", "Mod Dateien sichern");
+            Polish.Add("installBackupMods", "Stwórz kopię zapasową pliku modyfikacji");
+            French.Add("installBackupMods", "Sauvegarde du fichier mod");
+
+            //Component: installBackupData
+            //
+            English.Add("installBackupData", "Backing up user data");
+            Gernam.Add("installBackupData", "Benutzerdaten sichern");
+            Polish.Add("installBackupData", "Stwórz kopię zapasową danych użytkownika");
+            French.Add("installBackupData", "Sauvegarde des données utilisateur");
+
             //Component: installClearCache
             //
             English.Add("installClearCache", "Deleting WoT cache");
@@ -2171,7 +2137,7 @@ namespace RelhaxModpack
 
             //Component: installClearLogs
             //
-            English.Add("installClearLogs", "Deleting WoT logs");
+            English.Add("installClearLogs", "Deleting log files");
             Gernam.Add("installClearLogs", TranslationNeeded);
             Polish.Add("installClearLogs", TranslationNeeded);
             French.Add("installClearLogs", TranslationNeeded);
@@ -2190,54 +2156,80 @@ namespace RelhaxModpack
             Polish.Add("installExtractingMods", "Wypakowywanie paczki");
             French.Add("installExtractingMods", "Extraction du package");
 
+            //Component: extractingUserMod
+            //
+            English.Add("extractingUserMod", "Extracting user package");
+            Gernam.Add("extractingUserMod", TranslationNeeded);
+            Polish.Add("extractingUserMod", TranslationNeeded);
+            French.Add("extractingUserMod", TranslationNeeded);
+
+            //Component: installRestoreUserdata
+            //
+            English.Add("installRestoreUserdata", "Restoring user data");
+            Gernam.Add("installRestoreUserdata", "Benutzerdaten wiederherstellen");
+            Polish.Add("installRestoreUserdata", "Przywracanie danych użytkownika");
+            French.Add("installRestoreUserdata", "Restoration des données utilisateur");
+
             //Component: installXmlUnpack
             //
-            English.Add("installXmlUnpack", "Unpacking local XML file");
-            Gernam.Add("installXmlUnpack", "Entpacke lokale XML Dateien");
-            Polish.Add("installXmlUnpack", "Rozpakowywanie lokalnego pliku XML");
-            French.Add("installXmlUnpack", "Décompresser le fichier XML local");
+            English.Add("installXmlUnpack", "Unpacking XML file");
+            Gernam.Add("installXmlUnpack", "Entpacke XML Dateien");
+            Polish.Add("installXmlUnpack", "Rozpakowywanie pliku XML");
+            French.Add("installXmlUnpack", "Décompresser le fichier XML");
 
-            //Component: extractingPackage
+            //Component: installPatchFiles
             //
-            English.Add("file", "File");
-            Gernam.Add("file", "Datei");
-            Polish.Add("file", "Plik");
-            French.Add("file", "Fichier");
+            English.Add("installPatchFiles", "Patching file");
+            Gernam.Add("installPatchFiles", "Datei wird geändert");
+            Polish.Add("installPatchFiles", "Aktualizowanie plików");
+            French.Add("installPatchFiles", "Patch du fichier");
 
-            //Component: extractingPackage
+            //Component: installShortcuts
             //
-            English.Add("size", "Size");
-            Gernam.Add("size", "Größe");
-            Polish.Add("size", "Rozmiar");
-            French.Add("size", "Taille");
+            English.Add("installShortcuts", "Creating shortcuts");
+            Gernam.Add("installShortcuts", TranslationNeeded);
+            Polish.Add("installShortcuts", TranslationNeeded);
+            French.Add("installShortcuts", TranslationNeeded);
 
-            //Component: backupModFile
-            //
-            English.Add("backupModFile", "Backing up mod file");
-            Gernam.Add("backupModFile", "Mod Dateien sichern");
-            Polish.Add("backupModFile", "Stwórz kopię zapasową pliku modyfikacji");
-            French.Add("backupModFile", "Sauvegarde du fichier mod");
+            //Component: installContourIconAtlas
+            English.Add("installContourIconAtlas", "Creating Atlas file");
+            Gernam.Add("installContourIconAtlas", "Erstelle Atlas Datei");
+            Polish.Add("installContourIconAtlas", "Tworzenie pliku Atlas");
+            French.Add("installContourIconAtlas", "Creations des fichiers Atlas");
 
-            //Component: backupUserDatas
+            //Component: installFonts
             //
-            English.Add("backupUserDatas", "Backing up user data");
-            Gernam.Add("backupUserDatas", "Benutzerdaten sichern");
-            Polish.Add("backupUserDatas", "Stwórz kopię zapasową danych użytkownika");
-            French.Add("backupUserDatas", "Sauvegarde des données utilisateur");
+            English.Add("installFonts", "Installing fonts");
+            Gernam.Add("installFonts", "Installieren von Schriftarten");
+            Polish.Add("installFonts", "Instalowanie czcionek");
+            French.Add("installFonts", "Installation des polices");
 
-            //Component: backupSystemDatas
+            //Component: installCleanup
             //
-            English.Add("backupSystemDatas", "Backing up mod related data");
-            Gernam.Add("backupSystemDatas", TranslationNeeded);
-            Polish.Add("backupSystemDatas", TranslationNeeded);
-            French.Add("backupSystemDatas", TranslationNeeded);
+            English.Add("installCleanup", "Cleaning Up");
+            Gernam.Add("installCleanup", TranslationNeeded);
+            Polish.Add("installCleanup", TranslationNeeded);
+            French.Add("installCleanup", TranslationNeeded);
 
-            //Component: deletingFiles
+            //Component: ExtractAtlases
+            English.Add("AtlasExtraction", "Extracting Atlas file");
+            Gernam.Add("AtlasExtraction", "Entpacke Atlas Datei");
+            Polish.Add("AtlasExtraction", "Wypakuj plik Atlas");
+            French.Add("AtlasExtraction", "Extraction des fichiers Atlas");
+
+            //Component: 
             //
-            English.Add("deletingFiles", "Deleting files");
-            Gernam.Add("deletingFiles", "Lösche Dateien");
-            Polish.Add("deletingFiles", "Usuwanie plików");
-            French.Add("deletingFiles", "Suppression de fichiers");
+            English.Add("copyingFile", "Copying file");
+            Gernam.Add("copyingFile", "Kopieren von Dateien");
+            Polish.Add("copyingFile", "Kopiowanie plików");
+            French.Add("copyingFile", "Copie des fichiers");
+
+            //Component: 
+            //
+            English.Add("deletingFile", "Deleting file");
+            Gernam.Add("deletingFile", "Lösche Datei");
+            Polish.Add("deletingFile", "Usuwanie plików");
+            French.Add("deletingFile", "Supression du fichier");
 
             //Component DeleteMods
             //
@@ -2246,65 +2238,19 @@ namespace RelhaxModpack
             Polish.Add("scanningModsFolders", TranslationNeeded);
             French.Add("scanningModsFolders", TranslationNeeded);
 
-            //Component: restoringUserData
+            //Component: file
             //
-            English.Add("restoringUserData", "Restoring user data");
-            Gernam.Add("restoringUserData", "Benutzerdaten wiederherstellen");
-            Polish.Add("restoringUserData", "Przywracanie danych użytkownika");
-            French.Add("restoringUserData", "Restoration des données utilisateur");
+            English.Add("file", "File");
+            Gernam.Add("file", "Datei");
+            Polish.Add("file", "Plik");
+            French.Add("file", "Fichier");
 
-            //Component: restoringSystemData
+            //Component: size
             //
-            English.Add("restoringSystemData", "Restoring Mod-files");
-            Gernam.Add("restoringSystemData", "Mod-Dateien wiederherstellen");
-            Polish.Add("restoringSystemData", TranslationNeeded);
-            French.Add("restoringSystemData", TranslationNeeded);
-
-            //Component restoringData before (function moveFileEx)
-            //
-            English.Add("writingInstallationLogfile", "writing {0} files to installation-logfile ...");
-            Gernam.Add("writingInstallationLogfile", "schreibe {0} Dateieinträge in die Installations-Logdatei ...");
-            Polish.Add("writingInstallationLogfile", TranslationNeeded);
-            French.Add("writingInstallationLogfile", TranslationNeeded);
-
-            //Component: patchingFile
-            //
-            English.Add("patchingFile", "Patching file");
-            Gernam.Add("patchingFile", "Datei wird geändert");
-            Polish.Add("patchingFile", "Aktualizowanie plików");
-            French.Add("patchingFile", "Patch du fichier");
-
-            //Component: extractingUserMod
-            //
-            English.Add("extractingUserMod", "Extracting user mod");
-            Gernam.Add("extractingUserMod", "Benutzer Modifikationen entpacken");
-            Polish.Add("extractingUserMod", "Wypakowywanie modyfikacji");
-            French.Add("extractingUserMod", "Extraction des mods utilisateur");
-
-            //Component: ExtractAtlases
-            English.Add("AtlasExtraction", "Extracting Atlas file");
-            Gernam.Add("AtlasExtraction", "Entpacke Atlas Datei");
-            Polish.Add("AtlasExtraction", "Wypakuj plik Atlas");
-            French.Add("AtlasExtraction", "Extraction des fichiers Atlas");
-
-            //Component: ExtractAtlases
-            English.Add("AtlasTexture", "Texture");
-            Gernam.Add("AtlasTexture", "Textur");
-            Polish.Add("AtlasTexture", "Tekstury");
-            French.Add("AtlasTexture", "Texture");
-
-            //Component: CreatingAtlases
-            English.Add("AtlasCreating", "Creating Atlas file");
-            Gernam.Add("AtlasCreating", "Erstelle Atlas Datei");
-            Polish.Add("AtlasCreating", "Tworzenie pliku Atlas");
-            French.Add("AtlasCreating", "Creations des fichiers Atlas");
-
-            //Component: installingUserFonts
-            //
-            English.Add("installingUserFonts", "Installing user fonts");
-            Gernam.Add("installingUserFonts", "Benutzer Schriftsätze installieren");
-            Polish.Add("installingUserFonts", "Instalowanie czcionek użytkownika");
-            French.Add("installingUserFonts", "Installation des polices utilisateur");
+            English.Add("size", "Size");
+            Gernam.Add("size", "Größe");
+            Polish.Add("size", "Rozmiar");
+            French.Add("size", "Taille");
 
             //Component: CheckDatabase
             //
@@ -2327,6 +2273,27 @@ namespace RelhaxModpack
             Polish.Add("installationFinished", "Instalacja jest zakończona");
             French.Add("installationFinished", "L'installation est terminée");
 
+            //Component: deletingFiles
+            //
+            English.Add("deletingFiles", "Deleting files");
+            Gernam.Add("deletingFiles", "Lösche Dateien");
+            Polish.Add("deletingFiles", "Usuwanie plików");
+            French.Add("deletingFiles", "Suppression de fichiers");
+
+            //Component DeleteMods
+            //
+            English.Add("scanningModsFolders", "scanning mods folders ...");
+            Gernam.Add("scanningModsFolders", "Durchsuche Mod Verzeichnisse ...");
+            Polish.Add("scanningModsFolders", TranslationNeeded);
+            French.Add("scanningModsFolders", TranslationNeeded);
+
+            //Component: 
+            //
+            English.Add("uninstalling", "Uninstalling");
+            Gernam.Add("uninstalling", "Deinstallieren");
+            Polish.Add("uninstalling", "Deinstalacja w toku");
+            French.Add("uninstalling", "Désinstallation");
+
             //Component:
             //
             English.Add("WoTRunningHeader", "WoT is Running");
@@ -2340,20 +2307,6 @@ namespace RelhaxModpack
             Gernam.Add("WoTRunningMessage", "Um Fortzufahren, schliesse bitte World of Tanks.");
             Polish.Add("WoTRunningMessage", "Proszę zamknąć World of Tanks, aby kontynuować");
             French.Add("WoTRunningMessage", "Veuillez fermer World of Tanks pour continuer");
-
-            //Component:
-            //
-            English.Add("KillRunningWoTHeader", "Problem ??");
-            Gernam.Add("KillRunningWoTHeader", TranslationNeeded);
-            Polish.Add("KillRunningWoTHeader", TranslationNeeded);
-            French.Add("KillRunningWoTHeader", TranslationNeeded);
-
-            //Component:
-            //
-            English.Add("KillRunningWoTMessage", "You where trying to go on now {0}x times, but the game is still not closed.\n\nIn some conditions, the game was closed by user, but is still running in the background (visible via the TaskManager)\n\nShould we try to kill the task for you?");
-            Gernam.Add("KillRunningWoTMessage", TranslationNeeded);
-            Polish.Add("KillRunningWoTMessage", TranslationNeeded);
-            French.Add("KillRunningWoTMessage", TranslationNeeded);
 
             //Component:
             //
