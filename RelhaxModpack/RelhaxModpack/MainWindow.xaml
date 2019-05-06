@@ -61,9 +61,9 @@
                         <CheckBox Content="Clear WoT cache data" Tag="ClearCacheCB" x:Name="ClearCacheCB" Click="OnClearWoTCacheChanged"/>
                         <CheckBox Content="Save user created data" Tag="SaveUserDataCB" x:Name="SaveUserDataCB" Click="OnSaveUserDataChanged"/>
                         <CheckBox Content="Create shortcuts" Tag="CreateShortcutsCB" x:Name="CreateShortcutsCB" Click="OnCreateShortcutsChanged"/>
-                        <CheckBox Content="Multicore extraction mode" IsEnabled="True" Tag="MulticoreExtractionCB" x:Name="MulticoreExtractionCB" Click="OnMulticoreExtractionChanged"/>
+                        <CheckBox Content="Multicore extraction mode" IsEnabled="False" Tag="MulticoreExtractionCB" x:Name="MulticoreExtractionCB" Click="OnMulticoreExtractionChanged"/>
                         <TextBlock Text="Detected Cores: {0}" Tag="MulticoreExtractionCoresCountLabel" x:Name="MulticoreExtractionCoresCountLabel" IsEnabled="True" Padding="20,0,0,0"/>
-                        <CheckBox Content="Extract while downloading" IsEnabled="True" Tag="InstallWhileDownloadingCB" x:Name="InstallWhileDownloadingCB" Click="OnImmidateExtarctionChanged"/>
+                        <CheckBox Content="Extract while downloading" IsEnabled="False" Tag="InstallWhileDownloadingCB" x:Name="InstallWhileDownloadingCB" Click="OnImmidateExtarctionChanged"/>
                         <CheckBox x:Name="DeleteOldCacheFiles" Content="Delete old cache files" Tag="DeleteOldCacheFiles" Click="DeleteOldCacheFiles_Click"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1"/>

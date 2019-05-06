@@ -43,6 +43,9 @@ namespace RelhaxModpack
         NewsViewer newsViewer = null;
         private WebClient client = null;
 
+        //temp list of components not to toggle
+        Control[] tempDisabledBlacklist = null;
+
         /// <summary>
         /// Creates the instance of the MainWindow class
         /// </summary>
@@ -50,6 +53,21 @@ namespace RelhaxModpack
         {
             InitializeComponent();
             WindowState = WindowState.Minimized;
+            tempDisabledBlacklist = new Control[]
+            {
+                MulticoreExtractionCB,
+                InstallWhileDownloadingCB,
+                BackupModsCB,
+                AdvancedInstallationProgress,
+                ThemeDefault,
+                ThemeDark,
+                ThemeCustom,
+                UseBetaApplicationCB,
+                DisableTriggersCB,
+                AutoInstallCB,
+                OneClickInstallCB,
+                ExportModeCB
+            };
         }
 
         private async void TheMainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -1401,7 +1419,11 @@ namespace RelhaxModpack
             foreach (FrameworkElement control in controlsToToggle)
             {
                 if (control is Button || control is CheckBox || control is RadioButton)
+                {
+                    if (tempDisabledBlacklist.Contains(control))
+                        continue;
                     control.IsEnabled = toggle;
+                }
             }
             //any to include here that arent any of the above class types
             AutoSyncFrequencyTexbox.IsEnabled = toggle;
