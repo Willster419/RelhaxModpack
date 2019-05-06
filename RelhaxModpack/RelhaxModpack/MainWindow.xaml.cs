@@ -1354,29 +1354,42 @@ namespace RelhaxModpack
                 current_download_time = downloadTimer.Elapsed.TotalMilliseconds;
                 return;
             }
+
             //otherwise use standard estimating procedures
             //set current to last and get new currents
             last_bytes_downloaded = current_bytes_downloaded;
             last_download_time = current_download_time;
             current_bytes_downloaded = e.BytesReceived;
             current_download_time = downloadTimer.Elapsed.TotalMilliseconds;
+
             //get the current bytes per millisecond
             double bytes_per_millisecond = (current_bytes_downloaded - last_bytes_downloaded) / (current_download_time - last_download_time);
             double bytes_per_second = bytes_per_millisecond / 1000;
             double kbytes_per_second = bytes_per_second / 1024;
             double mbytes_per_second = kbytes_per_second / 1024;
+
             //if we have a download rate, and a remaining size, then we can get a remaining time!
             double remaining_bytes = e.TotalBytesToReceive - e.BytesReceived;
             double remaining_milliseconds = remaining_bytes / bytes_per_millisecond;
             double remaining_seconds = remaining_milliseconds / 1000;
+
             ChildProgressBar.Maximum = e.TotalBytesToReceive;
             ChildProgressBar.Minimum = 0;
             ChildProgressBar.Value = e.BytesReceived;
+
+            //break it up into lines cause it's hard to read
+            string line1 = string.Format("{0} {1} {2} {3}",
+                Translations.GetTranslatedString("Downloading"), ParentProgressBar.Value, Translations.GetTranslatedString("of"), ParentProgressBar.Maximum);
+
+            string line2 = downloadProgress.ChildCurrentProgress;
+
+            string line3 = string.Format("{0} {1} {2}",
+                Utils.SizeSuffix((ulong)e.BytesReceived,1,true), Translations.GetTranslatedString("of"), Utils.SizeSuffix((ulong)e.TotalBytesToReceive,1,true));
+
+            string line4 = string.Format("{0} {1}",  Math.Round(remaining_seconds,1), Translations.GetTranslatedString("seconds"));
+
             //also report to the download message process
-            InstallProgressTextBox.Text = string.Format("{0} {1} {2} {3}\n{4}\n{5} {6} {7}\n{8} {9} {10}",
-                Translations.GetTranslatedString("downloading"), TotalProgressBar.Value, Translations.GetTranslatedString("of"),
-                TotalProgressBar.Maximum, downloadProgress.ChildCurrentProgress, e.BytesReceived / (1024 * 1024), Translations.GetTranslatedString("of"),
-                e.TotalBytesToReceive / (1024 * 1024), "ETA:", remaining_seconds, Translations.GetTranslatedString("seconds"));
+            InstallProgressTextBox.Text = string.Format("{0}\n{1}\n{2}\n{3}", line1, line2, line3, line4);
         }
 
         private void ToggleUIButtons(bool toggle)

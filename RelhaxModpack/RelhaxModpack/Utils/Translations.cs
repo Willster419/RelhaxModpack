@@ -1672,6 +1672,13 @@ namespace RelhaxModpack
             Polish.Add("Downloading", "Pobieranie");
             French.Add("Downloading", "Téléchargement");
 
+            //Component: seconds
+            //
+            English.Add("seconds", "seconds");
+            Gernam.Add("seconds", TranslationNeeded);
+            Polish.Add("seconds", TranslationNeeded);
+            French.Add("seconds", TranslationNeeded);
+
             //Component: 
             //
             English.Add("patching", "Patching");
@@ -1812,19 +1819,26 @@ namespace RelhaxModpack
             Polish.Add("of", "z");
             French.Add("of", "de");
 
-            //Component: 
+            //Component: failedToDownload1
             //
-            English.Add("failed_To_Download_1", "Failed to download:");
-            Gernam.Add("failed_To_Download_1", "Fehler beim Herunterladen:");
-            Polish.Add("failed_To_Download_1", "Ściąganie zakończone niepowodzeniem, plik:");
-            French.Add("failed_To_Download_1", "Échec de téléchargement:");
+            English.Add("failedToDownload1", "Failed to download:");
+            Gernam.Add("failedToDownload1", "Fehler beim Herunterladen:");
+            Polish.Add("failedToDownload1", "Ściąganie zakończone niepowodzeniem, plik:");
+            French.Add("failedToDownload1", "Échec de téléchargement:");
+
+            //Component: failedToDownload2
+            //
+            English.Add("failedToDownload2", "If you know which mod this is, uncheck it and you should be fine. It will be fixed soon.");
+            Gernam.Add("failedToDownload2", "Wenn du weisst, welcher Mod das ist, deaktiviere ihn und alles sollte funktionieren. Es wird bald behoben.");
+            Polish.Add("failedToDownload2", "Jeśli wiesz który to mod, odznacz go i wszystko powinno byćw porządku. Wkrótce naprawimy błąd.");
+            French.Add("failedToDownload2", "Si vous savez quel mod est la cause, déséléectionnez celui-ci. Un corrigé vas être disponible bientôt.");
 
             //Component: 
             //
-            English.Add("failed_To_Download_2", "If you know which mod this is, uncheck it and you should be fine. It will be fixed soon. Restart this when it exits");
-            Gernam.Add("failed_To_Download_2", "Wenn du weisst, welcher Mod das ist, deaktiviere ihn und alles sollte funktionieren. Es wird bald behoben. Starte das Programm neu nach dem beenden.");
-            Polish.Add("failed_To_Download_2", "Jeśli wiesz który to mod, odznacz go i wszystko powinno byćw porządku. Wkrótce naprawimy błąd. Zrestartuj, jeśli problem pojawia się ponownie.");
-            French.Add("failed_To_Download_2", "Si vous savez quel mod est la cause, déséléectionnez celui-ci. Un corrigé vas être disponible bientôt. Redémarrez ceci a la fermeture");
+            English.Add("failedToDownloadHeader", "Failed to download");
+            Gernam.Add("failedToDownloadHeader", "Fehler beim Herunterladen");
+            Polish.Add("failedToDownloadHeader", "Ściąganie zakończone niepowodzeniem, plik");
+            French.Add("failedToDownloadHeader", "Échec de téléchargement");
 
             //Component: update check against online app version
             //
