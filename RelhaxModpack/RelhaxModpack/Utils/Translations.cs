@@ -52,7 +52,9 @@ namespace RelhaxModpack
             "DeveloperSettingsHeaderDescription",
             "AutoSyncCheckFrequencyTextBox",
             "AutoSyncCheckFrequencyTextBoxDescription",
-            "DiagnosticsStatusTextBox"
+            "DiagnosticsStatusTextBox",
+            "seachCB",
+            "PART_EditableTextBox"
         };
         private const string TranslationNeeded = "TODO";
         private static readonly string Blank = string.Empty;
@@ -1302,47 +1304,105 @@ namespace RelhaxModpack
             #endregion
 
             #region ModSelectionList
-            //Component: continueButton
+            //Component: ContinueButtonLabel
             //
-            English.Add("continueButton", "Install");
-            Gernam.Add("continueButton", "Installieren");
-            Polish.Add("continueButton", "Zainstaluj");
-            French.Add("continueButton", "Installer");
+            English.Add("ContinueButtonLabel", "Install");
+            Gernam.Add("ContinueButtonLabel", "Installieren");
+            Polish.Add("ContinueButtonLabel", "Zainstaluj");
+            French.Add("ContinueButtonLabel", "Installer");
 
-            //Component: cancelButton
+            //Component: CancelButtonLabel
             //
-            English.Add("cancelButton", "Cancel");
-            Gernam.Add("cancelButton", "Abbrechen");
-            Polish.Add("cancelButton", "Anuluj");
-            French.Add("cancelButton", "Anuler");
+            English.Add("CancelButtonLabel", "Cancel");
+            Gernam.Add("CancelButtonLabel", "Abbrechen");
+            Polish.Add("CancelButtonLabel", "Anuluj");
+            French.Add("CancelButtonLabel", "Anuler");
 
-            //Component: helpLabel
+            //Component: HelpLabel
             //
-            English.Add("helpLabel", "Right-click a mod name to preview it");
-            Gernam.Add("helpLabel", "Klick mit rechten Maustaste auf einen Mod-Namen, um eine Vorschau zu sehen");
-            Polish.Add("helpLabel", "PPM by wyświetlić opis");
-            French.Add("helpLabel", "Cliquez droit sur un nom de mod pour un apercu");
+            English.Add("HelpLabel", "Right-click a selection component to see a preview window");
+            Gernam.Add("HelpLabel", TranslationNeeded);
+            Polish.Add("HelpLabel", TranslationNeeded);
+            French.Add("HelpLabel", TranslationNeeded);
 
-            //Component: loadConfigButton
+            //Component: LoadSelectionButtonLabel
             //
-            English.Add("loadConfigButton", "Load selection");
-            Gernam.Add("loadConfigButton", "Auswahl laden");
-            Polish.Add("loadConfigButton", "Wczytaj konfigurację z pliku");
-            French.Add("loadConfigButton", "Charger une configuration");
+            English.Add("LoadSelectionButtonLabel", "Load selection");
+            Gernam.Add("LoadSelectionButtonLabel", "Auswahl laden");
+            Polish.Add("LoadSelectionButtonLabel", "Wczytaj konfigurację z pliku");
+            French.Add("LoadSelectionButtonLabel", "Charger une configuration");
 
-            //Component: saveConfigButton
+            //Component: SaveSelectionButtonLabel
             //
-            English.Add("saveConfigButton", "Save selection");
-            Gernam.Add("saveConfigButton", "Auswahl speichern");
-            Polish.Add("saveConfigButton", "Zapisz konfigurację w pliku");
-            French.Add("saveConfigButton", "Sauvegarder une configuration");
+            English.Add("SaveSelectionButtonLabel", "Save selection");
+            Gernam.Add("SaveSelectionButtonLabel", "Auswahl speichern");
+            Polish.Add("SaveSelectionButtonLabel", "Zapisz konfigurację w pliku");
+            French.Add("SaveSelectionButtonLabel", "Sauvegarder une configuration");
 
-            //Component: clearSelectionsButton
+            //Component: ClearSelectionsButtonLabel
             //
-            English.Add("clearSelectionsButton", "Clear selections");
-            Gernam.Add("clearSelectionsButton", "Auswahl löschen");
-            Polish.Add("clearSelectionsButton", "Wyczyść wybór");
-            French.Add("clearSelectionsButton", "Réinitialiser la sélection");
+            English.Add("ClearSelectionsButtonLabel", "Clear selections");
+            Gernam.Add("ClearSelectionsButtonLabel", "Auswahl löschen");
+            Polish.Add("ClearSelectionsButtonLabel", "Wyczyść wybór");
+            French.Add("ClearSelectionsButtonLabel", "Réinitialiser la sélection");
+
+            //Component: SearchThisTabOnlyCB
+            //
+            English.Add("SearchThisTabOnlyCB", "This tab only");
+            Gernam.Add("SearchThisTabOnlyCB", TranslationNeeded);
+            Polish.Add("SearchThisTabOnlyCB", TranslationNeeded);
+            French.Add("SearchThisTabOnlyCB", TranslationNeeded);
+
+            //Component: SearchTB
+            //
+            English.Add("SearchTB", "Search for a mod...");
+            Gernam.Add("SearchTB", TranslationNeeded);
+            Polish.Add("SearchTB", TranslationNeeded);
+            French.Add("SearchTB", TranslationNeeded);
+
+            //Component: SeachTBDescription
+            //
+            English.Add("SeachTBDescription", "You can also search for multiple name parts, separated by a * (asterisk).\nFor example: config*willster419 will display as search result: Willster419\'s Config");
+            Gernam.Add("SeachTBDescription", "Du kannst auch nach mehreren Namensteilen suchen, getrennt durch ein * (Sternchen).\nZum Beispiel: config*willster419  wird als Suchergebnis anzeigen: Willster419\'s Config");
+            Polish.Add("SeachTBDescription", "Można również wyszukiwać wiele części nazw oddzielonych gwiazdką (*).\nNa przykład: config * willster419 wyświetli się jako wynik wyszukiwania: Willster419's Config");
+            French.Add("SeachTBDescription", "Vous pouvez également rechercher plusieurs parties de nom, séparées par un * (astérisque).\nPar exemple: config *" +
+                " willster419 affichera comme résultat de la recherche: Config de Willster419");
+
+            //Component: SeachCBDescription
+            //
+            English.Add("SeachCBDescription", "You can also search for multiple name parts, separated by a * (asterisk).\nFor example: config*willster419 will display as search result: Willster419\'s Config");
+            Gernam.Add("SeachCBDescription", "Du kannst auch nach mehreren Namensteilen suchen, getrennt durch ein * (Sternchen).\nZum Beispiel: config*willster419  wird als Suchergebnis anzeigen: Willster419\'s Config");
+            Polish.Add("SeachCBDescription", "Można również wyszukiwać wiele części nazw oddzielonych gwiazdką (*).\nNa przykład: config * willster419 wyświetli się jako wynik wyszukiwania: Willster419's Config");
+            French.Add("SeachCBDescription", "Vous pouvez également rechercher plusieurs parties de nom, séparées par un * (astérisque).\nPar exemple: config *" +
+                " willster419 affichera comme résultat de la recherche: Config de Willster419");
+
+            //Component: InstallingAsWoTVersion
+            //
+            English.Add("InstallingAsWoTVersion", "Installing as WoT version: {0}");
+            Gernam.Add("InstallingAsWoTVersion", TranslationNeeded);
+            Polish.Add("InstallingAsWoTVersion", TranslationNeeded);
+            French.Add("InstallingAsWoTVersion", TranslationNeeded);
+
+            //Component: userMods
+            //
+            English.Add("userMods", "User Mods");
+            Gernam.Add("userMods", TranslationNeeded);
+            Polish.Add("userMods", TranslationNeeded);
+            French.Add("userMods", TranslationNeeded);
+
+            //Component: FirstTimeUserModsWarning
+            //
+            English.Add("FirstTimeUserModsWarning", "This tab is for selecting zip files you place in the \"RelhaxUserMods\" folder. They must be zip files, and should use a root directory folder of the \"World_of_Tanks\" directory");
+            Gernam.Add("FirstTimeUserModsWarning", TranslationNeeded);
+            Polish.Add("FirstTimeUserModsWarning", TranslationNeeded);
+            French.Add("FirstTimeUserModsWarning", TranslationNeeded);
+
+            //Component: downloadingDatabase
+            //
+            English.Add("downloadingDatabase", "Downloading database");
+            Gernam.Add("downloadingDatabase", TranslationNeeded);
+            Polish.Add("downloadingDatabase", TranslationNeeded);
+            French.Add("downloadingDatabase", TranslationNeeded);
 
             //Component: readingDatabase
             //
@@ -1351,35 +1411,34 @@ namespace RelhaxModpack
             Polish.Add("readingDatabase", "Wczytywanie baz danych");
             French.Add("readingDatabase", "Chargement de la base de données");
 
-            //Component: buildingUI
+            //Component: loadingUI
             //
-            English.Add("buildingUI", "Building UI");
-            Gernam.Add("buildingUI", "Erstelle UI");
-            Polish.Add("buildingUI", "Budowanie interfejsu");
-            French.Add("buildingUI", "Construction de l'interface");
+            English.Add("loadingUI", "Loading UI");
+            Gernam.Add("loadingUI", TranslationNeeded);
+            Polish.Add("loadingUI", TranslationNeeded);
+            French.Add("loadingUI", TranslationNeeded);
 
-            //Component: checkingCache
+            //Component: verifyingDownloadCache
             //
-            English.Add("checkingCache", "checking download cache of ");
-            Gernam.Add("checkingCache", "Überprüfen des Download-Cache von");
-            Polish.Add("checkingCache", "sprawdzanie ściągniętego cache dla");
-            French.Add("checkingCache", "vérification du cache de téléchargement de");
+            English.Add("verifyingDownloadCache", "Verifying file integrity of ");
+            Gernam.Add("verifyingDownloadCache", TranslationNeeded);
+            Polish.Add("verifyingDownloadCache", TranslationNeeded);
+            French.Add("verifyingDownloadCache", TranslationNeeded);
 
             //Section: Preview
             //Component: descriptionBox
             //
-            English.Add("noDescription", "no description provided");
-            Gernam.Add("noDescription", "keine Beschreibung verfügbar");
-            Polish.Add("noDescription", "nie podano opisu");
-            French.Add("noDescription", "nPas de description fournie");
+            English.Add("noDescription", "No description provided");
+            Gernam.Add("noDescription", "Keine Beschreibung verfügbar");
+            Polish.Add("noDescription", "Nie podano opisu");
+            French.Add("noDescription", "NPas de description fournie");
 
             //Component: updateBox
             //
             English.Add("noUpdateInfo", "No update info provided");
-            Gernam.Add("noUpdateInfo", "keine Aktualisierungsinformationen verfügbar");
-            Polish.Add("noUpdateInfo", "brak informacji o aktualizacji");
+            Gernam.Add("noUpdateInfo", "Keine Aktualisierungsinformationen verfügbar");
+            Polish.Add("noUpdateInfo", "Brak informacji o aktualizacji");
             French.Add("noUpdateInfo", "Aucune information de mise à jour fournie");
-
 
             //Component: NextPicButton
             //
@@ -1408,6 +1467,148 @@ namespace RelhaxModpack
             Gernam.Add("InstallProgressTextBoxDescription", TranslationNeeded);
             Polish.Add("InstallProgressTextBoxDescription", TranslationNeeded);
             French.Add("InstallProgressTextBoxDescription", TranslationNeeded);
+
+            //Component: testModeDatabaseNotFound
+            //
+            English.Add("testModeDatabaseNotFound", "CRITICAL: TestMode Database not found at:\n{0}");
+            Gernam.Add("testModeDatabaseNotFound", "KRITISCH: Die Datanbank für den Testmodus wurde nicht gefunden:\n{0}");
+            Polish.Add("testModeDatabaseNotFound", "BŁĄD KRYTYCZNY: Baza danych Trybu Testowego nie znaleziona w lokalizacji:\n{0}");
+            French.Add("testModeDatabaseNotFound", "CRITIQUE: Impossible de trouver la base de données du mode de test situé a: \n{0}");
+
+            //Component: 
+            //
+            English.Add("duplicateMods", "CRITICAL: Duplicate mod name detected");
+            Gernam.Add("duplicateMods", "KRITISCH: Duplizierter Modname wurde erkannt");
+            Polish.Add("duplicateMods", "BŁĄD KRYTYCZNY: Wykryto zduplikowaną nazwę modyfikacji");
+            French.Add("duplicateMods", "CRITIQUE: Détection de mods en double");
+
+            //Component: 
+            //
+            English.Add("databaseReadFailed", "CRITICAL: Failed to read database\n\nsee Logfile for detailed info");
+            Gernam.Add("databaseReadFailed", "KRITISCH: Datenbank konnte nicht gelesen werden\n\nin der Protokolldatei stehen weitere Informationen zu diesem Fehler");
+            Polish.Add("databaseReadFailed", "BŁĄD KRYTYCZNY: Nie udało się wczytać bazy danych");
+            French.Add("databaseReadFailed", "CRITIQUE: Impossible de lire la base de données");
+
+            //Component: 
+            //
+            English.Add("configSaveSuccess", "Config Saved Successfully");
+            Gernam.Add("configSaveSuccess", "Konfiguration wurde erfolgreich gespeichert");
+            Polish.Add("configSaveSuccess", "Udało się zapisać konfigurację");
+            French.Add("configSaveSuccess", "Succès sauvegarde de la configuration");
+
+            //Component: 
+            //
+            English.Add("selectConfigFile", "Select a user preference file to load");
+            Gernam.Add("selectConfigFile", "Wählen Sie die benutzerdefinierte Datei aus, die geladen werden soll");
+            Polish.Add("selectConfigFile", "Wybierz plik preferencji do wczytania");
+            French.Add("selectConfigFile", "Sélectionnez un fichier de préférences utilisateur à charger");
+
+            //Component: 
+            //
+            English.Add("configLoadFailed", "The preference file could not be loaded, loading in standard mode");
+            Gernam.Add("configLoadFailed", "Die Konfigurationsdatei konnte nicht geladen werden, lade im Standard Modus");
+            Polish.Add("configLoadFailed", "Nie można wczytać pliku knfiguracji, ładowanie trybu podstawowego");
+            French.Add("configLoadFailed", "Impossible de charge le fichier de préférences. Chargement en mode normal");
+
+            //Component: 
+            //
+            English.Add("modNotFound", "The mod, \"{0}\" was not found in the modpack. It could have been renamed or removed.");
+            Gernam.Add("modNotFound", "Der Mod, \"{0}\" wurde im Modpack nicht gefunden. Er könnte umbenannt oder entfernt worden sein.");
+            Polish.Add("modNotFound", "Modyfikacja \"{0}\" nie została znaleziona w paczce. Sprawdź, czy nie została usunięta lub zmieniona nazwa.");
+            French.Add("modNotFound", "Impossible de trouver le mod, \"{0}\" dans le mod pack. Il est possible qu`il sois supprimé ou changé de nom");
+
+            //Component: 
+            //
+            English.Add("configNotFound", "The config \"{0}\" was not found for mod \"{1}\". It could have been renamed or removed.");
+            Gernam.Add("configNotFound", "Die Config \"{0}\" wurde nicht für den Mod gefunden \"{1}\". Er könnte umbenannt oder entfernt worden sein.");
+            Polish.Add("configNotFound", "Konfiguracja \"{0}\" nie została znaleziona dla modyfikacji \"{1}\". Sprawdź, czy nie została usunięta lub zmieniona nazwa.");
+            French.Add("configNotFound", "Impossible de trouver la configuration \"{0}\" pour le mod \"{1}\". Il est possible qu`il sois supprimé ou changé de nom");
+
+            //Component: 
+            //
+            English.Add("modDeactivated", "The mod \"{0}\" is currently deactivated in the modpack and could not to be selected to install.");
+            Gernam.Add("modDeactivated", "Der Mod \"{0}\" ist derzeit im Modpack deaktiviert und steht für die Installation nicht zur Verfügung.");
+            Polish.Add("modDeactivated", "Modyfikacja \"{0}\" jest obecnie zdezaktywowana w paczce i nie może zostać wybrana.");
+            French.Add("modDeactivated", "Le mod est actuellement désactivé dans le mod pack et ne seras pas installé");
+
+            //Component: 
+            //
+            English.Add("configDeactivated", "The config \"{0}\" of \"{1}\" is currently deactivated in the modpack and could not to be selected to install.");
+            Gernam.Add("configDeactivated", "Die Konfiguration \"{0}\" von \"{1}\" ist derzeit im Modpack deaktiviert und steht für die Installation nicht zur Verfügung.");
+            Polish.Add("configDeactivated", "Konfiguracja \"{0}\" z \"{1}\" jest obecnie zdezaktywowana w paczce i nie może zostać wybrana.");
+            French.Add("configDeactivated", "La configuration \"{0}\" du mod \"{1}\" est actuellement désactivé dans le mod pack et ne seras pas installé");
+
+            //Component: 
+            //
+            English.Add("modsNotFoundTechnical", "The following mods could not be found and were most likely removed. There are only technical names available:\n{0}");
+            Gernam.Add("modsNotFoundTechnical", "Die folgenden Modifikationen können nicht gefunden werden und wurden wahrscheinlich entfernt/gelöscht. Es sind leider nur technische Namen verfügbar:\n{0}");
+            Polish.Add("modsNotFoundTechnical", "Następujące modyfikacje nie zostały znalezione, najprawdopodobniej zostały usunięte:\n{0}");
+            French.Add("modsNotFoundTechnical", "Les mods suivants n'ont pas pu être trouvés et ont probablement été supprimés. Il n'y a que des noms techniques disponibles:\n{0}");
+
+            //Component: 
+            //
+            English.Add("modsBrokenStructure", "The following mods were disabled due to modifications in the package structure. You need to re-check them if you want to install them:\n");
+            Gernam.Add("modsBrokenStructure", "Die folgenden Mods wurden aufgrund von Änderungen in der Paketstruktur deaktiviert. Sie müssen sie erneut auswählen, wenn Sie sie installieren möchten:\n");
+            Polish.Add("modsBrokenStructure", "Następujące modyfikacje zostały wyłączone ze względu na zmiany w strukturze paczki. Zaznacz je ponownie, jeśli chcesz je zainstalować:\n");
+            French.Add("modsBrokenStructure", "Les mods suivants ont été désactivés en raison de modifications dans la structure du paquet: vous devez les vérifier de nouveau si vous voulez les installer:\n");
+
+            //Component: 
+            //
+            English.Add("oldSavedConfigFile", "The saved preferences file your are using is in an outdated format and will be inaccurate in the future. Convert it to the new format?" +
+                " (A backup of the old format will be made)");
+            Gernam.Add("oldSavedConfigFile", "Die Konfigurationsdatei die benutzt wurde, wird in Zukunft immer ungenauer werden. Soll auf das neue Standardformat umgestellt werden?" +
+                " (Eine Sicherung des alten Formats erfolgt)");
+            Polish.Add("oldSavedConfigFile", "Zapisana konfiguracja jest w przestarzałym formacie i może powodować nieścisłości. Czy chcesz przekonwertować ją na nowszy zapis?");
+            French.Add("oldSavedConfigFile", "Le fichier de préférences que vous avez choisis est un format obsolète et seras inexact dans le future. Convertire au nouveau format?");
+
+            //Component: 
+            //
+            English.Add("prefrencesSet", "Preferences Set");
+            Gernam.Add("prefrencesSet", "Bevorzugte Einstellungen");
+            Polish.Add("prefrencesSet", "Preferowane Ustawienia");
+            French.Add("prefrencesSet", "Préférences Enregistrées");
+
+            //Component: 
+            //
+            English.Add("selectionsCleared", "Selections Cleared");
+            Gernam.Add("selectionsCleared", "Auswahl gelöscht");
+            Polish.Add("selectionsCleared", "Usunięto Zaznaczenia");
+            French.Add("selectionsCleared", "Sélections effacées");
+
+            //Component: ExpandAllButton
+            //
+            English.Add("ExpandAllButton", "Expand Current Tab");
+            Gernam.Add("ExpandAllButton", "Erweitere alle Einträge der aktuellen Registerkarte");
+            Polish.Add("ExpandAllButton", "Rozwiń bieżącą kartę");
+            French.Add("ExpandAllButton", "Elargir l'onglet");
+
+            //Component: CollapseAllButton
+            //
+            English.Add("CollapseAllButton", "Collapse Current Tab");
+            Gernam.Add("CollapseAllButton", "Reduziere alle Einträge der aktuellen Registerkarte");
+            Polish.Add("CollapseAllButton", "Zwiń bieżącą kartę");
+            French.Add("CollapseAllButton", "Réduire l'onglet");
+
+            //Component: InstallingTo
+            //
+            English.Add("InstallingTo", "Installing to: {0}");
+            Gernam.Add("InstallingTo", "Installiere nach: {0}");
+            Polish.Add("InstallingTo", "Instalowanie w: {0}");
+            French.Add("InstallingTo", "Installation à: {0}");
+
+            //Section saveConfig
+            //
+            English.Add("selectWhereToSave", "Select where to save user prefs");
+            Gernam.Add("selectWhereToSave", "Bitte wähle wo die Konfiguation gespeichert werden soll");
+            Polish.Add("selectWhereToSave", "Wybór lokalizacji zapisu preferencji użytkownika");
+            French.Add("selectWhereToSave", "Sélectionnez la location pour enregistrer les préférences utilisateur");
+
+            //Section addModTreeview
+            //
+            English.Add("updated", "updated");
+            Gernam.Add("updated", "aktualisiert");
+            Polish.Add("updated", "zaktualizowane");
+            French.Add("updated", "Mis à jours");
             #endregion
 
             #region Update Window
@@ -1901,150 +2102,6 @@ namespace RelhaxModpack
             French.Add("noChangeUntilRestart", "Cette option ne prendra effet qu'au redémarrage de l'application");
             #endregion
 
-            #region Messages from ModSelectionList
-            //Component: testModeDatabaseNotFound
-            //
-            English.Add("testModeDatabaseNotFound", "CRITICAL: TestMode Database not found at:\n{0}");
-            Gernam.Add("testModeDatabaseNotFound", "KRITISCH: Die Datanbank für den Testmodus wurde nicht gefunden:\n{0}");
-            Polish.Add("testModeDatabaseNotFound", "BŁĄD KRYTYCZNY: Baza danych Trybu Testowego nie znaleziona w lokalizacji:\n{0}");
-            French.Add("testModeDatabaseNotFound", "CRITIQUE: Impossible de trouver la base de données du mode de test situé a: \n{0}");
-
-            //Component: 
-            //
-            English.Add("duplicateMods", "CRITICAL: Duplicate mod name detected");
-            Gernam.Add("duplicateMods", "KRITISCH: Duplizierter Modname wurde erkannt");
-            Polish.Add("duplicateMods", "BŁĄD KRYTYCZNY: Wykryto zduplikowaną nazwę modyfikacji");
-            French.Add("duplicateMods", "CRITIQUE: Détection de mods en double");
-
-            //Component: 
-            //
-            English.Add("databaseReadFailed", "CRITICAL: Failed to read database\n\nsee Logfile for detailed info");
-            Gernam.Add("databaseReadFailed", "KRITISCH: Datenbank konnte nicht gelesen werden\n\nin der Protokolldatei stehen weitere Informationen zu diesem Fehler");
-            Polish.Add("databaseReadFailed", "BŁĄD KRYTYCZNY: Nie udało się wczytać bazy danych");
-            French.Add("databaseReadFailed", "CRITIQUE: Impossible de lire la base de données");
-
-            //Component: 
-            //
-            English.Add("configSaveSuccess", "Config Saved Successfully");
-            Gernam.Add("configSaveSuccess", "Konfiguration wurde erfolgreich gespeichert");
-            Polish.Add("configSaveSuccess", "Udało się zapisać konfigurację");
-            French.Add("configSaveSuccess", "Succès sauvegarde de la configuration");
-
-            //Component: 
-            //
-            English.Add("selectConfigFile", "Select a user preference file to load");
-            Gernam.Add("selectConfigFile", "Wählen Sie die benutzerdefinierte Datei aus, die geladen werden soll");
-            Polish.Add("selectConfigFile", "Wybierz plik preferencji do wczytania");
-            French.Add("selectConfigFile", "Sélectionnez un fichier de préférences utilisateur à charger");
-
-            //Component: 
-            //
-            English.Add("configLoadFailed", "The preference file could not be loaded, loading in standard mode");
-            Gernam.Add("configLoadFailed", "Die Konfigurationsdatei konnte nicht geladen werden, lade im Standard Modus");
-            Polish.Add("configLoadFailed", "Nie można wczytać pliku knfiguracji, ładowanie trybu podstawowego");
-            French.Add("configLoadFailed", "Impossible de charge le fichier de préférences. Chargement en mode normal");
-
-            //Component: 
-            //
-            English.Add("modNotFound", "The mod, \"{0}\" was not found in the modpack. It could have been renamed or removed.");
-            Gernam.Add("modNotFound", "Der Mod, \"{0}\" wurde im Modpack nicht gefunden. Er könnte umbenannt oder entfernt worden sein.");
-            Polish.Add("modNotFound", "Modyfikacja \"{0}\" nie została znaleziona w paczce. Sprawdź, czy nie została usunięta lub zmieniona nazwa.");
-            French.Add("modNotFound", "Impossible de trouver le mod, \"{0}\" dans le mod pack. Il est possible qu`il sois supprimé ou changé de nom");
-
-            //Component: 
-            //
-            English.Add("configNotFound", "The config \"{0}\" was not found for mod \"{1}\". It could have been renamed or removed.");
-            Gernam.Add("configNotFound", "Die Config \"{0}\" wurde nicht für den Mod gefunden \"{1}\". Er könnte umbenannt oder entfernt worden sein.");
-            Polish.Add("configNotFound", "Konfiguracja \"{0}\" nie została znaleziona dla modyfikacji \"{1}\". Sprawdź, czy nie została usunięta lub zmieniona nazwa.");
-            French.Add("configNotFound", "Impossible de trouver la configuration \"{0}\" pour le mod \"{1}\". Il est possible qu`il sois supprimé ou changé de nom");
-
-            //Component: 
-            //
-            English.Add("modDeactivated", "The mod \"{0}\" is currently deactivated in the modpack and could not to be selected to install.");
-            Gernam.Add("modDeactivated", "Der Mod \"{0}\" ist derzeit im Modpack deaktiviert und steht für die Installation nicht zur Verfügung.");
-            Polish.Add("modDeactivated", "Modyfikacja \"{0}\" jest obecnie zdezaktywowana w paczce i nie może zostać wybrana.");
-            French.Add("modDeactivated", "Le mod est actuellement désactivé dans le mod pack et ne seras pas installé");
-
-            //Component: 
-            //
-            English.Add("configDeactivated", "The config \"{0}\" of \"{1}\" is currently deactivated in the modpack and could not to be selected to install.");
-            Gernam.Add("configDeactivated", "Die Konfiguration \"{0}\" von \"{1}\" ist derzeit im Modpack deaktiviert und steht für die Installation nicht zur Verfügung.");
-            Polish.Add("configDeactivated", "Konfiguracja \"{0}\" z \"{1}\" jest obecnie zdezaktywowana w paczce i nie może zostać wybrana.");
-            French.Add("configDeactivated", "La configuration \"{0}\" du mod \"{1}\" est actuellement désactivé dans le mod pack et ne seras pas installé");
-
-            //Component: 
-            //
-            English.Add("modsNotFoundTechnical", "The following mods could not be found and were most likely removed. There are only technical names available:\n{0}");
-            Gernam.Add("modsNotFoundTechnical", "Die folgenden Modifikationen können nicht gefunden werden und wurden wahrscheinlich entfernt/gelöscht. Es sind leider nur technische Namen verfügbar:\n{0}");
-            Polish.Add("modsNotFoundTechnical", "Następujące modyfikacje nie zostały znalezione, najprawdopodobniej zostały usunięte:\n{0}");
-            French.Add("modsNotFoundTechnical", "Les mods suivants n'ont pas pu être trouvés et ont probablement été supprimés. Il n'y a que des noms techniques disponibles:\n{0}");
-
-            //Component: 
-            //
-            English.Add("modsBrokenStructure", "The following mods were disabled due to modifications in the package structure. You need to re-check them if you want to install them:\n");
-            Gernam.Add("modsBrokenStructure", "Die folgenden Mods wurden aufgrund von Änderungen in der Paketstruktur deaktiviert. Sie müssen sie erneut auswählen, wenn Sie sie installieren möchten:\n");
-            Polish.Add("modsBrokenStructure", "Następujące modyfikacje zostały wyłączone ze względu na zmiany w strukturze paczki. Zaznacz je ponownie, jeśli chcesz je zainstalować:\n");
-            French.Add("modsBrokenStructure", "Les mods suivants ont été désactivés en raison de modifications dans la structure du paquet: vous devez les vérifier de nouveau si vous voulez les installer:\n");
-
-            //Component: 
-            //
-            English.Add("oldSavedConfigFile", "The saved preferences file your are using is in an outdated format and will be inaccurate in the future. Convert it to the new format?" +
-                " (A backup of the old format will be made)");
-            Gernam.Add("oldSavedConfigFile", "Die Konfigurationsdatei die benutzt wurde, wird in Zukunft immer ungenauer werden. Soll auf das neue Standardformat umgestellt werden?" +
-                " (Eine Sicherung des alten Formats erfolgt)");
-            Polish.Add("oldSavedConfigFile", "Zapisana konfiguracja jest w przestarzałym formacie i może powodować nieścisłości. Czy chcesz przekonwertować ją na nowszy zapis?");
-            French.Add("oldSavedConfigFile", "Le fichier de préférences que vous avez choisis est un format obsolète et seras inexact dans le future. Convertire au nouveau format?");
-
-            //Component: 
-            //
-            English.Add("prefrencesSet", "Preferences Set");
-            Gernam.Add("prefrencesSet", "Bevorzugte Einstellungen");
-            Polish.Add("prefrencesSet", "Preferowane Ustawienia");
-            French.Add("prefrencesSet", "Préférences Enregistrées");
-
-            //Component: 
-            //
-            English.Add("selectionsCleared", "Selections Cleared");
-            Gernam.Add("selectionsCleared", "Auswahl gelöscht");
-            Polish.Add("selectionsCleared", "Usunięto Zaznaczenia");
-            French.Add("selectionsCleared", "Sélections effacées");
-
-            //Component: Expand current tab option
-            //
-            English.Add("expandAllButton", "Expand Current Tab");
-            Gernam.Add("expandAllButton", "Erweitere alle Einträge der aktuellen Registerkarte");
-            Polish.Add("expandAllButton", "Rozwiń bieżącą kartę");
-            French.Add("expandAllButton", "Elargir l'onglet");
-
-            //Component: Colapse current tab option
-            //
-            English.Add("colapseAllButton", "Collapse Current Tab");
-            Gernam.Add("colapseAllButton", "Reduziere alle Einträge der aktuellen Registerkarte");
-            Polish.Add("colapseAllButton", "Zwiń bieżącą kartę");
-            French.Add("colapseAllButton", "Réduire l'onglet");
-
-            //Component:
-            //
-            English.Add("InstallingTo", "Installing to {0}");
-            Gernam.Add("InstallingTo", "Installiere nach {0}");
-            Polish.Add("InstallingTo", "Instalowanie w {0}");
-            French.Add("InstallingTo", "Installation à {0}");
-
-            //Section saveConfig
-            //
-            English.Add("selectWhereToSave", "Select where to save user prefs");
-            Gernam.Add("selectWhereToSave", "Bitte wähle wo die Konfiguation gespeichert werden soll");
-            Polish.Add("selectWhereToSave", "Wybór lokalizacji zapisu preferencji użytkownika");
-            French.Add("selectWhereToSave", "Sélectionnez la location pour enregistrer les préférences utilisateur");
-
-            //Section addModTreeview
-            //
-            English.Add("updated", "updated");
-            Gernam.Add("updated", "aktualisiert");
-            Polish.Add("updated", "zaktualizowane");
-            French.Add("updated", "Mis à jours");
-            #endregion
-
             #region OldFilesToDelete
             //Window header
             English.Add("foundOldFilesHeader", "Old Files Question");
@@ -2530,21 +2587,6 @@ namespace RelhaxModpack
             Polish.Add("zipSavedTo", "Plik zip zapisano do: ");
             French.Add("zipSavedTo", "Fichier zip sauvegarder à: ");
             #endregion
-
-            //Component: ModSelectionList
-            //Component: seachCB ToolTip
-            English.Add("searchToolTip", "You can also search for multiple name parts, separated by a * (asterisk).\nFor example: config*willster419 will display as search result: Willster419\'s Config");
-            Gernam.Add("searchToolTip", "Du kannst auch nach mehreren Namensteilen suchen, getrennt durch ein * (Sternchen).\nZum Beispiel: config*willster419  wird als Suchergebnis anzeigen: Willster419\'s Config");
-            Polish.Add("searchToolTip", "Można również wyszukiwać wiele części nazw oddzielonych gwiazdką (*).\nNa przykład: config * willster419 wyświetli się jako wynik wyszukiwania: Willster419's Config");
-            French.Add("searchToolTip", "Vous pouvez également rechercher plusieurs parties de nom, séparées par un * (astérisque).\nPar exemple: config *" +
-                " willster419 affichera comme résultat de la recherche: Config de Willster419");
-
-            //Component: ModSelectionList
-            //Component: seachTB
-            English.Add("searchTB", "Search Mod Name:");
-            Gernam.Add("searchTB", "Suche Mod Namen:");
-            Polish.Add("searchTB", "Wyszukaj nazwę modu:");
-            French.Add("searchTB", "Rechercher le nom du mod:");
             
         }
 

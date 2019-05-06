@@ -822,11 +822,7 @@ namespace RelhaxModpack
             modSelectionList.Owner = Window.GetWindow(this);
             //https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c
             modSelectionList.OnSelectionListReturn += ModSelectionList_OnSelectionListReturn;
-            modSelectionList.Visibility = Visibility.Hidden;
-            modSelectionList.Hide();
-            //modSelectionList.WindowState = WindowState.Minimized;
-            modSelectionList.ShowDialog();
-            modSelectionList.WindowState = WindowState.Normal;
+            modSelectionList.Show();
         }
 
         //https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c

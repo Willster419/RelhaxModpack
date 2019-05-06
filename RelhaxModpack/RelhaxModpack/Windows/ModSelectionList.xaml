@@ -5,24 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="ModSelectionList" Height="480" Width="800" MinHeight="480" MinWidth="800" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="OnWindowLoad" Closed="RelhaxWindow_Closed" >
+        Title="ModSelectionList" Height="480" Width="800" MinHeight="480" MinWidth="800" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="OnWindowLoad" Closed="RelhaxWindow_Closed" LocalizeWindow="True" ApplyToolTips="True">
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <TextBlock x:Name="HelpLabel" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Right-click an option to see a preview window" VerticalAlignment="Top" Tag="HelpLabel"/>
-        <TextBlock x:Name="TanksPath" HorizontalAlignment="Left" Margin="10,26,0,0" TextWrapping="Wrap" Text="Installing to: " VerticalAlignment="Top" Tag="TanksPath"/>
-        <TextBlock x:Name="TanksVersionLabel" HorizontalAlignment="Left" Margin="10,42,0,0" TextWrapping="Wrap" Text="Installing as WoT version: " VerticalAlignment="Top" Tag="TanksVersionLabel"/>
+        <TextBlock x:Name="HelpLabel" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Right-click a selection component to see a preview window" VerticalAlignment="Top" Tag="HelpLabel"/>
+        <TextBlock x:Name="InstallingTo" HorizontalAlignment="Left" Margin="10,26,0,0" TextWrapping="Wrap" Text="Installing to: " VerticalAlignment="Top" Tag="InstallingTo"/>
+        <TextBlock x:Name="InstallingAsWoTVersion" HorizontalAlignment="Left" Margin="10,42,0,0" TextWrapping="Wrap" Text="Installing as WoT version: " VerticalAlignment="Top" Tag="InstallingAsWoTVersion"/>
         <TabControl x:Name="ModTabGroups" HorizontalAlignment="Stretch" Margin="10,94,10,60" VerticalAlignment="Stretch" />
-        <Button x:Name="CollapseAllButton" Content="Collapse current tab" HorizontalAlignment="Right" Margin="0,10,140,0" VerticalAlignment="Top" Width="125" Height="35" Tag="CollapseAllButton" />
-        <Button x:Name="ExpandAllButton" Content="Expand current tab" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="125" Height="35" Tag="ExpandAllButton" />
+        <Button x:Name="CollapseAllRealButton" HorizontalAlignment="Right" Margin="0,10,140,0" VerticalAlignment="Top" Width="125" Height="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+            <TextBlock x:Name="CollapseAllButton" Tag="CollapseAllButton" Text="Collapse current tab" TextWrapping="Wrap" TextAlignment="Center"/>
+        </Button>
+        <Button x:Name="ExpandAllRealButton" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="125" Height="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+            <TextBlock x:Name="ExpandAllButton" Tag="ExpandAllButton" Text="Expand current tab" TextWrapping="Wrap" TextAlignment="Center"/>
+        </Button>
         <TextBlock x:Name="SearchTB" HorizontalAlignment="Right" Margin="0,52,270,0" TextWrapping="Wrap" Text="Search for a mod..." VerticalAlignment="Top" Height="22" Width="251" TextAlignment="Right" Padding="3" Tag="SearchTB" />
         <ComboBox x:Name="SearchCB" HorizontalAlignment="Right" Margin="0,52,10,0" VerticalAlignment="Top" Width="255" PreviewKeyDown="SearchCB_PreviewKeyDown" KeyUp="SearchCB_KeyUp" IsEditable="True" IsTextSearchEnabled="False" PreviewMouseDown="SearchCB_PreviewMouseDown"/>
         <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnContinueInstallation" Tag="ContinueButton" >
-            <TextBlock x:Name="ContinueButtonLabel" Text="Continue" TextWrapping="Wrap" TextAlignment="Center"/>
+            <TextBlock x:Name="ContinueButtonLabel" Text="Install" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
         <Button HorizontalAlignment="Right" Margin="0,0,135,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnCancelInstallation" Tag="CancelButton" >
             <TextBlock x:Name="CancelButtonLabel" Text="Cancel" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
         <Button HorizontalAlignment="Right" Margin="0,0,260,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnSaveSelectionClick" Tag="SaveSelectionButton" >
-            <TextBlock x:Name="SaveSelectionButtonLabel" Text="Save selection to file" TextWrapping="Wrap" TextAlignment="Center"/>
+            <TextBlock x:Name="SaveSelectionButtonLabel" Text="Save selection" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
         <Button HorizontalAlignment="Right" Margin="0,0,385,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnLoadSelectionClick" Tag="LoadSelectionButton" >
             <TextBlock x:Name="LoadSelectionButtonLabel" Text="Load Selection" TextWrapping="Wrap" TextAlignment="Center"/>

@@ -59,6 +59,7 @@ namespace RelhaxModpack.Windows
         public ModSelectionList()
         {
             InitializeComponent();
+            WindowState = WindowState.Minimized;
         }
 
         private void OnWindowLoadReportProgress(object sender, RelhaxProgress progress)
@@ -362,8 +363,8 @@ namespace RelhaxModpack.Windows
                     }
 
                     //since file exists, report progress here
-                    loadProgress.ReportMessage = string.Format("{0} {1} {2}",
-                        Translations.GetTranslatedString("verifyingDownloadCache"), Translations.GetTranslatedString("of"), package.PackageName);
+                    loadProgress.ReportMessage = string.Format("{0} {1}",
+                        Translations.GetTranslatedString("verifyingDownloadCache"), package.PackageName);
                     progress.Report(loadProgress);
 
                     //compares the crcs of the files
@@ -415,7 +416,7 @@ namespace RelhaxModpack.Windows
                 }
 
                 //perform any final loading to do
-                loadProgress.ReportMessage = Translations.GetTranslatedString("preparingUI");
+                loadProgress.ReportMessage = Translations.GetTranslatedString("loadingUI");
                 progress.Report(loadProgress);
                 Utils.AllowUIToUpdate();
 
@@ -426,21 +427,21 @@ namespace RelhaxModpack.Windows
                     AddUserMods();
                     //finish loading
                     //update the text on the list
-                    TanksPath.Text = string.Format(Translations.GetTranslatedString("installingTo"), Settings.WoTDirectory);
-                    TanksVersionLabel.Text = string.Format(Translations.GetTranslatedString("installingAsWoT"), Settings.WoTClientVersion);
+                    InstallingTo.Text = string.Format(Translations.GetTranslatedString("InstallingTo"), Settings.WoTDirectory);
+                    InstallingAsWoTVersion.Text = string.Format(Translations.GetTranslatedString("InstallingAsWoTVersion"), Settings.WoTClientVersion);
                     //determind if the collapse and expand buttons should be visible
                     switch (ModpackSettings.ModSelectionView)
                     {
                         case SelectionView.DefaultV2:
-                            CollapseAllButton.IsEnabled = false;
-                            CollapseAllButton.Visibility = Visibility.Hidden;
-                            ExpandAllButton.IsEnabled = false;
-                            ExpandAllButton.Visibility = Visibility.Hidden;
+                            CollapseAllRealButton.IsEnabled = false;
+                            CollapseAllRealButton.Visibility = Visibility.Hidden;
+                            ExpandAllRealButton.IsEnabled = false;
+                            ExpandAllRealButton.Visibility = Visibility.Hidden;
                             break;
                         case SelectionView.Legacy:
-                            CollapseAllButton.IsEnabled = true;
-                            CollapseAllButton.Visibility = Visibility.Visible;
-                            ExpandAllButton.IsEnabled = true;
+                            CollapseAllRealButton.IsEnabled = true;
+                            CollapseAllRealButton.Visibility = Visibility.Visible;
+                            ExpandAllRealButton.IsEnabled = true;
                             ExpandAllButton.Visibility = Visibility.Visible;
                             break;
                     }
@@ -489,6 +490,9 @@ namespace RelhaxModpack.Windows
                             Logging.Error("Failed to load SelectionsDocument, AutoSelectionFilePath={0}", ModpackSettings.AutoOneclickSelectionFilePath);
                         }
                     }
+
+                    //set the version of WoT we are installing for
+                    InstallingAsWoTVersion.Text = string.Format("{0}: {1}", Translations.GetTranslatedString("InstallingAsWoTVersion"), Settings.WoTClientVersion);
 
                     //like hook up the flashing timer
                     FlashTimer.Tick += OnFlastTimerTick;
