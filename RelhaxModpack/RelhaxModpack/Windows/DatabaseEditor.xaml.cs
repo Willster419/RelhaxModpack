@@ -826,6 +826,7 @@ namespace RelhaxModpack.Windows
                 selectablePackage.ShowInSearchList = (bool)PackageShowInSearchListDisplay.IsChecked;
                 selectablePackage.PopularMod = (bool)PackagePopularModDisplay.IsChecked;
                 selectablePackage.GreyAreaMod = (bool)PackageGreyAreaModDisplay.IsChecked;
+                selectablePackage.Visible = (bool)PackageVisibleDisplay.IsChecked;
                 selectablePackage.Name = PackageNameDisplay.Text;
                 selectablePackage.Type = (SelectionTypes)PackageTypeDisplay.SelectedItem;
                 if (!selectablePackage.ZipFile.Equals(PackageZipFileDisplay.Text))
