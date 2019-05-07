@@ -777,8 +777,10 @@ namespace RelhaxModpack.Windows
                 PackageTypeDisplay.SelectedItem = selectablePackage.Type;
                 PackageLevelDisplay.Text = selectablePackage.Level.ToString();
                 PackageVisibleDisplay.IsChecked = selectablePackage.Visible;
-                PackageDescriptionDisplay.Text = Utils.MacroReplace(selectablePackage.Description,ReplacementTypes.TextUnescape);
-                PackageUpdateNotesDisplay.Text = Utils.MacroReplace(selectablePackage.UpdateComment,ReplacementTypes.TextUnescape);
+                //PackageDescriptionDisplay.Text = Utils.MacroReplace(selectablePackage.Description,ReplacementTypes.TextUnescape);
+                //PackageUpdateNotesDisplay.Text = Utils.MacroReplace(selectablePackage.UpdateComment,ReplacementTypes.TextUnescape);
+                PackageDescriptionDisplay.Text = selectablePackage.Description;
+                PackageUpdateNotesDisplay.Text = selectablePackage.UpdateComment;
                 foreach (DatabaseLogic d in selectablePackage.Dependencies)
                     PackageDependenciesDisplay.Items.Add(d);
                 foreach (Media media in selectablePackage.Medias)
@@ -860,8 +862,10 @@ namespace RelhaxModpack.Windows
                     selectablePackage.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
                     PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(selectablePackage.Timestamp);
                 }
-                selectablePackage.Description = Utils.MacroReplace(PackageDescriptionDisplay.Text,ReplacementTypes.TextEscape);
-                selectablePackage.UpdateComment = Utils.MacroReplace(PackageUpdateNotesDisplay.Text,ReplacementTypes.TextEscape);
+                //selectablePackage.Description = Utils.MacroReplace(PackageDescriptionDisplay.Text,ReplacementTypes.TextEscape);
+                //selectablePackage.UpdateComment = Utils.MacroReplace(PackageUpdateNotesDisplay.Text,ReplacementTypes.TextEscape);
+                selectablePackage.Description = PackageDescriptionDisplay.Text;
+                selectablePackage.UpdateComment = PackageUpdateNotesDisplay.Text;
 
                 selectablePackage.Dependencies.Clear();
                 foreach (DatabaseLogic dl in PackageDependenciesDisplay.Items)
