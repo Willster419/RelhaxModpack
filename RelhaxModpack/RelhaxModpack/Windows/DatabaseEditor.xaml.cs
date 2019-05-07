@@ -1532,11 +1532,10 @@ namespace RelhaxModpack.Windows
                 AddSaveLevel = true,
                 SelectedPackage = null
             };
+
             if (!(bool)addRemove.ShowDialog())
                 return;
-            if (addRemove.SelectedPackage == null)
-                throw new BadMemeException("i hate you all");
-            //put the drag drop to a method to access it here TODO
+
             //selectedItem is itemToMove, currentlyOver is what you just pointed to
             if (DatabaseTreeView.SelectedItem is TreeViewItem itemToMove && itemToMove.Header is EditorComboBoxItem editorItemToMove
                 && itemToMove.Parent is TreeViewItem parentItemToMove && addRemove.SelectedPackage.EditorTreeViewItem.Parent is TreeViewItem parentItemCurrentlyOver)
@@ -1558,6 +1557,8 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show("Please select a package to perform action on");
                 return;
             }
+
+            //make the window and show it
             EditorAddRemove addRemove = new EditorAddRemove()
             {
                 GlobalDependencies = GlobalDependencies,
@@ -1569,9 +1570,8 @@ namespace RelhaxModpack.Windows
             };
             if (!(bool)addRemove.ShowDialog())
                 return;
-            if (addRemove.SelectedPackage == null)
-                throw new BadMemeException("i hate you all");
-            //put the drag drop to a method to access it here TODO
+
+            //getting here means that we are confirming an add
             //selectedItem is itemToMove, currentlyOver is what you just pointed to
             if (DatabaseTreeView.SelectedItem is TreeViewItem itemToMove && itemToMove.Header is EditorComboBoxItem editorItemToMove
                 && itemToMove.Parent is TreeViewItem parentItemToMove && addRemove.SelectedPackage.EditorTreeViewItem.Parent is TreeViewItem parentItemCurrentlyOver)

@@ -103,8 +103,11 @@ namespace RelhaxModpack.Windows
 
         private void PackageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(PackageComboBox.SelectedItem is EditorComboBoxItem item)
+            if (PackageComboBox.SelectedItem is EditorComboBoxItem item)
+            {
                 SelectedPackage = item.Package;
+                OKButton.IsEnabled = true;
+            }
         }
 
         private void AddSameLevel_Checked(object sender, RoutedEventArgs e)
