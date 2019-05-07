@@ -684,8 +684,8 @@ namespace RelhaxModpack.Windows
 
         private void ShowDatabaseCategory(Category category)
         {
-            Logging.Debug("ShowDatabaseCategory(), category showing = {0}", category.Name);
             ResetRightPanels(null);
+            Logging.Debug("ShowDatabaseCategory(), category showing = {0}", category.Name);
             foreach (DatabaseLogic logic in category.Dependencies)
                 PackageDependenciesDisplay.Items.Add(logic);
             PackageNameDisplay.Text = category.Name;
@@ -693,8 +693,8 @@ namespace RelhaxModpack.Windows
 
         private void ShowDatabasePackage(DatabasePackage package)
         {
-            Logging.Debug("ShowDatabaseObject(), package showing = {0}", package.PackageName);
             ResetRightPanels(package);
+            Logging.Debug("ShowDatabaseObject(), package showing = {0}", package.PackageName);
             //load all items in the databasePackage level first
             //basic tab
             PackagePackageNameDisplay.Text = package.PackageName;
@@ -721,29 +721,37 @@ namespace RelhaxModpack.Windows
             }
             PackageLogAtInstallDisplay.IsChecked = package.LogAtInstall;
             PackageEnabledDisplay.IsChecked = package.Enabled;
+
             //devURL
-            //each url is seperated by newline characters "\n"
+            //each url is separated by newline characters "\n"
             //should be displayed with newlines already, so no change needed
             PackageDevURLDisplay.Text = Utils.MacroReplace(package.DevURL,ReplacementTypes.TextUnescape);
+
             //internal notes
             PackageInternalNotesDisplay.Text = Utils.MacroReplace(package.InternalNotes,ReplacementTypes.TextUnescape);
+
             //triggers
             foreach (string s in package.Triggers)
                 PackageTriggersDisplay.Items.Add(s);
-            //reset the conflicting packages tab text just in case
-            ConflictingPackagesTab.Header = "Conflicting Packages";
-            ConflictingPackagesMessagebox.Text = "To add a package to the list, search it above and right click it";
+
             //then handle if dependency
             if (package is Dependency dependency)
             {
+                //display all dependencies that the selected dependency uses
                 foreach (DatabaseLogic d in dependency.Dependencies)
                     PackageDependenciesDisplay.Items.Add(d);
+
+                //change the "conflicting packages" tab into a "dependency usage" tab
                 ConflictingPackagesTab.Header = "Dependency Usage";
                 ConflictingPackagesMessagebox.Text = "Above is list packages that use this dependency";
+
+                //display all the dependencies and packages that use the selected dependency
                 foreach (Dependency dependencyy in Dependencies)
                 {
+                    //don't add itself
                     if (dependencyy.Equals(dependency))
                         continue;
+
                     foreach (DatabaseLogic logic in dependencyy.Dependencies)
                         if (logic.PackageName.Equals(dependency.PackageName))
                             //the fact i'm not breaking can help determine if a package has the dependency listed twice
@@ -755,6 +763,9 @@ namespace RelhaxModpack.Windows
                         if (logic.PackageName.Equals(dependency.PackageName))
                             PackageConflictingPackagesDisplay.Items.Add(selectablePackage);
                 }
+
+                //also disable the "remove conflicting package" button since it won't work for these
+                ConflictingPackagesRemoveConflictingPackage.IsEnabled = false;
             }
             //then handle if selectalbePackage
             else if (package is SelectablePackage selectablePackage)
@@ -777,6 +788,11 @@ namespace RelhaxModpack.Windows
                 PackageConflictingPackagesDisplay.Items.Clear();
                 foreach (string s in selectablePackage.ConflictingPackages)
                     PackageConflictingPackagesDisplay.Items.Add(s);
+
+                //set the conflicting packages tab
+                ConflictingPackagesTab.Header = "Conflicting Packages";
+                ConflictingPackagesMessagebox.Text = "To add a package to the list, search it above and right click it";
+                ConflictingPackagesRemoveConflictingPackage.IsEnabled = true;
             }
         }
 
@@ -824,9 +840,6 @@ namespace RelhaxModpack.Windows
             //see if it's a dependency
             if (package is Dependency dependency)
             {
-                ConflictingPackagesTab.Content = "Dependency Usage";
-                ConflictingPackagesMessagebox.Text = "To add a package to the list, search it above and right click it";
-                PackageConflictingPackagesDisplay.Items.Clear();
                 dependency.Dependencies.Clear();
                 foreach (DatabaseLogic dl in PackageDependenciesDisplay.Items)
                     dependency.Dependencies.Add(dl);
