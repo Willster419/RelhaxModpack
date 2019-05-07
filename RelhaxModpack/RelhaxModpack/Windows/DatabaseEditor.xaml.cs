@@ -237,6 +237,17 @@ namespace RelhaxModpack.Windows
 
         private void LoadUI(List<DatabasePackage> globalDependencies, List<Dependency> dependnecies, List<Category> parsedCategoryList, int numToAddEnd = 5)
         {
+            //reset the UI first
+            ResetRightPanels(null);
+
+            //also make the selected item null just in case
+            if(SelectedItem != null)
+            {
+                Logging.Debug("from LoadUI(), selectedItem is not null, setting to null (user pressed a load database function) previous={0}", SelectedItem.ToString());
+                SelectedItem = null;
+            }
+
+            //load database views
             LoadDatabaseView(GlobalDependencies, Dependencies, ParsedCategoryList);
             LoadInstallView(GlobalDependencies, Dependencies, ParsedCategoryList);
             LoadPatchView(GlobalDependencies, Dependencies, ParsedCategoryList);
@@ -1388,6 +1399,7 @@ namespace RelhaxModpack.Windows
                 //from auto load function
                 fileToLoad = CommandLineSettings.EditorAutoLoadFileName;
             }
+
             //the file exists, load it
             XmlDocument doc = XMLUtils.LoadXmlDocument(fileToLoad, XmlLoadType.FromFile);
             if (doc == null)
@@ -1401,9 +1413,11 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show("Failed to load the database, check the logfile");
                 return;
             }
+
             //build internal database links
             Utils.BuildLinksRefrence(ParsedCategoryList, true);
             Utils.BuildLevelPerPackage(ParsedCategoryList);
+
             //set the onlineFolder and version
             //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
             //for the folder version: //modInfoAlpha.xml/@version
@@ -1425,6 +1439,7 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show(string.Format("The file\n{0}\ndoes not exist", DefaultSaveLocationSetting.Text));
                 return;
             }
+
             //actually load
             //the file exists, load it
             XmlDocument doc = XMLUtils.LoadXmlDocument(DefaultSaveLocationSetting.Text, XmlLoadType.FromFile);
@@ -1439,9 +1454,11 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show("Failed to load the database, check the logfile");
                 return;
             }
+
             //build internal database links
             Utils.BuildLinksRefrence(ParsedCategoryList, true);
             Utils.BuildLevelPerPackage(ParsedCategoryList);
+
             //set the onlineFolder and version
             //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
             //for the folder version: //modInfoAlpha.xml/@version
