@@ -458,12 +458,12 @@ namespace RelhaxModpack
             Polish.Add("backupModsSizeLabel", "");
             French.Add("backupModsSizeLabel", "");
 
-            //Component: backupModsSizeLabelUsed
+            //Component: BackupModsSizeLabelUsed
             //
-            English.Add("backupModsSizeLabelUsed", "Backups: {0}  Size: {1}");
-            Gernam.Add("backupModsSizeLabelUsed", "Sicherungen: {0}  Größe: {1}");
-            Polish.Add("backupModsSizeLabelUsed", TranslationNeeded);
-            French.Add("backupModsSizeLabelUsed", TranslationNeeded);
+            English.Add("BackupModsSizeLabelUsed", "Backups: {0}  Size: {1}");
+            Gernam.Add("BackupModsSizeLabelUsed", "Sicherungen: {0}  Größe: {1}");
+            Polish.Add("BackupModsSizeLabelUsed", TranslationNeeded);
+            French.Add("BackupModsSizeLabelUsed", TranslationNeeded);
 
             //Component: backupModsSizeLabelDescription
             //

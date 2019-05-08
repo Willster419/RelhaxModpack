@@ -163,8 +163,19 @@ namespace RelhaxModpack
             //get the number of processor cores
             MulticoreExtractionCoresCountLabel.Text = string.Format(Translations.GetTranslatedString("MulticoreExtractionCoresCountLabel"), Settings.NumLogicalProcesors);
 
+            //set the file count and size for the backups folder
+            Logging.Debug("getting filesizes of backups");
+            long totalSize = 0;
+            string[] backupFiles = Utils.DirectorySearch(Settings.RelhaxModBackupFolder, SearchOption.TopDirectoryOnly, false, "*.zip", 5, 3, false);
+            foreach(string file in backupFiles)
+            {
+                totalSize += Utils.GetFilesize(file);
+            }
+            BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"), backupFiles.Count(), Utils.SizeSuffix((ulong)totalSize, 1,true));
+
+            Logging.Debug("checking if application is up to date");
             //if the application is up to date, then check if we need to display the welcome message to the user
-            if(isApplicationUpToDate && !closingFromFailure)
+            if (isApplicationUpToDate && !closingFromFailure)
             {
                 Logging.Debug("application is up to date, checking to display welcome message");
                 Settings.ProcessFirstLoadings();

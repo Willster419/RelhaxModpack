@@ -818,24 +818,74 @@ namespace RelhaxModpack.InstallerComponents
         #region Installer methods
         private bool BackupMods()
         {
-            //check first if the directory exists first
+            //check first if the modpack backup directory exists first
             if (!Directory.Exists(Settings.RelhaxModBackupFolder))
                 Directory.CreateDirectory(Settings.RelhaxModBackupFolder);
+
             //create the directory for this version to backup to
-            string folderDateName = string.Format("{0:yyyy-MM-dd-HH-mm-ss}", DateTime.Now);
-            string fullFolderPath = Path.Combine(Settings.RelhaxModBackupFolder, folderDateName);
-            if (Directory.Exists(fullFolderPath))
-                throw new BadMemeException("how does this already exist, like seriously");
-            Directory.CreateDirectory(fullFolderPath);
-            //make zip files maybe? TODO
-            throw new BadMemeException("TODO");
-            using (Ionic.Zip.ZipFile backupZip = new Ionic.Zip.ZipFile(fullFolderPath + ".zip"))
+            string zipFileName = string.Format("{0:yyyy-MM-dd-HH-mm-ss}_{1}.zip", DateTime.Now,Settings.WoTClientVersion);
+            string zipFileFullPath = Path.Combine(Settings.RelhaxModBackupFolder, zipFileName);
+            Logging.Debug("started backupMods(), making zipfile {0}", zipFileFullPath);
+
+            //make a zip file of the mods and res_mods and appdata
+            using (ZipFile backupZip = new ZipFile(zipFileFullPath))
             {
-                backupZip.AddDirectory(Path.Combine(Settings.WoTDirectory, "mods"));
-                backupZip.AddDirectory(Path.Combine(Settings.WoTDirectory, "res_mods"));
+                //set the compression level to be normal
+                backupZip.CompressionLevel = Ionic.Zlib.CompressionLevel.Default;
+
+                //report progress of gettings mods to save into the zip file
+                Prog.ParrentCurrent = 0;
+                Prog.ParrentTotal = 1;
+                Prog.ChildCurrent = 0;
+                Prog.ChildTotal = 1;
+                Prog.ParrentCurrentProgress = Translations.GetTranslatedString("scanningModsFolders");
+                Progress.Report(Prog);
+
+                //get the list of mods to add to the zip
+                List<string> filesToAdd = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "mods"), SearchOption.AllDirectories, false, "*", 5, 3, false).ToList();
+                filesToAdd.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "res_mods"), SearchOption.AllDirectories, false, "*", 5, 3, false).ToList());
+
+                //add them to the zip. also get the string to be the path in the zip file, meaning that the root path in the zip file starts at "World_of_Tanks"
+                foreach(string file in filesToAdd)
+                {
+                    backupZip.AddFile(file, Path.GetDirectoryName(file.Substring(Settings.WoTDirectory.Length + 1)));
+                }
+
+                //clear the list and repeat the process for the appDataFolder
+                filesToAdd.Clear();
+                filesToAdd.AddRange(Utils.DirectorySearch(Settings.AppDataFolder, SearchOption.AllDirectories, false, "*", 5, 3, false).ToList());
+                foreach (string file in filesToAdd)
+                {
+                    backupZip.AddFile(file, Path.GetDirectoryName(Path.Combine("appData", file.Substring(Settings.AppDataFolder.Length + 1))));
+                }
+
+                //save the file. all the time to wait is in this method, so add the event handler here
+                backupZip.SaveProgress += BackupZip_SaveProgress;
+                Prog.ParrentCurrentProgress = string.Empty;
                 backupZip.Save();
             }
+            Logging.Debug("finished backupMods()");
             return true;
+        }
+
+        private void BackupZip_SaveProgress(object sender, SaveProgressEventArgs e)
+        {
+            //we only want entry bytes read for report (let's *try* to be efficient here)
+            switch (e.EventType)
+            {
+                case ZipProgressEventType.Saving_EntryBytesRead:
+                    Prog.ChildCurrent = (int)e.BytesTransferred;
+                    Prog.ChildTotal = (int)e.TotalBytesToTransfer;
+                    Progress.Report(Prog);
+                    break;
+                case ZipProgressEventType.Saving_AfterWriteEntry:
+                case ZipProgressEventType.Saving_BeforeWriteEntry:
+                    Prog.ParrentCurrent = e.EntriesSaved;
+                    Prog.ParrentTotal = e.EntriesTotal;
+                    Prog.EntryFilename = e.CurrentEntry.FileName;
+                    Progress.Report(Prog);
+                    break;
+            } 
         }
 
         private bool BackupData(List<SelectablePackage> packagesWithData)
