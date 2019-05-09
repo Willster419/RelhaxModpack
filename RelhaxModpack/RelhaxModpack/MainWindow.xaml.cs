@@ -1107,52 +1107,64 @@ namespace RelhaxModpack
                 if (ChildProgressBar.Value != e.ChildCurrent)
                     ChildProgressBar.Value = e.ChildCurrent;
 
+                string line1 = string.Empty;
+                string line2 = string.Empty;
+                string line3 = string.Empty;
+                string line4 = string.Empty;
+
                 //standard progress
                 switch (e.InstallStatus)
                 {
                     case InstallerComponents.InstallerExitCodes.BackupModsError:
-                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("installBackupMods"), e.Filename);
+                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("installBackupMods"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.BackupDataError:
-                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("installBackupData"), e.Filename);
+                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("installBackupData"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.ClearCacheError:
-                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("installClearCache"), e.Filename);
+                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("installClearCache"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.ClearLogsError:
-                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("installClearLogs"), e.Filename);
+                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("installClearLogs"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.CleanModsError:
-                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("installCleanMods"), e.Filename);
+                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("installCleanMods"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.ExtractionError:
-                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("installExtractingMods"), e.Filename);
+                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("installExtractingMods"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.UserExtractionError:
-                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("extractingUserMod"), e.Filename);
+                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("extractingUserMod"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.RestoreUserdataError:
-                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("installRestoreUserdata"), e.Filename);
+                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("installRestoreUserdata"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.XmlUnpackError:
-                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("installXmlUnpack"), e.Filename);
+                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("installXmlUnpack"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.PatchError:
-                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("installPatchFiles"), e.Filename);
+                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("installPatchFiles"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.ShortcustError:
-                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("installShortcuts"), e.Filename);
+                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("installShortcuts"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.ContourIconAtlasError:
-                        InstallProgressTextBox.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("installContourIconAtlas"), e.Filename);
+                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("installContourIconAtlas"), e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.FontInstallError:
-                        InstallProgressTextBox.Text = Translations.GetTranslatedString("installFonts");
+                        line1 = Translations.GetTranslatedString("installFonts");
                         break;
                     case InstallerComponents.InstallerExitCodes.CleanupError:
-                        InstallProgressTextBox.Text = Translations.GetTranslatedString("installCleanup");
+                        line1 = Translations.GetTranslatedString("installCleanup");
                         break;
                 }
+
+                InstallProgressTextBox.Text = string.Format("{0}{1}{2}{3}",
+                    string.IsNullOrEmpty(line1) ? string.Empty : line1 + "\n",
+                    string.IsNullOrEmpty(line2) ? string.Empty : line2 + "\n",
+                    string.IsNullOrEmpty(line3) ? string.Empty : line3 + "\n",
+                    string.IsNullOrEmpty(line4) ? string.Empty : line4 + "\n");
+
             }
         }
 

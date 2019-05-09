@@ -226,7 +226,9 @@ namespace RelhaxModpack.InstallerComponents
 
             //step 1 on install: backup user mods
             OldTime = InstallStopWatch.Elapsed;
-            Prog.TotalCurrent++;
+            //unknown error is last step in ints
+            Prog.TotalTotal = (int)InstallerExitCodes.UnknownError;
+            Prog.TotalCurrent = 1;
             InstallFinishedArgs.ExitCodes = InstallerExitCodes.BackupModsError;
             Prog.InstallStatus = InstallerExitCodes.BackupModsError;
             Progress.Report(Prog);
@@ -379,16 +381,27 @@ namespace RelhaxModpack.InstallerComponents
             Prog.TotalCurrent++;
             InstallFinishedArgs.ExitCodes = InstallerExitCodes.XmlUnpackError;
             Prog.InstallStatus = InstallerExitCodes.XmlUnpackError;
+            Prog.ChildTotal = 1;
+            Prog.ParrentTotal = 1;
+            Prog.ParrentCurrent = Prog.ChildCurrent = 0;
+            Prog.Filename = string.Empty;
             Progress.Report(Prog);
 
             Logging.WriteToLog(string.Format("Unpack of xml files, current install time = {0} msec", (int)InstallStopWatch.Elapsed.TotalMilliseconds));
             List<XmlUnpack> xmlUnpacks = MakeXmlUnpackList();
             if (xmlUnpacks.Count > 0)
             {
+                //progress
+                Prog.ParrentTotal = xmlUnpacks.Count;
+
                 StringBuilder unpackBuilder = new StringBuilder();
                 unpackBuilder.AppendLine("/*   Unpack xml files   */");
                 foreach (XmlUnpack xmlUnpack in xmlUnpacks)
                 {
+                    Prog.ParrentCurrent++;
+                    Prog.Filename = xmlUnpack.FileName;
+                    Progress.Report(Prog);
+
                     XMLUtils.UnpackXmlFile(xmlUnpack, unpackBuilder);
                 }
                 Logging.Installer(unpackBuilder.ToString());
@@ -399,13 +412,19 @@ namespace RelhaxModpack.InstallerComponents
 
             //step 8: patch files (async option)
             //make the task array here. so far can be a maximum of 3 items
-            Task[] concurrentTasksAfterMainExtractoin = new Task[4];
-            int taskIndex = 0;
+            Task patchTask = null;
+            Task createShortcutsTask = null;
+            Task createAtlasesTask = null;
+            Task createFontsTask = null;
+            Task[] concurrentTasksAfterMainExtractoin = new Task[]
+            {
+                patchTask,
+                createShortcutsTask,
+                createAtlasesTask,
+                createFontsTask
+            };
+
             OldTime = InstallStopWatch.Elapsed;
-            Prog.TotalCurrent++;
-            InstallFinishedArgs.ExitCodes = InstallerExitCodes.PatchError;
-            Prog.InstallStatus = InstallerExitCodes.PatchError;
-            Progress.Report(Prog);
 
             Logging.WriteToLog(string.Format("Patching of files, current install time = {0} msec",
                 (int)InstallStopWatch.Elapsed.TotalMilliseconds));
@@ -413,23 +432,33 @@ namespace RelhaxModpack.InstallerComponents
             if (pathces.Count > 0)
             {
                 //no need to installer log patches, since it's operating on files that already exist
-                concurrentTasksAfterMainExtractoin[taskIndex++] = Task.Factory.StartNew(() =>
+                patchTask = Task.Factory.StartNew(() =>
                 {
+                    Prog.ChildTotal = 1;
+                    Prog.ParrentTotal = pathces.Count;
+                    Prog.ParrentCurrent = Prog.ChildCurrent = 0;
+                    Prog.Filename = string.Empty;
+                    Progress.Report(Prog);
+
                     foreach (Patch patch in pathces)
                     {
+                        Prog.Filename = patch.File;
+                        Prog.ParrentCurrent++;
+                        Progress.Report(Prog);
+
                         PatchUtils.RunPatch(patch);
                     }
                     Logging.Info("Patching of files complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
+                    Prog.TotalCurrent = (int)InstallerExitCodes.PatchError;
+                    InstallFinishedArgs.ExitCodes = InstallerExitCodes.PatchError;
+                    Prog.InstallStatus = InstallerExitCodes.PatchError;
+                    Progress.Report(Prog);
                 });
             }
             else
                 Logging.WriteToLog("...skipped (no patch entries parsed)");
 
             //step 9: create shortcuts (async option)
-            Prog.TotalCurrent++;
-            InstallFinishedArgs.ExitCodes = InstallerExitCodes.ShortcustError;
-            Prog.InstallStatus = InstallerExitCodes.ShortcustError;
-            Progress.Report(Prog);
 
             Logging.WriteToLog(string.Format("Creating of shortcuts, current install time = {0} msec",
                 (int)InstallStopWatch.Elapsed.TotalMilliseconds));
@@ -438,10 +467,31 @@ namespace RelhaxModpack.InstallerComponents
             {
                 StringBuilder shortcutBuilder = new StringBuilder();
                 shortcutBuilder.AppendLine("/*   Shortcuts   */");
-                concurrentTasksAfterMainExtractoin[taskIndex++] = Task.Factory.StartNew(() =>
+                createShortcutsTask = Task.Factory.StartNew(() =>
                 {
+                    if (TaskNullOrDone(patchTask))
+                    {
+                        Prog.ChildTotal = 1;
+                        Prog.ParrentTotal = shortcuts.Count;
+                        Prog.ParrentCurrent = 0;
+                        Prog.ChildCurrent = 0;
+                        Prog.Filename = string.Empty;
+                        LockProgress();
+                    }
+                    int numDone = 0;
                     foreach (Shortcut shortcut in shortcuts)
                     {
+                        numDone++;
+                        if (TaskNullOrDone(patchTask))
+                        {
+                            Prog.ChildTotal = 1;
+                            Prog.ParrentTotal = shortcuts.Count;
+                            Prog.ParrentCurrent = numDone;
+                            Prog.ChildCurrent = 0;
+                            Prog.Filename = shortcut.Path;
+                            LockProgress();
+                        }
+
                         if (shortcut.Enabled)
                         {
                             Utils.CreateShortcut(shortcut, shortcutBuilder);
@@ -449,6 +499,13 @@ namespace RelhaxModpack.InstallerComponents
                     }
                     Logging.Installer(shortcutBuilder.ToString());
                     Logging.Info("Creating of shortcuts complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
+                    if(TaskNullOrDone(patchTask))
+                    {
+                        Prog.TotalCurrent = (int)InstallerExitCodes.ShortcustError;
+                        InstallFinishedArgs.ExitCodes = InstallerExitCodes.ShortcustError;
+                        Prog.InstallStatus = InstallerExitCodes.ShortcustError;
+                        LockProgress();
+                    }
                 });
             }
             else
@@ -457,20 +514,31 @@ namespace RelhaxModpack.InstallerComponents
             //step 10: create atlases (async option)
             if (ModpackSettings.DisableTriggers)
             {
-                Prog.TotalCurrent++;
-                InstallFinishedArgs.ExitCodes = InstallerExitCodes.ContourIconAtlasError;
-                Prog.InstallStatus = InstallerExitCodes.ContourIconAtlasError;
-                Progress.Report(Prog);
-
                 Logging.WriteToLog(string.Format("Creating of atlases, current install time = {0} msec", (int)InstallStopWatch.Elapsed.TotalMilliseconds));
                 List<Atlas> atlases = MakeAtlasList();
                 if (atlases.Count > 0)
                 {
                     //NOTE: stringbuilder logging is done inside BuildContourIcons()
-                    concurrentTasksAfterMainExtractoin[taskIndex++] = Task.Factory.StartNew(() =>
+                    createAtlasesTask = Task.Factory.StartNew(() =>
                     {
-                        BuildContourIcons();
+                        if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask))
+                        {
+                            Prog.ChildTotal = 1;
+                            Prog.ParrentTotal = 1;
+                            Prog.ParrentCurrent = Prog.ChildCurrent = 0;
+                            Prog.Filename = string.Empty;
+                            LockProgress();
+                        }
+                        
+                        BuildContourIcons(patchTask, createShortcutsTask);
                         Logging.Info("Creating of atlases complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
+                        if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask))
+                        {
+                            Prog.TotalCurrent = (int)InstallerExitCodes.ContourIconAtlasError;
+                            InstallFinishedArgs.ExitCodes = InstallerExitCodes.ContourIconAtlasError;
+                            Prog.InstallStatus = InstallerExitCodes.ContourIconAtlasError;
+                            LockProgress();
+                        }
                     });
                 }
                 else
@@ -480,11 +548,6 @@ namespace RelhaxModpack.InstallerComponents
             //step 11: install fonts (async operation)
             if (ModpackSettings.DisableTriggers)
             {
-                Prog.TotalCurrent++;
-                InstallFinishedArgs.ExitCodes = InstallerExitCodes.FontInstallError;
-                Prog.InstallStatus = InstallerExitCodes.FontInstallError;
-                Progress.Report(Prog);
-
                 Logging.WriteToLog(string.Format("Installing of fonts, current install time = {0} msec",
                     (int)InstallStopWatch.Elapsed.TotalMilliseconds));
                 string[] fontsToInstall = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername), SearchOption.TopDirectoryOnly, false, @"*", 50, 3, true);
@@ -492,10 +555,25 @@ namespace RelhaxModpack.InstallerComponents
                     Logging.WriteToLog("...skipped (no font files to install)");
                 else
                 {
-                    concurrentTasksAfterMainExtractoin[taskIndex++] = Task.Factory.StartNew(() =>
+                    createFontsTask = Task.Factory.StartNew(() =>
                     {
-                        InstallFonts(fontsToInstall);
+                        if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask) && TaskNullOrDone(createAtlasesTask))
+                        {
+                            Prog.ChildTotal = 1;
+                            Prog.ParrentTotal = 1;
+                            Prog.ParrentCurrent = Prog.ChildCurrent = 0;
+                            Prog.Filename = string.Empty;
+                            LockProgress();
+                        }
+                        InstallFonts(fontsToInstall, patchTask, createShortcutsTask, createAtlasesTask);
                         Logging.Info("Installing of fonts complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
+                        if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask) && TaskNullOrDone(createAtlasesTask))
+                        {
+                            Prog.TotalCurrent = (int)InstallerExitCodes.FontInstallError;
+                            InstallFinishedArgs.ExitCodes = InstallerExitCodes.FontInstallError;
+                            Prog.InstallStatus = InstallerExitCodes.FontInstallError;
+                            LockProgress();
+                        }
                     });
                 }
             }
@@ -506,7 +584,7 @@ namespace RelhaxModpack.InstallerComponents
 
             //step 12: trim download cache folder
             OldTime = InstallStopWatch.Elapsed;
-            Prog.TotalCurrent++;
+            Prog.TotalCurrent = (int)InstallerExitCodes.TrimDownloadCacheError;
             InstallFinishedArgs.ExitCodes = InstallerExitCodes.TrimDownloadCacheError;
             Prog.InstallStatus = InstallerExitCodes.TrimDownloadCacheError;
             Progress.Report(Prog);
@@ -818,6 +896,12 @@ namespace RelhaxModpack.InstallerComponents
         #region Installer methods
         private bool BackupMods()
         {
+            //setup prog reporting
+            Prog.ParrentTotal = Prog.ChildTotal = 1;
+            Prog.ParrentCurrent = Prog.ChildCurrent = 0;
+            Prog.Filename = string.Empty;
+            Progress.Report(Prog);
+
             //check first if the modpack backup directory exists first
             if (!Directory.Exists(Settings.RelhaxModBackupFolder))
                 Directory.CreateDirectory(Settings.RelhaxModBackupFolder);
@@ -896,12 +980,14 @@ namespace RelhaxModpack.InstallerComponents
             //child is the file being backed up in this package
             //using file parameter
             Prog.ParrentTotal = packagesWithData.Count;
-            Prog.ParrentCurrent = 0;
-            Prog.ChildCurrent = 0;
-            Prog.ChildTotal = 0;
+
+            //setup prog reporting
+            Prog.ChildTotal = 1;
+            Prog.ParrentCurrent = Prog.ChildCurrent = 0;
+            Prog.Filename = string.Empty;
             Progress.Report(Prog);
 
-            foreach(SelectablePackage package in packagesWithData)
+            foreach (SelectablePackage package in packagesWithData)
             {
                 Logging.Info("Backup data of package {0} starting", package.PackageName);
                 Prog.ParrentCurrent++;
@@ -979,9 +1065,15 @@ namespace RelhaxModpack.InstallerComponents
 
         private bool ClearCache()
         {
+            //setup prog reporting
+            Prog.ParrentTotal = Prog.ChildTotal = 1;
+            Prog.ParrentCurrent = Prog.ChildCurrent = 0;
+            Prog.Filename = string.Empty;
+            Progress.Report(Prog);
+
             //make sure that the app data folder exists
             //if it does not, then it does not need to run this
-            if(!Directory.Exists(Settings.AppDataFolder))
+            if (!Directory.Exists(Settings.AppDataFolder))
             {
                 Logging.WriteToLog("Appdata folder does not exist, creating");
                 Directory.CreateDirectory(Settings.AppDataFolder);
@@ -1076,6 +1168,11 @@ namespace RelhaxModpack.InstallerComponents
 
         private bool ClearLogs()
         {
+            //setup prog reporting
+            Prog.ParrentTotal = Prog.ChildTotal = 1;
+            Prog.ParrentCurrent = Prog.ChildCurrent = 0;
+            Prog.Filename = string.Empty;
+            Progress.Report(Prog);
             string[] logsToDelete = new string[]
             {
                 Path.Combine(Settings.WoTDirectory, "python.log"),
@@ -1084,9 +1181,14 @@ namespace RelhaxModpack.InstallerComponents
                 Path.Combine(Settings.WoTDirectory, "WoTLauncher.log"),
                 Path.Combine(Settings.WoTDirectory, "cef.log")
             };
+            Prog.ParrentTotal = logsToDelete.Count();
+            Progress.Report(Prog);
             foreach(string s in logsToDelete)
             {
                 Logging.WriteToLog("Processing log file (if exists) " + s, Logfiles.Application, LogLevel.Info);
+                Prog.ParrentCurrent++;
+                Prog.Filename = s;
+                Progress.Report(Prog);
                 if (File.Exists(s))
                     if (!Utils.FileDelete(s))
                         return false;
@@ -1113,7 +1215,9 @@ namespace RelhaxModpack.InstallerComponents
         private bool ExtractFilesAsyncSetup()
         {
             //progress reporting
-            Prog.ChildCurrent = Prog.ChildTotal = Prog.ParrentCurrent = Prog.ParrentTotal = 0;
+            Prog.ChildCurrent = Prog.ParrentCurrent = 0;
+            Prog.ChildTotal = Prog.ParrentTotal = 1;
+            Prog.Filename = string.Empty;
             Progress.Report(Prog);
 
             //this is the only really new one. for each install group, spawn a bunch of threads to start the install process
@@ -1203,7 +1307,11 @@ namespace RelhaxModpack.InstallerComponents
         {
             //progress reporting
             Prog.ChildTotal = packagesWithData.Count;
-            Prog.ChildCurrent = 0;
+            Prog.ChildCurrent = Prog.ParrentCurrent = 0;
+            Prog.ParrentTotal = 1;
+            Prog.Filename = string.Empty;
+            Progress.Report(Prog);
+
             foreach (SelectablePackage package in packagesWithData)
             {
                 //actually report
@@ -1238,11 +1346,31 @@ namespace RelhaxModpack.InstallerComponents
             return true;
         }
 
-        private void InstallFonts(string[] fontsToInstall)
+        private void InstallFonts(string[] fontsToInstall, Task patchTask, Task createShortcutsTask, Task createAtlasesTask)
         {
             Logging.Debug("checking system installed fonts to remove duplicates");
+            if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask) && TaskNullOrDone(createAtlasesTask))
+            {
+                Prog.ChildTotal = 1;
+                Prog.ParrentTotal = 6;
+                Prog.ParrentCurrent = 0;
+                Prog.ChildCurrent = 0;
+                Prog.Filename = string.Empty;
+                LockProgress();
+            }
+
             string[] fontscurrentlyInstalled = Utils.DirectorySearch(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), SearchOption.TopDirectoryOnly,false);
             string[] fontsNamesCurrentlyInstalled = fontscurrentlyInstalled.Select(s => Path.GetFileName(s).ToLower()).ToArray();
+            if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask) && TaskNullOrDone(createAtlasesTask))
+            {
+                Prog.ChildTotal = 1;
+                Prog.ParrentTotal = 6;
+                Prog.ParrentCurrent = 1;
+                Prog.ChildCurrent = 0;
+                Prog.Filename = string.Empty;
+                LockProgress();
+            }
+
             //remove any fonts whos filename match what is already installed
             for (int i = 0; i < fontsToInstall.Count(); i++)
             {
@@ -1258,8 +1386,17 @@ namespace RelhaxModpack.InstallerComponents
             string[] realFontsToInstall = fontsToInstall.Where(font => !string.IsNullOrWhiteSpace(font)).ToArray();
 
             Logging.Debug("fontsToInstallReal count: {0}", realFontsToInstall.Count());
+            if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask) && TaskNullOrDone(createAtlasesTask))
+            {
+                Prog.ChildTotal = 1;
+                Prog.ParrentTotal = 6;
+                Prog.ParrentCurrent = 2;
+                Prog.ChildCurrent = 0;
+                Prog.Filename = string.Empty;
+                LockProgress();
+            }
 
-            if(realFontsToInstall.Count() > 0)
+            if (realFontsToInstall.Count() > 0)
             {
                 //extract he exe to install fonts
                 Logging.Debug("extracting fontReg for font install");
@@ -1270,6 +1407,15 @@ namespace RelhaxModpack.InstallerComponents
                     using (ZipFile zip = new ZipFile(Settings.ManagerInfoDatFile))
                     {
                         zip.ExtractSelectedEntries("FontReg.exe", null, Path.GetDirectoryName(fontRegPath));
+                    }
+                    if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask) && TaskNullOrDone(createAtlasesTask))
+                    {
+                        Prog.ChildTotal = 1;
+                        Prog.ParrentTotal = 6;
+                        Prog.ParrentCurrent = 3;
+                        Prog.ChildCurrent = 0;
+                        Prog.Filename = string.Empty;
+                        LockProgress();
                     }
                 }
                 Logging.Info("Attemping to install fonts: {0}", string.Join(",", realFontsToInstall));
@@ -1290,6 +1436,15 @@ namespace RelhaxModpack.InstallerComponents
                     installFontss.Start();
                     installFontss.WaitForExit();
                     Logging.Info("FontReg.exe ExitCode: " + installFontss.ExitCode);
+                    if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask) && TaskNullOrDone(createAtlasesTask))
+                    {
+                        Prog.ChildTotal = 1;
+                        Prog.ParrentTotal = 6;
+                        Prog.ParrentCurrent = 6;
+                        Prog.ChildCurrent = 0;
+                        Prog.Filename = string.Empty;
+                        LockProgress();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -1303,6 +1458,13 @@ namespace RelhaxModpack.InstallerComponents
 
         private bool TrimDownloadCache()
         {
+            //progress reporting
+            Prog.ChildCurrent = Prog.ParrentCurrent = 0;
+            Prog.ChildTotal = 1;
+            Prog.ParrentTotal = 2;
+            Prog.Filename = string.Empty;
+            Progress.Report(Prog);
+
             //get a list of all packages in the database with zip files
             List<DatabasePackage> allFlatList = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList).Where(package => !string.IsNullOrWhiteSpace(package.ZipFile)).ToList();
 
@@ -1316,6 +1478,8 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.Error("failed to get list of zip files in download cache, skipping this step");
                 return false;
             }
+            Prog.ParrentCurrent = 1;
+            Progress.Report(Prog);
 
             //update the list to only have the filename, not the complete path
             zipFilesInCache = zipFilesInCache.Select(str => Path.GetFileName(str)).ToList();
@@ -1323,20 +1487,40 @@ namespace RelhaxModpack.InstallerComponents
             //get a list of zip files in the cache that aren't in the database, these are old and can be deleted
             List<string> oldZipFilesNotInDatabase = zipFilesInCache.Except(zipFilesInDatabase).ToList();
 
+            //report progress
+            Prog.ChildTotal = oldZipFilesNotInDatabase.Count;
+
             //if there are any in the above list, it means they are old and can be deleted
             if (oldZipFilesNotInDatabase.Count > 0)
             {
                 foreach (string zipfile in oldZipFilesNotInDatabase)
+                {
+                    Prog.ChildCurrent++;
+                    Prog.Filename = zipfile;
+                    Progress.Report(Prog);
+
                     Utils.FileDelete(Path.Combine(Settings.RelhaxDownloadsFolder, zipfile));
+                }
             }
             return true;
         }
 
         private bool Cleanup()
         {
-            foreach(string folder in Settings.FoldersToCleanup)
+            //progress reporting
+            Prog.ChildCurrent = Prog.ParrentCurrent = 0;
+            Prog.ChildTotal = 1;
+            Prog.ParrentTotal = Settings.FoldersToCleanup.Count();
+            Prog.Filename = string.Empty;
+            Progress.Report(Prog);
+
+            foreach (string folder in Settings.FoldersToCleanup)
             {
                 Logging.Debug("cleaning folder {0}, if exists", folder);
+                Prog.ParrentCurrent++;
+                Prog.Filename = folder;
+                Progress.Report(Prog);
+
                 string folderPath = Path.Combine(Settings.WoTDirectory, folder);
                 if (Directory.Exists(folderPath))
                     Utils.DirectoryDelete(folderPath, true);
@@ -1514,20 +1698,36 @@ namespace RelhaxModpack.InstallerComponents
 
         private void OnZipfileExtractProgress(object sender, ExtractProgressEventArgs e)
         {
-            lock(Progress)
+            //this thing fires for all sorts of events, but we only care about 3. and we want to keep locking to a minimum, as well as progress reporting
+            //(no needless locking or progress reporting)
+            switch (e.EventType)
             {
-                Prog.BytesTotal = e.TotalBytesToTransfer;
-                Prog.BytesProcessed = e.BytesTransferred;
-                Prog.EntriesProcessed = (uint)e.EntriesExtracted;
-                Prog.EntriesTotal = (uint)e.EntriesTotal;
-                Prog.EntryFilename = e.CurrentEntry.FileName;
-                Prog.Filename = e.ArchiveName;
-                Prog.ThreadID = (uint)(sender as RelhaxZipFile).ThreadID;
-                Progress.Report(Prog);
+                case ZipProgressEventType.Extracting_EntryBytesWritten:
+                    lock (Progress)
+                    {
+                        Prog.ChildCurrent = (int)e.BytesTransferred;
+                        Prog.ChildTotal = (int)e.TotalBytesToTransfer;
+                        Prog.Filename = e.ArchiveName;
+                        Prog.ThreadID = (uint)(sender as RelhaxZipFile).ThreadID;
+                        Progress.Report(Prog);
+                    }
+                    break;
+                case ZipProgressEventType.Extracting_BeforeExtractEntry:
+                case ZipProgressEventType.Extracting_AfterExtractEntry:
+                    lock (Progress)
+                    {
+                        Prog.ParrentCurrent = e.EntriesExtracted;
+                        Prog.ParrentTotal = e.EntriesTotal;
+                        Prog.EntryFilename = e.CurrentEntry.FileName;
+                        Prog.Filename = e.ArchiveName;
+                        Prog.ThreadID = (uint)(sender as RelhaxZipFile).ThreadID;
+                        Progress.Report(Prog);
+                    }
+                    break;
             }
         }
 
-        private void BuildContourIcons()
+        private void BuildContourIcons(Task patchTask, Task createShortcutsTask)
         {
             Logging.WriteToLog(string.Format("Creating of atlases, current install time = {0} msec",
                 (int)InstallStopWatch.Elapsed.TotalMilliseconds));
@@ -1536,14 +1736,25 @@ namespace RelhaxModpack.InstallerComponents
             {
                 StringBuilder atlasBuilder = new StringBuilder();
                 atlasBuilder.AppendLine("/*   Atlases   */");
+                int done = 0;
                 foreach (Atlas atlas in atlases)
                 {
+                    done++;
                     //replace macros
                     atlas.Pkg = Utils.MacroReplace(atlas.Pkg, ReplacementTypes.FilePath);
                     atlas.AtlasSaveDirectory = Utils.MacroReplace(atlas.AtlasSaveDirectory, ReplacementTypes.FilePath);
                     for(int i = 0; i < atlas.ImageFolderList.Count; i++)
                     {
                         atlas.ImageFolderList[i] = Utils.MacroReplace(atlas.ImageFolderList[i], ReplacementTypes.FilePath);
+                    }
+                    if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask))
+                    {
+                        Prog.ChildTotal = 1;
+                        Prog.ParrentTotal = atlases.Count;
+                        Prog.ParrentCurrent = done;
+                        Prog.ChildCurrent = 0;
+                        Prog.Filename = atlas.AtlasFile;
+                        LockProgress();
                     }
                     Utils.CreateAtlas(atlas);
                     atlasBuilder.AppendLine(atlas.MapFile);
@@ -1589,7 +1800,7 @@ namespace RelhaxModpack.InstallerComponents
                             switch (match.Name)
                             {
                                 case TriggerContouricons:
-                                    match.TriggerTask = Task.Run(() => BuildContourIcons());
+                                    match.TriggerTask = Task.Run(() => BuildContourIcons(null,null));
                                     break;
                                 case TriggerInstallFonts:
                                     match.TriggerTask = Task.Run(() =>
@@ -1598,7 +1809,7 @@ namespace RelhaxModpack.InstallerComponents
                                         if (fontsToInstall == null || fontsToInstall.Count() == 0)
                                             Logging.WriteToLog("...skipped (no font files to install)");
                                         else
-                                            InstallFonts(fontsToInstall);
+                                            InstallFonts(fontsToInstall,null,null,null);
                                     });
                                     break;
                                 default:
@@ -2011,6 +2222,22 @@ namespace RelhaxModpack.InstallerComponents
                     }
                 }
                 atlases.Add(sc);
+            }
+        }
+        #endregion
+
+        #region other
+
+        private bool TaskNullOrDone(Task task)
+        {
+            return task == null || task.IsCompleted;
+        }
+
+        private void LockProgress()
+        {
+            lock(Progress)
+            {
+                Progress.Report(Prog);
             }
         }
         #endregion
