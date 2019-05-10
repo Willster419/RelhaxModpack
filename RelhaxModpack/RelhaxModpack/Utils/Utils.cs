@@ -1393,6 +1393,36 @@ namespace RelhaxModpack
                 flatList.AddRange(cat.GetFlatPackageList());
             return flatList;
         }
+
+        public static bool StartProcess(ProcessStartInfo startInfo)
+        {
+            try
+            {
+                Process.Start(startInfo);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception("Failed to start process");
+                Logging.Exception(ex.ToString());
+                return false;
+            }
+        }
+
+        public static bool StartProcess(string command)
+        {
+            try
+            {
+                Process.Start(command);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception("Failed to start process");
+                Logging.Exception(ex.ToString());
+                return false;
+            }
+        }
         #endregion
 
         #region Macro Utils
