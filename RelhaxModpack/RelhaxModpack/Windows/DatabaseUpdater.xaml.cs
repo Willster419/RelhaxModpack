@@ -688,7 +688,10 @@ namespace RelhaxModpack.Windows
                         //update the current size of the package
                         package.Size = fakeSize;
                         if (package.Size == 0)
-                            throw new BadMemeException("you made a mistake");
+                        {
+                            Logging.Error("zip file {0} is 0 bytes (empty file)",package.ZipFile);
+                            return;
+                        }
                     }
                 }
                 else if (package.CRC.Equals("f") || string.IsNullOrWhiteSpace(package.CRC))
