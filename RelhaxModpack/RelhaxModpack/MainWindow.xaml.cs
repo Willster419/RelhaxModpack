@@ -687,6 +687,7 @@ namespace RelhaxModpack
         #endregion
 
         #region Installation
+
         private void InstallModpackButton_Click(object sender, RoutedEventArgs e)
         {
             //toggle buttons and reset UI
@@ -1047,6 +1048,12 @@ namespace RelhaxModpack
 
             InstallerComponents.RelhaxInstallFinishedEventArgs results = await engine.RunInstallationAsync(progress);
 
+            //update the UI to be in a "finished" state"
+            InstallProgressTextBox.Clear();
+            ParentProgressBar.Value = ParentProgressBar.Maximum;
+            ChildProgressBar.Value = ChildProgressBar.Maximum;
+            TotalProgressBar.Value = TotalProgressBar.Maximum;
+
             //after waiting for the installation...
             if (results.ExitCodes == InstallerComponents.InstallerExitCodes.Success)
             {
@@ -1116,40 +1123,68 @@ namespace RelhaxModpack
                 switch (e.InstallStatus)
                 {
                     case InstallerComponents.InstallerExitCodes.BackupModsError:
-                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("installBackupMods"), e.Filename);
+                        line1 = Translations.GetTranslatedString("installBackupMods");
+                        if(string.IsNullOrEmpty(e.ParrentCurrentProgress))
+                        {
+                            line2 = e.EntryFilename;
+                        }
+                        else
+                        {
+                            line2 = e.ParrentCurrentProgress;
+                        }
                         break;
                     case InstallerComponents.InstallerExitCodes.BackupDataError:
-                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("installBackupData"), e.Filename);
+                        //filename is name of file in package to backup
+                        //parrentCurrentProgress is name of package
+                        line1 = Translations.GetTranslatedString("installBackupData");
+                        line2 = e.Filename;
+                        line3 = e.ParrentCurrentProgress;
                         break;
                     case InstallerComponents.InstallerExitCodes.ClearCacheError:
-                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("installClearCache"), e.Filename);
+                        line1 = Translations.GetTranslatedString("installClearCache");
                         break;
                     case InstallerComponents.InstallerExitCodes.ClearLogsError:
-                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("installClearLogs"), e.Filename);
+                        line1 = Translations.GetTranslatedString("installClearLogs");
+                        line2 = Path.GetFileName(e.Filename);
                         break;
                     case InstallerComponents.InstallerExitCodes.CleanModsError:
-                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("installCleanMods"), e.Filename);
+                        line1 = Translations.GetTranslatedString("installCleanMods");
+                        line2 = e.Filename;
                         break;
                     case InstallerComponents.InstallerExitCodes.ExtractionError:
-                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("installExtractingMods"), e.Filename);
+                        line1 = Translations.GetTranslatedString("installExtractingMods");
+                        line2 = Path.GetFileName(e.Filename);
+                        line3 = string.Format("{0} {1} {2}", e.EntriesProcessed, Translations.GetTranslatedString("of"), e.EntriesTotal);
+                        line4 = e.EntryFilename;
                         break;
                     case InstallerComponents.InstallerExitCodes.UserExtractionError:
-                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("extractingUserMod"), e.Filename);
+                        line1 = Translations.GetTranslatedString("extractingUserMod");
+                        line2 = Path.GetFileName(e.Filename);
+                        line3 = string.Format("{0} {1} {2}", e.EntriesProcessed, Translations.GetTranslatedString("of"), e.EntriesTotal);
+                        line4 = e.EntryFilename;
                         break;
                     case InstallerComponents.InstallerExitCodes.RestoreUserdataError:
-                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("installRestoreUserdata"), e.Filename);
+                        //filename is name of file in package to backup
+                        //parrentCurrentProgress is name of package
+                        line1 = Translations.GetTranslatedString("installRestoreUserdata");
+                        line2 = e.Filename;
+                        line3 = e.ParrentCurrentProgress;
                         break;
                     case InstallerComponents.InstallerExitCodes.XmlUnpackError:
-                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("installXmlUnpack"), e.Filename);
+                        line1 = Translations.GetTranslatedString("installXmlUnpack");
+                        line2 = e.Filename;
                         break;
                     case InstallerComponents.InstallerExitCodes.PatchError:
-                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("installPatchFiles"), e.Filename);
+                        line1 = Translations.GetTranslatedString("installPatchFiles");
+                        line2 = e.Filename;
                         break;
                     case InstallerComponents.InstallerExitCodes.ShortcustError:
-                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("installShortcuts"), e.Filename);
+                        line1 = Translations.GetTranslatedString("installShortcuts");
+                        line2 = e.Filename;
                         break;
                     case InstallerComponents.InstallerExitCodes.ContourIconAtlasError:
-                        line1 = string.Format("{0}\n{1}", Translations.GetTranslatedString("installContourIconAtlas"), e.Filename);
+                        line1 = Translations.GetTranslatedString("installContourIconAtlas");
+                        line2 = e.Filename;
                         break;
                     case InstallerComponents.InstallerExitCodes.FontInstallError:
                         line1 = Translations.GetTranslatedString("installFonts");
