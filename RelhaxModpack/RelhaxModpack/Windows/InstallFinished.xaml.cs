@@ -1,16 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
+using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace RelhaxModpack.Windows
 {
@@ -22,6 +14,50 @@ namespace RelhaxModpack.Windows
         public InstallFinished()
         {
             InitializeComponent();
+        }
+
+        private void InstallationCompleteStartWoTButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(!Utils.StartProcess(new ProcessStartInfo()
+            {
+                WorkingDirectory = Path.GetDirectoryName(Settings.WoTDirectory),
+                FileName = Path.Combine(Settings.WoTDirectory, "WorldOfTanks.exe")
+            }))
+            {
+                MessageBox.Show(Translations.GetTranslatedString("CouldNotStartProcess"));
+            }
+            DialogResult = true;
+            Close();
+        }
+
+        private void InstallationCompleteStartGameCenterButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!Utils.StartProcess(new ProcessStartInfo()
+            {
+                WorkingDirectory = Path.GetDirectoryName(Settings.WoTDirectory),
+                FileName = Path.Combine(Settings.WoTDirectory, "WoTLauncher.exe")
+            }))
+            {
+                MessageBox.Show(Translations.GetTranslatedString("CouldNotStartProcess"));
+            }
+            DialogResult = true;
+            Close();
+        }
+
+        private void InstallationCompleteOpenXVMButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!Utils.StartProcess(string.Format("https://www.modxvm.com/{0}/", Translations.GetTranslatedString("xvmUrlLocalisation"))))
+            {
+                MessageBox.Show(Translations.GetTranslatedString("CouldNotStartProcess"));
+            }
+            DialogResult = true;
+            Close();
+        }
+
+        private void InstallationCompleteCloseAppButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+            Application.Current.Shutdown();
         }
     }
 }
