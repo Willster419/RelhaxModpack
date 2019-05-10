@@ -482,12 +482,12 @@ namespace RelhaxModpack
             //check if the documentation xml file is there, if so then we should say in alpha
             if (version == ApplicationVersions.Alpha && !File.Exists("RelhaxModpack.xml"))
             {
-                Logging.WriteToLog("temp version of " + nameof(Settings.ApplicationVersion) + " is Alpha and RelhaxModpack.xml does NOT exist, setting to stable for safety",
-                    Logfiles.Application, LogLevel.Warning);
-                version = ApplicationVersions.Stable;
+                Logging.Warning("You are running an alpha build of Relhax Modpack. Unless you knew you were running an alpha build, you shouldn't be running an alpha build!");
+                Logging.Warning("This version is most likely unstable and was used for testing, you should update to beta or stable as soon as possible!");
+                version = ApplicationVersions.Beta;
             }
 
-            //declare these out hereso the logger can access them
+            //declare these out here so the logger can access them
             string applicationBuildVersion = Utils.GetApplicationVersion();
 
             if(version == ApplicationVersions.Alpha)
@@ -496,19 +496,19 @@ namespace RelhaxModpack
                 return true;
             }
 
-            //if current application build does not equal requestion distribution channel
+            //if current application build does not equal requested distribution channel
             if (version != ModpackSettings.ApplicationDistroVersion)
             {
                 outOfDate = true;//can assume out of date
-                Logging.WriteToLog(string.Format("Current build is {0} ({1}), online build is NA (changing distro version {2}->{3})",
+                Logging.WriteToLog(string.Format("Current build is {0} ({1}), online build is NA (changing distribution version {2}->{3})",
                     applicationBuildVersion, version.ToString(), version.ToString(), ModpackSettings.ApplicationDistroVersion.ToString()));
             }
             else
             {
-                //actually compare the bulid of the application of the requested distribution channel
+                //actually compare the build of the application of the requested distribution channel
                 string applicationOnlineVersion = (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Stable) ?
-                    XMLUtils.GetXMLStringFromXPath(doc, "//version/manager_v2") ://stable
-                    XMLUtils.GetXMLStringFromXPath(doc, "//version/manager_beta_v2");//beta
+                    XMLUtils.GetXMLStringFromXPath(doc, "//version/relhax_v2_stable").Trim() ://stable
+                    XMLUtils.GetXMLStringFromXPath(doc, "//version/relhax_v2_beta").Trim();//beta
                 if (!(applicationBuildVersion.Equals(applicationOnlineVersion)))
                     outOfDate = true;
                 Logging.WriteToLog(string.Format("Current build is {0} ({1}), online build is {2} ({3})",
