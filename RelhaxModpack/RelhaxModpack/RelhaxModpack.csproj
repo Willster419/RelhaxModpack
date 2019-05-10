@@ -183,7 +183,6 @@
     <Compile Include="Windows\RelhaxMediaPlayer.xaml.cs">
       <DependentUpon>RelhaxMediaPlayer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\RelhaxPreviewIndex.cs" />
     <Compile Include="UIComponents\RelhaxProgress.cs" />
     <Compile Include="UIComponents\StretchingTreeView.cs" />
     <Compile Include="UIComponents\StretchingTreeViewItem.cs" />

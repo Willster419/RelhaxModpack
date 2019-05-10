@@ -1060,11 +1060,6 @@
             InitializeComponent
             </summary>
         </member>
-        <member name="T:RelhaxModpack.UIComponents.RelhaxPreviewIndex">
-            <summary>
-            A RelhaxPreviewIndex item is a glorified textblock with a hyperlink with a refrence to a media element
-            </summary>
-        </member>
         <member name="T:RelhaxModpack.UIComponents.RelhaxProgress">
             <summary>
             The base class for reporting async progress to any UI receiver task.
