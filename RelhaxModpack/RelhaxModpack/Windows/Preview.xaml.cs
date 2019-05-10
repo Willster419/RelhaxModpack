@@ -24,6 +24,7 @@ namespace RelhaxModpack.Windows
         public SelectablePackage Package = null;
         public bool EditorMode = false;
         private MemoryStream ImageStream = null;
+        private Media CurrentDispalyMedia = null;
 
         public Preview()
         {
@@ -48,8 +49,13 @@ namespace RelhaxModpack.Windows
                 Close();
             }
 
+            //translate 3 components
+            DevUrlHeader.Text = Translations.GetTranslatedString(DevUrlHeader.Name);
+            PreviewNextPicButton.Content = Translations.GetTranslatedString(PreviewNextPicButton.Name);
+            PreviewPreviousPicButton.Content = Translations.GetTranslatedString(PreviewPreviousPicButton.Name);
+
             //check if devURL element should be enabled or not
-            if(string.IsNullOrWhiteSpace(Package.DevURL))
+            if (string.IsNullOrWhiteSpace(Package.DevURL))
             {
                 DevUrlHeader.IsEnabled = false;
                 DevUrlHeader.Visibility = Visibility.Hidden;
@@ -88,19 +94,26 @@ namespace RelhaxModpack.Windows
             //make the linked labels in the link box
             for(int i =0; i < Package.Medias.Count; i++)
             {
-                //make the custom class element to host it
-                RelhaxPreviewIndex previewIndex = new RelhaxPreviewIndex()
+                TextBlock block = new TextBlock()
                 {
-                    Media = Package.Medias[i],
-                    Text = i.ToString()
+
                 };
-                previewIndex.OnPreviewLinkClick += PreviewIndex_OnPreviewLinkClick;
-                MediaIndexer.Children.Add(previewIndex);
+                block.Inlines.Clear();
+                Hyperlink h = new Hyperlink(new Run(i.ToString()))
+                {
+                    Tag = Package.Medias[i],
+                    //dummy URI just to make the request navigate work
+                    NavigateUri = new Uri("http://google.com")
+                };
+                h.RequestNavigate += OnMediaHyperlinkClick;
+                block.Inlines.Add(h);
+                MediaIndexer.Children.Add(block);
             }
 
             //format the descriptions and update info text strings
             PreviewDescriptionBox.Text = string.IsNullOrWhiteSpace(Package.Description) ?
                 Translations.GetTranslatedString("noDescription") : Package.Description;
+
             //0 is update notes, 1 is update time (last updated)
             PreviewUpdatesBox.Text = string.Format("{0}\n{1}", string.IsNullOrWhiteSpace(Package.UpdateComment) ?
                 Translations.GetTranslatedString("noUpdateInfo") : Package.UpdateComment,
@@ -110,6 +123,7 @@ namespace RelhaxModpack.Windows
             {
                 WindowStartupLocation = WindowStartupLocation.Manual;
             }
+
             //if the saved preview window point is within the screen, then load it to there
             else
             {
@@ -141,6 +155,18 @@ namespace RelhaxModpack.Windows
                 DisplayMedia(Package.Medias[0]);
         }
 
+        private void OnMediaHyperlinkClick(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            if(sender is Hyperlink link)
+            {
+                if(link.Tag is Media media)
+                {
+                    if(!media.Equals(CurrentDispalyMedia))
+                        DisplayMedia(media);
+                }
+            }
+        }
+
         private void OnHyperLinkClick(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
             try
@@ -153,23 +179,17 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void PreviewIndex_OnPreviewLinkClick(object sender, RelhaxPreviewIndexEventArgs e)
-        {
-            if (e.Media == null)
-                throw new BadMemeException("MEDIA IS NULL HOW IS THAT EVEN POSSIBLE REEEEE");
-            DisplayMedia(e.Media);
-        }
-
         private async void DisplayMedia(Media media)
         {
+            CurrentDispalyMedia = media;
             //null the child element and make it again
             MainPreviewBorder.Child = null;
-            Logging.Debug("loading preview of MediaType {0}, URL={1}", nameof(Preview), media.MediaType.ToString(), media.URL);
+            Logging.Debug("loading preview of MediaType {0}, URL={1}", media.MediaType.ToString(), media.URL);
             switch(media.MediaType)
             {
                 case MediaType.Unknown:
                 default:
-                    Logging.Error("Invalid MediaType: {0}", nameof(Preview), media.MediaType.ToString());
+                    Logging.Error("Invalid MediaType: {0}", media.MediaType.ToString());
                     return;
                 case MediaType.HTML:
                     WebBrowser browser = new WebBrowser();
@@ -192,6 +212,7 @@ namespace RelhaxModpack.Windows
                         Value = 0,
                         HorizontalAlignment = HorizontalAlignment.Stretch,
                         VerticalAlignment = VerticalAlignment.Top,
+                        Margin = new Thickness(0, 20, 0, 0),
                         Height = 20
                     };
                     //https://stackoverflow.com/questions/9173904/byte-array-to-image-conversion
@@ -256,6 +277,24 @@ namespace RelhaxModpack.Windows
             {
                 ImageStream.Dispose();
                 ImageStream = null;
+            }
+        }
+
+        private void PreviewNextPicButton_Click(object sender, RoutedEventArgs e)
+        {
+            int index = Package.Medias.IndexOf(CurrentDispalyMedia);
+            if(index < Package.Medias.Count-1)
+            {
+                DisplayMedia(Package.Medias[index + 1]);
+            }
+        }
+
+        private void PreviewPreviousPicButton_Click(object sender, RoutedEventArgs e)
+        {
+            int index = Package.Medias.IndexOf(CurrentDispalyMedia);
+            if(index > 0)
+            {
+                DisplayMedia(Package.Medias[index - 1]);
             }
         }
     }

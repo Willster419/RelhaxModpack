@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="Preview" Height="550" Width="450" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="OnPreviewWindowLoad" Closed="RelhaxWindow_Closed">
+        Title="Preview" Height="550" Width="450" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="OnPreviewWindowLoad" Closed="RelhaxWindow_Closed" LocalizeWindow="False">
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition MinHeight="50" Height="*"/>
@@ -18,8 +18,8 @@
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
             <Border Tag="MainPreviewBorder" x:Name="MainPreviewBorder" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="1" BorderBrush="Black"/>
-            <Button Content="Next" HorizontalAlignment="Right" Margin="0,5,10,0" Grid.Row="1" VerticalAlignment="Top" Width="75"/>
-            <Button Content="Previous" HorizontalAlignment="Left" Margin="10,5,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75"/>
+            <Button x:Name="PreviewNextPicButton" Tag="PreviewNextPicButton" Content="Next" HorizontalAlignment="Right" Margin="0,5,10,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="PreviewNextPicButton_Click"/>
+            <Button x:Name="PreviewPreviousPicButton" Tag="PreviewPreviousPicButton" Content="Previous" HorizontalAlignment="Left" Margin="10,5,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="PreviewPreviousPicButton_Click"/>
             <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Stretch" Height="20" Margin="90,5,90,0" Grid.Row="1" VerticalAlignment="Top" >
                 <StackPanel Orientation="Horizontal" x:Name="MediaIndexer"/>
             </Border>
