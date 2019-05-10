@@ -36,12 +36,32 @@ namespace RelhaxModpack.UIComponents
             //tell the user it's loading the file
             FileName.Text = Translations.GetTranslatedString("loading");
             //use an async load
+            bool taskComplete = false;
             await Task.Factory.StartNew(() =>
             {
-                audioFileReader2 = new MediaFoundationReader(MediaURL);
-                waveOutDevice.Init(audioFileReader2);
-                waveOutDevice.Stop();
+                try
+                {
+                    audioFileReader2 = new MediaFoundationReader(MediaURL);
+                    waveOutDevice.Init(audioFileReader2);
+                    waveOutDevice.Stop();
+                    taskComplete = true;
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception("Failed to load audio preview: {0}", MediaURL);
+                    Logging.Exception(ex.ToString());
+                }
             });
+            if (!taskComplete)
+            {
+                FileName.Text = "ERROR";
+                StopButton.IsEnabled = false;
+                PlayPause.IsEnabled = false;
+                Seekbar.IsEnabled = false;
+                Volume.IsEnabled = false;
+                return;
+            }
+            
             //now that it's loaded, setup the UI
             //https://stackoverflow.com/questions/10371741/naudio-seeking-and-navigation-to-play-from-the-specified-position
             Seekbar.Maximum = (int)audioFileReader2.TotalTime.TotalMilliseconds;
