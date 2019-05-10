@@ -84,18 +84,21 @@ namespace RelhaxModpack.InstallerComponents
         //names of triggers
         public const string TriggerContouricons = "build_contour_icons";
         public const string TriggerInstallFonts = "install_fonts";
+        public const string TriggerCreateShortcuts = "create_shortcuts";
 
         public static readonly string[] CompleteTriggerList = new string[]
         {
             TriggerContouricons,
-            TriggerInstallFonts
+            TriggerInstallFonts,
+            TriggerCreateShortcuts
         };
 
         //trigger array
         public static List<Trigger> Triggers = new List<Trigger>
         {
             new Trigger(){ Fired = false, Name = TriggerContouricons, NumberProcessed = 0, Total = 0, TriggerTask = null },
-            new Trigger(){ Fired = false, Name = TriggerInstallFonts, NumberProcessed = 0, Total = 0, TriggerTask = null }
+            new Trigger(){ Fired = false, Name = TriggerInstallFonts, NumberProcessed = 0, Total = 0, TriggerTask = null },
+            new Trigger() {Fired = false, Name = TriggerCreateShortcuts, NumberProcessed = 0, Total = 0, TriggerTask = null}
         };
 
         //other
@@ -460,56 +463,64 @@ namespace RelhaxModpack.InstallerComponents
 
             //step 9: create shortcuts (async option)
 
-            Logging.WriteToLog(string.Format("Creating of shortcuts, current install time = {0} msec",
-                (int)InstallStopWatch.Elapsed.TotalMilliseconds));
-            List<Shortcut> shortcuts = MakeShortcutList();
-            if (shortcuts.Count > 0)
+            if(ModpackSettings.DisableTriggers)
             {
-                StringBuilder shortcutBuilder = new StringBuilder();
-                shortcutBuilder.AppendLine("/*   Shortcuts   */");
-                createShortcutsTask = Task.Factory.StartNew(() =>
+                Logging.WriteToLog(string.Format("Creating of shortcuts, current install time = {0} msec",
+                (int)InstallStopWatch.Elapsed.TotalMilliseconds));
+                if (ModpackSettings.CreateShortcuts)
                 {
-                    if (TaskNullOrDone(patchTask))
+                    List<Shortcut> shortcuts = MakeShortcutList();
+                    if (shortcuts.Count > 0)
                     {
-                        Prog.ChildTotal = 1;
-                        Prog.ParrentTotal = shortcuts.Count;
-                        Prog.ParrentCurrent = 0;
-                        Prog.ChildCurrent = 0;
-                        Prog.Filename = string.Empty;
-                        LockProgress();
-                    }
-                    int numDone = 0;
-                    foreach (Shortcut shortcut in shortcuts)
-                    {
-                        numDone++;
-                        if (TaskNullOrDone(patchTask))
+                        StringBuilder shortcutBuilder = new StringBuilder();
+                        shortcutBuilder.AppendLine("/*   Shortcuts   */");
+                        createShortcutsTask = Task.Factory.StartNew(() =>
                         {
-                            Prog.ChildTotal = 1;
-                            Prog.ParrentTotal = shortcuts.Count;
-                            Prog.ParrentCurrent = numDone;
-                            Prog.ChildCurrent = 0;
-                            Prog.Filename = shortcut.Path;
-                            LockProgress();
-                        }
+                            if (TaskNullOrDone(patchTask))
+                            {
+                                Prog.ChildTotal = 1;
+                                Prog.ParrentTotal = shortcuts.Count;
+                                Prog.ParrentCurrent = 0;
+                                Prog.ChildCurrent = 0;
+                                Prog.Filename = string.Empty;
+                                LockProgress();
+                            }
+                            int numDone = 0;
+                            foreach (Shortcut shortcut in shortcuts)
+                            {
+                                numDone++;
+                                if (TaskNullOrDone(patchTask))
+                                {
+                                    Prog.ChildTotal = 1;
+                                    Prog.ParrentTotal = shortcuts.Count;
+                                    Prog.ParrentCurrent = numDone;
+                                    Prog.ChildCurrent = 0;
+                                    Prog.Filename = shortcut.Path;
+                                    LockProgress();
+                                }
 
-                        if (shortcut.Enabled)
-                        {
-                            Utils.CreateShortcut(shortcut, shortcutBuilder);
-                        }
+                                if (shortcut.Enabled)
+                                {
+                                    Utils.CreateShortcut(shortcut, shortcutBuilder);
+                                }
+                            }
+                            Logging.Installer(shortcutBuilder.ToString());
+                            Logging.Info("Creating of shortcuts complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
+                            if (TaskNullOrDone(patchTask))
+                            {
+                                Prog.TotalCurrent = (int)InstallerExitCodes.ShortcustError;
+                                InstallFinishedArgs.ExitCodes = InstallerExitCodes.ShortcustError;
+                                Prog.InstallStatus = InstallerExitCodes.ShortcustError;
+                                LockProgress();
+                            }
+                        });
                     }
-                    Logging.Installer(shortcutBuilder.ToString());
-                    Logging.Info("Creating of shortcuts complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
-                    if(TaskNullOrDone(patchTask))
-                    {
-                        Prog.TotalCurrent = (int)InstallerExitCodes.ShortcustError;
-                        InstallFinishedArgs.ExitCodes = InstallerExitCodes.ShortcustError;
-                        Prog.InstallStatus = InstallerExitCodes.ShortcustError;
-                        LockProgress();
-                    }
-                });
+                    else
+                        Logging.WriteToLog("...skipped (no shortcut entries parsed)");
+                }
+                else
+                    Logging.WriteToLog("...skipped (setting is false)");
             }
-            else
-                Logging.WriteToLog("...skipped (no shortcut entries parsed)");
 
             //step 10: create atlases (async option)
             if (ModpackSettings.DisableTriggers)
