@@ -1425,42 +1425,6 @@ namespace RelhaxModpack
             Polish.Add("verifyingDownloadCache", TranslationNeeded);
             French.Add("verifyingDownloadCache", TranslationNeeded);
 
-            //Section: Preview
-            //Component: descriptionBox
-            //
-            English.Add("noDescription", "No description provided");
-            Gernam.Add("noDescription", "Keine Beschreibung verfügbar");
-            Polish.Add("noDescription", "Nie podano opisu");
-            French.Add("noDescription", "NPas de description fournie");
-
-            //Component: updateBox
-            //
-            English.Add("noUpdateInfo", "No update info provided");
-            Gernam.Add("noUpdateInfo", "Keine Aktualisierungsinformationen verfügbar");
-            Polish.Add("noUpdateInfo", "Brak informacji o aktualizacji");
-            French.Add("noUpdateInfo", "Aucune information de mise à jour fournie");
-
-            //Component: NextPicButton
-            //
-            English.Add("NextPicButton", "next");
-            Gernam.Add("NextPicButton", "weiter");
-            Polish.Add("NextPicButton", "Dalej");
-            French.Add("NextPicButton", "Suivant");
-
-            //Component: PreviousPicButton
-            //
-            English.Add("PreviousPicButton", "previous");
-            Gernam.Add("PreviousPicButton", "zurück");
-            Polish.Add("PreviousPicButton", "Wstecz");
-            French.Add("PreviousPicButton", "Précedent");
-
-            //Component: DevLinkLabel
-            //
-            English.Add("DevLinkLabel", "Developer website");
-            Gernam.Add("DevLinkLabel", "Entwickler webseite");
-            Polish.Add("DevLinkLabel", "Strona Dewelopera");
-            French.Add("DevLinkLabel", "Site web du développeur");
-
             //Component: InstallProgressTextBoxDescription
             //
             English.Add("InstallProgressTextBoxDescription", "Progress of an installation will be shown here");
@@ -2061,32 +2025,11 @@ namespace RelhaxModpack
             French.Add("supportNotGuarnteed", "Ce client n'est pas supporté officiellement. Les mods risque de ne pas fonctionner.");
 
             //Component: notifying the user the change won't take effect until application restart
+            //
             English.Add("noChangeUntilRestart", "This option won't take effect until application restart");
             Gernam.Add("noChangeUntilRestart", "Diese Option hat keine Auswirkungen bis das Programm neu gestartet wurde");
             Polish.Add("noChangeUntilRestart", "Aby zastosować tą opcję należy zrestartować aplikację");
             French.Add("noChangeUntilRestart", "Cette option ne prendra effet qu'au redémarrage de l'application");
-            #endregion
-
-            #region OldFilesToDelete
-            //Window header
-            English.Add("foundOldFilesHeader", "Old Files Question");
-            Gernam.Add("foundOldFilesHeader", "alte Dateien löschen");
-            Polish.Add("foundOldFilesHeader", "Zapytanie o starsze wersje plików");
-            French.Add("foundOldFilesHeader", "Question pour les fichiers anciens (français seulement)");
-
-            //Component: Found zip files to delete 1
-            //
-            English.Add("foundOldFilesDelete1", "The installer has found the following files that are old and can be deleted");
-            Gernam.Add("foundOldFilesDelete1", "Wir haben folgende veralteten Dateien gefunden die gelöscht werden können");
-            Polish.Add("foundOldFilesDelete1", "Instalator znalazł następujące stare pliki, które mogą zostać usunięte");
-            French.Add("foundOldFilesDelete1", "L'installateur a trouvé les vieux fichiers suivants qui peuvent être supprimé");
-
-            //Component: Found zip files to delete 2
-            //
-            English.Add("foundOldFilesDelete2", "Would you like to delete them?");
-            Gernam.Add("foundOldFilesDelete2", "Möchtest du das sie gelöscht werden?");
-            Polish.Add("foundOldFilesDelete2", "Czy chcesz je usunąć?");
-            French.Add("foundOldFilesDelete2", "Voulez vous les supprimés");
             #endregion
 
             #region SelectionViewer
@@ -2370,40 +2313,40 @@ namespace RelhaxModpack
             #endregion
 
             #region Install finished window
-            //Component: InstallCompleteLabel
+            //Component: InstallationCompleteText
             //
-            English.Add("InstallCompleteLabel", "The Installation is complete. Would you like to...");
-            Gernam.Add("InstallCompleteLabel", "Installation ist beendet. Willst du...");
-            Polish.Add("InstallCompleteLabel", "Instalacja jest zakończona. Czy chciałbyś...");
-            French.Add("InstallCompleteLabel", "L'installation est terminée. Voudriez-vous...");
+            English.Add("InstallationCompleteText", "The Installation is complete. Would you like to...");
+            Gernam.Add("InstallationCompleteText", "Installation ist beendet. Willst du...");
+            Polish.Add("InstallationCompleteText", "Instalacja jest zakończona. Czy chciałbyś...");
+            French.Add("InstallationCompleteText", "L'installation est terminée. Voudriez-vous...");
 
-            //Component: StartTanksButton
+            //Component: InstallationCompleteStartWoT
             //
-            English.Add("StartTanksButton", "Start the game? (WorldofTanks.exe)");
-            Gernam.Add("StartTanksButton", "Das Spiel starten? (WorldofTanks.exe)");
-            Polish.Add("StartTanksButton", "Uruchomić grę? (WorldofTanks.exe)");
-            French.Add("StartTanksButton", "Démarrez le jeu? (WorldofTanks.exe)");
+            English.Add("InstallationCompleteStartWoT", "Start the game? (WorldofTanks.exe)");
+            Gernam.Add("InstallationCompleteStartWoT", "Das Spiel starten? (WorldofTanks.exe)");
+            Polish.Add("InstallationCompleteStartWoT", "Uruchomić grę? (WorldofTanks.exe)");
+            French.Add("InstallationCompleteStartWoT", "Démarrez le jeu? (WorldofTanks.exe)");
 
-            //Component: StartWoTLauncherButton
+            //Component: InstallationCompleteStartGameCenter
             //
-            English.Add("StartWoTLauncherButton", "Start the game launcher? (WoTLauncher.exe)");
-            Gernam.Add("StartWoTLauncherButton", "Den Spiel Launcher starten? (WoTLauncher.exe)");
-            Polish.Add("StartWoTLauncherButton", "Uruchomić launcher? (WoTLauncher.exe)");
-            French.Add("StartWoTLauncherButton", "Démarrez le lanceur de jeux? (WoTLauncher.exe)");
+            English.Add("InstallationCompleteStartGameCenter", "Start WG Game Center (WoTLauncher.exe)?");
+            Gernam.Add("InstallationCompleteStartGameCenter", TranslationNeeded);
+            Polish.Add("InstallationCompleteStartGameCenter", TranslationNeeded);
+            French.Add("InstallationCompleteStartGameCenter", TranslationNeeded);
 
-            //Component: StartXVMStatButton
+            //Component: InstallationCompleteOpenXVM
             //
-            English.Add("StartXVMStatButton", "Open your web browser to the xvm statistics login website?");
-            Gernam.Add("StartXVMStatButton", "Öffne Deinen Browser auf der XVM Statistik Login Webseite?");
-            Polish.Add("StartXVMStatButton", "Otworzyć stronę statystyk XVM ?");
-            French.Add("StartXVMStatButton", "Ouvrir votre navigateur Web vers le site de connexion aux statistiques xvm?");
+            English.Add("InstallationCompleteOpenXVM", "Open your web browser to the xvm statistics login website?");
+            Gernam.Add("InstallationCompleteOpenXVM", "Öffne Deinen Browser auf der XVM Statistik Login Webseite?");
+            Polish.Add("InstallationCompleteOpenXVM", "Otworzyć stronę statystyk XVM ?");
+            French.Add("InstallationCompleteOpenXVM", "Ouvrir votre navigateur Web vers le site de connexion aux statistiques xvm?");
 
-            //Component: CloseApplicationButton
+            //Component: InstallationCompleteCloseApp
             //
-            English.Add("CloseApplicationButton", "Close the application?");
-            Gernam.Add("CloseApplicationButton", "Anwendung schließen");
-            Polish.Add("CloseApplicationButton", "Zamknij aplikację");
-            French.Add("CloseApplicationButton", "Fermer l'application");
+            English.Add("InstallationCompleteCloseApp", "Close the application?");
+            Gernam.Add("InstallationCompleteCloseApp", "Anwendung schließen");
+            Polish.Add("InstallationCompleteCloseApp", "Zamknij aplikację");
+            French.Add("InstallationCompleteCloseApp", "Fermer l'application");
 
             //Component: StartXVMStatButton_Click
             //localisation to which page you will jump
@@ -2412,12 +2355,12 @@ namespace RelhaxModpack
             Polish.Add("xvmUrlLocalisation", "en");
             French.Add("xvmUrlLocalisation", "fr");
 
-            //Component: loadingGifpreview
-            //GifPreview.cs
-            English.Add("loadingGifpreview", "Loading Picture Preview");
-            Gernam.Add("loadingGifpreview", "Ladebild Vorschau");
-            Polish.Add("loadingGifpreview", "Ładowanie Podglądu");
-            French.Add("loadingGifpreview", "Chargement de l'image de prévisualisation");
+            //Component: CouldNotStartProcess
+            //
+            English.Add("CouldNotStartProcess", "Could not start process");
+            Gernam.Add("CouldNotStartProcess",TranslationNeeded);
+            Polish.Add("CouldNotStartProcess", TranslationNeeded);
+            French.Add("CouldNotStartProcess", TranslationNeeded);
             #endregion
 
             #region Diagnostics
@@ -2547,7 +2490,50 @@ namespace RelhaxModpack
             Polish.Add("zipSavedTo", "Plik zip zapisano do: ");
             French.Add("zipSavedTo", "Fichier zip sauvegarder à: ");
             #endregion
-            
+
+            #region Preview Window
+            //Component: noDescription
+            //
+            English.Add("noDescription", "No description provided");
+            Gernam.Add("noDescription", "Keine Beschreibung verfügbar");
+            Polish.Add("noDescription", "Nie podano opisu");
+            French.Add("noDescription", "NPas de description fournie");
+
+            //Component: noUpdateInfo
+            //
+            English.Add("noUpdateInfo", "No update info provided");
+            Gernam.Add("noUpdateInfo", "Keine Aktualisierungsinformationen verfügbar");
+            Polish.Add("noUpdateInfo", "Brak informacji o aktualizacji");
+            French.Add("noUpdateInfo", "Aucune information de mise à jour fournie");
+
+            //Component: noTimestamp
+            //
+            English.Add("noTimestamp", "No timestamp provided");
+            Gernam.Add("noTimestamp", TranslationNeeded);
+            Polish.Add("noTimestamp", TranslationNeeded);
+            French.Add("noTimestamp", TranslationNeeded);
+
+            //Component: PreviewNextPicButton
+            //
+            English.Add("PreviewNextPicButton", "Next");
+            Gernam.Add("PreviewNextPicButton", "Weiter");
+            Polish.Add("PreviewNextPicButton", "Dalej");
+            French.Add("PreviewNextPicButton", "Suivant");
+
+            //Component: PreviewPreviousPicButton
+            //
+            English.Add("PreviewPreviousPicButton", "Previous");
+            Gernam.Add("PreviewPreviousPicButton", "Zurück");
+            Polish.Add("PreviewPreviousPicButton", "Wstecz");
+            French.Add("PreviewPreviousPicButton", "Précedent");
+
+            //Component: DevUrlHeader
+            //
+            English.Add("DevUrlHeader", "Developer links");
+            Gernam.Add("DevUrlHeader", TranslationNeeded);
+            Polish.Add("DevUrlHeader", TranslationNeeded);
+            French.Add("DevUrlHeader", TranslationNeeded);
+            #endregion
         }
 
         private static void LegacyTranlationsToKeepButNotLoadJustInCaseWeEverNeedThemAgainJustInCase()
@@ -2745,6 +2731,28 @@ namespace RelhaxModpack
             Gernam.Add("fontSizeGB", "Skalierungsmodus");
             Polish.Add("fontSizeGB", "Tryb skalowania");
             French.Add("fontSizeGB", "Mode d'échelle");
+
+            #region OldFilesToDelete
+            //Window header
+            English.Add("foundOldFilesHeader", "Old Files Question");
+            Gernam.Add("foundOldFilesHeader", "alte Dateien löschen");
+            Polish.Add("foundOldFilesHeader", "Zapytanie o starsze wersje plików");
+            French.Add("foundOldFilesHeader", "Question pour les fichiers anciens (français seulement)");
+
+            //Component: Found zip files to delete 1
+            //
+            English.Add("foundOldFilesDelete1", "The installer has found the following files that are old and can be deleted");
+            Gernam.Add("foundOldFilesDelete1", "Wir haben folgende veralteten Dateien gefunden die gelöscht werden können");
+            Polish.Add("foundOldFilesDelete1", "Instalator znalazł następujące stare pliki, które mogą zostać usunięte");
+            French.Add("foundOldFilesDelete1", "L'installateur a trouvé les vieux fichiers suivants qui peuvent être supprimé");
+
+            //Component: Found zip files to delete 2
+            //
+            English.Add("foundOldFilesDelete2", "Would you like to delete them?");
+            Gernam.Add("foundOldFilesDelete2", "Möchtest du das sie gelöscht werden?");
+            Polish.Add("foundOldFilesDelete2", "Czy chcesz je usunąć?");
+            French.Add("foundOldFilesDelete2", "Voulez vous les supprimés");
+            #endregion
 
             #region Advanced Settings View
             //Component: form name
