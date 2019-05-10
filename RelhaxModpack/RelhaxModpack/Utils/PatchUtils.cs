@@ -28,12 +28,6 @@ namespace RelhaxModpack
 
     public static class PatchUtils
     {
-        #region Statics
-        //note that the "\\" is for escaping. it means that \\ is acually "\"
-        private static string XVMBootFileLoc1 = "\\res_mods\\configs\\xvm\\xvm.xc";
-        private static string XVMBootFileLoc2 = "\\mods\\configs\\xvm\\xvm.xc";
-        #endregion
-
         #region Main Patch Method
         public static void RunPatch(Patch p)
         {
@@ -1075,6 +1069,54 @@ namespace RelhaxModpack
                 .Replace(@"[rbracket]", @"}");
             File.WriteAllText(p.CompletePath, toWrite);
             Logging.Debug("json patch completed successfully");
+        }
+        #endregion
+
+        #region Helpers
+        //returns the folder(s) to get to the xvm config folder directory
+        public static string GetXvmFolderName()
+        {
+            //form where it should be
+            string xvmBootFile = Path.Combine(Settings.WoTDirectory, "res_mods\\configs\\xvm\\xvm.xc");
+
+            //check if it exists there
+            if (!File.Exists(xvmBootFile))
+            {
+                Logging.Error("extractor asked to get location of xvm folder name, but boot file does not exist! returning \"default\"");
+                return "default";
+            }
+
+            string fileContents = File.ReadAllText(xvmBootFile);
+
+            //patch block comments out
+            fileContents = Regex.Replace(fileContents, @"\/\*.*\*\/", string.Empty, RegexOptions.Singleline);
+
+            //remove return character
+            fileContents = fileContents.Replace("\r",string.Empty);
+
+            //patch single line comments out
+            string[] removeComments = fileContents.Split('\n');
+            StringBuilder bootBuilder = new StringBuilder();
+            foreach (string s in removeComments)
+            {
+                if (Regex.IsMatch(s, @"\/\/.*$"))
+                    continue;
+                bootBuilder.Append(s + "\n");
+            }
+            fileContents = bootBuilder.ToString().Trim();
+
+            //get the path from the json style
+            Match match = Regex.Match(fileContents, @"\${.*:.*}");
+            string innerJsonValue = match.Value;
+
+            //the second quote set is what we're interested in, the file path
+            string[] splitIt = innerJsonValue.Split('"');
+            string filePath = splitIt[1];
+
+            //split again to get just the folder name
+            string folderName = filePath.Split('/')[0];
+
+            return folderName;
         }
         #endregion
     }

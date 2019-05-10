@@ -107,6 +107,7 @@ namespace RelhaxModpack.InstallerComponents
         private RelhaxInstallFinishedEventArgs InstallFinishedArgs = new RelhaxInstallFinishedEventArgs();
         private IProgress<RelhaxInstallerProgress> Progress = null;
         private RelhaxInstallerProgress Prog = null;
+        private string XvmFolderName = string.Empty;
         #endregion
 
         #region More boring stuff
@@ -1076,7 +1077,7 @@ namespace RelhaxModpack.InstallerComponents
                         //check if destinatino exists first before replace
                         if (File.Exists(destination))
                             File.Delete(destination);
-                        File.Move(file, Path.Combine(tempFolderPath, Path.GetFileName(file)));
+                        File.Move(file, destination);
                         files.Files_saved.Add(file);
                     }
                 }
@@ -1631,7 +1632,15 @@ namespace RelhaxModpack.InstallerComponents
                                 zipEntryName = zipEntryName.Replace("versiondir", Settings.WoTClientVersion);
                             //check for xvmConfigFolderName
                             if (zipEntryName.Contains("configs/xvm/xvmConfigFolderName"))
-                                zipEntryName = zipEntryName.Replace("configs/xvm/xvmConfigFolderName", "configs/xvm/TODO");
+                            {
+                                //check if the config folder name has been tested for yet
+                                //if not, then get it
+                                if(string.IsNullOrEmpty(XvmFolderName))
+                                {
+                                    XvmFolderName = PatchUtils.GetXvmFolderName();
+                                }
+                                zipEntryName = zipEntryName.Replace("configs/xvm/xvmConfigFolderName", string.Format("configs/xvm/{0}",XvmFolderName));
+                            }
                             if(Regex.IsMatch(zipEntryName, @"_patch.*\.xml"))
                             {
                                 //build the patch name manually
