@@ -1052,7 +1052,7 @@ namespace RelhaxModpack
                 {
                     Logging.Debug("updating future references (like logicalDependnecies) for if dependency was checked");
                     //update any dependencies that use it
-                    foreach (DatabaseLogic callingLogic in dependency.DatabasePackageLogic)
+                    foreach (DatabaseLogic callingLogic in dependency.Dependencies)
                     {
                         //get the dependency (if it is a dependency) that logic'ed this dependency
                         List<Dependency> found = dependencies.Where(dep => dep.PackageName.Equals(callingLogic.PackageName)).ToList();
@@ -1061,12 +1061,20 @@ namespace RelhaxModpack
                         {
                             Dependency refrenced = found[0];
                             //now get the logic entry that refrences the original calculated depdnency
-                            List<DatabaseLogic> foundLogic = refrenced.Dependencies.Where(logic => logic.PackageName.Equals(dependency.PackageName)).ToList();
+                            List<DatabaseLogic> foundLogic = refrenced.DatabasePackageLogic.Where(logic => logic.PackageName.Equals(dependency.PackageName)).ToList();
                             if (foundLogic.Count > 0)
                             {
-                                Logging.Debug("logic refrence entry of dep {0} updated to {1}", refrenced.PackageName, ANDSPass && ORsPass);
+                                Logging.Debug("logic refrence entry for dep {0} updated to {1}", refrenced.PackageName, ANDSPass && ORsPass);
                                 foundLogic[0].willBeInstalled = ANDSPass && ORsPass;
                             }
+                            else
+                            {
+                                Logging.Error("found logics count is 0 for updating refrences");
+                            }
+                        }
+                        else
+                        {
+                            Logging.Error("found count is 0 for updating refrences");
                         }
                     }
                 }
