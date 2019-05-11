@@ -74,6 +74,12 @@ namespace RelhaxModpack.Windows
 
         private void OnContinueInstallation(object sender, RoutedEventArgs e)
         {
+            //check if we should save last config and if so, then do so
+            if(ModpackSettings.SaveLastSelection)
+            {
+                Logging.Debug("Saving selection from continue button, when saveLastSelection is true");
+                SaveSelection(Settings.LastInstalledConfigFilepath, true);
+            }
             continueInstallation = true;
             this.Close();
         }
@@ -492,7 +498,7 @@ namespace RelhaxModpack.Windows
                     }
 
                     //set the version of WoT we are installing for
-                    InstallingAsWoTVersion.Text = string.Format("{0}: {1}", Translations.GetTranslatedString("InstallingAsWoTVersion"), Settings.WoTClientVersion);
+                    InstallingAsWoTVersion.Text = string.Format(Translations.GetTranslatedString("InstallingAsWoTVersion"), Settings.WoTClientVersion);
 
                     //like hook up the flashing timer
                     FlashTimer.Tick += OnFlastTimerTick;
@@ -526,7 +532,7 @@ namespace RelhaxModpack.Windows
                     Enabled = true,
                     Level = 0
                 };
-                //circular refrence because
+                //circular reference because
                 sp.Parent = sp.TopParent = sp;
                 userMods.Add(sp);
             }
@@ -1304,7 +1310,7 @@ namespace RelhaxModpack.Windows
 
         private async void OnDeveloperSelectionsExit(object sender, DevleoperSelectionsClosedEWventArgs e)
         {
-            if(e.LoadSelection)
+            if(!e.LoadSelection)
                 return;
             if(string.IsNullOrWhiteSpace(e.FileToLoad))
             {
@@ -1312,7 +1318,7 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show(Translations.GetTranslatedString("failedLoadSelection"));
                 return;
             }
-            if(e.FileToLoad.Equals("local"))
+            if(e.FileToLoad.Equals("LOCAL"))
             {
                 OpenFileDialog selectLoadPath = new OpenFileDialog()
                 {

@@ -41,9 +41,7 @@ namespace RelhaxModpack.Windows
 
         private async void OnApplicationLoading(object sender, RoutedEventArgs e)
         {
-            //add loading message to stack panel
-            DeveloperSelectionsTextHeader.Text = Translations.GetTranslatedString("loadingDevTranslations");
-            ContinueButton.IsEnabled = false;
+            DeveloperSelectionsContinueButton.IsEnabled = false;
             string selectionsXMlString = string.Empty;
             using (client = new WebClient())
             {
@@ -69,35 +67,48 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show(Translations.GetTranslatedString("failedToParseSelections"));
                 return;
             }
-            //set text to say "pick a selection" instead of "loading selections"
-            DeveloperSelectionsTextHeader.Text = Translations.GetTranslatedString("SelectSelection");
+
             //load selections into stackpanel
-            foreach (XmlNode node in XMLUtils.GetXMLNodesFromXPath(doc, "//selections/selection"))
+            XmlNodeList selectionsList = XMLUtils.GetXMLNodesFromXPath(doc, "//selections/selection");
+            if(selectionsList == null || selectionsList.Count == 0)
+            {
+                Logging.Error("selectionsList is null or count is 0 after download");
+                MessageBox.Show(Translations.GetTranslatedString("failedToParseSelections"));
+                return;
+            }
+            bool firstOne = true;
+            foreach (XmlNode node in selectionsList)
             {
                 DeveloperSelectionsStackPanel.Children.Add(new RadioButton()
                 {
                     Content = node.Attributes["displayName"],
                     ToolTip = Translations.GetTranslatedString("lastModified") + " " + node.Attributes["lastModified"],
-                    Tag = node.InnerText
+                    Tag = node.InnerText,
+                    IsChecked = firstOne
                 });
+                firstOne = false;
             }
+
             //enable the button to select them
-            ContinueButton.IsEnabled = true;
+            DeveloperSelectionsContinueButton.IsEnabled = true;
         }
 
         private void OnApplicationClosed(object sender, EventArgs e)
         {
             if (OnDeveloperSelectionsClosed != null)
             {
-                if(!FileToLoad.Equals("LOCAL"))
-                    LoadSelection = false;
-                foreach(RadioButton button in DeveloperSelectionsStackPanel.Children)
+                if (!FileToLoad.Equals("LOCAL"))
                 {
-                    if((bool)button.IsChecked)
+                    //checkif a radio button is selected. to do that, set LoadSelection to false. forces a button to set it to true
+                    LoadSelection = false;
+                    foreach (RadioButton button in DeveloperSelectionsStackPanel.Children)
                     {
-                        LoadSelection = true;
-                        FileToLoad = (string)button.Tag;
-                        break;
+                        if ((bool)button.IsChecked)
+                        {
+                            LoadSelection = true;
+                            FileToLoad = (string)button.Tag;
+                            break;
+                        }
                     }
                 }
                 OnDeveloperSelectionsClosed(this, new DevleoperSelectionsClosedEWventArgs()

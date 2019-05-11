@@ -2534,9 +2534,53 @@ namespace RelhaxModpack
             Polish.Add("DevUrlHeader", TranslationNeeded);
             French.Add("DevUrlHeader", TranslationNeeded);
             #endregion
+
+            #region Developer Selection Window
+            //Component: DeveloperSelectionsViewer
+            //
+            English.Add("DeveloperSelectionsViewer", "Selections Viewer");
+            Gernam.Add("DeveloperSelectionsViewer", TranslationNeeded);
+            Polish.Add("DeveloperSelectionsViewer", TranslationNeeded);
+            French.Add("DeveloperSelectionsViewer", TranslationNeeded);
+
+            //Component: DeveloperSelectionsTextHeader
+            //
+            English.Add("DeveloperSelectionsTextHeader", "Selection to load");
+            Gernam.Add("DeveloperSelectionsTextHeader", TranslationNeeded);
+            Polish.Add("DeveloperSelectionsTextHeader", TranslationNeeded);
+            French.Add("DeveloperSelectionsTextHeader", TranslationNeeded);
+
+            //Component: DeveloperSelectionsCancelButton
+            //
+            English.Add("DeveloperSelectionsCancelButton", "Cancel");
+            Gernam.Add("DeveloperSelectionsCancelButton", TranslationNeeded);
+            Polish.Add("DeveloperSelectionsCancelButton", TranslationNeeded);
+            French.Add("DeveloperSelectionsCancelButton", TranslationNeeded);
+
+            //Component: DeveloperSelectionsLocalFile
+            //
+            English.Add("DeveloperSelectionsLocalFile", "Local file");
+            Gernam.Add("DeveloperSelectionsLocalFile", TranslationNeeded);
+            Polish.Add("DeveloperSelectionsLocalFile", TranslationNeeded);
+            French.Add("DeveloperSelectionsLocalFile", TranslationNeeded);
+
+            //Component: DeveloperSelectionsContinueButton
+            //
+            English.Add("DeveloperSelectionsContinueButton", "Select");
+            Gernam.Add("DeveloperSelectionsContinueButton", TranslationNeeded);
+            Polish.Add("DeveloperSelectionsContinueButton", TranslationNeeded);
+            French.Add("DeveloperSelectionsContinueButton", TranslationNeeded);
+
+            //Component: failedToParseSelections
+            //
+            English.Add("failedToParseSelections", "Failed to parse selections");
+            Gernam.Add("failedToParseSelections", TranslationNeeded);
+            Polish.Add("failedToParseSelections", TranslationNeeded);
+            French.Add("failedToParseSelections", TranslationNeeded);
+            #endregion
         }
 
-        private static void LegacyTranlationsToKeepButNotLoadJustInCaseWeEverNeedThemAgainJustInCase()
+        private static void LegacyTranlationsToKeepButNotLoadJustInCaseWeEverNeedThemAgain()
         {
 
             //Component: toolTip
