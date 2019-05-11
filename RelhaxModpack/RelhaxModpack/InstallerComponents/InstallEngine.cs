@@ -530,7 +530,6 @@ namespace RelhaxModpack.InstallerComponents
                 List<Atlas> atlases = MakeAtlasList();
                 if (atlases.Count > 0)
                 {
-                    //NOTE: stringbuilder logging is done inside BuildContourIcons()
                     createAtlasesTask = Task.Factory.StartNew(() =>
                     {
                         if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask))
@@ -541,8 +540,43 @@ namespace RelhaxModpack.InstallerComponents
                             Prog.Filename = string.Empty;
                             LockProgress();
                         }
-                        
-                        BuildContourIcons(patchTask, createShortcutsTask);
+
+                        StringBuilder atlasBuilder = new StringBuilder();
+                        atlasBuilder.AppendLine("/*   Atlases   */");
+                        int done = 0;
+                        foreach (Atlas atlas in atlases)
+                        {
+                            //increment task-inside internal counter for progress reporting
+                            done++;
+
+                            //replace macros
+                            atlas.Pkg = Utils.MacroReplace(atlas.Pkg, ReplacementTypes.FilePath);
+                            atlas.AtlasSaveDirectory = Utils.MacroReplace(atlas.AtlasSaveDirectory, ReplacementTypes.FilePath);
+                            for (int i = 0; i < atlas.ImageFolderList.Count; i++)
+                            {
+                                atlas.ImageFolderList[i] = Utils.MacroReplace(atlas.ImageFolderList[i], ReplacementTypes.FilePath);
+                            }
+
+                            //report progress
+                            if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask))
+                            {
+                                Prog.ChildTotal = 1;
+                                Prog.ParrentTotal = atlases.Count;
+                                Prog.ParrentCurrent = done;
+                                Prog.ChildCurrent = 0;
+                                Prog.Filename = atlas.AtlasFile;
+                                LockProgress();
+                            }
+
+                            //create the atlas
+                            Utils.CreateAtlas(atlas);
+
+                            //append generated atlas info
+                            atlasBuilder.AppendLine(atlas.MapFile);
+                            atlasBuilder.AppendLine(atlas.AtlasFile);
+                        }
+                        Logging.Installer(atlasBuilder.ToString());
+
                         Logging.Info("Creating of atlases complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
                         if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask))
                         {
@@ -1770,44 +1804,6 @@ namespace RelhaxModpack.InstallerComponents
             }
         }
 
-        private void BuildContourIcons(Task patchTask, Task createShortcutsTask)
-        {
-            Logging.WriteToLog(string.Format("Creating of atlases, current install time = {0} msec",
-                (int)InstallStopWatch.Elapsed.TotalMilliseconds));
-            List<Atlas> atlases = MakeAtlasList();
-            if (atlases.Count > 0)
-            {
-                StringBuilder atlasBuilder = new StringBuilder();
-                atlasBuilder.AppendLine("/*   Atlases   */");
-                int done = 0;
-                foreach (Atlas atlas in atlases)
-                {
-                    done++;
-                    //replace macros
-                    atlas.Pkg = Utils.MacroReplace(atlas.Pkg, ReplacementTypes.FilePath);
-                    atlas.AtlasSaveDirectory = Utils.MacroReplace(atlas.AtlasSaveDirectory, ReplacementTypes.FilePath);
-                    for(int i = 0; i < atlas.ImageFolderList.Count; i++)
-                    {
-                        atlas.ImageFolderList[i] = Utils.MacroReplace(atlas.ImageFolderList[i], ReplacementTypes.FilePath);
-                    }
-                    if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask))
-                    {
-                        Prog.ChildTotal = 1;
-                        Prog.ParrentTotal = atlases.Count;
-                        Prog.ParrentCurrent = done;
-                        Prog.ChildCurrent = 0;
-                        Prog.Filename = atlas.AtlasFile;
-                        LockProgress();
-                    }
-                    Utils.CreateAtlas(atlas);
-                    atlasBuilder.AppendLine(atlas.MapFile);
-                }
-                Logging.Installer(atlasBuilder.ToString());
-            }
-            else
-                Logging.Warning("building contour icons triggered, but none exist! (is this the intent)");
-        }
-
         private void ProcessTriggers(List<string> packageTriggers)
         {
             //at least 1 trigger exists
@@ -1839,11 +1835,12 @@ namespace RelhaxModpack.InstallerComponents
                         {
                             Logging.Debug("trigger {0} is starting", match.Name);
                             match.Fired = true;
-                            //hard_coded list of triggers that can be fired from list at top of class
+                            //hard-coded list of triggers that can be fired from list at top of class
+                            throw new BadMemeException("fix me");
                             switch (match.Name)
                             {
                                 case TriggerContouricons:
-                                    match.TriggerTask = Task.Run(() => BuildContourIcons(null,null));
+                                    //match.TriggerTask = Task.Run(() => BuildContourIcons(null,null));
                                     break;
                                 case TriggerInstallFonts:
                                     match.TriggerTask = Task.Run(() =>
