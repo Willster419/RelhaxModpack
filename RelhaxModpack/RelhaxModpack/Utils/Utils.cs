@@ -1040,30 +1040,33 @@ namespace RelhaxModpack
                 string final = string.Format("final result for dependency {0}: AND={1}, OR={2}", dependency.PackageName, ANDSPass, ORsPass);
                 if(ANDSPass && ORsPass)
                 {
-                    Logging.WriteToLog(string.Format("{0} (AND and OR) = TRUE, dependency WILL be installed!", final),
-                        Logfiles.Application, LogLevel.Debug);
+                    Logging.Debug("{0} (AND and OR) = TRUE, dependency WILL be installed!", final);
                     dependenciesToInstall.Add(dependency);
                 }
                 else
                 {
-                    Logging.WriteToLog(string.Format("{0} (AND and OR) = FALSE, dependency WILL NOT be installed!", final),
-                        Logfiles.Application, LogLevel.Debug);
+                    Logging.Debug("{0} (AND and OR) = FALSE, dependency WILL NOT be installed!", final);
                 }
 
-                //update any dependencies that use it
-                foreach(DatabaseLogic callingLogic in dependency.DatabasePackageLogic)
+                if (dependency.DatabasePackageLogic.Count > 0 && (ANDSPass && ORsPass))
                 {
-                    //get the dependency (if it is a dependency) that logic'ed this dependency
-                    List<Dependency> found = dependencies.Where(dep => dep.PackageName.Equals(callingLogic.PackageName)).ToList();
-                    if(found.Count > 0)
+                    Logging.Debug("updating future references (like logicalDependnecies) for if dependency was checked");
+                    //update any dependencies that use it
+                    foreach (DatabaseLogic callingLogic in dependency.DatabasePackageLogic)
                     {
-                        Dependency refrenced = found[0];
-                        //now get the logic entry that refrences the original calculated depdnency
-                        List<DatabaseLogic> foundLogic = refrenced.Dependencies.Where(logic => logic.PackageName.Equals(dependency.PackageName)).ToList();
-                        if(foundLogic.Count > 0)
+                        //get the dependency (if it is a dependency) that logic'ed this dependency
+                        List<Dependency> found = dependencies.Where(dep => dep.PackageName.Equals(callingLogic.PackageName)).ToList();
+
+                        if (found.Count > 0)
                         {
-                            Logging.Debug("logic refrence entry of dep {0} updated to {1}", refrenced.PackageName, ANDSPass && ORsPass);
-                            foundLogic[0].willBeInstalled = ANDSPass && ORsPass;
+                            Dependency refrenced = found[0];
+                            //now get the logic entry that refrences the original calculated depdnency
+                            List<DatabaseLogic> foundLogic = refrenced.Dependencies.Where(logic => logic.PackageName.Equals(dependency.PackageName)).ToList();
+                            if (foundLogic.Count > 0)
+                            {
+                                Logging.Debug("logic refrence entry of dep {0} updated to {1}", refrenced.PackageName, ANDSPass && ORsPass);
+                                foundLogic[0].willBeInstalled = ANDSPass && ORsPass;
+                            }
                         }
                     }
                 }
