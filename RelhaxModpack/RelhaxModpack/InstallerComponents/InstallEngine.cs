@@ -1582,6 +1582,7 @@ namespace RelhaxModpack.InstallerComponents
             Prog.Filename = string.Empty;
             Progress.Report(Prog);
 
+            bool success = true;
             foreach (string folder in Settings.FoldersToCleanup)
             {
                 Logging.Debug("cleaning folder {0}, if exists", folder);
@@ -1591,9 +1592,14 @@ namespace RelhaxModpack.InstallerComponents
 
                 string folderPath = Path.Combine(Settings.WoTDirectory, folder);
                 if (Directory.Exists(folderPath))
-                    Utils.DirectoryDelete(folderPath, true);
+                {
+                    if(!Utils.DirectoryDelete(folderPath, true))
+                    {
+                        success = false;
+                    }
+                }
             }
-            return true;
+            return success;
         }
         #endregion
 
