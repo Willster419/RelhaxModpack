@@ -58,6 +58,11 @@ namespace RelhaxModpack.AtlasesCreator
             //save to a dds file
             if (ImageHandler.SaveDDS(atlas.AtlasFile, outputImage,true))
                 Logging.Info("successfully created Atlas image: " + atlas.AtlasFile);
+            else
+            {
+                Logging.Error("Failed to save bitmap to dds image");
+                return FailCode.FailedToSaveImage;
+            }
 
             return FailCode.None;
         }
