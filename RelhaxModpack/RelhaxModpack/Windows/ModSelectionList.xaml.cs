@@ -31,6 +31,12 @@ namespace RelhaxModpack.Windows
         public List<DatabasePackage> GlobalDependencies;
     }
     public delegate void SelectionListClosedDelegate(object sender, SelectionListEventArgs e);
+
+    public enum PropagationDirection
+    {
+        Up,
+        Down
+    }
     #endregion
     /// <summary>
     /// Interaction logic for ModSelectionList.xaml
@@ -44,7 +50,6 @@ namespace RelhaxModpack.Windows
         private ProgressIndicator loadingProgress;
         public event SelectionListClosedDelegate OnSelectionListReturn;
         private bool LoadingUI = false;
-        private bool IgnoreSearchBoxFocus = false;
         private List<SelectablePackage> userMods;
         private Preview p;
         const int FLASH_TICK_INTERVAL = 250;
@@ -935,7 +940,7 @@ namespace RelhaxModpack.Windows
         //https://stackoverflow.com/questions/25763954/event-when-combobox-is-selected
         private void DropDownSelectSelfFix(object sender, EventArgs e)
         {
-            if (LoadingUI || IgnoreSearchBoxFocus)
+            if (LoadingUI)
                 return;
             IPackageUIComponent ipc = (IPackageUIComponent)sender;
             SelectablePackage spc = null;
@@ -953,12 +958,15 @@ namespace RelhaxModpack.Windows
         //when a single/single1 mod is selected
         void OnSinglePackageClick(object sender, EventArgs e)
         {
-            if (LoadingUI || IgnoreSearchBoxFocus)
+            if (LoadingUI)
                 return;
+
             IPackageUIComponent ipc = (IPackageUIComponent)sender;
             SelectablePackage spc = ipc.Package;
+
             if (!spc.IsStructureEnabled)
                 return;
+
             //uncheck all packages at this level that are single
             foreach (SelectablePackage childPackage in spc.Parent.Packages)
             {
@@ -970,21 +978,26 @@ namespace RelhaxModpack.Windows
                     PropagateDownNotChecked(childPackage);
                 }
             }
-            //check the acutal package
+
+            //check the actual package
             spc.Checked = true;
+
             //down
-            PropagateChecked(spc, false);
+            PropagateChecked(spc, PropagationDirection.Down);
+
             //up
-            PropagateChecked(spc, true);
+            PropagateChecked(spc, PropagationDirection.Up);
         }
 
         //when a single_dropdown mod is selected
         void OnSingleDDPackageClick(object sender, EventArgs e)
         {
-            if (LoadingUI || IgnoreSearchBoxFocus)
+            if (LoadingUI)
                 return;
+
             IPackageUIComponent ipc = (IPackageUIComponent)sender;
             SelectablePackage spc = null;
+
             if (ipc is RelhaxWPFComboBox cb2)
             {
                 //don't change the selection if the user did not want to change the option
@@ -993,8 +1006,10 @@ namespace RelhaxModpack.Windows
                 ComboBoxItem cbi = (ComboBoxItem)cb2.SelectedItem;
                 spc = cbi.Package;
             }
+
             if (!spc.IsStructureEnabled)
                 return;
+
             foreach (SelectablePackage childPackage in spc.Parent.Packages)
             {
                 if (childPackage.Equals(spc))
@@ -1005,40 +1020,47 @@ namespace RelhaxModpack.Windows
                     childPackage.Checked = false;
                 }
             }
+
             //verify selected is actually checked
             if (!spc.Checked)
                 spc.Checked = true;
+
             //dropdown packages only need to propagate up when selected...
-            PropagateChecked(spc, true);
+            PropagateChecked(spc, PropagationDirection.Up);
         }
 
         //when a multi mod is selected
         void OnMultiPackageClick(object sender, EventArgs e)
         {
-            if (LoadingUI || IgnoreSearchBoxFocus)
+            if (LoadingUI)
                 return;
+
             IPackageUIComponent ipc = (IPackageUIComponent)sender;
             SelectablePackage spc = ipc.Package;
+
             if (!spc.IsStructureEnabled)
                 return;
+
             //can be enabled
             if (!spc.Checked)
             {
                 //check it and propagate change
                 spc.Checked = true;
-                //if it's a user checkbox end here
+                //if it's a user check box end here
                 //DISABLED FOR NOW
                 //if (ipc is RelhaxUserCheckBox)
                    // return;
+
                 //down
-                PropagateChecked(spc, false);
+                PropagateChecked(spc, PropagationDirection.Down);
                 //up
-                PropagateChecked(spc, true);
+                PropagateChecked(spc, PropagationDirection.Up);
             }
             else if (spc.Checked)
             {
                 //uncheck it and propagate change
                 spc.Checked = false;
+
                 //if (ipc is RelhaxUserCheckBox)
                    // return;
                 PropagateDownNotChecked(spc);
@@ -1048,18 +1070,19 @@ namespace RelhaxModpack.Windows
         //propagates the change back up the selection tree
         //can be sent from any component
         //true = up, false = down
-        void PropagateChecked(SelectablePackage spc, bool upDown)
+        void PropagateChecked(SelectablePackage spc, PropagationDirection direction)
         {
             //the parent of the package we just checked
             SelectablePackage parent = null;
+
             //if we're going up the tree, set the package to it's parent
             //else use itself
-            if (upDown)
+            if (direction == PropagationDirection.Up)
                 parent = spc.Parent;
             else
                 parent = spc;
             
-            //for each type of requried single selection, check if the package has them, and if any are enabled
+            //for each type of required single selection, check if the package has them, and if any are enabled
             bool hasSingles = false;
             bool singleSelected = false;
             bool hasDD1 = false;
@@ -1068,7 +1091,7 @@ namespace RelhaxModpack.Windows
             bool DD2Selected = false;
             foreach (SelectablePackage childPackage in parent.Packages)
             {
-                //if the pacakge is enabled and it is of single type
+                //if the package is enabled and it is of single type
                 if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
                 {
                     //then this package does have single type packages
@@ -1091,9 +1114,10 @@ namespace RelhaxModpack.Windows
                         DD2Selected = true;
                 }
             }
-            //if going up, will only ever see radiobuttons (not dropDown)
+
+            //if going up, will only ever see radio buttons (not dropDown)
             //check if this package is of single type, if it is then we need to unselect all other packages of this level
-            if (upDown && (parent.Type.Equals("single") || parent.Type.Equals("single1")))
+            if (direction == PropagationDirection.Up && (parent.Type.Equals("single") || parent.Type.Equals("single1")))
             {
                 foreach (SelectablePackage childPackage in parent.Parent.Packages)
                 {
@@ -1116,7 +1140,7 @@ namespace RelhaxModpack.Windows
                     if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
                     {
                         childPackage.Checked = true;
-                        PropagateChecked(childPackage, false);
+                        PropagateChecked(childPackage, PropagationDirection.Down);
                         break;
                         //PropagateDownChecked(childPackage);
                     }
@@ -1150,10 +1174,10 @@ namespace RelhaxModpack.Windows
             }
             //last of all, check itself (if not checked already)
             parent.Checked = true;
-            if (upDown)
+            if (direction == PropagationDirection.Up)
                 if (parent.Level >= 0)
-                    //recursivly propagate the change back up the selection list
-                    PropagateChecked(parent, true);
+                    //recursively propagate the change back up the selection list
+                    PropagateChecked(parent, PropagationDirection.Up);
         }
 
         //propagates the change back up the selection tree
@@ -1162,7 +1186,7 @@ namespace RelhaxModpack.Windows
         {
             if (spc.Level == -1)
                 return;
-            //if nothing cheched at this level, uncheck the parent and propagate up not checked agailn
+            //if nothing checked at this level, uncheck the parent and propagate up not checked again
             bool anythingChecked = false;
             foreach (SelectablePackage childPackage in spc.Parent.Packages)
             {
@@ -1176,7 +1200,7 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        //propagaetes the change down the selection tree
+        //propagates the change down the selection tree
         void PropagateDownNotChecked(SelectablePackage spc)
         {
             foreach (SelectablePackage childPackage in spc.Packages)
