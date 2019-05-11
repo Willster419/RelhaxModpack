@@ -108,9 +108,14 @@ namespace RelhaxModpack.InstallerComponents
         private IProgress<RelhaxInstallerProgress> Progress = null;
         private RelhaxInstallerProgress Prog = null;
         private string XvmFolderName = string.Empty;
+        //async progress reporters
+        private RelhaxInstallerProgress ProgPatch = null;
+        private RelhaxInstallerProgress ProgShortcuts = null;
+        private RelhaxInstallerProgress ProgAtlas = null;
+        private RelhaxInstallerProgress ProgFonts = null;
         private Task patchTask = null;
         private Task createShortcutsTask = null;
-        private Task createAtlasesTask = null;
+        private Task[] atlasTasks = null;
         private Task createFontsTask = null;
         #endregion
 
@@ -418,44 +423,50 @@ namespace RelhaxModpack.InstallerComponents
             else
                 Logging.WriteToLog("...skipped (no XmlUnpack entries parsed");
 
-            //step 8: patch files (async option)
-
+            //step 9: patch files (async option)
             OldTime = InstallStopWatch.Elapsed;
-
             Logging.WriteToLog(string.Format("Patching of files, current install time = {0} msec",
                 (int)InstallStopWatch.Elapsed.TotalMilliseconds));
+
+            //reset Prog for the next async progreses
+            Prog.ChildTotal = 1;
+            Prog.ParrentTotal = 1;
+            Prog.ParrentCurrent = Prog.ChildCurrent = 0;
+            Prog.Filename = string.Empty;
+            Prog.ParrentCurrentProgress = string.Empty;
+            Prog.ChildCurrentProgress = string.Empty;
+
             List<Patch> pathces = MakePatchList();
             if (pathces.Count > 0)
             {
                 //no need to installer log patches, since it's operating on files that already exist
-                patchTask = Task.Factory.StartNew(() =>
+                patchTask = Task.Run(() =>
                 {
-                    Prog.ChildTotal = 1;
-                    Prog.ParrentTotal = pathces.Count;
-                    Prog.ParrentCurrent = Prog.ChildCurrent = 0;
-                    Prog.Filename = string.Empty;
-                    Progress.Report(Prog);
+                    ProgPatch = CopyProgress(Prog);
+                    ProgPatch.ParrentTotal = pathces.Count;
+                    ProgPatch.InstallStatus = InstallerExitCodes.PatchError;
+                    LockProgress();
 
                     foreach (Patch patch in pathces)
                     {
-                        Prog.Filename = patch.File;
-                        Prog.ParrentCurrent++;
-                        Progress.Report(Prog);
+                        ProgPatch.Filename = patch.File;
+                        ProgPatch.ParrentCurrent++;
+                        LockProgress();
 
                         PatchUtils.RunPatch(patch);
                     }
                     Logging.Info("Patching of files complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
-                    Prog.TotalCurrent = (int)InstallerExitCodes.PatchError;
+                    ProgPatch.TotalCurrent = (int)InstallerExitCodes.PatchError;
                     InstallFinishedArgs.ExitCodes = InstallerExitCodes.PatchError;
-                    Prog.InstallStatus = InstallerExitCodes.PatchError;
-                    Progress.Report(Prog);
+                    ProgPatch.InstallStatus = InstallerExitCodes.PatchError;
+                    LockProgress();
+                    ProgPatch = null;
                 });
             }
             else
                 Logging.WriteToLog("...skipped (no patch entries parsed)");
 
-            //step 9: create shortcuts (async option)
-
+            //step 10: create shortcuts (async option)
             if(ModpackSettings.DisableTriggers)
             {
                 Logging.WriteToLog(string.Format("Creating of shortcuts, current install time = {0} msec",
@@ -469,43 +480,30 @@ namespace RelhaxModpack.InstallerComponents
                         shortcutBuilder.AppendLine("/*   Shortcuts   */");
                         createShortcutsTask = Task.Factory.StartNew(() =>
                         {
-                            if (TaskNullOrDone(patchTask))
-                            {
-                                Prog.ChildTotal = 1;
-                                Prog.ParrentTotal = shortcuts.Count;
-                                Prog.ParrentCurrent = 0;
-                                Prog.ChildCurrent = 0;
-                                Prog.Filename = string.Empty;
-                                LockProgress();
-                            }
-                            int numDone = 0;
+                            ProgShortcuts = CopyProgress(Prog);
+                            ProgShortcuts.ParrentTotal = shortcuts.Count;
+                            ProgShortcuts.InstallStatus = InstallerExitCodes.ShortcustError;
+                            LockProgress();
+
                             foreach (Shortcut shortcut in shortcuts)
                             {
-                                numDone++;
-                                if (TaskNullOrDone(patchTask))
-                                {
-                                    Prog.ChildTotal = 1;
-                                    Prog.ParrentTotal = shortcuts.Count;
-                                    Prog.ParrentCurrent = numDone;
-                                    Prog.ChildCurrent = 0;
-                                    Prog.Filename = shortcut.Path;
-                                    LockProgress();
-                                }
+                                ProgShortcuts.ParrentCurrent++;
+                                LockProgress();
 
                                 if (shortcut.Enabled)
                                 {
                                     Utils.CreateShortcut(shortcut, shortcutBuilder);
                                 }
                             }
+
                             Logging.Installer(shortcutBuilder.ToString());
                             Logging.Info("Creating of shortcuts complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
-                            if (TaskNullOrDone(patchTask))
-                            {
-                                Prog.TotalCurrent = (int)InstallerExitCodes.ShortcustError;
-                                InstallFinishedArgs.ExitCodes = InstallerExitCodes.ShortcustError;
-                                Prog.InstallStatus = InstallerExitCodes.ShortcustError;
-                                LockProgress();
-                            }
+
+                            ProgShortcuts.TotalCurrent = (int)InstallerExitCodes.ShortcustError;
+                            InstallFinishedArgs.ExitCodes = InstallerExitCodes.ShortcustError;
+                            ProgShortcuts.InstallStatus = InstallerExitCodes.ShortcustError;
+                            LockProgress();
+                            ProgShortcuts = null;
                         });
                     }
                     else
@@ -515,79 +513,84 @@ namespace RelhaxModpack.InstallerComponents
                     Logging.WriteToLog("...skipped (setting is false)");
             }
 
-            //step 10: create atlases (async option)
+            //step 11: create atlases (async option)
             if (ModpackSettings.DisableTriggers)
             {
                 Logging.WriteToLog(string.Format("Creating of atlases, current install time = {0} msec", (int)InstallStopWatch.Elapsed.TotalMilliseconds));
                 List<Atlas> atlases = MakeAtlasList();
                 if (atlases.Count > 0)
                 {
-                    createAtlasesTask = Task.Factory.StartNew(() =>
-                    {
-                        if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask))
-                        {
-                            Prog.ChildTotal = 1;
-                            Prog.ParrentTotal = 1;
-                            Prog.ParrentCurrent = Prog.ChildCurrent = 0;
-                            Prog.Filename = string.Empty;
-                            LockProgress();
-                        }
+                    //initial progress report
+                    ProgAtlas = CopyProgress(Prog);
+                    ProgAtlas.ParrentTotal = atlases.Count;
+                    ProgAtlas.InstallStatus = InstallerExitCodes.ContourIconAtlasError;
+                    LockProgress();
 
-                        StringBuilder atlasBuilder = new StringBuilder();
-                        atlasBuilder.AppendLine("/*   Atlases   */");
-                        int done = 0;
-                        foreach (Atlas atlas in atlases)
+                    //make an array to hold all the atlas tasks
+                    atlasTasks = new Task[atlases.Count];
+
+                    for(int i = 0; i < atlases.Count; i++)
+                    {
+                        //spawn atlas threads for each task
+                        bool taskValuesLocked = false;
+                        atlasTasks[i] = Task.Run(() =>
                         {
-                            //increment task-inside internal counter for progress reporting
-                            done++;
+                            StringBuilder atlasBuilder = new StringBuilder();
+                            atlasBuilder.AppendLine("/*   Atlases   */");
+
+                            Atlas atlas = atlases[i];
+                            taskValuesLocked = true;
 
                             //replace macros
                             atlas.Pkg = Utils.MacroReplace(atlas.Pkg, ReplacementTypes.FilePath);
                             atlas.AtlasSaveDirectory = Utils.MacroReplace(atlas.AtlasSaveDirectory, ReplacementTypes.FilePath);
-                            for (int i = 0; i < atlas.ImageFolderList.Count; i++)
+                            for (int j = 0; j < atlas.ImageFolderList.Count; j++)
                             {
-                                atlas.ImageFolderList[i] = Utils.MacroReplace(atlas.ImageFolderList[i], ReplacementTypes.FilePath);
+                                atlas.ImageFolderList[j] = Utils.MacroReplace(atlas.ImageFolderList[j], ReplacementTypes.FilePath);
                             }
 
-                            //report progress
-                            if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask))
-                            {
-                                Prog.ChildTotal = 1;
-                                Prog.ParrentTotal = atlases.Count;
-                                Prog.ParrentCurrent = done;
-                                Prog.ChildCurrent = 0;
-                                Prog.Filename = atlas.AtlasFile;
-                                LockProgress();
-                            }
+                            LockProgress();
 
                             //create the atlas
                             Utils.CreateAtlas(atlas);
 
+                            lock (Progress)
+                            {
+                                ProgAtlas.ParrentCurrent++;
+                            }
+                            LockProgress();
+
                             //append generated atlas info
                             atlasBuilder.AppendLine(atlas.MapFile);
                             atlasBuilder.AppendLine(atlas.AtlasFile);
-                        }
-                        Logging.Installer(atlasBuilder.ToString());
-
-                        Logging.Info("Creating of atlases complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
-                        if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask))
-                        {
-                            Prog.TotalCurrent = (int)InstallerExitCodes.ContourIconAtlasError;
-                            InstallFinishedArgs.ExitCodes = InstallerExitCodes.ContourIconAtlasError;
-                            Prog.InstallStatus = InstallerExitCodes.ContourIconAtlasError;
-                            LockProgress();
-                        }
-                    });
+                            //make sure it's not writing the same time
+                            lock(Progress)
+                            {
+                                Logging.Installer(atlasBuilder.ToString());
+                                if(ProgAtlas.ParrentCurrent == ProgAtlas.ParrentTotal)
+                                {
+                                    ProgAtlas.TotalCurrent = (int)InstallerExitCodes.ContourIconAtlasError;
+                                    InstallFinishedArgs.ExitCodes = InstallerExitCodes.ContourIconAtlasError;
+                                    ProgAtlas.InstallStatus = InstallerExitCodes.ContourIconAtlasError;
+                                    LockProgress();
+                                    ProgAtlas = null;
+                                }
+                            }
+                        });
+                        while (!taskValuesLocked) ;
+                    }
                 }
                 else
                     Logging.WriteToLog("...skipped (no atlas entries parsed)");
             }
 
-            //step 11: install fonts (async operation)
+            //step 12: install fonts (async operation)
             if (ModpackSettings.DisableTriggers)
             {
                 Logging.WriteToLog(string.Format("Installing of fonts, current install time = {0} msec",
                     (int)InstallStopWatch.Elapsed.TotalMilliseconds));
+
+                //check for any font files to install at all
                 string[] fontsToInstall = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername), SearchOption.TopDirectoryOnly, false, @"*", 50, 3, true);
                 if (fontsToInstall == null || fontsToInstall.Count() == 0)
                     Logging.WriteToLog("...skipped (no font files to install)");
@@ -595,35 +598,92 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     createFontsTask = Task.Factory.StartNew(() =>
                     {
-                        if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask) && TaskNullOrDone(createAtlasesTask))
+                        Logging.Debug("checking system installed fonts to remove duplicates");
+
+                        string[] fontscurrentlyInstalled = Utils.DirectorySearch(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), SearchOption.TopDirectoryOnly, false);
+                        string[] fontsNamesCurrentlyInstalled = fontscurrentlyInstalled.Select(s => Path.GetFileName(s).ToLower()).ToArray();
+
+                        //remove any fonts whos filename match what is already installed
+                        for (int i = 0; i < fontsToInstall.Count(); i++)
                         {
-                            Prog.ChildTotal = 1;
-                            Prog.ParrentTotal = 1;
-                            Prog.ParrentCurrent = Prog.ChildCurrent = 0;
-                            Prog.Filename = string.Empty;
-                            LockProgress();
+                            string fontToInstallNameLower = Path.GetFileName(fontsToInstall[i]).ToLower();
+                            if (fontsNamesCurrentlyInstalled.Contains(fontToInstallNameLower))
+                            {
+                                //empty the entry
+                                fontsToInstall[i] = string.Empty;
+                            }
                         }
-                        InstallFonts(fontsToInstall, patchTask, createShortcutsTask, createAtlasesTask);
-                        Logging.Info("Installing of fonts complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
-                        if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask) && TaskNullOrDone(createAtlasesTask))
+
+                        //get the new array of fonts to install that don't already exist
+                        string[] realFontsToInstall = fontsToInstall.Where(font => !string.IsNullOrWhiteSpace(font)).ToArray();
+
+                        Logging.Debug("realFontsToInstall count: {0}", realFontsToInstall.Count());
+
+                        if (realFontsToInstall.Count() > 0)
                         {
-                            Prog.TotalCurrent = (int)InstallerExitCodes.FontInstallError;
-                            InstallFinishedArgs.ExitCodes = InstallerExitCodes.FontInstallError;
-                            Prog.InstallStatus = InstallerExitCodes.FontInstallError;
+                            //initial progress
+                            ProgFonts = CopyProgress(Prog);
+                            ProgFonts.InstallStatus = InstallerExitCodes.FontInstallError;
                             LockProgress();
+
+                            //extract he exe to install fonts
+                            Logging.Info("extracting fontReg for font install");
+                            string fontRegPath = Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername, "FontReg.exe");
+                            if (!File.Exists(fontRegPath))
+                            {
+                                //get fontreg from the zip file
+                                using (ZipFile zip = new ZipFile(Settings.ManagerInfoDatFile))
+                                {
+                                    zip.ExtractSelectedEntries("FontReg.exe", null, Path.GetDirectoryName(fontRegPath));
+                                }
+                            }
+
+                            Logging.Info("Attempting to install fonts: {0}", string.Join(",", realFontsToInstall));
+                            ProcessStartInfo info = new ProcessStartInfo
+                            {
+                                FileName = fontRegPath,
+                                UseShellExecute = true,
+                                Verb = "runas", // Provides Run as Administrator
+                                Arguments = "/copy",
+                                WorkingDirectory = Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername)
+                            };
+
+                            try
+                            {
+                                Process installFontss = new Process() { StartInfo = info };
+                                installFontss.Start();
+                                installFontss.WaitForExit();
+                                Logging.Info("FontReg.exe ExitCode: " + installFontss.ExitCode);
+                                Logging.Info("Installing of fonts complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
+                            }
+                            catch (Exception ex)
+                            {
+                                Logging.Error("could not start font installer:{0}{1}", Environment.NewLine, ex.ToString());
+                                MessageBox.Show(Translations.GetTranslatedString("fontsPromptError_1") + Settings.WoTDirectory + Translations.GetTranslatedString("fontsPromptError_2"));
+                            }
+                            finally
+                            {
+                                ProgFonts.TotalCurrent = (int)InstallerExitCodes.FontInstallError;
+                                InstallFinishedArgs.ExitCodes = InstallerExitCodes.FontInstallError;
+                                ProgFonts.InstallStatus = InstallerExitCodes.FontInstallError;
+                                LockProgress();
+                                ProgFonts = null;
+                            }
                         }
                     });
                 }
             }
 
             //barrier goes here to make sure cleanup is the last thing to do
-            Task[] concurrentTasksAfterMainExtractoin = new Task[]
+            List<Task> concurrentTasksAfterMainExtractoin = new List<Task>()
             {
                 patchTask,
                 createShortcutsTask,
-                createAtlasesTask,
                 createFontsTask
             };
+            if (atlasTasks != null)
+                concurrentTasksAfterMainExtractoin.AddRange(atlasTasks);
+
             Task.WaitAll(concurrentTasksAfterMainExtractoin.Where(task => task != null).ToArray());
             Logging.Info("All async operations after extraction complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
 
@@ -1414,116 +1474,6 @@ namespace RelhaxModpack.InstallerComponents
             return true;
         }
 
-        private void InstallFonts(string[] fontsToInstall, Task patchTask, Task createShortcutsTask, Task createAtlasesTask)
-        {
-            Logging.Debug("checking system installed fonts to remove duplicates");
-            if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask) && TaskNullOrDone(createAtlasesTask))
-            {
-                Prog.ChildTotal = 1;
-                Prog.ParrentTotal = 6;
-                Prog.ParrentCurrent = 0;
-                Prog.ChildCurrent = 0;
-                Prog.Filename = string.Empty;
-                LockProgress();
-            }
-
-            string[] fontscurrentlyInstalled = Utils.DirectorySearch(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), SearchOption.TopDirectoryOnly,false);
-            string[] fontsNamesCurrentlyInstalled = fontscurrentlyInstalled.Select(s => Path.GetFileName(s).ToLower()).ToArray();
-            if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask) && TaskNullOrDone(createAtlasesTask))
-            {
-                Prog.ChildTotal = 1;
-                Prog.ParrentTotal = 6;
-                Prog.ParrentCurrent = 1;
-                Prog.ChildCurrent = 0;
-                Prog.Filename = string.Empty;
-                LockProgress();
-            }
-
-            //remove any fonts whos filename match what is already installed
-            for (int i = 0; i < fontsToInstall.Count(); i++)
-            {
-                string fontToInstallNameLower = Path.GetFileName(fontsToInstall[i]).ToLower();
-                if(fontsNamesCurrentlyInstalled.Contains(fontToInstallNameLower))
-                {
-                    //empty the entry
-                    fontsToInstall[i] = string.Empty;
-                }
-            }
-
-            //get the new array of fonts to install that don't already exist
-            string[] realFontsToInstall = fontsToInstall.Where(font => !string.IsNullOrWhiteSpace(font)).ToArray();
-
-            Logging.Debug("fontsToInstallReal count: {0}", realFontsToInstall.Count());
-            if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask) && TaskNullOrDone(createAtlasesTask))
-            {
-                Prog.ChildTotal = 1;
-                Prog.ParrentTotal = 6;
-                Prog.ParrentCurrent = 2;
-                Prog.ChildCurrent = 0;
-                Prog.Filename = string.Empty;
-                LockProgress();
-            }
-
-            if (realFontsToInstall.Count() > 0)
-            {
-                //extract he exe to install fonts
-                Logging.Debug("extracting fontReg for font install");
-                string fontRegPath = Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername, "FontReg.exe");
-                if(!File.Exists(fontRegPath))
-                {
-                    //get fontreg from the zip file
-                    using (ZipFile zip = new ZipFile(Settings.ManagerInfoDatFile))
-                    {
-                        zip.ExtractSelectedEntries("FontReg.exe", null, Path.GetDirectoryName(fontRegPath));
-                    }
-                    if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask) && TaskNullOrDone(createAtlasesTask))
-                    {
-                        Prog.ChildTotal = 1;
-                        Prog.ParrentTotal = 6;
-                        Prog.ParrentCurrent = 3;
-                        Prog.ChildCurrent = 0;
-                        Prog.Filename = string.Empty;
-                        LockProgress();
-                    }
-                }
-                Logging.Info("Attemping to install fonts: {0}", string.Join(",", realFontsToInstall));
-                ProcessStartInfo info = new ProcessStartInfo
-                {
-                    FileName = fontRegPath,
-                    UseShellExecute = true,
-                    Verb = "runas", // Provides Run as Administrator
-                    Arguments = "/copy",
-                    WorkingDirectory = Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername)
-                };
-                try
-                {
-                    Process installFontss = new Process
-                    {
-                        StartInfo = info
-                    };
-                    installFontss.Start();
-                    installFontss.WaitForExit();
-                    Logging.Info("FontReg.exe ExitCode: " + installFontss.ExitCode);
-                    if (TaskNullOrDone(patchTask) && TaskNullOrDone(createShortcutsTask) && TaskNullOrDone(createAtlasesTask))
-                    {
-                        Prog.ChildTotal = 1;
-                        Prog.ParrentTotal = 6;
-                        Prog.ParrentCurrent = 6;
-                        Prog.ChildCurrent = 0;
-                        Prog.Filename = string.Empty;
-                        LockProgress();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logging.Error("could not start font installer:{0}{1}", Environment.NewLine, ex.ToString());
-                    MessageBox.Show(Translations.GetTranslatedString("fontsPromptError_1") + Settings.WoTDirectory + Translations.GetTranslatedString("fontsPromptError_2"));
-                    Logging.Info("Installation done, but fonts install failed");
-                    return;
-                }
-            }
-        }
-
         private bool TrimDownloadCache()
         {
             //progress reporting
@@ -1853,8 +1803,8 @@ namespace RelhaxModpack.InstallerComponents
                                         string[] fontsToInstall = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername), SearchOption.TopDirectoryOnly, false, @"*", 50, 3, true);
                                         if (fontsToInstall == null || fontsToInstall.Count() == 0)
                                             Logging.WriteToLog("...skipped (no font files to install)");
-                                        else
-                                            InstallFonts(fontsToInstall,null,null,null);
+                                        //else
+                                            //InstallFonts(fontsToInstall,null,null,null);
                                     });
                                     break;
                                 default:
@@ -2278,12 +2228,55 @@ namespace RelhaxModpack.InstallerComponents
             return task == null || task.IsCompleted;
         }
 
+        private bool TaskNullOrDone(Task[] tasks)
+        {
+            foreach (Task t in tasks)
+                if (!TaskNullOrDone(t))
+                    return false;
+            return true;
+        }
+
         private void LockProgress()
         {
             lock(Progress)
             {
-                Progress.Report(Prog);
+                //reports progress based on order of what is done. a progress being done is determined if the installerProgress object is null
+                //using if-else gives us order
+                if (ProgPatch != null)
+                    Progress.Report(ProgPatch);
+                else if (ProgShortcuts != null)
+                    Progress.Report(ProgShortcuts);
+                else if (ProgAtlas != null)
+                    Progress.Report(ProgAtlas);
+                else
+                    Progress.Report(ProgFonts);
             }
+        }
+
+        private RelhaxInstallerProgress CopyProgress(RelhaxInstallerProgress progress)
+        {
+            return new RelhaxInstallerProgress()
+            {
+                BytesProcessed = progress.BytesProcessed,
+                BytesTotal = progress.BytesTotal,
+                Filename = string.Copy(progress.Filename),
+                EntryFilename = string.Copy(progress.EntryFilename),
+                EntriesProcessed = progress.EntriesProcessed,
+                EntriesTotal = progress.EntriesTotal,
+                ThreadID = progress.ThreadID,
+                InstallStatus = progress.InstallStatus,
+                UninstallStatus = progress.UninstallStatus,
+                ChildCurrent = progress.ChildCurrent,
+                ChildTotal = progress.ChildTotal,
+                ChildCurrentProgress = string.Copy(progress.ChildCurrentProgress),
+                ParrentCurrent = progress.ParrentCurrent,
+                ParrentTotal = progress.ParrentTotal,
+                ParrentCurrentProgress = string.Copy(progress.ParrentCurrentProgress),
+                TotalCurrent = progress.TotalCurrent,
+                TotalTotal = progress.TotalTotal,
+                TotalCurrentProgress = string.Copy(progress.TotalCurrentProgress),
+                ReportMessage = string.Copy(progress.ReportMessage)
+            };
         }
         #endregion
 
