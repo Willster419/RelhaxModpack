@@ -1664,20 +1664,24 @@ namespace RelhaxModpack
             string tempAtlasMapFile = Path.Combine(atlas.TempAltasPresentDirectory, atlas.MapFile);
             Logging.Info("atlas file {0} image parsing starting", Path.GetFileName(atlas.AtlasFile));
             stopwatch.Restart();
+
+            //get the list of textures that exist in the atlas
+            atlas.TextureList = MapExporter.Load(tempAtlasMapFile);
             Size originalAtlasSize = new Size();
             using (Bitmap atlasImage = ImageHandler.LoadBitmapFromDDS(tempAtlasImageFile))
             {
+                //get the size from grumpel code
                 originalAtlasSize = atlasImage.Size;
-                atlas.TextureList = MapExporter.Load(tempAtlasMapFile);
-                //load the texture bitmaps to memory to possibly be overwritten later by mods
+                
+                //load the texture bitmaps to memory
                 foreach(Texture texture in atlas.TextureList)
                 {
-                    texture.AtlasImage = new Bitmap(texture.width, texture.height, atlasImage.PixelFormat);
-                    // copy pixels over to avoid antialiasing or any other side effects of drawing
-                    // the subimages to the output image using Graphics
-                    for (int x = 0; x < texture.width; x++)
-                        for (int y = 0; y < texture.height; y++)
-                            texture.AtlasImage.SetPixel(x, y, atlasImage.GetPixel(texture.x + x, texture.y + y));
+                    //copy the texture bitmap data into the texture bitmap object
+                    //https://docs.microsoft.com/en-us/dotnet/api/system.drawing.bitmap.clone?redirectedfrom=MSDN&view=netframework-4.8#System_Drawing_Bitmap_Clone_System_Drawing_Rectangle_System_Drawing_Imaging_PixelFormat_
+                    //rectange of desired area to clone
+                    Rectangle textureRect = new Rectangle(texture.x, texture.y, texture.width, texture.height);
+                    //copythe bitmap
+                    texture.AtlasImage = atlasImage.Clone(textureRect, atlasImage.PixelFormat);
                 }
             }
             stopwatch.Stop();
