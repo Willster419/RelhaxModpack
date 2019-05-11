@@ -47,12 +47,11 @@ namespace RelhaxModpack.AtlasesCreator
             //https://stackoverflow.com/questions/28655133/difference-between-bitmap-and-bitmapdata
             //https://docs.microsoft.com/en-us/dotnet/api/system.drawing.imaging.bitmapdata.scan0?view=netframework-4.8#System_Drawing_Imaging_BitmapData_Scan0
             Rectangle rect = new Rectangle(0, 0, image.Width, image.Height);
-            BitmapData bmpData = image.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadOnly, image.PixelFormat);
+            BitmapData bmpData = image.LockBits(rect, ImageLockMode.ReadOnly, image.PixelFormat);
 
             //create surface object for processing
-            Surface surfaceFromRawData = Surface.LoadFromRawData(bmpData.Scan0, image.Width, image.Height, bmpData.Stride, true);
-
-            //compress to DDS
+            //and compress to DDS
+            using (Surface surfaceFromRawData = Surface.LoadFromRawData(bmpData.Scan0, image.Width, image.Height, bmpData.Stride, true))
             using (Compressor compressor = new Compressor())
             {
                 compressor.Compression.Format = CompressionFormat.DXT5;

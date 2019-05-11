@@ -1816,6 +1816,16 @@ namespace RelhaxModpack
             }
             stopwatch.Stop();
             Logging.Info("atlas file {0} building completed in {1} msec", Path.GetFileName(atlas.AtlasFile), stopwatch.ElapsedMilliseconds);
+
+            //dispose of the atlas images afterwards
+            foreach(Texture tex in atlas.TextureList)
+            {
+                tex.AtlasImage.Dispose();
+            }
+            foreach(Texture tex in modTextures)
+            {
+                tex.AtlasImage.Dispose();
+            }
         }
         #endregion
 
