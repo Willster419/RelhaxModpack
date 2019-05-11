@@ -1109,6 +1109,9 @@ namespace RelhaxModpack
                 }
                 package.Checked = false;
             }
+            foreach (Category category in ParsedCategoryList)
+                if (category.CategoryHeader != null && category.CategoryHeader.Checked)
+                    category.CategoryHeader.Checked = false;
         }
 
         public static int GetMaxInstallGroupNumber(List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList)
