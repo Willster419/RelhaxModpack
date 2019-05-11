@@ -970,7 +970,7 @@ namespace RelhaxModpack.Windows
             //uncheck all packages at this level that are single
             foreach (SelectablePackage childPackage in spc.Parent.Packages)
             {
-                if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
+                if ((childPackage.Type == SelectionTypes.single1) && childPackage.Enabled)
                 {
                     if (childPackage.Equals(spc))
                         continue;
@@ -1092,7 +1092,7 @@ namespace RelhaxModpack.Windows
             foreach (SelectablePackage childPackage in parent.Packages)
             {
                 //if the package is enabled and it is of single type
-                if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
+                if ((childPackage.Type == SelectionTypes.single1) && childPackage.Enabled)
                 {
                     //then this package does have single type packages
                     hasSingles = true;
@@ -1101,13 +1101,13 @@ namespace RelhaxModpack.Windows
                         singleSelected = true;
                 }
                 //same idea as above
-                else if ((childPackage.Type.Equals("single_dropdown") || childPackage.Type.Equals("single_dropdown1")) && childPackage.Enabled)
+                else if ((childPackage.Type == SelectionTypes.single_dropdown1) && childPackage.Enabled)
                 {
                     hasDD1 = true;
                     if (childPackage.Checked)
                         DD1Selected = true;
                 }
-                else if (childPackage.Type.Equals("single_dropdown2") && childPackage.Enabled)
+                else if (childPackage.Type == SelectionTypes.single_dropdown2 && childPackage.Enabled)
                 {
                     hasDD2 = true;
                     if (childPackage.Checked)
@@ -1117,11 +1117,11 @@ namespace RelhaxModpack.Windows
 
             //if going up, will only ever see radio buttons (not dropDown)
             //check if this package is of single type, if it is then we need to unselect all other packages of this level
-            if (direction == PropagationDirection.Up && (parent.Type.Equals("single") || parent.Type.Equals("single1")))
+            if (direction == PropagationDirection.Up && (parent.Type == SelectionTypes.single1))
             {
                 foreach (SelectablePackage childPackage in parent.Parent.Packages)
                 {
-                    if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
+                    if ((childPackage.Type == SelectionTypes.single1) && childPackage.Enabled)
                     {
                         if (!childPackage.Equals(parent))
                         {
@@ -1137,7 +1137,7 @@ namespace RelhaxModpack.Windows
                 //select one
                 foreach (SelectablePackage childPackage in parent.Packages)
                 {
-                    if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
+                    if ((childPackage.Type == SelectionTypes.single1) && childPackage.Enabled)
                     {
                         childPackage.Checked = true;
                         PropagateChecked(childPackage, PropagationDirection.Down);
@@ -1151,7 +1151,7 @@ namespace RelhaxModpack.Windows
                 //select one
                 foreach (SelectablePackage childPackage in parent.Packages)
                 {
-                    if ((childPackage.Type.Equals("single_dropdown") || childPackage.Type.Equals("single_dropdown1")) && childPackage.Enabled)
+                    if ((childPackage.Type == SelectionTypes.single_dropdown1) && childPackage.Enabled)
                     {
                         childPackage.Checked = true;
                         break;
@@ -1164,7 +1164,7 @@ namespace RelhaxModpack.Windows
                 //select one
                 foreach (SelectablePackage childPackage in parent.Packages)
                 {
-                    if (childPackage.Type.Equals("single_dropdown2") && childPackage.Enabled)
+                    if (childPackage.Type == SelectionTypes.single_dropdown2 && childPackage.Enabled)
                     {
                         childPackage.Checked = true;
                         break;
@@ -1626,19 +1626,19 @@ namespace RelhaxModpack.Windows
                 bool DD2Selected = false;
                 foreach (SelectablePackage childPackage in Package.Packages)
                 {
-                    if ((childPackage.Type.Equals("single") || childPackage.Type.Equals("single1")) && childPackage.Enabled)
+                    if ((childPackage.Type == SelectionTypes.single1) && childPackage.Enabled)
                     {
                         hasSingles = true;
                         if (childPackage.Checked)
                             singleSelected = true;
                     }
-                    else if ((childPackage.Type.Equals("single_dropdown") || childPackage.Type.Equals("single_dropdown1")) && childPackage.Enabled)
+                    else if ((childPackage.Type == SelectionTypes.single_dropdown1) && childPackage.Enabled)
                     {
                         hasDD1 = true;
                         if (childPackage.Checked)
                             DD1Selected = true;
                     }
-                    else if (childPackage.Type.Equals("single_dropdown2") && childPackage.Enabled)
+                    else if (childPackage.Type == SelectionTypes.single_dropdown2 && childPackage.Enabled)
                     {
                         hasDD2 = true;
                         if (childPackage.Checked)
