@@ -108,6 +108,10 @@ namespace RelhaxModpack.InstallerComponents
         private IProgress<RelhaxInstallerProgress> Progress = null;
         private RelhaxInstallerProgress Prog = null;
         private string XvmFolderName = string.Empty;
+        private Task patchTask = null;
+        private Task createShortcutsTask = null;
+        private Task createAtlasesTask = null;
+        private Task createFontsTask = null;
         #endregion
 
         #region More boring stuff
@@ -415,18 +419,6 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.WriteToLog("...skipped (no XmlUnpack entries parsed");
 
             //step 8: patch files (async option)
-            //make the task array here. so far can be a maximum of 3 items
-            Task patchTask = null;
-            Task createShortcutsTask = null;
-            Task createAtlasesTask = null;
-            Task createFontsTask = null;
-            Task[] concurrentTasksAfterMainExtractoin = new Task[]
-            {
-                patchTask,
-                createShortcutsTask,
-                createAtlasesTask,
-                createFontsTask
-            };
 
             OldTime = InstallStopWatch.Elapsed;
 
@@ -623,8 +615,15 @@ namespace RelhaxModpack.InstallerComponents
                     });
                 }
             }
-            
+
             //barrier goes here to make sure cleanup is the last thing to do
+            Task[] concurrentTasksAfterMainExtractoin = new Task[]
+            {
+                patchTask,
+                createShortcutsTask,
+                createAtlasesTask,
+                createFontsTask
+            };
             Task.WaitAll(concurrentTasksAfterMainExtractoin.Where(task => task != null).ToArray());
             Logging.Info("All async operations after extraction complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
 
