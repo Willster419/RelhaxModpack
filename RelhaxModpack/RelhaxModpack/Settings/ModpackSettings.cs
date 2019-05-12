@@ -118,7 +118,7 @@ namespace RelhaxModpack
 
         public static bool DisplayUserModsWarning = true;
 
-        public static bool VerboseLogging = false;
+        public static bool VerboseLogging = true;
 
         public static bool AllowStatisticDataGather = true;
         /// <summary>
