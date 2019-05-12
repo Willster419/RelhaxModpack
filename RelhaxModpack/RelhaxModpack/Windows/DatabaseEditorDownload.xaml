@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="Download/Update file" Height="150" Width="300" MinHeight="120" MinWidth="300" Loaded="RelhaxWindow_Loaded">
+        Title="Download/Update file" Height="200" Width="350" MinHeight="200" MinWidth="350" Loaded="RelhaxWindow_Loaded">
     <Grid>
         <TextBlock x:Name="ProgressHeader" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Downloaded X of Y kb" VerticalAlignment="Top"/>
         <ProgressBar x:Name="ProgressProgressBar" HorizontalAlignment="Stretch" Height="20" Margin="10,30,10,0" VerticalAlignment="Top" />
