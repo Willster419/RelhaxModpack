@@ -949,10 +949,16 @@ namespace RelhaxModpack.InstallerComponents
 
                     //replace the macro to make the complete path
                     searchPattern = Utils.MacroReplace(searchPattern, ReplacementTypes.FilePath);
-                    Logging.Debug("complete path: {0}", searchPattern);
+                    string directorySearchpath = Path.GetDirectoryName(searchPattern);
+                    searchPattern = Path.GetFileName(searchPattern);
+                    Logging.Debug("search term (or file): {0}", searchPattern);
+
+                    //if the directory to search does not exist, then make it, just in case
+                    if (!Directory.Exists(directorySearchpath))
+                        Directory.CreateDirectory(directorySearchpath);
 
                     //get the list of files to replace
-                    string[] filesToSave = Utils.DirectorySearch(Path.GetDirectoryName(searchPattern), SearchOption.AllDirectories, false, Path.GetFileName(searchPattern), 5, 3, false);
+                    string[] filesToSave = Utils.DirectorySearch(directorySearchpath, SearchOption.AllDirectories, false, searchPattern, 5, 3, false);
 
                     //check if we have files to move
                     if(filesToSave.Count() == 0)
@@ -1415,7 +1421,7 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     Logging.Debug("checking system installed fonts to remove duplicates");
 
-                    string[] fontscurrentlyInstalled = Utils.DirectorySearch(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), SearchOption.TopDirectoryOnly, false);
+                    string[] fontscurrentlyInstalled = Utils.DirectorySearch(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), SearchOption.TopDirectoryOnly, false, @"*",5,3,false);
                     string[] fontsNamesCurrentlyInstalled = fontscurrentlyInstalled.Select(s => Path.GetFileName(s).ToLower()).ToArray();
 
                     //remove any fonts whos filename match what is already installed
