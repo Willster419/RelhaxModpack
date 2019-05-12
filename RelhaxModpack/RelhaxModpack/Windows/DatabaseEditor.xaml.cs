@@ -233,7 +233,7 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region Other UI methods
+        #region Load UI Views
 
         private void LoadUI(List<DatabasePackage> globalDependencies, List<Dependency> dependnecies, List<Category> parsedCategoryList, int numToAddEnd = 5)
         {
@@ -618,7 +618,7 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region Load and Save internal database methods
+        #region Show and Apply database methods
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
@@ -1018,7 +1018,7 @@ namespace RelhaxModpack.Windows
                 //this will cause it in the UI to be highlighted, but internal selection code will reject it because it's not "user initiated"
                 realItemToMove.IsSelected = true;
                 //so make it programatically selected this one time
-                SelectDatabaseObject(packageToMove, null);
+                SelectDatabaseObject(realItemToMove.Header, null);
             }
         }
 
