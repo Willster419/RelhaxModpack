@@ -1237,6 +1237,12 @@ namespace RelhaxModpack.Windows
 
         private void ZipDownload_Click(object sender, RoutedEventArgs e)
         {
+            if(SelectedItem == null)
+            {
+                MessageBox.Show("No item selected");
+                Logging.Debug("Tried to download a zip, but SelectedItem is null");
+                return;
+            }
             //make sure it actually has a zip file to download
             if (string.IsNullOrWhiteSpace((SelectedItem as EditorComboBoxItem).Package.ZipFile))
             {
@@ -1246,7 +1252,7 @@ namespace RelhaxModpack.Windows
             //make sure FTP credentials are at least entered
             if (string.IsNullOrWhiteSpace(EditorSettings.BigmodsPassword) || string.IsNullOrWhiteSpace(EditorSettings.BigmodsUsername))
             {
-                MessageBox.Show("Missing FTP credentails");
+                MessageBox.Show("Missing FTP credentials");
                 return;
             }
             if (SaveZipFileDialog == null)
@@ -1261,6 +1267,10 @@ namespace RelhaxModpack.Windows
                     Title = "Select destination for zip file",
                     FileName = (SelectedItem as EditorComboBoxItem).Package.ZipFile
                 };
+            }
+            else
+            {
+                SaveZipFileDialog.FileName = (SelectedItem as EditorComboBoxItem).Package.ZipFile;
             }
             if (!(bool)SaveZipFileDialog.ShowDialog())
                 return;
@@ -1279,10 +1289,16 @@ namespace RelhaxModpack.Windows
 
         private void ZipUload_Click(object sender, RoutedEventArgs e)
         {
+            if (SelectedItem == null)
+            {
+                MessageBox.Show("No item selected");
+                Logging.Debug("Tried to download a zip, but SelectedItem is null");
+                return;
+            }
             //make sure FTP credentials are at least entered
             if (string.IsNullOrWhiteSpace(EditorSettings.BigmodsPassword) || string.IsNullOrWhiteSpace(EditorSettings.BigmodsUsername))
             {
-                MessageBox.Show("Missing FTP credentails");
+                MessageBox.Show("Missing FTP credentials");
                 return;
             }
             string zipFileToUpload = string.Empty;
