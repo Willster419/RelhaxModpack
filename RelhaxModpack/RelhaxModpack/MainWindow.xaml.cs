@@ -922,7 +922,6 @@ namespace RelhaxModpack
                 //https://stackoverflow.com/questions/13781468/get-list-of-properties-from-list-of-objects
                 List<string> packageNamesToUpload = packagesToGather.Select(pack => pack.PackageName).ToList();
 
-                //remove first await when running later, this is just for testing
                 Task.Run(async () =>
                 {
                     try
