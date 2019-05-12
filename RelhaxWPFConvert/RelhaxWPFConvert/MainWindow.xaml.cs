@@ -16,7 +16,6 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using Point = System.Windows.Point;
 using TeximpNet.DDS;
-using Pfim;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -235,80 +234,32 @@ namespace RelhaxWPFConvert
             //https://docs.microsoft.com/en-us/windows/desktop/direct3d11/texture-block-compression-in-direct3d-11#bc1-bc2-and-b3-formats
 
             //best method found to use mode 1 and direct=true
-            int mode = 1;
             bool directBitmap = true;
             //TEXIMP DDSFILE
             //this is an Importer and says nothing about bitmap objects. i don't think it's designed to do this (load directly and make bitmap out of)
-            if(mode == 0)
-            {
-                return;
-                DDSContainer dds = DDSFile.Read("damageIndicator.dds", DDSFlags.ForceRgb);
-                MipChain chain = dds.MipChains[0];
-                MipData data = chain[0];
-
-                if (directBitmap)
-                {
-                    bmp = new Bitmap(data.Width, data.Height, data.RowPitch, System.Drawing.Imaging.PixelFormat.Format32bppArgb, data.Data);
-                }
-                else
-                {
-                    //stride is rowpitch
-                    //length of array is height * stride/pitch
-                    int size = data.RowPitch * data.Height;
-                    byte[] managedArrayy = new byte[size];
-                    Marshal.Copy(data.Data, managedArrayy, 0, size);
-                    source = BitmapSource.Create(data.Width, data.Height, 96.0, 96.0, PixelFormats.Bgra32, null, managedArrayy, data.RowPitch);
-                    bmp = BitmapFromSource(source);
-                }
-            }
             //TEXIMP SURFACE
             //https://bitbucket.org/Starnick/teximpnet/src/acf2d0a8d7f6?at=master
-            else if (mode == 1)
-            {
-                //format of image is Rgba32
-                //Surface surfaceFromRawData = Surface.LoadFromRawData(data.Data, data.Width, data.Height, data.RowPitch,true,true);
-                Surface surface = Surface.LoadFromFile("damageIndicator.dds", ImageLoadFlags.Default);
-                surface.FlipVertically();
+            //format of image is Rgba32
+            //Surface surfaceFromRawData = Surface.LoadFromRawData(data.Data, data.Width, data.Height, data.RowPitch,true,true);
+            Surface surface = Surface.LoadFromFile("damageIndicator.dds", ImageLoadFlags.Default);
+            surface.FlipVertically();
 
-                if(directBitmap)
-                {
-                    //https://stackoverflow.com/questions/16478449/convert-intptr-to-bitmapimage
-                    bmp = new Bitmap(surface.Width, surface.Height, surface.Pitch, System.Drawing.Imaging.PixelFormat.Format32bppArgb, surface.DataPtr);
-                }
-                else
-                {
-                    //stride is rowpitch
-                    //length of array is height * stride/pitch
-                    int size = surface.Height * surface.Pitch;
-                    byte[] managedArrayy = new byte[size];
-                    //https://stackoverflow.com/questions/5486938/c-sharp-how-to-get-byte-from-intptr
-                    //https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.marshal.copy?view=netframework-4.8#System_Runtime_InteropServices_Marshal_Copy_System_IntPtr_System_Byte___System_Int32_System_Int32_
-                    Marshal.Copy(surface.DataPtr, managedArrayy, 0, size);
-                    source = BitmapSource.Create(surface.Width, surface.Height, 96.0, 96.0, PixelFormats.Bgra32, null, managedArrayy, surface.Pitch);
-                    bmp = BitmapFromSource(source);
-                }
+            if (directBitmap)
+            {
+                //https://stackoverflow.com/questions/16478449/convert-intptr-to-bitmapimage
+                bmp = new Bitmap(surface.Width, surface.Height, surface.Pitch, System.Drawing.Imaging.PixelFormat.Format32bppArgb, surface.DataPtr);
             }
-            //PFIM
-            else if (mode == 2)
+            else
             {
-                IImage image = Pfim.Pfim.FromFile("damageIndicator.dds");
-                source = BitmapSource.Create(image.Width, image.Height, 96.0, 96.0, PixelFormats.Bgra32, null, image.Data, image.Stride);
+                //stride is rowpitch
+                //length of array is height * stride/pitch
+                int size = surface.Height * surface.Pitch;
+                byte[] managedArrayy = new byte[size];
+                //https://stackoverflow.com/questions/5486938/c-sharp-how-to-get-byte-from-intptr
+                //https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.marshal.copy?view=netframework-4.8#System_Runtime_InteropServices_Marshal_Copy_System_IntPtr_System_Byte___System_Int32_System_Int32_
+                Marshal.Copy(surface.DataPtr, managedArrayy, 0, size);
+                source = BitmapSource.Create(surface.Width, surface.Height, 96.0, 96.0, PixelFormats.Bgra32, null, managedArrayy, surface.Pitch);
                 bmp = BitmapFromSource(source);
-
-                if (directBitmap)
-                {
-                    //does not work, but we're not using it anyways
-                    return;
-                    //https://docs.microsoft.com/en-us/dotnet/api/system.intptr?view=netframework-4.8
-                    IntPtr ptr = new IntPtr();
-                    Marshal.Copy(image.Data, 0, ptr, image.Data.Length);
-                    bmp = new Bitmap(image.Width, image.Height, image.Stride, System.Drawing.Imaging.PixelFormat.Format32bppArgb, ptr);
-                }
-                else
-                {
-                    source = BitmapSource.Create(image.Width, image.Height, 96.0, 96.0, PixelFormats.Bgra32, null, image.Data, image.Stride);
-                    bmp = BitmapFromSource(source);
-                }
             }
 
             TestImageDisplay.Source = source;
