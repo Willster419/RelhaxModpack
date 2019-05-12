@@ -51,11 +51,11 @@ namespace RelhaxModpack.AtlasesCreator
                 Logging.Info(string.Format("Success Packing '{0}' to {1} x {2} pixel", Path.GetFileName(atlas.AtlasFile), outputImage.Height, outputImage.Width));
             }
 
-            //export it using map exporter
+            //export the atlas file
+            //delete one if it exists
             if (File.Exists(atlas.AtlasFile))
                 File.Delete(atlas.AtlasFile);
-
-            //save to a dds file
+            //then save
             if (ImageHandler.SaveDDS(atlas.AtlasFile, outputImage,true))
                 Logging.Info("successfully created Atlas image: " + atlas.AtlasFile);
             else
@@ -63,6 +63,13 @@ namespace RelhaxModpack.AtlasesCreator
                 Logging.Error("Failed to save bitmap to dds image");
                 return FailCode.FailedToSaveImage;
             }
+
+            //export the mapfile
+            //delete one if it exists
+            if (File.Exists(atlas.MapFile))
+                File.Delete(atlas.MapFile);
+            //then save
+            MapExporter.Save(atlas.MapFile, outputMap);
 
             return FailCode.None;
         }
