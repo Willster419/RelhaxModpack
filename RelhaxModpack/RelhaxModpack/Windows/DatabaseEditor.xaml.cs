@@ -1327,7 +1327,7 @@ namespace RelhaxModpack.Windows
                 ZipFileName = Path.GetFileName(zipFileToUpload),
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
                 Upload = true,
-                PackageToUpdate = (SelectedItem as DatabasePackage)
+                PackageToUpdate = (SelectedItem as EditorComboBoxItem).Package
             };
             name.OnEditorUploadDownloadClosed += OnEditorUploadFinished;
             name.Show();
@@ -1336,10 +1336,10 @@ namespace RelhaxModpack.Windows
         private void OnEditorUploadFinished(object sender, EditorUploadDownloadEventArgs e)
         {
             UnsavedChanges = true;
-            if (SelectedItem.Equals(e.Package))
+            if ((SelectedItem as EditorComboBoxItem).Package.Equals(e.Package))
             {
                 PackageZipFileDisplay.Text = e.Package.ZipFile;
-                if (!(SelectedItem as DatabasePackage).ZipFile.Equals(e.Package.ZipFile))
+                if (!(SelectedItem as EditorComboBoxItem).Package.ZipFile.Equals(e.Package.ZipFile))
                 {
                     throw new BadMemeException("You have made a mistake");
                 }
