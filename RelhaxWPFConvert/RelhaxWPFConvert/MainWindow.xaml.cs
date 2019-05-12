@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using Point = System.Windows.Point;
 using TeximpNet.DDS;
@@ -227,7 +221,6 @@ namespace RelhaxWPFConvert
             //check if it's actually a dds file
             bool isItADDSFile = DDSFile.IsDDSFile("damageIndicator.dds");
             Bitmap bmp = null;
-            BitmapSource source = null;
 
             //helpful links
             //https://docs.microsoft.com/en-us/windows/desktop/api/dxgiformat/ne-dxgiformat-dxgi_format#dxgi-format-bc3-unorm
@@ -235,84 +228,81 @@ namespace RelhaxWPFConvert
 
             //best method found to use mode 1 and direct=true
             bool directBitmap = true;
+
             //TEXIMP DDSFILE
             //this is an Importer and says nothing about bitmap objects. i don't think it's designed to do this (load directly and make bitmap out of)
             //TEXIMP SURFACE
             //https://bitbucket.org/Starnick/teximpnet/src/acf2d0a8d7f6?at=master
             //format of image is Rgba32
-            //Surface surfaceFromRawData = Surface.LoadFromRawData(data.Data, data.Width, data.Height, data.RowPitch,true,true);
-            Surface surface = Surface.LoadFromFile("damageIndicator.dds", ImageLoadFlags.Default);
-            surface.FlipVertically();
-
-            if (directBitmap)
+            using (Surface surface = Surface.LoadFromFile("damageIndicator.dds", ImageLoadFlags.Default))
             {
-                //https://stackoverflow.com/questions/16478449/convert-intptr-to-bitmapimage
-                bmp = new Bitmap(surface.Width, surface.Height, surface.Pitch, System.Drawing.Imaging.PixelFormat.Format32bppArgb, surface.DataPtr);
-            }
-            else
-            {
-                //stride is rowpitch
-                //length of array is height * stride/pitch
-                int size = surface.Height * surface.Pitch;
-                byte[] managedArrayy = new byte[size];
-                //https://stackoverflow.com/questions/5486938/c-sharp-how-to-get-byte-from-intptr
-                //https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.marshal.copy?view=netframework-4.8#System_Runtime_InteropServices_Marshal_Copy_System_IntPtr_System_Byte___System_Int32_System_Int32_
-                Marshal.Copy(surface.DataPtr, managedArrayy, 0, size);
-                source = BitmapSource.Create(surface.Width, surface.Height, 96.0, 96.0, PixelFormats.Bgra32, null, managedArrayy, surface.Pitch);
-                bmp = BitmapFromSource(source);
-            }
+                surface.FlipVertically();
 
-            TestImageDisplay.Source = source;
+                if (directBitmap)
+                {
+                    //https://stackoverflow.com/questions/16478449/convert-intptr-to-bitmapimage
+                    bmp = new Bitmap(surface.Width, surface.Height, surface.Pitch, System.Drawing.Imaging.PixelFormat.Format32bppArgb, surface.DataPtr);
+                }
+                else
+                {
+                    //stride is rowpitch
+                    //length of array is height * stride/pitch
+                    int size = surface.Height * surface.Pitch;
+                    byte[] managedArrayy = new byte[size];
 
-            bmp.Save("damageIndicator.png", System.Drawing.Imaging.ImageFormat.Png);
-            bmp.Dispose();
+                    //https://stackoverflow.com/questions/5486938/c-sharp-how-to-get-byte-from-intptr
+                    //https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.marshal.copy?view=netframework-4.8#System_Runtime_InteropServices_Marshal_Copy_System_IntPtr_System_Byte___System_Int32_System_Int32_
+                    Marshal.Copy(surface.DataPtr, managedArrayy, 0, size);
+                    BitmapSource source = BitmapSource.Create(surface.Width, surface.Height, 96.0, 96.0, PixelFormats.Bgra32, null, managedArrayy, surface.Pitch);
+                    bmp = BitmapFromSource(source);
+                    TestImageDisplay.Source = source;
+                }
+
+                bmp.Save("damageIndicator.png", System.Drawing.Imaging.ImageFormat.Png);
+                bmp.Dispose();
+            }
         }
 
         //https://stackoverflow.com/questions/3751715/convert-system-windows-media-imaging-bitmapsource-to-system-drawing-image
-        private System.Drawing.Bitmap BitmapFromSource(BitmapSource bitmapsource)
+        private Bitmap BitmapFromSource(BitmapSource bitmapsource)
         {
-            System.Drawing.Bitmap bitmap;
+            Bitmap bitmap;
             using (MemoryStream outStream = new MemoryStream())
             {
                 PngBitmapEncoder enc = new PngBitmapEncoder();
                 enc.Frames.Add(BitmapFrame.Create(bitmapsource));
                 enc.Save(outStream);
-                bitmap = new System.Drawing.Bitmap(outStream);
+                bitmap = new Bitmap(outStream);
             }
             return bitmap;
         }
 
         private void BitmapToDds_Click(object sender, RoutedEventArgs e)
         {
-            Bitmap bmp2 = new Bitmap("damageIndicator.png");
-            System.Drawing.Imaging.BitmapData bmpData = null;
-            Compressor compressor = null;
+            BitmapData bmpData = null;
+            using (Bitmap bmp2 = new Bitmap("damageIndicator.png"))
+            {
+                // Lock the bitmap's bits. 
+                //https://stackoverflow.com/questions/28655133/difference-between-bitmap-and-bitmapdata
+                //https://docs.microsoft.com/en-us/dotnet/api/system.drawing.imaging.bitmapdata.scan0?view=netframework-4.8#System_Drawing_Imaging_BitmapData_Scan0
+                Rectangle rect = new Rectangle(0, 0, bmp2.Width, bmp2.Height);
+                bmpData = bmp2.LockBits(rect, ImageLockMode.ReadOnly, bmp2.PixelFormat);
 
-            // Lock the bitmap's bits. 
-            //https://stackoverflow.com/questions/28655133/difference-between-bitmap-and-bitmapdata
-            //https://docs.microsoft.com/en-us/dotnet/api/system.drawing.imaging.bitmapdata.scan0?view=netframework-4.8#System_Drawing_Imaging_BitmapData_Scan0
-            System.Drawing.Rectangle rect = new System.Drawing.Rectangle(0, 0, bmp2.Width, bmp2.Height);
-            bmpData = bmp2.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadOnly, bmp2.PixelFormat);
+                // Get the address of the first line.
+                IntPtr ptr = bmpData.Scan0;
 
-            // Get the address of the first line.
-            IntPtr ptr = bmpData.Scan0;
-
-            //create surface object for processing
-            Surface surfaceFromRawData = Surface.LoadFromRawData(ptr, bmp2.Width, bmp2.Height, bmpData.Stride, true);
-
-            //compress to dds
-            compressor = new Compressor();
-            compressor.Compression.Format = CompressionFormat.DXT5;
-            compressor.Input.AlphaMode = AlphaMode.None;
-            compressor.Input.GenerateMipmaps = false;
-            compressor.Input.ConvertToNormalMap = false;
-            compressor.Input.SetData(surfaceFromRawData);
-            compressor.Process("damageIndicator2.dds");
-
-            //dispose and finish
-            compressor.Dispose();
-            bmp2.UnlockBits(bmpData);
-            bmp2.Dispose();
+                using (Compressor compressor = new Compressor())
+                using (Surface surfaceFromRawData = Surface.LoadFromRawData(ptr, bmp2.Width, bmp2.Height, bmpData.Stride, true))
+                {
+                    //compress to dds
+                    compressor.Compression.Format = CompressionFormat.DXT5;
+                    compressor.Input.AlphaMode = AlphaMode.None;
+                    compressor.Input.GenerateMipmaps = false;
+                    compressor.Input.ConvertToNormalMap = false;
+                    compressor.Input.SetData(surfaceFromRawData);
+                    compressor.Process("damageIndicator2.dds");
+                }
+            }
         }
         #endregion
 
