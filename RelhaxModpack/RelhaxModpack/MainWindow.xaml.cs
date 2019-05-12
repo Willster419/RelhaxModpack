@@ -923,7 +923,7 @@ namespace RelhaxModpack
                 List<string> packageNamesToUpload = packagesToGather.Select(pack => pack.PackageName).ToList();
 
                 //remove first await when running later, this is just for testing
-                await Task.Run(async () =>
+                Task.Run(async () =>
                 {
                     try
                     {
