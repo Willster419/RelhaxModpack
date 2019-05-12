@@ -469,209 +469,19 @@ namespace RelhaxModpack.InstallerComponents
             //step 10: create shortcuts (async option)
             if(ModpackSettings.DisableTriggers)
             {
-                Logging.WriteToLog(string.Format("Creating of shortcuts, current install time = {0} msec",
-                (int)InstallStopWatch.Elapsed.TotalMilliseconds));
-                if (ModpackSettings.CreateShortcuts)
-                {
-                    List<Shortcut> shortcuts = MakeShortcutList();
-                    if (shortcuts.Count > 0)
-                    {
-                        StringBuilder shortcutBuilder = new StringBuilder();
-                        shortcutBuilder.AppendLine("/*   Shortcuts   */");
-                        createShortcutsTask = Task.Factory.StartNew(() =>
-                        {
-                            ProgShortcuts = CopyProgress(Prog);
-                            ProgShortcuts.ParrentTotal = shortcuts.Count;
-                            ProgShortcuts.InstallStatus = InstallerExitCodes.ShortcustError;
-                            LockProgress();
-
-                            foreach (Shortcut shortcut in shortcuts)
-                            {
-                                ProgShortcuts.ParrentCurrent++;
-                                LockProgress();
-
-                                if (shortcut.Enabled)
-                                {
-                                    Utils.CreateShortcut(shortcut, shortcutBuilder);
-                                }
-                            }
-
-                            Logging.Installer(shortcutBuilder.ToString());
-                            Logging.Info("Creating of shortcuts complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
-
-                            ProgShortcuts.TotalCurrent = (int)InstallerExitCodes.ShortcustError;
-                            InstallFinishedArgs.ExitCodes = InstallerExitCodes.ShortcustError;
-                            ProgShortcuts.InstallStatus = InstallerExitCodes.ShortcustError;
-                            LockProgress();
-                            ProgShortcuts = null;
-                        });
-                    }
-                    else
-                        Logging.WriteToLog("...skipped (no shortcut entries parsed)");
-                }
-                else
-                    Logging.WriteToLog("...skipped (setting is false)");
+                CreateShortcuts();
             }
 
             //step 11: create atlases (async option)
             if (ModpackSettings.DisableTriggers)
             {
-                Logging.WriteToLog(string.Format("Creating of atlases, current install time = {0} msec", (int)InstallStopWatch.Elapsed.TotalMilliseconds));
-                List<Atlas> atlases = MakeAtlasList();
-                if (atlases.Count > 0)
-                {
-                    //initial progress report
-                    ProgAtlas = CopyProgress(Prog);
-                    ProgAtlas.ParrentTotal = atlases.Count;
-                    ProgAtlas.InstallStatus = InstallerExitCodes.ContourIconAtlasError;
-                    LockProgress();
-
-                    //make an array to hold all the atlas tasks
-                    atlasTasks = new Task[atlases.Count];
-
-                    for(int i = 0; i < atlases.Count; i++)
-                    {
-                        //spawn atlas threads for each task
-                        bool taskValuesLocked = false;
-                        atlasTasks[i] = Task.Run(() =>
-                        {
-                            StringBuilder atlasBuilder = new StringBuilder();
-                            atlasBuilder.AppendLine("/*   Atlases   */");
-
-                            Atlas atlas = atlases[i];
-                            taskValuesLocked = true;
-
-                            //replace macros
-                            atlas.Pkg = Utils.MacroReplace(atlas.Pkg, ReplacementTypes.FilePath);
-                            atlas.AtlasSaveDirectory = Utils.MacroReplace(atlas.AtlasSaveDirectory, ReplacementTypes.FilePath);
-                            for (int j = 0; j < atlas.ImageFolderList.Count; j++)
-                            {
-                                atlas.ImageFolderList[j] = Utils.MacroReplace(atlas.ImageFolderList[j], ReplacementTypes.FilePath);
-                            }
-
-                            LockProgress();
-
-                            //create the atlas
-                            Utils.CreateAtlas(atlas);
-
-                            lock (Progress)
-                            {
-                                ProgAtlas.ParrentCurrent++;
-                            }
-                            LockProgress();
-
-                            //append generated atlas info
-                            atlasBuilder.AppendLine(atlas.MapFile);
-                            atlasBuilder.AppendLine(atlas.AtlasFile);
-                            //make sure it's not writing the same time
-                            lock(Progress)
-                            {
-                                Logging.Installer(atlasBuilder.ToString());
-                                if(ProgAtlas.ParrentCurrent == ProgAtlas.ParrentTotal)
-                                {
-                                    ProgAtlas.TotalCurrent = (int)InstallerExitCodes.ContourIconAtlasError;
-                                    InstallFinishedArgs.ExitCodes = InstallerExitCodes.ContourIconAtlasError;
-                                    ProgAtlas.InstallStatus = InstallerExitCodes.ContourIconAtlasError;
-                                    LockProgress();
-                                    ProgAtlas = null;
-                                }
-                            }
-                        });
-                        while (!taskValuesLocked) ;
-                    }
-                }
-                else
-                    Logging.WriteToLog("...skipped (no atlas entries parsed)");
+                CreateAtlases();
             }
 
             //step 12: install fonts (async operation)
             if (ModpackSettings.DisableTriggers)
             {
-                Logging.WriteToLog(string.Format("Installing of fonts, current install time = {0} msec",
-                    (int)InstallStopWatch.Elapsed.TotalMilliseconds));
-
-                //check for any font files to install at all
-                string[] fontsToInstall = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername), SearchOption.TopDirectoryOnly, false, @"*", 50, 3, true);
-                if (fontsToInstall == null || fontsToInstall.Count() == 0)
-                    Logging.WriteToLog("...skipped (no font files to install)");
-                else
-                {
-                    createFontsTask = Task.Factory.StartNew(() =>
-                    {
-                        Logging.Debug("checking system installed fonts to remove duplicates");
-
-                        string[] fontscurrentlyInstalled = Utils.DirectorySearch(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), SearchOption.TopDirectoryOnly, false);
-                        string[] fontsNamesCurrentlyInstalled = fontscurrentlyInstalled.Select(s => Path.GetFileName(s).ToLower()).ToArray();
-
-                        //remove any fonts whos filename match what is already installed
-                        for (int i = 0; i < fontsToInstall.Count(); i++)
-                        {
-                            string fontToInstallNameLower = Path.GetFileName(fontsToInstall[i]).ToLower();
-                            if (fontsNamesCurrentlyInstalled.Contains(fontToInstallNameLower))
-                            {
-                                //empty the entry
-                                fontsToInstall[i] = string.Empty;
-                            }
-                        }
-
-                        //get the new array of fonts to install that don't already exist
-                        string[] realFontsToInstall = fontsToInstall.Where(font => !string.IsNullOrWhiteSpace(font)).ToArray();
-
-                        Logging.Debug("realFontsToInstall count: {0}", realFontsToInstall.Count());
-
-                        if (realFontsToInstall.Count() > 0)
-                        {
-                            //initial progress
-                            ProgFonts = CopyProgress(Prog);
-                            ProgFonts.InstallStatus = InstallerExitCodes.FontInstallError;
-                            LockProgress();
-
-                            //extract he exe to install fonts
-                            Logging.Info("extracting fontReg for font install");
-                            string fontRegPath = Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername, "FontReg.exe");
-                            if (!File.Exists(fontRegPath))
-                            {
-                                //get fontreg from the zip file
-                                using (ZipFile zip = new ZipFile(Settings.ManagerInfoDatFile))
-                                {
-                                    zip.ExtractSelectedEntries("FontReg.exe", null, Path.GetDirectoryName(fontRegPath));
-                                }
-                            }
-
-                            Logging.Info("Attempting to install fonts: {0}", string.Join(",", realFontsToInstall));
-                            ProcessStartInfo info = new ProcessStartInfo
-                            {
-                                FileName = fontRegPath,
-                                UseShellExecute = true,
-                                Verb = "runas", // Provides Run as Administrator
-                                Arguments = "/copy",
-                                WorkingDirectory = Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername)
-                            };
-
-                            try
-                            {
-                                Process installFontss = new Process() { StartInfo = info };
-                                installFontss.Start();
-                                installFontss.WaitForExit();
-                                Logging.Info("FontReg.exe ExitCode: " + installFontss.ExitCode);
-                                Logging.Info("Installing of fonts complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
-                            }
-                            catch (Exception ex)
-                            {
-                                Logging.Error("could not start font installer:{0}{1}", Environment.NewLine, ex.ToString());
-                                MessageBox.Show(Translations.GetTranslatedString("fontsPromptError_1") + Settings.WoTDirectory + Translations.GetTranslatedString("fontsPromptError_2"));
-                            }
-                            finally
-                            {
-                                ProgFonts.TotalCurrent = (int)InstallerExitCodes.FontInstallError;
-                                InstallFinishedArgs.ExitCodes = InstallerExitCodes.FontInstallError;
-                                ProgFonts.InstallStatus = InstallerExitCodes.FontInstallError;
-                                LockProgress();
-                                ProgFonts = null;
-                            }
-                        }
-                    });
-                }
+                InstallFonts();
             }
 
             //barrier goes here to make sure cleanup is the last thing to do
@@ -1474,6 +1284,211 @@ namespace RelhaxModpack.InstallerComponents
             return true;
         }
 
+        private void CreateShortcuts()
+        {
+            Logging.WriteToLog(string.Format("Creating of shortcuts, current install time = {0} msec",
+                (int)InstallStopWatch.Elapsed.TotalMilliseconds));
+            if (ModpackSettings.CreateShortcuts)
+            {
+                List<Shortcut> shortcuts = MakeShortcutList();
+                if (shortcuts.Count > 0)
+                {
+                    StringBuilder shortcutBuilder = new StringBuilder();
+                    shortcutBuilder.AppendLine("/*   Shortcuts   */");
+                    createShortcutsTask = Task.Factory.StartNew(() =>
+                    {
+                        ProgShortcuts = CopyProgress(Prog);
+                        ProgShortcuts.ParrentTotal = shortcuts.Count;
+                        ProgShortcuts.InstallStatus = InstallerExitCodes.ShortcustError;
+                        LockProgress();
+
+                        foreach (Shortcut shortcut in shortcuts)
+                        {
+                            ProgShortcuts.ParrentCurrent++;
+                            LockProgress();
+
+                            if (shortcut.Enabled)
+                            {
+                                Utils.CreateShortcut(shortcut, shortcutBuilder);
+                            }
+                        }
+
+                        Logging.Installer(shortcutBuilder.ToString());
+                        Logging.Info("Creating of shortcuts complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
+
+                        ProgShortcuts.TotalCurrent = (int)InstallerExitCodes.ShortcustError;
+                        InstallFinishedArgs.ExitCodes = InstallerExitCodes.ShortcustError;
+                        ProgShortcuts.InstallStatus = InstallerExitCodes.ShortcustError;
+                        LockProgress();
+                        ProgShortcuts = null;
+                    });
+                }
+                else
+                    Logging.WriteToLog("...skipped (no shortcut entries parsed)");
+            }
+            else
+                Logging.WriteToLog("...skipped (setting is false)");
+        }
+
+        private void CreateAtlases()
+        {
+            Logging.WriteToLog(string.Format("Creating of atlases, current install time = {0} msec", (int)InstallStopWatch.Elapsed.TotalMilliseconds));
+            List<Atlas> atlases = MakeAtlasList();
+            if (atlases.Count > 0)
+            {
+                //initial progress report
+                ProgAtlas = CopyProgress(Prog);
+                ProgAtlas.ParrentTotal = atlases.Count;
+                ProgAtlas.InstallStatus = InstallerExitCodes.ContourIconAtlasError;
+                LockProgress();
+
+                //make an array to hold all the atlas tasks
+                atlasTasks = new Task[atlases.Count];
+
+                for (int i = 0; i < atlases.Count; i++)
+                {
+                    //spawn atlas threads for each task
+                    bool taskValuesLocked = false;
+                    atlasTasks[i] = Task.Run(() =>
+                    {
+                        StringBuilder atlasBuilder = new StringBuilder();
+                        atlasBuilder.AppendLine("/*   Atlases   */");
+
+                        Atlas atlas = atlases[i];
+                        taskValuesLocked = true;
+
+                        //replace macros
+                        atlas.Pkg = Utils.MacroReplace(atlas.Pkg, ReplacementTypes.FilePath);
+                        atlas.AtlasSaveDirectory = Utils.MacroReplace(atlas.AtlasSaveDirectory, ReplacementTypes.FilePath);
+                        for (int j = 0; j < atlas.ImageFolderList.Count; j++)
+                        {
+                            atlas.ImageFolderList[j] = Utils.MacroReplace(atlas.ImageFolderList[j], ReplacementTypes.FilePath);
+                        }
+
+                        LockProgress();
+
+                        //create the atlas
+                        Utils.CreateAtlas(atlas);
+
+                        lock (Progress)
+                        {
+                            ProgAtlas.ParrentCurrent++;
+                        }
+                        LockProgress();
+
+                        //append generated atlas info
+                        atlasBuilder.AppendLine(atlas.MapFile);
+                        atlasBuilder.AppendLine(atlas.AtlasFile);
+                        //make sure it's not writing the same time
+                        lock (Progress)
+                        {
+                            Logging.Installer(atlasBuilder.ToString());
+                            if (ProgAtlas.ParrentCurrent == ProgAtlas.ParrentTotal)
+                            {
+                                ProgAtlas.TotalCurrent = (int)InstallerExitCodes.ContourIconAtlasError;
+                                InstallFinishedArgs.ExitCodes = InstallerExitCodes.ContourIconAtlasError;
+                                ProgAtlas.InstallStatus = InstallerExitCodes.ContourIconAtlasError;
+                                LockProgress();
+                                ProgAtlas = null;
+                            }
+                        }
+                    });
+                    while (!taskValuesLocked) ;
+                }
+            }
+            else
+                Logging.WriteToLog("...skipped (no atlas entries parsed)");
+        }
+
+        private void InstallFonts()
+        {
+            Logging.WriteToLog(string.Format("Installing of fonts, current install time = {0} msec",
+                    (int)InstallStopWatch.Elapsed.TotalMilliseconds));
+
+            //check for any font files to install at all
+            string[] fontsToInstall = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername), SearchOption.TopDirectoryOnly, false, @"*", 50, 3, true);
+            if (fontsToInstall == null || fontsToInstall.Count() == 0)
+                Logging.WriteToLog("...skipped (no font files to install)");
+            else
+            {
+                createFontsTask = Task.Factory.StartNew(() =>
+                {
+                    Logging.Debug("checking system installed fonts to remove duplicates");
+
+                    string[] fontscurrentlyInstalled = Utils.DirectorySearch(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), SearchOption.TopDirectoryOnly, false);
+                    string[] fontsNamesCurrentlyInstalled = fontscurrentlyInstalled.Select(s => Path.GetFileName(s).ToLower()).ToArray();
+
+                    //remove any fonts whos filename match what is already installed
+                    for (int i = 0; i < fontsToInstall.Count(); i++)
+                    {
+                        string fontToInstallNameLower = Path.GetFileName(fontsToInstall[i]).ToLower();
+                        if (fontsNamesCurrentlyInstalled.Contains(fontToInstallNameLower))
+                        {
+                            //empty the entry
+                            fontsToInstall[i] = string.Empty;
+                        }
+                    }
+
+                    //get the new array of fonts to install that don't already exist
+                    string[] realFontsToInstall = fontsToInstall.Where(font => !string.IsNullOrWhiteSpace(font)).ToArray();
+
+                    Logging.Debug("realFontsToInstall count: {0}", realFontsToInstall.Count());
+
+                    if (realFontsToInstall.Count() > 0)
+                    {
+                        //initial progress
+                        ProgFonts = CopyProgress(Prog);
+                        ProgFonts.InstallStatus = InstallerExitCodes.FontInstallError;
+                        LockProgress();
+
+                        //extract he exe to install fonts
+                        Logging.Info("extracting fontReg for font install");
+                        string fontRegPath = Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername, "FontReg.exe");
+                        if (!File.Exists(fontRegPath))
+                        {
+                            //get fontreg from the zip file
+                            using (ZipFile zip = new ZipFile(Settings.ManagerInfoDatFile))
+                            {
+                                zip.ExtractSelectedEntries("FontReg.exe", null, Path.GetDirectoryName(fontRegPath));
+                            }
+                        }
+
+                        Logging.Info("Attempting to install fonts: {0}", string.Join(",", realFontsToInstall));
+                        ProcessStartInfo info = new ProcessStartInfo
+                        {
+                            FileName = fontRegPath,
+                            UseShellExecute = true,
+                            Verb = "runas", // Provides Run as Administrator
+                            Arguments = "/copy",
+                            WorkingDirectory = Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername)
+                        };
+
+                        try
+                        {
+                            Process installFontss = new Process() { StartInfo = info };
+                            installFontss.Start();
+                            installFontss.WaitForExit();
+                            Logging.Info("FontReg.exe ExitCode: " + installFontss.ExitCode);
+                            Logging.Info("Installing of fonts complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
+                        }
+                        catch (Exception ex)
+                        {
+                            Logging.Error("could not start font installer:{0}{1}", Environment.NewLine, ex.ToString());
+                            MessageBox.Show(Translations.GetTranslatedString("fontsPromptError_1") + Settings.WoTDirectory + Translations.GetTranslatedString("fontsPromptError_2"));
+                        }
+                        finally
+                        {
+                            ProgFonts.TotalCurrent = (int)InstallerExitCodes.FontInstallError;
+                            InstallFinishedArgs.ExitCodes = InstallerExitCodes.FontInstallError;
+                            ProgFonts.InstallStatus = InstallerExitCodes.FontInstallError;
+                            LockProgress();
+                            ProgFonts = null;
+                        }
+                    }
+                });
+            }
+        }
+
         private bool TrimDownloadCache()
         {
             //progress reporting
@@ -1791,21 +1806,16 @@ namespace RelhaxModpack.InstallerComponents
                             Logging.Debug("trigger {0} is starting", match.Name);
                             match.Fired = true;
                             //hard-coded list of triggers that can be fired from list at top of class
-                            throw new BadMemeException("fix me");
                             switch (match.Name)
                             {
                                 case TriggerContouricons:
-                                    //match.TriggerTask = Task.Run(() => BuildContourIcons(null,null));
+                                    CreateAtlases();
                                     break;
                                 case TriggerInstallFonts:
-                                    match.TriggerTask = Task.Run(() =>
-                                    {
-                                        string[] fontsToInstall = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername), SearchOption.TopDirectoryOnly, false, @"*", 50, 3, true);
-                                        if (fontsToInstall == null || fontsToInstall.Count() == 0)
-                                            Logging.WriteToLog("...skipped (no font files to install)");
-                                        //else
-                                            //InstallFonts(fontsToInstall,null,null,null);
-                                    });
+                                    InstallFonts();
+                                    break;
+                                case TriggerCreateShortcuts:
+                                    CreateShortcuts();
                                     break;
                                 default:
                                     Logging.Error("Invalid trigger name for switch block: {0}", match.Name);
