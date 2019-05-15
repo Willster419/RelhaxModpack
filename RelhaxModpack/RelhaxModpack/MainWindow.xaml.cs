@@ -164,14 +164,21 @@ namespace RelhaxModpack
             MulticoreExtractionCoresCountLabel.Text = string.Format(Translations.GetTranslatedString("MulticoreExtractionCoresCountLabel"), Settings.NumLogicalProcesors);
 
             //set the file count and size for the backups folder
-            Logging.Debug("getting filesizes of backups");
-            long totalSize = 0;
-            string[] backupFiles = Utils.DirectorySearch(Settings.RelhaxModBackupFolder, SearchOption.TopDirectoryOnly, false, "*.zip", 5, 3, false);
-            foreach(string file in backupFiles)
+            Logging.Debug("starting async task of getting filesizes of backups");
+            Task.Run(() =>
             {
-                totalSize += Utils.GetFilesize(file);
-            }
-            BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"), backupFiles.Count(), Utils.SizeSuffix((ulong)totalSize, 1,true));
+                long totalSize = 0;
+                string[] backupFiles = Utils.DirectorySearch(Settings.RelhaxModBackupFolder, SearchOption.TopDirectoryOnly, false, "*.zip", 5, 3, false);
+                foreach (string file in backupFiles)
+                {
+                    totalSize += Utils.GetFilesize(file);
+                }
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"), backupFiles.Count(), Utils.SizeSuffix((ulong)totalSize, 1, true));
+                });
+                Logging.Debug("completed async task of getting filesizes of backups");
+            });
 
             Logging.Debug("checking if application is up to date");
             //if the application is up to date, then check if we need to display the welcome message to the user
