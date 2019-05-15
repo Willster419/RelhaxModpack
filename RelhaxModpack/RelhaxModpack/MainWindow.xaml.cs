@@ -644,7 +644,7 @@ namespace RelhaxModpack
             {
                 using (ZipFile zip = ZipFile.Read(Settings.ApplicationUpdateFileName))
                 {
-                    zip.ExtractAll(Settings.ApplicationStartupPath);
+                    zip.ExtractAll(Settings.ApplicationStartupPath,ExtractExistingFileAction.OverwriteSilently);
                 }
             }
             catch (ZipException zipex)

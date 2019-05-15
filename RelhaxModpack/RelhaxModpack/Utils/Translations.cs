@@ -1617,6 +1617,13 @@ namespace RelhaxModpack
             Gernam.Add("clickHereUpdateLabel", "klick hier");
             Polish.Add("clickHereUpdateLabel", "kliknij tutaj");
             French.Add("clickHereUpdateLabel", "Cliquez ici");
+
+            //Component: loadingApplicationUpdateNotes
+            //
+            English.Add("loadingApplicationUpdateNotes", "Loading application update notes...");
+            Gernam.Add("loadingApplicationUpdateNotes", TranslationNeeded);
+            Polish.Add("loadingApplicationUpdateNotes", TranslationNeeded);
+            French.Add("loadingApplicationUpdateNotes", TranslationNeeded);
             #endregion
 
             #region Please Wait Window
