@@ -51,6 +51,8 @@ namespace RelhaxModpack
 
         public const string BetaDatabaseBranchesURL = "https://api.github.com/repos/Willster419/RelhaxModpackDatabase/branches";
 
+        public const string ManagerInfoURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat";
+
         //the config file version for saving the user's selection prefrences
         public const string ConfigFileVersion = "2.0";
         public const string ApplicationUpdateURL = "http://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";

@@ -596,7 +596,7 @@ namespace RelhaxModpack
                 {
                     if (File.Exists(Settings.ManagerInfoDatFile))
                         File.Delete(Settings.ManagerInfoDatFile);
-                    await client.DownloadFileTaskAsync("http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat", Settings.ManagerInfoDatFile);
+                    await client.DownloadFileTaskAsync(Settings.ManagerInfoURL, Settings.ManagerInfoDatFile);
 
                 }
                 catch (Exception e)
