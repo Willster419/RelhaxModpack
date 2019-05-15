@@ -1873,6 +1873,13 @@ namespace RelhaxModpack
                     LanguagesSelector.SelectedItem = Translations.LanguagePolish;
                     break;
             }
+
+            //apply beta database settings
+            if(ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Beta)
+            {
+                UseBetaDatabaseCB.IsChecked = true;
+                OnUseBetaDatabaseChanged(null, null);
+            }
         }
         #endregion
     }
