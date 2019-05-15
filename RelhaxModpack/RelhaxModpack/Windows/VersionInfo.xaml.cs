@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Net;
 
 namespace RelhaxModpack.Windows
 {
@@ -46,6 +47,19 @@ namespace RelhaxModpack.Windows
         {
             ConfirmUpdate = false;
             Close();
+        }
+
+        private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            //update the textbox with the latest version
+            ApplicationUpdateNotes.Text = Translations.GetTranslatedString("loadingApplicationUpdateNotes");
+            using (WebClient client = new WebClient())
+            {
+                Uri temp = new Uri((ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Stable) ?
+                    Settings.ApplicationNotesStableUrl : Settings.ApplicationNotesBetaUrl);
+                client.DownloadStringCompleted += (senderr, args) => { ApplicationUpdateNotes.Text = args.Result; };
+                client.DownloadStringAsync(temp);
+            }
         }
     }
 }
