@@ -498,6 +498,8 @@ namespace RelhaxModpack
                 Logging.Warning("You are running an alpha build of Relhax Modpack. Unless you knew you were running an alpha build, you shouldn't be running an alpha build!");
                 Logging.Warning("This version is most likely unstable and was used for testing, you should update to beta or stable as soon as possible!");
                 version = ApplicationVersions.Beta;
+                //at least let's set this for now, might want to unset it later after testing. at this point if you're running an alpha build you're being moved to beta
+                ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Beta;
             }
 
             //declare these out here so the logger can access them
