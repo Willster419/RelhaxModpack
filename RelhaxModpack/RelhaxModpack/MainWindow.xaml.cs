@@ -654,7 +654,7 @@ namespace RelhaxModpack
                 Application.Current.Shutdown();
             }
             //extract the batch script to update the application
-            string batchScript = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "RelicCopyUpdate.txt");
+            string batchScript = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, Settings.RelicBatchUpdateScriptServer);
             File.WriteAllText(Settings.RelicBatchUpdateScript, batchScript);
             //try to start the update script
             try

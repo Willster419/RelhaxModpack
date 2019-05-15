@@ -53,10 +53,11 @@ namespace RelhaxModpack
 
         //the config file version for saving the user's selection prefrences
         public const string ConfigFileVersion = "2.0";
-        public const string ApplicationUpdateURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";
-        public const string ApplicationBetaUpdateURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.zip";
+        public const string ApplicationUpdateURL = "http://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";
+        public const string ApplicationBetaUpdateURL = "http://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.zip";
         public const string ApplicationUpdateFileName = "RelhaxModpack_update.zip";
-        public const string RelicBatchUpdateScript = "RelicCopyUpdate.bat";
+        public const string RelicBatchUpdateScript = "relic_self_updater.bat";
+        public const string RelicBatchUpdateScriptServer = "relic_self_updater.txt";
 
         public const string SelectionsRoot = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/selection_files/";
         public const string SelectionsXml = "selections.xml";
