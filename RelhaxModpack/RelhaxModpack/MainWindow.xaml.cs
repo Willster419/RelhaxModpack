@@ -244,6 +244,12 @@ namespace RelhaxModpack
                     }
                 }
             }
+            //apply the title change for beta application and beta database
+            if (ModpackSettings.DatabaseDistroVersion != DatabaseVersions.Stable)
+                Title = string.Format("{0} ({1} DB)", Title, ModpackSettings.DatabaseDistroVersion.ToString());
+            if (ModpackSettings.ApplicationDistroVersion != ApplicationVersions.Stable)
+                Title = string.Format("{0} ({1} APP)", Title, ModpackSettings.ApplicationDistroVersion.ToString());
+
             //dispose of please wait here
             if (progressIndicator != null)
             {
