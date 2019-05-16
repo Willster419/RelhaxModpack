@@ -11,10 +11,10 @@
         <TextBlock x:Name="InstallingTo" HorizontalAlignment="Left" Margin="10,26,0,0" TextWrapping="Wrap" Text="Installing to: " VerticalAlignment="Top" Tag="InstallingTo"/>
         <TextBlock x:Name="InstallingAsWoTVersion" HorizontalAlignment="Left" Margin="10,42,0,0" TextWrapping="Wrap" Text="Installing as WoT version: " VerticalAlignment="Top" Tag="InstallingAsWoTVersion"/>
         <TabControl x:Name="ModTabGroups" HorizontalAlignment="Stretch" Margin="10,94,10,60" VerticalAlignment="Stretch" />
-        <Button x:Name="CollapseAllRealButton" HorizontalAlignment="Right" Margin="0,10,140,0" VerticalAlignment="Top" Width="125" Height="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+        <Button x:Name="CollapseAllRealButton" HorizontalAlignment="Right" Margin="0,10,140,0" VerticalAlignment="Top" Width="125" Height="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="CollapseAllRealButton_Click">
             <TextBlock x:Name="CollapseAllButton" Tag="CollapseAllButton" Text="Collapse current tab" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
-        <Button x:Name="ExpandAllRealButton" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="125" Height="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+        <Button x:Name="ExpandAllRealButton" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="125" Height="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="ExpandAllRealButton_Click">
             <TextBlock x:Name="ExpandAllButton" Tag="ExpandAllButton" Text="Expand current tab" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
         <TextBlock x:Name="SearchTB" HorizontalAlignment="Right" Margin="0,52,270,0" TextWrapping="Wrap" Text="Search for a mod..." VerticalAlignment="Top" Height="22" Width="251" TextAlignment="Right" Padding="3" Tag="SearchTB" />

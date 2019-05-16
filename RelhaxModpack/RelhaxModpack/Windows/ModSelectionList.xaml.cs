@@ -153,11 +153,12 @@ namespace RelhaxModpack.Windows
 
         private void TreeViewItem_Collapsed(object sender, RoutedEventArgs e)
         {
-            //trigger the colappsed such that itself is expanded but other elements are collapsed
+            e.Handled = true;
+            //trigger the collapsed such that itself is expanded but other elements are collapsed
             TreeViewItem rootItem = sender as TreeViewItem;
             RelhaxWPFCheckBox wpfCheckBox = rootItem.Header as RelhaxWPFCheckBox;
             SelectablePackage rootPackage = wpfCheckBox.Package as SelectablePackage;
-            //itterate to collapse each other item, then expand itself
+            //iterate to collapse each other item, then expand itself
             foreach (SelectablePackage package in rootPackage.Packages)
             {
                 if (package.TreeViewItem != null)
@@ -590,7 +591,7 @@ namespace RelhaxModpack.Windows
                     //MinWidth = 50,
                     //MaxWidth = 150,
                     //Width = 0
-                    
+                    Tag = cat
                 };
                 //make and attach the category header
                 cat.CategoryHeader = new SelectablePackage()
@@ -639,6 +640,7 @@ namespace RelhaxModpack.Windows
                         cat.CategoryHeader.TreeViewItem.IsExpanded = true;
                         //for root element, hook into expandable element
                         cat.CategoryHeader.TreeViewItem.Collapsed += TreeViewItem_Collapsed;
+                        cat.CategoryHeader.TreeViewItem.Expanded += (sender, e) => { e.Handled = true; };
                         //TODO BACKGROUND
                         RelhaxWPFCheckBox box = new RelhaxWPFCheckBox()
                         {
@@ -841,6 +843,9 @@ namespace RelhaxModpack.Windows
                         case SelectionView.Legacy:
                             //attach the UI component to the tree view
                             package.TreeViewItem.Header = package.UIComponent;
+                            //disable the recursive handling of expansions
+                            package.TreeViewItem.Expanded += (sender, e) => { e.Handled = true; };
+                            package.TreeViewItem.Collapsed += (sender, e) => { e.Handled = true; };
                             //expand the tree view item
                             package.TreeViewItem.IsExpanded = true;
                             //and add the treeviewitem to the stackpanel
@@ -1871,6 +1876,43 @@ namespace RelhaxModpack.Windows
                        .Any();
             if (exists)
                 Md5HashDocument.Descendants("file").Where(arg => arg.Attribute("filename").Value.Equals(inputFile)).Remove();
+        }
+        #endregion
+
+        #region Collapse and expand buttons
+        private void CollapseAllRealButton_Click(object sender, RoutedEventArgs e)
+        {
+            //get the category from the tag ref
+            TabItem openCategoryTab = ModTabGroups.SelectedItem as TabItem;
+            Category openCategory = openCategoryTab.Tag as Category;
+
+            //set the expanded property, it will trigger the method to collapse all but the root
+            //openCategory.CategoryHeader.TreeViewItem.IsExpanded = false;
+
+            //get a flat list to toggle
+            foreach (SelectablePackage package in openCategory.GetFlatPackageList())
+            {
+                //toggle them
+                if (package.TreeViewItem != null)
+                    if (package.TreeViewItem.IsExpanded)
+                        package.TreeViewItem.IsExpanded = false;
+            }
+        }
+
+        private void ExpandAllRealButton_Click(object sender, RoutedEventArgs e)
+        {
+            //get the category from the tag ref
+            TabItem openCategoryTab = ModTabGroups.SelectedItem as TabItem;
+            Category openCategory = openCategoryTab.Tag as Category;
+
+            //get a flat list to toggle
+            foreach (SelectablePackage package in openCategory.GetFlatPackageList())
+            {
+                //toggle them
+                if (package.TreeViewItem != null)
+                    if (!package.TreeViewItem.IsExpanded)
+                        package.TreeViewItem.IsExpanded = true;
+            }
         }
         #endregion
     }
