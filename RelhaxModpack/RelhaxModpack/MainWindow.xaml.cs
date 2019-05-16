@@ -248,7 +248,13 @@ namespace RelhaxModpack
             if (ModpackSettings.DatabaseDistroVersion != DatabaseVersions.Stable)
                 Title = string.Format("{0} ({1} DB)", Title, ModpackSettings.DatabaseDistroVersion.ToString());
             if (ModpackSettings.ApplicationDistroVersion != ApplicationVersions.Stable)
-                Title = string.Format("{0} ({1} APP)", Title, ModpackSettings.ApplicationDistroVersion.ToString());
+            {
+                //if it's real alpha, then put alpha
+                if(Settings.TrueAlpha)
+                    Title = string.Format("{0} ({1} APP)", Title, Settings.ApplicationVersion.ToString());
+                else
+                    Title = string.Format("{0} ({1} APP)", Title, ModpackSettings.ApplicationDistroVersion.ToString());
+            }
 
             //dispose of please wait here
             if (progressIndicator != null)
@@ -500,6 +506,11 @@ namespace RelhaxModpack
                 version = ApplicationVersions.Beta;
                 //at least let's set this for now, might want to unset it later after testing. at this point if you're running an alpha build you're being moved to beta
                 ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Beta;
+            }
+            else if (version == ApplicationVersions.Alpha && File.Exists("RelhaxModpack.xml"))
+            {
+                Logging.Debug("TRUE alpha detected");
+                Settings.TrueAlpha = true;
             }
 
             //declare these out here so the logger can access them

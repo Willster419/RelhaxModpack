@@ -74,6 +74,8 @@ namespace RelhaxModpack
         /// </summary>
         public const ApplicationVersions ApplicationVersion = ApplicationVersions.Alpha;
 
+        public static bool TrueAlpha = false;
+
         public static readonly string RelhaxDownloadsFolder = Path.Combine(ApplicationStartupPath, "RelhaxDownloads");
 
         public static readonly string RelhaxModBackupFolder = Path.Combine(ApplicationStartupPath, "RelhaxModBackup");
