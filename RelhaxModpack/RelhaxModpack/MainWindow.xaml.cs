@@ -1883,6 +1883,7 @@ namespace RelhaxModpack
             MinimizeToSystemTray.IsChecked = ModpackSettings.MinimizeToSystemTray;
             if(!string.IsNullOrWhiteSpace(ModpackSettings.AutoOneclickSelectionFilePath))
                 AutoInstallOneClickInstallSelectionFilePath.Text = ModpackSettings.AutoOneclickSelectionFilePath;
+
             //setup the languages selector
             switch(ModpackSettings.Language)
             {
@@ -1897,6 +1898,18 @@ namespace RelhaxModpack
                     break;
                 case Languages.Polish:
                     LanguagesSelector.SelectedItem = Translations.LanguagePolish;
+                    break;
+            }
+
+            //setup the selection view
+            switch(ModpackSettings.ModSelectionView)
+            {
+                case SelectionView.DefaultV2:
+                    SelectionDefault.IsChecked = true;
+                    break;
+
+                case SelectionView.Legacy:
+                    SelectionLegacy.IsChecked = true;
                     break;
             }
 
