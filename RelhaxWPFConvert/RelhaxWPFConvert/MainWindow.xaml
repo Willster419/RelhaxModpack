@@ -123,5 +123,10 @@
                 <Image x:Name="TestImageDisplay" HorizontalAlignment="Left" Height="100" Margin="10,60,0,0" VerticalAlignment="Top" Width="100"/>
             </Grid>
         </TabItem>
+        <TabItem Header="N Audio Test">
+            <Grid Background="#FFE5E5E5">
+                <Button x:Name="LoadNAudio" Content="Load N Audio" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="83" Click="LoadNAudio_Click"/>
+            </Grid>
+        </TabItem>
     </TabControl>
 </Window>

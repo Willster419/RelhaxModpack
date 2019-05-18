@@ -13,8 +13,10 @@ using TeximpNet.DDS;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Net;
 using TeximpNet;
 using TeximpNet.Compression;
+using NAudio.Wave;
 
 namespace RelhaxWPFConvert
 {
@@ -333,6 +335,20 @@ namespace RelhaxWPFConvert
             IsDialogReturnedButton.Text = "The dialog has returned";
             testSubWindow.WindowState = WindowState.Normal;
             //testSubWindow.Show();
+        }
+
+        private async void LoadNAudio_Click(object sender, RoutedEventArgs e)
+        {
+            string url = "http://bigmods.relhaxmodpack.com/Medias/Audio/6th_Sense/relhax_spotted_4.wav";
+            string extension = Path.GetExtension(url);
+            using (WebClient client = new WebClient())
+            using (MemoryStream audioStream = new MemoryStream(await client.DownloadDataTaskAsync(url)))
+            using (WaveFileReader reader = new WaveFileReader(audioStream))
+            using (WaveOutEvent wo = new WaveOutEvent())
+            {
+                wo.Init(reader);
+                wo.Play();
+            }
         }
     }
 }
