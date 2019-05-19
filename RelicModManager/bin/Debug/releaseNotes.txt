@@ -1,3 +1,9 @@
+Version 0.28.2.19 (05/18/2019)
+https://www.virustotal.com/#/file/67aadc24d5e400b5e6f2ac3cd6529fa5130617e93ec8c0b4ec90ced81b2969f1/detection
+-Fixed the bug of advanced settings window not sizing properly
+-Fixed issues with audio type previews (like 6th sense audio files)
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 0.28.2.18 (01/23/2019)
 https://www.virustotal.com/#/file/924157d54f0e4501686bf0f9fb479e1aecb4b794fba37f5796daafd69ab6433c/detection
 -Fixed a bug in default view when using DarkUI, the drop down options would not show properly
