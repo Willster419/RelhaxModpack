@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Xml;
 using Microsoft.Win32;
 using RelhaxModpack.UIComponents;
+using RelhaxModpack.DatabaseComponents;
 using System.Net;
 using Path = System.IO.Path;
 
@@ -1648,10 +1649,16 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show("Invalid logic selection");
                 return;
             }
-            if (SelectedItem is Dependency dependency)
+            DatabasePackage package = SelectedItem as DatabasePackage;
+            //get it out of the editor combobox item first
+            if(SelectedItem is EditorComboBoxItem editorComboBoxItem)
+            {
+                package = editorComboBoxItem.Package;
+            }
+            if (package is IDatabaseLogic logicalPackage)
             {
                 //check the list of databaselogic in the item, make sure we're not trying to add a duplicate item
-                foreach (DatabaseLogic logic in dependency.Dependencies)
+                foreach (DatabaseLogic logic in logicalPackage.DependenciesProp)
                 {
                     if (logic.PackageName.Equals((LoadedDependenciesList.SelectedItem as Dependency).PackageName))
                     {
@@ -1659,7 +1666,7 @@ namespace RelhaxModpack.Windows
                         return;
                     }
                 }
-                dependency.Dependencies.Add(new DatabaseLogic()
+                logicalPackage.DependenciesProp.Add(new DatabaseLogic()
                 {
                     PackageName = (LoadedDependenciesList.SelectedItem as Dependency).PackageName,
                     Logic = (Logic)LoadedLogicsList.SelectedItem,
@@ -1667,24 +1674,18 @@ namespace RelhaxModpack.Windows
                 }
                 );
             }
-            else if (SelectedItem is SelectablePackage selectablePackage)
+            else
             {
-                //check the list of databaselogic in the item, make sure we're not trying to add a duplicate item
-                foreach (DatabaseLogic logic in selectablePackage.Dependencies)
-                {
-                    if (logic.PackageName.Equals((LoadedDependenciesList.SelectedItem as Dependency).PackageName))
-                    {
-                        MessageBox.Show("Dependency already exists in package");
-                        return;
-                    }
-                }
-                selectablePackage.Dependencies.Add(new DatabaseLogic()
-                {
-                    PackageName = (LoadedDependenciesList.SelectedItem as Dependency).PackageName,
-                    Logic = (Logic)LoadedLogicsList.SelectedItem,
-                    NotFlag = (bool)DependenciesNotFlag.IsChecked
-                }
-                );
+                Logging.Error("SelectedItem is invalid type: {0}", SelectedItem.GetType().ToString());
+                return;
+            }
+
+            //update the UI
+            PackageDependenciesDisplay.Items.Clear();
+            if(package is IDatabaseLogic)
+            {
+                foreach (DatabaseLogic logic in logicalPackage.DependenciesProp)
+                    PackageDependenciesDisplay.Items.Add(logic);
             }
         }
 
@@ -1696,6 +1697,8 @@ namespace RelhaxModpack.Windows
             LoadedLogicsList.SelectedItem = selectedLogic.Logic;
             DependenciesNotFlag.IsChecked = selectedLogic.NotFlag;
             LoadedDependenciesList.SelectedIndex = -1;
+
+            //check if it exits in the list of all loaded dependencies (it should) and if it does select it
             foreach (Dependency dependency in LoadedDependenciesList.Items)
             {
                 if (dependency.PackageName.Equals(selectedLogic.PackageName))
@@ -1708,7 +1711,15 @@ namespace RelhaxModpack.Windows
 
         private void DependenciesRemoveSelected_Click(object sender, RoutedEventArgs e)
         {
+            //remove the selected item from the UI display
             PackageDependenciesDisplay.Items.Remove(PackageDependenciesDisplay.SelectedItem);
+
+            //remove it from the list of logics/dependencies of the selected item
+            DatabasePackage package = (SelectedItem as EditorComboBoxItem).Package;
+            if(package is IDatabaseLogic packageLogic)
+            {
+                packageLogic.DependenciesProp.Remove(PackageDependenciesDisplay.SelectedItem as DatabaseLogic);
+            }
         }
 
         private void MediaAddMediaButton_Click(object sender, RoutedEventArgs e)
