@@ -257,7 +257,7 @@ namespace RelhaxWPFConvert
                     Marshal.Copy(surface.DataPtr, managedArrayy, 0, size);
                     BitmapSource source = BitmapSource.Create(surface.Width, surface.Height, 96.0, 96.0, PixelFormats.Bgra32, null, managedArrayy, surface.Pitch);
                     bmp = BitmapFromSource(source);
-                    TestImageDisplay.Source = source;
+                    //TestImageDisplay.Source = source;
                 }
 
                 bmp.Save("damageIndicator.png", System.Drawing.Imaging.ImageFormat.Png);

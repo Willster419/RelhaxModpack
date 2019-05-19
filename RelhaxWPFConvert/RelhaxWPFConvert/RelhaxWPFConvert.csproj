@@ -59,6 +59,9 @@
     <Reference Include="NAudio, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NAudio.1.9.0\lib\net35\NAudio.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
@@ -95,30 +98,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="GlobalProgressBarTest.xaml.cs">
-      <DependentUpon>GlobalProgressBarTest.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="StretchingTreeViewItem.cs" />
     <Compile Include="RelhaxCheckBox.xaml.cs">
       <DependentUpon>RelhaxCheckBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="stretchtreeview.xaml.cs">
-      <DependentUpon>stretchtreeview.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SubWindow.cs" />
-    <Compile Include="TabviewTesting.xaml.cs">
-      <DependentUpon>TabviewTesting.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="test.cs" />
+    <Compile Include="StretchingTreeView.cs" />
     <Compile Include="TestSubWindow.xaml.cs">
       <DependentUpon>TestSubWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="wrapPanelTest.xaml.cs">
-      <DependentUpon>wrapPanelTest.xaml</DependentUpon>
-    </Compile>
-    <Page Include="GlobalProgressBarTest.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -131,19 +119,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="OMCViewTesting.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="RelhaxCheckBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="stretchtreeview.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="TabviewTesting.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -151,15 +127,8 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="wrapPanelTest.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OMCViewTesting.xaml.cs">
-      <DependentUpon>OMCViewTesting.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
