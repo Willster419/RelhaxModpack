@@ -47,7 +47,7 @@ namespace RelhaxModpack
             }
 
             //macro parsing needs to go here
-            Logging.Info(p.DumpPatchInfoForLog,Logfiles.Application);
+            Logging.Info(p.DumpPatchInfoForLog);
 
             //actually run the patches based on what type it is
             switch (p.Type.ToLower())
@@ -285,22 +285,24 @@ namespace RelhaxModpack
         private static void RegxPatch(Patch p, int[] lines)
         {
             //replace all "fake escape characters" with real escape characters
-            //TODO: fix newlines and add warning for search and replace
-            p.Search = p.Search.Replace(@"\n", "newline");
-            p.Search = p.Search.Replace(@"\r", "\r");
-            p.Search = p.Search.Replace(@"\t", "\t");
+            p.Search = Utils.MacroReplace(p.Search, ReplacementTypes.TextUnescape);
 
-            Logging.Debug("TODO: fixed macro replace system");
-            //p.Search = Utils.MacroReplace(p.Search, ReplacementTypes.TextUnescape);
+            //legacy compatibility: if the replace text has "newline", then replace it with "\n" and log the warning
+            if(p.Replace.Contains("newline"))
+            {
+                Logging.Warning("This patch has the \"newline\" replace syntax and should be updated");
+                p.Replace = p.Replace.Replace("newline", "\n");
+            }
 
-            //load file from disk...
+            //load file from disk
             string file = File.ReadAllText(p.CompletePath);
+
             //parse each line into an index array
             string[] fileParsed = file.Split('\n');
             StringBuilder sb = new StringBuilder();
             try
             {
-                if (lines == null)
+                if (lines == null || lines.Count() == 0)
                 {
                     //search entire file and replace each instance
                     bool everReplaced = false;
@@ -310,33 +312,31 @@ namespace RelhaxModpack
                         {
                             Logging.Debug("line {0} matched ({1})", i + 1, fileParsed[i]);
                             fileParsed[i] = Regex.Replace(fileParsed[i], p.Search, p.Replace);
-                            fileParsed[i] = Regex.Replace(fileParsed[i], "newline", "\n");
-                            //fileParsed[i] = Regex.Replace(fileParsed[i], @"\n", "\n");
                             everReplaced = true;
                         }
+                        //we split by \n so put it back in by \n
                         sb.Append(fileParsed[i] + "\n");
                     }
                     if (!everReplaced)
                     {
-                        Logging.WriteToLog("Regex never matched", Logfiles.Application, LogLevel.Warning);
+                        Logging.Warning("Regex never matched");
                         return;
                     }
                 }
                 else if (lines.Count() == 1 && lines[0] == -1)
-                //search entire file and string and make one giant regex replacement
                 {
+                    //search entire file and string and make one giant regex replacement
                     //but remove newlines first
                     file = Regex.Replace(file, "\n", "newline");
                     if (Regex.IsMatch(file, p.Search))
                     {
                         file = Regex.Replace(file, p.Search, p.Replace);
                         file = Regex.Replace(file, "newline", "\n");
-                        //file = Regex.Replace(file, @"\n", "\n");
                         sb.Append(file);
                     }
                     else
                     {
-                        Logging.WriteToLog("Regex match not found", Logfiles.Application, LogLevel.Warning);
+                        Logging.Warning("Regex never matched");
                         return;
                     }
                 }
@@ -353,7 +353,6 @@ namespace RelhaxModpack
                                 Logging.Debug("line {0} matched ({1})", i + 1, fileParsed[i]);
                                 fileParsed[i] = Regex.Replace(fileParsed[i], p.Search, p.Replace);
                                 fileParsed[i] = Regex.Replace(fileParsed[i], "newline", "\n");
-                                //fileParsed[i] = Regex.Replace(fileParsed[i], @"\n", "\n");
                                 everReplaced = true;
                             }
                         }
@@ -361,16 +360,17 @@ namespace RelhaxModpack
                     }
                     if (!everReplaced)
                     {
-                        Logging.WriteToLog("Regex never matched", Logfiles.Application, LogLevel.Warning);
+                        Logging.Warning("Regex never matched");
                         return;
                     }
                 }
             }
             catch (ArgumentException ex)
             {
-                Logging.WriteToLog("Invalid regex command", Logfiles.Application, LogLevel.Error);
+                Logging.Error("Invalid regex command");
                 Logging.Debug(ex.ToString());
             }
+
             //save the file back into the string and then the file
             file = sb.ToString();
             File.WriteAllText(p.CompletePath, file);
