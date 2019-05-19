@@ -64,6 +64,7 @@ namespace RelhaxModpack
         };
         public static Dictionary<string, string> TextUnscapeDict = new Dictionary<string, string>()
         {
+            //ORDER MATTERS
             {@"\n", "\n" },
             {@"\r", "\r" },
             {@"\t", "\t" },
@@ -72,6 +73,7 @@ namespace RelhaxModpack
         };
         public static Dictionary<string, string> TextEscapeDict = new Dictionary<string, string>()
         {
+            //ORDER MATTERS
             {"\n", @"\n" },
             {"\r", @"\r" },
             {"\t", @"\t" }
