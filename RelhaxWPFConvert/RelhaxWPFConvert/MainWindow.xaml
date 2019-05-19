@@ -53,7 +53,6 @@
                     <TreeView HorizontalAlignment="Left" Height="100" Margin="515,10,0,0" VerticalAlignment="Top" Width="159">
                         <TreeViewItem x:Name="headerModifyTest" Header="Test"/>
                     </TreeView>
-                    <Button Content="Button" HorizontalAlignment="Left" Margin="515,115,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
                     <ComboBox HorizontalAlignment="Left" Margin="515,140,0,0" VerticalAlignment="Top" Width="159">
                         <local:MediaType>Picture</local:MediaType>
                         <local:MediaType>Webpage</local:MediaType>
@@ -167,6 +166,11 @@
                 <GroupBox Header="NAudio" HorizontalAlignment="Left" Height="100" Margin="561,10,0,0" VerticalAlignment="Top" Width="215">
                     <Grid >
                         <Button x:Name="LoadNAudio" Content="Load N Audio" HorizontalAlignment="Left" VerticalAlignment="Top" Width="96" Click="LoadNAudio_Click" Margin="10,10,0,0"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Json Test" HorizontalAlignment="Left" Height="63" Margin="351,194,0,0" VerticalAlignment="Top" Width="205">
+                    <Grid>
+                        <Button x:Name="JsonTest" Content="Test Json" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="JsonTest_Click"/>
                     </Grid>
                 </GroupBox>
                 <GroupBox Header="Task stuff" HorizontalAlignment="Left" Height="100" Margin="10,10,0,0" VerticalAlignment="Top" Width="546">

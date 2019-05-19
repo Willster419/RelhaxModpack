@@ -17,6 +17,8 @@ using System.Net;
 using TeximpNet;
 using TeximpNet.Compression;
 using NAudio.Wave;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace RelhaxWPFConvert
 {
@@ -38,21 +40,16 @@ namespace RelhaxWPFConvert
             InitializeComponent();
         }
 
-        private void CheckBox_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void CheckBox_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
-        {
-
-        }
+        #region Hit testing
 
         private void ScrollViewer_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
             Point pt = e.GetPosition((UIElement)sender);
             HitTestResult result = VisualTreeHelper.HitTest((UIElement)sender,pt);
         }
+        #endregion
+
+        #region Right click preview testing
 
         private void ContentControl_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
@@ -66,12 +63,25 @@ namespace RelhaxWPFConvert
 
         private void Grid_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            
+
         }
+
+        private void CheckBox_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void CheckBox_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+        #endregion
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            //checkbox testing
             testBox1.CheckboxDisabledColor = Colors.Green;
+
         }
 
         #region Task Reporting
@@ -210,12 +220,6 @@ namespace RelhaxWPFConvert
         }
         #endregion
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            headerModifyTest.Header = "VALUE";
-        }
-
-
         #region Bitmap DDS testing
 
         private void DdsToBitmap_Click(object sender, RoutedEventArgs e)
@@ -308,7 +312,8 @@ namespace RelhaxWPFConvert
         }
         #endregion
 
-        #region dialog not blocking
+        #region Dialog not blocking
+
         private void DialogNotBlocksButton_Click(object sender, RoutedEventArgs e)
         {
             IsDialogReturnedButton.Text = "The dialog has not returned";
@@ -321,8 +326,7 @@ namespace RelhaxWPFConvert
             testSubWindow.WindowState = WindowState.Normal;
             testSubWindow.Show();
         }
-        #endregion
-
+        
         private void DialogBlocksButton_Click(object sender, RoutedEventArgs e)
         {
             IsDialogReturnedButton.Text = "The dialog has not returned";
@@ -336,6 +340,9 @@ namespace RelhaxWPFConvert
             testSubWindow.WindowState = WindowState.Normal;
             //testSubWindow.Show();
         }
+        #endregion
+
+        #region NAudio Testing to load from URL and pass in stream
 
         private async void LoadNAudio_Click(object sender, RoutedEventArgs e)
         {
@@ -350,5 +357,18 @@ namespace RelhaxWPFConvert
                 wo.Play();
             }
         }
+        #endregion
+
+        #region JsonNet Testing with loading and keeping comments
+
+        private void JsonTest_Click(object sender, RoutedEventArgs e)
+        {
+            JsonLoadSettings settings = new JsonLoadSettings();
+            settings.CommentHandling = CommentHandling.Load;
+            settings.LineInfoHandling = LineInfoHandling.Load;
+            JObject objectt = JObject.Parse(File.ReadAllText("jsonWithCustomFormattingAndComments.json"),settings);
+
+        }
+        #endregion
     }
 }
