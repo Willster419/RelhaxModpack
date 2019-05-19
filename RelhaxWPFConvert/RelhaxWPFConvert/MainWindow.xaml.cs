@@ -363,11 +363,19 @@ namespace RelhaxWPFConvert
 
         private void JsonTest_Click(object sender, RoutedEventArgs e)
         {
-            JsonLoadSettings settings = new JsonLoadSettings();
-            settings.CommentHandling = CommentHandling.Load;
-            settings.LineInfoHandling = LineInfoHandling.Load;
-            JObject objectt = JObject.Parse(File.ReadAllText("jsonWithCustomFormattingAndComments.json"),settings);
+            JsonLoadSettings settings = new JsonLoadSettings
+            {
+                CommentHandling = CommentHandling.Load,
+                LineInfoHandling = LineInfoHandling.Load
+            };
+            string JsonFromFile = File.ReadAllText("input.json");
+            //Parse() does not keep comments
+            JToken objectt = JToken.Parse(JsonFromFile,settings);
 
+            //output
+            string newJson = objectt.ToString(Formatting.Indented, null);
+            //toString() will now allow for output of previous formatting
+            File.WriteAllText("output.json", newJson);
         }
         #endregion
     }
