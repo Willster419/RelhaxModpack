@@ -97,11 +97,20 @@ namespace RelhaxModpack.Windows
 
         private void RelhaxWindow_Closed(object sender, EventArgs e)
         {
+            //close and dispose preview
             if (p != null)
             {
                 p.Close();
                 p = null;
             }
+
+            //save width and height settings
+            if (WindowState == WindowState.Maximized)
+                ModpackSettings.ModSelectionFullscreen = true;
+            else if (WindowState == WindowState.Normal)
+                ModpackSettings.ModSelectionFullscreen = false;
+            ModpackSettings.ModSelectionHeight = (int)Height;
+            ModpackSettings.ModSelectionWidth = (int)Width;
 
             if (OnSelectionListReturn != null)
             {
@@ -509,6 +518,11 @@ namespace RelhaxModpack.Windows
                     //like hook up the flashing timer
                     FlashTimer.Tick += OnFlastTimerTick;
 
+                    //set the selection window width, height
+                    Width = ModpackSettings.ModSelectionWidth;
+                    Height = ModpackSettings.ModSelectionHeight;
+
+
                     //close the loading window and show this one
                     loadingProgress.Close();
                     loadingProgress = null;
@@ -516,9 +530,9 @@ namespace RelhaxModpack.Windows
                     //set the loading flag back to false
                     LoadingUI = false;
 
-                    //show the UI for selection list
+                    //show the UI for selection list, and if should be fullscreen or not
                     this.Show();
-                    this.WindowState = WindowState.Normal;
+                    this.WindowState = ModpackSettings.ModSelectionFullscreen? WindowState.Maximized: WindowState.Normal;
                 });
                 return true;
             });
