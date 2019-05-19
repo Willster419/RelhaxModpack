@@ -41,15 +41,26 @@
                 {
                     case "regex":
                     case "regx":
-                        return string.Format("regex patch, {0}={1}, {2}={3}, {4}={5}, {6}={7}, {8}={9}", nameof(PatchPath), PatchPath,
-                            nameof(File), File, nameof(Lines), Lines == null ? "null" : string.Join(",",Lines), nameof(Search), Search,
+                        return string.Format("regex patch, {0}={1}, {2}={3}, {4}={5}, {6}={7}, {8}={9}",
+                            nameof(PatchPath), PatchPath,
+                            nameof(File), File,
+                            nameof(Lines), Lines == null ? "null" : string.Join(",",Lines),
+                            nameof(Search), Search,
                             nameof(Replace), Replace);
                     case "xml":
-                        return string.Format("xml patch, {0}={1}, {2}={3}, {4}={5}, {6}={7}, {8}={9}", nameof(PatchPath), PatchPath,
-                            nameof(File), File, nameof(Path), Path, nameof(Search), Search, nameof(Replace), Replace);
+                        return string.Format("xml patch, {0}={1}, {2}={3}, {4}={5}, {6}={7}, {8}={9}",
+                            nameof(PatchPath), PatchPath,
+                            nameof(File), File,
+                            nameof(Path), Path,
+                            nameof(Search), Search,
+                            nameof(Replace), Replace);
                     case "json":
-                        return string.Format("json patch, {0}={1}, {2}={3}, {4}={5}, {6}={7}, {8}={9}", nameof(PatchPath), PatchPath,
-                            nameof(File), File, nameof(Path), Path, nameof(Search), Search,  nameof(Replace), Replace);
+                        return string.Format("json patch, {0}={1}, {2}={3}, {4}={5}, {6}={7}, {8}={9}",
+                            nameof(PatchPath), PatchPath,
+                            nameof(File), File,
+                            nameof(Path), Path,
+                            nameof(Search), Search,
+                            nameof(Replace), Replace);
                     default:
                         return string.Format("ERROR: unknown type: {0}",Type);
                 }
