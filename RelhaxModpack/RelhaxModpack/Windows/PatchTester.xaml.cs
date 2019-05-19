@@ -373,12 +373,6 @@ namespace RelhaxModpack.Windows
                 return;
             }
             patchToTest.Type = PatchTypeCombobox.SelectedItem as string;
-            //check if path/lines is valid (has string values)
-            if (string.IsNullOrWhiteSpace(PatchLinesPathTextbox.Text))
-            {
-                Logging.Info("invalid patch path or lines");
-                return;
-            }
             //check patch mode
             switch (patchToTest.Type)
             {
@@ -391,10 +385,17 @@ namespace RelhaxModpack.Windows
                         return;
                     }
                     //set the lines
-                    patchToTest.Lines = PatchLinesPathTextbox.Text.Split(',');
+                    if(!string.IsNullOrWhiteSpace(PatchLinesPathTextbox.Text))
+                        patchToTest.Lines = PatchLinesPathTextbox.Text.Split(',');
                     break;
                 case "xml":
-                    if(!validXmlModes.Contains(PatchModeCombobox.SelectedItem as string))
+                    //check if path/lines is valid (has string values)
+                    if (string.IsNullOrWhiteSpace(PatchLinesPathTextbox.Text))
+                    {
+                        Logging.Info("invalid patch path or lines");
+                        return;
+                    }
+                    if (!validXmlModes.Contains(PatchModeCombobox.SelectedItem as string))
                     {
                         Logging.Info("Type=xml, invalid patch type: {0}", PatchModeCombobox.SelectedItem as string);
                         Logging.Info("valid types are: {0}",string.Join(",",validXmlModes));
@@ -403,6 +404,12 @@ namespace RelhaxModpack.Windows
                     patchToTest.Path = PatchLinesPathTextbox.Text;
                     break;
                 case "json":
+                    //check if path/lines is valid (has string values)
+                    if (string.IsNullOrWhiteSpace(PatchLinesPathTextbox.Text))
+                    {
+                        Logging.Info("invalid patch path or lines");
+                        return;
+                    }
                     if (!validJsonModes.Contains(PatchModeCombobox.SelectedItem as string))
                     {
                         Logging.Info("Type=json, invalid patch type: {0}", PatchModeCombobox.SelectedItem as string);
@@ -412,7 +419,7 @@ namespace RelhaxModpack.Windows
                     patchToTest.Path = PatchLinesPathTextbox.Text;
                     break;
                 default:
-                    throw new BadMemeException("congratulations you have autism");
+                    throw new BadMemeException("invalid patch type, but you should probably make this a enum not strings");
             }
             patchToTest.Mode = PatchModeCombobox.SelectedItem as string;
             //check followPath true ONLY for json
