@@ -1,4 +1,7 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.IO;
+using System.Windows.Forms;
+using System.Net;
 using NAudio.Wave;
 
 namespace RelhaxModpack
@@ -6,8 +9,12 @@ namespace RelhaxModpack
     public partial class RelhaxMediaPlayer : UserControl
     {
         private Timer UITimer = new Timer();
-        IWavePlayer waveOutDevice = new WaveOut();
-        MediaFoundationReader audioFileReader2;
+        private WaveOut waveOutDevice = new WaveOut();
+        private Mp3FileReader mp3FileReader;
+        private WaveFileReader waveFileReader;
+        private WaveStream audioFileReader;
+        private WebClient client;
+        private MemoryStream audioStream;
         public string MediaURL;        
         public string StopText
         {
@@ -46,8 +53,8 @@ namespace RelhaxModpack
         {
             if (waveOutDevice.PlaybackState != PlaybackState.Playing)
                 Stop_Click(null,null);
-            if(Seekbar.Minimum <= audioFileReader2.CurrentTime.TotalMilliseconds && audioFileReader2.CurrentTime.TotalMilliseconds <= Seekbar.Maximum)
-                Seekbar.Value = (int)audioFileReader2.CurrentTime.TotalMilliseconds;
+            if(Seekbar.Minimum <= audioFileReader.CurrentTime.TotalMilliseconds && audioFileReader.CurrentTime.TotalMilliseconds <= Seekbar.Maximum)
+                Seekbar.Value = (int)audioFileReader.CurrentTime.TotalMilliseconds;
         }
 
         private void Volume_Scroll(object sender, System.EventArgs e)
@@ -79,7 +86,7 @@ namespace RelhaxModpack
             //set the seekbar UI value to the scrolled location
             double newPos = Seekbar.Maximum * seekPos;
             Seekbar.Value = (int)newPos;
-            audioFileReader2.CurrentTime = new System.TimeSpan(0, 0, 0, 0, Seekbar.Value);
+            audioFileReader.CurrentTime = new System.TimeSpan(0, 0, 0, 0, Seekbar.Value);
         }
 
         private void Stop_Click(object sender, System.EventArgs e)
@@ -87,7 +94,7 @@ namespace RelhaxModpack
             waveOutDevice.Stop();
             UITimer.Stop();
             Seekbar.Value = 0;
-            audioFileReader2.Position = 0;
+            audioFileReader.Position = 0;
         }
 
         private void PlayPause_Click(object sender, System.EventArgs e)
@@ -106,17 +113,33 @@ namespace RelhaxModpack
             }
         }
 
-        private void RelhaxMediaPlayer_Load(object sender, System.EventArgs e)
+        private void RelhaxMediaPlayer_Load(object sender, EventArgs e)
         {
             //init
             FileName.Text = "LOADING";
             Application.DoEvents();
-            audioFileReader2 = new MediaFoundationReader(MediaURL);
-            waveOutDevice.Init(audioFileReader2);
+            //download to steam
+            client = new WebClient();
+            audioStream = new MemoryStream(client.DownloadData(MediaURL));
+            //check if wave or mp3
+            switch (Path.GetExtension(MediaURL).ToLower())
+            {
+                case ".mp3":
+                    mp3FileReader = new Mp3FileReader(audioStream);
+                    audioFileReader = mp3FileReader;
+                    break;
+                case ".wav":
+                    waveFileReader = new WaveFileReader(audioStream);
+                    audioFileReader = waveFileReader;
+                    break;
+                default:
+                    throw new NotSupportedException("wave and mp3 only k thanks");
+            }
+            waveOutDevice.Init(audioFileReader);
             waveOutDevice.Stop();
             //https://stackoverflow.com/questions/10371741/naudio-seeking-and-navigation-to-play-from-the-specified-position
-            Seekbar.Maximum = (int)audioFileReader2.TotalTime.TotalMilliseconds;
-            FileName.Text = System.IO.Path.GetFileName(MediaURL);
+            Seekbar.Maximum = (int)audioFileReader.TotalTime.TotalMilliseconds;
+            FileName.Text = Path.GetFileName(MediaURL);
             //start volume at 50 percent
             Volume.Value = 5;
             waveOutDevice.Volume = 0.5f;
