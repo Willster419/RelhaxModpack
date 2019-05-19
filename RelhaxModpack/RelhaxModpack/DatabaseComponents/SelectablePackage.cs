@@ -1,4 +1,5 @@
 ﻿using RelhaxModpack.UIComponents;
+using RelhaxModpack.DatabaseComponents;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -24,7 +25,7 @@ namespace RelhaxModpack
     /// <summary>
     /// A package that has UI elements, and is eithor a mod or config that can be selected in the UI
     /// </summary>
-    public class SelectablePackage : DatabasePackage
+    public class SelectablePackage : DatabasePackage, IDatabaseLogic
     {
         #region XML Parsing
 
@@ -284,11 +285,12 @@ namespace RelhaxModpack
         /// </summary>
         public List<Media> Medias = new List<Media>();
 
-        //list of dependnecys this package calls for
         /// <summary>
         /// A list of packages (from dependencies list) that this package is dependent on in order to be installed
         /// </summary>
         public List<DatabaseLogic> Dependencies = new List<DatabaseLogic>();
+
+        public List<DatabaseLogic> DependenciesProp { get { return Dependencies; } set { Dependencies = value; } }
 
         /// <summary>
         /// A list of any SelectablePackages that conflict with this mod. A conflict will result the package not being processed.

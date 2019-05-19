@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using RelhaxModpack.UIComponents;
+using RelhaxModpack.DatabaseComponents;
 using System.Windows.Controls;
 using System;
 
@@ -8,7 +9,7 @@ namespace RelhaxModpack
     /// <summary>
     /// a catagory is what makes up each tab in the mod selection dislpay window. It holds the first level of list of SelectablePackages
     /// </summary>
-    public class Category
+    public class Category : IDatabaseLogic
     {
         #region Database Properties
 
@@ -36,6 +37,8 @@ namespace RelhaxModpack
 
         //list of dependencies required if anything is selected from this catagory
         public List<DatabaseLogic> Dependencies = new List<DatabaseLogic>();
+
+        public List<DatabaseLogic> DependenciesProp { get  { return Dependencies; } set { Dependencies = value; } }
         #endregion
 
         #region Other Properties and Methods

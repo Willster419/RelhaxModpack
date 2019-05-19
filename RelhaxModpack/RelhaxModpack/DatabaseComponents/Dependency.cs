@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System;
+using RelhaxModpack.DatabaseComponents;
 
 namespace RelhaxModpack
 {
     //a dependency is a zip file like mod that is required for any of the mods to work
     //i.e. and sound mods require the sound memory to be increased
-    public class Dependency : DatabasePackage
+    public class Dependency : DatabasePackage, IDatabaseLogic
     {
         #region XML parsing
 
@@ -34,6 +35,8 @@ namespace RelhaxModpack
 
         //list of dependnecies this dependency calls on
         public List<DatabaseLogic> Dependencies = new List<DatabaseLogic>();
+
+        public List<DatabaseLogic> DependenciesProp { get { return Dependencies; } set { Dependencies = value; } }
 
         //legacy compatibility feature: set this for when loading from legacy database type and is was of type "logicalDependency"
         public bool wasLogicalDependencyLegacy = false;
