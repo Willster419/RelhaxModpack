@@ -94,160 +94,192 @@ namespace RelhaxModpack
         #region XML
         private static void XMLPatch(Patch p)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(p.CompletePath);
+            //load the xml document
+            XmlDocument doc = XMLUtils.LoadXmlDocument(p.CompletePath,XmlLoadType.FromFile);
+            if (doc == null)
+            {
+                Logging.Error("xml document from xml path is null");
+                return;
+            }
+
             //check to see if it has the header info at the top to see if we need to remove it later
             bool hadHeader = false;
-            XmlDocument doc3 = new XmlDocument();
-            doc3.Load(p.CompletePath);
-            foreach (XmlNode node in doc3)
+            string xmlDec = string.Empty;
+            foreach (XmlNode node in doc)
             {
                 if (node.NodeType == XmlNodeType.XmlDeclaration)
                 {
                     hadHeader = true;
+                    xmlDec = node.OuterXml;
                     break;
                 }
             }
-            //determines which version of pathing will be done
-            switch (p.Mode)
+
+            //determines which version of patching will be done
+            switch (p.Mode.ToLower())
             {
                 case "add":
                     //check to see if it's already there
                     //make the full node path
-                    Logging.Debug("checking if xml element to add alreay exists, creating full xml path");
-                    string[] tempp = p.Replace.Split('/');
+                    Logging.Debug("checking if xml element to add already exists, creating full xml path");
+
+                    //the add syntax works by using "/" as the node creation path. the last one is the value to put in
+                    //there should therefore be at least 2 split element array
+                    string[] replacePathSplit = p.Replace.Split('/');
+
+                    //join the base path with the "would-be" path of the new element to add
                     string fullNodePath = p.Path;
-                    for (int i = 0; i < tempp.Count() - 1; i++)
+                    for (int i = 0; i < replacePathSplit.Count() - 1; i++)
                     {
-                        fullNodePath = fullNodePath + "/" + tempp[i];
+                        fullNodePath = fullNodePath + "/" + replacePathSplit[i];
                     }
+
                     //in each node check if the element exist with the replace innerText
-                    Logging.Debug("full path created as '{0}'", fullNodePath);
-                    XmlNodeList currentSoundBanksAdd = doc.SelectNodes(fullNodePath);
-                    foreach (XmlElement e in currentSoundBanksAdd)
+                    Logging.Debug("full path to check if exists created as '{0}'", fullNodePath);
+                    XmlNodeList fullPathNodeList = doc.SelectNodes(fullNodePath);
+                    if (fullPathNodeList.Count > 0)
                     {
-                        string innerText = tempp[tempp.Count() - 1];
-                        //remove any tabs and whitespaces first before testing
-                        innerText = innerText.Trim();
-                        if (e.InnerText.Equals(innerText))
+                        foreach (XmlElement fullPathMatch in fullPathNodeList)
                         {
-                            Logging.Debug("found entry with matching trimmed text, aborting");
-                            return;
+                            //get the last element in the replace syntax as value to compare against
+                            string innerTextToMatch = replacePathSplit[replacePathSplit.Count() - 1];
+
+                            //remove any tabs and white-spaces first before testing
+                            innerTextToMatch = innerTextToMatch.Trim();
+
+                            if (fullPathMatch.InnerText.Trim().Equals(innerTextToMatch))
+                            {
+                                Logging.Debug("full path found entry with matching text, aborting (no need to patch)");
+                                return;
+                            }
+                            else
+                                Logging.Debug("full path found entry, but text does not match. proceeding with add");
                         }
                     }
-                    Logging.Debug("entry not found, preceding with add");
+                    else
+                        Logging.Debug("full path entry not found, proceeding with add");
+
                     //get to the node where to add the element
-                    XmlNode reff = doc.SelectSingleNode(p.Path);
-                    if(reff == null)
+                    XmlNode xmlPath = doc.SelectSingleNode(p.Path);
+                    if(xmlPath == null)
                     {
-                        Logging.Warning("patch path returns null!");
+                        Logging.Error("patch xmlPath returns null!");
+                        return;
                     }
+
                     //create node(s) to add to the element
-                    string[] temp = p.Replace.Split('/');
-                    Logging.Debug("Total inner xml entries to make: {0}", temp.Count());
-                    List<XmlElement> nodes = new List<XmlElement>();
-                    for (int i = 0; i < temp.Count() - 1; i++)
+                    Logging.Debug("Total inner xml elements to make: {0}", replacePathSplit.Count()-1);
+                    List<XmlElement> nodesListToAdd = new List<XmlElement>();
+                    for (int i = 0; i < replacePathSplit.Count() - 1; i++)
                     {
-                        XmlElement ele = doc.CreateElement(temp[i]);
-                        if (i == temp.Count() - 2)
+                        //make the next element using the array replace name
+                        XmlElement addElementToMake = doc.CreateElement(replacePathSplit[i]);
+                        //the last one is the text to add
+                        if (i == replacePathSplit.Count() - 2)
                         {
-                            //last node with actual data to add
-                            string data = temp[temp.Count() - 1];
-                            Logging.Debug("TODO: make xml macro replace system");
-                            data = data.Replace(@"[sl]", @"/");
-                            ele.InnerText = data;
+                            string textToAddIntoNode = replacePathSplit[replacePathSplit.Count() - 1];
+                            textToAddIntoNode = Utils.MacroReplace(textToAddIntoNode, ReplacementTypes.PatchArguements);
+                            Logging.Debug("adding text: {0}", textToAddIntoNode);
+                            addElementToMake.InnerText = textToAddIntoNode;
                         }
-                        nodes.Add(ele);
+                        //add it to the list
+                        nodesListToAdd.Add(addElementToMake);
                     }
+
                     //add nodes to the element in reverse for hierarchy order
-                    for (int i = nodes.Count - 1; i > -1; i--)
+                    for (int i = nodesListToAdd.Count - 1; i > -1; i--)
                     {
                         if (i == 0)
                         {
-                            //getting here means this is the highmost node
-                            //that needto be modified
-                            reff.InsertAfter(nodes[i], reff.FirstChild);
+                            //getting here means this is the highest node
+                            //that needs to be modified
+                            xmlPath.InsertAfter(nodesListToAdd[i], xmlPath.FirstChild);
                             break;
                         }
-                        XmlElement parrent = nodes[i - 1];
-                        XmlElement child = nodes[i];
+                        XmlElement parrent = nodesListToAdd[i - 1];
+                        XmlElement child = nodesListToAdd[i];
                         parrent.InsertAfter(child, parrent.FirstChild);
                     }
-                    Logging.Debug("saving to disk");
-                    //save it
-                    if (File.Exists(p.CompletePath))
-                        File.Delete(p.CompletePath);
-                    doc.Save(p.CompletePath);
+                    Logging.Debug("xml add complete");
                     break;
 
                 case "edit":
                     //check to see if it's already there
-                    Logging.Debug("checking if element already exists");
-                    XmlNodeList currentSoundBanksEdit = doc.SelectNodes(p.Path);
-                    foreach (XmlElement e in currentSoundBanksEdit)
+                    Logging.Debug("checking if element exists in all results");
+
+                    XmlNodeList xpathResults = doc.SelectNodes(p.Path);
+                    if(xpathResults.Count == 0)
                     {
-                        string innerText = e.InnerText;
-                        innerText = innerText.Trim();
-                        if (e.InnerText.Equals(p.Replace))
+                        Logging.Error("xpath not found");
+                        return;
+                    }
+
+                    //keep track if all xpath results equal this result
+                    int matches = 0;
+                    foreach (XmlElement match in xpathResults)
+                    {
+                        //matched, but trim and check if it matches the replace value
+                        if (match.InnerText.Trim().Equals(p.Replace))
                         {
-                            Logging.Debug("element inner text equals replace value, aborting");
-                            return;
+                            Logging.Debug("found replace match for path search, incrementing match counter");
+                            matches++;
                         }
                     }
-                    //find and replace
-                    Logging.Debug("element text does not equal replace, continue");
-                    foreach (XmlElement eee in currentSoundBanksEdit)
+                    if (matches == xpathResults.Count)
                     {
-                        if (Regex.IsMatch(eee.InnerText, p.Search))
+                        Logging.Info("all {0} path results have values equal to replace, so can skip", matches);
+                        return;
+                    }
+                    else
+                        Logging.Info("{0} of {1} path results match, running patch");
+
+                    //find and replace
+                    foreach (XmlElement replaceMatch in xpathResults)
+                    {
+                        if (Regex.IsMatch(replaceMatch.InnerText, p.Search))
                         {
-                            eee.InnerText = p.Replace;
+                            Logging.Debug("found match, oldValue={0}, new value={1}", replaceMatch.InnerText, p.Replace);
+                            replaceMatch.InnerText = p.Replace;
                         }
                         else
                         {
-                            Logging.Warning("Regex never matched");
+                            Logging.Warning("Regex never matched for this xpath result: {0}",p.Path);
                         }
                     }
-                    //save it
-                    Logging.Debug("saving to disk");
-                    if (File.Exists(p.CompletePath)) File.Delete(p.CompletePath);
-                    doc.Save(p.CompletePath);
+                    Logging.Debug("xml edit complete");
                     break;
 
                 case "remove":
                     //check to see if it's there
-                    XmlNodeList currentSoundBanksRemove = doc.SelectNodes(p.Path);
-                    foreach (XmlElement e in currentSoundBanksRemove)
+                    XmlNodeList xpathMatchesToRemove = doc.SelectNodes(p.Path);
+                    foreach (XmlElement match in xpathMatchesToRemove)
                     {
-                        if (Regex.IsMatch(e.InnerText, p.Search))
+                        if (Regex.IsMatch(match.InnerText.Trim(), p.Search))
                         {
-                            e.RemoveAll();
+                            match.RemoveAll();
                         }
                         else
                         {
-                            Logging.Warning("Regex never matched");
+                            Logging.Warning("xpath match found, but regex search not matched");
                         }
                     }
-                    //save it
-                    Logging.Debug("first temp save to disk");
-                    if (File.Exists(p.CompletePath))
-                        File.Delete(p.CompletePath);
-                    doc.Save(p.CompletePath);
+
                     //remove empty elements
                     Logging.Debug("Removing any empty xml elements");
-                    Logging.Debug("TODO: removing empty elements can be optimized");
-                    XDocument doc2 = XDocument.Load(p.CompletePath);
+                    XDocument doc2 = XMLUtils.DocumentToXDocument(doc);
+                    //note that XDocuemnt toString drops declaration
+                    //https://stackoverflow.com/questions/1228976/xdocument-tostring-drops-xml-encoding-tag
                     doc2.Descendants().Where(e => string.IsNullOrEmpty(e.Value)).Remove();
-                    Logging.Debug("saving to disk");
-                    if (File.Exists(p.CompletePath))
-                        File.Delete(p.CompletePath);
-                    doc2.Save(p.CompletePath);
+
+                    //update doc with doc2
+                    doc = XMLUtils.LoadXmlDocument(doc2.ToString(), XmlLoadType.FromString);
+                    Logging.Debug("xml remove complete");
                     break;
             }
+
             //check to see if we need to remove the header
             bool hasHeader = false;
-            XmlDocument doc5 = new XmlDocument();
-            doc5.Load(p.CompletePath);
-            foreach (XmlNode node in doc5)
+            foreach (XmlNode node in doc)
             {
                 if (node.NodeType == XmlNodeType.XmlDeclaration)
                 {
@@ -258,23 +290,38 @@ namespace RelhaxModpack
             //if not had header and has header, remove header
             //if had header and has header, no change
             //if not had header and not has header, no change
-            //if had header and not has header, no change
+            //if had header and not has header, add header
             Logging.Debug("hadHeader={0}, hasHeader={1}", hadHeader, hasHeader);
             if (!hadHeader && hasHeader)
             {
                 Logging.Debug("removing header");
-                XmlDocument doc4 = new XmlDocument();
-                doc4.Load(p.CompletePath);
-                foreach (XmlNode node in doc4)
+                foreach (XmlNode node in doc)
                 {
                     if (node.NodeType == XmlNodeType.XmlDeclaration)
                     {
-                        doc4.RemoveChild(node);
+                        doc.RemoveChild(node);
                         break;
                     }
                 }
-                doc4.Save(p.CompletePath);
             }
+            else if (hadHeader && !hasHeader)
+            {
+                Logging.Debug("adding header");
+                if(string.IsNullOrEmpty(xmlDec))
+                {
+                    throw new BadMemeException("nnnice.");
+                }
+                string[] splitDec = xmlDec.Split('=');
+                string xmlVer = splitDec[1].Substring(1).Split('"')[0];
+                string xmlenc = splitDec[2].Substring(1).Split('"')[0];
+                string xmlStandAlone = splitDec[3].Substring(1).Split('"')[0];
+                XmlDeclaration dec = doc.CreateXmlDeclaration(xmlVer, xmlenc, xmlStandAlone);
+                doc.InsertBefore(dec, doc.DocumentElement);
+            }
+
+            //save to disk
+            Logging.Debug("saving to disk");
+            doc.Save(p.CompletePath);
             Logging.Debug("xml patch completed successfully");
         }
         #endregion
@@ -372,7 +419,7 @@ namespace RelhaxModpack
             }
 
             //save the file back into the string and then the file
-            file = sb.ToString();
+            file = sb.ToString().Trim();
             File.WriteAllText(p.CompletePath, file);
             Logging.Debug("regex patch completed successfully");
         }

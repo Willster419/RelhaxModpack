@@ -56,7 +56,7 @@ namespace RelhaxModpack
         public static Dictionary<string, string> FilePathDict = new Dictionary<string, string>();
         public static Dictionary<string, string> PatchArguementsDict = new Dictionary<string, string>()
         {
-            //TODO
+            {@"[sl]", @"/" }
         };
         public static Dictionary<string, string> PatchFilesDict = new Dictionary<string, string>()
         {
