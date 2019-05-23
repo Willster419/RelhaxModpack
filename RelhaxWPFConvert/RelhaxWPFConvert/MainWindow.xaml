@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RelhaxWPFConvert"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
-    <TabControl>
+    <TabControl x:Name="MainTab">
         <TabItem Header="Scroll views">
             <ScrollViewer HorizontalScrollBarVisibility="Visible" MouseRightButtonUp="ScrollViewer_MouseRightButtonUp">
                 <Grid x:Name="theGrid" Background="#FF0C0CE6" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible" PreviewMouseDown="Grid_PreviewMouseDown">
@@ -186,6 +186,10 @@
                         <ProgressBar x:Name="HybridTaskProgress" HorizontalAlignment="Left" Height="16" Margin="350,56,0,0" VerticalAlignment="Top" Width="165" Value="0" Minimum="0" Maximum="10"/>
 
                     </Grid>
+                </GroupBox>
+                <GroupBox Header="Scaling Test" HorizontalAlignment="Left" Height="100" Margin="561,220,0,0" VerticalAlignment="Top" Width="215">
+                    <Button x:Name="ScallingTest" Content="1.5x scalling" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="ScallingTest_Click" >
+                    </Button>
                 </GroupBox>
             </Grid>
         </TabItem>

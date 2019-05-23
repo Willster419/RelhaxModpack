@@ -40,6 +40,8 @@ namespace RelhaxWPFConvert
             InitializeComponent();
         }
 
+        private double dpiFactor = 0;
+
         #region Hit testing
 
         private void ScrollViewer_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
@@ -81,7 +83,6 @@ namespace RelhaxWPFConvert
         {
             //checkbox testing
             testBox1.CheckboxDisabledColor = Colors.Green;
-
         }
 
         #region Task Reporting
@@ -376,6 +377,29 @@ namespace RelhaxWPFConvert
             string newJson = objectt.ToString(Formatting.Indented, null);
             //toString() will now allow for output of previous formatting
             File.WriteAllText("output.json", newJson);
+        }
+        #endregion
+
+        #region Display Scaling
+        private void ScallingTest_Click(object sender, RoutedEventArgs e)
+        {
+            //scale application from setting (TEST)
+            //https://stackoverflow.com/questions/44683626/wpf-application-same-size-at-every-system-scale-scale-independent
+            if(dpiFactor == 0)
+            {
+                dpiFactor = System.Windows.PresentationSource.FromVisual(this).CompositionTarget.TransformToDevice.M11;
+            }
+            if (dpiFactor != 1.5F)
+            {
+                // Change scale of window content
+                //https://stackoverflow.com/questions/5022397/scale-an-entire-wpf-window
+                //https://stackoverflow.com/questions/44683626/wpf-application-same-size-at-every-system-scale-scale-independent
+                dpiFactor = 1.5F;
+                (this.Content as FrameworkElement).LayoutTransform = new ScaleTransform(dpiFactor, dpiFactor, 0, 0);
+                Width *= dpiFactor;
+                Height *= dpiFactor;
+                this.UpdateLayout();
+            }
         }
         #endregion
     }
