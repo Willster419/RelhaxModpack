@@ -25,6 +25,7 @@ using System.Windows.Threading;
 using RelhaxModpack.AtlasesCreator;
 using System.Drawing;
 using Size = System.Drawing.Size;
+using RelhaxModpack.Windows;
 
 namespace RelhaxModpack
 {
@@ -217,6 +218,36 @@ namespace RelhaxModpack
             //EDIT:
             Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
                                           new Action(delegate { }));
+        }
+
+        public static void ApplyApplicationScale(Window window, double scaleValue)
+        {
+            //input filtering
+            if(scaleValue < Settings.MinimumDisplayScale)
+            {
+                Logging.Warning("scale size of {0} is to small, setting to 1", scaleValue.ToString("N"));
+                scaleValue = Settings.MinimumDisplayScale;
+            }
+            if (scaleValue > Settings.MaximumDisplayScale)
+            {
+                Logging.Warning("scale size of {0} is to large, setting to 3", scaleValue.ToString("N"));
+                scaleValue = Settings.MaximumDisplayScale;
+            }
+            //scale internals
+            (window.Content as FrameworkElement).LayoutTransform = new ScaleTransform(scaleValue, scaleValue, 0, 0);
+            //scale window itself
+            if (window is MainWindow mw)
+            {
+                mw.Width = mw.OriginalWidth * scaleValue;
+                mw.Height = mw.OriginalHeight * scaleValue;
+            }
+            else if (window is RelhaxWindow rw)
+            {
+                rw.Width = rw.OriginalWidth * scaleValue;
+                rw.Height = rw.OriginalHeight * scaleValue;
+            }
+            else
+                throw new BadMemeException("you should probably make me a RelhaxWindow if you want to use this feature");
         }
         #endregion
 
