@@ -391,14 +391,13 @@ namespace RelhaxWPFConvert
             }
             if (dpiFactor != 1.5F)
             {
-                // Change scale of window content
+                //Change scale of window content
                 //https://stackoverflow.com/questions/5022397/scale-an-entire-wpf-window
                 //https://stackoverflow.com/questions/44683626/wpf-application-same-size-at-every-system-scale-scale-independent
                 dpiFactor = 1.5F;
                 (this.Content as FrameworkElement).LayoutTransform = new ScaleTransform(dpiFactor, dpiFactor, 0, 0);
                 Width *= dpiFactor;
                 Height *= dpiFactor;
-                this.UpdateLayout();
             }
         }
         #endregion
