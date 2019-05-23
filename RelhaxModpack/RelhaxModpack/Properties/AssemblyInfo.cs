@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Relhax Modpack")]
 [assembly: AssemblyProduct("RelhaxModpack")]
-[assembly: AssemblyCopyright("Copyright ©  2019 Willard Wider")]
+[assembly: AssemblyCopyright("Copyright © 2019 Willard Wider")]
 [assembly: AssemblyTrademark("Would you rather work on your mods, or your gameplay?")]
 [assembly: AssemblyCulture("")]
 
@@ -51,7 +51,7 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.28.2.20")]
-[assembly: AssemblyFileVersion("0.28.2.20")]
+[assembly: AssemblyVersion("0.28.2.21")]
+[assembly: AssemblyFileVersion("0.28.2.21")]
 [assembly: NeutralResourcesLanguage("en-US")]
 
