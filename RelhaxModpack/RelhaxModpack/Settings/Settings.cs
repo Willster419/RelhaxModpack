@@ -167,6 +167,8 @@ namespace RelhaxModpack
         public static string DatabaseVersion = "";
         public static bool FirstLoad = false;
         public static bool FirstLoadToV2 = false;
+        public const double MaximumDisplayScale = 3.0F;
+        public const double MinimumDisplayScale = 1.0F;
         #endregion
 
         public static void ProcessFirstLoadings()

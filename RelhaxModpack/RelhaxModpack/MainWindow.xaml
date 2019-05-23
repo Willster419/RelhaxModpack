@@ -7,7 +7,7 @@
     xmlns:System="clr-namespace:System;assembly=mscorlib"
     xmlns:uicomponents="clr-namespace:RelhaxModpack.UIComponents" x:Name="TheMainWindow" x:Class="RelhaxModpack.MainWindow"
     mc:Ignorable="d"
-    Title="Relhax" Height="650" Width="550" MinWidth="550" MinHeight="650" MaxHeight="650" MaxWidth="550" ResizeMode="CanMinimize"
+    Title="Relhax" Height="650" Width="550" ResizeMode="CanMinimize"
     Loaded="TheMainWindow_Loaded"
     Closing="TheMainWindow_Closing"
     Icon="Resources/modpack_icon.ico">
@@ -112,10 +112,16 @@
                             <RadioButton Content="Default" x:Name="UninstallDefault" Tag="UninstallDefault" Margin="20,0,0,0" Checked="UninstallDefault_Checked"/>
                             <RadioButton Content="Quick" x:Name="UninstallQuick" Tag="UninstallQuick" Margin="5,0,0,0" Checked="UninstallQuick_Checked"/>
                         </StackPanel>
-                        <CheckBox Content="Minimze to system tray" x:Name="MinimizeToSystemTray" Tag="MinimizeToSystemTray" Click="MinimizeToSystemTray_Click"/>
+                        <CheckBox Content="Minimize to system tray" x:Name="MinimizeToSystemTray" Tag="MinimizeToSystemTray" Click="MinimizeToSystemTray_Click"/>
                         <CheckBox x:Name="VerboseLoggingCB" Tag="VerboseLoggingCB" Content="Verbose Logging" Click="VerboseLoggingCB_Click"/>
                         <CheckBox x:Name="DisableTriggersCB" Tag="DisableTriggersCB" Content="Disable Triggers" Click="DisableTriggersCB_Click" IsChecked="True" IsEnabled="False"/>
                         <CheckBox x:Name="AllowStatsGatherCB" Tag="AllowStatsGatherCB" Content="Allow statistics gathering of mod usage" Click="AllowStatsGatherCB_Click" />
+                        <TextBlock x:Name="ApplyCustomScalingCB" Tag="ApplyCustomSclaingCB" Text="Application scaling"/>
+                        <!-- https://stackoverflow.com/questions/832216/wpf-how-to-make-controls-stretch-in-a-stackpanel -->
+                        <DockPanel HorizontalAlignment="Stretch" LastChildFill="True">
+                            <TextBlock x:Name="ApplyCustomScalingLabel" Tag="ApplyCustomScalingLabel" DockPanel.Dock="Right" Text="0.00x" Margin="0,0,5,0" IsEnabled="True"/>
+                            <Slider x:Name="ApplyCustomScalingSlider" Tag="ApplyCustomScalingSlider" Margin="5,0,5,0" Minimum="1" Maximum="3" Value="1" IsEnabled="True" HorizontalAlignment="Stretch" DockPanel.Dock="Left" PreviewMouseUp="ApplyCustomScalingSlider_MouseUp" SmallChange="0.25" IsSnapToTickEnabled="True" LargeChange="0.25" TickFrequency="0.25"/>
+                        </DockPanel>
                     </StackPanel>
                     <StackPanel Grid.Column="1">    
                         <CheckBox x:Name="AutoInstallCB" Tag="EnableModsAutoSyncCheckbox" Content="Enable auto install" IsEnabled="False" Click="OneClickInstallCB_Click" />

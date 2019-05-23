@@ -20,12 +20,23 @@ namespace RelhaxModpack.Windows
         /// Specified if the window should have tooltips applied
         /// </summary>
         public bool ApplyToolTips { get; set; } = false;
+
         public bool ApplyColorSettings { get; set; } = false;
+
+        public bool ApplyScaling { get; set; } = false;
+
+        public double OriginalWidth { get; set; }
+
+        public double OriginalHeight { get; set; }
+
         /// <summary>
         /// Creates an instance of the RelhaxWindow class
         /// </summary>
         public RelhaxWindow() : base()
         {
+            //get the original width and height
+            OriginalHeight = Height;
+            OriginalWidth = Width;
             //subscribe to the loaded event to load custom code
             Loaded += OnWindowLoaded;
         }
@@ -42,6 +53,17 @@ namespace RelhaxModpack.Windows
             if(ApplyColorSettings)
             {
                 UISettings.ApplyUIColorSettings(this);
+            }
+            //deal with scaling
+            if(ApplyScaling)
+            {
+                //get current scaling of window (like from display settings)
+                double currentScale = PresentationSource.FromVisual(this).CompositionTarget.TransformToDevice.M11;
+                //if current scale is not target(modpackSetting), then update
+                if (ModpackSettings.DisplayScale != currentScale)
+                {
+                    Utils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
+                }
             }
         }
     }

@@ -243,6 +243,8 @@ namespace RelhaxModpack
         /// toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
         /// </summary>
         public static bool MinimizeToSystemTray = false;
+
+        public static double DisplayScale = 0;
         #endregion
 
         #region legacy compatability

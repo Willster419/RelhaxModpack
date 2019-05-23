@@ -42,6 +42,7 @@ namespace RelhaxModpack
         bool closingFromFailure = false;
         NewsViewer newsViewer = null;
         private WebClient client = null;
+        public double OriginalWidth, OriginalHeight = 0;
 
         //temp list of components not to toggle
         Control[] tempDisabledBlacklist = null;
@@ -74,6 +75,10 @@ namespace RelhaxModpack
         {
             //first hide the window
             //Hide();
+
+            //get size of original width and height of window
+            OriginalHeight = Height;
+            OriginalWidth = Width;
 
             //load the progress report window
             ProgressIndicator progressIndicator = new ProgressIndicator()
@@ -267,7 +272,24 @@ namespace RelhaxModpack
             if (!closingFromFailure)
             {
                 WindowState = WindowState.Normal;
-                //Show();
+                //get the current application scale
+                //https://stackoverflow.com/questions/5022397/scale-an-entire-wpf-window
+                //https://stackoverflow.com/questions/44683626/wpf-application-same-size-at-every-system-scale-scale-independent
+                double currentScale = PresentationSource.FromVisual(this).CompositionTarget.TransformToDevice.M11;
+
+                //if display scale is 0, then set it to what it is currently
+                if (ModpackSettings.DisplayScale == 0)
+                    ModpackSettings.DisplayScale = currentScale;
+
+                //if current scale is not target, then update
+                if (ModpackSettings.DisplayScale != currentScale)
+                {
+                    Utils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
+                }
+
+                //apply to slider
+                ApplyCustomScalingSlider.Value = ModpackSettings.DisplayScale;
+                ApplyCustomScalingLabel.Text = string.Format("{0}x", ApplyCustomScalingSlider.Value.ToString("N"));
             }
         }
 
@@ -1921,5 +1943,15 @@ namespace RelhaxModpack
             }
         }
         #endregion
+
+        private void ApplyCustomScalingSlider_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if(e.LeftButton == MouseButtonState.Released)
+            {
+                ApplyCustomScalingLabel.Text = string.Format("{0}x", ApplyCustomScalingSlider.Value.ToString("N"));
+                ModpackSettings.DisplayScale = ApplyCustomScalingSlider.Value;
+                Utils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
+            }
+        }
     }
 }
