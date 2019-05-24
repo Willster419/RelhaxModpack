@@ -79,7 +79,7 @@ namespace RelhaxModpack
                     XMLPatch(p);
                     break;
                 case "json":
-                    JSONPatch(p);
+                    JSONPatchOld(p);
                     break;
                 case "xvm":
                     throw new BadMemeException("xvm patches are not supported, please use the json patch method");
@@ -425,9 +425,17 @@ namespace RelhaxModpack
         }
         #endregion
 
-        #region JSON
+        #region JSON_NEW
+        private static void JsonPatch(Patch p)
+        {
+            //apply and log legacy compatibilities
+
+        }
+        #endregion
+
+        #region JSON_OLD
         //method to parse json files
-        private static void JSONPatch(Patch p)
+        private static void JSONPatchOld(Patch p)
         {
             //try to convert the new value to a bool or an int or double first
             bool newValueBool = false;
