@@ -61,7 +61,15 @@ namespace RelhaxModpack
         };
         public static Dictionary<string, string> PatchFilesDict = new Dictionary<string, string>()
         {
-            //TODO (what is this for??)
+            //add all patch file escape characters
+            //key (look for), value (replaced with)
+            {@"""[xvm_dollar]", @"$" },
+            {@"[xvm_rbracket]""", @"}" },
+            {@"[lbracket]", @"{" },
+            {@"[rbracket]", @"}" },
+            {@"[quote]", "\"" },
+            {@"[colon]", @":" },
+            {@"[dollar]", @"$" },
         };
         public static Dictionary<string, string> TextUnscapeDict = new Dictionary<string, string>()
         {
@@ -727,6 +735,15 @@ namespace RelhaxModpack
                 return result;
             else return defaultValue;
         }
+
+        public static bool ParseBool(string input, out bool result, bool defaultValue = false)
+        {
+            if (bool.TryParse(input, out result))
+                return true;
+            else
+                return false;
+        }
+
         /// <summary>
         /// Try to parse an intiger value based on string input
         /// </summary>
@@ -739,6 +756,15 @@ namespace RelhaxModpack
                 return result;
             else return defaultValue;
         }
+
+        public static bool ParseInt(string input, out int result, int defaultValue = 0)
+        {
+            if (int.TryParse(input, out result))
+                return true;
+            else
+                return false;
+        }
+
         /// <summary>
         /// Try to parse a float value based on string input
         /// </summary>
@@ -751,18 +777,45 @@ namespace RelhaxModpack
                 return result;
             else return defaultValue;
         }
+
+        public static bool ParseFloat(string input, out float result, float defaultValue = 0)
+        {
+            if (float.TryParse(input, NumberStyles.Float,CultureInfo.InvariantCulture,out result))
+                return true;
+            else
+                return false;
+        }
+
         public static long ParseLong(string input, long defaultValue)
         {
             if (long.TryParse(input, out long result))
                 return result;
             else return defaultValue;
         }
+
+        public static bool ParseLong(string input, out long result, long defaultValue = 0)
+        {
+            if (long.TryParse(input, out result))
+                return true;
+            else
+                return false;
+        }
+
         public static ulong ParseuLong(string input, ulong defaultValue)
         {
             if (ulong.TryParse(input, out ulong result))
                 return result;
             else return defaultValue;
         }
+
+        public static bool ParseuLong(string input, out ulong result, ulong defaultValue = 0)
+        {
+            if (ulong.TryParse(input, out result))
+                return true;
+            else
+                return false;
+        }
+
         //https://stackoverflow.com/questions/10685794/how-to-use-generic-tryparse-with-enum
         public static TEnum ParseEnum<TEnum>(string input, TEnum defaultValue)
             where TEnum : struct, IConvertible

@@ -429,6 +429,138 @@ namespace RelhaxModpack
         private static void JsonPatch(Patch p)
         {
             //apply and log legacy compatibilities
+            //if no search parameter, set it to the regex default "match all" search option
+            if(string.IsNullOrEmpty(p.Search))
+            {
+                Logging.Warning("Patch should have search value specified, please update it!");
+                p.Search = @".*";
+            }
+            //if no mode, treat as edit
+            if(string.IsNullOrWhiteSpace(p.Mode))
+            {
+                Logging.Warning("Patch should have mode value specified, please update it!");
+                p.Mode = "edit";
+            }
+            //arrayEdit is not a valid mode, but may be specified by mistake
+            if(p.Mode.Equals("arrayEdit"))
+            {
+                Logging.Warning("Patch mode \"arrayEdit\" is not a valid mode and will be treated as \"edit\", please update it!");
+                p.Mode = "edit";
+            }
+
+            //load the file into a string
+            string file = File.ReadAllText(p.CompletePath);
+
+            //if the file is xc then check it for xvm style references (clean it up for the json parser)
+            if (Path.GetExtension(p.CompletePath).ToLower().Equals(".xc"))
+            {
+                //and also check if the replace value is an xvm direct reference, we don't allow those (needs to be escaped)
+                if (Regex.IsMatch(p.Replace, @"\$[ \t]*\{[ \t]*"""))
+                {
+                    Logging.Error("patch replace value detected as xvm reference, but is not in escaped form! must be escaped!");
+                    return;
+                }
+
+                //replace all xvm references with escaped versions that can be parsed
+                file = EscapeXvmRefrences(file);
+            }
+
+            //escape the "$ref" meta-data header 
+            file = file.Replace("\"$ref\"", "\"[dollar]ref\"");
+
+            //now that the string file is ready, parse it into json.net
+            //load the settings
+            JsonLoadSettings settings = new JsonLoadSettings()
+            {
+                //ignore comments and load line info
+                //"jsOn DoeSnT sUpPorT coMmAs"
+                CommentHandling = CommentHandling.Ignore,
+                LineInfoHandling = LineInfoHandling.Load
+            };
+            JObject root = null;
+
+            //if it's from the editor, then dump the file to disk to show an escaped version for debugging
+            if (Settings.ApplicationVersion == ApplicationVersions.Alpha && p.FromEditor)
+            {
+                string filenameForDump = Path.GetFileNameWithoutExtension(p.CompletePath) + "_escaped" + Path.GetExtension(p.CompletePath);
+                string filePathForDump = Path.Combine(Path.GetDirectoryName(p.CompletePath), filenameForDump);
+                Logging.Debug("Dumping escaped file for debug before json.net parse: " + filePathForDump);
+                File.WriteAllText(filePathForDump, file);
+            }
+            try
+            {
+                root = JObject.Parse(file, settings);
+            }
+            catch (JsonReaderException j)
+            {
+                Logging.Error("Failed to parse json file! {0}", Path.GetFileName(p.File));
+                Logging.Debug(j.ToString());
+                return;
+            }
+
+            //switch how it is handled based on the mode of the patch
+            switch(p.Mode.ToLower())
+            {
+                case "add":
+
+                    break;
+                case "edit":
+
+                    break;
+                case "remove":
+
+                    break;
+                case "arrayadd":
+
+                    break;
+                case "arrayremove":
+
+                    break;
+                case "arrayclear":
+
+                    break;
+                default:
+                    Logging.Error("ERROR: Unknown json patch mode, {0}", p.Mode);
+                    return;
+            }
+
+            //un-escape the string with all ref metadata and xvm references
+            file = Utils.MacroReplace(file, ReplacementTypes.PatchFiles);
+
+            //write to disk and finish
+            File.WriteAllText(p.CompletePath, file);
+            Logging.Debug("json patch completed successfully");
+        }
+        #endregion
+
+        #region Json modes
+        private static void JsonAdd(Patch p, JObject root)
+        {
+
+        }
+
+        private static void JsonEdit(Patch p, JObject root)
+        {
+
+        }
+
+        private static void JsonRemove(Patch p, JObject root)
+        {
+
+        }
+
+        private static void JsonArrayAdd(Patch p, JObject root)
+        {
+
+        }
+
+        private static void JsonArrayRemove(Patch p, JObject root)
+        {
+
+        }
+
+        private static void JsonArrayClear(Patch p, JObject root)
+        {
 
         }
         #endregion
@@ -1128,6 +1260,72 @@ namespace RelhaxModpack
         #endregion
 
         #region Helpers
+
+        private static void UpdateJsonValue(JValue jvalue, string value)
+        {
+            //determine what type value should be used for the json item based on attempted parsing
+            //try to parse as a bool
+            if (Utils.ParseBool(value, out bool resultBool))
+                jvalue.Value = resultBool;
+            else if (Utils.ParseFloat(value, out float resultFloat))
+                jvalue.Value = resultFloat;
+            else if (Utils.ParseInt(value, out int resultInt))
+                jvalue.Value = resultInt;
+            else
+                jvalue.Value = value;
+            Logging.Debug("Json value parsed as {0}", jvalue.Value.GetType().ToString());
+        }
+
+        private static void UpdateJsonValue(JProperty property, string name, string value)
+        {
+            throw new BadMemeException("finish me");
+        }
+
+        private static string EscapeXvmRefrences(string file)
+        {
+            //replace all xvm style references with escaped versions that won't cause invalid parsing
+            //split regex based on the start of the xvm reference (the dollar, whitespace, left bracket, whitespace, quote)
+            //note it will need to be put back in
+            string[] fileSplit = Regex.Split(file, @"\$[ \t]*\{[ \t]*""");
+            for (int i = 1; i < fileSplit.Length; i++)
+            {
+                fileSplit[i] = @"""[xvm_dollar][lbracket][quote]" + fileSplit[i];
+                //looks like:      "[xvm_dollar][lbracket][quote]damageLog.log.x" }
+                //"battleLoading": "[xvm_dollar][lbracket][quote]battleLoading.xc":"battleLoading"},
+
+                //split it again so we don't replace more than we need to
+                //stop at the next right bracket to indicate the end of the xvm reference
+                //the escaped string can always be treated as a value in the key-value pair system
+                string[] splitAgain = fileSplit[i].Split('}');
+
+                //check for if it is a file:path reference and escape it
+                if (Regex.IsMatch(splitAgain[0], @"""[\t ]*\:[\t ]*"""))
+                    splitAgain[0] = Regex.Replace(splitAgain[0], @"""[\t ]*\:[\t ]*""", @"[quote][colon][quote]");
+                //if that style, would look like "battleLoading": "[xvm_dollar][lbracket][quote]battleLoading.xc[quote][colon][quote]battleLoading"},
+
+                //join it back to fileSplit
+                fileSplit[i] = string.Join("}", splitAgain);
+
+                //match the first occurrence only of the end of the reference ("})
+                Match m = Regex.Match(fileSplit[i], @"""[\t ]*\}");
+                if (m.Success)
+                {
+                    //create the string of everything before the match (up to and not include the quote)
+                    string before = fileSplit[i].Substring(0, m.Index);
+
+                    //create the string of everything after the match (after and not include the right bracket)
+                    string after = fileSplit[i].Substring(m.Index + m.Length);
+
+                    //make the string with the escape for the end of the xvm reference
+                    fileSplit[i] = before + @"[quote][xvm_rbracket]""" + after;
+                    //finished result: "[xvm_dollar][lbracket][quote]damageLog.log.x[quote][xvm_rbracket]"
+                    //"battleLoading": "[xvm_dollar][lbracket][quote]battleLoading.xc[quote][colon][quote]battleLoading[quote][xvm_rbracket]",
+                }
+            }
+            file = string.Join("", fileSplit);
+            return file;
+        }
+
         //returns the folder(s) to get to the xvm config folder directory
         public static string GetXvmFolderName()
         {
