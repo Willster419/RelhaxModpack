@@ -491,13 +491,14 @@ namespace RelhaxModpack
             //if it is an xvm configuration file, or from editor, and we are wanting to followPath, then the root object then becomes the last item in the path
             //this works based on splitting up the path itself (forces dot convention) and going into files based on the reference
             //note that it will modify the patch path variable
+            JObject searchRoot = root;
             if ((Path.GetExtension(p.CompletePath).ToLower().Equals(".xc") || p.FromEditor) && p.FollowPath)
             {
                 Logging.Debug("followpath is true, and either editor or xc file, following path to get actual root json object");
-                root = FollowXvmPath(p, root);
+                searchRoot = FollowXvmPath(p, root);
             }
 
-            if(root == null && p.FollowPath)
+            if(searchRoot == null && p.FollowPath)
             {
                 Logging.Debug("root Jobject is null, meaning followPath previously completed, so stop here");
                 return;
@@ -507,22 +508,22 @@ namespace RelhaxModpack
             switch (p.Mode.ToLower())
             {
                 case "add":
-                    JsonAdd(p, root);
+                    JsonAdd(p, searchRoot);
                     break;
                 case "edit":
-                    JsonEditRemove(p, root, true);
+                    JsonEditRemove(p, searchRoot, true);
                     break;
                 case "remove":
-                    JsonEditRemove(p, root, false);
+                    JsonEditRemove(p, searchRoot, false);
                     break;
                 case "arrayadd":
-                    JsonArrayAdd(p, root);
+                    JsonArrayAdd(p, searchRoot);
                     break;
                 case "arrayremove":
-                    JsonArrayRemoveClear(p, root, true);
+                    JsonArrayRemoveClear(p, searchRoot, true);
                     break;
                 case "arrayclear":
-                    JsonArrayRemoveClear(p, root, false);
+                    JsonArrayRemoveClear(p, searchRoot, false);
                     break;
                 default:
                     Logging.Error("ERROR: Unknown json patch mode, {0}", p.Mode);
@@ -964,6 +965,11 @@ namespace RelhaxModpack
                     Logging.Error(tokenSearchException.ToString());
                     break;
                 }
+                if(pathSearchResult == null)
+                {
+                    Logging.Error("minipath search result is null, error with the given path?");
+                    break;
+                }
                 if(pathSearchResult is JObject jobject)
                 {
                     //if it's a jboject, then search inside with saving
@@ -972,17 +978,25 @@ namespace RelhaxModpack
                 }
                 else if (pathSearchResult is JArray jarray)
                 {
-                    throw new BadMemeException("wait that's illegal");
+                    //if the result is an array then it's an arrayEdit. return the latest object and path. an array in an array has yet to be seen
+                    Logging.Debug("miniPath resulted in Jarray, stop and return latest object");
+                    break;
                 }
                 else if (pathSearchResult is JValue jvalue)
                 {
-                    Logging.Debug("miniPath resulted in jValue, checking if reference or value");
+                    Logging.Debug("miniPath resulted in jValue, checking if string for xvm reference");
                     if(jvalue.Value is string value)
                     {
                         Logging.Debug("jValue is string, checking for xvm reference");
                         if(value.Contains(@"[xvm_dollar]"))
                         {
-                            Logging.Debug("xvm reference detected, parsing");
+                            Logging.Debug("xvm reference detected, checking if reference is target and not add");
+                            if(pathArray.Count == 1 && !p.Mode.ToLower().Equals("add"))
+                            {
+                                Logging.Debug("this reference is the target, so don't enter it. return latest object");
+                                break;
+                            }
+                            Logging.Debug("reference is not target");
 
                             //parse the first part of the reference, could be direct reference path inside file or filename
                             string fileOrReference = value.Split(new string[] { @"[xvm_dollar][lbracket][quote]"}, StringSplitOptions.RemoveEmptyEntries)[0].Split('[')[0];
