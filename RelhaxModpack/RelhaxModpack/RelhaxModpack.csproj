@@ -175,9 +175,6 @@
       <DependentUpon>FirstLoadAknowledgements.xaml</DependentUpon>
     </Compile>
     <Compile Include="UIComponents\IPackageUIComponent.cs" />
-    <Compile Include="Windows\DeleteOldCache.xaml.cs">
-      <DependentUpon>DeleteOldCache.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\NewsViewer.xaml.cs">
       <DependentUpon>NewsViewer.xaml</DependentUpon>
     </Compile>
@@ -304,10 +301,6 @@
     <Page Include="Windows\FirstLoadAknowledgements.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\DeleteOldCache.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\InstallFinished.xaml">
       <SubType>Designer</SubType>

@@ -1247,19 +1247,6 @@
             InitializeComponent
             </summary>
         </member>
-        <member name="T:RelhaxModpack.Windows.DeleteOldCache">
-            <summary>
-            Interaction logic for GenericYesNoWindow.xaml
-            </summary>
-            <summary>
-            DeleteOldCache
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.DeleteOldCache.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
         <member name="T:RelhaxModpack.Windows.NewsViewer">
             <summary>
             Interaction logic for NewsViewer.xaml
