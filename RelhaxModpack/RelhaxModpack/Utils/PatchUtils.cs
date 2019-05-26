@@ -935,10 +935,10 @@ namespace RelhaxModpack
             //determine what type value should be used for the json item based on attempted parsing
             if (Utils.ParseBool(value, out bool resultBool))
                 jvalue.Value = resultBool;
-            else if (Utils.ParseFloat(value, out float resultFloat))
-                jvalue.Value = resultFloat;
             else if (Utils.ParseInt(value, out int resultInt))
                 jvalue.Value = resultInt;
+            else if (Utils.ParseFloat(value, out float resultFloat))
+                jvalue.Value = resultFloat;
             else
                 jvalue.Value = value;
             Logging.Debug("Json value parsed as {0}", jvalue.Value.GetType().ToString());
@@ -950,10 +950,10 @@ namespace RelhaxModpack
             JValue jvalue = null;
             if (Utils.ParseBool(value, out bool resultBool))
                 jvalue = new JValue(resultBool);
-            else if (Utils.ParseFloat(value, out float resultFloat))
-                jvalue = new JValue(resultFloat);
             else if (Utils.ParseInt(value, out int resultInt))
                 jvalue = new JValue(resultInt);
+            else if (Utils.ParseFloat(value, out float resultFloat))
+                jvalue = new JValue(resultFloat);
             else
                 jvalue = new JValue(value);
             Logging.Debug("Json value parsed as {0}", jvalue.Value.GetType().ToString());
