@@ -806,7 +806,7 @@ namespace RelhaxModpack
 
             //get the property name (if exists, and value, and index to add to)
             string propertyName = addPathArray.Count == 2 ? addPathArray[0] : string.Empty;
-            string valueToAdd = addPathArray[0];
+            string valueToAdd = addPathArray.Count == 2? addPathArray[1] : addPathArray[0];
 
             //check for index value in p.replace (name/value[index=NUMBER])
             string indexString = valueToAdd.Split(new string[] { @"[index=" }, StringSplitOptions.None)[1];
@@ -816,6 +816,9 @@ namespace RelhaxModpack
 
             //and get it out of the valueToAdd
             valueToAdd = valueToAdd.Split(new string[] { @"[index=" }, StringSplitOptions.None)[0];
+
+            //and run the result through the un-escape
+            valueToAdd = Utils.MacroReplace(valueToAdd, ReplacementTypes.PatchArguements);
 
             JArray array = JsonArrayGet(p, root);
             if (array == null)
