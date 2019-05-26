@@ -48,15 +48,16 @@
                     <Button Tag="TestPatchButton" x:Name="TestPatchButton" Content="Test Patch..." HorizontalAlignment="Right" Margin="0,0,102,0" VerticalAlignment="Bottom" Width="75" Click="TestPatchButton_Click"/>
                     <Button Tag="ApplyChangesButton" x:Name="ApplyChangesButton" Content="Apply Changes" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="97" Click="ApplyChangesButton_Click"/>
                     <TextBox Tag="FileToPatchTextbox" x:Name="FileToPatchTextbox" HorizontalAlignment="Stretch" Height="42" TextWrapping="Wrap" VerticalAlignment="Top" Margin="0,27,0,0" />
-                    <CheckBox Tag="PatchFollowPathSetting" x:Name="PatchFollowPathSetting" Content="Follow Path (for allowing inside xvm files)" HorizontalAlignment="Left" Margin="130,156,0,0" VerticalAlignment="Top" IsEnabled="False"/>
+                    <CheckBox Tag="PatchFollowPathSetting" x:Name="PatchFollowPathSetting" Content="Follow Path (for allowing inside xvm files)" HorizontalAlignment="Left" Margin="130,156,0,0" VerticalAlignment="Top" IsEnabled="True"/>
                 </Grid>
             </TabItem>
             <TabItem Tag="RegressionTestingTab" x:Name="RegressionTestingTab" Header="Regression Testing">
                 <Grid Background="#FFE5E5E5">
                     <TextBlock HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Warning! For application Developers ONLY!" VerticalAlignment="Top" Foreground="#FFFD1111" FontWeight="Bold" TextAlignment="Left" Margin="10,0,0,0"/>
-                    <Button Tag="RegexRegressionTesting" x:Name="RegexRegressionTesting" Content="Regex Regression Testing" HorizontalAlignment="Left" Margin="10,21,0,0" VerticalAlignment="Top" Width="155" Click="RegexRegressionTesting_Click"/>
-                    <Button Tag="XmlRegressionTesting" x:Name="XmlRegressionTesting" Content="XML Regression Testing" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top" Width="155" Click="XmlRegressionTesting_Click"/>
-                    <Button Tag="JsonRegressionTesting"  x:Name="JsonRegressionTesting" Content="JSON Regression Testing" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="155" Click="JsonRegressionTesting_Click"/>
+                    <Button Tag="RegexRegressionTesting" x:Name="RegexRegressionTesting" Content="Regex Regression Testing" HorizontalAlignment="Left" Margin="10,21,0,0" VerticalAlignment="Top" Width="165" Click="RegexRegressionTesting_Click"/>
+                    <Button Tag="XmlRegressionTesting" x:Name="XmlRegressionTesting" Content="XML Regression Testing" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top" Width="165" Click="XmlRegressionTesting_Click"/>
+                    <Button Tag="JsonRegressionTesting"  x:Name="JsonRegressionTesting" Content="JSON Regression Testing" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="165" Click="JsonRegressionTesting_Click"/>
+                    <Button Tag="FollowPathRegressionTesting" x:Name="FollowPathRegressionTesting" Content="FollowPath Regression Testing" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top" Width="165" Click="FollowPathRegressionTesting_Click"/>
                 </Grid>
             </TabItem>
         </TabControl>

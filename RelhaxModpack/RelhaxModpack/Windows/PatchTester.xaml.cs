@@ -19,7 +19,6 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class PatchTester : RelhaxWindow
     {
-
         private PatchSettings PatchSettings;
         private XmlDocument LoadedPatchesDocument;
         //private List<Patch> LoadedPatches;
@@ -762,6 +761,23 @@ namespace RelhaxModpack.Windows
             Dispatcher.Invoke(new Action(() => { RegressionsRunning = false; }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
         }
 
+        private async void FollowPathRegressionTesting_Click(object sender, RoutedEventArgs e)
+        {
+            RegressionsRunning = true;
+            if (PatchSettings.SwitchToLogWhenTestingPatch)
+            {
+                RightSideTabControl.SelectedItem = LogOutputTab;
+            }
+            Logging.Info("FollowPath regressions start");
+            await Task.Run(() =>
+            {
+                Regression regression = new Regression(RegressionTypes.followPath, BuildFollowPathUnittests());
+                regression.RunRegressions();
+            });
+            Logging.Info("FollowPath regressions end");
+            Dispatcher.Invoke(new Action(() => { RegressionsRunning = false; }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+        }
+
         private void Logging_OnLoggingUIThreadReport(string message)
         {
             //https://www.tutorialspoint.com/csharp/csharp_delegates.htm
@@ -1298,6 +1314,28 @@ namespace RelhaxModpack.Windows
                         Search = "should match",
                         Replace = "replaced",
                         Type = "regex"
+                    }
+                }
+            };
+        }
+        #endregion
+
+        #region followPath regressions
+        private List<UnitTest> BuildFollowPathUnittests()
+        {
+            return new List<UnitTest>()
+            {
+                new UnitTest()
+                {
+                    Description = "disable damageLog, follow path @xvm.xc->check_01.xc, includes \"$ref\" inside file",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        FollowPath = true,
+                        Path = @"$.damageLogTest.enabled",
+                        Search = ".*",
+                        Replace = "false",
+                        Type = "json"
                     }
                 }
             };

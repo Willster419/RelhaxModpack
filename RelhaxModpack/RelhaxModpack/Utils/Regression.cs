@@ -12,7 +12,8 @@ namespace RelhaxModpack
     {
         json,
         xml,
-        regex
+        regex,
+        followPath
     }
 
     public class UnitTest
@@ -63,6 +64,14 @@ namespace RelhaxModpack
                     RegressionLogfile = new Logfile(Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", RegressionTypeString,
                         DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), ".log")), Logging.ApplicationLogfileTimestamp);
                     break;
+                case RegressionTypes.followPath:
+                    RegressionTypeString = "json";
+                    RegressionExtension = string.Format(".{0}", "xc");
+                    Startfile = string.Format("{0}{1}", @"@xvm", RegressionExtension);
+                    RegressionFolderPath = Path.Combine("patch_regressions", "followPath");
+                    RegressionLogfile = new Logfile(Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", "followPath",
+                        DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), ".log")), Logging.ApplicationLogfileTimestamp);
+                    break;
             }
         }
 
@@ -85,7 +94,7 @@ namespace RelhaxModpack
 
             if(!RegressionLogfile.Init())
             {
-                Logging.Error("failed to initalize logfile");
+                Logging.Error("failed to initialize logfile");
                 return false;
             }
 
