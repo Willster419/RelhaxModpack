@@ -898,7 +898,13 @@ namespace RelhaxModpack
             bool found = false;
             for (int i = 0; i < array.Count; i++)
             {
-                string jsonResult = JsonGetCompare(array[i] as JValue);
+                //can return jvalue or jobject
+                string jsonResult = string.Empty;
+                if (array[i] is JValue jvalue)
+                    jsonResult = JsonGetCompare(array[i] as JValue);
+                else //assuming jobject
+                    jsonResult = array[i].ToString();
+
                 if (Regex.IsMatch(jsonResult, p.Search))
                 {
                     found = true;
