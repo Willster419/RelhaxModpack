@@ -12,20 +12,6 @@ using System.Globalization;
 
 namespace RelhaxModpack
 {
-    #region JSON Patcher workaround
-    //This class is for saving all the lines in an .xc xvm config file
-    //the "best json api" can't handle "$" refrences, so they must be removed
-    //prior to patching. This class stores all required information for that purpose.
-    //TODO: remove this lol
-    public struct StringSave
-    {
-        //the name of the property to put it back on later
-        public string Name { get; set; }
-        //the value of the property (the refrence)
-        public string Value { get; set; }
-    }
-    #endregion
-
     public static class PatchUtils
     {
         #region Main Patch Method
