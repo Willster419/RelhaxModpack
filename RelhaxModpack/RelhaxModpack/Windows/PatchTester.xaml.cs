@@ -1335,7 +1335,94 @@ namespace RelhaxModpack.Windows
                         Path = @"$.damageLog.enabled",
                         Search = ".*",
                         Replace = "false",
-                        Type = "json"
+                        Type = "json",
+                        Mode = "edit"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "update hitlogHeader's updateEvent property to be on dank memes. followPath @xvm.xc->battleLabels.xc->battleLabelsTemplates.xc",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        FollowPath = true,
+                        //@"$.screensavers2.starttime[?(@<420)]"
+                        //https://support.smartbear.com/alertsite/docs/monitors/api/endpoint/jsonpath.html#filters
+                        Path = @"$.battleLabels.formats[?(@ =~ /hitLogHeader/)].updateEvent",
+                        Search = ".*",
+                        Replace = "PY(ON_DANK_MEMES)",
+                        Type = "json",
+                        Mode = "edit"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "remove array reference entry of fire",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        FollowPath = true,
+                        Path = @"$.battleLabels.formats",
+                        Search = "fire",
+                        Replace = "",
+                        Type = "json",
+                        Mode = "arrayRemove"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "part 1 of 4: add a object to playersPanel definition-> change link in root file from 'playersPanel' to 'def'",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        FollowPath = true,
+                        Path = @"$.playersPanel",
+                        Search = ".*",
+                        Replace = @"[xvm_dollar][lbracket][quote]playersPanel.xc[quote][colon][quote]def[quote][xvm_rbracket]",
+                        Type = "json",
+                        Mode = "edit"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "part 2 of 4: add a object to playersPanel definition-> change link in root file from 'playersPanel' to 'def'",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        FollowPath = true,
+                        Path = @"$.playersPanel",
+                        Search = ".*",
+                        Replace = @"newDef[object]",
+                        Type = "json",
+                        Mode = "add"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "part 3 of 4: add a object to playersPanel definition-> change link in root file from 'playersPanel' to 'def'",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        FollowPath = true,
+                        Path = @"$.playersPanel.newDef",
+                        Search = ".*",
+                        Replace = @"isThisTheBestXvmParserEver/true",
+                        Type = "json",
+                        Mode = "add"
+                    }
+                },
+                new UnitTest()
+                {
+                    Description = "part 4 of 4: add a object to playersPanel definition-> change link in root file back to 'def' to 'playersPanel'",
+                    ShouldPass = true,
+                    Patch = new Patch()
+                    {
+                        FollowPath = true,
+                        Path = @"$.playersPanel",
+                        Search = ".*",
+                        Replace = @"[xvm_dollar][lbracket][quote]playersPanel.xc[quote][colon][quote]playersPanel[quote][xvm_rbracket]",
+                        Type = "json",
+                        Mode = "edit"
                     }
                 }
             };
