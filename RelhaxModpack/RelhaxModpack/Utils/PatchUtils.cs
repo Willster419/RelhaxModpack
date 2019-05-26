@@ -79,7 +79,7 @@ namespace RelhaxModpack
                     XMLPatch(p);
                     break;
                 case "json":
-                    JSONPatchOld(p);
+                    JsonPatch(p);
                     break;
                 case "xvm":
                     throw new BadMemeException("xvm patches are not supported, please use the json patch method");
@@ -502,22 +502,22 @@ namespace RelhaxModpack
             switch(p.Mode.ToLower())
             {
                 case "add":
-
+                    JsonAdd(p, root);
                     break;
                 case "edit":
-
+                    JsonEditRemove(p, root, true);
                     break;
                 case "remove":
-
+                    JsonEditRemove(p, root, false);
                     break;
                 case "arrayadd":
-
+                    JsonArrayAdd(p, root);
                     break;
                 case "arrayremove":
-
+                    JsonArrayRemoveClear(p, root, true);
                     break;
                 case "arrayclear":
-
+                    JsonArrayRemoveClear(p, root, false);
                     break;
                 default:
                     Logging.Error("ERROR: Unknown json patch mode, {0}", p.Mode);
@@ -536,735 +536,359 @@ namespace RelhaxModpack
         #region Json modes
         private static void JsonAdd(Patch p, JObject root)
         {
+            //3 modes for json adding: regular add, add blank array, add blank object
 
-        }
-
-        private static void JsonEdit(Patch p, JObject root)
-        {
-
-        }
-
-        private static void JsonRemove(Patch p, JObject root)
-        {
-
-        }
-
-        private static void JsonArrayAdd(Patch p, JObject root)
-        {
-
-        }
-
-        private static void JsonArrayRemove(Patch p, JObject root)
-        {
-
-        }
-
-        private static void JsonArrayClear(Patch p, JObject root)
-        {
-
-        }
-        #endregion
-
-        #region JSON_OLD
-        //method to parse json files
-        private static void JSONPatchOld(Patch p)
-        {
-            //try to convert the new value to a bool or an int or double first
-            bool newValueBool = false;
-            int newValueInt = -69420;
-            double newValueDouble = -69420.0d;
-            bool useBool = false;
-            bool useInt = false;
-            bool useDouble = false;
-            Logging.Debug("TODO: update json patch replace syntax");
-            Logging.Debug("TODO: re-write value type replace system");
-            Logging.Debug("TODO: fix handling of \"ref\" json keywords");
-            //legacy compatibility: many json patches don't have a valid regex systax for p.search, assume they mean a forced replace
-            if (p.Search.Equals(""))
-                p.Search = @".*";
-            //legacy compatibility: treat p.mode being nothing or null default to edit
-            if (p.Mode == null || p.Mode.Equals("") || p.Mode.Equals("arrayEdit"))
-                p.Mode = "edit";
-            //check if the replace value is an xvm path and manually put in the macro equivilants
-            //testValue = testValue.Replace(@"[dollar]", @"$").Replace(@"[lbracket]", @"{").Replace(@"[quote]", @"""").Replace(@"[rbracket]""", @"}");
-            //match ${"
-            if (Regex.IsMatch(p.Replace, @"\$[ \t]*\{[ \t]*"""))
-                p.Replace = p.Replace.Replace(@"$", @"[dollar]").Replace(@"{", @"[lbracket]").Replace(@"""", @"[quote]").Replace(@":",@"[colon]").Replace(@"}", @"[rbracket]");
-            //split the replace path here so both can use it later
-            string[] addPathArray = null;
-            string testValue = p.Replace;
-            if (p.Mode.Equals("add") || p.Mode.Equals("arrayAdd"))
+            //match replace with [array] or [object] at the end, special case
+            if(Regex.IsMatch(p.Replace, @".*\[array\]$"))
             {
-                //.Split(new string[] { @"[index=" }, StringSplitOptions.None)
-                addPathArray = p.Replace.Split('/');
-                testValue = addPathArray[addPathArray.Count() - 1];
-                testValue = testValue.Split(new string[] { @"[index=" }, StringSplitOptions.None)[0];
-            }
-            //try a bool first, only works with "true" and "false"
-            try
-            {
-                newValueBool = bool.Parse(testValue);
-                useBool = true;
-                useInt = false;
-                useDouble = false;
-            }
-            catch (FormatException)
-            { }
-            //try a double nixt. it will parse a double and int. at this point it could be eithor
-            try
-            {
-                newValueDouble = double.Parse(testValue, CultureInfo.InvariantCulture);
-                useDouble = true;
-            }
-            catch (FormatException)
-            { }
-            //try an int next. if it works than turn double to false and int to true
-            try
-            {
-                newValueInt = int.Parse(testValue);
-                useInt = true;
-                useDouble = false;
-            }
-            catch (FormatException)
-            { }
-
-            //load file from disk...
-            string file = File.ReadAllText(p.CompletePath);
-
-            //replace all the invalid"${" refrences with macros
-            string[] fileSplit = Regex.Split(file, @"\$[ \t]*\{[ \t]*""");
-            for(int i = 1; i < fileSplit.Length; i++)
-            {
-                fileSplit[i] = @"""[dollar][lbracket][quote]" + fileSplit[i];
-                //split it again so we don't replace more than we need to
-                //we only want to replace the first entry that the original split fond
-                string[] splitAgain = fileSplit[i].Split('}');
-                if(Regex.IsMatch(splitAgain[0], @"""[\t ]*\:[\t ]*"""))
-                    splitAgain[0] = Regex.Replace(splitAgain[0], @"""[\t ]*\:[\t ]*""", @"[quote][colon][quote]");
-                //splitAgain[0] = splitAgain[0] + "}";
-                fileSplit[i] = string.Join("}", splitAgain);
-                //only match the first one...
-                Match m = Regex.Match(fileSplit[i], @"""[\t ]*\}");
-                if(m.Success)
-                {
-                    //create two strings, one for before, one for after
-                    string before = fileSplit[i].Substring(0, m.Index);
-                    string after = fileSplit[i].Substring(m.Index + m.Length);
-                    fileSplit[i] = before + @"[quote][rbracket]""" + after;
-                }
-                //fileSplit[i] = Regex.Replace(fileSplit[i], @"""[\t ]*\}", @"[quote][rbracket]""");
-            }
-            file = string.Join("", fileSplit);
-
-            //save the "$" lines
-            List<StringSave> ssList = new List<StringSave>();
-            StringBuilder backTogether = new StringBuilder();
-            string[] removeComments = file.Split('\n');
-            for (int i = 0; i < removeComments.Count(); i++)
-            {
-                string temp = removeComments[i];
-                //determine if it has (had) a comma at the end of the string
-                bool hadComma = false;
-                bool modified = false;
-                if (Regex.IsMatch(temp, @",[ \/\w\t\r\n()]*$"))
-                    hadComma = true;
-
-                //determine if it is a illegal refrence in jarray or jobject
-                StringSave ss = new StringSave();
-                if (Regex.IsMatch(temp, @"^[ \t]*""\$ref"" *: *{.*}"))
-                {
-                    modified = true;
-                    //jobject
-                    ss.Name = temp.Split('"')[1];
-                    ss.Value = temp.Split('{')[1];
-                    ssList.Add(ss);
-                    temp = "\"" + "willster419_refReplace" + "\"" + ": -6969";
-                }
-                if (hadComma && modified)
-                    temp = temp + ",";
-                backTogether.Append(temp + "\n");
-            }
-            file = backTogether.ToString();
-
-            JsonLoadSettings settings = new JsonLoadSettings()
-            {
-                CommentHandling = CommentHandling.Ignore
-            };
-            JObject root = null;
-            //load json for editing
-            if (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Alpha)
-            {
-                Logging.WriteToLog("Dumping escaped file for debug: " + Path.Combine(Settings.ApplicationStartupPath, "escaped.xc"));
-                File.WriteAllText(Path.Combine(Settings.ApplicationStartupPath, "escaped.xc"), file);
-            }
-            try
-            {
-                root = JObject.Parse(file, settings);
-            }
-            catch (JsonReaderException j)
-            {
-                Logging.WriteToLog(string.Format("JsonReaderException: Failed to patch {0}, the file is not valid json", p.CompletePath));
-                Logging.WriteToLog("(run test db or beta application to get more details)");
-                Logging.WriteToLog(j.ToString(),Logfiles.Application,LogLevel.Debug);
-            }
-            //if it failed to parse show the message (above) and pull out
-            if (root == null)
-            {
+                Logging.Debug("adding blank array detected");
+                p.Replace = Regex.Replace(p.Replace, @".*\[array\]$", string.Empty);
+                JsonAddBlank(p, root, false);
                 return;
             }
-            if (p.Mode.Equals("add"))
+            else if (Regex.IsMatch(p.Replace, @".*\[object\]$"))
             {
-                try
-                {
-                    //get to object from p.path
-                    //if in p.replace regex matches [array], add a blank array if not already there and return
-                    //if in p.replace regex matches [object], add a blank object if not already there and return
-                    //make full json path of what user wants to add to check, if the value is already there, return if so
-                    //for each split element, make objects for path IF not already exist, then property
+                Logging.Debug("adding blank object detected");
+                p.Replace = Regex.Replace(p.Replace, @".*\[object\]$", string.Empty);
+                JsonAddBlank(p, root, true);
+                return;
+            }
 
-                    JContainer result = null;
-                    //mode 1: adding blank array
-                    //add if the desired path to the array return null
-                    if (Regex.IsMatch(p.Replace,@".*\[array\]$"))
-                    {
-                        string propName = p.Replace.Replace(@"[array]", "");
-                        try
-                        {
-                            result = (JContainer)root.SelectToken(p.Path + "." + propName);
-                        }
-                        catch (Exception array)
-                        {
-                            Logging.WriteToLog(string.Format("error in replace syntax: {0}\n{1}", propName, array.ToString()),
-                                Logfiles.Application, LogLevel.Exception);
-                        }
-                        if (result != null)
-                        {
-                            Logging.WriteToLog("cannot add blank array when object already exists",Logfiles.Application,LogLevel.Error);
-                            return;
-                        }
-                        JContainer pathForArray = null;
-                        try
-                        {
-                            pathForArray = (JContainer)root.SelectToken(p.Path);
-                        }
-                        catch (Exception array)
-                        {
-                            Logging.WriteToLog(string.Format("error in replace syntax: {0}\n{1}", p.Path, array.ToString()),
-                                 Logfiles.Application, LogLevel.Exception);
-                        }
-                        JArray ary = new JArray();
-                        JProperty prop = new JProperty(propName, ary);
-                        pathForArray.Add(prop);
-                    }
-                    //mode 2: adding property with blank object
-                    //add if the desired path returns null
-                    else if (Regex.IsMatch(p.Replace,@".*\[object\]$"))
-                    {
-                        string propName = p.Replace.Replace(@"[object]", "");
-                        try
-                        {
-                            result = (JContainer)root.SelectToken(p.Path + "." + propName);
-                        }
-                        catch (Exception exObject)
-                        {
-                            Logging.WriteToLog(string.Format("error in replace syntax: {0}\n{1}", propName, exObject.ToString()),
-                                Logfiles.Application, LogLevel.Exception);
-                        }
-                        if (result != null)
-                        {
-                            Logging.WriteToLog("cannot add blank array when object already exists",Logfiles.Application,LogLevel.Error);
-                            return;
-                        }
-                        JContainer pathForArray = null;
-                        try
-                        {
-                            pathForArray = (JContainer)root.SelectToken(p.Path);
-                        }
-                        catch (Exception exObject)
-                        {
-                            Logging.WriteToLog(string.Format("error in replace syntax: {0}\n{1}", p.Path, exObject.ToString()),
-                                Logfiles.Application, LogLevel.Exception);
-                        }
-                        JObject obj = new JObject();
-                        JProperty prop = new JProperty(propName, obj);
-                        pathForArray.Add(prop);
-                    }
-                    //mode 3: adding property with value
-                    //add if the path returns null if path returns value that direct matches replace
-                    else
-                    {
-                        //check to see if it is there first
-                        //add all elements of the new path (all the / in the replace field) up to the last one
-                        string fullJSONPath = p.Path;
-                        for (int i = 0; i < addPathArray.Count() - 1; i++)
-                        {
-                            fullJSONPath = fullJSONPath + "." + addPathArray[i];
-                        }
-                        JToken val = null;
-                        try
-                        {
-                            val = root.SelectToken(fullJSONPath);
-                        }
-                        catch (Exception exVal)
-                        {
-                            Logging.WriteToLog(string.Format("error in path syntax: {0}\n{1}", fullJSONPath, exVal.ToString()),
-                                Logfiles.Application, LogLevel.Exception);
-                        }
-                        //null means the fullJSONPath was invalid, the item is not already there
-                        if (val != null)
-                        {
-                            if (!(val is JValue))
-                            {
-                                Logging.WriteToLog(string.Format("JToken found at {0}, but is not JValue", fullJSONPath),Logfiles.Application,LogLevel.Error);
-                                return;
-                            }
-                            //path is valid, but is the value what we want?
-                            JValue temp = (JValue)val;
-                            string value = "" + temp.ToString();
-                            value = value.Trim();
-                            if (useBool)
-                                value = value.ToLower();
-                            string replaceValue = addPathArray[addPathArray.Count() - 1];
-                            if (value.Equals(replaceValue))
-                            {
-                                //value is already what we want, no need to be here
-                                return;
-                            }
-                            else
-                            {
-                                //update the value to what we want
-                                if (useBool)
-                                    temp.Value = newValueBool;
-                                else if (useInt)
-                                    temp.Value = newValueInt;
-                                else if (useDouble)
-                                    temp.Value = newValueDouble;
-                                else //string
-                                    temp.Value = replaceValue.Replace(@"[sl]", @"/");
-                            }
-                        }
-                        else
-                        {
-                            //at this point the json is parsed, the property is not already there
-                            JObject newJobject = null;
-                            try
-                            {
-                                newJobject = (JObject)root.SelectToken(p.Path);
-                            }
-                            catch (Exception exNewObject)
-                            {
-                                Logging.WriteToLog(string.Format("error in adding json object: {0}\n{1}", p.Path, exNewObject.ToString()),
-                                Logfiles.Application, LogLevel.Exception);
-                            }
-                            if (newJobject == null)//error
-                            {
-                                Logging.WriteToLog("fullJSONPath does not exist in the file: " + p.Path,Logfiles.Application,LogLevel.Error);
-                                return;
-                            }
-                            JObject jobjectPlaceholder = newJobject;
-                            string newJsonpath = p.Path;
-                            for (int i = 0; i < addPathArray.Count(); i++)
-                            {
-                                if (i == addPathArray.Count() - 2)
-                                {
-                                    //need to create a property
-                                    string newPropValue = addPathArray[i + 1];
-                                    newPropValue = newPropValue.Replace(@"[sl]", @"/");
-                                    JProperty propToAdd = null;
-                                    if (useBool)
-                                        propToAdd = new JProperty(addPathArray[i], newValueBool);
-                                    else if (useInt)
-                                        propToAdd = new JProperty(addPathArray[i], newValueInt);
-                                    else if (useDouble)
-                                        propToAdd = new JProperty(addPathArray[i], newValueDouble);
-                                    else //string
-                                        propToAdd = new JProperty(addPathArray[i], newPropValue);
-                                    jobjectPlaceholder.Add(propToAdd);
-                                    break;
-                                }
-                                else
-                                {
-                                    //need to create a property with objects
-                                    //check if object of this name already exists
-                                    newJsonpath = newJsonpath + "." + addPathArray[i];
-                                    JToken np = null;
-                                    try
-                                    {
-                                        np = root.SelectToken(newJsonpath);
-                                    }
-                                    catch (Exception exNewJsonpath)
-                                    {
-                                        Logging.WriteToLog(string.Format("error in adding json object: {0}\n{1}", newJsonpath, exNewJsonpath.ToString()),
-                                            Logfiles.Application, LogLevel.Exception);
-                                    }
-                                    if ((np != null) && (np is JObject))
-                                    {
-                                        //part of the path already exists, use that instead
-                                        jobjectPlaceholder = (JObject)np;
-                                        continue;
-                                    }
-                                    JObject nextObject = new JObject();
-                                    JProperty nextProperty = new JProperty(addPathArray[i], nextObject);
-                                    jobjectPlaceholder.Add(nextProperty);
-                                    jobjectPlaceholder = nextObject;
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (Exception add)
-                {
-                    Logging.WriteToLog(string.Format("Error adding json object\n{0}", add.ToString()), Logfiles.Application, LogLevel.Exception);
-                }
-            }
-            else if (p.Mode.Equals("edit"))
-            {
-                try
-                {
-                    //get list of values from syntax
-                    //foreach returned item, if it's not a JValue, abort patch
-                    //if value equals regex value, edit it
-                    //List<JToken> results = null;
-                    IEnumerable<JToken> results = null;
-                    try
-                    {
-                        results = root.SelectTokens(p.Path);
-                    }
-                    catch (Exception exResults)
-                    {
-                        Logging.WriteToLog(string.Format("error with selecting token: {0}, mode={1}\n{2}", p.Path, p.Mode, exResults.ToString()),
-                            Logfiles.Application, LogLevel.Exception);
-                    }
-                    if (results == null || results.Count() == 0)
-                    {
-                        Logging.WriteToLog(string.Format("Path not found: {0}",p.Path),Logfiles.Application,LogLevel.Error);
-                        return;
-                    }
-                    List<JValue> Jresults = new List<JValue>();
-                    foreach(JToken jt in results)
-                    {
-                        if(jt is JValue Jvalue)
-                        {
-                            Jresults.Add(Jvalue);
-                        }
-                        else
-                        {
-                            Logging.WriteToLog(string.Format("Expected results of type JValue, returned {0}", jt.Type.ToString()),
-                                Logfiles.Application, LogLevel.Error);
-                            return;
-                        }
-                    }
-                    Logging.Debug("number of Jvalues: {0}", Jresults.Count);
-                    if (Jresults.Count == 0)
-                    {
-                        Logging.Debug("Jresults count is 0 (is this the intent?)");
-                        return;
-                    }
-                    foreach(JValue jv in Jresults)
-                    {
-                        string jsonValue = "" + jv.Value;
-                        if (useBool)
-                            jsonValue = jsonValue.ToLower();
-                        if (jsonValue.Trim().Equals(p.Replace.Replace(@"[sl]", @"/")))
-                        {
-                            //no need to update it, just return
-                            continue;
-                        }
-                        if (!Regex.IsMatch(jsonValue, p.Search))
-                            continue;
-                        if (useBool)
-                            jv.Value = newValueBool;
-                        else if (useInt)
-                            jv.Value = newValueInt;
-                        else if (useDouble)
-                            jv.Value = newValueDouble;
-                        else //string
-                            jv.Value = p.Replace.Replace(@"[sl]", @"/");
-                    }
-                }
-                catch (Exception edit)
-                {
-                    Logging.WriteToLog(string.Format("error parsing patch {0} \n{1}", p.ActualPatchName, edit.ToString()),
-                        Logfiles.Application, LogLevel.Exception);
-                }
-            }
-            else if (p.Mode.Equals("remove"))
-            {
-                //get to array/object/property
-                //if is array, remove it
-                //else if is value, remove parent property
-                //else if is object, remove it
-                JToken cont = root.SelectToken(p.Path);
-                
-                if (cont == null)
-                {
-                    Logging.WriteToLog(string.Format("path to element not found: {0}", p.Path), Logfiles.Application, LogLevel.Error);
-                    return;
-                }
-                if(cont is JValue)
-                {
-                    if(cont.Parent is JArray)
-                    {
-                        Logging.WriteToLog("Selected from p.path is JValue and parent is JArray. Use arrayRemove for this function",
-                            Logfiles.Application,LogLevel.Error);
-                        return;
-                    }
-                }
-                cont = cont.Parent;//to get the JProperty
-                if(Regex.IsMatch(cont.ToString(),p.Search))
-                {
-                    cont.Remove();
-                }
-            }
-            else if (p.Mode.Equals("arrayAdd"))
-            {
-                //get to the array
-                //if split string count is > 2, abort (invalid)
-                //if split string count is 2, property and value
-                //if split string count is 1, value
-                //check thay array is of similar contents (if it has items)
-                //unless p.search is "null", check each item.TString via regex if it already exists, if so abort
-                //insert into array from index
+            //here means it's a standard json add
+            //split the replace into array to make path for new object
+            Logging.Debug("adding standard value");
+            List<string> addPathArray = null;
+            addPathArray = p.Replace.Split('/').ToList();
 
-                if(addPathArray.Count() > 2)
+            //check it has at least 2 values
+            if(addPathArray.Count < 2)
+            {
+                Logging.Error("add syntax or replace value must have at least 2 values separated by \"/\" in its path");
+                return;
+            }
+
+            //last item in array is item to add
+            string valueToAdd = addPathArray[addPathArray.Count - 1];
+            valueToAdd = Utils.MacroReplace(valueToAdd, ReplacementTypes.PatchArguements);
+
+            //then remove it
+            addPathArray.RemoveAt(addPathArray.Count - 1);
+
+            //same idea for the property name
+            string propertyName = addPathArray[addPathArray.Count - 1];
+            addPathArray.RemoveAt(addPathArray.Count - 1);
+
+            //now form the full path (including any extra object paths used in the replace syntax)
+            string fullPath = p.Path;
+            if(addPathArray.Count > 0)
+            {
+                foreach(string s in addPathArray)
                 {
-                    Logging.WriteToLog(string.Format("invalid syntax of p.replace, more than 2 items detected: {0}", p.Replace),
-                        Logfiles.Application, LogLevel.Error);
+                    fullPath = fullPath + "." + s;
+                }
+            }
+
+            //get the root object from the original jsonPath
+            JContainer objectRoot = null;
+            try
+            {
+                objectRoot = (JContainer)root.SelectToken(p.Path);
+            }
+            catch (Exception exVal)
+            {
+                Logging.Error("error in jsonPath syntax: {0}", p.Path);
+                Logging.Debug(exVal.ToString());
+                return;
+            }
+            if(objectRoot == null)
+            {
+                Logging.Error("jsonPath does not exist: {0}", p.Path);
+                return;
+            }
+
+            //foreach string still in the addPath array, go into the inner object
+            foreach(string s in addPathArray)
+            {
+                objectRoot = (JContainer)objectRoot.SelectToken(s);
+
+                //if it's null, then it does not exist, so make it
+                if(objectRoot == null)
+                {
+                    //make a new property with key of name and value of object
+                    JObject nextObject = new JObject();
+                    JProperty nextProperty = new JProperty(s, nextObject);
+                    objectRoot.Add(nextProperty);
+                    objectRoot = nextObject;
+                }
+            }
+
+            //add the property to the object
+            objectRoot.Add(CreateJsonProperty(propertyName, valueToAdd));
+        }
+
+        private static void JsonAddBlank(Patch p, JObject root, bool jObject)
+        {
+            //replace field has now already been parsed
+            //see if the object already exists in the full form (so include replace being the new object/array name)
+            JContainer result = null;
+            try
+            {
+                result = (JContainer)root.SelectToken(p.Path + "." + p.Replace);
+            }
+            catch (Exception array)
+            {
+                Logging.Error("error in replace syntax: {0}\n{1}", p.Replace, array.ToString());
+                return;
+            }
+            if (result != null)
+            {
+                Logging.Error("cannot add blank array or object when already exists");
+                return;
+            }
+
+            //here means the object/array does not exist, and can be added
+            //get the container for adding the new blank object/array to
+            JContainer pathForArray = (JContainer)root.SelectToken(p.Path);
+
+            //make object reference and make it array or object
+            JContainer newObject = null;
+            if (jObject)
+                newObject = new JObject();
+            else
+                newObject = new JArray();
+
+            //make the property to hold the new object/array, key-value style
+            JProperty prop = new JProperty(p.Replace, newObject);
+
+            //add it to the container
+            pathForArray.Add(prop);
+        }
+
+        private static void JsonEditRemove(Patch p, JObject root, bool edit)
+        {
+            //get the list of all items that match the path
+            IEnumerable<JToken> jsonPathresults = null;
+            try
+            {
+                jsonPathresults = root.SelectTokens(p.Path);
+            }
+            catch (Exception exResults)
+            {
+                Logging.Error("Error with jsonPath: {0}", p.Path);
+                Logging.Error(exResults.ToString());
+            }
+            if (jsonPathresults == null || jsonPathresults.Count() == 0)
+            {
+                Logging.Warning("no results from jsonPath search");
+                return;
+            }
+
+            //make sure results are all JValue
+            List<JValue> Jresults = new List<JValue>();
+            foreach (JToken jt in jsonPathresults)
+            {
+                if (jt is JValue Jvalue)
+                {
+                    Jresults.Add(Jvalue);
+                }
+                else
+                {
+                    Logging.Error("Expected results of type JValue, returned {0}", jt.Type.ToString());
                     return;
                 }
-                JToken newObject = root.SelectToken(p.Path);
-                
-                //pull out if it failed to get the selection
-                if (newObject == null)
+            }
+
+            //check that we have results
+            Logging.Debug("number of Jvalues: {0}", Jresults.Count);
+            if (Jresults.Count == 0)
+            {
+                Logging.Warning("Jresults count is 0 (is this the intent?)");
+                return;
+            }
+
+            //foreach match from json search, match the result with search parameter
+            foreach(JValue result in Jresults)
+            {
+                //parse the value to a string for comparison
+                string jsonValue = JsonGetCompare(result);
+
+                //only update the value if the regex search matches
+                if(Regex.IsMatch(jsonValue,p.Search))
                 {
-                    Logging.WriteToLog(string.Format("path {0} not found for {1}", p.Path, Path.GetFileName(p.CompletePath)),
-                        Logfiles.Application,LogLevel.Error);
-                    return;
-                }
-                if (!(newObject is JArray))
-                {
-                    Logging.WriteToLog(string.Format("ERROR: the path \"{0}\" does not lead to a Jarray", p.Path),Logfiles.Application,LogLevel.Error);
-                    return;
-                }
-                JArray newObjectArray = (JArray)newObject;
-                //check for index value in p.replace (name/value[index=NUMBER])
-                string[] splitForAdd = p.Replace.Split(new string[] { @"[index=" }, StringSplitOptions.None);
-                if(splitForAdd.Length < 2)
-                {
-                    Logging.WriteToLog(string.Format("ERROR: arrayAdd selected but replace value does not have [index=] tag"),
-                        Logfiles.Application,LogLevel.Error);
-                    return;
-                }
-                int index = Utils.ParseInt(splitForAdd[1].Replace(@"]", ""), -1);
-                if(index >= newObjectArray.Count)
-                {
-                    //if the array is empty and the index is 0, trying to add to a blank array, don't log it
-                    if(index != 0)
-                        Logging.WriteToLog(string.Format("index value ({0})>= array count ({1}), putting at end of the array (is this the intent?)",
-                            index,newObjectArray.Count), Logfiles.Application,LogLevel.Warning);
-                    index = -1;
-                }
-                if (newObjectArray.Count > 0)
-                {
-                    if ((newObjectArray[0] is JValue) && (addPathArray.Count() == 2))
+                    if (edit)
                     {
-                        Logging.WriteToLog("array is of JValues and 2 replace arguemnts given",Logfiles.Application,LogLevel.Error);
-                        return;
-                    }
-                    else if (!(newObjectArray[0] is JValue) && (addPathArray.Count() == 1))
-                    {
-                        Logging.WriteToLog("array is not of JValues and only 1 replace arguemnt given",Logfiles.Application,LogLevel.Error);
-                        return;
-                    }
-                }
-                JValue val = null;
-                string value = addPathArray[0];
-                if (addPathArray.Count() == 2)
-                    value = addPathArray[1];
-                value = value.Split(new string[] { @"[index=" }, StringSplitOptions.None)[0];
-                value = value.Replace(@"[sl]", @"/");
-                if (useBool)
-                    val = new JValue(newValueBool);
-                else if (useInt)
-                    val = new JValue(newValueInt);
-                else if (useDouble)
-                    val = new JValue(newValueDouble);
-                else //string
-                    val = new JValue(value);
-                if (addPathArray.Count() == 2)
-                {
-                    //add object with property
-                    if(index == -1)
-                    {
-                        newObjectArray.Add(new JObject(new JProperty(addPathArray[0], val)));
+                        Logging.Debug("regex match for result {0}, applying edit to {1}", jsonValue, p.Search);
+                        UpdateJsonValue(result, p.Replace);
                     }
                     else
                     {
-                        newObjectArray.Insert(index, (new JObject(new JProperty(addPathArray[0], val))));
+                        Logging.Debug("regex match for result {0}, removing", jsonValue);
+                        //check if parent is array, we should not be removing from an array in this function
+                        if(result.Parent is JArray)
+                        {
+                            Logging.Error("Selected from p.path is JValue and parent is JArray. Use arrayRemove for this function");
+                            return;
+                        }
+                        //get the jProperty above it and remove itself
+                        else if (result.Parent is JProperty prop)
+                        {
+                            prop.Remove();
+                        }
+                        else
+                        {
+                            Logging.Error("unknown parent type: {0}", result.Parent.GetType().ToString());
+                        }
                     }
                 }
                 else
                 {
-                    //add value
-                    if (index == -1)
-                    {
-                        newObjectArray.Add(val);
-                    }
-                    else
-                    {
-                        newObjectArray.Insert(index, val);
-                    }
+                    Logging.Debug("json value {0} matches jsonPath but does not match regex search {1}", jsonValue, p.Search);
                 }
             }
-            else if (p.Mode.Equals("arrayRemove"))
+        }
+
+        private static void JsonArrayAdd(Patch p, JObject root)
+        {
+            //check syntax of what was added
+            List<string> addPathArray = null;
+            addPathArray = p.Replace.Split('/').ToList();
+
+            //maximum number of args for replace is 2
+            if(addPathArray.Count > 2)
             {
-                //get to array from p.path
-                //foreach item.ToString in the array
-                //if regex match the first one, remove and break
-                JToken newObject = root.SelectToken(p.Path);
-                
-                //pull out if it failed to get the selection
-                if (newObject == null)
+                Logging.Error("invalid replace syntax: maximum arguments is 2. given: {0}", addPathArray.Count);
+                return;
+            }
+
+            //get the property name (if exists, and value, and index to add to)
+            string propertyName = addPathArray.Count == 2 ? addPathArray[0] : string.Empty;
+            string valueToAdd = addPathArray[0];
+
+            //check for index value in p.replace (name/value[index=NUMBER])
+            string indexString = valueToAdd.Split(new string[] { @"[index=" }, StringSplitOptions.None)[1];
+
+            //split off the end brace, default is index 0 (add it to array at bottom if none provided)
+            int index = Utils.ParseInt(indexString.Split(']')[0], -1);
+
+            //and get it out of the valueToAdd
+            valueToAdd = valueToAdd.Split(new string[] { @"[index=" }, StringSplitOptions.None)[0];
+
+            JArray array = JsonArrayGet(p, root);
+            if (array == null)
+            {
+                Logging.Error("JArray is null");
+                return;
+            }
+
+            //if index value is greater then count, then warning and set it to -1 (tells it to add to bottom of array)
+            if(index >= array.Count)
+            {
+                if (index != 0)
+                    Logging.Warning("index value ({0})>= array count ({1}), putting at end of the array (is this the intent?)", index, array.Count);
+                index = -1;
+            }
+
+            //check that the correct type of array was found for expected add (key-value to value array, vise versa)
+            if (array.Count > 0)
+            {
+                if ((array[0] is JValue) && (addPathArray.Count() == 2))
                 {
-                    Logging.WriteToLog(string.Format("path {0} not found for {1}", p.Path, Path.GetFileName(p.CompletePath)),
-                        Logfiles.Application,LogLevel.Error);
+                    Logging.WriteToLog("array is of JValues and 2 replace arguments given", Logfiles.Application, LogLevel.Error);
                     return;
                 }
-                if (!(newObject is JArray))
+                else if (!(array[0] is JValue) && (addPathArray.Count() == 1))
                 {
-                    Logging.WriteToLog(string.Format("the path \"{0}\" does not lead to a JSON array", p.Path),
-                        Logfiles.Application,LogLevel.Error);
-                    return;
-                }
-                JArray newObjectArray = (JArray)newObject;
-                if(newObjectArray.Count == 0)
-                {
-                    //can't remove from an array if it's empty #rollSafe
-                    Logging.WriteToLog("WARNING: array is already empty, is this the intent? (i bet it's not)",Logfiles.Application,LogLevel.Warning);
-                    return;
-                }
-                bool found = false;
-                for(int i = 0; i < newObjectArray.Count; i++)
-                {
-                    if(Regex.IsMatch(newObjectArray[i].ToString(),p.Search))
-                    {
-                        found = true;
-                        newObjectArray[i].Remove();
-                        break;
-                    }
-                }
-                if (!found)
-                {
-                    Logging.WriteToLog(string.Format("no results found for search \"{0}\", with path \"{1}\"", p.Search, p.Path),
-                        Logfiles.Application,LogLevel.Error);
+                    Logging.WriteToLog("array is not of JValues and only 1 replace arguments given", Logfiles.Application, LogLevel.Error);
                     return;
                 }
             }
-            else if (p.Mode.Equals("arrayClear"))
+
+            //add the value/key-value pair to the array at the specified index
+            JValue val = CreateJsonValue(valueToAdd);
+            if (addPathArray.Count() == 2)
             {
-                //get to array from p.path
-                //foreach item.ToString in the array
-                //if regex match from p.search, remove
-                JToken newObject = root.SelectToken(p.Path);
-                
-                //pull out if it failed to get the selection
-                if (newObject == null)
+                //add object with property
+                if (index == -1)
                 {
-                    Logging.WriteToLog(string.Format("path {0} not found for {1}", p.Path, Path.GetFileName(p.CompletePath)),
-                        Logfiles.Application,LogLevel.Warning);
-                    return;
+                    array.Add(new JObject(new JProperty(propertyName, val)));
                 }
-                if (!(newObject is JArray))
+                else
                 {
-                    Logging.WriteToLog(string.Format("the path \"{0}\" does not lead to a JSON array", p.Path),Logfiles.Application,LogLevel.Error);
-                    return;
-                }
-                JArray newObjectArray = (JArray)newObject;
-                if (newObjectArray.Count == 0)
-                {
-                    //can't remove from an array if it's empty #rollSafe
-                    Logging.WriteToLog("array is already empty",Logfiles.Application,LogLevel.Warning);
-                    return;
-                }
-                bool found = false;
-                for (int i = 0; i < newObjectArray.Count; i++)
-                {
-                    if (Regex.IsMatch(newObjectArray[i].ToString(), p.Search))
-                    {
-                        found = true;
-                        newObjectArray[i].Remove();
-                        i--;
-                        //break;
-                    }
-                }
-                if (!found)
-                {
-                    Logging.WriteToLog(string.Format("no results found for search \"{0}\", with path \"{1}\"", p.Search, p.Path),
-                        Logfiles.Application,LogLevel.Warning);
-                    return;
+                    array.Insert(index, (new JObject(new JProperty(propertyName, val))));
                 }
             }
             else
             {
-                Logging.WriteToLog(string.Format("ERROR: Unknown json patch mode, {0}", p.Mode),Logfiles.Application,LogLevel.Error);
+                //add value
+                if (index == -1)
+                {
+                    array.Add(val);
+                }
+                else
+                {
+                    array.Insert(index, val);
+                }
+            }
+        }
+
+        private static void JsonArrayRemoveClear(Patch p, JObject root, bool remove)
+        {
+            JArray array = JsonArrayGet(p, root);
+            if (array == null)
+            {
+                Logging.Error("JArray is null");
                 return;
             }
 
-            StringBuilder rebuilder = new StringBuilder();
-            string[] putBackDollas = root.ToString().Split('\n');
-            for (int i = 0; i < putBackDollas.Count(); i++)
+            //can't remove from an array if it's empty #rollSafe
+            if (array.Count == 0)
             {
-                string temp = putBackDollas[i];
-                if (Regex.IsMatch(temp, "willster419_refReplace"))
+                Logging.Error("array is already empty");
+                return;
+            }
+
+            //search and remove each item that matches. if it's remove mode, then stop at the first one
+            bool found = false;
+            for (int i = 0; i < array.Count; i++)
+            {
+                string jsonResult = JsonGetCompare(array[i] as JValue);
+                if (Regex.IsMatch(jsonResult, p.Search))
                 {
-                    temp = "\"" + ssList[0].Name + "\"" + ": {" + ssList[0].Value;
-                    putBackDollas[i] = temp;
-                    ssList.RemoveAt(0);
+                    found = true;
+                    array[i].Remove();
+                    i--;
+                    if (remove)
+                        break;
                 }
-                rebuilder.Append(putBackDollas[i] + "\n");
             }
-            if (ssList.Count != 0)
+            if (!found)
             {
-                Logging.WriteToLog(string.Format("There was an error with patching the file {0}, with extra refrences. aborting patch", p.CompletePath),
-                    Logfiles.Application,LogLevel.Error);
+                Logging.Warning("no results found for search \"{0}\", with path \"{1}\"", p.Search, p.Path);
                 return;
             }
-            string toWrite = rebuilder.ToString();
-            try
-            {
-                JObject @object = JObject.Parse(toWrite);
-            }
-            catch (JsonReaderException e)
-            {
-                Logging.WriteToLog(string.Format("Failed to write file {0}: there was an error with it's json syntax (most likly an error in" +
-                    " the replace property or it could indicate an error with the patching system) \n{1}", p.CompletePath,e.ToString()),
-                    Logfiles.Application,LogLevel.Exception);
-                return;
-            }
-            //unescape the macros
-            //unescaped string looks like this (sample)
-            //"[dollar][lbracket][quote]battle.xc[quote][colon][quote]expertPanel[quote][rbracket]"
-            //^quotes included
-            toWrite = toWrite
-                //first replace the refrences (the ones with the quotes to remove the quotes)
-                .Replace(@"""[dollar]", @"$")//start of refrence with dollar
-                .Replace(@"[rbracket]""", @"}")//end of refrence with colon
-                .Replace(@"[lbracket]", @"{")
-                .Replace(@"[quote]", @"""")
-                .Replace(@"[colon]",@":")
-                .Replace(@"[dollar]", @"$")
-                .Replace(@"[rbracket]", @"}");
-            File.WriteAllText(p.CompletePath, toWrite);
-            Logging.Debug("json patch completed successfully");
         }
         #endregion
 
         #region Helpers
 
+        private static string JsonGetCompare(JValue result)
+        {
+            //parse the value to a string for comparison
+            string jsonValue = string.Empty;
+            if (result.Value is string str)
+                jsonValue = str;
+            else if (result.Value is char c)
+                jsonValue = c.ToString();
+            else if (result.Value is bool b)
+                jsonValue = b.ToString().ToLower();
+            else
+                jsonValue = result.Value.ToString();
+            return jsonValue;
+        }
+
         private static void UpdateJsonValue(JValue jvalue, string value)
         {
             //determine what type value should be used for the json item based on attempted parsing
-            //try to parse as a bool
             if (Utils.ParseBool(value, out bool resultBool))
                 jvalue.Value = resultBool;
             else if (Utils.ParseFloat(value, out float resultFloat))
@@ -1276,9 +900,46 @@ namespace RelhaxModpack
             Logging.Debug("Json value parsed as {0}", jvalue.Value.GetType().ToString());
         }
 
-        private static void UpdateJsonValue(JProperty property, string name, string value)
+        private static JValue CreateJsonValue(string value)
         {
-            throw new BadMemeException("finish me");
+            //determine what type value should be used for the json item based on attempted parsing
+            JValue jvalue = null;
+            if (Utils.ParseBool(value, out bool resultBool))
+                jvalue = new JValue(resultBool);
+            else if (Utils.ParseFloat(value, out float resultFloat))
+                jvalue = new JValue(resultFloat);
+            else if (Utils.ParseInt(value, out int resultInt))
+                jvalue = new JValue(resultInt);
+            else
+                jvalue = new JValue(value);
+            Logging.Debug("Json value parsed as {0}", jvalue.Value.GetType().ToString());
+            return jvalue;
+        }
+
+        private static JProperty CreateJsonProperty(string propertyName, string value)
+        {
+            JValue jvalue = CreateJsonValue(value);
+            return new JProperty(propertyName, jvalue);
+        }
+
+        private static JArray JsonArrayGet(Patch p, JObject root)
+        {
+            //get the root object from the original jsonPath
+            JContainer objectRoot = null;
+            try
+            {
+                objectRoot = (JContainer)root.SelectToken(p.Path);
+            }
+            catch (Exception exVal)
+            {
+                Logging.Error("error in jsonPath syntax: {0}", p.Path);
+                Logging.Debug(exVal.ToString());
+            }
+            if (objectRoot == null)
+            {
+                Logging.Error("path does not exist: {0}", p.Path);
+            }
+            return objectRoot as JArray;
         }
 
         private static string EscapeXvmRefrences(string file)
