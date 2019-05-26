@@ -525,10 +525,13 @@ namespace RelhaxModpack
             }
 
             //un-escape the string with all ref metadata and xvm references
-            file = Utils.MacroReplace(file, ReplacementTypes.PatchFiles);
+            file = Utils.MacroReplace(root.ToString(), ReplacementTypes.PatchFiles);
+
+            //always have a newline at the end
+            file = file.Trim() + Environment.NewLine;
 
             //write to disk and finish
-            File.WriteAllText(p.CompletePath, root.ToString());
+            File.WriteAllText(p.CompletePath, file);
             Logging.Debug("json patch completed successfully");
         }
         #endregion
@@ -539,17 +542,17 @@ namespace RelhaxModpack
             //3 modes for json adding: regular add, add blank array, add blank object
 
             //match replace with [array] or [object] at the end, special case
-            if(Regex.IsMatch(p.Replace, @".*\[array\]$"))
+            if(Regex.IsMatch(p.Replace, @"\[array\]$"))
             {
                 Logging.Debug("adding blank array detected");
-                p.Replace = Regex.Replace(p.Replace, @".*\[array\]$", string.Empty);
+                p.Replace = Regex.Replace(p.Replace, @"\[array\]$", string.Empty);
                 JsonAddBlank(p, root, false);
                 return;
             }
-            else if (Regex.IsMatch(p.Replace, @".*\[object\]$"))
+            else if (Regex.IsMatch(p.Replace, @"\[object\]$"))
             {
                 Logging.Debug("adding blank object detected");
-                p.Replace = Regex.Replace(p.Replace, @".*\[object\]$", string.Empty);
+                p.Replace = Regex.Replace(p.Replace, @"\[object\]$", string.Empty);
                 JsonAddBlank(p, root, true);
                 return;
             }
@@ -605,26 +608,66 @@ namespace RelhaxModpack
                 Logging.Error("jsonPath does not exist: {0}", p.Path);
                 return;
             }
+            if(!(objectRoot is JObject))
+            {
+                Logging.Error("expected JObject, got {0}", objectRoot.Type.ToString());
+                return;
+            }
 
             //foreach string still in the addPath array, go into the inner object
+            JObject previous = (JObject)objectRoot;
             foreach(string s in addPathArray)
             {
-                objectRoot = (JContainer)objectRoot.SelectToken(s);
+                Logging.Debug("creating object for path: {0}", s);
+                JContainer innerSearch = (JContainer)previous.SelectToken(s);
 
                 //if it's null, then it does not exist, so make it
-                if(objectRoot == null)
+                if(innerSearch == null)
                 {
                     //make a new property with key of name and value of object
                     JObject nextObject = new JObject();
                     JProperty nextProperty = new JProperty(s, nextObject);
-                    objectRoot.Add(nextProperty);
-                    objectRoot = nextObject;
+                    previous.Add(nextProperty);
+                    previous = nextObject;
+                }
+                else if (innerSearch is JObject innerObject)
+                {
+                    Logging.Debug("following add path, found JObject exists from the add replace path: {0}",s);
+                    previous = innerObject;
+                }
+                else
+                {
+                    Logging.Error("following add path, expected JObject or null, got {0}", innerSearch.Type.ToString());
+                    return;
                 }
             }
 
-            //add the property to the object
-            JProperty prop = CreateJsonProperty(propertyName, valueToAdd);
-            objectRoot.Add(prop);
+            //search for if the key/value already exists
+            Logging.Debug("checking if value exists and needs to be replaced");
+            objectRoot = previous;
+            JToken resultValue = objectRoot.SelectToken(propertyName);
+            //result is jvalue, parent is property
+            if (resultValue is JValue jvalue)
+            {
+                Logging.Debug("found result already exists, checking if value is direct equals");
+                if (valueToAdd.Equals(JsonGetCompare(jvalue)))
+                {
+                    Logging.Debug("value already matches, no need to replace");
+                    return;
+                }
+                else
+                {
+                    Logging.Debug("value does not match, replacing");
+                    UpdateJsonValue(jvalue, valueToAdd);
+                }
+            }
+            else
+            {
+                //add the property to the object
+                Logging.Debug("key-value pair does not exist, adding");
+                JProperty prop = CreateJsonProperty(propertyName, valueToAdd);
+                objectRoot.Add(prop);
+            }
         }
 
         private static void JsonAddBlank(Patch p, JObject root, bool jObject)
@@ -718,7 +761,7 @@ namespace RelhaxModpack
                 {
                     if (edit)
                     {
-                        Logging.Debug("regex match for result {0}, applying edit to {1}", jsonValue, p.Search);
+                        Logging.Debug("regex match for result {0}, applying edit to {1}", jsonValue, p.Replace);
                         UpdateJsonValue(result, p.Replace);
                     }
                     else
