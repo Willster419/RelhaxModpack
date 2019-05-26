@@ -26,7 +26,6 @@ namespace RelhaxModpack.Windows
         #region Constants
         //get the sensitive constants (like this test below) from the PrivateStuff class
         private const string DatabaseUpdateTxt = "databaseUpdate.txt";
-        private const string DatabaseUpdateTxtBak = "databaseUpdate.txt.bak";
         private const string SupportedClients = "supported_clients.xml";
         private const string ManagerVersion = "manager_version.xml";
         private const string TrashXML = "trash.xml";
@@ -754,14 +753,8 @@ namespace RelhaxModpack.Windows
                 "---------------------------------------------------------------------------------------");
 
             //save databaseUpdate.txt
-            //if it exists, then move it to the backup
-            if(File.Exists(DatabaseUpdateTxt))
-            {
-                //but if the backup also exists, then delete that as well
-                if (File.Exists(DatabaseUpdateTxtBak))
-                    File.Delete(DatabaseUpdateTxtBak);
-                File.Move(DatabaseUpdateTxt, DatabaseUpdateTxtBak);
-            }
+            if (File.Exists(DatabaseUpdateTxt))
+                File.Delete(DatabaseUpdateTxt);
             File.WriteAllText(DatabaseUpdateTxt, databaseUpdateText.ToString());
             ReportProgress("Database text processed and written to disk");
 
