@@ -109,7 +109,7 @@ namespace RelhaxModpack
             for(int i = 1; i < UnitTests.Count+1; i++)
             {
                 string checkfile = Path.Combine(RegressionFolderPath, string.Format("{0}{1}{2}", CheckFilenamePrefix, i.ToString("D2"), RegressionExtension));
-                if (!File.Exists(checkfile))//!File.Exists(checkfile)
+                if (!File.Exists(checkfile))
                 {
                     Logging.Error("checkfile does not exist!");
                     Logging.Error(checkfile);
@@ -135,6 +135,40 @@ namespace RelhaxModpack
                 unitTest.Patch.Type = RegressionTypeString;
                 WriteToLogfiles("Running test {0} of {1}: {2}", ++NumPassed, UnitTests.Count, unitTest.Description);
                 unitTest.Patch.FromEditor = true;
+                if(unitTest.Patch.FollowPath)
+                {
+                    //delete testfile
+                    if (File.Exists(filenameToTestPath))
+                        File.Delete(filenameToTestPath);
+                    if (NumPassed >= 5)
+                    {
+                        File.Copy(Path.Combine(RegressionFolderPath, string.Format("{0}{1}", @"check_04", RegressionExtension)), filenameToTestPath);
+                        if (NumPassed == 6)
+                        {
+                            //backup currentPlayersPanel and copy over new one
+                            if(File.Exists(Path.Combine(RegressionFolderPath, string.Format("{0}{1}", @"playersPanelBackup", RegressionExtension))))
+                                File.Delete(Path.Combine(RegressionFolderPath, string.Format("{0}{1}", @"playersPanelBackup", RegressionExtension)));
+                            File.Copy(Path.Combine(RegressionFolderPath, string.Format("{0}{1}", @"playersPanel", RegressionExtension)),
+                                Path.Combine(RegressionFolderPath, string.Format("{0}{1}", @"playersPanelBackup", RegressionExtension)));
+
+                            if(File.Exists(Path.Combine(RegressionFolderPath, string.Format("{0}{1}", @"playersPanel", RegressionExtension))))
+                                File.Delete(Path.Combine(RegressionFolderPath, string.Format("{0}{1}", @"playersPanel", RegressionExtension)));
+                            File.Copy(Path.Combine(RegressionFolderPath, string.Format("{0}{1}", @"check_05", RegressionExtension)),
+                                Path.Combine(RegressionFolderPath, string.Format("{0}{1}", @"playersPanel", RegressionExtension)));
+                        }
+                        else if (NumPassed == 7)
+                        {
+                            if (File.Exists(Path.Combine(RegressionFolderPath, string.Format("{0}{1}", @"playersPanel", RegressionExtension))))
+                                File.Delete(Path.Combine(RegressionFolderPath, string.Format("{0}{1}", @"playersPanel", RegressionExtension)));
+                            File.Copy(Path.Combine(RegressionFolderPath, string.Format("{0}{1}", @"check_06", RegressionExtension)),
+                                Path.Combine(RegressionFolderPath, string.Format("{0}{1}", @"playersPanel", RegressionExtension)));
+                        }
+                    }
+                    else
+                    {
+                        File.Copy(Path.Combine(RegressionFolderPath, Startfile), filenameToTestPath);
+                    }
+                }
                 PatchUtils.RunPatch(unitTest.Patch);
                 string checkfile = Path.Combine(RegressionFolderPath, string.Format("{0}{1}{2}", CheckFilenamePrefix, NumPassed.ToString("D2"), Path.GetExtension(Startfile)));
                 WriteToLogfiles("Checking results against check file {0}...",Path.GetFileName(checkfile));
@@ -162,6 +196,20 @@ namespace RelhaxModpack
                 //delete the test file, we don't need it. (it's the same text as the last check file anyways)
                 if (File.Exists(filenameToTestPath))
                     File.Delete(filenameToTestPath);
+                if(UnitTests[0].Patch.FollowPath)
+                {
+                    //delete not needed "escaped" files and put playersPanelBackup back
+                    if (File.Exists(Path.Combine(RegressionFolderPath, string.Format("{0}{1}", @"playersPanel", RegressionExtension))))
+                        File.Delete(Path.Combine(RegressionFolderPath, string.Format("{0}{1}", @"playersPanel", RegressionExtension)));
+                    File.Copy(Path.Combine(RegressionFolderPath, string.Format("{0}{1}", @"playersPanelBackup", RegressionExtension)),
+                        Path.Combine(RegressionFolderPath, string.Format("{0}{1}", @"playersPanel", RegressionExtension)));
+                    foreach (string file in new string[] { "battleLabelsTemplates_escaped", "battleLabels_escaped",
+                        "damageLog_escaped", "playersPanel_escaped", "testfile_escaped", "playersPanelBackup" })
+                    {
+                        if (File.Exists(Path.Combine(RegressionFolderPath, string.Format("{0}{1}", file, RegressionExtension))))
+                            File.Delete(Path.Combine(RegressionFolderPath, string.Format("{0}{1}", file, RegressionExtension)));
+                    }
+                }
             }
             //dispose log file
             RegressionLogfile.Dispose();
