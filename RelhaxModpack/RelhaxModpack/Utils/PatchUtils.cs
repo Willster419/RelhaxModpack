@@ -425,7 +425,7 @@ namespace RelhaxModpack
         }
         #endregion
 
-        #region JSON_NEW
+        #region JSON
         private static void JsonPatch(Patch p)
         {
             //apply and log legacy compatibilities
@@ -528,7 +528,7 @@ namespace RelhaxModpack
             file = Utils.MacroReplace(file, ReplacementTypes.PatchFiles);
 
             //write to disk and finish
-            File.WriteAllText(p.CompletePath, file);
+            File.WriteAllText(p.CompletePath, root.ToString());
             Logging.Debug("json patch completed successfully");
         }
         #endregion
@@ -623,7 +623,8 @@ namespace RelhaxModpack
             }
 
             //add the property to the object
-            objectRoot.Add(CreateJsonProperty(propertyName, valueToAdd));
+            JProperty prop = CreateJsonProperty(propertyName, valueToAdd);
+            objectRoot.Add(prop);
         }
 
         private static void JsonAddBlank(Patch p, JObject root, bool jObject)
