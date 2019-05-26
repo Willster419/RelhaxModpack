@@ -125,6 +125,7 @@ namespace RelhaxModpack
                 unitTest.Patch.File = filenameToTestPath;
                 unitTest.Patch.Type = RegressionTypeString;
                 WriteToLogfiles("Running test {0} of {1}: {2}", ++NumPassed, UnitTests.Count, unitTest.Description);
+                unitTest.Patch.FromEditor = true;
                 PatchUtils.RunPatch(unitTest.Patch);
                 string checkfile = Path.Combine(RegressionFolderPath, string.Format("{0}{1}{2}", CheckFilenamePrefix, NumPassed.ToString("D2"), Path.GetExtension(Startfile)));
                 WriteToLogfiles("Checking results against check file {0}...",Path.GetFileName(checkfile));

@@ -438,7 +438,7 @@ namespace RelhaxModpack
             string file = File.ReadAllText(p.CompletePath);
 
             //if the file is xc then check it for xvm style references (clean it up for the json parser)
-            if (Path.GetExtension(p.CompletePath).ToLower().Equals(".xc"))
+            if (Path.GetExtension(p.CompletePath).ToLower().Equals(".xc") || p.FromEditor)
             {
                 //and also check if the replace value is an xvm direct reference, we don't allow those (needs to be escaped)
                 if (Regex.IsMatch(p.Replace, @"\$[ \t]*\{[ \t]*"""))
