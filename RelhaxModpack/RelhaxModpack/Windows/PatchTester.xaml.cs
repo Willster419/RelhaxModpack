@@ -1332,7 +1332,7 @@ namespace RelhaxModpack.Windows
                     Patch = new Patch()
                     {
                         FollowPath = true,
-                        Path = @"$.damageLogTest.enabled",
+                        Path = @"$.damageLog.enabled",
                         Search = ".*",
                         Replace = "false",
                         Type = "json"

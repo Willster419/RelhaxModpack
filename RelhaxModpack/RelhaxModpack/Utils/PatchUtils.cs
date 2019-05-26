@@ -437,6 +437,10 @@ namespace RelhaxModpack
             //load the file into a string
             string file = File.ReadAllText(p.CompletePath);
 
+            //save it for later if followpath and from editor
+            if (p.FromEditor && p.FollowPath && string.IsNullOrEmpty(p.FollowPathEditorCompletePath))
+                p.FollowPathEditorCompletePath = p.CompletePath;
+
             //if the file is xc then check it for xvm style references (clean it up for the json parser)
             if (Path.GetExtension(p.CompletePath).ToLower().Equals(".xc") || p.FromEditor)
             {
@@ -484,8 +488,23 @@ namespace RelhaxModpack
                 return;
             }
 
+            //if it is an xvm configuration file, or from editor, and we are wanting to followPath, then the root object then becomes the last item in the path
+            //this works based on splitting up the path itself (forces dot convention) and going into files based on the reference
+            //note that it will modify the patch path variable
+            if ((Path.GetExtension(p.CompletePath).ToLower().Equals(".xc") || p.FromEditor) && p.FollowPath)
+            {
+                Logging.Debug("followpath is true, and either editor or xc file, following path to get actual root json object");
+                root = FollowXvmPath(p, root);
+            }
+
+            if(root == null && p.FollowPath)
+            {
+                Logging.Debug("root Jobject is null, meaning followPath previously completed, so stop here");
+                return;
+            }
+
             //switch how it is handled based on the mode of the patch
-            switch(p.Mode.ToLower())
+            switch (p.Mode.ToLower())
             {
                 case "add":
                     JsonAdd(p, root);
@@ -517,7 +536,13 @@ namespace RelhaxModpack
             file = file.Trim() + Environment.NewLine;
 
             //write to disk and finish
-            File.WriteAllText(p.CompletePath, file);
+            if(p.FollowPath && p.FromEditor)
+            {
+                //if followpath and from editor, actually save it to testfile
+                File.WriteAllText(p.FollowPathEditorCompletePath, file);
+            }
+            else
+                File.WriteAllText(p.CompletePath, file);
             Logging.Debug("json patch completed successfully");
         }
         #endregion
@@ -909,6 +934,112 @@ namespace RelhaxModpack
         #endregion
 
         #region Helpers
+
+        private static JObject FollowXvmPath(Patch p, JObject root)
+        {
+            //split the path into dots. each option therefore is a small path that it will be searching into
+            Logging.Debug("followPath start");
+            List<string> pathArray = p.Path.Split('.').ToList();
+            if(pathArray.Count == 1)
+            {
+                Logging.Info("pathArray count is 1, no need to follow path");
+                return root;
+            }
+
+            //go into each path from the array
+            //also subtract from the pathArray as we go to put it back into the path
+            JObject latest = root;
+            while(pathArray.Count != 0)
+            {
+                string miniPath = pathArray[0];
+                Logging.Debug("searching from minipath: {0}", miniPath);
+                JToken pathSearchResult = null;
+                try
+                {
+                    pathSearchResult = latest.SelectToken(miniPath);
+                }
+                catch (JsonException tokenSearchException)
+                {
+                    Logging.Error("error with minipath, stopping at previous");
+                    Logging.Error(tokenSearchException.ToString());
+                    break;
+                }
+                if(pathSearchResult is JObject jobject)
+                {
+                    //if it's a jboject, then search inside with saving
+                    Logging.Debug("miniPath resulted in JObject, continue");
+                    latest = jobject;
+                }
+                else if (pathSearchResult is JArray jarray)
+                {
+                    throw new BadMemeException("wait that's illegal");
+                }
+                else if (pathSearchResult is JValue jvalue)
+                {
+                    Logging.Debug("miniPath resulted in jValue, checking if reference or value");
+                    if(jvalue.Value is string value)
+                    {
+                        Logging.Debug("jValue is string, checking for xvm reference");
+                        if(value.Contains(@"[xvm_dollar]"))
+                        {
+                            Logging.Debug("xvm reference detected, parsing");
+
+                            //parse the first part of the reference, could be direct reference path inside file or filename
+                            string fileOrReference = value.Split(new string[] { @"[xvm_dollar][lbracket][quote]"}, StringSplitOptions.RemoveEmptyEntries)[0].Split('[')[0];
+
+                            //parse the second part of the reference, could be the new path for new file, or blank (if direct path inside current file)
+                            string reference = value.Split(new string[] { @"[quote][colon][quote]" }, StringSplitOptions.RemoveEmptyEntries)[1].Split('[')[0];
+                            if(string.IsNullOrEmpty(reference))
+                            {
+                                Logging.Debug("reference is internal to file in new path");
+                                latest = root;
+                                pathArray[0] = fileOrReference;
+                                continue;
+                            }
+                            else
+                            {
+                                Logging.Debug("reference is external to new file");
+                                //load and parse the new file
+                                string folderPath = Path.GetDirectoryName(p.CompletePath);
+                                string completePathNewFile = Path.Combine(folderPath, fileOrReference);
+
+                                //check if file exists and load it
+                                if(!File.Exists(completePathNewFile))
+                                {
+                                    Logging.Error("following path resulted in \"{0}\", but does not exist!");
+                                    return null;
+                                }
+
+                                //recursively enter the new patch file
+                                p.CompletePath = completePathNewFile;
+                                pathArray.RemoveAt(0);
+                                p.Path = string.Format("$.{0}.{1}", reference ,string.Join(".", pathArray));
+                                Logging.Debug("starting new recursive patch run");
+                                RunPatch(p);
+                                return null;
+                            }
+                        }
+                        else
+                        {
+                            Logging.Debug("no reference detected");
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        Logging.Debug("jValue is not string, actual value, stop at previous");
+                        break;
+                    }
+                }
+
+                //remove it
+                pathArray.RemoveAt(0);
+            }
+
+            //update the path for what was left
+            p.Path = string.Join(".", pathArray);
+            return latest;
+        }
 
         private static string JsonGetCompare(JValue result)
         {

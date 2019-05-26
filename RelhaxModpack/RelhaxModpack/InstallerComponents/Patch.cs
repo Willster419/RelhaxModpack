@@ -20,6 +20,7 @@
         public string File = string.Empty;
         //the complete path to the file, saved at parse time
         public string CompletePath = string.Empty;
+        public string FollowPathEditorCompletePath = string.Empty;
         //if xml or json, the xml xpath to the node
         public string Path = string.Empty;
         //if regex, the optional specific lines in the text file
