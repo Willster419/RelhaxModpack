@@ -558,6 +558,9 @@ namespace RelhaxModpack.Windows
             List<DatabasePackage> disabledPackages = new List<DatabasePackage>();
             List<DatabasePackage> removedPackages = new List<DatabasePackage>();
             List<DatabasePackage> missingPackages = new List<DatabasePackage>();
+            List<SelectablePackage> renamedPackages = new List<SelectablePackage>();
+            List<SelectablePackage> internallyRenamed = new List<SelectablePackage>();
+            List<SelectablePackage> movedPackages = new List<SelectablePackage>();
 
             //init strings
             CurrentModInfoXml = string.Empty;
@@ -698,30 +701,92 @@ namespace RelhaxModpack.Windows
                     missingPackages.Add(package);
                 }
             }
+
             //do list magic to get all added, removed, disabled, etc package lists
             //used for disabled, removed, added mods
             PackageComparerByPackageName pc = new PackageComparerByPackageName();
+
             //if in before but not after = removed
             removedPackages = flatListOld.Except(flatListCurrent, pc).ToList();
+
             //if not in before but after = added
             addedPackages = flatListCurrent.Except(flatListOld, pc).ToList();
+
+            //get the list of renamed packages
+            //first start by getting the list of all current packages, then filter out removed and added packages
+            List<DatabasePackage> renamedPackagesTemp = new List<DatabasePackage>(flatListCurrent);
+            renamedPackagesTemp = renamedPackagesTemp.Except(removedPackages, pc).Except(addedPackages, pc).ToList();
+            //https://stackoverflow.com/questions/3842714/linq-selection-by-type-of-an-object
+            List<SelectablePackage> selectablePackagesOld = flatListOld.OfType<SelectablePackage>().ToList();
+            List<SelectablePackage> potentialRenamedPackages = renamedPackagesTemp.OfType<SelectablePackage>().ToList();
+            foreach(SelectablePackage selectablePackage in potentialRenamedPackages)
+            {
+                List<SelectablePackage> results = selectablePackagesOld.Where(pack => pack.PackageName.Equals(selectablePackage.PackageName)).ToList();
+                if (results.Count == 0)
+                    continue;
+                SelectablePackage result = results[0];
+                if(!selectablePackage.Name.Equals(result.Name))
+                {
+                    renamedPackages.Add(selectablePackage);
+                }
+            }
+
+            //get the list of internally renamed packages
+            //list of packages who's names are equal but packagenames aren't
+            foreach(SelectablePackage selectablePackage in potentialRenamedPackages)
+            {
+                List<SelectablePackage> results = selectablePackagesOld.Where(pack => pack.Name.Equals(selectablePackage.Name) && pack.Parent.PackageName.Equals(selectablePackage.Parent.PackageName)).ToList();
+                if (results.Count == 0)
+                    continue;
+                SelectablePackage result = results[0];
+                if (!selectablePackage.PackageName.Equals(result.PackageName))
+                {
+                    internallyRenamed.Add(selectablePackage);
+                }
+            }
+
+            //list of moved packages
+            //where the packagename is the same but the structure text thing arent' the same
+            foreach (SelectablePackage selectablePackage in potentialRenamedPackages)
+            {
+                List<SelectablePackage> results = selectablePackagesOld.Where(pack => pack.PackageName.Equals(selectablePackage.PackageName)).ToList();
+                if (results.Count == 0)
+                    continue;
+                SelectablePackage result = results[0];
+                if(!result.CompletePath.Equals(selectablePackage.CompletePath))
+                {
+                    movedPackages.Add(selectablePackage);
+                }
+            }
+
+            //remove any packages that say are added and removed, but actually just had internal structure changed
+            addedPackages = addedPackages.Except(internallyRenamed, pc).ToList();
+            removedPackages = removedPackages.Except(internallyRenamed, pc).ToList();
+
             //list of disabled packages before
             List<DatabasePackage> disabledBefore = flatListOld.Where(p => !p.Enabled).ToList();
+
             //list of disabled packages after
             List<DatabasePackage> disabledAfter = flatListCurrent.Where(p => !p.Enabled).ToList();
+
             //compare except with after.before
             disabledPackages = disabledAfter.Except(disabledBefore, pc).ToList();
+
             //also need to remove and removed and added and disabled from updated
             updatedPackages = updatedPackages.Except(removedPackages, pc).ToList();
             updatedPackages = updatedPackages.Except(disabledPackages, pc).ToList();
             updatedPackages = updatedPackages.Except(addedPackages, pc).ToList();
+
             //put them to stringBuilder and write text to disk
             ReportProgress(string.Format("Number of Added packages: {0}", addedPackages.Count));
             ReportProgress(string.Format("Number of Updated packages: {0}", updatedPackages.Count));
             ReportProgress(string.Format("Number of Disabled packages: {0}", disabledPackages.Count));
             ReportProgress(string.Format("Number of Removed packages: {0}", removedPackages.Count));
+            ReportProgress(string.Format("Number of Moved packages: {0}", movedPackages.Count));
+            ReportProgress(string.Format("Number of Renamed packages: {0}", renamedPackages.Count));
+            ReportProgress(string.Format("Number of Internally renamed packages: {0}", internallyRenamed.Count));
             //abort if missing files
-            if(missingPackages.Count > 0)
+            if (missingPackages.Count > 0)
             {
                 if (File.Exists(MissingPackagesTxt))
                     File.Delete(MissingPackagesTxt);
@@ -735,21 +800,34 @@ namespace RelhaxModpack.Windows
 
             //make stringBuilder of databaseUpdate.text
             databaseUpdateText.Clear();
-            databaseUpdateText.Append("Database Update!\n\n");
-            databaseUpdateText.Append("Updated: " + DatabaseUpdateVersion + "\n\n");
-            databaseUpdateText.Append("Added:\n");
+            databaseUpdateText.AppendLine("Database Update!\n");
+            databaseUpdateText.AppendLine("New version tag: " + DatabaseUpdateVersion);
+
+            databaseUpdateText.AppendLine("\nAdded:");
             foreach (DatabasePackage dp in addedPackages)
-                databaseUpdateText.Append("-" + dp.CompletePath + "\n");
-            databaseUpdateText.Append("\nUpdated:\n");
+                databaseUpdateText.AppendLine("-" + dp.CompletePath);
+
+            databaseUpdateText.AppendLine("\nUpdated:");
             foreach (DatabasePackage dp in updatedPackages)
-                databaseUpdateText.Append("-" + dp.CompletePath + "\n");
-            databaseUpdateText.Append("\nDisabled:\n");
+                databaseUpdateText.AppendLine("-" + dp.CompletePath);
+
+            databaseUpdateText.AppendLine("\nRenamed:");
+                foreach (DatabasePackage dp in renamedPackages)
+                databaseUpdateText.AppendLine("-" + dp.CompletePath);
+
+            databaseUpdateText.AppendLine("\Moved:");
+            foreach (DatabasePackage dp in movedPackages)
+                databaseUpdateText.AppendLine("-" + dp.CompletePath);
+
+            databaseUpdateText.AppendLine("\nDisabled:");
             foreach (DatabasePackage dp in disabledPackages)
-                databaseUpdateText.Append("-" + dp.CompletePath + "\n");
-            databaseUpdateText.Append("\nRemoved:\n");
+                databaseUpdateText.AppendLine("-" + dp.CompletePath);
+
+            databaseUpdateText.AppendLine("\nRemoved:");
             foreach (DatabasePackage dp in removedPackages)
-                databaseUpdateText.Append("-" + dp.CompletePath + "\n");
-            databaseUpdateText.Append("\nNotes:\n-\n\n-----------------------------------------------------" +
+                databaseUpdateText.AppendLine("-" + dp.CompletePath);
+
+            databaseUpdateText.AppendLine("\nNotes:\n-\n\n-----------------------------------------------------" +
                 "---------------------------------------------------------------------------------------");
 
             //save databaseUpdate.txt
