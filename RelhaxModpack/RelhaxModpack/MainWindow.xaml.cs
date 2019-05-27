@@ -1979,6 +1979,17 @@ namespace RelhaxModpack
                     break;
             }
 
+            //setup uninstall view
+            switch(ModpackSettings.UninstallMode)
+            {
+                case UninstallModes.Default:
+                    UninstallDefault.IsChecked = true;
+                    break;
+                case UninstallModes.Quick:
+                    UninstallQuick.IsChecked = true;
+                    break;
+            }
+
             //apply beta database settings
             if(ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Beta)
             {
