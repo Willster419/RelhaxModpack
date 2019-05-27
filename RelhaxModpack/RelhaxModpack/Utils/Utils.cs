@@ -356,40 +356,90 @@ namespace RelhaxModpack
             return textStr;
         }
 
-        public static void ProcessEmptyDirectories(string startLocation, bool recursive)
+        public static bool ProcessEmptyDirectories(string startLocation, bool recursive, uint numRetrys = 3, uint timeout = 100)
         {
             //if the root does not exist then stop now
             if (!Directory.Exists(startLocation))
-                return;
+                return true;
 
-            if(recursive)
+            //check to make sure the number of retries is between 1 and 10
+            if (numRetrys < 1)
             {
-                //get the list of all directories inside it and recursivly process
+                Logging.WriteToLog(string.Format("numRetrys is invalid (below 1), setting to 1 (numRetryes={0})", numRetrys),
+                    Logfiles.Application, LogLevel.Warning);
+                numRetrys = 1;
+            }
+            if (numRetrys > 10)
+            {
+                Logging.WriteToLog(string.Format("numRetrys is invalid (above 10), setting to 10 (numRetryes={0})", numRetrys),
+                    Logfiles.Application, LogLevel.Warning);
+                numRetrys = 10;
+            }
+
+            uint retryCounter = 0;
+            if (recursive)
+            {
+                //get the list of all directories inside it, no need to recursively process
                 List<string> directories = DirectorySearch(startLocation, SearchOption.AllDirectories,false).ToList().Where(direct => Directory.Exists(direct)).ToList();
+
+                //sort and reverse the list to make longer paths on top to simulate recursively deleting from all the way down to up
                 directories.Sort();
                 directories.Reverse();
 
+                //now can delete for each folder
                 foreach (string directory in directories)
                 {
-                    if (Directory.GetFiles(directory).Length == 0 &&
-                        Directory.GetDirectories(directory).Length == 0)
+                    retryCounter = 0;
+                    while (retryCounter < numRetrys)
                     {
-                        Logging.WriteToLog(string.Format("Deleting empty directory {0}", directory), Logfiles.Application, LogLevel.Debug);
-                        DirectoryDelete(directory, false);
+                        try
+                        {
+                            if (Directory.GetFiles(directory).Length == 0 && Directory.GetDirectories(directory).Length == 0)
+                            {
+                                Logging.Debug("Deleting empty directory {0}", directory);
+                                Directory.Delete(directory, false);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Logging.Warning("failed to delete {0}, retryCount={1}, message:\n{2}", directory, retryCounter, ex.Message);
+                            retryCounter++;
+                            System.Threading.Thread.Sleep((int)timeout);
+                            if (retryCounter == numRetrys)
+                            {
+                                Logging.Error("retries = counter, fully failed to delete directory {0}", directory);
+                                return false;
+                            }
+                        }
                     }
                 }
             }
 
             //and process the root
-            if (Directory.Exists(startLocation))
+            retryCounter = 0;
+            while (retryCounter < numRetrys)
             {
-                if (Directory.GetFiles(startLocation).Length == 0 &&
-                    Directory.GetDirectories(startLocation).Length == 0)
+                try
                 {
-                    Logging.WriteToLog(string.Format("Deleting empty directory {0}", startLocation), Logfiles.Application, LogLevel.Debug);
-                    DirectoryDelete(startLocation, false);
+                    if (Directory.GetFiles(startLocation).Length == 0 && Directory.GetDirectories(startLocation).Length == 0)
+                    {
+                        Logging.Debug("Deleting empty directory {0}", startLocation);
+                        Directory.Delete(startLocation, false);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.Warning("failed to delete {0}, retryCount={1}, message:\n{2}", startLocation, retryCounter, ex.Message);
+                    retryCounter++;
+                    System.Threading.Thread.Sleep((int)timeout);
+                    if (retryCounter == numRetrys)
+                    {
+                        Logging.Error("retries = counter, fully failed to delete directory {0}", startLocation);
+                        return false;
+                    }
                 }
             }
+            return true;
         }
         
         public static string SizeSuffix(ulong value, uint decimalPlaces = 1, bool sizeSuffix = false)
@@ -478,12 +528,12 @@ namespace RelhaxModpack
                 catch (Exception ex)
                 {
                     Logging.WriteToLog(string.Format("failed to delete {0}, retryCount={1}, message:\n{2}", file, retryCounter, ex.Message),
-                        Logfiles.Application, LogLevel.Error);
+                        Logfiles.Application, LogLevel.Warning);
                     retryCounter++;
                     System.Threading.Thread.Sleep((int)timeout);
                     if (retryCounter == numRetrys)
                     {
-                        Logging.Debug("retries = counter, fully failed to delete file {0}", file);
+                        Logging.Error("retries = counter, fully failed to delete file {0}", file);
                         overallSuccess = false;
                     }
                 }
@@ -521,12 +571,12 @@ namespace RelhaxModpack
                     catch(Exception ex)
                     {
                         Logging.WriteToLog(string.Format("failed to delete {0}, retryCount={1}, message:\n{2}", file, retryCounter, ex.Message),
-                            Logfiles.Application,LogLevel.Error);
+                            Logfiles.Application,LogLevel.Warning);
                         retryCounter++;
                         System.Threading.Thread.Sleep((int)timeout);
                         if(retryCounter == numRetrys)
                         {
-                            Logging.Debug("retries = counter, fully failed to delete file {0}",file);
+                            Logging.Error("retries = counter, fully failed to delete file {0}",file);
                             overallSuccess = false;
                         }
                     }
