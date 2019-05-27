@@ -161,11 +161,17 @@ namespace RelhaxModpack
             switch (file)
             {
                 case Logfiles.Installer:
+                    if (InstallLogfile == null)
+                        return false;
                     return InstallLogfile.CanWrite;
                 case Logfiles.Uninstaller:
+                    if (UninstallLogfile == null)
+                        return false;
                     return UninstallLogfile.CanWrite;
                 case Logfiles.Application:
                 default:
+                    if (ApplicationLogfile == null)
+                        return false;
                     return ApplicationLogfile.CanWrite;
             }
         }

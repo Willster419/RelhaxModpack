@@ -89,6 +89,16 @@ namespace RelhaxModpack
         };
         #endregion
 
+        public struct VersionInfos
+        {
+            public string WoTClientVersion;
+            public string WoTOnlineFolderVersion;
+            public override string ToString()
+            {
+                return string.Format("WoTClientVersion={0}, WoTOnlineFolderVersion={1}", WoTClientVersion, WoTOnlineFolderVersion);
+            }
+        }
+
         #region Application Utils
         /// <summary>
         /// Return the entire assembely version
@@ -426,6 +436,7 @@ namespace RelhaxModpack
                         Logging.Debug("Deleting empty directory {0}", startLocation);
                         Directory.Delete(startLocation, false);
                     }
+                    retryCounter = numRetrys;
                 }
                 catch (Exception ex)
                 {

@@ -9,7 +9,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-//using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -742,162 +741,207 @@ namespace RelhaxModpack
             ResetUI();
             ToggleUIButtons(false);
             //settings for export mode
-            if(ModpackSettings.ExportMode)
+            if (ModpackSettings.ExportMode)
             {
-                throw new BadMemeException("TODO");
-            }
-            else if (ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall)
-            {
-                //load the custom selection file, if it exists
-                if (!File.Exists(ModpackSettings.AutoOneclickSelectionFilePath))
+                Logging.Debug("ExportMode is True, asking where to export");
+                string foldertoExportTo = string.Empty;
+                using (System.Windows.Forms.FolderBrowserDialog exportFolderSelect = new System.Windows.Forms.FolderBrowserDialog()
                 {
-                    MessageBox.Show(Translations.GetTranslatedString("autoOneclickSelectionFileNotExist"));
-                    ToggleUIButtons(true);
-                    return;
+                    ShowNewFolderButton = true,
+                    Description = Translations.GetTranslatedString("selectLocationToExport")
+                })
+                {
+                    if (exportFolderSelect.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                        foldertoExportTo = exportFolderSelect.SelectedPath;
+                    else
+                    {
+                        Logging.Debug("user canceled selecting folder, stop");
+                        ToggleUIButtons(true);
+                        return;
+                    }
                 }
-            }
-            if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Beta)
-            {
-                //if mods sync
-                if (ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall)
+
+                Logging.Debug("ask which version of client to export for");
+                ExportModeSelect exportModeSelect = new ExportModeSelect();
+                if ((bool)exportModeSelect.ShowDialog())
                 {
-                    MessageBox.Show(Translations.GetTranslatedString("noAutoOneclickWithBeta"));
-                    ToggleUIButtons(true);
-                    return;
-                }
-            }
-            //parse WoT root directory
-            Logging.WriteToLog("started looking for WoT root directory", Logfiles.Application, LogLevel.Debug);
-            if(!Utils.AutoFindWoTDirectory(ref Settings.WoTDirectory) || ModpackSettings.ForceManuel)
-            {
-                Logging.WriteToLog("auto detect failed or user requests manual", Logfiles.Application, LogLevel.Debug);
-                Microsoft.Win32.OpenFileDialog manualWoTFind = new Microsoft.Win32.OpenFileDialog()
-                {
-                    InitialDirectory = string.IsNullOrWhiteSpace(Settings.WoTDirectory) ? Settings.ApplicationStartupPath : Settings.WoTDirectory,
-                    AddExtension = true,
-                    CheckFileExists = true,
-                    CheckPathExists = true,
-                    Filter = "WorldOfTanks.exe|WorldOfTanks.exe",
-                    Multiselect = false,
-                    RestoreDirectory = true,
-                    ValidateNames = true
-                };
-                if((bool)manualWoTFind.ShowDialog())
-                {
-                    Settings.WoTDirectory = manualWoTFind.FileName;
+                    Logging.Debug("ExportModeSelect returned true, setting majorVersion to {0}, minorVersion to {1}",
+                        exportModeSelect.SelectedVersionInfo.WoTOnlineFolderVersion, exportModeSelect.SelectedVersionInfo.WoTClientVersion);
+                    Settings.WoTModpackOnlineFolderVersion = exportModeSelect.SelectedVersionInfo.WoTOnlineFolderVersion;
+                    Settings.WoTClientVersion = exportModeSelect.SelectedVersionInfo.WoTClientVersion;
+                    Settings.WoTDirectory = foldertoExportTo;
                 }
                 else
                 {
-                    Logging.WriteToLog("User Canceled installation");
+                    Logging.Debug("exportModeSelect returned false, stop");
                     ToggleUIButtons(true);
                     return;
                 }
             }
-            Settings.WoTDirectory = Path.GetDirectoryName(Settings.WoTDirectory);
-            Logging.WriteToLog("Wot root directory parsed as " + Settings.WoTDirectory);
-            //check to make sure the application is not in the same directory as the WoT install
-            if (Settings.WoTDirectory.Equals(Settings.ApplicationStartupPath))
+            else
             {
-                //display error and abort
-                MessageBox.Show(Translations.GetTranslatedString("moveOutOfTanksLocation"));
-                ToggleUIButtons(true);
-                return;
-            }
-            //get the version of tanks in the format
-            //of the res_mods version folder i.e. 0.9.17.0.3
-            string versionTemp = XMLUtils.GetXMLStringFromXPath(Path.Combine(Settings.WoTDirectory, "version.xml"), "//version.xml/version");
-            Settings.WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2);
-            //determine if current detected version of the game is supported
-            //only if applicaition distro is not alhpa and databate distro is not test
-            if (ModpackSettings.DatabaseDistroVersion != DatabaseVersions.Test)
-            {
-                //make an array of all the supported versions
-                string supportedClientsXML = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "supported_clients.xml");
-                if (string.IsNullOrWhiteSpace(supportedClientsXML))
+                if (ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall)
                 {
-                    Logging.WriteToLog("Failed to parse supported_clients.xml from string from zipfile", Logfiles.Application, LogLevel.Exception);
-                    MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " supported_clients.xml");
-                    ToggleUIButtons(true);
-                    return;
-                }
-                XmlDocument doc = new XmlDocument();
-                try
-                {
-                    doc.LoadXml(supportedClientsXML);
-                }
-                catch (XmlException ex)
-                {
-                    Logging.WriteToLog("Failed to parse supported_clients.xml to xml\n" + ex.ToString(), Logfiles.Application, LogLevel.Exception);
-                    MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " supported_clients.xml");
-                    ToggleUIButtons(true);
-                    return;
-                }
-                //copy inner text of each WoT version into a string array
-                XmlNodeList supportedVersionsXML = XMLUtils.GetXMLNodesFromXPath(doc, "//versions/version");
-                string[] supportedVersionsString = new string[supportedVersionsXML.Count];
-                for (int i = 0; i < supportedVersionsXML.Count; i++)
-                {
-                    supportedVersionsString[i] = supportedVersionsXML[i].InnerText;
-                    //see if this supported client version is the same as what was parsed to be the current client version
-                    if (supportedVersionsXML[i].InnerText.Equals(Settings.WoTClientVersion))
+                    //load the custom selection file, if it exists
+                    if (!File.Exists(ModpackSettings.AutoOneclickSelectionFilePath))
                     {
-                        //WoTClientVersions is already set, set the online folder
-                        Settings.WoTModpackOnlineFolderVersion = supportedVersionsXML[i].Attributes["folder"].Value;
+                        MessageBox.Show(Translations.GetTranslatedString("autoOneclickSelectionFileNotExist"));
+                        ToggleUIButtons(true);
+                        return;
                     }
-
                 }
-                //check to see if array of supported clients cas the detected WoT client version
-                if (Settings.ApplicationVersion != ApplicationVersions.Alpha && !supportedVersionsString.Contains(Settings.WoTClientVersion))
+                if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Beta)
                 {
-                    //log and inform the user
-                    Logging.WriteToLog("Detected client version is " + Settings.WoTClientVersion + ", not supported",
-                        Logfiles.Application, LogLevel.Warning);
-                    Logging.WriteToLog("Supported versions are: " + string.Join(", ", supportedVersionsString));
-                    MessageBox.Show(string.Format("{0}: {1}\n{2}\n\n{3}:\n{4}", Translations.GetTranslatedString("detectedClientVersion"),
-                        Settings.WoTClientVersion, Translations.GetTranslatedString("supportNotGuarnteed"),
-                        Translations.GetTranslatedString("supportedClientVersions"), string.Join("\n", supportedVersionsString)),
-                        Translations.GetTranslatedString("critical"));
-                    //set the version and online folder to the last ones
-                    Settings.WoTClientVersion = supportedVersionsXML[supportedVersionsXML.Count - 1].InnerText;
-                    Settings.WoTModpackOnlineFolderVersion = supportedVersionsXML[supportedVersionsXML.Count - 1].Attributes["folder"].Value;
-                }
-
-                //if the version does not match, then we need to set the online download version (even if we are in test mode)
-                if(!supportedVersionsString.Contains(Settings.WoTClientVersion))
-                {
-                    Settings.WoTModpackOnlineFolderVersion = supportedVersionsXML[supportedVersionsXML.Count - 1].Attributes["folder"].Value;
-                }
-
-                //if the user wants to, check if the database has actually changed
-                if (ModpackSettings.NotifyIfSameDatabase)
-                {
-                    //get the instal llog for last installed database version
-                    string installedfilesLogPath = Path.Combine(Settings.WoTDirectory, "logs", "installedRelhaxFiles.log");
-                    if (File.Exists(installedfilesLogPath))
+                    //if mods sync
+                    if (ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall)
                     {
-                        //use index 0 of array, index 18 of string array
-                        string lastInstalledDatabaseVersion = File.ReadAllText(installedfilesLogPath).Split('\n')[0].Substring(18).Trim();
-                        if (Settings.DatabaseVersion.Equals(lastInstalledDatabaseVersion))
-                        {
-                            if (MessageBox.Show(Translations.GetTranslatedString("DatabaseVersionsSameBody"), Translations.GetTranslatedString("DatabaseVersionsSameHeader"), MessageBoxButton.YesNo) == MessageBoxResult.No)
-                            {
-                                ToggleUIButtons(true);
-                                return;
-                            }
-                        }
+                        MessageBox.Show(Translations.GetTranslatedString("noAutoOneclickWithBeta"));
+                        ToggleUIButtons(true);
+                        return;
+                    }
+                }
+
+                //parse WoT root directory
+                Logging.WriteToLog("started looking for WoT root directory", Logfiles.Application, LogLevel.Debug);
+                if (!Utils.AutoFindWoTDirectory(ref Settings.WoTDirectory) || ModpackSettings.ForceManuel)
+                {
+                    Logging.WriteToLog("auto detect failed or user requests manual", Logfiles.Application, LogLevel.Debug);
+                    Microsoft.Win32.OpenFileDialog manualWoTFind = new Microsoft.Win32.OpenFileDialog()
+                    {
+                        InitialDirectory = string.IsNullOrWhiteSpace(Settings.WoTDirectory) ? Settings.ApplicationStartupPath : Settings.WoTDirectory,
+                        AddExtension = true,
+                        CheckFileExists = true,
+                        CheckPathExists = true,
+                        Filter = "WorldOfTanks.exe|WorldOfTanks.exe",
+                        Multiselect = false,
+                        RestoreDirectory = true,
+                        ValidateNames = true
+                    };
+                    if ((bool)manualWoTFind.ShowDialog())
+                    {
+                        Settings.WoTDirectory = manualWoTFind.FileName;
                     }
                     else
                     {
-                        Logging.WriteToLog("installedRelhaxFiles.log does not exist, cannnot notify if same database");
+                        Logging.WriteToLog("User Canceled installation");
+                        ToggleUIButtons(true);
+                        return;
+                    }
+                }
+                Settings.WoTDirectory = Path.GetDirectoryName(Settings.WoTDirectory);
+                Logging.WriteToLog("Wot root directory parsed as " + Settings.WoTDirectory);
+
+                //check to make sure the application is not in the same directory as the WoT install
+                if (Settings.WoTDirectory.Equals(Settings.ApplicationStartupPath))
+                {
+                    //display error and abort
+                    MessageBox.Show(Translations.GetTranslatedString("moveOutOfTanksLocation"));
+                    ToggleUIButtons(true);
+                    return;
+                }
+
+                //get the version of tanks in the format
+                //of the res_mods version folder i.e. 0.9.17.0.3
+                string versionTemp = XMLUtils.GetXMLStringFromXPath(Path.Combine(Settings.WoTDirectory, "version.xml"), "//version.xml/version");
+                Settings.WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2);
+
+                //determine if current detected version of the game is supported
+                //only if applicaition distro is not alhpa and databate distro is not test
+                if (ModpackSettings.DatabaseDistroVersion != DatabaseVersions.Test)
+                {
+                    //make an array of all the supported versions
+                    string supportedClientsXML = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "supported_clients.xml");
+                    if (string.IsNullOrWhiteSpace(supportedClientsXML))
+                    {
+                        Logging.WriteToLog("Failed to parse supported_clients.xml from string from zipfile", Logfiles.Application, LogLevel.Exception);
+                        MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " supported_clients.xml");
+                        ToggleUIButtons(true);
+                        return;
+                    }
+                    XmlDocument doc = new XmlDocument();
+                    try
+                    {
+                        doc.LoadXml(supportedClientsXML);
+                    }
+                    catch (XmlException ex)
+                    {
+                        Logging.WriteToLog("Failed to parse supported_clients.xml to xml\n" + ex.ToString(), Logfiles.Application, LogLevel.Exception);
+                        MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " supported_clients.xml");
+                        ToggleUIButtons(true);
+                        return;
+                    }
+
+                    //copy inner text of each WoT version into a string array
+                    XmlNodeList supportedVersionsXML = XMLUtils.GetXMLNodesFromXPath(doc, "//versions/version");
+                    string[] supportedVersionsString = new string[supportedVersionsXML.Count];
+                    for (int i = 0; i < supportedVersionsXML.Count; i++)
+                    {
+                        supportedVersionsString[i] = supportedVersionsXML[i].InnerText;
+                        //see if this supported client version is the same as what was parsed to be the current client version
+                        if (supportedVersionsXML[i].InnerText.Equals(Settings.WoTClientVersion))
+                        {
+                            //WoTClientVersions is already set, set the online folder
+                            Settings.WoTModpackOnlineFolderVersion = supportedVersionsXML[i].Attributes["folder"].Value;
+                        }
+
+                    }
+
+                    //check to see if array of supported clients cas the detected WoT client version
+                    if (Settings.ApplicationVersion != ApplicationVersions.Alpha && !supportedVersionsString.Contains(Settings.WoTClientVersion))
+                    {
+                        //log and inform the user
+                        Logging.WriteToLog("Detected client version is " + Settings.WoTClientVersion + ", not supported",
+                            Logfiles.Application, LogLevel.Warning);
+                        Logging.WriteToLog("Supported versions are: " + string.Join(", ", supportedVersionsString));
+                        MessageBox.Show(string.Format("{0}: {1}\n{2}\n\n{3}:\n{4}", Translations.GetTranslatedString("detectedClientVersion"),
+                            Settings.WoTClientVersion, Translations.GetTranslatedString("supportNotGuarnteed"),
+                            Translations.GetTranslatedString("supportedClientVersions"), string.Join("\n", supportedVersionsString)),
+                            Translations.GetTranslatedString("critical"));
+                        //set the version and online folder to the last ones
+                        Settings.WoTClientVersion = supportedVersionsXML[supportedVersionsXML.Count - 1].InnerText;
+                        Settings.WoTModpackOnlineFolderVersion = supportedVersionsXML[supportedVersionsXML.Count - 1].Attributes["folder"].Value;
+                    }
+
+                    //if the version does not match, then we need to set the online download version (even if we are in test mode)
+                    if (!supportedVersionsString.Contains(Settings.WoTClientVersion))
+                    {
+                        Settings.WoTModpackOnlineFolderVersion = supportedVersionsXML[supportedVersionsXML.Count - 1].Attributes["folder"].Value;
+                    }
+
+                    //if the user wants to, check if the database has actually changed
+                    if (ModpackSettings.NotifyIfSameDatabase)
+                    {
+                        //get the instal llog for last installed database version
+                        string installedfilesLogPath = Path.Combine(Settings.WoTDirectory, "logs", "installedRelhaxFiles.log");
+                        if (File.Exists(installedfilesLogPath))
+                        {
+                            //use index 0 of array, index 18 of string array
+                            string lastInstalledDatabaseVersion = File.ReadAllText(installedfilesLogPath).Split('\n')[0].Substring(18).Trim();
+                            if (Settings.DatabaseVersion.Equals(lastInstalledDatabaseVersion))
+                            {
+                                if (MessageBox.Show(Translations.GetTranslatedString("DatabaseVersionsSameBody"), Translations.GetTranslatedString("DatabaseVersionsSameHeader"), MessageBoxButton.YesNo) == MessageBoxResult.No)
+                                {
+                                    ToggleUIButtons(true);
+                                    return;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Logging.WriteToLog("installedRelhaxFiles.log does not exist, cannnot notify if same database");
+                        }
                     }
                 }
             }
+
             //show the mod selection list
-            modSelectionList = new ModSelectionList();
-            //set the owner
-            //https://stackoverflow.com/questions/21756542/why-is-window-showdialog-not-blocking-in-taskscheduler-task
-            //https://docs.microsoft.com/en-us/dotnet/api/system.windows.window.owner?view=netframework-4.8
-            modSelectionList.Owner = Window.GetWindow(this);
+            modSelectionList = new ModSelectionList
+            {
+                //set the owner
+                //https://stackoverflow.com/questions/21756542/why-is-window-showdialog-not-blocking-in-taskscheduler-task
+                //https://docs.microsoft.com/en-us/dotnet/api/system.windows.window.owner?view=netframework-4.8
+                Owner = Window.GetWindow(this)
+            };
             //https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c
             modSelectionList.OnSelectionListReturn += ModSelectionList_OnSelectionListReturn;
             modSelectionList.Show();

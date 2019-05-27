@@ -171,6 +171,9 @@
     <Compile Include="Windows\ExceptionCaptureDisplay.xaml.cs">
       <DependentUpon>ExceptionCaptureDisplay.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ExportModeSelect.xaml.cs">
+      <DependentUpon>ExportModeSelect.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\FirstLoadAknowledgements.xaml.cs">
       <DependentUpon>FirstLoadAknowledgements.xaml</DependentUpon>
     </Compile>
@@ -295,6 +298,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\ExceptionCaptureDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ExportModeSelect.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

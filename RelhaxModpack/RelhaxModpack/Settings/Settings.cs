@@ -146,6 +146,9 @@ namespace RelhaxModpack
         /// </summary>
         public const int DefaultImagePadding = 1;
 
+        public const string SupportedClients = "supported_clients.xml";
+        public const string ManagerVersion = "manager_version.xml";
+
         public static readonly int NumLogicalProcesors = Environment.ProcessorCount;
 
         public static readonly string[] SelectablePackageTypes = new string[]

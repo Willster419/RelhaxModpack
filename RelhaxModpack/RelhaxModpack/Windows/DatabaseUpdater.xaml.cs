@@ -24,10 +24,7 @@ namespace RelhaxModpack.Windows
     public partial class DatabaseUpdater : RelhaxWindow
     {
         #region Constants
-        //get the sensitive constants (like this test below) from the PrivateStuff class
         private const string DatabaseUpdateTxt = "databaseUpdate.txt";
-        private const string SupportedClients = "supported_clients.xml";
-        private const string ManagerVersion = "manager_version.xml";
         private const string TrashXML = "trash.xml";
         private const string DatabaseXml = "database.xml";
         private const string MissingPackagesTxt = "missingPackages.txt";
@@ -188,8 +185,8 @@ namespace RelhaxModpack.Windows
             Logging.WriteToLog("Deleting trash files...");
             string[] filesToDelete = new string[]
             {
-                SupportedClients,
-                ManagerVersion,
+                Settings.SupportedClients,
+                Settings.ManagerVersion,
                 DatabaseXml,
                 CurrentModInfoXml,
                 LastSupportedModInfoXml
@@ -326,16 +323,16 @@ namespace RelhaxModpack.Windows
         {
             LogOutput.Clear();
             ReportProgress("Running Clean online folders step 1");
-            ReportProgress("Downloading and parsing " + SupportedClients);
+            ReportProgress("Downloading and parsing " + Settings.SupportedClients);
             //download supported_clients
             XmlDocument doc;
             using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
             {
-                string xml = await client.DownloadStringTaskAsync(PrivateStuff.FTPManagerInfoRoot + SupportedClients);
+                string xml = await client.DownloadStringTaskAsync(PrivateStuff.FTPManagerInfoRoot + Settings.SupportedClients);
                 doc = XMLUtils.LoadXmlDocument(xml, XmlLoadType.FromString);
             }
             //parse each online folder to list type string
-            ReportProgress("Parsing " + SupportedClients);
+            ReportProgress("Parsing " + Settings.SupportedClients);
             CleanFoldersOnlineStep2b.Items.Clear();
             XmlNodeList supportedClients = XMLUtils.GetXMLNodesFromXPath(doc, "//versions/version");
             VersionInfosList = new List<VersionInfos>();
@@ -590,11 +587,11 @@ namespace RelhaxModpack.Windows
             }
 
             //check if manager version or supported clients exist. if they do, delete them
-            if (File.Exists(ManagerVersion))
-                File.Delete(ManagerVersion);
+            if (File.Exists(Settings.ManagerVersion))
+                File.Delete(Settings.ManagerVersion);
             //especially supported clients cause we only check it once now as a string
-            if (File.Exists(SupportedClients))
-                File.Delete(SupportedClients);
+            if (File.Exists(Settings.SupportedClients))
+                File.Delete(Settings.SupportedClients);
 
             using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
             {
@@ -602,8 +599,8 @@ namespace RelhaxModpack.Windows
                 ReportProgress("Making new database version string");
                 //download manager_version.xml to get the string value of last database update version
                 string dateTimeFormat = string.Format("{0:yyyy-MM-dd}", DateTime.Now);
-                await client.DownloadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + ManagerVersion,ManagerVersion);
-                XmlDocument doc = XMLUtils.LoadXmlDocument(ManagerVersion, XmlLoadType.FromFile);
+                await client.DownloadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + Settings.ManagerVersion,Settings.ManagerVersion);
+                XmlDocument doc = XMLUtils.LoadXmlDocument(Settings.ManagerVersion, XmlLoadType.FromFile);
                 XmlNode database_version_text = doc.SelectSingleNode("//version/database");
                 //database update text is like this: <WoTVersion>_<Date>_<itteration>
                 //only update the iteration if the WoT version and date match
@@ -627,7 +624,7 @@ namespace RelhaxModpack.Windows
                 ReportProgress(string.Format("DatabaseUpdateVersion = {0}", DatabaseUpdateVersion));
                 //update and save the manager_version.xml file
                 database_version_text.InnerText = DatabaseUpdateVersion;
-                doc.Save(ManagerVersion);
+                doc.Save(Settings.ManagerVersion);
 
                 //get last supported wot version for comparison
                 LastSupportedTanksVersion = lastWoTClientVersion;
@@ -867,7 +864,7 @@ namespace RelhaxModpack.Windows
                 ReportProgress("DatabaseUpdateVersion is null");
                 return;
             }
-            if(!File.Exists(ManagerVersion))
+            if(!File.Exists(Settings.ManagerVersion))
             {
                 ReportProgress("manager_version.xml does not exist");
                 return;
@@ -884,7 +881,7 @@ namespace RelhaxModpack.Windows
 
                 //upload manager_version.xml
                 ReportProgress("Uploading new manager_version.xml");
-                await client.UploadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + ManagerVersion, ManagerVersion);
+                await client.UploadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + Settings.ManagerVersion, Settings.ManagerVersion);
 
                 //upload databaseUpdate.txt
                 ReportProgress("uploading new databaseUpdate.txt");
@@ -899,16 +896,16 @@ namespace RelhaxModpack.Windows
                 ReportProgress("DOES need to be updated");
                 using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
                 {
-                    await client.DownloadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + SupportedClients, SupportedClients);
-                    XmlDocument supportedClients = XMLUtils.LoadXmlDocument(SupportedClients, XmlLoadType.FromFile);
+                    await client.DownloadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + Settings.SupportedClients, Settings.SupportedClients);
+                    XmlDocument supportedClients = XMLUtils.LoadXmlDocument(Settings.SupportedClients, XmlLoadType.FromFile);
                     XmlNode versionRoot = supportedClients.SelectSingleNode("//versions");
                     XmlElement supported_client = supportedClients.CreateElement("version");
                     supported_client.InnerText = Settings.WoTClientVersion;
                     supported_client.SetAttribute("folder", Settings.WoTModpackOnlineFolderVersion);
                     versionRoot.AppendChild(supported_client);
-                    supportedClients.Save(SupportedClients);
-                    await client.UploadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + SupportedClients, SupportedClients);
-                    File.Delete(SupportedClients);
+                    supportedClients.Save(Settings.SupportedClients);
+                    await client.UploadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + Settings.SupportedClients, Settings.SupportedClients);
+                    File.Delete(Settings.SupportedClients);
                 }
                 ReportProgress("Done");
             }

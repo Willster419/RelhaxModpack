@@ -249,7 +249,7 @@ namespace RelhaxModpack.InstallerComponents
             Progress.Report(Prog);
 
             Logging.WriteToLog("Backup of mods, current install time = 0 msec");
-            if (ModpackSettings.BackupModFolder)
+            if (ModpackSettings.BackupModFolder && !ModpackSettings.ExportMode)
             {
                 if (! BackupMods())
                 {
@@ -269,7 +269,7 @@ namespace RelhaxModpack.InstallerComponents
 
             Logging.WriteToLog(string.Format("Backup of user data, current install time = {0} msec",
                 (int)InstallStopWatch.Elapsed.TotalMilliseconds));
-            if (ModpackSettings.SaveUserData)
+            if (ModpackSettings.SaveUserData && !ModpackSettings.ExportMode)
             {
                 if(!BackupData(packagesWithData))
                 {
@@ -289,7 +289,7 @@ namespace RelhaxModpack.InstallerComponents
 
             Logging.WriteToLog(string.Format("Cleaning of cache folders, current install time = {0} msec",
                 (int)InstallStopWatch.Elapsed.TotalMilliseconds));
-            if (ModpackSettings.ClearCache)
+            if (ModpackSettings.ClearCache && !ModpackSettings.ExportMode)
             {
                 if(!ClearCache())
                 {
@@ -309,7 +309,7 @@ namespace RelhaxModpack.InstallerComponents
 
             Logging.WriteToLog(string.Format("Cleaning of logs, current install time = {0} msec",
                 (int)InstallStopWatch.Elapsed.TotalMilliseconds));
-            if (ModpackSettings.DeleteLogs)
+            if (ModpackSettings.DeleteLogs && !ModpackSettings.ExportMode)
             {
                 if(!ClearLogs())
                 {
@@ -329,7 +329,7 @@ namespace RelhaxModpack.InstallerComponents
 
             Logging.WriteToLog(string.Format("Cleaning of mods folders, current install time = {0} msec",
                 (int)InstallStopWatch.Elapsed.TotalMilliseconds));
-            if (ModpackSettings.CleanInstallation)
+            if (ModpackSettings.CleanInstallation || ModpackSettings.ExportMode)
             {
                 if (!ClearModsFolders())
                 {
@@ -341,8 +341,11 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.WriteToLog("...skipped");
 
             //backup the last installed log file
-            string backupInstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.InstallLogFilenameBackup);
-            string installLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.InstallLogFilename);
+            string logsFilepath = Path.Combine(Settings.WoTDirectory, "logs");
+            string backupInstallLogfile = Path.Combine(logsFilepath, Logging.InstallLogFilenameBackup);
+            string installLogfile = Path.Combine(logsFilepath, Logging.InstallLogFilename);
+            if (!Directory.Exists(logsFilepath))
+                Directory.CreateDirectory(logsFilepath);
             if (File.Exists(backupInstallLogfile))
                 Utils.FileDelete(backupInstallLogfile);
             if (File.Exists(installLogfile))
@@ -365,6 +368,18 @@ namespace RelhaxModpack.InstallerComponents
                 return InstallFinishedArgs;
             }
             Logging.Info("Extraction complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
+
+            //if export mode, this is where we stop
+            if(ModpackSettings.ExportMode)
+            {
+                //report to log install is finished
+                OldTime = InstallStopWatch.Elapsed;
+                InstallFinishedArgs.ExitCodes = InstallerExitCodes.Success;
+                Prog.InstallStatus = InstallerExitCodes.Success;
+                Logging.Info("Export finished, total install time = {0} msec", (int)InstallStopWatch.Elapsed.TotalMilliseconds);
+                InstallStopWatch.Stop();
+                return InstallFinishedArgs;
+            }
 
             //step 7: restore data
             OldTime = InstallStopWatch.Elapsed;
@@ -584,6 +599,13 @@ namespace RelhaxModpack.InstallerComponents
                     ListOfAllItems.AddRange(Utils.DirectorySearch(folderPath, SearchOption.AllDirectories,true));
             }
 
+            ListOfAllItems.Sort();
+            ListOfAllItems.Reverse();
+
+            //split off into files and folders and shortcuts
+            List<string> ListOfAllDirectories = ListOfAllItems.Where(item => Directory.Exists(item)).ToList();
+            List<string> ListOfAllFiles = ListOfAllItems.Where(item => File.Exists(item)).ToList();
+
             //start init progress reporting. for uninstall, only use child current, total and filename
             Prog.ChildTotal = ListOfAllItems.Count;
             Prog.ChildCurrent = 0;
@@ -612,10 +634,10 @@ namespace RelhaxModpack.InstallerComponents
                 }
             }
 
-            //backup old uninstall logfile
+            //delete all files
             bool success = true;
             Prog.UninstallStatus = UninstallerExitCodes.UninstallError;
-            foreach(string file in ListOfAllItems)
+            foreach(string file in ListOfAllFiles)
             {
                 Prog.ChildCurrent++;
                 Prog.Filename = file;
@@ -626,6 +648,21 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     if(logIt)
                         Logging.WriteToLog(file, Logfiles.Uninstaller, LogLevel.Info);
+                }
+            }
+
+            //delete all folders
+            foreach(string folder in ListOfAllDirectories)
+            {
+                Prog.ChildCurrent++;
+                Prog.Filename = folder;
+                Progress.Report(Prog);
+                if (!Utils.ProcessEmptyDirectories(folder, false))
+                    success = false;
+                else
+                {
+                    if (logIt)
+                        Logging.WriteToLog(folder, Logfiles.Uninstaller, LogLevel.Info);
                 }
             }
 
@@ -800,7 +837,8 @@ namespace RelhaxModpack.InstallerComponents
             {
                 if (Directory.Exists(folder))
                 {
-                    Utils.ProcessEmptyDirectories(folder, false);
+                    if (!Utils.ProcessEmptyDirectories(folder, false))
+                        success = false;
                     if(logIt)
                         Logging.WriteToLog(folder, Logfiles.Uninstaller, LogLevel.Info);
                 }
@@ -1151,18 +1189,23 @@ namespace RelhaxModpack.InstallerComponents
 
         private bool ClearModsFolders()
         {
-            switch (ModpackSettings.UninstallMode)
+            if (ModpackSettings.ExportMode)
             {
-                case UninstallModes.Default:
-                    Logging.WriteToLog("Running uninstall modes method Default");
-                    return UninstallModsDefault(false);
-                case UninstallModes.Quick:
-                    Logging.WriteToLog("Running uninstall modes method Quick (Advanced)");
-                    return UninstallModsQuick(false);
-                default:
-                    Logging.WriteToLog("Unknown uninstall mode: " + ModpackSettings.UninstallMode.ToString());
-                    return false;
+                Logging.Info("Running uninstall method quick for export mode");
+                return UninstallModsQuick(false);
             }
+            else if (ModpackSettings.UninstallMode == UninstallModes.Default)
+            {
+                Logging.WriteToLog("Running uninstall modes method Default");
+                return UninstallModsDefault(false);
+            }
+            else if (ModpackSettings.UninstallMode == UninstallModes.Quick)
+            {
+                Logging.WriteToLog("Running uninstall modes method Quick (Advanced)");
+                return UninstallModsQuick(false);
+            }
+            else
+                throw new BadMemeException(":thinking:");
         }
 
         private bool ExtractFilesAsyncSetup()
@@ -1820,6 +1863,11 @@ namespace RelhaxModpack.InstallerComponents
 
         private void ProcessTriggers(List<string> packageTriggers)
         {
+            if(ModpackSettings.ExportMode)
+            {
+                Logging.Info("skipped triggers due to export mode");
+                return;
+            }
             //at least 1 trigger exists
             foreach (string triggerFromPackage in packageTriggers)
             {

@@ -1234,6 +1234,19 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.ExportModeSelect">
+            <summary>
+            Interaction logic for ExportModeSelect.xaml
+            </summary>
+            <summary>
+            ExportModeSelect
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ExportModeSelect.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.FirstLoadAknowledgements">
             <summary>
             Interaction logic for FirstLoadAknowledgements.xaml
