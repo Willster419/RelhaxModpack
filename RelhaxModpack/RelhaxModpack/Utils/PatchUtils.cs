@@ -12,16 +12,26 @@ using System.Globalization;
 
 namespace RelhaxModpack
 {
+    public enum PatchExitCode
+    {
+        Success = 0,
+        Warning = -1,
+        Error = -2
+    }
+
     public static class PatchUtils
     {
+
+        private static PatchExitCode PatchExitCodeForJson = PatchExitCode.Error;
+
         #region Main Patch Method
-        public static void RunPatch(Patch p)
+        public static PatchExitCode RunPatch(Patch p)
         {
             //check if file exists
             if (!File.Exists(p.CompletePath))
             {
                 Logging.Warning("File {0} not found", p.CompletePath);
-                return;
+                return PatchExitCode.Error;
             }
 
             //if from the editor, enable verbose logging (allows it to get debug log statements)
@@ -36,6 +46,7 @@ namespace RelhaxModpack
             Logging.Info(p.DumpPatchInfoForLog);
 
             //actually run the patches based on what type it is
+            PatchExitCode patchSuccess = PatchExitCode.Error;
             switch (p.Type.ToLower())
             {
                 case "regex":
@@ -43,12 +54,12 @@ namespace RelhaxModpack
                     if (p.Lines == null || p.Lines.Count() == 0)
                     {
                         Logging.Debug("Running regex patch as all lines, line by line");
-                        RegxPatch(p, null);
+                        patchSuccess = RegxPatch(p, null);
                     }
                     else if (p.Lines.Count() == 1 && p.Lines[0].Trim().Equals("-1"))
                     {
                         Logging.Debug("Running regex patch as whole file");
-                        RegxPatch(p, new int[] { -1 });
+                        patchSuccess = RegxPatch(p, new int[] { -1 });
                     }
                     else
                     {
@@ -58,34 +69,37 @@ namespace RelhaxModpack
                         {
                             lines[i] = int.Parse(p.Lines[i].Trim());
                         }
-                        RegxPatch(p, lines);
+                        patchSuccess = RegxPatch(p, lines);
                     }
                     break;
                 case "xml":
-                    XMLPatch(p);
+                    patchSuccess = XMLPatch(p);
                     break;
                 case "json":
-                    JsonPatch(p);
+                    patchSuccess = JsonPatch(p);
                     break;
                 case "xvm":
-                    throw new BadMemeException("xvm patches are not supported, please use the json patch method");
+                    Logging.Error("xvm patches are not supported, please use the json patch method");
+                    patchSuccess = PatchExitCode.Error;
+                    break;
             }
             Logging.Debug("patch complete");
             //set the verbose setting back
             Logging.Debug("temp logging setting={0}, ModpackSettings.VerboseLogging={1}, setting logging back to temp");
             ModpackSettings.VerboseLogging = tempVerboseLoggingSetting;
+            return patchSuccess;
         }
         #endregion
 
         #region XML
-        private static void XMLPatch(Patch p)
+        private static PatchExitCode XMLPatch(Patch p)
         {
             //load the xml document
             XmlDocument doc = XMLUtils.LoadXmlDocument(p.CompletePath,XmlLoadType.FromFile);
             if (doc == null)
             {
                 Logging.Error("xml document from xml path is null");
-                return;
+                return PatchExitCode.Error;
             }
 
             //check to see if it has the header info at the top to see if we need to remove it later
@@ -136,7 +150,7 @@ namespace RelhaxModpack
                             if (fullPathMatch.InnerText.Trim().Equals(innerTextToMatch))
                             {
                                 Logging.Debug("full path found entry with matching text, aborting (no need to patch)");
-                                return;
+                                return PatchExitCode.Success;
                             }
                             else
                                 Logging.Debug("full path found entry, but text does not match. proceeding with add");
@@ -150,7 +164,7 @@ namespace RelhaxModpack
                     if(xmlPath == null)
                     {
                         Logging.Error("patch xmlPath returns null!");
-                        return;
+                        return PatchExitCode.Error;
                     }
 
                     //create node(s) to add to the element
@@ -197,7 +211,7 @@ namespace RelhaxModpack
                     if(xpathResults.Count == 0)
                     {
                         Logging.Error("xpath not found");
-                        return;
+                        return PatchExitCode.Error;
                     }
 
                     //keep track if all xpath results equal this result
@@ -214,7 +228,7 @@ namespace RelhaxModpack
                     if (matches == xpathResults.Count)
                     {
                         Logging.Info("all {0} path results have values equal to replace, so can skip", matches);
-                        return;
+                        return PatchExitCode.Success;
                     }
                     else
                         Logging.Info("{0} of {1} path results match, running patch");
@@ -309,13 +323,14 @@ namespace RelhaxModpack
             Logging.Debug("saving to disk");
             doc.Save(p.CompletePath);
             Logging.Debug("xml patch completed successfully");
+            return PatchExitCode.Success;
         }
         #endregion
 
         #region REGEX
         //method to patch a standard text or json file
         //fileLocation is relative to res_mods folder
-        private static void RegxPatch(Patch p, int[] lines)
+        private static PatchExitCode RegxPatch(Patch p, int[] lines)
         {
             //replace all "fake escape characters" with real escape characters
             p.Search = Utils.MacroReplace(p.Search, ReplacementTypes.TextUnescape);
@@ -353,7 +368,7 @@ namespace RelhaxModpack
                     if (!everReplaced)
                     {
                         Logging.Warning("Regex never matched");
-                        return;
+                        return PatchExitCode.Warning;
                     }
                 }
                 else if (lines.Count() == 1 && lines[0] == -1)
@@ -370,7 +385,7 @@ namespace RelhaxModpack
                     else
                     {
                         Logging.Warning("Regex never matched");
-                        return;
+                        return PatchExitCode.Warning;
                     }
                 }
                 else
@@ -394,7 +409,7 @@ namespace RelhaxModpack
                     if (!everReplaced)
                     {
                         Logging.Warning("Regex never matched");
-                        return;
+                        return PatchExitCode.Warning;
                     }
                 }
             }
@@ -402,17 +417,19 @@ namespace RelhaxModpack
             {
                 Logging.Error("Invalid regex command");
                 Logging.Debug(ex.ToString());
+                return PatchExitCode.Error;
             }
 
             //save the file back into the string and then the file
             file = sb.ToString().Trim();
             File.WriteAllText(p.CompletePath, file);
             Logging.Debug("regex patch completed successfully");
+            return PatchExitCode.Success;
         }
         #endregion
 
         #region JSON
-        private static void JsonPatch(Patch p)
+        private static PatchExitCode JsonPatch(Patch p)
         {
             //apply and log legacy compatibilities
             //if no search parameter, set it to the regex default "match all" search option
@@ -448,7 +465,7 @@ namespace RelhaxModpack
                 if (Regex.IsMatch(p.Replace, @"\$[ \t]*\{[ \t]*"""))
                 {
                     Logging.Error("patch replace value detected as xvm reference, but is not in escaped form! must be escaped!");
-                    return;
+                    return PatchExitCode.Error;
                 }
 
                 //replace all xvm references with escaped versions that can be parsed
@@ -485,13 +502,14 @@ namespace RelhaxModpack
             {
                 Logging.Error("Failed to parse json file! {0}", Path.GetFileName(p.File));
                 Logging.Debug(j.ToString());
-                return;
+                return PatchExitCode.Error;
             }
 
             //if it is an xvm configuration file, or from editor, and we are wanting to followPath, then the root object then becomes the last item in the path
             //this works based on splitting up the path itself (forces dot convention) and going into files based on the reference
             //note that it will modify the patch path variable
             JObject searchRoot = root;
+            PatchExitCodeForJson = PatchExitCode.Error;
             if ((Path.GetExtension(p.CompletePath).ToLower().Equals(".xc") || p.FromEditor) && p.FollowPath)
             {
                 Logging.Debug("followpath is true, and either editor or xc file, following path to get actual root json object");
@@ -501,33 +519,33 @@ namespace RelhaxModpack
             if(searchRoot == null && p.FollowPath)
             {
                 Logging.Debug("root Jobject is null, meaning followPath previously completed, so stop here");
-                return;
+                return PatchExitCodeForJson;
             }
 
             //switch how it is handled based on the mode of the patch
             switch (p.Mode.ToLower())
             {
                 case "add":
-                    JsonAdd(p, searchRoot);
+                    PatchExitCodeForJson = JsonAdd(p, searchRoot);
                     break;
                 case "edit":
-                    JsonEditRemove(p, searchRoot, true);
+                    PatchExitCodeForJson = JsonEditRemove(p, searchRoot, true);
                     break;
                 case "remove":
-                    JsonEditRemove(p, searchRoot, false);
+                    PatchExitCodeForJson = JsonEditRemove(p, searchRoot, false);
                     break;
                 case "arrayadd":
-                    JsonArrayAdd(p, searchRoot);
+                    PatchExitCodeForJson = JsonArrayAdd(p, searchRoot);
                     break;
                 case "arrayremove":
-                    JsonArrayRemoveClear(p, searchRoot, true);
+                    PatchExitCodeForJson = JsonArrayRemoveClear(p, searchRoot, true);
                     break;
                 case "arrayclear":
-                    JsonArrayRemoveClear(p, searchRoot, false);
+                    PatchExitCodeForJson = JsonArrayRemoveClear(p, searchRoot, false);
                     break;
                 default:
                     Logging.Error("ERROR: Unknown json patch mode, {0}", p.Mode);
-                    return;
+                    return PatchExitCodeForJson;
             }
 
             //un-escape the string with all ref metadata and xvm references
@@ -545,11 +563,12 @@ namespace RelhaxModpack
             else
                 File.WriteAllText(p.CompletePath, file);
             Logging.Debug("json patch completed successfully");
+            return PatchExitCodeForJson;
         }
         #endregion
 
         #region Json modes
-        private static void JsonAdd(Patch p, JObject root)
+        private static PatchExitCode JsonAdd(Patch p, JObject root)
         {
             //3 modes for json adding: regular add, add blank array, add blank object
 
@@ -558,15 +577,13 @@ namespace RelhaxModpack
             {
                 Logging.Debug("adding blank array detected");
                 p.Replace = Regex.Replace(p.Replace, @"\[array\]$", string.Empty);
-                JsonAddBlank(p, root, false);
-                return;
+                return JsonAddBlank(p, root, false);
             }
             else if (Regex.IsMatch(p.Replace, @"\[object\]$"))
             {
                 Logging.Debug("adding blank object detected");
                 p.Replace = Regex.Replace(p.Replace, @"\[object\]$", string.Empty);
-                JsonAddBlank(p, root, true);
-                return;
+                return JsonAddBlank(p, root, true);
             }
 
             //here means it's a standard json add
@@ -579,7 +596,7 @@ namespace RelhaxModpack
             if(addPathArray.Count < 2)
             {
                 Logging.Error("add syntax or replace value must have at least 2 values separated by \"/\" in its path");
-                return;
+                return PatchExitCode.Error;
             }
 
             //last item in array is item to add
@@ -613,17 +630,17 @@ namespace RelhaxModpack
             {
                 Logging.Error("error in jsonPath syntax: {0}", p.Path);
                 Logging.Debug(exVal.ToString());
-                return;
+                return PatchExitCode.Error;
             }
             if(objectRoot == null)
             {
                 Logging.Error("jsonPath does not exist: {0}", p.Path);
-                return;
+                return PatchExitCode.Error;
             }
             if(!(objectRoot is JObject))
             {
                 Logging.Error("expected JObject, got {0}", objectRoot.Type.ToString());
-                return;
+                return PatchExitCode.Error;
             }
 
             //foreach string still in the addPath array, go into the inner object
@@ -650,7 +667,7 @@ namespace RelhaxModpack
                 else
                 {
                     Logging.Error("following add path, expected JObject or null, got {0}", innerSearch.Type.ToString());
-                    return;
+                    return PatchExitCode.Error;
                 }
             }
 
@@ -665,7 +682,7 @@ namespace RelhaxModpack
                 if (valueToAdd.Equals(JsonGetCompare(jvalue)))
                 {
                     Logging.Debug("value already matches, no need to replace");
-                    return;
+                    return PatchExitCode.Success;
                 }
                 else
                 {
@@ -680,9 +697,10 @@ namespace RelhaxModpack
                 JProperty prop = CreateJsonProperty(propertyName, valueToAdd);
                 objectRoot.Add(prop);
             }
+            return PatchExitCode.Success;
         }
 
-        private static void JsonAddBlank(Patch p, JObject root, bool jObject)
+        private static PatchExitCode JsonAddBlank(Patch p, JObject root, bool jObject)
         {
             //replace field has now already been parsed
             //see if the object already exists in the full form (so include replace being the new object/array name)
@@ -694,12 +712,12 @@ namespace RelhaxModpack
             catch (Exception array)
             {
                 Logging.Error("error in replace syntax: {0}\n{1}", p.Replace, array.ToString());
-                return;
+                return PatchExitCode.Error;
             }
             if (result != null)
             {
                 Logging.Error("cannot add blank array or object when already exists");
-                return;
+                return PatchExitCode.Error;
             }
 
             //here means the object/array does not exist, and can be added
@@ -718,9 +736,10 @@ namespace RelhaxModpack
 
             //add it to the container
             pathForArray.Add(prop);
+            return PatchExitCode.Success;
         }
 
-        private static void JsonEditRemove(Patch p, JObject root, bool edit)
+        private static PatchExitCode JsonEditRemove(Patch p, JObject root, bool edit)
         {
             //get the list of all items that match the path
             IEnumerable<JToken> jsonPathresults = null;
@@ -736,7 +755,7 @@ namespace RelhaxModpack
             if (jsonPathresults == null || jsonPathresults.Count() == 0)
             {
                 Logging.Warning("no results from jsonPath search");
-                return;
+                return PatchExitCode.Warning;
             }
 
             //make sure results are all JValue
@@ -750,7 +769,7 @@ namespace RelhaxModpack
                 else
                 {
                     Logging.Error("Expected results of type JValue, returned {0}", jt.Type.ToString());
-                    return;
+                    return PatchExitCode.Error;
                 }
             }
 
@@ -759,7 +778,7 @@ namespace RelhaxModpack
             if (Jresults.Count == 0)
             {
                 Logging.Warning("Jresults count is 0 (is this the intent?)");
-                return;
+                return PatchExitCode.Warning;
             }
 
             //foreach match from json search, match the result with search parameter
@@ -783,7 +802,7 @@ namespace RelhaxModpack
                         if(result.Parent is JArray)
                         {
                             Logging.Error("Selected from p.path is JValue and parent is JArray. Use arrayRemove for this function");
-                            return;
+                            return PatchExitCode.Error;
                         }
                         //get the jProperty above it and remove itself
                         else if (result.Parent is JProperty prop)
@@ -793,6 +812,7 @@ namespace RelhaxModpack
                         else
                         {
                             Logging.Error("unknown parent type: {0}", result.Parent.GetType().ToString());
+                            return PatchExitCode.Error;
                         }
                     }
                 }
@@ -801,9 +821,10 @@ namespace RelhaxModpack
                     Logging.Debug("json value {0} matches jsonPath but does not match regex search {1}", jsonValue, p.Search);
                 }
             }
+            return PatchExitCode.Success;
         }
 
-        private static void JsonArrayAdd(Patch p, JObject root)
+        private static PatchExitCode JsonArrayAdd(Patch p, JObject root)
         {
             //check syntax of what was added
             List<string> addPathArray = null;
@@ -813,7 +834,7 @@ namespace RelhaxModpack
             if(addPathArray.Count > 2)
             {
                 Logging.Error("invalid replace syntax: maximum arguments is 2. given: {0}", addPathArray.Count);
-                return;
+                return PatchExitCode.Error;
             }
 
             //get the property name (if exists, and value, and index to add to)
@@ -836,7 +857,7 @@ namespace RelhaxModpack
             if (array == null)
             {
                 Logging.Error("JArray is null");
-                return;
+                return PatchExitCode.Error;
             }
 
             //if index value is greater then count, then warning and set it to -1 (tells it to add to bottom of array)
@@ -853,12 +874,12 @@ namespace RelhaxModpack
                 if ((array[0] is JValue) && (addPathArray.Count() == 2))
                 {
                     Logging.WriteToLog("array is of JValues and 2 replace arguments given", Logfiles.Application, LogLevel.Error);
-                    return;
+                    return PatchExitCode.Error;
                 }
                 else if (!(array[0] is JValue) && (addPathArray.Count() == 1))
                 {
                     Logging.WriteToLog("array is not of JValues and only 1 replace arguments given", Logfiles.Application, LogLevel.Error);
-                    return;
+                    return PatchExitCode.Error;
                 }
             }
 
@@ -888,22 +909,23 @@ namespace RelhaxModpack
                     array.Insert(index, val);
                 }
             }
+            return PatchExitCode.Success;
         }
 
-        private static void JsonArrayRemoveClear(Patch p, JObject root, bool remove)
+        private static PatchExitCode JsonArrayRemoveClear(Patch p, JObject root, bool remove)
         {
             JArray array = JsonArrayGet(p, root);
             if (array == null)
             {
                 Logging.Error("JArray is null");
-                return;
+                return PatchExitCode.Error;
             }
 
             //can't remove from an array if it's empty #rollSafe
             if (array.Count == 0)
             {
                 Logging.Error("array is already empty");
-                return;
+                return PatchExitCode.Warning;
             }
 
             //search and remove each item that matches. if it's remove mode, then stop at the first one
@@ -929,8 +951,9 @@ namespace RelhaxModpack
             if (!found)
             {
                 Logging.Warning("no results found for search \"{0}\", with path \"{1}\"", p.Search, p.Path);
-                return;
+                return PatchExitCode.Warning;
             }
+            return PatchExitCode.Success;
         }
         #endregion
 
