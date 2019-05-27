@@ -2489,7 +2489,233 @@ namespace RelhaxModpack
             }
         }
         #endregion
-        
+
+        #region Component Parsing methods
+
+        public static void AddPatchesFromFile(List<Patch> patches, string filename)
+        {
+            //make an xml document to get all patches
+            XmlDocument doc = LoadXmlDocument(filename, XmlLoadType.FromFile);
+            if (doc == null)
+                return;
+            //make new patch object for each entry
+            //remember to add lots of logging
+            XmlNodeList XMLpatches = GetXMLNodesFromXPath(doc, "//patchs/patch");
+            if (XMLpatches == null || XMLpatches.Count == 0)
+            {
+                Logging.Error("File {0} contains no patch entries", filename);
+                return;
+            }
+            Logging.Info("Adding {0} patches from patchFile {1}", Logfiles.Application, XMLpatches.Count, filename);
+            foreach (XmlNode patchNode in XMLpatches)
+            {
+                Patch p = new Patch();
+                //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
+                foreach (XmlNode property in patchNode.ChildNodes)
+                {
+                    //each element in the xml gets put into the
+                    //the corresponding attribute for the Patch instance
+                    switch (property.Name)
+                    {
+                        case "type":
+                            p.Type = property.InnerText.Trim();
+                            break;
+                        case "mode":
+                            p.Mode = property.InnerText.Trim();
+                            break;
+                        case "patchPath":
+                            p.PatchPath = property.InnerText.Trim();
+                            break;
+                        case "file":
+                            p.File = property.InnerText.Trim();
+                            break;
+                        case "path":
+                            p.Path = property.InnerText.Trim();
+                            break;
+                        case "line":
+                            if (!string.IsNullOrWhiteSpace(property.InnerText.Trim()))
+                                p.Lines = property.InnerText.Trim().Split(',');
+                            break;
+                        case "search":
+                            p.Search = property.InnerText.Trim();
+                            break;
+                        case "replace":
+                            p.Replace = property.InnerText.Trim();
+                            break;
+                    }
+                }
+                patches.Add(p);
+            }
+        }
+
+        public static void AddShortcutsFromFile(List<Shortcut> shortcuts, string filename)
+        {
+            //make an xml document to get all shortcuts
+            XmlDocument doc = LoadXmlDocument(filename, XmlLoadType.FromFile);
+            if (doc == null)
+            {
+                Logging.Error("Failed to parse xml shortcut file, skipping");
+                return;
+            }
+            //make new patch object for each entry
+            //remember to add lots of logging
+            XmlNodeList XMLshortcuts = GetXMLNodesFromXPath(doc, "//shortcuts/shortcut");
+            if (XMLshortcuts == null || XMLshortcuts.Count == 0)
+            {
+                Logging.Warning("File {0} contains no shortcut entries", filename);
+                return;
+            }
+            Logging.Info("Adding {0} shortcuts from shortcutFile {1}", Logfiles.Application, XMLshortcuts.Count, filename);
+            foreach (XmlNode patchNode in XMLshortcuts)
+            {
+                Shortcut sc = new Shortcut();
+                //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
+                foreach (XmlNode property in patchNode.ChildNodes)
+                {
+                    //each element in the xml gets put into the
+                    //the corresponding attribute for the Patch instance
+                    switch (property.Name)
+                    {
+                        case "path":
+                            sc.Path = property.InnerText.Trim();
+                            break;
+                        case "name":
+                            sc.Name = property.InnerText.Trim();
+                            break;
+                        case "enabled":
+                            sc.Enabled = Utils.ParseBool(property.InnerText.Trim(), false);
+                            break;
+                    }
+                }
+                shortcuts.Add(sc);
+            }
+        }
+
+        //actual XML unpack parsing TODO
+        public static void AddXmlUnpackFromFile(List<XmlUnpack> XmlUnpacks, string filename)
+        {
+            //make an xml document to get all Xml Unpacks
+            XmlDocument doc = LoadXmlDocument(filename, XmlLoadType.FromFile);
+            if (doc == null)
+            {
+                Logging.Error("failed to parse xml file");
+                return;
+            }
+            //make new patch object for each entry
+            //remember to add lots of logging
+            XmlNodeList XMLUnpacks = GetXMLNodesFromXPath(doc, "//files/file");
+            if (XMLUnpacks == null || XMLUnpacks.Count == 0)
+            {
+                Logging.Error("File {0} contains no XmlUnapck entries", filename);
+                return;
+            }
+            Logging.Info("Adding {0} xml unpack entries from file {1}", Logfiles.Application, XMLUnpacks.Count, filename);
+            foreach (XmlNode patchNode in XMLUnpacks)
+            {
+                XmlUnpack xmlup = new XmlUnpack();
+                //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
+                foreach (XmlNode property in patchNode.ChildNodes)
+                {
+                    //each element in the xml gets put into the
+                    //the corresponding attribute for the Patch instance
+                    switch (property.Name)
+                    {
+                        case "pkg":
+                            xmlup.Pkg = property.InnerText.Trim();
+                            break;
+                        case "directoryInArchive":
+                            xmlup.DirectoryInArchive = property.InnerText.Trim();
+                            break;
+                        case "fileName":
+                            xmlup.FileName = property.InnerText.Trim();
+                            break;
+                        case "extractDirectory":
+                            xmlup.ExtractDirectory = property.InnerText.Trim();
+                            break;
+                        case "newFileName":
+                            xmlup.NewFileName = property.InnerText.Trim();
+                            break;
+                    }
+                }
+                XmlUnpacks.Add(xmlup);
+            }
+        }
+
+        //actual Atlas parsing TODO
+        public static void AddAtlasFromFile(List<Atlas> atlases, string filename)
+        {
+            //make an xml document to get all Xml Unpacks
+            XmlDocument doc = LoadXmlDocument(filename, XmlLoadType.FromFile);
+            if (doc == null)
+                return;
+            //make new patch object for each entry
+            //remember to add lots of logging
+            XmlNodeList XMLAtlases = GetXMLNodesFromXPath(doc, "//atlases/atlas");
+            if (XMLAtlases == null || XMLAtlases.Count == 0)
+            {
+                Logging.Error("File {0} contains no atlas entries", filename);
+                return;
+            }
+            Logging.Info("Adding {0} atlas entries from file {1}", Logfiles.Application, XMLAtlases.Count, filename);
+            foreach (XmlNode atlasNode in XMLAtlases)
+            {
+                Atlas sc = new Atlas();
+                //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
+                foreach (XmlNode property in atlasNode.ChildNodes)
+                {
+                    //each element in the xml gets put into the
+                    //the corresponding attribute for the Patch instance
+                    switch (property.Name)
+                    {
+                        case "pkg":
+                            sc.Pkg = property.InnerText.Trim();
+                            break;
+                        case "directoryInArchive":
+                            sc.DirectoryInArchive = property.InnerText.Trim();
+                            break;
+                        case "atlasFile":
+                            sc.AtlasFile = property.InnerText.Trim();
+                            break;
+                        case "mapFile":
+                            sc.MapFile = property.InnerText.Trim();
+                            break;
+                        case "generateMap":
+                            sc.GenerateMap = Utils.ParseEnum(property.InnerText.Trim(), Atlas.State.True);
+                            break;
+                        case "powOf2":
+                            sc.PowOf2 = Utils.ParseEnum(property.InnerText.Trim(), Atlas.State.False);
+                            break;
+                        case "square":
+                            sc.Square = Utils.ParseEnum(property.InnerText.Trim(), Atlas.State.False);
+                            break;
+                        case "fastImagePacker":
+                            sc.FastImagePacker = Utils.ParseBool(property.InnerText.Trim(), false);
+                            break;
+                        case "padding":
+                            sc.Padding = Utils.ParseInt(property.InnerText.Trim(), 1);
+                            break;
+                        case "atlasWidth":
+                            sc.AtlasWidth = Utils.ParseInt(property.InnerText.Trim(), 2400);
+                            break;
+                        case "atlasHeight":
+                            sc.AtlasHeight = Utils.ParseInt(property.InnerText.Trim(), 8192);
+                            break;
+                        case "atlasSaveDirectory":
+                            sc.AtlasSaveDirectory = property.InnerText.Trim();
+                            break;
+                        case "imageFolders":
+                            //sc.im = property.InnerText.Trim();
+                            foreach (XmlNode imageFolder in property.ChildNodes)
+                            {
+                                sc.ImageFolderList.Add(imageFolder.InnerText.Trim());
+                            }
+                            break;
+                    }
+                }
+                atlases.Add(sc);
+            }
+        }
+        #endregion
     }
 }
  

@@ -1833,8 +1833,6 @@ namespace RelhaxModpack.InstallerComponents
             }
         }
 
-
-        #region Patch list parsing
         private List<Patch> MakePatchList()
         {
             //get a list of all files in the dedicated patch directory
@@ -1871,71 +1869,12 @@ namespace RelhaxModpack.InstallerComponents
                         }
                         Utils.ApplyNormalFileProperties(completePath);
                         //ok NOW actually add the file to the patch list
-                        AddPatchesFromFile(patches, completePath);
+                        XMLUtils.AddPatchesFromFile(patches, completePath);
                     }
                 }
             }
             return patches;
         }
-
-        private void AddPatchesFromFile(List<Patch> patches, string filename)
-        {
-            //make an xml document to get all patches
-            XmlDocument doc = XMLUtils.LoadXmlDocument(filename, XmlLoadType.FromFile);
-            if (doc == null)
-                return;
-            //make new patch object for each entry
-            //remember to add lots of logging
-            XmlNodeList XMLpatches = XMLUtils.GetXMLNodesFromXPath(doc, "//patchs/patch");
-            if(XMLpatches == null || XMLpatches.Count == 0)
-            {
-                Logging.Error("File {0} contains no patch entries", filename);
-                return;
-            }
-            Logging.Info("Adding {0} patches from patchFile {1}", Logfiles.Application, XMLpatches.Count, filename);
-            foreach(XmlNode patchNode in XMLpatches)
-            {
-                Patch p = new Patch();
-                //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
-                foreach(XmlNode property in patchNode.ChildNodes)
-                {
-                    //each element in the xml gets put into the
-                    //the corresponding attribute for the Patch instance
-                    switch (property.Name)
-                    {
-                        case "type":
-                            p.Type = property.InnerText;
-                            break;
-                        case "mode":
-                            p.Mode = property.InnerText;
-                            break;
-                        case "patchPath":
-                            p.PatchPath = property.InnerText;
-                            break;
-                        case "file":
-                            p.File = property.InnerText;
-                            break;
-                        case "path":
-                            p.Path = property.InnerText;
-                            break;
-                        case "line":
-                            if(!string.IsNullOrWhiteSpace(property.InnerText))
-                                p.Lines = property.InnerText.Split(',');
-                            break;
-                        case "search":
-                            p.Search = property.InnerText;
-                            break;
-                        case "replace":
-                            p.Replace = property.InnerText;
-                            break;
-                    }
-                }
-                patches.Add(p);
-            }
-        }
-        #endregion
-
-        #region Shortcut parsing
 
         private List<Shortcut> MakeShortcutList()
         {
@@ -1970,57 +1909,12 @@ namespace RelhaxModpack.InstallerComponents
                     Utils.ApplyNormalFileProperties(completePath);
                     //ok NOW actually add the file to the patch list
                     Logging.Info("Adding shortcuts from shortcutFile {1}", Logfiles.Application, filename);
-                    AddShortcutsFromFile(shortcuts, filename);
+                    XMLUtils.AddShortcutsFromFile(shortcuts, filename);
                 }
             }
             return shortcuts;
         }
 
-        private void AddShortcutsFromFile(List<Shortcut> shortcuts, string filename)
-        {
-            //make an xml document to get all shortcuts
-            XmlDocument doc = XMLUtils.LoadXmlDocument(filename, XmlLoadType.FromFile);
-            if (doc == null)
-            {
-                Logging.Error("Failed to parse xml shortcut file, skipping");
-                return;
-            } 
-            //make new patch object for each entry
-            //remember to add lots of logging
-            XmlNodeList XMLshortcuts = XMLUtils.GetXMLNodesFromXPath(doc, "//shortcuts/shortcut");
-            if (XMLshortcuts == null || XMLshortcuts.Count == 0)
-            {
-                Logging.Warning("File {0} contains no shortcut entries", filename);
-                return;
-            }
-            Logging.Info("Adding {0} shortcuts from shortcutFile {1}", Logfiles.Application, XMLshortcuts.Count, filename);
-            foreach (XmlNode patchNode in XMLshortcuts)
-            {
-                Shortcut sc = new Shortcut();
-                //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
-                foreach (XmlNode property in patchNode.ChildNodes)
-                {
-                    //each element in the xml gets put into the
-                    //the corresponding attribute for the Patch instance
-                    switch (property.Name)
-                    {
-                        case "path":
-                            sc.Path = property.InnerText;
-                            break;
-                        case "name":
-                            sc.Name = property.InnerText;
-                            break;
-                        case "enabled":
-                            sc.Enabled = Utils.ParseBool(property.InnerText, false);
-                            break;
-                    }
-                }
-                shortcuts.Add(sc);
-            }
-        }
-        #endregion
-
-        #region xml unpack
         //XML Unpack
         private List<XmlUnpack> MakeXmlUnpackList()
         {
@@ -2052,7 +1946,7 @@ namespace RelhaxModpack.InstallerComponents
 
                         //ok NOW actually add the file to the patch list
                         Logging.Info("Adding xml unpack entries from file {1}", Logfiles.Application, filename);
-                        AddXmlUnpackFromFile(XmlUnpacks, filename);
+                        XMLUtils.AddXmlUnpackFromFile(XmlUnpacks, filename);
                     }
                 }
             }
@@ -2070,58 +1964,6 @@ namespace RelhaxModpack.InstallerComponents
             return XmlUnpacks;
         }
 
-        //actual XML unpack parsing TODO
-        private void AddXmlUnpackFromFile(List<XmlUnpack> XmlUnpacks, string filename)
-        {
-            //make an xml document to get all Xml Unpacks
-            XmlDocument doc = XMLUtils.LoadXmlDocument(filename, XmlLoadType.FromFile);
-            if (doc == null)
-            {
-                Logging.Error("failed to parse xml file");
-                return;
-            }
-            //make new patch object for each entry
-            //remember to add lots of logging
-            XmlNodeList XMLUnpacks = XMLUtils.GetXMLNodesFromXPath(doc, "//files/file");
-            if (XMLUnpacks == null || XMLUnpacks.Count == 0)
-            {
-                Logging.Error("File {0} contains no XmlUnapck entries", filename);
-                return;
-            }
-            Logging.Info("Adding {0} xml unpack entries from file {1}", Logfiles.Application, XMLUnpacks.Count, filename);
-            foreach (XmlNode patchNode in XMLUnpacks)
-            {
-                XmlUnpack xmlup = new XmlUnpack();
-                //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
-                foreach (XmlNode property in patchNode.ChildNodes)
-                {
-                    //each element in the xml gets put into the
-                    //the corresponding attribute for the Patch instance
-                    switch (property.Name)
-                    {
-                        case "pkg":
-                            xmlup.Pkg = property.InnerText;
-                            break;
-                        case "directoryInArchive":
-                            xmlup.DirectoryInArchive = property.InnerText;
-                            break;
-                        case "fileName":
-                            xmlup.FileName = property.InnerText;
-                            break;
-                        case "extractDirectory":
-                            xmlup.ExtractDirectory = property.InnerText;
-                            break;
-                        case "newFileName":
-                            xmlup.NewFileName = property.InnerText;
-                            break;
-                    }
-                }
-                XmlUnpacks.Add(xmlup);
-            }
-        }
-        #endregion
-
-        #region atlas parsing
         //Atlas parsing
         private List<Atlas> MakeAtlasList()
         {
@@ -2154,90 +1996,12 @@ namespace RelhaxModpack.InstallerComponents
                         Utils.ApplyNormalFileProperties(completePath);
                         //ok NOW actually add the file to the patch list
                         Logging.Info("Adding atlas entries from file {1}", Logfiles.Application, filename);
-                        AddAtlasFromFile(atlases, filename);
+                        XMLUtils.AddAtlasFromFile(atlases, filename);
                     }
                 }
             }
             return atlases;
         }
-
-        //actual Atlas parsing TODO
-        private void AddAtlasFromFile(List<Atlas> atlases, string filename)
-        {
-            //make an xml document to get all Xml Unpacks
-            XmlDocument doc = XMLUtils.LoadXmlDocument(filename, XmlLoadType.FromFile);
-            if (doc == null)
-                return;
-            //make new patch object for each entry
-            //remember to add lots of logging
-            XmlNodeList XMLAtlases = XMLUtils.GetXMLNodesFromXPath(doc, "//atlases/atlas");
-            if (XMLAtlases == null || XMLAtlases.Count == 0)
-            {
-                Logging.Error("File {0} contains no atlas entries", filename);
-                return;
-            }
-            Logging.Info("Adding {0} atlas entries from file {1}", Logfiles.Application, XMLAtlases.Count, filename);
-            foreach (XmlNode atlasNode in XMLAtlases)
-            {
-                Atlas sc = new Atlas();
-                //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
-                foreach (XmlNode property in atlasNode.ChildNodes)
-                {
-                    //each element in the xml gets put into the
-                    //the corresponding attribute for the Patch instance
-                    switch (property.Name)
-                    {
-                        case "pkg":
-                            sc.Pkg = property.InnerText;
-                            break;
-                        case "directoryInArchive":
-                            sc.DirectoryInArchive = property.InnerText;
-                            break;
-                        case "atlasFile":
-                            sc.AtlasFile = property.InnerText;
-                            break;
-                        case "mapFile":
-                            sc.MapFile = property.InnerText;
-                            break;
-                        case "generateMap":
-                            sc.GenerateMap = Utils.ParseEnum(property.InnerText,Atlas.State.True);
-                            break;
-                        case "powOf2":
-                            sc.PowOf2 = Utils.ParseEnum(property.InnerText,Atlas.State.False);
-                            break;
-                        case "square":
-                            sc.Square = Utils.ParseEnum(property.InnerText,Atlas.State.False);
-                            break;
-                        case "fastImagePacker":
-                            sc.FastImagePacker = Utils.ParseBool(property.InnerText,false);
-                            break;
-                        case "padding":
-                            sc.Padding = Utils.ParseInt(property.InnerText,1);
-                            break;
-                        case "atlasWidth":
-                            sc.AtlasWidth = Utils.ParseInt(property.InnerText, 2400);
-                            break;
-                        case "atlasHeight":
-                            sc.AtlasHeight = Utils.ParseInt(property.InnerText,8192);
-                            break;
-                        case "atlasSaveDirectory":
-                            sc.AtlasSaveDirectory = property.InnerText;
-                            break;
-                        case "imageFolders":
-                            //sc.im = property.InnerText;
-                            foreach(XmlNode imageFolder in property.ChildNodes)
-                            {
-                                sc.ImageFolderList.Add(imageFolder.InnerText);
-                            }
-                            break;
-                    }
-                }
-                atlases.Add(sc);
-            }
-        }
-        #endregion
-
-        #region other
 
         private bool TaskNullOrDone(Task task)
         {
@@ -2294,7 +2058,6 @@ namespace RelhaxModpack.InstallerComponents
                 ReportMessage = string.Copy(progress.ReportMessage)
             };
         }
-        #endregion
 
         #endregion
 
