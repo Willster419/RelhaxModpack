@@ -815,7 +815,7 @@ namespace RelhaxModpack.Windows
                 foreach (DatabasePackage dp in renamedPackages)
                 databaseUpdateText.AppendLine("-" + dp.CompletePath);
 
-            databaseUpdateText.AppendLine("\Moved:");
+            databaseUpdateText.AppendLine("\nMoved:");
             foreach (DatabasePackage dp in movedPackages)
                 databaseUpdateText.AppendLine("-" + dp.CompletePath);
 
