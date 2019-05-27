@@ -1,4 +1,6 @@
-﻿namespace RelhaxModpack
+﻿using System;
+
+namespace RelhaxModpack
 {
     //TODO: move patch classes into interface stuff
     //a patch is an instruction of how to modify a text file
@@ -38,40 +40,29 @@
         {
             get
             {
-                switch (Type.ToLower())
-                {
-                    case "regex":
-                    case "regx":
-                        return string.Format("regex patch, {0}={1}, {2}={3}, {4}={5}, {6}={7}, {8}={9}",
-                            nameof(PatchPath), PatchPath,
-                            nameof(File), File,
-                            nameof(Lines), Lines == null ? "null" : string.Join(",",Lines),
-                            nameof(Search), Search,
-                            nameof(Replace), Replace);
-                    case "xml":
-                        return string.Format("xml patch, {0}={1}, {2}={3}, {4}={5}, {6}={7}, {8}={9}",
-                            nameof(PatchPath), PatchPath,
-                            nameof(File), File,
-                            nameof(Path), Path,
-                            nameof(Search), Search,
-                            nameof(Replace), Replace);
-                    case "json":
-                        return string.Format("json patch, {0}={1}, {2}={3}, {4}={5}, {6}={7}, {8}={9}",
-                            nameof(PatchPath), PatchPath,
-                            nameof(File), File,
-                            nameof(Path), Path,
-                            nameof(Search), Search,
-                            nameof(Replace), Replace);
-                    default:
-                        return string.Format("ERROR: unknown type: {0}",Type);
-                }
+                return string.Format("{0} patch, NativeProcessingFile={1}, ActualFile={2}," +
+                    "{3}{4}PatchPath={5}, FileToPatch={6}," +
+                    "{7}{8}Lines={9}, Path={0}, Search={10}, Replace={11}",
+                    Type.ToLower(),
+                    NativeProcessingFile,
+                    ActualPatchName,
+                    Environment.NewLine,
+                    Settings.LogSpacingLinup,
+                    PatchPath,
+                    File,
+                    Environment.NewLine,
+                    Settings.LogSpacingLinup,
+                    Lines == null ? "null" : string.Join(",", Lines),
+                    string.IsNullOrEmpty(Path) ? "null" :Path,
+                    Search,
+                    Replace);
             }
         }
         public override string ToString()
         {
             if (FromEditor)
             {
-                return string.Format("type={0},mode={1},lines/path={2}", Type, Mode, Lines == null ? Path: string.Join(",", Lines));
+                return string.Format("type={0} ,mode={1}, lines/path={2}", Type, Mode, Lines == null ? Path: string.Join(",", Lines));
             }
             else
             {
