@@ -670,23 +670,30 @@ namespace RelhaxModpack.InstallerComponents
             Progress.Report(Prog);
 
             //get a list of all files and folders in the install log (assuming checking for logfile already done and exists)
+            Logging.Debug("creating list of files to delete from reading uninstall logfile");
             List<string> ListOfAllItems = File.ReadAllLines(Path.Combine(Settings.WoTDirectory, "logs", Logging.InstallLogFilename)).ToList();
 
             //combine with a list of all files and folders in mods and res_mods
+            Logging.Debug("adding any files in res_mods and mods by scanning the folders if they aren't on the list already");
             if(Directory.Exists(Path.Combine(Settings.WoTDirectory, "res_mods")))
                 ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "res_mods"), SearchOption.AllDirectories,true).ToList());
             if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "mods")))
                 ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "mods"), SearchOption.AllDirectories,true).ToList());
 
             //combine with a list of any installer engine created folders
+            Logging.Debug("adding any installer created folders if they exist");
             foreach(string folder in Settings.FoldersToCleanup)
             {
                 string folderPath = Path.Combine(Settings.WoTDirectory, folder);
                 if (Directory.Exists(folderPath))
-                    ListOfAllItems.AddRange(Utils.DirectorySearch(folderPath, SearchOption.AllDirectories,true));
+                {
+                    Logging.Debug("adding installer created folder {0}", folder);
+                    ListOfAllItems.AddRange(Utils.DirectorySearch(folderPath, SearchOption.AllDirectories, true));
+                }
             }
 
             //merge then sort and then reverse
+            Logging.Debug("merging and sorting lists");
             ListOfAllItems = ListOfAllItems.Distinct().ToList();
             ListOfAllItems.Sort();
             ListOfAllItems.Reverse();
@@ -705,6 +712,7 @@ namespace RelhaxModpack.InstallerComponents
             if(logIt)
             {
                 //backup old uninstall logfile
+                Logging.Debug("backing up old uninstall logfile and creating new");
                 string backupUninstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilenameBackup);
                 string uninstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilename);
                 if (File.Exists(backupUninstallLogfile))
@@ -726,6 +734,7 @@ namespace RelhaxModpack.InstallerComponents
             }
 
             //delete all files (not shortcuts)
+            Logging.Debug("deleting all files from list, not including shortcuts");
             bool success = true;
             Prog.UninstallStatus = UninstallerExitCodes.UninstallError;
             foreach (string file in ListOfAllFiles)
@@ -736,10 +745,13 @@ namespace RelhaxModpack.InstallerComponents
                 if (File.Exists(file))
                 {
                     if (!Utils.FileDelete(file))
+                    {
                         success = false;
+                        Logging.Error("failed to delete the file {0}", file);
+                    }
                     else
                     {
-                        if(logIt)
+                        if (logIt)
                             Logging.WriteToLog(file, Logfiles.Uninstaller, LogLevel.Info);
                     }
                 }
@@ -756,10 +768,13 @@ namespace RelhaxModpack.InstallerComponents
                     if (File.Exists(file))
                     {
                         if (!Utils.FileDelete(file))
+                        {
                             success = false;
+                            Logging.Error("failed to delete the file {0}", file);
+                        }
                         else
                         {
-                            if(logIt)
+                            if (logIt)
                                 Logging.WriteToLog(file, Logfiles.Uninstaller, LogLevel.Info);
                         }
                     }
@@ -767,6 +782,7 @@ namespace RelhaxModpack.InstallerComponents
             }
 
             //final wipe of the folders
+            Logging.Debug("performing final wipe of res_mods and mods folders");
             Prog.UninstallStatus = UninstallerExitCodes.PerformFinalClearup;
             Progress.Report(Prog);
             if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "res_mods")))
@@ -777,6 +793,7 @@ namespace RelhaxModpack.InstallerComponents
                     success = false;
 
             //delete all empty folders
+            Logging.Debug("processing empty folders");
             Prog.UninstallStatus = UninstallerExitCodes.ProcessingEmptyFolders;
             Progress.Report(Prog);
             foreach (string folder in ListOfAllDirectories)
@@ -790,10 +807,12 @@ namespace RelhaxModpack.InstallerComponents
             }
 
             //re-create the folders at the end
+            Logging.Debug("re-creating res_mods and mods folders including wot version folder number");
             Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, "res_mods", Settings.WoTClientVersion));
             Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, "mods", Settings.WoTClientVersion));
 
             //if we are logging, we need to dispose of the uninstall log
+            Logging.Debug("disposing of logging and cleanup");
             if(logIt)
             {
                 Logging.DisposeLogging(Logfiles.Uninstaller);
