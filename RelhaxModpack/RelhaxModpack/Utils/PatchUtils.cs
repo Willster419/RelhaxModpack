@@ -71,7 +71,7 @@ namespace RelhaxModpack
                     p.CompletePath = Path.Combine(patchPathStart, p.File);
                     Logging.Info("complete path to patch parsed as '{0}'", p.CompletePath);
                 }
-                else
+                else//from application regular install
                 {
                     //process the start of the path
                     if(string.IsNullOrWhiteSpace(p.PatchPath))
@@ -88,11 +88,20 @@ namespace RelhaxModpack
                         }
                         p.PatchPath = Utils.MacroReplace(p.PatchPath, ReplacementTypes.FilePath);
                     }
+
+                    //check for that dumb filepath thing i did a while back
+                    if(p.File.Contains(@"\\"))
+                    {
+                        Logging.Warning("found legacy patch of \"\\\\\", please update to remove extra slashes!");
+                        p.File = p.File.Replace(@"\\", @"\");
+                    }
+
                     if(p.File[0].Equals('\\'))
                     {
                         Logging.Debug("p.file starts with '\\', removing for path combine");
                         p.File = p.File.Substring(1);
                     }
+
                     //also check for "xvmConfigFolderName"
                     if (p.File.Contains("xvmConfigFolderName") && !p.File.Contains(@"{xvmConfigFolderName}"))
                         p.File = p.File.Replace("xvmConfigFolderName", @"{xvmConfigFolderName}");
