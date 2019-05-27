@@ -1564,13 +1564,19 @@ namespace RelhaxModpack.InstallerComponents
                 Progress.Report(Prog);
 
                 string folderPath = Path.Combine(Settings.WoTDirectory, folder);
-                if (Directory.Exists(folderPath))
+                bool directoryExists = Directory.Exists(folderPath);
+                bool deleteSuccess = false;
+                if (directoryExists)
                 {
-                    if(!Utils.DirectoryDelete(folderPath, true))
+                    deleteSuccess = Utils.DirectoryDelete(folderPath, true);
+                    if (!deleteSuccess)
                     {
                         success = false;
                     }
+                    Logging.Debug("directoryExists={0}, deleteSuccess={1}", directoryExists.ToString(), deleteSuccess.ToString());
                 }
+                else
+                    Logging.Debug("directoryExists={0}", directoryExists.ToString());
             }
             return success;
         }
