@@ -27,10 +27,55 @@ namespace RelhaxModpack
         #region Main Patch Method
         public static PatchExitCode RunPatch(Patch p)
         {
+            //parse macros for when not from editor
+            if (!p.FromEditor)
+            {
+                if(CommandLineSettings.ApplicationMode == ApplicationMode.Patcher && !Utils.FilePathDict.ContainsKey("{app}"))
+                {
+                    Logging.Info("no {app} key - using path relative to application ({0})", Settings.ApplicationStartupPath);
+                    p.CompletePath = p.File;
+                }
+                else
+                {
+                    //process the start of the path
+                    if(string.IsNullOrWhiteSpace(p.PatchPath))
+                    {
+                        p.PatchPath = Settings.WoTDirectory;
+                    }
+                    else
+                    {
+                        if(!p.PatchPath[0].Equals('{'))
+                        {
+                            Logging.Warning("application patchpath macro does not start with '{', needs to be updated");
+                            //https://stackoverflow.com/questions/91362/how-to-escape-braces-curly-brackets-in-a-format-string-in-net
+                            p.PatchPath = string.Format("{{{0}}}", p.PatchPath);
+                        }
+                        p.PatchPath = Utils.MacroReplace(p.PatchPath, ReplacementTypes.FilePath);
+                    }
+                    if(p.File[0].Equals('\\'))
+                    {
+                        Logging.Debug("p.file starts with '\\', removing for path combine");
+                        p.File = p.File.Substring(1);
+                    }
+                    //also check for "xvmConfigFolderName"
+                    if (p.File.Contains("xvmConfigFolderName") && !p.File.Contains(@"{xvmConfigFolderName}"))
+                        p.File = p.File.Replace("xvmConfigFolderName", @"{xvmConfigFolderName}");
+
+                    if(!Utils.FilePathDict.ContainsKey(@"{xvmConfigFolderName}"))
+                        Utils.FilePathDict.Add(@"{xvmConfigFolderName}", GetXvmFolderName().Trim());
+
+                    p.File = Utils.MacroReplace(p.File, ReplacementTypes.FilePath);
+                    p.CompletePath = Path.Combine(p.PatchPath, p.File);
+                }
+            }
+
+            //dump info for logging
+            Logging.Info(p.DumpPatchInfoForLog);
+
             //check if file exists
             if (!File.Exists(p.CompletePath))
             {
-                Logging.Warning("File {0} not found", p.CompletePath);
+                Logging.Warning("File '{0}' not found", p.CompletePath);
                 return PatchExitCode.Error;
             }
 
@@ -41,9 +86,6 @@ namespace RelhaxModpack
                 Logging.Debug("p.FromEditor=true and ModpackSettings.VerboseLogging=false, setting to true for duration of patch method");
                 ModpackSettings.VerboseLogging = true;
             }
-
-            //macro parsing needs to go here
-            Logging.Info(p.DumpPatchInfoForLog);
 
             //actually run the patches based on what type it is
             PatchExitCode patchSuccess = PatchExitCode.Error;

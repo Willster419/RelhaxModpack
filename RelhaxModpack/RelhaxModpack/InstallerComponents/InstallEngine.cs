@@ -108,6 +108,8 @@ namespace RelhaxModpack.InstallerComponents
         private IProgress<RelhaxInstallerProgress> Progress = null;
         private RelhaxInstallerProgress Prog = null;
         private string XvmFolderName = string.Empty;
+        private Dictionary<string, string> OriginalPatchNames = new Dictionary<string, string>();
+
         //async progress reporters
         private RelhaxInstallerProgress ProgPatch = null;
         private RelhaxInstallerProgress ProgShortcuts = null;
@@ -1647,7 +1649,10 @@ namespace RelhaxModpack.InstallerComponents
                                 //if not, then get it
                                 if(string.IsNullOrEmpty(XvmFolderName))
                                 {
-                                    XvmFolderName = PatchUtils.GetXvmFolderName();
+                                    XvmFolderName = PatchUtils.GetXvmFolderName().Trim();
+                                    //also add it to the filepath replace
+                                    if (!Utils.FilePathDict.ContainsKey(@"{xvmConfigFolderName}"))
+                                        Utils.FilePathDict.Add(@"{xvmConfigFolderName}", XvmFolderName);
                                 }
                                 zipEntryName = zipEntryName.Replace("configs/xvm/xvmConfigFolderName", string.Format("configs/xvm/{0}",XvmFolderName));
                             }
@@ -1661,6 +1666,14 @@ namespace RelhaxModpack.InstallerComponents
                                 sb.Append(package.PatchGroup.ToString("D3"));
                                 //name else doesn't need to change, to set the rest of the name and use it
                                 sb.Append(zipEntryName.Substring(7));
+                                //save the original and new names to the list to apply later
+                                //lock on a static
+                                lock(this)
+                                {
+                                    //key is sb, sb is new name for disk, is native processing file
+                                    //value is original name from zip file
+                                    OriginalPatchNames.Add(sb.ToString().Substring(7), zipEntryName.Substring(7));
+                                }
                                 //and save it to the string
                                 zipEntryName = sb.ToString();
                             }
@@ -1869,7 +1882,7 @@ namespace RelhaxModpack.InstallerComponents
                         }
                         Utils.ApplyNormalFileProperties(completePath);
                         //ok NOW actually add the file to the patch list
-                        XMLUtils.AddPatchesFromFile(patches, completePath);
+                        XMLUtils.AddPatchesFromFile(patches, completePath, OriginalPatchNames[Path.GetFileName(filename)]);
                     }
                 }
             }

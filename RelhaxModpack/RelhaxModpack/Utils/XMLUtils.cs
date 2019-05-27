@@ -2492,7 +2492,7 @@ namespace RelhaxModpack
 
         #region Component Parsing methods
 
-        public static void AddPatchesFromFile(List<Patch> patches, string filename)
+        public static void AddPatchesFromFile(List<Patch> patches, string filename, string originalNameFromZip = null)
         {
             //make an xml document to get all patches
             XmlDocument doc = LoadXmlDocument(filename, XmlLoadType.FromFile);
@@ -2509,7 +2509,11 @@ namespace RelhaxModpack
             Logging.Info("Adding {0} patches from patchFile {1}", Logfiles.Application, XMLpatches.Count, filename);
             foreach (XmlNode patchNode in XMLpatches)
             {
-                Patch p = new Patch();
+                Patch p = new Patch
+                {
+                    NativeProcessingFile = Path.GetFileName(filename),
+                    ActualPatchName = originalNameFromZip
+                };
                 //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
                 foreach (XmlNode property in patchNode.ChildNodes)
                 {

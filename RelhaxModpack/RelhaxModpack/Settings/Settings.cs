@@ -155,6 +155,8 @@ namespace RelhaxModpack
             "single_dropdown2",
             "multi"
         };
+
+        public const string LogSpacingLinup = "                          ";
         #endregion
 
         #region Statics
