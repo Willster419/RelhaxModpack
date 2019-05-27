@@ -87,6 +87,22 @@ namespace RelhaxModpack
                         Logging.Info("patcher, loading in patch mode");
                         PatchFilenames.Add(args[++i].Trim());
                         break;
+                    case "macro":
+                        string macroName = args[++i];
+                        string macroValue = args[++i];
+                        Logging.Info("parsing macro '{0}' with value '{1}'",macroName,macroValue);
+                        /*
+                        FilePathDict.Add(@"{versiondir}", Settings.WoTClientVersion);
+                        FilePathDict.Add(@"{appdata}", Settings.AppDataFolder);
+                        FilePathDict.Add(@"{app}", Settings.WoTDirectory);
+                        */
+                        if(!macroName[0].Equals('{'))
+                        {
+                            Logging.Info(@"macro not started with '{', adding");
+                            macroName = string.Format("{{{0}}}", macroName);
+                        }
+                        Utils.FilePathDict.Add(macroName, macroValue);
+                        break;
                     default:
                         if (ApplicationMode == ApplicationMode.Patcher)
                         {

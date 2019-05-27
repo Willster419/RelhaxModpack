@@ -184,6 +184,7 @@ namespace RelhaxModpack
                                 exitCode = exitCodeTemp;
                         }
                         Logging.Info("patching finished, exit code {0} ({1})", (int)exitCode, exitCode.ToString());
+                        Current.Shutdown((int)exitCode);
                     }
                     break;
             }

@@ -30,10 +30,46 @@ namespace RelhaxModpack
             //parse macros for when not from editor
             if (!p.FromEditor)
             {
-                if(CommandLineSettings.ApplicationMode == ApplicationMode.Patcher && !Utils.FilePathDict.ContainsKey("{app}"))
+                if(CommandLineSettings.ApplicationMode == ApplicationMode.Patcher)
                 {
-                    Logging.Info("no {app} key - using path relative to application ({0})", Settings.ApplicationStartupPath);
-                    p.CompletePath = p.File;
+                    string patchPathStart = string.Empty;
+                    if(Utils.FilePathDict.ContainsKey(@"{app}"))
+                    {
+                        Logging.Info("{{app}} key found - using path replace macro ({0})", Settings.ApplicationStartupPath);
+                        patchPathStart = Utils.MacroReplace(@"{app}", ReplacementTypes.FilePath);
+                    }
+                    else
+                    {
+                        Logging.Info("no {{app}} key - using path relative to application ({0})", Settings.ApplicationStartupPath);
+                        patchPathStart = Settings.ApplicationStartupPath;
+                    }
+
+                    if(p.File.Contains("versiondir"))
+                    {
+                        if (Utils.FilePathDict.ContainsKey(@"{versiondir}"))
+                        {
+                            Logging.Info("{{versiondir}} key found, replacing");
+
+                            if (p.File.Contains("versiondir") && !p.File.Contains(@"{versiondir}"))
+                                p.File = p.File.Replace("versiondir", @"{versiondir}");
+
+                            p.File = Utils.MacroReplace(p.File, ReplacementTypes.FilePath);
+                        }
+                    }
+
+                    if (p.File[0].Equals('\\'))
+                    {
+                        Logging.Debug("p.file starts with '\\', removing for path combine");
+                        p.File = p.File.Substring(1);
+                    }
+
+                    if (patchPathStart[patchPathStart.Length-1].Equals('\\'))
+                    {
+                        Logging.Debug("patchPathStart end with '\\', removing for path combine");
+                        patchPathStart = patchPathStart.Substring(0,patchPathStart.Length-1);
+                    }
+                    p.CompletePath = Path.Combine(patchPathStart, p.File);
+                    Logging.Info("complete path to patch parsed as '{0}'", p.CompletePath);
                 }
                 else
                 {
