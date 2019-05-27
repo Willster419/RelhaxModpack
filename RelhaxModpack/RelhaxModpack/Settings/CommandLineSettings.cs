@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 
 
 namespace RelhaxModpack
@@ -24,11 +25,11 @@ namespace RelhaxModpack
         //use key filename as check for update key mode
         public static string UpdateKeyFileName = string.Empty;
         public static string EditorAutoLoadFileName = string.Empty;
-        public static string PatchFilename = string.Empty;
+        public static List<string> PatchFilenames = new List<string>();
         public static ApplicationMode ApplicationMode = ApplicationMode.Default;
-        public static void ParseCommandLineConflicts()//stub TODO
+        public static void ParseCommandLineConflicts()
         {
-            //check for conflicting command line arguements
+            //check for conflicting command line arguments
         }
 
         public static void ParseCommandLine(string[] args)
@@ -66,7 +67,7 @@ namespace RelhaxModpack
                         break;
                     case "editorAutoLoad":
                         EditorAutoLoadFileName = args[++i];
-                        Logging.WriteToLog("editorAutoLoad, loading databse from " + EditorAutoLoadFileName);
+                        Logging.WriteToLog("editorAutoLoad, loading database from " + EditorAutoLoadFileName);
                         break;
                     //now check for different startup modes
                     case "patch-designer":
@@ -84,7 +85,14 @@ namespace RelhaxModpack
                     case "patcher":
                         ApplicationMode = ApplicationMode.Patcher;
                         Logging.Info("patcher, loading in patch mode");
-                        PatchFilename = args[++i];
+                        PatchFilenames.Add(args[++i].Trim());
+                        break;
+                    default:
+                        if (ApplicationMode == ApplicationMode.Patcher)
+                        {
+                            Logging.Info("adding patch: {0}", commandArg.Trim());
+                            PatchFilenames.Add(commandArg.Trim());
+                        }
                         break;
                 }
             }

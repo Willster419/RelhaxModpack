@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using RelhaxModpack.Windows;
 
@@ -147,9 +149,42 @@ namespace RelhaxModpack
                     Current.Shutdown(0);
                     break;
                 case ApplicationMode.Patcher:
-                    Logging.Info("Running patch: {0}", CommandLineSettings.PatchFilename);
-                    throw new BadMemeException("TODO");
-                    //shutdown based on patch return type
+                    Logging.Info("Running patch mode");
+                    if(CommandLineSettings.PatchFilenames.Count == 0)
+                    {
+                        Logging.Error("0 patchfiles parsed from commandline!");
+                        Current.Shutdown(-3);
+                    }
+                    else
+                    {
+                        List<Patch> patchList = new List<Patch>();
+                        foreach(string file in CommandLineSettings.PatchFilenames)
+                        {
+                            if(!File.Exists(file))
+                            {
+                                Logging.Warning("skipping file path {0}, not found", file);
+                                continue;
+                            }
+                            Logging.Info("adding patches from file {0}", file);
+                            XMLUtils.AddPatchesFromFile(patchList, file);
+                        }
+                        if(patchList.Count == 0)
+                        {
+                            Logging.Error("0 patches parsed from files!");
+                            Current.Shutdown(-4);
+                        }
+                        PatchExitCode exitCode = PatchExitCode.Success;
+                        //always return on worst condition
+                        int i = 1;
+                        foreach(Patch p in patchList)
+                        {
+                            Logging.Info("running patch {0} of {1}", i++, patchList.Count);
+                            PatchExitCode exitCodeTemp = PatchUtils.RunPatch(p);
+                            if ((int)exitCodeTemp < (int)exitCode)
+                                exitCode = exitCodeTemp;
+                        }
+                        Logging.Info("patching finished, exit code {0} ({1})", (int)exitCode, exitCode.ToString());
+                    }
                     break;
             }
         }
