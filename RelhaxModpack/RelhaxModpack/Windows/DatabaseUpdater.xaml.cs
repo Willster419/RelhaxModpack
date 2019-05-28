@@ -574,7 +574,7 @@ namespace RelhaxModpack.Windows
                 ReportProgress("failed to parse modInfo to lists");
                 return;
             }
-            Utils.BuildLinksRefrence(parsedCategoryList, false);
+            Utils.BuildLinksRefrence(parsedCategoryList, true);
             Utils.BuildLevelPerPackage(parsedCategoryList);
             List<DatabasePackage> flatListCurrent = Utils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
             List<string> duplicates = Utils.CheckForDuplicates(globalDependencies, dependencies, parsedCategoryList);
@@ -646,7 +646,7 @@ namespace RelhaxModpack.Windows
                 ReportProgress("failed to parse modInfo to lists");
                 return;
             }
-            Utils.BuildLinksRefrence(parsedCateogryListOld, false);
+            Utils.BuildLinksRefrence(parsedCateogryListOld, true);
             Utils.BuildLevelPerPackage(parsedCateogryListOld);
             List<DatabasePackage> flatListOld = Utils.GetFlatList(globalDependenciesOld, dependenciesOld, null, parsedCateogryListOld);
             //download and load latest database.xml file from server
@@ -724,6 +724,7 @@ namespace RelhaxModpack.Windows
                 SelectablePackage result = results[0];
                 if(!selectablePackage.Name.Equals(result.Name))
                 {
+                    Logging.Debug("package rename-> old:{0}, new:{1}", result.PackageName, selectablePackage.PackageName);
                     renamedPackages.Add(selectablePackage);
                 }
             }
@@ -732,12 +733,15 @@ namespace RelhaxModpack.Windows
             //list of packages who's names are equal but packagenames aren't
             foreach(SelectablePackage selectablePackage in potentialRenamedPackages)
             {
-                List<SelectablePackage> results = selectablePackagesOld.Where(pack => pack.Name.Equals(selectablePackage.Name) && pack.Parent.PackageName.Equals(selectablePackage.Parent.PackageName)).ToList();
+                List<SelectablePackage> results = selectablePackagesOld.Where(pack => pack.NameFormatted.Equals(selectablePackage.NameFormatted) && pack.Parent.PackageName.Equals(selectablePackage.Parent.PackageName)).ToList();
                 if (results.Count == 0)
                     continue;
                 SelectablePackage result = results[0];
-                if (!selectablePackage.PackageName.Equals(result.PackageName))
+                if (!result.PackageName.Equals(selectablePackage.PackageName))
                 {
+                    Logging.Debug("internal packageName rename-> old:{0}, new:{1}", result.PackageName, selectablePackage.PackageName);
+                    Logging.Debug("name-> old: {0}, new:{1}", result.Name, result.Name);
+                    Logging.Debug("ParentName->{0}", result.Parent.PackageName);
                     internallyRenamed.Add(selectablePackage);
                 }
             }
@@ -775,13 +779,16 @@ namespace RelhaxModpack.Windows
             updatedPackages = updatedPackages.Except(addedPackages, pc).ToList();
 
             //put them to stringBuilder and write text to disk
-            ReportProgress(string.Format("Number of Added packages: {0}", addedPackages.Count));
-            ReportProgress(string.Format("Number of Updated packages: {0}", updatedPackages.Count));
-            ReportProgress(string.Format("Number of Disabled packages: {0}", disabledPackages.Count));
-            ReportProgress(string.Format("Number of Removed packages: {0}", removedPackages.Count));
-            ReportProgress(string.Format("Number of Moved packages: {0}", movedPackages.Count));
-            ReportProgress(string.Format("Number of Renamed packages: {0}", renamedPackages.Count));
-            ReportProgress(string.Format("Number of Internally renamed packages: {0}", internallyRenamed.Count));
+            StringBuilder numberBuilder = new StringBuilder();
+            numberBuilder.AppendLine(string.Format("Number of Added packages: {0}", addedPackages.Count));
+            numberBuilder.AppendLine(string.Format("Number of Updated packages: {0}", updatedPackages.Count));
+            numberBuilder.AppendLine(string.Format("Number of Disabled packages: {0}", disabledPackages.Count));
+            numberBuilder.AppendLine(string.Format("Number of Removed packages: {0}", removedPackages.Count));
+            numberBuilder.AppendLine(string.Format("Number of Moved packages: {0}", movedPackages.Count));
+            numberBuilder.AppendLine(string.Format("Number of Renamed packages: {0}", renamedPackages.Count));
+            numberBuilder.AppendLine(string.Format("Number of Internally renamed packages: {0}", internallyRenamed.Count));
+
+            ReportProgress(numberBuilder.ToString());
             //abort if missing files
             if (missingPackages.Count > 0)
             {
@@ -799,6 +806,8 @@ namespace RelhaxModpack.Windows
             databaseUpdateText.Clear();
             databaseUpdateText.AppendLine("Database Update!\n");
             databaseUpdateText.AppendLine("New version tag: " + DatabaseUpdateVersion);
+
+            databaseUpdateText.Append("\n" + numberBuilder.ToString());
 
             databaseUpdateText.AppendLine("\nAdded:");
             foreach (DatabasePackage dp in addedPackages)
@@ -827,10 +836,13 @@ namespace RelhaxModpack.Windows
             databaseUpdateText.AppendLine("\nNotes:\n-\n\n-----------------------------------------------------" +
                 "---------------------------------------------------------------------------------------");
 
+            //fix line endings
+            string fixedDatabaseUpdate = databaseUpdateText.ToString().Replace("\r\n", "\n").Replace("\n", "\r\n");
+
             //save databaseUpdate.txt
             if (File.Exists(DatabaseUpdateTxt))
                 File.Delete(DatabaseUpdateTxt);
-            File.WriteAllText(DatabaseUpdateTxt, databaseUpdateText.ToString());
+            File.WriteAllText(DatabaseUpdateTxt, fixedDatabaseUpdate);
             ReportProgress("Database text processed and written to disk");
 
             //save new modInfo.xml
