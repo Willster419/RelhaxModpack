@@ -20,7 +20,7 @@ namespace RelhaxModpack.Windows
         {
             if(!Utils.StartProcess(new ProcessStartInfo()
             {
-                WorkingDirectory = Path.GetDirectoryName(Settings.WoTDirectory),
+                WorkingDirectory = Settings.WoTDirectory,
                 FileName = Path.Combine(Settings.WoTDirectory, "WorldOfTanks.exe")
             }))
             {
@@ -34,7 +34,7 @@ namespace RelhaxModpack.Windows
         {
             if (!Utils.StartProcess(new ProcessStartInfo()
             {
-                WorkingDirectory = Path.GetDirectoryName(Settings.WoTDirectory),
+                WorkingDirectory = Settings.WoTDirectory,
                 FileName = Path.Combine(Settings.WoTDirectory, "WoTLauncher.exe")
             }))
             {
