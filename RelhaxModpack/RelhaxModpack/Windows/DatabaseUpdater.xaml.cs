@@ -555,9 +555,9 @@ namespace RelhaxModpack.Windows
             List<DatabasePackage> disabledPackages = new List<DatabasePackage>();
             List<DatabasePackage> removedPackages = new List<DatabasePackage>();
             List<DatabasePackage> missingPackages = new List<DatabasePackage>();
-            List<SelectablePackage> renamedPackages = new List<SelectablePackage>();
-            List<SelectablePackage> internallyRenamed = new List<SelectablePackage>();
-            List<SelectablePackage> movedPackages = new List<SelectablePackage>();
+            List<BeforeAfter> renamedPackages = new List<BeforeAfter>();
+            List<BeforeAfter> internallyRenamed = new List<BeforeAfter>();
+            List<BeforeAfter> movedPackages = new List<BeforeAfter>();
 
             //init strings
             CurrentModInfoXml = string.Empty;
@@ -725,7 +725,7 @@ namespace RelhaxModpack.Windows
                 if(!selectablePackage.Name.Equals(result.Name))
                 {
                     Logging.Debug("package rename-> old:{0}, new:{1}", result.PackageName, selectablePackage.PackageName);
-                    renamedPackages.Add(selectablePackage);
+                    renamedPackages.Add(new BeforeAfter() {Before = result, After = selectablePackage });
                 }
             }
 
@@ -742,7 +742,7 @@ namespace RelhaxModpack.Windows
                     Logging.Debug("internal packageName rename-> old:{0}, new:{1}", result.PackageName, selectablePackage.PackageName);
                     Logging.Debug("name-> old: {0}, new:{1}", result.Name, result.Name);
                     Logging.Debug("ParentName->{0}", result.Parent.PackageName);
-                    internallyRenamed.Add(selectablePackage);
+                    internallyRenamed.Add(new BeforeAfter() { Before = result, After = selectablePackage });
                 }
             }
 
@@ -754,15 +754,22 @@ namespace RelhaxModpack.Windows
                 if (results.Count == 0)
                     continue;
                 SelectablePackage result = results[0];
-                if(!result.CompletePath.Equals(selectablePackage.CompletePath))
+                bool parentPackageNameChanged = !result.Parent.PackageName.Equals(selectablePackage.Parent.PackageName);
+                bool parentNameChanged = !result.Parent.NameFormatted.Equals(selectablePackage.Parent.NameFormatted);
+                if(parentNameChanged && parentPackageNameChanged)
                 {
-                    movedPackages.Add(selectablePackage);
+                    movedPackages.Add(new BeforeAfter { Before = result, After = selectablePackage });
                 }
             }
 
+            //move them to lists of selectablePackageType as well
+            List<SelectablePackage> internallyRenamedPackages = internallyRenamed.Select(intt => intt.After).ToList();
+            List<SelectablePackage> actualMovedPackages = movedPackages.Select(intt => intt.After).ToList();
+            List<SelectablePackage> actualRenamedPackages = renamedPackages.Select(intt => intt.After).ToList();
+
             //remove any packages that say are added and removed, but actually just had internal structure changed
-            addedPackages = addedPackages.Except(internallyRenamed, pc).ToList();
-            removedPackages = removedPackages.Except(internallyRenamed, pc).ToList();
+            addedPackages = addedPackages.Except(internallyRenamedPackages, pc).ToList();
+            removedPackages = removedPackages.Except(internallyRenamedPackages, pc).ToList();
 
             //list of disabled packages before
             List<DatabasePackage> disabledBefore = flatListOld.Where(p => !p.Enabled).ToList();
@@ -811,29 +818,29 @@ namespace RelhaxModpack.Windows
 
             databaseUpdateText.AppendLine("\nAdded:");
             foreach (DatabasePackage dp in addedPackages)
-                databaseUpdateText.AppendLine("-" + dp.CompletePath);
+                databaseUpdateText.AppendLine(" - " + dp.CompletePath);
 
             databaseUpdateText.AppendLine("\nUpdated:");
             foreach (DatabasePackage dp in updatedPackages)
-                databaseUpdateText.AppendLine("-" + dp.CompletePath);
+                databaseUpdateText.AppendLine(" - " + dp.CompletePath);
 
             databaseUpdateText.AppendLine("\nRenamed:");
-                foreach (DatabasePackage dp in renamedPackages)
-                databaseUpdateText.AppendLine("-" + dp.CompletePath);
+                foreach (BeforeAfter dp in renamedPackages)
+                databaseUpdateText.AppendFormat(" - \"{0}\" was renamed to \"{1}\"\r\n", dp.Before.NameFormatted, dp.After.NameFormatted);
 
             databaseUpdateText.AppendLine("\nMoved:");
-            foreach (DatabasePackage dp in movedPackages)
-                databaseUpdateText.AppendLine("-" + dp.CompletePath);
+            foreach (BeforeAfter dp in movedPackages)
+                databaseUpdateText.AppendFormat(" - \"{0}\" was moved to \"{1}\"\r\n", dp.Before.CompletePath, dp.After.CompletePath);
 
             databaseUpdateText.AppendLine("\nDisabled:");
             foreach (DatabasePackage dp in disabledPackages)
-                databaseUpdateText.AppendLine("-" + dp.CompletePath);
+                databaseUpdateText.AppendLine(" - " + dp.CompletePath);
 
             databaseUpdateText.AppendLine("\nRemoved:");
             foreach (DatabasePackage dp in removedPackages)
-                databaseUpdateText.AppendLine("-" + dp.CompletePath);
+                databaseUpdateText.AppendLine(" - " + dp.CompletePath);
 
-            databaseUpdateText.AppendLine("\nNotes:\n-\n\n-----------------------------------------------------" +
+            databaseUpdateText.AppendLine("\nNotes:\n - \n\n-----------------------------------------------------" +
                 "---------------------------------------------------------------------------------------");
 
             //fix line endings

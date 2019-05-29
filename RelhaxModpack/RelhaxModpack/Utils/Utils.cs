@@ -40,6 +40,12 @@ namespace RelhaxModpack
         ZipFilePath
     }
 
+    public struct BeforeAfter
+    {
+        public SelectablePackage Before;
+        public SelectablePackage After;
+    }
+
     /// <summary>
     /// A utility class for static functions used in various places in the modpack
     /// </summary>
