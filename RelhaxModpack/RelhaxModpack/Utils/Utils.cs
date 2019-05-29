@@ -1598,11 +1598,13 @@ namespace RelhaxModpack
             if (FilePathDict == null)
                 throw new BadMemeException("REEEEEEEEEE");
             FilePathDict.Clear();
+            //add macro versions first then regular versions
             FilePathDict.Add(@"{versiondir}", Settings.WoTClientVersion);
             FilePathDict.Add(@"{tanksversion}", Settings.WoTClientVersion);
             FilePathDict.Add(@"{tanksonlinefolderversion}", Settings.WoTModpackOnlineFolderVersion);
             FilePathDict.Add(@"{appdata}", Settings.AppDataFolder);
             FilePathDict.Add(@"{app}", Settings.WoTDirectory);
+            FilePathDict.Add(@"versiondir", Settings.WoTClientVersion);
         }
         public static string MacroReplace(string inputString, ReplacementTypes type)
         {

@@ -1719,8 +1719,8 @@ namespace RelhaxModpack.InstallerComponents
                                 {
                                     XvmFolderName = PatchUtils.GetXvmFolderName().Trim();
                                     //also add it to the filepath replace
-                                    if (!Utils.FilePathDict.ContainsKey(@"{xvmConfigFolderName}"))
-                                        Utils.FilePathDict.Add(@"{xvmConfigFolderName}", XvmFolderName);
+                                    if (!Utils.FilePathDict.ContainsKey(@"xvmConfigFolderName"))
+                                        Utils.FilePathDict.Add(@"xvmConfigFolderName", XvmFolderName);
                                 }
                                 zipEntryName = zipEntryName.Replace("configs/xvm/xvmConfigFolderName", string.Format("configs/xvm/{0}",XvmFolderName));
                             }

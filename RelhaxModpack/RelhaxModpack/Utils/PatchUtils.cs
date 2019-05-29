@@ -46,12 +46,9 @@ namespace RelhaxModpack
 
                     if(p.File.Contains("versiondir"))
                     {
-                        if (Utils.FilePathDict.ContainsKey(@"{versiondir}"))
+                        if (Utils.FilePathDict.ContainsKey(@"versiondir"))
                         {
-                            Logging.Info("{{versiondir}} key found, replacing");
-
-                            if (p.File.Contains("versiondir") && !p.File.Contains(@"{versiondir}"))
-                                p.File = p.File.Replace("versiondir", @"{versiondir}");
+                            Logging.Info("'versiondir' key found, replacing path with supplied tanks version");
 
                             p.File = Utils.MacroReplace(p.File, ReplacementTypes.FilePath);
                         }
@@ -103,11 +100,8 @@ namespace RelhaxModpack
                     }
 
                     //also check for "xvmConfigFolderName"
-                    if (p.File.Contains("xvmConfigFolderName") && !p.File.Contains(@"{xvmConfigFolderName}"))
-                        p.File = p.File.Replace("xvmConfigFolderName", @"{xvmConfigFolderName}");
-
-                    if(!Utils.FilePathDict.ContainsKey(@"{xvmConfigFolderName}"))
-                        Utils.FilePathDict.Add(@"{xvmConfigFolderName}", GetXvmFolderName().Trim());
+                    if(!Utils.FilePathDict.ContainsKey(@"xvmConfigFolderName"))
+                        Utils.FilePathDict.Add(@"xvmConfigFolderName", GetXvmFolderName().Trim());
 
                     p.File = Utils.MacroReplace(p.File, ReplacementTypes.FilePath);
                     p.CompletePath = Path.Combine(p.PatchPath, p.File);
