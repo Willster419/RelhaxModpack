@@ -19,7 +19,7 @@ namespace RelhaxModpack.Windows
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
-    public partial class AdvancedProgress : Window
+    public partial class AdvancedProgress : RelhaxWindow
     {
         public AdvancedProgress()
         {

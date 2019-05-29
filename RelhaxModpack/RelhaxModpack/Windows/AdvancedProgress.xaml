@@ -1,81 +1,25 @@
-﻿<Window x:Name="Advanced_Installer_Progress"
+﻿<local:RelhaxWindow x:Name="Advanced_Installer_Progress"
         x:Class="RelhaxModpack.Windows.AdvancedProgress"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:RelhaxModpack.UIComponents"
+        xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="Advanced Installer Progress" Height="450" Width="800" MinHeight="200" MinWidth="400">
-    <Grid>
-        
-        <DockPanel>
-            <ProgressBar DockPanel.Dock="Bottom" x:Name="advanced_Installer_Progress_Bar_Overall" Height="20" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
-            <TabControl DockPanel.Dock="Top" x:Name="advanced_Installer_Categories">
-                <TabItem Tag="advanced_Installer_Cleaner_Tab" x:Name="advanced_Installer_Cleaner_Tab" Header="Cleaner">
-                    <DockPanel LastChildFill="True">
-                        <ProgressBar DockPanel.Dock="Bottom" x:Name="advanced_Installer_Progress_Bar_Cleaner" Height="20"/>
-                        <TextBox x:Name="advanced_Installer_Cleaner_Text" Tag="installer_Cleaner_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap" DockPanel.Dock="Top">
-                            This is where the text goes for the Folder cleaner
-                        </TextBox>
-                    </DockPanel>
-                </TabItem>
+        Title="Advanced Installer Progress" Height="450" Width="500">
+    <Grid Background="#FFE5E5E5">
+        <TabControl >
+            <TabItem Header="Pre-install tasks">
+                <Grid Background="#FFE5E5E5">
+                </Grid>
+            </TabItem>
+            <TabItem Header="Extraction">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Post-install tasks">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        </TabControl>
 
-                <TabItem Tag="installer_Extration_Tab" x:Name="installer_Extration_Tab" Header="Extraction" Height="22" VerticalAlignment="Stretch">
-                    <DockPanel>
-                        <ProgressBar DockPanel.Dock="Bottom" x:Name="advanced_Installer_Progress_Bar_Extraction" Height="20"/>
-                        <TextBox x:Name="advanced_Installer_Extration_Text" Tag="installer_Extration_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
-                            This is where the text goes for Extractions
-                        </TextBox>
-                    </DockPanel>
-                </TabItem>
-
-                <TabItem Tag="installer_Patching_Tab" x:Name="installer_Patching_Tab" Header="Patcher" VerticalAlignment="Stretch">
-                    <DockPanel>
-                        <ProgressBar DockPanel.Dock="Bottom" x:Name="advanced_Installer_Progress_Bar_Patcher" Height="20"/>
-                        <TextBox x:Name="advanced_Installer_Patching_Text" Tag="database_Update_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
-                            This is where the text goes for patches
-                        </TextBox>
-                    </DockPanel>
-                </TabItem>
-
-                <TabItem Tag="installer_User_Data_Tab" x:Name="installer_User_Data_Tab" Header="User Data" VerticalAlignment="Stretch">
-                    <DockPanel>
-                        <ProgressBar DockPanel.Dock="Bottom" x:Name="advanced_Installer_Progress_Bar_User_Data" Height="20"/>
-                        <TextBox x:Name="advanced_Installer_User_Data_Text" Tag="database_Update_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
-                            This is where the text goes for user data
-                        </TextBox>
-                    </DockPanel>
-                </TabItem>
-
-                <TabItem Tag="installer_Atlas_Tab" x:Name="installer_Atlas_Tab" Header="Atlas" VerticalAlignment="Stretch">
-                    <DockPanel>
-                        <ProgressBar DockPanel.Dock="Bottom" x:Name="advanced_Installer_Progress_Bar_Atlas" Height="20"/>
-                        <TextBox x:Name="advanced_Installer_Atlas_Text" Tag="database_Update_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
-                            This is where the text goes for Atlas
-                        </TextBox>
-                    </DockPanel>
-                </TabItem>
-
-                <TabItem Tag="installer_Backup_Tab" x:Name="installer_Backup_Tab" Header="Backup" VerticalAlignment="Stretch">
-                    <DockPanel>
-                        <ProgressBar DockPanel.Dock="Bottom" x:Name="advanced_Installer_Progress_Bar_Backup" Height="20"/>
-                        <TextBox x:Name="advanced_Installer_Backup_Text" Tag="database_Update_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
-                            This is where the text goes for backups
-                        </TextBox>
-                    </DockPanel>
-                </TabItem>
-
-                <TabItem Tag="installer_Misc_Tab" x:Name="installer_Misc_Tab" Header="Misc" VerticalAlignment="Stretch">
-                    <DockPanel>
-                        <ProgressBar DockPanel.Dock="Bottom" x:Name="advanced_Installer_Progress_Bar_Misc" Height="20"/>
-                        <TextBox x:Name="advanced_Installer_Misc_Text" Tag="database_Update_Text" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap">
-                            This is where the text goes for misc
-                        </TextBox>
-                    </DockPanel>
-                </TabItem>
-
-            </TabControl>
-        </DockPanel>
     </Grid>
-</Window>
+</local:RelhaxWindow>

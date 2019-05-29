@@ -1008,6 +1008,19 @@
             Load the custom color definitions from XML
             </summary>
         </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter">
+            <summary>
+            Interaction logic for RelhaxInstallTaskReporter.xaml
+            </summary>
+            <summary>
+            RelhaxInstallTaskReporter
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.UIComponents.RelhaxWPFCheckBox">
             <summary>
             Interaction logic for RelhaxWPFCheckBox.xaml

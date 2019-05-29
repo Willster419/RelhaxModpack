@@ -140,6 +140,9 @@
     <Compile Include="UIComponents\EditorComboBoxItem.cs" />
     <Compile Include="UIComponents\EditorSearchBoxItem.cs" />
     <Compile Include="UIComponents\LinkButton.cs" />
+    <Compile Include="UIComponents\RelhaxInstallTaskReporter.xaml.cs">
+      <DependentUpon>RelhaxInstallTaskReporter.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UIComponents\RelhaxWPFCheckBox.xaml.cs">
       <DependentUpon>RelhaxWPFCheckBox.xaml</DependentUpon>
     </Compile>
@@ -245,6 +248,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UIComponents\RelhaxInstallTaskReporter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UIComponents\RelhaxWPFCheckBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
