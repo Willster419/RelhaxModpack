@@ -148,6 +148,9 @@ namespace RelhaxModpack
         /// </summary>
         public virtual string CompletePath
         { get {  return PackageName; } }
+
+        public virtual string CompletePackageNamePath
+        { get { return PackageName; } }
         #endregion
     }
 }

@@ -398,6 +398,28 @@ namespace RelhaxModpack
             }
         }
 
+        
+        public override string CompletePackageNamePath
+        {
+            get
+            {
+                if (ParentCategory == null)
+                {
+                    return base.CompletePackageNamePath;
+                }
+                //level is taken care of in createModStructure, so use that
+                List<string> parentPackages = new List<string>();
+                SelectablePackage package = this;
+                while (package != null && package.Level > -1)
+                {
+                    parentPackages.Add(package.PackageName);
+                    package = package.Parent;
+                }
+                parentPackages.Reverse();
+                return string.Join("->", parentPackages);
+            }
+        }
+
         /// <summary>
         /// Determines if the UI package structure to this package is of all visible components.
         /// </summary>

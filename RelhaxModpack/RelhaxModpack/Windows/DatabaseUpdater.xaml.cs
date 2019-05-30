@@ -733,14 +733,15 @@ namespace RelhaxModpack.Windows
             //list of packages who's names are equal but packagenames aren't
             foreach(SelectablePackage selectablePackage in potentialRenamedPackages)
             {
-                List<SelectablePackage> results = selectablePackagesOld.Where(pack => pack.NameFormatted.Equals(selectablePackage.NameFormatted) && pack.Parent.PackageName.Equals(selectablePackage.Parent.PackageName)).ToList();
+                //List<SelectablePackage> results = selectablePackagesOld.Where(pack => pack.NameFormatted.Equals(selectablePackage.NameFormatted) && pack.Parent.PackageName.Equals(selectablePackage.Parent.PackageName)).ToList();
+                List<SelectablePackage> results = selectablePackagesOld.Where(pack => pack.CompletePath.Equals(selectablePackage.CompletePath)).ToList();
                 if (results.Count == 0)
                     continue;
                 SelectablePackage result = results[0];
                 if (!result.PackageName.Equals(selectablePackage.PackageName))
                 {
                     Logging.Debug("internal packageName rename-> old:{0}, new:{1}", result.PackageName, selectablePackage.PackageName);
-                    Logging.Debug("name-> old: {0}, new:{1}", result.Name, result.Name);
+                    Logging.Debug("name-> old: {0}, new:{1}", result.Name, selectablePackage.Name);
                     Logging.Debug("ParentName->{0}", result.Parent.PackageName);
                     internallyRenamed.Add(new BeforeAfter() { Before = result, After = selectablePackage });
                 }
@@ -754,10 +755,14 @@ namespace RelhaxModpack.Windows
                 if (results.Count == 0)
                     continue;
                 SelectablePackage result = results[0];
-                bool parentPackageNameChanged = !result.Parent.PackageName.Equals(selectablePackage.Parent.PackageName);
-                bool parentNameChanged = !result.Parent.NameFormatted.Equals(selectablePackage.Parent.NameFormatted);
-                if(parentNameChanged && parentPackageNameChanged)
+                //bool parentPackageNameChanged = !result.Parent.PackageName.Equals(selectablePackage.Parent.PackageName);
+                //bool parentNameChanged = !result.Parent.NameFormatted.Equals(selectablePackage.Parent.NameFormatted);
+                //if(parentNameChanged && parentPackageNameChanged)
+                bool completeNamePathChanged = !result.CompletePath.Equals(selectablePackage.CompletePath);
+                bool completePackageNamePathChanged = !result.CompletePackageNamePath.Equals(selectablePackage.CompletePackageNamePath);
+                if (completeNamePathChanged && completePackageNamePathChanged)
                 {
+                    Logging.Debug("package moved: {0}", selectablePackage.PackageName);
                     movedPackages.Add(new BeforeAfter { Before = result, After = selectablePackage });
                 }
             }
@@ -769,7 +774,34 @@ namespace RelhaxModpack.Windows
 
             //remove any packages that say are added and removed, but actually just had internal structure changed
             addedPackages = addedPackages.Except(internallyRenamedPackages, pc).ToList();
+            addedPackages = addedPackages.Except(actualMovedPackages, pc).ToList();
+
             removedPackages = removedPackages.Except(internallyRenamedPackages, pc).ToList();
+            removedPackages = removedPackages.Except(actualMovedPackages, pc).ToList();
+
+            //as last resort, sometimes the internal rename check won't find it. but, if the completepath exists in both added and removed, then something else happened to it
+            List<SelectablePackage> addedSelectablePackages = addedPackages.OfType<SelectablePackage>().ToList();
+            List<SelectablePackage> removedSelectablePackages = removedPackages.OfType<SelectablePackage>().ToList();
+            List<string> completePathDetect = addedSelectablePackages.Select(pack => pack.CompletePath).ToList();
+            completePathDetect.AddRange(removedSelectablePackages.Select(pack => pack.CompletePath).ToList());
+            completePathDetect = completePathDetect.Distinct().ToList();
+            Logging.Debug("CompletePath count compare of add and remove is {0}", completePathDetect.Count);
+            if (completePathDetect.Count > 0)
+            {
+                foreach(string completePathDet in completePathDetect)
+                {
+                    List<SelectablePackage> addResultList = addedSelectablePackages.Where(pack => pack.CompletePath.Equals(completePathDet)).ToList();
+                    List<SelectablePackage> removeResultList = removedSelectablePackages.Where(pack => pack.CompletePath.Equals(completePathDet)).ToList();
+                    if(addResultList.Count > 0 && removeResultList.Count > 0)
+                    {
+                        SelectablePackage addResult = addResultList[0];
+                        SelectablePackage removeResult = removeResultList[0];
+                        internallyRenamed.Add(new BeforeAfter() { Before = removeResult, After = addResult });
+                        addedPackages.Remove(addedPackages.Where(pack => pack.PackageName.Equals(addResult.PackageName)).ToList()[0]);
+                        removedPackages.Remove(removedPackages.Where(pack => pack.PackageName.Equals(removeResult.PackageName)).ToList()[0]);
+                    }
+                }
+            }
 
             //list of disabled packages before
             List<DatabasePackage> disabledBefore = flatListOld.Where(p => !p.Enabled).ToList();
