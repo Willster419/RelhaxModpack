@@ -662,7 +662,10 @@ namespace RelhaxModpack.Windows
                     Settings.WoTModpackOnlineFolderVersion, DatabaseXml), DatabaseXml);
                 databaseXml.Load(DatabaseXml);
             }
+
             //update the crc values, also makes list of updated mods
+            ReportProgress("downloaded, comparing crc values for list of updated mods");
+            Utils.AllowUIToUpdate();
             foreach(DatabasePackage package in flatListCurrent)
             {
                 if(string.IsNullOrEmpty(package.ZipFile))
@@ -701,6 +704,8 @@ namespace RelhaxModpack.Windows
 
             //do list magic to get all added, removed, disabled, etc package lists
             //used for disabled, removed, added mods
+            ReportProgress("getting list of added and removed packages");
+            Utils.AllowUIToUpdate();
             PackageComparerByPackageName pc = new PackageComparerByPackageName();
 
             //if in before but not after = removed
@@ -710,7 +715,10 @@ namespace RelhaxModpack.Windows
             addedPackages = flatListCurrent.Except(flatListOld, pc).ToList();
 
             //get the list of renamed packages
+            //a renamed package will have the same internal name, but a different display name
             //first start by getting the list of all current packages, then filter out removed and added packages
+            ReportProgress("getting list of renamed packages");
+            Utils.AllowUIToUpdate();
             List<DatabasePackage> renamedPackagesTemp = new List<DatabasePackage>(flatListCurrent);
             renamedPackagesTemp = renamedPackagesTemp.Except(removedPackages, pc).Except(addedPackages, pc).ToList();
             //https://stackoverflow.com/questions/3842714/linq-selection-by-type-of-an-object
@@ -722,42 +730,23 @@ namespace RelhaxModpack.Windows
                 if (results.Count == 0)
                     continue;
                 SelectablePackage result = results[0];
-                if(!selectablePackage.Name.Equals(result.Name))
+                if(!selectablePackage.NameFormatted.Equals(result.NameFormatted))
                 {
                     Logging.Debug("package rename-> old:{0}, new:{1}", result.PackageName, selectablePackage.PackageName);
                     renamedPackages.Add(new BeforeAfter() {Before = result, After = selectablePackage });
                 }
             }
 
-            //get the list of internally renamed packages
-            //list of packages who's names are equal but packagenames aren't
-            foreach(SelectablePackage selectablePackage in potentialRenamedPackages)
-            {
-                //List<SelectablePackage> results = selectablePackagesOld.Where(pack => pack.NameFormatted.Equals(selectablePackage.NameFormatted) && pack.Parent.PackageName.Equals(selectablePackage.Parent.PackageName)).ToList();
-                List<SelectablePackage> results = selectablePackagesOld.Where(pack => pack.CompletePath.Equals(selectablePackage.CompletePath)).ToList();
-                if (results.Count == 0)
-                    continue;
-                SelectablePackage result = results[0];
-                if (!result.PackageName.Equals(selectablePackage.PackageName))
-                {
-                    Logging.Debug("internal packageName rename-> old:{0}, new:{1}", result.PackageName, selectablePackage.PackageName);
-                    Logging.Debug("name-> old: {0}, new:{1}", result.Name, selectablePackage.Name);
-                    Logging.Debug("ParentName->{0}", result.Parent.PackageName);
-                    internallyRenamed.Add(new BeforeAfter() { Before = result, After = selectablePackage });
-                }
-            }
-
             //list of moved packages
-            //where the packagename is the same but the structure text thing arent' the same
+            //a moved package will have a different completePackagePath and different completePath, but still have the same internalName
+            ReportProgress("getting list of moved packages");
+            Utils.AllowUIToUpdate();
             foreach (SelectablePackage selectablePackage in potentialRenamedPackages)
             {
                 List<SelectablePackage> results = selectablePackagesOld.Where(pack => pack.PackageName.Equals(selectablePackage.PackageName)).ToList();
                 if (results.Count == 0)
                     continue;
                 SelectablePackage result = results[0];
-                //bool parentPackageNameChanged = !result.Parent.PackageName.Equals(selectablePackage.Parent.PackageName);
-                //bool parentNameChanged = !result.Parent.NameFormatted.Equals(selectablePackage.Parent.NameFormatted);
-                //if(parentNameChanged && parentPackageNameChanged)
                 bool completeNamePathChanged = !result.CompletePath.Equals(selectablePackage.CompletePath);
                 bool completePackageNamePathChanged = !result.CompletePackageNamePath.Equals(selectablePackage.CompletePackageNamePath);
                 if (completeNamePathChanged && completePackageNamePathChanged)
@@ -768,24 +757,28 @@ namespace RelhaxModpack.Windows
             }
 
             //move them to lists of selectablePackageType as well
-            List<SelectablePackage> internallyRenamedPackages = internallyRenamed.Select(intt => intt.After).ToList();
             List<SelectablePackage> actualMovedPackages = movedPackages.Select(intt => intt.After).ToList();
-            List<SelectablePackage> actualRenamedPackages = renamedPackages.Select(intt => intt.After).ToList();
+            actualMovedPackages.AddRange(movedPackages.Select(intt => intt.Before).ToList());
+            actualMovedPackages = actualMovedPackages.Distinct().ToList();
 
             //remove any packages that say are added and removed, but actually just had internal structure changed
-            addedPackages = addedPackages.Except(internallyRenamedPackages, pc).ToList();
             addedPackages = addedPackages.Except(actualMovedPackages, pc).ToList();
-
-            removedPackages = removedPackages.Except(internallyRenamedPackages, pc).ToList();
             removedPackages = removedPackages.Except(actualMovedPackages, pc).ToList();
 
-            //as last resort, sometimes the internal rename check won't find it. but, if the completepath exists in both added and removed, then something else happened to it
+            //if a package was internally renamed, it will show up in the added and removed list
+            //a internal renamed package will have a different completePackagePath but the same completePath (assuming it wasn't renamed as well), and different internalName
+            //first get the list of *selectable*Packages for added and removed
+            ReportProgress("checking add and removed list for internal renamed");
+            Utils.AllowUIToUpdate();
             List<SelectablePackage> addedSelectablePackages = addedPackages.OfType<SelectablePackage>().ToList();
             List<SelectablePackage> removedSelectablePackages = removedPackages.OfType<SelectablePackage>().ToList();
+
+            //get a string list of completePath and completePackagePath
             List<string> completePathDetect = addedSelectablePackages.Select(pack => pack.CompletePath).ToList();
             completePathDetect.AddRange(removedSelectablePackages.Select(pack => pack.CompletePath).ToList());
             completePathDetect = completePathDetect.Distinct().ToList();
-            Logging.Debug("CompletePath count compare of add and remove is {0}", completePathDetect.Count);
+
+            ReportProgress(string.Format("CompletePath count compare of add and remove is {0}", completePathDetect.Count));
             if (completePathDetect.Count > 0)
             {
                 foreach(string completePathDet in completePathDetect)
