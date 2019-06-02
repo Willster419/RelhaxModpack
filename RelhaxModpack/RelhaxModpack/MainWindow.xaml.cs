@@ -1111,7 +1111,8 @@ namespace RelhaxModpack
                     RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
                     {
                         IsSubProgressActive = true,
-                        TaskTitle = Translations.GetTranslatedString("AdvancedInstallBackupMods")
+                        TaskTitle = Translations.GetTranslatedString("AdvancedInstallBackupMods"),
+                        ReportState = TaskReportState.Inactive
                     };
                     AdvancedProgressWindow.PreInstallPanel.Children.Add(reporter);
                     AdvancedProgressWindow.BackupModsReporter = reporter;
@@ -1125,7 +1126,7 @@ namespace RelhaxModpack
                     RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
                     {
                         IsSubProgressActive = false,
-
+                        ReportState = TaskReportState.Inactive
                     };
                     AdvancedProgressWindow.PreInstallPanel.Children.Add(reporter);
                     AdvancedProgressWindow.BackupDataClearCacheClearLogsReporter = reporter;
@@ -1137,8 +1138,9 @@ namespace RelhaxModpack
                     Logging.Debug("adding CleanInstallation reporter");
                     RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
                     {
-                        IsSubProgressActive = true,
-                        TaskTitle = Translations.GetTranslatedString("AdvancedInstallClearMods")
+                        IsSubProgressActive = false,
+                        TaskTitle = Translations.GetTranslatedString("AdvancedInstallClearMods"),
+                        ReportState = TaskReportState.Inactive
                     };
                     AdvancedProgressWindow.PreInstallPanel.Children.Add(reporter);
                     AdvancedProgressWindow.CleanModsReporter = reporter;
@@ -1153,7 +1155,8 @@ namespace RelhaxModpack
                     RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
                     {
                         IsSubProgressActive = true,
-                        TaskTitle = string.Format("{0} {1}", Translations.GetTranslatedString("AdvancedInstallInstallMods"), (i + 1).ToString())
+                        TaskTitle = string.Format("{0} {1}", Translations.GetTranslatedString("AdvancedInstallInstallMods"), (i + 1).ToString()),
+                        ReportState = TaskReportState.Inactive
                     };
                     AdvancedProgressWindow.ExtractionPanel.Children.Add(reporter);
                     AdvancedProgressWindow.ExtractionModsReporters[i] = reporter;

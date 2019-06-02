@@ -2657,6 +2657,27 @@ namespace RelhaxModpack
             Polish.Add("AdvancedInstallPatchFiles", TranslationNeeded);
             French.Add("AdvancedInstallPatchFiles", TranslationNeeded);
 
+            //Component: AdvancedInstallCreateShortcuts
+            //
+            English.Add("AdvancedInstallCreateShortcuts", "Create Shortcuts");
+            Gernam.Add("AdvancedInstallCreateShortcuts", TranslationNeeded);
+            Polish.Add("AdvancedInstallCreateShortcuts", TranslationNeeded);
+            French.Add("AdvancedInstallCreateShortcuts", TranslationNeeded);
+
+            //Component: AdvancedInstallCreateAtlas
+            //
+            English.Add("AdvancedInstallCreateAtlas", "Create atlases");
+            Gernam.Add("AdvancedInstallCreateAtlas", TranslationNeeded);
+            Polish.Add("AdvancedInstallCreateAtlas", TranslationNeeded);
+            French.Add("AdvancedInstallCreateAtlas", TranslationNeeded);
+
+            //Component: AdvancedInstallInstallFonts
+            //
+            English.Add("AdvancedInstallInstallFonts", "Install fonts");
+            Gernam.Add("AdvancedInstallInstallFonts", TranslationNeeded);
+            Polish.Add("AdvancedInstallInstallFonts", TranslationNeeded);
+            French.Add("AdvancedInstallInstallFonts", TranslationNeeded);
+
             //Component: AdvancedInstallTrimDownloadCache
             //
             English.Add("AdvancedInstallTrimDownloadCache", "Trim download cache");

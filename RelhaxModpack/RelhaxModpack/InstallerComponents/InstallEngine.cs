@@ -1509,6 +1509,7 @@ namespace RelhaxModpack.InstallerComponents
                         //initial progress
                         ProgFonts = CopyProgress(Prog);
                         ProgFonts.InstallStatus = InstallerExitCodes.FontInstallError;
+                        ProgFonts.ParrentTotal = realFontsToInstall.Count();
                         LockProgress();
 
                         //extract he exe to install fonts

@@ -16,6 +16,14 @@ using System.Windows.Shapes;
 
 namespace RelhaxModpack.UIComponents
 {
+    public enum TaskReportState
+    {
+        Inactive,
+        Active,
+        Complete,
+        Error
+    }
+
     /// <summary>
     /// Interaction logic for RelhaxInstallTaskReporter.xaml
     /// </summary>
@@ -27,12 +35,31 @@ namespace RelhaxModpack.UIComponents
         }
 
         #region Properties
-        public bool IsActive
+        private TaskReportState _reportState = TaskReportState.Inactive;
+        public TaskReportState ReportState
         {
             get
-            { return IsActive; }
+            { return _reportState; }
             set
-            { IsActive = value; }
+            {
+                _reportState = value;
+                if(value == TaskReportState.Active)
+                {
+                    IsEnabled = true;
+                }
+                else
+                {
+                    IsEnabled = false;
+                    if(value == TaskReportState.Error)
+                    {
+                        Background = new SolidColorBrush(Colors.Red);
+                    }
+                    else if (value == TaskReportState.Complete)
+                    {
+                        Background = new SolidColorBrush(Colors.Green);
+                    }
+                }
+            }
         }
         public bool IsSubProgressActive { get; set; } = false;
         public string TaskTitle { get; set; } = string.Empty;
