@@ -2027,6 +2027,8 @@ namespace RelhaxModpack
             AutoInstallCB.IsChecked = ModpackSettings.AutoInstall;
             DeleteOldCacheFiles.IsChecked = ModpackSettings.DeleteCacheFiles;
             MinimizeToSystemTray.IsChecked = ModpackSettings.MinimizeToSystemTray;
+            AdvancedInstallationProgress.IsChecked = ModpackSettings.AdvancedInstalProgress;
+
             if(!string.IsNullOrWhiteSpace(ModpackSettings.AutoOneclickSelectionFilePath))
                 AutoInstallOneClickInstallSelectionFilePath.Text = ModpackSettings.AutoOneclickSelectionFilePath;
 

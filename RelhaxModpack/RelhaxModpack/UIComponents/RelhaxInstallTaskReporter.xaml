@@ -7,10 +7,10 @@
              mc:Ignorable="d" d:DesignWidth="300" Height="95">
     <Border BorderBrush="Black" BorderThickness="1" x:Name="MainBorder" Tag="MainBorder" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <StackPanel x:Name="MainGrid" Tag="MainGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <TextBlock HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding TaskTitle, ElementName=userControl}" VerticalAlignment="Top" x:Name="TaskName" Tag="TaskName"/>
-            <TextBox HorizontalAlignment="Stretch" Height="45" TextWrapping="Wrap" Margin="0,3,0,0" Text="{Binding TaskText, ElementName=userControl}" VerticalAlignment="Top" x:Name="TaskStatus" Tag="TaskStatus"/>
-            <ProgressBar HorizontalAlignment="Stretch" Height="10" Margin="0,3,0,0" VerticalAlignment="Top" x:Name="TaskProgress1" Tag="TaskProgress1" Maximum="{Binding TaskMaximum, ElementName=userControl}" Minimum="{Binding TaskMinimum, ElementName=userControl}" Value="{Binding TaskValue, ElementName=userControl}"/>
-            <ProgressBar HorizontalAlignment="Stretch" Height="10" Margin="0,2,0,0" VerticalAlignment="Top" x:Name="TaskProgress2" Tag="TaskProgress2" IsEnabled="{Binding IsSubProgressActive, ElementName=userControl}" Maximum="{Binding SubTaskMaximum, ElementName=userControl}" Minimum="{Binding SubTaskMinimum, ElementName=userControl}" Value="{Binding SubTaskValue, ElementName=userControl}"/>
+            <TextBlock HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding TaskTitle, ElementName=RelhaxTaskReporter}" VerticalAlignment="Top" x:Name="TaskName" Tag="TaskName"/>
+            <TextBox HorizontalAlignment="Stretch" Height="45" TextWrapping="Wrap" Margin="0,3,0,0" Text="{Binding TaskText, ElementName=RelhaxTaskReporter}" VerticalAlignment="Top" x:Name="TaskStatus" Tag="TaskStatus"/>
+            <ProgressBar HorizontalAlignment="Stretch" Height="10" Margin="0,3,0,0" VerticalAlignment="Top" x:Name="TaskProgress1" Tag="TaskProgress1" Maximum="{Binding TaskMaximum, ElementName=RelhaxTaskReporter}" Minimum="{Binding TaskMinimum, ElementName=RelhaxTaskReporter}" Value="{Binding TaskValue, ElementName=RelhaxTaskReporter}"/>
+            <ProgressBar HorizontalAlignment="Stretch" Height="10" Margin="0,2,0,0" VerticalAlignment="Top" x:Name="TaskProgress2" Tag="TaskProgress2" IsEnabled="{Binding IsSubProgressActive, ElementName=RelhaxTaskReporter}" Maximum="{Binding SubTaskMaximum, ElementName=RelhaxTaskReporter}" Minimum="{Binding SubTaskMinimum, ElementName=RelhaxTaskReporter}" Value="{Binding SubTaskValue, ElementName=RelhaxTaskReporter}"/>
         </StackPanel>
     </Border>
 </UserControl>

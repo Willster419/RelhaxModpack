@@ -27,7 +27,7 @@ namespace RelhaxModpack.UIComponents
     /// <summary>
     /// Interaction logic for RelhaxInstallTaskReporter.xaml
     /// </summary>
-    public partial class RelhaxInstallTaskReporter : UserControl
+    public partial class RelhaxInstallTaskReporter : UserControl, INotifyPropertyChanged
     {
         public RelhaxInstallTaskReporter()
         {
@@ -35,6 +35,7 @@ namespace RelhaxModpack.UIComponents
         }
 
         #region Properties
+
         private TaskReportState _reportState = TaskReportState.Inactive;
         public TaskReportState ReportState
         {
@@ -61,15 +62,105 @@ namespace RelhaxModpack.UIComponents
                 }
             }
         }
-        public bool IsSubProgressActive { get; set; } = false;
-        public string TaskTitle { get; set; } = string.Empty;
-        public string TaskText { get; set; } = string.Empty;
-        public int TaskMinimum { get; set; } = 0;
-        public int TaskMaximum { get; set; } = 100;
-        public int TaskValue { get; set; } = 0;
-        public int SubTaskMinimum { get; set; } = 0;
-        public int SubTaskMaximum { get; set; } = 100;
-        public int SubTaskValue { get; set; } = 0;
+
+        private bool _isSubProgressActive = false;
+        public bool IsSubProgressActive
+        {
+            get { return _isSubProgressActive; }
+            set
+            {
+                _isSubProgressActive = value;
+                OnPropertyChanged(nameof(IsSubProgressActive));
+            }
+        }
+
+        private string _taskTitle = string.Empty;
+        public string TaskTitle
+        {
+            get { return _taskTitle; }
+            set
+            {
+                _taskTitle = value;
+                OnPropertyChanged(nameof(TaskTitle));
+            }
+        }
+
+        private string _taskText = string.Empty;
+        public string TaskText
+        {
+            get { return _taskText; }
+            set
+            {
+                _taskText = value;
+                OnPropertyChanged(nameof(TaskText));
+            }
+        }
+
+        private int _taskMinimum = 0;
+        public int TaskMinimum
+        {
+            get { return _taskMinimum; }
+            set
+            {
+                _taskMinimum = value;
+                OnPropertyChanged(nameof(TaskMinimum));
+            }
+        }
+
+        private int _taskMaximum = 0;
+        public int TaskMaximum
+        {
+            get { return _taskMaximum; }
+            set
+            {
+                _taskMaximum = value;
+                OnPropertyChanged(nameof(TaskMaximum));
+            }
+        }
+
+        private int _taskValue = 0;
+        public int TaskValue
+        {
+            get { return _taskValue; }
+            set
+            {
+                _taskValue = value;
+                OnPropertyChanged(nameof(TaskValue));
+            }
+        }
+
+        public int _subTaskMininum = 0;
+        public int SubTaskMinimum
+        {
+            get { return _subTaskMininum; }
+            set
+            {
+                _subTaskMininum = value;
+                OnPropertyChanged(nameof(SubTaskMinimum));
+            }
+        }
+
+        private int _subTaskMaximum = 100;
+        public int SubTaskMaximum
+        {
+            get { return _subTaskMaximum; }
+            set
+            {
+                _subTaskMaximum = value;
+                OnPropertyChanged(nameof(SubTaskMaximum));
+            }
+        }
+
+        private int _subTaskValue = 0;
+        public int SubTaskValue
+        {
+            get { return _subTaskValue; }
+            set
+            {
+                _subTaskValue = value;
+                OnPropertyChanged(nameof(SubTaskValue));
+            }
+        }
         #endregion
 
         #region Property changed code
