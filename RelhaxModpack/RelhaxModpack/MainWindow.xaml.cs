@@ -1947,7 +1947,25 @@ namespace RelhaxModpack
 
         private void OneClickInstallCB_Click(object sender, RoutedEventArgs e)
         {
-            ModpackSettings.OneClickInstall = (bool)OneClickInstallCB.IsChecked;
+            string tmep = string.Empty;
+            if(string.IsNullOrWhiteSpace(ModpackSettings.AutoOneclickSelectionFilePath) || !File.Exists(ModpackSettings.AutoOneclickSelectionFilePath))
+            {
+                tmep = ModpackSettings.AutoOneclickSelectionFilePath;
+                Logging.Debug("autoClickSelectionPath is null or doesn't exist, prompting user to change");
+                LoadAutoSyncSelectionFile_Click(null, null);
+            }
+
+            if (string.IsNullOrWhiteSpace(ModpackSettings.AutoOneclickSelectionFilePath) || !File.Exists(ModpackSettings.AutoOneclickSelectionFilePath))
+            {
+                Logging.Debug("autoClickSelectionPath is null or doesn't exist still, setting to false and reverting path");
+                ModpackSettings.AutoOneclickSelectionFilePath = tmep;
+                ModpackSettings.OneClickInstall = false;
+                OneClickInstallCB.IsChecked = false;
+            }
+            else
+            {
+                ModpackSettings.OneClickInstall = (bool)OneClickInstallCB.IsChecked;
+            }
         }
 
         private void LoadAutoSyncSelectionFile_Click(object sender, RoutedEventArgs e)
@@ -1992,7 +2010,25 @@ namespace RelhaxModpack
 
         private void AutoInstallCB_Click(object sender, RoutedEventArgs e)
         {
-            ModpackSettings.AutoInstall = (bool)AutoInstallCB.IsChecked;
+            string tmep = string.Empty;
+            if (string.IsNullOrWhiteSpace(ModpackSettings.AutoOneclickSelectionFilePath) || !File.Exists(ModpackSettings.AutoOneclickSelectionFilePath))
+            {
+                tmep = ModpackSettings.AutoOneclickSelectionFilePath;
+                Logging.Debug("autoClickSelectionPath is null or doesn't exist, prompting user to change");
+                LoadAutoSyncSelectionFile_Click(null, null);
+            }
+
+            if (string.IsNullOrWhiteSpace(ModpackSettings.AutoOneclickSelectionFilePath) || !File.Exists(ModpackSettings.AutoOneclickSelectionFilePath))
+            {
+                Logging.Debug("autoClickSelectionPath is null or doesn't exist still, setting to false and reverting path");
+                ModpackSettings.AutoOneclickSelectionFilePath = tmep;
+                ModpackSettings.AutoInstall = false;
+                AutoInstallCB.IsChecked = false;
+            }
+            else
+            {
+                ModpackSettings.AutoInstall = (bool)AutoInstallCB.IsChecked;
+            }
         }
 
         private void AllowStatsGatherCB_Click(object sender, RoutedEventArgs e)

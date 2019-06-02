@@ -544,7 +544,7 @@ namespace RelhaxModpack.Windows
                     {
                         OnSelectionListReturn(this, new SelectionListEventArgs()
                         {
-                            ContinueInstallation = continueInstallation,
+                            ContinueInstallation = true,
                             ParsedCategoryList = ParsedCategoryList,
                             Dependencies = Dependencies,
                             GlobalDependencies = GlobalDependencies
