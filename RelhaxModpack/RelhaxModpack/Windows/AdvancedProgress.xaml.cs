@@ -26,6 +26,17 @@ namespace RelhaxModpack.Windows
             InitializeComponent();
         }
 
+        //make a bunch of handlers for referencing the install progress options later
+        public RelhaxInstallTaskReporter BackupModsReporter = null;
+        public RelhaxInstallTaskReporter BackupDataClearCacheClearLogsReporter = null;
+        public RelhaxInstallTaskReporter CleanModsReporter = null;
+        public RelhaxInstallTaskReporter[] ExtractionModsReporters;
+        public RelhaxInstallTaskReporter ExtractionUserModsReporter = null;
+        public RelhaxInstallTaskReporter RestoreDataXmlUnpackReporter = null;
+        public RelhaxInstallTaskReporter PatchReporter = null;
+        public RelhaxInstallTaskReporter ShortcutsFontsReporter = null;
+        public RelhaxInstallTaskReporter AtlasReporter = null;
+
         public void OnReportAdvancedProgress(RelhaxInstallerProgress progress)
         {
             //sample of what you could do...
@@ -33,11 +44,6 @@ namespace RelhaxModpack.Windows
             {
 
             }
-        }
-
-        private void Advanced_Installer_Categories_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
     }
 }

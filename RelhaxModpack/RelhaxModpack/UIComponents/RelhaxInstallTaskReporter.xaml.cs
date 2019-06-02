@@ -34,6 +34,15 @@ namespace RelhaxModpack.UIComponents
             set
             { IsActive = value; }
         }
+        public bool IsSubProgressActive { get; set; } = false;
+        public string TaskTitle { get; set; } = string.Empty;
+        public string TaskText { get; set; } = string.Empty;
+        public int TaskMinimum { get; set; } = 0;
+        public int TaskMaximum { get; set; } = 100;
+        public int TaskValue { get; set; } = 0;
+        public int SubTaskMinimum { get; set; } = 0;
+        public int SubTaskMaximum { get; set; } = 100;
+        public int SubTaskValue { get; set; } = 0;
         #endregion
 
         #region Property changed code

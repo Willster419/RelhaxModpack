@@ -2585,6 +2585,93 @@ namespace RelhaxModpack
             Polish.Add("failedToParseSelections", TranslationNeeded);
             French.Add("failedToParseSelections", TranslationNeeded);
             #endregion
+
+            #region Advanced Installer Window
+            //Component: AdvancedInstallBackupMods
+            //
+            English.Add("AdvancedInstallBackupMods", "Backup current installation");
+            Gernam.Add("AdvancedInstallBackupMods", TranslationNeeded);
+            Polish.Add("AdvancedInstallBackupMods", TranslationNeeded);
+            French.Add("AdvancedInstallBackupMods", TranslationNeeded);
+
+            //Component: AdvancedInstallBackupData
+            //
+            English.Add("AdvancedInstallBackupData", "Backup Mod Data");
+            Gernam.Add("AdvancedInstallBackupData", TranslationNeeded);
+            Polish.Add("AdvancedInstallBackupData", TranslationNeeded);
+            French.Add("AdvancedInstallBackupData", TranslationNeeded);
+
+            //Component: AdvancedInstallClearCache
+            //
+            English.Add("AdvancedInstallClearCache", "Clear WoT Cache");
+            Gernam.Add("AdvancedInstallClearCache", TranslationNeeded);
+            Polish.Add("AdvancedInstallClearCache", TranslationNeeded);
+            French.Add("AdvancedInstallClearCache", TranslationNeeded);
+
+            //Component: AdvancedInstallClearLogs
+            //
+            English.Add("AdvancedInstallClearLogs", "Clear Logfiles");
+            Gernam.Add("AdvancedInstallClearLogs", TranslationNeeded);
+            Polish.Add("AdvancedInstallClearLogs", TranslationNeeded);
+            French.Add("AdvancedInstallClearLogs", TranslationNeeded);
+
+            //Component: AdvancedInstallClearMods
+            //
+            English.Add("AdvancedInstallClearMods", "Uninstall previous installation");
+            Gernam.Add("AdvancedInstallClearMods", TranslationNeeded);
+            Polish.Add("AdvancedInstallClearMods", TranslationNeeded);
+            French.Add("AdvancedInstallClearMods", TranslationNeeded);
+
+            //Component: AdvancedInstallInstallMods
+            //
+            English.Add("AdvancedInstallInstallMods", "Install Thread");
+            Gernam.Add("AdvancedInstallInstallMods", TranslationNeeded);
+            Polish.Add("AdvancedInstallInstallMods", TranslationNeeded);
+            French.Add("AdvancedInstallInstallMods", TranslationNeeded);
+
+            //Component: AdvancedInstallUserInstallMods
+            //
+            English.Add("AdvancedInstallUserInstallMods", "User Install");
+            Gernam.Add("AdvancedInstallUserInstallMods", TranslationNeeded);
+            Polish.Add("AdvancedInstallUserInstallMods", TranslationNeeded);
+            French.Add("AdvancedInstallUserInstallMods", TranslationNeeded);
+
+            //Component: AdvancedInstallRestoreData
+            //
+            English.Add("AdvancedInstallRestoreData", "Restore Data");
+            Gernam.Add("AdvancedInstallRestoreData", TranslationNeeded);
+            Polish.Add("AdvancedInstallRestoreData", TranslationNeeded);
+            French.Add("AdvancedInstallRestoreData", TranslationNeeded);
+
+            //Component: AdvancedInstallXmlUnpack
+            //
+            English.Add("AdvancedInstallXmlUnpack", "Xml Unpacker");
+            Gernam.Add("AdvancedInstallXmlUnpack", TranslationNeeded);
+            Polish.Add("AdvancedInstallXmlUnpack", TranslationNeeded);
+            French.Add("AdvancedInstallXmlUnpack", TranslationNeeded);
+
+            //Component: AdvancedInstallPatchFiles
+            //
+            English.Add("AdvancedInstallPatchFiles", "Patch files");
+            Gernam.Add("AdvancedInstallPatchFiles", TranslationNeeded);
+            Polish.Add("AdvancedInstallPatchFiles", TranslationNeeded);
+            French.Add("AdvancedInstallPatchFiles", TranslationNeeded);
+
+            //Component: AdvancedInstallTrimDownloadCache
+            //
+            English.Add("AdvancedInstallTrimDownloadCache", "Trim download cache");
+            Gernam.Add("AdvancedInstallTrimDownloadCache", TranslationNeeded);
+            Polish.Add("AdvancedInstallTrimDownloadCache", TranslationNeeded);
+            French.Add("AdvancedInstallTrimDownloadCache", TranslationNeeded);
+
+            //Component: AdvancedInstallCleanup
+            //
+            English.Add("AdvancedInstallCleanup", "Cleanup");
+            Gernam.Add("AdvancedInstallCleanup", TranslationNeeded);
+            Polish.Add("AdvancedInstallCleanup", TranslationNeeded);
+            French.Add("AdvancedInstallCleanup", TranslationNeeded);
+
+            #endregion
         }
 
         private static void LegacyTranlationsToKeepButNotLoadJustInCaseWeEverNeedThemAgain()

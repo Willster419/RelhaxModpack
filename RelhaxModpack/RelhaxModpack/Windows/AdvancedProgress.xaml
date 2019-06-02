@@ -5,19 +5,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
+        xmlns:user="clr-namespace:RelhaxModpack.UIComponents"
         mc:Ignorable="d"
-        Title="Advanced Installer Progress" Height="450" Width="500">
-    <Grid Background="#FFE5E5E5">
-        <TabControl >
-            <TabItem Header="Pre-install tasks">
-                <Grid Background="#FFE5E5E5">
-                </Grid>
+        Title="Advanced Installer Progress" Height="600" Width="400">
+    <Grid Background="#FFE5E5E5" x:Name="MainGrid" Tag="MainGrid">
+        <TabControl x:Name="MainTabControl">
+            <TabItem Header="Pre-install Tasks" x:Name="PreInstallTab">
+                <StackPanel Background="#FFE5E5E5" x:Name="PreInstallPanel">
+                </StackPanel>
             </TabItem>
-            <TabItem Header="Extraction">
-                <Grid Background="#FFE5E5E5"/>
+            <TabItem Header="Extraction" x:Name="ExtractionTab">
+                <StackPanel Background="#FFE5E5E5" x:Name="ExtractionPanel"/>
             </TabItem>
-            <TabItem Header="Post-install tasks">
-                <Grid Background="#FFE5E5E5"/>
+            <TabItem Header="Post-install tasks" x:Name="PostInstallTab">
+                <StackPanel Background="#FFE5E5E5" x:Name="PostInstallPanel">
+                </StackPanel>
             </TabItem>
         </TabControl>
 
