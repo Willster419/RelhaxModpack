@@ -1952,7 +1952,17 @@ namespace RelhaxModpack
 
         private void LoadAutoSyncSelectionFile_Click(object sender, RoutedEventArgs e)
         {
-
+            Microsoft.Win32.OpenFileDialog selectAutoSyncSelectionFileDialog = new Microsoft.Win32.OpenFileDialog()
+            {
+                Filter = "*.xml|*.xml",
+                Title = Translations.GetTranslatedString("MainWindowSelectSelectionFileToLoad"),
+                InitialDirectory = Settings.RelhaxUserConfigsFolder,
+                Multiselect = false
+            };
+            if (!(bool)selectAutoSyncSelectionFileDialog.ShowDialog())
+                return;
+            AutoInstallOneClickInstallSelectionFilePath.Text = selectAutoSyncSelectionFileDialog.FileName;
+            ModpackSettings.AutoOneclickSelectionFilePath = selectAutoSyncSelectionFileDialog.FileName;
         }
 
         private void ForceEnabledCB_Clicked(object sender, RoutedEventArgs e)

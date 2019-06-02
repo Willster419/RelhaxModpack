@@ -1301,6 +1301,13 @@ namespace RelhaxModpack
             Gernam.Add("SettingsTabAdvancedSettingsHeader", TranslationNeeded);
             Polish.Add("SettingsTabAdvancedSettingsHeader", TranslationNeeded);
             French.Add("SettingsTabAdvancedSettingsHeader", TranslationNeeded);
+
+            //Component: MainWindowSelectSelectionFileToLoad
+            //
+            English.Add("MainWindowSelectSelectionFileToLoad", "Select selection file to load");
+            Gernam.Add("MainWindowSelectSelectionFileToLoad", TranslationNeeded);
+            Polish.Add("MainWindowSelectSelectionFileToLoad", TranslationNeeded);
+            French.Add("MainWindowSelectSelectionFileToLoad", TranslationNeeded);
             #endregion
 
             #region ModSelectionList

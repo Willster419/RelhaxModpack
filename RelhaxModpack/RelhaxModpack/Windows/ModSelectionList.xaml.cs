@@ -468,13 +468,23 @@ namespace RelhaxModpack.Windows
                     }
 
                     //process loading selections after loading UI
-                    XmlDocument SelectionsDocument;
+                    XmlDocument SelectionsDocument = null;
                     bool shouldLoadSomething = false;
-                    if ((ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall) && ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Stable)
+                    if (ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall)
                     {
-                        //load the custom selection file
-                        SelectionsDocument = XMLUtils.LoadXmlDocument(ModpackSettings.AutoOneclickSelectionFilePath, XmlLoadType.FromFile);
-                        shouldLoadSomething = true;
+                        //check that the file exists before trying to load it
+                        if(File.Exists(ModpackSettings.AutoOneclickSelectionFilePath))
+                        {
+                            //load the custom selection file
+                            SelectionsDocument = XMLUtils.LoadXmlDocument(ModpackSettings.AutoOneclickSelectionFilePath, XmlLoadType.FromFile);
+                            shouldLoadSomething = true;
+                        }
+                        else
+                        {
+                            Logging.Warning("AutoInstall or OneClickInstall is true, but the file selection path does not exist");
+                            Logging.Warning(ModpackSettings.AutoOneclickSelectionFilePath);
+                            MessageBox.Show(Translations.GetTranslatedString("configLoadFailed"));
+                        }
                     }
                     else if (ModpackSettings.SaveLastSelection)
                     {
@@ -522,7 +532,6 @@ namespace RelhaxModpack.Windows
                     Width = ModpackSettings.ModSelectionWidth;
                     Height = ModpackSettings.ModSelectionHeight;
 
-
                     //close the loading window and show this one
                     loadingProgress.Close();
                     loadingProgress = null;
@@ -530,9 +539,24 @@ namespace RelhaxModpack.Windows
                     //set the loading flag back to false
                     LoadingUI = false;
 
-                    //show the UI for selection list, and if should be fullscreen or not
-                    this.Show();
-                    this.WindowState = ModpackSettings.ModSelectionFullscreen? WindowState.Maximized: WindowState.Normal;
+                    //if auto install or one-click install, don't show the UI
+                    if(ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall)
+                    {
+                        OnSelectionListReturn(this, new SelectionListEventArgs()
+                        {
+                            ContinueInstallation = continueInstallation,
+                            ParsedCategoryList = ParsedCategoryList,
+                            Dependencies = Dependencies,
+                            GlobalDependencies = GlobalDependencies
+                        });
+                        this.Close();
+                    }
+                    else
+                    {
+                        //show the UI for selection list, and if should be fullscreen or not
+                        this.Show();
+                        this.WindowState = ModpackSettings.ModSelectionFullscreen ? WindowState.Maximized : WindowState.Normal;
+                    }
                 });
                 return true;
             });

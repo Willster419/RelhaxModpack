@@ -124,10 +124,10 @@
                         </DockPanel>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
-                        <CheckBox x:Name="AutoInstallCB" Tag="EnableModsAutoSyncCheckbox" Content="Enable auto install" IsEnabled="False" Click="OneClickInstallCB_Click" />
-                        <CheckBox x:Name="OneClickInstallCB" Tag="AutoInstallCheckbox" Content="Enable one-click install" IsEnabled="False" Click="AutoInstallCB_Click" />
+                        <CheckBox x:Name="AutoInstallCB" Tag="EnableModsAutoSyncCheckbox" Content="Enable auto install" IsEnabled="False" Click="AutoInstallCB_Click"/>
+                        <CheckBox x:Name="OneClickInstallCB" Tag="AutoInstallCheckbox" Content="Enable one-click install" IsEnabled="True" Click="OneClickInstallCB_Click"/>
                         <TextBox Tag="AutoSyncSelectionFileTextBox"  x:Name="AutoInstallOneClickInstallSelectionFilePath" Height="46" TextWrapping="Wrap" Margin="0,3,0,0" />
-                        <Button x:Name="LoadAutoSyncSelectionFile" Tag="LoadAutoSyncSelectionFile" Content="Load selection file" HorizontalAlignment="Left" Margin="0,3,0,0" Width="120" Click="LoadAutoSyncSelectionFile_Click" IsEnabled="False"/>
+                        <Button x:Name="LoadAutoSyncSelectionFile" Tag="LoadAutoSyncSelectionFile" Content="Load selection file" HorizontalAlignment="Left" Margin="0,3,0,0" Width="120" Click="LoadAutoSyncSelectionFile_Click" IsEnabled="True"/>
                         <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
                             <TextBlock Tag="AutoSyncCheckFrequencyTextBox" x:Name="AutoSyncCheckFrequencyTextBox"  TextWrapping="Wrap" Text="Frequency: every" />
                             <TextBox Tag="AutoSyncFrequencyTexbox" x:Name="AutoSyncFrequencyTexbox" Height="23" TextWrapping="Wrap" Text="xx" Width="25" Margin="5,0,0,0" IsEnabled="False"/>

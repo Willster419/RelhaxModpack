@@ -520,8 +520,7 @@ namespace RelhaxModpack.Windows
             //a PatientWebClient should allow a timeout value of 5 mins (or more)
             await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.UpdateDatabaseOnlinePHP, 30 * Utils.TO_SECONDS * Utils.TO_MINUETS);
         }
-        
-        
+              
         private async void UpdateDatabaseStep3_Click(object sender, RoutedEventArgs e)
         {
             //getting local crcs and comparing them on server
