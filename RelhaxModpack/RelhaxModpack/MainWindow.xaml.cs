@@ -1101,7 +1101,73 @@ namespace RelhaxModpack
                 AdvancedProgressWindow = null;
             if (ModpackSettings.AdvancedInstalProgress)
             {
+                Logging.Debug("advancedInstallProgress is true, making window and populating with reporters");
                 AdvancedProgressWindow= new AdvancedProgress();
+                //build the number of InstallTaskReporter objects based on what we are doing
+                //if we are making a backup of the mods then make a reporter for it
+                if(ModpackSettings.BackupModFolder)
+                {
+                    Logging.Debug("adding backupModFolder reporter");
+                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
+                    {
+                        IsSubProgressActive = true,
+                        TaskTitle = Translations.GetTranslatedString("AdvancedInstallBackupMods")
+                    };
+                    AdvancedProgressWindow.PreInstallPanel.Children.Add(reporter);
+                    AdvancedProgressWindow.BackupModsReporter = reporter;
+                }
+
+                //if we are backing up data, clearing cache, or clearing logs, then make one to hold them all
+                if(ModpackSettings.SaveUserData || ModpackSettings.ClearCache || ModpackSettings.DeleteLogs)
+                {
+                    Logging.Debug("adding userData/clearCache/deleteLogs reporter: SaveUserData={0}, ClearCache={1}, DeleteLogs={2}",
+                        ModpackSettings.SaveUserData, ModpackSettings.ClearCache, ModpackSettings.DeleteLogs);
+                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
+                    {
+                        IsSubProgressActive = false,
+
+                    };
+                    AdvancedProgressWindow.PreInstallPanel.Children.Add(reporter);
+                    AdvancedProgressWindow.BackupDataClearCacheClearLogsReporter = reporter;
+                }
+
+                //same for cleaning mods
+                if(ModpackSettings.CleanInstallation)
+                {
+                    Logging.Debug("adding CleanInstallation reporter");
+                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
+                    {
+                        IsSubProgressActive = true,
+                        TaskTitle = Translations.GetTranslatedString("AdvancedInstallClearMods")
+                    };
+                    AdvancedProgressWindow.PreInstallPanel.Children.Add(reporter);
+                    AdvancedProgressWindow.CleanModsReporter = reporter;
+                }
+
+                //extraction is done based on the number of threads
+                int numThreads = ModpackSettings.MulticoreExtraction ? Settings.NumLogicalProcesors : 1;
+                AdvancedProgressWindow.ExtractionModsReporters = new RelhaxInstallTaskReporter[numThreads];
+                Logging.Debug("adding {0} reporters (MultiCoreExtraction={1}", numThreads, ModpackSettings.MulticoreExtraction);
+                for(int i = 0; i < numThreads; i++)
+                {
+                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
+                    {
+                        IsSubProgressActive = true,
+                        TaskTitle = string.Format("{0} {1}", Translations.GetTranslatedString("AdvancedInstallInstallMods"), (i + 1).ToString())
+                    };
+                    AdvancedProgressWindow.ExtractionPanel.Children.Add(reporter);
+                    AdvancedProgressWindow.ExtractionModsReporters[i] = reporter;
+                }
+
+                //same idea for user mods
+                if(false)
+                {
+                    Logging.Debug("adding userMods reporter");
+
+                }
+
+                //all the post-install options, you don't know until the extraction finishes and if the UI reports events on it
+
                 AdvancedProgressWindow.Show();
             }
 
@@ -1134,7 +1200,18 @@ namespace RelhaxModpack
             Progress<RelhaxInstallerProgress> progress = new Progress<RelhaxInstallerProgress>();
             progress.ProgressChanged += OnInstallProgressChanged;
 
+            //run install
             InstallerComponents.RelhaxInstallFinishedEventArgs results = await engine.RunInstallationAsync(progress);
+
+            //close and free up RAM from advanced install progress
+            if(ModpackSettings.AdvancedInstalProgress)
+            {
+                if(AdvancedProgressWindow != null)
+                {
+                    AdvancedProgressWindow.Close();
+                    AdvancedProgressWindow = null;
+                }
+            }
 
             //update the UI to be in a "finished" state"
             InstallProgressTextBox.Clear();
@@ -1174,7 +1251,7 @@ namespace RelhaxModpack
             {
                 if (AdvancedProgressWindow == null)
                 {
-                    AdvancedProgressWindow = new AdvancedProgress();
+                    throw new BadMemeException("Not so advanced now is it");
                 }
                 AdvancedProgressWindow.OnReportAdvancedProgress(e);
             }
