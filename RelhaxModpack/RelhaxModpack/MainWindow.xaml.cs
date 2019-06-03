@@ -1087,9 +1087,17 @@ namespace RelhaxModpack
                 //toggle the button before and after as well
                 CancelDownloadInstallButton.Visibility = Visibility.Visible;
                 CancelDownloadInstallButton.IsEnabled = true;
+                //disconnect the install method and connect the download
+                //https://stackoverflow.com/questions/367523/how-to-ensure-an-event-is-only-subscribed-to-once
+                CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Install_Click;
+                CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
+                CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Download_Click;
                 await ProcessDownloads(packagesToDownload);
                 CancelDownloadInstallButton.IsEnabled = false;
                 CancelDownloadInstallButton.Visibility = Visibility.Hidden;
+                //connect the install and disconnect the download
+                CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Install_Click;
+                CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
                 Logging.WriteToLog(string.Format("download time took {0} msec", stopwatch.Elapsed.TotalMilliseconds - lastTime.TotalMilliseconds));
                 lastTime = stopwatch.Elapsed;
             }
@@ -1097,6 +1105,11 @@ namespace RelhaxModpack
             {
                 Logging.WriteToLog("download while install = true and packages to download, starting ProcessDownloadsAsync()");
                 ProcessDownloadsAsync(packagesToDownload);
+                //async does download and install at the same time, so subscribe to both, install first
+                CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Install_Click;
+                CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
+                CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Install_Click;
+                CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Download_Click;
             }
 
             //now let's start the install procedures
@@ -1724,10 +1737,15 @@ namespace RelhaxModpack
                 throw new BadMemeException("aids. on a stick");
         }
 
-        private void CancelDownloadButton_Click(object sender, RoutedEventArgs e)
+        private void CancelDownloadInstallButton_Download_Click(object sender, RoutedEventArgs e)
         {
             if (this.client != null)
                 this.client.CancelAsync();
+        }
+
+        private void CancelDownloadInstallButton_Install_Click(object sender, RoutedEventArgs e)
+        {
+
         }
         #endregion
 
