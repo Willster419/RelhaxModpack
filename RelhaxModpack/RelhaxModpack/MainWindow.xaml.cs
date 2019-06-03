@@ -1085,11 +1085,11 @@ namespace RelhaxModpack
             {
                 Logging.WriteToLog("download while install = false and packages to download, starting ProcessDownloads()");
                 //toggle the button before and after as well
-                CancelDownloadButton.Visibility = Visibility.Visible;
-                CancelDownloadButton.IsEnabled = true;
+                CancelDownloadInstallButton.Visibility = Visibility.Visible;
+                CancelDownloadInstallButton.IsEnabled = true;
                 await ProcessDownloads(packagesToDownload);
-                CancelDownloadButton.IsEnabled = false;
-                CancelDownloadButton.Visibility = Visibility.Hidden;
+                CancelDownloadInstallButton.IsEnabled = false;
+                CancelDownloadInstallButton.Visibility = Visibility.Hidden;
                 Logging.WriteToLog(string.Format("download time took {0} msec", stopwatch.Elapsed.TotalMilliseconds - lastTime.TotalMilliseconds));
                 lastTime = stopwatch.Elapsed;
             }
@@ -1639,8 +1639,8 @@ namespace RelhaxModpack
         {
             List<FrameworkElement> controlsToToggle = Utils.GetAllWindowComponentsLogical(this, false);
             //any to remove here
-            if (controlsToToggle.Contains(CancelDownloadButton))
-                controlsToToggle.Remove(CancelDownloadButton);
+            if (controlsToToggle.Contains(CancelDownloadInstallButton))
+                controlsToToggle.Remove(CancelDownloadInstallButton);
             foreach (FrameworkElement control in controlsToToggle)
             {
                 if (control is Button || control is CheckBox || control is RadioButton)
