@@ -124,14 +124,14 @@
                         </DockPanel>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
-                        <CheckBox x:Name="AutoInstallCB" Tag="EnableModsAutoSyncCheckbox" Content="Enable auto install" IsEnabled="False" Click="AutoInstallCB_Click"/>
+                        <CheckBox x:Name="AutoInstallCB" Tag="EnableModsAutoSyncCheckbox" Content="Enable auto install" IsEnabled="True" Click="AutoInstallCB_Click"/>
                         <CheckBox x:Name="OneClickInstallCB" Tag="AutoInstallCheckbox" Content="Enable one-click install" IsEnabled="True" Click="OneClickInstallCB_Click"/>
                         <TextBox Tag="AutoSyncSelectionFileTextBox"  x:Name="AutoInstallOneClickInstallSelectionFilePath" Height="46" TextWrapping="Wrap" Margin="0,3,0,0" />
                         <Button x:Name="LoadAutoSyncSelectionFile" Tag="LoadAutoSyncSelectionFile" Content="Load selection file" HorizontalAlignment="Left" Margin="0,3,0,0" Width="120" Click="LoadAutoSyncSelectionFile_Click" IsEnabled="True"/>
                         <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
                             <TextBlock Tag="AutoSyncCheckFrequencyTextBox" x:Name="AutoSyncCheckFrequencyTextBox"  TextWrapping="Wrap" Text="Frequency: every" />
-                            <TextBox Tag="AutoSyncFrequencyTexbox" x:Name="AutoSyncFrequencyTexbox" Height="23" TextWrapping="Wrap" Text="xx" Width="25" Margin="5,0,0,0" IsEnabled="False"/>
-                            <ComboBox Margin="5,0,0,0" Width="67" IsEnabled="False">
+                            <TextBox Tag="AutoSyncFrequencyTexbox" x:Name="AutoSyncFrequencyTexbox" Height="23" TextWrapping="Wrap" Width="25" Margin="5,0,0,0" IsEnabled="True" TextChanged="AutoSyncFrequencyTexbox_TextChanged"/>
+                            <ComboBox x:Name="AutoSyncFrequencyComboBox" Tag="AutoSyncFrequencyComboBox" Margin="5,0,0,0" Width="91" IsEnabled="True" SelectedIndex="0" SelectionChanged="AutoSyncFrequencyComboBox_SelectionChanged">
                                 <System:String>Minutes</System:String>
                                 <System:String>Hours</System:String>
                                 <System:String>Days</System:String>

@@ -20,6 +20,7 @@ using Ionic.Zip;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net.Http;
+using System.Timers;
 
 namespace RelhaxModpack
 {
@@ -42,6 +43,9 @@ namespace RelhaxModpack
         NewsViewer newsViewer = null;
         private WebClient client = null;
         public double OriginalWidth, OriginalHeight = 0;
+        private Timer autoInstallTimer = new Timer();
+        private bool databaseUpdateAvailableFromAutoSync = false;
+        private bool autoInstallTimerRegistered = false;
 
         //temp list of components not to toggle
         Control[] tempDisabledBlacklist = null;
@@ -370,7 +374,8 @@ namespace RelhaxModpack
 
         private void CheckForDatabaseUpdatesPeriodic(bool quiet)
         {
-            Logging.Debug("starting periodic check for database updates");
+            Logging.Info("starting periodic check for database updates");
+            databaseUpdateAvailableFromAutoSync = false;
             if(!quiet)
             {
                 //make and show progress indicator
@@ -390,7 +395,7 @@ namespace RelhaxModpack
             {
                 CheckForDatabaseUpdates(true);
             }
-            Logging.Debug("database periodic check complete");
+            Logging.Info("database periodic check complete, result of update = {0}",databaseUpdateAvailableFromAutoSync);
         }
 
         private void OnMenuItemRestoreClick(object sender, EventArgs e)
@@ -2024,10 +2029,61 @@ namespace RelhaxModpack
                 ModpackSettings.AutoOneclickSelectionFilePath = tmep;
                 ModpackSettings.AutoInstall = false;
                 AutoInstallCB.IsChecked = false;
+                return;
+            }
+
+            //check the time parsed value
+            int timeToUse = Utils.ParseInt(AutoSyncFrequencyTexbox.Text, 0);
+            if(timeToUse < 1)
+            {
+                Logging.Info("Invalid time specified, must be above 0");
+                MessageBox.Show("InvalidTimeNumberSpecified");
+                ModpackSettings.AutoInstall = false;
+                AutoInstallCB.IsChecked = false;
+                return;
+            }
+
+            //parse the time into a timespan for the check timer
+            switch(AutoSyncFrequencyComboBox.SelectedIndex)
+            {
+                case 0:
+                    autoInstallTimer.Interval = TimeSpan.FromMinutes(timeToUse).TotalMilliseconds;
+                    break;
+                case 1:
+                    autoInstallTimer.Interval = TimeSpan.FromHours(timeToUse).TotalMilliseconds;
+                    break;
+                case 2:
+                    autoInstallTimer.Interval = TimeSpan.FromDays(timeToUse).TotalMilliseconds;
+                    break;
+                default:
+                    throw new BadMemeException("this should not happen");
+            }
+            autoInstallTimer.AutoReset = true;
+            if (!autoInstallTimerRegistered)
+            {
+                Logging.Debug("auto install timer not registered to event, setting");
+                autoInstallTimer.Elapsed += AutoInstallTimer_Elapsed;
+                autoInstallTimerRegistered = true;
             }
             else
             {
-                ModpackSettings.AutoInstall = (bool)AutoInstallCB.IsChecked;
+                Logging.Debug("auto install timer already registered");
+            }
+            ModpackSettings.AutoInstall = (bool)AutoInstallCB.IsChecked;
+            if (ModpackSettings.AutoInstall)
+                autoInstallTimer.Enabled = true;
+            else
+                autoInstallTimer.Enabled = false;
+        }
+
+        private void AutoInstallTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            Logging.Debug("timer has elapsed to check for database updates");
+            CheckForDatabaseUpdatesPeriodic(true);
+            if (databaseUpdateAvailableFromAutoSync)
+            {
+                Logging.Debug("update found from auto install, running installation");
+                InstallModpackButton_Click(null, null);
             }
         }
 
@@ -2074,6 +2130,18 @@ namespace RelhaxModpack
             DeleteOldCacheFiles.IsChecked = ModpackSettings.DeleteCacheFiles;
             MinimizeToSystemTray.IsChecked = ModpackSettings.MinimizeToSystemTray;
             AdvancedInstallationProgress.IsChecked = ModpackSettings.AdvancedInstalProgress;
+
+            //apply auto sync time unit and amount
+            AutoSyncFrequencyTexbox.Text = ModpackSettings.AutoInstallFrequencyInterval.ToString();
+            if(ModpackSettings.AutoInstallFrequencyTimeUnit < AutoSyncFrequencyComboBox.Items.Count && ModpackSettings.AutoInstallFrequencyTimeUnit > 0)
+            {
+                AutoSyncFrequencyComboBox.SelectedIndex = ModpackSettings.AutoInstallFrequencyTimeUnit;
+            }
+            else
+            {
+                Logging.Warning("AutoInstallFrequencyTimeUnit is not valid selection, setting to default");
+                AutoSyncFrequencyComboBox.SelectedIndex = 0;
+            }
 
             if(!string.IsNullOrWhiteSpace(ModpackSettings.AutoOneclickSelectionFilePath))
                 AutoInstallOneClickInstallSelectionFilePath.Text = ModpackSettings.AutoOneclickSelectionFilePath;
@@ -2124,8 +2192,33 @@ namespace RelhaxModpack
                 UseBetaDatabaseCB.IsChecked = true;
                 OnUseBetaDatabaseChanged(null, null);
             }
+
+            //apply auto install check
+            if(ModpackSettings.AutoInstall)
+            {
+                AutoInstallCB_Click(null, null);
+            }
         }
         #endregion
+
+        private void AutoSyncFrequencyTexbox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //check the time parsed value
+            int timeToUse = Utils.ParseInt(AutoSyncFrequencyTexbox.Text, 0);
+            if (timeToUse < 1)
+            {
+                Logging.Debug("Invalid time specified, must be above 0. not saving");
+            }
+            else
+            {
+                ModpackSettings.AutoInstallFrequencyInterval = timeToUse;
+            }
+        }
+
+        private void AutoSyncFrequencyComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ModpackSettings.AutoInstallFrequencyTimeUnit = AutoSyncFrequencyComboBox.SelectedIndex;
+        }
 
         private void ApplyCustomScalingSlider_MouseUp(object sender, MouseButtonEventArgs e)
         {

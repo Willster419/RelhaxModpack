@@ -188,6 +188,11 @@ namespace RelhaxModpack
         /// toggle for if the Preview window should be shown in fullscreen mode
         /// </summary>
         public static bool PreviewFullscreen = false;
+
+        public static int AutoInstallFrequencyInterval = 10;
+
+        public static int AutoInstallFrequencyTimeUnit = 0;
+
         /// <summary>
         /// the height, in pixels, of the ModSelectionView window
         /// </summary>
