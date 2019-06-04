@@ -157,13 +157,13 @@
                         <local:RelhaxCheckBox x:Name="testBox1" Content="RelhaxCheckBox" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=TestRedBox}"/>
                     </Grid>
                 </GroupBox>
-                <GroupBox Header="DDS and Bitmap" HorizontalAlignment="Left" Height="100" Margin="561,115,0,0" VerticalAlignment="Top" Width="215">
+                <GroupBox Header="DDS and Bitmap" HorizontalAlignment="Left" Height="84" Margin="561,75,0,0" VerticalAlignment="Top" Width="215">
                     <Grid >
                         <Button x:Name="DdsToBitmap" Content="DDS -&gt; Bitmap" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="96" Click="DdsToBitmap_Click"/>
                         <Button x:Name="BitmapToDds" Content="Bitmap -&gt; DDS" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="96" Click="BitmapToDds_Click"/>
                     </Grid>
                 </GroupBox>
-                <GroupBox Header="NAudio" HorizontalAlignment="Left" Height="100" Margin="561,10,0,0" VerticalAlignment="Top" Width="215">
+                <GroupBox Header="NAudio" HorizontalAlignment="Left" Height="60" Margin="561,10,0,0" VerticalAlignment="Top" Width="215">
                     <Grid >
                         <Button x:Name="LoadNAudio" Content="Load N Audio" HorizontalAlignment="Left" VerticalAlignment="Top" Width="96" Click="LoadNAudio_Click" Margin="10,10,0,0"/>
                     </Grid>
@@ -187,9 +187,17 @@
 
                     </Grid>
                 </GroupBox>
-                <GroupBox Header="Scaling Test" HorizontalAlignment="Left" Height="100" Margin="561,220,0,0" VerticalAlignment="Top" Width="215">
+                <GroupBox Header="Scaling Test" HorizontalAlignment="Left" Height="54" Margin="561,164,0,0" VerticalAlignment="Top" Width="215">
                     <Button x:Name="ScallingTest" Content="1.5x scalling" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="ScallingTest_Click" >
                     </Button>
+                </GroupBox>
+                <GroupBox Header="Task Cancel Stuff" x:Name="TaskCancelTestingGroupBox" HorizontalAlignment="Left" Height="102" Margin="561,223,0,0" VerticalAlignment="Top" Width="215">
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <TextBlock x:Name="TaskCancelTestingBlock" HorizontalAlignment="Left" Margin="10,32,0,0" TextWrapping="Wrap" Text="Task Not started" VerticalAlignment="Top" Width="183" />
+                        <Button x:Name="TaskCancelTestingButton" Content="Start Task" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="74" Height="20" Click="TaskCancelTestingButton_Click"/>
+                        <ProgressBar x:Name="TaskCancelTestingProgress" HorizontalAlignment="Left" Height="17" Margin="10,53,0,0" VerticalAlignment="Top" Width="183" Minimum="0" Value="0" Maximum="10"/>
+                        <Button x:Name="TaskCancelTestingCancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="89,10,0,0" VerticalAlignment="Top" Width="75" Click="TaskCancelTestingCancelButton_Click"/>
+                    </Grid>
                 </GroupBox>
             </Grid>
         </TabItem>

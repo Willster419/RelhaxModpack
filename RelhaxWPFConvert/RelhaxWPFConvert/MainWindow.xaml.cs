@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -19,6 +20,9 @@ using TeximpNet.Compression;
 using NAudio.Wave;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Threading;
+using Timer = System.Timers.Timer;
+using System.Runtime.Remoting.Contexts;
 
 namespace RelhaxWPFConvert
 {
@@ -35,6 +39,9 @@ namespace RelhaxWPFConvert
     /// </summary>
     public partial class MainWindow : Window
     {
+        private CancellationToken ct;
+        private CancellationTokenSource tokenSource2;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -401,5 +408,70 @@ namespace RelhaxWPFConvert
             }
         }
         #endregion
+
+        #region Task Reporting with Cancellation and Reporting
+        private async void TaskCancelTestingButton_Click(object sender, RoutedEventArgs e)
+        {
+            //progress
+            Progress<CustomProgress> progress = new Progress<CustomProgress>();
+            progress.ProgressChanged += Progress_ProgressChangedCancel;
+
+            //cancel token
+            tokenSource2 = new CancellationTokenSource();
+            ct = tokenSource2.Token;
+
+            bool result = await PerformTaskAsyncWithCancel(progress, ct);
+            TaskCancelTestingBlock.Text = result? "Complete" : "Failed";
+        }
+
+        public Task<bool> PerformTaskAsyncWithCancel(IProgress<CustomProgress> progress, CancellationToken ct)
+        {
+            Task<bool> t2 = Task.Run(() =>
+            {
+                //progress
+                CustomProgress prog = new CustomProgress
+                {
+                    update = "Processing wait 0 of 10",
+                    value = 0
+                };
+                progress.Report(prog);
+
+                //run task that takes up lots of stuffs
+                for (int i = 0; i < 10; i++)
+                {
+                    //https://docs.microsoft.com/en-us/dotnet/api/system.threading.tasks.task?view=netframework-4.7.2
+                    for (int j = 0; j < 10; j++)
+                    {
+                        Thread.Sleep(50);
+                    }
+                    ct.ThrowIfCancellationRequested();
+                    prog.update = string.Format("Processing wait {0} of 10", i + 1);
+                    prog.value = i + 1;
+                    progress.Report(prog);
+                }
+            }).ContinueWith(task =>
+            {
+                if (task.Status == TaskStatus.Faulted)
+                {
+                    return false;
+                }
+                return true;
+            });
+            return t2;
+        }
+
+        private void TaskCancelTestingCancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            tokenSource2.Cancel();
+        }
+
+        private void Progress_ProgressChangedCancel(object sender, CustomProgress e)
+        {
+            TaskCancelTestingBlock.Text = e.update;
+            TaskCancelTestingProgress.Value = e.value;
+        }
+        #endregion
+
+
     }
 }
