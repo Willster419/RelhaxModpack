@@ -10,6 +10,7 @@ using System.Xml;
 using System.Windows;
 using Ionic.Zip;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace RelhaxModpack.InstallerComponents
 {
@@ -109,16 +110,24 @@ namespace RelhaxModpack.InstallerComponents
         private RelhaxInstallerProgress Prog = null;
         private string XvmFolderName = string.Empty;
         private Dictionary<string, string> OriginalPatchNames = new Dictionary<string, string>();
+        public CancellationToken CancellationToken;
 
         //async progress reporters
         private RelhaxInstallerProgress ProgPatch = null;
         private RelhaxInstallerProgress ProgShortcuts = null;
         private RelhaxInstallerProgress ProgAtlas = null;
         private RelhaxInstallerProgress ProgFonts = null;
+
+        //tasks
         private Task patchTask = null;
         private Task createShortcutsTask = null;
         private Task[] atlasTasks = null;
         private Task createFontsTask = null;
+
+        //task holder when each one is created and active
+        private List<Task> createdChildTasks = new List<Task>();
+        //flag for if installing or installing
+        private bool installing = true;
         #endregion
 
         #region More boring stuff
@@ -136,15 +145,25 @@ namespace RelhaxModpack.InstallerComponents
             Prog = new RelhaxInstallerProgress();
             Progress = progress;
 
+            //set flag
+            installing = true;
+
             Task<RelhaxInstallFinishedEventArgs> task = Task.Run(() =>
             {
                 RelhaxInstallFinishedEventArgs t = RunInstallation();
 
+                InstallFinishedArgs = t;
+                //use a continue with so that it acts as a way to swallow the exception of the last task not finishing completely
+                //note that it will get to this if it completes successfully or error
+            }).ContinueWith(taskk =>
+            {
+                //check for cancelation
+                CheckForCancel();
+
                 //stop the logfile if it was started
                 if (Logging.IsLogOpen(Logfiles.Installer))
                     Logging.DisposeLogging(Logfiles.Installer);
-
-                return t;
+                return InstallFinishedArgs;
             });
             return task;
         }
@@ -155,13 +174,29 @@ namespace RelhaxModpack.InstallerComponents
             Prog = new RelhaxInstallerProgress();
             Progress = progress;
 
-            Task<RelhaxInstallFinishedEventArgs> task = Task.Run(() => RunUninstallation());
+            //set flag
+            installing = false;
+
+            Task<RelhaxInstallFinishedEventArgs> task = Task.Run(() =>
+            {
+                RelhaxInstallFinishedEventArgs t = RunUninstallation();
+                InstallFinishedArgs = t;
+            }).ContinueWith(taskk =>
+            {
+                CheckForCancel();
+                if (Logging.IsLogOpen(Logfiles.Uninstaller))
+                    Logging.DisposeLogging(Logfiles.Uninstaller);
+                return InstallFinishedArgs;
+            });
             return task;
         }
 
         private RelhaxInstallFinishedEventArgs RunUninstallation()
         {
             Logging.Info("Uninstall process starts on new thread with mode {0}", ModpackSettings.UninstallMode.ToString());
+
+            //by default, set the exitCode to error, therefore it only updates success at the end (if it makes it)
+            InstallFinishedArgs.ExitCodes = InstallerExitCodes.UnknownError;
 
             //run the uninstall methods
             bool success = true;
@@ -588,12 +623,15 @@ namespace RelhaxModpack.InstallerComponents
             List<string> ListOfAllItems = new List<string>();
             if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "res_mods")))
                 ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "res_mods"), SearchOption.AllDirectories,true).ToList());
+            CancellationToken.ThrowIfCancellationRequested();
             if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "mods")))
                 ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "mods"), SearchOption.AllDirectories,true).ToList());
+            CancellationToken.ThrowIfCancellationRequested();
 
             //combine with a list of any installer engine created folders
             foreach (string folder in Settings.FoldersToCleanup)
             {
+                CancellationToken.ThrowIfCancellationRequested();
                 string folderPath = Path.Combine(Settings.WoTDirectory, folder);
                 if (Directory.Exists(folderPath))
                     ListOfAllItems.AddRange(Utils.DirectorySearch(folderPath, SearchOption.AllDirectories,true));
@@ -633,12 +671,14 @@ namespace RelhaxModpack.InstallerComponents
                     Logging.WriteToLog(@"/*  files and folders deleted  */", Logfiles.Uninstaller, LogLevel.Info);
                 }
             }
+            CancellationToken.ThrowIfCancellationRequested();
 
             //delete all files
             bool success = true;
             Prog.UninstallStatus = UninstallerExitCodes.UninstallError;
             foreach(string file in ListOfAllFiles)
             {
+                CancellationToken.ThrowIfCancellationRequested();
                 Prog.ChildCurrent++;
                 Prog.Filename = file;
                 Progress.Report(Prog);
@@ -654,6 +694,7 @@ namespace RelhaxModpack.InstallerComponents
             //delete all folders
             foreach(string folder in ListOfAllDirectories)
             {
+                CancellationToken.ThrowIfCancellationRequested();
                 Prog.ChildCurrent++;
                 Prog.Filename = folder;
                 Progress.Report(Prog);
@@ -675,6 +716,7 @@ namespace RelhaxModpack.InstallerComponents
             if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "mods")))
                 if (!Utils.DirectoryDelete(Path.Combine(Settings.WoTDirectory, "mods"), true))
                     success = false;
+            CancellationToken.ThrowIfCancellationRequested();
 
             //re-create the folders at the end
             Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, "res_mods", Settings.WoTClientVersion));
@@ -714,13 +756,16 @@ namespace RelhaxModpack.InstallerComponents
             Logging.Debug("adding any files in res_mods and mods by scanning the folders if they aren't on the list already");
             if(Directory.Exists(Path.Combine(Settings.WoTDirectory, "res_mods")))
                 ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "res_mods"), SearchOption.AllDirectories,true).ToList());
+            CancellationToken.ThrowIfCancellationRequested();
             if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "mods")))
                 ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "mods"), SearchOption.AllDirectories,true).ToList());
+            CancellationToken.ThrowIfCancellationRequested();
 
             //combine with a list of any installer engine created folders
             Logging.Debug("adding any installer created folders if they exist");
             foreach(string folder in Settings.FoldersToCleanup)
             {
+                CancellationToken.ThrowIfCancellationRequested();
                 string folderPath = Path.Combine(Settings.WoTDirectory, folder);
                 if (Directory.Exists(folderPath))
                 {
@@ -769,6 +814,7 @@ namespace RelhaxModpack.InstallerComponents
                     Logging.WriteToLog(@"/*  files and folders deleted  */", Logfiles.Uninstaller, LogLevel.Info);
                 }
             }
+            CancellationToken.ThrowIfCancellationRequested();
 
             //delete all files (not shortcuts)
             Logging.Debug("deleting all files from list, not including shortcuts");
@@ -776,6 +822,7 @@ namespace RelhaxModpack.InstallerComponents
             Prog.UninstallStatus = UninstallerExitCodes.UninstallError;
             foreach (string file in ListOfAllFiles)
             {
+                CancellationToken.ThrowIfCancellationRequested();
                 Prog.ChildCurrent++;
                 Prog.Filename = file;
                 Progress.Report(Prog);
@@ -802,6 +849,7 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.Debug("Deleting shortcuts");
                 foreach (string file in ListOfAllShortcuts)
                 {
+                    CancellationToken.ThrowIfCancellationRequested();
                     if (File.Exists(file))
                     {
                         if (!Utils.FileDelete(file))
@@ -825,9 +873,11 @@ namespace RelhaxModpack.InstallerComponents
             if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "res_mods")))
                 if (!Utils.DirectoryDelete(Path.Combine(Settings.WoTDirectory, "res_mods"), true))
                     success = false;
+            CancellationToken.ThrowIfCancellationRequested();
             if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "mods")))
                 if (!Utils.DirectoryDelete(Path.Combine(Settings.WoTDirectory, "mods"), true))
                     success = false;
+            CancellationToken.ThrowIfCancellationRequested();
 
             //delete all empty folders
             Logging.Debug("processing empty folders");
@@ -835,6 +885,7 @@ namespace RelhaxModpack.InstallerComponents
             Progress.Report(Prog);
             foreach (string folder in ListOfAllDirectories)
             {
+                CancellationToken.ThrowIfCancellationRequested();
                 if (Directory.Exists(folder))
                 {
                     if (!Utils.ProcessEmptyDirectories(folder, false))
@@ -1232,6 +1283,9 @@ namespace RelhaxModpack.InstallerComponents
                 Prog.ParrentCurrent++;
                 Progress.Report(Prog);
 
+                //clear the list of child tasks
+                createdChildTasks.Clear();
+
                 //get the list of packages to install
                 //this list represents all the packages in this install group that can be installed at the same time
                 //i.e. there are NO conflicting zip file paths in ALL of the files (all the entries in all zip files are mutually exclusive)
@@ -1288,6 +1342,8 @@ namespace RelhaxModpack.InstallerComponents
                     while (!valueLocked) ;
                     valueLocked = false;
                     Logging.Debug("thread {0} running, starting next task", k);
+                    //also save the task to a list to use for cancel later
+                    createdChildTasks.Add(tasks[k]);
                 }
 
                 //and log it all
@@ -1374,6 +1430,7 @@ namespace RelhaxModpack.InstallerComponents
 
                         foreach (Shortcut shortcut in shortcuts)
                         {
+                            CancellationToken.ThrowIfCancellationRequested();
                             ProgShortcuts.ParrentCurrent++;
                             LockProgress();
 
@@ -1432,13 +1489,15 @@ namespace RelhaxModpack.InstallerComponents
                         atlas.AtlasSaveDirectory = Utils.MacroReplace(atlas.AtlasSaveDirectory, ReplacementTypes.FilePath);
                         for (int j = 0; j < atlas.ImageFolderList.Count; j++)
                         {
+                            CancellationToken.ThrowIfCancellationRequested();
                             atlas.ImageFolderList[j] = Utils.MacroReplace(atlas.ImageFolderList[j], ReplacementTypes.FilePath);
                         }
 
+                        CancellationToken.ThrowIfCancellationRequested();
                         LockProgress();
 
                         //create the atlas
-                        Utils.CreateAtlas(atlas);
+                        Utils.CreateAtlas(atlas, CancellationToken);
 
                         lock (Progress)
                         {
@@ -1524,6 +1583,7 @@ namespace RelhaxModpack.InstallerComponents
                             }
                         }
 
+                        CancellationToken.ThrowIfCancellationRequested();
                         Logging.Info("Attempting to install fonts: {0}", string.Join(",", realFontsToInstall));
                         ProcessStartInfo info = new ProcessStartInfo
                         {
@@ -1554,6 +1614,7 @@ namespace RelhaxModpack.InstallerComponents
                             ProgFonts.InstallStatus = InstallerExitCodes.FontInstallError;
                             LockProgress();
                             ProgFonts = null;
+                            CancellationToken.ThrowIfCancellationRequested();
                         }
                     }
                 });
@@ -1657,6 +1718,7 @@ namespace RelhaxModpack.InstallerComponents
                 int numExtracted = 0;
                 foreach (DatabasePackage package in packagesToExtract)
                 {
+                    CancellationToken.ThrowIfCancellationRequested();
                     if (ModpackSettings.InstallWhileDownloading && package.DownloadFlag)
                     {
                         continue;
@@ -1707,6 +1769,7 @@ namespace RelhaxModpack.InstallerComponents
                         //first for loop takes care of any path replacing in the zipfile
                         for(int j = 0; j < zip.Entries.Count; j++)
                         {
+                            CancellationToken.ThrowIfCancellationRequested();
                             //check for versiondir
                             string zipEntryName = zip[j].FileName;
                             if (zipEntryName.Contains("versiondir"))
@@ -1754,6 +1817,7 @@ namespace RelhaxModpack.InstallerComponents
                         //second loop extracts each file and checks for extraction macros
                         for (int j = 0; j < zip.Entries.Count; j++)
                         {
+                            CancellationToken.ThrowIfCancellationRequested();
                             string zipFilename = zip[j].FileName;
                             //create logging entry
                             string loggingCompletePath = string.Empty;
@@ -1802,7 +1866,13 @@ namespace RelhaxModpack.InstallerComponents
                 }
                 catch (Exception e)
                 {
-                    if(i <= 1)
+                    //if it's a cancel, then stop
+                    if (e is OperationCanceledException)
+                    {
+                        Logging.Debug("cancel detected in extraction thread, aborting");
+                        return;
+                    }
+                    if (i <= 1)
                     {
                         //log as error, 3 tries and all failures
                         Logging.Exception("Failed to extract zipfile {0}, exception message:{1}{2}", package.ZipFile, Environment.NewLine, e.ToString());
@@ -2144,6 +2214,51 @@ namespace RelhaxModpack.InstallerComponents
                 TotalCurrentProgress = string.Copy(progress.TotalCurrentProgress),
                 ReportMessage = string.Copy(progress.ReportMessage)
             };
+        }
+
+        private void CheckForCancel()
+        {
+            if(CancellationToken.IsCancellationRequested)
+            {
+                Logging.Info("Cancel detected, waiting all child threads before stopping master thread");
+                if(installing)
+                {
+                    for (int i = 0; i < createdChildTasks.Count; i++)
+                    {
+                        Task tsk = createdChildTasks[i];
+                        if (tsk == null)
+                        {
+                            Logging.Error("task to cancel is null, should not happen!");
+                            continue;
+                        }
+                        while (true)
+                        {
+                            if (tsk.Status == TaskStatus.Canceled || tsk.Status == TaskStatus.Faulted || tsk.Status == TaskStatus.RanToCompletion)
+                                break;
+                        }
+                        tsk.Dispose();
+                        tsk = null;
+                    }
+                    createdChildTasks = null;
+                    Logging.Info("all child threads stopped, stopping master");
+                }
+                else
+                {
+                    Logging.Debug("engine is in uninstall mode, canceling main task");
+                }
+
+                //if canceling, at least making the folders if they don't already exist
+                if (!ModpackSettings.ExportMode)
+                {
+                    Logging.Debug("creating mods and res_mods if they don't already exist, just in case");
+                    foreach (string s in new string[] { Path.Combine(Settings.WoTDirectory, "res_mods", Settings.WoTClientVersion),
+                    Path.Combine(Settings.WoTDirectory, "mods", Settings.WoTClientVersion) })
+                    {
+                        if (!Directory.Exists(s))
+                            Directory.CreateDirectory(s);
+                    }
+                }
+            }
         }
 
         #endregion

@@ -21,6 +21,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using System.Timers;
+using System.Threading;
+using Timer = System.Timers.Timer;
 
 namespace RelhaxModpack
 {
@@ -46,6 +48,8 @@ namespace RelhaxModpack
         private Timer autoInstallTimer = new Timer();
         private bool databaseUpdateAvailableFromAutoSync = false;
         private bool autoInstallTimerRegistered = false;
+        private CancellationTokenSource cancellationTokenSource;
+        private InstallerComponents.InstallEngine installEngine;
 
         //temp list of components not to toggle
         Control[] tempDisabledBlacklist = null;
@@ -666,6 +670,13 @@ namespace RelhaxModpack
         {
             ChildProgressBar.Value = ParentProgressBar.Value = TotalProgressBar.Value = 0;
             InstallProgressTextBox.Text = string.Empty;
+            if(CancelDownloadInstallButton.Visibility == Visibility.Visible)
+            {
+                CancelDownloadInstallButton.Visibility = Visibility.Hidden;
+                CancelDownloadInstallButton.IsEnabled = false;
+                CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Install_Click;
+                CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
+            }
         }
         
         private void OnUpdateDownloadCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
@@ -1092,7 +1103,13 @@ namespace RelhaxModpack
                 CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Install_Click;
                 CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
                 CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Download_Click;
-                await ProcessDownloads(packagesToDownload);
+                bool downlaodTaskComplete =  await ProcessDownloads(packagesToDownload);
+                if(!downlaodTaskComplete)
+                {
+                    Logging.Info("download task was canceled, canceling installation");
+                    ToggleUIButtons(true);
+                    return;
+                }
                 CancelDownloadInstallButton.IsEnabled = false;
                 CancelDownloadInstallButton.Visibility = Visibility.Hidden;
                 //connect the install and disconnect the download
@@ -1206,26 +1223,45 @@ namespace RelhaxModpack
                 }
             }
 
+            //create the cancellation token source
+            cancellationTokenSource = new CancellationTokenSource();
+
             //and create and link the install engine
-            InstallerComponents.InstallEngine engine = new InstallerComponents.InstallEngine()
+            installEngine = new InstallerComponents.InstallEngine()
             {
                 FlatListSelectablePackages = flatListSelect,
                 OrderedPackagesToInstall = orderedPackagesToInstall,
                 PackagesToInstall = packagesToInstall,
                 ParsedCategoryList = parsedCategoryList,
                 Dependencies = dependencies,
-                GlobalDependencies = globalDependencies
+                GlobalDependencies = globalDependencies,
+                CancellationToken = cancellationTokenSource.Token
             };
+
+            //setup the cancel button
+            CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Install_Click;
+            CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
+            CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Install_Click;
+            CancelDownloadInstallButton.Visibility = Visibility.Visible;
+            CancelDownloadInstallButton.IsEnabled = true;
 
             //create progress object
             Progress<RelhaxInstallerProgress> progress = new Progress<RelhaxInstallerProgress>();
             progress.ProgressChanged += OnInstallProgressChanged;
 
             //run install
-            InstallerComponents.RelhaxInstallFinishedEventArgs results = await engine.RunInstallationAsync(progress);
+            InstallerComponents.RelhaxInstallFinishedEventArgs results = await installEngine.RunInstallationAsync(progress);
+            installEngine.Dispose();
+            installEngine = null;
+
+            //close and hide the install progress button
+            CancelDownloadInstallButton.IsEnabled = false;
+            CancelDownloadInstallButton.Visibility = Visibility.Hidden;
+            CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Install_Click;
+            CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
 
             //close and free up RAM from advanced install progress
-            if(ModpackSettings.AdvancedInstalProgress)
+            if (ModpackSettings.AdvancedInstalProgress)
             {
                 if(AdvancedProgressWindow != null)
                 {
@@ -1254,6 +1290,12 @@ namespace RelhaxModpack
                 }
                 InstallProgressTextBox.Text = string.Empty;
                 ToggleUIButtons(true);
+            }
+            else if (cancellationTokenSource.IsCancellationRequested)
+            {
+                Logging.Info("Cancel success");
+                ToggleUIButtons(true);
+                InstallProgressTextBox.Text = Translations.GetTranslatedString("canceled");
             }
             else
             {
@@ -1412,6 +1454,11 @@ namespace RelhaxModpack
                         }
                         catch(WebException ex)
                         {
+                            if (cancellationTokenSource.IsCancellationRequested)
+                            {
+                                ResetUI();
+                                return;
+                            }
                             Logging.WriteToLog(string.Format("Failed to download the file {0}, try {1} of {2}\n{3}", package.ZipFile, retryCount, 1,
                                 ex.ToString()), Logfiles.Application, LogLevel.Error);
                             retryCount--;
@@ -1421,9 +1468,9 @@ namespace RelhaxModpack
             }
         }
 
-        private async Task ProcessDownloads(List<DatabasePackage> packagesToDownload)
+        private async Task<bool> ProcessDownloads(List<DatabasePackage> packagesToDownload)
         {
-            //remmeber this is on the UI thread so we can update the progress via this
+            //remember this is on the UI thread so we can update the progress via this
             //and also update the UI info
             ParentProgressBar.Minimum = 0;
             ParentProgressBar.Maximum = packagesToDownload.Count;
@@ -1470,6 +1517,9 @@ namespace RelhaxModpack
                             {
                                 Logging.Info("Download canceled, stopping installation");
                                 ToggleUIButtons(true);
+                                ResetUI();
+                                retry = false;
+                                return false;
                             }
                             else
                             {
@@ -1503,6 +1553,7 @@ namespace RelhaxModpack
                     }
                 }
             }
+            return true;
         }
         #endregion
 
@@ -1559,9 +1610,17 @@ namespace RelhaxModpack
             Progress<RelhaxInstallerProgress> progress = new Progress<RelhaxInstallerProgress>();
             progress.ProgressChanged += UninstallProgressChanged;
 
+            //create token source
+            cancellationTokenSource = new CancellationTokenSource();
+
             //create and run uninstall engine
-            InstallerComponents.InstallEngine engine = new InstallerComponents.InstallEngine();
-            InstallerComponents.RelhaxInstallFinishedEventArgs results = await engine.RunUninstallationAsync(progress);
+            installEngine = new InstallerComponents.InstallEngine
+            {
+                CancellationToken = cancellationTokenSource.Token
+            };
+            InstallerComponents.RelhaxInstallFinishedEventArgs results = await installEngine.RunUninstallationAsync(progress);
+            installEngine.Dispose();
+            installEngine = null;
 
             //report results
             ChildProgressBar.Value = ChildProgressBar.Maximum;
@@ -1745,7 +1804,21 @@ namespace RelhaxModpack
 
         private void CancelDownloadInstallButton_Install_Click(object sender, RoutedEventArgs e)
         {
-
+            if(installEngine == null)
+            {
+                Logging.Error("Cancel request failed because installEngine is null!");
+                MessageBox.Show(Translations.GetTranslatedString("CancelInstallRequestFailed"));
+                return;
+            }
+            if(!cancellationTokenSource.IsCancellationRequested)
+            {
+                Logging.Info("requesting cancel of installation from UI - cancel process started");
+                cancellationTokenSource.Cancel();
+            }
+            else
+            {
+                Logging.Debug("cancel already started - skipping request");
+            }
         }
         #endregion
 

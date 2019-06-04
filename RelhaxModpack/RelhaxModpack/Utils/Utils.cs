@@ -26,6 +26,7 @@ using RelhaxModpack.AtlasesCreator;
 using System.Drawing;
 using Size = System.Drawing.Size;
 using RelhaxModpack.Windows;
+using System.Threading;
 
 namespace RelhaxModpack
 {
@@ -1796,7 +1797,7 @@ namespace RelhaxModpack
             sb.AppendLine(shortcutPath);
         }
 
-        public static void CreateAtlas(Atlas atlas)
+        public static void CreateAtlas(Atlas atlas, CancellationToken token)
         {
             //create the save directory if it does not already exist
             if (!Directory.Exists(atlas.AtlasSaveDirectory))
@@ -1810,7 +1811,9 @@ namespace RelhaxModpack
             Logging.Info("atlas file {0} unpack of atlas and map starting", Path.GetFileName(atlas.AtlasFile));
             stopwatch.Restart();
             XMLUtils.Unpack(atlas.Pkg, Path.Combine(atlas.DirectoryInArchive, atlas.AtlasFile), Path.Combine(atlas.TempAltasPresentDirectory, atlas.AtlasFile));
+            token.ThrowIfCancellationRequested();
             XMLUtils.Unpack(atlas.Pkg, Path.Combine(atlas.DirectoryInArchive, atlas.MapFile), Path.Combine(atlas.TempAltasPresentDirectory, atlas.MapFile));
+            token.ThrowIfCancellationRequested();
             stopwatch.Stop();
             Logging.Info("atlas file {0} unpack completed in {1} msec", Path.GetFileName(atlas.AtlasFile), stopwatch.ElapsedMilliseconds);
 
@@ -1825,12 +1828,14 @@ namespace RelhaxModpack
             Size originalAtlasSize = new Size();
             using (Bitmap atlasImage = ImageHandler.LoadBitmapFromDDS(tempAtlasImageFile))
             {
+                token.ThrowIfCancellationRequested();
                 //get the size from grumpel code
                 originalAtlasSize = atlasImage.Size;
                 
                 //load the texture bitmaps to memory
                 foreach(Texture texture in atlas.TextureList)
                 {
+                    token.ThrowIfCancellationRequested();
                     //copy the texture bitmap data into the texture bitmap object
                     //https://docs.microsoft.com/en-us/dotnet/api/system.drawing.bitmap.clone?redirectedfrom=MSDN&view=netframework-4.8#System_Drawing_Bitmap_Clone_System_Drawing_Rectangle_System_Drawing_Imaging_PixelFormat_
                     //rectange of desired area to clone
@@ -1882,7 +1887,8 @@ namespace RelhaxModpack
             List<Texture> modTextures = new List<Texture>();
             foreach (string folder in atlas.ImageFolderList)
             {
-                if(!Directory.Exists(folder))
+                token.ThrowIfCancellationRequested();
+                if (!Directory.Exists(folder))
                 {
                     Logging.Warning("directory {0} does not exist in atlas parsing, skipping", folder);
                     continue;
@@ -1896,6 +1902,7 @@ namespace RelhaxModpack
 
                 foreach(FileInfo customContourIcon in customContourIcons)
                 {
+                    token.ThrowIfCancellationRequested();
                     //load the custom image into the texture list
                     string filename = Path.GetFileNameWithoutExtension(customContourIcon.Name);
                     //load the bitmap as well
@@ -1933,6 +1940,7 @@ namespace RelhaxModpack
             stopwatch.Restart();
             for (int i = 0; i < modTextures.Count; i++)
             {
+                token.ThrowIfCancellationRequested();
                 //get the matching texture, if it exists
                 Texture[] originalResults = atlas.TextureList.Where(texturee => texturee.name.Equals(modTextures[i].name)).ToArray();
                 if (originalResults.Count() > 1)
@@ -1981,6 +1989,7 @@ namespace RelhaxModpack
             {
                 tex.AtlasImage.Dispose();
             }
+            token.ThrowIfCancellationRequested();
         }
         #endregion
 
