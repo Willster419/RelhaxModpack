@@ -7,12 +7,13 @@ namespace RelhaxModpack
     public static class Translations
     {
         //Enumerator to determine which translated string to return
-        public enum Languages { English = 0, German = 1, Polish = 2, French = 3 };
+        public enum Languages { English = 0, German = 1, Polish = 2, French = 3, Russian = 4 };
         public static Languages language = Languages.English;//set it to this default
         public static Hashtable english = new Hashtable();
         public static Hashtable german = new Hashtable();
         public static Hashtable polish = new Hashtable();
         public static Hashtable french = new Hashtable();
+        public static Hashtable russian = new Hashtable();
         public const string TranslationNeeded = "TODO";
         //load hashes on application startup
 
@@ -70,6 +71,18 @@ namespace RelhaxModpack
                             return s;
                         }
                         break;
+                    case Languages.Russian:
+                        if(russian.Contains(componetName))
+                        {
+                            s = (string)russian[componetName];
+                            if (s.ToUpper().Equals(TranslationNeeded))
+                            {
+                                Logging.Manager(string.Format("WARNING: russian translation for \"{0}\" is missing.", componetName));
+                                s = (string)english[componetName];
+                            }
+                            return s;
+                        }
+                        break;
                 }
                 Logging.Manager(string.Format("ERROR: no value in language hash for key: {0}  Language: {1}", componetName, lang));
                 return componetName;
@@ -88,6 +101,7 @@ namespace RelhaxModpack
             german.Add(key, message);
             polish.Add(key, message);
             french.Add(key, message);
+            russian.Add(key, message);
         }
         //method to load each translated string based on which language is selected
         public static void LoadHashes()
