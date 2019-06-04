@@ -420,11 +420,11 @@ namespace RelhaxWPFConvert
             tokenSource2 = new CancellationTokenSource();
             ct = tokenSource2.Token;
 
-            bool result = await PerformTaskAsyncWithCancel(progress, ct);
+            bool result = await PerformTaskWithCancelAsync(progress, ct);
             TaskCancelTestingBlock.Text = result? "Complete" : "Failed";
         }
 
-        public Task<bool> PerformTaskAsyncWithCancel(IProgress<CustomProgress> progress, CancellationToken ct)
+        public Task<bool> PerformTaskWithCancelAsync(IProgress<CustomProgress> progress, CancellationToken ct)
         {
             Task<bool> t2 = Task.Run(() =>
             {
