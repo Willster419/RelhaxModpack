@@ -1725,7 +1725,7 @@ namespace RelhaxModpack.InstallerComponents
                     }
                     else
                     {
-                        Logging.WriteToLog("Thread ID=" + threadNum + ", starting extraction of " + package.ZipFile);
+                        Logging.Info("Thread ID={0}, starting extraction of zipfile {1} of pacakgeName {2}", threadNum, package.ZipFile, package.PackageName);
                         numExtracted++;
                         if (string.IsNullOrWhiteSpace(package.ZipFile))
                             continue;
