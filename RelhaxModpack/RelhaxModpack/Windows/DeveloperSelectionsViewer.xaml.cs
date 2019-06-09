@@ -97,7 +97,12 @@ namespace RelhaxModpack.Windows
         {
             if (OnDeveloperSelectionsClosed != null)
             {
-                if (!FileToLoad.Equals("LOCAL"))
+                //only perform selection logic if the user selected to load one
+                if(!LoadSelection)
+                {
+                    FileToLoad = string.Empty;
+                }
+                else if (!FileToLoad.Equals("LOCAL"))
                 {
                     //checkif a radio button is selected. to do that, set LoadSelection to false. forces a button to set it to true
                     LoadSelection = false;
