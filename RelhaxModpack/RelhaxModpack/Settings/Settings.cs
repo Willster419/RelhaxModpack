@@ -58,8 +58,8 @@ namespace RelhaxModpack
         public const string ApplicationUpdateURL = "http://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";
         public const string ApplicationBetaUpdateURL = "http://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.zip";
         public const string ApplicationUpdateFileName = "RelhaxModpack_update.zip";
-        public const string RelicBatchUpdateScript = "RelicCopyUpdate.bat"; //"relic_self_updater.bat";
-        public const string RelicBatchUpdateScriptServer = "RelicCopyUpdate.txt"; //"relic_self_updater.txt";
+        public const string RelicBatchUpdateScript = "relic_self_updater.bat";
+        public const string RelicBatchUpdateScriptServer = "relic_self_updater.txt";
 
         public const string SelectionsRoot = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/selection_files/";
         public const string SelectionsXml = "selections.xml";
