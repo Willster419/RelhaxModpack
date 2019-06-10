@@ -64,6 +64,7 @@ namespace RelhaxModpack
         /// The filename of the application log file
         /// </summary>
         public const string ApplicationLogFilename = "Relhax.log";
+        public const string ApplicationLogTempFilename = "RelhaxTemp.log";
         public const string ApplicationUpdaterLogFilename = "RelhaxUpdater.log";
         public const string ApplicationEditorLogFilename = "RelhaxEditor.log";
         public const string ApplicationPatchDesignerLogFilename = "RelhaxPatchDesigner.log";
@@ -196,6 +197,14 @@ namespace RelhaxModpack
                     break;
             }
         }
+
+        public static void WriteHeader(string header)
+        {
+            if (ApplicationLogfile == null)
+                return;
+            ApplicationLogfile.Write(header);
+        }
+
         /// <summary>
         /// Writes a message to a logfile instance, if it exists
         /// </summary>
