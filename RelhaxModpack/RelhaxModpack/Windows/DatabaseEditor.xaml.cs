@@ -2146,6 +2146,12 @@ namespace RelhaxModpack.Windows
 
         private void OnSearchBoxCommitted(EditorSearchBoxItem item, bool fromMouse)
         {
+            if(item == null)
+            {
+                Logging.Info("User tried to search from item that does not exist, stopping");
+                Logging.Info("searched text: {0}", SearchBox.Text);
+                return;
+            }
             item.Package.EditorTreeViewItem.Focusable = true;
             item.Package.EditorTreeViewItem.Focus();
             Dispatcher.InvokeAsync(() => item.Package.EditorTreeViewItem.BringIntoView(), System.Windows.Threading.DispatcherPriority.Background);
