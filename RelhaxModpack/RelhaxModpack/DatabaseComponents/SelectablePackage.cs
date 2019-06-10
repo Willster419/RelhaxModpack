@@ -159,16 +159,16 @@ namespace RelhaxModpack
                 {
                     UIComponent.OnCheckedChanged(value);
                 }
-                if (Type.Equals("single_dropdown") || Type.Equals("single_dropdown1"))
+                if (Type == SelectionTypes.single_dropdown1)
                 {
                     dropDownSelectionType = 0;
                 }
-                else if (Type.Equals("single_dropdown2"))
+                else if (Type == SelectionTypes.single_dropdown2)
                 {
                     dropDownSelectionType = 1;
                 }
                 //inside here is for comboboxes (checked)
-                if (Enabled && dropDownSelectionType > -1)
+                if (Enabled && dropDownSelectionType > -1 && IsStructureEnabled)
                 {
                     switch (ModpackSettings.ModSelectionView)
                     {
@@ -206,7 +206,7 @@ namespace RelhaxModpack
                             break;
                     }
                 }
-                else if (dropDownSelectionType > -1 && actuallyDoColorChange)
+                else if (Visible && dropDownSelectionType > -1 && actuallyDoColorChange && IsStructureVisible)
                 {
                     //in here means it's a dropdown and doing color change
                     switch (_Checked)

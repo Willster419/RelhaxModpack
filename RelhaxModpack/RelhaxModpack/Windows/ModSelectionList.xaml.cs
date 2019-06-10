@@ -769,9 +769,11 @@ namespace RelhaxModpack.Windows
         {
             foreach(SelectablePackage package in packages)
             {
-                //do all the package UI building here
-                //should NOT have to do any of the memory linking since that was all done for us above in a utility #likeABoss
-                //but first check if we actually want to add it. if the program isn't forcing them to be enabled
+                //link the parent panels and border to childs
+                package.ParentBorder = package.Parent.ChildBorder;
+                package.ParentStackPanel = package.Parent.ChildStackPanel;
+
+                //check if we actually want to add it. if the program isn't forcing them to be enabled
                 //and the mod reports being disabled, then don't add it to the UI
                 //the counter needs to still be kept up to date with the list (the whole list includes invisible mods!)
                 if (!ModpackSettings.ForceVisible && !package.Visible)
@@ -782,9 +784,7 @@ namespace RelhaxModpack.Windows
                     package.Visible = true;
                 if (ModpackSettings.ForceEnabled && !package.IsStructureEnabled)
                     package.Enabled = true;
-                //link the parent panels and border to childs
-                package.ParentBorder = package.Parent.ChildBorder;
-                package.ParentStackPanel = package.Parent.ChildStackPanel;
+                
                 //special code for the borders and stackpanels
                 //if the child container for sub options hsa yet to be made AND there are sub options, make it
                 if(package.ChildBorder == null && package.Packages.Count > 0)
@@ -1528,7 +1528,7 @@ namespace RelhaxModpack.Windows
                         disabledMods.Add(package.CompletePath);
                         Logging.WriteToLog(string.Format("\"{0}\" is a disabled mod", package.CompletePath));
                     }
-                    //if it's the top level, chedk the category header
+                    //if it's the top level, check the category header
                     if (package.Level == 0 && !package.ParentCategory.CategoryHeader.Checked)
                     {
                         package.ParentCategory.CategoryHeader.Checked = true;
@@ -1547,32 +1547,32 @@ namespace RelhaxModpack.Windows
                     stringUserSelections.Remove(package.ZipFile);
                 }
             }
-            //now check for the correct structre of mods
+            //now check for the correct structure of mods
             List<SelectablePackage> brokenMods = IsValidStructure(ParsedCategoryList);
-            Logging.WriteToLog("Broken mods structre count: " + brokenMods.Count);
-            //only report issues if silent is false. true means its doing sometthing like auto selections or
+            Logging.WriteToLog("Broken mods structure count: " + brokenMods.Count);
+            //only report issues if silent is false. true means its doing something like auto selections or
             if(!silent)
             {
-                Logging.WriteToLog(string.Format("Informing user of {0} disabled mods, {1} broken selections, {2} removed mods, {3} removed user mods",
-                disabledMods.Count, disabledStructureMods.Count, stringSelections.Count, stringUserSelections.Count));
+                Logging.Info("Informing user of {0} disabled selections, {1} broken selections, {2} removed selections, {3} removed user selections",
+                disabledMods.Count, brokenMods.Count, stringSelections.Count, stringUserSelections.Count);
                 if(disabledMods.Count > 0)
                 {
-                    //disabled mods
+                    //disabled selections
                     MessageBox.Show(Translations.GetTranslatedString("modsDisabled") + "\n" + string.Join("\n",disabledMods));
                 }
                 if(stringSelections.Count > 0)
                 {
-                    //removed mods
+                    //removed selections
                     MessageBox.Show(Translations.GetTranslatedString("modsNotRemovedTechnical") + "\n" + string.Join("\n", stringSelections));
                 }
                 if(stringUserSelections.Count > 0)
                 {
-                    //removed user mdos
+                    //removed user selections
                     MessageBox.Show(Translations.GetTranslatedString("userModsRemovedTechnical") + "\n" + string.Join("\n", stringUserSelections));
                 }
                 if(disabledStructureMods.Count > 0)
                 {
-                    //removed structure user mdos
+                    //removed structure user selections
                     MessageBox.Show(Translations.GetTranslatedString("modsBrokenStructure") + "\n" + string.Join("\n", disabledStructureMods));
                 }
             }
