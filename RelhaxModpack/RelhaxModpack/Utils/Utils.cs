@@ -1243,10 +1243,7 @@ namespace RelhaxModpack
         public static List<DatabasePackage>[] CreateOrderedInstallList(List<DatabasePackage> packagesToInstall)
         {
             //get the max number of defined groups
-            int maxGrops = 0;
-            foreach (DatabasePackage package in packagesToInstall)
-                if (package.InstallGroup > maxGrops)
-                    maxGrops = package.InstallGroup;
+            int maxGrops = packagesToInstall.Select(max => max.InstallGroup).Max();
 
             //make the list to return
             //make it maxGroups +1 because group 4 exists, but making a aray of 4 is 0-3
