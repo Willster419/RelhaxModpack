@@ -1294,9 +1294,16 @@ namespace RelhaxModpack.InstallerComponents
                 //set it for the progress report
                 Prog.ChildTotal = packages.Count;
 
-                //first sort the packages by the size parameter
+                //get the size of any packages where the size is invalid before sorting
+                foreach(DatabasePackage packa in packages.Where(pack => pack.Size == 0 && !string.IsNullOrWhiteSpace(pack.ZipFile)))
+                {
+                    string zipFile = Path.Combine(Settings.RelhaxDownloadsFolder, packa.ZipFile);
+                    if (File.Exists(zipFile))
+                        packa.Size = (ulong)Utils.GetFilesize(zipFile);
+                }
+
+                //then sort the packages by the size parameter (largest files on top)
                 //https://stackoverflow.com/questions/3309188/how-to-sort-a-listt-by-a-property-in-the-object
-                //TODO: the size of all objects MUST BE KNOWN??
                 packages = packages.OrderByDescending(pack => pack.Size).ToList();
                 //for not just go with the packages as they are, they should already be in alphabetical order
 
@@ -1725,7 +1732,7 @@ namespace RelhaxModpack.InstallerComponents
                     }
                     else
                     {
-                        Logging.Info("Thread ID={0}, starting extraction of zipfile {1} of pacakgeName {2}", threadNum, package.ZipFile, package.PackageName);
+                        Logging.Info("Thread ID={0}, starting extraction of zipfile {1} of packageName {2}", threadNum, package.ZipFile, package.PackageName);
                         numExtracted++;
                         if (string.IsNullOrWhiteSpace(package.ZipFile))
                             continue;
