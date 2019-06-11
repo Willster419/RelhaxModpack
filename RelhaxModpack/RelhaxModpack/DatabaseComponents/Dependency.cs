@@ -46,6 +46,7 @@ namespace RelhaxModpack
             //https://stackoverflow.com/questions/326223/overriding-fields-or-properties-in-subclasses
             //the custom constructor will be called after the base one
             InstallGroup = 2;
+            PatchGroup = 2;
         }
         #endregion
     }

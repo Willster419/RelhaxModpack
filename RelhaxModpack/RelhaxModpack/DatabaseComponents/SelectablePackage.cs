@@ -68,6 +68,7 @@ namespace RelhaxModpack
         public SelectablePackage()
         {
             InstallGroup = 4;
+            PatchGroup = 4;
         }
         /// <summary>
         /// the name of the package

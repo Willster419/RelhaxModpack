@@ -1797,21 +1797,37 @@ namespace RelhaxModpack.InstallerComponents
                             }
                             if(Regex.IsMatch(zipEntryName, @"_patch.*\.xml"))
                             {
+                                //format for new patch names
+                                //patchGroup_origName_0 <- can be increased for uniqueness
+                                //patchGroup takes care of the global->dep->selectable package order
+
                                 //build the patch name manually
                                 StringBuilder sb = new StringBuilder();
+
                                 //first get the "_patch/" prefix (that does not change)
                                 sb.Append(zipEntryName.Substring(0,7));
-                                //pad the patchGroup name
+
+                                //pad and add the patchGroup name
                                 sb.Append(package.PatchGroup.ToString("D3"));
+
                                 //name else doesn't need to change, to set the rest of the name and use it
                                 sb.Append(zipEntryName.Substring(7));
+
                                 //save the original and new names to the list to apply later
                                 //lock on a static
                                 lock(this)
                                 {
                                     //key is sb, sb is new name for disk, is native processing file
                                     //value is original name from zip file
-                                    OriginalPatchNames.Add(sb.ToString().Substring(7), zipEntryName.Substring(7));
+                                    string key = sb.ToString().Substring(7);
+                                    string value = zipEntryName.Substring(7);
+                                    while (OriginalPatchNames.ContainsKey(key))
+                                    {
+                                        string orig = key;
+                                        key = string.Join("_.", key.Split('.'));
+                                        Logging.Warning("patchfile \"{0}\" has same name as patch in other zip file! Please fix! Using name \"{1}\" instead", orig, key);
+                                    }
+                                    OriginalPatchNames.Add(key, value);
                                 }
                                 //and save it to the string
                                 zipEntryName = sb.ToString();
