@@ -1260,6 +1260,15 @@ namespace RelhaxModpack
             return orderedList;
         }
 
+        public static void PropagateInstallGroupsPerLevel(List<DatabasePackage> packagesToInstall)
+        {
+            foreach(DatabasePackage package in packagesToInstall)
+            {
+                if (package is SelectablePackage selectablePackage)
+                    selectablePackage.InstallGroup = selectablePackage.InstallGroup + selectablePackage.Level;
+            }
+        }
+
         public static void ClearSelections(List<Category> ParsedCategoryList)
         {
             foreach (SelectablePackage package in GetFlatList(null, null, null, ParsedCategoryList))
