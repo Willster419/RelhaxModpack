@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Net;
 using System.IO;
+using System.Timers;
 
 namespace RelhaxModpack.Windows
 {
@@ -34,6 +35,8 @@ namespace RelhaxModpack.Windows
         public DatabasePackage PackageToUpdate;
         public event EditorUploadDownloadClosed OnEditorUploadDownloadClosed;
         private long FTPDownloadFilesize = -1;
+        private Timer timer = new Timer() { AutoReset = true, Enabled = false, Interval=1000 };
+        public uint Countdown = 0;
 
         private WebClient client;
         private string CompleteFTPPath;
@@ -45,7 +48,12 @@ namespace RelhaxModpack.Windows
 
         private async void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            //set the UI parameters based on upload or download
+            //hook up the timer
+            timer.Elapsed += Timer_Elapsed;
+
+            //set the open folder and file button
+            //if uploading, the buttons are invalid, don't show then
+            //if downloading, the buttons are valid to show, but not enabled until the download is complete
             switch(Upload)
             {
                 case true:
@@ -55,27 +63,31 @@ namespace RelhaxModpack.Windows
                 case false:
                     OpenFodlerButton.Visibility = Visibility.Visible;
                     OpenFileButton.Visibility = Visibility.Visible;
+                    OpenFodlerButton.IsEnabled = false;
+                    OpenFileButton.IsEnabled = false;
                     break;
             }
+
+            //set header
             if(!Upload)
             {
                 //download
-                ProgressBody.Text = string.Format("{0} {1} {2} FTP folder {3}", Upload ? "Uploading" : "Downloading",
-                Path.GetFileName(ZipFilePathDisk), Upload ? "to" : "from", Settings.WoTModpackOnlineFolderVersion);
+                ProgressBody.Text = string.Format("Downloading {0} from FTP folder {1}", Path.GetFileName(ZipFilePathDisk), Settings.WoTModpackOnlineFolderVersion);
             }
             else if(PackageToUpdate == null)
             {
                 //upload to medias
-                ProgressBody.Text = string.Format("{0} {1} {2} FTP folder {3}", "Uploading",
-                ZipFileName, "to", "Medias/...");
+                ProgressBody.Text = string.Format("Uploading {0} to FTP folder Medias/...", ZipFileName);
             }
             else
             {
                 //upload to bigmods
-                ProgressBody.Text = string.Format("{0} {1} {2} FTP folder {3}", Upload ? "Uploading" : "Downloading",
-                Path.GetFileName(ZipFilePathDisk), Upload ? "to" : "from", Settings.WoTModpackOnlineFolderVersion);
+                ProgressBody.Text = string.Format("Uploading {0} to FTP folder {1}", Path.GetFileName(ZipFilePathDisk), Settings.WoTModpackOnlineFolderVersion);
             }
+
+            //set body initial text
             ProgressHeader.Text = string.Format("{0} 0 kb of 0 kb", Upload ? "Uploaded" : "Downloaded");
+
             CompleteFTPPath = string.Format("{0}{1}", ZipFilePathOnline, ZipFileName);
             using (client = new WebClient() { Credentials=Credential })
             {
@@ -103,7 +115,7 @@ namespace RelhaxModpack.Windows
                             //if we're uploading a package zip file, then PackageToUpdate is not null, and fire the event
                             if (PackageToUpdate != null)
                             {
-                                Logging.Debug("FTP upload complete, changing zipFile entry for package {0} from", PackageToUpdate.PackageName);
+                                Logging.Debug("FTP zip package upload complete, changing zipFile entry for package {0} from", PackageToUpdate.PackageName);
                                 Logging.Debug("\"{0}\"{1}to{2}", PackageToUpdate.ZipFile, Environment.NewLine, Environment.NewLine);
                                 Logging.Debug("\"{0}\"", ZipFileName);
                                 PackageToUpdate.ZipFile = ZipFileName;
@@ -114,11 +126,6 @@ namespace RelhaxModpack.Windows
                                         Package = PackageToUpdate
                                     });
                                 }
-                            }
-                            else
-                            {
-                                DialogResult = true;
-                                Close();
                             }
                         }
                         catch (Exception ex)
@@ -141,7 +148,7 @@ namespace RelhaxModpack.Windows
                         {
                             FTPDownloadFilesize = await Utils.FTPGetFilesizeAsync(CompleteFTPPath, Credential);
                             await client.DownloadFileTaskAsync(CompleteFTPPath, ZipFilePathDisk);
-                            Logging.Debug("FTP download complete ({0})",ZipFileName);
+                            Logging.Debug("FTP DOWNLOAD COMPLETE ({0})",ZipFileName);
                         }
                         catch (Exception ex)
                         {
@@ -158,6 +165,37 @@ namespace RelhaxModpack.Windows
                         break;
                 }
             }
+            StartTimerForClose();
+        }
+
+        private void StartTimerForClose()
+        {
+            if(Countdown == 0)
+            {
+                Logging.Debug("Countdown is 0, do not close");
+            }
+            else
+            {
+                Logging.Debug("Countdown is > 0, starting");
+                TimeoutClose.Visibility = Visibility.Visible;
+                timer.Enabled = true;
+                TimeoutClose.Text = Countdown.ToString();
+            }
+        }
+
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                TimeoutClose.Text = (--Countdown).ToString();
+                if (Countdown == 0)
+                {
+                    Logging.Debug("countdown complete, closing the window");
+                    timer.Enabled = false;
+                    timer.Dispose();
+                    Close();
+                }
+            });
         }
 
         private async void Client_DownloadUploadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)

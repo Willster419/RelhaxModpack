@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
-        xmlns:RelhaxModpack="clr-namespace:RelhaxModpack" x:Class="RelhaxModpack.Windows.DatabaseEditor"
+        xmlns:RelhaxModpack="clr-namespace:RelhaxModpack" x:Name="relhaxWindow" x:Class="RelhaxModpack.Windows.DatabaseEditor"
         mc:Ignorable="d"
         Title="DatabaseEditor" Height="700" Width="1000" MinHeight="480" MinWidth="640" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="OnApplicationLoad" Closed="OnApplicationClose">
     <local:RelhaxWindow.Resources>
@@ -376,6 +376,15 @@
                         <CheckBox x:Name="ShowConfirmOnPackageAddRemoveEditSetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="6" VerticalAlignment="Center" Click="ShowConfirmOnPackageAddRemoveEditSetting_Click"/>
                         <Button x:Name="SelectDefaultSaveLocationButton" Content="Select default save location" HorizontalAlignment="Stretch" Grid.Row="7" VerticalAlignment="Center" Click="SelectDefaultSaveLocationButton_Click" />
                         <TextBox x:Name="DefaultSaveLocationSetting" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="7" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="DefaultSaveLocationSetting_TextChanged" />
+                        <TextBlock x:Name="FtpUpDownAutoCloseTimeoutLabel" HorizontalAlignment="Stretch" Grid.Row="8" TextWrapping="Wrap" Text="FTP U/L and D/L auto close timeout" VerticalAlignment="Center"/>
+                        <Grid x:Name="FtpUpDownAutoCloseTimoutPanel" Grid.Column="1" Grid.Row="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="10*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Slider x:Name="FtpUpDownAutoCloseTimoutSlider" HorizontalAlignment="Stretch" VerticalAlignment="Center" IsEnabled="True" ValueChanged="FtpUpDownAutoCloseTimoutSlider_ValueChanged" IsSnapToTickEnabled="True"/>
+                            <TextBlock x:Name="FtpUpDownAutoCloseTimoutDisplayLabel" HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="Test" Grid.Column="1"/>
+                        </Grid>
                     </Grid>
                 </TabItem>
             </TabControl>

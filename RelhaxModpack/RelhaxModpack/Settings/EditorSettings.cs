@@ -31,6 +31,8 @@ namespace RelhaxModpack
 
         public string DefaultEditorSaveLocation = string.Empty;
 
+        public uint FTPUploadDownloadWindowTimeout = 0;
+
         public EditorSettings() { }
     }
 }

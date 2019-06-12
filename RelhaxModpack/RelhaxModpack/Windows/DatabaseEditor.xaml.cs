@@ -384,6 +384,8 @@ namespace RelhaxModpack.Windows
             ShowConfirmOnPackageApplySetting.IsChecked = EditorSettings.ShowConfirmationOnPackageApply;
             ShowConfirmOnPackageAddRemoveEditSetting.IsChecked = EditorSettings.ShowConfirmationOnPackageAddRemoveMove;
             DefaultSaveLocationSetting.Text = EditorSettings.DefaultEditorSaveLocation;
+            FtpUpDownAutoCloseTimoutSlider.Value = EditorSettings.FTPUploadDownloadWindowTimeout;
+            FtpUpDownAutoCloseTimoutDisplayLabel.Text = EditorSettings.FTPUploadDownloadWindowTimeout.ToString();
         }
         #endregion
 
@@ -1283,7 +1285,8 @@ namespace RelhaxModpack.Windows
                 ZipFileName = Path.GetFileName((SelectedItem as EditorComboBoxItem).Package.ZipFile),
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
                 Upload = false,
-                PackageToUpdate = null
+                PackageToUpdate = null,
+                Countdown = EditorSettings.FTPUploadDownloadWindowTimeout
             };
             name.Show();
         }
@@ -1328,7 +1331,8 @@ namespace RelhaxModpack.Windows
                 ZipFileName = Path.GetFileName(zipFileToUpload),
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
                 Upload = true,
-                PackageToUpdate = (SelectedItem as EditorComboBoxItem).Package
+                PackageToUpdate = (SelectedItem as EditorComboBoxItem).Package,
+                Countdown = EditorSettings.FTPUploadDownloadWindowTimeout
             };
             name.OnEditorUploadDownloadClosed += OnEditorUploadFinished;
             name.Show();
@@ -1832,7 +1836,8 @@ namespace RelhaxModpack.Windows
                     ZipFileName = mediaToUploadFilename,
                     Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
                     Upload = true,
-                    PackageToUpdate = null
+                    PackageToUpdate = null,
+                    Countdown = EditorSettings.FTPUploadDownloadWindowTimeout
                 };
                 if ((bool)name.ShowDialog())
                 {
@@ -2061,6 +2066,12 @@ namespace RelhaxModpack.Windows
         private void ShowConfirmOnPackageAddRemoveEditSetting_Click(object sender, RoutedEventArgs e)
         {
             EditorSettings.ShowConfirmationOnPackageAddRemoveMove = (bool)ShowConfirmOnPackageAddRemoveEditSetting.IsChecked;
+        }
+
+        private void FtpUpDownAutoCloseTimoutSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            EditorSettings.FTPUploadDownloadWindowTimeout = (uint)FtpUpDownAutoCloseTimoutSlider.Value;
+            FtpUpDownAutoCloseTimoutDisplayLabel.Text = EditorSettings.FTPUploadDownloadWindowTimeout.ToString();
         }
         #endregion
 
