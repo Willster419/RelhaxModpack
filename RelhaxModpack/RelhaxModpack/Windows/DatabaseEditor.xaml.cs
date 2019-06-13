@@ -1341,7 +1341,17 @@ namespace RelhaxModpack.Windows
         private void OnEditorUploadFinished(object sender, EditorUploadDownloadEventArgs e)
         {
             UnsavedChanges = true;
-            if ((SelectedItem as EditorComboBoxItem).Package.Equals(e.Package))
+            if(e.Package == null)
+            {
+                //uploaded media
+                Logging.Info("Upload of {0} success, adding entry in editor", e.UploadedFilename);
+                PackageMediasDisplay.Items.Add(new Media()
+                {
+                    MediaType = MediaType.Picture,
+                    URL = string.Format("{0}{1}", e.UploadedFilepathOnline, e.UploadedFilename).Replace("ftp:", "http:")
+                });
+            }
+            else if ((SelectedItem as EditorComboBoxItem).Package.Equals(e.Package))
             {
                 PackageZipFileDisplay.Text = e.Package.ZipFile;
                 if (!(SelectedItem as EditorComboBoxItem).Package.ZipFile.Equals(e.Package.ZipFile))
@@ -1798,7 +1808,7 @@ namespace RelhaxModpack.Windows
             //make sure FTP credentials are at least entered
             if (string.IsNullOrWhiteSpace(EditorSettings.BigmodsPassword) || string.IsNullOrWhiteSpace(EditorSettings.BigmodsUsername))
             {
-                MessageBox.Show("Missing FTP credentails");
+                MessageBox.Show("Missing FTP credentials");
                 return;
             }
 
@@ -1839,19 +1849,9 @@ namespace RelhaxModpack.Windows
                     PackageToUpdate = null,
                     Countdown = EditorSettings.FTPUploadDownloadWindowTimeout
                 };
-                if ((bool)name.ShowDialog())
-                {
-                    Logging.Info("Upload of {0} success, adding entry in editor", mediaToUploadFilename);
-                    PackageMediasDisplay.Items.Add(new Media()
-                    {
-                        MediaType = MediaType.Picture,
-                        URL = string.Format("{0}{1}", selectUploadLocation.UploadPath, mediaToUploadFilename).Replace("ftp:", "http:")
-                    });
-                }
-                else
-                {
-                    Logging.Warning("File {0} failed to upload, skipping adding media", mediaToUploadFilename);
-                }
+                //this needs to be changed to a show() with event handler made for on exit
+                name.OnEditorUploadDownloadClosed += OnEditorUploadFinished;
+                name.Show();
             }
         }
 

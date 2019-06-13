@@ -19,6 +19,8 @@ namespace RelhaxModpack.Windows
     public class EditorUploadDownloadEventArgs : EventArgs
     {
         public DatabasePackage Package;
+        public string UploadedFilename;
+        public string UploadedFilepathOnline;
     }
     public delegate void EditorUploadDownloadClosed(object sender, EditorUploadDownloadEventArgs e);
     /// <summary>
@@ -107,37 +109,39 @@ namespace RelhaxModpack.Windows
                         client.UploadProgressChanged += Client_UploadProgressChanged;
                         //write handler for if upload or download was canceled
                         client.UploadFileCompleted += Client_DownloadUploadFileCompleted;
+
                         Logging.Debug("STARTING FTP UPLOAD");
                         try
                         {
                             await client.UploadFileTaskAsync(CompleteFTPPath, ZipFilePathDisk);
-                            Logging.Debug("FTP UPLOAD COMPLETE");
-                            //if we're uploading a package zip file, then PackageToUpdate is not null, and fire the event
-                            if (PackageToUpdate != null)
-                            {
-                                Logging.Debug("FTP zip package upload complete, changing zipFile entry for package {0} from", PackageToUpdate.PackageName);
-                                Logging.Debug("\"{0}\"{1}to{2}", PackageToUpdate.ZipFile, Environment.NewLine, Environment.NewLine);
-                                Logging.Debug("\"{0}\"", ZipFileName);
-                                PackageToUpdate.ZipFile = ZipFileName;
-                                if (OnEditorUploadDownloadClosed != null)
-                                {
-                                    OnEditorUploadDownloadClosed(this, new EditorUploadDownloadEventArgs()
-                                    {
-                                        Package = PackageToUpdate
-                                    });
-                                }
-                            }
                         }
                         catch (Exception ex)
                         {
                             Logging.Info("FTP UPLOAD Failed");
                             Logging.Info(ex.ToString());
-                            //MessageBox.Show(ex.ToString());
                         }
-                        finally
+
+                        Logging.Debug("FTP UPLOAD COMPLETE");
+                        if (PackageToUpdate == null)
+                            Logging.Debug("FTP media upload complete");
+                        else
                         {
-                            CancelButton.IsEnabled = false;
+                            Logging.Debug("FTP zip package upload complete, changing zipFile entry for package {0} from", PackageToUpdate.PackageName);
+                            Logging.Debug("\"{0}\"{1}to{2}", PackageToUpdate.ZipFile, Environment.NewLine, Environment.NewLine);
+                            Logging.Debug("\"{0}\"", ZipFileName);
+                            PackageToUpdate.ZipFile = ZipFileName;
                         }
+                        
+                        if (OnEditorUploadDownloadClosed != null)
+                        {
+                            OnEditorUploadDownloadClosed(this, new EditorUploadDownloadEventArgs()
+                            {
+                                Package = PackageToUpdate,
+                                UploadedFilename = ZipFileName,
+                                UploadedFilepathOnline = ZipFilePathOnline
+                            });
+                        }
+                        CancelButton.IsEnabled = false;
                         break;
                     case false:
                         client.DownloadProgressChanged += Client_DownloadProgressChanged;
