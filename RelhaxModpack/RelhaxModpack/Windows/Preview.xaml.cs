@@ -25,6 +25,7 @@ namespace RelhaxModpack.Windows
         public bool EditorMode = false;
         private MemoryStream ImageStream = null;
         private Media CurrentDispalyMedia = null;
+        private WebBrowser browser = null;
 
         public Preview()
         {
@@ -192,7 +193,12 @@ namespace RelhaxModpack.Windows
                     Logging.Error("Invalid MediaType: {0}", media.MediaType.ToString());
                     return;
                 case MediaType.HTML:
-                    WebBrowser browser = new WebBrowser();
+                    if (browser != null)
+                    {
+                        browser.Dispose();
+                        browser = null;
+                    }
+                    browser = new WebBrowser();
                     //https://stackoverflow.com/questions/2585782/displaying-html-from-string-in-wpf-webbrowser-control
                     browser.NavigateToString(media.URL);
                     MainPreviewBorder.Child = browser;
@@ -239,10 +245,15 @@ namespace RelhaxModpack.Windows
                     }
                     break;
                 case MediaType.Webpage:
-                    WebBrowser browserr = new WebBrowser();
+                    if (browser != null)
+                    {
+                        browser.Dispose();
+                        browser = null;
+                    }
+                    browser = new WebBrowser();
                     //https://stackoverflow.com/questions/2585782/displaying-html-from-string-in-wpf-webbrowser-control
-                    browserr.NavigateToString(media.URL);
-                    MainPreviewBorder.Child = browserr;
+                    browser.Navigate(media.URL);
+                    MainPreviewBorder.Child = browser;
                     break;
             }
         }
@@ -280,11 +291,18 @@ namespace RelhaxModpack.Windows
                 }
             }
 
-            Logging.Debug("Disposing image memory stream");
+            Logging.Debug(" Preview:  Disposing image memory stream");
             if(ImageStream != null)
             {
                 ImageStream.Dispose();
                 ImageStream = null;
+            }
+
+            Logging.Debug("Preview:  Disposing browser");
+            if(browser != null)
+            {
+                browser.Dispose();
+                browser = null;
             }
         }
 
