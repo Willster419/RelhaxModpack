@@ -204,7 +204,6 @@ namespace RelhaxModpack.Windows
                     //https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.image?view=netframework-4.7.2
                     Image pictureViewer = new Image();
                     pictureViewer.MouseLeftButtonDown += PictureViewer_MouseLeftButtonDown;
-                    //MainPreviewBorder.Child = pictureViewer;
                     MainPreviewBorder.Child = new ProgressBar()
                     {
                         Minimum = 0,
@@ -220,13 +219,22 @@ namespace RelhaxModpack.Windows
                     using (WebClient client = new WebClient() { })
                     {
                         client.DownloadProgressChanged += Client_DownloadProgressChanged;
-                        byte[] image = await client.DownloadDataTaskAsync(media.URL);
-                        ImageStream = new MemoryStream(image);
-                        BitmapImage bitmapImage = new BitmapImage();
-                        bitmapImage.BeginInit();
-                        bitmapImage.StreamSource = ImageStream;
-                        bitmapImage.EndInit();
-                        pictureViewer.Source = bitmapImage;
+                        try
+                        {
+                            byte[] image = await client.DownloadDataTaskAsync(media.URL);
+                            ImageStream = new MemoryStream(image);
+                            BitmapImage bitmapImage = new BitmapImage();
+                            bitmapImage.BeginInit();
+                            bitmapImage.StreamSource = ImageStream;
+                            bitmapImage.EndInit();
+                            pictureViewer.Source = bitmapImage;
+                        }
+                        catch(Exception ex)
+                        {
+                            Logging.Error("failed to load picture");
+                            Logging.Error(ex.ToString());
+                            pictureViewer.Source = Utils.BitmapToImageSource(Properties.Resources.error_loading_picture);
+                        }
                         MainPreviewBorder.Child = pictureViewer;
                     }
                     break;

@@ -1853,6 +1853,11 @@
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Properties.Resources.error_loading_picture">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:RelhaxModpack.Properties.Resources.facebook_brand">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.

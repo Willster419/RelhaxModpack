@@ -27,6 +27,7 @@ using System.Drawing;
 using Size = System.Drawing.Size;
 using RelhaxModpack.Windows;
 using System.Threading;
+using System.Windows.Media.Imaging;
 
 namespace RelhaxModpack
 {
@@ -1417,6 +1418,22 @@ namespace RelhaxModpack
         #endregion
 
         #region Generic Utils
+        public static BitmapImage BitmapToImageSource(Bitmap bitmap)
+        {
+            //https://stackoverflow.com/questions/22499407/how-to-display-a-bitmap-in-a-wpf-image
+            using (MemoryStream memory = new MemoryStream())
+            {
+                bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
+                memory.Position = 0;
+                BitmapImage bitmapimage = new BitmapImage();
+                bitmapimage.BeginInit();
+                bitmapimage.StreamSource = memory;
+                bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapimage.EndInit();
+                return bitmapimage;
+            }
+        }
+
         /// <summary>
         /// https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings-in-c
         /// </summary>

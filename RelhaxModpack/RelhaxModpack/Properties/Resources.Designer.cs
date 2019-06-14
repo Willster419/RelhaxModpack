@@ -112,6 +112,16 @@ namespace RelhaxModpack.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap error_loading_picture {
+            get {
+                object obj = ResourceManager.GetObject("error_loading_picture", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap facebook_brand {
             get {
                 object obj = ResourceManager.GetObject("facebook_brand", resourceCulture);
