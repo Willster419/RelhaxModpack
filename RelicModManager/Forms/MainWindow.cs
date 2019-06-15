@@ -2300,6 +2300,9 @@ namespace RelhaxModpack
                 case (Translations.Languages.French):
                     LanguageComboBox.SelectedIndex = 3;
                     break;
+                case (Translations.Languages.Russian):
+                    LanguageComboBox.SelectedIndex = 4;
+                    break;
             }
             LanguageComboBox.SelectedIndexChanged += LanguageComboBox_SelectedIndexChanged;
             switch (Settings.SView)
@@ -2527,6 +2530,9 @@ namespace RelhaxModpack
                     break;
                 case 3://french
                     Translations.language = Translations.Languages.French;
+                    break;
+                case 4://russian
+                    Translations.language = Translations.Languages.Russian;
                     break;
             }
             ApplyControlTranslations(Controls);
