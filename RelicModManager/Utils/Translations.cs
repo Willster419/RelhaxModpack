@@ -1083,7 +1083,7 @@ namespace RelhaxModpack
             german.Add("thirdGuardsLoadingImageRBDescription", "Wähle ein Lade-Gif fuer das Vorschaufenster des Mods.");
             polish.Add("thirdGuardsLoadingImageRBDescription", "Załaduj gif w oknie podglądu.");
             french.Add("thirdGuardsLoadingImageRBDescription", "Choisissez un GIF de chargement pour l'apercu des mods");
-            russian.Add("standardImageRBDescription", "Выберите GIF для анимации загрузки в окне предпросмотра.");
+            russian.Add("thirdGuardsLoadingImageRBDescription", "Выберите GIF для анимации загрузки в окне предпросмотра.");
             
             //Componet: 
             //
