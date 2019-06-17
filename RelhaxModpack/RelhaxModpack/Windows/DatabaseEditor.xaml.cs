@@ -809,6 +809,10 @@ namespace RelhaxModpack.Windows
                 ApplyDatabasePackage(package);
             else if (obj is EditorComboBoxItem editorComboBoxItem)
                 ApplyDatabasePackage(editorComboBoxItem.Package);
+
+            //there now are unsaved changes
+            UnsavedChanges = true;
+
             //if user requests apply to also save to disk, then do that now
             if (EditorSettings.ApplyBehavior == ApplyBehavior.ApplyTriggersSave)
             {
@@ -1027,6 +1031,7 @@ namespace RelhaxModpack.Windows
                 //so make it programatically selected this one time
                 SelectDatabaseObject(realItemToMove.Header, null);
             }
+            UnsavedChanges = true;
         }
 
         private void OnTreeViewDatabaseDrop(object sender, DragEventArgs e)
@@ -1707,6 +1712,8 @@ namespace RelhaxModpack.Windows
             PackageDependenciesDisplay.Items.Clear();
             foreach (DatabaseLogic logic in component.DependenciesProp)
                 PackageDependenciesDisplay.Items.Add(logic);
+
+            UnsavedChanges = true;
         }
 
         private void PackageDependenciesDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1740,6 +1747,8 @@ namespace RelhaxModpack.Windows
             {
                 packageLogic.DependenciesProp.Remove(PackageDependenciesDisplay.SelectedItem as DatabaseLogic);
             }
+
+            UnsavedChanges = true;
         }
 
         private void MediaAddMediaButton_Click(object sender, RoutedEventArgs e)
@@ -1767,6 +1776,7 @@ namespace RelhaxModpack.Windows
                 MediaType = (MediaType)MediaTypesList.SelectedItem,
                 URL = MediaTypesURL.Text
             });
+            UnsavedChanges = true;
         }
 
         private void MediaApplyEditButton_Click(object sender, RoutedEventArgs e)
@@ -1792,6 +1802,7 @@ namespace RelhaxModpack.Windows
             //update the UI
             //PackageMediasDisplay.UpdateLayout();
             PackageMediasDisplay.Items.Refresh();
+            UnsavedChanges = true;
         }
 
         private void PackageMediasDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1806,6 +1817,7 @@ namespace RelhaxModpack.Windows
         private void MediaRemoveMediaButton_Click(object sender, RoutedEventArgs e)
         {
             PackageMediasDisplay.Items.Remove(PackageMediasDisplay.SelectedItem);
+            UnsavedChanges = true;
         }
 
         private void UploadMediaButton_Click(object sender, RoutedEventArgs e)
@@ -1951,6 +1963,7 @@ namespace RelhaxModpack.Windows
                 }
             }
             PackageUserdatasDisplay.Items.Add(new UserFile { Pattern = UserDataEditBox.Text });
+            UnsavedChanges = true;
         }
 
         private void UserdataApplyEditButton_Click(object sender, RoutedEventArgs e)
@@ -1970,6 +1983,7 @@ namespace RelhaxModpack.Windows
             }
             (PackageUserdatasDisplay.SelectedItem as UserFile).Pattern = UserDataEditBox.Text;
             PackageUserdatasDisplay.Items.Refresh();
+            UnsavedChanges = true;
         }
 
         private void PackageUserdatasDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1982,6 +1996,7 @@ namespace RelhaxModpack.Windows
         private void UserdataRemoveUserdata_Click(object sender, RoutedEventArgs e)
         {
             PackageUserdatasDisplay.Items.Remove(PackageUserdatasDisplay.SelectedItem);
+            UnsavedChanges = true;
         }
 
         private void TriggerAddSelectedTrigger_Click(object sender, RoutedEventArgs e)
@@ -2000,6 +2015,7 @@ namespace RelhaxModpack.Windows
                 }
             }
             PackageTriggersDisplay.Items.Add(LoadedTriggersComboBox.SelectedItem as string);
+            UnsavedChanges = true;
         }
 
         private void PackageTriggersDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -2019,11 +2035,13 @@ namespace RelhaxModpack.Windows
         private void TriggerRemoveTrigger_Click(object sender, RoutedEventArgs e)
         {
             PackageTriggersDisplay.Items.Remove(PackageTriggersDisplay.SelectedItem);
+            UnsavedChanges = true;
         }
 
         private void ConflictingPackagesRemoveConflictingPackage_Click(object sender, RoutedEventArgs e)
         {
             PackageConflictingPackagesDisplay.Items.Remove(PackageConflictingPackagesDisplay.SelectedItem);
+            UnsavedChanges = true;
         }
         #endregion
 
@@ -2151,6 +2169,7 @@ namespace RelhaxModpack.Windows
                                 }
                             }
                             PackageConflictingPackagesDisplay.Items.Add(item.Package.PackageName);
+                            UnsavedChanges = true;
                         }
                         else
                         {
