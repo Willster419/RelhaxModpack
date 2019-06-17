@@ -556,6 +556,9 @@ namespace RelhaxModpack.Windows
                             case "file":
                                 patch.File = element.InnerText.Trim();
                                 break;
+                            case "version":
+                                patch.Version = Utils.ParseInt(element.InnerText.Trim(), 1);
+                                break;
                             case "path":
                                 patch.Path = element.InnerText.Trim();
                                 break;

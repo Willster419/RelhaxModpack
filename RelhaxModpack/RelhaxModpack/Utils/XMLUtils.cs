@@ -2536,6 +2536,9 @@ namespace RelhaxModpack
                         case "path":
                             p.Path = property.InnerText.Trim();
                             break;
+                        case "version":
+                            p.Version = Utils.ParseInt(property.InnerText.Trim(), 1);
+                            break;
                         case "line":
                             if (!string.IsNullOrWhiteSpace(property.InnerText.Trim()))
                                 p.Lines = property.InnerText.Trim().Split(',');

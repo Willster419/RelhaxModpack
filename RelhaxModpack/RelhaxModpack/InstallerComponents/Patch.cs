@@ -23,6 +23,8 @@ namespace RelhaxModpack
         //the complete path to the file, saved at parse time
         public string CompletePath = string.Empty;
         public string FollowPathEditorCompletePath = string.Empty;
+        //the version of the patch. default to 1
+        public int Version = 1;
         //if xml or json, the xml xpath to the node
         public string Path = string.Empty;
         //if regex, the optional specific lines in the text file
