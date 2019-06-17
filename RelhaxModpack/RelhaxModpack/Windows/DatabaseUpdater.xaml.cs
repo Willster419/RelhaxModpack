@@ -631,6 +631,7 @@ namespace RelhaxModpack.Windows
                 //also delete this just in case
                 if (File.Exists(LastSupportedModInfoXml))
                     File.Delete(LastSupportedModInfoXml);
+                ReportProgress("getting last supported modInfo");
                 await client.DownloadFileTaskAsync(PrivateStuff.ModInfosLocation + LastSupportedModInfoXml, LastSupportedModInfoXml);
             }
 
@@ -766,7 +767,7 @@ namespace RelhaxModpack.Windows
 
             //if a package was internally renamed, it will show up in the added and removed list
             //a internal renamed package will have a different completePackagePath but the same completePath (assuming it wasn't renamed as well), and different internalName
-            //first get the list of *selectable*Packages for added and removed
+            //first get the list of *selectable* Packages for added and removed
             ReportProgress("checking add and removed list for internal renamed");
             Utils.AllowUIToUpdate();
             List<SelectablePackage> addedSelectablePackages = addedPackages.OfType<SelectablePackage>().ToList();
@@ -791,6 +792,52 @@ namespace RelhaxModpack.Windows
                         internallyRenamed.Add(new BeforeAfter() { Before = removeResult, After = addResult });
                         addedPackages.Remove(addedPackages.Where(pack => pack.PackageName.Equals(addResult.PackageName)).ToList()[0]);
                         removedPackages.Remove(removedPackages.Where(pack => pack.PackageName.Equals(removeResult.PackageName)).ToList()[0]);
+                    }
+                }
+            }
+
+            //get a string list of name (without macro)
+            List<string> nameWithMacro = addedSelectablePackages.Select(pack => pack.NameFormatted).ToList();
+            nameWithMacro.AddRange(removedSelectablePackages.Select(pack => pack.NameFormatted).ToList());
+            nameWithMacro = nameWithMacro.Distinct().ToList();
+            ReportProgress(string.Format("Name count compare of add and remove is {0}", completePathDetect.Count));
+            if(nameWithMacro.Count > 0)
+            {
+                //if the name exists in both, then it was moved and renamed
+                foreach(string name in nameWithMacro)
+                {
+                    List<SelectablePackage> addResultList = addedSelectablePackages.Where(pack => pack.NameFormatted.Equals(name)).ToList();
+                    List<SelectablePackage> removeResultList = removedSelectablePackages.Where(pack => pack.NameFormatted.Equals(name)).ToList();
+                    if (addResultList.Count > 0 && removeResultList.Count > 0)
+                    {
+                        SelectablePackage addResult = addResultList[0];
+                        SelectablePackage removeResult = removeResultList[0];
+                        movedPackages.Add(new BeforeAfter() { Before = removeResult, After = addResult });
+                        renamedPackages.Add(new BeforeAfter() { Before = removeResult, After = addResult });
+
+                        for(int i = 0; i < addedPackages.Count; i++)
+                        {
+                            if(addedPackages[i] is SelectablePackage selectablePackage)
+                            {
+                                if(selectablePackage.NameFormatted.Equals(addResult.NameFormatted))
+                                {
+                                    addedPackages.RemoveAt(i);
+                                    break;
+                                }
+                            }
+                        }
+
+                        for (int i = 0; i < removedPackages.Count; i++)
+                        {
+                            if (removedPackages[i] is SelectablePackage selectablePackage)
+                            {
+                                if (selectablePackage.NameFormatted.Equals(removeResult.NameFormatted))
+                                {
+                                    removedPackages.RemoveAt(i);
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
             }
