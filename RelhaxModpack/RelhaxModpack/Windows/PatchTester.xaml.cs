@@ -223,6 +223,23 @@ namespace RelhaxModpack.Windows
 
         private void SaveApplyPatch(Patch patch)
         {
+            //check to make sure at least valid settings are set before saving
+            if(PatchPathCombobox.SelectedItem == null)
+            {
+                MessageBox.Show("invalid patch path selection");
+                return;
+            }
+            else if (PatchTypeCombobox.SelectedItem == null)
+            {
+                MessageBox.Show("invalid patch type selection");
+                return;
+            }
+            else if (PatchModeCombobox.SelectedItem == null)
+            {
+                MessageBox.Show("invalid patch mode selection");
+                return;
+            }
+
             UnsavedChanges = true;
             //save all UI settings to patch object
             patch.File = FileToPatchTextbox.Text;
@@ -245,6 +262,8 @@ namespace RelhaxModpack.Windows
             {
                 SavePatchXmlButton_Click(null, null);
             }
+
+            PatchesList.Items.Refresh();
         }
         private void LogOutput_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
@@ -454,7 +473,7 @@ namespace RelhaxModpack.Windows
         {
             if (PatchesList.SelectedItem != null)
             {
-                SaveApplyPatch(PatchesList.SelectedItem as Patch);
+                SaveApplyPatch((Patch)PatchesList.SelectedItem);
             }
         }
 
@@ -464,11 +483,11 @@ namespace RelhaxModpack.Windows
                 return;
             if(PatchSettings.SaveSelectionBeforeLeave && PatchesList.SelectedItem != null)
             {
-                SaveApplyPatch(PatchesList.SelectedItem as Patch);
+                SaveApplyPatch((Patch)PatchesList.SelectedItem);
             }
             if(PatchesList.SelectedItem as Patch != null)
             {
-                DisplayPatch(PatchesList.SelectedItem as Patch);
+                DisplayPatch((Patch)PatchesList.SelectedItem);
             }
         }
 
@@ -573,7 +592,7 @@ namespace RelhaxModpack.Windows
             {
                 if(PatchSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && PatchesList.SelectedItem != null)
                 {
-                    SaveApplyPatch(PatchesList.SelectedItem as Patch);
+                    SaveApplyPatch((Patch)PatchesList.SelectedItem);
                 }
 
                 XmlDocument doc = new XmlDocument();
