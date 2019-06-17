@@ -531,6 +531,23 @@ namespace RelhaxModpack
                 Logging.Warning("Patch mode \"arrayEdit\" is not a valid mode and will be treated as \"edit\", please update it!");
                 p.Mode = "edit";
             }
+            //if patch type is v1, run v1 patch changes
+            if(p.Version == 1)
+            {
+                Logging.Warning("patch is V1 type, please update to V2!");
+                //V1 fix 1: if type if json, hard-code the replace to look for xvm reference, and replace it with the new macro used (start macro)
+                if(p.Replace.Contains("[dollar][lbracket][quote]"))
+                {
+                    Logging.Warning("applying v1 fix 1: if json type, update xvm reference macros (start macro)");
+                    p.Replace = p.Replace.Replace("[dollar][lbracket][quote]", "[xvm_dollar][lbracket][quote]");
+                }
+                //V1 fix 2: if type if json, hard-code the replace to look for xvm reference, and replace it with the new macro used (end macro)
+                if (p.Replace.Contains("[quote][rbracket]"))
+                {
+                    Logging.Warning("applying v1 fix 2: if json type, update xvm reference macros (end macro)");
+                    p.Replace = p.Replace.Replace("[quote][rbracket]", "[quote][xvm_rbracket]");
+                }
+            }
 
             //load the file into a string
             string file = File.ReadAllText(p.CompletePath);
