@@ -810,9 +810,6 @@ namespace RelhaxModpack.Windows
             else if (obj is EditorComboBoxItem editorComboBoxItem)
                 ApplyDatabasePackage(editorComboBoxItem.Package);
 
-            //there now are unsaved changes
-            UnsavedChanges = true;
-
             //if user requests apply to also save to disk, then do that now
             if (EditorSettings.ApplyBehavior == ApplyBehavior.ApplyTriggersSave)
             {
@@ -827,11 +824,25 @@ namespace RelhaxModpack.Windows
             category.Dependencies.Clear();
             foreach (DatabaseLogic logic in PackageDependenciesDisplay.Items)
                 category.Dependencies.Add(logic);
+
+            //there now are unsaved changes
+            UnsavedChanges = true;
         }
 
         private void ApplyDatabasePackage(DatabasePackage package)
         {
             Logging.Debug("ApplyDatabasePackage(), package saving = {0}", package.PackageName);
+
+            //check if the to save packagename is unique
+            if(!PackagePackageNameDisplay.Text.Equals(package.PackageName))
+            {
+                Logging.Info("packageName is new, checking if it is unique");
+                if(Utils.IsDuplicateName(Utils.GetFlatList(GlobalDependencies,Dependencies,null,ParsedCategoryList), PackagePackageNameDisplay.Text))
+                {
+                    MessageBox.Show(string.Format("Duplicate packageName: {0} is already used", PackagePackageNameDisplay.Text));
+                    return;
+                }
+            }
 
             //save everything from the UI into the package
             //save package elements first
@@ -894,6 +905,9 @@ namespace RelhaxModpack.Windows
                 foreach (string s in PackageConflictingPackagesDisplay.Items)
                     selectablePackage.ConflictingPackages.Add(s);
             }
+
+            //there now are unsaved changes
+            UnsavedChanges = true;
         }
         #endregion
 
@@ -1816,7 +1830,17 @@ namespace RelhaxModpack.Windows
 
         private void MediaRemoveMediaButton_Click(object sender, RoutedEventArgs e)
         {
+            Logging.Info("removing media from component");
+
+            //remove from db
+            if(SelectedItem is SelectablePackage selectablePackage)
+            {
+                selectablePackage.Medias.Remove(PackageMediasDisplay.SelectedItem as Media);
+            }
+
+            //remove from UI
             PackageMediasDisplay.Items.Remove(PackageMediasDisplay.SelectedItem);
+
             UnsavedChanges = true;
         }
 
@@ -1995,6 +2019,13 @@ namespace RelhaxModpack.Windows
 
         private void UserdataRemoveUserdata_Click(object sender, RoutedEventArgs e)
         {
+            Logging.Info("removing userdata from component");
+
+            if (SelectedItem is SelectablePackage selectablePackage)
+            {
+                selectablePackage.UserFiles.Remove(PackageMediasDisplay.SelectedItem as UserFile);
+            }
+
             PackageUserdatasDisplay.Items.Remove(PackageUserdatasDisplay.SelectedItem);
             UnsavedChanges = true;
         }
@@ -2034,6 +2065,13 @@ namespace RelhaxModpack.Windows
 
         private void TriggerRemoveTrigger_Click(object sender, RoutedEventArgs e)
         {
+            Logging.Info("removing trigger from component");
+
+            if (SelectedItem is SelectablePackage selectablePackage)
+            {
+                selectablePackage.Triggers.Remove(PackageMediasDisplay.SelectedItem as string);
+            }
+
             PackageTriggersDisplay.Items.Remove(PackageTriggersDisplay.SelectedItem);
             UnsavedChanges = true;
         }
@@ -2157,7 +2195,7 @@ namespace RelhaxModpack.Windows
                 {
                     if (item.IsHighlighted && item.IsMouseOver)
                     {
-                        //if it's the right mouse and we're in the conflicting packages view, the user is tryingto add the element
+                        //if it's the right mouse and we're in the conflicting packages view, the user is trying to add the element
                         if (e.RightButton == MouseButtonState.Pressed && ConflictingPackagesTab.IsVisible && SelectedItem != null)
                         {
                             foreach (string s in PackageConflictingPackagesDisplay.Items)
@@ -2169,6 +2207,10 @@ namespace RelhaxModpack.Windows
                                 }
                             }
                             PackageConflictingPackagesDisplay.Items.Add(item.Package.PackageName);
+                            if (SelectedItem is SelectablePackage selectablePackage)
+                            {
+                                selectablePackage.Triggers.Add(item.Package.PackageName);
+                            }
                             UnsavedChanges = true;
                         }
                         else

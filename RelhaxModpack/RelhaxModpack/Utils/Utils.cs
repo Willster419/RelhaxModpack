@@ -910,6 +910,16 @@ namespace RelhaxModpack
             return duplicatesList;
         }
 
+        public static bool IsDuplicateName(List<DatabasePackage> packagesToCheckWith, string nameToCheck)
+        {
+            foreach(DatabasePackage package in packagesToCheckWith)
+            {
+                if (package.PackageName.Equals(nameToCheck))
+                    return true;
+            }
+            return false;
+        }
+
         //processes sorting categories by using the sorting property and
         public static void SortDatabase(List<Category> parsedCategoryList)
         {
