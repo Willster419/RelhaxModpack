@@ -1667,30 +1667,18 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show("Invalid logic selection");
                 return;
             }
-            DatabasePackage package = SelectedItem as DatabasePackage;
-            //get it out of the editor combobox item first
+
+            Logging.Info("adding dependency to component");
+            IComponentWithDependencies component = null;
+            //convert it out of editorComboBoxItem if it is in one
             if(SelectedItem is EditorComboBoxItem editorComboBoxItem)
             {
-                package = editorComboBoxItem.Package;
+                if(editorComboBoxItem.Package is IComponentWithDependencies componentWithDependencies)
+                    component = componentWithDependencies;
             }
-            if (package is IDatabaseLogic logicalPackage)
+            else if (SelectedItem is IComponentWithDependencies componentWithDependencies)
             {
-                //check the list of databaselogic in the item, make sure we're not trying to add a duplicate item
-                foreach (DatabaseLogic logic in logicalPackage.DependenciesProp)
-                {
-                    if (logic.PackageName.Equals((LoadedDependenciesList.SelectedItem as Dependency).PackageName))
-                    {
-                        MessageBox.Show("Dependency already exists in package");
-                        return;
-                    }
-                }
-                logicalPackage.DependenciesProp.Add(new DatabaseLogic()
-                {
-                    PackageName = (LoadedDependenciesList.SelectedItem as Dependency).PackageName,
-                    Logic = (Logic)LoadedLogicsList.SelectedItem,
-                    NotFlag = (bool)DependenciesNotFlag.IsChecked
-                }
-                );
+                component = componentWithDependencies;
             }
             else
             {
@@ -1698,19 +1686,34 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
+            //check the list of databaselogic in the item, make sure we're not trying to add a duplicate item
+            foreach (DatabaseLogic logic in component.DependenciesProp)
+            {
+                if (logic.PackageName.Equals((LoadedDependenciesList.SelectedItem as Dependency).PackageName))
+                {
+                    MessageBox.Show("Dependency already exists in package");
+                    return;
+                }
+            }
+            component.DependenciesProp.Add(new DatabaseLogic()
+            {
+                PackageName = (LoadedDependenciesList.SelectedItem as Dependency).PackageName,
+                Logic = (Logic)LoadedLogicsList.SelectedItem,
+                NotFlag = (bool)DependenciesNotFlag.IsChecked
+            }
+            );
+
             //update the UI
             PackageDependenciesDisplay.Items.Clear();
-            if(package is IDatabaseLogic)
-            {
-                foreach (DatabaseLogic logic in logicalPackage.DependenciesProp)
-                    PackageDependenciesDisplay.Items.Add(logic);
-            }
+            foreach (DatabaseLogic logic in component.DependenciesProp)
+                PackageDependenciesDisplay.Items.Add(logic);
         }
 
         private void PackageDependenciesDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (PackageDependenciesDisplay.SelectedItem == null)
                 return;
+
             DatabaseLogic selectedLogic = (DatabaseLogic)PackageDependenciesDisplay.SelectedItem;
             LoadedLogicsList.SelectedItem = selectedLogic.Logic;
             DependenciesNotFlag.IsChecked = selectedLogic.NotFlag;
@@ -1733,8 +1736,7 @@ namespace RelhaxModpack.Windows
             PackageDependenciesDisplay.Items.Remove(PackageDependenciesDisplay.SelectedItem);
 
             //remove it from the list of logics/dependencies of the selected item
-            DatabasePackage package = (SelectedItem as EditorComboBoxItem).Package;
-            if(package is IDatabaseLogic packageLogic)
+            if(SelectedItem is IComponentWithDependencies packageLogic)
             {
                 packageLogic.DependenciesProp.Remove(PackageDependenciesDisplay.SelectedItem as DatabaseLogic);
             }

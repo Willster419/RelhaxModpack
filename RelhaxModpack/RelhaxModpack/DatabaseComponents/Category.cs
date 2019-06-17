@@ -9,7 +9,7 @@ namespace RelhaxModpack
     /// <summary>
     /// a catagory is what makes up each tab in the mod selection dislpay window. It holds the first level of list of SelectablePackages
     /// </summary>
-    public class Category : IDatabaseLogic
+    public class Category : IComponentWithDependencies
     {
         #region Database Properties
 

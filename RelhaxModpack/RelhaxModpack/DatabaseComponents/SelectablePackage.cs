@@ -25,7 +25,7 @@ namespace RelhaxModpack
     /// <summary>
     /// A package that has UI elements, and is eithor a mod or config that can be selected in the UI
     /// </summary>
-    public class SelectablePackage : DatabasePackage, IDatabaseLogic
+    public class SelectablePackage : DatabasePackage, IComponentWithDependencies
     {
         #region XML Parsing
 

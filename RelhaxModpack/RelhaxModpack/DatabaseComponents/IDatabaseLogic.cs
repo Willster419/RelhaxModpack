@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.DatabaseComponents
 {
-    public interface IDatabaseLogic
+    public interface IComponentWithDependencies
     {
         List<DatabaseLogic> DependenciesProp { get; set; }
     }
