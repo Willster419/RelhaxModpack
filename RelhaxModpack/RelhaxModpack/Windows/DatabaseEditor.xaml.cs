@@ -828,12 +828,13 @@ namespace RelhaxModpack.Windows
         private void ApplyDatabasePackage(DatabasePackage package)
         {
             Logging.Debug("ApplyDatabasePackage(), package saving = {0}", package.PackageName);
+
             //save everything from the UI into the package
             //save package elements first
             package.PackageName = PackagePackageNameDisplay.Text;
             package.StartAddress = PackageStartAddressDisplay.Text;
-            package.ZipFile = PackageZipFileDisplay.Text;
             package.EndAddress = PackageEndAddressDisplay.Text;
+
             //devURL is separated by newlines for array list, so it's not necessary to escape
             package.DevURL = Utils.MacroReplace(PackageDevURLDisplay.Text,ReplacementTypes.TextEscape);
             package.Version = PackageVersionDisplay.Text;
@@ -842,6 +843,15 @@ namespace RelhaxModpack.Windows
             package.LogAtInstall = (bool)PackageLogAtInstallDisplay.IsChecked;
             package.Enabled = (bool)PackageEnabledDisplay.IsChecked;
             package.InternalNotes = Utils.MacroReplace(PackageInternalNotesDisplay.Text,ReplacementTypes.TextEscape);
+
+            //if the zipfile was updated, then update the last modified date
+            if (!package.ZipFile.Equals(PackageZipFileDisplay.Text))
+            {
+                package.CRC = "f";
+                package.ZipFile = PackageZipFileDisplay.Text;
+                package.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
+                PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
+            }
             //see if it's a dependency
             if (package is Dependency dependency)
             {
@@ -849,6 +859,7 @@ namespace RelhaxModpack.Windows
                 foreach (DatabaseLogic dl in PackageDependenciesDisplay.Items)
                     dependency.Dependencies.Add(dl);
             }
+
             //see if it's a selectablePackage
             else if (package is SelectablePackage selectablePackage)
             {
@@ -858,13 +869,6 @@ namespace RelhaxModpack.Windows
                 selectablePackage.Visible = (bool)PackageVisibleDisplay.IsChecked;
                 selectablePackage.Name = PackageNameDisplay.Text;
                 selectablePackage.Type = (SelectionTypes)PackageTypeDisplay.SelectedItem;
-                if (!selectablePackage.ZipFile.Equals(PackageZipFileDisplay.Text))
-                {
-                    selectablePackage.CRC = "f";
-                    selectablePackage.ZipFile = PackageZipFileDisplay.Text;
-                    selectablePackage.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
-                    PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(selectablePackage.Timestamp);
-                }
                 //selectablePackage.Description = Utils.MacroReplace(PackageDescriptionDisplay.Text,ReplacementTypes.TextEscape);
                 //selectablePackage.UpdateComment = Utils.MacroReplace(PackageUpdateNotesDisplay.Text,ReplacementTypes.TextEscape);
                 selectablePackage.Description = PackageDescriptionDisplay.Text;
