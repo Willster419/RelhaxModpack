@@ -606,6 +606,10 @@ namespace RelhaxModpack.Windows
                     XmlElement xmlPatch = doc.CreateElement("patch");
                     patchHolder.AppendChild(xmlPatch);
 
+                    XmlElement version = doc.CreateElement("version");
+                    version.InnerText = 2.ToString();
+                    xmlPatch.AppendChild(version);
+
                     XmlElement type = doc.CreateElement("type");
                     type.InnerText = patch.Type;
                     xmlPatch.AppendChild(type);
