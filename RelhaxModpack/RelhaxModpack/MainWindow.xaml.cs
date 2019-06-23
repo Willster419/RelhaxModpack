@@ -1463,6 +1463,7 @@ namespace RelhaxModpack
         {
             using (WebClient client = new WebClient())
             {
+                this.client = client;
                 int retryCount = 3;
                 string fileToDownload = string.Empty;
                 string fileToSaveTo = string.Empty;
@@ -1471,6 +1472,7 @@ namespace RelhaxModpack
                     retryCount = 3;
                     while(retryCount > 0)
                     {
+                        package.StartAddress = package.StartAddress.Replace("{onlineFolder}", Settings.WoTModpackOnlineFolderVersion);
                         fileToDownload = package.StartAddress + package.ZipFile + package.EndAddress;
                         fileToSaveTo = Path.Combine(Settings.RelhaxDownloadsFolder, package.ZipFile);
                         try
@@ -1483,12 +1485,16 @@ namespace RelhaxModpack
                         {
                             if (cancellationTokenSource.IsCancellationRequested)
                             {
-                                ResetUI();
+                                Logging.Info("Download canceled from UI request, stopping installation");
+                                if (File.Exists(fileToSaveTo))
+                                    File.Delete(fileToSaveTo);
                                 return;
                             }
-                            Logging.WriteToLog(string.Format("Failed to download the file {0}, try {1} of {2}\n{3}", package.ZipFile, retryCount, 1,
-                                ex.ToString()), Logfiles.Application, LogLevel.Error);
+                            Logging.Error("Failed to download the file {0}, try {1} of {2}\n{3}", package.ZipFile, retryCount, 1, ex.ToString());
                             retryCount--;
+                            //if it failed or not, the file should be deleted
+                            if (File.Exists(fileToSaveTo))
+                                File.Delete(fileToSaveTo);
                         }
                     }
                 }
@@ -1542,16 +1548,17 @@ namespace RelhaxModpack
                         {
                             if(ex.Status == WebExceptionStatus.RequestCanceled)
                             {
-                                Logging.Info("Download canceled, stopping installation");
+                                Logging.Info("Download canceled from UI request, stopping installation");
                                 ToggleUIButtons(true);
                                 ResetUI();
                                 retry = false;
+                                if (File.Exists(fileToSaveTo))
+                                    File.Delete(fileToSaveTo);
                                 return false;
                             }
                             else
                             {
-                                Logging.WriteToLog("failed to download the file " + package.ZipFile + "\n" + ex.ToString(),
-                                                                Logfiles.Application, LogLevel.Error);
+                                Logging.Error("failed to download the file {0} {1} {2}", package.ZipFile, Environment.NewLine, ex.ToString());
                                 //show abort retry ignore window TODO
                                 MessageBoxResult result = MessageBox.Show(string.Format("{0} \"{1}\" {2}",
                                     Translations.GetTranslatedString("failedToDownload1"),
@@ -1567,10 +1574,11 @@ namespace RelhaxModpack
                                         retry = false;
                                         break;
                                     case MessageBoxResult.Cancel:
-                                        //stop the installation alltogether
-                                        //cancel token stuff TODO
+                                        //stop the installation all together
+                                        ToggleUIButtons(true);
+                                        ResetUI();
                                         retry = false;
-                                        break;
+                                        return false;
                                 }
                             }
                             //if it failed or not, the file should be deleted
@@ -1825,26 +1833,48 @@ namespace RelhaxModpack
 
         private void CancelDownloadInstallButton_Download_Click(object sender, RoutedEventArgs e)
         {
-            if (this.client != null)
-                this.client.CancelAsync();
+            if(client == null)
+            {
+                Logging.Info("Cancel pressed in download mode (and download while install is false), but client reference is false, cannot cancel!");
+                return;
+            }
+            Logging.Info("Cancel pressed from UI in download mode, sending cancel request");
+            client.CancelAsync();
         }
 
         private void CancelDownloadInstallButton_Install_Click(object sender, RoutedEventArgs e)
         {
+            Logging.Info("Cancel press from UI in install mode, processing request");
+
+            //cancel installer
             if(installEngine == null)
             {
                 Logging.Error("Cancel request failed because installEngine is null!");
                 MessageBox.Show(Translations.GetTranslatedString("CancelInstallRequestFailed"));
-                return;
             }
-            if(!cancellationTokenSource.IsCancellationRequested)
+            else if(!cancellationTokenSource.IsCancellationRequested)
             {
                 Logging.Info("requesting cancel of installation from UI - cancel process started");
                 cancellationTokenSource.Cancel();
             }
             else
             {
-                Logging.Debug("cancel already started - skipping request");
+                Logging.Info("cancel already started for installer - skipping request");
+            }
+
+            //then cancel downloader
+            if (ModpackSettings.InstallWhileDownloading)
+            {
+                Logging.Info("InstallWhileDownloading is true, attempt to cancel download thread");
+                if (client == null)
+                {
+                    Logging.Info("Unable to cancel download thread, client reference is null (maybe no packages to download?)");
+                }
+                else
+                {
+                    Logging.Info("Sending cancel request to download thread");
+                    client.CancelAsync();
+                }
             }
         }
         #endregion
