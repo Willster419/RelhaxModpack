@@ -1356,8 +1356,7 @@ namespace RelhaxModpack.InstallerComponents
                     {
                         int threadSelector = j % numThreads;
                         packageThreads[threadSelector].Add(packages[j]);
-                        Logging.WriteToLog(string.Format("j index = {0} package {1} has been assigned to packageThread {2}", j, packages[j].PackageName,
-                            threadSelector), Logfiles.Application, LogLevel.Debug);
+                        Logging.Info("j index = {0} package {1} has been assigned to packageThread {2}", j, packages[j].PackageName, threadSelector);
                     }
 
                     //now the fun starts. these all can run at once. yeah.
@@ -1371,7 +1370,7 @@ namespace RelhaxModpack.InstallerComponents
                     //start the threads
                     for (int k = 0; k < tasks.Count(); k++)
                     {
-                        Logging.WriteToLog(string.Format("thread {0} starting task, packages to extract={1}", k, packageThreads[k].Count));
+                        Logging.Info("thread {0} starting task, packages to extract={1}", k, packageThreads[k].Count);
                         //use the task factory to create tasks(threads) for each logical cores
                         tasks[k] = Task.Run(() =>
                         {
