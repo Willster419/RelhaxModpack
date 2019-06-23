@@ -565,7 +565,7 @@ namespace RelhaxModpack.Windows
         private void InitUsermods()
         {
             //get a list of all zip files in the folder
-            string[] zipFilesUserMods = Directory.GetFiles(Settings.RelhaxUserModsFolder, @"*.zip");
+            string[] zipFilesUserMods = Utils.DirectorySearch(Settings.RelhaxUserModsFolder, SearchOption.TopDirectoryOnly, false, @"*.zip", 5, 3, true);
             userMods = new List<SelectablePackage>();
             foreach (string s in zipFilesUserMods)
             {
@@ -574,7 +574,9 @@ namespace RelhaxModpack.Windows
                     ZipFile = s,
                     Name = Path.GetFileNameWithoutExtension(s),
                     Enabled = true,
-                    Level = 0
+                    Level = 0,
+                    PatchGroup = 9,
+                    InstallGroup = 9
                 };
                 //circular reference because
                 sp.Parent = sp.TopParent = sp;
@@ -599,10 +601,14 @@ namespace RelhaxModpack.Windows
                 {
                     Package = package,
                     HorizontalAlignment = HorizontalAlignment.Left,
-                    VerticalAlignment = VerticalAlignment.Center,
+                    HorizontalContentAlignment = HorizontalAlignment.Left,
+                    VerticalContentAlignment = VerticalAlignment.Center,
                     //FONT/BACKGROUND TODO
                     IsChecked = false,
-                    IsEnabled = true
+                    IsEnabled = true,
+                    Content = package.NameDisplay,
+                    PopularModVisability = Visibility.Hidden,
+                    GreyAreaVisability = Visibility.Hidden
                 };
                 //EVENT TODO
                 userStackPanel.Children.Add(userMod);
