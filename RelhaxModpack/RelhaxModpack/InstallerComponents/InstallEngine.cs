@@ -130,6 +130,8 @@ namespace RelhaxModpack.InstallerComponents
         private List<Task> createdChildTasks = new List<Task>();
         //flag for if installing or installing
         private bool installing = true;
+
+        public bool DisableTriggersForInstall = true;
         #endregion
 
         #region More boring stuff
@@ -238,7 +240,7 @@ namespace RelhaxModpack.InstallerComponents
             List<SelectablePackage> selectedPackages = FlatListSelectablePackages.Where(package => package.Checked && package.Enabled).ToList();
 
             //do any list processing here
-            if(!ModpackSettings.DisableTriggers)
+            if(!DisableTriggersForInstall)
             {
                 //process any packages that have triggers
                 //reset the internal list first
@@ -544,19 +546,19 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.WriteToLog("...skipped (no patch entries parsed)");
 
             //step 10: create shortcuts (async option)
-            if(ModpackSettings.DisableTriggers)
+            if(DisableTriggersForInstall)
             {
                 CreateShortcuts();
             }
 
             //step 11: create atlases (async option)
-            if (ModpackSettings.DisableTriggers)
+            if (DisableTriggersForInstall)
             {
                 CreateAtlases();
             }
 
             //step 12: install fonts (async operation)
-            if (ModpackSettings.DisableTriggers)
+            if (DisableTriggersForInstall)
             {
                 InstallFonts();
             }
@@ -612,7 +614,7 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.WriteToLog("...skipped (ModpackSettings.ExportMode = true)");
 
 
-            if (!ModpackSettings.DisableTriggers)
+            if (!DisableTriggersForInstall)
             {
                 //check if any triggers are still running
                 foreach (Trigger trigger in Triggers)
@@ -1766,7 +1768,7 @@ namespace RelhaxModpack.InstallerComponents
                         Unzip(package, threadNum, zipLogger);
                         Logging.Installer(zipLogger.ToString());
                         //after zip file extraction, process triggers (if enabled)
-                        if(!ModpackSettings.DisableTriggers)
+                        if(!DisableTriggersForInstall)
                         {
                             if (package.Triggers.Count > 0)
                                 ProcessTriggers(package.Triggers);

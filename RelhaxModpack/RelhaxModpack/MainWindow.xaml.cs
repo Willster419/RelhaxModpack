@@ -50,6 +50,7 @@ namespace RelhaxModpack
         private bool autoInstallTimerRegistered = false;
         private CancellationTokenSource cancellationTokenSource;
         private InstallerComponents.InstallEngine installEngine;
+        private bool disableTriggersBackupVal = true;
 
         //temp list of components not to toggle
         Control[] tempDisabledBlacklist = null;
@@ -1242,6 +1243,14 @@ namespace RelhaxModpack
             //create the cancellation token source
             cancellationTokenSource = new CancellationTokenSource();
 
+            //if user mods are being installed, then disable triggers
+            disableTriggersBackupVal = ModpackSettings.DisableTriggers;
+            if (userModsToInstall.Count > 0 && !ModpackSettings.DisableTriggers)
+            {
+                Logging.Info("DisableTriggers is false and user has mods to install. Disabling triggers");
+                disableTriggersBackupVal = true;
+            }
+
             //and create and link the install engine
             installEngine = new InstallerComponents.InstallEngine()
             {
@@ -1252,7 +1261,8 @@ namespace RelhaxModpack
                 Dependencies = dependencies,
                 GlobalDependencies = globalDependencies,
                 UserPackagesToInstall = userModsToInstall,
-                CancellationToken = cancellationTokenSource.Token
+                CancellationToken = cancellationTokenSource.Token,
+                DisableTriggersForInstall = disableTriggersBackupVal
             };
 
             //setup the cancel button
@@ -1287,7 +1297,7 @@ namespace RelhaxModpack
                 }
             }
 
-            //update the UI to be in a "finished" state"
+            //update the UI to be in a "finished" state
             InstallProgressTextBox.Clear();
             ParentProgressBar.Value = ParentProgressBar.Maximum;
             ChildProgressBar.Value = ChildProgressBar.Maximum;
