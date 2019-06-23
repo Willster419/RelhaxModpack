@@ -1787,9 +1787,9 @@ namespace RelhaxModpack
             bool result = (bool)saveFileDialog.ShowDialog();
             if(result)
             {
-                Logging.WriteToLog("Saving color settings dump to " + saveFileDialog.FileName);
+                Logging.Info("Saving color settings dump to " + saveFileDialog.FileName);
                 UISettings.DumpAllWindowColorSettingsToFile(saveFileDialog.FileName);
-                Logging.WriteToLog("Color settings saved");
+                Logging.Info("Color settings saved");
             }
         }
 
