@@ -1807,7 +1807,7 @@ namespace RelhaxModpack
                 }
                 else
                 {
-                    //no updat needed
+                    //no update needed
                     Logging.Debug("no update needed");
                     return;
                 }
