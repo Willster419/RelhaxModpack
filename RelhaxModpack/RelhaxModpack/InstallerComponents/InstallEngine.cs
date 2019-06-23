@@ -1356,7 +1356,7 @@ namespace RelhaxModpack.InstallerComponents
                     {
                         int threadSelector = j % numThreads;
                         packageThreads[threadSelector].Add(packages[j]);
-                        Logging.Info("j index = {0} package {1} has been assigned to packageThread {2}", j, packages[j].PackageName, threadSelector);
+                        Logging.Info("j index = {0}, package {1} has been assigned to packageThread {2}", j, packages[j].PackageName, threadSelector);
                     }
 
                     //now the fun starts. these all can run at once. yeah.
@@ -1368,20 +1368,20 @@ namespace RelhaxModpack.InstallerComponents
                     bool valueLocked = false;
 
                     //start the threads
+                    Logging.Debug("Starting {0} threads", tasks.Count());
                     for (int k = 0; k < tasks.Count(); k++)
                     {
                         Logging.Info("thread {0} starting task, packages to extract={1}", k, packageThreads[k].Count);
-                        //use the task factory to create tasks(threads) for each logical cores
                         tasks[k] = Task.Run(() =>
                         {
                             int temp = k;
                             valueLocked = true;
                             ExtractFiles(packageThreads[temp], temp);
                         });
-                        Logging.Debug("thread {0} waiting to be started", k);
+                        Logging.Debug("thread {0} started, waiting for thread ID value to be locked", k);
                         while (!valueLocked) ;
                         valueLocked = false;
-                        Logging.Debug("thread {0} running, starting next task", k);
+                        Logging.Debug("thread {0} ID value locked, starting next task", k);
                         //also save the task to a list to use for cancel later
                         createdChildTasks.Add(tasks[k]);
                     }
@@ -1751,31 +1751,55 @@ namespace RelhaxModpack.InstallerComponents
         private void ExtractFiles(List<DatabasePackage> packagesToExtract, int threadNum)
         {
             bool notAllPackagesExtracted = true;
-            //in case the user selected to "download and install at the same time", there may be cases where
-            //some items in this list (earlier, for sake of areugment) are not downloaded yet, but others below are.
-            //if this is the case, then we need to skip over those items for now while they download in the background
+            //in case the user selected to "download while installing", there may be cases where
+            //some items in this list (earlier, for sake of argument) are not downloaded yet, but others below are.
+            //if this is the case, then we need to skip over those items and install others while we wait
+            int numExtracted = 0;
             while (notAllPackagesExtracted)
             {
-                int numExtracted = 0;
                 foreach (DatabasePackage package in packagesToExtract)
                 {
+                    //check for cancel
                     CancellationToken.ThrowIfCancellationRequested();
+
+                    //check if we are installing while downloading and this package is still downloading
                     if (ModpackSettings.InstallWhileDownloading && package.DownloadFlag)
                     {
                         continue;
                     }
+                    //else check if we are installing while downloading and this package's extraction has started
+                    else if (ModpackSettings.InstallWhileDownloading && package.ExtractionStarted)
+                    {
+                        continue;
+                    }
+                    //else start extraction
                     else
                     {
                         Logging.Info("Thread ID={0}, starting extraction of zipfile {1} of packageName {2}", threadNum, package.ZipFile, package.PackageName);
-                        numExtracted++;
-                        if (string.IsNullOrWhiteSpace(package.ZipFile))
-                            continue;
-                        StringBuilder zipLogger = new StringBuilder();
-                        zipLogger.AppendLine(string.Format("/*   {0}   */",package.ZipFile));
-                        Unzip(package, threadNum, zipLogger);
-                        Logging.Installer(zipLogger.ToString());
+
+                        //flag that this package's extraction has started
+                        package.ExtractionStarted = true;
+
+                        //stop if the zipfile name is blank (no actual zipfile to extract)
+                        if (!string.IsNullOrWhiteSpace(package.ZipFile))
+                        {
+                            StringBuilder zipLogger = new StringBuilder();
+                            zipLogger.AppendLine(string.Format("/*   {0}   */", package.ZipFile));
+                            Unzip(package, threadNum, zipLogger);
+                            Logging.Installer(zipLogger.ToString());
+                        }
+                        else
+                        {
+                            Logging.Warning("zipfile for package {0} is blank!", package.PackageName);
+                        }
+
+                        Logging.Info("Thread ID={0}, extraction finished of zipfile {1} of packageName {2}", threadNum, package.ZipFile, package.PackageName);
+
+                        //increment counter
+                        Logging.Info("Thread ID={0}, extracted {1} of {2}", threadNum, ++numExtracted, packagesToExtract.Count);
+
                         //after zip file extraction, process triggers (if enabled)
-                        if(!DisableTriggersForInstall)
+                        if (!DisableTriggersForInstall)
                         {
                             if (package.Triggers.Count > 0)
                                 ProcessTriggers(package.Triggers);

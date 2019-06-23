@@ -134,11 +134,15 @@ namespace RelhaxModpack
         #endregion
 
         #region UI Properties
+
         //used for the editor ONLY
         public TreeViewItem EditorTreeViewItem = null;
         #endregion
 
         #region Other Properties and Methods
+
+        public bool ExtractionStarted = false;
+
         public override string ToString()
         {
             return PackageName;

@@ -1477,7 +1477,9 @@ namespace RelhaxModpack
                         fileToSaveTo = Path.Combine(Settings.RelhaxDownloadsFolder, package.ZipFile);
                         try
                         {
+                            Logging.Info("Async download of {0} start", package.ZipFile);
                             await client.DownloadFileTaskAsync(fileToDownload, fileToSaveTo);
+                            Logging.Info("Async download of {0} finish", package.ZipFile);
                             retryCount = 0;
                             package.DownloadFlag = false;
                         }
@@ -1540,7 +1542,9 @@ namespace RelhaxModpack
                         downloadTimer.Restart();
                         try
                         {
+                            Logging.Info("Download of {0} start", package.ZipFile);
                             await client.DownloadFileTaskAsync(fileToDownload, fileToSaveTo);
+                            Logging.Info("Download of {0} finish", package.ZipFile);
                             retry = false;
                             package.DownloadFlag = false;
                         }
