@@ -612,6 +612,7 @@ namespace RelhaxModpack.Windows
                     PopularModVisability = Visibility.Hidden,
                     GreyAreaVisability = Visibility.Hidden
                 };
+                userMod.Click += OnUserPackageClick;
                 //EVENT TODO
                 userStackPanel.Children.Add(userMod);
             }
@@ -1078,6 +1079,20 @@ namespace RelhaxModpack.Windows
 
             //dropdown packages only need to propagate up when selected...
             PropagateChecked(spc, PropagationDirection.Up);
+        }
+
+        void OnUserPackageClick(object sender, EventArgs e)
+        {
+            if (LoadingUI)
+                return;
+
+            IPackageUIComponent ipc = (IPackageUIComponent)sender;
+            SelectablePackage spc = ipc.Package;
+
+            if (!spc.Checked)
+                spc.Checked = true;
+            else
+                spc.Checked = false;
         }
 
         //when a multi mod is selected
