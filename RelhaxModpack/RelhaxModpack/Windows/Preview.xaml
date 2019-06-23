@@ -44,7 +44,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="1*" MinHeight="20"/>
                     </Grid.RowDefinitions>
-                    <TextBox x:Name="PreviewDescriptionBox" Tag="PreviewDescriptionBox" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsReadOnly="True"/>
+                    <TextBox x:Name="PreviewDescriptionBox" Tag="PreviewDescriptionBox" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsReadOnly="True" TextWrapping="Wrap"/>
                     <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" Height="5"/>
                     <TextBox x:Name="PreviewUpdatesBox" Tag="PreviewUpdatesBox" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsReadOnly="True"/>
                 </Grid>
