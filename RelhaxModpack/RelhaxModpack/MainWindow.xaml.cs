@@ -1251,6 +1251,7 @@ namespace RelhaxModpack
                 ParsedCategoryList = parsedCategoryList,
                 Dependencies = dependencies,
                 GlobalDependencies = globalDependencies,
+                UserPackagesToInstall = userModsToInstall,
                 CancellationToken = cancellationTokenSource.Token
             };
 

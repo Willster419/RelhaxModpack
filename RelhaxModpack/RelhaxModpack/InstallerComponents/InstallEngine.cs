@@ -77,6 +77,8 @@ namespace RelhaxModpack.InstallerComponents
         /// </summary>
         public List<SelectablePackage> FlatListSelectablePackages;
 
+        public List<SelectablePackage> UserPackagesToInstall;
+
         //for passing back to application (DO NOT WRITE TO)
         public List<Category> ParsedCategoryList;
         public List<Dependency> Dependencies;
@@ -403,6 +405,29 @@ namespace RelhaxModpack.InstallerComponents
                 return InstallFinishedArgs;
             }
             Logging.Info("Extraction complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
+
+            //step 7: extract usermods
+            OldTime = InstallStopWatch.Elapsed;
+            Prog.TotalCurrent++;
+            InstallFinishedArgs.ExitCodes = InstallerExitCodes.UserExtractionError;
+            Prog.InstallStatus = InstallerExitCodes.UserExtractionError;
+            Progress.Report(Prog);
+
+            Logging.Info("Extracting usermods, current install time = {0} msec", (int)InstallStopWatch.Elapsed.TotalMilliseconds);
+            Logging.Info("UserPackages to install: {0}", UserPackagesToInstall.Count);
+            if(UserPackagesToInstall.Count > 0)
+            {
+                StringBuilder userModsBuilder = new StringBuilder();
+                userModsBuilder.AppendLine("/*   User Mods   */");
+                foreach(DatabasePackage userPackage in UserPackagesToInstall)
+                {
+                    Logging.Info("Extracting user package {0}", Path.GetFileName(userPackage.ZipFile));
+                    userModsBuilder.AppendLine(string.Format("/*   {0}   */", Path.GetFileName(userPackage.ZipFile)));
+                    Unzip(userPackage, 9, userModsBuilder);
+                }
+                Logging.Installer(userModsBuilder.ToString());
+            }
+            Logging.Info("Extracting usermods complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
 
             //if export mode, this is where we stop
             if(ModpackSettings.ExportMode)

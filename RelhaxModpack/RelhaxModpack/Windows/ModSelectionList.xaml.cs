@@ -578,7 +578,8 @@ namespace RelhaxModpack.Windows
                     Enabled = true,
                     Level = 0,
                     PatchGroup = 9,
-                    InstallGroup = 9
+                    InstallGroup = 9,
+                    DownloadFlag = false
                 };
                 //circular reference because
                 sp.Parent = sp.TopParent = sp;
