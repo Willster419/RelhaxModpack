@@ -1830,6 +1830,32 @@ namespace RelhaxModpack
             sb.AppendLine(shortcutPath);
         }
 
+        private static bool TryCloneBitmapSection(Texture texture, Bitmap atlasImage, Rectangle textureRect, string atlasFileName, int numTries = 3, int delayMilliseconds = 50)
+        {
+            int tryCounter = 0;
+            while (true)
+            {
+                try
+                {
+                    texture.AtlasImage = atlasImage.Clone(textureRect, atlasImage.PixelFormat);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    if(tryCounter >= numTries-1)
+                    {
+                        Logging.Exception("Failed to copy bitmap data for atlas image {0}", atlasFileName);
+                        return false;
+                    }
+                    else
+                    {
+                        Logging.Warning("Failed to copy bitmap data for atlas image {0}, fail {1} of {2}", atlasFileName, tryCounter++, numTries);
+                        Thread.Sleep(delayMilliseconds);
+                    }
+                }
+            }
+        }
+
         public static void CreateAtlas(Atlas atlas, CancellationToken token)
         {
             //create the save directory if it does not already exist
@@ -1839,41 +1865,68 @@ namespace RelhaxModpack
             //set the mapfile name
             atlas.MapFile = string.Format("{0}.xml", Path.GetFileNameWithoutExtension(atlas.AtlasFile));
 
+            //extract atlas bitmaps from original atlas file
+            string tempAtlasImageFile = Path.Combine(atlas.TempAltasPresentDirectory, atlas.AtlasFile);
+            string tempAtlasMapFile = Path.Combine(atlas.TempAltasPresentDirectory, atlas.MapFile);
+
+            //delete the temp files if they exist
+            if (File.Exists(tempAtlasImageFile))
+                File.Delete(tempAtlasImageFile);
+            if (File.Exists(tempAtlasMapFile))
+                File.Delete(tempAtlasMapFile);
+
             Stopwatch stopwatch = new Stopwatch();
             //extract the map and atlas files
             Logging.Info("atlas file {0} unpack of atlas and map starting", Path.GetFileName(atlas.AtlasFile));
             stopwatch.Restart();
-            XMLUtils.Unpack(atlas.Pkg, Path.Combine(atlas.DirectoryInArchive, atlas.AtlasFile), Path.Combine(atlas.TempAltasPresentDirectory, atlas.AtlasFile));
+            XMLUtils.Unpack(atlas.Pkg, Path.Combine(atlas.DirectoryInArchive, atlas.AtlasFile), tempAtlasImageFile);
             token.ThrowIfCancellationRequested();
-            XMLUtils.Unpack(atlas.Pkg, Path.Combine(atlas.DirectoryInArchive, atlas.MapFile), Path.Combine(atlas.TempAltasPresentDirectory, atlas.MapFile));
+            XMLUtils.Unpack(atlas.Pkg, Path.Combine(atlas.DirectoryInArchive, atlas.MapFile), tempAtlasMapFile);
             token.ThrowIfCancellationRequested();
             stopwatch.Stop();
             Logging.Info("atlas file {0} unpack completed in {1} msec", Path.GetFileName(atlas.AtlasFile), stopwatch.ElapsedMilliseconds);
 
-            //extract atlas bitmaps from original atlas file
-            string tempAtlasImageFile = Path.Combine(atlas.TempAltasPresentDirectory, atlas.AtlasFile);
-            string tempAtlasMapFile = Path.Combine(atlas.TempAltasPresentDirectory, atlas.MapFile);
             Logging.Info("atlas file {0} image parsing starting", Path.GetFileName(atlas.AtlasFile));
             stopwatch.Restart();
 
             //get the list of textures that exist in the atlas
+            Logging.Info("atlas file {0} loading map exporter", Path.GetFileName(atlas.AtlasFile));
             atlas.TextureList = MapExporter.Load(tempAtlasMapFile);
             Size originalAtlasSize = new Size();
+            Logging.Info("atlas file {0} loading atlas to bitmap data", Path.GetFileName(atlas.AtlasFile));
             using (Bitmap atlasImage = ImageHandler.LoadBitmapFromDDS(tempAtlasImageFile))
             {
                 token.ThrowIfCancellationRequested();
                 //get the size from grumpel code
                 originalAtlasSize = atlasImage.Size;
-                
+
                 //load the texture bitmaps to memory
-                foreach(Texture texture in atlas.TextureList)
+                Logging.Info("atlas file {0} copying bitmap data", Path.GetFileName(atlas.AtlasFile));
+                foreach (Texture texture in atlas.TextureList)
                 {
                     token.ThrowIfCancellationRequested();
                     //copy the texture bitmap data into the texture bitmap object
                     //https://docs.microsoft.com/en-us/dotnet/api/system.drawing.bitmap.clone?redirectedfrom=MSDN&view=netframework-4.8#System_Drawing_Bitmap_Clone_System_Drawing_Rectangle_System_Drawing_Imaging_PixelFormat_
-                    //rectange of desired area to clone
+                    //rectangle of desired area to clone
                     Rectangle textureRect = new Rectangle(texture.x, texture.y, texture.width, texture.height);
-                    //copythe bitmap
+                    //copy the bitmap
+                    if (!TryCloneBitmapSection(texture, atlasImage, textureRect, Path.GetFileName(atlas.AtlasFile)))
+                    {
+                        foreach(Texture tex in atlas.TextureList)
+                        {
+                            if (tex.AtlasImage != null)
+                            {
+                                tex.AtlasImage.Dispose();
+                                tex.AtlasImage = null;
+                            }
+                        }
+                        //delete the temp files if they exist
+                        if (File.Exists(tempAtlasImageFile))
+                            File.Delete(tempAtlasImageFile);
+                        if (File.Exists(tempAtlasMapFile))
+                            File.Delete(tempAtlasMapFile);
+                        return;
+                    }
                     texture.AtlasImage = atlasImage.Clone(textureRect, atlasImage.PixelFormat);
                 }
             }
@@ -1957,10 +2010,10 @@ namespace RelhaxModpack
 
             //check if any custom mod contour icons were parsed
             if (modTextures.Count > 0)
-                Logging.Info("{0} custom icons parsed for atlas file {1}!", modTextures.Count, Path.GetFileName(atlas.AtlasFile));
+                Logging.Info("{0} custom icons parsed for atlas file {1}", modTextures.Count, Path.GetFileName(atlas.AtlasFile));
             else
             {
-                Logging.Info("0 custom icons parsed for atlas file {1}! no need to make a custom atlas!", modTextures.Count, Path.GetFileName(atlas.AtlasFile));
+                Logging.Info("0 custom icons parsed for atlas file {1}, no need to make a custom atlas!", modTextures.Count, Path.GetFileName(atlas.AtlasFile));
                 if(File.Exists(tempAtlasImageFile)) File.Delete(tempAtlasImageFile);
                 if (File.Exists(tempAtlasMapFile)) File.Delete(tempAtlasMapFile);
                 foreach (Texture texture in atlas.TextureList)
@@ -1969,7 +2022,7 @@ namespace RelhaxModpack
             }
 
             //replace the original atlas textures with the mod ones
-            Logging.Info("atlas file {0} mod images replacing starting", Path.GetFileName(atlas.AtlasFile));
+            Logging.Info("atlas file {0}, mod images replacing starting", Path.GetFileName(atlas.AtlasFile));
             stopwatch.Restart();
             for (int i = 0; i < modTextures.Count; i++)
             {
@@ -1978,14 +2031,18 @@ namespace RelhaxModpack
                 Texture[] originalResults = atlas.TextureList.Where(texturee => texturee.name.Equals(modTextures[i].name)).ToArray();
                 if (originalResults.Count() > 1)
                     throw new BadMemeException("REEEE");
-                if(originalResults.Count() == 0 && atlas.AllowToAddAdditionalImages)
+                if(originalResults.Count() == 0)
                 {
-                    Logging.Info("allowToAddAdditionalImages is true, adding custom image {0}", modTextures[i].name);
-                    atlas.TextureList.Add(modTextures[i]);
-                }
-                else if (originalResults.Count() == 0 && !atlas.AllowToAddAdditionalImages)
-                {
-                    Logging.Info("allowToAddAdditionalImages is false, NOT adding custom image {0}", modTextures[i].name);
+                    Logging.Debug("atlas file {0}, found custom texture file not present in original texture list: {1}", Path.GetFileName(atlas.AtlasFile), modTextures[i].name);
+                    if(atlas.AllowToAddAdditionalImages)
+                    {
+                        Logging.Info("allowToAddAdditionalImages is true, adding custom image {0}", modTextures[i].name);
+                        atlas.TextureList.Add(modTextures[i]);
+                    }
+                    else
+                    {
+                        Logging.Info("allowToAddAdditionalImages is false, NOT adding custom image {0}", modTextures[i].name);
+                    }
                 }
                 else
                 {
@@ -2022,7 +2079,12 @@ namespace RelhaxModpack
             {
                 tex.AtlasImage.Dispose();
             }
-            token.ThrowIfCancellationRequested();
+
+            //delete the temp files if they exist
+            if (File.Exists(tempAtlasImageFile))
+                File.Delete(tempAtlasImageFile);
+            if (File.Exists(tempAtlasMapFile))
+                File.Delete(tempAtlasMapFile);
         }
         #endregion
 
