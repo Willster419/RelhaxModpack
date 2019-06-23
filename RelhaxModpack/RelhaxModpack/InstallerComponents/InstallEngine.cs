@@ -1318,72 +1318,80 @@ namespace RelhaxModpack.InstallerComponents
                 //i.e. there are NO conflicting zip file paths in ALL of the files (all the entries in all zip files are mutually exclusive)
                 List<DatabasePackage> packages = new List<DatabasePackage>(OrderedPackagesToInstall[i]);
 
-                //set it for the progress report
-                Prog.ChildTotal = packages.Count;
-
-                //get the size of any packages where the size is invalid before sorting
-                foreach(DatabasePackage packa in packages.Where(pack => pack.Size == 0 && !string.IsNullOrWhiteSpace(pack.ZipFile)))
+                //if a group does not have any packages in it, then we can skip
+                Logging.Debug("number of packages in this group: {0}", packages.Count);
+                if(packages.Count > 0)
                 {
-                    string zipFile = Path.Combine(Settings.RelhaxDownloadsFolder, packa.ZipFile);
-                    if (File.Exists(zipFile))
-                        packa.Size = (ulong)Utils.GetFilesize(zipFile);
-                }
+                    //set it for the progress report
+                    Prog.ChildTotal = packages.Count;
 
-                //then sort the packages by the size parameter (largest files on top)
-                //https://stackoverflow.com/questions/3309188/how-to-sort-a-listt-by-a-property-in-the-object
-                packages = packages.OrderByDescending(pack => pack.Size).ToList();
-                //for not just go with the packages as they are, they should already be in alphabetical order
-
-                //make a list of packages again, but size is based on number of logical processors and/or multi-core install mods
-                //if a user has 8 cores, then make a lists of packages to install
-                List<DatabasePackage>[] packageThreads = new List<DatabasePackage>[numThreads];
-
-                //new up the lists before we can assign to them
-                for (int j = 0; j < packageThreads.Count(); j++)
-                {
-                    packageThreads[j] = new List<DatabasePackage>();
-                }
-
-                //assign each package one at a time into a package thread
-                for (int j = 0; j < packages.Count; j++)
-                {
-                    int threadSelector = j % numThreads;
-                    packageThreads[threadSelector].Add(packages[j]);
-                    Logging.WriteToLog(string.Format("j index = {0} package {1} has been assigned to packageThread {2}", j, packages[j].PackageName,
-                        threadSelector), Logfiles.Application, LogLevel.Debug);
-                }
-
-                //now the fun starts. these all can run at once. yeah.
-                //https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/task-based-asynchronous-programming
-                Task[] tasks = new Task[numThreads];
-                if (tasks.Count() != packageThreads.Count())
-                    throw new BadMemeException("ohhhhhhhhh, NOW you f*cked UP!");
-
-                bool valueLocked = false;
-
-                //start the threads
-                for (int k = 0; k < tasks.Count(); k++)
-                {
-                    Logging.WriteToLog(string.Format("thread {0} starting task, packages to extract={1}", k, packageThreads[k].Count));
-                    //use the task factory to create tasks(threads) for each logical cores
-                    tasks[k] = Task.Run(() =>
+                    //get the size of any packages where the size is invalid before sorting
+                    foreach (DatabasePackage packa in packages.Where(pack => pack.Size == 0 && !string.IsNullOrWhiteSpace(pack.ZipFile)))
                     {
-                        int temp = k;
-                        valueLocked = true;
-                        ExtractFiles(packageThreads[temp], temp);
-                    });
-                    Logging.Debug("thread {0} waiting to be started", k);
-                    while (!valueLocked) ;
-                    valueLocked = false;
-                    Logging.Debug("thread {0} running, starting next task", k);
-                    //also save the task to a list to use for cancel later
-                    createdChildTasks.Add(tasks[k]);
+                        Logging.Debug("package {0} has size 0 and zipfile entry, getting size", packa.PackageName);
+                        string zipFile = Path.Combine(Settings.RelhaxDownloadsFolder, packa.ZipFile);
+                        if (File.Exists(zipFile))
+                            packa.Size = (ulong)Utils.GetFilesize(zipFile);
+                        Logging.Debug("size parsed to {0}", packa.Size.ToString());
+                    }
+
+                    //then sort the packages by the size parameter (largest files on top)
+                    //https://stackoverflow.com/questions/3309188/how-to-sort-a-listt-by-a-property-in-the-object
+                    packages = packages.OrderByDescending(pack => pack.Size).ToList();
+                    //for not just go with the packages as they are, they should already be in alphabetical order
+
+                    //make a list of packages again, but size is based on number of logical processors and/or multi-core install mods
+                    //if a user has 8 cores, then make 8 lists of packages to install
+                    List<DatabasePackage>[] packageThreads = new List<DatabasePackage>[numThreads];
+
+                    //new up the lists before we can assign to them
+                    for (int j = 0; j < packageThreads.Count(); j++)
+                    {
+                        packageThreads[j] = new List<DatabasePackage>();
+                    }
+
+                    //assign each package one at a time into a package thread
+                    Logging.Info("starting package assignment to each thread");
+                    for (int j = 0; j < packages.Count; j++)
+                    {
+                        int threadSelector = j % numThreads;
+                        packageThreads[threadSelector].Add(packages[j]);
+                        Logging.WriteToLog(string.Format("j index = {0} package {1} has been assigned to packageThread {2}", j, packages[j].PackageName,
+                            threadSelector), Logfiles.Application, LogLevel.Debug);
+                    }
+
+                    //now the fun starts. these all can run at once. yeah.
+                    //https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/task-based-asynchronous-programming
+                    Task[] tasks = new Task[numThreads];
+                    if (tasks.Count() != packageThreads.Count())
+                        throw new BadMemeException("ohhhhhhhhh, NOW you f*cked UP!");
+
+                    bool valueLocked = false;
+
+                    //start the threads
+                    for (int k = 0; k < tasks.Count(); k++)
+                    {
+                        Logging.WriteToLog(string.Format("thread {0} starting task, packages to extract={1}", k, packageThreads[k].Count));
+                        //use the task factory to create tasks(threads) for each logical cores
+                        tasks[k] = Task.Run(() =>
+                        {
+                            int temp = k;
+                            valueLocked = true;
+                            ExtractFiles(packageThreads[temp], temp);
+                        });
+                        Logging.Debug("thread {0} waiting to be started", k);
+                        while (!valueLocked) ;
+                        valueLocked = false;
+                        Logging.Debug("thread {0} running, starting next task", k);
+                        //also save the task to a list to use for cancel later
+                        createdChildTasks.Add(tasks[k]);
+                    }
+
+                    //and log it all
+                    Logging.Debug("all threads started on group {0}, master thread now waiting on Task.WaitAll(tasks)", i);
+                    Task.WaitAll(tasks);
                 }
 
-                //and log it all
-                Logging.WriteToLog(string.Format("all threads started on group {0}, master thread now waiting on Task.WaitAll(tasks)",i),
-                    Logfiles.Application,LogLevel.Debug);
-                Task.WaitAll(tasks);
                 Logging.WriteToLog("Install Group " + i + " finishes now");
             }
             return true;
@@ -1778,7 +1786,7 @@ namespace RelhaxModpack.InstallerComponents
                 if (numExtracted == packagesToExtract.Count)
                     notAllPackagesExtracted = false;
                 else
-                    System.Threading.Thread.Sleep(200);
+                    Thread.Sleep(200);
             }
             //report progress on the thread. in case multiple threads, make sure you lock it
             lock(Prog)
@@ -1842,7 +1850,7 @@ namespace RelhaxModpack.InstallerComponents
 
                                 //save the original and new names to the list to apply later
                                 //lock on a static
-                                lock(this)
+                                lock(Settings.AppDataFolder)
                                 {
                                     //key is sb, sb is new name for disk, is native processing file
                                     //value is original name from zip file
