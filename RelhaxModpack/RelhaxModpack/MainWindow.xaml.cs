@@ -968,7 +968,8 @@ namespace RelhaxModpack
         {
             if (e.ContinueInstallation)
             {
-                OnBeginInstallation(new List<Category>(e.ParsedCategoryList), new List<Dependency>(e.Dependencies),new List<DatabasePackage>(e.GlobalDependencies));
+                OnBeginInstallation(new List<Category>(e.ParsedCategoryList), new List<Dependency>(e.Dependencies),
+                    new List<DatabasePackage>(e.GlobalDependencies), new List<SelectablePackage>(e.UserMods));
                 modSelectionList = null;
             }
             else
@@ -977,7 +978,7 @@ namespace RelhaxModpack
             }
         }
 
-        private async void OnBeginInstallation(List<Category> parsedCategoryList, List<Dependency> dependencies, List<DatabasePackage> globalDependencies)
+        private async void OnBeginInstallation(List<Category> parsedCategoryList, List<Dependency> dependencies, List<DatabasePackage> globalDependencies, List<SelectablePackage> UserMods)
         {
             //rookie mistake checks
             if (parsedCategoryList == null || dependencies == null || globalDependencies == null ||
@@ -1003,7 +1004,7 @@ namespace RelhaxModpack
                     ToggleUIButtons(true);
                     return;
                 }
-                System.Threading.Thread.Sleep(100);
+                Thread.Sleep(100);
             }
 
             //build macro hash for install
@@ -1071,12 +1072,13 @@ namespace RelhaxModpack
             packagesToInstall.AddRange(dependneciesToInstall.Where(dep => dep.Enabled && !string.IsNullOrWhiteSpace(dep.ZipFile)).ToList());
             List<SelectablePackage> selectablePackagesToInstall = flatListSelect.Where(fl => fl.Enabled && fl.Checked && !string.IsNullOrWhiteSpace(fl.ZipFile)).ToList();
             packagesToInstall.AddRange(selectablePackagesToInstall);
+            List<SelectablePackage> userModsToInstall = UserMods.Where(mod => mod.Checked).ToList();
 
             //while we're at it let's make a list of packages that need to be downloaded
             List<DatabasePackage> packagesToDownload = packagesToInstall.Where(pack => pack.DownloadFlag).ToList();
 
-            //and check if we need to actuall install anything lol
-            if (selectablePackagesToInstall.Count == 0)
+            //and check if we need to actually install anything
+            if (selectablePackagesToInstall.Count == 0 && userModsToInstall.Count == 0)
             {
                 Logging.WriteToLog("no packages selected to install...");
                 ResetUI();

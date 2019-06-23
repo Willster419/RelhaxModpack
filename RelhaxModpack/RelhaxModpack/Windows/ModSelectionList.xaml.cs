@@ -29,6 +29,7 @@ namespace RelhaxModpack.Windows
         public List<Category> ParsedCategoryList;
         public List<Dependency> Dependencies;
         public List<DatabasePackage> GlobalDependencies;
+        public List<SelectablePackage> UserMods;
     }
     public delegate void SelectionListClosedDelegate(object sender, SelectionListEventArgs e);
 
@@ -119,7 +120,8 @@ namespace RelhaxModpack.Windows
                     ContinueInstallation = continueInstallation,
                     ParsedCategoryList = ParsedCategoryList,
                     Dependencies = Dependencies,
-                    GlobalDependencies = GlobalDependencies
+                    GlobalDependencies = GlobalDependencies,
+                    UserMods = userMods
                 });
             }
         }
