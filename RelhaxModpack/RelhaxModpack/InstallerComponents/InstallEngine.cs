@@ -1371,24 +1371,33 @@ namespace RelhaxModpack.InstallerComponents
                     Logging.Debug("Starting {0} threads", tasks.Count());
                     for (int k = 0; k < tasks.Count(); k++)
                     {
-                        Logging.Info("thread {0} starting task, packages to extract={1}", k, packageThreads[k].Count);
-                        tasks[k] = Task.Run(() =>
+                        //if number of threads to use > number of packages, then skip making threads that won't be used
+                        if(packageThreads[k].Count > 0)
                         {
-                            int temp = k;
-                            valueLocked = true;
-                            ExtractFiles(packageThreads[temp], temp);
-                        });
-                        Logging.Debug("thread {0} started, waiting for thread ID value to be locked", k);
-                        while (!valueLocked) ;
-                        valueLocked = false;
-                        Logging.Debug("thread {0} ID value locked, starting next task", k);
-                        //also save the task to a list to use for cancel later
-                        createdChildTasks.Add(tasks[k]);
+                            Logging.Info("thread {0} starting task, packages to extract={1}", k, packageThreads[k].Count);
+                            tasks[k] = Task.Run(() =>
+                            {
+                                int temp = k;
+                                valueLocked = true;
+                                ExtractFiles(packageThreads[temp], temp);
+                            });
+                            Logging.Debug("thread {0} started, waiting for thread ID value to be locked", k);
+                            while (!valueLocked) ;
+                            valueLocked = false;
+                            Logging.Debug("thread {0} ID value locked, starting next task", k);
+                            //also save the task to a list to use for cancel later
+                            createdChildTasks.Add(tasks[k]);
+                        }
+                        else
+                        {
+                            Logging.Info("thread {0} skipped, no packages to extract (number of threads to use > number of packages in group)",k);
+                            tasks[k] = null;
+                        }
                     }
 
                     //and log it all
                     Logging.Debug("all threads started on group {0}, master thread now waiting on Task.WaitAll(tasks)", i);
-                    Task.WaitAll(tasks);
+                    Task.WaitAll(tasks.Where(task => task != null).ToArray());
                 }
 
                 Logging.WriteToLog("Install Group " + i + " finishes now");
