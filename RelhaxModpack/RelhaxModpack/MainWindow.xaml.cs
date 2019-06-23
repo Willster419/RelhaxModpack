@@ -1207,10 +1207,17 @@ namespace RelhaxModpack
                 }
 
                 //same idea for user mods
-                if(false)
+                if(userModsToInstall.Count > 0)
                 {
                     Logging.Debug("adding userMods reporter");
-
+                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
+                    {
+                        IsSubProgressActive = true,
+                        TaskTitle = Translations.GetTranslatedString("AdvancedInstallInstallUserMods"),
+                        ReportState = TaskReportState.Inactive
+                    };
+                    AdvancedProgressWindow.ExtractionPanel.Children.Add(reporter);
+                    AdvancedProgressWindow.ExtractionUserModsReporter = reporter;
                 }
 
                 //all the post-install options, you don't know until the extraction finishes and if the UI reports events on it
