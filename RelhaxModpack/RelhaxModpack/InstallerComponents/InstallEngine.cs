@@ -1586,6 +1586,10 @@ namespace RelhaxModpack.InstallerComponents
 
             //check for any font files to install at all
             string[] fontsToInstall = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername), SearchOption.TopDirectoryOnly, false, @"*", 50, 3, true);
+
+            //filter out fontReg
+            fontsToInstall = fontsToInstall.Where(filename => !filename.Contains(".exe")).ToArray();
+
             if (fontsToInstall == null || fontsToInstall.Count() == 0)
                 Logging.WriteToLog("...skipped (no font files to install)");
             else
@@ -1621,16 +1625,13 @@ namespace RelhaxModpack.InstallerComponents
                         ProgFonts.ParrentTotal = realFontsToInstall.Count();
                         LockProgress();
 
-                        //extract he exe to install fonts
-                        Logging.Info("extracting fontReg for font install");
+                        //check if fontReg exists
                         string fontRegPath = Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername, "FontReg.exe");
                         if (!File.Exists(fontRegPath))
                         {
-                            //get fontreg from the zip file
-                            using (ZipFile zip = new ZipFile(Settings.ManagerInfoDatFile))
-                            {
-                                zip.ExtractSelectedEntries("FontReg.exe", null, Path.GetDirectoryName(fontRegPath));
-                            }
+                            Logging.Error("FontReg was not located in the \"_fonts\" folder!");
+                            MessageBox.Show(string.Format("{0}{1}{2}{3}{4}", Translations.GetTranslatedString("fontsPromptError_1"), Environment.NewLine,
+                                Settings.WoTDirectory, Environment.NewLine, Translations.GetTranslatedString("fontsPromptError_2")));
                         }
 
                         CancellationToken.ThrowIfCancellationRequested();
@@ -1655,7 +1656,8 @@ namespace RelhaxModpack.InstallerComponents
                         catch (Exception ex)
                         {
                             Logging.Error("could not start font installer:{0}{1}", Environment.NewLine, ex.ToString());
-                            MessageBox.Show(Translations.GetTranslatedString("fontsPromptError_1") + Settings.WoTDirectory + Translations.GetTranslatedString("fontsPromptError_2"));
+                            MessageBox.Show(string.Format("{0}{1}{2}{3}{4}", Translations.GetTranslatedString("fontsPromptError_1"), Environment.NewLine,
+                                Settings.WoTDirectory, Environment.NewLine, Translations.GetTranslatedString("fontsPromptError_2")));
                         }
                         finally
                         {
