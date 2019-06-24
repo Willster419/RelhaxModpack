@@ -1739,7 +1739,7 @@ namespace RelhaxModpack
                 " Czy kontynuować?");
             french.Add("DatabaseVersionsSameBody", "La base de données n'a pas changé depuis votre dernière installation. Par conséquent, il n'y a pas de mise à jour pour votre sélection" +
                 "  de mods. Continuer de toute façon?");
-            russian.Add("DatabaseVersionsSameBody", "База данных не менялась с момента последней установки. В то же время не обновлений к выбранным вами модам. Продолжить в любом случае?")
+            russian.Add("DatabaseVersionsSameBody", "База данных не менялась с момента последней установки. В то же время не обновлений к выбранным вами модам. Продолжить в любом случае?");
 
             //Component: Current database is same as last installed database (header)
             //
@@ -1747,7 +1747,7 @@ namespace RelhaxModpack
             german.Add("DatabaseVersionsSameHeader", "Datenbank Version ist identisch");
             polish.Add("DatabaseVersionsSameHeader", "Wersja bazy danych jest taka sama");
             french.Add("DatabaseVersionsSameHeader", "La version de la base de données est la même");
-            russian.Add("DatabaseVersionsSameHeader", "Одинаковые версии БД")
+            russian.Add("DatabaseVersionsSameHeader", "Одинаковые версии БД");
 
             //Componet: 
             //
@@ -1755,7 +1755,7 @@ namespace RelhaxModpack
             german.Add("databaseNotFound", "Datenbank nicht an der angegebenen URL gefunden");
             polish.Add("databaseNotFound", "Nie znaleziono bazy danych pod wskazanym URL");
             french.Add("databaseNotFound", "Base de données introuvable à L'URL fournie  ");
-            russian.Add("databaseNotFound", "По запрошенному адресу база данных не найдена")
+            russian.Add("databaseNotFound", "По запрошенному адресу база данных не найдена");
 
             //Componet: Mod Selection view Group Box
             //
@@ -1961,7 +1961,7 @@ namespace RelhaxModpack
             german.Add("databaseReadFailed", "KRITISCH: Datenbank konnte nicht gelesen werden\n\nin der Protokolldatei stehen weitere Informationen zu diesem Fehler");
             polish.Add("databaseReadFailed", "BŁĄD KRYTYCZNY: Nie udało się wczytać bazy danych");
             french.Add("databaseReadFailed", "CRITIQUE: Impossible de lire la base de données");
-            russian.Add("databaseReadFailed", "КРИТИЧЕСКАЯ ОШИБКА: Ошибка чтения базы данных!\nПодробности в log-файле")
+            russian.Add("databaseReadFailed", "КРИТИЧЕСКАЯ ОШИБКА: Ошибка чтения базы данных!\nПодробности в log-файле");
 
             //Componet: 
             //
@@ -2009,7 +2009,7 @@ namespace RelhaxModpack
             german.Add("modDeactivated", "Der Mod \"{0}\" ist derzeit im Modpack deaktiviert und steht für die Installation nicht zur Verfügung.");
             polish.Add("modDeactivated", "Modyfikacja \"{0}\" jest obecnie zdezaktywowana w paczce i nie może zostać wybrana.");
             french.Add("modDeactivated", "Le mod est actuellement désactivé dans le mod pack et ne seras pas installé");
-            russian.Add("modDeactivated", "Мод \"{0}\" в данный момент отключён в модпаке и не может быть выбран для установки.")
+            russian.Add("modDeactivated", "Мод \"{0}\" в данный момент отключён в модпаке и не может быть выбран для установки.");
 
             //Componet: 
             //
@@ -2059,7 +2059,7 @@ namespace RelhaxModpack
             german.Add("selectionsCleared", "Auswahl gelöscht");
             polish.Add("selectionsCleared", "Usunięto Zaznaczenia");
             french.Add("selectionsCleared", "Sélections effacées");
-            russian.Add("selectionsCleared", "Список выбранных модов очищен")
+            russian.Add("selectionsCleared", "Список выбранных модов очищен");
 
             //Componet: Expand current tab option
             //
@@ -2331,7 +2331,7 @@ namespace RelhaxModpack
             german.Add("checkDatabase", "Durchsuche das Dateiarchive nach veralteten oder nicht mehr benötigten Dateien");
             polish.Add("checkDatabase", "Trwa przeszukiwanie w bazie danych przedawnionych i niepotrzebnych plików");
             french.Add("checkDatabase", "Vérification de la base de données pour les fichiers périmés ou non nécessaires");
-            russian.Add("checkDatabase", "Идёт проверка БД на наличие неактуальных или ненужных файлов")
+            russian.Add("checkDatabase", "Идёт проверка БД на наличие неактуальных или ненужных файлов");
 
             //Component: 
             //function checkForOldZipFiles() 
@@ -2371,7 +2371,7 @@ namespace RelhaxModpack
             german.Add("KillRunningWoTHeader", TranslationNeeded);
             polish.Add("KillRunningWoTHeader", TranslationNeeded);
             french.Add("KillRunningWoTHeader", TranslationNeeded);
-            russian.Add("KillRunningWoTHeader", "Проблема?")
+            russian.Add("KillRunningWoTHeader", "Проблема?");
 
             //Componet:
             //
@@ -2403,7 +2403,7 @@ namespace RelhaxModpack
             german.Add("zipReadingErrorMessage2", "Konnte nicht gelesen werden, da es höchstwahrscheinlich ein unvollständiger Download ist. Bitte versuche es später nochmal.");
             polish.Add("zipReadingErrorMessage2", "Nie można odczytać, prawdopodobnie niekompletność pobranych plików. Proszę spróbować ponownie");
             french.Add("zipReadingErrorMessage2", "n'as pas pus être lus, probablement un téléchargement incomplet. Veuillez réeissayer.");
-            russian.Add("zipReadingErrorMessage2", "не может быть прочитан, возможно, причиной послужила незаконченная загрузка. Попробуйте ещё раз.")
+            russian.Add("zipReadingErrorMessage2", "не может быть прочитан, возможно, причиной послужила незаконченная загрузка. Попробуйте ещё раз.");
 
             //Componet:
             //
@@ -2411,7 +2411,7 @@ namespace RelhaxModpack
             german.Add("zipReadingErrorMessage3", "Konnte nicht gelesen werden.");
             polish.Add("zipReadingErrorMessage3", "Nie można odczytać.");
             french.Add("zipReadingErrorMessage3", "n'as pas pus être lus");
-            russian.Add("zipReadingErrorMessage3", "Сбой чтения.")
+            russian.Add("zipReadingErrorMessage3", "Сбой чтения.");
 
             //Componet: 
             //
