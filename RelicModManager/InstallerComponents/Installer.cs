@@ -470,18 +470,6 @@ namespace RelhaxModpack
             Logging.Manager("Recorded time after extraction (msec): " + afterExtraction);
             long totalExtraction = beforeExtraction + duringExtraction + afterExtraction;
             Logging.Manager("Total recorded install time (msec): " + totalExtraction);
-            if (Settings.ShowInstallCompleteWindow)
-            {
-                using (InstallFinished IF = new InstallFinished(TanksLocation))
-                {
-                    System.Media.SystemSounds.Beep.Play();
-                    IF.ShowDialog();
-                }
-            }
-            else
-            {
-                MessageBox.Show(Translations.GetTranslatedString("installationFinished"), Translations.GetTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
         }
 
         

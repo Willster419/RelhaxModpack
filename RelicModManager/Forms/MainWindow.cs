@@ -2153,6 +2153,18 @@ namespace RelhaxModpack
                     if (Program.autoInstall)
                         Program.autoInstall = false;
                     ToggleUIButtons(true);
+                    if (Settings.ShowInstallCompleteWindow)
+                    {
+                        using (InstallFinished IF = new InstallFinished(this.tanksLocation))
+                        {
+                            System.Media.SystemSounds.Beep.Play();
+                            IF.ShowDialog();
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show(Translations.GetTranslatedString("installationFinished"), Translations.GetTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                     break;
                 case InstallerEventArgs.InstallProgress.Uninstall:
                     totalProgressBar.Value = 0;
