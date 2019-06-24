@@ -1,3 +1,9 @@
+Version 0.28.2.20 (06/23/2019)
+https://www.virustotal.com/gui/file/50f7e14d49f28c7ec7a4047f72963f4dbf8541cd8d676fcec60036cac6c70e2a/detection
+-Fixed a bug of the application crashing when pressing close from the advanced install progress window
+-Changed system for installing fonts
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 0.28.2.19 (05/18/2019)
 https://www.virustotal.com/#/file/67aadc24d5e400b5e6f2ac3cd6529fa5130617e93ec8c0b4ec90ced81b2969f1/detection
 -Fixed the bug of advanced settings window not sizing properly
