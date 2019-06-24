@@ -980,7 +980,7 @@
         <member name="F:RelhaxModpack.Settings.ApplicationVersion">
             <summary>
             The current distribution version of the application
-            Alhpa should NEVER be built for public distribution unless direct testing!
+            Alpha should NEVER be built for public distribution unless direct testing!
             </summary>
         </member>
         <member name="F:RelhaxModpack.Settings.DefaultMaximumSheetWidth">

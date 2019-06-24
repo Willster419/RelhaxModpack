@@ -70,7 +70,7 @@ namespace RelhaxModpack
 
         /// <summary>
         /// The current distribution version of the application
-        /// Alhpa should NEVER be built for public distribution unless direct testing!
+        /// Alpha should NEVER be built for public distribution unless direct testing!
         /// </summary>
         public const ApplicationVersions ApplicationVersion = ApplicationVersions.Alpha;
 
