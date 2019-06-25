@@ -650,12 +650,12 @@ namespace RelhaxModpack
                 {
                     if (File.Exists(Settings.ManagerInfoDatFile))
                         File.Delete(Settings.ManagerInfoDatFile);
-                    await client.DownloadFileTaskAsync(Settings.ManagerInfoURL, Settings.ManagerInfoDatFile);
+                    await client.DownloadFileTaskAsync(Settings.ManagerInfoURLBigmods, Settings.ManagerInfoDatFile);
 
                 }
                 catch (Exception e)
                 {
-                    Logging.WriteToLog(string.Format("Failed to check for updates: \n{0}", e), Logfiles.Application, LogLevel.ApplicationHalt);
+                    Logging.Exception("Failed to check for updates: \n{0}", e);
                     MessageBox.Show(Translations.GetTranslatedString("failedCheckUpdates"));
                     closingFromFailure = true;
                     Application.Current.Shutdown();
