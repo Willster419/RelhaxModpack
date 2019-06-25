@@ -132,6 +132,12 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Boring stuff
+
+        public DatabaseUpdater()
+        {
+            InitializeComponent();
+        }
+
         private void OnLoadModInfo(object sender, RoutedEventArgs e)
         {
             if (SelectModInfo.ShowDialog() == true)
