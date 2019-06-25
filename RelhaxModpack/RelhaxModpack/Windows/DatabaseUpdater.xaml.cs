@@ -26,9 +26,12 @@ namespace RelhaxModpack.Windows
         private const string MissingPackagesTxt = "missingPackages.txt";
         private const string RepoResourcesFolder = "resources";
         private const string RepoLatestDatabaseFolder = "latest_database";
-        private static readonly string DatabaseUpdatePath = Path.Combine(RepoResourcesFolder, DatabaseUpdateFilename);
-        private static readonly string SupportedClientsPath = Path.Combine(RepoResourcesFolder, Settings.SupportedClients);
-        private static readonly string ManagerVersionPath = Path.Combine(RepoResourcesFolder, Settings.ManagerVersion);
+        private const string HardCodeRepoPath = "F:\\Tanks Stuff\\RelhaxModpackDatabase";
+        private const bool UseHardCodePath = true;
+        private static readonly string DatabaseUpdatePath = Path.Combine(UseHardCodePath? HardCodeRepoPath: Settings.ApplicationStartupPath, RepoResourcesFolder, DatabaseUpdateFilename);
+        private static readonly string SupportedClientsPath = Path.Combine(UseHardCodePath ? HardCodeRepoPath : Settings.ApplicationStartupPath, RepoResourcesFolder, Settings.SupportedClients);
+        private static readonly string ManagerVersionPath = Path.Combine(UseHardCodePath ? HardCodeRepoPath : Settings.ApplicationStartupPath, RepoResourcesFolder, Settings.ManagerVersion);
+        private static readonly string RepoLatestDatabaseFolderPath = Path.Combine(UseHardCodePath ? HardCodeRepoPath : Settings.ApplicationStartupPath, RepoLatestDatabaseFolder);
         #endregion
 
         #region Editables
@@ -932,7 +935,7 @@ namespace RelhaxModpack.Windows
                 globalDependencies, dependencies, parsedCategoryList, DatabaseXmlVersion.Legacy);
 
             //and save it in new form as well
-            XMLUtils.SaveDatabase(RepoLatestDatabaseFolder, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
+            XMLUtils.SaveDatabase(RepoLatestDatabaseFolderPath, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
                 globalDependencies, dependencies, parsedCategoryList, DatabaseXmlVersion.OnePointOne);
 
             ReportProgress("Ready for step 4");
@@ -960,7 +963,7 @@ namespace RelhaxModpack.Windows
                 ReportProgress("DatabaseUpdateVersion is null");
                 return;
             }
-            if(!File.Exists(Settings.ManagerVersion))
+            if(!File.Exists(ManagerVersionPath))
             {
                 ReportProgress("manager_version.xml does not exist");
                 return;
@@ -987,7 +990,8 @@ namespace RelhaxModpack.Windows
             ReportProgress("Uploading new manager_version.xml to bigmods");
             using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
             {
-                await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPManagerResources + Settings.ManagerVersion, ManagerVersionPath);
+                string completeURL = PrivateStuff.BigmodsFTPManagerResources + Settings.ManagerVersion;
+                //await client.UploadFileTaskAsync(completeURL, ManagerVersionPath);
             }
 
             //check if supported_clients.xml needs to be updated for a new version
@@ -1004,16 +1008,16 @@ namespace RelhaxModpack.Windows
                 versionRoot.AppendChild(supported_client);
                 supportedClients.Save(SupportedClientsPath);
 
-                ReportProgress("Uploading new manager_version.xml to wotmods");
+                ReportProgress("Uploading new supported_clients.xml to wotmods");
                 using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
                 {
                     await client.UploadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + Settings.SupportedClients, SupportedClientsPath);
                 }
 
-                ReportProgress("Uploading new manager_version.xml to bigmods");
+                ReportProgress("Uploading new supported_clients.xml to bigmods");
                 using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
                 {
-                    await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPManagerResources + Settings.SupportedClients, SupportedClientsPath);
+                    //await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPManagerResources + Settings.SupportedClients, SupportedClientsPath);
                 }
                 ReportProgress("Updated");
             }
