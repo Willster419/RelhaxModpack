@@ -566,9 +566,11 @@ namespace RelhaxModpack.Windows
                 ReportProgress("failed to parse modInfo to lists");
                 return;
             }
+
             Utils.BuildLinksRefrence(parsedCategoryList, true);
             Utils.BuildLevelPerPackage(parsedCategoryList);
             List<DatabasePackage> flatListCurrent = Utils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
+
             List<string> duplicates = Utils.CheckForDuplicates(globalDependencies, dependencies, parsedCategoryList);
             if(duplicates.Count > 0)
             {
@@ -578,51 +580,53 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
+            //make the name of the new database update version
+            ReportProgress("Making new database version string");
+            string dateTimeFormat = string.Format("{0:yyyy-MM-dd}", DateTime.Now);
+
+            //load manager version xml file
+            XmlDocument doc = XMLUtils.LoadXmlDocument(ManagerVersionPath, XmlLoadType.FromFile);
+            XmlNode database_version_text = doc.SelectSingleNode("//version/database");
+
+            //database update text is like this: <WoTVersion>_<Date>_<itteration>
+            //only update the iteration if the WoT version and date match
+            string lastWoTClientVersion = database_version_text.InnerText.Split('_')[0];
+            string lastDate = database_version_text.InnerText.Split('_')[1];
+
+            ReportProgress(string.Format("lastWoTClientVersion = {0}", lastWoTClientVersion));
+            ReportProgress(string.Format("lastDate = {0}", lastDate));
+            ReportProgress(string.Format("currentWoTClientVersion = {0}", Settings.WoTClientVersion));
+            ReportProgress(string.Format("currentDate = {0}", dateTimeFormat));
+
+            if (lastWoTClientVersion.Equals(Settings.WoTClientVersion) && lastDate.Equals(dateTimeFormat))
+            {
+                ReportProgress("lastWoTVersion and date match, so incrementing the version");
+                int lastItteration = int.Parse(database_version_text.InnerText.Split('_')[2]);
+                DatabaseUpdateVersion = string.Format("{0}_{1}_{2}", Settings.WoTClientVersion, dateTimeFormat, ++lastItteration);
+            }
+            else
+            {
+                ReportProgress("lastWoTVersion and/or date NOT match, not incrementing the version (starts at 1)");
+                DatabaseUpdateVersion = string.Format("{0}_{1}_1", Settings.WoTClientVersion, dateTimeFormat);
+            }
+
+            ReportProgress(string.Format("DatabaseUpdateVersion = {0}", DatabaseUpdateVersion));
+
+            //update and save the manager_version.xml file
+            database_version_text.InnerText = DatabaseUpdateVersion;
+            doc.Save(ManagerVersionPath);
+
+            //get last supported wot version for comparison
+            LastSupportedTanksVersion = lastWoTClientVersion;
+            LastSupportedModInfoXml = "modInfo_" + LastSupportedTanksVersion + ".xml";
+
+            //also delete this just in case
+            if (File.Exists(LastSupportedModInfoXml))
+                File.Delete(LastSupportedModInfoXml);
+
+            ReportProgress("getting last supported modInfo");
             using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
             {
-                //make the name of the new database update version
-                ReportProgress("Making new database version string");
-                string dateTimeFormat = string.Format("{0:yyyy-MM-dd}", DateTime.Now);
-
-                //load manager version xml file
-                XmlDocument doc = XMLUtils.LoadXmlDocument(ManagerVersionPath, XmlLoadType.FromFile);
-                XmlNode database_version_text = doc.SelectSingleNode("//version/database");
-
-                //database update text is like this: <WoTVersion>_<Date>_<itteration>
-                //only update the iteration if the WoT version and date match
-                string lastWoTClientVersion = database_version_text.InnerText.Split('_')[0];
-                string lastDate = database_version_text.InnerText.Split('_')[1];
-
-                ReportProgress(string.Format("lastWoTClientVersion = {0}", lastWoTClientVersion));
-                ReportProgress(string.Format("lastDate = {0}", lastDate));
-                ReportProgress(string.Format("currentWoTClientVersion = {0}", Settings.WoTClientVersion));
-                ReportProgress(string.Format("currentDate = {0}", dateTimeFormat));
-
-                if (lastWoTClientVersion.Equals(Settings.WoTClientVersion) && lastDate.Equals(dateTimeFormat))
-                {
-                    ReportProgress("lastWoTVersion and date match, so incrementing the version");
-                    int lastItteration = int.Parse(database_version_text.InnerText.Split('_')[2]);
-                    DatabaseUpdateVersion = string.Format("{0}_{1}_{2}", Settings.WoTClientVersion, dateTimeFormat, ++lastItteration);
-                }
-                else
-                {
-                    ReportProgress("lastWoTVersion and/or date NOT match, not incrementing the version (starts at 1)");
-                    DatabaseUpdateVersion = string.Format("{0}_{1}_1", Settings.WoTClientVersion, dateTimeFormat);
-                }
-
-                ReportProgress(string.Format("DatabaseUpdateVersion = {0}", DatabaseUpdateVersion));
-
-                //update and save the manager_version.xml file
-                database_version_text.InnerText = DatabaseUpdateVersion;
-                doc.Save(ManagerVersionPath);
-
-                //get last supported wot version for comparison
-                LastSupportedTanksVersion = lastWoTClientVersion;
-                LastSupportedModInfoXml = "modInfo_" + LastSupportedTanksVersion + ".xml";
-                //also delete this just in case
-                if (File.Exists(LastSupportedModInfoXml))
-                    File.Delete(LastSupportedModInfoXml);
-                ReportProgress("getting last supported modInfo");
                 await client.DownloadFileTaskAsync(PrivateStuff.ModInfosLocation + LastSupportedModInfoXml, LastSupportedModInfoXml);
             }
 
@@ -644,12 +648,12 @@ namespace RelhaxModpack.Windows
             //download and load latest database.xml file from server
             ReportProgress("downloading database.xml of current WoT onlineFolder version from server");
             XmlDocument databaseXml = new XmlDocument();
+            if (File.Exists(DatabaseXml))
+            {
+                File.Delete(DatabaseXml);
+            }
             using (client = new WebClient())
             {
-                if(File.Exists(DatabaseXml))
-                {
-                    File.Delete(DatabaseXml);
-                }
                 await client.DownloadFileTaskAsync(string.Format("http://bigmods.relhaxmodpack.com/WoT/{0}/{1}",
                     Settings.WoTModpackOnlineFolderVersion, DatabaseXml), DatabaseXml);
                 databaseXml.Load(DatabaseXml);
@@ -966,12 +970,18 @@ namespace RelhaxModpack.Windows
                 await client.UploadFileTaskAsync(PrivateStuff.ModInfosLocation + CurrentModInfoXml, SelectModInfo.FileName);
 
                 //upload manager_version.xml
-                ReportProgress("Uploading new manager_version.xml");
-                await client.UploadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + Settings.ManagerVersion, Settings.ManagerVersion);
+                ReportProgress("Uploading new manager_version.xml to wotmods");
+                await client.UploadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + Settings.ManagerVersion, ManagerVersionPath);
 
                 //upload databaseUpdate.txt
                 ReportProgress("uploading new databaseUpdate.txt");
                 await client.UploadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + DatabaseUpdateFilename, DatabaseUpdatePath);
+            }
+
+            ReportProgress("Uploading new manager_version.xml to bigmods");
+            using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
+            {
+                await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPManagerResources + Settings.ManagerVersion, ManagerVersionPath);
             }
 
             //check if supported_clients.xml needs to be updated for a new version
@@ -980,22 +990,30 @@ namespace RelhaxModpack.Windows
             if (!LastSupportedTanksVersion.Equals(Settings.WoTClientVersion))
             {
                 ReportProgress("DOES need to be updated");
+                XmlDocument supportedClients = XMLUtils.LoadXmlDocument(SupportedClientsPath, XmlLoadType.FromFile);
+                XmlNode versionRoot = supportedClients.SelectSingleNode("//versions");
+                XmlElement supported_client = supportedClients.CreateElement("version");
+                supported_client.InnerText = Settings.WoTClientVersion;
+                supported_client.SetAttribute("folder", Settings.WoTModpackOnlineFolderVersion);
+                versionRoot.AppendChild(supported_client);
+                supportedClients.Save(SupportedClientsPath);
+
+                ReportProgress("Uploading new manager_version.xml to wotmods");
                 using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
                 {
-                    XmlDocument supportedClients = XMLUtils.LoadXmlDocument(SupportedClientsPath, XmlLoadType.FromFile);
-                    XmlNode versionRoot = supportedClients.SelectSingleNode("//versions");
-                    XmlElement supported_client = supportedClients.CreateElement("version");
-                    supported_client.InnerText = Settings.WoTClientVersion;
-                    supported_client.SetAttribute("folder", Settings.WoTModpackOnlineFolderVersion);
-                    versionRoot.AppendChild(supported_client);
-                    supportedClients.Save(SupportedClientsPath);
-                    await client.UploadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + Settings.SupportedClients, Settings.SupportedClients);
+                    await client.UploadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + Settings.SupportedClients, SupportedClientsPath);
+                }
+
+                ReportProgress("Uploading new manager_version.xml to bigmods");
+                using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
+                {
+                    await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPManagerResources + Settings.SupportedClients, SupportedClientsPath);
                 }
                 ReportProgress("Updated");
             }
             else
             {
-                ReportProgress("DOES NOT need to be uploaded");
+                ReportProgress("DOES NOT need to be updated");
             }
             ReportProgress("Done");
         }
