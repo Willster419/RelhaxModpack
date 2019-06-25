@@ -421,11 +421,14 @@ namespace RelhaxModpack.InstallerComponents
             {
                 StringBuilder userModsBuilder = new StringBuilder();
                 userModsBuilder.AppendLine("/*   User Mods   */");
+                int counter = 0;
                 foreach(DatabasePackage userPackage in UserPackagesToInstall)
                 {
-                    Logging.Info("Extracting user package {0}", Path.GetFileName(userPackage.ZipFile));
+                    Logging.Info("Extraction started of user zipfile {0}", Path.GetFileName(userPackage.ZipFile));
                     userModsBuilder.AppendLine(string.Format("/*   {0}   */", Path.GetFileName(userPackage.ZipFile)));
                     Unzip(userPackage, 9, userModsBuilder);
+                    Logging.Info("Extraction finished of user zipfile {0}", Path.GetFileName(userPackage.ZipFile));
+                    Logging.Info("Completed {0} of {1} extractions", ++counter, UserPackagesToInstall.Count);
                 }
                 Logging.Installer(userModsBuilder.ToString());
             }
