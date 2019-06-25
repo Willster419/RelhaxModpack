@@ -31,7 +31,7 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Editables
-        private string KeyFilename = "key.txt";//can be overridden by command line arguement
+        private string KeyFilename = "key.txt";//can be overridden by command line argument
         private WebClient client;
         private bool authorized = false;
         private OpenFileDialog SelectModInfo = new OpenFileDialog() { Filter = "*.xml|*.xml" };
@@ -68,13 +68,6 @@ namespace RelhaxModpack.Windows
         List<VersionInfos> VersionInfosList;
         VersionInfos selectedVersionInfos;
         bool cancelDelete = false;
-        #endregion
-
-        #region Constructor
-        public DatabaseUpdater()
-        {
-            InitializeComponent();
-        }
         #endregion
 
         #region Password auth stuff
