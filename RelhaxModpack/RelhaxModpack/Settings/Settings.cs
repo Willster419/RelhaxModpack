@@ -60,6 +60,7 @@ namespace RelhaxModpack
         public const string ApplicationUpdateFileName = "RelhaxModpack_update.zip";
         public const string RelicBatchUpdateScript = "relic_self_updater.bat";
         public const string RelicBatchUpdateScriptServer = "relic_self_updater.txt";
+        public const string RelicBatchUpdateScriptOld = "RelicCopyUpdate.bat";
 
         public const string SelectionsRoot = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/selection_files/";
         public const string SelectionsXml = "selections.xml";

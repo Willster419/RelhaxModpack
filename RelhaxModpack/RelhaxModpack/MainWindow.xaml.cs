@@ -84,6 +84,16 @@ namespace RelhaxModpack
             //first hide the window
             //Hide();
 
+            //delete the updater scripts if they exist
+            foreach (string s in new string[] { Settings.RelicBatchUpdateScript, Settings.RelicBatchUpdateScriptOld })
+            {
+                if(File.Exists(s))
+                {
+                    Logging.Debug("{0} found, deleting", s);
+                    File.Delete(s);
+                }
+            }
+
             //get size of original width and height of window
             OriginalHeight = Height;
             OriginalWidth = Width;
