@@ -1053,7 +1053,7 @@ namespace RelhaxModpack
                             ClientCertificateOptions = ClientCertificateOption.Automatic,
                             PreAuthenticate = true
                         })
-                        using (HttpClient client = new HttpClient(handler) { BaseAddress = new Uri(PrivateStuff.BigmodsDownloadStatURL) })
+                        using (HttpClient client = new HttpClient(handler) { BaseAddress = new Uri(PrivateStuff.BigmodsEnterDownloadStatPHP) })
                         {
                             //https://stackoverflow.com/questions/15176538/net-httpclient-how-to-post-string-value
                             FormUrlEncodedContent content = new FormUrlEncodedContent(new[]

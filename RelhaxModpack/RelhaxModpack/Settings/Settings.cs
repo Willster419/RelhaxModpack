@@ -53,6 +53,8 @@ namespace RelhaxModpack
 
         public const string ManagerInfoURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat";
 
+        public const string ManagerInfoURLBigmods = "http://bigmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat";
+
         //the config file version for saving the user's selection preferences
         public const string ConfigFileVersion = "2.0";
         public const string ApplicationUpdateURL = "http://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";

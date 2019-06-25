@@ -1304,7 +1304,7 @@ namespace RelhaxModpack.Windows
             DatabaseEditorDownload name = new DatabaseEditorDownload()
             {
                 ZipFilePathDisk = SaveZipFileDialog.FileName,
-                ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.FTPRoot, Settings.WoTModpackOnlineFolderVersion),
+                ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPRoot, Settings.WoTModpackOnlineFolderVersion),
                 ZipFileName = Path.GetFileName((SelectedItem as EditorComboBoxItem).Package.ZipFile),
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
                 Upload = false,
@@ -1350,7 +1350,7 @@ namespace RelhaxModpack.Windows
             DatabaseEditorDownload name = new DatabaseEditorDownload()
             {
                 ZipFilePathDisk = zipFileToUpload,
-                ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.FTPRoot, Settings.WoTModpackOnlineFolderVersion),
+                ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPRoot, Settings.WoTModpackOnlineFolderVersion),
                 ZipFileName = Path.GetFileName(zipFileToUpload),
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
                 Upload = true,

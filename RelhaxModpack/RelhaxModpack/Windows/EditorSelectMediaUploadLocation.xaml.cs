@@ -21,7 +21,7 @@ namespace RelhaxModpack.Windows
     public partial class EditorSelectMediaUploadLocation : RelhaxWindow
     {
 
-        private string FTPPath = PrivateStuff.FTPMediaRoot;
+        private string FTPPath = PrivateStuff.BigmodsFTPMediaRoot;
         public NetworkCredential Credential;
         public string UploadPath;
         private TreeViewItem root;
