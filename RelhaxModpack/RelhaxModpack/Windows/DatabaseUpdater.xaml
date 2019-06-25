@@ -30,11 +30,12 @@
                     <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
                         <TextBox x:Name="UpdateDatabaseStep0" Height="23" TextWrapping="Wrap" Text="Step 0: Pull latest database!!!" TextAlignment="Left" IsReadOnly="True"/>
                         <Button x:Name="UpdateDatabaseStep1" Content="Step 1: Load modInfo.xml" HorizontalContentAlignment="Left" Click="OnLoadModInfo"/>
-                        <Button x:Name="UpdateDatabaseStep2" Content="Step 2: Update via PHP script" HorizontalContentAlignment="Left"  Click="UpdateDatabaseStep2_Click"/>
+                        <Button x:Name="UpdateDatabaseStep2" Content="Step 2: Update zip database via PHP script" HorizontalContentAlignment="Left"  Click="UpdateDatabaseStep2_Click"/>
                         <Button x:Name="UpdateDatabaseStep3" Content="Step 3: Prepare database update" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep3_Click"/>
                         <Button x:Name="UpdateDatabaseStep4" Content="Step 4: Upload changed" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep4_Click"/>
-                        <Button x:Name="UpdateDatabaseStep5" Content="Step 5: Run script CreateModInfo.php" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep5_Click"/>
-                        <Button x:Name="UpdateDatabaseStep6" Content="Step 6: Run script CreateManagerInfo.php" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep6_Click"/>
+                        <Button x:Name="UpdateDatabaseStep5" Content="Step 5: Run script CreateModInfo.php (wotmods)" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep5_Click"/>
+                        <Button x:Name="UpdateDatabaseStep6a" Content="Step 6a: Run script CreateManagerInfo.php (wotmods)" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep6a_Click"/>
+                        <Button x:Name="UpdateDatabaseStep6b" Content="Step 6b: Run script CreateManagerInfo.php (bigmods)" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep6b_Click"/>
                         <TextBox x:Name="UpdateDatabaseStep7" Height="35" TextWrapping="Wrap" Text="Step 7: Commit modInfo.xml and databaseUpdate.txt update with message: &quot;made database public @123gauss&quot;" IsReadOnly="True"/>
                         <StackPanel Orientation="Horizontal">
                             <TextBox x:Name="UpdateDatabaseStep8" Height="23" TextWrapping="Wrap" Text="Step 8: Post database update on discord/forums" Margin="0,0,5,0" IsReadOnly="True"/>

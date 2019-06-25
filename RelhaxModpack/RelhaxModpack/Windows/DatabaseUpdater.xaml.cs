@@ -1026,12 +1026,20 @@ namespace RelhaxModpack.Windows
             await RunPhpScript(PrivateStuff.WotmodsNetworkCredential, PrivateStuff.CreateModInfoPHP, 100000);
         }
 
-        private async void UpdateDatabaseStep6_Click(object sender, RoutedEventArgs e)
+        private async void UpdateDatabaseStep6a_Click(object sender, RoutedEventArgs e)
         {
             LogOutput.Clear();
-            ReportProgress("Starting Update database step 6...");
-            ReportProgress("Running script to create manager info");
+            ReportProgress("Starting Update database step 6a...");
+            ReportProgress("Running script to create manager info (wotmods)");
             await RunPhpScript(PrivateStuff.WotmodsNetworkCredential, PrivateStuff.CreateManagerInfoPHP, 100000);
+        }
+
+        private async void UpdateDatabaseStep6b_Click(object sender, RoutedEventArgs e)
+        {
+            LogOutput.Clear();
+            ReportProgress("Starting Update database step 6a...");
+            ReportProgress("Running script to create manager info (bigmods)");
+            await RunPhpScript(PrivateStuff.BigmodsNetworkCredential, PrivateStuff.BigmodsCreateManagerInfoPHP, 100000);
         }
 
         private void UpdateDatabasestep8_NA_ENG_Click(object sender, RoutedEventArgs e)
