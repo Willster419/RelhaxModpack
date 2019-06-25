@@ -1786,7 +1786,7 @@ namespace RelhaxModpack.InstallerComponents
                     //else start extraction
                     else
                     {
-                        Logging.Info("Thread ID={0}, starting extraction of zipfile {1} of packageName {2}", threadNum, package.ZipFile, package.PackageName);
+                        Logging.Info("Thread ID={0}, extraction started of zipfile {1} of packageName {2}", threadNum, package.ZipFile, package.PackageName);
 
                         //flag that this package's extraction has started
                         package.ExtractionStarted = true;
