@@ -1896,7 +1896,10 @@ namespace RelhaxModpack.InstallerComponents
                                     while (OriginalPatchNames.ContainsKey(key))
                                     {
                                         string orig = key;
+                                        //add a underscore before the dot for the file extension
                                         key = string.Join("_.", key.Split('.'));
+                                        //also update the stringbuilder
+                                        sb = new StringBuilder(string.Format("{0}{1}",sb.ToString().Substring(0,7),key));
                                         Logging.Warning("patchfile \"{0}\" has same name as patch in other zip file! Please fix! Using name \"{1}\" instead", orig, key);
                                     }
                                     OriginalPatchNames.Add(key, value);
