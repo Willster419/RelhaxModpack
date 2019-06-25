@@ -990,8 +990,8 @@ namespace RelhaxModpack.Windows
             ReportProgress("Uploading new manager_version.xml to bigmods");
             using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
             {
-                string completeURL = PrivateStuff.BigmodsFTPManagerResources + Settings.ManagerVersion;
-                //await client.UploadFileTaskAsync(completeURL, ManagerVersionPath);
+                string completeURL = PrivateStuff.BigmodsFTPManager + Settings.ManagerVersion;
+                await client.UploadFileTaskAsync(completeURL, ManagerVersionPath);
             }
 
             //check if supported_clients.xml needs to be updated for a new version
@@ -999,7 +999,7 @@ namespace RelhaxModpack.Windows
             ReportProgress("Old version = " + LastSupportedTanksVersion + ", new version = " + Settings.WoTClientVersion);
             if (!LastSupportedTanksVersion.Equals(Settings.WoTClientVersion))
             {
-                ReportProgress("DOES need to be updated");
+                ReportProgress("DOES need to be updated/uploaded");
                 XmlDocument supportedClients = XMLUtils.LoadXmlDocument(SupportedClientsPath, XmlLoadType.FromFile);
                 XmlNode versionRoot = supportedClients.SelectSingleNode("//versions");
                 XmlElement supported_client = supportedClients.CreateElement("version");
@@ -1017,13 +1017,13 @@ namespace RelhaxModpack.Windows
                 ReportProgress("Uploading new supported_clients.xml to bigmods");
                 using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
                 {
-                    //await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPManagerResources + Settings.SupportedClients, SupportedClientsPath);
+                    await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPManager + Settings.SupportedClients, SupportedClientsPath);
                 }
                 ReportProgress("Updated");
             }
             else
             {
-                ReportProgress("DOES NOT need to be updated");
+                ReportProgress("DOES NOT need to be updated/uploaded");
             }
             ReportProgress("Done");
         }
@@ -1049,7 +1049,7 @@ namespace RelhaxModpack.Windows
             LogOutput.Clear();
             ReportProgress("Starting Update database step 6a...");
             ReportProgress("Running script to create manager info (bigmods)");
-            await RunPhpScript(PrivateStuff.BigmodsNetworkCredential, PrivateStuff.BigmodsCreateManagerInfoPHP, 100000);
+            await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateManagerInfoPHP, 100000);
         }
 
         private void UpdateDatabasestep8_NA_ENG_Click(object sender, RoutedEventArgs e)
