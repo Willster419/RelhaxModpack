@@ -509,22 +509,19 @@ namespace RelhaxModpack
         private async Task<bool> CheckForApplicationUpdates()
         {
             //check if skipping updates
-            Logging.WriteToLog("Started check for application updates");
+            Logging.Info("Started check for application updates");
             if(CommandLineSettings.SkipUpdate)
             {
                 if(Settings.ApplicationVersion != ApplicationVersions.Alpha)
                     MessageBox.Show(Translations.GetTranslatedString("skipUpdateWarning"));
-                Logging.WriteToLog("Skipping updates", Logfiles.Application, LogLevel.Warning);
+                Logging.Warning("Skipping update check from command-line option SkipUpdate");
                 return true;
             }
-
-            XmlDocument doc = await GetManagerInfoDocumentAsync();
 
             //if the request distro version is alpha, correct it to stable
             if (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Alpha)
             {
-                Logging.WriteToLog(nameof(ModpackSettings.ApplicationDistroVersion) + "is Alpha, setting to stable for safety",
-                    Logfiles.Application, LogLevel.Warning);
+                Logging.Warning("Alpha is invalid option for ModpackSettings.ApplicationDistroVersion, setting to stable");
                 ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
             }
             
@@ -536,7 +533,7 @@ namespace RelhaxModpack
             //beta->beta (update check)
             bool outOfDate = false;
 
-            //make a copy of the curent application version and set it to stable if alphs
+            //make a copy of the current application version and set it to stable if (fake) alpha
             ApplicationVersions version = Settings.ApplicationVersion;
 
             //check if the documentation xml file is there, if so then we should say in alpha
@@ -557,18 +554,22 @@ namespace RelhaxModpack
             //declare these out here so the logger can access them
             string applicationBuildVersion = Utils.GetApplicationVersion();
 
+            //only true alpha build version will get here
             if(version == ApplicationVersions.Alpha)
             {
                 Logging.Debug("application version is {0} on alpha build, skipping update check");
                 return true;
             }
 
+            //get manager_info.xml into XmlDocument
+            XmlDocument doc = await GetManagerInfoDocumentAsync();
+
             //if current application build does not equal requested distribution channel
             if (version != ModpackSettings.ApplicationDistroVersion)
             {
                 outOfDate = true;//can assume out of date
-                Logging.WriteToLog(string.Format("Current build is {0} ({1}), online build is NA (changing distribution version {2}->{3})",
-                    applicationBuildVersion, version.ToString(), version.ToString(), ModpackSettings.ApplicationDistroVersion.ToString()));
+                Logging.Info("Current build is {0} ({1}), online build is NA (changing distribution version {1}->{2})",
+                    applicationBuildVersion, version.ToString(), ModpackSettings.ApplicationDistroVersion.ToString());
             }
             else
             {
@@ -576,17 +577,21 @@ namespace RelhaxModpack
                 string applicationOnlineVersion = (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Stable) ?
                     XMLUtils.GetXMLStringFromXPath(doc, "//version/relhax_v2_stable").Trim() ://stable
                     XMLUtils.GetXMLStringFromXPath(doc, "//version/relhax_v2_beta").Trim();//beta
-                if (!(applicationBuildVersion.Equals(applicationOnlineVersion)))
+
+                //check if versions are equal
+                if (!applicationBuildVersion.Equals(applicationOnlineVersion))
                     outOfDate = true;
-                Logging.WriteToLog(string.Format("Current build is {0} ({1}), online build is {2} ({3})",
-                    applicationBuildVersion, version.ToString(), applicationOnlineVersion, ModpackSettings.ApplicationDistroVersion.ToString()));
+
+                Logging.Info("Current build is {0} ({1}), online build is {2} ({3})",
+                    applicationBuildVersion, version.ToString(), applicationOnlineVersion, ModpackSettings.ApplicationDistroVersion.ToString());
             }
             if(!outOfDate)
             {
-                Logging.WriteToLog("Application up to date or is alpha build");
+                Logging.Info("Application up to date");
                 return true;
             }
-            Logging.WriteToLog("Application is out of date, display update window");
+
+            Logging.Info("Application is out of date, display update window");
             VersionInfo versionInfo = new VersionInfo();
             versionInfo.ShowDialog();
             if(versionInfo.ConfirmUpdate)
@@ -594,7 +599,7 @@ namespace RelhaxModpack
                 //check for any other running instances
                 while (true)
                 {
-                    System.Threading.Thread.Sleep(100);
+                    Thread.Sleep(100);
                     if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1)
                     {
                         MessageBoxResult result = MessageBox.Show(Translations.GetTranslatedString("closeInstanceRunningForUpdate"), Translations.GetTranslatedString("critical"), MessageBoxButton.OKCancel);
@@ -632,9 +637,8 @@ namespace RelhaxModpack
             }
             else
             {
-                Logging.WriteToLog("User pressed x or said no");
+                Logging.Info("User pressed x or said no");
                 Application.Current.Shutdown();
-                Close();
                 return false;
             }
             return false;
