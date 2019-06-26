@@ -43,7 +43,11 @@ namespace RelhaxModpack
 
         public static string DefaultEndAddress = @"";
 
-        public const string BetaDatabaseURL = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/modInfo.xml";
+        public const string BetaDatabaseV1URL = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/modInfo.xml";
+
+        public const string BetaDatabaseV2FolderURL = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/{branch}/latest_database/";
+
+        public const string BetaDatabaseV2RootFilename = "database.xml";
 
         public const string DatabaseOnlineFolderXpath = "//modInfoAlpha.xml/@onlineFolder";
 

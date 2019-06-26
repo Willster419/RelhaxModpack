@@ -395,7 +395,7 @@ namespace RelhaxModpack.Windows
                 {
                     if(infos.WoTClientVersion.Equals("GITHUB"))
                     {
-                        doc.LoadXml(await client.DownloadStringTaskAsync(Settings.BetaDatabaseURL));
+                        doc.LoadXml(await client.DownloadStringTaskAsync(Settings.BetaDatabaseV1URL));
                         string betaDatabaseOnlineFolderVersion = XMLUtils.GetXMLStringFromXPath(doc, Settings.DatabaseOnlineFolderXpath);
                         ReportProgress(string.Format("GITHUB online folder={0}, selected online folder to clean version={1}",
                             betaDatabaseOnlineFolderVersion, selectedVersionInfos.WoTOnlineFolderVersion));
