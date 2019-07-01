@@ -2066,6 +2066,7 @@ namespace RelhaxModpack
             if(creator.CreateAtlas(atlas) != FailCode.None)
             {
                 Logging.Error("Failed to create atlas file: {0}", atlas.MapFile);
+                return;
             }
             stopwatch.Stop();
             Logging.Info("atlas file {0} building completed in {1} msec", Path.GetFileName(atlas.AtlasFile), stopwatch.ElapsedMilliseconds);
