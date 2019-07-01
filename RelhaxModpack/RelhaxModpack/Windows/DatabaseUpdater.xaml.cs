@@ -487,8 +487,8 @@ namespace RelhaxModpack.Windows
             CleanFoldersOnlineCancelStep3.Visibility = Visibility.Visible;
             List<string> filesToDelete = new List<string>();
             filesToDelete = CleanZipFoldersTextbox.Text.Split('\n').ToList();
-            string[] filesActuallyInFolder = await Utils.FTPListFilesFoldersAsync(string.Format("ftp://bigmods.relhaxmodpack.com/{0}/",
-                selectedVersionInfos.WoTOnlineFolderVersion),PrivateStuff.BigmodsNetworkCredential);
+            string[] filesActuallyInFolder = await Utils.FTPListFilesFoldersAsync(
+                PrivateStuff.BigmodsFTPRootWoT + selectedVersionInfos.WoTOnlineFolderVersion,PrivateStuff.BigmodsNetworkCredential);
             int count = 1;
             foreach(string s in filesToDelete)
             {
@@ -504,8 +504,8 @@ namespace RelhaxModpack.Windows
                     continue;
                 }
                 ReportProgress(string.Format("Deleting file {0} of {1}, {2}", count++, filesToDelete.Count, s));
-                await Utils.FTPDeleteFileAsync(string.Format("ftp://bigmods.relhaxmodpack.com/{0}/{1}",
-                    selectedVersionInfos.WoTOnlineFolderVersion, s), PrivateStuff.BigmodsNetworkCredential);
+                await Utils.FTPDeleteFileAsync(string.Format("{0}{1}/{2}",
+                    PrivateStuff.BigmodsFTPRootWoT, selectedVersionInfos.WoTOnlineFolderVersion, s), PrivateStuff.BigmodsNetworkCredential);
             }
             CleanZipFoldersTextbox.Clear();
             CleanFoldersOnlineCancelStep3.Visibility = Visibility.Hidden;
@@ -990,7 +990,7 @@ namespace RelhaxModpack.Windows
             ReportProgress("Uploading new manager_version.xml to bigmods");
             using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
             {
-                string completeURL = PrivateStuff.BigmodsFTPManager + Settings.ManagerVersion;
+                string completeURL = PrivateStuff.BigmodsFTPModpackManager + Settings.ManagerVersion;
                 await client.UploadFileTaskAsync(completeURL, ManagerVersionPath);
             }
 
@@ -1017,7 +1017,7 @@ namespace RelhaxModpack.Windows
                 ReportProgress("Uploading new supported_clients.xml to bigmods");
                 using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
                 {
-                    await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPManager + Settings.SupportedClients, SupportedClientsPath);
+                    await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Settings.SupportedClients, SupportedClientsPath);
                 }
                 ReportProgress("Updated");
             }
