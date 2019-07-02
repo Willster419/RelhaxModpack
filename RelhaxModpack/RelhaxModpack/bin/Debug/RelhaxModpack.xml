@@ -704,9 +704,9 @@
         </member>
         <member name="M:RelhaxModpack.Logging.Init(RelhaxModpack.Logfiles,System.String)">
             <summary>
-            Initialize the logging subsystem for the appilcation
+            Initialize the logging subsystem for the application
             </summary>
-            <returns>True if sucessfull initialization, false otherwise</returns>
+            <returns>True if successful initialization, false otherwise</returns>
         </member>
         <member name="M:RelhaxModpack.Logging.DisposeLogging(RelhaxModpack.Logfiles)">
             <summary>

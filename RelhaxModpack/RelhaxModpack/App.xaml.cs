@@ -77,15 +77,6 @@ namespace RelhaxModpack
             }
         }
 
-        private string TransferLogInfo(string filename)
-        {
-            if (!File.Exists(filename))
-                return Logging.ApplicationlogStartStop;
-            string textToReturn = File.ReadAllText(filename);
-            File.Delete(filename);
-            return textToReturn.Trim();
-        }
-
         //when application is starting for first time
         private void Application_Startup(object sender, StartupEventArgs e)
         {
@@ -107,7 +98,7 @@ namespace RelhaxModpack
             };
             //init loggine here
             //"The application failed to open a logfile. Eithor check your file permissions or move the application to a folder with write access"
-            if (!Logging.Init(Logfiles.Application, Logging.ApplicationLogTempFilename))
+            if (!Logging.Init(Logfiles.Application))
             {
                 MessageBox.Show(Translations.GetTranslatedString("appFailedCreateLogfile"));
                 Shutdown((int)ReturnCodes.LogfileError);
@@ -128,13 +119,13 @@ namespace RelhaxModpack
                     //stop application logging system
                     CloseApplicationLog(false);
                     //start updater logging system
-                    if (!Logging.Init(Logfiles.Application, Logging.ApplicationUpdaterLogFilename))
+                    if (!Logging.Init(Logfiles.Updater))
                     {
-                        MessageBox.Show("Failed to initialize logfile (Do you have multiple windows open?");
+                        MessageBox.Show("Failed to initialize logfile for updater");
                         Current.Shutdown((int)ReturnCodes.LogfileError);
                         return;
                     }
-                    Logging.WriteHeader(TransferLogInfo(Logging.ApplicationLogTempFilename));
+                    Logging.WriteHeader(Logfiles.Updater);
                     updater.ShowDialog();
                     //stop updater logging system
                     CloseApplicationLog(true);
@@ -146,13 +137,13 @@ namespace RelhaxModpack
                     //stop application logging system
                     CloseApplicationLog(false);
                     //start updater logging system
-                    if (!Logging.Init(Logfiles.Application, Logging.ApplicationEditorLogFilename))
+                    if (!Logging.Init(Logfiles.Editor))
                     {
-                        MessageBox.Show("Failed to initialize logfile (Do you have multiple windows open?");
+                        MessageBox.Show("Failed to initialize logfile for editor");
                         Current.Shutdown((int)ReturnCodes.LogfileError);
                         return;
                     }
-                    Logging.WriteHeader(TransferLogInfo(Logging.ApplicationLogTempFilename));
+                    Logging.WriteHeader(Logfiles.Editor);
                     editor.ShowDialog();
                     //stop updater logging system
                     CloseApplicationLog(true);
@@ -164,13 +155,13 @@ namespace RelhaxModpack
                     //stop application logging system
                     CloseApplicationLog(false);
                     //start updater logging system
-                    if (!Logging.Init(Logfiles.Application, Logging.ApplicationPatchDesignerLogFilename))
+                    if (!Logging.Init(Logfiles.Patcher))
                     {
-                        MessageBox.Show("Failed to initialize logfile (Do you have multiple windows open?");
+                        MessageBox.Show("Failed to initialize logfile for patcher");
                         Current.Shutdown((int)ReturnCodes.LogfileError);
                         return;
                     }
-                    Logging.WriteHeader(TransferLogInfo(Logging.ApplicationLogTempFilename));
+                    Logging.WriteHeader(Logfiles.Patcher);
                     patcher.ShowDialog();
                     //stop updater logging system
                     CloseApplicationLog(true);
@@ -179,8 +170,7 @@ namespace RelhaxModpack
                     break;
                 case ApplicationMode.Patcher:
                     CloseApplicationLog(false);
-                    Logging.Init(Logfiles.Application, Logging.ApplicationLogFilename);
-                    Logging.WriteHeader(TransferLogInfo(Logging.ApplicationLogTempFilename));
+                    Logging.Init(Logfiles.Application);
                     Logging.Info("Running patch mode");
                     if(CommandLineSettings.PatchFilenames.Count == 0)
                     {
@@ -219,16 +209,6 @@ namespace RelhaxModpack
                         CloseApplicationLog(true);
                         Current.Shutdown((int)exitCode);
                     }
-                    break;
-                default:
-                    CloseApplicationLog(false);
-                    if (!Logging.Init(Logfiles.Application, Logging.ApplicationLogFilename))
-                    {
-                        MessageBox.Show("Failed to initialize logfile (Do you have multiple windows open?");
-                        Current.Shutdown((int)ReturnCodes.LogfileError);
-                        return;
-                    }
-                    Logging.WriteHeader(TransferLogInfo(Logging.ApplicationLogTempFilename));
                     break;
             }
         }

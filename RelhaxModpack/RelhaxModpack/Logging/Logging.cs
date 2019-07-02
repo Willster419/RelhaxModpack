@@ -20,7 +20,13 @@ namespace RelhaxModpack
         /// <summary>
         /// logfile for when uninstalling mods
         /// </summary>
-        Uninstaller
+        Uninstaller,
+
+        Editor,
+
+        Patcher,
+
+        Updater
     }
     /// <summary>
     /// The level of severity of the log message
@@ -64,7 +70,6 @@ namespace RelhaxModpack
         /// The filename of the application log file
         /// </summary>
         public const string ApplicationLogFilename = "Relhax.log";
-        public const string ApplicationLogTempFilename = "RelhaxTemp.log";
         public const string ApplicationUpdaterLogFilename = "RelhaxUpdater.log";
         public const string ApplicationEditorLogFilename = "RelhaxEditor.log";
         public const string ApplicationPatchDesignerLogFilename = "RelhaxPatchDesigner.log";
@@ -99,20 +104,25 @@ namespace RelhaxModpack
         /// Provides a refrence to an instalce of an uninstall log file
         /// </summary>
         private static Logfile UninstallLogfile;
+        private static Logfile PatcherLogfile;
+        private static Logfile EditorLogfile;
+        private static Logfile UpdaterLogfile;
         private static bool FailedToWriteToLogWindowShown = false;
         public static event LoggingUIThreadReport OnLoggingUIThreadReport;
         /// <summary>
-        /// Initialize the logging subsystem for the appilcation
+        /// Initialize the logging subsystem for the application
         /// </summary>
-        /// <returns>True if sucessfull initialization, false otherwise</returns>
-        public static bool Init(Logfiles logfile, string logfilePath)
+        /// <returns>True if successful initialization, false otherwise</returns>
+        public static bool Init(Logfiles logfile, string logfilePath = null)
         {
             Logfile fileToWriteTo = null;
+
             //assign it here first to make sure it's null
             switch (logfile)
             {
                 case Logfiles.Application:
                     fileToWriteTo = ApplicationLogfile;
+                    logfilePath = ApplicationLogFilename;
                     break;
                 case Logfiles.Installer:
                     fileToWriteTo = InstallLogfile;
@@ -120,10 +130,24 @@ namespace RelhaxModpack
                 case Logfiles.Uninstaller:
                     fileToWriteTo = UninstallLogfile;
                     break;
+                case Logfiles.Editor:
+                    fileToWriteTo = EditorLogfile;
+                    logfilePath = ApplicationEditorLogFilename;
+                    break;
+                case Logfiles.Patcher:
+                    fileToWriteTo = PatcherLogfile;
+                    logfilePath = ApplicationPatchDesignerLogFilename;
+                    break;
+                case Logfiles.Updater:
+                    fileToWriteTo = UpdaterLogfile;
+                    logfilePath = ApplicationUpdaterLogFilename;
+                    break;
             }
+
             if (fileToWriteTo != null)
                 throw new BadMemeException("only do this once jackass");
             fileToWriteTo = new Logfile(logfilePath, ApplicationLogfileTimestamp);
+
             //now that it's newed, the reference needs to be reverse assigned
             switch (logfile)
             {
@@ -137,6 +161,7 @@ namespace RelhaxModpack
                     UninstallLogfile = fileToWriteTo;
                     break;
             }
+
             if (!fileToWriteTo.Init())
             {
                 MessageBox.Show(string.Format("Failed to initialize logfile {0}, check file permissions", logfilePath));
@@ -144,6 +169,7 @@ namespace RelhaxModpack
             }
             return true;
         }
+
         public static bool IsLogDisposed(Logfiles file)
         {
             switch (file)
@@ -152,11 +178,18 @@ namespace RelhaxModpack
                     return InstallLogfile == null ? true : false;
                 case Logfiles.Uninstaller:
                     return UninstallLogfile == null ? true : false;
+                case Logfiles.Editor:
+                    return EditorLogfile == null ? true : false;
+                case Logfiles.Patcher:
+                    return PatcherLogfile == null ? true : false;
+                case Logfiles.Updater:
+                    return UpdaterLogfile == null ? true : false;
                 case Logfiles.Application:
                 default:
                     return ApplicationLogfile == null ? true : false;
             }
         }
+
         public static bool IsLogOpen(Logfiles file)
         {
             switch (file)
@@ -165,10 +198,27 @@ namespace RelhaxModpack
                     if (InstallLogfile == null)
                         return false;
                     return InstallLogfile.CanWrite;
+
                 case Logfiles.Uninstaller:
                     if (UninstallLogfile == null)
                         return false;
                     return UninstallLogfile.CanWrite;
+
+                case Logfiles.Editor:
+                    if (EditorLogfile == null)
+                        return false;
+                    return EditorLogfile.CanWrite;
+
+                case Logfiles.Patcher:
+                    if (PatcherLogfile == null)
+                        return false;
+                    return PatcherLogfile.CanWrite;
+
+                case Logfiles.Updater:
+                    if (UpdaterLogfile == null)
+                        return false;
+                    return UpdaterLogfile.CanWrite;
+
                 case Logfiles.Application:
                 default:
                     if (ApplicationLogfile == null)
@@ -195,14 +245,38 @@ namespace RelhaxModpack
                     UninstallLogfile.Dispose();
                     UninstallLogfile = null;
                     break;
+                case Logfiles.Editor:
+                    EditorLogfile.Dispose();
+                    EditorLogfile = null;
+                    break;
+                case Logfiles.Patcher:
+                    PatcherLogfile.Dispose();
+                    PatcherLogfile = null;
+                    break;
+                case Logfiles.Updater:
+                    UpdaterLogfile.Dispose();
+                    UpdaterLogfile = null;
+                    break;
             }
         }
 
-        public static void WriteHeader(string header)
+        public static void WriteHeader(Logfiles logfile)
         {
-            if (ApplicationLogfile == null)
-                return;
-            ApplicationLogfile.Write(header);
+            switch(logfile)
+            {
+                case Logfiles.Application:
+                    ApplicationLogfile.Write(ApplicationlogStartStop);
+                    break;
+                case Logfiles.Editor:
+                    EditorLogfile.Write(ApplicationlogStartStop);
+                    break;
+                case Logfiles.Patcher:
+                    PatcherLogfile.Write(ApplicationlogStartStop);
+                    break;
+                case Logfiles.Updater:
+                    UpdaterLogfile.Write(ApplicationlogStartStop);
+                    break;
+            }
         }
 
         /// <summary>
@@ -213,6 +287,7 @@ namespace RelhaxModpack
         /// <param name="logLevel">The level of severity of the message. If not Application log, this parameter is ignored</param>
         public static void WriteToLog(string message, Logfiles logfiles = Logfiles.Application, LogLevel logLevel = LogLevel.Info)
         {
+
             Logfile fileToWriteTo = null;
             switch(logfiles)
             {
@@ -244,8 +319,9 @@ namespace RelhaxModpack
                 }
                 return;
             }
-            if (logfiles == Logfiles.Application)
+            if (logfiles == Logfiles.Updater)
             {
+#warning this is hackey and should be fixed
                 string temp = fileToWriteTo.Write(message, logLevel);
                 if(OnLoggingUIThreadReport != null)
                 {
@@ -315,7 +391,7 @@ namespace RelhaxModpack
 
         public static void Installer(string message)
         {
-            WriteToLog(message, Logfiles.Installer, LogLevel.Info);//logLevel does not matter if it's not the application
+            WriteToLog(message, Logfiles.Installer, LogLevel.Info);//logLevel does not matter if it's installer or uninstaller
         }
 
         public static void Installer(string message, params object[] args)
