@@ -141,6 +141,7 @@
                         <CheckBox x:Name="ForceEnabledCB" Tag="ForceEnabledCB" Content="Force all components enabled" Margin="20,0,0,0" Click="ForceEnabledCB_Clicked"/>
                         <CheckBox x:Name="ForceVisibleCB" Tag="ForceVisibleCB" Content="Force all components visible" Margin="20,0,0,0" Click="ForceVisibleCB_Click"/>
                         <CheckBox x:Name="ExportModeCB" Tag="ExportModeCB" Content="Export mode" Margin="20,0,0,0" Click="ExportModeCB_Click" IsEnabled="True"/>
+                        <Button x:Name="LauchEditor" Tag="LauchEditor" Content="Launch Editor" Margin="20,0,0,0" Click="LauchEditor_Click" IsEnabled="False" Visibility="Hidden"/>
                     </StackPanel>
                 </Grid>
             </TabItem>

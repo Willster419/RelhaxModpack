@@ -37,6 +37,8 @@ namespace RelhaxModpack
 
         public const string LastSavedConfigFilename = "lastInstalledConfig.xml";
 
+        public const string EditorLaunchFromMainWindowFilename = "EditorUnlock.txt";
+
         public static string DefaultStartAddress = @"http://bigmods.relhaxmodpack.com/WoT/{onlineFolder}/";
 
         public static string WotmodsDatabaseDatRoot = @"http://wotmods.relhaxmodpack.com/WoT/{onlineFolder}/";

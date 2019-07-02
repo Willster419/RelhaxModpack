@@ -279,6 +279,19 @@ namespace RelhaxModpack
                     Title = string.Format("{0} ({1} APP)", Title, ModpackSettings.ApplicationDistroVersion.ToString());
             }
 
+            //if the editor unlock file exists, then enable the editor button
+            if(File.Exists(Settings.EditorLaunchFromMainWindowFilename))
+            {
+                Logging.Info("{0} found, enabling editor button", Settings.EditorLaunchFromMainWindowFilename);
+                LauchEditor.Visibility = Visibility.Visible;
+                LauchEditor.IsEnabled = true;
+            }
+            else
+            {
+                LauchEditor.Visibility = Visibility.Hidden;
+                LauchEditor.IsEnabled = false;
+            }
+
             //dispose of please wait here
             if (progressIndicator != null)
             {
@@ -2384,6 +2397,11 @@ namespace RelhaxModpack
         private void AutoSyncFrequencyComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ModpackSettings.AutoInstallFrequencyTimeUnit = AutoSyncFrequencyComboBox.SelectedIndex;
+        }
+
+        private void LauchEditor_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
 
         private void ApplyCustomScalingSlider_MouseUp(object sender, MouseButtonEventArgs e)
