@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Windows;
 using RelhaxModpack.Windows;
 
@@ -87,6 +89,22 @@ namespace RelhaxModpack
         //when application is starting for first time
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            //handle any assembly resolves
+            //https://stackoverflow.com/a/19806004/3128017
+            AppDomain.CurrentDomain.AssemblyResolve += (sender2, bargs) =>
+            {
+                string dllName = new AssemblyName(bargs.Name).Name + ".dll";
+                Logging.Debug("an assembly was loaded via AssemblyResolve: {0}", dllName);
+                Assembly assem = Assembly.GetExecutingAssembly();
+                string resourceName = assem.GetManifestResourceNames().FirstOrDefault(rn => rn.EndsWith(dllName));
+                if (resourceName == null) return null; // Not found, maybe another handler will find it
+                using (var stream = assem.GetManifestResourceStream(resourceName))
+                {
+                    byte[] assemblyData = new byte[stream.Length];
+                    stream.Read(assemblyData, 0, assemblyData.Length);
+                    return Assembly.Load(assemblyData);
+                }
+            };
             //init loggine here
             //"The application failed to open a logfile. Eithor check your file permissions or move the application to a folder with write access"
             if (!Logging.Init(Logfiles.Application, Logging.ApplicationLogTempFilename))

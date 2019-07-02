@@ -390,6 +390,16 @@
     <Resource Include="Resources\Licences\Fody.txt" />
     <Resource Include="Resources\Images\grey_area_mod.png" />
     <Resource Include="Resources\Images\error_loading_picture.png" />
+    <EmbeddedResource Include="Resources\DLL\DotNetZip.dll" />
+    <EmbeddedResource Include="Resources\DLL\FreeImage32.dll" />
+    <EmbeddedResource Include="Resources\DLL\FreeImage64.dll" />
+    <EmbeddedResource Include="Resources\DLL\Microsoft.WindowsAPICodePack.dll" />
+    <EmbeddedResource Include="Resources\DLL\Microsoft.WindowsAPICodePack.Shell.dll" />
+    <EmbeddedResource Include="Resources\DLL\NAudio.dll" />
+    <EmbeddedResource Include="Resources\DLL\Newtonsoft.Json.dll" />
+    <EmbeddedResource Include="Resources\DLL\nvtt32.dll" />
+    <EmbeddedResource Include="Resources\DLL\nvtt64.dll" />
+    <EmbeddedResource Include="Resources\DLL\TeximpNet.dll" />
     <Content Include="Resources\Licences\modpack_license_agrement.txt" />
     <None Include="Properties\RelhaxModpack.ruleset" />
   </ItemGroup>
