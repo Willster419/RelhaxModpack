@@ -23,6 +23,8 @@ using Newtonsoft.Json.Linq;
 using System.Threading;
 using Timer = System.Timers.Timer;
 using System.Runtime.Remoting.Contexts;
+using System.Reflection;
+using System.Security.Cryptography;
 
 namespace RelhaxWPFConvert
 {
@@ -230,8 +232,19 @@ namespace RelhaxWPFConvert
 
         #region Bitmap DDS testing
 
+        [DllImport("kernel32.dll")]
+        public static extern IntPtr LoadLibrary(string dllToLoad);
+
+
         private void DdsToBitmap_Click(object sender, RoutedEventArgs e)
         {
+            //custom load freeImage from another place
+            string dllFolder = Path.GetFullPath("tempLibFolder");
+            string dll32 = Path.Combine(dllFolder, "FreeImage32.dll");
+            string dll64 = Path.Combine(dllFolder, "FreeImage64.dll");
+            TeximpNet.Unmanaged.FreeImageLibrary library = TeximpNet.Unmanaged.FreeImageLibrary.Instance;
+            library.LoadLibrary(dll32,dll64);
+
             //check if it's actually a dds file
             bool isItADDSFile = DDSFile.IsDDSFile("damageIndicator.dds");
             Bitmap bmp = null;
