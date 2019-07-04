@@ -97,6 +97,19 @@ namespace RelhaxModpack
         };
         #endregion
 
+        #region Unmanaged Library stuff
+
+        public static RelhaxFreeImageLibrary FreeImageLibrary = new RelhaxFreeImageLibrary();
+
+        public static RelhaxNvTexLibrary NvTexLibrary = new RelhaxNvTexLibrary();
+
+        public static string GetAssemblyName(string keyword)
+        {
+            return Assembly.GetExecutingAssembly().GetManifestResourceNames().FirstOrDefault(rn => rn.Contains(keyword));
+        }
+
+        #endregion
+
         public struct VersionInfos
         {
             public string WoTClientVersion;

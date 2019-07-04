@@ -1522,6 +1522,22 @@ namespace RelhaxModpack.InstallerComponents
                 ProgAtlas.InstallStatus = InstallerExitCodes.ContourIconAtlasError;
                 LockProgress();
 
+                //load the unmanaged libraries if they are not loaded already
+                if (!Utils.FreeImageLibrary.IsLoaded)
+                {
+                    Logging.Info("freeimage library is not loaded, loading");
+                    Utils.FreeImageLibrary.Load();
+                }
+                else
+                    Logging.Info("freeimage library is loaded");
+                if (!Utils.NvTexLibrary.IsLoaded)
+                {
+                    Logging.Info("freeimage library is not loaded, loading");
+                    Utils.NvTexLibrary.Load();
+                }
+                else
+                    Logging.Info("freeimage library is loaded");
+
                 //make an array to hold all the atlas tasks
                 atlasTasks = new Task[atlases.Count];
 
