@@ -1532,11 +1532,11 @@ namespace RelhaxModpack.InstallerComponents
                     Logging.Info("freeimage library is loaded");
                 if (!Utils.NvTexLibrary.IsLoaded)
                 {
-                    Logging.Info("freeimage library is not loaded, loading");
+                    Logging.Info("nvtt library is not loaded, loading");
                     Utils.NvTexLibrary.Load();
                 }
                 else
-                    Logging.Info("freeimage library is loaded");
+                    Logging.Info("nvtt library is loaded");
 
                 //make an array to hold all the atlas tasks
                 atlasTasks = new Task[atlases.Count];
