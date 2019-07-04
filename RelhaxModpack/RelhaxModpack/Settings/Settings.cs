@@ -95,6 +95,8 @@ namespace RelhaxModpack
 
         public static readonly string RelhaxTempFolder = Path.Combine(ApplicationStartupPath, "RelhaxTemp");
 
+        public static readonly string RelhaxLibrariesFolder = Path.Combine(ApplicationStartupPath, "RelhaxLibraries");
+
         public const string PatchFolderName = "_patch";
 
         public const string ShortcutFolderName = "_shortcuts";
@@ -137,7 +139,8 @@ namespace RelhaxModpack
             RelhaxModBackupFolder,
             RelhaxUserConfigsFolder,
             RelhaxUserModsFolder,
-            RelhaxTempFolder
+            RelhaxTempFolder,
+            RelhaxLibrariesFolder
         };
 
         /// <summary>
@@ -159,14 +162,6 @@ namespace RelhaxModpack
         public const string ManagerVersion = "manager_version.xml";
 
         public static readonly int NumLogicalProcesors = Environment.ProcessorCount;
-
-        public static readonly string[] SelectablePackageTypes = new string[]
-        {
-            "single1",
-            "single_dropdown1",
-            "single_dropdown2",
-            "multi"
-        };
 
         public const string LogSpacingLinup = "                          ";
         #endregion
