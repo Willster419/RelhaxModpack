@@ -160,7 +160,7 @@ namespace RelhaxModpack
             XmlAttribute brushType = brushSettings.Attributes["type"];
             if (brushType == null)
             {
-                Logging.WriteToLog("failed to apply brush setting: type attribute not exist!");
+                Logging.Warning("failed to apply brush setting: type attribute not exist!");
                 return false;
             }
             XmlAttribute textColor = brushSettings.Attributes["textColor"];
@@ -194,7 +194,7 @@ namespace RelhaxModpack
             XmlAttribute brushType = brushSettings.Attributes["type"];
             if(brushType == null)
             {
-                Logging.WriteToLog("failed to apply brush setting: type attribute not exist!");
+                Logging.Warning("failed to apply brush setting: type attribute not exist!");
                 return false;
             }
             //https://docs.microsoft.com/en-us/dotnet/api/system.windows.media.color.fromargb?view=netframework-4.7.2#System_Windows_Media_Color_FromArgb_System_Byte_System_Byte_System_Byte_System_Byte_
@@ -288,7 +288,7 @@ namespace RelhaxModpack
                             break;
                         }
                     default:
-                        Logging.WriteToLog(string.Format("unknown type parameter{0} in component {1} ", brushType.InnerText, componentTag));
+                        Logging.Warning(string.Format("unknown type parameter{0} in component {1} ", brushType.InnerText, componentTag));
                         break;
                 }
             }

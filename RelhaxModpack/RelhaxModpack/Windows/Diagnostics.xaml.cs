@@ -53,7 +53,7 @@ namespace RelhaxModpack.Windows
             }
             else
             {
-                Logging.WriteToLog("User Canceled selection");
+                Logging.Info("User Canceled selection");
             }
 
             //check to make sure a selected tanks installation is selected

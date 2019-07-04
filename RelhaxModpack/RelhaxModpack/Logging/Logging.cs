@@ -285,7 +285,7 @@ namespace RelhaxModpack
         /// <param name="message">The message to write</param>
         /// <param name="logfiles">The logfile to write to</param>
         /// <param name="logLevel">The level of severity of the message. If not Application log, this parameter is ignored</param>
-        public static void WriteToLog(string message, Logfiles logfiles = Logfiles.Application, LogLevel logLevel = LogLevel.Info)
+        public static void WriteToLog(string message, Logfiles logfiles, LogLevel logLevel)
         {
 
             Logfile fileToWriteTo = null;
@@ -330,7 +330,7 @@ namespace RelhaxModpack
             }
             else
             {
-                fileToWriteTo.Write(message);
+                fileToWriteTo.Write(message, logLevel);
             }
         }
 

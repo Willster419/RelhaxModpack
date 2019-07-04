@@ -215,7 +215,7 @@ namespace RelhaxModpack.Windows
             //create and run async task (fire and forget style, keeps the UI thread open during the task operation)
             try
             {
-                Logging.WriteToLog("Starting async task: " + nameof(LoadModSelectionListAsync) + "()");
+                Logging.Info("Starting async task: " + nameof(LoadModSelectionListAsync) + "()");
                 //https://blogs.msdn.microsoft.com/dotnet/2012/06/06/async-in-4-5-enabling-progress-and-cancellation-in-async-apis/
                 Progress<RelhaxProgress> progressIndicator = new Progress<RelhaxProgress>();
                 progressIndicator.ProgressChanged += OnWindowLoadReportProgress;
@@ -1478,9 +1478,9 @@ namespace RelhaxModpack.Windows
 
         private void OnClearSelectionsClick(object sender, RoutedEventArgs e)
         {
-            Logging.WriteToLog("Clearing selections");
+            Logging.Info("Clearing selections");
             Utils.ClearSelections(ParsedCategoryList);
-            Logging.WriteToLog("Selections cleared");
+            Logging.Info("Selections cleared");
             MessageBox.Show(Translations.GetTranslatedString("selectionsCleared"));
         }
 
@@ -1499,7 +1499,7 @@ namespace RelhaxModpack.Windows
 
                 default:
                     //log we don't know wtf it is
-                    Logging.WriteToLog("Unknown selection version: " + selectionVersion + ", aborting");
+                    Logging.Warning("Unknown selection version: " + selectionVersion + ", aborting");
                     if(!silent)
                         MessageBox.Show(string.Format(Translations.GetTranslatedString("unknownselectionFileFormat"),selectionVersion));
                     return;
@@ -1540,7 +1540,7 @@ namespace RelhaxModpack.Windows
                     if(package.Enabled || ModpackSettings.ForceEnabled)
                     {
                         package.Checked = true;
-                        Logging.WriteToLog(string.Format("Checking package {0}",package.CompletePath));
+                        Logging.Info(string.Format("Checking package {0}",package.CompletePath));
                     }
                     else
                     {
@@ -1550,13 +1550,13 @@ namespace RelhaxModpack.Windows
                             package.FlagForSelectionSave = true;
                         }
                         disabledMods.Add(package.CompletePath);
-                        Logging.WriteToLog(string.Format("\"{0}\" is a disabled mod", package.CompletePath));
+                        Logging.Info(string.Format("\"{0}\" is a disabled mod", package.CompletePath));
                     }
                     //if it's the top level, check the category header
                     if (package.Level == 0 && !package.ParentCategory.CategoryHeader.Checked)
                     {
                         package.ParentCategory.CategoryHeader.Checked = true;
-                        Logging.WriteToLog("Checking top header " + package.ParentCategory.CategoryHeader.NameFormatted);
+                        Logging.Info("Checking top header " + package.ParentCategory.CategoryHeader.NameFormatted);
                     }
                 }
             }
@@ -1565,7 +1565,7 @@ namespace RelhaxModpack.Windows
             {
                 if(stringUserSelections.Contains(package.ZipFile) && File.Exists(Path.Combine(Settings.RelhaxUserModsFolder,package.ZipFile)))
                 {
-                    Logging.WriteToLog(string.Format("Checking User Mod {0}",package.ZipFile));
+                    Logging.Info(string.Format("Checking User Mod {0}",package.ZipFile));
                     package.Enabled = true;
                     package.Checked = true;
                     stringUserSelections.Remove(package.ZipFile);
@@ -1573,7 +1573,7 @@ namespace RelhaxModpack.Windows
             }
             //now check for the correct structure of mods
             List<SelectablePackage> brokenMods = IsValidStructure(ParsedCategoryList);
-            Logging.WriteToLog("Broken mods structure count: " + brokenMods.Count);
+            Logging.Info("Broken mods structure count: " + brokenMods.Count);
             //only report issues if silent is false. true means its doing something like auto selections or
             if(!silent)
             {
@@ -1604,7 +1604,7 @@ namespace RelhaxModpack.Windows
 
         private void SaveSelection(string savePath, bool silent)
         {
-            Logging.WriteToLog("Saving selections to " + savePath);
+            Logging.Info("Saving selections to " + savePath);
             //create saved config xml layout
             XDocument doc = new XDocument(
                 new XDeclaration("1.0", "utf-8", "yes"),
@@ -1626,7 +1626,7 @@ namespace RelhaxModpack.Windows
             {
                 if (package.Checked)
                 {
-                    Logging.WriteToLog("Adding relhax mod " + package.PackageName);
+                    Logging.Info("Adding relhax mod " + package.PackageName);
                     //add it to the list
                     nodeRelhax.Add(new XElement("mod", package.PackageName));
                 }
@@ -1642,7 +1642,7 @@ namespace RelhaxModpack.Windows
             {
                 if (m.Checked)
                 {
-                    Logging.WriteToLog("adding user mod" + m.ZipFile);
+                    Logging.Info("adding user mod" + m.ZipFile);
                     //add it to the list
                     nodeUserMods.Add(new XElement("mod", m.Name));
                 }

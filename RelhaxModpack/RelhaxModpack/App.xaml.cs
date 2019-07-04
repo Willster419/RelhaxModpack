@@ -70,8 +70,8 @@ namespace RelhaxModpack
             {
                 if (showCloseMessage)
                 {
-                    Logging.WriteToLog("Application closing");
-                    Logging.WriteToLog(Logging.ApplicationlogStartStop);
+                    Logging.Info("Application closing");
+                    Logging.WriteHeader(Logfiles.Application);
                 }
                 Logging.DisposeLogging(Logfiles.Application);
             }
@@ -102,10 +102,10 @@ namespace RelhaxModpack
                 MessageBox.Show(Translations.GetTranslatedString("appFailedCreateLogfile"));
                 Shutdown((int)ReturnCodes.LogfileError);
             }
-            Logging.WriteToLog(Logging.ApplicationlogStartStop);
-            Logging.WriteToLog(string.Format("| Relhax Modpack version {0}", Utils.GetApplicationVersion()));
-            Logging.WriteToLog(string.Format("| Build version {0}, from date {1}", Settings.ApplicationVersion.ToString(), Utils.GetCompileTime()));
-            Logging.WriteToLog(string.Format("| Running on OS {0}", Environment.OSVersion.ToString()));
+            Logging.WriteHeader(Logfiles.Application);
+            Logging.Info(string.Format("| Relhax Modpack version {0}", Utils.GetApplicationVersion()));
+            Logging.Info(string.Format("| Build version {0}, from date {1}", Settings.ApplicationVersion.ToString(), Utils.GetCompileTime()));
+            Logging.Info(string.Format("| Running on OS {0}", Environment.OSVersion.ToString()));
             //parse command line arguements here
             //get the command line args for testing of auto install
             CommandLineSettings.ParseCommandLine(Environment.GetCommandLineArgs());

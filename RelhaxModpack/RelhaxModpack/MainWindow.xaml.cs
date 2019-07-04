@@ -146,7 +146,7 @@ namespace RelhaxModpack
             //verify folder stucture for all folders in the directory
             progressIndicator.UpdateProgress(3, Translations.GetTranslatedString("verDirStructure"));
             Utils.AllowUIToUpdate();
-            Logging.WriteToLog("Verifying folder structure");
+            Logging.Info("Verifying folder structure");
             foreach (string s in Settings.FoldersToCheck)
             {
                 try
@@ -163,7 +163,7 @@ namespace RelhaxModpack
                     return;
                 }
             }
-            Logging.WriteToLog("Structure verified");
+            Logging.Info("Structure verified");
 
             //set the application appData directory
             Settings.AppDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -337,13 +337,13 @@ namespace RelhaxModpack
                 if (!Logging.IsLogDisposed(Logfiles.Application))
                 {
                     if (Logging.IsLogOpen(Logfiles.Application))
-                        Logging.WriteToLog("Saving settings");
+                        Logging.Info("Saving settings");
                     if (!closingFromFailure)
                         if (Settings.SaveSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null))
                             if (Logging.IsLogOpen(Logfiles.Application))
-                                Logging.WriteToLog("Settings saved");
+                                Logging.Info("Settings saved");
                     if (Logging.IsLogOpen(Logfiles.Application))
-                        Logging.WriteToLog("Disposing tray icon");
+                        Logging.Info("Disposing tray icon");
                     if (RelhaxIcon != null)
                     {
                         RelhaxIcon.Dispose();
@@ -471,7 +471,7 @@ namespace RelhaxModpack
         #region Update Code
         private async void CheckForDatabaseUpdates(bool refreshModInfo)
         {
-            Logging.WriteToLog("Checking for database updates in CheckForDatabaseUpdates()");
+            Logging.Info("Checking for database updates in CheckForDatabaseUpdates()");
 
             //if we are gettign a new ModInfo then do that
             XmlDocument doc = null;
@@ -496,7 +496,7 @@ namespace RelhaxModpack
 
             //get new DB update version and compare
             string databaseNewVersion = XMLUtils.GetXMLStringFromXPath(doc, "//version/database");
-            Logging.WriteToLog(string.Format("Comparing database versions, old={0}, new={1}", Settings.DatabaseVersion, databaseNewVersion));
+            Logging.Info(string.Format("Comparing database versions, old={0}, new={1}", Settings.DatabaseVersion, databaseNewVersion));
             if(string.IsNullOrWhiteSpace(Settings.DatabaseVersion))
             {
                 //auto apply and don't annouce. this usually happends when the application is loading for first time
@@ -507,16 +507,16 @@ namespace RelhaxModpack
             else if (!Settings.DatabaseVersion.Equals(databaseNewVersion))
             {
                 //this happends when user clicks to manually check for updates or from the auto install feature
-                Logging.WriteToLog("new version of database applied");
+                Logging.Info("new version of database applied");
                 Settings.DatabaseVersion = databaseNewVersion;
                 DatabaseVersionLabel.Text = Translations.GetTranslatedString("databaseVersion") + " " + Settings.DatabaseVersion;
                 MessageBox.Show(Translations.GetTranslatedString("newDBApplied"));
             }
             else
             {
-                Logging.WriteToLog("database versions are the same");
+                Logging.Info("database versions are the same");
             }
-            Logging.WriteToLog("Checking for database updates complete");
+            Logging.Info("Checking for database updates complete");
         }
 
         private async Task<bool> CheckForApplicationUpdates()
@@ -618,7 +618,7 @@ namespace RelhaxModpack
                         MessageBoxResult result = MessageBox.Show(Translations.GetTranslatedString("closeInstanceRunningForUpdate"), Translations.GetTranslatedString("critical"), MessageBoxButton.OKCancel);
                         if (result != MessageBoxResult.OK)
                         {
-                            Logging.WriteToLog("User canceled update, because he does not want to end the parallel running Relhax instance.");
+                            Logging.Info("User canceled update, because he does not want to end the parallel running Relhax instance.");
                             Application.Current.Shutdown();
                             Close();
                             return false;
@@ -867,13 +867,13 @@ namespace RelhaxModpack
                     }
                     else
                     {
-                        Logging.WriteToLog("User Canceled installation");
+                        Logging.Info("User Canceled installation");
                         ToggleUIButtons(true);
                         return;
                     }
                 }
                 Settings.WoTDirectory = Path.GetDirectoryName(Settings.WoTDirectory);
-                Logging.WriteToLog("Wot root directory parsed as " + Settings.WoTDirectory);
+                Logging.Info("Wot root directory parsed as " + Settings.WoTDirectory);
 
                 //check to make sure the application is not in the same directory as the WoT install
                 if (Settings.WoTDirectory.Equals(Settings.ApplicationStartupPath))
@@ -897,7 +897,7 @@ namespace RelhaxModpack
                     string supportedClientsXML = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "supported_clients.xml");
                     if (string.IsNullOrWhiteSpace(supportedClientsXML))
                     {
-                        Logging.WriteToLog("Failed to parse supported_clients.xml from string from zipfile", Logfiles.Application, LogLevel.Exception);
+                        Logging.Info("Failed to parse supported_clients.xml from string from zipfile", Logfiles.Application, LogLevel.Exception);
                         MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " supported_clients.xml");
                         ToggleUIButtons(true);
                         return;
@@ -909,7 +909,7 @@ namespace RelhaxModpack
                     }
                     catch (XmlException ex)
                     {
-                        Logging.WriteToLog("Failed to parse supported_clients.xml to xml\n" + ex.ToString(), Logfiles.Application, LogLevel.Exception);
+                        Logging.Info("Failed to parse supported_clients.xml to xml\n" + ex.ToString(), Logfiles.Application, LogLevel.Exception);
                         MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " supported_clients.xml");
                         ToggleUIButtons(true);
                         return;
@@ -936,7 +936,7 @@ namespace RelhaxModpack
                         //log and inform the user
                         Logging.WriteToLog("Detected client version is " + Settings.WoTClientVersion + ", not supported",
                             Logfiles.Application, LogLevel.Warning);
-                        Logging.WriteToLog("Supported versions are: " + string.Join(", ", supportedVersionsString));
+                        Logging.Info("Supported versions are: " + string.Join(", ", supportedVersionsString));
                         MessageBox.Show(string.Format("{0}: {1}\n{2}\n\n{3}:\n{4}", Translations.GetTranslatedString("detectedClientVersion"),
                             Settings.WoTClientVersion, Translations.GetTranslatedString("supportNotGuarnteed"),
                             Translations.GetTranslatedString("supportedClientVersions"), string.Join("\n", supportedVersionsString)),
@@ -972,7 +972,7 @@ namespace RelhaxModpack
                         }
                         else
                         {
-                            Logging.WriteToLog("installedRelhaxFiles.log does not exist, cannnot notify if same database");
+                            Logging.Warning("installedRelhaxFiles.log does not exist, cannnot notify if same database");
                         }
                     }
                 }
@@ -1014,7 +1014,7 @@ namespace RelhaxModpack
                 throw new BadMemeException("You suck at starting installations LEARN2CODE");
 
             //start the timer
-            Logging.WriteToLog("Starting an installation (timer starts now)");
+            Logging.Info("Starting an installation (timer starts now)");
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Restart();
 
@@ -1108,7 +1108,7 @@ namespace RelhaxModpack
             //and check if we need to actually install anything
             if (selectablePackagesToInstall.Count == 0 && userModsToInstall.Count == 0)
             {
-                Logging.WriteToLog("no packages selected to install...");
+                Logging.Info("no packages selected to install...");
                 ResetUI();
                 ToggleUIButtons(true);
                 return;
@@ -1126,12 +1126,12 @@ namespace RelhaxModpack
             //we now have a list of enabled, checked and actual zip file mods that we are going to install based on install groups
             //log the time to process lists
             TimeSpan lastTime = stopwatch.Elapsed;
-            Logging.WriteToLog(string.Format("Took {0} msec to process lists", stopwatch.ElapsedMilliseconds));
+            Logging.Info(string.Format("Took {0} msec to process lists", stopwatch.ElapsedMilliseconds));
 
             //first, if we have downloads to do and doing them the standard way, then start processing them
             if(packagesToDownload.Count > 0 && !ModpackSettings.InstallWhileDownloading)
             {
-                Logging.WriteToLog("download while install = false and packages to download, starting ProcessDownloads()");
+                Logging.Info("download while install = false and packages to download, starting ProcessDownloads()");
                 //toggle the button before and after as well
                 CancelDownloadInstallButton.Visibility = Visibility.Visible;
                 CancelDownloadInstallButton.IsEnabled = true;
@@ -1152,12 +1152,12 @@ namespace RelhaxModpack
                 //connect the install and disconnect the download
                 CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Install_Click;
                 CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
-                Logging.WriteToLog(string.Format("download time took {0} msec", stopwatch.Elapsed.TotalMilliseconds - lastTime.TotalMilliseconds));
+                Logging.Info(string.Format("download time took {0} msec", stopwatch.Elapsed.TotalMilliseconds - lastTime.TotalMilliseconds));
                 lastTime = stopwatch.Elapsed;
             }
             else if(packagesToDownload.Count > 0 && ModpackSettings.InstallWhileDownloading)
             {
-                Logging.WriteToLog("download while install = true and packages to download, starting ProcessDownloadsAsync()");
+                Logging.Info("download while install = true and packages to download, starting ProcessDownloadsAsync()");
                 ProcessDownloadsAsync(packagesToDownload);
                 //async does download and install at the same time, so subscribe to both, install first
                 CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Install_Click;
@@ -1652,13 +1652,13 @@ namespace RelhaxModpack
                 }
                 else
                 {
-                    Logging.WriteToLog("User Canceled installation");
+                    Logging.Info("User Canceled installation");
                     ToggleUIButtons(true);
                     return;
                 }
             }
             Settings.WoTDirectory = Path.GetDirectoryName(Settings.WoTDirectory);
-            Logging.WriteToLog("Wot root directory parsed as " + Settings.WoTDirectory);
+            Logging.Info("Wot root directory parsed as " + Settings.WoTDirectory);
 
             //get the version of tanks in the format of the res_mods version folder i.e. 0.9.17.0.3
             string versionTemp = XMLUtils.GetXMLStringFromXPath(Path.Combine(Settings.WoTDirectory, "version.xml"), "//version.xml/version");

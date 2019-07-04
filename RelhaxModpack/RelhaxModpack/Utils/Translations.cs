@@ -98,7 +98,7 @@ namespace RelhaxModpack
         public static void SetLanguageOnFirstLoad()
         {
             //try to get and load the native language of the user
-            Logging.WriteToLog("Language: " + CultureInfo.CurrentCulture.DisplayName);
+            Logging.Info("Language: " + CultureInfo.CurrentCulture.DisplayName);
             switch (CultureInfo.InstalledUICulture.Name.Split('-')[0].ToLower())
             {
                 case "de":

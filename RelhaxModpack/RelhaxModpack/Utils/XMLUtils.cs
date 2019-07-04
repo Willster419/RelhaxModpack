@@ -677,7 +677,7 @@ namespace RelhaxModpack
                             d.PackageName = globs.Value.Trim();
                             if (string.IsNullOrEmpty(d.PackageName))
                             {
-                                Logging.WriteToLog(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => (line {1})",
+                                Logging.Warning(string.Format("modInfo.xml: PackageName not defined. node \"{0}\" => (line {1})",
                                     globs.Name.ToString(), ((IXmlLineInfo)globs).LineNumber));
                                 if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                     MessageBox.Show(string.Format("modInfo.xml: PackageName not defined.\nnode \"{0}\" => globsPend {1}\n\nmore informations, see logfile",
@@ -685,7 +685,7 @@ namespace RelhaxModpack
                             }
                             break;
                         default:
-                            Logging.WriteToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => (line {1})",
+                            Logging.Warning(string.Format("modInfo.xml incomprehensible node \"{0}\" => (line {1})",
                                 globs.Name.ToString(), ((IXmlLineInfo)globs).LineNumber));
                             if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                 MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: ZipFile, CRC, StartAddress, EndAddress, enabled, PackageName\n\nNode found: {0}\n\nmore informations, see logfile",
@@ -703,10 +703,10 @@ namespace RelhaxModpack
                         unknownNodeList.Add(globs.Name.ToString());
                 }
                 if (depNodeList.Count > 0)
-                    Logging.WriteToLog(string.Format("Error: modInfo.xml nodes not used: {0} => globsPend {1} (line {2})",
+                    Logging.Warning(string.Format("modInfo.xml nodes not used: {0} => globsPend {1} (line {2})",
                         string.Join(",", depNodeList), d.PackageName, ((IXmlLineInfo)dependencyNode).LineNumber));
                 if (unknownNodeList.Count > 0)
-                    Logging.WriteToLog(string.Format("Error: modInfo.xml unknown nodes: {0} => globsPend {1} (line {2})",
+                    Logging.Warning(string.Format("modInfo.xml unknown nodes: {0} => globsPend {1} (line {2})",
                         string.Join(",", unknownNodeList), d.PackageName, ((IXmlLineInfo)dependencyNode).LineNumber));
                 if (string.IsNullOrWhiteSpace(d.PackageName))
                 {
@@ -757,7 +757,7 @@ namespace RelhaxModpack
                             d.PackageName = globs.Value.Trim();
                             if (string.IsNullOrEmpty(d.PackageName))
                             {
-                                Logging.WriteToLog(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => (line {1})",
+                                Logging.Warning(string.Format("modInfo.xml: PackageName not defined. node \"{0}\" => (line {1})",
                                     globs.Name.ToString(), ((IXmlLineInfo)globs).LineNumber));
                                 if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                     MessageBox.Show(string.Format("modInfo.xml: PackageName not defined.\nnode \"{0}\" => globsPend {1}\n\nmore informations, see logfile",
@@ -780,7 +780,7 @@ namespace RelhaxModpack
                                             ld.PackageName = logDependencyNode.Value.Trim();
                                             if (ld.PackageName.Equals(""))
                                             {
-                                                Logging.WriteToLog(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => (line {1})",
+                                                Logging.Warning(string.Format("modInfo.xml: PackageName not defined. node \"{0}\" => (line {1})",
                                                     logDependencyNode.Name.ToString(), ((IXmlLineInfo)logDependencyNode).LineNumber));
                                                 if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                                     MessageBox.Show(string.Format("modInfo.xml: PackageName not defined.\nnode \"{0}\"  => dep {1}",
@@ -791,7 +791,7 @@ namespace RelhaxModpack
                                             ld.NotFlag = Utils.ParseBool(logDependencyNode.Value, true);
                                             break;
                                         default:
-                                            Logging.WriteToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => (line {1})",
+                                            Logging.Warning(string.Format("modInfo.xml incomprehensible node \"{0}\" => (line {1})",
                                                 logDependencyNode.Name.ToString(), ((IXmlLineInfo)logDependencyNode).LineNumber));
                                             if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                                 MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: PackageName\n\nNode found: {0}\n\nmore informations, see logfile",
@@ -800,18 +800,18 @@ namespace RelhaxModpack
                                     }
                                 }
                                 if (logDepNodeList.Length > 0)
-                                    Logging.WriteToLog(string.Format("Error: modInfo.xml nodes not used: {0} => logDep (line {1})",
+                                    Logging.Warning(string.Format("modInfo.xml nodes not used: {0} => logDep (line {1})",
                                     string.Join(",", logDepNodeList), ((IXmlLineInfo)logDependencyHolder).LineNumber));
                                 if (ld.PackageName.Equals(""))
                                 {
                                     ld.PackageName = Utils.RandomString(30);
-                                    Logging.WriteToLog("PackageName is random generated: " + ld.PackageName);              // to avoid exceptions
+                                    Logging.Info("PackageName is random generated: " + ld.PackageName);              // to avoid exceptions
                                 }
                                 d.Dependencies.Add(ld);
                             }
                             break;
                         default:
-                            Logging.WriteToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => (line {1})",
+                            Logging.Warning(string.Format("modInfo.xml incomprehensible node \"{0}\" => (line {1})",
                                 globs.Name.ToString(), ((IXmlLineInfo)globs).LineNumber));
                             if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                 MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: ZipFile, CRC, StartAddress, EndAddress, enabled, PackageName\n\nNode found: {0}\n\nmore informations, see logfile",
@@ -829,10 +829,10 @@ namespace RelhaxModpack
                         unknownNodeList.Add(globs.Name.ToString());
                 }
                 if (depNodeList.Count > 0)
-                    Logging.WriteToLog(string.Format("Error: modInfo.xml nodes not used: {0} => (line {1})",
+                    Logging.Warning(string.Format("modInfo.xml nodes not used: {0} => (line {1})",
                         string.Join(",", depNodeList), ((IXmlLineInfo)dependencyNode).LineNumber));
                 if (unknownNodeList.Count > 0)
-                    Logging.WriteToLog(string.Format("Error: modInfo.xml unknown nodes: {0} => globsPend {1} (line {2})",
+                    Logging.Warning(string.Format("modInfo.xml unknown nodes: {0} => globsPend {1} (line {2})",
                         string.Join(",", unknownNodeList), d.PackageName, ((IXmlLineInfo)dependencyNode).LineNumber));
                 if (string.IsNullOrWhiteSpace(d.PackageName))
                 {
@@ -880,7 +880,7 @@ namespace RelhaxModpack
                             d.PackageName = globs.Value.Trim();
                             if (d.PackageName.Equals(""))
                             {
-                                Logging.WriteToLog(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => (line {1})",
+                                Logging.Warning(string.Format("modInfo.xml: PackageName not defined. node \"{0}\" => (line {1})",
                                     globs.Name.ToString(), ((IXmlLineInfo)globs).LineNumber));
                                 if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                     MessageBox.Show(string.Format("modInfo.xml: PackageName not defined.\nnode \"{0}\" => logDep {1}\n\nmore informations, see logfile",
@@ -888,7 +888,7 @@ namespace RelhaxModpack
                             }
                             break;
                         default:
-                            Logging.WriteToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => (line {1})",
+                            Logging.Warning(string.Format("modInfo.xml incomprehensible node \"{0}\" => (line {1})",
                                 globs.Name.ToString(), ((IXmlLineInfo)globs).LineNumber));
                             if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                 MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: ZipFile, CRC, StartAddress, EndAddress, enabled, PackageName\n\nNode found: {0}\n\nmore informations, see logfile",
@@ -906,10 +906,10 @@ namespace RelhaxModpack
                         unknownNodeList.Add(globs.Name.ToString());
                 }
                 if (depNodeList.Count > 0)
-                    Logging.WriteToLog(string.Format("Error: modInfo.xml nodes not used: {0} => (line {1})",
+                    Logging.Warning(string.Format("modInfo.xml nodes not used: {0} => (line {1})",
                         string.Join(",", depNodeList), ((IXmlLineInfo)dependencyNode).LineNumber));
                 if (unknownNodeList.Count > 0)
-                    Logging.WriteToLog(string.Format("Error: modInfo.xml unknown nodes: {0} => globsPend {1} (line {2})",
+                    Logging.Warning(string.Format("modInfo.xml unknown nodes: {0} => globsPend {1} (line {2})",
                         string.Join(",", unknownNodeList), d.PackageName, ((IXmlLineInfo)dependencyNode).LineNumber));
                 if (string.IsNullOrWhiteSpace(d.PackageName))
                 {
@@ -1007,7 +1007,7 @@ namespace RelhaxModpack
                                                     m.PackageName = modNode.Value.Trim();
                                                     if (m.PackageName.Equals(""))
                                                     {
-                                                        Logging.WriteToLog(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => mod {1} ({2}) (line {3})",
+                                                        Logging.Warning(string.Format("modInfo.xml: PackageName not defined. node \"{0}\" => mod {1} ({2}) (line {3})",
                                                             modNode.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)modNode).LineNumber));
                                                         if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                                             MessageBox.Show(string.Format("modInfo.xml: PackageName not defined.\nnode \"{0}\" => mod {1} ({2})",
@@ -1048,7 +1048,7 @@ namespace RelhaxModpack
                                                                 m.UserFiles.Add(uf);
                                                                 break;
                                                             default:
-                                                                Logging.WriteToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => userDatas => expected node: userData (line {3})",
+                                                                Logging.Warning(string.Format("modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => userDatas => expected node: userData (line {3})",
                                                                     userDataNode.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)userDataNode).LineNumber));
                                                                 if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                                                     MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected node: userData\n\nNode found: {0}\n\nmore informations, see logfile",
@@ -1096,7 +1096,7 @@ namespace RelhaxModpack
                                                                             }
                                                                             break;
                                                                         default:
-                                                                            Logging.WriteToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => picture =>expected nodes: URL (line {3})",
+                                                                            Logging.Warning(string.Format("modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => picture =>expected nodes: URL (line {3})",
                                                                                 pictureNode.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)pictureNode).LineNumber));
                                                                             if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                                                                 MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: URL\n\nNode found: {0}\n\nmore informations, see logfile",
@@ -1106,7 +1106,7 @@ namespace RelhaxModpack
                                                                 }
                                                                 break;
                                                             default:
-                                                                Logging.WriteToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => expected node: picture (line {3})",
+                                                                Logging.Warning(string.Format("modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => expected node: picture (line {3})",
                                                                     pictureHolder.Name, m.Name, m.ZipFile, ((IXmlLineInfo)pictureHolder).LineNumber));
                                                                 if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                                                     MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected node: picture\n\nNode found: {0}\n\nmore informations, see logfile",
@@ -1131,7 +1131,7 @@ namespace RelhaxModpack
                                                                     d.PackageName = dependencyNode.Value.Trim();
                                                                     if (d.PackageName.Equals(""))
                                                                     {
-                                                                        Logging.WriteToLog(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => mod {1} ({2}) => (line {3})",
+                                                                        Logging.Warning(string.Format("modInfo.xml: PackageName not defined. node \"{0}\" => mod {1} ({2}) => (line {3})",
                                                                             dependencyNode.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
                                                                         if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                                                         {
@@ -1141,7 +1141,7 @@ namespace RelhaxModpack
                                                                     }
                                                                     break;
                                                                 default:
-                                                                    Logging.WriteToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => (line {3})",
+                                                                    Logging.Warning(string.Format("modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => (line {3})",
                                                                         dependencyNode.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
                                                                     if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                                                         MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: PackageName\n\nNode found: {0}\n\nmore informations, see logfile",
@@ -1151,7 +1151,7 @@ namespace RelhaxModpack
                                                         }
                                                         if (depNodeList.Length > 0)
                                                         {
-                                                            Logging.WriteToLog(string.Format("Error: modInfo.xml nodes not used: {0} => mod {1} ({2}) => (line {3})",
+                                                            Logging.Warning(string.Format("modInfo.xml nodes not used: {0} => mod {1} ({2}) => (line {3})",
                                                                 string.Join(",", depNodeList), m.Name, m.ZipFile, ((IXmlLineInfo)dependencyHolder).LineNumber));
                                                         }
                                                         if (string.IsNullOrWhiteSpace(d.PackageName))
@@ -1176,7 +1176,7 @@ namespace RelhaxModpack
                                                                     d.PackageName = dependencyNode.Value.Trim();
                                                                     if (d.PackageName.Equals(""))
                                                                     {
-                                                                        Logging.WriteToLog(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => config {1} ({2}) => (line {3})",
+                                                                        Logging.Warning(string.Format("modInfo.xml: PackageName not defined. node \"{0}\" => config {1} ({2}) => (line {3})",
                                                                             dependencyNode.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
                                                                         if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                                                             MessageBox.Show(string.Format("modInfo.xml: PackageName not defined.\nnode \"{0}\" => config {1} ({2})",
@@ -1187,7 +1187,7 @@ namespace RelhaxModpack
                                                                     //d.NegateFlag = Utils.ParseBool(dependencyNode.Value, true);
                                                                     break;
                                                                 default:
-                                                                    Logging.WriteToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) => (line {3})",
+                                                                    Logging.Warning(string.Format("modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) => (line {3})",
                                                                         dependencyNode.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
                                                                     if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                                                     {
@@ -1199,7 +1199,7 @@ namespace RelhaxModpack
                                                         }
                                                         if (depNodeList.Length > 0)
                                                         {
-                                                            Logging.WriteToLog(string.Format("Error: modInfo.xml nodes not used: {0} => config {1} ({2}) => (line {3})",
+                                                            Logging.Warning(string.Format("modInfo.xml nodes not used: {0} => config {1} ({2}) => (line {3})",
                                                                 string.Join(",", depNodeList), m.Name, m.ZipFile, ((IXmlLineInfo)dependencyHolder).LineNumber));
                                                         }
                                                         if (string.IsNullOrWhiteSpace(d.PackageName))
@@ -1214,7 +1214,7 @@ namespace RelhaxModpack
                                                     ProcessConfigs(modNode, m, true,m.Level+1);
                                                     break;
                                                 default:
-                                                    Logging.WriteToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) (line {3})",
+                                                    Logging.Warning(string.Format("modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) (line {3})",
                                                         modNode.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)modNode).LineNumber));
                                                     if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                                         MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: name, version, ZipFile," +
@@ -1234,10 +1234,10 @@ namespace RelhaxModpack
                                                 unknownNodeList.Add(modNode.Name.ToString());
                                         }
                                         if (packageNodeList.Count > 0)
-                                        Logging.WriteToLog(string.Format("Error: modInfo.xml nodes not used: {0} => package {1} (line {2})",
+                                        Logging.Warning(string.Format("modInfo.xml nodes not used: {0} => package {1} (line {2})",
                                             string.Join(",", packageNodeList), m.Name, ((IXmlLineInfo)modHolder).LineNumber));
                                         if (unknownNodeList.Count > 0)
-                                            Logging.WriteToLog(string.Format("Error: modInfo.xml unknown nodes: {0} => package {1} (line {2})",
+                                            Logging.Warning(string.Format("modInfo.xml unknown nodes: {0} => package {1} (line {2})",
                                                 string.Join(",", unknownNodeList), m.PackageName, ((IXmlLineInfo)modHolder).LineNumber));
                                         if (string.IsNullOrWhiteSpace(m.PackageName))
                                         {
@@ -1246,7 +1246,7 @@ namespace RelhaxModpack
                                         cat.Packages.Add(m);
                                         break;
                                     default:
-                                        Logging.WriteToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => cat {1} (line {2})",
+                                        Logging.Warning(string.Format("modInfo.xml incomprehensible node \"{0}\" => cat {1} (line {2})",
                                             modHolder.Name.ToString(), cat.Name, ((IXmlLineInfo)modHolder).LineNumber));
                                         if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                             MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: mod\n\nNode found: {0}\n\nmore informations, see logfile",
@@ -1270,7 +1270,7 @@ namespace RelhaxModpack
                                             d.PackageName = dependencyNode.Value.Trim();
                                             if (d.PackageName.Equals(""))
                                             {
-                                                Logging.WriteToLog(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => cat {1} => (line {2})",
+                                                Logging.Warning(string.Format("modInfo.xml: PackageName not defined. node \"{0}\" => cat {1} => (line {2})",
                                                     dependencyNode.Name.ToString(), cat.Name, ((IXmlLineInfo)dependencyNode).LineNumber));
                                                 if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                                 {
@@ -1280,7 +1280,7 @@ namespace RelhaxModpack
                                             }
                                             break;
                                         default:
-                                            Logging.WriteToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => cat {1} => (line {2})",
+                                            Logging.Warning(string.Format("modInfo.xml incomprehensible node \"{0}\" => cat {1} => (line {2})",
                                                 dependencyNode.Name, cat.Name, ((IXmlLineInfo)dependencyNode).LineNumber));
                                             if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                             {
@@ -1292,7 +1292,7 @@ namespace RelhaxModpack
                                 }
                                 if (depNodeList.Length > 0)
                                 {
-                                    Logging.WriteToLog(string.Format("Error: modInfo.xml nodes not used: {0} => cat {1} => (line {2})",
+                                    Logging.Warning(string.Format("modInfo.xml nodes not used: {0} => cat {1} => (line {2})",
                                         string.Join(",", depNodeList), cat.Name, ((IXmlLineInfo)dependencyHolder).LineNumber));
                                 };
                                 if (string.IsNullOrWhiteSpace(d.PackageName))
@@ -1303,7 +1303,7 @@ namespace RelhaxModpack
                             }
                             break;
                         default:
-                            Logging.WriteToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => cat {1} (line {2})",
+                            Logging.Warning(string.Format("modInfo.xml incomprehensible node \"{0}\" => cat {1} (line {2})",
                                 catagoryNode.Name.ToString(), cat.Name, ((IXmlLineInfo)catagoryNode).LineNumber));
                             if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                             {
@@ -1315,7 +1315,7 @@ namespace RelhaxModpack
                 }
                 if (catNodeList.Length > 0)
                 {
-                    Logging.WriteToLog(string.Format("Error: modInfo.xml nodes not used: {0} => cat {1} (line {2})",
+                    Logging.Warning(string.Format("modInfo.xml nodes not used: {0} => cat {1} (line {2})",
                         string.Join(",", catNodeList), cat.Name, ((IXmlLineInfo)catagoryHolder).LineNumber));
                 }
                 parsedCatagoryList.Add(cat);
@@ -1377,7 +1377,7 @@ namespace RelhaxModpack
                                     c.PackageName = configNode.Value.Trim();
                                     if (c.PackageName.Equals(""))
                                     {
-                                        Logging.WriteToLog(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => config {1} ({2}) (line {3})",
+                                        Logging.Warning(string.Format("modInfo.xml: PackageName not defined. node \"{0}\" => config {1} ({2}) (line {3})",
                                             configNode.Name.ToString(), c.Name, c.ZipFile, ((IXmlLineInfo)configNode).LineNumber));
                                         if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                             MessageBox.Show(string.Format("modInfo.xml: PackageName not defined.\nnode \"{0}\" => config {1} ({2})",
@@ -1444,7 +1444,7 @@ namespace RelhaxModpack
                                                 c.UserFiles.Add(uf);
                                                 break;
                                             default:
-                                                Logging.WriteToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) => userDatas => expected nodes: userData (line {3})",
+                                                Logging.Warning(string.Format("modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) => userDatas => expected nodes: userData (line {3})",
                                                     userDataNode.Name.ToString(), c.Name, c.ZipFile, ((IXmlLineInfo)configNode).LineNumber));
                                                 if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                                     MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: userData\n\nNode found: {0}\n\nmore informations, see logfile",
@@ -1491,7 +1491,7 @@ namespace RelhaxModpack
                                                             }
                                                             break;
                                                         default:
-                                                            Logging.WriteToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => picture =>expected nodes: URL (line {3})",
+                                                            Logging.Warning(string.Format("modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => picture =>expected nodes: URL (line {3})",
                                                                 pictureNode.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)pictureNode).LineNumber));
                                                             if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                                                 MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: URL\n\nNode found: {0}\n\nmore informations, see logfile",
@@ -1501,7 +1501,7 @@ namespace RelhaxModpack
                                                 }
                                                 break;
                                             default:
-                                                Logging.WriteToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => expected node: picture (line {3})",
+                                                Logging.Warning(string.Format("modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => pictures => expected node: picture (line {3})",
                                                     pictureHolder.Name, m.Name, m.ZipFile, ((IXmlLineInfo)pictureHolder).LineNumber));
                                                 if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                                     MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected node: picture\n\nNode found: {0}\n\nmore informations, see logfile",
@@ -1526,7 +1526,7 @@ namespace RelhaxModpack
                                                     d.PackageName = dependencyNode.Value.Trim();
                                                     if (d.PackageName.Equals(""))
                                                     {
-                                                        Logging.WriteToLog(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => config {1} ({2}) => (line {3})",
+                                                        Logging.Warning(string.Format("modInfo.xml: PackageName not defined. node \"{0}\" => config {1} ({2}) => (line {3})",
                                                             dependencyNode.Name.ToString(), c.Name, c.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
                                                         if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                                             MessageBox.Show(string.Format("modInfo.xml: PackageName not defined.\nnode \"{0}\" => config {1} ({2})",
@@ -1534,7 +1534,7 @@ namespace RelhaxModpack
                                                     }
                                                     break;
                                                 default:
-                                                    Logging.WriteToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) => (line {3})",
+                                                    Logging.Warning(string.Format("modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) => (line {3})",
                                                         dependencyNode.Name.ToString(), c.Name, c.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
                                                     if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                                         MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: PackageName\n\nNode found: {0}\n\nmore informations, see logfile",
@@ -1543,12 +1543,12 @@ namespace RelhaxModpack
                                             }
                                         }
                                         if (depNodeList.Length > 0)
-                                            Logging.WriteToLog(string.Format("Error: modInfo.xml nodes not used: {0} => config {1} ({2}) => (line {3})",
+                                            Logging.Warning(string.Format("modInfo.xml nodes not used: {0} => config {1} ({2}) => (line {3})",
                                                 string.Join(",", depNodeList), c.Name, c.ZipFile, ((IXmlLineInfo)dependencyHolder).LineNumber));
                                         if (d.PackageName.Equals(""))
                                         {
                                             d.PackageName = Utils.RandomString(30);
-                                            Logging.WriteToLog("PackageName is random generated: " + d.PackageName);
+                                            Logging.Info("PackageName is random generated: " + d.PackageName);
                                         }              // to avoid exceptions
                                         c.Dependencies.Add(d);
                                     }
@@ -1568,7 +1568,7 @@ namespace RelhaxModpack
                                                     d.PackageName = dependencyNode.Value.Trim();
                                                     if (d.PackageName.Equals(""))
                                                     {
-                                                        Logging.WriteToLog(string.Format("Error modInfo.xml: PackageName not defined. node \"{0}\" => config {1} ({2}) => (line {3})",
+                                                        Logging.Warning(string.Format("modInfo.xml: PackageName not defined. node \"{0}\" => config {1} ({2}) => (line {3})",
                                                             dependencyNode.Name.ToString(), c.Name, c.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
                                                         if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                                             MessageBox.Show(string.Format("modInfo.xml: PackageName not defined.\nnode \"{0}\" => config {1} ({2})",
@@ -1579,7 +1579,7 @@ namespace RelhaxModpack
                                                     //d.NegateFlag = Utils.ParseBool(dependencyNode.Value, true);
                                                     break;
                                                 default:
-                                                    Logging.WriteToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) => (line {3})",
+                                                    Logging.Warning(string.Format("modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) => (line {3})",
                                                         dependencyNode.Name.ToString(), c.Name, c.ZipFile, ((IXmlLineInfo)dependencyNode).LineNumber));
                                                     if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                                         MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: PackageName\n\nNode found: {0}\n\nmore informations, see logfile",
@@ -1588,18 +1588,18 @@ namespace RelhaxModpack
                                             }
                                         }
                                         if (depNodeList.Length > 0)
-                                            Logging.WriteToLog(string.Format("Error: modInfo.xml nodes not used: {0} => config {1} ({2}) => (line {3})",
+                                            Logging.Warning(string.Format("modInfo.xml nodes not used: {0} => config {1} ({2}) => (line {3})",
                                                 string.Join(",", depNodeList), c.Name, c.ZipFile, ((IXmlLineInfo)dependencyHolder).LineNumber));
                                         if (d.PackageName.Equals(""))
                                         {
                                             d.PackageName = Utils.RandomString(30);
-                                            Logging.WriteToLog("PackageName is random generated: " + d.PackageName);
+                                            Logging.Info("PackageName is random generated: " + d.PackageName);
                                         }              // to avoid exceptions
                                         c.Dependencies.Add(d);
                                     }
                                     break;
                                 default:
-                                    Logging.WriteToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) (line {3})",
+                                    Logging.Warning(string.Format("modInfo.xml incomprehensible node \"{0}\" => config {1} ({2}) (line {3})",
                                         configNode.Name.ToString(), c.Name, c.ZipFile, ((IXmlLineInfo)configNode).LineNumber));
                                     if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                                         MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: name, version, ZipFile, StartAddress, " +
@@ -1619,10 +1619,10 @@ namespace RelhaxModpack
                                 unknownNodeList.Add(configNode.Name.ToString());
                         }
                         if (packageNodeList.Count > 0)
-                            Logging.WriteToLog(string.Format("Error: modInfo.xml nodes not used: {0} => package {1} (line {2})",
+                            Logging.Warning(string.Format("modInfo.xml nodes not used: {0} => package {1} (line {2})",
                                 string.Join(",", packageNodeList), m.Name, ((IXmlLineInfo)configHolder).LineNumber));
                         if (unknownNodeList.Count > 0)
-                            Logging.WriteToLog(string.Format("Error: modInfo.xml unknown nodes: {0} => package {1} (line {2})",
+                            Logging.Warning(string.Format("modInfo.xml unknown nodes: {0} => package {1} (line {2})",
                                 string.Join(",", unknownNodeList), m.PackageName, ((IXmlLineInfo)configHolder).LineNumber));
                         if (string.IsNullOrWhiteSpace(c.PackageName))
                         {
@@ -1635,7 +1635,7 @@ namespace RelhaxModpack
                             con.Packages.Add(c);
                         break;
                     default:
-                        Logging.WriteToLog(string.Format("Error: modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => expected nodes: config (line {3})",
+                        Logging.Warning(string.Format("modInfo.xml incomprehensible node \"{0}\" => mod {1} ({2}) => expected nodes: config (line {3})",
                             configHolder.Name.ToString(), m.Name, m.ZipFile, ((IXmlLineInfo)configHolder).LineNumber));
                         if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                             MessageBox.Show(string.Format("modInfo.xml file is incomprehensible.\nexpected nodes: config\n\nNode found: {0}\n\nmore informations, see logfile",

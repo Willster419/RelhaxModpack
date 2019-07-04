@@ -63,7 +63,7 @@ namespace RelhaxModpack
         /// Writes a line of text to the log file with the date and timestamp, and level of severity of the message
         /// </summary>
         /// <param name="message">The line to write</param>
-        /// <param name="logLevel">The level of severity of the log message. Default is info level.</param>
+        /// <param name="logLevel">The level of severity of the log message</param>
         public string Write(string message, LogLevel logLevel)
         {
             //only alpha and beta application distributions should log debug messages

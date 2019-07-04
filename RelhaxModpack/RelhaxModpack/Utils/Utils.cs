@@ -326,7 +326,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Logging.WriteToLog("Failed to check crc of local file " + inputFile + ex.ToString());
+                Logging.Warning("Failed to check crc of local file " + inputFile + ex.ToString());
                 return "-1";
             }
             //Return the hexadecimal string.
@@ -368,7 +368,7 @@ namespace RelhaxModpack
             // https://social.msdn.microsoft.com/Forums/vstudio/en-US/92a36534-0f01-4425-ab63-c5f8830d64ae/help-please-with-dotnetzip-extracting-data-form-ziped-file?forum=csharpgeneral
             if(!File.Exists(zipFilename))
             {
-                Logging.WriteToLog(string.Format("ERROR: {0} not found", zipFilename));
+                Logging.Error(string.Format("ERROR: {0} not found", zipFilename));
                 return null;
             }
             string textStr = "";
@@ -731,7 +731,7 @@ namespace RelhaxModpack
             //filter input
             if(numRetrys == 0)
             {
-                Logging.WriteToLog("numRetrys needs to be larger than 0!");
+                Logging.Warning("numRetrys needs to be larger than 0! setting to 1");
                 numRetrys++;
             }
             //loop for how many times to try (in case the OS herped a derp, for example)
@@ -1775,7 +1775,7 @@ namespace RelhaxModpack
             {
                 if (File.Exists(path))
                 {
-                    Logging.WriteToLog(string.Format("valid game path found: {0}", path));
+                    Logging.Info(string.Format("valid game path found: {0}", path));
                     // write the path to the central value holder
                     WoTRoot = path;
                     // return the path
