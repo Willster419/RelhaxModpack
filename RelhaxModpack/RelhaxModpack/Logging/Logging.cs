@@ -287,18 +287,20 @@ namespace RelhaxModpack
         /// <param name="logLevel">The level of severity of the message. If not Application log, this parameter is ignored</param>
         public static void WriteToLog(string message, Logfiles logfiles, LogLevel logLevel)
         {
-
             Logfile fileToWriteTo = null;
             switch(logfiles)
             {
                 case Logfiles.Application:
                     fileToWriteTo = ApplicationLogfile;
                     break;
-                case Logfiles.Installer:
-                    fileToWriteTo = InstallLogfile;
+                case Logfiles.Updater:
+                    fileToWriteTo = UpdaterLogfile;
                     break;
-                case Logfiles.Uninstaller:
-                    fileToWriteTo = UninstallLogfile;
+                case Logfiles.Editor:
+                    fileToWriteTo = EditorLogfile;
+                    break;
+                case Logfiles.Patcher:
+                    fileToWriteTo = PatcherLogfile;
                     break;
             }
             //check if logfile is null
@@ -391,22 +393,22 @@ namespace RelhaxModpack
 
         public static void Installer(string message)
         {
-            WriteToLog(message, Logfiles.Installer, LogLevel.Info);//logLevel does not matter if it's installer or uninstaller
+            InstallLogfile.Write(message);
         }
 
         public static void Installer(string message, params object[] args)
         {
-            WriteToLog(message, Logfiles.Installer, LogLevel.Info, args);
+            InstallLogfile.Write(string.Format(message, args));
         }
 
         public static void Uninstaller(string message)
         {
-            WriteToLog(message, Logfiles.Uninstaller, LogLevel.Info);
+            InstallLogfile.Write(message);
         }
 
         public static void Uninstaller(string message, params object[] args)
         {
-            WriteToLog(message, Logfiles.Uninstaller, LogLevel.Info);
+            InstallLogfile.Write(string.Format(message, args));
         }
     }
 }
