@@ -85,14 +85,13 @@ namespace RelhaxModpack
             AppDomain.CurrentDomain.AssemblyResolve += (sender2, bargs) =>
             {
                 string dllName = new AssemblyName(bargs.Name).Name + ".dll";
-                Logging.Debug("an assembly was loaded via AssemblyResolve: {0}", dllName);
                 Assembly assem = Assembly.GetExecutingAssembly();
                 string resourceName = assem.GetManifestResourceNames().FirstOrDefault(rn => rn.EndsWith(dllName));
-                if (resourceName == null) return null; // Not found, maybe another handler will find it
-                using (var stream = assem.GetManifestResourceStream(resourceName))
+                using (Stream stream = assem.GetManifestResourceStream(resourceName))
                 {
                     byte[] assemblyData = new byte[stream.Length];
                     stream.Read(assemblyData, 0, assemblyData.Length);
+                    Logging.Debug("an assembly was loaded via AssemblyResolve: {0}", dllName);
                     return Assembly.Load(assemblyData);
                 }
             };
