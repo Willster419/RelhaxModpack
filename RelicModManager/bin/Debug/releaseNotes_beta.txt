@@ -1,6 +1,6 @@
 Version 0.28.2.21 (06/30/2019)
-
--Testing fix for sizing issues of selection window on high DPI monitors
+https://www.virustotal.com/gui/file/f97bd57f9838bf59f7f6a2f3ef807222c7f04bcfe1350c9b3bbf5152e8e4e692/detection
+-Fix for sizing issues of selection window on high DPI monitors
 --------------------------------------------------------------------------------------------------------------------------------------------
 
 Version 0.28.2.20 (06/23/2019)

@@ -1,3 +1,8 @@
+Version 0.28.2.21 (06/30/2019)
+https://www.virustotal.com/gui/file/f97bd57f9838bf59f7f6a2f3ef807222c7f04bcfe1350c9b3bbf5152e8e4e692/detection
+-Fix for sizing issues of selection window on high DPI monitors
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 0.28.2.20 (06/23/2019)
 https://www.virustotal.com/gui/file/50f7e14d49f28c7ec7a4047f72963f4dbf8541cd8d676fcec60036cac6c70e2a/detection
 -Fixed a bug of the application crashing when pressing close from the advanced install progress window
