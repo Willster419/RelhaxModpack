@@ -1392,7 +1392,6 @@ namespace RelhaxModpack.Windows
                 InitialDirectory = Settings.RelhaxUserConfigsFolder,
                 AddExtension = true,
                 Filter = "XML files|*.xml",
-                RestoreDirectory = true,
                 ValidateNames = true
             };
             if((bool)selectSavePath.ShowDialog())
@@ -1426,7 +1425,6 @@ namespace RelhaxModpack.Windows
                     AddExtension = true,
                     Filter = "XML files|*.xml",
                     Multiselect = false,
-                    RestoreDirectory = true,
                     ValidateNames = true
                 };
                 if((bool)selectLoadPath.ShowDialog())

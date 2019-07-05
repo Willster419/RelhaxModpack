@@ -6,6 +6,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.Win32;
 using Ionic.Zip;
 
 namespace RelhaxModpack.Windows
@@ -35,15 +36,13 @@ namespace RelhaxModpack.Windows
         private void ChangeInstall_Click(object sender, RoutedEventArgs e)
         {
             //show a standard WoT selection window from manual fine WoT.exe
-            Microsoft.Win32.OpenFileDialog manualWoTFind = new Microsoft.Win32.OpenFileDialog()
+            OpenFileDialog manualWoTFind = new OpenFileDialog()
             {
-                InitialDirectory = string.IsNullOrWhiteSpace(Settings.WoTDirectory) ? Settings.ApplicationStartupPath : Settings.WoTDirectory,
                 AddExtension = true,
                 CheckFileExists = true,
                 CheckPathExists = true,
                 Filter = "WorldOfTanks.exe|WorldOfTanks.exe",
                 Multiselect = false,
-                RestoreDirectory = true,
                 ValidateNames = true
             };
             if ((bool)manualWoTFind.ShowDialog())
@@ -91,9 +90,11 @@ namespace RelhaxModpack.Windows
         {
             if (string.IsNullOrWhiteSpace(Settings.WoTDirectory))
                 return;
+
             //setup UI
             Logging.Info("started collection of log files");
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("collectionLogInfo");
+
             //create the list of files to collect (should always collect these)
             List<string> filesToCollect = new List<string>()
             {
@@ -108,14 +109,23 @@ namespace RelhaxModpack.Windows
                 Path.Combine(Settings.WoTDirectory, "xvm.log"),
                 Path.Combine(Settings.WoTDirectory, "pmod.log")
             };
+
             //use a nice diagnostic window to check if the user wants to include any other files
-            AddPicturesZip apz = new AddPicturesZip();
+            AddPicturesZip apz = new AddPicturesZip() { filesToAddalways = filesToCollect };
+
+            //add the already above collected files to the list
+            foreach (string file in filesToCollect)
+                if(File.Exists(file))
+                    apz.FilesToAddList.Items.Add(file);
+
             if((bool)apz.ShowDialog())
             {
                 foreach (string s in apz.FilesToAddList.Items)
-                    filesToCollect.Add(s);
+                    if(!filesToCollect.Contains(s))
+                        filesToCollect.Add(s);
             }
             apz = null;
+
             //check in the list to make sure that the entries are valid and paths exist
             Logging.Debug("Filtering list of files to collect");
             filesToCollect = filesToCollect.Where(fileEntry => !string.IsNullOrWhiteSpace(fileEntry) && File.Exists(fileEntry)).ToList();

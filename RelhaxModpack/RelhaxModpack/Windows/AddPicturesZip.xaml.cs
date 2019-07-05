@@ -26,12 +26,13 @@ namespace RelhaxModpack.Windows
             InitializeComponent();
         }
 
+        public List<string> filesToAddalways;
+
         private void AddFilesButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog()
             {
                 Filter = string.Format("{0}|*.*", Translations.GetTranslatedString("allFiles")),
-                InitialDirectory = Settings.ApplicationStartupPath,
                 Title = Translations.GetTranslatedString("selectFilesToInclude"),
                 Multiselect = true
             };
@@ -46,8 +47,13 @@ namespace RelhaxModpack.Windows
         {
             for (int i = 0; i < FilesToAddList.SelectedItems.Count; i++)
             {
-                FilesToAddList.Items.Remove(FilesToAddList.SelectedItems[i]);
-                i--;
+                if (filesToAddalways.Contains(FilesToAddList.SelectedItems[i]))
+                    MessageBox.Show("CantRemoveDefaultFile");
+                else
+                {
+                    FilesToAddList.Items.Remove(FilesToAddList.SelectedItems[i]);
+                    i--;
+                }
             }
         }
 

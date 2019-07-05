@@ -26,8 +26,6 @@ namespace RelhaxModpack.Windows
         private OpenFileDialog OpenPatchfileDialog;
         private OpenFileDialog OpenFileToPatchDialog;
         private SaveFileDialog SavePatchfileDialog;
-        private SaveFileDialog SelectAppPathDialog;
-        private SaveFileDialog SelectVersionDirDialog;
         private bool UnsavedChanges = false;
         private bool init = true;
         //for drag drop
@@ -282,7 +280,6 @@ namespace RelhaxModpack.Windows
                     Title = "Select a file to test patches on",
                     AddExtension = true,
                     CheckPathExists = true,
-                    RestoreDirectory = true,
                     Multiselect = false,
                     CheckFileExists = true
                 };
@@ -501,7 +498,6 @@ namespace RelhaxModpack.Windows
                     AddExtension = true,
                     CheckPathExists = true,
                     CheckFileExists = true,
-                    RestoreDirectory = true,
                     Multiselect = false,
                     DefaultExt = "xml"
                 };
@@ -587,7 +583,6 @@ namespace RelhaxModpack.Windows
                     Title = "Save xml patch",
                     AddExtension = true,
                     CheckPathExists = true,
-                    RestoreDirectory = true,
                     DefaultExt = "xml",
                 };
             }

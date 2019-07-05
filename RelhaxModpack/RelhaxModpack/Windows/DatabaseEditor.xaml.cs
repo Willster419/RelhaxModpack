@@ -1302,7 +1302,10 @@ namespace RelhaxModpack.Windows
                     CheckPathExists = true,
                     DefaultExt = "zip",
                     OverwritePrompt = true,
-                    InitialDirectory = Settings.ApplicationStartupPath,
+                    //don't set initial directory to allow for restore feature
+                    //https://stackoverflow.com/questions/16078362/how-to-save-last-folder-in-openfiledialog
+                    //https://stackoverflow.com/questions/4353487/what-does-the-filedialog-restoredirectory-property-actually-do
+                    //InitialDirectory = Settings.ApplicationStartupPath,
                     Title = "Select destination for zip file",
                     FileName = (SelectedItem as EditorComboBoxItem).Package.ZipFile
                 };
@@ -1349,7 +1352,7 @@ namespace RelhaxModpack.Windows
                     CheckFileExists = true,
                     CheckPathExists = true,
                     DefaultExt = "zip",
-                    InitialDirectory = Settings.ApplicationStartupPath,
+                    //InitialDirectory = Settings.ApplicationStartupPath,
                     Multiselect = false,
                     Title = "Select zip file to upload"
                 };
@@ -1467,7 +1470,7 @@ namespace RelhaxModpack.Windows
                         CheckFileExists = true,
                         CheckPathExists = true,
                         DefaultExt = "xml",
-                        InitialDirectory = Settings.ApplicationStartupPath,
+                        //InitialDirectory = Settings.ApplicationStartupPath,
                         Multiselect = false,
                         Title = "Load Database"
                     };
@@ -1874,8 +1877,7 @@ namespace RelhaxModpack.Windows
                     AddExtension = true,
                     CheckFileExists = true,
                     CheckPathExists = true,
-                    //DefaultExt = "zip",
-                    InitialDirectory = Settings.ApplicationStartupPath,
+                    //InitialDirectory = Settings.ApplicationStartupPath,
                     Multiselect = true,
                     Title = "Select image file to upload"
                 };

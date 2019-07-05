@@ -23,6 +23,7 @@ using System.Net.Http;
 using System.Timers;
 using System.Threading;
 using Timer = System.Timers.Timer;
+using Microsoft.Win32;
 
 namespace RelhaxModpack
 {
@@ -831,7 +832,7 @@ namespace RelhaxModpack
                 if (!Utils.AutoFindWoTDirectory(ref Settings.WoTDirectory) || ModpackSettings.ForceManuel)
                 {
                     Logging.WriteToLog("auto detect failed or user requests manual", Logfiles.Application, LogLevel.Debug);
-                    Microsoft.Win32.OpenFileDialog manualWoTFind = new Microsoft.Win32.OpenFileDialog()
+                    OpenFileDialog manualWoTFind = new OpenFileDialog()
                     {
                         InitialDirectory = string.IsNullOrWhiteSpace(Settings.WoTDirectory) ? Settings.ApplicationStartupPath : Settings.WoTDirectory,
                         AddExtension = true,
@@ -839,7 +840,6 @@ namespace RelhaxModpack
                         CheckPathExists = true,
                         Filter = "WorldOfTanks.exe|WorldOfTanks.exe",
                         Multiselect = false,
-                        RestoreDirectory = true,
                         ValidateNames = true
                     };
                     if ((bool)manualWoTFind.ShowDialog())
@@ -1620,7 +1620,7 @@ namespace RelhaxModpack
             if (!Utils.AutoFindWoTDirectory(ref Settings.WoTDirectory) || ModpackSettings.ForceManuel)
             {
                 Logging.WriteToLog("auto detect failed or user requests manual", Logfiles.Application, LogLevel.Debug);
-                Microsoft.Win32.OpenFileDialog manualWoTFind = new Microsoft.Win32.OpenFileDialog()
+                OpenFileDialog manualWoTFind = new OpenFileDialog()
                 {
                     InitialDirectory = string.IsNullOrWhiteSpace(Settings.WoTDirectory) ? Settings.ApplicationStartupPath : Settings.WoTDirectory,
                     AddExtension = true,
@@ -1818,12 +1818,11 @@ namespace RelhaxModpack
 
         private void DumpColorSettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog()
+            SaveFileDialog saveFileDialog = new SaveFileDialog()
             {
                 AddExtension = true,
                 CheckPathExists = true,
                 OverwritePrompt = true,
-                RestoreDirectory = true,
                 DefaultExt = "xml",
                 Title = Translations.GetTranslatedString("ColorDumpSaveFileDialog"),
                 Filter = "XML Documents|*.xml"
@@ -2139,7 +2138,7 @@ namespace RelhaxModpack
 
         private void LoadAutoSyncSelectionFile_Click(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.OpenFileDialog selectAutoSyncSelectionFileDialog = new Microsoft.Win32.OpenFileDialog()
+            OpenFileDialog selectAutoSyncSelectionFileDialog = new OpenFileDialog()
             {
                 Filter = "*.xml|*.xml",
                 Title = Translations.GetTranslatedString("MainWindowSelectSelectionFileToLoad"),
