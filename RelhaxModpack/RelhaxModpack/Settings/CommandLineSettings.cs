@@ -58,7 +58,7 @@ namespace RelhaxModpack
                         break;
                     case "auto-install":
                         AutoInstallFileName = args[++i];
-                        Logging.Info("auto-install, attempting to parse user configuration file: " + AutoInstallFileName);
+                        Logging.Info("auto-install, attempting to launch installation using user configuration file: " + AutoInstallFileName);
                         break;
                     case "updateKeyFile":
                         //get key file

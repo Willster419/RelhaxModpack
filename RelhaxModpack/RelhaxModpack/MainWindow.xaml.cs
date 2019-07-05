@@ -321,6 +321,28 @@ namespace RelhaxModpack
                 //apply to slider
                 ApplyCustomScalingSlider.Value = ModpackSettings.DisplayScale;
                 ApplyCustomScalingLabel.Text = string.Format("{0}x", ApplyCustomScalingSlider.Value.ToString("N"));
+
+                //if silent start is selected, start the application minimized
+                if(CommandLineSettings.SilentStart)
+                {
+                    Logging.Info("SilentStart found from command line, minimizing on startup");
+                    WindowState = WindowState.Minimized;
+                }
+                //else if the auto-install option was set, immediatly start the installation
+                else if (!string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
+                {
+                    Logging.Info("auto-install specified to launce install using {0}", CommandLineSettings.AutoInstallFileName);
+                    if(!File.Exists(Path.Combine(Settings.RelhaxUserConfigsFolder,CommandLineSettings.AutoInstallFileName)))
+                    {
+                        Logging.Error("configuration file not found in {0}, aborting", Settings.RelhaxUserConfigsFolder);
+                        CommandLineSettings.AutoInstallFileName = string.Empty;
+                    }
+                    else
+                    {
+                        Logging.Info("file exists, launching modpack installation!");
+                        InstallModpackButton_Click(null, null);
+                    }
+                }
             }
         }
 
@@ -1312,6 +1334,10 @@ namespace RelhaxModpack
             CancelDownloadInstallButton.Visibility = Visibility.Hidden;
             CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Install_Click;
             CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
+
+            //if from command line auto install, then turn it off to prevent another one
+            if (!string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
+                CommandLineSettings.AutoInstallFileName = string.Empty;
 
             //close and free up RAM from advanced install progress
             if (ModpackSettings.AdvancedInstalProgress)

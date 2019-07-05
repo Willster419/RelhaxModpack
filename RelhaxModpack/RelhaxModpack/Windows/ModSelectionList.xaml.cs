@@ -488,6 +488,12 @@ namespace RelhaxModpack.Windows
                             MessageBox.Show(Translations.GetTranslatedString("configLoadFailed"));
                         }
                     }
+                    //else check and load the use selection from auto launch command line
+                    else if (!string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
+                    {
+                        SelectionsDocument = XMLUtils.LoadXmlDocument(Path.Combine(Settings.RelhaxUserConfigsFolder, CommandLineSettings.AutoInstallFileName), XmlLoadType.FromFile);
+                        shouldLoadSomething = true;
+                    }
                     else if (ModpackSettings.SaveLastSelection)
                     {
                         if (!File.Exists(Settings.LastInstalledConfigFilepath))
@@ -542,14 +548,15 @@ namespace RelhaxModpack.Windows
                     LoadingUI = false;
 
                     //if auto install or one-click install, don't show the UI
-                    if(ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall)
+                    if(ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall || !string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
                     {
                         OnSelectionListReturn(this, new SelectionListEventArgs()
                         {
                             ContinueInstallation = true,
                             ParsedCategoryList = ParsedCategoryList,
                             Dependencies = Dependencies,
-                            GlobalDependencies = GlobalDependencies
+                            GlobalDependencies = GlobalDependencies,
+                            UserMods = userMods
                         });
                         this.Close();
                     }
