@@ -2401,6 +2401,10 @@ namespace RelhaxModpack
         private void LauchEditor_Click(object sender, RoutedEventArgs e)
         {
             Logging.Info("Lanuching editor from MainWindow");
+            if (!Logging.IsLogDisposed(Logfiles.Application))
+                Logging.DisposeLogging(Logfiles.Application);
+
+            CommandLineSettings.ApplicationMode = ApplicationMode.Editor;
             DatabaseEditor editor = new DatabaseEditor();
             //start updater logging system
             if (!Logging.Init(Logfiles.Editor))
@@ -2411,6 +2415,13 @@ namespace RelhaxModpack
             }
             Logging.WriteHeader(Logfiles.Editor);
             editor.ShowDialog();
+
+            CommandLineSettings.ApplicationMode = ApplicationMode.Default;
+            if (!Logging.Init(Logfiles.Application))
+            {
+                MessageBox.Show(Translations.GetTranslatedString("appFailedCreateLogfile"));
+                Application.Current.Shutdown((int)ReturnCodes.LogfileError);
+            }
         }
 
         private void ApplyCustomScalingSlider_MouseUp(object sender, MouseButtonEventArgs e)

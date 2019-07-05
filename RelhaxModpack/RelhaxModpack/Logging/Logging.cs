@@ -312,8 +312,24 @@ namespace RelhaxModpack
                     fileToWriteTo = PatcherLogfile;
                     break;
             }
+            //check if the application logfile is null and the application is now in a new mode
+            if(fileToWriteTo == null && CommandLineSettings.ApplicationMode != ApplicationMode.Default)
+            {
+                switch (CommandLineSettings.ApplicationMode)
+                {
+                    case ApplicationMode.Editor:
+                        fileToWriteTo = EditorLogfile;
+                        break;
+                    case ApplicationMode.PatchDesigner:
+                        fileToWriteTo = PatcherLogfile;
+                        break;
+                    case ApplicationMode.Updater:
+                        fileToWriteTo = UpdaterLogfile;
+                        break;
+                }
+            }
             //check if logfile is null
-            if (fileToWriteTo == null)
+            else if (fileToWriteTo == null)
             {
                 //check if it's the application logfile
                 if(fileToWriteTo == ApplicationLogfile)

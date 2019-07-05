@@ -59,6 +59,7 @@ namespace RelhaxModpack.Windows
 
         private void OnApplicationLoad(object sender, RoutedEventArgs e)
         {
+            Logging.Editor("Editor start");
             EditorSettings = new EditorSettings();
             Logging.Editor("Loading editor settings");
             if (!Settings.LoadSettings(Settings.EditorSettingsFilename, typeof(EditorSettings), null, EditorSettings))

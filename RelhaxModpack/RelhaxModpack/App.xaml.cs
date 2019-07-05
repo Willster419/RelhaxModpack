@@ -64,6 +64,12 @@ namespace RelhaxModpack
             CloseApplicationLog(true);
         }
 
+        private void CloseLog(Logfiles logfile)
+        {
+            if (!Logging.IsLogDisposed(logfile))
+                Logging.DisposeLogging(logfile);
+        }
+
         private void CloseApplicationLog(bool showCloseMessage)
         {
             if (!Logging.IsLogDisposed(Logfiles.Application))
@@ -115,6 +121,8 @@ namespace RelhaxModpack
             {
                 case ApplicationMode.Updater:
                     DatabaseUpdater updater = new DatabaseUpdater();
+                    CloseApplicationLog(true);
+
                     //start updater logging system
                     if (!Logging.Init(Logfiles.Updater))
                     {
@@ -124,13 +132,16 @@ namespace RelhaxModpack
                     }
                     Logging.WriteHeader(Logfiles.Updater);
                     updater.ShowDialog();
+
                     //stop updater logging system
-                    CloseApplicationLog(true);
+                    CloseLog(Logfiles.Updater);
                     updater = null;
                     Current.Shutdown(0);
                     break;
                 case ApplicationMode.Editor:
                     DatabaseEditor editor = new DatabaseEditor();
+                    CloseApplicationLog(true);
+
                     //start updater logging system
                     if (!Logging.Init(Logfiles.Editor))
                     {
@@ -141,12 +152,14 @@ namespace RelhaxModpack
                     Logging.WriteHeader(Logfiles.Editor);
                     editor.ShowDialog();
                     //stop updater logging system
-                    CloseApplicationLog(true);
+                    CloseLog(Logfiles.Editor);
                     editor = null;
                     Current.Shutdown(0);
                     break;
                 case ApplicationMode.PatchDesigner:
                     PatchTester patcher = new PatchTester();
+                    CloseApplicationLog(true);
+
                     //start updater logging system
                     if (!Logging.Init(Logfiles.Patcher))
                     {
@@ -156,8 +169,9 @@ namespace RelhaxModpack
                     }
                     Logging.WriteHeader(Logfiles.Patcher);
                     patcher.ShowDialog();
+
                     //stop updater logging system
-                    CloseApplicationLog(true);
+                    CloseLog(Logfiles.Patcher);
                     patcher = null;
                     Current.Shutdown(0);
                     break;
