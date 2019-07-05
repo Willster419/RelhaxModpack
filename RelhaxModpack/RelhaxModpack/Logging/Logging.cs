@@ -160,6 +160,15 @@ namespace RelhaxModpack
                 case Logfiles.Uninstaller:
                     UninstallLogfile = fileToWriteTo;
                     break;
+                case Logfiles.Editor:
+                    EditorLogfile = fileToWriteTo;
+                    break;
+                case Logfiles.Patcher:
+                    PatcherLogfile = fileToWriteTo;
+                    break;
+                case Logfiles.Updater:
+                    UpdaterLogfile = fileToWriteTo;
+                    break;
             }
 
             if (!fileToWriteTo.Init())
@@ -423,22 +432,22 @@ namespace RelhaxModpack
 
         public static void Updater(string message, LogLevel level = LogLevel.Info)
         {
-            WriteToLog(message, Logfiles.Editor, level);
+            WriteToLog(message, Logfiles.Updater, level);
         }
 
         public static void Updater(string message, LogLevel level = LogLevel.Info, params object[] args)
         {
-            WriteToLog(message, Logfiles.Editor, level, args);
+            WriteToLog(message, Logfiles.Updater, level, args);
         }
 
         public static void Patcher(string message, LogLevel level = LogLevel.Info)
         {
-            WriteToLog(message, Logfiles.Editor, level);
+            WriteToLog(message, Logfiles.Patcher, level);
         }
 
         public static void Patcher(string message, LogLevel level = LogLevel.Info, params object[] args)
         {
-            WriteToLog(message, Logfiles.Editor, level, args);
+            WriteToLog(message, Logfiles.Patcher, level, args);
         }
     }
 }

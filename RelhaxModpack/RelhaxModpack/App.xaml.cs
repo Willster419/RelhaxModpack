@@ -68,7 +68,7 @@ namespace RelhaxModpack
         {
             if (!Logging.IsLogDisposed(Logfiles.Application))
             {
-                if (showCloseMessage)
+                if (showCloseMessage && Logging.IsLogOpen(Logfiles.Application))
                 {
                     Logging.Info("Application closing");
                     Logging.WriteHeader(Logfiles.Application);
@@ -115,8 +115,6 @@ namespace RelhaxModpack
             {
                 case ApplicationMode.Updater:
                     DatabaseUpdater updater = new DatabaseUpdater();
-                    //stop application logging system
-                    CloseApplicationLog(false);
                     //start updater logging system
                     if (!Logging.Init(Logfiles.Updater))
                     {
@@ -133,8 +131,6 @@ namespace RelhaxModpack
                     break;
                 case ApplicationMode.Editor:
                     DatabaseEditor editor = new DatabaseEditor();
-                    //stop application logging system
-                    CloseApplicationLog(false);
                     //start updater logging system
                     if (!Logging.Init(Logfiles.Editor))
                     {
@@ -151,8 +147,6 @@ namespace RelhaxModpack
                     break;
                 case ApplicationMode.PatchDesigner:
                     PatchTester patcher = new PatchTester();
-                    //stop application logging system
-                    CloseApplicationLog(false);
                     //start updater logging system
                     if (!Logging.Init(Logfiles.Patcher))
                     {
@@ -168,8 +162,6 @@ namespace RelhaxModpack
                     Current.Shutdown(0);
                     break;
                 case ApplicationMode.Patcher:
-                    CloseApplicationLog(false);
-                    Logging.Init(Logfiles.Application);
                     Logging.Info("Running patch mode");
                     if(CommandLineSettings.PatchFilenames.Count == 0)
                     {

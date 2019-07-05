@@ -349,7 +349,6 @@ namespace RelhaxModpack
                         RelhaxIcon.Dispose();
                         RelhaxIcon = null;
                     }
-                    Logging.DisposeLogging(Logfiles.Application);
                 }
             }
         }
@@ -2401,7 +2400,17 @@ namespace RelhaxModpack
 
         private void LauchEditor_Click(object sender, RoutedEventArgs e)
         {
-            
+            Logging.Info("Lanuching editor from MainWindow");
+            DatabaseEditor editor = new DatabaseEditor();
+            //start updater logging system
+            if (!Logging.Init(Logfiles.Editor))
+            {
+                MessageBox.Show("Failed to initialize logfile for editor");
+                editor.Close();
+                return;
+            }
+            Logging.WriteHeader(Logfiles.Editor);
+            editor.ShowDialog();
         }
 
         private void ApplyCustomScalingSlider_MouseUp(object sender, MouseButtonEventArgs e)
