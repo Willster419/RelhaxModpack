@@ -45,6 +45,7 @@ namespace RelhaxModpack.Windows
         private object SelectedItem = null;
         private Preview Preview;
         private bool UnsavedChanges = false;
+        public bool LaunchedFromMainWindow = false;
         private string[] UIHeaders = new string[]
         {
             "-----Global Dependencies-----",
@@ -98,6 +99,16 @@ namespace RelhaxModpack.Windows
             foreach (string s in InstallerComponents.InstallEngine.CompleteTriggerList)
                 LoadedTriggersComboBox.Items.Add(s);
             Init = false;
+            if (!LaunchedFromMainWindow)
+            {
+                Task.Run(async () =>
+                {
+                    if (!await Utils.IsManagerUptoDate(Utils.GetApplicationVersion()))
+                    {
+                        MessageBox.Show("Your application is out of date. Please launch the application normally to update");
+                    }
+                });
+            }
         }
 
 

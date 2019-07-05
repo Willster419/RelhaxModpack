@@ -2391,7 +2391,7 @@ namespace RelhaxModpack
                 Logging.DisposeLogging(Logfiles.Application);
 
             CommandLineSettings.ApplicationMode = ApplicationMode.Editor;
-            DatabaseEditor editor = new DatabaseEditor();
+            DatabaseEditor editor = new DatabaseEditor() { LaunchedFromMainWindow = true };
             //start updater logging system
             if (!Logging.Init(Logfiles.Editor))
             {
