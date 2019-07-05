@@ -63,11 +63,11 @@ namespace RelhaxModpack.Windows
                 if (MessageBox.Show("You have unsaved changes, return to patcher?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     return;
             }
-            if (!Logging.IsLogDisposed(Logfiles.Application))
+            if (!Logging.IsLogDisposed(Logfiles.Patcher))
             {
-                Logging.WriteToLog("Saving patcher settings");
+                Logging.Patcher("Saving patcher settings",LogLevel.Info);
                 if (Settings.SaveSettings(Settings.PatcherSettingsFilename, typeof(PatchSettings), null, PatchSettings))
-                    Logging.WriteToLog("Patcher settings saved");
+                    Logging.Patcher("Patcher settings saved", LogLevel.Info);
             }
         }
 
@@ -75,11 +75,11 @@ namespace RelhaxModpack.Windows
         {
             //load settings
             PatchSettings = new PatchSettings();
-            Logging.Info("Loading patcher settings");
+            Logging.Patcher("Loading patcher settings", LogLevel.Info);
             if (!Settings.LoadSettings(Settings.PatcherSettingsFilename, typeof(PatchSettings), null, PatchSettings))
-                Logging.Warning("Failed to load patcher settings, using defaults");
+                Logging.Patcher("Failed to load patcher settings, using defaults", LogLevel.Error);
             else
-                Logging.Info("Successfully loaded patcher settings");
+                Logging.Patcher("Successfully loaded patcher settings", LogLevel.Info);
             LoadSettingsToUI();
             //load empty patch definition
             PatchesList.Items.Clear();
@@ -300,47 +300,47 @@ namespace RelhaxModpack.Windows
             {
                 RightSideTabControl.SelectedItem = LogOutputTab;
             }
-            Logging.Info("TestPatch() start");
-            Logging.Info("Checking UI elements for valid patch information...");
+            Logging.Patcher("TestPatch() start", LogLevel.Info);
+            Logging.Patcher("Checking UI elements for valid patch information...", LogLevel.Info);
             //make new patch element
             Patch patchToTest = new Patch();
             //check input from UI left panel side
 
             //file location
-            Logging.Info("File to Patch location mode: {0}", FilePathType.SelectedItem == null ? "(null)" : FilePathType.SelectedItem);
+            Logging.Patcher("File to Patch location mode: {0}", LogLevel.Info, FilePathType.SelectedItem == null ? "(null)" : FilePathType.SelectedItem);
             if(FilePathType.SelectedItem == null)
             {
-                Logging.Info("Invalid file path type");
+                Logging.Patcher("Invalid file path type", LogLevel.Info);
                 return;
             }
             switch(FilePathType.SelectedItem.ToString())
             {
                 case "Absolute":
-                    Logging.Info("Checking if absolute file path {0} exists...", FileToPatchTextbox.Text);
+                    Logging.Patcher("Checking if absolute file path {0} exists...", LogLevel.Info, FileToPatchTextbox.Text);
                     if(File.Exists(FileToPatchTextbox.Text))
                     {
-                        Logging.Info("File Exists!");
+                        Logging.Patcher("File Exists!", LogLevel.Info);
                         patchToTest.File = FileToPatchTextbox.Text;
                         patchToTest.CompletePath = FileToPatchTextbox.Text;
                     }
                     else
                     {
-                        Logging.Info("File does not exist, aborting");
+                        Logging.Patcher("File does not exist, aborting", LogLevel.Info);
                         return;
                     }
                     break;
                 case "Relative":
-                    Logging.Info("Using relative macro {0}", PatchPathCombobox.SelectedItem == null ? "(null)" : PatchPathCombobox.SelectedItem);
+                    Logging.Patcher("Using relative macro {0}", LogLevel.Info, PatchPathCombobox.SelectedItem == null ? "(null)" : PatchPathCombobox.SelectedItem);
                     string completePathForPatchFile = string.Empty;
                     switch(PatchPathCombobox.SelectedItem.ToString())
                     {
                         case "app":
                             if (Directory.Exists(PatchSettings.AppMacro))
                             {
-                                Logging.Info("app macro folder path exists...");
+                                Logging.Patcher("app macro folder path exists...", LogLevel.Info);
                                 if(FileToPatchTextbox.Text.Contains("versiondir") && string.IsNullOrWhiteSpace(PatchSettings.VersiondirMacro))
                                 {
-                                    Logging.Info("versiondir macro found, but versiondir patch seting macro is blank, aborting");
+                                    Logging.Patcher("versiondir macro found, but versiondir patch setting macro is blank, aborting", LogLevel.Info);
                                     return;
                                 }
                                 completePathForPatchFile = PatchSettings.AppMacro + FileToPatchTextbox.Text;
@@ -348,46 +348,46 @@ namespace RelhaxModpack.Windows
                             }
                             else
                             {
-                                Logging.Info("app macro folder path does not exist, aborting");
+                                Logging.Patcher("app macro folder path does not exist, aborting", LogLevel.Info);
                                 return;
                             }
                             break;
                         case "appData":
                             if (Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)))
                             {
-                                Logging.Info("appData macro folder path exists...");
+                                Logging.Patcher("appData macro folder path exists...", LogLevel.Info);
                                 completePathForPatchFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + FileToPatchTextbox.Text;
                             }
                             else
                             {
-                                Logging.Info("appData macro folder path does not exist, aborting");
+                                Logging.Patcher("appData macro folder path does not exist, aborting", LogLevel.Info);
                                 return;
                             }
                             break;
                         default:
-                            Logging.Info("Invalid path macro");
+                            Logging.Patcher("Invalid path macro", LogLevel.Info);
                             return;
                     }
-                    Logging.Info("relative path built as {0}", completePathForPatchFile);
+                    Logging.Patcher("relative path built as {0}", LogLevel.Info, completePathForPatchFile);
                     if(File.Exists(completePathForPatchFile))
                     {
-                        Logging.Info("File exists!");
+                        Logging.Patcher("File exists!", LogLevel.Info);
                         patchToTest.File = FileToPatchTextbox.Text;
                         patchToTest.CompletePath = completePathForPatchFile;
                     }
                     else
                     {
-                        Logging.Info("File does not exist, aborting (did you forget to add \"\\\" to the beginning of the path?");
+                        Logging.Patcher("File does not exist, aborting (did you forget to add \"\\\" to the beginning of the path?", LogLevel.Info);
                     }
                     break;
                 default:
-                    Logging.Info("Invalid file path type, aborting");
+                    Logging.Patcher("Invalid file path type, aborting", LogLevel.Info);
                     return;
             }
             //check patch type
             if(PatchTypeCombobox.SelectedItem == null)
             {
-                Logging.Info("Invalid Patch Type, aborting");
+                Logging.Patcher("Invalid Patch Type, aborting", LogLevel.Info);
                 return;
             }
             patchToTest.Type = PatchTypeCombobox.SelectedItem as string;
@@ -398,8 +398,8 @@ namespace RelhaxModpack.Windows
                 case "regx":
                     if(!string.IsNullOrWhiteSpace(PatchModeCombobox.SelectedItem as string))
                     {
-                        Logging.Info("Type=regex, invalid patch type: {0}", PatchModeCombobox.SelectedItem as string);
-                        Logging.Info("valid types are: (null)");
+                        Logging.Patcher("Type=regex, invalid patch type: {0}", LogLevel.Info, PatchModeCombobox.SelectedItem as string);
+                        Logging.Patcher("valid types are: (null)");
                         return;
                     }
                     //set the lines
@@ -410,13 +410,13 @@ namespace RelhaxModpack.Windows
                     //check if path/lines is valid (has string values)
                     if (string.IsNullOrWhiteSpace(PatchLinesPathTextbox.Text))
                     {
-                        Logging.Info("invalid patch path or lines");
+                        Logging.Patcher("invalid patch path or lines", LogLevel.Info);
                         return;
                     }
                     if (!validXmlModes.Contains(PatchModeCombobox.SelectedItem as string))
                     {
-                        Logging.Info("Type=xml, invalid patch type: {0}", PatchModeCombobox.SelectedItem as string);
-                        Logging.Info("valid types are: {0}",string.Join(",",validXmlModes));
+                        Logging.Patcher("Type=xml, invalid patch type: {0}", LogLevel.Info, PatchModeCombobox.SelectedItem as string);
+                        Logging.Patcher("valid types are: {0}", LogLevel.Info, string.Join(",",validXmlModes));
                         return;
                     }
                     patchToTest.Path = PatchLinesPathTextbox.Text;
@@ -425,13 +425,13 @@ namespace RelhaxModpack.Windows
                     //check if path/lines is valid (has string values)
                     if (string.IsNullOrWhiteSpace(PatchLinesPathTextbox.Text))
                     {
-                        Logging.Info("invalid patch path or lines");
+                        Logging.Patcher("invalid patch path or lines");
                         return;
                     }
                     if (!validJsonModes.Contains(PatchModeCombobox.SelectedItem as string))
                     {
-                        Logging.Info("Type=json, invalid patch type: {0}", PatchModeCombobox.SelectedItem as string);
-                        Logging.Info("valid types are: {0}", string.Join(",", validJsonModes));
+                        Logging.Patcher("Type=json, invalid patch type: {0}", LogLevel.Info, PatchModeCombobox.SelectedItem as string);
+                        Logging.Patcher("valid types are: {0}", LogLevel.Info, string.Join(",", validJsonModes));
                         return;
                     }
                     patchToTest.Path = PatchLinesPathTextbox.Text;
@@ -443,23 +443,23 @@ namespace RelhaxModpack.Windows
             //check followPath true ONLY for json
             if(!patchToTest.Type.Equals("json") && (bool)PatchFollowPathSetting.IsChecked)
             {
-                Logging.Info("Types=json, followPathSetting must be false!");
+                Logging.Patcher("Types=json, followPathSetting must be false!");
                 return;
             }
             //check search and replace
             if (string.IsNullOrWhiteSpace(PatchReplaceTextbox.Text) && string.IsNullOrWhiteSpace(PatchSearchTextbox.Text))
             {
-                Logging.Info("patch repalce and search are blank, invalid patch");
+                Logging.Patcher("patch repalce and search are blank, invalid patch");
                 return;
             }
             if (string.IsNullOrWhiteSpace(PatchSearchTextbox.Text))
             {
-                Logging.Warning("patch search is blank (is this the intent?)");
+                Logging.Patcher("patch search is blank (is this the intent?)");
             }
             patchToTest.Search = PatchSearchTextbox.Text;
             if (string.IsNullOrWhiteSpace(PatchReplaceTextbox.Text))
             {
-                Logging.Info("patch replace is blank (is this the intent?)");
+                Logging.Patcher("patch replace is blank (is this the intent?)");
             }
             patchToTest.Replace = PatchReplaceTextbox.Text;
             //put patch into patch test methods
@@ -743,13 +743,13 @@ namespace RelhaxModpack.Windows
             {
                 RightSideTabControl.SelectedItem = LogOutputTab;
             }
-            Logging.Info("Regex regressions start");
+            Logging.Patcher("Regex regressions start");
             await Task.Run(() =>
             {
                 Regression regression = new Regression(RegressionTypes.regex, BuildRegexUnittests());
                 regression.RunRegressions();
             });
-            Logging.Info("Regex regressions end");
+            Logging.Patcher("Regex regressions end");
             Dispatcher.Invoke(new Action(() => { RegressionsRunning = false; }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
         }
 
@@ -760,13 +760,13 @@ namespace RelhaxModpack.Windows
             {
                 RightSideTabControl.SelectedItem = LogOutputTab;
             }
-            Logging.Info("Xml regressions start");
+            Logging.Patcher("Xml regressions start");
             await Task.Run(() =>
             {
                 Regression regression = new Regression(RegressionTypes.xml, BuildXmlUnittests());
                 regression.RunRegressions();
             });
-            Logging.Info("Xml regressions end");
+            Logging.Patcher("Xml regressions end");
             Dispatcher.Invoke(new Action(() => { RegressionsRunning = false; }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
         }
 
@@ -777,13 +777,13 @@ namespace RelhaxModpack.Windows
             {
                 RightSideTabControl.SelectedItem = LogOutputTab;
             }
-            Logging.Info("Json regressions start");
+            Logging.Patcher("Json regressions start");
             await Task.Run(() =>
             {
                 Regression regression = new Regression(RegressionTypes.json, BuildJsonUnittests());
                 regression.RunRegressions();
             });
-            Logging.Info("Json regressions end");
+            Logging.Patcher("Json regressions end");
             Dispatcher.Invoke(new Action(() => { RegressionsRunning = false; }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
         }
 
@@ -794,13 +794,13 @@ namespace RelhaxModpack.Windows
             {
                 RightSideTabControl.SelectedItem = LogOutputTab;
             }
-            Logging.Info("FollowPath regressions start");
+            Logging.Patcher("FollowPath regressions start");
             await Task.Run(() =>
             {
                 Regression regression = new Regression(RegressionTypes.followPath, BuildFollowPathUnittests());
                 regression.RunRegressions();
             });
-            Logging.Info("FollowPath regressions end");
+            Logging.Patcher("FollowPath regressions end");
             Dispatcher.Invoke(new Action(() => { RegressionsRunning = false; }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
         }
 

@@ -80,18 +80,18 @@ namespace RelhaxModpack.Windows
             //check if key filename was changed from command line
             if (!string.IsNullOrWhiteSpace(CommandLineSettings.UpdateKeyFileName))
             {
-                Logging.Debug("User specified from command line new key filename to use: {0}", CommandLineSettings.UpdateKeyFileName);
+                Logging.Updater("User specified from command line new key filename to use: {0}", LogLevel.Info, CommandLineSettings.UpdateKeyFileName);
                 KeyFilename = CommandLineSettings.UpdateKeyFileName;
             }
             if(File.Exists(KeyFilename))
             {
-                Logging.Debug("File for auth exists, attempting authorization");
-                Logging.Debug(KeyFilename);
+                Logging.Updater("File for auth exists, attempting authorization");
+                Logging.Updater(KeyFilename);
                 AttemptAuthFromFile(KeyFilename);
             }
             else
             {
-                Logging.Info("Loading without pre-file authorization");
+                Logging.Updater("Loading without pre-file authorization");
             }
         }
 
@@ -102,7 +102,7 @@ namespace RelhaxModpack.Windows
 
         private async Task<bool> AttemptAuthFromFile(string filepath)
         {
-            Logging.Info("attempting authorization", filepath);
+            Logging.Updater("attempting authorization", LogLevel.Info, filepath);
             return await AttemptAuthFromString(File.ReadAllText(filepath));
         }
 
@@ -116,7 +116,7 @@ namespace RelhaxModpack.Windows
                 string onlinePassword = await client.DownloadStringTaskAsync(PrivateStuff.KeyAddress);
                 if (onlinePassword.Equals(key))
                 {
-                    Logging.WriteToLog("authorized, keys match");
+                    Logging.Updater("authorized, keys match");
                     AuthStatusTextblock.Text = "Current status: Authorized";
                     AuthStatusTextblock.Foreground = new SolidColorBrush(Colors.Green);
                     authorized = true;
@@ -124,7 +124,7 @@ namespace RelhaxModpack.Windows
                 }
                 else
                 {
-                    Logging.WriteToLog("not authorized, keys do not match");
+                    Logging.Updater("not authorized, keys do not match");
                     AuthStatusTextblock.Text = "Current status: Denied";
                     AuthStatusTextblock.Foreground = new SolidColorBrush(Colors.Red);
                     authorized = false;
@@ -152,7 +152,7 @@ namespace RelhaxModpack.Windows
                 Settings.WoTClientVersion = XMLUtils.GetXMLStringFromXPath(SelectModInfo.FileName, "//modInfoAlpha.xml/@version");
                 string versionInfo = string.Format("{0}={1},  {2}={3}", nameof(Settings.WoTModpackOnlineFolderVersion)
                     , Settings.WoTModpackOnlineFolderVersion, nameof(Settings.WoTClientVersion), Settings.WoTClientVersion);
-                Logging.WriteToLog(versionInfo);
+                Logging.Updater(versionInfo);
                 ReportProgress(versionInfo);
             }
         }
@@ -166,7 +166,7 @@ namespace RelhaxModpack.Windows
         private void ReportProgress(string message)
         {
             //reports to the log file and the console otuptu
-            Logging.WriteToLog(message);
+            Logging.Updater(message);
             LogOutput.AppendText(message + "\n");
         }
 
@@ -184,7 +184,7 @@ namespace RelhaxModpack.Windows
         {
             //if strings are not empty and file exists, delete them
             //for all the class level strings
-            Logging.WriteToLog("Deleting trash files...");
+            Logging.Updater("Deleting trash files...");
             string[] filesToDelete = new string[]
             {
                 DatabaseXml,
@@ -696,7 +696,7 @@ namespace RelhaxModpack.Windows
                         package.Size = fakeSize;
                         if (package.Size == 0)
                         {
-                            Logging.Error("zip file {0} is 0 bytes (empty file)",package.ZipFile);
+                            Logging.Updater("zip file {0} is 0 bytes (empty file)", LogLevel.Info, package.ZipFile);
                             return;
                         }
                     }
@@ -737,7 +737,7 @@ namespace RelhaxModpack.Windows
                 SelectablePackage result = results[0];
                 if(!selectablePackage.NameFormatted.Equals(result.NameFormatted))
                 {
-                    Logging.Debug("package rename-> old:{0}, new:{1}", result.PackageName, selectablePackage.PackageName);
+                    Logging.Updater("package rename-> old:{0}, new:{1}", LogLevel.Info, result.PackageName, selectablePackage.PackageName);
                     renamedPackages.Add(new BeforeAfter() {Before = result, After = selectablePackage });
                 }
             }
@@ -756,7 +756,7 @@ namespace RelhaxModpack.Windows
                 bool completePackageNamePathChanged = !result.CompletePackageNamePath.Equals(selectablePackage.CompletePackageNamePath);
                 if (completeNamePathChanged && completePackageNamePathChanged)
                 {
-                    Logging.Debug("package moved: {0}", selectablePackage.PackageName);
+                    Logging.Updater("package moved: {0}", LogLevel.Info, selectablePackage.PackageName);
                     movedPackages.Add(new BeforeAfter { Before = result, After = selectablePackage });
                 }
             }

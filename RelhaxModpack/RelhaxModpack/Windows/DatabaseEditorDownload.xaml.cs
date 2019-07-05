@@ -98,11 +98,11 @@ namespace RelhaxModpack.Windows
                     case true:
                         //before uploading, make sure it doesn't exist first
                         ProgressHeader.Text = "Checking if file exists on server...";
-                        Logging.Debug("Checking if {0} already exists on the server in folder {1}", ZipFileName, Settings.WoTModpackOnlineFolderVersion);
+                        Logging.Editor("Checking if {0} already exists on the server in folder {1}", LogLevel.Info, ZipFileName, Settings.WoTModpackOnlineFolderVersion);
                         string[] listOfFilesOnServer = await Utils.FTPListFilesFoldersAsync(ZipFilePathOnline, Credential);
                         if (listOfFilesOnServer.Contains(ZipFileName) && MessageBox.Show("File already exists, overwrite?", "", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
                         {
-                            Logging.Debug("DOES exist and user said don't overwrite, aborting");
+                            Logging.Editor("DOES exist and user said don't overwrite, aborting");
                             ProgressHeader.Text = "Canceled";
                             return;
                         }
@@ -110,25 +110,25 @@ namespace RelhaxModpack.Windows
                         //write handler for if upload or download was canceled
                         client.UploadFileCompleted += Client_DownloadUploadFileCompleted;
 
-                        Logging.Debug("STARTING FTP UPLOAD");
+                        Logging.Editor("STARTING FTP UPLOAD");
                         try
                         {
                             await client.UploadFileTaskAsync(CompleteFTPPath, ZipFilePathDisk);
                         }
                         catch (Exception ex)
                         {
-                            Logging.Info("FTP UPLOAD Failed");
-                            Logging.Info(ex.ToString());
+                            Logging.Editor("FTP UPLOAD Failed");
+                            Logging.Editor(ex.ToString());
                         }
 
-                        Logging.Debug("FTP UPLOAD COMPLETE");
+                        Logging.Editor("FTP UPLOAD COMPLETE");
                         if (PackageToUpdate == null)
-                            Logging.Debug("FTP media upload complete");
+                            Logging.Editor("FTP media upload complete");
                         else
                         {
-                            Logging.Debug("FTP zip package upload complete, changing zipFile entry for package {0} from", PackageToUpdate.PackageName);
-                            Logging.Debug("\"{0}\"{1}to{2}", PackageToUpdate.ZipFile, Environment.NewLine, Environment.NewLine);
-                            Logging.Debug("\"{0}\"", ZipFileName);
+                            Logging.Editor("FTP zip package upload complete, changing zipFile entry for package {0} from", LogLevel.Info, PackageToUpdate.PackageName);
+                            Logging.Editor("\"{0}\"{1}to{2}", LogLevel.Info, PackageToUpdate.ZipFile, Environment.NewLine, Environment.NewLine);
+                            Logging.Editor("\"{0}\"", LogLevel.Info, ZipFileName);
                             PackageToUpdate.ZipFile = ZipFileName;
                         }
                         
@@ -147,17 +147,17 @@ namespace RelhaxModpack.Windows
                         client.DownloadProgressChanged += Client_DownloadProgressChanged;
                         //write handler for if upload or download was canceled
                         client.DownloadFileCompleted += Client_DownloadUploadFileCompleted;
-                        Logging.Debug("STARTING FTP DOWNLOAD");
+                        Logging.Editor("STARTING FTP DOWNLOAD");
                         try
                         {
                             FTPDownloadFilesize = await Utils.FTPGetFilesizeAsync(CompleteFTPPath, Credential);
                             await client.DownloadFileTaskAsync(CompleteFTPPath, ZipFilePathDisk);
-                            Logging.Debug("FTP DOWNLOAD COMPLETE ({0})",ZipFileName);
+                            Logging.Editor("FTP DOWNLOAD COMPLETE ({0})", LogLevel.Info, ZipFileName);
                         }
                         catch (Exception ex)
                         {
-                            Logging.Info("FTP download failed");
-                            Logging.Info(ex.ToString());
+                            Logging.Editor("FTP download failed");
+                            Logging.Editor(ex.ToString());
                             //MessageBox.Show(ex.ToString());
                         }
                         finally
@@ -176,11 +176,11 @@ namespace RelhaxModpack.Windows
         {
             if(Countdown == 0)
             {
-                Logging.Debug("Countdown is 0, do not close");
+                Logging.Editor("Countdown is 0, do not close");
             }
             else
             {
-                Logging.Debug("Countdown is > 0, starting");
+                Logging.Editor("Countdown is > 0, starting");
                 TimeoutClose.Visibility = Visibility.Visible;
                 timer.Enabled = true;
                 TimeoutClose.Text = Countdown.ToString();
@@ -194,7 +194,7 @@ namespace RelhaxModpack.Windows
                 TimeoutClose.Text = (--Countdown).ToString();
                 if (Countdown == 0)
                 {
-                    Logging.Debug("countdown complete, closing the window");
+                    Logging.Editor("countdown complete, closing the window");
                     timer.Enabled = false;
                     timer.Dispose();
                     Close();
@@ -206,16 +206,16 @@ namespace RelhaxModpack.Windows
         {
             if(e.Cancelled)
             {
-                Logging.Debug("FTP upload or download cancel detected from UI thread, handling");
+                Logging.Editor("FTP upload or download cancel detected from UI thread, handling");
                 switch (Upload)
                 {
                     case true:
                         //delete file on server
-                        Logging.Debug("deleting file on server");
+                        Logging.Editor("deleting file on server");
                         await Utils.FTPDeleteFileAsync(CompleteFTPPath, Credential);
                         break;
                     case false:
-                        Logging.Debug("deleting file on disk");
+                        Logging.Editor("deleting file on disk");
                         File.Delete(ZipFilePathDisk);
                         break;
                 }
@@ -243,7 +243,7 @@ namespace RelhaxModpack.Windows
         {
             if(!Directory.Exists(Path.GetDirectoryName(ZipFilePathDisk)))
             {
-                Logging.Error("OpenFolder button pressed but path {0} does not exist!", Path.GetDirectoryName(ZipFilePathDisk));
+                Logging.Editor("OpenFolder button pressed but path {0} does not exist!", LogLevel.Info, Path.GetDirectoryName(ZipFilePathDisk));
                 return;
             }
             try
@@ -260,7 +260,7 @@ namespace RelhaxModpack.Windows
         {
             if (!File.Exists(ZipFilePathDisk))
             {
-                Logging.Error("OpenFile button pressed but file {0} does not exist!", ZipFilePathDisk);
+                Logging.Editor("OpenFile button pressed but file {0} does not exist!", LogLevel.Info, ZipFilePathDisk);
                 return;
             }
             try
@@ -275,9 +275,9 @@ namespace RelhaxModpack.Windows
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            Logging.Debug("Cancel pressed, Upload={0}", Upload.ToString());
+            Logging.Editor("Cancel pressed, Upload={0}", LogLevel.Info, Upload.ToString());
             ProgressHeader.Text = "Canceled";
-            Logging.Debug("Canceling upload or download operation");
+            Logging.Editor("Canceling upload or download operation");
             client.CancelAsync();
         }
     }

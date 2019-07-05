@@ -321,7 +321,7 @@ namespace RelhaxModpack
                 }
                 return;
             }
-            if (logfiles == Logfiles.Updater)
+            if (logfiles == Logfiles.Patcher)
             {
 #warning this is hackey and should be fixed
                 string temp = fileToWriteTo.Write(message, logLevel);
@@ -409,6 +409,36 @@ namespace RelhaxModpack
         public static void Uninstaller(string message, params object[] args)
         {
             InstallLogfile.Write(string.Format(message, args));
+        }
+
+        public static void Editor(string message, LogLevel level = LogLevel.Info)
+        {
+            WriteToLog(message, Logfiles.Editor, level);
+        }
+
+        public static void Editor(string message, LogLevel level = LogLevel.Info, params object[] args)
+        {
+            WriteToLog(message, Logfiles.Editor, level, args);
+        }
+
+        public static void Updater(string message, LogLevel level = LogLevel.Info)
+        {
+            WriteToLog(message, Logfiles.Editor, level);
+        }
+
+        public static void Updater(string message, LogLevel level = LogLevel.Info, params object[] args)
+        {
+            WriteToLog(message, Logfiles.Editor, level, args);
+        }
+
+        public static void Patcher(string message, LogLevel level = LogLevel.Info)
+        {
+            WriteToLog(message, Logfiles.Editor, level);
+        }
+
+        public static void Patcher(string message, LogLevel level = LogLevel.Info, params object[] args)
+        {
+            WriteToLog(message, Logfiles.Editor, level, args);
         }
     }
 }

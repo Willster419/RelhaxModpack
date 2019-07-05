@@ -60,27 +60,27 @@ namespace RelhaxModpack.Windows
         private void OnApplicationLoad(object sender, RoutedEventArgs e)
         {
             EditorSettings = new EditorSettings();
-            Logging.Info("Loading editor settings");
+            Logging.Editor("Loading editor settings");
             if (!Settings.LoadSettings(Settings.EditorSettingsFilename, typeof(EditorSettings), null, EditorSettings))
             {
-                Logging.Warning("Failed to load editor settings, using defaults");
+                Logging.Editor("Failed to load editor settings, using defaults");
             }
             else
             {
-                Logging.Info("Editor settings loaded success");
+                Logging.Editor("Editor settings loaded success");
             }
             //check if we are loading the document auto from the command line
             LoadSettingsToUI();
             if (!string.IsNullOrWhiteSpace(CommandLineSettings.EditorAutoLoadFileName))
             {
-                Logging.Info("Attempting to auto-load xml file from {0}", CommandLineSettings.EditorAutoLoadFileName);
+                Logging.Editor("Attempting to auto-load xml file from {0}",LogLevel.Info, CommandLineSettings.EditorAutoLoadFileName);
                 if (File.Exists(CommandLineSettings.EditorAutoLoadFileName))
                 {
                     OnLoadDatabaseClick(null, null);
                 }
                 else
                 {
-                    Logging.Info("file does not exist");
+                    Logging.Editor("file does not exist");
                 }
             }
             //load the trigger box with trigger options
@@ -124,14 +124,14 @@ namespace RelhaxModpack.Windows
                 if (MessageBox.Show("You have unsaved changes, return to editor?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     return;
             }
-            if (!Logging.IsLogDisposed(Logfiles.Application))
+            if (!Logging.IsLogDisposed(Logfiles.Editor))
             {
-                if(Logging.IsLogOpen(Logfiles.Application))
-                    Logging.WriteToLog("Saving editor settings");
+                if(Logging.IsLogOpen(Logfiles.Editor))
+                    Logging.Editor("Saving editor settings");
                 if (Settings.SaveSettings(Settings.EditorSettingsFilename, typeof(EditorSettings), null, EditorSettings))
-                    if (Logging.IsLogOpen(Logfiles.Application))
-                        Logging.WriteToLog("Editor settings saved");
-                Logging.DisposeLogging(Logfiles.Application);
+                    if (Logging.IsLogOpen(Logfiles.Editor))
+                        Logging.Editor("Editor settings saved");
+                Logging.DisposeLogging(Logfiles.Editor);
             }
         }
 
@@ -244,7 +244,7 @@ namespace RelhaxModpack.Windows
             //also make the selected item null just in case
             if(SelectedItem != null)
             {
-                Logging.Debug("from LoadUI(), selectedItem is not null, setting to null (user pressed a load database function) previous={0}", SelectedItem.ToString());
+                Logging.Editor("from LoadUI(), selectedItem is not null, setting to null (user pressed a load database function) previous={0}", LogLevel.Info, SelectedItem.ToString());
                 SelectedItem = null;
             }
 
@@ -407,11 +407,11 @@ namespace RelhaxModpack.Windows
                     //check if the database is actually loaded before Loading the database view
                     if(GlobalDependencies.Count == 0)
                     {
-                        Logging.Info("Database is not yet loaded, skipping UI loading");
+                        Logging.Editor("Database is not yet loaded, skipping UI loading");
                     }
                     else
                     {
-                        Logging.Info("Database is loaded, UI loading()");
+                        Logging.Editor("Database is loaded, UI loading()");
                         LoadDatabaseView(GlobalDependencies, Dependencies, ParsedCategoryList);
                     }
                 }
@@ -424,11 +424,11 @@ namespace RelhaxModpack.Windows
                     AddDatabaseObjectButton.IsEnabled = false;
                     if (GlobalDependencies.Count == 0)
                     {
-                        Logging.Info("Database is not yet loaded, skipping UI loading");
+                        Logging.Editor("Database is not yet loaded, skipping UI loading");
                     }
                     else
                     {
-                        Logging.Info("Database is loaded, UI loading()");
+                        Logging.Editor("Database is loaded, UI loading()");
                         LoadInstallView(GlobalDependencies, Dependencies, ParsedCategoryList);
                     }
                 }
@@ -441,11 +441,11 @@ namespace RelhaxModpack.Windows
                     AddDatabaseObjectButton.IsEnabled = false;
                     if (GlobalDependencies.Count == 0)
                     {
-                        Logging.Info("Database is not yet loaded, skipping UI loading");
+                        Logging.Editor("Database is not yet loaded, skipping UI loading");
                     }
                     else
                     {
-                        Logging.Info("Database is loaded, UI loading()");
+                        Logging.Editor("Database is loaded, UI loading()");
                         LoadPatchView(GlobalDependencies, Dependencies, ParsedCategoryList);
                     }
                 }
@@ -470,7 +470,7 @@ namespace RelhaxModpack.Windows
                 lastCount += DevURL.Length;
                 if(PackageDevURLDisplay.SelectionStart <= lastCount)
                 {
-                    Logging.Debug("DevURL selection parsed at selectionStart={0} (total={1}, current={2}, lines total={3}), opening URL as {4}",
+                    Logging.Editor("DevURL selection parsed at selectionStart={0} (total={1}, current={2}, lines total={3}), opening URL as {4}", LogLevel.Info,
                             PackageDevURLDisplay.SelectionStart, PackageDevURLDisplay.Text.Length, DevURL.Length, DevURLs.Count(), DevURL.Trim());
                     try
                     {
@@ -478,7 +478,7 @@ namespace RelhaxModpack.Windows
                     }
                     catch
                     {
-                        Logging.Error("Failed to open DevURL {0}", DevURL.Trim());
+                        Logging.Editor("Failed to open DevURL {0}", LogLevel.Info, DevURL.Trim());
                     }
                     return;
                 }
@@ -487,7 +487,7 @@ namespace RelhaxModpack.Windows
 
         private void ResetRightPanels(DatabasePackage package)
         {
-            Logging.Debug("ResetRightPanels(), package type = {0}, name= {1}", package == null? "(null)": package.GetType().ToString(), package == null ? "(null)" : package.PackageName);
+            Logging.Editor("ResetRightPanels(), package type = {0}, name= {1}", LogLevel.Info, package == null? "(null)": package.GetType().ToString(), package == null ? "(null)" : package.PackageName);
             //for each tab, disable all components. then enable them back of tye type of database object
             List<Control> controlsToDisable = new List<Control>();
             foreach (TabItem tabItem in RightTab.Items)
@@ -652,7 +652,7 @@ namespace RelhaxModpack.Windows
                 //if the mouse is not over, then it was not user initiated
                 if (!(selectedTreeViewItem.IsMouseOver || Keyboard.IsKeyDown(Key.Enter)))
                     return;
-                Logging.Debug("SelectedItemChanged(), selectedTreeViewItem.Header={0}", selectedTreeViewItem.Header);
+                Logging.Editor("SelectedItemChanged(), selectedTreeViewItem.Header={0}", LogLevel.Info, selectedTreeViewItem.Header);
                 SelectDatabaseObject(selectedTreeViewItem.Header, e.OldValue as TreeViewItem);
             }
         }
@@ -688,7 +688,7 @@ namespace RelhaxModpack.Windows
         private void ShowDatabaseCategory(Category category)
         {
             ResetRightPanels(null);
-            Logging.Debug("ShowDatabaseCategory(), category showing = {0}", category.Name);
+            Logging.Editor("ShowDatabaseCategory(), category showing = {0}", LogLevel.Info, category.Name);
             foreach (DatabaseLogic logic in category.Dependencies)
                 PackageDependenciesDisplay.Items.Add(logic);
             PackageNameDisplay.Text = category.Name;
@@ -697,7 +697,7 @@ namespace RelhaxModpack.Windows
         private void ShowDatabasePackage(DatabasePackage package)
         {
             ResetRightPanels(package);
-            Logging.Debug("ShowDatabaseObject(), package showing = {0}", package.PackageName);
+            Logging.Editor("ShowDatabaseObject(), package showing = {0}", LogLevel.Info, package.PackageName);
             //load all items in the databasePackage level first
             //basic tab
             PackagePackageNameDisplay.Text = package.PackageName;
@@ -819,7 +819,7 @@ namespace RelhaxModpack.Windows
 
         private void ApplyDatabaseCategory(Category category)
         {
-            Logging.Debug("ApplyDatabaseCategory(), category saving= {0}", category.Name);
+            Logging.Editor("ApplyDatabaseCategory(), category saving= {0}", LogLevel.Info, category.Name);
             category.Name = PackageNameDisplay.Text;
             category.Dependencies.Clear();
             foreach (DatabaseLogic logic in PackageDependenciesDisplay.Items)
@@ -831,12 +831,12 @@ namespace RelhaxModpack.Windows
 
         private void ApplyDatabasePackage(DatabasePackage package)
         {
-            Logging.Debug("ApplyDatabasePackage(), package saving = {0}", package.PackageName);
+            Logging.Editor("ApplyDatabasePackage(), package saving = {0}", LogLevel.Info, package.PackageName);
 
             //check if the to save packagename is unique
             if(!PackagePackageNameDisplay.Text.Equals(package.PackageName))
             {
-                Logging.Info("packageName is new, checking if it is unique");
+                Logging.Editor("packageName is new, checking if it is unique");
                 if(Utils.IsDuplicateName(Utils.GetFlatList(GlobalDependencies,Dependencies,null,ParsedCategoryList), PackagePackageNameDisplay.Text))
                 {
                     MessageBox.Show(string.Format("Duplicate packageName: {0} is already used", PackagePackageNameDisplay.Text));
@@ -916,21 +916,21 @@ namespace RelhaxModpack.Windows
         private void PerformDatabaseMoveAdd(TreeViewItem itemCurrentlyOver, TreeViewItem itemToMove, TreeViewItem parentItemToMove, TreeViewItem parentItemOver,
             DatabasePackage packageToMove, DatabasePackage packageCurrentlyOver, DragDropEffects effects, bool addBelowItem)
         {
-            Logging.Debug("Starting PerformDatabaseMoveAdd function, itemCurrentlyOver={0}, itemToMove={1}, parentItemToMove={2}, parentItemOver={3}, packageToMove={4}," +
-                " packageCurrentlyOver={5}, effects={6}, addBelowItem={7}", itemCurrentlyOver.ToString(), itemToMove.ToString(), parentItemToMove.ToString(), parentItemOver.ToString(),
+            Logging.Editor("Starting PerformDatabaseMoveAdd function, itemCurrentlyOver={0}, itemToMove={1}, parentItemToMove={2}, parentItemOver={3}, packageToMove={4}," +
+                " packageCurrentlyOver={5}, effects={6}, addBelowItem={7}", LogLevel.Info, itemCurrentlyOver.ToString(), itemToMove.ToString(), parentItemToMove.ToString(), parentItemOver.ToString(),
                 packageToMove.PackageName, packageCurrentlyOver.PackageName, effects.ToString(), addBelowItem.ToString());
 
             //make sure that the source and destination are not the same
             if (packageCurrentlyOver.Equals(packageToMove))
             {
-                Logging.Debug("database packages detected to be the same, aborting dragDrop");
+                Logging.Editor("database packages detected to be the same, aborting dragDrop");
                 return;
             }
 
             //if it's a move operation, then remove the element from it's original list
             if (effects == DragDropEffects.Move)
             {
-                Logging.Debug("Effects is move, removing {0} from parent", packageToMove.PackageName);
+                Logging.Editor("Effects is move, removing {0} from parent", LogLevel.Info, packageToMove.PackageName);
                 if (packageToMove is SelectablePackage selectablePackageToMove)
                     selectablePackageToMove.Parent.Packages.Remove(selectablePackageToMove);
                 else if (packageToMove is Dependency dependencyToMove)
@@ -944,7 +944,7 @@ namespace RelhaxModpack.Windows
             //then assign it back to packageToMove
             if (effects == DragDropEffects.Copy)
             {
-                Logging.Debug("Effects is copy, making new copy instance of {0}", packageToMove.PackageName);
+                Logging.Editor("Effects is copy, making new copy instance of {0}", LogLevel.Info, packageToMove.PackageName);
                 if (packageCurrentlyOver is SelectablePackage)
                 {
                     packageToMove = CopySelectablePackage(packageToMove);
@@ -962,10 +962,10 @@ namespace RelhaxModpack.Windows
                 string origName = packageToMove.PackageName;
                 while (Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList).Where(package => package.PackageName.Equals(packageToMove.PackageName)).Count() > 0)
                     packageToMove.PackageName = string.Format("{0}_{1}", origName, i++);
-                Logging.Debug("New package name is {0}", packageToMove.PackageName);
+                Logging.Editor("New package name is {0}", LogLevel.Info, packageToMove.PackageName);
             }
 
-            Logging.Debug("for insert process, packageCurrentlyOver type is {0}, packageToMove type is {1}", packageCurrentlyOver.GetType().Name, packageToMove.GetType().Name);
+            Logging.Editor("for insert process, packageCurrentlyOver type is {0}, packageToMove type is {1}", LogLevel.Info, packageCurrentlyOver.GetType().Name, packageToMove.GetType().Name);
             //insert packageToMove into corresponding list that it's over
             if (packageCurrentlyOver is SelectablePackage selectablePackageCurrentlyOverFOrInsert)
             {
@@ -994,7 +994,7 @@ namespace RelhaxModpack.Windows
             //at this point if the destination is a selectale package, then it's refrences need to be updated
             if (packageCurrentlyOver is SelectablePackage selectablePackageCurrentlyOver)
             {
-                Logging.Debug("packageCurrentlyOver is selectablePackage, updating refrences");
+                Logging.Editor("packageCurrentlyOver is selectablePackage, updating refrences");
                 //packageToMove needs to be casted to a SelectablePackage to have it's refrences updated
                 SelectablePackage packageToMoveCast = (SelectablePackage)packageToMove;
                 packageToMoveCast.TopParent = selectablePackageCurrentlyOver.TopParent;
@@ -1011,7 +1011,7 @@ namespace RelhaxModpack.Windows
             }
 
             //and edit the tree view list
-            Logging.Debug("updating treeview");
+            Logging.Editor("updating treeview");
             //same as before
             TreeViewItem realItemToMove = itemToMove;
             //if move, remove
@@ -1195,7 +1195,8 @@ namespace RelhaxModpack.Windows
             bool isDragConfirmed = IsDragConfirmed(e.GetPosition(treeView));
             if (e.LeftButton == MouseButtonState.Pressed && isDragConfirmed && !IsScrolling)
             {
-                Logging.Debug("MouseMove DragDrop movement accepted, leftButton={0}, isDragConfirmed={1}, IsScrolling={2}", e.LeftButton.ToString(), isDragConfirmed.ToString(), IsScrolling.ToString());
+                Logging.Editor("MouseMove DragDrop movement accepted, leftButton={0}, isDragConfirmed={1}, IsScrolling={2}",
+                    LogLevel.Info, e.LeftButton.ToString(), isDragConfirmed.ToString(), IsScrolling.ToString());
                 if (treeView.SelectedItem is TreeViewItem itemToMove)
                 {
                     if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) && treeView.Equals(DatabaseTreeView))
@@ -1213,7 +1214,7 @@ namespace RelhaxModpack.Windows
             {
                 AlreadyLoggedMouseMove = true;
                 //yeah...that got annoying real quick
-                //Logging.Debug("MouseMove DragDrop movement not accepted, leftButton={0}, isDragConfirmed={1}, IsScrolling={2}", e.LeftButton.ToString(), isDragConfirmed.ToString(), IsScrolling.ToString());
+                //Logging.Editor("MouseMove DragDrop movement not accepted, leftButton={0}, isDragConfirmed={1}, IsScrolling={2}", e.LeftButton.ToString(), isDragConfirmed.ToString(), IsScrolling.ToString());
             }
         }
 
@@ -1222,7 +1223,7 @@ namespace RelhaxModpack.Windows
             if (!(sender is TreeView tv))
                 return;
             TreeView treeView = (TreeView)sender;
-            //Logging.Debug("MouseDown, leftButton={0}, saving mouse location if pressed", e.LeftButton.ToString());
+            //Logging.Editor("MouseDown, leftButton={0}, saving mouse location if pressed", e.LeftButton.ToString());
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 BeforeDragDropPoint = e.GetPosition(treeView);
@@ -1234,7 +1235,7 @@ namespace RelhaxModpack.Windows
             //https://stackoverflow.com/questions/14583234/disable-drag-and-drop-when-scrolling
             if (!AlreadyLoggedScroll)
             {
-                //Logging.Debug("ScrollChanged event fire, LeftButton={0}, setting IsScrolling to true if pressed", Mouse.LeftButton.ToString());
+                //Logging.Editor("ScrollChanged event fire, LeftButton={0}, setting IsScrolling to true if pressed", Mouse.LeftButton.ToString());
                 AlreadyLoggedScroll = true;
             }
             if (Mouse.LeftButton == MouseButtonState.Pressed)
@@ -1247,7 +1248,7 @@ namespace RelhaxModpack.Windows
 
         private void OnTreeViewMouseUpPreview(object sender, MouseButtonEventArgs e)
         {
-            //Logging.Debug("MouseUp, leftButton={0}, setting IsScrolling to false", e.LeftButton.ToString());
+            //Logging.Editor("MouseUp, leftButton={0}, setting IsScrolling to false", e.LeftButton.ToString());
             if (e.LeftButton == MouseButtonState.Released)
             {
                 IsScrolling = false;
@@ -1266,7 +1267,7 @@ namespace RelhaxModpack.Windows
             if(SelectedItem == null)
             {
                 MessageBox.Show("No item selected");
-                Logging.Debug("Tried to download a zip, but SelectedItem is null");
+                Logging.Editor("Tried to download a zip, but SelectedItem is null");
                 return;
             }
             //make sure it actually has a zip file to download
@@ -1319,7 +1320,7 @@ namespace RelhaxModpack.Windows
             if (SelectedItem == null)
             {
                 MessageBox.Show("No item selected");
-                Logging.Debug("Tried to download a zip, but SelectedItem is null");
+                Logging.Editor("Tried to download a zip, but SelectedItem is null");
                 return;
             }
             //make sure FTP credentials are at least entered
@@ -1367,7 +1368,7 @@ namespace RelhaxModpack.Windows
             if(e.Package == null)
             {
                 //uploaded media
-                Logging.Info("Upload of {0} success, adding entry in editor", e.UploadedFilename);
+                Logging.Editor("Upload of {0} success, adding entry in editor", LogLevel.Info, e.UploadedFilename);
                 PackageMediasDisplay.Items.Add(new Media()
                 {
                     MediaType = MediaType.Picture,
@@ -1476,7 +1477,7 @@ namespace RelhaxModpack.Windows
             if (doc == null)
             {
                 MessageBox.Show("Failed to load the database, check the logfile");
-                Logging.Error("doc is null from LoadXmlDocument(fileToload, xmlType)");
+                Logging.Editor("doc is null from LoadXmlDocument(fileToload, xmlType)");
                 return;
             }
             if (!XMLUtils.ParseDatabase(doc, GlobalDependencies, Dependencies, ParsedCategoryList, Path.GetDirectoryName(fileToLoad)))
@@ -1517,7 +1518,7 @@ namespace RelhaxModpack.Windows
             if (doc == null)
             {
                 MessageBox.Show("Failed to load the database, check the logfile");
-                Logging.Error("doc is null from LoadXmlDocument(fileToload, xmlType)");
+                Logging.Editor("doc is null from LoadXmlDocument(fileToload, xmlType)");
                 return;
             }
             if (!XMLUtils.ParseDatabase(doc, GlobalDependencies, Dependencies, ParsedCategoryList, Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
@@ -1687,7 +1688,7 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            Logging.Info("adding dependency to component");
+            Logging.Editor("adding dependency to component");
             IComponentWithDependencies component = null;
             //convert it out of editorComboBoxItem if it is in one
             if(SelectedItem is EditorComboBoxItem editorComboBoxItem)
@@ -1701,7 +1702,7 @@ namespace RelhaxModpack.Windows
             }
             else
             {
-                Logging.Error("SelectedItem is invalid type: {0}", SelectedItem.GetType().ToString());
+                Logging.Editor("SelectedItem is invalid type: {0}", LogLevel.Info, SelectedItem.GetType().ToString());
                 return;
             }
 
@@ -1830,7 +1831,7 @@ namespace RelhaxModpack.Windows
 
         private void MediaRemoveMediaButton_Click(object sender, RoutedEventArgs e)
         {
-            Logging.Info("removing media from component");
+            Logging.Editor("removing media from component");
 
             //remove from db
             if(SelectedItem is SelectablePackage selectablePackage)
@@ -2019,7 +2020,7 @@ namespace RelhaxModpack.Windows
 
         private void UserdataRemoveUserdata_Click(object sender, RoutedEventArgs e)
         {
-            Logging.Info("removing userdata from component");
+            Logging.Editor("removing userdata from component");
 
             if (SelectedItem is SelectablePackage selectablePackage)
             {
@@ -2065,7 +2066,7 @@ namespace RelhaxModpack.Windows
 
         private void TriggerRemoveTrigger_Click(object sender, RoutedEventArgs e)
         {
-            Logging.Info("removing trigger from component");
+            Logging.Editor("removing trigger from component");
 
             if (SelectedItem is SelectablePackage selectablePackage)
             {
@@ -2202,7 +2203,7 @@ namespace RelhaxModpack.Windows
                             {
                                 if (s.Equals(item.Package.PackageName))
                                 {
-                                    Logging.Debug("Mouse right click with trigger add, skipping adding cause already exists: {0}", item.Package.PackageName);
+                                    Logging.Editor("Mouse right click with trigger add, skipping adding cause already exists: {0}", LogLevel.Info, item.Package.PackageName);
                                     return;
                                 }
                             }
@@ -2226,8 +2227,8 @@ namespace RelhaxModpack.Windows
         {
             if(item == null)
             {
-                Logging.Info("User tried to search from item that does not exist, stopping");
-                Logging.Info("searched text: {0}", SearchBox.Text);
+                Logging.Editor("User tried to search from item that does not exist, stopping");
+                Logging.Editor("searched text: {0}", LogLevel.Info, SearchBox.Text);
                 return;
             }
             item.Package.EditorTreeViewItem.Focusable = true;
