@@ -858,9 +858,9 @@ namespace RelhaxModpack
                 if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Beta)
                 {
                     //if mods sync
-                    if (ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall)
+                    if (ModpackSettings.AutoInstall)
                     {
-                        MessageBox.Show(Translations.GetTranslatedString("noAutoOneclickWithBeta"));
+                        MessageBox.Show(Translations.GetTranslatedString("noAutoInstallWithBeta"));
                         ToggleUIButtons(true);
                         return;
                     }
