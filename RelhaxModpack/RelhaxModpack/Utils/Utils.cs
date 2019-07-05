@@ -127,7 +127,7 @@ namespace RelhaxModpack
         /// <returns>The entire assembely version string (major, minor, build, revision)</returns>
         public static string GetApplicationVersion()
         {
-            return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            return Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
         /// <summary>
         /// Return the date and time in EN-US form, the time that the application was built
@@ -136,6 +136,61 @@ namespace RelhaxModpack
         public static string GetCompileTime()
         {
             return CiInfo.BuildTag + " (EN-US date format)";
+        }
+
+        public static async Task<XmlDocument> GetManagerInfoDocumentAsync()
+        {
+            XmlDocument doc = null;
+            //delete the last one and download a new one
+            using (WebClient client = new WebClient())
+            {
+                try
+                {
+                    if (File.Exists(Settings.ManagerInfoDatFile))
+                        File.Delete(Settings.ManagerInfoDatFile);
+                    await client.DownloadFileTaskAsync(Settings.ManagerInfoURLBigmods, Settings.ManagerInfoDatFile);
+                }
+                catch (Exception e)
+                {
+                    Logging.Exception("Failed to check for updates: \n{0}", e);
+                    MessageBox.Show(Translations.GetTranslatedString("failedCheckUpdates"));
+                    return null;
+                }
+            }
+
+            //get the version info string
+            string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
+            if (string.IsNullOrEmpty(xmlString))
+            {
+                Logging.WriteToLog("Failed to get get xml string from managerInfo.dat", Logfiles.Application, LogLevel.ApplicationHalt);
+                Application.Current.Shutdown();
+                return null;
+            }
+
+            return XMLUtils.LoadXmlDocument(xmlString, XmlLoadType.FromString);
+        }
+
+        public static async Task<bool> IsManagerUptoDate(string currentVersion)
+        {
+            //actually compare the build of the application of the requested distribution channel
+            XmlDocument doc = await GetManagerInfoDocumentAsync();
+            if (doc == null)
+            {
+                Logging.Error("failed to get manager online version");
+                return false;
+            }
+
+            string applicationOnlineVersion = (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Stable) ?
+                XMLUtils.GetXMLStringFromXPath(doc, "//version/relhax_v2_stable").Trim() ://stable
+                XMLUtils.GetXMLStringFromXPath(doc, "//version/relhax_v2_beta").Trim();//beta
+
+            Logging.Info("Current build is {0} online build is {1}", currentVersion, applicationOnlineVersion);
+
+            //check if versions are equal
+            if (!currentVersion.Equals(applicationOnlineVersion))
+                return false;
+            else
+                return true;
         }
         #endregion
 

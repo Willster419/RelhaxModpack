@@ -505,7 +505,7 @@ namespace RelhaxModpack
             XmlDocument doc = null;
             if (refreshModInfo)
             {
-                doc = await GetManagerInfoDocumentAsync();
+                doc = await Utils.GetManagerInfoDocumentAsync();
             }
             else
             {
@@ -603,7 +603,7 @@ namespace RelhaxModpack
             }
 
             //get manager_info.xml into XmlDocument
-            XmlDocument doc = await GetManagerInfoDocumentAsync();
+            XmlDocument doc = null;
 
             //if current application build does not equal requested distribution channel
             if (version != ModpackSettings.ApplicationDistroVersion)
@@ -614,17 +614,7 @@ namespace RelhaxModpack
             }
             else
             {
-                //actually compare the build of the application of the requested distribution channel
-                string applicationOnlineVersion = (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Stable) ?
-                    XMLUtils.GetXMLStringFromXPath(doc, "//version/relhax_v2_stable").Trim() ://stable
-                    XMLUtils.GetXMLStringFromXPath(doc, "//version/relhax_v2_beta").Trim();//beta
-
-                //check if versions are equal
-                if (!applicationBuildVersion.Equals(applicationOnlineVersion))
-                    outOfDate = true;
-
-                Logging.Info("Current build is {0} ({1}), online build is {2} ({3})",
-                    applicationBuildVersion, version.ToString(), applicationOnlineVersion, ModpackSettings.ApplicationDistroVersion.ToString());
+                outOfDate = await Utils.IsManagerUptoDate(applicationBuildVersion);
             }
             if(!outOfDate)
             {
@@ -683,43 +673,6 @@ namespace RelhaxModpack
                 return false;
             }
             return false;
-        }
-
-        private async Task<XmlDocument> GetManagerInfoDocumentAsync()
-        {
-            XmlDocument doc = null;
-            //delete the last one and download a new one
-            using (WebClient client = new WebClient())
-            {
-                try
-                {
-                    if (File.Exists(Settings.ManagerInfoDatFile))
-                        File.Delete(Settings.ManagerInfoDatFile);
-                    await client.DownloadFileTaskAsync(Settings.ManagerInfoURLBigmods, Settings.ManagerInfoDatFile);
-
-                }
-                catch (Exception e)
-                {
-                    Logging.Exception("Failed to check for updates: \n{0}", e);
-                    MessageBox.Show(Translations.GetTranslatedString("failedCheckUpdates"));
-                    closingFromFailure = true;
-                    Application.Current.Shutdown();
-                    Close();
-                    return null;
-                }
-            }
-
-            //get the version info string
-            string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
-            if (string.IsNullOrEmpty(xmlString))
-            {
-                Logging.WriteToLog("Failed to get get xml string from managerInfo.dat", Logfiles.Application, LogLevel.ApplicationHalt);
-                Application.Current.Shutdown();
-                Close();
-                return null;
-            }
-
-            return XMLUtils.LoadXmlDocument(xmlString, XmlLoadType.FromString);
         }
 
         private void ResetUI()
