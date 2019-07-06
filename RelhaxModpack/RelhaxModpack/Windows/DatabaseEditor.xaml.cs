@@ -833,13 +833,189 @@ namespace RelhaxModpack.Windows
         private void ApplyDatabaseCategory(Category category)
         {
             Logging.Editor("ApplyDatabaseCategory(), category saving= {0}", LogLevel.Info, category.Name);
-            category.Name = PackageNameDisplay.Text;
-            category.Dependencies.Clear();
-            foreach (DatabaseLogic logic in PackageDependenciesDisplay.Items)
-                category.Dependencies.Add(logic);
 
-            //there now are unsaved changes
-            UnsavedChanges = true;
+            //check if any changes were actually made
+            if (CategoryWasModified(category))
+            {
+                Logging.Editor("Category was modified, saving and setting flag");
+                category.Name = PackageNameDisplay.Text;
+                category.Dependencies.Clear();
+                foreach (DatabaseLogic logic in PackageDependenciesDisplay.Items)
+                    category.Dependencies.Add(logic);
+
+                //there now are unsaved changes
+                UnsavedChanges = true;
+            }
+            else
+                Logging.Editor("Category was not modified, no change to set");
+        }
+
+        private bool DependenciesWereModified(List<DatabaseLogic> dependencies)
+        {
+            //check if counts are equal. if not, then modifications exist
+            if (dependencies.Count() != PackageDependenciesDisplay.Items.Count)
+                return true;
+
+            int i = 0;
+            //check packagename, notflag, logic
+            foreach(DatabaseLogic logic in PackageDependenciesDisplay.Items)
+            {
+                if (!logic.Equals(dependencies[i]))
+                    return true;
+                i++;
+            }
+
+            return false;
+        }
+
+        private bool TriggersWereModified(List<string> triggers)
+        {
+            if (triggers.Count != PackageTriggersDisplay.Items.Count)
+                return true;
+
+            int i = 0;
+            foreach (string trigger in PackageTriggersDisplay.Items)
+            {
+                if (!trigger.Equals(triggers[i]))
+                    return true;
+                i++;
+            }
+
+            return false;
+        }
+
+        private bool UserFilesWereModified(List<UserFile> userFiles)
+        {
+            if (userFiles.Count != PackageUserdatasDisplay.Items.Count)
+                return true;
+
+            int i = 0;
+            foreach (UserFile file in PackageUserdatasDisplay.Items)
+            {
+                if (!file.Equals(userFiles[i]))
+                    return true;
+                i++;
+            }
+
+            return false;
+        }
+
+        private bool MediasModified(List<Media> Medias)
+        {
+            if (Medias.Count != PackageMediasDisplay.Items.Count)
+                return true;
+
+            int i = 0;
+            foreach(Media media in PackageMediasDisplay.Items)
+            {
+                if (!media.Equals(Medias[i]))
+                    return true;
+                i++;
+            }
+
+            return false;
+        }
+
+        private bool ConflictingPackagesModified(List<string> conflicts)
+        {
+            if (conflicts.Count != PackageConflictingPackagesDisplay.Items.Count)
+                return true;
+
+            int i = 0;
+            foreach (string conflict in PackageConflictingPackagesDisplay.Items)
+            {
+                if (!conflict.Equals(conflicts[i]))
+                    return true;
+                i++;
+            }
+
+            return false;
+        }
+
+        private bool CategoryWasModified(Category category)
+        {
+            if (!category.Name.Equals(PackageNameDisplay.Text))
+                return true;
+
+            if (DependenciesWereModified(category.Dependencies))
+                return true;
+
+            return false;
+        }
+
+        private bool PackageWasModified(DatabasePackage package)
+        {
+            //save everything from the UI into the package
+            //save package elements first
+            if (!package.PackageName.Equals(PackagePackageNameDisplay.Text))
+                return true;
+            if (!package.StartAddress.Equals(PackageStartAddressDisplay.Text))
+                return true;
+            if (!package.EndAddress.Equals(PackageEndAddressDisplay.Text))
+                return true;
+
+            //devURL is separated by newlines for array list, so it's not necessary to escape
+            if (!package.DevURL.Equals(Utils.MacroReplace(PackageDevURLDisplay.Text, ReplacementTypes.TextEscape)))
+                return true;
+            if (!package.Version.Equals(PackageVersionDisplay.Text))
+                return true;
+            if (!package.InstallGroup.Equals((int)PackageInstallGroupDisplay.SelectedItem))
+                return true;
+            if (!package.PatchGroup.Equals((int)PackagePatchGroupDisplay.SelectedItem))
+                return true;
+            if (!package.LogAtInstall.Equals((bool)PackageLogAtInstallDisplay.IsChecked))
+                return true;
+            if (!package.Enabled.Equals((bool)PackageEnabledDisplay.IsChecked))
+                return true;
+            if (!package.InternalNotes.Equals(Utils.MacroReplace(PackageInternalNotesDisplay.Text, ReplacementTypes.TextEscape)))
+                return true;
+            if (!package.ZipFile.Equals(PackageZipFileDisplay.Text))
+                return true;
+
+            //dependency
+            if (package is Dependency dependency)
+            {
+                if (DependenciesWereModified(dependency.Dependencies))
+                    return true;
+            }
+
+            //see if it's a selectablePackage
+            else if (package is SelectablePackage selectablePackage)
+            {
+                if (!selectablePackage.ShowInSearchList.Equals((bool)PackageShowInSearchListDisplay.IsChecked))
+                    return true;
+                if (!selectablePackage.PopularMod.Equals((bool)PackagePopularModDisplay.IsChecked))
+                    return true;
+                if (!selectablePackage.GreyAreaMod.Equals((bool)PackageGreyAreaModDisplay.IsChecked))
+                    return true;
+                if (!selectablePackage.Visible.Equals((bool)PackageVisibleDisplay.IsChecked))
+                    return true;
+                if (!selectablePackage.Name.Equals(PackageNameDisplay.Text))
+                    return true;
+                if (!selectablePackage.Type.Equals((SelectionTypes)PackageTypeDisplay.SelectedItem))
+                    return true;
+                //if (!selectablePackage.Description.Equals(Utils.MacroReplace(PackageDescriptionDisplay.Text,ReplacementTypes.TextEscape)))
+                //    return true;
+                //if (!selectablePackage.UpdateComment.Equals(Utils.MacroReplace(PackageUpdateNotesDisplay.Text,ReplacementTypes.TextEscape)))
+                //    return true;
+                if (!selectablePackage.Description.Equals(PackageDescriptionDisplay.Text))
+                    return true;
+                if (!selectablePackage.UpdateComment.Equals(PackageUpdateNotesDisplay.Text))
+                    return true;
+
+                if (DependenciesWereModified(selectablePackage.Dependencies))
+                    return true;
+
+                if (UserFilesWereModified(selectablePackage.UserFiles))
+                    return true;
+
+                if (MediasModified(selectablePackage.Medias))
+                    return true;
+
+                if (ConflictingPackagesModified(selectablePackage.ConflictingPackages))
+                    return true;
+            }
+            return false;
         }
 
         private void ApplyDatabasePackage(DatabasePackage package)
@@ -856,6 +1032,14 @@ namespace RelhaxModpack.Windows
                     return;
                 }
             }
+
+            //check if package was actually modified before saving all these delicious properties
+            if(!PackageWasModified(package))
+            {
+                Logging.Editor("package was not modified, don't apply anything");
+                return;
+            }
+            Logging.Editor("package was modified, saving changes to memory and setting changes switch");
 
             //save everything from the UI into the package
             //save package elements first
