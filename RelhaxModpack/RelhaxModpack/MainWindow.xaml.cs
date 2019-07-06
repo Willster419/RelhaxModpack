@@ -52,6 +52,16 @@ namespace RelhaxModpack
         private CancellationTokenSource cancellationTokenSource;
         private InstallerComponents.InstallEngine installEngine;
         private bool disableTriggersBackupVal = true;
+        private OpenFileDialog FindTestDatabaseDialog = new OpenFileDialog()
+        {
+            AddExtension = true,
+            CheckFileExists = true,
+            CheckPathExists = true,
+            Multiselect = false,
+            Title = "Select root database 2.0 file"
+        };
+        private DatabaseVersions databaseVersion;
+        private bool loading = false;
 
         //temp list of components not to toggle
         Control[] tempDisabledBlacklist = null;
@@ -84,6 +94,9 @@ namespace RelhaxModpack
         {
             //first hide the window
             //Hide();
+
+            //set loading flag
+            loading = true;
 
             //delete the updater scripts if they exist
             foreach (string s in new string[] { Settings.RelicBatchUpdateScript, Settings.RelicBatchUpdateScriptOld })
@@ -143,6 +156,14 @@ namespace RelhaxModpack
 
             //check command line settings
             CommandLineSettings.ParseCommandLineConflicts();
+
+            //save database version to temp and process if command line test mode
+            databaseVersion = ModpackSettings.DatabaseDistroVersion;
+            if (CommandLineSettings.TestMode)
+            {
+                Logging.Info("test mode set for installation only (not saved to settings)");
+                databaseVersion = DatabaseVersions.Test;
+            }
 
             //verify folder stucture for all folders in the directory
             progressIndicator.UpdateProgress(3, Translations.GetTranslatedString("verDirStructure"));
@@ -276,8 +297,9 @@ namespace RelhaxModpack
                 }
             }
             //apply the title change for beta application and beta database
-            if (ModpackSettings.DatabaseDistroVersion != DatabaseVersions.Stable)
-                Title = string.Format("{0} ({1} DB)", Title, ModpackSettings.DatabaseDistroVersion.ToString());
+            if (databaseVersion != DatabaseVersions.Stable)
+                Title = string.Format("{0} ({1} DB)", Title, databaseVersion.ToString());
+
             if (ModpackSettings.ApplicationDistroVersion != ApplicationVersions.Stable)
             {
                 //if it's real alpha, then put alpha
@@ -351,6 +373,9 @@ namespace RelhaxModpack
                         InstallModpackButton_Click(null, null);
                     }
                 }
+
+                //unset loading flag
+                loading = false;
             }
         }
 
@@ -766,6 +791,7 @@ namespace RelhaxModpack
             //toggle buttons and reset UI
             ResetUI();
             ToggleUIButtons(false);
+
             //settings for export mode
             if (ModpackSettings.ExportMode)
             {
@@ -816,7 +842,7 @@ namespace RelhaxModpack
                         return;
                     }
                 }
-                if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Beta)
+                if (databaseVersion == DatabaseVersions.Beta)
                 {
                     //if mods sync
                     if (ModpackSettings.AutoInstall)
@@ -865,6 +891,20 @@ namespace RelhaxModpack
                     return;
                 }
 
+                //if test mode, check if test path exists
+                if(databaseVersion == DatabaseVersions.Test)
+                {
+                    if (string.IsNullOrWhiteSpace(ModpackSettings.CustomModInfoPath) || !File.Exists(ModpackSettings.CustomModInfoPath))
+                    {
+                        if (!(bool)FindTestDatabaseDialog.ShowDialog())
+                        {
+                            ToggleUIButtons(true);
+                            return;
+                        }
+                        ModpackSettings.CustomModInfoPath = FindTestDatabaseDialog.FileName;
+                    }
+                }
+
                 //get the version of tanks in the format
                 //of the res_mods version folder i.e. 0.9.17.0.3
                 string versionTemp = XMLUtils.GetXMLStringFromXPath(Path.Combine(Settings.WoTDirectory, "version.xml"), "//version.xml/version");
@@ -872,7 +912,7 @@ namespace RelhaxModpack
 
                 //determine if current detected version of the game is supported
                 //only if applicaition distro is not alhpa and databate distro is not test
-                if (ModpackSettings.DatabaseDistroVersion != DatabaseVersions.Test)
+                if (databaseVersion != DatabaseVersions.Test)
                 {
                     //make an array of all the supported versions
                     string supportedClientsXML = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "supported_clients.xml");
@@ -2040,6 +2080,11 @@ namespace RelhaxModpack
             {
                 ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Stable;
             }
+
+            if (databaseVersion == DatabaseVersions.Test && !(sender is bool))
+            {
+                MessageBox.Show("Database setting applied, but you are currently in test mode. Test mode will remain active until application restart.");
+            }
         }
 
         private void OnDefaultBordersV2Changed(object sender, RoutedEventArgs e)
@@ -2353,7 +2398,7 @@ namespace RelhaxModpack
             if(ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Beta)
             {
                 UseBetaDatabaseCB.IsChecked = true;
-                OnUseBetaDatabaseChanged(null, null);
+                OnUseBetaDatabaseChanged(true, null);
             }
 
             //apply auto install check

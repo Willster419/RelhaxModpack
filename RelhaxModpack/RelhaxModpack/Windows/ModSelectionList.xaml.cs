@@ -60,6 +60,7 @@ namespace RelhaxModpack.Windows
         private Brush HighlightBrush = new SolidColorBrush(Colors.Blue);
         private System.Windows.Forms.Timer FlashTimer = new System.Windows.Forms.Timer() { Interval=FLASH_TICK_INTERVAL };
         private XDocument Md5HashDocument;
+        private DatabaseVersions databaseVersion;
 
         #region Boring stuff
         public ModSelectionList()
@@ -240,15 +241,24 @@ namespace RelhaxModpack.Windows
                 //progress init setup
                 RelhaxProgress loadProgress = new RelhaxProgress()
                 {
-                    ChildTotal = 4,
+                    ChildTotal = 3,
                     ChildCurrent = 1,
-                    ReportMessage = Translations.GetTranslatedString("downloadingDatabase")
+                    ReportMessage = Translations.GetTranslatedString("readingDatabase")
                 };
                 progress.Report(loadProgress);
 
+                //save database version to temp and process if command line test mode
+                databaseVersion = ModpackSettings.DatabaseDistroVersion;
+                if (CommandLineSettings.TestMode)
+                {
+                    Logging.Info("test mode set for installation only (not saved to settings)");
+                    databaseVersion = DatabaseVersions.Test;
+                }
+
                 //get the XML database loaded into a string based on database version type (from server download, from github, from testfile
+
                 string modInfoXml = "";
-                switch (ModpackSettings.DatabaseDistroVersion)
+                switch (databaseVersion)
                 {
                     //from server download
                     case DatabaseVersions.Stable:
@@ -259,6 +269,8 @@ namespace RelhaxModpack.Windows
                         string tempDownloadLocation = Path.Combine(Settings.RelhaxTempFolder, "modInfo.dat");
                         using (WebClient client = new WebClient())
                         {
+                            if (File.Exists(tempDownloadLocation))
+                                File.Delete(tempDownloadLocation);
                             client.DownloadFile(modInfoxmlURL, tempDownloadLocation);
                         }
                         //extract modinfo xml string
@@ -266,44 +278,25 @@ namespace RelhaxModpack.Windows
                         break;
                     //from github
                     case DatabaseVersions.Beta:
-                        //load string constant url from manager info xml
-                        string managerInfoXml = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
-                        if (string.IsNullOrWhiteSpace(managerInfoXml))
-                        {
-                            Logging.WriteToLog("Failed to parse manager_version.xml from string from zipfile", Logfiles.Application, LogLevel.Exception);
-                            MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " manager_version.xml");
-                            return false;
-                        }
-                        //get download URL of static beta database location
-                        string downloadURL = XMLUtils.GetXMLStringFromXPath(managerInfoXml, "//version/database_beta_url", "manager_version.xml");
-                        if (string.IsNullOrWhiteSpace(downloadURL))
-                        {
-                            Logging.WriteToLog("Failed to get xpath value //version/database_beta_url from manager_version.xml",
-                                Logfiles.Application, LogLevel.Exception);
-                            return false;
-                        }
-                        //download document from string
                         using (WebClient client = new WebClient())
                         {
-                            modInfoXml = client.DownloadString(downloadURL);
+                            //load string constant url from manager info xml
+                            string rootbetaDBURL = Settings.BetaDatabaseV2FolderURL.Replace("{branch}", ModpackSettings.BetaDatabaseSelectedBranch);
+                            string rootXml = rootbetaDBURL + Settings.BetaDatabaseV2RootFilename;
+                            //download the xml string into "modInfoXml"
+                            client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
+                            modInfoXml = client.DownloadString(rootXml);
                         }
                         break;
                     //from testfile
                     case DatabaseVersions.Test:
                         //make string
-                        string modInfoFilePath = ModpackSettings.CustomModInfoPath;
-                        if (string.IsNullOrWhiteSpace(modInfoFilePath))
+                        if (string.IsNullOrWhiteSpace(ModpackSettings.CustomModInfoPath))
                         {
-                            modInfoFilePath = Path.Combine(Settings.ApplicationStartupPath, "modInfo.xml");
+                            ModpackSettings.CustomModInfoPath = Path.Combine(Settings.ApplicationStartupPath, Settings.BetaDatabaseV2RootFilename);
                         }
                         //load modinfo xml
-                        if (File.Exists(modInfoFilePath))
-                            modInfoXml = File.ReadAllText(modInfoFilePath);
-                        else
-                        {
-                            Logging.WriteToLog("modInfo.xml does not exist at " + modInfoFilePath, Logfiles.Application, LogLevel.Error);
-                            return false;
-                        }
+                        modInfoXml = File.ReadAllText(ModpackSettings.CustomModInfoPath);
                         break;
                 }
 
@@ -315,11 +308,6 @@ namespace RelhaxModpack.Windows
                     return false;
                 }
 
-                //report progress change to reading the database
-                loadProgress.ChildCurrent++;
-                loadProgress.ReportMessage = Translations.GetTranslatedString("readingDatabase");
-                progress.Report(loadProgress);
-
                 //load the xml document into xml object
                 XmlDocument modInfoDocument = XMLUtils.LoadXmlDocument(modInfoXml, XmlLoadType.FromString);
                 if(modInfoDocument == null)
@@ -330,26 +318,106 @@ namespace RelhaxModpack.Windows
                 }
 
                 //if not stable db, update WoT current version and online folder version macros from modInfoxml itself
-                if (ModpackSettings.DatabaseDistroVersion != DatabaseVersions.Stable)
+                if (databaseVersion != DatabaseVersions.Stable)
                 {
                     Settings.WoTModpackOnlineFolderVersion = XMLUtils.GetXMLStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@onlineFolder");
                     Settings.WoTClientVersion = XMLUtils.GetXMLStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@version");
                 }
 
                 //parse the modInfoXml to list in memory
-                if (!XMLUtils.ParseDatabase(modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
+                switch(databaseVersion)
                 {
-                    Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
-                    MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
-                    return false;
+                    case DatabaseVersions.Stable:
+                        //2.0 test
+                        /*
+                        Logging.Debug("getting xml string values from zip file");
+                        List<string> categoriesXml = new List<string>();
+                        string globalDependencyXmlString = Utils.GetStringFromZip(zipfilePath, GetXMLStringFromXPath(rootDocument, "/modInfoAlpha.xml/globalDependencies/@file"));
+                        string dependenicesXmlString = Utils.GetStringFromZip(zipfilePath, GetXMLStringFromXPath(rootDocument, "/modInfoAlpha.xml/dependencies/@file"));
+                        foreach (XmlNode categoryNode in GetXMLNodesFromXPath(rootDocument, "//modInfoAlpha.xml/categories/category"))
+                        {
+                            categoriesXml.Add(Utils.GetStringFromZip(zipfilePath, GetXMLStringFromXPath(rootDocument, categoryNode.Attributes["file"].Value)));
+                        }
+
+                        //parse into lists
+                        if (!XMLUtils.ParseDatabase1V1FromStrings(globalDependencyXmlString, dependenicesXmlString,categoriesXml, GlobalDependencies, Dependencies, ParsedCategoryList))
+                        {
+                            Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
+                            MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
+                            return false;
+                        }
+                        */
+                        if (!XMLUtils.ParseDatabase(modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
+                        {
+                            Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
+                            MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
+                            return false;
+                        }
+                        break;
+
+                    case DatabaseVersions.Beta:
+                        string rootbetaDBURL = Settings.BetaDatabaseV2FolderURL.Replace("{branch}", ModpackSettings.BetaDatabaseSelectedBranch);
+
+                        //download the files
+                        List<string> downloadTasks = new List<string>();
+                        Logging.Debug("starting downloads to globalDependnecies, dependencies, all categories");
+                        using (WebClient client = new WebClient())
+                        {
+                            client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
+                            //global dependencies
+                            downloadTasks.Add(client.DownloadString(rootbetaDBURL + XMLUtils.GetXMLStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/globalDependencies/@file")));
+                            //dependencies
+                            downloadTasks.Add(client.DownloadString(rootbetaDBURL + XMLUtils.GetXMLStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/dependencies/@file")));
+                            //categories
+                            foreach (XmlNode categoryNode in XMLUtils.GetXMLNodesFromXPath(modInfoDocument, "//modInfoAlpha.xml/categories/category"))
+                            {
+                                string categoryFileName = categoryNode.Attributes["file"].Value;
+                                if(string.IsNullOrWhiteSpace(categoryFileName))
+                                {
+                                    BadMemeException badMeme = new BadMemeException("Failed to parse V2 database category: " + categoryNode.ToString());
+                                    Logging.Exception(badMeme.ToString());
+                                    throw badMeme;
+                                }
+                                downloadTasks.Add(client.DownloadString(rootbetaDBURL + categoryFileName));
+                            }
+                        }
+                        List<string> categoriesXml = new List<string>();
+
+                        Logging.Debug("tasks finished, extracting task results and sending to database string parser");
+
+                        //parse into string
+                        string globalDependencyXmlString = downloadTasks[0];
+                        string dependenicesXmlString = downloadTasks[1];
+                        for (int i = 2; i < downloadTasks.Count; i++)
+                        {
+                            categoriesXml.Add(downloadTasks[i]);
+                        }
+
+                        //parse into lists
+                        if (!XMLUtils.ParseDatabase1V1FromStrings(globalDependencyXmlString, dependenicesXmlString,categoriesXml, GlobalDependencies, Dependencies, ParsedCategoryList))
+                        {
+                            Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
+                            MessageBox.Show(Translations.GetTranslatedString("failedToParse") + "database V2");
+                            return false;
+                        }
+                        break;
+
+                    case DatabaseVersions.Test:
+                        if (!XMLUtils.ParseDatabase1V1FromFiles(Path.GetDirectoryName(ModpackSettings.CustomModInfoPath), modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
+                        {
+                            Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
+                            MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
+                            return false;
+                        }
+                        break;
                 }
 
-                //map and link all refrences inside the package objects for use later
+                //map and link all references inside the package objects for use later
                 Utils.BuildLinksRefrence(ParsedCategoryList, false);
                 Utils.BuildLevelPerPackage(ParsedCategoryList);
                 List<DatabasePackage> flatList = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList);
 
-                //check db cache of local files in downlaod zip folder
+                //check db cache of local files in download zip folder
                 loadProgress.ChildCurrent++;
                 loadProgress.ReportMessage = Translations.GetTranslatedString("verifyingDownloadCache");
                 progress.Report(loadProgress);
@@ -525,7 +593,7 @@ namespace RelhaxModpack.Windows
                         else
                         {
                             Logging.Error("Failed to load SelectionsDocument, AutoInstall={0}, OneClickInstall={1}, DatabaseDistro={2}, SaveSelection={3}",
-                            ModpackSettings.AutoInstall, ModpackSettings.OneClickInstall, ModpackSettings.DatabaseDistroVersion, ModpackSettings.SaveLastSelection);
+                            ModpackSettings.AutoInstall, ModpackSettings.OneClickInstall, databaseVersion, ModpackSettings.SaveLastSelection);
                             Logging.Error("Failed to load SelectionsDocument, AutoSelectionFilePath={0}", ModpackSettings.AutoOneclickSelectionFilePath);
                         }
                     }
@@ -1615,7 +1683,7 @@ namespace RelhaxModpack.Windows
                 new XDeclaration("1.0", "utf-8", "yes"),
                 new XElement("mods", new XAttribute("ver", Settings.ConfigFileVersion), new XAttribute("date",
                 DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")), new XAttribute("timezone", TimeZoneInfo.Local.DisplayName),
-                new XAttribute("dbVersion", Settings.DatabaseVersion), new XAttribute("dbDistro", ModpackSettings.DatabaseDistroVersion.ToString())));
+                new XAttribute("dbVersion", Settings.DatabaseVersion), new XAttribute("dbDistro", databaseVersion.ToString())));
 
             //relhax mods root
             doc.Element("mods").Add(new XElement("relhaxMods"));

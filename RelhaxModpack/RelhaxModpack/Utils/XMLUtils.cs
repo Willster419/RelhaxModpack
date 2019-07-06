@@ -12,6 +12,8 @@ using System.ComponentModel;
 using System.Text;
 using Ionic.Zip;
 using RelhaxModpack.XmlBinary;
+using System.Threading.Tasks;
+using System.Net;
 
 namespace RelhaxModpack
 {
@@ -264,7 +266,7 @@ namespace RelhaxModpack
             switch(versionString)
             {
                 case "1.1":
-                    return ParseDatabase1V1(modInfoDocument, globalDependencies, dependencies, parsedCategoryList, location);
+                    return ParseDatabase1V1FromFiles(location, modInfoDocument, globalDependencies, dependencies, parsedCategoryList);
                 default:
                     //parse legacy database
                     List<Dependency> logicalDependencies = new List<Dependency>();
@@ -274,7 +276,9 @@ namespace RelhaxModpack
                     return true;
             }
         }
-        public static bool ParseDatabase1V1(XmlDocument rootDocument, List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList, string rootPath)
+
+        public static bool ParseDatabase1V1FromFiles(string rootPath, XmlDocument rootDocument, List<DatabasePackage> globalDependencies,
+            List<Dependency> dependencies, List<Category> parsedCategoryList)
         {
             //load each document to make sure they all exist first
             if(string.IsNullOrWhiteSpace(rootPath))
@@ -318,21 +322,25 @@ namespace RelhaxModpack
                 XDocument catDoc = LoadXDocument(completeFilepath, XmlLoadType.FromFile);
                 if (catDoc == null)
                     throw new BadMemeException("this should not be null");
-                //make new category object
-                Category cat = new Category()
-                {
-                    XmlFilename = categoryNode.Attributes["file"].Value
-                };
-                //get the list of dependencies in the category
-                IEnumerable<XElement> listOfDependencies = catDoc.XPathSelectElements("//Category/Dependencies/Dependency");
-                Utils.SetListEntriesField(cat, cat.GetType().GetField(nameof(cat.Dependencies)), listOfDependencies);
-                //add object cat to list
-                parsedCategoryList.Add(cat);
                 //add xml cat to list
                 categoryDocuments.Add(catDoc);
             }
             //run the loading method
             return LoadDatabase1V1(globalDepsDoc, globalDependencies, depsDoc, dependencies, categoryDocuments, parsedCategoryList);
+        }
+
+        public static bool ParseDatabase1V1FromStrings(string globalDependenciesXml, string dependneciesXml, List<string> categoriesXml,
+            List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList)
+        {
+            XDocument globalDependenciesdoc = LoadXDocument(globalDependenciesXml, XmlLoadType.FromString);
+            XDocument dependenciesdoc = LoadXDocument(dependneciesXml, XmlLoadType.FromString);
+            List<XDocument> categoryDocuments = new List<XDocument>();
+            foreach(string category in categoriesXml)
+            {
+                categoryDocuments.Add(LoadXDocument(category, XmlLoadType.FromString));
+            }
+
+            return LoadDatabase1V1(globalDependenciesdoc, globalDependencies, dependenciesdoc, dependencies, categoryDocuments, parsedCategoryList);
         }
 
         private static bool LoadDatabase1V1(XDocument globalDependenciesDoc, List<DatabasePackage> globalDependenciesList, XDocument dependenciesDoc,
@@ -348,12 +356,20 @@ namespace RelhaxModpack
             bool categoriesParsed = true;
             for (int i = 0; i < categoryDocuments.Count; i++)
             {
-                parsedCategoryList[i].Name = categoryDocuments[i].Root.FirstAttribute.Value;
-                if (!LoadDatabase1V1Packages(categoryDocuments[i].XPathSelectElements("//Category/Package").ToList(), parsedCategoryList[i].Packages,
+                Category cat = new Category()
+                {
+                    Name = categoryDocuments[i].Root.FirstAttribute.Value,
+                    //XmlFilename = categoryNode.Attributes["file"].Value
+                };
+                //parse the list of dependencies from xml for the categories into the category in list
+                IEnumerable<XElement> listOfDependencies = categoryDocuments[i].XPathSelectElements("//Category/Dependencies/Dependency");
+                Utils.SetListEntriesField(cat, cat.GetType().GetField(nameof(cat.Dependencies)), listOfDependencies);
+                if (!LoadDatabase1V1Packages(categoryDocuments[i].XPathSelectElements("//Category/Package").ToList(), cat.Packages,
                     SelectablePackage.FieldsToXmlParseAttributes(), SelectablePackage.FieldsToXmlParseNodes(), typeof(SelectablePackage)))
                 {
                     categoriesParsed = false;
                 }
+                parsedCategoryList.Add(cat);
             }
             return globalParsed && depsParsed && categoriesParsed;
         }

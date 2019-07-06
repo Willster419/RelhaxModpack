@@ -86,7 +86,7 @@ namespace RelhaxModpack
         /// <summary>
         /// The custom path to the ModInfo.xml file if loading in test mode
         /// </summary>
-        public static string CustomModInfoPath = "";
+        public static string CustomModInfoPath = string.Empty;
 
         public static string BetaDatabaseSelectedBranch = "master";
         /// <summary>
