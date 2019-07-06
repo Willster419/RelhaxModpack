@@ -662,7 +662,8 @@ namespace RelhaxModpack.Windows
             if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem)
             {
                 //if the mouse is not over, then it was not user initiated
-                if (!(selectedTreeViewItem.IsMouseOver || Keyboard.IsKeyDown(Key.Enter)))
+                bool anyUserKyesDown = Keyboard.IsKeyDown(Key.Enter) || Keyboard.IsKeyDown(Key.Up) || Keyboard.IsKeyDown(Key.Down) || Keyboard.IsKeyDown(Key.Left) || Keyboard.IsKeyDown(Key.Right);
+                if (!(selectedTreeViewItem.IsMouseOver || anyUserKyesDown))
                     return;
                 Logging.Editor("SelectedItemChanged(), selectedTreeViewItem.Header={0}", LogLevel.Info, selectedTreeViewItem.Header);
                 SelectDatabaseObject(selectedTreeViewItem.Header, e.OldValue as TreeViewItem);
