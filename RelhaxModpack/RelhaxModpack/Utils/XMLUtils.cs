@@ -2529,7 +2529,7 @@ namespace RelhaxModpack
                 Logging.Error("File {0} contains no patch entries", filename);
                 return;
             }
-            Logging.Info("Adding {0} patches from patchFile {1}", Logfiles.Application, XMLpatches.Count, filename);
+            Logging.Info("Adding {0} patches from patchFile: {1}", XMLpatches.Count, filename);
             foreach (XmlNode patchNode in XMLpatches)
             {
                 Patch p = new Patch
@@ -2537,6 +2537,8 @@ namespace RelhaxModpack
                     NativeProcessingFile = Path.GetFileName(filename),
                     ActualPatchName = originalNameFromZip
                 };
+                Logging.Debug("adding patch from file: {0} -> original name: {1}", Path.GetFileName(filename), originalNameFromZip);
+                
                 //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
                 foreach (XmlNode property in patchNode.ChildNodes)
                 {
@@ -2595,7 +2597,7 @@ namespace RelhaxModpack
                 Logging.Warning("File {0} contains no shortcut entries", filename);
                 return;
             }
-            Logging.Info("Adding {0} shortcuts from shortcutFile {1}", Logfiles.Application, XMLshortcuts.Count, filename);
+            Logging.Info("Adding {0} shortcuts from shortcutFile: {1}", XMLshortcuts.Count, filename);
             foreach (XmlNode patchNode in XMLshortcuts)
             {
                 Shortcut sc = new Shortcut();
@@ -2639,7 +2641,7 @@ namespace RelhaxModpack
                 Logging.Error("File {0} contains no XmlUnapck entries", filename);
                 return;
             }
-            Logging.Info("Adding {0} xml unpack entries from file {1}", Logfiles.Application, XMLUnpacks.Count, filename);
+            Logging.Info("Adding {0} xml unpack entries from file: {1}", XMLUnpacks.Count, filename);
             foreach (XmlNode patchNode in XMLUnpacks)
             {
                 XmlUnpack xmlup = new XmlUnpack();
@@ -2686,7 +2688,7 @@ namespace RelhaxModpack
                 Logging.Error("File {0} contains no atlas entries", filename);
                 return;
             }
-            Logging.Info("Adding {0} atlas entries from file {1}", Logfiles.Application, XMLAtlases.Count, filename);
+            Logging.Info("Adding {0} atlas entries from file: {1}", XMLAtlases.Count, filename);
             foreach (XmlNode atlasNode in XMLAtlases)
             {
                 Atlas sc = new Atlas();

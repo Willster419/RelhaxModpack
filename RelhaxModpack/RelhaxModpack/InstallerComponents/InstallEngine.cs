@@ -2113,8 +2113,8 @@ namespace RelhaxModpack.InstallerComponents
             //if the patches folder does not exist, then there are no patches to load or run
             if (!Directory.Exists(Path.Combine(Settings.WoTDirectory, Settings.PatchFolderName)))
             {
-                Logging.Debug("\"{0}\" folder does not exist, skipping", Settings.PatchFolderName);
-                Logging.Debug("Number of patches: {0}", patches.Count());
+                Logging.Info("\"{0}\" folder does not exist, skipping", Settings.PatchFolderName);
+                Logging.Info("Number of patches: {0}", patches.Count());
                 return patches;
             }
 
@@ -2124,7 +2124,7 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.WriteToLog("Failed to parse patches from patch directory (see above lines for more info", Logfiles.Application, LogLevel.Error);
             else
             {
-                Logging.Debug("Number of patch files: {0}",patch_files.Count());
+                Logging.Info("Number of patch files: {0}",patch_files.Count());
                 //if there wern't any, don't bother doing anything
                 if(patch_files.Count() > 0)
                 {
@@ -2154,8 +2154,8 @@ namespace RelhaxModpack.InstallerComponents
             //if the patches folder does not exist, then there are no patches to load or run
             if (!Directory.Exists(Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName)))
             {
-                Logging.Debug("\"{0}\" folder does not exist, skipping", Settings.ShortcutFolderName);
-                Logging.WriteToLog(string.Format("Number of shortcuts: {0}", shortcuts.Count()), Logfiles.Application, LogLevel.Debug);
+                Logging.Info("\"{0}\" folder does not exist, skipping", Settings.ShortcutFolderName);
+                Logging.WriteToLog(string.Format("Number of shortcuts: {0}", shortcuts.Count()), Logfiles.Application, LogLevel.Info);
                 return shortcuts;
             }
 
@@ -2194,8 +2194,8 @@ namespace RelhaxModpack.InstallerComponents
             //if the patches folder does not exist, then there are no patches to load or run
             if (!Directory.Exists(Path.Combine(Settings.WoTDirectory, Settings.XmlUnpackFolderName)))
             {
-                Logging.Debug("\"{0}\" folder does not exist, skipping", Settings.XmlUnpackFolderName);
-                Logging.WriteToLog(string.Format("Number of XmlUnpack files: {0}", XmlUnpacks.Count()), Logfiles.Application, LogLevel.Debug);
+                Logging.Info("\"{0}\" folder does not exist, skipping", Settings.XmlUnpackFolderName);
+                Logging.WriteToLog(string.Format("Number of XmlUnpack files: {0}", XmlUnpacks.Count()), Logfiles.Application, LogLevel.Info);
                 return XmlUnpacks;
             }
 
@@ -2206,7 +2206,7 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.WriteToLog("Failed to parse xml unpacks from unpack directory", Logfiles.Application, LogLevel.Error);
             else
             {
-                Logging.WriteToLog(string.Format("Number of XmlUnpack files: {0}", unpack_files.Count()), Logfiles.Application, LogLevel.Debug);
+                Logging.WriteToLog(string.Format("Number of XmlUnpack files: {0}", unpack_files.Count()), Logfiles.Application, LogLevel.Info);
                 //if there wern't any, don't bother doing anything
                 if (unpack_files.Count() > 0)
                 {
