@@ -2248,7 +2248,13 @@ namespace RelhaxModpack.Windows
             }
             item.Package.EditorTreeViewItem.Focusable = true;
             item.Package.EditorTreeViewItem.Focus();
-            Dispatcher.InvokeAsync(() => item.Package.EditorTreeViewItem.BringIntoView(), System.Windows.Threading.DispatcherPriority.Background);
+            Logging.Editor("OnSearchBoxCommitted(), invoking async dispatch to bring into view item: {0}", LogLevel.Info, item.Package.PackageName);
+            Dispatcher.InvokeAsync(() =>
+            {
+                item.Package.EditorTreeViewItem.BringIntoView();
+                item.Package.EditorTreeViewItem.IsSelected = true;
+                SelectDatabaseObject(item.Package, null);
+            }, System.Windows.Threading.DispatcherPriority.Background);
         }
         #endregion
 
