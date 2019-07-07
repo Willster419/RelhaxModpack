@@ -130,6 +130,7 @@ namespace RelhaxModpack.InstallerComponents
         private List<Task> createdChildTasks = new List<Task>();
         //flag for if installing or installing
         private bool installing = true;
+        private Task atlasDisposeTask;
 
         private object atlasBuilderLockerObject = new object();
 
@@ -1540,8 +1541,24 @@ namespace RelhaxModpack.InstallerComponents
                 else
                     Logging.Info("nvtt library is loaded");
 
+                //start the mod image parsing task
+                //get list of all mod texture folders
+                List<string> textureFolders = new List<string>();
+                foreach(Atlas atlas in atlases)
+                {
+                    foreach(string path in atlas.ImageFolderList)
+                    {
+                        if(!textureFolders.Contains(path))
+                        {
+                            textureFolders.Add(path);
+                        }
+                    }
+                }
+                AtlasesCreator.AtlasCreator.ParseModTexturesAsync(textureFolders, CancellationToken);
+
                 //make an array to hold all the atlas tasks
                 atlasTasks = new Task[atlases.Count];
+                List<AtlasesCreator.AtlasCreator> atlasCreators = new List<AtlasesCreator.AtlasCreator>();
 
                 for (int i = 0; i < atlases.Count; i++)
                 {
@@ -1571,14 +1588,17 @@ namespace RelhaxModpack.InstallerComponents
                         LockProgress();
 
                         //create the atlas
-                        using (AtlasesCreator.AtlasCreator atlasCreator = new AtlasesCreator.AtlasCreator()
+                        AtlasesCreator.AtlasCreator atlasCreator = new AtlasesCreator.AtlasCreator()
                         {
-                            //atlasData, CancellationToken
                             atlas = atlasData,
                             token = CancellationToken,
                             debugLockObject = atlasBuilderLockerObject
-                        })
+                        };
                         {
+                            lock(atlasBuilderLockerObject)
+                            {
+                                atlasCreators.Add(atlasCreator);
+                            }
                             AtlasesCreator.FailCode code = atlasCreator.CreateAtlas();
                             if ( code != AtlasesCreator.FailCode.None)
                             {
@@ -1612,6 +1632,20 @@ namespace RelhaxModpack.InstallerComponents
                     });
                     while (!taskValuesLocked) ;
                 }
+                Logging.Info("creating task to wait for all atlas creations before disposal");
+                atlasDisposeTask = Task.Run(() =>
+                {
+                    Logging.Debug("waiting for all atlas tasks to complete");
+                    Task.WaitAll(atlasTasks);
+                    Logging.Debug("all atlas tasks completed, disposal starts");
+                    for(int i = 0; i < atlasCreators.Count; i++)
+                    {
+                        atlasCreators[i].Dispose();
+                        atlasCreators[i] = null;
+                    }
+                    atlasCreators = null;
+                    AtlasesCreator.AtlasCreator.DisposeparseModTextures();
+                });
             }
             else
                 Logging.Info("...skipped (no atlas entries parsed)");
@@ -1768,6 +1802,13 @@ namespace RelhaxModpack.InstallerComponents
             Prog.ParrentTotal = Settings.FoldersToCleanup.Count();
             Prog.Filename = string.Empty;
             Progress.Report(Prog);
+
+            if (atlasDisposeTask != null)
+            {
+                Logging.Debug("waiting for atlas disposal task before try to cleanup");
+                atlasDisposeTask.Wait();
+                Logging.Debug("atlas disposal complete, continue with cleanup");
+            }
 
             bool success = true;
             foreach (string folder in Settings.FoldersToCleanup)
