@@ -640,7 +640,7 @@ namespace RelhaxModpack
             }
             else
             {
-                outOfDate = await Utils.IsManagerUptoDate(applicationBuildVersion);
+                outOfDate = !(await Utils.IsManagerUptoDate(applicationBuildVersion));
             }
             if(!outOfDate)
             {

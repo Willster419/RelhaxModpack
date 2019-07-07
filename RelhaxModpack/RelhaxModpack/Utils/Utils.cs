@@ -184,13 +184,10 @@ namespace RelhaxModpack
                 XMLUtils.GetXMLStringFromXPath(doc, "//version/relhax_v2_stable").Trim() ://stable
                 XMLUtils.GetXMLStringFromXPath(doc, "//version/relhax_v2_beta").Trim();//beta
 
-            Logging.Info("Current build is {0} online build is {1}", currentVersion, applicationOnlineVersion);
+            Logging.Info("Current build is {0} Online build is {1}", currentVersion, applicationOnlineVersion);
 
             //check if versions are equal
-            if (!currentVersion.Equals(applicationOnlineVersion))
-                return false;
-            else
-                return true;
+            return currentVersion.Equals(applicationOnlineVersion);
         }
         #endregion
 
