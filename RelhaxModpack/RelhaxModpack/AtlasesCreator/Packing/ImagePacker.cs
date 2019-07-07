@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -100,12 +101,12 @@ namespace RelhaxModpack.AtlasesCreator.Packing
             }
 
             // make our output image
-            outputImage = ImageHandler.GenerateImage(files, imagePlacement, outputWidth, outputHeight);
+            outputImage = GenerateAtlasImageData(files, imagePlacement, outputWidth, outputHeight);
             if (outputImage == null)
                 return FailCode.FailedToSaveImage;
 
             
-            outputMap = MapExporter.GenerateMapData(imagePlacement, imageSizes);
+            outputMap = GenerateMapData(imagePlacement, imageSizes);
 
 
             // clear our dictionaries just to free up some memory
@@ -113,6 +114,56 @@ namespace RelhaxModpack.AtlasesCreator.Packing
             imagePlacement.Clear();
 
             return 0;
+        }
+
+        private Dictionary<string, Rectangle> GenerateMapData(Dictionary<Texture, Rectangle> imagePlacement, Dictionary<Texture, Size> imageSizes)
+        {
+            // go through our image placements and replace the width/height found in there with
+            // each image's actual width/height (since the ones in imagePlacement will have padding)
+            Texture[] keys = new Texture[imagePlacement.Keys.Count];
+            imagePlacement.Keys.CopyTo(keys, 0);
+
+            foreach (var k in keys)
+            {
+                // get the actual size
+                Size s = imageSizes[k];
+
+                // get the placement rectangle
+                Rectangle r = imagePlacement[k];
+
+                // set the proper size
+                r.Width = s.Width;
+                r.Height = s.Height;
+
+                // insert back into the dictionary
+                imagePlacement[k] = r;
+            }
+
+            // copy the placement dictionary to the output
+            Dictionary<string, Rectangle> outputMap = new Dictionary<string, Rectangle>();
+            foreach (var pair in imagePlacement)
+            {
+                outputMap.Add(pair.Key.name, pair.Value);
+            }
+            return outputMap;
+        }
+
+        private Bitmap GenerateAtlasImageData(List<Texture> files, Dictionary<Texture, Rectangle> imagePlacement, int outputWidth, int outputHeight)
+        {
+            Bitmap outputImage = new Bitmap(outputWidth, outputHeight, PixelFormat.Format32bppArgb);
+
+            // draw all the images into the output image
+            foreach (var image in files)
+            {
+                Rectangle location = imagePlacement[image];
+
+                // copy pixels over to avoid antialiasing or any other side effects of drawing
+                // the subimages to the output image using Graphics
+                for (int x = 0; x < image.AtlasImage.Width; x++)
+                    for (int y = 0; y < image.AtlasImage.Height; y++)
+                        outputImage.SetPixel(location.X + x, location.Y + y, image.AtlasImage.GetPixel(x, y));
+            }
+            return outputImage;
         }
 
         // This method does some trickery type stuff where we perform the TestPackingImages method over and over, 

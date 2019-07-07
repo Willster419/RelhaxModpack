@@ -4,11 +4,6 @@
         <name>RelhaxModpack</name>
     </assembly>
     <members>
-        <member name="T:RelhaxModpack.AtlasesCreator.ImageHandler">
-            <summary>
-            Handles loading and saving a DDS image in bitmap form
-            </summary>
-        </member>
         <member name="T:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker">
             <summary>Rectangle packer using an algorithm by Javier Arevalo</summary>
             <remarks>

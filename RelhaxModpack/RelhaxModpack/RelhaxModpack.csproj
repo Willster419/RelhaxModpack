@@ -118,8 +118,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AtlasesCreator\AtlasCreator.cs" />
-    <Compile Include="AtlasesCreator\ImageHandler.cs" />
-    <Compile Include="AtlasesCreator\MapExporter.cs" />
     <Compile Include="AtlasesCreator\Packing\ArevaloRectanglePacker.cs" />
     <Compile Include="AtlasesCreator\Packing\ImagePacker.cs" />
     <Compile Include="AtlasesCreator\Packing\OutOfSpaceException.cs" />

@@ -131,6 +131,8 @@ namespace RelhaxModpack.InstallerComponents
         //flag for if installing or installing
         private bool installing = true;
 
+        private object atlasBuilderLockerObject = new object();
+
         public bool DisableTriggersForInstall = true;
         #endregion
 
@@ -1547,26 +1549,43 @@ namespace RelhaxModpack.InstallerComponents
                     bool taskValuesLocked = false;
                     atlasTasks[i] = Task.Run(() =>
                     {
+                        //copy the atlas reference into the task scope
+                        //the bool creates a spinlock that prevents it from continuing until it's copied the reference
+                        Atlas atlasData = atlases[i];
+                        taskValuesLocked = true;
+
+                        //create string builder for putting files created to installer log
                         StringBuilder atlasBuilder = new StringBuilder();
                         atlasBuilder.AppendLine("/*   Atlases   */");
 
-                        Atlas atlas = atlases[i];
-                        taskValuesLocked = true;
-
                         //replace macros
-                        atlas.Pkg = Utils.MacroReplace(atlas.Pkg, ReplacementTypes.FilePath);
-                        atlas.AtlasSaveDirectory = Utils.MacroReplace(atlas.AtlasSaveDirectory, ReplacementTypes.FilePath);
-                        for (int j = 0; j < atlas.ImageFolderList.Count; j++)
+                        atlasData.Pkg = Utils.MacroReplace(atlasData.Pkg, ReplacementTypes.FilePath);
+                        atlasData.AtlasSaveDirectory = Utils.MacroReplace(atlasData.AtlasSaveDirectory, ReplacementTypes.FilePath);
+                        for (int j = 0; j < atlasData.ImageFolderList.Count; j++)
                         {
                             CancellationToken.ThrowIfCancellationRequested();
-                            atlas.ImageFolderList[j] = Utils.MacroReplace(atlas.ImageFolderList[j], ReplacementTypes.FilePath);
+                            atlasData.ImageFolderList[j] = Utils.MacroReplace(atlasData.ImageFolderList[j], ReplacementTypes.FilePath);
                         }
 
                         CancellationToken.ThrowIfCancellationRequested();
                         LockProgress();
 
                         //create the atlas
-                        Utils.CreateAtlas(atlas, CancellationToken);
+                        using (AtlasesCreator.AtlasCreator atlasCreator = new AtlasesCreator.AtlasCreator()
+                        {
+                            //atlasData, CancellationToken
+                            atlas = atlasData,
+                            token = CancellationToken,
+                            debugLockObject = atlasBuilderLockerObject
+                        })
+                        {
+                            AtlasesCreator.FailCode code = atlasCreator.CreateAtlas();
+                            if ( code != AtlasesCreator.FailCode.None)
+                            {
+                                Logging.Exception("Failed to create atlas file {0}: {1}", Path.GetFileName(atlasData.AtlasFile), code.ToString());
+                                return;
+                            }
+                        }
 
                         lock (Progress)
                         {
@@ -1575,8 +1594,8 @@ namespace RelhaxModpack.InstallerComponents
                         LockProgress();
 
                         //append generated atlas info
-                        atlasBuilder.AppendLine(atlas.MapFile);
-                        atlasBuilder.AppendLine(atlas.AtlasFile);
+                        atlasBuilder.AppendLine(atlasData.MapFile);
+                        atlasBuilder.AppendLine(atlasData.AtlasFile);
                         //make sure it's not writing the same time
                         lock (Progress)
                         {
