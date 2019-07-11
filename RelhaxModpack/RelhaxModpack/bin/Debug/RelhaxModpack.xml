@@ -1,0 +1,2010 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RelhaxModpack</name>
+    </assembly>
+    <members>
+        <member name="T:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker">
+            <summary>Rectangle packer using an algorithm by Javier Arevalo</summary>
+            <remarks>
+              <para>
+                Original code by Javier Arevalo (jare at iguanademos dot com). Rewritten
+                to C# / .NET by Markus Ewald (cygon at nuclex dot org). The following comments
+                were written by the original author when he published his algorithm.
+              </para>
+              <para>
+                You have a bunch of rectangular pieces. You need to arrange them in a
+                rectangular surface so that they don't overlap, keeping the total area of the
+                rectangle as small as possible. This is fairly common when arranging characters
+                in a bitmapped font, lightmaps for a 3D engine, and I guess other situations as
+                well.
+              </para>
+              <para>
+                The idea of this algorithm is that, as we add rectangles, we can pre-select
+                "interesting" places where we can try to add the next rectangles. For optimal
+                results, the rectangles should be added in order. I initially tried using area
+                as a sorting criteria, but it didn't work well with very tall or very flat
+                rectangles. I then tried using the longest dimension as a selector, and it
+                worked much better. So much for intuition...
+              </para>
+              <para>
+                These "interesting" places are just to the right and just below the currently
+                added rectangle. The first rectangle, obviously, goes at the top left, the next
+                one would go either to the right or below this one, and so on. It is a weird way
+                to do it, but it seems to work very nicely.
+              </para>
+              <para>
+                The way we search here is fairly brute-force, the fact being that for most
+                off-line purposes the performance seems more than adequate. I have generated a
+                Japanese font with around 8500 characters and all the time was spent generating
+                the bitmaps.
+              </para>
+              <para>
+                Also, for all we care, we could grow the parent rectangle in a different way
+                than power of two. It just happens that power of 2 is very convenient for
+                graphics hardware textures.
+              </para>
+              <para>
+                I'd be interested in hearing of other approaches to this problem. Make sure
+                to post them on http://www.flipcode.com
+              </para>
+            </remarks>
+        </member>
+        <member name="T:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.AnchorRankComparer">
+            <summary>Compares the 'rank' of anchoring points</summary>
+            <remarks>
+              Anchoring points are potential locations for the placement of new rectangles.
+              Each time a rectangle is inserted, an anchor point is generated on its upper
+              right end and another one at its lower left end. The anchor points are kept
+              in a list that is ordered by their closeness to the upper left corner of the
+              packing area (their 'rank') so the packer favors positions that are closer to
+              the upper left for new rectangles.
+            </remarks>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.AnchorRankComparer.Default">
+            <summary>Provides a default instance for the anchor rank comparer</summary>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.AnchorRankComparer.Compare(System.Drawing.Point,System.Drawing.Point)">
+            <summary>Compares the rank of two anchors against each other</summary>
+            <param name="left">Left anchor point that will be compared</param>
+            <param name="right">Right anchor point that will be compared</param>
+            <returns>The relation of the two anchor point's ranks to each other</returns>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.actualPackingAreaHeight">
+            <summary>Current height of the packing area</summary>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.actualPackingAreaWidth">
+            <summary>Current width of the packing area</summary>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.anchors">
+            <summary>Anchoring points where new rectangles can potentially be placed</summary>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.packedRectangles">
+            <summary>Rectangles contained in the packing area</summary>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.#ctor(System.Int32,System.Int32)">
+            <summary>Initializes a new rectangle packer</summary>
+            <param name="packingAreaWidth">Maximum width of the packing area</param>
+            <param name="packingAreaHeight">Maximum height of the packing area</param>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.TryPack(System.Int32,System.Int32,System.Drawing.Point@)">
+            <summary>Tries to allocate space for a rectangle in the packing area</summary>
+            <param name="rectangleWidth">Width of the rectangle to allocate</param>
+            <param name="rectangleHeight">Height of the rectangle to allocate</param>
+            <param name="placement">Output parameter receiving the rectangle's placement</param>
+            <returns>True if space for the rectangle could be allocated</returns>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.OptimizePlacement(System.Drawing.Point@,System.Int32,System.Int32)">
+            <summary>
+              Optimizes the rectangle's placement by moving it either left or up to fill
+              any gaps resulting from rectangles blocking the anchors of the most optimal
+              placements.
+            </summary>
+            <param name="placement">Placement to be optimized</param>
+            <param name="rectangleWidth">Width of the rectangle to be optimized</param>
+            <param name="rectangleHeight">Height of the rectangle to be optimized</param>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.SelectAnchorRecursive(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+              Searches for a free anchor and recursively enlarges the packing area
+              if none can be found.
+            </summary>
+            <param name="rectangleWidth">Width of the rectangle to be placed</param>
+            <param name="rectangleHeight">Height of the rectangle to be placed</param>
+            <param name="testedPackingAreaWidth">Width of the tested packing area</param>
+            <param name="testedPackingAreaHeight">Height of the tested packing area</param>
+            <returns>
+              Index of the anchor the rectangle is to be placed at or -1 if the rectangle
+              does not fit in the packing area anymore.
+            </returns>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.FindFirstFreeAnchor(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>Locates the first free anchor at which the rectangle fits</summary>
+            <param name="rectangleWidth">Width of the rectangle to be placed</param>
+            <param name="rectangleHeight">Height of the rectangle to be placed</param>
+            <param name="testedPackingAreaWidth">Total width of the packing area</param>
+            <param name="testedPackingAreaHeight">Total height of the packing area</param>
+            <returns>The index of the first free anchor or -1 if none is found</returns>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.IsFree(System.Drawing.Rectangle@,System.Int32,System.Int32)">
+            <summary>
+              Determines whether the rectangle can be placed in the packing area
+              at its current location.
+            </summary>
+            <param name="rectangle">Rectangle whose position to check</param>
+            <param name="testedPackingAreaWidth">Total width of the packing area</param>
+            <param name="testedPackingAreaHeight">Total height of the packing area</param>
+            <returns>True if the rectangle can be placed at its current position</returns>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.InsertAnchor(System.Drawing.Point)">
+            <summary>Inserts a new anchor point into the anchor list</summary>
+            <param name="anchor">Anchor point that will be inserted</param>
+            <remarks>
+              This method tries to keep the anchor list ordered by ranking the anchors
+              depending on the distance from the top left corner in the packing area.
+            </remarks>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ImagePacker.PackImage(System.Collections.Generic.IEnumerable{RelhaxModpack.Texture},RelhaxModpack.Atlas.State,RelhaxModpack.Atlas.State,System.Boolean,System.Int32,System.Int32,System.Int32,System.Drawing.Bitmap@,System.Collections.Generic.Dictionary{System.String,System.Drawing.Rectangle}@)">
+            <summary>
+            Packs a collection of images into a single image.
+            </summary>
+            <param name="imageFiles">The list of Textures of the images to be combined.</param>
+            <param name="requirePowerOfTwo">Whether or not the output image must have a power of two size.</param>
+            <param name="requireSquareImage">Whether or not the output image must be a square.</param>
+            <param name="fastImagePacker">Accept the first successful image packing.</param>
+            <param name="maximumWidth">The maximum width of the output image.</param>
+            <param name="maximumHeight">The maximum height of the output image.</param>
+            <param name="imagePadding">The amount of blank space to insert in between individual images.</param>
+            <param name="outputImage">The resulting output image.</param>
+            <param name="outputMap">The resulting output map of placement rectangles for the images.</param>
+            <returns>0 if the packing was successful, error code otherwise.</returns>
+        </member>
+        <member name="T:RelhaxModpack.AtlasesCreator.Packing.OutOfSpaceException">
+            <summary>Insufficient space left in packing area to contain a given object</summary>
+            <remarks>
+              An exception being sent to you from deep space. Erm, no, wait, it's an exception
+              that occurs when a packing algorithm runs out of space and is unable to fit
+              the object you tried to pack into the remaining packing area.
+            </remarks>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.OutOfSpaceException.#ctor(System.String)">
+            <summary>Initializes the exception with an error message</summary>
+            <param name="message">Error message describing the cause of the exception</param>
+        </member>
+        <member name="T:RelhaxModpack.AtlasesCreator.Packing.RectanglePacker">
+            <summary>Base class for rectangle packing algorithms</summary>
+            <remarks>
+              <para>
+                By uniting all rectangle packers under this common base class, you can
+                easily switch between different algorithms to find the most efficient or
+                performant one for a given job.
+              </para>
+              <para>
+                An almost exhaustive list of packing algorithms can be found here:
+                http://www.csc.liv.ac.uk/~epa/surveyhtml.html
+              </para>
+            </remarks>
+        </member>
+        <member name="P:RelhaxModpack.AtlasesCreator.Packing.RectanglePacker.PackingAreaWidth">
+            <summary>Maximum width the packing area is allowed to have</summary>
+        </member>
+        <member name="P:RelhaxModpack.AtlasesCreator.Packing.RectanglePacker.PackingAreaHeight">
+            <summary>Maximum height the packing area is allowed to have</summary>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.RectanglePacker.#ctor(System.Int32,System.Int32)">
+            <summary>Initializes a new rectangle packer</summary>
+            <param name="packingAreaWidth">Width of the packing area</param>
+            <param name="packingAreaHeight">Height of the packing area</param>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.RectanglePacker.Pack(System.Int32,System.Int32)">
+            <summary>Allocates space for a rectangle in the packing area</summary>
+            <param name="rectangleWidth">Width of the rectangle to allocate</param>
+            <param name="rectangleHeight">Height of the rectangle to allocate</param>
+            <returns>The location at which the rectangle has been placed</returns>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.Packing.RectanglePacker.TryPack(System.Int32,System.Int32,System.Drawing.Point@)">
+            <summary>Tries to allocate space for a rectangle in the packing area</summary>
+            <param name="rectangleWidth">Width of the rectangle to allocate</param>
+            <param name="rectangleHeight">Height of the rectangle to allocate</param>
+            <param name="placement">Output parameter receiving the rectangle's placement</param>
+            <returns>True if space for the rectangle could be allocated</returns>
+        </member>
+        <member name="T:RelhaxModpack.Category">
+            <summary>
+            a catagory is what makes up each tab in the mod selection dislpay window. It holds the first level of list of SelectablePackages
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.DatabasePackage">
+            <summary>
+            A database component is an abstract class for all Components within the database
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage.PackageName">
+            <summary>
+            a unique identifier for each component in the database. No two components will have the same PackageName
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage.Version">
+            <summary>
+            a method to keep track of the version of the package
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage.Timestamp">
+            <summary>
+            used to determine when the package entry was last modified
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage.Size">
+            <summary>
+            size of the zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage.ZipFile">
+            <summary>
+            the zip file to extract (can be "")
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabasePackage.Enabled">
+            <summary>
+            a toggle to enable and disable the component
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage.CRC">
+            <summary>
+            the crc checksum of the zipfile
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage.StartAddress">
+            <summary>
+            the start address of the url to the zip file
+            URL format: StartAddress + ZipFile + EndAddress
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage.EndAddress">
+            <summary>
+            the end address of the url to the zip file
+            URL format: StartAddress + ZipFile + EndAddress
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage.DownloadFlag">
+            <summary>
+            determine at install time if the package needs to be downloaded
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage.ReadyForInstall">
+            <summary>
+            determine if the mod has been downloaded and is ready for installation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage.LogAtInstall">
+            <summary>
+            determine if the files from the package should be logged for uninstallation
+            only set this to false if absolutly necessary!
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage.DevURL">
+            <summary>
+            the URL link of where you can view the webpage of the mod
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabasePackage.CompletePath">
+            <summary>
+            Provides (if possible) a complete tree style path in for the cateogry views
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.SelectablePackage">
+            <summary>
+            A package that has UI elements, and is eithor a mod or config that can be selected in the UI
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.SelectablePackage.#ctor">
+            <summary>
+            Constructior override for DatabasePackage. save memory by only enabling the components we need
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Name">
+            <summary>
+            the name of the package
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.NameFormatted">
+            <summary>
+            the name of the package with the version macro replaced for use display
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ParentCategory">
+            <summary>
+            the Category refrence
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Type">
+            <summary>
+            the type of selectable package logic to follow (options are single1, single_dropdown1, single_dropdown2, multi)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Parent">
+            <summary>
+            the refrence for the direct parent of this package
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.TopParent">
+            <summary>
+            the refrence for the absolute top of the package tree
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Visible">
+            <summary>
+            a flag to determine wether or not the mod should be shown in UI
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.UpdateComment">
+            <summary>
+            update comments of the package
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Description">
+            <summary>
+            description of the package
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.PopularMod">
+            <summary>
+            Flag to determine if the mod (and children? TODO) should be used in the 
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.SortChildPackages">
+            <summary>
+            Flag to determine any packages of this package should be sorted (by name)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.FlagForSelectionSave">
+            <summary>
+            Used as internal flag for if application settings is checked "SaveDisabledModsInSelection". Allows for disabled mods to be saved back to the user's selection
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage._Checked">
+            <summary>
+            field for whether the package is selected to install
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.Checked">
+            <summary>
+            property for if the package is selected by the user to install. handles all color change and single_dropdown updating code
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.Enabled">
+            <summary>
+            Overrides DatabasePackage.Enabled property. Used to toggle if the mod should be selectable and installed in the selection list.
+            The override also enables the triggering of the UI components to reflect the user's selection changes.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Level">
+            <summary>
+            The level in the database tree where the package resides.
+            Category header is -1, each child is +1 from there
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.UserFiles">
+            <summary>
+            the list of cache files that should be backed up before wiping the directory
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Packages">
+            <summary>
+            the list of child SelectablePackage entries in this instance of SelectablePackages
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Medias">
+            <summary>
+            list of media preview items associated with this package, shown in the preview window on right click of component
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.Dependencies">
+            <summary>
+            A list of packages (from dependencies list) that this package is dependent on in order to be installed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ConflictingPackages">
+            <summary>
+            A list of any SelectablePackages that conflict with this mod. A conflict will result the package not being processed.
+            Refer to examples for more information
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ShowInSearchList">
+            <summary>
+            Toggle if the package should appear in the search list
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.UIComponent">
+            <summary>
+            the UI element refrence for this package
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ParentUIComponent">
+            <summary>
+            the UI element refrence for the direct parent of this package
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.TopParentUIComponent">
+            <summary>
+            the UI element refrence for the absolute top of the package tree
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.RelhaxWPFComboBoxList">
+            <summary>
+            The list of WPF combo boxes DESCIBE MORE TODO
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ChildBorder">
+            <summary>
+            the border for the legacy view to allow for putting all subchilderen in the border. sits inside treeviewitem. wpf component
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ChildStackPanel">
+            <summary>
+            the stackpanel to allow the child treeviewitems to stack upon each other. sits inside the border. wpf component
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ParentBorder">
+            <summary>
+            the border that this component is in. wpf componment
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ParentStackPanel">
+            <summary>
+            the stackpanel that this item is inside. wpf component
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ContentControl">
+            <summary>
+            ContentControl item to allow for right-clicking of disabled components. defaultv2 wpf component
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.TreeViewItem">
+            <summary>
+            the treeviewitem that corresponds to this package. legacy wpf component
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.TreeView">
+            <summary>
+            the treeview that this package is in. legacy wpf component
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.TabIndex">
+            <summary>
+            the TabPage refrence
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.CompletePath">
+            <summary>
+            provides a nice complete path that is more human readable than a packagePath
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.IsStructureVisible">
+            <summary>
+            Determines if the UI package structure to this package is of all visible components.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.IsStructureEnabled">
+            <summary>
+            Determines if the UI package structure to this package is of all enabled components.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.NameDisplay">
+            <summary>
+            Returns the display name of the package for the UI, with version macros replaced and any other statuses appended
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.TimeStampString">
+            <summary>
+            Returns a string representation of the timestamp of when the zip file of this package was last modified
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.ToolTipString">
+            <summary>
+            Returns the display tooltip string, or the translation string for "no description"
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.SelectablePackage.CompareModsPackageName(RelhaxModpack.SelectablePackage,RelhaxModpack.SelectablePackage)">
+            <summary>
+            Allows for alphabetical sorting of packages by PackageName
+            </summary>
+            <param name="x">a package</param>
+            <param name="y">another package</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.SelectablePackage.ToString">
+            <summary>
+            Allows for display in a combobox and when debugging
+            </summary>
+            <returns>The nameFormatted property of the pacakge</returns>
+        </member>
+        <member name="M:RelhaxModpack.SelectablePackage.AnyPackagesChecked">
+            <summary>
+            check if the color change should be changed on or off, based on if any other packages at this level are enabled and checked
+            </summary>
+            <returns>True if another package at this level is checked and enabled, false otherwise</returns>
+        </member>
+        <member name="T:RelhaxModpack.Trigger">
+            <summary>
+            Represents a trigger object used in the installer as an event starter.
+            For example, a contour icon trigger exists to start the building of contour icons
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.InstallerComponents.InstallEngine.OrderedPackagesToInstall">
+            <summary>
+            List of packages that have zip files to install and are enabled (and checked if selectable) and ordered into installGroups
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.InstallerComponents.InstallEngine.PackagesToInstall">
+            <summary>
+            List of packages that have zip files to install and are enabled (and checked if selectable)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.InstallerComponents.InstallEngine.FlatListSelectablePackages">
+            <summary>
+            Flat list of all selectable packages
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Logfile">
+            <summary>
+            Represenets an instance of a logfile used for writing important logging information to a log
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Logfile.Filepath">
+            <summary>
+            The path to the file the log is writing to
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Logfile.Filename">
+            <summary>
+            The name of the file that the log is writing to
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Logfile.Timestamp">
+            <summary>
+            The date and time format for writing each line in the logfile
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Logfile.#ctor(System.String,System.String)">
+            <summary>
+            Create an instance of the logfile
+            </summary>
+            <param name="filePath">The path to the file to create/open</param>
+            <param name="timestamp">the date and time format to write for each log line</param>
+        </member>
+        <member name="M:RelhaxModpack.Logfile.Init">
+            <summary>
+            Initializes the logfile
+            </summary>
+            <returns>True if sucessfull initialization, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Logfile.Write(System.String,RelhaxModpack.LogLevel)">
+            <summary>
+            Writes a line of text to the log file with the date and timestamp, and level of severity of the message
+            </summary>
+            <param name="message">The line to write</param>
+            <param name="logLevel">The level of severity of the log message</param>
+        </member>
+        <member name="M:RelhaxModpack.Logfile.Dispose(System.Boolean)">
+            <summary>
+            Dispose Managed and Unmanaged rescources used for the logfiles
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:RelhaxModpack.Logfile.Dispose">
+            <summary>
+            Dispose Managed and Unmanaged rescources used for the logfiles
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Logfiles">
+            <summary>
+            The different log files currently used in the modpack
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logfiles.Application">
+            <summary>
+            The default modpack logfile
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logfiles.Installer">
+            <summary>
+            logfile for when installing mods
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logfiles.Uninstaller">
+            <summary>
+            logfile for when uninstalling mods
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.LogLevel">
+            <summary>
+            The level of severity of the log message
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.LogLevel.Debug">
+            <summary>
+            Debug message
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.LogLevel.Info">
+            <summary>
+            Informational message
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.LogLevel.Warning">
+            <summary>
+            A problem, but can be worked around
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.LogLevel.Error">
+            <summary>
+            Something is wrong, something may not work
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.LogLevel.Exception">
+            <summary>
+            Something is wrong, something will not work
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.LogLevel.ApplicationHalt">
+            <summary>
+            The application is closing now
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Logging">
+            <summary>
+            A static constant refrence to common logging variables and common log refrences
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.ApplicationLogFilename">
+            <summary>
+            The filename of the application log file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.OldApplicationLogFilename">
+            <summary>
+            The filename of the old application log file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.InstallLogFilename">
+            <summary>
+            The name of the install log file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.UninstallLogFilename">
+            <summary>
+            the name of the uninstall log file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.ApplicationlogStartStop">
+            <summary>
+            The header and end that shows the start and stop of the application log file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.ApplicationLogfile">
+            <summary>
+            Provides a constant refrence to the log file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.InstallLogfile">
+            <summary>
+            Provides a refrence to an instance of an install log file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logging.UninstallLogfile">
+            <summary>
+            Provides a refrence to an instalce of an uninstall log file
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Init(RelhaxModpack.Logfiles,System.String)">
+            <summary>
+            Initialize the logging subsystem for the application
+            </summary>
+            <returns>True if successful initialization, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Logging.DisposeLogging(RelhaxModpack.Logfiles)">
+            <summary>
+            Dispose of the application logging subsystem
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Logging.WriteToLog(System.String,RelhaxModpack.Logfiles,RelhaxModpack.LogLevel)">
+            <summary>
+            Writes a message to a logfile instance, if it exists
+            </summary>
+            <param name="message">The message to write</param>
+            <param name="logfiles">The logfile to write to</param>
+            <param name="logLevel">The level of severity of the message. If not Application log, this parameter is ignored</param>
+        </member>
+        <member name="T:RelhaxModpack.SelectionView">
+            <summary>
+            The type of selection view for how to display the selection tree
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectionView.Legacy">
+            <summary>
+            OMC style
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectionView.DefaultV2">
+            <summary>
+            Default WPF V2 style
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.LoadingGifs">
+            <summary>
+            The different loading Gifs for when loading the preview
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.LoadingGifs.Standard">
+            <summary>
+            The standard loading Gif
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.LoadingGifs.ThirdGuards">
+            <summary>
+            Thirdguards head loading Gif
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UninstallModes">
+            <summary>
+            The types on uninstall mods the application supports
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UninstallModes.Default">
+            <summary>
+            Default uninstall method to uninstall all modifiecation done by the application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UninstallModes.Quick">
+            <summary>
+            Quick uninstall method to remove 
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.DatabaseVersions">
+            <summary>
+            Database distribution levels
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseVersions.Stable">
+            <summary>
+            The stable public database
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseVersions.Beta">
+            <summary>
+            The unstable public beta database
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseVersions.Test">
+            <summary>
+            The unstable private testing database.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.ModpackSettings">
+            <summary>
+            Provides access to all settings used in the modpack.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.CustomModInfoPath">
+            <summary>
+            The custom path to the ModInfo.xml file if loading in test mode
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.NotifyIfSameDatabase">
+            <summary>
+            toggle if the program should notify the user if the database version is the same as the last installed version
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.BackupModFolder">
+            <summary>
+            toggle if the program will backup the current mod installation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.CleanInstallation">
+            <summary>
+            toggle if the program will clean the mods and res_mods folders before installation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ForceManuel">
+            <summary>
+            toggle if the program should force the user to manually point to the WoT location
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.SaveLastSelection">
+            <summary>
+            toggle if the application should automatically save the last selected config to also be automatically loaded upon selection load
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.SaveUserData">
+            <summary>
+            toggle if the application should save user cache save data like session stats, or auto equip configs
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.EnableBordersLegacyView">
+            <summary>
+            toggle for each view if the borders around the child selection options should show
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.EnableBordersDefaultV2View">
+            <summary>
+            toggle for each view if the borders around the child selection options should show
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.EnableColorChangeLegacyView">
+            <summary>
+            toggle for each view if the color change should occur when a child selection happends
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.EnableColorChangeDefaultV2View">
+            <summary>
+            toggle for each view if the color change should occur when a child selection happends
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ShowInstallCompleteWindow">
+            <summary>
+            toggle if the installation complete window will be shown
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ClearCache">
+            <summary>
+            toggle if the program will delete the WoT appdata cache
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.DeleteLogs">
+            <summary>
+            toggle if the program will delete xvm, pmod, WoT logs
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.CreateShortcuts">
+            <summary>
+            toggle if the program will create desktop shortcuts
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.InstallWhileDownloading">
+            <summary>
+            toggle the ability for the modpack to extract a package as soon as it is downloaded
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.MulticoreExtraction">
+            <summary>
+            toggle the ability to have multiple extractions happening at the same time
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ExportMode">
+            <summary>
+            toggle export mode
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.AdvancedInstalProgress">
+            <summary>
+            Toggle the advanced installation progress window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.DeleteCacheFiles">
+            <summary>
+            True - After an installation the application will ask to delete old download cache files
+            False - After an installation the application will always delete old download cache files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.PreviewFullscreen">
+            <summary>
+            toggle for if the Preview window should be shown in fullscreen mode
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ModSelectionHeight">
+            <summary>
+            the height, in pixels, of the ModSelectionView window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ModSelectionWidth">
+            <summary>
+            the width, in pixels, of the ModSelectionView window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ModSelectionFullscreen">
+            <summary>
+            toggle for if the ModSelectionView window should be shown in fullscreen mode
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.PreviewX">
+            <summary>
+            the x-coordinate location, in pixels, of the Preview window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.PreviewY">
+            <summary>
+            the y-coordinate location, in pixels, of the Preview window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.PreviewHeight">
+            <summary>
+            the height, in pixels, of the Preview window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.PreviewWidth">
+            <summary>
+            the width, in pixels, of the Preview window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.UninstallMode">
+            <summary>
+            The Uninstall mode to use when uninstalling or installing with the clean install option
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ModSelectionView">
+            <summary>
+            The selection view to use
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.Language">
+            <summary>
+            The selected language
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.DatabaseDistroVersion">
+            <summary>
+            The distribution version of the database to use when selecting mods
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ApplicationDistroVersion">
+            <summary>
+            The application distribution version to use. When selected, it won't take affect until application restart
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.MinimizeToSystemTray">
+            <summary>
+            toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Settings">
+            <summary>
+            Handles all generic constants and statics used throughout the application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationStartupPath">
+            <summary>
+            The Startup root path of the application. Does not include the application name
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettingsFileName">
+            <summary>
+            The absolute name of the application settings file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationVersion">
+            <summary>
+            The current distribution version of the application
+            Alpha should NEVER be built for public distribution unless direct testing!
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.DefaultMaximumSheetWidth">
+            <summary>
+            default maximum sprite sheet width (pixels)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.DefaultMaximumSheetHeight">
+            <summary>
+            default maximum sprite sheet height (pixels)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.DefaultImagePadding">
+            <summary>
+            default image padding
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UISettings">
+            <summary>
+            Handles all custom UI settings
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UISettings.LoadSettings(System.Boolean)">
+            <summary>
+            Load the custom color definitions from XML
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter">
+            <summary>
+            Interaction logic for RelhaxInstallTaskReporter.xaml
+            </summary>
+            <summary>
+            RelhaxInstallTaskReporter
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxWPFCheckBox">
+            <summary>
+            Interaction logic for RelhaxWPFCheckBox.xaml
+            </summary>
+            <summary>
+            RelhaxWPFCheckBox
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxWPFComboBox">
+            <summary>
+            Interaction logic for RelhaxWPFComboBox.xaml
+            </summary>
+            <summary>
+            RelhaxWPFComboBox
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxWPFRadioButton">
+            <summary>
+            Interaction logic for RelhaxWPFRadioButton.xaml
+            </summary>
+            <summary>
+            RelhaxWPFRadioButton
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxMediaPlayer">
+            <summary>
+            Interaction logic for RelhaxMediaPlayer.xaml
+            </summary>
+            <summary>
+            RelhaxMediaPlayer
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxProgress">
+            <summary>
+            The base class for reporting async progress to any UI receiver task.
+            There are up to 3 levels of tasks that can be reported: child, parent, and total. At least total will be implemented an any given usage case.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ChildCurrent">
+            <summary>
+            The current completed and total child level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ChildTotal">
+            <summary>
+            The current completed and total child level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ChildCurrentProgress">
+            <summary>
+            A custom formatted string to use if the async task supports/implements it
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ParrentCurrent">
+            <summary>
+            The current completed and total parent level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ParrentTotal">
+            <summary>
+            The current completed and total parent level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ParrentCurrentProgress">
+            <summary>
+            A custom formatted string to use if the async task supports/implements it
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.TotalCurrent">
+            <summary>
+            The current completed and total total level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.TotalTotal">
+            <summary>
+            The current completed and total total level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.TotalCurrentProgress">
+            <summary>
+            A custom formatted string to use if the async task supports/implements it
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ReportMessage">
+            <summary>
+            A custom formatted string to use if the async task supports/implements it
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.BytesProcessed">
+            <summary>
+            During zip file extraction, the number of processed bytes extracted, and the total bytes to extract.
+            During copy operations, the number of processed copied bytes, and the total bytes to copy.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.BytesTotal">
+            <summary>
+            During zip file extraction, the number of processed bytes extracted, and the total bytes to extract.
+            During copy operations, the number of processed copied bytes, and the total bytes to copy.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.Filename">
+            <summary>
+            The name of the file currently being processed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.EntryFilename">
+            <summary>
+            During zip file extraction, the entry inside the zip file being processed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.InstallStatus">
+            <summary>
+            The current status of the installer. Represents the current state of the installer. When it exists, it is also used as an exit code.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.AskCloseWoT">
+            <summary>
+            Interaction logic for AskCloseWoT.xaml
+            </summary>
+            <summary>
+            AskCloseWoT
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.AskCloseWoT.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.CreateFTPFolderName">
+            <summary>
+            Interaction logic for CreateFTPFolderName.xaml
+            </summary>
+            <summary>
+            CreateFTPFolderName
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.CreateFTPFolderName.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.DeveloperSelectionsViewer">
+            <summary>
+            Interaction logic for DeveloperSelectionsViewer.xaml
+            </summary>
+            <summary>
+            DeveloperSelectionsViewer
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.DeveloperSelectionsViewer.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.Diagnostics">
+            <summary>
+            Interaction logic for Diagnostics.xaml
+            </summary>
+            <summary>
+            Diagnostics
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.Diagnostics.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.EditorAddRemove">
+            <summary>
+            Interaction logic for EditorAddRemove.xaml
+            </summary>
+            <summary>
+            EditorAddRemove
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.EditorAddRemove.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.EditorSelectMediaUploadLocation">
+            <summary>
+            Interaction logic for EditorSelectMediaUploadLocation.xaml
+            </summary>
+            <summary>
+            EditorSelectMediaUploadLocation
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.EditorSelectMediaUploadLocation.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.ExceptionCaptureDisplay">
+            <summary>
+            Interaction logic for ExceptionCaptureDisplay.xaml
+            </summary>
+            <summary>
+            ExceptionCaptureDisplay
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ExceptionCaptureDisplay.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.ExportModeSelect">
+            <summary>
+            Interaction logic for ExportModeSelect.xaml
+            </summary>
+            <summary>
+            ExportModeSelect
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ExportModeSelect.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.FirstLoadAknowledgements">
+            <summary>
+            Interaction logic for FirstLoadAknowledgements.xaml
+            </summary>
+            <summary>
+            FirstLoadAknowledgements
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.FirstLoadAknowledgements.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.NewsViewer">
+            <summary>
+            Interaction logic for NewsViewer.xaml
+            </summary>
+            <summary>
+            NewsViewer
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.NewsViewer.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.AdvancedProgress">
+            I exist as a branch
+             <summary>
+             Interaction logic for Window1.xaml
+             </summary>
+            <summary>
+            AdvancedProgress
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.AdvancedProgress.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.AddPicturesZip">
+            <summary>
+            Interaction logic for AddPicturesZip.xaml
+            </summary>
+            <summary>
+            AddPicturesZip
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AddPicturesZip.FilesToAddList">
+            <summary>
+            FilesToAddList Name Field
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.AddPicturesZip.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.DatabaseEditor">
+            <summary>
+            Interaction logic for DatabaseEditor.xaml
+            </summary>
+            <summary>
+            DatabaseEditor
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.DatabaseEditor.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.DatabaseEditorDownload">
+            <summary>
+            Interaction logic for DatabaseEditorDownload.xaml
+            </summary>
+            <summary>
+            DatabaseEditorDownload
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.DatabaseEditorDownload.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.DatabaseUpdater">
+            <summary>
+            Interaction logic for DatabaseUpdater.xaml
+            </summary>
+            <summary>
+            DatabaseUpdater
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.DatabaseUpdater.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.InstallFinished">
+            <summary>
+            Interaction logic for InstallFinished.xaml
+            </summary>
+            <summary>
+            InstallFinished
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.InstallFinished.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.ModSelectionList">
+            <summary>
+            Interaction logic for ModSelectionList.xaml
+            </summary>
+            <summary>
+            ModSelectionList
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ModSelectionList.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.PatchTester">
+            <summary>
+            Interaction logic for PatchTester.xaml
+            </summary>
+            <summary>
+            PatchTester
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.PatchTester.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.Preview">
+            <summary>
+            Interaction logic for Preview.xaml
+            </summary>
+            <summary>
+            Preview
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.Preview.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.ProgressIndicator">
+            <summary>
+            Interaction logic for ProgressIndicator.xaml
+            </summary>
+            <summary>
+            ProgressIndicator
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ProgressIndicator.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.RelhaxWindow">
+            <summary>
+            Defines a window with translation and custom UI color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.RelhaxWindow.LocalizeWindow">
+            <summary>
+            Specifies if the window should have translatoin applied
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.RelhaxWindow.ApplyToolTips">
+            <summary>
+            Specified if the window should have tooltips applied
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxWindow.#ctor">
+            <summary>
+            Creates an instance of the RelhaxWindow class
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.VersionInfo">
+            <summary>
+            Interaction logic for VersionInfo.xaml
+            </summary>
+            <summary>
+            VersionInfo
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.VersionInfo.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.CiInfo">
+            <summary>Info about the continuous integration server build that produced this binary.</summary> 
+        </member>
+        <member name="F:RelhaxModpack.CiInfo.BuildTag">
+            <summary>String of the build number and build date/time, and other useful info.</summary> 
+        </member>
+        <member name="T:RelhaxModpack.Languages">
+            <summary>
+            List of all supported Languages in the modpack
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Languages.English">
+            <summary>
+            The English language
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Languages.German">
+            <summary>
+            The German language
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Languages.Polish">
+            <summary>
+            The Polish language
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Languages.French">
+            <summary>
+            The French language
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Translations">
+            <summary>
+            Handles all localization for the application User Interface
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Translations.SetLanguage(RelhaxModpack.Languages)">
+            <summary>
+            Sets the language dictionary to use when returning a localized string
+            </summary>
+            <param name="language">The language to switch to</param>
+        </member>
+        <member name="M:RelhaxModpack.Translations.SetLanguageOnFirstLoad">
+            <summary>
+            Change the language to the active language code installed on the computer, if we support
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Translations.GetTranslatedString(System.String)">
+            <summary>
+            Get a localized string in the currently selected language
+            </summary>
+            <param name="componentName">The key value of the string phrase</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Translations.LoadTranslations">
+            <summary>
+            Loads all translation dictionaries. Should only be done once (at application start)
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Translations.LocalizeWindow(System.Windows.Window,System.Boolean)">
+            <summary>
+            Applies localized text translations for the passed in window
+            See the comments in the method for more information
+            </summary>
+            <param name="window">The window to apply translations to</param>
+            <param name="applyToolTips">Set to true to seach and apply tooltips to the components</param>
+        </member>
+        <member name="T:RelhaxModpack.Utils">
+            <summary>
+            A utility class for static functions used in various places in the modpack
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetApplicationVersion">
+            <summary>
+            Return the entire assembely version
+            </summary>
+            <returns>The entire assembely version string (major, minor, build, revision)</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetCompileTime">
+            <summary>
+            Return the date and time in EN-US form, the time that the application was built
+            </summary>
+            <returns>the application build date and time in EN-US form</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetAllWindowComponentsVisual(System.Windows.Window,System.Boolean)">
+            <summary>
+            Get a list of all visual components in the window
+            </summary>
+            <param name="window">The window to get the list of</param>
+            <param name="includeWindow">if the list should include the window itself</param>
+            <returns>A list of type FrameowrkElement of all components</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.PointWithinScreen(System.Int32,System.Int32)">
+            <summary>Checks if a point is inside the possible monitor space</summary>
+            <param name="x">The x coordinate of the point</param>
+            <param name="y">The y coordinate of the point</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.PointWithinScreen(System.Drawing.Point)">
+            <summary>Checks if a point is inside the possible monitor space</summary>
+            <param name="p">The point to check</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.CreateMD5Hash(System.String)">
+            <summary>
+            Creates an MD5 hash calculation of the input file
+            </summary>
+            <param name="inputFile">The path to the file to calculate</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.CreateMD5HashAsync(System.String)">
+            <summary>
+            Creates an MD5 hash calculation of the input file
+            </summary>
+            <param name="inputFile">The path to the file to calculate</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetStringFromZip(System.String,System.String,System.String)">
+            <summary>
+            Gets a zip file entry in the form of a string
+            </summary>
+            <param name="zipFilename">The path to the file in the zip</param>
+            <param name="archivedFilename">the path to the zip file</param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetValidFilename(System.String)">
+            <summary>
+            Checks if a filename has invalid characters and replaces them with underscores
+            </summary>
+            <param name="fileName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.ParseBool(System.String,System.Boolean)">
+            <summary>
+            Try to parse a boolean value based on string input
+            </summary>
+            <param name="input">the string to try to parse</param>
+            <param name="defaultValue">the default value to use if parsing fails</param>
+            <returns>The bool value of the ipnut string, or the default value if parsing failes</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.ParseInt(System.String,System.Int32)">
+            <summary>
+            Try to parse an intiger value based on string input
+            </summary>
+            <param name="input">the string to try to parse</param>
+            <param name="defaultValue">the default value to use if parsing fails</param>
+            <returns>The int value of the ipnut string, or the default value if parsing failes</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.ParseFloat(System.String,System.Single)">
+            <summary>
+            Try to parse a float value based on string input
+            </summary>
+            <param name="input">the string to try to parse</param>
+            <param name="defaultValue">the default value to use if parsing fails</param>
+            <returns>The float value of the ipnut string, or the default value if parsing failes</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.BuildLinksRefrence(System.Collections.Generic.List{RelhaxModpack.Category},System.Boolean)">
+            <summary>
+            Links all the refrences (like parent, etc) for each class object making it possible to traverse the list tree in memory
+            </summary>
+            <param name="ParsedCategoryList">The List of categories</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.BuildLinksRefrence(RelhaxModpack.SelectablePackage,RelhaxModpack.Category,RelhaxModpack.SelectablePackage)">
+            <summary>
+            Links all the refrences (like parent, etc) for each class object making it possible to traverse the list tree in memory
+            </summary>
+            <param name="sp">The package to perform linking on</param>
+            <param name="cat">The category that the SelectablePackagesp belongs to</param>
+            <param name="parent">The tree parent of sp</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.RandomString(System.Int32)">
+            <summary>
+            https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings-in-c
+            </summary>
+            <param name="length"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.CompareVersions(System.String,System.String)">
+            <summary>
+            Compare versions of form "1,2,3,4" or "1.2.3.4". Throws FormatException
+            in case of invalid version. See function comments for more informations and samples.
+            </summary>
+            <param name="strA">the first version</param>
+            <param name="strB">the second version</param>
+            <returns>less than zero if strA is less than strB, equal to zero if
+            strA equals strB, and greater than zero if strA is greater than strB
+            Samples:
+            1.0.0.0     | 1.0.0.1 = -1
+            1.0.0.1     | 1.0.0.0 =  1
+            1.0.0.0     | 1.0.0.0 =  0
+            1, 0.0.0    | 1.0.0.0 =  0
+            9, 5, 1, 44 | 3.4.5.6 =  1
+            1, 5, 1, 44 | 3.4.5.6 = -1
+            6,5,4,3     | 6.5.4.3 =  0</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetCurrentUniversalFiletimeTimestamp">
+            <summary>
+            Gets the current time in the form of universal time
+            </summary>
+            <returns>the universal time of now</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.ConvertFiletimeTimestampToDate(System.Int64)">
+            <summary>
+            
+            </summary>
+            <param name="timestamp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.Base64Encode(System.String)">
+            <summary>
+            Encode a plain text string into base64 UTF8 encoding
+            </summary>
+            <param name="plainText">The plain text string</param>
+            <returns>The UTF8 base64 encoded version</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.Base64Decode(System.String)">
+            <summary>
+            Decode a base64 UTF8 encoded string into plain text
+            </summary>
+            <param name="base64EncodedData">The base64 stirng</param>
+            <returns>The plain text version</returns>
+        </member>
+        <member name="T:RelhaxModpack.XmlLoadType">
+            <summary>
+            Xml document load type enumeration
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.XmlLoadType.FromFile">
+            <summary>
+            loading xml from a file on disk
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.XmlLoadType.FromString">
+            <summary>
+            loading xml from a text string
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.XMLUtils">
+            <summary>
+            Utility class for all XML static methods
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.XMLUtils.IsValidXml(System.String)">
+            <summary>
+            check to make sure an xml file is valid
+            </summary>
+            <param name="filePath">The path to the xml file</param>
+            <returns>True if valid XML, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.XMLUtils.IsValidXml(System.String,System.String)">
+            <summary>
+            check to make sure an xml file is valid
+            </summary>
+            <param name="xmlString">The xml text string</param>
+            <param name="fileName">the name of the file, used for debugging purposes</param>
+            <returns>True if valid XML, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.XMLUtils.GetXMLStringFromXPath(System.String,System.String)">
+            <summary>
+            get an xml element attribute given an xml path
+            </summary>
+            <param name="file">The path to the XML file</param>
+            <param name="xpath">The xpath search string</param>
+            <returns>The value from the xpath search, otherwise null</returns>
+        </member>
+        <member name="M:RelhaxModpack.XMLUtils.GetXMLStringFromXPath(System.String,System.String,System.String)">
+            <summary>
+            get an xml element attribute given an xml path
+            </summary>
+            <param name="xmlString">The XML text string</param>
+            <param name="xpath">The xpath search string</param>
+            <param name="filename"></param>
+            <returns>The value from the xpath search, otherwise null</returns>
+        </member>
+        <member name="M:RelhaxModpack.XMLUtils.GetXMLStringFromXPath(System.Xml.XmlDocument,System.String)">
+            <summary>
+            get an xml element attribute given an xml path
+            </summary>
+            <param name="doc">The XML document object to check</param>
+            <param name="xpath">The xpath search string</param>
+            <returns>The value from the xpath search, otherwise null</returns>
+        </member>
+        <member name="T:RelhaxModpack.ReturnCodes">
+            <summary>
+            Application return error codes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ReturnCodes.Sucess">
+            <summary>
+            No error occured
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ReturnCodes.LogfileError">
+            <summary>
+            Error with logfile creation
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.ApplicationVersions">
+            <summary>
+            The build distribution version of the application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ApplicationVersions.Stable">
+            <summary>
+            The stable distribution for all users
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ApplicationVersions.Beta">
+            <summary>
+            The beta distrubution, for advanced users, may have new features or improvements, and bugs
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ApplicationVersions.Alpha">
+            <summary>
+            The alpha distribution. Should never be publicly distributed
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.App">
+            <summary>
+            Interaction logic for App.xaml
+            </summary>
+            <summary>
+            App
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.App.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.App.Main">
+            <summary>
+            Application Entry Point.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.MainWindow">
+            <summary>
+            Interaction logic for MainWindow.xaml
+            </summary>
+            <summary>
+            MainWindow
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.MainWindow.#ctor">
+            <summary>
+            Creates the instance of the MainWindow class
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.MainWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.dds_reader">
+             <summary>
+               Looks up a localized string similar to                   GNU LESSER GENERAL PUBLIC LICENSE
+                                   Version 2.1, February 1999
+            
+             Copyright (C) 1991, 1999 Free Software Foundation, Inc.
+             51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+             Everyone is permitted to copy and distribute verbatim copies
+             of this license document, but changing it is not allowed.
+            
+            (This is the first released version of the Lesser GPL.  It also counts
+             as the successor of the GNU Library Public License, version 2, hence
+             the version numb [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.discord_brand">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.donation">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.EMail">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.error_loading_picture">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.facebook_brand">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.flag_de">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.flag_gb">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.flag_us">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.grey_area_mod">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.Home">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.modpack_icon">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.modpack_license_agrement">
+             <summary>
+               Looks up a localized string similar to                                  Apache License
+                                       Version 2.0, January 2004
+                                    http://www.apache.org/licenses/
+            
+               TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+            
+               1. Definitions.
+            
+                  &quot;License&quot; shall mean the terms and conditions for use, reproduction,
+                  and distribution as defined by Sections 1 through 9 of this document.
+            
+                  &quot;Licensor&quot; shall mean the copyright owner or entity authorized by
+                  the copyright owner that is [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.NAudio1">
+             <summary>
+               Looks up a localized string similar to Microsoft Public License (Ms-PL)
+            
+            This license governs use of the accompanying software. If you use the software, you accept this license. If you do not accept the license, do not use the software.
+            
+            1. Definitions
+            
+            The terms &quot;reproduce,&quot; &quot;reproduction,&quot; &quot;derivative works,&quot; and &quot;distribution&quot; have the same meaning here as under U.S. copyright law.
+            
+            A &quot;contribution&quot; is the original software, or any additions or changes to the software.
+            
+            A &quot;contributor&quot; is any person that distributes its contribution [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.play_pause">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.popular_icon">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.report">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.SpriteSheetPacker">
+             <summary>
+               Looks up a localized string similar to Copyright (c) 2009-2010 Nick Gravelyn (nick@gravelyn.com), Markus Ewald (cygon@nuclex.org)
+            
+            Permission is hereby granted, free of charge, to any person obtaining a 
+            copy of this software and associated documentation files (the &quot;Software&quot;), 
+            to deal in the Software without restriction, including without limitation 
+            the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+            and/or sell copies of the Software, and to permit persons to whom the Software 
+            is furnished to do so, subject to t [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.stop2">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.TeximpNet">
+             <summary>
+               Looks up a localized string similar to Copyright (c) 2016-2018 TeximpNet - Nicholas Woodfield
+             
+            Permission is hereby granted, free of charge, to any person obtaining a copy
+            of this software and associated documentation files (the &quot;Software&quot;), to deal
+            in the Software without restriction, including without limitation the rights
+            to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+            copies of the Software, and to permit persons to whom the Software is
+            furnished to do so, subject to the following conditions:
+            
+            The above co [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.twitter_brand">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.WoT_brand_light_grey">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="T:XamlGeneratedNamespace.GeneratedInternalTypeHelper">
+            <summary>
+            GeneratedInternalTypeHelper
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
+            <summary>
+            CreateInstance
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            GetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            SetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
+            <summary>
+            CreateDelegate
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
+            <summary>
+            AddEventHandler
+            </summary>
+        </member>
+    </members>
+</doc>

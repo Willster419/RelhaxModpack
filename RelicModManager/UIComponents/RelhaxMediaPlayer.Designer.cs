@@ -17,6 +17,12 @@
             {
                 components.Dispose();
             }
+            //dispose of audio stuff
+            waveOutDevice.Dispose();
+            audioFileReader.Dispose();
+            client.Dispose();
+            audioStream.Dispose();
+
             base.Dispose(disposing);
         }
 

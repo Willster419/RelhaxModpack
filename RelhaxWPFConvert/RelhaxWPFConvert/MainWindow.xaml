@@ -5,45 +5,201 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxWPFConvert"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <ScrollViewer HorizontalScrollBarVisibility="Visible" MouseRightButtonUp="ScrollViewer_MouseRightButtonUp">
-    <Grid Background="#FF0C0CE6" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible">
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="200" Margin="10,10,0,0" VerticalAlignment="Top" Width="500">
-            <StackPanel>
-                <CheckBox Content="CheckBox"/>
-                <CheckBox Content="CheckBox"/>
-                <Border BorderBrush="Black" BorderThickness="2" Height="102" Padding="13,0,0,0">
-                    <StackPanel>
-                        <CheckBox Content="CheckBox"/>
-                        <CheckBox Content="CheckBox" HorizontalAlignment="Left"/>
-                        <ContentControl HorizontalAlignment="Left" MouseRightButtonUp="ContentControl_MouseRightButtonUp">
-                            <CheckBox Content="CheckBox" Foreground="BlanchedAlmond" HorizontalAlignment="Left" IsEnabled="False" MouseDown="CheckBox_MouseDown" PreviewMouseRightButtonDown="CheckBox_PreviewMouseRightButtonDown"/>
-                        </ContentControl>
-                            <ComboBox MaxWidth="200" HorizontalAlignment="Left" MinWidth="100"/>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
-        </Border>
-            <TreeView HorizontalAlignment="Left" Height="161" Margin="10,215,0,0" VerticalAlignment="Top" Width="500">
-                <TreeViewItem Header="" Padding="0" Margin="0" IsExpanded="True">
-                    <Border BorderBrush="Black" BorderThickness="1" Padding="0" Margin="-22,-15,0,0">
+        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
+    <TabControl x:Name="MainTab">
+        <TabItem Header="Scroll views">
+            <ScrollViewer HorizontalScrollBarVisibility="Visible" MouseRightButtonUp="ScrollViewer_MouseRightButtonUp">
+                <Grid x:Name="theGrid" Background="#FF0C0CE6" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible" PreviewMouseDown="Grid_PreviewMouseDown">
+                    <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="200" Margin="10,10,0,0" VerticalAlignment="Top" Width="500">
                         <StackPanel>
-                            <CheckBox Content="TEST"/>
-                            <CheckBox Content="TEST"/>
-                            <CheckBox Content="TEST"/>
-                            <TreeViewItem Header="" Padding="0" Margin="0" IsExpanded="True">
-                                <Border BorderBrush="Black" BorderThickness="1" Padding="0" Margin="-22,-15,0,0">
-                                    <StackPanel>
-                                        <CheckBox Content="TEST"/>
-                                        <CheckBox Content="TEST"/>
-                                        <CheckBox Content="TEST"/>
-                                    </StackPanel>
-                                </Border>
-                            </TreeViewItem>
+                            <CheckBox Content="CheckBox"/>
+                            <CheckBox Content="CheckBox"/>
+                            <Border BorderBrush="Black" BorderThickness="2" Height="102" Padding="13,0,0,0">
+                                <StackPanel>
+                                    <CheckBox Content="CheckBox"/>
+                                    <CheckBox Content="CheckBox" HorizontalAlignment="Left"/>
+                                    <ContentControl HorizontalAlignment="Left" MouseRightButtonUp="ContentControl_MouseRightButtonUp">
+                                        <CheckBox Content="CheckBox" Foreground="BlanchedAlmond" HorizontalAlignment="Left" IsEnabled="False" MouseDown="CheckBox_MouseDown" PreviewMouseRightButtonDown="CheckBox_PreviewMouseRightButtonDown"/>
+                                    </ContentControl>
+                                    <ComboBox MaxWidth="200" HorizontalAlignment="Left" MinWidth="100">
+                                        <ComboBoxItem Content="Item 1" PreviewMouseDown="ComboBoxItem_PreviewMouseDown"/>
+                                        <ComboBoxItem Content="Item 2" IsEnabled="False" PreviewMouseDown="ComboBoxItem_PreviewMouseDown"/>
+                                        <ComboBoxItem Content="Item 3"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </Border>
                         </StackPanel>
                     </Border>
-                </TreeViewItem>
-            </TreeView>
-        </Grid>
-    </ScrollViewer>
+                    <local:StretchingTreeView HorizontalAlignment="Left" Height="161" Margin="10,215,0,0" VerticalAlignment="Top" Width="500" HorizontalContentAlignment="Stretch">
+                        <local:StretchingTreeViewItem Header="UI COMPONENT" Padding="0" Margin="0" IsExpanded="True" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                            <Border BorderBrush="Black" BorderThickness="1" Padding="0" Margin="-22,0,0,0" HorizontalAlignment="Stretch">
+                                <StackPanel HorizontalAlignment="Stretch">
+                                    <CheckBox Content="TEST" HorizontalAlignment="Left"/>
+                                    <CheckBox Content="TEST"/>
+                                    <CheckBox Content="TEST"/>
+                                    <local:StretchingTreeViewItem Header="" Padding="0" Margin="0" IsExpanded="True">
+                                        <Border BorderBrush="Black" BorderThickness="1" Padding="0" Margin="-22,-15,0,0">
+                                            <StackPanel>
+                                                <CheckBox Content="TEST"/>
+                                                <CheckBox Content="TEST"/>
+                                                <CheckBox Content="TEST"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </local:StretchingTreeViewItem>
+                                </StackPanel>
+                            </Border>
+                        </local:StretchingTreeViewItem>
+                    </local:StretchingTreeView>
+                    <TreeView HorizontalAlignment="Left" Height="100" Margin="515,10,0,0" VerticalAlignment="Top" Width="159">
+                        <TreeViewItem x:Name="headerModifyTest" Header="Test"/>
+                    </TreeView>
+                    <ComboBox HorizontalAlignment="Left" Margin="515,140,0,0" VerticalAlignment="Top" Width="159">
+                        <local:MediaType>Picture</local:MediaType>
+                        <local:MediaType>Webpage</local:MediaType>
+                        <local:MediaType>HTML</local:MediaType>
+
+                    </ComboBox>
+                </Grid>
+            </ScrollViewer>
+        </TabItem>
+        <TabItem Header="Custom Tabviewer">
+            <TabControl HorizontalAlignment="Left" Height="100" Margin="515,10,0,0" VerticalAlignment="Top" Width="250">
+                <TabItem Header="TabItem1">
+                    <TabItem.Background>
+                        <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                            <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                            <GradientStop Color="#FFE5E5E5" Offset="1"/>
+                        </LinearGradientBrush>
+                    </TabItem.Background>
+                    <Grid Background="#FFE5E5E5"/>
+                </TabItem>
+                <TabItem Header="TabItem2" Background="#FF0C0CE6">
+                    <Grid Background="#FFE5E5E5"/>
+                </TabItem>
+            </TabControl>
+        </TabItem>
+        <TabItem Header="Advanced Progress Tests" >
+            <Grid Background="#FFE5E5E5">
+                <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                    <TabItem Header="TabItem">
+                        <Grid Background="#FFE5E5E5">
+                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="TextBlock2" VerticalAlignment="Top"/>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="TabItem">
+                        <Grid Background="#FFE5E5E5">
+                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="TextBlock1" VerticalAlignment="Top"/>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+                <ProgressBar Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Value="50"/>
+            </Grid>
+        </TabItem>
+        <TabItem Header="OMC TreeView Testing" >
+            <Grid Background="#FFE5E5E5">
+                <TreeView HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
+                    <TreeViewItem Header="" Padding="0" Margin="0" IsExpanded="True" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                        <Border BorderBrush="Black" BorderThickness="1" Padding="0" Margin="-22,-15,0,0" HorizontalAlignment="Stretch">
+                            <StackPanel HorizontalAlignment="Stretch">
+                                <CheckBox Content="TEST" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"/>
+                                <CheckBox Content="TEST"/>
+                                <CheckBox Content="TEST"/>
+                                <TreeViewItem Header="" Padding="0" Margin="0" IsExpanded="True">
+                                    <Border BorderBrush="Black" BorderThickness="1" Padding="0" Margin="-22,-15,0,0">
+                                        <StackPanel>
+                                            <CheckBox Content="TEST"/>
+                                            <CheckBox Content="TEST"/>
+                                            <CheckBox Content="TEST"/>
+                                        </StackPanel>
+                                    </Border>
+                                </TreeViewItem>
+                            </StackPanel>
+                        </Border>
+                    </TreeViewItem>
+                </TreeView>
+            </Grid>
+        </TabItem>
+        <TabItem Header="StretchingTreeView" >
+            <Grid Background="#FFE5E5E5">
+                <local:StretchingTreeView HorizontalAlignment="Stretch" >
+                    <local:StretchingTreeViewItem Header="Stuff" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" IsExpanded="True">
+                        <Grid HorizontalAlignment="Stretch" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0">Some random text</Label>
+                            <TextBox Grid.Column="1" ></TextBox>
+                        </Grid>
+                    </local:StretchingTreeViewItem>
+                </local:StretchingTreeView>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Other tests">
+            <Grid>
+                <GroupBox Header="Not blocking dialog issue" HorizontalAlignment="Left" Height="74" Margin="351,115,0,0" VerticalAlignment="Top" Width="205">
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <Button x:Name="DialogNotBlocksButton" Content="Not blocking" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Width="75" Click="DialogNotBlocksButton_Click"/>
+                        <TextBlock x:Name="IsDialogReturnedButton" HorizontalAlignment="Left" Margin="0,35,0,0" TextWrapping="Wrap" Text="The dialog has not returned" VerticalAlignment="Top" Width="155"/>
+                        <Button x:Name="DialogBlocksButton" Content="Blocking" HorizontalAlignment="Left" Margin="80,10,0,0" VerticalAlignment="Top" Width="75" Click="DialogBlocksButton_Click"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Checkbox tests" HorizontalAlignment="Left" Height="142" Margin="10,115,0,0" VerticalAlignment="Top" Width="336">
+                    <Grid >
+                        <CheckBox HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="You agree to the "/>
+                                <TextBlock><Hyperlink><Run Text="License Agreement"/></Hyperlink></TextBlock>
+                            </StackPanel>
+                        </CheckBox>
+                        <local:RelhaxCheckBox x:Name="testBox4" Content="Mod Name that is popular" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" PopularModVisability="Visible"/>
+                        <CheckBox x:Name="TestRedBox" Content="CheckBox" HorizontalAlignment="Left" Margin="10,51,0,0" VerticalAlignment="Top" IsEnabled="True"/>
+                        <local:RelhaxCheckBox x:Name="testBox1" Content="RelhaxCheckBox" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=TestRedBox}"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="DDS and Bitmap" HorizontalAlignment="Left" Height="84" Margin="561,75,0,0" VerticalAlignment="Top" Width="215">
+                    <Grid >
+                        <Button x:Name="DdsToBitmap" Content="DDS -&gt; Bitmap" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="96" Click="DdsToBitmap_Click"/>
+                        <Button x:Name="BitmapToDds" Content="Bitmap -&gt; DDS" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="96" Click="BitmapToDds_Click"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="NAudio" HorizontalAlignment="Left" Height="60" Margin="561,10,0,0" VerticalAlignment="Top" Width="215">
+                    <Grid >
+                        <Button x:Name="LoadNAudio" Content="Load N Audio" HorizontalAlignment="Left" VerticalAlignment="Top" Width="96" Click="LoadNAudio_Click" Margin="10,10,0,0"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Json Test" HorizontalAlignment="Left" Height="63" Margin="351,194,0,0" VerticalAlignment="Top" Width="205">
+                    <Grid>
+                        <Button x:Name="JsonTest" Content="Test Json" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="JsonTest_Click"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Task stuff" HorizontalAlignment="Left" Height="100" Margin="10,10,0,0" VerticalAlignment="Top" Width="546">
+                    <Grid >
+                        <Button x:Name="BackgroundTaskStartButton" Content="Start Async Background Task" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="165" Click="BackgroundTaskStartButton_Click"/>
+                        <TextBlock x:Name="BackgroundTaskReport" HorizontalAlignment="Left" Margin="10,35,0,0" TextWrapping="Wrap" Text="Task Not started" VerticalAlignment="Top" Width="165"/>
+                        <ProgressBar x:Name="BackgroundTaskProgress" HorizontalAlignment="Left" Height="16" Margin="10,56,0,0" VerticalAlignment="Top" Width="165" Value="0" Minimum="0" Maximum="10"/>
+                        <Button x:Name="ForgroundTaskStartButton" Content="Start Forground Task" HorizontalAlignment="Left" Margin="180,10,0,0" VerticalAlignment="Top" Width="165" Click="ForgroundTaskStartButton_Click"/>
+                        <TextBlock x:Name="ForgroundTaskReport" HorizontalAlignment="Left" Margin="180,35,0,0" TextWrapping="Wrap" Text="Task Not started" VerticalAlignment="Top" Width="165"/>
+                        <ProgressBar x:Name="ForgroundTaskProgress" HorizontalAlignment="Left" Height="16" Margin="180,56,0,0" VerticalAlignment="Top" Width="165" Value="0" Minimum="0" Maximum="10"/>
+                        <Button x:Name="HybridTaskStartButton" Content="Start Hybrid Task" HorizontalAlignment="Left" Margin="350,10,0,0" VerticalAlignment="Top" Width="165" Click="HybradTaskStartButton_Click"/>
+                        <TextBlock x:Name="HybridTaskReport" HorizontalAlignment="Left" Margin="350,35,0,0" TextWrapping="Wrap" Text="Task Not started" VerticalAlignment="Top" Width="165"/>
+                        <ProgressBar x:Name="HybridTaskProgress" HorizontalAlignment="Left" Height="16" Margin="350,56,0,0" VerticalAlignment="Top" Width="165" Value="0" Minimum="0" Maximum="10"/>
+
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Scaling Test" HorizontalAlignment="Left" Height="54" Margin="561,164,0,0" VerticalAlignment="Top" Width="215">
+                    <Button x:Name="ScallingTest" Content="1.5x scalling" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="ScallingTest_Click" >
+                    </Button>
+                </GroupBox>
+                <GroupBox Header="Task Cancel Stuff" x:Name="TaskCancelTestingGroupBox" HorizontalAlignment="Left" Height="102" Margin="561,223,0,0" VerticalAlignment="Top" Width="215">
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <TextBlock x:Name="TaskCancelTestingBlock" HorizontalAlignment="Left" Margin="10,32,0,0" TextWrapping="Wrap" Text="Task Not started" VerticalAlignment="Top" Width="183" />
+                        <Button x:Name="TaskCancelTestingButton" Content="Start Task" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="74" Height="20" Click="TaskCancelTestingButton_Click"/>
+                        <ProgressBar x:Name="TaskCancelTestingProgress" HorizontalAlignment="Left" Height="17" Margin="10,53,0,0" VerticalAlignment="Top" Width="183" Minimum="0" Value="0" Maximum="10"/>
+                        <Button x:Name="TaskCancelTestingCancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="89,10,0,0" VerticalAlignment="Top" Width="75" Click="TaskCancelTestingCancelButton_Click"/>
+                    </Grid>
+                </GroupBox>
+            </Grid>
+        </TabItem>
+    </TabControl>
 </Window>

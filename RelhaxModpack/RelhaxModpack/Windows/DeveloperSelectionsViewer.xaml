@@ -1,0 +1,18 @@
+﻿<local:RelhaxWindow x:Class="RelhaxModpack.Windows.DeveloperSelectionsViewer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RelhaxModpack.Windows"
+        mc:Ignorable="d"
+        Title="DeveloperSelectionsViewer" Height="300" Width="300" Loaded="OnApplicationLoading" Closed="OnApplicationClosed" MinWidth="300" MinHeight="300" LocalizeWindow="True">
+    <Grid>
+        <Button Tag="DeveloperSelectionsContinueButton" x:Name="DeveloperSelectionsContinueButton" Content="Select" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="ContinueButton_Click"/>
+        <Button Tag="DeveloperSelectionsCancelButton" x:Name="DeveloperSelectionsCancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75" Click="CancelButton_Click"/>
+        <Border Margin="10,31,10,35" BorderThickness="3" BorderBrush="Black">
+            <StackPanel x:Name="DeveloperSelectionsStackPanel" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        </Border>
+        <TextBlock Tag="DeveloperSelectionsTextHeader" x:Name="DeveloperSelectionsTextHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Selection to load" VerticalAlignment="Top" Margin="10,10,10,0" />
+        <Button Tag="DeveloperSelectionsLocalFile" x:Name="DeveloperSelectionsLocalFile" Content="Local file" HorizontalAlignment="Right" Margin="0,0,90,10" VerticalAlignment="Bottom" Width="78" Click="LocalFile_Click"/>
+    </Grid>
+</local:RelhaxWindow>

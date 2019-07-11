@@ -115,27 +115,27 @@ namespace RelhaxModpack
                 _Checked = value;
                 if(UIComponent != null)
                     UIComponent.OnCheckedChanged(value);
-                if ((Type.Equals("single_dropdown") || Type.Equals("single_dropdown1")) && Enabled)
+                int dropDownSelectionType = -1;
+                if (Type.Equals("single_dropdown") || Type.Equals("single_dropdown1"))
                 {
-                    switch(Settings.SView)
-                    {
-                        case SelectionView.Default:
-                            Parent.RelhaxFormComboBoxList[0].OnDropDownSelectionChanged(this, value);
-                            break;
-                        case SelectionView.DefaultV2:
-                            Parent.RelhaxWPFComboBoxList[0].OnDropDownSelectionChanged(this, value);
-                            break;
-                    }
+                    dropDownSelectionType = 0;
                 }
-                else if (Type.Equals("single_dropdown2") && Enabled)
+                else if (Type.Equals("single_dropdown2"))
+                {
+                    dropDownSelectionType = 1;
+                }
+                if (Enabled && dropDownSelectionType > -1)
                 {
                     switch (Settings.SView)
                     {
                         case SelectionView.Default:
-                            Parent.RelhaxFormComboBoxList[1].OnDropDownSelectionChanged(this, value);
+                            Parent.RelhaxFormComboBoxList[dropDownSelectionType].OnDropDownSelectionChanged(this, value);
                             break;
                         case SelectionView.DefaultV2:
-                            Parent.RelhaxWPFComboBoxList[1].OnDropDownSelectionChanged(this, value);
+                            Parent.RelhaxWPFComboBoxList[dropDownSelectionType].OnDropDownSelectionChanged(this, value);
+                            break;
+                        case SelectionView.Legacy:
+                            Parent.RelhaxWPFComboBoxList[dropDownSelectionType].OnDropDownSelectionChanged(this, value);
                             break;
                     }
                 }
@@ -160,6 +160,7 @@ namespace RelhaxModpack
                                         rucb.BackColor = Color.BlanchedAlmond;
                                         if (Settings.DarkUI)
                                             rucb.ForeColor = SystemColors.ControlText;
+                                        break;
                                     }
                                 }
                                 break;
@@ -171,6 +172,7 @@ namespace RelhaxModpack
                                     {
                                         ParentPanel.BackColor = Settings.GetBackColorWinForms();
                                     }
+                                    //special user CB code
                                     else if (UIComponent is RelhaxUserCheckBox rucb)
                                     {
                                         rucb.BackColor = Settings.GetBackColorWinForms();
@@ -178,8 +180,8 @@ namespace RelhaxModpack
                                         {
                                             rucb.ForeColor = Settings.GetTextColorWinForms();
                                         }
+                                        break;
                                     }
-
                                 }
                                 break;
                         }
@@ -189,11 +191,19 @@ namespace RelhaxModpack
                         {
                             case true:
                                 //handle color change code
-                                if (Settings.EnableBordersDefaultV2View)
+                                if (Settings.EnableColorChangeDefaultV2View)
                                 {
                                     if(ParentBorder != null && ParentBorder.Background != System.Windows.Media.Brushes.BlanchedAlmond)
                                     {
                                         ParentBorder.Background = System.Windows.Media.Brushes.BlanchedAlmond;
+                                    }
+                                    //special user CB code
+                                    else if (UIComponent is RelhaxUserCheckBox rucb)
+                                    {
+                                        rucb.BackColor = Color.BlanchedAlmond;
+                                        if (Settings.DarkUI)
+                                            rucb.ForeColor = SystemColors.ControlText;
+                                        break;
                                     }
                                     if (Settings.DarkUI)
                                     {
@@ -221,10 +231,20 @@ namespace RelhaxModpack
                                 break;
                             case false:
                                 //handle color change code
-                                if (Settings.EnableBordersDefaultV2View)
+                                if (Settings.EnableColorChangeDefaultV2View)
                                 {
                                     if (ParentBorder != null && !AnyPackagesChecked())
                                         ParentBorder.Background = Settings.GetBackColorWPF();
+                                    //special user CB code
+                                    else if (UIComponent is RelhaxUserCheckBox rucb)
+                                    {
+                                        rucb.BackColor = Settings.GetBackColorWinForms();
+                                        if (Settings.DarkUI)
+                                        {
+                                            rucb.ForeColor = Settings.GetTextColorWinForms();
+                                        }
+                                        break;
+                                    }
                                     if (Settings.DarkUI)
                                     {
                                         //need to go through every contentpresenter of a stackpanel and parse
@@ -270,6 +290,14 @@ namespace RelhaxModpack
                                     {
                                         ParentBorder.Background = System.Windows.Media.Brushes.BlanchedAlmond;
                                     }
+                                    //special user CB code
+                                    else if (UIComponent is RelhaxUserCheckBox rucb)
+                                    {
+                                        rucb.BackColor = Color.BlanchedAlmond;
+                                        if (Settings.DarkUI)
+                                            rucb.ForeColor = SystemColors.ControlText;
+                                        break;
+                                    }
                                     else if (Level == -1 && TreeView.Background != System.Windows.Media.Brushes.BlanchedAlmond)
                                     {
                                         TreeView.Background = System.Windows.Media.Brushes.BlanchedAlmond;
@@ -300,6 +328,16 @@ namespace RelhaxModpack
                                     if (ParentBorder != null && !AnyPackagesChecked())
                                     {
                                         ParentBorder.Background = Settings.GetBackColorWPF();
+                                    }
+                                    //special user CB code
+                                    else if (UIComponent is RelhaxUserCheckBox rucb)
+                                    {
+                                        rucb.BackColor = Settings.GetBackColorWinForms();
+                                        if (Settings.DarkUI)
+                                        {
+                                            rucb.ForeColor = Settings.GetTextColorWinForms();
+                                        }
+                                        break;
                                     }
                                     else if (Level == -1 && !AnyPackagesChecked())
                                     {
@@ -482,6 +520,10 @@ namespace RelhaxModpack
         /// <returns>True if another package at this level is checked and enabled, false otherwise</returns>
         public bool AnyPackagesChecked()
         {
+            if (Parent == null)
+                return false;
+            if (Parent.Packages.Count == 0)
+                return false;
             foreach (SelectablePackage sp in Parent.Packages)
             {
                 if (sp.Enabled && sp.Checked)

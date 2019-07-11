@@ -30,9 +30,10 @@ namespace RelhaxModpack
             SelectionRadioButton b = new SelectionRadioButton
             {
                 XMLURL = "localFile",
-                Text = Translations.GetTranslatedString("localFile")
+                Text = Translations.GetTranslatedString("localFile"),
+                AutoSize = true
             };
-            b.Location = new Point(6, (SelectConfigPanel.Controls.Count * (b.Size.Height-3)));
+            b.Location = new Point(6, GetYLocation(SelectConfigPanel.Controls));
             SelectConfigPanel.Controls.Add(b);
 
             foreach (var node in XMLUtils.developerSelections)
@@ -40,9 +41,10 @@ namespace RelhaxModpack
                 SelectionRadioButton bb = new SelectionRadioButton
                 {
                     XMLURL = node.internalName,
-                    Text = node.displayName
+                    Text = node.displayName,
+                    AutoSize = true
                 };
-                bb.Location = new Point(6, (SelectConfigPanel.Controls.Count * (b.Size.Height-3)));
+                bb.Location = new Point(6, GetYLocation(SelectConfigPanel.Controls));
                 // add ToolTip to the develeopersSelections
                 ToolTip rbToolTip = new ToolTip
                 {
@@ -102,6 +104,21 @@ namespace RelhaxModpack
                 }
             }
             return "-1";
+        }
+
+        //method for finding the location of which to put a control
+        private int GetYLocation(Control.ControlCollection ctrl)
+        {
+            //initial padding
+            int y = 2;
+            //only look for the dropDown menu options or checkboxes
+            foreach (SelectionRadioButton c in ctrl)
+            {
+                y += c.Size.Height;
+                //spacing
+                y += 2;
+            }
+            return y;
         }
     }
 }

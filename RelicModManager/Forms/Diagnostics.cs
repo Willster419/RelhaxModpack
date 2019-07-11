@@ -64,13 +64,17 @@ namespace RelhaxModpack
                 string newZipFileName = "";
                 try
                 {
-                    string RelHaxLogPath = Path.Combine(AppStartupPath, "RelHaxLog.txt");
-                    string LastInstalledConfig = Path.Combine(AppStartupPath, "RelHaxUserConfigs", "lastInstalledConfig.xml");
-                    string InstalledRelhaxFiles = Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log");
-                    string UninstalledRelhaxFiles = Path.Combine(TanksLocation, "logs", "uninstall.log");
-                    string PythonLog = Path.Combine(TanksLocation, "python.log");
-                    string SelectionXMlFile = "";
-                    List<string> filesToCollect = new List<string>(){ RelHaxLogPath, InstalledRelhaxFiles, UninstalledRelhaxFiles, PythonLog, SelectionXMlFile, LastInstalledConfig };
+                    List<string> filesToCollect = new List<string>()
+                    {
+                        Path.Combine(AppStartupPath, "RelHaxLog.txt"),
+                        Path.Combine(AppStartupPath, "RelHaxUserConfigs", "lastInstalledConfig.xml"),
+                        Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"),
+                        Path.Combine(TanksLocation, "logs", "uninstall.log"),
+                        Path.Combine(AppStartupPath, "RelHaxSettings.xml"),
+                        Path.Combine(TanksLocation, "python.log"),
+                        Path.Combine(TanksLocation, "xvm.log"),
+                        Path.Combine(TanksLocation, "pmod.log")
+                    };
                     using (AddPicturesZip apz = new AddPicturesZip()
                     {
                         AppStartupPath = this.AppStartupPath
@@ -87,7 +91,7 @@ namespace RelhaxModpack
                     }
                     foreach(string s in filesToCollect)
                     {
-                        if (s.Equals(""))
+                        if (string.IsNullOrWhiteSpace(s))
                             continue;
                         //verify that it's not already in there but from a different folder
                         int dupCunter = 0;
@@ -101,10 +105,11 @@ namespace RelhaxModpack
                         {
                             ZipEntry entry = zip.AddFile(s);
                             entry.FileName = nameInZipFile;
+                            Logging.Manager("file " + s + " added to debug zip file");
                         }
                         else
                         {
-                            Logging.Manager("WARNING: file " + s + " does not exist!");
+                            Logging.Manager("file " + s + " skipped, does not exist");
                         }
                     }
                     newZipFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "RelhaxModpackLogs_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".zip");

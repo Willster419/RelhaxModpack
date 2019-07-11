@@ -1,0 +1,27 @@
+﻿<local:RelhaxWindow x:Name="Advanced_Installer_Progress"
+        x:Class="RelhaxModpack.Windows.AdvancedProgress"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RelhaxModpack.Windows"
+        xmlns:user="clr-namespace:RelhaxModpack.UIComponents"
+        mc:Ignorable="d"
+        Title="Advanced Installer Progress" Height="600" Width="400">
+    <Grid Background="#FFE5E5E5" x:Name="MainGrid" Tag="MainGrid">
+        <TabControl x:Name="MainTabControl">
+            <TabItem Header="Pre-install Tasks" x:Name="PreInstallTab">
+                <StackPanel Background="#FFE5E5E5" x:Name="PreInstallPanel">
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Extraction" x:Name="ExtractionTab">
+                <StackPanel Background="#FFE5E5E5" x:Name="ExtractionPanel"/>
+            </TabItem>
+            <TabItem Header="Post-install tasks" x:Name="PostInstallTab">
+                <StackPanel Background="#FFE5E5E5" x:Name="PostInstallPanel">
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</local:RelhaxWindow>

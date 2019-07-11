@@ -1,0 +1,83 @@
+﻿using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+
+namespace RelhaxModpack.Windows
+{
+    /// <summary>
+    /// Interaction logic for AddPicturesZip.xaml
+    /// </summary>
+    public partial class AddPicturesZip : RelhaxWindow
+    {
+        public AddPicturesZip()
+        {
+            InitializeComponent();
+        }
+
+        public List<string> filesToAddalways;
+
+        private void AddFilesButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog()
+            {
+                Filter = string.Format("{0}|*.*", Translations.GetTranslatedString("allFiles")),
+                Title = Translations.GetTranslatedString("selectFilesToInclude"),
+                Multiselect = true
+            };
+            if((bool)dialog.ShowDialog())
+                foreach (string s in dialog.FileNames)
+                    //probably don't need it, but just to be safe i guess
+                    if(File.Exists(s))
+                        FilesToAddList.Items.Add(s);
+        }
+
+        private void RemoveSelectedButton_Click(object sender, RoutedEventArgs e)
+        {
+            for (int i = 0; i < FilesToAddList.SelectedItems.Count; i++)
+            {
+                if (filesToAddalways.Contains(FilesToAddList.SelectedItems[i]))
+                    MessageBox.Show("CantRemoveDefaultFile");
+                else
+                {
+                    FilesToAddList.Items.Remove(FilesToAddList.SelectedItems[i]);
+                    i--;
+                }
+            }
+        }
+
+        private void ContinueButton_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
+            Close();
+        }
+
+        private void FilesToAddList_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effects = DragDropEffects.Copy;
+        }
+
+        private void FilesToAddList_Drop(object sender, DragEventArgs e)
+        {
+            //https://stackoverflow.com/questions/21706747/drag-and-drop-files-into-my-listbox
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            foreach (string file in files)
+            {
+                if (!FilesToAddList.Items.Contains(file))
+                    FilesToAddList.Items.Add(file);
+            }
+        }
+    }
+}

@@ -545,19 +545,15 @@ namespace RelhaxModpack
                 }
                 UserMods[i].Enabled = true;
                 UserPackage.Enabled = true;
+                //add internal database refrences
                 UserMods[i].UIComponent = UserPackage;
                 UserMods[i].ParentUIComponent = UserPackage;
                 UserMods[i].TopParentUIComponent = UserPackage;
+                //add UI refrence based on type of view
                 UserPackage.Click += OnMultiPackageClick;
                 tb.Controls.Add(UserPackage);
             }
             modTabGroups.TabPages.Add(tb);
-        }
-
-        private void UserPackage_CheckedChanged(object sender, EventArgs e)
-        {
-            RelhaxUserCheckBox cb = (RelhaxUserCheckBox)sender;
-            cb.Package.Checked = cb.Checked;
         }
 
         private void FinishLoad()
@@ -729,6 +725,9 @@ namespace RelhaxModpack
                     }
                     sp.ParentPanel = sp.Parent.ChildPanel;
                     //end code for dealing with panels
+                    //escape the "&" symbol for winforms
+                    //https://stackoverflow.com/questions/4325094/enter-symbol-into-a-text-label-in-windows-forms
+                    packageDisplayName = packageDisplayName.Replace(@"&", @"&&");
                     switch (sp.Type)
                     {
                         case "single":
@@ -760,7 +759,7 @@ namespace RelhaxModpack
                                     Enabled = false,
                                     Name = "notAddedYet",
                                     DropDownStyle = ComboBoxStyle.DropDownList,
-                                    ForeColor = Settings.GetTextColorWinForms()
+                                    ForeColor = SystemColors.ControlText
                                 };
                                 //https://stackoverflow.com/questions/1882993/c-sharp-how-do-i-prevent-mousewheel-scrolling-in-my-combobox
                                 sp.Parent.RelhaxFormComboBoxList[0].MouseWheel += (o, e) => ((HandledMouseEventArgs)e).Handled = true;
@@ -941,6 +940,7 @@ namespace RelhaxModpack
                             {
                                 sp.Parent.RelhaxWPFComboBoxList[0].Name = "added";
                                 sp.Parent.RelhaxWPFComboBoxList[0].PreviewMouseRightButtonDown += Generic_MouseDown;
+                                sp.Parent.RelhaxWPFComboBoxList[0].DropDownClosed += DropDownHotfix;
                                 sp.Parent.RelhaxWPFComboBoxList[0].SelectionChanged += OnSingleDDPackageClick;
                                 sp.Parent.RelhaxWPFComboBoxList[0].handler = OnSingleDDPackageClick;
                                 //ADD HANDLER HERE
@@ -983,6 +983,7 @@ namespace RelhaxModpack
                                 sp.Parent.RelhaxWPFComboBoxList[1].Name = "added";
                                 sp.Parent.RelhaxWPFComboBoxList[1].PreviewMouseRightButtonDown += Generic_MouseDown;
                                 sp.Parent.RelhaxWPFComboBoxList[1].SelectionChanged += OnSingleDDPackageClick;
+                                sp.Parent.RelhaxWPFComboBoxList[1].DropDownClosed += DropDownHotfix;
                                 sp.Parent.RelhaxWPFComboBoxList[1].handler = OnSingleDDPackageClick;
                                 //ADD HANDLER HERE
                                 if (sp.Parent.RelhaxWPFComboBoxList[1].Items.Count > 0)
@@ -1112,6 +1113,7 @@ namespace RelhaxModpack
                                 sp.Parent.RelhaxWPFComboBoxList[0].Name = "added";
                                 sp.Parent.RelhaxWPFComboBoxList[0].PreviewMouseRightButtonDown += Generic_MouseDown;
                                 sp.Parent.RelhaxWPFComboBoxList[0].SelectionChanged += OnSingleDDPackageClick;
+                                sp.Parent.RelhaxWPFComboBoxList[0].DropDownClosed += DropDownHotfix;
                                 sp.Parent.RelhaxWPFComboBoxList[0].handler = OnSingleDDPackageClick;
                                 //ADD HANDLER HERE
                                 if (sp.Parent.RelhaxWPFComboBoxList[0].Items.Count > 0)
@@ -1151,6 +1153,7 @@ namespace RelhaxModpack
                                 sp.Parent.RelhaxWPFComboBoxList[1].Name = "added";
                                 sp.Parent.RelhaxWPFComboBoxList[1].PreviewMouseRightButtonDown += Generic_MouseDown;
                                 sp.Parent.RelhaxWPFComboBoxList[1].SelectionChanged += OnSingleDDPackageClick;
+                                sp.Parent.RelhaxWPFComboBoxList[1].DropDownClosed += DropDownHotfix;
                                 sp.Parent.RelhaxWPFComboBoxList[1].handler = OnSingleDDPackageClick;
                                 //ADD HANDLER HERE
                                 if (sp.Parent.RelhaxWPFComboBoxList[1].Items.Count > 0)
@@ -1224,6 +1227,23 @@ namespace RelhaxModpack
                 foreach(SelectablePackage sp2 in sp.Packages)
                 {
                     AddPackage(sp2, c, sp);
+                }
+            }
+        }
+        //https://stackoverflow.com/questions/25763954/event-when-combobox-is-selected
+        private void DropDownHotfix(object sender, EventArgs e)
+        {
+            if (LoadingConfig || IgnoreSearchBoxFocus)
+                return;
+            IPackageUIComponent ipc = (IPackageUIComponent)sender;
+            SelectablePackage spc = null;
+            if (ipc is RelhaxWPFComboBox cb2)
+            {
+                ComboBoxItem cbi = (ComboBoxItem)cb2.SelectedItem;
+                spc = cbi.Package;
+                if(!spc.Checked && spc.Enabled && cb2.SelectedIndex == 0)
+                {
+                    OnSingleDDPackageClick(sender, e);
                 }
             }
         }
@@ -1307,7 +1327,8 @@ namespace RelhaxModpack
                 //uncheck all packages of the same type
                 if(childPackage.Type.Equals(spc.Type))
                 {
-                    childPackage.Checked = false;
+                    if(childPackage.Checked)
+                        childPackage.Checked = false;
                 }
             }
             //verify selected is actually checked

@@ -445,15 +445,22 @@ namespace RelhaxModpack
                 List<string> folder = new List<string> { "_readme", "_patch", "_shortcuts", "_xmlUnPack", "_atlases", "_fonts" };
                 foreach (string f in folder)
                 {
-                    try
+                    int strikes = 0;
+                    while (strikes <= 3)
                     {
-                        if (Directory.Exists(Path.Combine(TanksLocation, f)))
-                            Directory.Delete(Path.Combine(TanksLocation, f), true);
-                    }
-                    catch (Exception ex)
-                    {
-                        ex = ex.GetBaseException();
-                        Logging.Manager(string.Format("error at folder delete: {0} ({1})", f, ex.Message));
+                        try
+                        {
+                            System.Threading.Thread.Sleep(100);
+                            if (Directory.Exists(Path.Combine(TanksLocation, f)))
+                                Directory.Delete(Path.Combine(TanksLocation, f), true);
+                            strikes = 4;
+                        }
+                        catch (Exception ex)
+                        {
+                            ex = ex.GetBaseException();
+                            Logging.Manager(string.Format("error at folder delete (try {0} of {1}: {2} ({3})", strikes, 3, f, ex.Message));
+                            strikes++;
+                        }
                     }
                 }
             }
@@ -463,18 +470,6 @@ namespace RelhaxModpack
             Logging.Manager("Recorded time after extraction (msec): " + afterExtraction);
             long totalExtraction = beforeExtraction + duringExtraction + afterExtraction;
             Logging.Manager("Total recorded install time (msec): " + totalExtraction);
-            if (Settings.ShowInstallCompleteWindow)
-            {
-                using (InstallFinished IF = new InstallFinished(TanksLocation))
-                {
-                    System.Media.SystemSounds.Beep.Play();
-                    IF.ShowDialog();
-                }
-            }
-            else
-            {
-                MessageBox.Show(Translations.GetTranslatedString("installationFinished"), Translations.GetTranslatedString("information"), MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
         }
 
         
@@ -1963,6 +1958,8 @@ namespace RelhaxModpack
                     return;
                 }
                 string[] fonts = Directory.GetFiles(Path.Combine(TanksLocation, "_fonts"), @"*.*",System.IO.SearchOption.TopDirectoryOnly);
+                //filter out fontReg
+                fonts = fonts.Where(filename => !filename.Contains(".exe")).ToArray();
                 if (fonts.Count() == 0)
                 {
                     //done display
@@ -1970,16 +1967,14 @@ namespace RelhaxModpack
                     return;
                 }
                 //load fonts and move names to a list
-                List<String> fontsList = new List<string>();
+                List<string> fontsList = new List<string>();
                 foreach (string s in fonts)
                 {
-                    //load the font into a temporoary not loaded font collection
+                    //load the font into a temporary not loaded font collection
                     fontsList.Add(Path.GetFileName(s));
                 }
                 try
                 {
-
-
                     //removes any already installed fonts
                     for (int i = 0; i < fontsList.Count; i++)
                     {
@@ -2019,32 +2014,14 @@ namespace RelhaxModpack
                     }
                     if (dr == DialogResult.Yes)
                     {
-
                         string fontRegPath = Path.Combine(TanksLocation, "_fonts", "FontReg.exe");
+                        //if fontReg doesn't already exist, then something has gone wrong
                         if (!File.Exists(fontRegPath))
                         {
-                            if (!Program.testMode)                  // if not in testMode, the managerInfoDatFile was downloaded
-                            {
-                                //get fontreg from the zip file
-                                using (ZipFile zip = new ZipFile(Settings.ManagerInfoDatFile))
-                                {
-                                    zip.ExtractSelectedEntries("FontReg.exe", null, Path.GetDirectoryName(fontRegPath));
-                                }
-                            }
-                            else
-                            {
-                                // in testMode, the managerInfoDatFile was NOT downloaded and that have to be done now
-                                try
-                                {
-                                    using (WebClient downloader = new WebClient())
-                                    downloader.DownloadFile("http://wotmods.relhaxmodpack.com/RelhaxModpack/Resources/external/FontReg.exe", fontRegPath);
-                                }
-                                catch (WebException ex)
-                                {
-                                    Utils.ExceptionLog("InstallFonts()", "download FontReg.exe", ex);
-                                    MessageBox.Show(string.Format("{0} FontReg.exe", Translations.GetTranslatedString("failedToDownload_1")));
-                                }
-                            }
+                            Logging.Manager("ERROR: fontReg.exe was not found in the _fonts folder!");
+                            MessageBox.Show(string.Format("{0}{1}{2}{3}{4}",Translations.GetTranslatedString("fontsPromptError_1"), Environment.NewLine,
+                                TanksLocation, Environment.NewLine, Translations.GetTranslatedString("fontsPromptError_2")));
+                            return;
                         }
                         ProcessStartInfo info = new ProcessStartInfo
                         {
@@ -2067,7 +2044,8 @@ namespace RelhaxModpack
                         catch (Exception e)
                         {
                             Utils.ExceptionLog("InstallFonts", "could not start font installer", e);
-                            MessageBox.Show(Translations.GetTranslatedString("fontsPromptError_1") + TanksLocation + Translations.GetTranslatedString("fontsPromptError_2"));
+                            MessageBox.Show(string.Format("{0}{1}{2}{3}{4}", Translations.GetTranslatedString("fontsPromptError_1"), Environment.NewLine,
+                                TanksLocation, Environment.NewLine, Translations.GetTranslatedString("fontsPromptError_2")));
                             Logging.Manager("Installation done, but fonts install failed");
                             return;
                         }

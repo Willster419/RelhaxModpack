@@ -1,0 +1,62 @@
+﻿<local:RelhaxWindow x:Class="RelhaxModpack.Windows.FirstLoadAknowledgements"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RelhaxModpack.Windows"
+        mc:Ignorable="d"
+        Title="First Load Aknowledgements" Height="235" Width="600" ResizeMode="NoResize" Loaded="RelhaxWindow_Loaded">
+
+
+    <Grid>
+
+        <StackPanel>
+            
+            <CheckBox x:Name="license_Agree" HorizontalAlignment="Stretch" Margin="10,10,10,0" VerticalAlignment="Top" Click="CheckForContinueButton">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                    <TextBlock x:Name="AgreementLicense" TextWrapping="Wrap" Text="You have read and agree to the "/>
+                    
+                    <TextBlock>
+                        <Hyperlink x:Name="LicenseLink" NavigateUri="https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/LICENSE" RequestNavigate="Link_RequestNavigate">License Agreement</Hyperlink>
+                    </TextBlock>
+                    
+                </StackPanel>
+            </CheckBox>
+
+            <CheckBox HorizontalAlignment="Stretch"  VerticalAlignment="Top" Margin="10,10,10,0" x:Name="support" Click="CheckForContinueButton">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                    <TextBlock x:Name="agreement_Support" TextWrapping="Wrap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Text="If you need support you can either visit our "/>
+
+                    <TextBlock Width="43" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                        <Hyperlink x:Name="AgreementSupportForums" NavigateUri="https://forums.relhaxmodpack.com/index.php?board=6.0" RequestNavigate="Link_RequestNavigate">Forums</Hyperlink>
+                    </TextBlock>
+
+                    <TextBlock x:Name="AgreementSupport2" Text="or our " VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+
+                    <TextBlock VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                        <Hyperlink x:Name="AgreementSupportDiscord" NavigateUri="https://discord.gg/eURMQ2Y" RequestNavigate="Link_RequestNavigate">Discord.</Hyperlink>
+                    </TextBlock>
+                </StackPanel>
+            </CheckBox>
+
+            <CheckBox HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="10,10,10,0" x:Name="mod_hoster" Click="CheckForContinueButton">
+                <TextBlock x:Name="agreement_Hoster" TextWrapping="Wrap"   VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                 Text="I understand Relhax is a mod hoster and installation service and Relhax does not maintain every mod found in this Modpack" >
+                </TextBlock>
+            </CheckBox>
+
+            <CheckBox HorizontalAlignment="Stretch" Margin="10,10,10,0" VerticalAlignment="Top"  x:Name="collect_stats" Click="CheckForContinueButton">
+                <TextBlock x:Name="agreement_Anon_Data" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="I understand that Relhax V2 collects anonymous usage data to improve the application, and can be disabled in the advanced settings tab" />
+            </CheckBox>
+
+            <TextBlock x:Name="v2_upgrade_notice_text" TextWrapping="Wrap" HorizontalAlignment="Stretch" Padding="20,5,0,0"
+                 Text="It looks like you are running an upgrade from V1 to V2 for the first time. Pressing continue will result in an upgrade to file structure that cannot be reverted. It is recommended to make a backup of your V1 folder before continuing." Margin="10,0" Foreground="Red" Visibility="Hidden"  >
+            </TextBlock>
+
+        </StackPanel>
+
+
+        <Button Content="Continue" Tag="continue_Button" x:Name="continue_Button" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="99" IsEnabled="False" Click="Continue_Button_Click"/>
+
+    </Grid>
+</local:RelhaxWindow>

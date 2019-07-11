@@ -1,0 +1,215 @@
+﻿<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:RelhaxModpack"
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
+    xmlns:uicomponents="clr-namespace:RelhaxModpack.UIComponents" x:Name="TheMainWindow" x:Class="RelhaxModpack.MainWindow"
+    mc:Ignorable="d"
+    Title="Relhax" Height="675" Width="550" ResizeMode="CanMinimize"
+    Loaded="TheMainWindow_Loaded"
+    Closing="TheMainWindow_Closing"
+    Icon="Resources/modpack_icon.ico">
+    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+        <Grid.Background>
+            <ImageBrush ImageSource="Resources/Images/WoT brand light grey.png"/>
+        </Grid.Background>
+        <Grid HorizontalAlignment="Stretch" Height="66" Margin="10,10,10,0" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Grid.Row="0" Margin="2" Content="Install" Tag="InstallModpackButton" x:Name="InstallModpackButton" Click="InstallModpackButton_Click"/>
+            <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Grid.Row="1" Margin="2" Content="Uninstall" Tag="UninstallModpackButton" x:Name="UninstallModpackButton" Click="UninstallModpackButton_Click"/>
+            <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="2" Margin="2" Content="View News" Tag="ViewNewsButton" x:Name="ViewNewsButton" Click="ViewNewsButton_Click"/>
+            <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Margin="2" Content="Diagnostic Utilities" Tag="DiagnosticUtilitiesButton" x:Name="DiagnosticUtilitiesButton" Click="DiagnosticUtilitiesButton_Click"/>
+        </Grid>
+        <TabControl HorizontalAlignment="Stretch" Height="254" Margin="12,81,12,0" VerticalAlignment="Top" Background="#7FE5E5E5">
+            <TabItem Header="Intro" x:Name="SettingsTabIntro" Tag="SettingsTabIntro" Background="#7FE5E5E5">
+                <Grid Background="#7FE5E5E5">
+                    <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="TODO: some sort of documentation..." VerticalAlignment="Top"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Selection View" x:Name="SettingsTabSelectionView" Tag="SettingsTabSelectionView" Background="#7FE5E5E5">
+                <Grid Background="#7FE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <RadioButton Tag="SelectionDefault" x:Name="SelectionDefault" Content="Default" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="OnSelectionViewChanged"/>
+                    <CheckBox Tag="EnableBordersDefaultV2CB" x:Name="EnableBordersDefaultV2CB" Content="Enable Borders" Grid.Column="0" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Click="OnDefaultBordersV2Changed"/>
+                    <CheckBox Tag="EnableColorChangeDefaultV2CB" x:Name="EnableColorChangeDefaultV2CB" Content="Enable Color Change" Grid.Column="0" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Click="OnDefaultSelectColorChanged"/>
+                    <RadioButton Tag="SelectionLegacy" x:Name="SelectionLegacy" Content="Legacy" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Click="OnSelectionViewChanged" />
+                    <CheckBox Tag="EnableBordersLegacyCB" x:Name="EnableBordersLegacyCB" Content="Enable Borders" Grid.Column="1" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Click="OnLegacyBordersChanged"/>
+                    <CheckBox Tag="EnableColorChangeLegacyCB" x:Name="EnableColorChangeLegacyCB" Content="Enable Color Change" Grid.Column="1" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Click="OnLegacySelectColorChenged"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Installation Settings" x:Name="SettingsTabInstallationSettings" Tag="SettingsTabInstallationSettings" Background="#7FE5E5E5">
+                <Grid Background="#7FE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <CheckBox Content="Clean installation (Recommended)" Tag="CleanInstallCB" x:Name="CleanInstallCB" Click="OnCleanInstallChanged"/>
+                        <CheckBox Content="Clear log files" Tag="ClearLogFilesCB" x:Name="ClearLogFilesCB" Click="OnClearLogFilesChanged"/>
+                        <CheckBox Content="Clear WoT cache data" Tag="ClearCacheCB" x:Name="ClearCacheCB" Click="OnClearWoTCacheChanged"/>
+                        <CheckBox Content="Save user created data" Tag="SaveUserDataCB" x:Name="SaveUserDataCB" Click="OnSaveUserDataChanged"/>
+                        <CheckBox Content="Create shortcuts" Tag="CreateShortcutsCB" x:Name="CreateShortcutsCB" Click="OnCreateShortcutsChanged"/>
+                        <CheckBox Content="Multicore extraction mode" IsEnabled="True" Tag="MulticoreExtractionCB" x:Name="MulticoreExtractionCB" Click="OnMulticoreExtractionChanged"/>
+                        <TextBlock Text="Detected Cores: {0}" Tag="MulticoreExtractionCoresCountLabel" x:Name="MulticoreExtractionCoresCountLabel" IsEnabled="True" Padding="20,0,0,0"/>
+                        <CheckBox Content="Extract while downloading" IsEnabled="True" Tag="InstallWhileDownloadingCB" x:Name="InstallWhileDownloadingCB" Click="OnImmidateExtarctionChanged"/>
+                        <CheckBox x:Name="DeleteOldCacheFiles" Content="Delete old cache files" Tag="DeleteOldCacheFiles" Click="DeleteOldCacheFiles_Click"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Application Settings" x:Name="SettingsTabApplicationSettings" Tag="SettingsTabApplicationSettings" Background="#7FE5E5E5">
+                <Grid Background="#7FE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <CheckBox Content="Save mod selection of last installation" Tag="SaveLastInstallCB" x:Name="SaveLastInstallCB" Click="OnSaveLastInstallChanged"/>
+                        <CheckBox Content="Inform if no new database available" Tag="NotifyIfSameDatabaseCB" x:Name="NotifyIfSameDatabaseCB" Click="OnInformIfNoNewDatabaseChanged"/>
+                        <CheckBox Content="Force manual game detection" Tag="ForceManuelGameDetectionCB" x:Name="ForceManuelGameDetectionCB" Click="OnForceManuelGameDetectionChanged"/>
+                        <CheckBox Content="Show install complete window" Tag="ShowInstallCompleteWindowCB" x:Name="ShowInstallCompleteWindowCB" Click="OnShowInstallCompleteWindowChanged"/>
+                        <CheckBox Content="Backup mods folder before installation" Tag="BackupModsCB" x:Name="BackupModsCB" Click="OnBackupModsChanged" IsEnabled="True"/>
+                        <TextBlock x:Name="BackupModsSizeLabelUsed" Text="Backups: {0}  Size: {1}" Margin="20,0,0,0" />
+                        <CheckBox x:Name="SaveDisabledModsInSelection" Tag="SaveDisabledModsInSelection" Content="Keep disabled mods when saving selection" Click="SaveDisabledModsInSelection_Click"/>
+                        <CheckBox x:Name="AdvancedInstallationProgress" Tag="AdvancedInstallationProgress" Content="Show advanced installation window" IsEnabled="True" Click="AdvancedInstallationProgress_Click"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="Select theme:" />
+                        <StackPanel Orientation="Vertical" Margin="15,0,0,0">
+                            <RadioButton Content="Default" x:Name="ThemeDefault" Tag="ThemeDefault" Checked="Theme_Checked" IsEnabled="False" IsChecked="True"/>
+                            <RadioButton Content="Dark" x:Name="ThemeDark" Tag="ThemeDark" Checked="Theme_Checked" IsEnabled="False"/>
+                            <RadioButton Content="Custom" x:Name="ThemeCustom" Tag="ThemeCustom" Checked="Theme_Checked" IsEnabled="False"/>
+                        </StackPanel>
+                        <Button Content="Dump color settings to xml" Tag="DumpColorSettingsButton" Name="DumpColorSettingsButton" Click="DumpColorSettingsButton_Click"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Advanced Settings" x:Name="SettingsTabAdvancedSettings" Tag="SettingsTabAdvancedSettings" Background="#7FE5E5E5">
+                <Grid Background="#7FE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <!-- Use a margin of 20 to give it a tree affect-->
+                        <CheckBox Content="Use beta database" Tag="UseBetaDatabaseCB" x:Name="UseBetaDatabaseCB" Click="OnUseBetaDatabaseChanged"/>
+                        <ComboBox Tag="UseBetaDatabaseBranches" x:Name="UseBetaDatabaseBranches" SelectionChanged="OnBetaDatabaseSelectionChanged" Margin="20,0,0,0" IsEnabled="False"/>
+                        <CheckBox Content="Use beta application" Tag="UseBetaApplicationCB" x:Name="UseBetaApplicationCB" Click="OnUseBetaAppChanged" IsEnabled="False"/>
+                        <TextBlock Text="Uninstall mode:" Tag="UninstallModeGroupBox" x:Name="UninstallModeGroupBox"/>
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton Content="Default" x:Name="UninstallDefault" Tag="UninstallDefault" Margin="20,0,0,0" Checked="UninstallDefault_Checked"/>
+                            <RadioButton Content="Quick" x:Name="UninstallQuick" Tag="UninstallQuick" Margin="5,0,0,0" Checked="UninstallQuick_Checked"/>
+                        </StackPanel>
+                        <CheckBox Content="Minimize to system tray" x:Name="MinimizeToSystemTray" Tag="MinimizeToSystemTray" Click="MinimizeToSystemTray_Click"/>
+                        <CheckBox x:Name="VerboseLoggingCB" Tag="VerboseLoggingCB" Content="Verbose Logging" Click="VerboseLoggingCB_Click"/>
+                        <CheckBox x:Name="DisableTriggersCB" Tag="DisableTriggersCB" Content="Disable Triggers" Click="DisableTriggersCB_Click" IsChecked="True" IsEnabled="False"/>
+                        <CheckBox x:Name="AllowStatsGatherCB" Tag="AllowStatsGatherCB" Content="Allow statistics gathering of mod usage" Click="AllowStatsGatherCB_Click" />
+                        <TextBlock x:Name="ApplyCustomScalingCB" Tag="ApplyCustomSclaingCB" Text="Application scaling"/>
+                        <!-- https://stackoverflow.com/questions/832216/wpf-how-to-make-controls-stretch-in-a-stackpanel -->
+                        <DockPanel HorizontalAlignment="Stretch" LastChildFill="True">
+                            <TextBlock x:Name="ApplyCustomScalingLabel" Tag="ApplyCustomScalingLabel" DockPanel.Dock="Right" Text="0.00x" Margin="0,0,5,0" IsEnabled="True"/>
+                            <Slider x:Name="ApplyCustomScalingSlider" Tag="ApplyCustomScalingSlider" Margin="5,0,5,0" Minimum="1" Maximum="3" Value="1" IsEnabled="True" HorizontalAlignment="Stretch" DockPanel.Dock="Left" PreviewMouseUp="ApplyCustomScalingSlider_MouseUp" SmallChange="0.25" IsSnapToTickEnabled="True" LargeChange="0.25" TickFrequency="0.25"/>
+                        </DockPanel>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <CheckBox x:Name="AutoInstallCB" Tag="EnableModsAutoSyncCheckbox" Content="Enable auto install" IsEnabled="True" Click="AutoInstallCB_Click"/>
+                        <CheckBox x:Name="OneClickInstallCB" Tag="AutoInstallCheckbox" Content="Enable one-click install" IsEnabled="True" Click="OneClickInstallCB_Click"/>
+                        <TextBox Tag="AutoSyncSelectionFileTextBox"  x:Name="AutoInstallOneClickInstallSelectionFilePath" Height="46" TextWrapping="Wrap" Margin="0,3,0,0" />
+                        <Button x:Name="LoadAutoSyncSelectionFile" Tag="LoadAutoSyncSelectionFile" Content="Load selection file" HorizontalAlignment="Left" Margin="0,3,0,0" Width="120" Click="LoadAutoSyncSelectionFile_Click" IsEnabled="True"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
+                            <TextBlock Tag="AutoSyncCheckFrequencyTextBox" x:Name="AutoSyncCheckFrequencyTextBox"  TextWrapping="Wrap" Text="Frequency: every" />
+                            <TextBox Tag="AutoSyncFrequencyTexbox" x:Name="AutoSyncFrequencyTexbox" Height="23" TextWrapping="Wrap" Width="25" Margin="5,0,0,0" IsEnabled="True" TextChanged="AutoSyncFrequencyTexbox_TextChanged"/>
+                            <ComboBox x:Name="AutoSyncFrequencyComboBox" Tag="AutoSyncFrequencyComboBox" Margin="5,0,0,0" Width="91" IsEnabled="True" SelectedIndex="0" SelectionChanged="AutoSyncFrequencyComboBox_SelectionChanged">
+                                <System:String>Minutes</System:String>
+                                <System:String>Hours</System:String>
+                                <System:String>Days</System:String>
+                            </ComboBox>
+                        </StackPanel>
+                        <TextBlock x:Name="DeveloperSettingsHeader" Tag="DeveloperSettingsHeader" Text="Developer Settings"/>
+                        <CheckBox x:Name="ForceEnabledCB" Tag="ForceEnabledCB" Content="Force all components enabled" Margin="20,0,0,0" Click="ForceEnabledCB_Clicked"/>
+                        <CheckBox x:Name="ForceVisibleCB" Tag="ForceVisibleCB" Content="Force all components visible" Margin="20,0,0,0" Click="ForceVisibleCB_Click"/>
+                        <CheckBox x:Name="ExportModeCB" Tag="ExportModeCB" Content="Export mode" Margin="20,0,0,0" Click="ExportModeCB_Click" IsEnabled="True"/>
+                        <Button x:Name="LauchEditor" Tag="LauchEditor" Content="Launch Editor" Margin="20,0,0,0" Click="LauchEditor_Click" IsEnabled="False" Visibility="Hidden"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <Grid HorizontalAlignment="Stretch" Height="38" Margin="10,553,10,0" VerticalAlignment="Top" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <uicomponents:LinkButton x:Name="Forms_ENG_EUButton" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Click="OnLinkButtonClick" Link="http://forum.worldoftanks.eu/index.php?/topic/623269-">
+                <Image Source="Resources/Images/flag gb.png" Stretch="None" x:Name="EU_ENG_forms_image"/>
+            </uicomponents:LinkButton>
+            <uicomponents:LinkButton Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="Forms_GER_EUButton" Click="OnLinkButtonClick" Link="http://forum.worldoftanks.eu/index.php?/topic/624499-">
+                <Image Source="Resources/Images/flag de.png" Stretch="None"/>
+            </uicomponents:LinkButton>
+            <uicomponents:LinkButton Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="Forms_ENG_NAButton" Click="OnLinkButtonClick" Link="http://forum.worldoftanks.com/index.php?/topic/535868-">
+                <Image Source="Resources/Images/flag us.png" Stretch="None"/>
+            </uicomponents:LinkButton>
+            <uicomponents:LinkButton Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="FacebookButton" Click="OnLinkButtonClick" Link="https://www.facebook.com/relhax.modpack.1">
+                <Image Source="Resources/Images/facebook brand.png" Stretch="None"/>
+            </uicomponents:LinkButton>
+            <uicomponents:LinkButton Grid.Column="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="TwitterButton" Click="OnLinkButtonClick" Link="https://twitter.com/relhaxmodpack">
+                <Image Source="Resources/Images/twitter brand.png" Stretch="None"/>
+            </uicomponents:LinkButton>
+            <uicomponents:LinkButton Grid.Column="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="DiscordButton" Click="OnLinkButtonClick" Link="https://discord.gg/58fdPvK">
+                <Image Source="Resources/Images/discord brand.png" Stretch="None"/>
+            </uicomponents:LinkButton>
+            <uicomponents:LinkButton Grid.Column="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="HomepageButton" Click="OnLinkButtonClick" Link="https://relhaxmodpack.com/">
+                <Image Source="Resources/Images/Home.png" Stretch="None"/>
+            </uicomponents:LinkButton>
+            <uicomponents:LinkButton Grid.Column="9" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="FindBugAddModButton" Click="OnLinkButtonClick" Link="https://forums.relhaxmodpack.com/">
+                <Image Source="Resources/Images/report.png" Stretch="None"/>
+            </uicomponents:LinkButton>
+            <uicomponents:LinkButton Grid.Column="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="SendEmailButton" Click="OnLinkButtonClick" Link="mailto:info@relhaxmodpack.com">
+                <Image Source="Resources/Images/EMail.png" Stretch="None"/>
+            </uicomponents:LinkButton>
+            <uicomponents:LinkButton Grid.Column="11" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="DonateButton" Click="OnLinkButtonClick" Link="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=76KNV8KXKYNG2">
+                <Image Source="Resources/Images/donation.png" Stretch="None"/>
+            </uicomponents:LinkButton>
+        </Grid>
+        <Grid HorizontalAlignment="Stretch" Height="40" Margin="10,596,10,0" VerticalAlignment="Top" >
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Application Version V{version}" VerticalAlignment="Center" x:Name="ApplicationVersionLabel"/>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Database Version V{version}" VerticalAlignment="Center" Grid.Row="1" x:Name="DatabaseVersionLabel" Margin="0,3,0,0"/>
+        </Grid>
+        <Grid HorizontalAlignment="Stretch" Height="208" Margin="10,340,10,0" VerticalAlignment="Top" >
+            <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,147,2,0" VerticalAlignment="Top" x:Name="TotalProgressBar"/>
+            <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,167,2,0" VerticalAlignment="Top" x:Name="ParentProgressBar"/>
+            <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,187,2,0" VerticalAlignment="Top" x:Name="ChildProgressBar"/>
+            <TextBox HorizontalAlignment="Stretch" Height="92" Margin="2,50,2,0" VerticalAlignment="Top" x:Name="InstallProgressTextBox" TextWrapping="Wrap"/>
+            <GroupBox Header="Language" HorizontalAlignment="Left" Height="45" Margin="360,0,0,0" VerticalAlignment="Top" Width="150" x:Name="LanguageSelectionGB">
+                <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Tag="LanguagesSelector" x:Name="LanguagesSelector" SelectionChanged="OnLanguageSelectionChanged" Margin="0,0,0,0">
+                </ComboBox>
+            </GroupBox>
+            <Button Tag="CancelDownloadButton" x:Name="CancelDownloadInstallButton" Content="Cancel" HorizontalAlignment="Left" Margin="235,14,0,0" VerticalAlignment="Top" Width="118" Height="31" Visibility="Hidden" IsEnabled="False"/>
+        </Grid>
+    </Grid>
+</Window>

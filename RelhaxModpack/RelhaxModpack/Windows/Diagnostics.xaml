@@ -1,0 +1,36 @@
+﻿<local:RelhaxWindow x:Class="RelhaxModpack.Windows.Diagnostics"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RelhaxModpack.Windows"
+        mc:Ignorable="d"
+        Title="Diagnostics" MinHeight="300" MinWidth="525" Height="300" Width="525" Loaded="RelhaxWindow_Loaded" LocalizeWindow="True" ApplyToolTips="True" ApplyColorSettings="True">
+    <Grid >
+        <TextBox x:Name="DiagnosticsMainTextBox" Tag="DiagnosticsMainTextBox" HorizontalAlignment="Stretch" Height="21" Margin="10,10,10,0" TextWrapping="Wrap" Text="Helpful explanation window" VerticalAlignment="Top" IsReadOnly="True"/>
+        <TextBlock Tag="SelectedInstallation" x:Name="SelectedInstallation" HorizontalAlignment="Stretch" Margin="10,36,10,0" TextWrapping="Wrap" Text="Currently Selected Installation:" VerticalAlignment="Top" Height="34" />
+        <TextBox Tag="DiagnosticsStatusTextBox" x:Name="DiagnosticsStatusTextBox" HorizontalAlignment="Stretch" Height="50" Margin="10,209,10,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True"/>
+        <Grid HorizontalAlignment="Stretch" Height="129" Margin="10,75,10,0" VerticalAlignment="Top" >
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" Click="ChangeInstall_Click" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                <TextBlock Tag="ChangeInstall" x:Name="ChangeInstall" Text="Change the currently selected WoT installation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="2,0,2,0"/>
+            </Button>
+            <Button HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"  Click="LaunchWoTLauncher_Click" Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                <TextBlock Tag="LaunchWoTLauncher" x:Name="LaunchWoTLauncher" Text="Start the World of Tanks launcher in integrity validation mode" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="2,0,2,0"/>
+            </Button>
+            <Button Tag="ClearDownloadCache" x:Name="ClearDownloadCache" Content="Clear download cache" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" Click="ClearDownloadCache_Click" Grid.Column="1" />
+            <Button HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"  Click="CollectLogInfo_Click" Grid.Row="2" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                <TextBlock Tag="CollectLogInfo" x:Name="CollectLogInfo" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="Collect log files into a zip file to report a problem" Margin="2,0,2,0"/>
+            </Button>
+            <Button Tag="ClearDownloadCacheDatabase" x:Name="ClearDownloadCacheDatabase" Content="Delete download cache database file" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="2,2,2,2" Grid.Column="1" Grid.Row="1"  Click="ClearDownloadCacheDatabase_Click"/>
+        </Grid>
+    </Grid>
+</local:RelhaxWindow>

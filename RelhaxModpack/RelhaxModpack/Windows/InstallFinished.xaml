@@ -1,0 +1,26 @@
+﻿<local:RelhaxWindow x:Class="RelhaxModpack.Windows.InstallFinished"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RelhaxModpack.Windows"
+        mc:Ignorable="d"
+        Title="Install Finished" Height="202" Width="300" MinHeight="220" MinWidth="300" LocalizeWindow="True">
+    <Grid>
+        <TextBox Tag="InstallationCompleteText" x:Name="InstallationCompleteText" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Installation Complete, would you like to..." VerticalAlignment="Top" TextAlignment="Left" Height="32"/>
+        <StackPanel Orientation="Vertical" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,47,10,10">
+            <Button x:Name="InstallationCompleteStartWoTButton" HorizontalAlignment="Stretch" Margin="0,0,0,2" VerticalAlignment="Top" Click="InstallationCompleteStartWoTButton_Click" >
+                <TextBlock Tag="InstallationCompleteStartWoT" x:Name="InstallationCompleteStartWoT" Text="Start the game? (WorldofTanks.exe)" TextWrapping="Wrap"/>
+            </Button>
+            <Button x:Name="InstallationCompleteStartGameCenterButton" HorizontalAlignment="Stretch" Margin="0,0,0,2" VerticalAlignment="Top" Click="InstallationCompleteStartGameCenterButton_Click" >
+                <TextBlock Tag="InstallationCompleteStartGameCenter" x:Name="InstallationCompleteStartGameCenter" Text="Start WG Game Center (WoTLauncher.exe)?" TextWrapping="Wrap"/>
+            </Button>
+            <Button x:Name="InstallationCompleteOpenXVMButton" HorizontalAlignment="Stretch" Margin="0,0,0,2" VerticalAlignment="Top" Click="InstallationCompleteOpenXVMButton_Click" >
+                <TextBlock Tag="InstallationCompleteOpenXVM" x:Name="InstallationCompleteOpenXVM" Text="Open your web browser to the xvm statistics login website?" TextWrapping="Wrap"/>
+            </Button>
+            <Button x:Name="InstallationCompleteCloseAppButton" HorizontalAlignment="Stretch" Margin="0,0,0,2" VerticalAlignment="Top" Click="InstallationCompleteCloseAppButton_Click" >
+                <TextBlock Tag="InstallationCompleteCloseApp" x:Name="InstallationCompleteCloseApp" Text="Close the application?" TextWrapping="Wrap"/>
+            </Button>
+        </StackPanel>
+    </Grid>
+</local:RelhaxWindow>

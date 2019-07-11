@@ -1,3 +1,66 @@
+Version 0.28.2.21 (07/04/2019)
+https://www.virustotal.com/gui/file/f97bd57f9838bf59f7f6a2f3ef807222c7f04bcfe1350c9b3bbf5152e8e4e692/detection
+-Fix for sizing issues of selection window on high DPI monitors
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Version 0.28.2.20 (06/23/2019)
+https://www.virustotal.com/gui/file/50f7e14d49f28c7ec7a4047f72963f4dbf8541cd8d676fcec60036cac6c70e2a/detection
+-Fixed a bug of the application crashing when pressing close from the advanced install progress window
+-Changed system for installing fonts
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Version 0.28.2.19 (05/18/2019)
+https://www.virustotal.com/#/file/67aadc24d5e400b5e6f2ac3cd6529fa5130617e93ec8c0b4ec90ced81b2969f1/detection
+-Fixed the bug of advanced settings window not sizing properly
+-Fixed issues with audio type previews (like 6th sense audio files)
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Version 0.28.2.18 (01/23/2019)
+https://www.virustotal.com/#/file/924157d54f0e4501686bf0f9fb479e1aecb4b794fba37f5796daafd69ab6433c/detection
+-Fixed a bug in default view when using DarkUI, the drop down options would not show properly
+-Fixed a bug in defaultV2 view and OMC view when using DarkUI and color change, drop down options would cause a crash.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Version 0.28.2.17 (01/03/2019)
+https://www.virustotal.com/#/file/d8a273613234a81d9756ef695b3daf214c0330c901c267289b6a7ef9c2730c9f/detection
+-Fixed bug in OMC and DefaultV2 views where user mods would not color change, and also would throw exceptions if used with DarkUI setting
+-Added more exception logging in Utils class
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Version 0.28.2.16 (12/10/2018)
+https://www.virustotal.com/#/file/1dfac9cbcb064c73a8a0866528ce1c8a95a8b99f9af0acd8b70acd309121ef86/detection
+-Hotfix for issue during installation cleanup where some installer's temporary files would fail to delete on some systems
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Version 0.28.2.15 (11/19/2018)
+https://www.virustotal.com/#/file/023edb64c4efa485009668b9472c79ba76f6b132712f06125ea1fe0de12540ea/detection
+-Fixed issue with "&" symbol not showing for mod names in default view
+-Fixed bug in legacy and default v2 views in relhax V1 and V2 where if user selects the 0th item in the drop down box it's not actually selected
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Version 0.28.2.14 (11/17/2018)
+https://www.virustotal.com/#/file/d584d555028f151dcbf880fa26ebd1b8463c937c67f5dfe0509b35381db2c463/detection
+-Removed old legacy DatabaseUpdater code parts that were re-written for Relhax V2
+-Fixed bug in default v2 view where color change settings were not applying properly (color change setting would not work)
+-Fixed bug where default v2 color change setting would not be restored to the UI on application load
+-Improved names of UI components
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Version 0.28.2.13 (11/09/2018)
+https://www.virustotal.com/#/file/26ab0e67ea7c800fcb82c33723832443ea533d766e17859a3a21617e99620433/detection
+-Fixed a bug with the database updater backend tool
+-Fixed a bug in the OMC Legacy selection view where when loading/clearing selections, drop down options would not be updated properly
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Version 0.28.2.12 (11/02/2018)
+https://www.virustotal.com/#/file/29531bd3ae7fd6b1248400d579741e701500fb07312bad40883bb7076070872a/detection
+-Changed default URL for zipfiles to be now hosted out of bigmods, not wotmods
+-Added exception handling if the application fails to parse supported clients document
+-Added RelHaxSettings.xml, xmv.log, pmod.log to list of log files to search for when making diagnostic zip file
+-Improved logging of creating the diagnostic zip file
+-Updated translations
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Version 0.28.2.11 (10/16/2018)
 https://www.virustotal.com/#/file/e506065d8b4c810409e466111bfde78ca031fcffb496bd65c29fbcea8657cca5/detection
 -Updated embedded assemblies to prevent application crash on load
