@@ -559,7 +559,7 @@ namespace RelhaxModpack.Windows
                     //else check and load the use selection from auto launch command line
                     else if (!string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
                     {
-                        SelectionsDocument = XMLUtils.LoadXmlDocument(Path.Combine(Settings.RelhaxUserConfigsFolder, CommandLineSettings.AutoInstallFileName), XmlLoadType.FromFile);
+                        SelectionsDocument = XMLUtils.LoadXmlDocument(Path.Combine(Settings.RelhaxUserSelectionsFolder, CommandLineSettings.AutoInstallFileName), XmlLoadType.FromFile);
                         shouldLoadSomething = true;
                     }
                     else if (ModpackSettings.SaveLastSelection)
@@ -1457,7 +1457,7 @@ namespace RelhaxModpack.Windows
         {
             SaveFileDialog selectSavePath = new SaveFileDialog()
             {
-                InitialDirectory = Settings.RelhaxUserConfigsFolder,
+                InitialDirectory = Settings.RelhaxUserSelectionsFolder,
                 AddExtension = true,
                 Filter = "XML files|*.xml",
                 ValidateNames = true
@@ -1487,7 +1487,7 @@ namespace RelhaxModpack.Windows
             {
                 OpenFileDialog selectLoadPath = new OpenFileDialog()
                 {
-                    InitialDirectory = Settings.RelhaxUserConfigsFolder,
+                    InitialDirectory = Settings.RelhaxUserSelectionsFolder,
                     CheckFileExists = true,
                     CheckPathExists = true,
                     AddExtension = true,

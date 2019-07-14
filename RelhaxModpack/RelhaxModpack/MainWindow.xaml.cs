@@ -237,8 +237,12 @@ namespace RelhaxModpack
             if (isApplicationUpToDate && !closingFromFailure)
             {
                 Logging.Debug("application is up to date, checking to display welcome message");
-                Settings.ProcessFirstLoadings();
+
+                //run checks to see if it's the first time loading the application
+                Settings.FirstLoad = !File.Exists(Settings.ModpackSettingsFileName) && !File.Exists(Settings.OldModpackSettingsFilename);
+                Settings.FirstLoadToV2 = !File.Exists(Settings.ModpackSettingsFileName) && File.Exists(Settings.OldModpackSettingsFilename);
                 Logging.Debug("FirstLoading = {0}, FirstLoadingV2 = {1}", Settings.FirstLoad.ToString(), Settings.FirstLoadToV2.ToString());
+
                 if(Settings.FirstLoad || Settings.FirstLoadToV2)
                 {
                     //display the welcome window and make sure the user agrees to it
@@ -260,9 +264,8 @@ namespace RelhaxModpack
                         Logging.Info("starting upgrade to V2");
 
                         //process libraries folder
-                        Logging.Info("deleting libraries folder");
-                        string oldLibrariesFolder = Path.Combine(Settings.ApplicationStartupPath, "RelhaxLibraries");
-                        Utils.DirectoryDelete(oldLibrariesFolder, true);
+                        Logging.Info("move old configs folder to selections folder");
+                        Directory.Move(Settings.RelhaxUserConfigsFolderOld, Settings.RelhaxUserSelectionsFolder);
 
                         //process xml settings file
                         //delete the new one, move the old one, reload settings
@@ -362,9 +365,9 @@ namespace RelhaxModpack
                 else if (!string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
                 {
                     Logging.Info("auto-install specified to launce install using {0}", CommandLineSettings.AutoInstallFileName);
-                    if(!File.Exists(Path.Combine(Settings.RelhaxUserConfigsFolder,CommandLineSettings.AutoInstallFileName)))
+                    if(!File.Exists(Path.Combine(Settings.RelhaxUserSelectionsFolder,CommandLineSettings.AutoInstallFileName)))
                     {
-                        Logging.Error("configuration file not found in {0}, aborting", Settings.RelhaxUserConfigsFolder);
+                        Logging.Error("configuration file not found in {0}, aborting", Settings.RelhaxUserSelectionsFolder);
                         CommandLineSettings.AutoInstallFileName = string.Empty;
                     }
                     else
@@ -2187,7 +2190,7 @@ namespace RelhaxModpack
             {
                 Filter = "*.xml|*.xml",
                 Title = Translations.GetTranslatedString("MainWindowSelectSelectionFileToLoad"),
-                InitialDirectory = Settings.RelhaxUserConfigsFolder,
+                InitialDirectory = Settings.RelhaxUserSelectionsFolder,
                 Multiselect = false
             };
             if (!(bool)selectAutoSyncSelectionFileDialog.ShowDialog())

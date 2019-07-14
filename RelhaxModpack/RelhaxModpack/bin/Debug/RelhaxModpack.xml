@@ -969,28 +969,249 @@
         </member>
         <member name="F:RelhaxModpack.Settings.ModpackSettingsFileName">
             <summary>
-            The absolute name of the application settings file
+            The name of the application settings file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.OldModpackSettingsFilename">
+            <summary>
+            The name of the legacy application settings file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.UISettingsFileName">
+            <summary>
+            The name of the application color settings file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.EditorSettingsFilename">
+            <summary>
+            The name of the modpack editor tool settings file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.PatcherSettingsFilename">
+            <summary>
+            The name of the modpack patch designer tool settings file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.LastSavedConfigFilename">
+            <summary>
+            The name of the selection file when used in the setting "save last installed selection"
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.EditorLaunchFromMainWindowFilename">
+            <summary>
+            The file in the application root directory used to unlock the "launch editor" button
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.DefaultStartAddress">
+            <summary>
+            The default starting address of the location of mod packages (start + zip + end)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.WotmodsDatabaseDatRoot">
+            <summary>
+            The old default starting address of the location of mod packages (start + zip + end)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.DefaultEndAddress">
+            <summary>
+            The default end address of the location of mod packages (start + zip + end)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.BetaDatabaseV1URL">
+            <summary>
+            The URL to the v1 legacy beta database
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.BetaDatabaseV2FolderURL">
+            <summary>
+            The URL of the V2 beta database root folder. (NOTE: database V2 is multiple files)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.BetaDatabaseV2RootFilename">
+            <summary>
+            The filename of the V2 root database document. All category names and filenames, and version info is in this document
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.DatabaseOnlineFolderXpath">
+            <summary>
+            The xpath string to get the onlineFolder attribute from the document root
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.DatabaseOnlineVersionXpath">
+            <summary>
+            The xpath string to get the database version info attribute from the document root
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.BetaDatabaseBranchesURL">
+            <summary>
+            The API URL to return a json format document of the current branches in the repository
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ManagerInfoURL">
+            <summary>
+            The URL of the V1 manager info zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ManagerInfoURLBigmods">
+            <summary>
+            The URL of the V2 manager info zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ConfigFileVersion">
+            <summary>
+            the latest config file version for saving the user's selection preferences
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationUpdateURL">
+            <summary>
+            The URL to the location of the latest stable version of the application as a zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationBetaUpdateURL">
+            <summary>
+            The URL to the location of the latest beta version of the application as a zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationUpdateFileName">
+            <summary>
+            The filename to download the latest stable or beta application zip file as
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelicBatchUpdateScript">
+            <summary>
+            The filename to save the self updater script as
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelicBatchUpdateScriptServer">
+            <summary>
+            The filename of the self updater script inside the manager zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelicBatchUpdateScriptOld">
+            <summary>
+            The old V1 filename to save the self updater script as
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.SelectionsRoot">
+            <summary>
+            The root URL of the V2 selection files location
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.SelectionsXml">
+            <summary>
+            The root filename of the list of selection files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationNotesStableUrl">
+            <summary>
+            The URL path of the latest application stable release notes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationNotesBetaUrl">
+            <summary>
+            The URL path of the latest application beta release notes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.DatabaseNotesUrl">
+            <summary>
+            The URL path of the latest V2 database release notes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelhaxDownloadsFolder">
+            <summary>
+            The absolute path of the application zip file and zip database file folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelhaxModBackupFolder">
+            <summary>
+            The absolute path of the application mod backup folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelhaxUserSelectionsFolder">
+            <summary>
+            The absolute path of the application user selections folder. Default location 
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelhaxUserConfigsFolderOld">
+            <summary>
+            The old absolute path of the application user selections folder. Old Default location
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelhaxUserModsFolder">
+            <summary>
+            The absolute path of the application folder where users can place custom mod zip files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelhaxTempFolder">
+            <summary>
+            The absolute path of the application temporary folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelhaxLibrariesFolder">
+            <summary>
+            The absolute path of the application 3rd party dll references folder. Currently used to hold atlas file libraries
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.PatchFolderName">
+            <summary>
+            The name of the installer folder to hold all patch xml files in
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ShortcutFolderName">
+            <summary>
+            The name of the installer folder to hold all shortcut xml files in
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.XmlUnpackFolderName">
+            <summary>
+            The name of the installer folder to hold all xml unpack entries in
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.AtlasCreationFoldername">
+            <summary>
+            The name of the installer folder to hold all xml atlas creation instructions in
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.FontsToInstallFoldername">
+            <summary>
+            The name of the installer folder to hold all fonts to install (or check if needs to install)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ReadmeFromZipfileFolderName">
+            <summary>
+            The name of the temporary install folder to hold database manager readme files. The end user does not need this folder
+            and will be deleted at the end of the installation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.FoldersToCleanup">
+            <summary>
+            The list of installer folders in the root {WoT} directory to cleanup after an installation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.MD5HashDatabaseXmlFile">
+            <summary>
+            The absolute path to the md5 hash zip file download database file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.DefaultCheckedSelectionfile">
+            <summary>
+            The filename of the selection file used to select mods on default loading of the mod selection list
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.SupportedClients">
+            <summary>
+            The filename of the xml document inside the manager info zip file containing the list of supported WoT clients
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ManagerVersion">
+            <summary>
+            The filename of the xml document inside the manager info zip file containing manager version information
             </summary>
         </member>
         <member name="F:RelhaxModpack.Settings.ApplicationVersion">
             <summary>
             The current distribution version of the application
             Alpha should NEVER be built for public distribution unless direct testing!
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.DefaultMaximumSheetWidth">
-            <summary>
-            default maximum sprite sheet width (pixels)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.DefaultMaximumSheetHeight">
-            <summary>
-            default maximum sprite sheet height (pixels)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.DefaultImagePadding">
-            <summary>
-            default image padding
             </summary>
         </member>
         <member name="T:RelhaxModpack.UISettings">
