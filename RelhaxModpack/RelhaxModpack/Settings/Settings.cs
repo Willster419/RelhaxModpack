@@ -326,6 +326,8 @@ namespace RelhaxModpack
         public const double MinimumDisplayScale = 1.0F;
         #endregion
 
+        public static Ionic.Zip.ZipFile ModInfoZipfile = null;
+
         #region Settings parsing to/from XML file
 
         public static bool LoadSettings(string xmlfile, Type SettingsClass, string[] propertiesToExclude, object classInstance)
