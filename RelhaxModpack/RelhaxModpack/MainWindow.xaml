@@ -113,7 +113,7 @@
                             <RadioButton Content="Quick" x:Name="UninstallQuick" Tag="UninstallQuick" Margin="5,0,0,0" Checked="UninstallQuick_Checked"/>
                         </StackPanel>
                         <CheckBox Content="Minimize to system tray" x:Name="MinimizeToSystemTray" Tag="MinimizeToSystemTray" Click="MinimizeToSystemTray_Click"/>
-                        <CheckBox x:Name="VerboseLoggingCB" Tag="VerboseLoggingCB" Content="Verbose Logging" Click="VerboseLoggingCB_Click"/>
+                        <CheckBox x:Name="VerboseLoggingCB" Tag="VerboseLoggingCB" Content="Verbose Logging" Click="VerboseLoggingCB_Click" IsChecked="True" IsEnabled="False"/>
                         <CheckBox x:Name="DisableTriggersCB" Tag="DisableTriggersCB" Content="Disable Triggers" Click="DisableTriggersCB_Click" IsChecked="True" IsEnabled="False"/>
                         <CheckBox x:Name="AllowStatsGatherCB" Tag="AllowStatsGatherCB" Content="Allow statistics gathering of mod usage" Click="AllowStatsGatherCB_Click" />
                         <TextBlock x:Name="ApplyCustomScalingCB" Tag="ApplyCustomSclaingCB" Text="Application scaling"/>

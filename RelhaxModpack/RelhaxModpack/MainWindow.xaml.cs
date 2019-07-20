@@ -150,6 +150,11 @@ namespace RelhaxModpack
             Settings.LoadSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude,null);
             ApplySettingsToUI();
 
+            //apply forced debugging settings
+#warning forced debugging settings is active
+            ModpackSettings.DisableTriggers = true;
+            ModpackSettings.VerboseLogging = true;
+
             //apply settings to UI elements
             UISettings.LoadSettings(true);
             UISettings.ApplyUIColorSettings(this);
