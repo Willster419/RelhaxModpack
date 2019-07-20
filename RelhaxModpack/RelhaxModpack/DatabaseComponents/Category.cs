@@ -12,26 +12,42 @@ namespace RelhaxModpack
     public class Category : IComponentWithDependencies
     {
         #region Database Properties
-
+        /// <summary>
+        /// The category name displayed to the user in the selection list
+        /// </summary>
         public string Name = "";
 
+        /// <summary>
+        /// The xml filename of this category. Used in database structure V2
+        /// </summary>
         public string XmlFilename = "";
         
+        /// <summary>
+        /// The list of packages contained in this category
+        /// </summary>
         public List<SelectablePackage> Packages = new List<SelectablePackage>();
 
-        //the install group number of the category
         //https://stackoverflow.com/questions/1759352/how-to-mark-a-method-as-obsolete-or-deprecated
+        /// <summary>
+        /// The install group number of the category. Used to denote which install thread it is assigned to.
+        /// Two (or more) categories can have the same number to be on the same install thread
+        /// </summary>
         [Obsolete("This is for legacy database compatibility and will be ignored in Relhax V2")]
         public int InstallGroup = 0;
         #endregion
 
         #region UI Properties
 
-        //the TabItem reference for the UI
+        /// <summary>
+        /// The TabItem object reference
+        /// </summary>
         public TabItem TabPage = null;
 
-        //the holder for all packages of a category. UI only
+        /// <summary>
+        /// The package created at selection list building that represents the header of this category
+        /// </summary>
         public SelectablePackage CategoryHeader = null;
+
 
         public TreeView @TreeView;
 

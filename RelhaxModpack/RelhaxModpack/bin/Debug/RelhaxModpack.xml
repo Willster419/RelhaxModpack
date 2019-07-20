@@ -44,6 +44,66 @@
             Duplicate image names in list of images to pack
             </summary>
         </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.FailCode.FailedToPackImage">
+            <summary>
+            Failed to pack the images into one large image (most likely they don't fit into the provided dimensions)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.FailCode.FailedToCreateBitmapAtlas">
+            <summary>
+            Failed to create the atlas bitmap object
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.AtlasesCreator.AtlasCreator">
+            <summary>
+            Represents the entire process of building an atlas image
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.AtlasCreator.Atlas">
+            <summary>
+            The object of atlas arguments for building the image
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.AtlasCreator.DebugLockObject">
+            <summary>
+            Object that exists in all Atlas creation threads. Used for sensitive areas of code that can only be executed by one thread at a time
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.AtlasCreator.Token">
+            <summary>
+            The token for handling a cancel call from the user
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.AtlasCreator.ParseModTexturesAsync(System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
+            <summary>
+            Loads all mod textures from disk into texture objects. This is done on a separate thread so it is not done redundantly multiple times on each atlas thread
+            </summary>
+            <param name="allModFolderPaths">The list of absolute paths containing images to be loaded</param>
+            <param name="token">The cancellation token</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.AtlasCreator.DisposeparseModTextures">
+            <summary>
+            Dispose of all textures in the shared mod texture list
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.AtlasCreator.CreateAtlas">
+            <summary>
+            Create the atlas image
+            </summary>
+            <returns>Success code if complete, any other FailCode otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.AtlasCreator.Dispose(System.Boolean)">
+            <summary>
+            Dispose of the Atlas Creator (mostly disposing image data)
+            </summary>
+            <param name="disposing">Set to true to dispose managed objects as well as unmanaged</param>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.AtlasCreator.Dispose">
+            <summary>
+            Dispose of the Atlas Creator (mostly disposing image data)
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker">
             <summary>Rectangle packer using an algorithm by Javier Arevalo</summary>
             <remarks>
@@ -256,7 +316,38 @@
         </member>
         <member name="T:RelhaxModpack.Category">
             <summary>
-            a catagory is what makes up each tab in the mod selection dislpay window. It holds the first level of list of SelectablePackages
+            a category is what makes up each tab in the mod selection display window. It holds the first level of list of SelectablePackages
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Category.Name">
+            <summary>
+            The category name displayed to the user in the selection list
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Category.XmlFilename">
+            <summary>
+            The xml filename of this category. Used in database structure V2
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Category.Packages">
+            <summary>
+            The list of packages contained in this category
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Category.InstallGroup">
+            <summary>
+            The install group number of the category. Used to denote which install thread it is assigned to.
+            Two (or more) categories can have the same number to be on the same install thread
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Category.TabPage">
+            <summary>
+            The TabItem object reference
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Category.CategoryHeader">
+            <summary>
+            The package created at selection list building that represents the header of this category
             </summary>
         </member>
         <member name="T:RelhaxModpack.DatabasePackage">
