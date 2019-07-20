@@ -2158,7 +2158,7 @@ namespace RelhaxModpack
 
         private void DeleteOldCacheFiles_Click(object sender, RoutedEventArgs e)
         {
-            ModpackSettings.DeleteCacheFiles = (bool)DeleteOldCacheFiles.IsChecked;
+            ModpackSettings.DeleteCacheFiles = (bool)DeleteOldPackagesCB.IsChecked;
         }
 
         private void MinimizeToSystemTray_Click(object sender, RoutedEventArgs e)
@@ -2353,7 +2353,7 @@ namespace RelhaxModpack
             DisableTriggersCB.IsChecked = ModpackSettings.DisableTriggers;
             OneClickInstallCB.IsChecked = ModpackSettings.OneClickInstall;
             AutoInstallCB.IsChecked = ModpackSettings.AutoInstall;
-            DeleteOldCacheFiles.IsChecked = ModpackSettings.DeleteCacheFiles;
+            DeleteOldPackagesCB.IsChecked = ModpackSettings.DeleteCacheFiles;
             MinimizeToSystemTray.IsChecked = ModpackSettings.MinimizeToSystemTray;
             AdvancedInstallationProgress.IsChecked = ModpackSettings.AdvancedInstalProgress;
 

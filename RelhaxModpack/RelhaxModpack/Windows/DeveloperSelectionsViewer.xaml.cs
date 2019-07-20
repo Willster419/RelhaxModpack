@@ -82,7 +82,7 @@ namespace RelhaxModpack.Windows
                 DeveloperSelectionsStackPanel.Children.Add(new RadioButton()
                 {
                     Content = node.Attributes["displayName"],
-                    ToolTip = Translations.GetTranslatedString("lastModified") + " " + node.Attributes["lastModified"],
+                    ToolTip = Translations.GetTranslatedString("lastModified") + ": " + node.Attributes["lastModified"],
                     Tag = node.InnerText,
                     IsChecked = firstOne
                 });

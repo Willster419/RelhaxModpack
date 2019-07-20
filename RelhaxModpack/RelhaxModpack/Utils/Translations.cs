@@ -57,7 +57,8 @@ namespace RelhaxModpack
             "DiagnosticsStatusTextBox",
             "seachCB",
             //"backupModsSizeLabel",
-            "PART_EditableTextBox"
+            "PART_EditableTextBox",
+            "ApplyCustomScalingLabel"
         };
         private const string TranslationNeeded = "TODO";
         private static readonly string Blank = string.Empty;
@@ -564,13 +565,13 @@ namespace RelhaxModpack
             Polish.Add("DisableTriggersCBDescription", TranslationNeeded);
             French.Add("DisableTriggersCBDescription", TranslationNeeded);
 
-            //Component: CancelDownloadButton
+            //Component: CancelDownloadInstallButton
             //
-            English.Add("CancelDownloadButton", "Cancel download");
-            Gernam.Add("CancelDownloadButton", "Download abbrechen");
-            Polish.Add("CancelDownloadButton", "Anuluj pobieranie");
-            French.Add("CancelDownloadButton", "Anuler le téléchargement");
-            Russian.Add("CancelDownloadButton", "Отменить скачивание");
+            English.Add("CancelDownloadInstallButton", "Cancel");
+            Gernam.Add("CancelDownloadInstallButton", "Abbrechen");
+            Polish.Add("CancelDownloadInstallButton", "Anuluj");
+            French.Add("CancelDownloadInstallButton", "Anuler");
+            Russian.Add("CancelDownloadInstallButton", "Отмена");
 
             //Component: appDataFolderNotExistHeader
             //
@@ -605,21 +606,21 @@ namespace RelhaxModpack
             French.Add("viewDBUpdates", "Afficher les dernières mises à jour de la base de données");
             Russian.Add("viewDBUpdates", "Посмотреть последние обновления базы данных");
 
-            //Component: EnableColorChangeDefaultCB
+            //Component: EnableColorChangeDefaultV2CB
             //
-            English.Add("EnableColorChangeDefaultCB", "Enable color change");
-            Gernam.Add("EnableColorChangeDefaultCB", "Farbwechsel");
-            Polish.Add("EnableColorChangeDefaultCB", "Włącz zmianê kolorów");
-            French.Add("EnableColorChangeDefaultCB", "Activer les changements de couleurs");
-            Russian.Add("EnableColorChangeDefaultCB", "Заменить цвета");
+            English.Add("EnableColorChangeDefaultV2CB", "Enable color change");
+            Gernam.Add("EnableColorChangeDefaultV2CB", "Farbwechsel");
+            Polish.Add("EnableColorChangeDefaultV2CB", "Włącz zmianê kolorów");
+            French.Add("EnableColorChangeDefaultV2CB", "Activer les changements de couleurs");
+            Russian.Add("EnableColorChangeDefaultV2CB", "Заменить цвета");
 
-            //Component: EnableColorChangeDefaultCBDescription
+            //Component: EnableColorChangeDefaultV2CBDescription
             //
-            English.Add("EnableColorChangeDefaultCBDescription", "Enable the changing of colors when toggling the selection of a mod or config.");
-            Gernam.Add("EnableColorChangeDefaultCBDescription", "Die Farbe ändert sich, wenn man eine Auswahl getroffen hat");
-            Polish.Add("EnableColorChangeDefaultCBDescription", "Włącz zmianê kolorów podczas zmiany wyboru modyfikacji i ustawieñ.");
-            French.Add("EnableColorChangeDefaultCBDescription", "Activer le changement de les couleurs lors de la selection d'un mod ou d'une config");
-            Russian.Add("EnableColorChangeDefaultCBDescription", "Включить замену цветов при выборе мода или конфигурации");
+            English.Add("EnableColorChangeDefaultV2CBDescription", "Enable the changing of colors when toggling the selection of a mod or config.");
+            Gernam.Add("EnableColorChangeDefaultV2CBDescription", "Die Farbe ändert sich, wenn man eine Auswahl getroffen hat");
+            Polish.Add("EnableColorChangeDefaultV2CBDescription", "Włącz zmianê kolorów podczas zmiany wyboru modyfikacji i ustawieñ.");
+            French.Add("EnableColorChangeDefaultV2CBDescription", "Activer le changement de les couleurs lors de la selection d'un mod ou d'une config");
+            Russian.Add("EnableColorChangeDefaultV2CBDescription", "Включить замену цветов при выборе мода или конфигурации");
 
 
             //Component: EnableColorChangeLegacyCB
@@ -674,19 +675,19 @@ namespace RelhaxModpack
                 " fichiers .exe (comme la configuration WWIIHA)");
             Russian.Add("CreateShortcutsCBDescription", "Если выбрано, то будут созданы ярлыки на рабочем столе для модов, являющимися EXE-файлами (как WWIIHA)");
 
-            //Component: DeleteOldPackages
+            //Component: DeleteOldPackagesCB
             //
-            English.Add("DeleteOldPackages", "Delete old package files");
-            Gernam.Add("DeleteOldPackages", TranslationNeeded);
-            Polish.Add("DeleteOldPackages", TranslationNeeded);
-            French.Add("DeleteOldPackages", TranslationNeeded);
+            English.Add("DeleteOldPackagesCB", "Delete old package files");
+            Gernam.Add("DeleteOldPackagesCB", TranslationNeeded);
+            Polish.Add("DeleteOldPackagesCB", TranslationNeeded);
+            French.Add("DeleteOldPackagesCB", TranslationNeeded);
 
-            //Component: DeleteOldCacheFilesDescription
+            //Component: DeleteOldPackagesCBDescription
             //
-            English.Add("DeleteOldCacheFilesDescription", "Delete any zip files that are no longer used by the installer in the \"RelhaxDownloads\" folder to free up disk space");
-            Gernam.Add("DeleteOldCacheFilesDescription", TranslationNeeded);
-            Polish.Add("DeleteOldCacheFilesDescription", TranslationNeeded);
-            French.Add("DeleteOldCacheFilesDescription", TranslationNeeded);
+            English.Add("DeleteOldPackagesCBDescription", "Delete any zip files that are no longer used by the installer in the \"RelhaxDownloads\" folder to free up disk space");
+            Gernam.Add("DeleteOldPackagesCBDescription", TranslationNeeded);
+            Polish.Add("DeleteOldPackagesCBDescription", TranslationNeeded);
+            French.Add("DeleteOldPackagesCBDescription", TranslationNeeded);
 
             //Component: AutoInstallCB
             //
@@ -757,6 +758,34 @@ namespace RelhaxModpack
             Gernam.Add("DeveloperSettingsHeader", TranslationNeeded);
             Polish.Add("DeveloperSettingsHeader", TranslationNeeded);
             French.Add("DeveloperSettingsHeader", TranslationNeeded);
+
+            //Component: ApplyCustomScalingCB
+            //
+            English.Add("ApplyCustomScalingCB", "Application Scaling");
+            Gernam.Add("ApplyCustomScalingCB", TranslationNeeded);
+            Polish.Add("ApplyCustomScalingCB", TranslationNeeded);
+            French.Add("ApplyCustomScalingCB", TranslationNeeded);
+
+            //Component: LauchEditor
+            //button for launching the editor from the main application window
+            English.Add("LauchEditor", "Launch Database Editor");
+            Gernam.Add("LauchEditor", TranslationNeeded);
+            Polish.Add("LauchEditor", TranslationNeeded);
+            French.Add("LauchEditor", TranslationNeeded);
+
+            //Component: LauchEditorDescription
+            //button for launching the editor from the main application window
+            English.Add("LauchEditorDescription", "Launch the Database Editor from here, instead of from command line");
+            Gernam.Add("LauchEditorDescription", TranslationNeeded);
+            Polish.Add("LauchEditorDescription", TranslationNeeded);
+            French.Add("LauchEditorDescription", TranslationNeeded);
+
+            //Component: ApplyCustomScalingCBDescription
+            //
+            English.Add("ApplyCustomScalingCBDescription", "Apply display scaling to the installer windows");
+            Gernam.Add("ApplyCustomScalingCBDescription", TranslationNeeded);
+            Polish.Add("ApplyCustomScalingCBDescription", TranslationNeeded);
+            French.Add("ApplyCustomScalingCBDescription", TranslationNeeded);
 
             //Component: InstallWhileDownloadingCB
             //
@@ -1208,13 +1237,13 @@ namespace RelhaxModpack
             Russian.Add("expandNodesDefaultDescription", "Выберите этот пункт для автоматического раскрытия всех списков. Применимо только для legacy.");
 
 
-            //Component: EnableBordersDefaultCB
+            //Component: EnableBordersDefaultV2CB
             //
-            English.Add("EnableBordersDefaultCB", "Enable borders");
-            Gernam.Add("EnableBordersDefaultCB", "Einrahmen");
-            Polish.Add("EnableBordersDefaultCB", "Włącz granice");
-            French.Add("EnableBordersDefaultCB", "Activer les bordures");
-            Russian.Add("EnableBordersDefaultCB", "Включить границы");
+            English.Add("EnableBordersDefaultV2CB", "Enable borders");
+            Gernam.Add("EnableBordersDefaultV2CB", "Einrahmen");
+            Polish.Add("EnableBordersDefaultV2CB", "Włącz granice");
+            French.Add("EnableBordersDefaultV2CB", "Activer les bordures");
+            Russian.Add("EnableBordersDefaultV2CB", "Включить границы");
 
             //Component: EnableBordersLegacyCB
             //
@@ -1224,13 +1253,13 @@ namespace RelhaxModpack
             French.Add("EnableBordersLegacyCB", "Activer les bordures");
             Russian.Add("EnableBordersLegacyCB", "Включить границы");
 
-            //Component: EnableBordersDefaultCBDescription
+            //Component: EnableBordersDefaultV2CBDescription
             //
-            English.Add("EnableBordersDefaultCBDescription", "Enable the black borders around each mod and config sublevel.");
-            Gernam.Add("EnableBordersDefaultCBDescription", "Jede Auswahl schwarz einrahmen");
-            Polish.Add("EnableBordersDefaultCBDescription", "Włącz czarne obramowanie modyfikacji i opcji konfiguracji");
-            French.Add("EnableBordersDefaultCBDescription", "Activer les bordures noires autour de chaque mod et selections de configuration.");
-            Russian.Add("EnableBordersDefaultCBDescription", "Включить показ чёрных рамок вокруг наименования каждого мода и конфигурации.");
+            English.Add("EnableBordersDefaultV2CBDescription", "Enable the black borders around each mod and config sublevel.");
+            Gernam.Add("EnableBordersDefaultV2CBDescription", "Jede Auswahl schwarz einrahmen");
+            Polish.Add("EnableBordersDefaultV2CBDescription", "Włącz czarne obramowanie modyfikacji i opcji konfiguracji");
+            French.Add("EnableBordersDefaultV2CBDescription", "Activer les bordures noires autour de chaque mod et selections de configuration.");
+            Russian.Add("EnableBordersDefaultV2CBDescription", "Включить показ чёрных рамок вокруг наименования каждого мода и конфигурации.");
 
 
             //Component: EnableBordersLegacyCBDescription
@@ -2644,6 +2673,13 @@ namespace RelhaxModpack
             Gernam.Add("failedToParseSelections", TranslationNeeded);
             Polish.Add("failedToParseSelections", TranslationNeeded);
             French.Add("failedToParseSelections", TranslationNeeded);
+
+            //Component: lastModified
+            //
+            English.Add("lastModified", "Last modified");
+            Gernam.Add("lastModified", TranslationNeeded);
+            Polish.Add("lastModified", TranslationNeeded);
+            French.Add("lastModified", TranslationNeeded);
             #endregion
 
             #region Advanced Installer Window

@@ -1301,7 +1301,7 @@ namespace RelhaxModpack
             //check if it exists there
             if (!File.Exists(xvmBootFile))
             {
-                Logging.Error("extractor asked to get location of xvm folder name, but boot file does not exist! returning \"default\"");
+                Logging.Warning("extractor asked to get location of xvm folder name, but boot file does not exist! returning \"default\"");
                 return "default";
             }
 
