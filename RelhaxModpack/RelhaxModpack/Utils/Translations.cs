@@ -305,18 +305,6 @@ namespace RelhaxModpack
             Russian.Add("stepsComplete", "заданий выполнено");
             #endregion
 
-            #region General Messages
-            English.Add("conflictBetaDBTestMode", "The command line options '/BetaDatabase' and '/Test' should not be used together, the application may be unstable. Continue anyway?");
-            Gernam.Add("conflictBetaDBTestMode", "Die Kommandozeilen Befehle '/BetaDatabase' und '/Test' sollten nicht zusammen verwendet werden, da sonst der ModPack Manager instabil werden könnte. Trotzdem fortfahren?");
-            Polish.Add("conflictBetaDBTestMode", "Opcje Beta wiersza poleceń dotyczące Bazy Danych i Testu nie powinny być używane jednocześnie, aplikacja może nie być stabilna. Czy kontynuować mimo wszystko?");
-            French.Add("conflictBetaDBTestMode", "Les options de ligne de commande '/BetaDatabase' et '/Test' ne doivent pas être utilisées ensemble, l'application peut être instable. Continuer quand même?");
-
-            English.Add("conflictsCommandlineHeader", "Command-Line option conflicts");
-            Gernam.Add("conflictsCommandlineHeader", "Konflikte in den Kommandozeilen Befehlen");
-            Polish.Add("conflictsCommandlineHeader", "Konflikt opcji wiersza poleceń.");
-            French.Add("conflictsCommandlineHeader", "Conflits d'options de ligne de commande");
-            #endregion
-
             #region Tray Icon
             //Component: MenuItemRestore
             //The menu item for restoring the application
@@ -324,6 +312,7 @@ namespace RelhaxModpack
             Gernam.Add("MenuItemRestore", "Wiederherstellen");
             Polish.Add("MenuItemRestore", "Przywróć");
             French.Add("MenuItemRestore", "Restaurer");
+            russian.Add("MenuItemRestore", "Восстановить");
 
             //Component: MenuItemCheckUpdates
             //The menu item for restoring the application
@@ -331,6 +320,7 @@ namespace RelhaxModpack
             Gernam.Add("MenuItemCheckUpdates", "Nach Updates suchen");
             Polish.Add("MenuItemCheckUpdates", "Sprawdź aktualizacje");
             French.Add("MenuItemCheckUpdates", "Vérifier les mises à jour");
+            russian.Add("MenuItemCheckUpdates", "Проверить наличие обновлений");
 
             //Component: MenuItemAppClose
             //The menu item for restoring the application
@@ -338,6 +328,7 @@ namespace RelhaxModpack
             Gernam.Add("MenuItemAppClose", "Schließen");
             Polish.Add("MenuItemAppClose", "Zamknij");
             French.Add("MenuItemAppClose", "Fermer");
+            russian.Add("MenuItemAppClose", "Закрыть");
 
             //Component: newDBApplied
             //MessageBox for when a new database version is applied
@@ -345,6 +336,7 @@ namespace RelhaxModpack
             Gernam.Add("newDBApplied", "Neue Datenbankversion angewendet");
             Polish.Add("newDBApplied", "Zastosowano nową bazę danych");
             French.Add("newDBApplied", "Nouvelle version de base de données appliquée");
+            russian.Add("newDBApplied", "Применена новая версия базы данных");
             #endregion
 
             #region Main Window
@@ -354,6 +346,7 @@ namespace RelhaxModpack
             Gernam.Add("InstallModpackButton", "Auswahl der Mods");
             Polish.Add("InstallModpackButton", "Przejdź Do Wyboru Modyfikacji");
             French.Add("InstallModpackButton", "Sélection des mods");
+            russian.Add("InstallModpackButton", "Начать выбор модификаций");
 
             //Component: InstallModpackButtonDescription
             //
@@ -368,6 +361,7 @@ namespace RelhaxModpack
             Gernam.Add("UninstallModpackButton", "Relhax Modpack deinstallieren");
             Polish.Add("UninstallModpackButton", "Odinstaluj Paczkę Relhax");
             French.Add("UninstallModpackButton", "Désinstaller Relhax Modpack");
+            russian.Add("UninstallModpackButton", "Удалить модпак Relhax");
 
             //Component: UninstallModpackButtonDescription
             //
@@ -396,6 +390,7 @@ namespace RelhaxModpack
             Gernam.Add("ForceManuelGameDetectionCB", "Erzwinge manuelle Spielerkennung");
             Polish.Add("ForceManuelGameDetectionCB", "Wymuś ręczną weryfikację ścieżki gry");
             French.Add("ForceManuelGameDetectionCB", "Forcer détection manuel");
+            russian.Add("ForceManuelGameDetectionCB", "Принудительно указать папку с игрой");
 
             //Component: ForceManuelGameDetectionCBDescription
             //
@@ -414,24 +409,28 @@ namespace RelhaxModpack
             Gernam.Add("LanguageSelectionGBHeader", "Sprachauswahl");
             Polish.Add("LanguageSelectionGBHeader", "Wybór języka");
             French.Add("LanguageSelectionGBHeader", "Choix de langue");
+            russian.Add("LanguageSelectionGBHeader", "Выбрать язык");
 
             //Component: Forms_ENG_NAButtonDescription
             English.Add("Forms_ENG_NAButtonDescription", "Go to the English-speaking 'World of Tanks' forum page for the NA server");
             Gernam.Add("Forms_ENG_NAButtonDescription", "Gehe zur englischsprachigen 'World of Tanks' Forum Seite für den NA Server");
             Polish.Add("Forms_ENG_NAButtonDescription", TranslationNeeded);
             French.Add("Forms_ENG_NAButtonDescription", TranslationNeeded);
+            russian.Add("Forms_ENG_NAButtonDescription", "Перейти на страницу модпака на World of Tanks NA (страница на английском)");
 
             //Component: FormsENG_EUButtonDescription
             English.Add("Forms_ENG_EUButtonDescription", "Go to the English-speaking 'World of Tanks' forum page for the EU server");
             Gernam.Add("Forms_ENG_EUButtonDescription", "Gehe zur englischsprachigen 'World of Tanks' Forum Seite für den EU Server");
             Polish.Add("Forms_ENG_EUButtonDescription", TranslationNeeded);
             French.Add("Forms_ENG_EUButtonDescription", TranslationNeeded);
+            russian.Add("FormsENG_EUButtonDescription", "Перейти на страницу модпака на World of Tanks EU (страница на английском)");
 
             //Component: FormsENG_GERButtonDescription
             English.Add("Forms_GER_EUButtonDescription", "Go to the Gernam-speaking 'World of Tanks' forum page for the EU server");
             Gernam.Add("Forms_GER_EUButtonDescription", "Gehe zur deutschsprachigen 'World of Tanks' Forum Seite für den EU Server");
             Polish.Add("Forms_GER_EUButtonDescription", TranslationNeeded);
             French.Add("Forms_GER_EUButtonDescription", TranslationNeeded);
+            russian.Add("FormsENG_GERButtonDescription", "Перейти на страницу модпака на World of Tanks EU (страница на немецком)");
 
             //Component: SaveUserDataCB
             //
@@ -439,6 +438,7 @@ namespace RelhaxModpack
             Gernam.Add("SaveUserDataCB", "Mod Daten speichern");
             Polish.Add("SaveUserDataCB", "Zapisz ustawienia użytkownika");
             French.Add("SaveUserDataCB", "Sauvegarder les données utilisateur");
+            russian.Add("SaveUserDataCB", "Сохранить пользовательские данные");
 
             //Component:SaveUserDataCBDescription
             //
@@ -453,6 +453,7 @@ namespace RelhaxModpack
             Gernam.Add("CleanInstallCB", "Saubere Installation (empfohlen)");
             Polish.Add("CleanInstallCB", "Czysta instalacja (Zalecane)");
             French.Add("CleanInstallCB", "Installation propre (Recommandé)");
+            russian.Add("CleanInstallCB", "Чистая установка (рекомендуется)");
 
             //Component: CleanInstallCBDescription
             //
@@ -471,6 +472,7 @@ namespace RelhaxModpack
             Gernam.Add("BackupModsCB", "Sicherung des aktuellen Modsordner");
             Polish.Add("BackupModsCB", "Zrób kopię zapasową obecnego pliku z modyfikacjami");
             French.Add("BackupModsCB", "Sauvegarder le dossier de mods");
+            russian.Add("BackupModsCB", "Сделать резервную копию папки с модификациями");
 
             //Component: BackupModsSizeLabelUsed
             //
@@ -493,6 +495,7 @@ namespace RelhaxModpack
             Gernam.Add("SaveLastInstallCB", "Speicherung der letzten Installation");
             Polish.Add("SaveLastInstallCB", "Zapisz ostatnią konfigurację instalacji");
             French.Add("SaveLastInstallCB", "Sauvegarder la denière configuration");
+            russian.Add("SaveLastInstallCB", "Запомнить выбранные моды");
 
             //Component: SaveLastInstallCBDescription
             //
@@ -565,6 +568,7 @@ namespace RelhaxModpack
             Gernam.Add("CancelDownloadButton", "Download abbrechen");
             Polish.Add("CancelDownloadButton", "Anuluj pobieranie");
             French.Add("CancelDownloadButton", "Anuler le téléchargement");
+            russian.Add("CancelDownloadButton", "Отменить скачивание");
 
             //Component: appDataFolderNotExistHeader
             //
@@ -572,6 +576,7 @@ namespace RelhaxModpack
             Gernam.Add("appDataFolderNotExistHeader", "Konnte den Cache-Ordner WoT nicht erkennen");
             Polish.Add("appDataFolderNotExistHeader", "Nie wykryto foldera WoT cache");
             French.Add("appDataFolderNotExistHeader", "Impossible de détecter le dossier de cache WoT");
+            russian.Add("appDataFolderNotExistHeader", "Невозможно найти папку кэша World of Tanks");
 
 
             //Component: appDataFolderNotExist
@@ -580,6 +585,7 @@ namespace RelhaxModpack
             Gernam.Add("appDataFolderNotExist", "Der Installer konnte den WoT-Cache-Ordner nicht erkennen. Installation fortsetzen ohne den WoT-Cache zu löschen?");
             Polish.Add("appDataFolderNotExist", "Instalato nie wykrył foldera cache. Czy kontynuować bez czyszczenia folderu cache?");
             French.Add("appDataFolderNotExist", "L'installateur n'as pas pus détecter le dossier de cache WoT. Continuer l'installation sans nettoyer le cache?");
+            russian.Add("appDataFolderNotExist", "Установщик не обнаружил папку кэша игры. Продолжить установку без очистки кэша?");
 
             //Component: viewAppUpdates
             //
@@ -587,6 +593,7 @@ namespace RelhaxModpack
             Gernam.Add("viewAppUpdates", "Programmaktualisierungen anzeigen");
             Polish.Add("viewAppUpdates", "Pokaż ostatnie zmiany w aplikacji");
             French.Add("viewAppUpdates", "Afficher les dernières mises à jour de l'applications");
+            russian.Add("viewAppUpdates", "Посмотреть последние обновления приложения");
 
             //Component: viewDBUpdates
             //
@@ -594,6 +601,7 @@ namespace RelhaxModpack
             Gernam.Add("viewDBUpdates", "Datenbankaktualisierungen anzeigen");
             Polish.Add("viewDBUpdates", "Pokaż ostatnie zmiany w bazie danych");
             French.Add("viewDBUpdates", "Afficher les dernières mises à jour de la base de données");
+            russian.Add("viewDBUpdates", "Посмотреть последние обновления базы данных");
 
             //Component: EnableColorChangeDefaultCB
             //
@@ -601,6 +609,7 @@ namespace RelhaxModpack
             Gernam.Add("EnableColorChangeDefaultCB", "Farbwechsel");
             Polish.Add("EnableColorChangeDefaultCB", "Włącz zmianê kolorów");
             French.Add("EnableColorChangeDefaultCB", "Activer les changements de couleurs");
+            russian.Add("EnableColorChangeDefaultCB", "Заменить цвета");
 
             //Component: EnableColorChangeDefaultCBDescription
             //
@@ -609,26 +618,13 @@ namespace RelhaxModpack
             Polish.Add("EnableColorChangeDefaultCBDescription", "Włącz zmianê kolorów podczas zmiany wyboru modyfikacji i ustawieñ.");
             French.Add("EnableColorChangeDefaultCBDescription", "Activer le changement de les couleurs lors de la selection d'un mod ou d'une config");
 
-            //Component: EnableColorChangeDefaultV2CB
-            //
-            English.Add("EnableColorChangeDefaultV2CB", "Enable color change");
-            Gernam.Add("EnableColorChangeDefaultV2CB", "Farbwechsel");
-            Polish.Add("EnableColorChangeDefaultV2CB", "Włącz zmianê kolorów");
-            French.Add("EnableColorChangeDefaultV2CB", "Activer les changements de couleurs");
-
-            //Component: EnableColorChangeDefaultV2CBDescription
-            //
-            English.Add("EnableColorChangeDefaultV2CBDescription", "Enable the changing of colors when toggling the selection of a mod or config.");
-            Gernam.Add("EnableColorChangeDefaultV2CBDescription", "Die Farbe ändert sich, wenn man eine Auswahl getroffen hat");
-            Polish.Add("EnableColorChangeDefaultV2CBDescription", "Włącz zmianê kolorów podczas zmiany wyboru modyfikacji i ustawieñ.");
-            French.Add("EnableColorChangeDefaultV2CBDescription", "Activer le changement de les couleurs lors de la selection d'un mod ou d'une config");
-
             //Component: EnableColorChangeLegacyCB
             //
             English.Add("EnableColorChangeLegacyCB", "Enable color change");
             Gernam.Add("EnableColorChangeLegacyCB", "Farbwechsel");
             Polish.Add("EnableColorChangeLegacyCB", "Włącz zmianê kolorów");
             French.Add("EnableColorChangeLegacyCB", "Activer les changements de couleurs");
+            russian.Add("EnableColorChangeLegacyCB", "Заменить цвета");
 
             //Component: EnableColorChangeLegacyCBDescription
             //
@@ -643,6 +639,7 @@ namespace RelhaxModpack
             Gernam.Add("ClearLogFilesCB", "Protokolldatei löschen");
             Polish.Add("ClearLogFilesCB", "Wyczyść logi");
             French.Add("ClearLogFilesCB", "Effacer les fichiers logs");
+            russian.Add("ClearLogFilesCB", "Очистить логи");
 
             //Component: ClearLogFilesCBDescription
             //
@@ -657,6 +654,7 @@ namespace RelhaxModpack
             Gernam.Add("CreateShortcutsCB", "Erstelle desktop verknüpfungen");
             Polish.Add("CreateShortcutsCB", "Stwórz skróty na pulpicie");
             French.Add("CreateShortcutsCB", "Créer des raccourcis sur le bureau");
+            russian.Add("CreateShortcutsCB", "Создать ярлык рабочего стола");
 
             //Component: CreateShortcutsCBDescription
             //
@@ -667,12 +665,12 @@ namespace RelhaxModpack
             French.Add("CreateShortcutsCBDescription", "Une fois sélectionné, L'installation créera des icônes de raccourci sur votre bureau pour les mods qui ont des" +
                 " fichiers .exe (comme la configuration WWIIHA)");
 
-            //Component: DeleteOldCacheFiles
+            //Component: DeleteOldPackages
             //
-            English.Add("DeleteOldCacheFiles", "Delete old cache files");
-            Gernam.Add("DeleteOldCacheFiles", TranslationNeeded);
-            Polish.Add("DeleteOldCacheFiles", TranslationNeeded);
-            French.Add("DeleteOldCacheFiles", TranslationNeeded);
+            English.Add("DeleteOldPackages", "Delete old package files");
+            Gernam.Add("DeleteOldPackages", TranslationNeeded);
+            Polish.Add("DeleteOldPackages", TranslationNeeded);
+            French.Add("DeleteOldPackages", TranslationNeeded);
 
             //Component: DeleteOldCacheFilesDescription
             //
@@ -868,10 +866,11 @@ namespace RelhaxModpack
 
             //Component: MulticoreExtractionCB
             //
-            English.Add("MulticoreExtractionCB", "Multicore extraction mode (experimental)");
-            Gernam.Add("MulticoreExtractionCB", "Mehrkern Extraktion (experimentell)");
-            Polish.Add("MulticoreExtractionCB", "Wsparcie wielu rdzeni (eksperymentalne)");
-            French.Add("MulticoreExtractionCB", "Mode d'extraction multicoeur (expérimental)");
+            English.Add("MulticoreExtractionCB", "Multicore extraction mode");
+            Gernam.Add("MulticoreExtractionCB", "Mehrkern Extraktion");
+            Polish.Add("MulticoreExtractionCB", "Wsparcie wielu rdzeni");
+            French.Add("MulticoreExtractionCB", "Mode d'extraction multicoeur");
+            russian.Add("MulticoreExtractionCB", "Многопроцессорный режим распаковки");
 
             //Component: MulticoreExtractionCBDescription
             //
@@ -890,6 +889,7 @@ namespace RelhaxModpack
             Gernam.Add("UninstallDefault", "Standard");
             Polish.Add("UninstallDefault", "Standard");
             French.Add("UninstallDefault", "Défaut");
+            russian.Add("UninstallDefault", "Стандартный");
 
             //Component: UninstallQuick
             //
@@ -897,6 +897,7 @@ namespace RelhaxModpack
             Gernam.Add("UninstallQuick", "Schnell");
             Polish.Add("UninstallQuick", "Szybka");
             French.Add("UninstallQuick", "Rapide");
+            russian.Add("UninstallQuick", "Быстрый");
 
             //Component: ExportModeCB
             //
@@ -904,6 +905,7 @@ namespace RelhaxModpack
             Gernam.Add("ExportModeCB", "Export-Modus");
             Polish.Add("ExportModeCB", "Tryb wyboru ścieżki wypakowywania");
             French.Add("ExportModeCB", "Mode d'exportation");
+            russian.Add("ExportModeCB", "Режим экспорта");
 
             //Component: ExportModeCBDescription
             //Explaining the export mode
@@ -924,6 +926,7 @@ namespace RelhaxModpack
             Gernam.Add("ExportWindowDesctiption", "Wählen Sie die Version von WoT, für die Sie exportieren möchten");
             Polish.Add("ExportWindowDesctiption", "Wybór wersji WoT");
             French.Add("ExportWindowDesctiption", "Sélection de la version de WoT que vous souhaitez exporter");
+            russian.Add("ExportWindowDesctiption", "Выберите версию WoT, для которой нужно произвести экспорт");
 
             //Component: helperText
             //
@@ -935,6 +938,16 @@ namespace RelhaxModpack
                 " Kliknik PPM na opcji, by wyświetlić opis. Nie zobaczysz tej wiadomości ponownie, dopóki nie usuniesz pliku ustawień xml.");
             French.Add("helperText", "Bienvenue au Modpack Relhax! J'ai aissayé de faire le modpack le plus simple possible, mais des questions peuvent survenir." +
                 " Survolez un paramètre pour voire une explication. Vous n'allez plus voire cette boite, sauf si vous supprimez le fichier de configuration xml ");
+            russian.Add("helperText", "Добро пожаловать в модпак Relhax! Я пытался сделать модпак максимально простым для использования, но вопросы всё же могут возникнуть." +
+                " Наведите курсор мыши на любую настройку, и вы увидите пояснение к ней. Данное диалоговое окно больше не появится, если не удалите XML-файл с настройками.");
+
+            //Component: helperTextShort
+            //
+            English.Add("helperTextShort", "Welcome to the Relhax Modpack!");
+            Gernam.Add("helperTextShort", "Willkommen im Relhax Modpack!");
+            Polish.Add("helperTextShort", "Witamy w paczce Relhax!");
+            French.Add("helperTextShort", "Bienvenue au Modpack Relhax!");
+            russian.Add("helperTextShort", "Добро пожаловать в модпак Relhax!");
 
             //Component: NotifyIfSameDatabaseCB
             //
@@ -942,6 +955,7 @@ namespace RelhaxModpack
             Gernam.Add("NotifyIfSameDatabaseCB", "Hinweis wenn keine Aktuallisierungen erfolgt sind");
             Polish.Add("NotifyIfSameDatabaseCB", "Poinformuj, jeśli nie będzie dostępna nowa baza danych");
             French.Add("NotifyIfSameDatabaseCB", "Informer si aucune nouvelle base de données est disponible");
+            russian.Add("NotifyIfSameDatabaseCB", "Уведомлять при отстутсвии новых баз данных");
 
             //Component: NotifyIfSameDatabaseCBDescription
             //
@@ -953,10 +967,11 @@ namespace RelhaxModpack
 
             //Component: ShowInstallCompleteWindowCB
             //
-            English.Add("ShowInstallCompleteWindowCB", "Show install complete window");
-            Gernam.Add("ShowInstallCompleteWindowCB", "Zeigt \"Installation fertig\" Fenster");
-            Polish.Add("ShowInstallCompleteWindowCB", "Pokaż okno akcji po instalacji");
-            French.Add("ShowInstallCompleteWindowCB", "Afficher la fenêtre \"installation terminé\"");
+            English.Add("ShowInstallCompleteWindowCB", "Show advanced install complete window");
+            Gernam.Add("ShowInstallCompleteWindowCB", TranslationNeeded);
+            Polish.Add("ShowInstallCompleteWindowCB", TranslationNeeded);
+            French.Add("ShowInstallCompleteWindowCB", TranslationNeeded);
+            russian.Add("ShowInstallCompleteWindowCB", TranslationNeeded);
 
             //Component: ShowInstallCompleteWindowCBDescription
             //
@@ -988,6 +1003,7 @@ namespace RelhaxModpack
             Gernam.Add("ClearCacheCB", "Cache-Daten für WoT löschen");
             Polish.Add("ClearCacheCB", "Usuń dane WoT cache");
             French.Add("ClearCacheCB", "Nettoyer le dossier de Cache WoT");
+            Russian.Add("ClearCacheCB", TranslationNeeded);
 
             //Component: ClearCachCBDescription
             //
@@ -1022,6 +1038,7 @@ namespace RelhaxModpack
             Gernam.Add("DiagnosticUtilitiesButton", "Diagnosedienstprogramme");
             Polish.Add("DiagnosticUtilitiesButton", "Narzędzia diagnostyczne");
             French.Add("DiagnosticUtilitiesButton", "Utilitaires de diagnostique");
+            russian.Add("DiagnosticUtilitiesButton", "Диагностика");
 
             //Component: DiagnosticUtilitiesButtonDescription
             //
@@ -1036,6 +1053,7 @@ namespace RelhaxModpack
             Gernam.Add("UninstallModeGroupBox", "Deinstallationsmodus:");
             Polish.Add("UninstallModeGroupBox", "Tryb Deinstalacji:");
             French.Add("UninstallModeGroupBox", "Mode de désinstallation:");
+            russian.Add("UninstallModeGroupBox", "Режим деинсталляции: ");
 
             //Component: UninstallModeGroupBoxDescription
             English.Add("UninstallModeGroupBoxDescription", "Select the uninstall mode to use");
@@ -1048,42 +1066,49 @@ namespace RelhaxModpack
             Gernam.Add("FacebookButtonDescription", "Unsere Facebook Seite aufrufen");
             Polish.Add("FacebookButtonDescription", "Strona FB");
             French.Add("FacebookButtonDescription", "Page Facebook");
+            russian.Add("FacebookButtonDescription", "Перейти на нашу страницу в Facebook");
 
             //Component: DiscordButtonDescription
             English.Add("DiscordButtonDescription", "Go to Discord server");
             Gernam.Add("DiscordButtonDescription", "Zum Discord Server");
             Polish.Add("DiscordButtonDescription", "Serwer Discorda");
             French.Add("DiscordButtonDescription", "Serveur Discord");
+            russian.Add("DiscordButtonDescription", "Перейти на наш сервер Discord");
 
             //Component: TwitterButtonDescription
             English.Add("TwitterButtonDescription", "Go to our Twitter page");
             Gernam.Add("TwitterButtonDescription", "Unsere Twitter Seite aufrufen");
             Polish.Add("TwitterButtonDescription", "Strona TT");
             French.Add("TwitterButtonDescription", "Page Twitter");
+            russian.Add("TwitterButtonDescription", "Перейти на нашу страницу в Twitter");
 
             //Component: SendEmailButtonDescription
-            English.Add("SendEmailButtonDescription", "Send us an Email");
-            Gernam.Add("SendEmailButtonDescription", "Schicke uns eine Email");
-            Polish.Add("SendEmailButtonDescription", "Przeœlij nam wiadomoœæ e-mail");
-            French.Add("SendEmailButtonDescription", "Nous envoyer un Email");
+            English.Add("SendEmailButtonDescription", "Send us an Email (No modpack support)");
+            Gernam.Add("SendEmailButtonDescription", TranslationNeeded);
+            Polish.Add("SendEmailButtonDescription", TranslationNeeded);
+            French.Add("SendEmailButtonDescription", TranslationNeeded);
+            russian.Add("SendEmailButtonDescription", TranslationNeeded);
 
             //Component: HomepageButtonDescription
             English.Add("HomepageButtonDescription", "Visit our Website");
             Gernam.Add("HomepageButtonDescription", "Zu unserer Homepage");
             Polish.Add("HomepageButtonDescription", "Odwiedz nasza strone");
             French.Add("HomepageButtonDescription", "Visiter notre site web");
+            russian.Add("HomepageButtonDescription", "Посетить наш веб-сайт");
 
             //Component: DonateButtonDescription
             English.Add("DonateButtonDescription", "Donation for further development");
             Gernam.Add("DonateButtonDescription", "Spende für die Weiterentwicklung");
             Polish.Add("DonateButtonDescription", "Dotacja na dalszy rozwój");
             French.Add("DonateButtonDescription", "Donation pour aider au développement");
+            russian.Add("DonateButtonDescription", "Поддержать копеечкой для дальнейшей разработки");
 
             //Component: FindBugAddModButtonDescription
             English.Add("FindBugAddModButtonDescription", "Find a bug? Want a mod added? Report here please!");
             Gernam.Add("FindBugAddModButtonDescription", "Fehler gefunden? Willst Du einen Mod hinzufügen? Bitte hier melden!");
             Polish.Add("FindBugAddModButtonDescription", "Znalazłeś błąd? Chcesz dodać mod?");
             French.Add("FindBugAddModButtonDescription", "Trouvé un bug? Recommandation de mod?");
+            russian.Add("FindBugAddModButtonDescription", "Нашли баг? Хотите добавить мод? Пишите сюда!");
 
             //Component: Mod Selection view Group Box
             //
@@ -1091,62 +1116,43 @@ namespace RelhaxModpack
             Gernam.Add("SelectionViewGB", "Darstellungsart");
             Polish.Add("SelectionViewGB", "Widok wyborów");
             French.Add("SelectionViewGB", "Affichage de sélection");
+            russian.Add("SelectionViewGB", "Вид списка");
 
-            //Component: Mod selection view default (relhax)
+            //Component: Mod selection view default (relhax) [NOW WPF VERSION IS DEFAULT]
             //
             English.Add("SelectionDefault", "Default");
             Gernam.Add("SelectionDefault", "Standard");
             Polish.Add("SelectionDefault", "Domyślne");
             French.Add("SelectionDefault", "Normal");
-
-            //Component: Mod selection view default (relhax) [WPF VERSION]
-            //
-            English.Add("SelectionDefaultV2", "Default V2");
-            Gernam.Add("SelectionDefaultV2", "Standard V2");
-            Polish.Add("SelectionDefaultV2", "Domyślne V2");
-            French.Add("SelectionDefaultV2", "Normal V2");
+            russian.Add("SelectionDefault", "Стандартный");
 
             //Component: Mod selection view legacy (OMC)
             //
-            English.Add("SelectionLegacy", "OMC Legacy");
-            Gernam.Add("SelectionLegacy", "OMC Legacy");
-            Polish.Add("SelectionLegacy", "OMC Legacy");
-            French.Add("SelectionLegacy", "OMC Legacy");
+            AddTranslationToAll("SelectionLegacy", "OMC Legacy");
 
-            //Component: Mod selection Description
+            //Componet: Mod selection Description
             //
             English.Add("SelectionLayoutDescription", "Select a mod selection list view mode\nDefault: Relhax list view mode\nLegacy: OMC tree list view mode");
             Gernam.Add("SelectionLayoutDescription", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nalternativ: OMC Baumstruktur");
             Polish.Add("SelectionLayoutDescription", "Wybierz tryb widoku wyborów modyfikacji\nDomyślnie: Tryb widoku listy RelHax\nSpuścizna: Tryb widoku listy OMC");
             French.Add("SelectionLayoutDescription", "Sélectionnez un style de liste pour la sélection\nNormal: Liste de sélection Relhax\nLegacy: Liste de vue arbre OMC");
+            russian.Add("SelectionLayoutDescription", "Выберите вид списка модов\nОбычный: как в Relhax (постранично)\nLegacy: как в OMC (деревом)");
 
-            //Component: Mod selection Description
+            //Componet: Mod selection Description
             //
             English.Add("SelectionDefaultDescription", "Select a mod selection list view mode\nDefault: Relhax list view mode\nLegacy: OMC tree list view mode");
             Gernam.Add("SelectionDefaultDescription", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nalternativ: OMC Baumstruktur");
             Polish.Add("SelectionDefaultDescription", "Wybierz tryb widoku wyborów modyfikacji\nDomyślnie: Tryb widoku listy RelHax\nSpuścizna: Tryb widoku listy OMC");
             French.Add("SelectionDefaultDescription", "Sélectionnez un style de liste pour la sélection\nNormal: Liste de sélection Relhax\nLegacy: Liste de vue arbre OMC");
+            russian.Add("SelectionDefaultDescription", "Выберите вид списка модов\nОбычный: как в Relhax (постранично)\nLegacy: как в OMC (деревом)");
 
-            //Component: Mod selection Description
-            //
-            English.Add("SelectionDefaultV2Description", "Select a mod selection list view mode\nDefault: Relhax list view mode\nLegacy: OMC tree list view mode");
-            Gernam.Add("SelectionDefaultV2Description", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nalternativ: OMC Baumstruktur");
-            Polish.Add("SelectionDefaultV2Description", "Wybierz tryb widoku wyborów modyfikacji\nDomyślnie: Tryb widoku listy RelHax\nSpuścizna: Tryb widoku listy OMC");
-            French.Add("SelectionDefaultV2Description", "Sélectionnez un style de liste pour la sélection\nNormal: Liste de sélection Relhax\nLegacy: Liste de vue arbre OMC");
-
-            //Component: Mod selection Description
+            //Componet: Mod selection Description
             //
             English.Add("SelectionLegacyDescription", "Select a mod selection list view mode\nDefault: Relhax list view mode\nLegacy: OMC tree list view mode");
             Gernam.Add("SelectionLegacyDescription", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nalternativ: OMC Baumstruktur");
             Polish.Add("SelectionLegacyDescription", "Wybierz tryb widoku wyborów modyfikacji\nDomyślnie: Tryb widoku listy RelHax\nSpuścizna: Tryb widoku listy OMC");
             French.Add("SelectionLegacyDescription", "Sélectionnez un style de liste pour la sélection\nNormal: Liste de sélection Relhax\nLegacy: Liste de vue arbre OMC");
-
-            //Component: selectionView_MouseEnter
-            //
-            English.Add("selectionView_MouseEnter", "Select a mod selection list view.");
-            Gernam.Add("selectionView_MouseEnter", "wähle eine der Listenansichten.");
-            Polish.Add("selectionView_MouseEnter", "Wybierz listę wyboru modyfikacji.");
-            French.Add("selectionView_MouseEnter", "Sélectionnez une vue de liste de sélection de mod.");
+            russian.Add("SelectionLegacyDescription", "Выберите вид списка модов\nОбычный: как в Relhax (постранично)\nLegacy: как в OMC (деревом)");
 
             //Component: LanguageSelectionGBDescription
             //
@@ -1154,6 +1160,7 @@ namespace RelhaxModpack
             Gernam.Add("LanguageSelectionGBDescription", "wähle Deine bevorzugte Sprache");
             Polish.Add("LanguageSelectionGBDescription", "Wybierz preferowany język.");
             French.Add("LanguageSelectionGBDescription", "Sélectionnez votre langue préféré");
+            russian.Add("LanguageSelectionGBDescription", "Выберите желаемый язык");
 
             //Component: expandNodesDefault
             //
@@ -1161,6 +1168,7 @@ namespace RelhaxModpack
             Gernam.Add("expandNodesDefault", "Alle erweitern");
             Polish.Add("expandNodesDefault", "Rozwiń wszystkie");
             French.Add("expandNodesDefault", "Développer tout");
+            russian.Add("expandNodesDefault", "Раскрыть все");
 
             //Component: expandNodesDefault2
             //
@@ -1168,6 +1176,7 @@ namespace RelhaxModpack
             Gernam.Add("expandNodesDefault2", "Alle erweitern");
             Polish.Add("expandNodesDefault2", "Rozwiń wszystkie");
             French.Add("expandNodesDefault2", "Développer tout");
+            russian.Add("expandNodesDefault2", "Раскрыть все");
 
             //Component: expandNodesDefaultDescription
             //
@@ -1175,6 +1184,8 @@ namespace RelhaxModpack
             Gernam.Add("expandNodesDefaultDescription", "Erweitere alle Einträge auf allen Registerkarten automatisch. Nur bei Ansicht als Baumstruktur.");
             Polish.Add("expandNodesDefaultDescription", "Zaznacz to, aby wszystkie opcje zostały automatycznie rozwinięte. Dotyczy tylko opcji Legacy Selection.");
             French.Add("expandNodesDefaultDescription", "Sélectionnez cette option pour que toutes les options s'élargis automatiquement. S'applique uniquement à la Sélection Legacy.");
+            russian.Add("expandNodesDefaultDescription", "Выберите этот пункт для автоматического раскрытия всех списков. Применимо только для legacy.");
+
 
             //Component: EnableBordersDefaultCB
             //
@@ -1182,13 +1193,7 @@ namespace RelhaxModpack
             Gernam.Add("EnableBordersDefaultCB", "Einrahmen");
             Polish.Add("EnableBordersDefaultCB", "Włącz granice");
             French.Add("EnableBordersDefaultCB", "Activer les bordures");
-
-            //Component: EnableBordersDefaultV2CB
-            //
-            English.Add("EnableBordersDefaultV2CB", "Enable borders");
-            Gernam.Add("EnableBordersDefaultV2CB", "Einrahmen");
-            Polish.Add("EnableBordersDefaultV2CB", "Włącz granice");
-            French.Add("EnableBordersDefaultV2CB", "Activer les bordures");
+            russian.Add("EnableBordersDefaultCB", "Включить границы");
 
             //Component: EnableBordersLegacyCB
             //
@@ -1196,6 +1201,7 @@ namespace RelhaxModpack
             Gernam.Add("EnableBordersLegacyCB", "Einrahmen");
             Polish.Add("EnableBordersLegacyCB", "Włącz granice");
             French.Add("EnableBordersLegacyCB", "Activer les bordures");
+            russian.Add("EnableBordersLegacyCB", "Включить границы");
 
             //Component: EnableBordersDefaultCBDescription
             //
@@ -1203,13 +1209,8 @@ namespace RelhaxModpack
             Gernam.Add("EnableBordersDefaultCBDescription", "Jede Auswahl schwarz einrahmen");
             Polish.Add("EnableBordersDefaultCBDescription", "Włącz czarne obramowanie modyfikacji i opcji konfiguracji");
             French.Add("EnableBordersDefaultCBDescription", "Activer les bordures noires autour de chaque mod et selections de configuration.");
+            russian.Add("EnableBordersDefaultCBDescription", "Включить показ чёрных рамок вокруг наименования каждого мода и конфигурации.");
 
-            //Component: EnableBordersDefaultCBDescription
-            //
-            English.Add("EnableBordersDefaultV2CBDescription", "Enable the black borders around each mod and config sublevel.");
-            Gernam.Add("EnableBordersDefaultV2CBDescription", "Jede Auswahl schwarz einrahmen");
-            Polish.Add("EnableBordersDefaultV2CBDescription", "Włącz czarne obramowanie modyfikacji i opcji konfiguracji");
-            French.Add("EnableBordersDefaultV2CBDescription", "Activer les bordures noires autour de chaque mod et selections de configuration.");
 
             //Component: EnableBordersLegacyCBDescription
             //
@@ -1217,30 +1218,38 @@ namespace RelhaxModpack
             Gernam.Add("EnableBordersLegacyCBDescription", "Jede Auswahl schwarz einrahmen");
             Polish.Add("EnableBordersLegacyCBDescription", "Włącz czarne obramowanie modyfikacji i opcji konfiguracji");
             French.Add("EnableBordersLegacyCBDescription", "Activer les bordures noires autour de chaque mod et selections de configuration.");
+            russian.Add("EnableBordersLegacyCBDescription", "Включить показ чёрных рамок вокруг наименования каждого мода и конфигурации.");
+
 
             //Component: UseBetaDatabaseCB
             English.Add("UseBetaDatabaseCB", "Use beta database");
             Gernam.Add("UseBetaDatabaseCB", "Die Beta-Version der Datenbank verwenden");
             Polish.Add("UseBetaDatabaseCB", "Użyj wersji beta bazy danych");
             French.Add("UseBetaDatabaseCB", "Utiliser la base de données beta");
+            russian.Add("UseBetaDatabaseCB", "Использовать бета-версию БД");
 
             //Component: UseBetaDatabaseCBDescription
             English.Add("UseBetaDatabaseCBDescription", "Use the latest beta database. Mod stability is not guaranteed");
             Gernam.Add("UseBetaDatabaseCBDescription", "Verwende die letzte Beta-Version des ModPack Datenbank. Die Stabilität der Mods kann nicht garantiert werden, jedoch werden hier auch Fehlerbehebungen als erstes getestet und implementiert.");
             Polish.Add("UseBetaDatabaseCBDescription", "Użyj ostatniej wersji beta bazy danych. Nie gwarantujemy stabilności modyfikacji.");
             French.Add("UseBetaDatabaseCBDescription", "Utiliser la dernière base de données beta. La stabilité des mods n'est pas garantie");
+            russian.Add("UseBetaDatabaseCBDescription", "Использовать последнюю доступную бета-версию БД. Стабильность модов не гарантирована.");
+
 
             //Component: UseBetaApplicationCB
             English.Add("UseBetaApplicationCB", "Use beta application");
             Gernam.Add("UseBetaApplicationCB", "Die Beta-Version des ModPack Managers verwenden");
             Polish.Add("UseBetaApplicationCB", "Użyj wersji beta bazy aplikacji");
             French.Add("UseBetaApplicationCB", "Utiliser l'application beta");
+            russian.Add("UseBetaApplicationCB", "Использовать бета-версию программы");
 
             //Component: UseBetaApplicationCBDescription
             English.Add("UseBetaApplicationCBDescription", "Use the latest beta application. Translations and application stability are not guaranteed");
             Gernam.Add("UseBetaApplicationCBDescription", "Verwende die letzte Beta-Version des ModPack Managers. Fehlerfreie Übersetzungen und Programmstabilität können nicht garantiert werden.");
             Polish.Add("UseBetaApplicationCBDescription", "Użyj ostatniej wersji beta aplikacji. Nie gwarantujemy stabilności ani tłumaczenia aplikacji.");
             French.Add("UseBetaApplicationCBDescription", "Utiliser la dernière version beta. Les traductions et la stabilité de l'application ne sont pas garanties");
+            russian.Add("UseBetaApplicationCBDescription", "Использовать последнюю доступную бета-версию программы. Корректность перевода и стабильность приложения не гарантированы.");
+
 
             //Component: SettingsTabIntroHeader
             //
@@ -1292,6 +1301,7 @@ namespace RelhaxModpack
             Gernam.Add("ContinueButtonLabel", "Installieren");
             Polish.Add("ContinueButtonLabel", "Zainstaluj");
             French.Add("ContinueButtonLabel", "Installer");
+            russian.Add("ContinueButtonLabel", "Установить");
 
             //Component: CancelButtonLabel
             //
@@ -1299,6 +1309,7 @@ namespace RelhaxModpack
             Gernam.Add("CancelButtonLabel", "Abbrechen");
             Polish.Add("CancelButtonLabel", "Anuluj");
             French.Add("CancelButtonLabel", "Anuler");
+            russian.Add("CancelButtonLabel", "Отмена");
 
             //Component: HelpLabel
             //
@@ -1313,6 +1324,7 @@ namespace RelhaxModpack
             Gernam.Add("LoadSelectionButtonLabel", "Auswahl laden");
             Polish.Add("LoadSelectionButtonLabel", "Wczytaj konfigurację z pliku");
             French.Add("LoadSelectionButtonLabel", "Charger une configuration");
+            russian.Add("LoadSelectionButtonLabel", "Загрузить шаблон настроек");
 
             //Component: SaveSelectionButtonLabel
             //
@@ -1320,6 +1332,7 @@ namespace RelhaxModpack
             Gernam.Add("SaveSelectionButtonLabel", "Auswahl speichern");
             Polish.Add("SaveSelectionButtonLabel", "Zapisz konfigurację w pliku");
             French.Add("SaveSelectionButtonLabel", "Sauvegarder une configuration");
+            russian.Add("SaveSelectionButtonLabel", "Сохранить шаблон настроек");
 
             //Component: ClearSelectionsButtonLabel
             //
@@ -1327,6 +1340,7 @@ namespace RelhaxModpack
             Gernam.Add("ClearSelectionsButtonLabel", "Auswahl löschen");
             Polish.Add("ClearSelectionsButtonLabel", "Wyczyść wybór");
             French.Add("ClearSelectionsButtonLabel", "Réinitialiser la sélection");
+            russian.Add("ClearSelectionsButtonLabel", "Снять все галочки");
 
             //Component: SearchThisTabOnlyCB
             //
@@ -1387,6 +1401,7 @@ namespace RelhaxModpack
             Gernam.Add("readingDatabase", "Lese datenbank");
             Polish.Add("readingDatabase", "Wczytywanie baz danych");
             French.Add("readingDatabase", "Chargement de la base de données");
+            russian.Add("readingDatabase", "Читается база данных");
 
             //Component: loadingUI
             //
@@ -1415,13 +1430,17 @@ namespace RelhaxModpack
             Gernam.Add("testModeDatabaseNotFound", "KRITISCH: Die Datanbank für den Testmodus wurde nicht gefunden:\n{0}");
             Polish.Add("testModeDatabaseNotFound", "BŁĄD KRYTYCZNY: Baza danych Trybu Testowego nie znaleziona w lokalizacji:\n{0}");
             French.Add("testModeDatabaseNotFound", "CRITIQUE: Impossible de trouver la base de données du mode de test situé a: \n{0}");
+            russian.Add("testModeDatabaseNotFound", "КРИТИЧЕСКАЯ ОШИБКА: Тестовая БД не найдена по адресу:\n{0}");
+
 
             //Component: 
             //
-            English.Add("duplicateMods", "CRITICAL: Duplicate mod name detected");
-            Gernam.Add("duplicateMods", "KRITISCH: Duplizierter Modname wurde erkannt");
-            Polish.Add("duplicateMods", "BŁĄD KRYTYCZNY: Wykryto zduplikowaną nazwę modyfikacji");
-            French.Add("duplicateMods", "CRITIQUE: Détection de mods en double");
+            English.Add("duplicateMods", "CRITICAL: Duplicate package ID detected");
+            Gernam.Add("duplicateMods", TranslationNeeded);
+            Polish.Add("duplicateMods", TranslationNeeded);
+            French.Add("duplicateMods", TranslationNeeded);
+            russian.Add("duplicateMods", TranslationNeeded);
+
 
             //Component: 
             //
@@ -1429,55 +1448,44 @@ namespace RelhaxModpack
             Gernam.Add("databaseReadFailed", "KRITISCH: Datenbank konnte nicht gelesen werden\n\nin der Protokolldatei stehen weitere Informationen zu diesem Fehler");
             Polish.Add("databaseReadFailed", "BŁĄD KRYTYCZNY: Nie udało się wczytać bazy danych");
             French.Add("databaseReadFailed", "CRITIQUE: Impossible de lire la base de données");
+            russian.Add("databaseReadFailed", "КРИТИЧЕСКАЯ ОШИБКА: Ошибка чтения базы данных!\nПодробности в log-файле");
+
 
             //Component: 
             //
-            English.Add("configSaveSuccess", "Config Saved Successfully");
-            Gernam.Add("configSaveSuccess", "Konfiguration wurde erfolgreich gespeichert");
-            Polish.Add("configSaveSuccess", "Udało się zapisać konfigurację");
-            French.Add("configSaveSuccess", "Succès sauvegarde de la configuration");
+            English.Add("configSaveSuccess", "Selection Saved Successfully");
+            Gernam.Add("configSaveSuccess", TranslationNeeded);
+            Polish.Add("configSaveSuccess", TranslationNeeded);
+            French.Add("configSaveSuccess", TranslationNeeded);
+            russian.Add("configSaveSuccess", TranslationNeeded);
 
             //Component: 
             //
-            English.Add("selectConfigFile", "Select a user preference file to load");
-            Gernam.Add("selectConfigFile", "Wählen Sie die benutzerdefinierte Datei aus, die geladen werden soll");
-            Polish.Add("selectConfigFile", "Wybierz plik preferencji do wczytania");
-            French.Add("selectConfigFile", "Sélectionnez un fichier de préférences utilisateur à charger");
+            English.Add("selectConfigFile", "Find a selection file to load");
+            Gernam.Add("selectConfigFile", TranslationNeeded);
+            Polish.Add("selectConfigFile", TranslationNeeded);
+            French.Add("selectConfigFile", TranslationNeeded);
 
             //Component: 
             //
-            English.Add("configLoadFailed", "The preference file could not be loaded, loading in standard mode");
-            Gernam.Add("configLoadFailed", "Die Konfigurationsdatei konnte nicht geladen werden, lade im Standard Modus");
-            Polish.Add("configLoadFailed", "Nie można wczytać pliku knfiguracji, ładowanie trybu podstawowego");
-            French.Add("configLoadFailed", "Impossible de charge le fichier de préférences. Chargement en mode normal");
+            English.Add("configLoadFailed", "The selection file could not be loaded, loading in standard mode");
+            Gernam.Add("configLoadFailed", TranslationNeeded);
+            Polish.Add("configLoadFailed", TranslationNeeded);
+            French.Add("configLoadFailed", TranslationNeeded);
 
             //Component: 
             //
-            English.Add("modNotFound", "The mod, \"{0}\" was not found in the modpack. It could have been renamed or removed.");
-            Gernam.Add("modNotFound", "Der Mod, \"{0}\" wurde im Modpack nicht gefunden. Er könnte umbenannt oder entfernt worden sein.");
-            Polish.Add("modNotFound", "Modyfikacja \"{0}\" nie została znaleziona w paczce. Sprawdź, czy nie została usunięta lub zmieniona nazwa.");
-            French.Add("modNotFound", "Impossible de trouver le mod, \"{0}\" dans le mod pack. Il est possible qu`il sois supprimé ou changé de nom");
+            English.Add("modNotFound", "The package (ID = \"{0}\") was not found in the database. It could have been renamed or removed.");
+            Gernam.Add("modNotFound", TranslationNeeded);
+            Polish.Add("modNotFound", TranslationNeeded);
+            French.Add("modNotFound", TranslationNeeded);
 
             //Component: 
             //
-            English.Add("configNotFound", "The config \"{0}\" was not found for mod \"{1}\". It could have been renamed or removed.");
-            Gernam.Add("configNotFound", "Die Config \"{0}\" wurde nicht für den Mod gefunden \"{1}\". Er könnte umbenannt oder entfernt worden sein.");
-            Polish.Add("configNotFound", "Konfiguracja \"{0}\" nie została znaleziona dla modyfikacji \"{1}\". Sprawdź, czy nie została usunięta lub zmieniona nazwa.");
-            French.Add("configNotFound", "Impossible de trouver la configuration \"{0}\" pour le mod \"{1}\". Il est possible qu`il sois supprimé ou changé de nom");
-
-            //Component: 
-            //
-            English.Add("modDeactivated", "The mod \"{0}\" is currently deactivated in the modpack and could not to be selected to install.");
-            Gernam.Add("modDeactivated", "Der Mod \"{0}\" ist derzeit im Modpack deaktiviert und steht für die Installation nicht zur Verfügung.");
-            Polish.Add("modDeactivated", "Modyfikacja \"{0}\" jest obecnie zdezaktywowana w paczce i nie może zostać wybrana.");
-            French.Add("modDeactivated", "Le mod est actuellement désactivé dans le mod pack et ne seras pas installé");
-
-            //Component: 
-            //
-            English.Add("configDeactivated", "The config \"{0}\" of \"{1}\" is currently deactivated in the modpack and could not to be selected to install.");
-            Gernam.Add("configDeactivated", "Die Konfiguration \"{0}\" von \"{1}\" ist derzeit im Modpack deaktiviert und steht für die Installation nicht zur Verfügung.");
-            Polish.Add("configDeactivated", "Konfiguracja \"{0}\" z \"{1}\" jest obecnie zdezaktywowana w paczce i nie może zostać wybrana.");
-            French.Add("configDeactivated", "La configuration \"{0}\" du mod \"{1}\" est actuellement désactivé dans le mod pack et ne seras pas installé");
+            English.Add("modDeactivated", "The package (ID= \"{0}\") is currently deactivated in the modpack and could not to be selected to install.");
+            Gernam.Add("modDeactivated", TranslationNeeded);
+            Polish.Add("modDeactivated", TranslationNeeded);
+            French.Add("modDeactivated", TranslationNeeded);
 
             //Component: 
             //
@@ -1485,6 +1493,8 @@ namespace RelhaxModpack
             Gernam.Add("modsNotFoundTechnical", "Die folgenden Modifikationen können nicht gefunden werden und wurden wahrscheinlich entfernt/gelöscht. Es sind leider nur technische Namen verfügbar:\n{0}");
             Polish.Add("modsNotFoundTechnical", "Następujące modyfikacje nie zostały znalezione, najprawdopodobniej zostały usunięte:\n{0}");
             French.Add("modsNotFoundTechnical", "Les mods suivants n'ont pas pu être trouvés et ont probablement été supprimés. Il n'y a que des noms techniques disponibles:\n{0}");
+            russian.Add("modsNotFoundTechnical", "Данные моды не найдены, вероятно они были удалены. Есть только их техническое название:\n{0}");
+
 
             //Component: 
             //
@@ -1492,6 +1502,8 @@ namespace RelhaxModpack
             Gernam.Add("modsBrokenStructure", "Die folgenden Mods wurden aufgrund von Änderungen in der Paketstruktur deaktiviert. Sie müssen sie erneut auswählen, wenn Sie sie installieren möchten:\n");
             Polish.Add("modsBrokenStructure", "Następujące modyfikacje zostały wyłączone ze względu na zmiany w strukturze paczki. Zaznacz je ponownie, jeśli chcesz je zainstalować:\n");
             French.Add("modsBrokenStructure", "Les mods suivants ont été désactivés en raison de modifications dans la structure du paquet: vous devez les vérifier de nouveau si vous voulez les installer:\n");
+            russian.Add("modsBrokenStructure", "Данные моды были отключены в связи с изменением структуры пакета. Вы можете перепроверить их в случае, если хотите установить их:\n");
+
 
             //Component: 
             //
@@ -1501,6 +1513,8 @@ namespace RelhaxModpack
                 " (Eine Sicherung des alten Formats erfolgt)");
             Polish.Add("oldSavedConfigFile", "Zapisana konfiguracja jest w przestarzałym formacie i może powodować nieścisłości. Czy chcesz przekonwertować ją na nowszy zapis?");
             French.Add("oldSavedConfigFile", "Le fichier de préférences que vous avez choisis est un format obsolète et seras inexact dans le future. Convertire au nouveau format?");
+            russian.Add("oldSavedConfigFile", "Сохранённый файл конфигурации использует устаревший формат и может некорректно работать в будущем. Хотите преобразовать его в новый? Бэкап старого будет так же сохранён.");
+
 
             //Component: 
             //
@@ -1508,6 +1522,7 @@ namespace RelhaxModpack
             Gernam.Add("prefrencesSet", "Bevorzugte Einstellungen");
             Polish.Add("prefrencesSet", "Preferowane Ustawienia");
             French.Add("prefrencesSet", "Préférences Enregistrées");
+            russian.Add("prefrencesSet", "Настройки применены");
 
             //Component: 
             //
@@ -1515,6 +1530,7 @@ namespace RelhaxModpack
             Gernam.Add("selectionsCleared", "Auswahl gelöscht");
             Polish.Add("selectionsCleared", "Usunięto Zaznaczenia");
             French.Add("selectionsCleared", "Sélections effacées");
+            russian.Add("selectionsCleared", "Список выбранных модов очищен");
 
             //Component: ExpandAllButton
             //
@@ -1522,6 +1538,7 @@ namespace RelhaxModpack
             Gernam.Add("ExpandAllButton", "Erweitere alle Einträge der aktuellen Registerkarte");
             Polish.Add("ExpandAllButton", "Rozwiń bieżącą kartę");
             French.Add("ExpandAllButton", "Elargir l'onglet");
+            russian.Add("ExpandAllButton", "Раскрыть текущую вкладку");
 
             //Component: CollapseAllButton
             //
@@ -1529,6 +1546,7 @@ namespace RelhaxModpack
             Gernam.Add("CollapseAllButton", "Reduziere alle Einträge der aktuellen Registerkarte");
             Polish.Add("CollapseAllButton", "Zwiń bieżącą kartę");
             French.Add("CollapseAllButton", "Réduire l'onglet");
+            russian.Add("CollapseAllButton", "Свернуть текущую вкладку");
 
             //Component: InstallingTo
             //
@@ -1536,13 +1554,14 @@ namespace RelhaxModpack
             Gernam.Add("InstallingTo", "Installiere nach: {0}");
             Polish.Add("InstallingTo", "Instalowanie w: {0}");
             French.Add("InstallingTo", "Installation à: {0}");
+            russian.Add("InstallingTo", "Установка в {0}");
 
             //Section saveConfig
             //
-            English.Add("selectWhereToSave", "Select where to save user prefs");
-            Gernam.Add("selectWhereToSave", "Bitte wähle wo die Konfiguation gespeichert werden soll");
-            Polish.Add("selectWhereToSave", "Wybór lokalizacji zapisu preferencji użytkownika");
-            French.Add("selectWhereToSave", "Sélectionnez la location pour enregistrer les préférences utilisateur");
+            English.Add("selectWhereToSave", "Select where to save selection file");
+            Gernam.Add("selectWhereToSave", TranslationNeeded);
+            Polish.Add("selectWhereToSave", TranslationNeeded);
+            French.Add("selectWhereToSave", TranslationNeeded);
 
             //Section addModTreeview
             //
@@ -1550,50 +1569,58 @@ namespace RelhaxModpack
             Gernam.Add("updated", "aktualisiert");
             Polish.Add("updated", "zaktualizowane");
             French.Add("updated", "Mis à jours");
+            russian.Add("updated", "обновлено");
             #endregion
 
             #region Update Window
-            //Component: updateAcceptButton
+            //Componet: updateAcceptButton
             //
-            English.Add("updateAcceptButton", "yes");
-            Gernam.Add("updateAcceptButton", "ja");
-            Polish.Add("updateAcceptButton", "Tak");
-            French.Add("updateAcceptButton", "Oui");
+            english.Add("updateAcceptButton", "yes");
+            german.Add("updateAcceptButton", "ja");
+            polish.Add("updateAcceptButton", "Tak");
+            french.Add("updateAcceptButton", "Oui");
+            russian.Add("updateAcceptButton", "Да");
 
-            //Component: updateDeclineButton
+            //Componet: updateDeclineButton
             //
-            English.Add("updateDeclineButton", "no");
-            Gernam.Add("updateDeclineButton", "nein");
-            Polish.Add("updateDeclineButton", "Nie");
-            French.Add("updateDeclineButton", "Non");
+            english.Add("updateDeclineButton", "no");
+            german.Add("updateDeclineButton", "nein");
+            polish.Add("updateDeclineButton", "Nie");
+            french.Add("updateDeclineButton", "Non");
+            russian.Add("updateDeclineButton", "Нет");
 
-            //Component: newVersionAvailableLabel
+            //Componet: newVersionAvailableLabel
             //
-            English.Add("newVersionAvailableLabel", "New version available");
-            Gernam.Add("newVersionAvailableLabel", "Neue version verfügbar");
-            Polish.Add("newVersionAvailableLabel", "Dostępna nowa wersja");
-            French.Add("newVersionAvailableLabel", "Nouvelle version disponible");
+            english.Add("newVersionAvailableLabel", "New version available");
+            german.Add("newVersionAvailableLabel", "Neue version verfügbar");
+            polish.Add("newVersionAvailableLabel", "Dostępna nowa wersja");
+            french.Add("newVersionAvailableLabel", "Nouvelle version disponible");
+            russian.Add("newVersionAvailableLabel", "Доступна новая версия");
 
-            //Component: updateQuestionLabel
+            //Componet: updateQuestionLabel
             //
-            English.Add("updateQuestionLabel", "Update?");
-            Gernam.Add("updateQuestionLabel", "Aktualisieren?");
-            Polish.Add("updateQuestionLabel", "Zaktualizować?");
-            French.Add("updateQuestionLabel", "Mettre à jour?");
+            english.Add("updateQuestionLabel", "Update?");
+            german.Add("updateQuestionLabel", "Aktualisieren?");
+            polish.Add("updateQuestionLabel", "Zaktualizować?");
+            french.Add("updateQuestionLabel", "Mettre à jour?");
+            russian.Add("updateQuestionLabel", "Обновить?");
 
-            //Component: problemsUpdatingLabel
+            //Componet: problemsUpdatingLabel
             //
-            English.Add("problemsUpdatingLabel", "If you are having problems updating, please");
-            Gernam.Add("problemsUpdatingLabel", "Wenn Sie Probleme mit der Aktualisierung haben, bitte");
-            Polish.Add("problemsUpdatingLabel", "Jeśli masz problemy z aktualizają proszę");
-            French.Add("problemsUpdatingLabel", "Si vous avez des problèmes avec la mise à jour, s'il vous plaît");
+            english.Add("problemsUpdatingLabel", "If you are having problems updating, please");
+            german.Add("problemsUpdatingLabel", "Wenn Sie Probleme mit der Aktualisierung haben, bitte");
+            polish.Add("problemsUpdatingLabel", "Jeśli masz problemy z aktualizają proszę");
+            french.Add("problemsUpdatingLabel", "Si vous avez des problèmes avec la mise à jour, s'il vous plaît");
+            russian.Add("problemsUpdatingLabel", "При наличии проблем в процессе обновлений, пожалуйста,");
 
-            //Component: 
+
+            //Componet: 
             //
-            English.Add("clickHereUpdateLabel", "click here");
-            Gernam.Add("clickHereUpdateLabel", "klick hier");
-            Polish.Add("clickHereUpdateLabel", "kliknij tutaj");
-            French.Add("clickHereUpdateLabel", "Cliquez ici");
+            english.Add("clickHereUpdateLabel", "click here");
+            german.Add("clickHereUpdateLabel", "klick hier");
+            polish.Add("clickHereUpdateLabel", "kliknij tutaj");
+            french.Add("clickHereUpdateLabel", "Cliquez ici");
+            russian.Add("clickHereUpdateLabel", "нажмите сюда.");
 
             //Component: loadingApplicationUpdateNotes
             //
@@ -1601,15 +1628,6 @@ namespace RelhaxModpack
             Gernam.Add("loadingApplicationUpdateNotes", TranslationNeeded);
             Polish.Add("loadingApplicationUpdateNotes", TranslationNeeded);
             French.Add("loadingApplicationUpdateNotes", TranslationNeeded);
-            #endregion
-
-            #region Please Wait Window
-            //Component: label1
-            //
-            English.Add("label1", "Loading...please wait...");
-            Gernam.Add("label1", "Lädt...bitte warten...");
-            Polish.Add("label1", "Ładowanie... proszę czekać...");
-            French.Add("label1", "Chargement... Patientez, s'il vous plaît...");
             #endregion
 
             #region Installer Messages
