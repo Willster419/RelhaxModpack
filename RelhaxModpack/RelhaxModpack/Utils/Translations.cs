@@ -31,7 +31,9 @@ namespace RelhaxModpack
         /// <summary>
         /// The French language
         /// </summary>
-        French
+        French,
+
+        Russian
     };
     /// <summary>
     /// Handles all localization for the application User Interface
@@ -59,14 +61,19 @@ namespace RelhaxModpack
         };
         private const string TranslationNeeded = "TODO";
         private static readonly string Blank = string.Empty;
+
         public const string LanguageEnglish = "English";
         public const string LanguagePolish = "Polski";
         public const string LanguageGerman = "Deutsch";
         public const string LanguageFrench = "Français";
+        public const string LanguageRussian = "Pусский";
+
         private static Dictionary<string, string> English = new Dictionary<string, string>();
         private static Dictionary<string, string> Gernam = new Dictionary<string, string>();
         private static Dictionary<string, string> Polish = new Dictionary<string, string>();
         private static Dictionary<string, string> French = new Dictionary<string, string>();
+        private static Dictionary<string, string> Russian = new Dictionary<string, string>();
+
         //default is to use english
         private static Dictionary<string, string> CurrentLanguage = English;
         #region Language methods
@@ -90,6 +97,9 @@ namespace RelhaxModpack
                 case Languages.Polish:
                     CurrentLanguage = Polish;
                     break;
+                case Languages.Russian:
+                    CurrentLanguage = Russian;
+                    break;
             }            
             ModpackSettings.Language = language;
         }
@@ -99,7 +109,9 @@ namespace RelhaxModpack
         public static void SetLanguageOnFirstLoad()
         {
             //try to get and load the native language of the user
-            Logging.Info("Language: " + CultureInfo.CurrentCulture.DisplayName);
+            Logging.Info("Detected OS Language: " + CultureInfo.CurrentCulture.DisplayName);
+            //list of culture keys
+            //http://www.localeplanet.com/dotnet/
             switch (CultureInfo.InstalledUICulture.Name.Split('-')[0].ToLower())
             {
                 case "de":
@@ -111,10 +123,14 @@ namespace RelhaxModpack
                 case "fr":
                     SetLanguage(Languages.French);
                     break;
+                case "ru":
+                    SetLanguage(Languages.Russian);
+                    break;
                 default:
                     SetLanguage(Languages.English);
                     break;
             }
+            Logging.Info("Language has been set: {0}", ModpackSettings.Language.ToString());
         }
         /// <summary>
         /// Get a localized string in the currently selected language
@@ -193,6 +209,7 @@ namespace RelhaxModpack
             Gernam.Add(key, message);
             Polish.Add(key, message);
             French.Add(key, message);
+            Russian.Add(key, message);
         }
         /// <summary>
         /// Loads all translation dictionaries. Should only be done once (at application start)
@@ -207,72 +224,85 @@ namespace RelhaxModpack
             Gernam.Add("yes", "ja");
             Polish.Add("yes", "Tak");
             French.Add("yes", "Oui");
+            Russian.Add("yes", "Да");
 
             English.Add("no", "no");
             Gernam.Add("no", "nein");
             Polish.Add("no", "Nie");
             French.Add("no", "Non");
+            Russian.Add("no", "Нет");
 
             English.Add("cancel", "Cancel");
             Gernam.Add("cancel", "Abbrechen");
             Polish.Add("cancel", "Anuluj");
             French.Add("cancel", "Anuler");
+            Russian.Add("cancel", "Отмена");
 
             English.Add("delete", "Delete");
             Gernam.Add("delete", "Löschen");
             Polish.Add("delete", TranslationNeeded);
             French.Add("delete", TranslationNeeded);
+            Russian.Add("delete", "Удалить");
 
             English.Add("warning", "WARNING");
             Gernam.Add("warning", "WARNUNG");
             Polish.Add("warning", "OSTRZEŻENIE");
             French.Add("warning", "ATTENTION");
+            Russian.Add("warning", "ВНИМАНИЕ");
 
             English.Add("critical", "CRITICAL");
             Gernam.Add("critical", "KRITISCH");
             Polish.Add("critical", "BŁĄD KRYTYCZNY");
             French.Add("critical", "CRITIQUAL");
-
+            Russian.Add("critical", "КРИТИЧЕСКАЯ ОШИБКА");
 
             English.Add("information", "Information");
             Gernam.Add("information", "Information");
             Polish.Add("information", "Informacja");
             French.Add("information", "information");
+            Russian.Add("information", "Информация");
 
             English.Add("select", "Select");
             Gernam.Add("select", "Auswählen");
             Polish.Add("select", "Wybierz");
             French.Add("select", "Sélectionner");
+            Russian.Add("select", "Выбрать");
 
             English.Add("abort", "Abort");
             Gernam.Add("abort", "Abbrechen");
             Polish.Add("abort", "Anulować");
             French.Add("abort", "Annuler");
+            Russian.Add("abort", "Отменить");
 
             English.Add("error", "Error");
             Gernam.Add("error", "Fehler");
             Polish.Add("error", "Błąd");
             French.Add("error", "Erreur");
+            Russian.Add("error", "Ошибка");
 
             English.Add("retry", "Retry");
             Gernam.Add("retry", "Wiederholen");
             Polish.Add("retry", "Spróbować ponownie");
             French.Add("retry", "Reaissayer");
+            Russian.Add("retry", "Повторить");
 
             English.Add("ignore", "Ignore");
             Gernam.Add("ignore", "Ignorieren");
             Polish.Add("ignore", "Ignorować");
             French.Add("ignore", "Ignorer");
+            Russian.Add("ignore", "Игнорировать");
 
             English.Add("lastUpdated", "Last Updated: ");
             Gernam.Add("lastUpdated", "Letzte Aktualisierung: ");
             Polish.Add("lastUpdated", "Ostatnio Zaktualizowano: ");
             French.Add("lastUpdated", "Dernière mise à jour: ");
+            Russian.Add("lastUpdated", "Последнее обновление: ");
 
             English.Add("stepsComplete", "tasks completed");
             Gernam.Add("stepsComplete", "erledigte Aufgaben");
             Polish.Add("stepsComplete", "zadania zakończone");
             French.Add("stepsComplete", "tâches terminées");
+            Russian.Add("stepsComplete", "заданий выполнено");
             #endregion
 
             #region General Messages
