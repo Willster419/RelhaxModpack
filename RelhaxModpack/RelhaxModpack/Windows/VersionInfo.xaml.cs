@@ -57,7 +57,17 @@ namespace RelhaxModpack.Windows
             {
                 Uri temp = new Uri((ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Stable) ?
                     Settings.ApplicationNotesStableUrl : Settings.ApplicationNotesBetaUrl);
-                client.DownloadStringCompleted += (senderr, args) => { ApplicationUpdateNotes.Text = args.Result; };
+                client.DownloadStringCompleted += (senderr, args) =>
+                {
+                    if(args.Error != null)
+                    {
+                        Logging.Exception("Failed to get update notes");
+                        Logging.Exception(args.Error.ToString());
+                        ApplicationUpdateNotes.Text = Translations.GetTranslatedString("failedToGetUpdateNotes");
+                    }
+                    else
+                        ApplicationUpdateNotes.Text = args.Result;
+                };
                 client.DownloadStringAsync(temp);
             }
         }
