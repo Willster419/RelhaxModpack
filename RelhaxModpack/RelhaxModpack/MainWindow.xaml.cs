@@ -534,13 +534,18 @@ namespace RelhaxModpack
             XmlDocument doc = null;
             if (refreshModInfo)
             {
-                doc = await Utils.GetManagerInfoDocumentAsync();
+                doc = await Utils.GetManagerInfoDocumentAsync(true);
             }
             else
             {
+                if(Settings.ModInfoZipfile == null)
+                {
+                    Logging.Debug("CheckForDatabaseUpdates(false), but Settings.ModInfoZipfile is null. getting latest modInfo");
+                    Settings.ModInfoZipfile = await Utils.GetManagerInfoZipfileAsync(false);
+                }
                 //only get if from the downloaded version
                 //get the version info string
-                string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
+                string xmlString = Utils.GetStringFromZip(Settings.ModInfoZipfile, "manager_version.xml");
                 if (string.IsNullOrEmpty(xmlString))
                 {
                     Logging.WriteToLog("Failed to get get xml string from managerInfo.dat", Logfiles.Application, LogLevel.ApplicationHalt);
@@ -554,6 +559,7 @@ namespace RelhaxModpack
             //get new DB update version and compare
             string databaseNewVersion = XMLUtils.GetXMLStringFromXPath(doc, "//version/database");
             Logging.Info(string.Format("Comparing database versions, old={0}, new={1}", Settings.DatabaseVersion, databaseNewVersion));
+
             if(string.IsNullOrWhiteSpace(Settings.DatabaseVersion))
             {
                 //auto apply and don't annouce. this usually happends when the application is loading for first time

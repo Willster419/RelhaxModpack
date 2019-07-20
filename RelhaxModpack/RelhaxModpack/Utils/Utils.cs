@@ -138,31 +138,22 @@ namespace RelhaxModpack
             return CiInfo.BuildTag + " (EN-US date format)";
         }
 
-        public static async Task<XmlDocument> GetManagerInfoDocumentAsync()
+        public static async Task<XmlDocument> GetManagerInfoDocumentAsync(bool overwrite)
         {
             XmlDocument doc = null;
-            //delete the last one and download a new one
-            using (WebClient client = new WebClient())
+
+            Settings.ModInfoZipfile = await GetManagerInfoZipfileAsync(overwrite);
+            if(Settings.ModInfoZipfile == null)
             {
-                try
-                {
-                    if (File.Exists(Settings.ManagerInfoDatFile))
-                        File.Delete(Settings.ManagerInfoDatFile);
-                    await client.DownloadFileTaskAsync(Settings.ManagerInfoURLBigmods, Settings.ManagerInfoDatFile);
-                }
-                catch (Exception e)
-                {
-                    Logging.Exception("Failed to check for updates: \n{0}", e);
-                    MessageBox.Show(Translations.GetTranslatedString("failedCheckUpdates"));
-                    return null;
-                }
+                Logging.Exception("Settings.ModInfoZipfile is null");
+                return null;
             }
 
             //get the version info string
-            string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, "manager_version.xml");
+            string xmlString = GetStringFromZip(Settings.ModInfoZipfile, "manager_version.xml");
             if (string.IsNullOrEmpty(xmlString))
             {
-                Logging.WriteToLog("Failed to get get xml string from managerInfo.dat", Logfiles.Application, LogLevel.ApplicationHalt);
+                Logging.Exception("Failed to get xml string from Settings.ModInfoZipfile");
                 Application.Current.Shutdown();
                 return null;
             }
@@ -170,10 +161,36 @@ namespace RelhaxModpack
             return XMLUtils.LoadXmlDocument(xmlString, XmlLoadType.FromString);
         }
 
+        public static async Task<ZipFile> GetManagerInfoZipfileAsync(bool overwrite)
+        {
+            //first delete the old file if it exists, just to check
+            if (File.Exists(Settings.ManagerInfoDatFile))
+                File.Delete(Settings.ManagerInfoDatFile);
+
+            //if the zipfile is not null and no overwrite, then stop
+            if (Settings.ModInfoZipfile != null && !overwrite)
+                return Settings.ModInfoZipfile;
+
+            using (WebClient client = new WebClient())
+            {
+                try
+                {
+                    byte[] zipfile = await client.DownloadDataTaskAsync(Settings.ManagerInfoURLBigmods);
+                    return ZipFile.Read(new MemoryStream(zipfile));
+                }
+                catch(Exception ex)
+                {
+                    Logging.Exception("Failed to download managerInfo to memory stream");
+                    Logging.Exception(ex.ToString());
+                    return null;
+                }
+            }
+        }
+
         public static async Task<bool> IsManagerUptoDate(string currentVersion)
         {
             //actually compare the build of the application of the requested distribution channel
-            XmlDocument doc = await GetManagerInfoDocumentAsync();
+            XmlDocument doc = await GetManagerInfoDocumentAsync(false);
             if (doc == null)
             {
                 Logging.Error("failed to get manager online version");
@@ -420,12 +437,17 @@ namespace RelhaxModpack
             // https://social.msdn.microsoft.com/Forums/vstudio/en-US/92a36534-0f01-4425-ab63-c5f8830d64ae/help-please-with-dotnetzip-extracting-data-form-ziped-file?forum=csharpgeneral
             if(!File.Exists(zipFilename))
             {
-                Logging.Error(string.Format("ERROR: {0} not found", zipFilename));
+                Logging.Error("Zip file {0} not found", zipFilename);
                 return null;
             }
-            string textStr = "";
             using (ZipFile zip = ZipFile.Read(zipFilename))
-            using (MemoryStream ms = new MemoryStream() { Position=0 })
+                return GetStringFromZip(zip, archivedFilename, password);
+        }
+
+        public static string GetStringFromZip(ZipFile zip, string archivedFilename, string password = "")
+        {
+            string textStr = "";
+            using (MemoryStream ms = new MemoryStream() { Position = 0 })
             using (StreamReader sr = new StreamReader(ms))
             {
                 ZipEntry e = zip[archivedFilename];
