@@ -1,0 +1,2 @@
+Application version 0.9.0.0 (19-07-2019)
+- Pre beta notes
