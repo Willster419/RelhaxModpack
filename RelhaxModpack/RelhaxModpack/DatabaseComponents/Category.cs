@@ -48,9 +48,6 @@ namespace RelhaxModpack
         /// </summary>
         public SelectablePackage CategoryHeader = null;
 
-
-        public TreeView @TreeView;
-
         //list of dependencies required if anything is selected from this category
         public List<DatabaseLogic> Dependencies = new List<DatabaseLogic>();
 
