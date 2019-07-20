@@ -371,7 +371,8 @@ namespace RelhaxModpack.InstallerComponents
 
             Logging.Info(string.Format("Cleaning of mods folders, current install time = {0} msec",
                 (int)InstallStopWatch.Elapsed.TotalMilliseconds));
-            if (ModpackSettings.CleanInstallation || ModpackSettings.ExportMode)
+
+            if (ModpackSettings.CleanInstallation || ModpackSettings.ExportMode || ModpackSettings.AutoInstall || !string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
             {
                 if (!ClearModsFolders())
                 {
