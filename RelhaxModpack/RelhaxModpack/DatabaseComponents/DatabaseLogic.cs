@@ -36,7 +36,7 @@ namespace RelhaxModpack
         /// <summary>
         /// Flag to determine if this package will be installed
         /// </summary>
-        public bool willBeInstalled { get; set; } = false;
+        public bool WillBeInstalled { get; set; } = false;
 
         /// <summary>
         /// Flag for negating the "AND" and "OR" logic (Creates "NAND" and "NOR") of how to install the attach object

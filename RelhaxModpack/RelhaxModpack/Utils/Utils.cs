@@ -1123,7 +1123,7 @@ namespace RelhaxModpack
                             dependency.DatabasePackageLogic.Add(new DatabaseLogic()
                             {
                                 PackageName = category.Name,
-                                willBeInstalled = category.AnyPackagesChecked(),
+                                WillBeInstalled = category.AnyPackagesChecked(),
                                 Logic = logic.Logic,
                                 NotFlag = logic.NotFlag
                             });
@@ -1150,7 +1150,7 @@ namespace RelhaxModpack
                             {
                                 //set PackageName to the selectablepackage package name so later we know where this logic entry came from
                                 PackageName = package.PackageName,
-                                willBeInstalled = package.Checked,
+                                WillBeInstalled = package.Checked,
                                 Logic = logic.Logic,
                                 NotFlag = logic.NotFlag
                             });
@@ -1179,7 +1179,7 @@ namespace RelhaxModpack
                             {
                                 PackageName = processingDependency.PackageName,
                                 //by default, dependences that are dependent on dependencies start as false until proven needed
-                                willBeInstalled = false,
+                                WillBeInstalled = false,
                                 Logic = logic.Logic,
                                 NotFlag = logic.NotFlag
                             });
@@ -1238,7 +1238,7 @@ namespace RelhaxModpack
                     //OR logic - if any mod/dependency is checked, then it's installed and can stop there
                     //because only one of them needs to be true
                     //same case goes for negatives - if mod is NOT checked and negateFlag
-                    if(!orLogic.willBeInstalled)
+                    if(!orLogic.WillBeInstalled)
                     {
                         Logging.WriteToLog(string.Format("skipping logic check of package {0} because it is not set for installation!", orLogic.PackageName),
                             Logfiles.Application, LogLevel.Debug);
@@ -1261,7 +1261,7 @@ namespace RelhaxModpack
                     else
                     {
                         Logging.WriteToLog(string.Format("package {0}, checked={1}, notFlag={2}, does not set orLogic to pass",
-                            orLogic.PackageName, orLogic.willBeInstalled, orLogic.NotFlag), Logfiles.Application, LogLevel.Debug);
+                            orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag), Logfiles.Application, LogLevel.Debug);
                     }
                 }
 
@@ -1269,13 +1269,13 @@ namespace RelhaxModpack
                 Logging.Debug("processing AND logic");
                 foreach(DatabaseLogic andLogic in logicalAND)
                 {
-                    if (andLogic.willBeInstalled && !andLogic.NotFlag)
+                    if (andLogic.WillBeInstalled && !andLogic.NotFlag)
                     {
                         Logging.WriteToLog(string.Format("package {0} is checked and (NOT notFlag) = true, correct AND logic, continue",
                             andLogic.PackageName), Logfiles.Application, LogLevel.Debug);
                         ANDSPass = true;
                     }
-                    else if (!andLogic.willBeInstalled && andLogic.NotFlag)
+                    else if (!andLogic.WillBeInstalled && andLogic.NotFlag)
                     {
                         Logging.WriteToLog(string.Format("package {0} is NOT checked and (notFlag) = true, correct AND logic, continue",
                             andLogic.PackageName), Logfiles.Application, LogLevel.Debug);
@@ -1284,7 +1284,7 @@ namespace RelhaxModpack
                     else
                     {
                         Logging.WriteToLog(string.Format("package {0}, checked={1}, notFlag={2}, incorrect AND logic, set andPass=false and break!",
-                            andLogic.PackageName, andLogic.willBeInstalled, andLogic.NotFlag), Logfiles.Application, LogLevel.Debug);
+                            andLogic.PackageName, andLogic.WillBeInstalled, andLogic.NotFlag), Logfiles.Application, LogLevel.Debug);
                         ANDSPass = false;
                         break;
                     }
@@ -1317,7 +1317,7 @@ namespace RelhaxModpack
                             if (foundLogic.Count > 0)
                             {
                                 Logging.Debug("logic refrence entry for dep {0} updated to {1}", refrenced.PackageName, ANDSPass && ORsPass);
-                                foundLogic[0].willBeInstalled = ANDSPass && ORsPass;
+                                foundLogic[0].WillBeInstalled = ANDSPass && ORsPass;
                             }
                             else
                             {
