@@ -7,7 +7,7 @@ using System;
 namespace RelhaxModpack
 {
     /// <summary>
-    /// a catagory is what makes up each tab in the mod selection dislpay window. It holds the first level of list of SelectablePackages
+    /// a category is what makes up each tab in the mod selection display window. It holds the first level of list of SelectablePackages
     /// </summary>
     public class Category : IComponentWithDependencies
     {
@@ -27,15 +27,15 @@ namespace RelhaxModpack
 
         #region UI Properties
 
-        //the TabItem refrence for the UI
+        //the TabItem reference for the UI
         public TabItem TabPage = null;
 
-        //the holder for all packages of a catagory. UI only
+        //the holder for all packages of a category. UI only
         public SelectablePackage CategoryHeader = null;
 
         public TreeView @TreeView;
 
-        //list of dependencies required if anything is selected from this catagory
+        //list of dependencies required if anything is selected from this category
         public List<DatabaseLogic> Dependencies = new List<DatabaseLogic>();
 
         public List<DatabaseLogic> DependenciesProp { get  { return Dependencies; } set { Dependencies = value; } }
@@ -57,13 +57,12 @@ namespace RelhaxModpack
             return null;
         }
 
-        //sorts the catagories
+        //sorts the categories
         public static int CompareCatagories(Category x, Category y)
         {
             return x.Name.CompareTo(y.Name);
         }
 
-        //for the tostring thing
         public override string ToString()
         {
             return Name;

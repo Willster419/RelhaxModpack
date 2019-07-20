@@ -1591,9 +1591,9 @@ namespace RelhaxModpack.InstallerComponents
                         //create the atlas
                         AtlasesCreator.AtlasCreator atlasCreator = new AtlasesCreator.AtlasCreator()
                         {
-                            atlas = atlasData,
-                            token = CancellationToken,
-                            debugLockObject = atlasBuilderLockerObject
+                            Atlas = atlasData,
+                            Token = CancellationToken,
+                            DebugLockObject = atlasBuilderLockerObject
                         };
                         {
                             lock(atlasBuilderLockerObject)

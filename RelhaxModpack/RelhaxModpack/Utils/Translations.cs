@@ -35,6 +35,7 @@ namespace RelhaxModpack
 
         Russian
     };
+
     /// <summary>
     /// Handles all localization for the application User Interface
     /// </summary>
