@@ -386,82 +386,191 @@
             </summary>
             <returns>Try if any package is selected, false otherwise</returns>
         </member>
+        <member name="T:RelhaxModpack.Logic">
+            <summary>
+            An enumerated representation of "and" and "or" logic
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logic.AND">
+            <summary>
+            A logical AND
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logic.OR">
+            <summary>
+            A logical OR
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.DatabaseLogic">
+            <summary>
+            Used for database dependency calculation. Determines what dependent packages use the package that this object is attached to
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseLogic.PackageName">
+            <summary>
+            The name of the package that this object is attached to
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabaseLogic.WillBeInstalled">
+            <summary>
+            Flag to determine if this package will be installed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseLogic.NotFlag">
+            <summary>
+            Flag for negating the "AND" and "OR" logic (Creates "NAND" and "NOR") of how to install the attach object
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseLogic.Logic">
+            <summary>
+            The logic type to use for this package definition
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.DatabaseLogic.ToString">
+            <summary>
+            String representation of the object
+            </summary>
+            <returns>The name of the package this object attaches to</returns>
+        </member>
         <member name="T:RelhaxModpack.DatabasePackage">
             <summary>
-            A database component is an abstract class for all Components within the database
+            A database component is the base class for all other packages
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.DatabasePackage.FieldsToXmlParseAttributes">
+            <summary>
+            Get the list of fields in the class that can be parsed as xml attributes
+            </summary>
+            <returns>The list of fields</returns>
+        </member>
+        <member name="M:RelhaxModpack.DatabasePackage.FieldsToXmlParseNodes">
+            <summary>
+            Get the list of fields in the class that can be parsed as xml elements
+            </summary>
+            <returns>The list of fields</returns>
         </member>
         <member name="F:RelhaxModpack.DatabasePackage.PackageName">
             <summary>
-            a unique identifier for each component in the database. No two components will have the same PackageName
+            A unique identifier for each component in the database. No two components will have the same PackageName
             </summary>
         </member>
         <member name="F:RelhaxModpack.DatabasePackage.Version">
             <summary>
-            a method to keep track of the version of the package
+            A method to keep track of the version of the package
             </summary>
         </member>
         <member name="F:RelhaxModpack.DatabasePackage.Timestamp">
             <summary>
-            used to determine when the package entry was last modified
+            Used to determine when the package entry was last modified
             </summary>
         </member>
         <member name="F:RelhaxModpack.DatabasePackage.Size">
             <summary>
-            size of the zip file
+            Size of the zip file
             </summary>
         </member>
         <member name="F:RelhaxModpack.DatabasePackage.ZipFile">
             <summary>
-            the zip file to extract (can be "")
+            The zip file to extract (can be empty string)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage._Enabled">
+            <summary>
+            Internal field for Enabled property
             </summary>
         </member>
         <member name="P:RelhaxModpack.DatabasePackage.Enabled">
             <summary>
-            a toggle to enable and disable the component
+            Determines if the component is enabled or disabled
             </summary>
         </member>
         <member name="F:RelhaxModpack.DatabasePackage.CRC">
             <summary>
-            the crc checksum of the zipfile
+            The crc checksum of the zipfile
             </summary>
         </member>
         <member name="F:RelhaxModpack.DatabasePackage.StartAddress">
             <summary>
-            the start address of the url to the zip file
+            The start address of the URL to the zip file
             URL format: StartAddress + ZipFile + EndAddress
             </summary>
         </member>
         <member name="F:RelhaxModpack.DatabasePackage.EndAddress">
             <summary>
-            the end address of the url to the zip file
+            The end address of the URL to the zip file
             URL format: StartAddress + ZipFile + EndAddress
             </summary>
         </member>
         <member name="F:RelhaxModpack.DatabasePackage.DownloadFlag">
             <summary>
-            determine at install time if the package needs to be downloaded
+            Determine at install time if the package needs to be downloaded
             </summary>
         </member>
         <member name="F:RelhaxModpack.DatabasePackage.ReadyForInstall">
             <summary>
-            determine if the mod has been downloaded and is ready for installation
+            Determine if the mod has been downloaded and is ready for installation
             </summary>
         </member>
         <member name="F:RelhaxModpack.DatabasePackage.LogAtInstall">
             <summary>
-            determine if the files from the package should be logged for uninstallation
-            only set this to false if absolutly necessary!
+            Determine if the files from the package should be logged for un-installation
+            only set this to false if absolutely necessary!
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage.Triggers">
+            <summary>
+            The list of triggers that this package can start (list of triggers that apply to this package)
             </summary>
         </member>
         <member name="F:RelhaxModpack.DatabasePackage.DevURL">
             <summary>
-            the URL link of where you can view the webpage of the mod
+            The URL link of where you can view the web page of the mod
             </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage.InstallGroup">
+            <summary>
+            The level at which this package can be installed. It will be installed with other packages of the same install group at the same time
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage.PatchGroup">
+            <summary>
+            The level at which the patches for this package can be installed. Patches will be executed with other patches of the same patch group
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage.InternalNotes">
+            <summary>
+            Internal instructions for updating the mod for database managers
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage.AppendExtraction">
+            <summary>
+            Determines if this package should be put into a list that will be installed last. Used for when the package is possibly overwriting files, for example
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage.EditorTreeViewItem">
+            <summary>
+            Reference for the UI element of this package in the database editor
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage.ExtractionStarted">
+            <summary>
+            Flag used for the "download while install" setting. Default is false until it is set true. Once set, the installer will not try to extract this package again
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.DatabasePackage.ToString">
+            <summary>
+            String representation of the object
+            </summary>
+            <returns>The PackageName of the package</returns>
         </member>
         <member name="P:RelhaxModpack.DatabasePackage.CompletePath">
             <summary>
-            Provides (if possible) a complete tree style path in for the cateogry views
+            Provides a complete tree style path to the package using its UI name, starting with the category
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabasePackage.CompletePackageNamePath">
+            <summary>
+            Provides a complete tree style path to the package using its internal packageName, starting with the category
             </summary>
         </member>
         <member name="T:RelhaxModpack.SelectablePackage">

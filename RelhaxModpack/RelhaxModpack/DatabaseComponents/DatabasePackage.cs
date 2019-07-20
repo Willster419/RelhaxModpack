@@ -5,7 +5,7 @@ using System.Windows.Controls;
 namespace RelhaxModpack
 {
     /// <summary>
-    /// A database component is an abstract class for all Components within the database
+    /// A database component is the base class for all other packages
     /// </summary>
     public class DatabasePackage
     {
@@ -34,11 +34,19 @@ namespace RelhaxModpack
             nameof(InternalNotes)
         };
 
+        /// <summary>
+        /// Get the list of fields in the class that can be parsed as xml attributes
+        /// </summary>
+        /// <returns>The list of fields</returns>
         public static List<string> FieldsToXmlParseAttributes()
         {
             return new List<string>(PackageElementsToXmlParseAttributes);
         }
 
+        /// <summary>
+        /// Get the list of fields in the class that can be parsed as xml elements
+        /// </summary>
+        /// <returns>The list of fields</returns>
         public static List<string> FieldsToXmlParseNodes()
         {
             return new List<string>(PackageElementsToXmlParseNodes);
@@ -48,34 +56,37 @@ namespace RelhaxModpack
         #region Database Properties
 
         /// <summary>
-        /// a unique identifier for each component in the database. No two components will have the same PackageName
+        /// A unique identifier for each component in the database. No two components will have the same PackageName
         /// </summary>
-        public string PackageName = "";
+        public string PackageName = string.Empty;
 
         /// <summary>
-        /// a method to keep track of the version of the package
+        /// A method to keep track of the version of the package
         /// </summary>
-        public string Version = "";
+        public string Version = string.Empty;
 
         /// <summary>
-        /// used to determine when the package entry was last modified
+        /// Used to determine when the package entry was last modified
         /// </summary>
         public long Timestamp = 0;
 
         /// <summary>
-        /// size of the zip file
+        /// Size of the zip file
         /// </summary>
         public ulong Size = 0;
 
         /// <summary>
-        /// the zip file to extract (can be "")
+        /// The zip file to extract (can be empty string)
         /// </summary>
-        public string ZipFile = "";
+        public string ZipFile = string.Empty;
 
+        /// <summary>
+        /// Internal field for Enabled property
+        /// </summary>
         protected internal bool _Enabled = false;
 
         /// <summary>
-        /// a toggle to enable and disable the component
+        /// Determines if the component is enabled or disabled
         /// </summary>
         public virtual bool Enabled
         {
@@ -84,75 +95,102 @@ namespace RelhaxModpack
         }
 
         /// <summary>
-        /// the crc checksum of the zipfile
+        /// The crc checksum of the zipfile
         /// </summary>
-        public string CRC = "";
+        public string CRC = string.Empty;
 
         /// <summary>
-        /// the start address of the url to the zip file
+        /// The start address of the URL to the zip file
         /// URL format: StartAddress + ZipFile + EndAddress
         /// </summary>
         public string StartAddress = Settings.DefaultStartAddress;
 
         /// <summary>
-        /// the end address of the url to the zip file
+        /// The end address of the URL to the zip file
         /// URL format: StartAddress + ZipFile + EndAddress
         /// </summary>
         public string EndAddress = Settings.DefaultEndAddress;
 
         /// <summary>
-        /// determine at install time if the package needs to be downloaded
+        /// Determine at install time if the package needs to be downloaded
         /// </summary>
         public bool DownloadFlag = false;
 
         /// <summary>
-        /// determine if the mod has been downloaded and is ready for installation
+        /// Determine if the mod has been downloaded and is ready for installation
         /// </summary>
         public bool ReadyForInstall = false;
 
         /// <summary>
-        /// determine if the files from the package should be logged for uninstallation
-        /// only set this to false if absolutly necessary!
+        /// Determine if the files from the package should be logged for un-installation
+        /// only set this to false if absolutely necessary!
         /// </summary>
         public bool LogAtInstall = true;
 
-        public List<string> Triggers = new List<string>();
         /// <summary>
-        /// the URL link of where you can view the webpage of the mod
+        /// The list of triggers that this package can start (list of triggers that apply to this package)
         /// </summary>
-        public string DevURL = "";
+        public List<string> Triggers = new List<string>();
 
+        /// <summary>
+        /// The URL link of where you can view the web page of the mod
+        /// </summary>
+        public string DevURL = string.Empty;
+
+        /// <summary>
+        /// The level at which this package can be installed. It will be installed with other packages of the same install group at the same time
+        /// </summary>
         public int InstallGroup = 0;
 
+        /// <summary>
+        /// The level at which the patches for this package can be installed. Patches will be executed with other patches of the same patch group
+        /// </summary>
         public int PatchGroup = 0;
 
-        public string InternalNotes = "";
+        /// <summary>
+        /// Internal instructions for updating the mod for database managers
+        /// </summary>
+        public string InternalNotes = string.Empty;
 
         //append extraction flag
+        /// <summary>
+        /// Determines if this package should be put into a list that will be installed last. Used for when the package is possibly overwriting files, for example
+        /// </summary>
         [Obsolete("This is for legacy database compatibility and will be ignored in Relhax V2")]
         public bool AppendExtraction = false;
         #endregion
 
         #region UI Properties
-
-        //used for the editor ONLY
+        /// <summary>
+        /// Reference for the UI element of this package in the database editor
+        /// </summary>
         public TreeViewItem EditorTreeViewItem = null;
         #endregion
 
         #region Other Properties and Methods
-
+        /// <summary>
+        /// Flag used for the "download while install" setting. Default is false until it is set true. Once set, the installer will not try to extract this package again
+        /// </summary>
         public bool ExtractionStarted = false;
 
+        /// <summary>
+        /// String representation of the object
+        /// </summary>
+        /// <returns>The PackageName of the package</returns>
         public override string ToString()
         {
             return PackageName;
         }
+
         /// <summary>
-        /// Provides (if possible) a complete tree style path in for the cateogry views
+        /// Provides a complete tree style path to the package using its UI name, starting with the category
         /// </summary>
         public virtual string CompletePath
         { get {  return PackageName; } }
 
+        /// <summary>
+        /// Provides a complete tree style path to the package using its internal packageName, starting with the category
+        /// </summary>
         public virtual string CompletePackageNamePath
         { get { return PackageName; } }
         #endregion
