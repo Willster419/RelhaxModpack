@@ -48,39 +48,42 @@ namespace RelhaxModpack
         /// </summary>
         public SelectablePackage CategoryHeader = null;
 
-        //list of dependencies required if anything is selected from this category
+        /// <summary>
+        /// List of dependencies of this category (Any package selected in this category needs these dependencies)
+        /// </summary>
         public List<DatabaseLogic> Dependencies = new List<DatabaseLogic>();
 
+        /// <summary>
+        /// Property of Dependencies list to allow for interface implementation
+        /// </summary>
         public List<DatabaseLogic> DependenciesProp { get  { return Dependencies; } set { Dependencies = value; } }
         #endregion
 
         #region Other Properties and Methods
-
-        //returns the mod with the specified name
-        //if it does not exist, it returns null
-        public SelectablePackage GetSelectablePackage(string packageNameOld)
-        {
-            if (Packages == null || Packages.Count == 0)
-                return null;
-            foreach (SelectablePackage sp in Packages)
-            {
-                if (sp.Name.Equals(packageNameOld))
-                    return sp;
-            }
-            return null;
-        }
-
-        //sorts the categories
+        /// <summary>
+        /// Sorts the Categories by their name property. Currently not implemented.
+        /// </summary>
+        /// <param name="x">The first Category to compare</param>
+        /// <param name="y">The second Category to compare</param>
+        /// <returns>1 if y is later in the alphabet, 0 if equal, -1 else</returns>
         public static int CompareCatagories(Category x, Category y)
         {
             return x.Name.CompareTo(y.Name);
         }
 
+        /// <summary>
+        /// Output the object to a string representation
+        /// </summary>
+        /// <returns>The name of the category</returns>
         public override string ToString()
         {
             return Name;
         }
 
+        /// <summary>
+        /// Returns a single depth (flat) list of packages in the category. Leveling is preserved (a sub-package will be directly below the parent in the list)
+        /// </summary>
+        /// <returns>The list of packages</returns>
         public List<SelectablePackage> GetFlatPackageList()
         {
             List<SelectablePackage> flatPackageList = new List<SelectablePackage>();
@@ -103,6 +106,10 @@ namespace RelhaxModpack
             }
         }
 
+        /// <summary>
+        /// Check if any packages in this category are selected for install
+        /// </summary>
+        /// <returns>Try if any package is selected, false otherwise</returns>
         public bool AnyPackagesChecked()
         {
             foreach(SelectablePackage package in GetFlatPackageList())

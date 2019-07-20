@@ -350,6 +350,42 @@
             The package created at selection list building that represents the header of this category
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Category.Dependencies">
+            <summary>
+            List of dependencies of this category (Any package selected in this category needs these dependencies)
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Category.DependenciesProp">
+            <summary>
+            Property of Dependencies list to allow for interface implementation
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Category.CompareCatagories(RelhaxModpack.Category,RelhaxModpack.Category)">
+            <summary>
+            Sorts the Categories by their name property. Currently not implemented.
+            </summary>
+            <param name="x">The first Category to compare</param>
+            <param name="y">The second Category to compare</param>
+            <returns>1 if y is later in the alphabet, 0 if equal, -1 else</returns>
+        </member>
+        <member name="M:RelhaxModpack.Category.ToString">
+            <summary>
+            Output the object to a string representation
+            </summary>
+            <returns>The name of the category</returns>
+        </member>
+        <member name="M:RelhaxModpack.Category.GetFlatPackageList">
+            <summary>
+            Returns a single depth (flat) list of packages in the category. Leveling is preserved (a sub-package will be directly below the parent in the list)
+            </summary>
+            <returns>The list of packages</returns>
+        </member>
+        <member name="M:RelhaxModpack.Category.AnyPackagesChecked">
+            <summary>
+            Check if any packages in this category are selected for install
+            </summary>
+            <returns>Try if any package is selected, false otherwise</returns>
+        </member>
         <member name="T:RelhaxModpack.DatabasePackage">
             <summary>
             A database component is an abstract class for all Components within the database
