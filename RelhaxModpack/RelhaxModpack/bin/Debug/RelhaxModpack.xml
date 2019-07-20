@@ -4,6 +4,46 @@
         <name>RelhaxModpack</name>
     </assembly>
     <members>
+        <member name="T:RelhaxModpack.AtlasesCreator.FailCode">
+            <summary>
+            List of possible areas in the Atlas creation process where it could fail
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.FailCode.None">
+            <summary>
+            No error occurred
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.FailCode.ImageImporter">
+            <summary>
+            Failed to import the DDS image file to a bitmap object
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.FailCode.ImageExporter">
+            <summary>
+            Failed to export the bitmap object to a DDS image file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.FailCode.MapImporter">
+            <summary>
+            Failed to load and parse the WG xml atlas map
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.FailCode.MapExporter">
+            <summary>
+            Failed to parse and save the WG xml atlas map
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.FailCode.NoImages">
+            <summary>
+            No images to build for the atlas
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.FailCode.ImageNameCollision">
+            <summary>
+            Duplicate image names in list of images to pack
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker">
             <summary>Rectangle packer using an algorithm by Javier Arevalo</summary>
             <remarks>
@@ -143,6 +183,11 @@
               This method tries to keep the anchor list ordered by ranking the anchors
               depending on the distance from the top left corner in the packing area.
             </remarks>
+        </member>
+        <member name="T:RelhaxModpack.AtlasesCreator.Packing.ImagePacker">
+            <summary>
+            Handles packing a list of small bitmap objects into one large bitmap object 
+            </summary>
         </member>
         <member name="M:RelhaxModpack.AtlasesCreator.Packing.ImagePacker.PackImage(System.Collections.Generic.IEnumerable{RelhaxModpack.Texture},RelhaxModpack.Atlas.State,RelhaxModpack.Atlas.State,System.Boolean,System.Int32,System.Int32,System.Int32,System.Drawing.Bitmap@,System.Collections.Generic.Dictionary{System.String,System.Drawing.Rectangle}@)">
             <summary>
