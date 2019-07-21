@@ -1529,14 +1529,14 @@ namespace RelhaxModpack
             //Component: 
             //
             English.Add("modNotFound", "The package (ID = \"{0}\") was not found in the database. It could have been renamed or removed.");
-            German.Add("modNotFound", "Das Paket (ID =" \"{0}\") wurde nicht in der Datenbank gefunden. Es könnte umbenannt oder entfernt worden sein");
+            German.Add("modNotFound", "Das Paket (ID = \"{0}\") wurde nicht in der Datenbank gefunden. Es könnte umbenannt oder entfernt worden sein");
             Polish.Add("modNotFound", TranslationNeeded);
             French.Add("modNotFound", TranslationNeeded);
 
             //Component: 
             //
-            English.Add("modDeactivated", "The package (ID= \"{0}\") is currently deactivated in the modpack and could not to be selected to install.");
-            German.Add("modDeactivated", "Das Paket (ID =" {0} ") ist vorrübergehend deaktiviert und kann nicht für die Installation ausgewählt werden");
+            English.Add("modDeactivated", "The package (ID = \"{0}\") is currently deactivated in the modpack and could not to be selected to install.");
+            German.Add("modDeactivated", "Das Paket (ID = \"{0}\") ist vorrübergehend deaktiviert und kann nicht für die Installation ausgewählt werden");
             Polish.Add("modDeactivated", TranslationNeeded);
             French.Add("modDeactivated", TranslationNeeded);
 
