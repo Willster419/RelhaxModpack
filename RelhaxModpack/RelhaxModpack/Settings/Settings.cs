@@ -297,7 +297,7 @@ namespace RelhaxModpack
 
         public static readonly int NumLogicalProcesors = Environment.ProcessorCount;
 
-        public const string LogSpacingLinup = "                          ";
+        public const string LogSpacingLineup = "                          ";
         #endregion
 
         #region database properties

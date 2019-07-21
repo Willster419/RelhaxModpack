@@ -1072,6 +1072,97 @@
             Flat list of all selectable packages
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Patch">
+            <summary>
+            A patch is an instruction object of how to modify a text file. Can be a json, xml, or plain text file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patch.NativeProcessingFile">
+            <summary>
+            A single string with the filename of the processingNativeFile (needed for tracing work instructions after installation)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patch.ActualPatchName">
+            <summary>
+            the actual name of the original patch before processed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patch.Type">
+            <summary>
+            The type of patch, xml or regex (direct text replacement)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patch.Mode">
+            <summary>
+            If not regex, the mode that the xml patcher should use.<para/>Examples: add xml node, remove xml node, edit xml node
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patch.PatchPath">
+            <summary>
+            The starting path to the file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patch.File">
+            <summary>
+            The path to the file, relative to patchPath
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patch.CompletePath">
+            <summary>
+            The complete path to the file, saved at parse time
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patch.FollowPathEditorCompletePath">
+            <summary>
+            Saves the complete path for if in editor mode, otherwise not used
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patch.Version">
+            <summary>
+            The version of the patch for parsing. Allows for multiple variations. Default to 1
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patch.Path">
+            <summary>
+            If xml or json, the xml xpath or json jsonpath to the node
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patch.Lines">
+            <summary>
+            If regex, the optional specific lines in the text file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patch.Search">
+            <summary>
+            The node inner text (xml) or regex criteria to search for
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patch.Replace">
+            <summary>
+            The text to replace the found search text with
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patch.FollowPath">
+            <summary>
+            For json patches, if it should use the new method of separating the path for getting the xvm references
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patch.FromEditor">
+            <summary>
+            If from editor/patch designer, enable verbose logging for the duration of that patch
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Patch.DumpPatchInfoForLog">
+            <summary>
+            Collects all patch information for logging
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Patch.ToString">
+            <summary>
+            The string representation of the object
+            </summary>
+            <returns>The type, mode and lines/path if in editor mode. Else, the base ToString()</returns>
+        </member>
         <member name="T:RelhaxModpack.Texture">
             <summary>
             A Texture is a piece of an atlas file. Contains image data such as the position, size, and bitmap itself.
