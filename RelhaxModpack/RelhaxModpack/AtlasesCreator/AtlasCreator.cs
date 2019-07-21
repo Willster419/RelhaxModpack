@@ -201,8 +201,8 @@ namespace RelhaxModpack.AtlasesCreator
             Logging.Debug("atlas file {0}: set map name as {1}", Path.GetFileName(Atlas.AtlasFile), Path.GetFileName(Atlas.MapFile));
 
             //set location to extract original WG atlas files
-            tempAtlasImageFile = Path.Combine(Atlas.TempAltasPresentDirectory, Atlas.AtlasFile);
-            tempAtlasMapFile = Path.Combine(Atlas.TempAltasPresentDirectory, Atlas.MapFile);
+            tempAtlasImageFile = Path.Combine(Settings.RelhaxTempFolder, Atlas.AtlasFile);
+            tempAtlasMapFile = Path.Combine(Settings.RelhaxTempFolder, Atlas.MapFile);
 
             //delete the temp files if they exist
             if (File.Exists(tempAtlasImageFile))

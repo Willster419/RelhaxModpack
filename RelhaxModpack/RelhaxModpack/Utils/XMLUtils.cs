@@ -2711,14 +2711,11 @@ namespace RelhaxModpack
                         case "mapFile":
                             sc.MapFile = property.InnerText.Trim();
                             break;
-                        case "generateMap":
-                            sc.GenerateMap = Utils.ParseEnum(property.InnerText.Trim(), Atlas.State.True);
-                            break;
                         case "powOf2":
-                            sc.PowOf2 = Utils.ParseEnum(property.InnerText.Trim(), Atlas.State.False);
+                            sc.PowOf2 = Utils.ParseBool(property.InnerText.Trim(), false);
                             break;
                         case "square":
-                            sc.Square = Utils.ParseEnum(property.InnerText.Trim(), Atlas.State.False);
+                            sc.Square = Utils.ParseBool(property.InnerText.Trim(), false);
                             break;
                         case "fastImagePacker":
                             sc.FastImagePacker = Utils.ParseBool(property.InnerText.Trim(), false);
@@ -2736,7 +2733,6 @@ namespace RelhaxModpack
                             sc.AtlasSaveDirectory = property.InnerText.Trim();
                             break;
                         case "imageFolders":
-                            //sc.im = property.InnerText.Trim();
                             foreach (XmlNode imageFolder in property.ChildNodes)
                             {
                                 sc.ImageFolderList.Add(imageFolder.InnerText.Trim());

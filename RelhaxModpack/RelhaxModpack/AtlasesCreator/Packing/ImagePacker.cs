@@ -40,8 +40,8 @@ namespace RelhaxModpack.AtlasesCreator.Packing
         /// <returns>0 if the packing was successful, error code otherwise.</returns>
         public FailCode PackImage(
             IEnumerable<Texture> imageFiles,
-            Atlas.State requirePowerOfTwo,
-            Atlas.State requireSquareImage,
+            bool requirePowerOfTwo,
+            bool requireSquareImage,
             bool fastImagePacker,
             int maximumWidth,
             int maximumHeight,
@@ -50,8 +50,8 @@ namespace RelhaxModpack.AtlasesCreator.Packing
             out Dictionary<string, Rectangle> outputMap)
         {
             files = new List<Texture>(imageFiles);
-            requirePow2 = requirePowerOfTwo == Atlas.State.True;
-            requireSquare = requireSquareImage == Atlas.State.True;
+            requirePow2 = requirePowerOfTwo == true;
+            requireSquare = requireSquareImage == true;
             acceptFirstPass = fastImagePacker;
             outputWidth = maximumWidth;
             outputHeight = maximumHeight;

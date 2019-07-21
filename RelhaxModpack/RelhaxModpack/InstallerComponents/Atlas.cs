@@ -7,75 +7,83 @@ using System.Windows.Forms;
 
 namespace RelhaxModpack
 {
-    //TODO: consider making interface for some of these?
+    /// <summary>
+    /// A class that serves as a description of an atlas file with processing instructions
+    /// </summary>
     public class Atlas
     {
-        //a single string with the filename of the processingNativeFile (needed for tracing work instructions after installation)
-        public string NativeProcessingFile { get; set; } = "";
-        //the actual name of the original file before processed
-        public string ActualPatchName { get; set; } = "";
-        // path and name to the package file
-        public string Pkg { get; set; } = "";
-        // fileName of the atlas file to extract
-        public string AtlasFile { get; set; } = "";
-        // fileName of the atlas map file to extract
-        public string MapFile { get; set; } = "";
-        // path inside the pkg file to the filename to process
-        public string DirectoryInArchive { get; set; } = "";
-        // path to atlas file outside the archive (after extraction located here)
-        public string TempAltasPresentDirectory { get; set; } = Settings.RelhaxTempFolder;
-        // path to place the finished file
-        public string AtlasSaveDirectory { get; set; } = "";
-        // width of the new atlases file
-        public int AtlasWidth { get; set; } = 0;   // 0 or empty = get from original atlas file
-        // height of the new atlases file
-        public int AtlasHeight { get; set; } = 0;   // 0 or empty = get from original atlas file
-        // padding of the new atlases file
+        /// <summary>
+        /// Path and name to the package file
+        /// </summary>
+        public string Pkg { get; set; } = string.Empty;
+
+        /// <summary>
+        /// FileName of the atlas image file to extract
+        /// </summary>
+        public string AtlasFile { get; set; } = string.Empty;
+
+        /// <summary>
+        /// FileName of the atlas map file to extract
+        /// </summary>
+        public string MapFile { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Path inside the pkg file to the filename to process
+        /// </summary>
+        public string DirectoryInArchive { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Path to place the generated atlas file
+        /// </summary>
+        public string AtlasSaveDirectory { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Width of the new atlases file. 0 = get from original atlas file
+        /// </summary>
+        public int AtlasWidth { get; set; } = 0;
+
+        /// <summary>
+        /// Height of the new atlases file. 0 = get from original atlas file
+        /// </summary>
+        public int AtlasHeight { get; set; } = 0;
+
+        /// <summary>
+        /// Padding of the new atlases file (amount of pixels as a border between each image)
+        /// </summary>
         public int Padding { get; set; } = 1;
-        // positioning optimation with PowOf2
-        public State PowOf2 { get; set; } = State.None;
-        // positioning optimation with Square
-        public State Square { get; set; } = State.None;
-        // allow to accept first successfull image optimazion layout
+
+        /// <summary>
+        /// Creating an atlas file only with log base 2 numbers (16, 32, 64, etc.)
+        /// </summary>
+        public bool PowOf2 { get; set; } = false;
+
+        /// <summary>
+        /// Creating an atlas file only in a square (same width and height of atlas)
+        /// </summary>
+        public bool Square { get; set; } = false;
+
+        /// <summary>
+        /// allow to accept first successful image optimization layout
+        /// </summary>
         public bool FastImagePacker { get; set; } = true;
-        // generate map file
-        public State GenerateMap { get; set; } = State.None;
-        // maybe new fileName
+
+        /// <summary>
+        /// List of folders that could contain images to replace original images
+        /// </summary>
         public List<string> ImageFolderList { get; set; } = new List<string>();
-        //the list of textures in each atlas
+
+        /// <summary>
+        /// The list of textures in each atlas
+        /// </summary>
         public List<Texture> TextureList { get; set; } = new List<Texture>();
-        // allow the folderparser to add new images to the atlas file
-        public bool AllowToAddAdditionalImages { get; set; } = false;
-        //for the tostring thing
+        
+        /// <summary>
+        /// Returns a string representation of the object
+        /// </summary>
+        /// <returns>The atlas file name</returns>
         public override string ToString()
         {
-            return string.Format("NativeProcessingFile: {0}\nActualPatchName: {1}\nPkg: {2}\nDirectoryInArchive: {3}\nAtlasFile: {4}\nStlasSaveDirectory: {5}\nSltas width: {6}\nSltas hight: {7}\nPadding: {8}\nPowOf2: {9}\nSquare: {10}\nFastImagePacker: {11}\nGenerateMap: {12}\nMapTypeName: {13}\nImageFolderList: {14}\nTexturelist: {15}\nAllowToAddNewPictures: {16}",
-                NativeProcessingFile.Equals("") ? "(empty)" : NativeProcessingFile,
-                ActualPatchName.Equals("") ? "(empty)" : ActualPatchName,
-                Pkg.Equals("") ? "(empty)" : Pkg,
-                DirectoryInArchive.Equals("") ? "(empty)" : DirectoryInArchive,
-                AtlasFile.Equals("") ? "(empty)" : AtlasFile,
-                AtlasSaveDirectory.Equals("") ? "(empty)" : AtlasSaveDirectory,
-                AtlasWidth == 0 ? "(empty)" : "" + AtlasWidth,
-                AtlasHeight == 0 ? "(empty)" : "" + AtlasHeight,
-                Padding == 0 ? "(empty)" : "" + Padding,
-                PowOf2 == State.None ? "(empty)" : PowOf2 == State.True ? "True" : "False",
-                Square == State.None ? "(empty)" : Square == State.True ? "True" : "False",
-                FastImagePacker ? "True" : "False",
-                GenerateMap == State.None ? "(empty)" : GenerateMap == State.True ? "True" : "False",
-                ImageFolderList.Count == 0 ? "(empty)" : ImageFolderList.ToString(),
-                //TextureList.Count == 0 ? "(empty)" : TextureList.Count.ToString(),
-                AllowToAddAdditionalImages ? "True" : "False");
-        }
-
-        public enum State
-        {
-
-            None = 0,
-
-            True,
-
-            False
+            return string.Format("AtlasFile: {0}", string.IsNullOrEmpty(AtlasFile) ? "(empty)" : AtlasFile);
         }
     }
 }
