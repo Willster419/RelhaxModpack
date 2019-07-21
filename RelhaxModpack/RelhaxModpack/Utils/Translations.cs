@@ -695,7 +695,7 @@ namespace RelhaxModpack
             //Component: AutoInstallCB
             //
             English.Add("AutoInstallCB", "Enable auto install (NEW)");
-            German.Add("AutoInstallCB", TranslationNeeded);
+            German.Add("AutoInstallCB", "Automatische Installation aktivieren (NEU)");
             Polish.Add("AutoInstallCB", TranslationNeeded);
             French.Add("AutoInstallCB", TranslationNeeded);
 
@@ -2666,7 +2666,7 @@ namespace RelhaxModpack
             //Component: DeveloperSelectionsContinueButton
             //
             English.Add("DeveloperSelectionsContinueButton", "Select");
-            German.Add("DeveloperSelectionsContinueButton", TranslationNeeded);
+            German.Add("DeveloperSelectionsContinueButton", "Auswahl bestätigen");
             Polish.Add("DeveloperSelectionsContinueButton", TranslationNeeded);
             French.Add("DeveloperSelectionsContinueButton", TranslationNeeded);
 
@@ -2724,7 +2724,7 @@ namespace RelhaxModpack
             //Component: AdvancedInstallInstallMods
             //
             English.Add("AdvancedInstallInstallMods", "Install Thread");
-            German.Add("AdvancedInstallInstallMods", TranslationNeeded);
+            German.Add("AdvancedInstallInstallMods", "Installiere Thread");
             Polish.Add("AdvancedInstallInstallMods", TranslationNeeded);
             French.Add("AdvancedInstallInstallMods", TranslationNeeded);
 
