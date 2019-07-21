@@ -573,54 +573,139 @@
             Provides a complete tree style path to the package using its internal packageName, starting with the category
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Dependency">
+            <summary>
+            Represents a package with logical calculations. A dependency is only installed when a selectable package is checked
+            for installation and is dependent on the dependency i.e. 6th sense sound and icon mods require the 6th sense script dependency
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Dependency.FieldsToXmlParseAttributes">
+            <summary>
+            Gets a list of fields (including from base classes) that can be parsed as xml attributes
+            </summary>
+            <returns>The string list</returns>
+        </member>
+        <member name="M:RelhaxModpack.Dependency.FieldsToXmlParseNodes">
+            <summary>
+            Gets a list of fields (including from base classes) that can be parsed as xml elements
+            </summary>
+            <returns>The string list</returns>
+        </member>
+        <member name="F:RelhaxModpack.Dependency.DatabasePackageLogic">
+            <summary>
+            List of linked mods and configs that use this dependency at install time
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Dependency.Dependencies">
+            <summary>
+            List of dependencies this dependency calls on
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Dependency.DependenciesProp">
+            <summary>
+            Property of Dependencies list to allow for interface implementation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Dependency.wasLogicalDependencyLegacy">
+            <summary>
+            When loading from legacy database type and is was of type "logicalDependency"
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Dependency.#ctor">
+            <summary>
+            Constructor to over-ride DatabasePackage default values
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.SelectionTypes">
+            <summary>
+            The types of UI selections for building the selection tree
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectionTypes.none">
+            <summary>
+            Used as catch-all for any mis-assigned selection types
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectionTypes.single1">
+            <summary>
+            A radio button selection (only one of many), can have children
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectionTypes.single_dropdown1">
+            <summary>
+            A combobox selection (only one of many), cannot have children
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectionTypes.single_dropdown2">
+            <summary>
+            Another combobox selection (only one of many), cannot have children
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectionTypes.multi">
+            <summary>
+            A checkbox selection (many of many), can have children
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.SelectablePackage">
             <summary>
-            A package that has UI elements, and is eithor a mod or config that can be selected in the UI
+            A package that can be selected in the UI, most commonly a mod or a configuration parameter for a mod
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.SelectablePackage.FieldsToXmlParseAttributes">
+            <summary>
+            Gets a list of fields (including from base classes) that can be parsed as xml attributes
+            </summary>
+            <returns>The string list</returns>
+        </member>
+        <member name="M:RelhaxModpack.SelectablePackage.FieldsToXmlParseNodes">
+            <summary>
+            Gets a list of fields (including from base classes) that can be parsed as xml elements
+            </summary>
+            <returns>The string list</returns>
         </member>
         <member name="M:RelhaxModpack.SelectablePackage.#ctor">
             <summary>
-            Constructior override for DatabasePackage. save memory by only enabling the components we need
+            Constructor to over-ride DatabasePackage default values
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.Name">
             <summary>
-            the name of the package
+            The display name of the package
             </summary>
         </member>
         <member name="P:RelhaxModpack.SelectablePackage.NameFormatted">
             <summary>
-            the name of the package with the version macro replaced for use display
+            The name of the package with the version macro replaced for use display
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.ParentCategory">
             <summary>
-            the Category refrence
+            The Category object reference
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.Type">
             <summary>
-            the type of selectable package logic to follow (options are single1, single_dropdown1, single_dropdown2, multi)
+            The type of selectable package logic to follow (see SelectionTypes enumeration for options)
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.Parent">
             <summary>
-            the refrence for the direct parent of this package
+            The reference for the direct parent of this package
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.TopParent">
             <summary>
-            the refrence for the absolute top of the package tree
+            The reference for the absolute top of the package tree
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.Visible">
             <summary>
-            a flag to determine wether or not the mod should be shown in UI
+            A flag to determine whether or not the mod should be shown in UI
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.UpdateComment">
             <summary>
-            update comments of the package
+            Update comments of the package
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.Description">
@@ -630,7 +715,12 @@
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.PopularMod">
             <summary>
-            Flag to determine if the mod (and children? TODO) should be used in the 
+            Flag to determine if the package is popular
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.GreyAreaMod">
+            <summary>
+            Flag to determine if the package is of controversial nature, or if the developer is a controversial source
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.SortChildPackages">
@@ -645,12 +735,12 @@
         </member>
         <member name="F:RelhaxModpack.SelectablePackage._Checked">
             <summary>
-            field for whether the package is selected to install
+            Field for whether the package is selected to install
             </summary>
         </member>
         <member name="P:RelhaxModpack.SelectablePackage.Checked">
             <summary>
-            property for if the package is selected by the user to install. handles all color change and single_dropdown updating code
+            Property for if the package is selected by the user to install. handles all color change and single_dropdown updating code
             </summary>
         </member>
         <member name="P:RelhaxModpack.SelectablePackage.Enabled">
@@ -667,22 +757,27 @@
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.UserFiles">
             <summary>
-            the list of cache files that should be backed up before wiping the directory
+            The list of cache files that should be backed up before wiping the directory
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.Packages">
             <summary>
-            the list of child SelectablePackage entries in this instance of SelectablePackages
+            The list of child SelectablePackage entries in this instance of SelectablePackages
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.Medias">
             <summary>
-            list of media preview items associated with this package, shown in the preview window on right click of component
+            List of media preview items associated with this package, shown in the preview window on right click of component
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.Dependencies">
             <summary>
             A list of packages (from dependencies list) that this package is dependent on in order to be installed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.DependenciesProp">
+            <summary>
+            Property of Dependencies list to allow for interface implementation
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.ConflictingPackages">
@@ -698,67 +793,77 @@
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.UIComponent">
             <summary>
-            the UI element refrence for this package
+            The UI element reference for this package
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.ParentUIComponent">
             <summary>
-            the UI element refrence for the direct parent of this package
+            The UI element reference for the direct parent of this package
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.TopParentUIComponent">
             <summary>
-            the UI element refrence for the absolute top of the package tree
+            The UI element reference for the absolute top of the package tree
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.RelhaxWPFComboBoxList">
             <summary>
-            The list of WPF combo boxes DESCIBE MORE TODO
+            The list of WPF combo boxes for each combobox type
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.ChildBorder">
             <summary>
-            the border for the legacy view to allow for putting all subchilderen in the border. sits inside treeviewitem. wpf component
+            The border for the legacy view to allow for putting all children in the border. sits inside TreeViewItem. WPF component
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.ChildStackPanel">
             <summary>
-            the stackpanel to allow the child treeviewitems to stack upon each other. sits inside the border. wpf component
+            The StackPanel to allow the child TreeViewItems to stack upon each other. sits inside the border. WPF component
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.ParentBorder">
             <summary>
-            the border that this component is in. wpf componment
+            The border that this component is in. WPF component
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.ParentStackPanel">
             <summary>
-            the stackpanel that this item is inside. wpf component
+            The StackPanel that this item is inside. WPF component
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.ContentControl">
             <summary>
-            ContentControl item to allow for right-clicking of disabled components. defaultv2 wpf component
+            ContentControl item to allow for right-clicking of disabled components. defaultv2 WPF component
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.SelectablePackage.ScrollViewer">
+            <summary>
+            Component used only in the top SelectablePackage to allow for scrolling of the package lists for each category
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.TreeViewItem">
             <summary>
-            the treeviewitem that corresponds to this package. legacy wpf component
+            The TreeViewItem that corresponds to this package. legacy WPF component
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.TreeView">
             <summary>
-            the treeview that this package is in. legacy wpf component
+            The TreeView that this package is in. legacy WPF component
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.TabIndex">
             <summary>
-            the TabPage refrence
+            The TabItem UI reference
             </summary>
         </member>
         <member name="P:RelhaxModpack.SelectablePackage.CompletePath">
             <summary>
-            provides a nice complete path that is more human readable than a packagePath
+            Provides a complete path of the name fields from the top package down to where this package is located in the tree
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.CompletePackageNamePath">
+            <summary>
+            Provides a complete path of the packageName fields from the top package down to where this package is located in the tree
             </summary>
         </member>
         <member name="P:RelhaxModpack.SelectablePackage.IsStructureVisible">
@@ -783,26 +888,34 @@
         </member>
         <member name="P:RelhaxModpack.SelectablePackage.ToolTipString">
             <summary>
-            Returns the display tooltip string, or the translation string for "no description"
+            Returns the display tool tip string, or the translation string for "no description"
             </summary>
         </member>
         <member name="M:RelhaxModpack.SelectablePackage.CompareModsPackageName(RelhaxModpack.SelectablePackage,RelhaxModpack.SelectablePackage)">
             <summary>
-            Allows for alphabetical sorting of packages by PackageName
+            Alphabetical sorting of packages by PackageName property at this level (not recursive)
             </summary>
-            <param name="x">a package</param>
-            <param name="y">another package</param>
+            <param name="x">First package to compare</param>
+            <param name="y">Second package to compare</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.SelectablePackage.CompareModsName(RelhaxModpack.SelectablePackage,RelhaxModpack.SelectablePackage)">
+            <summary>
+            Alphabetical sorting of packages by NameFormatted property at this level (not recursive)
+            </summary>
+            <param name="x">First package to compare</param>
+            <param name="y">Second package to compare</param>
             <returns></returns>
         </member>
         <member name="M:RelhaxModpack.SelectablePackage.ToString">
             <summary>
             Allows for display in a combobox and when debugging
             </summary>
-            <returns>The nameFormatted property of the pacakge</returns>
+            <returns>The nameFormatted property of the package</returns>
         </member>
         <member name="M:RelhaxModpack.SelectablePackage.AnyPackagesChecked">
             <summary>
-            check if the color change should be changed on or off, based on if any other packages at this level are enabled and checked
+            Check if the color change should be changed on or off, based on if any other packages at this level are enabled and checked
             </summary>
             <returns>True if another package at this level is checked and enabled, false otherwise</returns>
         </member>

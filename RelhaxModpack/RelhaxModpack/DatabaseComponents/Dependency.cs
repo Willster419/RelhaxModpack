@@ -5,8 +5,10 @@ using RelhaxModpack.DatabaseComponents;
 
 namespace RelhaxModpack
 {
-    //a dependency is a zip file like mod that is required for any of the mods to work
-    //i.e. and sound mods require the sound memory to be increased
+    /// <summary>
+    /// Represents a package with logical calculations. A dependency is only installed when a selectable package is checked
+    /// for installation and is dependent on the dependency i.e. 6th sense sound and icon mods require the 6th sense script dependency
+    /// </summary>
     public class Dependency : DatabasePackage, IComponentWithDependencies
     {
         #region XML parsing
@@ -16,12 +18,20 @@ namespace RelhaxModpack
             nameof(Dependencies)
         };
 
+        /// <summary>
+        /// Gets a list of fields (including from base classes) that can be parsed as xml attributes
+        /// </summary>
+        /// <returns>The string list</returns>
         new public static List<string> FieldsToXmlParseAttributes()
         {
             //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/versioning-with-the-override-and-new-keywords
             return DatabasePackage.FieldsToXmlParseAttributes();
         }
 
+        /// <summary>
+        /// Gets a list of fields (including from base classes) that can be parsed as xml elements
+        /// </summary>
+        /// <returns>The string list</returns>
         new public static List<string> FieldsToXmlParseNodes()
         {
             return DatabasePackage.FieldsToXmlParseNodes().Concat(DependencyElementsToXmlParseNodes).ToList();
@@ -30,17 +40,30 @@ namespace RelhaxModpack
 
         #region Database Properties
 
-        //list of linked mods and configs that use this dependency at install time
+        /// <summary>
+        /// List of linked mods and configs that use this dependency at install time
+        /// </summary>
         public List<DatabaseLogic> DatabasePackageLogic = new List<DatabaseLogic>();
 
-        //list of dependnecies this dependency calls on
+        /// <summary>
+        /// List of dependencies this dependency calls on
+        /// </summary>
         public List<DatabaseLogic> Dependencies = new List<DatabaseLogic>();
 
+        /// <summary>
+        /// Property of Dependencies list to allow for interface implementation
+        /// </summary>
         public List<DatabaseLogic> DependenciesProp { get { return Dependencies; } set { Dependencies = value; } }
 
-        //legacy compatibility feature: set this for when loading from legacy database type and is was of type "logicalDependency"
+        /// <summary>
+        /// When loading from legacy database type and is was of type "logicalDependency"
+        /// </summary>
+        [Obsolete("This is for legacy database compatibility and will be ignored in Relhax V2")]
         public bool wasLogicalDependencyLegacy = false;
         
+        /// <summary>
+        /// Constructor to over-ride DatabasePackage default values
+        /// </summary>
         public Dependency()
         {
             //https://stackoverflow.com/questions/326223/overriding-fields-or-properties-in-subclasses
