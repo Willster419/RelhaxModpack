@@ -2,40 +2,39 @@
 
 namespace RelhaxModpack
 {
+    /// <summary>
+    /// A Texture is a piece of an atlas file. Contains image data such as the position, size, and bitmap itself.
+    /// </summary>
     public class Texture
     {
-        //name of the texture
-        public string name { get; set; }
-        //x position of the texture in the atlas image
-        public int x { get; set; }
-        //y position of the texture in the atlas image
-        public int y { get; set; }
-        //width of the texture in the atlas image
-        public int width { get; set; }
-        //height of the texture in the atlas image
-        public int height { get; set; }
-        //the actual bitmap in memory of the image
-        public Bitmap AtlasImage { get; set; }
+        /// <summary>
+        /// The file name of where this texture came from
+        /// </summary>
+        public string Name { get; set; }
 
-        public Rectangle Rect;
-        // internal Rectangle rect
-        private Rectangle rect
-        {
-            get
-            {
-                Rect.X = x;
-                Rect.Y = y;
-                Rect.Width = width;
-                Rect.Height = height;
-                return Rect;
-            }
-            set
-            {
-                Rect.X = value.X;
-                Rect.Y = value.Y;
-                Rect.Width = value.Width;
-                Rect.Height = value.Height;
-            }
-        }
+        /// <summary>
+        /// The x position of the texture in the atlas image
+        /// </summary>
+        public int X { get; set; }
+
+        /// <summary>
+        /// The y position of the texture in the atlas image
+        /// </summary>
+        public int Y { get; set; }
+
+        /// <summary>
+        /// The width of the texture in the atlas image
+        /// </summary>
+        public int Width { get; set; }
+
+        /// <summary>
+        /// The height of the texture in the atlas image
+        /// </summary>
+        public int Height { get; set; }
+
+        /// <summary>
+        /// The actual bitmap in memory of the image
+        /// </summary>
+        public Bitmap AtlasImage { get; set; }
     }
 }

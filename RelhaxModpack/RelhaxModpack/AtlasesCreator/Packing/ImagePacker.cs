@@ -94,7 +94,7 @@ namespace RelhaxModpack.AtlasesCreator.Packing
                         return c;
 
                     //same size? go alphabetical i guess
-                    return f1.name.CompareTo(f2.name);
+                    return f1.Name.CompareTo(f2.Name);
                 });
 
             // try to pack the images
@@ -146,7 +146,7 @@ namespace RelhaxModpack.AtlasesCreator.Packing
             Dictionary<string, Rectangle> outputMap = new Dictionary<string, Rectangle>();
             foreach (var pair in imagePlacement)
             {
-                outputMap.Add(pair.Key.name, pair.Value);
+                outputMap.Add(pair.Key.Name, pair.Value);
             }
             return outputMap;
         }

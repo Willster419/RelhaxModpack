@@ -146,11 +146,11 @@ namespace RelhaxModpack.AtlasesCreator
                         //don't care about the x an y for the mod textures
                         realModTextures.Add(new Texture()
                         {
-                            name = filename,
-                            height = newImage.Height,
-                            width = newImage.Width,
-                            x = 0,
-                            y = 0,
+                            Name = filename,
+                            Height = newImage.Height,
+                            Width = newImage.Width,
+                            X = 0,
+                            Y = 0,
                             AtlasImage = newImage
                         });
                     }
@@ -259,7 +259,7 @@ namespace RelhaxModpack.AtlasesCreator
                 //copy the texture bitmap data into the texture bitmap object
                 //https://docs.microsoft.com/en-us/dotnet/api/system.drawing.bitmap.clone?redirectedfrom=MSDN&view=netframework-4.8#System_Drawing_Bitmap_Clone_System_Drawing_Rectangle_System_Drawing_Imaging_PixelFormat_
                 //rectangle of desired area to clone
-                Rectangle textureRect = new Rectangle(texture.x, texture.y, texture.width, texture.height);
+                Rectangle textureRect = new Rectangle(texture.X, texture.Y, texture.Width, texture.Height);
                 //copy the bitmap
                 texture.AtlasImage = atlasImage.Clone(textureRect, atlasImage.PixelFormat);
             }
@@ -330,7 +330,7 @@ namespace RelhaxModpack.AtlasesCreator
                 Token.ThrowIfCancellationRequested();
 
                 //get the matching texture, if it exists
-                Texture[] originalResults = realModTextures.Where(texturee => texturee.name.Equals(Atlas.TextureList[i].name)).ToArray();
+                Texture[] originalResults = realModTextures.Where(texturee => texturee.Name.Equals(Atlas.TextureList[i].Name)).ToArray();
                 if (originalResults.Count() == 0)
                     continue;
                 Texture textureResult = originalResults[originalResults.Count() - 1];
@@ -338,10 +338,10 @@ namespace RelhaxModpack.AtlasesCreator
                 Atlas.TextureList[i].AtlasImage.Dispose();
                 Atlas.TextureList[i].AtlasImage = null;
                 Atlas.TextureList[i].AtlasImage = textureResult.AtlasImage;
-                Atlas.TextureList[i].x = 0;
-                Atlas.TextureList[i].y = 0;
-                Atlas.TextureList[i].height = textureResult.AtlasImage.Height;
-                Atlas.TextureList[i].width = textureResult.AtlasImage.Width;
+                Atlas.TextureList[i].X = 0;
+                Atlas.TextureList[i].Y = 0;
+                Atlas.TextureList[i].Height = textureResult.AtlasImage.Height;
+                Atlas.TextureList[i].Width = textureResult.AtlasImage.Width;
             }
             stopwatch.Stop();
             Logging.Info("atlas file {0}: mod images replacing completed in {1} msec", Path.GetFileName(Atlas.AtlasFile), stopwatch.ElapsedMilliseconds);
@@ -472,19 +472,19 @@ namespace RelhaxModpack.AtlasesCreator
                     switch (item.Name.ToString().ToLower())
                     {
                         case "name":
-                            texture.name = item.Value.ToString().Trim();
+                            texture.Name = item.Value.ToString().Trim();
                             break;
                         case "x":
-                            texture.x = int.Parse("0" + item.Value.ToString().Trim());
+                            texture.X = int.Parse("0" + item.Value.ToString().Trim());
                             break;
                         case "y":
-                            texture.y = int.Parse("0" + item.Value.ToString().Trim());
+                            texture.Y = int.Parse("0" + item.Value.ToString().Trim());
                             break;
                         case "width":
-                            texture.width = int.Parse("0" + item.Value.ToString().Trim());
+                            texture.Width = int.Parse("0" + item.Value.ToString().Trim());
                             break;
                         case "height":
-                            texture.height = int.Parse("0" + item.Value.ToString().Trim());
+                            texture.Height = int.Parse("0" + item.Value.ToString().Trim());
                             break;
                         default:
                             Logging.Error("unexpected Item found. Name: {0}  Value: {1}", item.Name.ToString(), item.Value);

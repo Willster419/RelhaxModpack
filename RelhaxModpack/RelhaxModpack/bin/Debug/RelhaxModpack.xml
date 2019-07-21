@@ -1072,6 +1072,41 @@
             Flat list of all selectable packages
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Texture">
+            <summary>
+            A Texture is a piece of an atlas file. Contains image data such as the position, size, and bitmap itself.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Texture.Name">
+            <summary>
+            The file name of where this texture came from
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Texture.X">
+            <summary>
+            The x position of the texture in the atlas image
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Texture.Y">
+            <summary>
+            The y position of the texture in the atlas image
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Texture.Width">
+            <summary>
+            The width of the texture in the atlas image
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Texture.Height">
+            <summary>
+            The height of the texture in the atlas image
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Texture.AtlasImage">
+            <summary>
+            The actual bitmap in memory of the image
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Logfile">
             <summary>
             Represenets an instance of a logfile used for writing important logging information to a log
