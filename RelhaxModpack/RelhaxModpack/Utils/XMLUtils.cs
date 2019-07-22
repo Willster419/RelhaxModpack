@@ -579,7 +579,7 @@ namespace RelhaxModpack
         public static void UnpackXmlFile(XmlUnpack xmlUnpack, StringBuilder unpackBuilder)
         {
             //log info for debugging if need be
-            Logging.Info(xmlUnpack.ToString());
+            Logging.Info(xmlUnpack.DumpInfoToLog);
 
             //check if new destination name for replacing
             string destinationFilename = string.IsNullOrWhiteSpace(xmlUnpack.NewFileName) ? xmlUnpack.FileName : xmlUnpack.NewFileName;
