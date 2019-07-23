@@ -2413,7 +2413,7 @@ namespace RelhaxModpack
             English.Add("InstallationCompleteStartGameCenter", "Start WG Game Center (WoTLauncher.exe)?");
             German.Add("InstallationCompleteStartGameCenter", "Starte WG Game Center (WoTLauncher.exe)?");
             Polish.Add("InstallationCompleteStartGameCenter", TranslationNeeded);
-            French.Add("InstallationCompleteStartGameCenter", TranslationNeeded);
+            French.Add("InstallationCompleteStartGameCenter", "Démarrer WG Game Center (WoTLauncher.exe)?");
 
             //Component: InstallationCompleteOpenXVM
             //
@@ -2444,7 +2444,7 @@ namespace RelhaxModpack
             English.Add("CouldNotStartProcess", "Could not start process");
             German.Add("CouldNotStartProcess","Konnte Prozess nicht starten");
             Polish.Add("CouldNotStartProcess", TranslationNeeded);
-            French.Add("CouldNotStartProcess", TranslationNeeded);
+            French.Add("CouldNotStartProcess", "Impossible de démarrer le processus");
             #endregion
 
             #region Diagnostics
@@ -2469,7 +2469,7 @@ namespace RelhaxModpack
             English.Add("CollectLogInfo", "Collect log files into a zip file to report a problem");
             German.Add("CollectLogInfo", "Sammle und packe Protokolldateien in einer ZIP-Datei um ein Problem zu melden");
             Polish.Add("CollectLogInfo", TranslationNeeded);
-            French.Add("CollectLogInfo", TranslationNeeded);
+            French.Add("CollectLogInfo", "Recueillir les fichiers journaux dans un fichier zip pour signaler un problème");
 
             //Component: SelectedInstallation
             //
@@ -2484,7 +2484,7 @@ namespace RelhaxModpack
             English.Add("SelectedInstallationNone", "(none)");
             German.Add("SelectedInstallationNone", "(nichts)");
             Polish.Add("SelectedInstallationNone", TranslationNeeded);
-            French.Add("SelectedInstallationNone", TranslationNeeded);
+            French.Add("SelectedInstallationNone", "(aucun)");
 
             //Component: collectionLogInfo
             //
@@ -2539,42 +2539,42 @@ namespace RelhaxModpack
             English.Add("ClearDownloadCache", "Clear download cache");
             German.Add("ClearDownloadCache", "Lösche Downlaod Cache");
             Polish.Add("ClearDownloadCache", TranslationNeeded);
-            French.Add("ClearDownloadCache", TranslationNeeded);
+            French.Add("ClearDownloadCache", "Effacer le cache de téléchargement");
 
             //Component: ClearDownloadCacheDatabase
             //
             English.Add("ClearDownloadCacheDatabase", "Delete download cache database file");
             German.Add("ClearDownloadCacheDatabase", "Lösche Datenbank-Cache");
             Polish.Add("ClearDownloadCacheDatabase", TranslationNeeded);
-            French.Add("ClearDownloadCacheDatabase", TranslationNeeded);
+            French.Add("ClearDownloadCacheDatabase", "Supprimer le fichier de base de données de cache de téléchargement");
 
             //Component: ClearDownloadCacheDescription
             //
             English.Add("ClearDownloadCacheDescription", "Delete all files in the \"RelhaxDownloads\" folder");
             German.Add("ClearDownloadCacheDescription", "Lösche alle Daten aus dem \"RelhaxDownloads\" Ordner");
             Polish.Add("ClearDownloadCacheDescription", TranslationNeeded);
-            French.Add("ClearDownloadCacheDescription", TranslationNeeded);
+            French.Add("ClearDownloadCacheDescription", "Supprimez tous les fichiers dans le répertoire \ « RelhaxDownloads \ »");
 
             //Component: ClearDownloadCacheDatabaseDescription
             //
             English.Add("ClearDownloadCacheDatabaseDescription", "Delete the xml database file. This will cause all zip files to be re-checked for integrity.\nAll invalid files will be re-downloaded if selected in your next installation.");
             German.Add("ClearDownloadCacheDatabaseDescription", "Löschen Sie die XML-Datenbankdatei. Dadurch werden alle ZIP-Dateien erneut auf Integrität überprüft. \nAlle ungültigen Dateien werden erneut heruntergeladen, wenn sie bei Ihrer nächsten Installation ausgewählt werden");
             Polish.Add("ClearDownloadCacheDatabaseDescription", TranslationNeeded);
-            French.Add("ClearDownloadCacheDatabaseDescription", TranslationNeeded);
+            French.Add("ClearDownloadCacheDatabaseDescription", "Supprimez le fichier de base de données XML. L’intégrité de tous les fichiers zip sera à nouveau vérifiée. \nTous les fichiers non valides seront re-téléchargés s’ils sont sélectionnés lors de votre prochaine installation.");
 
             //Component: ChangeInstall
             //
             English.Add("ChangeInstall", "Change the currently selected WoT installation");
             German.Add("ChangeInstall", "Ändern Sie die aktuell ausgewählte WoT-Installation");
             Polish.Add("ChangeInstall", TranslationNeeded);
-            French.Add("ChangeInstall", TranslationNeeded);
+            French.Add("ChangeInstall", "Modifier l'installation WOT sélectionné");
 
             //Component: ChangeInstallDescription
             //
             English.Add("ChangeInstallDescription", "This will change which log files will get added to the diagnostics zip file");
             German.Add("ChangeInstallDescription", "Dadurch wird geändert, welche Protokolldateien zur ZIP-Diagnosedatei hinzugefügt werden");
             Polish.Add("ChangeInstallDescription", TranslationNeeded);
-            French.Add("ChangeInstallDescription", TranslationNeeded);
+            French.Add("ChangeInstallDescription", "Cela modifiera quel fichiers journaux qui seront ajoutés au fichier zip de diagnostic.");
 
             //Component: zipSavedTo
             //
@@ -2607,7 +2607,7 @@ namespace RelhaxModpack
             English.Add("noTimestamp", "No timestamp provided");
             German.Add("noTimestamp", "Kein Zeitstempel verfügbar");
             Polish.Add("noTimestamp", TranslationNeeded);
-            French.Add("noTimestamp", TranslationNeeded);
+            French.Add("noTimestamp", "Pas d'horodatage fourni");
 
             //Component: PreviewNextPicButton
             //
@@ -2630,7 +2630,7 @@ namespace RelhaxModpack
             English.Add("DevUrlHeader", "Developer links");
             German.Add("DevUrlHeader", "Entwickler-Link");
             Polish.Add("DevUrlHeader", TranslationNeeded);
-            French.Add("DevUrlHeader", TranslationNeeded);
+            French.Add("DevUrlHeader", "Liens développeur");
             #endregion
 
             #region Developer Selection Window
@@ -2639,21 +2639,21 @@ namespace RelhaxModpack
             English.Add("DeveloperSelectionsViewer", "Selections Viewer");
             German.Add("DeveloperSelectionsViewer", "Auswahl-Betrachter");
             Polish.Add("DeveloperSelectionsViewer", TranslationNeeded);
-            French.Add("DeveloperSelectionsViewer", TranslationNeeded);
+            French.Add("DeveloperSelectionsViewer", "Visualiseur de sélections");
 
             //Component: DeveloperSelectionsTextHeader
             //
             English.Add("DeveloperSelectionsTextHeader", "Selection to load");
             German.Add("DeveloperSelectionsTextHeader", "Auswahl zum Laden");
             Polish.Add("DeveloperSelectionsTextHeader", TranslationNeeded);
-            French.Add("DeveloperSelectionsTextHeader", TranslationNeeded);
+            French.Add("DeveloperSelectionsTextHeader", "Sélection à charger");
 
             //Component: DeveloperSelectionsCancelButton
             //
             English.Add("DeveloperSelectionsCancelButton", "Cancel");
             German.Add("DeveloperSelectionsCancelButton", "Abbrechen");
             Polish.Add("DeveloperSelectionsCancelButton", TranslationNeeded);
-            French.Add("DeveloperSelectionsCancelButton", TranslationNeeded);
+            French.Add("DeveloperSelectionsCancelButton", "Annuler");
 
             //Component: DeveloperSelectionsLocalFile
             //The text in the first radioButton in the selection viewer, for the user to select their own personal config file to load
@@ -2668,21 +2668,21 @@ namespace RelhaxModpack
             English.Add("DeveloperSelectionsContinueButton", "Select");
             German.Add("DeveloperSelectionsContinueButton", "Auswahl bestätigen");
             Polish.Add("DeveloperSelectionsContinueButton", TranslationNeeded);
-            French.Add("DeveloperSelectionsContinueButton", TranslationNeeded);
+            French.Add("DeveloperSelectionsContinueButton", "Selectionner");
 
             //Component: failedToParseSelections
             //
             English.Add("failedToParseSelections", "Failed to parse selections");
             German.Add("failedToParseSelections", "Auswahl konnte nicht analysiert werden");
             Polish.Add("failedToParseSelections", TranslationNeeded);
-            French.Add("failedToParseSelections", TranslationNeeded);
+            French.Add("failedToParseSelections", "Échec de l'analyse des sélections");
 
             //Component: lastModified
             //
             English.Add("lastModified", "Last modified");
             German.Add("lastModified", "Zuletzt geändert");
             Polish.Add("lastModified", TranslationNeeded);
-            French.Add("lastModified", TranslationNeeded);
+            French.Add("lastModified", "Dernière modification");
             #endregion
 
             #region Advanced Installer Window
@@ -2691,105 +2691,105 @@ namespace RelhaxModpack
             English.Add("AdvancedInstallBackupMods", "Backup current installation");
             German.Add("AdvancedInstallBackupMods", "Sichere derzeitige Installation (Backup)");
             Polish.Add("AdvancedInstallBackupMods", TranslationNeeded);
-            French.Add("AdvancedInstallBackupMods", TranslationNeeded);
+            French.Add("AdvancedInstallBackupMods", "Sauvegarder l'installation actuelle");
 
             //Component: AdvancedInstallBackupData
             //
             English.Add("AdvancedInstallBackupData", "Backup Mod Data");
             German.Add("AdvancedInstallBackupData", "Sichern Sie die Mod-Daten");
             Polish.Add("AdvancedInstallBackupData", TranslationNeeded);
-            French.Add("AdvancedInstallBackupData", TranslationNeeded);
+            French.Add("AdvancedInstallBackupData", "Sauvegarder les données du mod");
 
             //Component: AdvancedInstallClearCache
             //
             English.Add("AdvancedInstallClearCache", "Clear WoT Cache");
             German.Add("AdvancedInstallClearCache", "Lösche den WoT Cache");
             Polish.Add("AdvancedInstallClearCache", TranslationNeeded);
-            French.Add("AdvancedInstallClearCache", TranslationNeeded);
+            French.Add("AdvancedInstallClearCache", "Effacer le cache de WoT");
 
             //Component: AdvancedInstallClearLogs
             //
             English.Add("AdvancedInstallClearLogs", "Clear Logfiles");
             German.Add("AdvancedInstallClearLogs", "Lösche Protokolldateien");
             Polish.Add("AdvancedInstallClearLogs", TranslationNeeded);
-            French.Add("AdvancedInstallClearLogs", TranslationNeeded);
+            French.Add("AdvancedInstallClearLogs", "Effacer les fichiers journaux");
 
             //Component: AdvancedInstallClearMods
             //
             English.Add("AdvancedInstallClearMods", "Uninstall previous installation");
             German.Add("AdvancedInstallClearMods", "Deinstalliere letzte Installation");
             Polish.Add("AdvancedInstallClearMods", TranslationNeeded);
-            French.Add("AdvancedInstallClearMods", TranslationNeeded);
+            French.Add("AdvancedInstallClearMods", "Désinstaller l'installation précédente");
 
             //Component: AdvancedInstallInstallMods
             //
             English.Add("AdvancedInstallInstallMods", "Install Thread");
             German.Add("AdvancedInstallInstallMods", "Installiere Thread");
             Polish.Add("AdvancedInstallInstallMods", TranslationNeeded);
-            French.Add("AdvancedInstallInstallMods", TranslationNeeded);
+            French.Add("AdvancedInstallInstallMods", "Fil d'installation");
 
             //Component: AdvancedInstallUserInstallMods
             //
             English.Add("AdvancedInstallUserInstallMods", "User Install");
             German.Add("AdvancedInstallUserInstallMods", "Benutzerinstallation");
             Polish.Add("AdvancedInstallUserInstallMods", TranslationNeeded);
-            French.Add("AdvancedInstallUserInstallMods", TranslationNeeded);
+            French.Add("AdvancedInstallUserInstallMods", "Installation utilisateur");
 
             //Component: AdvancedInstallRestoreData
             //
             English.Add("AdvancedInstallRestoreData", "Restore Data");
             German.Add("AdvancedInstallRestoreData", "Daten widerherstellen");
             Polish.Add("AdvancedInstallRestoreData", TranslationNeeded);
-            French.Add("AdvancedInstallRestoreData", TranslationNeeded);
+            French.Add("AdvancedInstallRestoreData", "Restaurer les données");
 
             //Component: AdvancedInstallXmlUnpack
             //
             English.Add("AdvancedInstallXmlUnpack", "Xml Unpacker");
             German.Add("AdvancedInstallXmlUnpack", "XML Entpacker");
             Polish.Add("AdvancedInstallXmlUnpack", TranslationNeeded);
-            French.Add("AdvancedInstallXmlUnpack", TranslationNeeded);
+            French.Add("AdvancedInstallXmlUnpack", "Déballeur XML");
 
             //Component: AdvancedInstallPatchFiles
             //
             English.Add("AdvancedInstallPatchFiles", "Patch files");
             German.Add("AdvancedInstallPatchFiles", "Patch Dateien");
             Polish.Add("AdvancedInstallPatchFiles", TranslationNeeded);
-            French.Add("AdvancedInstallPatchFiles", TranslationNeeded);
+            French.Add("AdvancedInstallPatchFiles", "Fichiers de patch");
 
             //Component: AdvancedInstallCreateShortcuts
             //
             English.Add("AdvancedInstallCreateShortcuts", "Create Shortcuts");
             German.Add("AdvancedInstallCreateShortcuts", "Erstelle Verknüpfungen");
             Polish.Add("AdvancedInstallCreateShortcuts", TranslationNeeded);
-            French.Add("AdvancedInstallCreateShortcuts", TranslationNeeded);
+            French.Add("AdvancedInstallCreateShortcuts", "Créer des raccourcis");
 
             //Component: AdvancedInstallCreateAtlas
             //
             English.Add("AdvancedInstallCreateAtlas", "Create atlases");
             German.Add("AdvancedInstallCreateAtlas", "Erstelle Atlase");
             Polish.Add("AdvancedInstallCreateAtlas", TranslationNeeded);
-            French.Add("AdvancedInstallCreateAtlas", TranslationNeeded);
+            French.Add("AdvancedInstallCreateAtlas", "Créer des atlas");
 
             //Component: AdvancedInstallInstallFonts
             //
             English.Add("AdvancedInstallInstallFonts", "Install fonts");
             German.Add("AdvancedInstallInstallFonts", "Installiere Schriftarten");
             Polish.Add("AdvancedInstallInstallFonts", TranslationNeeded);
-            French.Add("AdvancedInstallInstallFonts", TranslationNeeded);
+            French.Add("AdvancedInstallInstallFonts", "Installer des polices");
 
             //Component: AdvancedInstallTrimDownloadCache
             //
             English.Add("AdvancedInstallTrimDownloadCache", "Trim download cache");
             German.Add("AdvancedInstallTrimDownloadCache", "Download-Cache kürzen");
             Polish.Add("AdvancedInstallTrimDownloadCache", TranslationNeeded);
-            French.Add("AdvancedInstallTrimDownloadCache", TranslationNeeded);
+            French.Add("AdvancedInstallTrimDownloadCache", "Réduire le cache de téléchargement");
 
             //Component: AdvancedInstallCleanup
             //
             English.Add("AdvancedInstallCleanup", "Cleanup");
             German.Add("AdvancedInstallCleanup", "Aufräumen");
             Polish.Add("AdvancedInstallCleanup", TranslationNeeded);
-            French.Add("AdvancedInstallCleanup", TranslationNeeded);
+            French.Add("AdvancedInstallCleanup", "Nettoyer");
 
             #endregion
         }
