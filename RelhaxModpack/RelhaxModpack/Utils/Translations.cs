@@ -2553,7 +2553,7 @@ namespace RelhaxModpack
             English.Add("ClearDownloadCacheDescription", "Delete all files in the \"RelhaxDownloads\" folder");
             German.Add("ClearDownloadCacheDescription", "Lösche alle Daten aus dem \"RelhaxDownloads\" Ordner");
             Polish.Add("ClearDownloadCacheDescription", TranslationNeeded);
-            French.Add("ClearDownloadCacheDescription", "Supprimez tous les fichiers dans le répertoire \ « RelhaxDownloads \ »");
+            French.Add("ClearDownloadCacheDescription", "Supprimez tous les fichiers dans le répertoire \"RelhaxDownloads\"");
 
             //Component: ClearDownloadCacheDatabaseDescription
             //
