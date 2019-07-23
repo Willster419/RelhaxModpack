@@ -473,7 +473,6 @@ echo     } &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
 echo } &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>"$(TargetDir)sign_modpack.bat - Shortcut.lnk"</PostBuildEvent>
   </PropertyGroup>
 </Project>
