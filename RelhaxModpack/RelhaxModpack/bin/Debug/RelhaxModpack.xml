@@ -1057,6 +1057,21 @@
             </summary>
             <returns>The atlas file name</returns>
         </member>
+        <member name="T:RelhaxModpack.InstallerComponents.InstallerExitCodes">
+            <summary>
+            Possible points at which the installer can fail
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.InstallerComponents.InstallerExitCodes.Success">
+            <summary>
+            No fail
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.InstallerComponents.InstallerExitCodes.DownloadModsError">
+            <summary>
+            Error with downloading mods
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.InstallerComponents.InstallEngine.OrderedPackagesToInstall">
             <summary>
             List of packages that have zip files to install and are enabled (and checked if selectable) and ordered into installGroups

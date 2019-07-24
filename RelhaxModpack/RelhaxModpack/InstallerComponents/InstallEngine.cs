@@ -15,9 +15,19 @@ using System.Threading;
 namespace RelhaxModpack.InstallerComponents
 {
     #region Event stuff
+    /// <summary>
+    /// Possible points at which the installer can fail
+    /// </summary>
     public enum InstallerExitCodes
     {
-        Success,//starts at 0
+        /// <summary>
+        /// No fail
+        /// </summary>
+        Success = 0,
+
+        /// <summary>
+        /// Error with downloading mods
+        /// </summary>
         DownloadModsError,
         BackupModsError,
         BackupDataError,
