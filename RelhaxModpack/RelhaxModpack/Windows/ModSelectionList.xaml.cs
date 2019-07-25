@@ -281,8 +281,19 @@ namespace RelhaxModpack.Windows
                         using (WebClient client = new WebClient())
                         {
                             //load string constant url from manager info xml
+                            //V2 here
                             string rootbetaDBURL = Settings.BetaDatabaseV2FolderURL.Replace("{branch}", ModpackSettings.BetaDatabaseSelectedBranch);
                             string rootXml = rootbetaDBURL + Settings.BetaDatabaseV2RootFilename;
+                            /////////
+
+                            //V1 here
+#warning using V1 beta database
+                            if(true)
+                            {
+                                rootXml = Settings.BetaDatabaseV1URL;
+                            }
+                            /////////
+
                             //download the xml string into "modInfoXml"
                             client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
                             modInfoXml = client.DownloadString(rootXml);
