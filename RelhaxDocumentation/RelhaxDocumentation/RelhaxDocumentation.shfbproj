@@ -13,7 +13,7 @@
     <RootNamespace>RelhaxDocumentation</RootNamespace>
     <Name>RelhaxDocumentation</Name>
     <!-- SHFB properties -->
-    <FrameworkVersion>.NET Framework 4.6.1</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 4.6.2</FrameworkVersion>
     <OutputPath>.\Help\</OutputPath>
     <HtmlHelpName>RelhaxDocumentation</HtmlHelpName>
     <Language>en-US</Language>
@@ -48,12 +48,12 @@
     </NamespaceSummaries>
     <MissingTags>Summary, Parameter, Returns, Value, Remarks, AutoDocumentCtors, Namespace, TypeParameter, IncludeTargets, AutoDocumentDispose</MissingTags>
     <HelpTitle>Relhax Modpack Documentation</HelpTitle>
-    <HelpFileVersion>1.0.0.1_Alpha</HelpFileVersion>
+    <HelpFileVersion>1.0.0.2</HelpFileVersion>
     <NamingMethod>MemberName</NamingMethod>
     <ContentPlacement>BelowNamespaces</ContentPlacement>
     <RootNamespaceContainer>True</RootNamespaceContainer>
     <RootNamespaceTitle>RelhaxModpack</RootNamespaceTitle>
-    <NamespaceGrouping>False</NamespaceGrouping>
+    <NamespaceGrouping>True</NamespaceGrouping>
     <MaximumGroupParts>2</MaximumGroupParts>
     <Preliminary>True</Preliminary>
     <FeedbackEMailAddress>info%40relhaxmodpack.com</FeedbackEMailAddress>
