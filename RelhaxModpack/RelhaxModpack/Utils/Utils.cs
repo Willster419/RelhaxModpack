@@ -169,7 +169,15 @@ namespace RelhaxModpack
 
             //if the zipfile is not null and no overwrite, then stop
             if (Settings.ModInfoZipfile != null && !overwrite)
+            {
                 return Settings.ModInfoZipfile;
+            }
+            //if zipfile is not null and we are overwriting, then dispose of the zip first
+            else if (Settings.ModInfoZipfile != null && overwrite)
+            {
+                Settings.ModInfoZipfile.Dispose();
+                Settings.ModInfoZipfile = null;
+            }
 
             using (WebClient client = new WebClient())
             {
