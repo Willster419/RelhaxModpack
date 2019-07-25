@@ -265,16 +265,14 @@ namespace RelhaxModpack.Windows
                         //make string
                         string modInfoxmlURL = Settings.WotmodsDatabaseDatRoot + "modInfo.dat";
                         modInfoxmlURL = modInfoxmlURL.Replace("{onlineFolder}", Settings.WoTModpackOnlineFolderVersion);
-                        //download dat file
-                        string tempDownloadLocation = Path.Combine(Settings.RelhaxTempFolder, "modInfo.dat");
-                        using (WebClient client = new WebClient())
+
+                        //download latest modInfo xml
+                        using(WebClient client = new WebClient())
+                        using(Ionic.Zip.ZipFile zip = Ionic.Zip.ZipFile.Read(new MemoryStream(client.DownloadData(modInfoxmlURL))))
                         {
-                            if (File.Exists(tempDownloadLocation))
-                                File.Delete(tempDownloadLocation);
-                            client.DownloadFile(modInfoxmlURL, tempDownloadLocation);
+                            //extract modinfo xml string
+                            modInfoXml = Utils.GetStringFromZip(zip, "modInfo.xml");
                         }
-                        //extract modinfo xml string
-                        modInfoXml = Utils.GetStringFromZip(tempDownloadLocation, "modInfo.xml");
                         break;
                     //from github
                     case DatabaseVersions.Beta:
