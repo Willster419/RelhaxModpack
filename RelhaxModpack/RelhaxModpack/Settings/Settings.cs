@@ -163,12 +163,12 @@ namespace RelhaxModpack
         /// <summary>
         /// The URL path of the latest application stable release notes
         /// </summary>
-        public const string ApplicationNotesStableUrl = "https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/RelicModManager/bin/Debug/releaseNotes.txt";
+        public const string ApplicationNotesStableUrl = "https://github.com/Willster419/RelhaxModpack/raw/master/RelhaxModpack/RelhaxModpack/bin/Debug/release_notes_stable.txt";
 
         /// <summary>
         /// The URL path of the latest application beta release notes
         /// </summary>
-        public const string ApplicationNotesBetaUrl = "https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/RelicModManager/bin/Debug/releaseNotes_beta.txt";
+        public const string ApplicationNotesBetaUrl = "https://github.com/Willster419/RelhaxModpack/raw/master/RelhaxModpack/RelhaxModpack/bin/Debug/release_notes_beta.txt";
 
         /// <summary>
         /// The URL path of the latest V2 database release notes
