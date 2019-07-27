@@ -325,7 +325,7 @@ namespace RelhaxModpack
         public const double MaximumDisplayScale = 3.0F;
         public const double MinimumDisplayScale = 1.0F;
         #endregion
-
+#warning using V1 beta database
         public static Ionic.Zip.ZipFile ModInfoZipfile = null;
 
         #region Settings parsing to/from XML file

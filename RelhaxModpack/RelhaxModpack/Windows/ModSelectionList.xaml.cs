@@ -285,11 +285,9 @@ namespace RelhaxModpack.Windows
                             /////////
 
                             //V1 here
-#warning using V1 beta database
-                            if(true)
-                            {
-                                rootXml = Settings.BetaDatabaseV1URL;
-                            }
+                            //aparently the #warning directive in this file causes an intellisense error with XDocuemtn for some reason
+                            //#warning using V1 beta database
+                            rootXml = Settings.BetaDatabaseV1URL;
                             /////////
 
                             //download the xml string into "modInfoXml"
