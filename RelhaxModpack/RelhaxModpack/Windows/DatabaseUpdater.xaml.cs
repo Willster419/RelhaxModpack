@@ -312,6 +312,7 @@ namespace RelhaxModpack.Windows
         #region Application update V1
         private async void UpdateApplicationV1UploadApplicationStable(object sender, RoutedEventArgs e)
         {
+            LogOutput.Clear();
             ReportProgress("Running Upload Stable Application");
             if (!(bool)SelectV1Application.ShowDialog())
                 return;
@@ -321,10 +322,12 @@ namespace RelhaxModpack.Windows
             {
                 await client.UploadFileTaskAsync(PrivateStuff.FTPModpackRoot + Path.GetFileName(SelectV1Application.FileName), SelectV1Application.FileName);
             }
+            ReportProgress("Done");
         }
 
         private async void UpdateApplicationV1UploadApplicationBeta(object sender, RoutedEventArgs e)
         {
+            LogOutput.Clear();
             ReportProgress("Running Upload Beta Application");
             if (!(bool)SelectV1Application.ShowDialog())
                 return;
@@ -334,10 +337,12 @@ namespace RelhaxModpack.Windows
             {
                 await client.UploadFileTaskAsync(PrivateStuff.FTPModpackRoot + Path.GetFileName(SelectV1Application.FileName), SelectV1Application.FileName);
             }
+            ReportProgress("Done");
         }
 
         private async void UpdateApplicationV1UploadManagerInfo(object sender, RoutedEventArgs e)
         {
+            LogOutput.Clear();
             ReportProgress("Running upload manager_info.xml");
             if (!(bool)SelectManagerInfoXml.ShowDialog())
                 return;
@@ -353,22 +358,26 @@ namespace RelhaxModpack.Windows
             {
                 await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Path.GetFileName(SelectManagerInfoXml.FileName), SelectManagerInfoXml.FileName);
             }
+            ReportProgress("Done");
         }
 
         private async void UpdateApplicationV1CreateUpdatePackages(object sender, RoutedEventArgs e)
         {
+            LogOutput.Clear();
             ReportProgress("Running script to create update packages (wotmods)...");
             await RunPhpScript(PrivateStuff.WotmodsNetworkCredential, PrivateStuff.CreateUpdatePackagesPHP, 30 * Utils.TO_SECONDS);
         }
 
         private async void UpdateApplicationV1CreateManagerInfoWotmods(object sender, RoutedEventArgs e)
         {
+            LogOutput.Clear();
             ReportProgress("Running script to create manager info (wotmods)...");
             await RunPhpScript(PrivateStuff.WotmodsNetworkCredential, PrivateStuff.CreateManagerInfoPHP, 30 * Utils.TO_SECONDS);
         }
 
         private async void UpdateApplicationV1CreateManagerInfoBigmods(object sender, RoutedEventArgs e)
         {
+            LogOutput.Clear();
             ReportProgress("Running script to create manager info (bigmods)...");
             await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateManagerInfoPHP, 30 * Utils.TO_SECONDS);
         }
@@ -377,6 +386,7 @@ namespace RelhaxModpack.Windows
         #region Application update V2
         private async void UpdateApplicationV2UploadApplicationStable(object sender, RoutedEventArgs e)
         {
+            LogOutput.Clear();
             ReportProgress("Running Upload Stable Application");
             if (!(bool)SelectV2Application.ShowDialog())
                 return;
@@ -386,10 +396,12 @@ namespace RelhaxModpack.Windows
             {
                 await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackRelhaxModpack + Path.GetFileName(SelectV2Application.FileName), SelectV2Application.FileName);
             }
+            ReportProgress("Done");
         }
 
         private async void UpdateApplicationV2UploadApplicationBeta(object sender, RoutedEventArgs e)
         {
+            LogOutput.Clear();
             ReportProgress("Running Upload Beta Application");
             if (!(bool)SelectV2Application.ShowDialog())
                 return;
@@ -399,10 +411,12 @@ namespace RelhaxModpack.Windows
             {
                 await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackRelhaxModpack + Path.GetFileName(SelectV2Application.FileName), SelectV2Application.FileName);
             }
+            ReportProgress("Done");
         }
 
         private async void UpdateApplicationV2UploadManagerInfo(object sender, RoutedEventArgs e)
         {
+            LogOutput.Clear();
             ReportProgress("Running upload manager_info.xml");
             if (!(bool)SelectManagerInfoXml.ShowDialog())
                 return;
@@ -418,22 +432,26 @@ namespace RelhaxModpack.Windows
             {
                 await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Path.GetFileName(SelectManagerInfoXml.FileName), SelectManagerInfoXml.FileName);
             }
+            ReportProgress("Done");
         }
 
         private async void UpdateApplicationV2CreateUpdatePackages(object sender, RoutedEventArgs e)
         {
+            LogOutput.Clear();
             ReportProgress("Running script to create update packages (bigmods)...");
             await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateUpdatePackagesPHP, 100000);
         }
 
         private async void UpdateApplicationV2CreateManagerInfoWotmods(object sender, RoutedEventArgs e)
         {
+            LogOutput.Clear();
             ReportProgress("Running script to create manager info (wotmods)...");
             await RunPhpScript(PrivateStuff.WotmodsNetworkCredential, PrivateStuff.CreateManagerInfoPHP, 100000);
         }
 
         private async void UpdateApplicationV2CreateManagerInfoBigmods(object sender, RoutedEventArgs e)
         {
+            LogOutput.Clear();
             ReportProgress("Running script to create manager info (bigmods)...");
             await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateManagerInfoPHP, 30 * Utils.TO_SECONDS);
         }
