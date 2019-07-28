@@ -2005,6 +2005,9 @@ namespace RelhaxModpack
             //set the application information text box
             ApplicationVersionLabel.Text = Translations.GetTranslatedString("applicationVersion") + " " + Utils.GetApplicationVersion();
 
+            //set the databse information text box
+            DatabaseVersionLabel.Text = Translations.GetTranslatedString("databaseVersion") + " " + Settings.DatabaseVersion;
+
             //get the number of processor cores
             MulticoreExtractionCoresCountLabel.Text = string.Format(Translations.GetTranslatedString("MulticoreExtractionCoresCountLabel"), Settings.NumLogicalProcesors);
 
@@ -2209,7 +2212,7 @@ namespace RelhaxModpack
                     break;
             }
             Translations.LocalizeWindow(this, true);
-            ApplyCustomUILocalizations(true);
+            ApplyCustomUILocalizations(!loading);
         }
 
         private void VerboseLoggingCB_Click(object sender, RoutedEventArgs e)
