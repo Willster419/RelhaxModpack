@@ -52,6 +52,8 @@ namespace RelhaxModpack
         private CancellationTokenSource cancellationTokenSource;
         private InstallerComponents.InstallEngine installEngine;
         private bool disableTriggersBackupVal = true;
+        private long totalSize = 0;
+        private string[] backupFiles = null;
         private OpenFileDialog FindTestDatabaseDialog = new OpenFileDialog()
         {
             AddExtension = true,
@@ -141,6 +143,7 @@ namespace RelhaxModpack
 
             //apply translations to this window
             Translations.LocalizeWindow(this,true);
+            ApplyCustomUILocalizations(false);
 
             //create tray icons and menus
             CreateTray();
@@ -208,12 +211,6 @@ namespace RelhaxModpack
             bool isApplicationUpToDate = await CheckForApplicationUpdates();
             CheckForDatabaseUpdates(false);
 
-            //set the application information text box
-            ApplicationVersionLabel.Text = Translations.GetTranslatedString("applicationVersion") + " " + Utils.GetApplicationVersion();
-
-            //get the number of processor cores
-            MulticoreExtractionCoresCountLabel.Text = string.Format(Translations.GetTranslatedString("MulticoreExtractionCoresCountLabel"), Settings.NumLogicalProcesors);
-
             //set the file count and size for the backups folder
             if(!isApplicationUpToDate)
             {
@@ -224,8 +221,8 @@ namespace RelhaxModpack
                 Logging.Debug("starting async task of getting filesizes of backups");
                 Task.Run(() =>
                 {
-                    long totalSize = 0;
-                    string[] backupFiles = Utils.DirectorySearch(Settings.RelhaxModBackupFolder, SearchOption.TopDirectoryOnly, false, "*.zip", 5, 3, false);
+                    totalSize = 0;
+                    backupFiles = Utils.DirectorySearch(Settings.RelhaxModBackupFolder, SearchOption.TopDirectoryOnly, false, "*.zip", 5, 3, false);
                     foreach (string file in backupFiles)
                     {
                         totalSize += Utils.GetFilesize(file);
@@ -2002,6 +1999,19 @@ namespace RelhaxModpack
                 Utils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
             }
         }
+
+        private void ApplyCustomUILocalizations(bool displaySize)
+        {
+            //set the application information text box
+            ApplicationVersionLabel.Text = Translations.GetTranslatedString("applicationVersion") + " " + Utils.GetApplicationVersion();
+
+            //get the number of processor cores
+            MulticoreExtractionCoresCountLabel.Text = string.Format(Translations.GetTranslatedString("MulticoreExtractionCoresCountLabel"), Settings.NumLogicalProcesors);
+
+            //display the backup file sizes (if requested)
+            if(displaySize)
+                BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"), backupFiles.Count(), Utils.SizeSuffix((ulong)totalSize, 1, true));
+        }
         #endregion
 
         #region All the dumb events for all the changing of settings
@@ -2199,6 +2209,7 @@ namespace RelhaxModpack
                     break;
             }
             Translations.LocalizeWindow(this, true);
+            ApplyCustomUILocalizations(true);
         }
 
         private void VerboseLoggingCB_Click(object sender, RoutedEventArgs e)
