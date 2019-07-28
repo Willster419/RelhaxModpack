@@ -1966,7 +1966,7 @@ namespace RelhaxModpack
 
         private void LauchEditor_Click(object sender, RoutedEventArgs e)
         {
-            Logging.Info("Lanuching editor from MainWindow");
+            Logging.Info("Launching editor from MainWindow");
             if (!Logging.IsLogDisposed(Logfiles.Application))
                 Logging.DisposeLogging(Logfiles.Application);
 
@@ -2005,7 +2005,7 @@ namespace RelhaxModpack
             //set the application information text box
             ApplicationVersionLabel.Text = Translations.GetTranslatedString("applicationVersion") + " " + Utils.GetApplicationVersion();
 
-            //set the databse information text box
+            //set the database information text box
             DatabaseVersionLabel.Text = Translations.GetTranslatedString("databaseVersion") + " " + Settings.DatabaseVersion;
 
             //get the number of processor cores
