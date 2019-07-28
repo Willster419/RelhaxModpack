@@ -142,15 +142,15 @@ namespace RelhaxModpack
         {
             XmlDocument doc = null;
 
-            Settings.ModInfoZipfile = await GetManagerInfoZipfileAsync(overwrite);
-            if(Settings.ModInfoZipfile == null)
+            Settings.ManagerInfoZipfile = await GetManagerInfoZipfileAsync(overwrite);
+            if(Settings.ManagerInfoZipfile == null)
             {
                 Logging.Exception("Settings.ModInfoZipfile is null");
                 return null;
             }
 
             //get the version info string
-            string xmlString = GetStringFromZip(Settings.ModInfoZipfile, "manager_version.xml");
+            string xmlString = GetStringFromZip(Settings.ManagerInfoZipfile, "manager_version.xml");
             if (string.IsNullOrEmpty(xmlString))
             {
                 Logging.Exception("Failed to get xml string from Settings.ModInfoZipfile");
@@ -168,15 +168,15 @@ namespace RelhaxModpack
                 File.Delete(Settings.ManagerInfoDatFile);
 
             //if the zipfile is not null and no overwrite, then stop
-            if (Settings.ModInfoZipfile != null && !overwrite)
+            if (Settings.ManagerInfoZipfile != null && !overwrite)
             {
-                return Settings.ModInfoZipfile;
+                return Settings.ManagerInfoZipfile;
             }
             //if zipfile is not null and we are overwriting, then dispose of the zip first
-            else if (Settings.ModInfoZipfile != null && overwrite)
+            else if (Settings.ManagerInfoZipfile != null && overwrite)
             {
-                Settings.ModInfoZipfile.Dispose();
-                Settings.ModInfoZipfile = null;
+                Settings.ManagerInfoZipfile.Dispose();
+                Settings.ManagerInfoZipfile = null;
             }
 
             using (WebClient client = new WebClient())

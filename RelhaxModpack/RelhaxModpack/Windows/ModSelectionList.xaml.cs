@@ -574,7 +574,7 @@ namespace RelhaxModpack.Windows
                         if (!File.Exists(Settings.LastInstalledConfigFilepath))
                         {
                             Logging.Warning("LastInstalledConfigFile does not exist, loading as first time with check default mods");
-                            SelectionsDocument = XMLUtils.LoadXmlDocument(Utils.GetStringFromZip(Settings.ModInfoZipfile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
+                            SelectionsDocument = XMLUtils.LoadXmlDocument(Utils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
                             shouldLoadSomething = true;
                         }
                         else
@@ -586,7 +586,7 @@ namespace RelhaxModpack.Windows
                     else
                     {
                         //load default checked mods
-                        SelectionsDocument = XMLUtils.LoadXmlDocument(Utils.GetStringFromZip(Settings.ModInfoZipfile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
+                        SelectionsDocument = XMLUtils.LoadXmlDocument(Utils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
                         shouldLoadSomething = true;
                     }
 

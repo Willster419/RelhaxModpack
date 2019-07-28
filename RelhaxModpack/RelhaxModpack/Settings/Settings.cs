@@ -310,7 +310,7 @@ namespace RelhaxModpack
         /// The current distribution version of the application
         /// Alpha should NEVER be built for public distribution unless direct testing!
         /// </summary>
-        public const ApplicationVersions ApplicationVersion = ApplicationVersions.Alpha;
+        public const ApplicationVersions ApplicationVersion = ApplicationVersions.Stable;
 
         public static bool TrueAlpha = false;
         //file and folder macro locations
@@ -326,7 +326,7 @@ namespace RelhaxModpack
         public const double MinimumDisplayScale = 1.0F;
         #endregion
 #warning using V1 beta database
-        public static Ionic.Zip.ZipFile ModInfoZipfile = null;
+        public static Ionic.Zip.ZipFile ManagerInfoZipfile = null;
 
         #region Settings parsing to/from XML file
 

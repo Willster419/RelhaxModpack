@@ -544,14 +544,14 @@ namespace RelhaxModpack
             }
             else
             {
-                if(Settings.ModInfoZipfile == null)
+                if(Settings.ManagerInfoZipfile == null)
                 {
                     Logging.Debug("CheckForDatabaseUpdates(false), but Settings.ModInfoZipfile is null. getting latest modInfo");
-                    Settings.ModInfoZipfile = await Utils.GetManagerInfoZipfileAsync(false);
+                    Settings.ManagerInfoZipfile = await Utils.GetManagerInfoZipfileAsync(false);
                 }
                 //only get if from the downloaded version
                 //get the version info string
-                string xmlString = Utils.GetStringFromZip(Settings.ModInfoZipfile, "manager_version.xml");
+                string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoZipfile, "manager_version.xml");
                 if (string.IsNullOrEmpty(xmlString))
                 {
                     Logging.WriteToLog("Failed to get get xml string from managerInfo.dat", Logfiles.Application, LogLevel.ApplicationHalt);
@@ -754,7 +754,7 @@ namespace RelhaxModpack
                 Application.Current.Shutdown();
             }
             //extract the batch script to update the application
-            string batchScript = Utils.GetStringFromZip(Settings.ManagerInfoDatFile, Settings.RelicBatchUpdateScriptServer);
+            string batchScript = Utils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.RelicBatchUpdateScriptServer);
             File.WriteAllText(Settings.RelicBatchUpdateScript, batchScript);
             //try to start the update script
             try
@@ -930,7 +930,7 @@ namespace RelhaxModpack
                 if (databaseVersion != DatabaseVersions.Test)
                 {
                     //make an array of all the supported versions
-                    string supportedClientsXML = Utils.GetStringFromZip(Settings.ModInfoZipfile, "supported_clients.xml");
+                    string supportedClientsXML = Utils.GetStringFromZip(Settings.ManagerInfoZipfile, "supported_clients.xml");
                     if (string.IsNullOrWhiteSpace(supportedClientsXML))
                     {
                         Logging.Info("Failed to parse supported_clients.xml from string from zipfile", Logfiles.Application, LogLevel.Exception);
