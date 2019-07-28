@@ -28,7 +28,7 @@ namespace RelhaxModpack.Windows
         private const string RepoLatestDatabaseFolder = "latest_database";
         private const string HardCodeRepoPath = "F:\\Tanks Stuff\\RelhaxModpackDatabase";
         private const bool UseHardCodePath = true;
-        private static readonly string DatabaseUpdatePath = Path.Combine(UseHardCodePath? HardCodeRepoPath: Settings.ApplicationStartupPath, RepoResourcesFolder, DatabaseUpdateFilename);
+        private static readonly string DatabaseUpdatePath = Path.Combine(UseHardCodePath ? HardCodeRepoPath : Settings.ApplicationStartupPath, RepoResourcesFolder, DatabaseUpdateFilename);
         private static readonly string SupportedClientsPath = Path.Combine(UseHardCodePath ? HardCodeRepoPath : Settings.ApplicationStartupPath, RepoResourcesFolder, Settings.SupportedClients);
         private static readonly string ManagerVersionPath = Path.Combine(UseHardCodePath ? HardCodeRepoPath : Settings.ApplicationStartupPath, RepoResourcesFolder, Settings.ManagerVersion);
         private static readonly string RepoLatestDatabaseFolderPath = Path.Combine(UseHardCodePath ? HardCodeRepoPath : Settings.ApplicationStartupPath, RepoLatestDatabaseFolder);
@@ -41,6 +41,9 @@ namespace RelhaxModpack.Windows
         private OpenFileDialog SelectModInfo = new OpenFileDialog() { Filter = "*.xml|*.xml" };
         private OpenFileDialog SelectManyModInfo = new OpenFileDialog();
         private OpenFileDialog SelectManyZip = new OpenFileDialog();
+        private OpenFileDialog SelectV1Application = new OpenFileDialog() { Title = "Find V1 application to upload", Filter = "*.exe|*.exe" };
+        private OpenFileDialog SelectV2Application = new OpenFileDialog() { Title = "Find V2 application to upload", Filter = "*.exe|*.exe" };
+        private OpenFileDialog SelectManagerInfoXml = new OpenFileDialog() { Title = "Find manager_version.xml", Filter = "manager_version.xml|manager_version.xml" };
         #endregion
 
         #region Stuff for parts 3 and 4 to share
@@ -306,17 +309,133 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region Application update
-        private async void UpdateApplicationStep7_Click(object sender, RoutedEventArgs e)
+        #region Application update V1
+        private async void UpdateApplicationV1UploadApplicationStable(object sender, RoutedEventArgs e)
         {
-            LogOutput.Text = "Running script to create update packages...";
+            ReportProgress("Running Upload Stable Application");
+            if (!(bool)SelectV1Application.ShowDialog())
+                return;
+
+            ReportProgress("Uploading stable exe to wotmods...");
+            using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
+            {
+                await client.UploadFileTaskAsync(PrivateStuff.FTPModpackRoot + Path.GetFileName(SelectV1Application.FileName), SelectV1Application.FileName);
+            }
+        }
+
+        private async void UpdateApplicationV1UploadApplicationBeta(object sender, RoutedEventArgs e)
+        {
+            ReportProgress("Running Upload Beta Application");
+            if (!(bool)SelectV1Application.ShowDialog())
+                return;
+
+            ReportProgress("Uploading beta exe to wotmods...");
+            using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
+            {
+                await client.UploadFileTaskAsync(PrivateStuff.FTPModpackRoot + Path.GetFileName(SelectV1Application.FileName), SelectV1Application.FileName);
+            }
+        }
+
+        private async void UpdateApplicationV1UploadManagerInfo(object sender, RoutedEventArgs e)
+        {
+            ReportProgress("Running upload manager_info.xml");
+            if (!(bool)SelectManagerInfoXml.ShowDialog())
+                return;
+
+            ReportProgress("Upload manager_info.xml to wotmods");
+            using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
+            {
+                await client.UploadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + Path.GetFileName(SelectManagerInfoXml.FileName), SelectManagerInfoXml.FileName);
+            }
+
+            ReportProgress("Upload manager_info.xml to bigmods");
+            using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
+            {
+                await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Path.GetFileName(SelectManagerInfoXml.FileName), SelectManagerInfoXml.FileName);
+            }
+        }
+
+        private async void UpdateApplicationV1CreateUpdatePackages(object sender, RoutedEventArgs e)
+        {
+            ReportProgress("Running script to create update packages (wotmods)...");
             await RunPhpScript(PrivateStuff.WotmodsNetworkCredential, PrivateStuff.CreateUpdatePackagesPHP, 30 * Utils.TO_SECONDS);
         }
 
-        private async void UpdateApplicationStep8_Click(object sender, RoutedEventArgs e)
+        private async void UpdateApplicationV1CreateManagerInfoWotmods(object sender, RoutedEventArgs e)
         {
-            LogOutput.Text = "Running script to create manager info...";
+            ReportProgress("Running script to create manager info (wotmods)...");
             await RunPhpScript(PrivateStuff.WotmodsNetworkCredential, PrivateStuff.CreateManagerInfoPHP, 30 * Utils.TO_SECONDS);
+        }
+
+        private async void UpdateApplicationV1CreateManagerInfoBigmods(object sender, RoutedEventArgs e)
+        {
+            ReportProgress("Running script to create manager info (bigmods)...");
+            await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateManagerInfoPHP, 30 * Utils.TO_SECONDS);
+        }
+        #endregion
+
+        #region Application update V2
+        private async void UpdateApplicationV2UploadApplicationStable(object sender, RoutedEventArgs e)
+        {
+            ReportProgress("Running Upload Stable Application");
+            if (!(bool)SelectV2Application.ShowDialog())
+                return;
+
+            ReportProgress("Uploading stable exe to wotmods...");
+            using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
+            {
+                await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackRelhaxModpack + Path.GetFileName(SelectV2Application.FileName), SelectV2Application.FileName);
+            }
+        }
+
+        private async void UpdateApplicationV2UploadApplicationBeta(object sender, RoutedEventArgs e)
+        {
+            ReportProgress("Running Upload Beta Application");
+            if (!(bool)SelectV2Application.ShowDialog())
+                return;
+
+            ReportProgress("Uploading beta exe to wotmods...");
+            using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
+            {
+                await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackRelhaxModpack + Path.GetFileName(SelectV2Application.FileName), SelectV2Application.FileName);
+            }
+        }
+
+        private async void UpdateApplicationV2UploadManagerInfo(object sender, RoutedEventArgs e)
+        {
+            ReportProgress("Running upload manager_info.xml");
+            if (!(bool)SelectManagerInfoXml.ShowDialog())
+                return;
+
+            ReportProgress("Upload manager_info.xml to wotmods");
+            using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
+            {
+                await client.UploadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + Path.GetFileName(SelectManagerInfoXml.FileName), SelectManagerInfoXml.FileName);
+            }
+
+            ReportProgress("Upload manager_info.xml to bigmods");
+            using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
+            {
+                await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Path.GetFileName(SelectManagerInfoXml.FileName), SelectManagerInfoXml.FileName);
+            }
+        }
+
+        private async void UpdateApplicationV2CreateUpdatePackages(object sender, RoutedEventArgs e)
+        {
+            ReportProgress("Running script to create update packages (bigmods)...");
+            await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateUpdatePackagesPHP, 100000);
+        }
+
+        private async void UpdateApplicationV2CreateManagerInfoWotmods(object sender, RoutedEventArgs e)
+        {
+            ReportProgress("Running script to create manager info (wotmods)...");
+            await RunPhpScript(PrivateStuff.WotmodsNetworkCredential, PrivateStuff.CreateManagerInfoPHP, 100000);
+        }
+
+        private async void UpdateApplicationV2CreateManagerInfoBigmods(object sender, RoutedEventArgs e)
+        {
+            ReportProgress("Running script to create manager info (bigmods)...");
+            await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateManagerInfoPHP, 30 * Utils.TO_SECONDS);
         }
         #endregion
 
