@@ -1947,6 +1947,61 @@ namespace RelhaxModpack
                 }
             }
         }
+
+        private void AutoSyncFrequencyTexbox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //check the time parsed value
+            int timeToUse = Utils.ParseInt(AutoSyncFrequencyTexbox.Text, 0);
+            if (timeToUse < 1)
+            {
+                Logging.Debug("Invalid time specified, must be above 0. not saving");
+            }
+            else
+            {
+                ModpackSettings.AutoInstallFrequencyInterval = timeToUse;
+            }
+        }
+
+        private void AutoSyncFrequencyComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ModpackSettings.AutoInstallFrequencyTimeUnit = AutoSyncFrequencyComboBox.SelectedIndex;
+        }
+
+        private void LauchEditor_Click(object sender, RoutedEventArgs e)
+        {
+            Logging.Info("Lanuching editor from MainWindow");
+            if (!Logging.IsLogDisposed(Logfiles.Application))
+                Logging.DisposeLogging(Logfiles.Application);
+
+            CommandLineSettings.ApplicationMode = ApplicationMode.Editor;
+            DatabaseEditor editor = new DatabaseEditor() { LaunchedFromMainWindow = true };
+            //start updater logging system
+            if (!Logging.Init(Logfiles.Editor))
+            {
+                MessageBox.Show("Failed to initialize logfile for editor");
+                editor.Close();
+                return;
+            }
+            Logging.WriteHeader(Logfiles.Editor);
+            editor.ShowDialog();
+
+            CommandLineSettings.ApplicationMode = ApplicationMode.Default;
+            if (!Logging.Init(Logfiles.Application))
+            {
+                MessageBox.Show(Translations.GetTranslatedString("appFailedCreateLogfile"));
+                Application.Current.Shutdown((int)ReturnCodes.LogfileError);
+            }
+        }
+
+        private void ApplyCustomScalingSlider_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Released)
+            {
+                ApplyCustomScalingLabel.Text = string.Format("{0}x", ApplyCustomScalingSlider.Value.ToString("N"));
+                ModpackSettings.DisplayScale = ApplyCustomScalingSlider.Value;
+                Utils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
+            }
+        }
         #endregion
 
         #region All the dumb events for all the changing of settings
@@ -2429,60 +2484,5 @@ namespace RelhaxModpack
             }
         }
         #endregion
-
-        private void AutoSyncFrequencyTexbox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            //check the time parsed value
-            int timeToUse = Utils.ParseInt(AutoSyncFrequencyTexbox.Text, 0);
-            if (timeToUse < 1)
-            {
-                Logging.Debug("Invalid time specified, must be above 0. not saving");
-            }
-            else
-            {
-                ModpackSettings.AutoInstallFrequencyInterval = timeToUse;
-            }
-        }
-
-        private void AutoSyncFrequencyComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ModpackSettings.AutoInstallFrequencyTimeUnit = AutoSyncFrequencyComboBox.SelectedIndex;
-        }
-
-        private void LauchEditor_Click(object sender, RoutedEventArgs e)
-        {
-            Logging.Info("Lanuching editor from MainWindow");
-            if (!Logging.IsLogDisposed(Logfiles.Application))
-                Logging.DisposeLogging(Logfiles.Application);
-
-            CommandLineSettings.ApplicationMode = ApplicationMode.Editor;
-            DatabaseEditor editor = new DatabaseEditor() { LaunchedFromMainWindow = true };
-            //start updater logging system
-            if (!Logging.Init(Logfiles.Editor))
-            {
-                MessageBox.Show("Failed to initialize logfile for editor");
-                editor.Close();
-                return;
-            }
-            Logging.WriteHeader(Logfiles.Editor);
-            editor.ShowDialog();
-
-            CommandLineSettings.ApplicationMode = ApplicationMode.Default;
-            if (!Logging.Init(Logfiles.Application))
-            {
-                MessageBox.Show(Translations.GetTranslatedString("appFailedCreateLogfile"));
-                Application.Current.Shutdown((int)ReturnCodes.LogfileError);
-            }
-        }
-
-        private void ApplyCustomScalingSlider_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            if(e.LeftButton == MouseButtonState.Released)
-            {
-                ApplyCustomScalingLabel.Text = string.Format("{0}x", ApplyCustomScalingSlider.Value.ToString("N"));
-                ModpackSettings.DisplayScale = ApplyCustomScalingSlider.Value;
-                Utils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
-            }
-        }
     }
 }
