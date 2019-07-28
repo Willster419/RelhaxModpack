@@ -32,7 +32,7 @@
         <TabControl HorizontalAlignment="Stretch" Height="254" Margin="12,81,12,0" VerticalAlignment="Top" Background="#7FE5E5E5">
             <TabItem Header="Intro" x:Name="SettingsTabIntro" Tag="SettingsTabIntro" Background="#7FE5E5E5">
                 <Grid Background="#7FE5E5E5">
-                    <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="TODO: some sort of documentation..." VerticalAlignment="Top"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" x:Name="HelperText" Tag="HelperText"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Selection View" x:Name="SettingsTabSelectionView" Tag="SettingsTabSelectionView" Background="#7FE5E5E5">
