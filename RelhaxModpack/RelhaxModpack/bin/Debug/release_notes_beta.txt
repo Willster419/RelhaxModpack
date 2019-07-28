@@ -1,3 +1,10 @@
+Application version 0.29.0.2 (2019-07-28)
+https://www.virustotal.com/gui/file/bddec9e9c1478883db4bc2d31d5d27641cb41e819b14642a9d8a4796ad8f6212/detection
+- Fixed bugs with beta database usage
+- Fixed issues with some MainWindow UI components not applying new translation when language changed
+- Updated application update code
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 0.29.0.2 (2019-07-27)
 https://www.virustotal.com/gui/file/ca4339219c1b76569472a36792c79911f449ecebe46864052dd8f3cdd364928a/detection
 - Added Russian Translations (Thanks to DrWeb7_1)
