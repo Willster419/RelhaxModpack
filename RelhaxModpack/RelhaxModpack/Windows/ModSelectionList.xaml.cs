@@ -363,6 +363,8 @@ namespace RelhaxModpack.Windows
                         break;
 
                     case DatabaseVersions.Beta:
+                        //for 2.0
+                        /*
                         string rootbetaDBURL = Settings.BetaDatabaseV2FolderURL.Replace("{branch}", ModpackSettings.BetaDatabaseSelectedBranch);
 
                         //download the files
@@ -405,6 +407,12 @@ namespace RelhaxModpack.Windows
                         {
                             Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
                             MessageBox.Show(Translations.GetTranslatedString("failedToParse") + "database V2");
+                            return false;
+                        }*/
+                        if (!XMLUtils.ParseDatabase(modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
+                        {
+                            Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
+                            MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
                             return false;
                         }
                         break;
