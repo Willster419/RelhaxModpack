@@ -1538,7 +1538,7 @@
         </member>
         <member name="T:RelhaxModpack.Logfile">
             <summary>
-            Represenets an instance of a logfile used for writing important logging information to a log
+            Represents an instance of a log file used for writing important logging information to a log
             </summary>
         </member>
         <member name="P:RelhaxModpack.Logfile.Filepath">
@@ -1553,38 +1553,55 @@
         </member>
         <member name="P:RelhaxModpack.Logfile.Timestamp">
             <summary>
-            The date and time format for writing each line in the logfile
+            The date and time format for writing each line in the log file
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Logfile.CanWrite">
+            <summary>
+            Returns true if the fileStream is not null and can be written to, false otherwise
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Logfile.fileStream">
+            <summary>
+            The fileStream object to write/create the log file. Requires disposal support
             </summary>
         </member>
         <member name="M:RelhaxModpack.Logfile.#ctor(System.String,System.String)">
             <summary>
-            Create an instance of the logfile
+            Create an instance of the log file
             </summary>
             <param name="filePath">The path to the file to create/open</param>
             <param name="timestamp">the date and time format to write for each log line</param>
         </member>
         <member name="M:RelhaxModpack.Logfile.Init">
             <summary>
-            Initializes the logfile
+            Initializes the log file
             </summary>
-            <returns>True if sucessfull initialization, false otherwise</returns>
+            <returns>True if successful initialization, false otherwise</returns>
         </member>
         <member name="M:RelhaxModpack.Logfile.Write(System.String,RelhaxModpack.LogLevel)">
             <summary>
-            Writes a line of text to the log file with the date and timestamp, and level of severity of the message
+            Writes a line of text to the log file with the date and timestamp, and severity level of the message
             </summary>
             <param name="message">The line to write</param>
             <param name="logLevel">The level of severity of the log message</param>
+            <returns>The formatted string that was written</returns>
+        </member>
+        <member name="M:RelhaxModpack.Logfile.Write(System.String)">
+            <summary>
+            Writes a line of text to the log file with the date and timestamp, and severity level of the message
+            </summary>
+            <param name="message">The message to write to the file</param>
         </member>
         <member name="M:RelhaxModpack.Logfile.Dispose(System.Boolean)">
             <summary>
-            Dispose Managed and Unmanaged rescources used for the logfiles
+            Dispose Managed and Unmanaged resources used for the log files
             </summary>
             <param name="disposing"></param>
         </member>
         <member name="M:RelhaxModpack.Logfile.Dispose">
             <summary>
-            Dispose Managed and Unmanaged rescources used for the logfiles
+            Dispose Managed and Unmanaged resources used for the log files
             </summary>
         </member>
         <member name="T:RelhaxModpack.Logfiles">

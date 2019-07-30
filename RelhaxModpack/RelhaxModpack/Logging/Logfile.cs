@@ -6,7 +6,7 @@ using System.Windows;
 namespace RelhaxModpack
 {
     /// <summary>
-    /// Represenets an instance of a logfile used for writing important logging information to a log
+    /// Represents an instance of a log file used for writing important logging information to a log
     /// </summary>
     public class Logfile : IDisposable
     {
@@ -14,19 +14,29 @@ namespace RelhaxModpack
         /// The path to the file the log is writing to
         /// </summary>
         public string Filepath { get; private set; }
+
         /// <summary>
         /// The name of the file that the log is writing to
         /// </summary>
         public string Filename { get; private set; }
+
         /// <summary>
-        /// The date and time format for writing each line in the logfile
+        /// The date and time format for writing each line in the log file
         /// </summary>
         public string Timestamp { get; private set; }
-        public bool CanWrite { get { return fileStream == null ? false : true; } }
-        //The filestream object to write/create the logfile. Requires disposal support
-        private FileStream fileStream;
+
         /// <summary>
-        /// Create an instance of the logfile
+        /// Returns true if the fileStream is not null and can be written to, false otherwise
+        /// </summary>
+        public bool CanWrite { get { return fileStream == null ? false : true; } }
+
+        /// <summary>
+        /// The fileStream object to write/create the log file. Requires disposal support
+        /// </summary>
+        private FileStream fileStream;
+
+        /// <summary>
+        /// Create an instance of the log file
         /// </summary>
         /// <param name="filePath">The path to the file to create/open</param>
         /// <param name="timestamp">the date and time format to write for each log line</param>
@@ -36,10 +46,11 @@ namespace RelhaxModpack
             Filename = Path.GetFileName(Filepath);
             Timestamp = timestamp;
         }
+
         /// <summary>
-        /// Initializes the logfile
+        /// Initializes the log file
         /// </summary>
-        /// <returns>True if sucessfull initialization, false otherwise</returns>
+        /// <returns>True if successful initialization, false otherwise</returns>
         public bool Init()
         {
             if (fileStream != null)
@@ -59,16 +70,19 @@ namespace RelhaxModpack
             }
             return true;
         }
+
         /// <summary>
-        /// Writes a line of text to the log file with the date and timestamp, and level of severity of the message
+        /// Writes a line of text to the log file with the date and timestamp, and severity level of the message
         /// </summary>
         /// <param name="message">The line to write</param>
         /// <param name="logLevel">The level of severity of the log message</param>
+        /// <returns>The formatted string that was written</returns>
         public string Write(string message, LogLevel logLevel)
         {
             //only alpha and beta application distributions should log debug messages
             if (Settings.ApplicationVersion == ApplicationVersions.Stable && logLevel == LogLevel.Debug && !ModpackSettings.VerboseLogging)
                 return string.Empty;
+
             string logMessageLevel = string.Empty;
             switch(logLevel)
             {
@@ -91,22 +105,30 @@ namespace RelhaxModpack
                     logMessageLevel = "CRITICAL APPLICATION FAILURE: ";
                     break;
             }
+
             //https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings
             string formattedDateTime = DateTime.Now.ToString(Timestamp);
             message = string.Format("{0}   {1}{2}", formattedDateTime, logMessageLevel, message);
             Write(message);
             return message;
         }
+
+        /// <summary>
+        /// Writes a line of text to the log file with the date and timestamp, and severity level of the message
+        /// </summary>
+        /// <param name="message">The message to write to the file</param>
         public void Write(string message)
         {
-            //check for empty filepaths or messages first
+            //check for empty file paths or messages first
             if (string.IsNullOrEmpty(message))
                 return;
             if (string.IsNullOrEmpty(Filepath))
-                throw new BadMemeException("You're bad at logfiles");
+                throw new BadMemeException("You're bad at log files");
             if (fileStream == null)
                 return;
-            message = message + Environment.NewLine;
+
+            message += Environment.NewLine;
+
             //actually write message to log
             fileStream.Write(Encoding.UTF8.GetBytes(message), 0, Encoding.UTF8.GetByteCount(message));
             fileStream.Flush();
@@ -115,7 +137,7 @@ namespace RelhaxModpack
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
         /// <summary>
-        /// Dispose Managed and Unmanaged rescources used for the logfiles
+        /// Dispose Managed and Unmanaged resources used for the log files
         /// </summary>
         /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
@@ -137,15 +159,9 @@ namespace RelhaxModpack
             }
         }
 
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~Logfile() {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
         // This code added to correctly implement the disposable pattern.
         /// <summary>
-        /// Dispose Managed and Unmanaged rescources used for the logfiles
+        /// Dispose Managed and Unmanaged resources used for the log files
         /// </summary>
         public void Dispose()
         {
