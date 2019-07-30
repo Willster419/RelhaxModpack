@@ -1368,7 +1368,7 @@ namespace RelhaxModpack
             TotalProgressBar.Value = TotalProgressBar.Maximum;
 
             //after waiting for the installation...
-            if (results.ExitCodes == InstallerComponents.InstallerExitCodes.Success)
+            if (results.ExitCode == InstallerComponents.InstallerExitCodes.Success)
             {
                 if (ModpackSettings.ShowInstallCompleteWindow)
                 {
@@ -1391,9 +1391,9 @@ namespace RelhaxModpack
             else
             {
                 //explain why if failed
-                MessageBox.Show(string.Format("{0}{1}{2}", Translations.GetTranslatedString("installFailed"), Environment.NewLine, results.ExitCodes.ToString()));
+                MessageBox.Show(string.Format("{0}{1}{2}", Translations.GetTranslatedString("installFailed"), Environment.NewLine, results.ExitCode.ToString()));
                 //and log
-                Logging.WriteToLog(string.Format("Installer failed to install, exit code {0}\n{1}", results.ExitCodes.ToString(), results.ErrorMessage),
+                Logging.WriteToLog(string.Format("Installer failed to install, exit code {0}\n{1}", results.ExitCode.ToString(), results.ErrorMessage),
                     Logfiles.Application, LogLevel.Exception);
                 ToggleUIButtons(true);
             }
@@ -1497,7 +1497,7 @@ namespace RelhaxModpack
                         line1 = Translations.GetTranslatedString("installPatchFiles");
                         line2 = e.Filename;
                         break;
-                    case InstallerComponents.InstallerExitCodes.ShortcustError:
+                    case InstallerComponents.InstallerExitCodes.ShortcutsError:
                         line1 = Translations.GetTranslatedString("installShortcuts");
                         line2 = e.Filename;
                         break;
@@ -1727,7 +1727,7 @@ namespace RelhaxModpack
 
             //report results
             ChildProgressBar.Value = ChildProgressBar.Maximum;
-            if (results.ExitCodes == InstallerComponents.InstallerExitCodes.Success)
+            if (results.ExitCode == InstallerComponents.InstallerExitCodes.Success)
             {
                 InstallProgressTextBox.Text = Translations.GetTranslatedString("uninstallSuccess");
                 MessageBox.Show(Translations.GetTranslatedString("uninstallSuccess"));

@@ -212,7 +212,7 @@ namespace RelhaxModpack.Windows
                     }
 
                     break;
-                case InstallerExitCodes.ShortcustError:
+                case InstallerExitCodes.ShortcutsError:
                     if (!ModpackSettings.CreateShortcuts)
                         break;
                     if (progress.ParrentTotal == 0)
@@ -324,7 +324,7 @@ namespace RelhaxModpack.Windows
                 case InstallerExitCodes.PatchError:
                     ToggleComplete(RestoreDataXmlUnpackReporter);
                     break;
-                case InstallerExitCodes.ShortcustError:
+                case InstallerExitCodes.ShortcutsError:
                     ToggleComplete(PatchReporter);
                     break;
                 case InstallerExitCodes.TrimDownloadCacheError:
