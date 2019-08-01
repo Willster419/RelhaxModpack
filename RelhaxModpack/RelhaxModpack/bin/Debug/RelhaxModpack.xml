@@ -1947,6 +1947,81 @@
             <param name="level">The level of severity included into the string format</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
         </member>
+        <member name="T:RelhaxModpack.ApplyBehavior">
+            <summary>
+            The different ways that the apply and save database buttons can interact
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ApplyBehavior.Default">
+            <summary>
+            Default behavior. The buttons do not interact.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ApplyBehavior.ApplyTriggersSave">
+            <summary>
+            When you click the apply button, it also saves the database after, to the default save location.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ApplyBehavior.SaveTriggersApply">
+            <summary>
+            When you click the save button, it also clicks the apply button before saving.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.EditorSettings">
+            <summary>
+            The settings used in the editor window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.EditorSettings.BigmodsUsername">
+            <summary>
+            The user's FTP account username to the bigmods FTP server
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.EditorSettings.BigmodsPassword">
+            <summary>
+            The user's FTP account password to the bigmods FTP server
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.EditorSettings.SaveSelectionBeforeLeave">
+            <summary>
+            Before you click on a new selection to display, it will apply any changes made. Can be used with ApplyBehavior.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.EditorSettings.SortDatabaseList">
+            <summary>
+            Sort the database list per level. Not currently implemented
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.EditorSettings.ApplyBehavior">
+            <summary>
+            The behavior the editor should use for the save and apply buttons
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.EditorSettings.ShowConfirmationOnPackageApply">
+            <summary>
+            Show a confirmation window when clicking apply
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.EditorSettings.ShowConfirmationOnPackageAddRemoveMove">
+            <summary>
+            Show a confirmation window when clicking to add or move a package
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.EditorSettings.DefaultEditorSaveLocation">
+            <summary>
+            The location to save the database file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.EditorSettings.FTPUploadDownloadWindowTimeout">
+            <summary>
+            The timeout, in seconds, until the FTP upload or download window will close. Set to 0 to disable timeout.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.EditorSettings.#ctor">
+            <summary>
+            Create an instance of the EditorSettings class. Settings should be set via property initialization style.
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.SelectionView">
             <summary>
             The type of selection view for how to display the selection tree
@@ -1962,21 +2037,6 @@
             Default WPF V2 style
             </summary>
         </member>
-        <member name="T:RelhaxModpack.LoadingGifs">
-            <summary>
-            The different loading Gifs for when loading the preview
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.LoadingGifs.Standard">
-            <summary>
-            The standard loading Gif
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.LoadingGifs.ThirdGuards">
-            <summary>
-            Thirdguards head loading Gif
-            </summary>
-        </member>
         <member name="T:RelhaxModpack.UninstallModes">
             <summary>
             The types on uninstall mods the application supports
@@ -1984,7 +2044,7 @@
         </member>
         <member name="F:RelhaxModpack.UninstallModes.Default">
             <summary>
-            Default uninstall method to uninstall all modifiecation done by the application
+            Default uninstall method to uninstall all modifications done by the application
             </summary>
         </member>
         <member name="F:RelhaxModpack.UninstallModes.Quick">
@@ -2017,95 +2077,156 @@
             Provides access to all settings used in the modpack.
             </summary>
         </member>
+        <member name="F:RelhaxModpack.ModpackSettings.PropertiesToExclude">
+            <summary>
+            Contains a list of properties that may be defined in the ModpackSettings class, but to exclude from the properties serialization (loading/saving)
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.ModpackSettings.CustomModInfoPath">
             <summary>
             The custom path to the ModInfo.xml file if loading in test mode
             </summary>
         </member>
+        <member name="F:RelhaxModpack.ModpackSettings.BetaDatabaseSelectedBranch">
+            <summary>
+            The name of the git branch to use when downloading the database. Uses the RelhaxModpackDatabase repository
+            </summary>
+            <remarks>URL for the repository: https://github.com/Willster419/RelhaxModpackDatabase </remarks>
+        </member>
         <member name="F:RelhaxModpack.ModpackSettings.NotifyIfSameDatabase">
             <summary>
-            toggle if the program should notify the user if the database version is the same as the last installed version
+            Toggle if the program should notify the user if the database version is the same as the last installed version
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.BackupModFolder">
             <summary>
-            toggle if the program will backup the current mod installation
+            Toggle if the program will backup the current mod installation
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.CleanInstallation">
             <summary>
-            toggle if the program will clean the mods and res_mods folders before installation
+            Toggle if the program will clean the mods and res_mods folders before installation
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.ForceManuel">
             <summary>
-            toggle if the program should force the user to manually point to the WoT location
+            Toggle if the program should force the user to manually point to the WoT location
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.SaveLastSelection">
             <summary>
-            toggle if the application should automatically save the last selected config to also be automatically loaded upon selection load
+            Toggle if the application should automatically save the last selected config to also be automatically loaded upon selection load
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.SaveUserData">
             <summary>
-            toggle if the application should save user cache save data like session stats, or auto equip configs
+            Toggle if the application should save user cache save data like session stats, or auto equip configs
             </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.SaveDisabledMods">
+            <summary>
+            Toggle if the application should save disabled mods in the user's selection file. If selected, when a mod is enabled again, it will be automatically selected
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.DisplayUserModsWarning">
+            <summary>
+            A one time run bool to display a message about how to use user mods
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.VerboseLogging">
+            <summary>
+            Toggle if the application should use debug level logging or just info
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.AllowStatisticDataGather">
+            <summary>
+            Toggle if the application can gather statistic data about it's usage
+            </summary>
+            <remarks>The data that the modpack gathers is only the list of packages you selected for installation. This helps us determine which mods are popular, and for how best to
+            prioritize which mods to work on first in the event the support team is overloaded</remarks>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.EnableBordersLegacyView">
             <summary>
-            toggle for each view if the borders around the child selection options should show
+            Toggle for each view if the borders around the child selection options should show
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.EnableBordersDefaultV2View">
             <summary>
-            toggle for each view if the borders around the child selection options should show
+            Toggle for each view if the borders around the child selection options should show
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.EnableColorChangeLegacyView">
             <summary>
-            toggle for each view if the color change should occur when a child selection happends
+            Toggle for each view if the color change should occur when a child selection happens
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.EnableColorChangeDefaultV2View">
             <summary>
-            toggle for each view if the color change should occur when a child selection happends
+            Toggle for each view if the color change should occur when a child selection happens
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.ShowInstallCompleteWindow">
             <summary>
-            toggle if the installation complete window will be shown
+            Toggle if the installation complete window will be shown
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.ClearCache">
             <summary>
-            toggle if the program will delete the WoT appdata cache
+            Toggle if the program will delete the WoT appdata cache
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.DeleteLogs">
             <summary>
-            toggle if the program will delete xvm, pmod, WoT logs
+            Toggle if the program will delete xvm, pmod, WoT logs
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.CreateShortcuts">
             <summary>
-            toggle if the program will create desktop shortcuts
+            Toggle if the program will create desktop shortcuts
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.InstallWhileDownloading">
             <summary>
-            toggle the ability for the modpack to extract a package as soon as it is downloaded
+            Toggle the ability for the modpack to extract a package as soon as it is downloaded
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.MulticoreExtraction">
             <summary>
-            toggle the ability to have multiple extractions happening at the same time
+            Toggle the ability to have multiple extractions happening at the same time
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.ExportMode">
             <summary>
-            toggle export mode
+            Toggle export mode
             </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ForceEnabled">
+            <summary>
+            Force all packages to be enabled in the selection list
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ForceVisible">
+            <summary>
+            Force all packages to be visible in the selection list
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.DisableTriggers">
+            <summary>
+            When selected, the installation engine will disable event triggers.
+            </summary>
+            <remarks>The triggers, when enabled, enable the application to start some install tasks when all required packages are downloaded</remarks>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.OneClickInstall">
+            <summary>
+            Toggle one click install mode
+            </summary>
+            <remarks>Allows the user to install a selection when clicking the install button</remarks>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.AutoInstall">
+            <summary>
+            Toggle auto install mode
+            </summary>
+            <remarks>Allows the user to have the application automatically check for and install a selection file when the database updates</remarks>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.AdvancedInstalProgress">
             <summary>
@@ -2120,43 +2241,59 @@
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.PreviewFullscreen">
             <summary>
-            toggle for if the Preview window should be shown in fullscreen mode
+            Toggle for if the Preview window should be shown in fullscreen mode
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.AutoInstallFrequencyInterval">
+            <summary>
+            The time, in a specified unit, to check for anew data base version
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.AutoInstallFrequencyTimeUnit">
+            <summary>
+            The time unit to use for the interval (mins, hours, etc)
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.ModSelectionHeight">
             <summary>
-            the height, in pixels, of the ModSelectionView window
+            The height, in pixels, of the ModSelectionView window
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.ModSelectionWidth">
             <summary>
-            the width, in pixels, of the ModSelectionView window
+            The width, in pixels, of the ModSelectionView window
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.ModSelectionFullscreen">
             <summary>
-            toggle for if the ModSelectionView window should be shown in fullscreen mode
+            Toggle for if the ModSelectionView window should be shown in fullscreen mode
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.PreviewX">
             <summary>
-            the x-coordinate location, in pixels, of the Preview window
+            The x-coordinate location, in pixels, of the Preview window
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.PreviewY">
             <summary>
-            the y-coordinate location, in pixels, of the Preview window
+            The y-coordinate location, in pixels, of the Preview window
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.PreviewHeight">
             <summary>
-            the height, in pixels, of the Preview window
+            The height, in pixels, of the Preview window
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.PreviewWidth">
             <summary>
-            the width, in pixels, of the Preview window
+            The width, in pixels, of the Preview window
             </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.AutoOneclickSelectionFilePath">
+            <summary>
+            The path to the auto or one click selection file
+            </summary>
+            <remarks>Used for both auto and one click installation modes</remarks>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.UninstallMode">
             <summary>
@@ -2185,8 +2322,112 @@
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.MinimizeToSystemTray">
             <summary>
-            toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
+            t=Toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
             </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.DisplayScale">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.ModpackSettings.ApplyOldSettings(System.Xml.XmlNodeList)">
+            <summary>
+            Check for old poorly named settings that don't directly match setting property names
+            </summary>
+            <param name="settings">The node that holds all the settings nodes</param>
+        </member>
+        <member name="T:RelhaxModpack.ApplicationMode">
+            <summary>
+            The primary functional modes the application can run in
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ApplicationMode.Default">
+            <summary>
+            The default mode of modpack installer. This is the primary focus of the application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ApplicationMode.Editor">
+            <summary>
+            The database editor mode
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ApplicationMode.Updater">
+            <summary>
+            The updater mode. Used for updating the database, application, and other various functions
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ApplicationMode.PatchDesigner">
+            <summary>
+            The patch designer mode. Allow the user to create and test patches
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ApplicationMode.Patcher">
+            <summary>
+            The patch runner mode. Can be used in command line mode, used for patching files given patch file instructions
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.CommandLineSettings">
+            <summary>
+            Handles all parsing and usage of command line arguments
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.CommandLineSettings.TestMode">
+            <summary>
+            Using the application is database test mode. Allows you to test a local database
+            </summary>
+            <remarks>Activated with "/test"</remarks>
+        </member>
+        <member name="F:RelhaxModpack.CommandLineSettings.SkipUpdate">
+            <summary>
+            Skip the application update check
+            </summary>
+            <remarks>Activated with "/skip-update"</remarks>
+        </member>
+        <member name="F:RelhaxModpack.CommandLineSettings.SilentStart">
+            <summary>
+            Allows the application (in installer mode) to be launched in a minimized state
+            </summary>
+            <remarks>Activated with "/silent-start"</remarks>
+        </member>
+        <member name="F:RelhaxModpack.CommandLineSettings.AutoInstallFileName">
+            <summary>
+            The name of the auto install selection file
+            </summary>
+            <remarks>The application uses the filename as check for if in auto install mode i.e. if the string is not empty.
+            The file must be in the "RelhaxUserSelections" folder</remarks>
+        </member>
+        <member name="F:RelhaxModpack.CommandLineSettings.UpdateKeyFileName">
+            <summary>
+            The name of the file that contains the key for unlocking the updater
+            </summary>
+            <remarks>use key filename as check for update key mode</remarks>
+        </member>
+        <member name="F:RelhaxModpack.CommandLineSettings.EditorAutoLoadFileName">
+            <summary>
+            The path to load the database from when the application starts
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.CommandLineSettings.PatchFilenames">
+            <summary>
+            The parsed list of patch instruction files for patch mode
+            </summary>
+            <remarks>The application will run the patches in order loaded from the command line i.e. left to right</remarks>
+        </member>
+        <member name="F:RelhaxModpack.CommandLineSettings.ApplicationMode">
+            <summary>
+            The mode that the application is currently running in
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.CommandLineSettings.ParseCommandLineConflicts">
+            <summary>
+            Parse any conflicting command line arguments
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.CommandLineSettings.ParseCommandLine(System.String[])">
+            <summary>
+            Parse the command line arguments
+            </summary>
+            <param name="args">A string array of command line arguments</param>
         </member>
         <member name="T:RelhaxModpack.Settings">
             <summary>
