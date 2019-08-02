@@ -13,20 +13,32 @@ namespace RelhaxModpack.Windows
     public class RelhaxWindow : Window
     {
         /// <summary>
-        /// Specifies if the window should have translatoin applied
+        /// Controls if the window should have translation applied
         /// </summary>
         public bool LocalizeWindow { get; set; } = false;
         /// <summary>
-        /// Specified if the window should have tooltips applied
+        /// Controls if the window should have tool tips applied
         /// </summary>
         public bool ApplyToolTips { get; set; } = false;
 
+        /// <summary>
+        /// Controls if the window should have color settings applied
+        /// </summary>
         public bool ApplyColorSettings { get; set; } = false;
 
+        /// <summary>
+        /// Controls if the window should apply scaling values set from the main window
+        /// </summary>
         public bool ApplyScaling { get; set; } = false;
 
+        /// <summary>
+        /// The original Width and Height of the window before scaling
+        /// </summary>
         public double OriginalWidth { get; set; }
 
+        /// <summary>
+        /// The original Width and Height of the window before scaling
+        /// </summary>
         public double OriginalHeight { get; set; }
 
         /// <summary>
@@ -41,10 +53,10 @@ namespace RelhaxModpack.Windows
             Loaded += OnWindowLoaded;
         }
 
-        //hook int othe window loaded event to apply things that should be done to all child windows of the mainWindow
+        //hook into the window loaded event to apply things that should be done to all child windows of the mainWindow
         private void OnWindowLoaded(object sender, RoutedEventArgs e)
         {
-            //deal with the translatios
+            //deal with the translations
             if(LocalizeWindow)
             {
                 Translations.LocalizeWindow(this, ApplyToolTips);

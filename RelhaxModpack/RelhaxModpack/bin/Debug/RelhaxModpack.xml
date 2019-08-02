@@ -3703,12 +3703,32 @@
         </member>
         <member name="P:RelhaxModpack.Windows.RelhaxWindow.LocalizeWindow">
             <summary>
-            Specifies if the window should have translatoin applied
+            Controls if the window should have translation applied
             </summary>
         </member>
         <member name="P:RelhaxModpack.Windows.RelhaxWindow.ApplyToolTips">
             <summary>
-            Specified if the window should have tooltips applied
+            Controls if the window should have tool tips applied
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.RelhaxWindow.ApplyColorSettings">
+            <summary>
+            Controls if the window should have color settings applied
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.RelhaxWindow.ApplyScaling">
+            <summary>
+            Controls if the window should apply scaling values set from the main window
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.RelhaxWindow.OriginalWidth">
+            <summary>
+            The original Width and Height of the window before scaling
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.RelhaxWindow.OriginalHeight">
+            <summary>
+            The original Width and Height of the window before scaling
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.RelhaxWindow.#ctor">
