@@ -15,7 +15,7 @@ namespace RelhaxModpack
     /// </summary>
     public static class Settings
     {
-        #region filenames and paths
+        #region Application Files and Folders
         /// <summary>
         /// The Startup root path of the application. Does not include the application name
         /// </summary>
@@ -57,77 +57,14 @@ namespace RelhaxModpack
         public const string EditorLaunchFromMainWindowFilename = "EditorUnlock.txt";
 
         /// <summary>
-        /// The default starting address of the location of mod packages (start + zip + end)
-        /// </summary>
-        public const string DefaultStartAddress = @"http://bigmods.relhaxmodpack.com/WoT/{onlineFolder}/";
-
-        /// <summary>
-        /// The old default starting address of the location of mod packages (start + zip + end)
-        /// </summary>
-        [Obsolete("Database format V1 is deprecated, please use V2 instead.")]
-        public const string WotmodsDatabaseDatRoot = @"http://wotmods.relhaxmodpack.com/WoT/{onlineFolder}/";
-
-        /// <summary>
         /// The default end address of the location of mod packages (start + zip + end)
         /// </summary>
         public const string DefaultEndAddress = @"";
 
         /// <summary>
-        /// The URL to the v1 legacy beta database
-        /// </summary>
-        [Obsolete("Database format V1 is deprecated, please use V2 instead.")]
-        public const string BetaDatabaseV1URL = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/modInfo.xml";
-
-        /// <summary>
-        /// The URL of the V2 beta database root folder. (NOTE: database V2 is multiple files)
-        /// </summary>
-        public const string BetaDatabaseV2FolderURL = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/{branch}/latest_database/";
-
-        /// <summary>
         /// The filename of the V2 root database document. All category names and filenames, and version info is in this document
         /// </summary>
         public const string BetaDatabaseV2RootFilename = "database.xml";
-
-        /// <summary>
-        /// The xpath string to get the onlineFolder attribute from the document root
-        /// </summary>
-        public const string DatabaseOnlineFolderXpath = "//modInfoAlpha.xml/@onlineFolder";
-
-        /// <summary>
-        /// The xpath string to get the database version info attribute from the document root
-        /// </summary>
-        public const string DatabaseOnlineVersionXpath = "//modInfoAlpha.xml/@version";
-
-        /// <summary>
-        /// The API URL to return a json format document of the current branches in the repository
-        /// </summary>
-        public const string BetaDatabaseBranchesURL = "https://api.github.com/repos/Willster419/RelhaxModpackDatabase/branches";
-
-        /// <summary>
-        /// The URL of the V1 manager info zip file
-        /// </summary>
-        [Obsolete("Database format V1 is deprecated, please use V2 instead.")]
-        public const string ManagerInfoURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat";
-
-        /// <summary>
-        /// The URL of the V2 manager info zip file
-        /// </summary>
-        public const string ManagerInfoURLBigmods = "http://bigmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat";
-
-        /// <summary>
-        /// the latest config file version for saving the user's selection preferences
-        /// </summary>
-        public const string ConfigFileVersion = "2.0";
-
-        /// <summary>
-        /// The URL to the location of the latest stable version of the application as a zip file
-        /// </summary>
-        public const string ApplicationUpdateURL = "http://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";
-
-        /// <summary>
-        /// The URL to the location of the latest beta version of the application as a zip file
-        /// </summary>
-        public const string ApplicationBetaUpdateURL = "http://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.zip";
 
         /// <summary>
         /// The filename to download the latest stable or beta application zip file as
@@ -151,29 +88,9 @@ namespace RelhaxModpack
         public const string RelicBatchUpdateScriptOld = "RelicCopyUpdate.bat";
 
         /// <summary>
-        /// The root URL of the V2 selection files location
-        /// </summary>
-        public const string SelectionsRoot = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/selection_files/";
-
-        /// <summary>
         /// The root filename of the list of selection files
         /// </summary>
         public const string SelectionsXml = "selections.xml";
-
-        /// <summary>
-        /// The URL path of the latest application stable release notes
-        /// </summary>
-        public const string ApplicationNotesStableUrl = "https://github.com/Willster419/RelhaxModpack/raw/master/RelhaxModpack/RelhaxModpack/bin/Debug/release_notes_stable.txt";
-
-        /// <summary>
-        /// The URL path of the latest application beta release notes
-        /// </summary>
-        public const string ApplicationNotesBetaUrl = "https://github.com/Willster419/RelhaxModpack/raw/master/RelhaxModpack/RelhaxModpack/bin/Debug/release_notes_beta.txt";
-
-        /// <summary>
-        /// The URL path of the latest V2 database release notes
-        /// </summary>
-        public const string DatabaseNotesUrl = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/databaseUpdate.txt";
 
         /// <summary>
         /// The absolute path of the application zip file and zip database file folder
@@ -298,11 +215,6 @@ namespace RelhaxModpack
         public static readonly string RelhaxLogFilepath = Path.Combine(ApplicationStartupPath, Logging.ApplicationLogFilename);
 
         /// <summary>
-        /// The name of the WoT process used for detecting if it is running
-        /// </summary>
-        public const string WoTProcessName = "WorldOfTanks";
-
-        /// <summary>
         /// Array of all Modpack created folders in the application directory
         /// </summary>
         public static readonly string[] FoldersToCheck = new string[]
@@ -314,23 +226,99 @@ namespace RelhaxModpack
             RelhaxTempFolder,
             RelhaxLibrariesFolder
         };
-
-        /// <summary>
-        /// The number of logical processors (threads) detected on the system. Used to make n installation threads for faster extraction
-        /// </summary>
-        public static readonly int NumLogicalProcesors = Environment.ProcessorCount;
-
-        /// <summary>
-        /// The amount so space characters to line up a continued log entry without the date/time
-        /// </summary>
-        public const string LogSpacingLineup = "                          ";
         #endregion
 
-        #region database properties
+        #region URLs
+        /// <summary>
+        /// The default starting address of the location of mod packages (start + zip + end)
+        /// </summary>
+        public const string DefaultStartAddress = @"http://bigmods.relhaxmodpack.com/WoT/{onlineFolder}/";
 
+        /// <summary>
+        /// The old default starting address of the location of mod packages (start + zip + end)
+        /// </summary>
+        [Obsolete("Database format V1 is deprecated, please use V2 instead.")]
+        public const string WotmodsDatabaseDatRoot = @"http://wotmods.relhaxmodpack.com/WoT/{onlineFolder}/";
+
+        /// <summary>
+        /// The URL to the v1 legacy beta database
+        /// </summary>
+        [Obsolete("Database format V1 is deprecated, please use V2 instead.")]
+        public const string BetaDatabaseV1URL = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/modInfo.xml";
+
+        /// <summary>
+        /// The URL of the V2 beta database root folder. (NOTE: database V2 is multiple files)
+        /// </summary>
+        public const string BetaDatabaseV2FolderURL = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/{branch}/latest_database/";
+
+        /// <summary>
+        /// The API URL to return a json format document of the current branches in the repository
+        /// </summary>
+        public const string BetaDatabaseBranchesURL = "https://api.github.com/repos/Willster419/RelhaxModpackDatabase/branches";
+
+        /// <summary>
+        /// The URL of the V1 manager info zip file
+        /// </summary>
+        [Obsolete("Database format V1 is deprecated, please use V2 instead.")]
+        public const string ManagerInfoURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat";
+
+        /// <summary>
+        /// The URL of the V2 manager info zip file
+        /// </summary>
+        public const string ManagerInfoURLBigmods = "http://bigmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat";
+
+        /// <summary>
+        /// The URL to the location of the latest stable version of the application as a zip file
+        /// </summary>
+        public const string ApplicationUpdateURL = "http://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";
+
+        /// <summary>
+        /// The URL to the location of the latest beta version of the application as a zip file
+        /// </summary>
+        public const string ApplicationBetaUpdateURL = "http://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.zip";
+
+        /// <summary>
+        /// The root URL of the V2 selection files location
+        /// </summary>
+        public const string SelectionsRoot = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/selection_files/";
+
+
+        /// <summary>
+        /// The URL path of the latest application stable release notes
+        /// </summary>
+        public const string ApplicationNotesStableUrl = "https://github.com/Willster419/RelhaxModpack/raw/master/RelhaxModpack/RelhaxModpack/bin/Debug/release_notes_stable.txt";
+
+        /// <summary>
+        /// The URL path of the latest application beta release notes
+        /// </summary>
+        public const string ApplicationNotesBetaUrl = "https://github.com/Willster419/RelhaxModpack/raw/master/RelhaxModpack/RelhaxModpack/bin/Debug/release_notes_beta.txt";
+
+        /// <summary>
+        /// The URL path of the latest V2 database release notes
+        /// </summary>
+        public const string DatabaseNotesUrl = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/databaseUpdate.txt";
         #endregion
 
-        #region application and installer properties
+        #region Application and Database properties
+        /// <summary>
+        /// The xpath string to get the onlineFolder attribute from the document root
+        /// </summary>
+        public const string DatabaseOnlineFolderXpath = "//modInfoAlpha.xml/@onlineFolder";
+
+        /// <summary>
+        /// The xpath string to get the database version info attribute from the document root
+        /// </summary>
+        public const string DatabaseOnlineVersionXpath = "//modInfoAlpha.xml/@version";
+
+        /// <summary>
+        /// the latest config file version for saving the user's selection preferences
+        /// </summary>
+        public const string ConfigFileVersion = "2.0";
+
+        /// <summary>
+        /// The name of the WoT process used for detecting if it is running
+        /// </summary>
+        public const string WoTProcessName = "WorldOfTanks";
 
         /// <summary>
         /// The current distribution version of the application.
@@ -343,6 +331,15 @@ namespace RelhaxModpack
         /// </summary>
         public static bool TrueAlpha = false;
 
+        /// <summary>
+        /// The number of logical processors (threads) detected on the system. Used to make n installation threads for faster extraction
+        /// </summary>
+        public static readonly int NumLogicalProcesors = Environment.ProcessorCount;
+
+        /// <summary>
+        /// The amount so space characters to line up a continued log entry without the date/time
+        /// </summary>
+        public const string LogSpacingLineup = "                          ";
         /// <summary>
         /// The location of the WoT app data folder parsed at installation time
         /// </summary>
@@ -392,17 +389,17 @@ namespace RelhaxModpack
         /// The default amount that the application will be scaled to. 100%
         /// </summary>
         public const double MinimumDisplayScale = 1.0F;
-        #endregion
 
-        //had to put this here because of bugs with intellisense. It's supposed to be in mod selection list
-#warning using V1 beta database
         /// <summary>
         /// The manager info zip in a program reference. Allows for multiple instances of the application to be active at the same time. Also saves milliseconds by not having to write to disk.
         /// </summary>
         public static Ionic.Zip.ZipFile ManagerInfoZipfile = null;
+        #endregion
+
+        //had to put this here because of bugs with intellisense. It's supposed to be in mod selection list
+#warning using V1 beta database
 
         #region Settings parsing to/from XML file
-
         /// <summary>
         /// Loads/serializes an xml file into a settings class based on class type
         /// </summary>

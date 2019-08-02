@@ -2508,74 +2508,14 @@
             The file in the application root directory used to unlock the "launch editor" button
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.DefaultStartAddress">
-            <summary>
-            The default starting address of the location of mod packages (start + zip + end)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.WotmodsDatabaseDatRoot">
-            <summary>
-            The old default starting address of the location of mod packages (start + zip + end)
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.Settings.DefaultEndAddress">
             <summary>
             The default end address of the location of mod packages (start + zip + end)
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.BetaDatabaseV1URL">
-            <summary>
-            The URL to the v1 legacy beta database
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.BetaDatabaseV2FolderURL">
-            <summary>
-            The URL of the V2 beta database root folder. (NOTE: database V2 is multiple files)
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.Settings.BetaDatabaseV2RootFilename">
             <summary>
             The filename of the V2 root database document. All category names and filenames, and version info is in this document
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.DatabaseOnlineFolderXpath">
-            <summary>
-            The xpath string to get the onlineFolder attribute from the document root
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.DatabaseOnlineVersionXpath">
-            <summary>
-            The xpath string to get the database version info attribute from the document root
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.BetaDatabaseBranchesURL">
-            <summary>
-            The API URL to return a json format document of the current branches in the repository
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ManagerInfoURL">
-            <summary>
-            The URL of the V1 manager info zip file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ManagerInfoURLBigmods">
-            <summary>
-            The URL of the V2 manager info zip file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ConfigFileVersion">
-            <summary>
-            the latest config file version for saving the user's selection preferences
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ApplicationUpdateURL">
-            <summary>
-            The URL to the location of the latest stable version of the application as a zip file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ApplicationBetaUpdateURL">
-            <summary>
-            The URL to the location of the latest beta version of the application as a zip file
             </summary>
         </member>
         <member name="F:RelhaxModpack.Settings.ApplicationUpdateFileName">
@@ -2598,29 +2538,9 @@
             The old V1 filename to save the self updater script as
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.SelectionsRoot">
-            <summary>
-            The root URL of the V2 selection files location
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.Settings.SelectionsXml">
             <summary>
             The root filename of the list of selection files
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ApplicationNotesStableUrl">
-            <summary>
-            The URL path of the latest application stable release notes
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ApplicationNotesBetaUrl">
-            <summary>
-            The URL path of the latest application beta release notes
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.DatabaseNotesUrl">
-            <summary>
-            The URL path of the latest V2 database release notes
             </summary>
         </member>
         <member name="F:RelhaxModpack.Settings.RelhaxDownloadsFolder">
@@ -2734,24 +2654,94 @@
             The absolute path of the Relhax log file
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.WoTProcessName">
-            <summary>
-            The name of the WoT process used for detecting if it is running
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.Settings.FoldersToCheck">
             <summary>
             Array of all Modpack created folders in the application directory
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.NumLogicalProcesors">
+        <member name="F:RelhaxModpack.Settings.DefaultStartAddress">
             <summary>
-            The number of logical processors (threads) detected on the system. Used to make n installation threads for faster extraction
+            The default starting address of the location of mod packages (start + zip + end)
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.LogSpacingLineup">
+        <member name="F:RelhaxModpack.Settings.WotmodsDatabaseDatRoot">
             <summary>
-            The amount so space characters to line up a continued log entry without the date/time
+            The old default starting address of the location of mod packages (start + zip + end)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.BetaDatabaseV1URL">
+            <summary>
+            The URL to the v1 legacy beta database
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.BetaDatabaseV2FolderURL">
+            <summary>
+            The URL of the V2 beta database root folder. (NOTE: database V2 is multiple files)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.BetaDatabaseBranchesURL">
+            <summary>
+            The API URL to return a json format document of the current branches in the repository
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ManagerInfoURL">
+            <summary>
+            The URL of the V1 manager info zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ManagerInfoURLBigmods">
+            <summary>
+            The URL of the V2 manager info zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationUpdateURL">
+            <summary>
+            The URL to the location of the latest stable version of the application as a zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationBetaUpdateURL">
+            <summary>
+            The URL to the location of the latest beta version of the application as a zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.SelectionsRoot">
+            <summary>
+            The root URL of the V2 selection files location
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationNotesStableUrl">
+            <summary>
+            The URL path of the latest application stable release notes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationNotesBetaUrl">
+            <summary>
+            The URL path of the latest application beta release notes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.DatabaseNotesUrl">
+            <summary>
+            The URL path of the latest V2 database release notes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.DatabaseOnlineFolderXpath">
+            <summary>
+            The xpath string to get the onlineFolder attribute from the document root
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.DatabaseOnlineVersionXpath">
+            <summary>
+            The xpath string to get the database version info attribute from the document root
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ConfigFileVersion">
+            <summary>
+            the latest config file version for saving the user's selection preferences
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.WoTProcessName">
+            <summary>
+            The name of the WoT process used for detecting if it is running
             </summary>
         </member>
         <member name="F:RelhaxModpack.Settings.ApplicationVersion">
@@ -2763,6 +2753,16 @@
         <member name="F:RelhaxModpack.Settings.TrueAlpha">
             <summary>
             Flag to determine if the user running is intentionally using the alpha version (or if an Alpha version was accidentally distributed)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.NumLogicalProcesors">
+            <summary>
+            The number of logical processors (threads) detected on the system. Used to make n installation threads for faster extraction
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.LogSpacingLineup">
+            <summary>
+            The amount so space characters to line up a continued log entry without the date/time
             </summary>
         </member>
         <member name="F:RelhaxModpack.Settings.AppDataFolder">
