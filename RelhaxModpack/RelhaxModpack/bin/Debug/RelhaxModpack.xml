@@ -3594,6 +3594,37 @@
             The current status of the uninstaller. Also used as exit code.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.UIComponents.StretchingTreeView">
+            <summary>
+            A tree view that allows for stretch horizontal alignment of the header item
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.StretchingTreeView.GetContainerForItemOverride">
+            <summary>
+            Overrides the parent GetContainerForItemOverride() method
+            </summary>
+            <returns>A new StretchingTreeViewItem object</returns>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.StretchingTreeView.IsItemItsOwnContainerOverride(System.Object)">
+            <summary>
+            Overrides the parent IsItemItsOwnContainerOverride() method
+            </summary>
+            <param name="item">The item to test</param>
+            <returns>True if the item is of StretchingTreeViewItem class, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.StretchingTreeViewItem.GetContainerForItemOverride">
+            <summary>
+            Overrides the parent GetContainerForItemOverride() method
+            </summary>
+            <returns>A new StretchingTreeViewItem object</returns>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.StretchingTreeViewItem.IsItemItsOwnContainerOverride(System.Object)">
+            <summary>
+            Overrides the parent IsItemItsOwnContainerOverride() method
+            </summary>
+            <param name="item">The item to test</param>
+            <returns>True if the item is of StretchingTreeViewItem class, false otherwise</returns>
+        </member>
         <member name="T:RelhaxModpack.Windows.AskCloseWoT">
             <summary>
             Interaction logic for AskCloseWoT.xaml

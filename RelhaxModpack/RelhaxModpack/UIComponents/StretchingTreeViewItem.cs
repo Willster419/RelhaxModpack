@@ -18,7 +18,7 @@ namespace RelhaxModpack.UIComponents
 
         private void StretchingTreeViewItem_Loaded(object sender, RoutedEventArgs e)
         {
-            // The purpose of this code is to stretch the Header Content all the way accross the TreeView. 
+            // The purpose of this code is to stretch the Header Content all the way across the TreeView. 
             if (this.VisualChildrenCount > 0)
             {
                 Grid grid = this.GetVisualChild(0) as Grid;
@@ -31,11 +31,20 @@ namespace RelhaxModpack.UIComponents
             }
         }
 
+        /// <summary>
+        /// Overrides the parent GetContainerForItemOverride() method
+        /// </summary>
+        /// <returns>A new StretchingTreeViewItem object</returns>
         protected override DependencyObject GetContainerForItemOverride()
         {
             return new StretchingTreeViewItem();
         }
 
+        /// <summary>
+        /// Overrides the parent IsItemItsOwnContainerOverride() method
+        /// </summary>
+        /// <param name="item">The item to test</param>
+        /// <returns>True if the item is of StretchingTreeViewItem class, false otherwise</returns>
         protected override bool IsItemItsOwnContainerOverride(object item)
         {
             return item is StretchingTreeViewItem;
