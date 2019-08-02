@@ -626,6 +626,58 @@
             The property wrapper of the Dependencies field
             </summary>
         </member>
+        <member name="T:RelhaxModpack.MediaType">
+            <summary>
+            The supported types of media formats supported for preview in the application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.MediaType.Unknown">
+            <summary>
+            Catch-all case for unknown media when parsing
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.MediaType.Picture">
+            <summary>
+            A direct link to a picture
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.MediaType.Webpage">
+            <summary>
+            A direct link to a website (like for embedding a web player)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.MediaType.MediaFile">
+            <summary>
+            A direct link to an audio file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.MediaType.HTML">
+            <summary>
+            Raw HTML code to display in embedded browser
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Media">
+            <summary>
+            A media object is a preview-able component stored in a list in SelectablePackages
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Media.URL">
+            <summary>
+            For direct link types, the URL to the element or resource
+            </summary>
+            <remarks>HTTP and HTTPS links work for this property</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Media.MediaType">
+            <summary>
+            The type of media for the URL to be interpreted as
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Media.ToString">
+            <summary>
+            The string properties of the object
+            </summary>
+            <returns>The integer code of the MediaType and the first 80 characters of the URL</returns>
+        </member>
         <member name="T:RelhaxModpack.SelectionTypes">
             <summary>
             The types of UI selections for building the selection tree
