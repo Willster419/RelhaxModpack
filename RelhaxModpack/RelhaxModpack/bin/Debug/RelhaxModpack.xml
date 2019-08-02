@@ -3034,6 +3034,34 @@
             </summary>
             <param name="savePath">The path to save the xml file to</param>
         </member>
+        <member name="T:RelhaxModpack.UIComponents.ComboBoxItem">
+            <summary>
+            The ComboBoxItem class is a wrapper class for displaying SelectablePackages as combo box items. The ToString() allows for display of the package name
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ComboBoxItem.Package">
+            <summary>
+            The SelectablePackage object that is being wrapped around
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ComboBoxItem.DisplayName">
+            <summary>
+            The text to display in the Combobox
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.ComboBoxItem.#ctor(RelhaxModpack.SelectablePackage,System.String)">
+            <summary>
+            Creates an instance of the ComboBoxItem class
+            </summary>
+            <param name="package">The package to wrap around</param>
+            <param name="display">The text to display in the Combobox</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.ComboBoxItem.ToString">
+            <summary>
+            Allows for displaying of custom text in the Combobox
+            </summary>
+            <returns>The text to display in the Combobox (DisplayName property)</returns>
+        </member>
         <member name="T:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter">
             <summary>
             Interaction logic for RelhaxInstallTaskReporter.xaml
