@@ -3244,6 +3244,64 @@
             RelhaxWPFCheckBox
             </summary>
         </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.#ctor">
+            <summary>
+            Create an instance of the RelhaxWPFCheckBox class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.Package">
+            <summary>
+            The package associated with this UI component
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.OnEnabledChanged(System.Boolean)">
+            <summary>
+            Change any UI parent class properties that depends on the enabled SelectablePackage
+            </summary>
+            <param name="Enabled">The value from the SelectablePackage</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.OnCheckedChanged(System.Boolean)">
+            <summary>
+            Change any UI parent class properties that depends on the checked SelectablePackage
+            </summary>
+            <param name="Checked">The value from the SelectablePackage</param>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.TextColor">
+            <summary>
+            Set the color of the Checkbox Foreground property
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.PanelColor">
+            <summary>
+            Set the brush of the Checkbox Panel Background property 
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.DisabledColor">
+            <summary>
+            Set the value of the disabled component color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.PopularModVisability">
+            <summary>
+            Set the visibility of the popular mod icon
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.GreyAreaVisability">
+            <summary>
+            Set visibility of the Grey area icon
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.PropertyChanged">
+            <summary>
+            Event to trigger when an internal property is changed. It forces a UI update
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.OnPropertyChanged(System.String)">
+            <summary>
+            Method to invoke the PropertyChanged event to update the UI
+            </summary>
+            <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
+        </member>
         <member name="M:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.InitializeComponent">
             <summary>
             InitializeComponent
@@ -3257,6 +3315,54 @@
             RelhaxWPFComboBox
             </summary>
         </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.#ctor">
+            <summary>
+            Create an instance of the RelhaxWPFComboBox class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.Package">
+            <summary>
+            The package associated with this UI component
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.OnEnabledChanged(System.Boolean)">
+            <summary>
+            This is not implemented
+            </summary>
+            <param name="Enabled">The value from the SelectablePackage</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.OnCheckedChanged(System.Boolean)">
+            <summary>
+            This is not implemented
+            </summary>
+            <param name="Checked">The value from the SelectablePackage</param>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.TextColor">
+            <summary>
+            This is not implemented
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.PanelColor">
+            <summary>
+            Set the brush of the ComboBox Panel Background property 
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.DisabledColor">
+            <summary>
+            Set the value of the disabled component color
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.UIComponents.RelhaxWPFComboBox.PropertyChanged">
+            <summary>
+            Event to trigger when an internal property is changed. It forces a UI update
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.OnPropertyChanged(System.String)">
+            <summary>
+            Method to invoke the PropertyChanged event to update the UI
+            </summary>
+            <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
+        </member>
         <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.InitializeComponent">
             <summary>
             InitializeComponent
@@ -3269,6 +3375,64 @@
             <summary>
             RelhaxWPFRadioButton
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.#ctor">
+            <summary>
+            Create an instance of the RelhaxWPFRadioButton class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.Package">
+            <summary>
+            The package associated with this UI component
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.OnEnabledChanged(System.Boolean)">
+            <summary>
+            Change any UI parent class properties that depends on the enabled SelectablePackage
+            </summary>
+            <param name="Enabled">The value from the SelectablePackage</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.OnCheckedChanged(System.Boolean)">
+            <summary>
+            Change any UI parent class properties that depends on the checked SelectablePackage
+            </summary>
+            <param name="Checked">The value from the SelectablePackage</param>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.TextColor">
+            <summary>
+            Set the color of the RadioButton Foreground property
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.PanelColor">
+            <summary>
+            Set the brush of the RadioButton Panel Background property 
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.DisabledColor">
+            <summary>
+            Set the value of the disabled component color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.PopularModVisability">
+            <summary>
+            Set the visibility of the popular mod icon
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.GreyAreaVisability">
+            <summary>
+            Set visibility of the Grey area icon
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.PropertyChanged">
+            <summary>
+            Event to trigger when an internal property is changed. It forces a UI update
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.OnPropertyChanged(System.String)">
+            <summary>
+            Method to invoke the PropertyChanged event to update the UI
+            </summary>
+            <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
         </member>
         <member name="M:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.InitializeComponent">
             <summary>

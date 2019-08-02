@@ -21,20 +21,43 @@ namespace RelhaxModpack.UIComponents
     /// </summary>
     public partial class RelhaxWPFComboBox : ComboBox, IPackageUIComponent, INotifyPropertyChanged
     {
+        /// <summary>
+        /// Create an instance of the RelhaxWPFComboBox class
+        /// </summary>
         public RelhaxWPFComboBox()
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// The package associated with this UI component
+        /// </summary>
         public SelectablePackage Package { get; set; }
-        public SelectionChangedEventHandler handler;
+
+#warning this needs to be investigated. Why not use the onChecked and onEnabled?
+        public SelectionChangedEventHandler Handler;
+
+        /// <summary>
+        /// This is not implemented
+        /// </summary>
+        /// <param name="Enabled">The value from the SelectablePackage</param>
         public void OnEnabledChanged(bool Enabled)
         {
 
         }
+
+        /// <summary>
+        /// This is not implemented
+        /// </summary>
+        /// <param name="Checked">The value from the SelectablePackage</param>
         public void OnCheckedChanged(bool Checked)
         {
 
         }
+
+        /// <summary>
+        /// This is not implemented
+        /// </summary>
         public Brush TextColor
         {
             get
@@ -42,6 +65,10 @@ namespace RelhaxModpack.UIComponents
             set
             { }
         }
+
+        /// <summary>
+        /// Set the brush of the ComboBox Panel Background property 
+        /// </summary>
         public Brush PanelColor
         {
             get
@@ -54,6 +81,8 @@ namespace RelhaxModpack.UIComponents
                     Package.ParentBorder.Background = value;
             }
         }
+
+
         public void OnDropDownSelectionChanged(SelectablePackage spc, bool value)
         {
             for (int i = 0; i < Items.Count; i++)
@@ -61,11 +90,11 @@ namespace RelhaxModpack.UIComponents
                 ComboBoxItem cbi = (ComboBoxItem)Items[i];
                 if (cbi.Package.Equals(spc) && value && cbi.Package.Enabled)
                 {
-                    if (handler != null)
-                        SelectionChanged -= handler;
+                    if (Handler != null)
+                        SelectionChanged -= Handler;
                     SelectedItem = cbi;
-                    if (handler != null)
-                        SelectionChanged += handler;
+                    if (Handler != null)
+                        SelectionChanged += Handler;
                     continue;
                 }//if value is false it will uncheck all the packages
                 if (cbi.Package.Enabled && cbi.Package.Checked)
@@ -73,13 +102,18 @@ namespace RelhaxModpack.UIComponents
             }
             if (!value)
             {
-                SelectionChanged -= handler;
+                SelectionChanged -= Handler;
                 SelectedIndex = 0;
-                SelectionChanged += handler;
+                SelectionChanged += Handler;
             }
         }
+
         #region Data UI Binding
         private Color _DisabledColor = Colors.DarkGray;
+
+        /// <summary>
+        /// Set the value of the disabled component color
+        /// </summary>
         public Color DisabledColor
         {
             get
@@ -92,8 +126,17 @@ namespace RelhaxModpack.UIComponents
                 OnPropertyChanged(nameof(DisabledColor));
             }
         }
+
         //https://stackoverflow.com/questions/34651123/wpf-binding-a-background-color-initializes-but-not-updating
+        /// <summary>
+        /// Event to trigger when an internal property is changed. It forces a UI update
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Method to invoke the PropertyChanged event to update the UI
+        /// </summary>
+        /// <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
         protected void OnPropertyChanged(string propertyName)
         {
             var handle = PropertyChanged;

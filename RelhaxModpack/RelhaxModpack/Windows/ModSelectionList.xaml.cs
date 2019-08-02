@@ -1033,7 +1033,7 @@ namespace RelhaxModpack.Windows
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].Name = "added";
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].PreviewMouseRightButtonDown += Generic_MouseDown;
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].SelectionChanged += OnSingleDDPackageClick;
-                package.Parent.RelhaxWPFComboBoxList[boxIndex].handler = OnSingleDDPackageClick;
+                package.Parent.RelhaxWPFComboBoxList[boxIndex].Handler = OnSingleDDPackageClick;
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].DropDownClosed += DropDownSelectSelfFix;
                 if (package.Parent.RelhaxWPFComboBoxList[boxIndex].Items.Count > 0)
                 {

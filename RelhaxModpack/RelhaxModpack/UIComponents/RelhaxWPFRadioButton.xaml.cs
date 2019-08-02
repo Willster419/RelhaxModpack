@@ -21,24 +21,40 @@ namespace RelhaxModpack.UIComponents
     /// </summary>
     public partial class RelhaxWPFRadioButton : RadioButton, IPackageUIComponent, INotifyPropertyChanged
     {
-
+        /// <summary>
+        /// Create an instance of the RelhaxWPFRadioButton class
+        /// </summary>
         public RelhaxWPFRadioButton()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// The package associated with this UI component
+        /// </summary>
         public SelectablePackage Package { get; set; }
 
+        /// <summary>
+        /// Change any UI parent class properties that depends on the enabled SelectablePackage
+        /// </summary>
+        /// <param name="Enabled">The value from the SelectablePackage</param>
         public void OnEnabledChanged(bool Enabled)
         {
             IsEnabled = Enabled;
         }
 
+        /// <summary>
+        /// Change any UI parent class properties that depends on the checked SelectablePackage
+        /// </summary>
+        /// <param name="Checked">The value from the SelectablePackage</param>
         public void OnCheckedChanged(bool Checked)
         {
             IsChecked = Checked;
         }
 
+        /// <summary>
+        /// Set the color of the RadioButton Foreground property
+        /// </summary>
         public Brush TextColor
         {
             get
@@ -47,6 +63,9 @@ namespace RelhaxModpack.UIComponents
             { Foreground = value; }
         }
 
+        /// <summary>
+        /// Set the brush of the RadioButton Panel Background property 
+        /// </summary>
         public Brush PanelColor
         {
             get
@@ -64,6 +83,9 @@ namespace RelhaxModpack.UIComponents
 
         private Color _DisabledColor = Colors.DarkGray;
 
+        /// <summary>
+        /// Set the value of the disabled component color
+        /// </summary>
         public Color DisabledColor
         {
             get
@@ -78,6 +100,10 @@ namespace RelhaxModpack.UIComponents
         }
 
         private Visibility _PopularModVisability = Visibility.Hidden;
+
+        /// <summary>
+        /// Set the visibility of the popular mod icon
+        /// </summary>
         public Visibility PopularModVisability
         {
             get { return _PopularModVisability; }
@@ -89,6 +115,10 @@ namespace RelhaxModpack.UIComponents
         }
 
         private Visibility _GreyAreaVisability = Visibility.Hidden;
+
+        /// <summary>
+        /// Set visibility of the Grey area icon
+        /// </summary>
         public Visibility GreyAreaVisability
         {
             get { return _GreyAreaVisability; }
@@ -100,8 +130,15 @@ namespace RelhaxModpack.UIComponents
         }
 
         //https://stackoverflow.com/questions/34651123/wpf-binding-a-background-color-initializes-but-not-updating
+        /// <summary>
+        /// Event to trigger when an internal property is changed. It forces a UI update
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Method to invoke the PropertyChanged event to update the UI
+        /// </summary>
+        /// <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
         protected void OnPropertyChanged(string propertyName)
         {
             var handle = PropertyChanged;
