@@ -3169,6 +3169,40 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.UIComponents.IPackageUIComponent">
+            <summary>
+            The PackageUIComponent class acts as a handler for when the enabled and checked properties are set from the Package.
+            It can simplify the ModSelectionList code, clean it up, allow for uniform logic for all UI,
+            and allow for easy implementation of another UI.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.IPackageUIComponent.Package">
+            <summary>
+            The package that the UI component belongs to
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.IPackageUIComponent.OnEnabledChanged(System.Boolean)">
+            <summary>
+            Method signature for when the enabled property changes
+            </summary>
+            <param name="Enabled">The value of the enabled property</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.IPackageUIComponent.OnCheckedChanged(System.Boolean)">
+            <summary>
+            Method signature for when the checked property changes
+            </summary>
+            <param name="Checked">The value of the checked property</param>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.IPackageUIComponent.TextColor">
+            <summary>
+            The color of the text of the UI display
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.IPackageUIComponent.PanelColor">
+            <summary>
+            The color of the back panel of the UI display
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.UIComponents.RelhaxMediaPlayer">
             <summary>
             Interaction logic for RelhaxMediaPlayer.xaml
