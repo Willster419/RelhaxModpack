@@ -275,16 +275,36 @@ namespace RelhaxModpack
         /// </summary>
         public const string ManagerVersion = "manager_version.xml";
 
+#warning ManagerInfoDatFile refrences needs to be updated
+        /// <summary>
+        /// The location of the manager info zip file. Contains several xml files with database and client definitions
+        /// </summary>
+        [Obsolete("Do not use this unless for file deleting, here only for legacy purposes. File is no longer created.")]
         public static readonly string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, "managerInfo.dat");
 
+        /// <summary>
+        /// The absolute path of the selection file used for saving last selection
+        /// </summary>
         public static readonly string LastInstalledConfigFilepath = Path.Combine(RelhaxUserSelectionsFolder, LastSavedConfigFilename);
 
+        /// <summary>
+        /// The absolute path of the V2 settings file used for saving ModpackSettings
+        /// </summary>
         public static readonly string RelhaxSettingsFilepath = Path.Combine(ApplicationStartupPath, ModpackSettingsFileName);
 
+        /// <summary>
+        /// The absolute path of the Relhax log file
+        /// </summary>
         public static readonly string RelhaxLogFilepath = Path.Combine(ApplicationStartupPath, Logging.ApplicationLogFilename);
 
+        /// <summary>
+        /// The name of the WoT process used for detecting if it is running
+        /// </summary>
         public const string WoTProcessName = "WorldOfTanks";
 
+        /// <summary>
+        /// Array of all Modpack created folders in the application directory
+        /// </summary>
         public static readonly string[] FoldersToCheck = new string[]
         {
             RelhaxDownloadsFolder,
@@ -295,8 +315,14 @@ namespace RelhaxModpack
             RelhaxLibrariesFolder
         };
 
+        /// <summary>
+        /// The number of logical processors (threads) detected on the system. Used to make n installation threads for faster extraction
+        /// </summary>
         public static readonly int NumLogicalProcesors = Environment.ProcessorCount;
 
+        /// <summary>
+        /// The amount so space characters to line up a continued log entry without the date/time
+        /// </summary>
         public const string LogSpacingLineup = "                          ";
         #endregion
 
@@ -307,29 +333,84 @@ namespace RelhaxModpack
         #region application and installer properties
 
         /// <summary>
-        /// The current distribution version of the application
+        /// The current distribution version of the application.
         /// Alpha should NEVER be built for public distribution unless direct testing!
         /// </summary>
         public const ApplicationVersions ApplicationVersion = ApplicationVersions.Stable;
 
+        /// <summary>
+        /// Flag to determine if the user running is intentionally using the alpha version (or if an Alpha version was accidentally distributed)
+        /// </summary>
         public static bool TrueAlpha = false;
-        //file and folder macro locations
+
+        /// <summary>
+        /// The location of the WoT app data folder parsed at installation time
+        /// </summary>
         public static string AppDataFolder = "";
+
+        /// <summary>
+        /// The location of the WoT installation directory parsed at installation time
+        /// </summary>
+        /// <remarks>The path is absolute, ending at "World_of_Tanks"</remarks>
         public static string WoTDirectory = "";
-        //version informations
+        
+        /// <summary>
+        /// The version information of WoT parsed at install time
+        /// </summary>
+        /// <remarks>This info is gathered from the "version.xml" file from the game's root directory</remarks>
         public static string WoTClientVersion = "";
+
+        /// <summary>
+        /// The version of the online folder name containing the zip files for this game
+        /// </summary>
+        /// <remarks>The online folders are done by major versions only i.e. 1.4.1, 1.5.0, etc. All zip files on 1.5.0.x are stored in this folder</remarks>
         public static string WoTModpackOnlineFolderVersion = "";
+
+        /// <summary>
+        /// The version of the database parsed upon application load
+        /// </summary>
         public static string DatabaseVersion = "";
+
+        /// <summary>
+        /// Determines if this is the first time the application is loading
+        /// </summary>
+        /// <remarks>Done by checking if the settings file exists. If it is set to true in the application, it will be set to false again when it closes.</remarks>
         public static bool FirstLoad = false;
+
+        /// <summary>
+        /// Determines if while being the first time loading, if this is an upgrade operation to Relhax V2
+        /// </summary>
+        /// <remarks>Done by if FirstLoad is true and the Relhax V1 settings file exists</remarks>
         public static bool FirstLoadToV2 = false;
+
+        /// <summary>
+        /// The maximum amount that the application will be allowed to scale. 300%
+        /// </summary>
         public const double MaximumDisplayScale = 3.0F;
+
+        /// <summary>
+        /// The default amount that the application will be scaled to. 100%
+        /// </summary>
         public const double MinimumDisplayScale = 1.0F;
         #endregion
+
+        //had to put this here because of bugs with intellisense. It's supposed to be in mod selection list
 #warning using V1 beta database
+        /// <summary>
+        /// The manager info zip in a program reference. Allows for multiple instances of the application to be active at the same time. Also saves milliseconds by not having to write to disk.
+        /// </summary>
         public static Ionic.Zip.ZipFile ManagerInfoZipfile = null;
 
         #region Settings parsing to/from XML file
 
+        /// <summary>
+        /// Loads/serializes an xml file into a settings class based on class type
+        /// </summary>
+        /// <param name="xmlfile">The path to the file</param>
+        /// <param name="SettingsClass">The type of the settings class to load into</param>
+        /// <param name="propertiesToExclude">A string list of properties (in the class) to not look for</param>
+        /// <param name="classInstance">The actual object to append the xml settings to</param>
+        /// <returns></returns>
         public static bool LoadSettings(string xmlfile, Type SettingsClass, string[] propertiesToExclude, object classInstance)
         {
             //first check if the file even exists
@@ -419,6 +500,14 @@ namespace RelhaxModpack
             return true;
         }
 
+        /// <summary>
+        /// Saves/serializes a settings class file to xml
+        /// </summary>
+        /// <param name="xmlFile">The file to write to. If exists, it will be overwritten</param>
+        /// <param name="SettingsClass">The type of the class to save values from</param>
+        /// <param name="propertiesToExclude">A string list of properties (in the class) to not look for</param>
+        /// <param name="classInstance">The actual instance of the class to save from</param>
+        /// <returns></returns>
         public static bool SaveSettings(string xmlFile, Type SettingsClass, string[] propertiesToExclude, object classInstance)
         {
             XmlDocument doc = new XmlDocument();
