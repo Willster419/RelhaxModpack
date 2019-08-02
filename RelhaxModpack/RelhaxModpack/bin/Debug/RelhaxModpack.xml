@@ -3062,9 +3062,36 @@
             </summary>
             <returns>The text to display in the Combobox (DisplayName property)</returns>
         </member>
+        <member name="T:RelhaxModpack.UIComponents.EditorComboBoxItem">
+            <summary>
+            The EditorComboBoxItem class is a wrapper class for displaying DatabaseObjects as combo box items. The ToString() allows for display of the internal PackageName property
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.EditorComboBoxItem.Package">
+            <summary>
+            The DatabasePackage object that is being wrapped around
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.EditorComboBoxItem.DisplayName">
+            <summary>
+            A wrapper property around the Package's PackageName object
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.EditorComboBoxItem.#ctor(RelhaxModpack.DatabasePackage)">
+            <summary>
+            Creates an instance of the EditorComboBoxItem class
+            </summary>
+            <param name="package">The package to wrap around</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.EditorComboBoxItem.ToString">
+            <summary>
+            Allows for displaying of custom text in the Combobox
+            </summary>
+            <returns>The text to display in the Combobox (DisplayName property -> PackageName)</returns>
+        </member>
         <member name="T:RelhaxModpack.UIComponents.EditorSearchBoxItem">
             <summary>
-            The EditorSearchBoxItem class is a wrapper class for displaying DatabaseObjects as combo box items. The ToString() allows for display of the internal PackageName property
+            The EditorSearchBoxItem class is a wrapper class for displaying DatabaseObjects as combo box items. The ToString() allows for display of any string property
             </summary>
         </member>
         <member name="P:RelhaxModpack.UIComponents.EditorSearchBoxItem.Package">
@@ -3088,7 +3115,7 @@
             <summary>
             Allows for displaying of custom text in the Combobox
             </summary>
-            <returns>The text to display in the Combobox (DisplayName property)</returns>
+            <returns>The text to display in the Combobox</returns>
         </member>
         <member name="T:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter">
             <summary>
