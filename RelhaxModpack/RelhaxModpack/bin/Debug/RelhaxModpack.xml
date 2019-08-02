@@ -1947,6 +1947,40 @@
             <param name="level">The level of severity included into the string format</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
         </member>
+        <member name="T:RelhaxModpack.PatchSettings">
+            <summary>
+            Defines the settings used for the patch class
+            </summary>
+            <remarks>There is no constructor for this class. It is not needed as the act of not having one assigns a default
+            of an empty constructor with to parameters. See https://stackoverflow.com/a/23458819/3128017 </remarks>
+        </member>
+        <member name="F:RelhaxModpack.PatchSettings.SaveSelectionBeforeLeave">
+            <summary>
+            If the selected patch should be saved (hitting apply) before the selection changes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.PatchSettings.SwitchToLogWhenTestingPatch">
+            <summary>
+            If true, when testing a patch, the log tab will become the active tab
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.PatchSettings.AppMacro">
+            <summary>
+            The path to use for replacing the {app} macro in patch files
+            </summary>
+            <remarks>This is for the relative patch mode</remarks>
+        </member>
+        <member name="F:RelhaxModpack.PatchSettings.VersiondirMacro">
+            <summary>
+            The version of the game to use for replacing the {versiondir} macro in patch files
+            </summary>
+            <remarks>This is for the relative patch mode</remarks>
+        </member>
+        <member name="F:RelhaxModpack.PatchSettings.ApplyBehavior">
+            <summary>
+            Controls how the save patch and apply button interact with each other. See ApplyBehavior enumeration for interaction definitions.
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.ApplyBehavior">
             <summary>
             The different ways that the apply and save database buttons can interact
