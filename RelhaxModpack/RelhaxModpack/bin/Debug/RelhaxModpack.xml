@@ -616,6 +616,16 @@
             Constructor to over-ride DatabasePackage default values
             </summary>
         </member>
+        <member name="T:RelhaxModpack.DatabaseComponents.IComponentWithDependencies">
+            <summary>
+            Provides an interface for Categories and packages to share commonality since they both can have dependencies
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabaseComponents.IComponentWithDependencies.DependenciesProp">
+            <summary>
+            The property wrapper of the Dependencies field
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.SelectionTypes">
             <summary>
             The types of UI selections for building the selection tree
