@@ -17,32 +17,41 @@ namespace RelhaxModpack.UIComponents
         /// The current completed and total child level tasks. (Tasks are arbitrary and defined by the task itself)
         /// </summary>
         public int ChildCurrent, ChildTotal = 0;
+
         /// <summary>
         /// A custom formatted string to use if the async task supports/implements it
         /// </summary>
         public string ChildCurrentProgress = string.Empty;
+
         /// <summary>
         /// The current completed and total parent level tasks. (Tasks are arbitrary and defined by the task itself)
         /// </summary>
         public int ParrentCurrent, ParrentTotal = 0;
+
         /// <summary>
         /// A custom formatted string to use if the async task supports/implements it
         /// </summary>
         public string ParrentCurrentProgress = string.Empty;
+
         /// <summary>
-        /// The current completed and total total level tasks. (Tasks are arbitrary and defined by the task itself)
+        /// The current completed and total level tasks. (Tasks are arbitrary and defined by the task itself)
         /// </summary>
         public int TotalCurrent, TotalTotal = 0;//#meta
+
         /// <summary>
         /// A custom formatted string to use if the async task supports/implements it
         /// </summary>
         public string TotalCurrentProgress = string.Empty;
+
         /// <summary>
         /// A custom formatted string to use if the async task supports/implements it
         /// </summary>
         public string ReportMessage = string.Empty;
     }
 
+    /// <summary>
+    /// The RelhaxInstallerProgress class adds additional properties for zip file extraction
+    /// </summary>
     public class RelhaxInstallerProgress : RelhaxProgress
     {
         /// <summary>
@@ -50,25 +59,40 @@ namespace RelhaxModpack.UIComponents
         /// During copy operations, the number of processed copied bytes, and the total bytes to copy.
         /// </summary>
         public long BytesProcessed, BytesTotal = 0;
+
         /// <summary>
         /// The name of the file currently being processed
         /// </summary>
         public string Filename = string.Empty;
+
         /// <summary>
         /// During zip file extraction, the entry inside the zip file being processed
         /// </summary>
         public string EntryFilename = string.Empty;
 
+        /// <summary>
+        /// The number of entries currently processed in this zip file
+        /// </summary>
         public uint EntriesProcessed = 0;
 
+        /// <summary>
+        /// The total number of entries in this zip file
+        /// </summary>
         public uint EntriesTotal = 0;
 
+        /// <summary>
+        /// The ID number of the thread that this zip file belongs to
+        /// </summary>
         public uint ThreadID = 0;
+
         /// <summary>
         /// The current status of the installer. Represents the current state of the installer. When it exists, it is also used as an exit code.
         /// </summary>
         public InstallerExitCodes InstallStatus = InstallerExitCodes.DownloadModsError;
 
+        /// <summary>
+        /// The current status of the uninstaller. Also used as exit code.
+        /// </summary>
         public UninstallerExitCodes UninstallStatus = UninstallerExitCodes.GettingFilelistError;
     }
 }

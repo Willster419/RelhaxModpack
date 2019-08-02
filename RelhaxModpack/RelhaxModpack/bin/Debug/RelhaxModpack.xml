@@ -3360,12 +3360,12 @@
         </member>
         <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.TotalCurrent">
             <summary>
-            The current completed and total total level tasks. (Tasks are arbitrary and defined by the task itself)
+            The current completed and total level tasks. (Tasks are arbitrary and defined by the task itself)
             </summary>
         </member>
         <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.TotalTotal">
             <summary>
-            The current completed and total total level tasks. (Tasks are arbitrary and defined by the task itself)
+            The current completed and total level tasks. (Tasks are arbitrary and defined by the task itself)
             </summary>
         </member>
         <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.TotalCurrentProgress">
@@ -3376,6 +3376,11 @@
         <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ReportMessage">
             <summary>
             A custom formatted string to use if the async task supports/implements it
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxInstallerProgress">
+            <summary>
+            The RelhaxInstallerProgress class adds additional properties for zip file extraction
             </summary>
         </member>
         <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.BytesProcessed">
@@ -3400,9 +3405,29 @@
             During zip file extraction, the entry inside the zip file being processed
             </summary>
         </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.EntriesProcessed">
+            <summary>
+            The number of entries currently processed in this zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.EntriesTotal">
+            <summary>
+            The total number of entries in this zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.ThreadID">
+            <summary>
+            The ID number of the thread that this zip file belongs to
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.InstallStatus">
             <summary>
             The current status of the installer. Represents the current state of the installer. When it exists, it is also used as an exit code.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.UninstallStatus">
+            <summary>
+            The current status of the uninstaller. Also used as exit code.
             </summary>
         </member>
         <member name="T:RelhaxModpack.Windows.AskCloseWoT">
