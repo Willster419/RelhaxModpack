@@ -678,6 +678,46 @@
             </summary>
             <returns>The integer code of the MediaType and the first 80 characters of the URL</returns>
         </member>
+        <member name="T:RelhaxModpack.PackageComparerByPackageName">
+            <summary>
+            Enables comparison of Packages by their PackageName property
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.PackageComparerByPackageName.Equals(RelhaxModpack.DatabasePackage,RelhaxModpack.DatabasePackage)">
+            <summary>
+            Determines if PackageName of package x is before or after PackageName of Package y
+            </summary>
+            <param name="x">The first package</param>
+            <param name="y">The second package</param>
+            <returns>1,0,-1 from string PackageName comparison</returns>
+        </member>
+        <member name="M:RelhaxModpack.PackageComparerByPackageName.GetHashCode(RelhaxModpack.DatabasePackage)">
+            <summary>
+            Returns the hash code of the PackageName of the Package
+            </summary>
+            <param name="package">The package to get the hash code</param>
+            <returns>The hash code of the PackageName of the Package</returns>
+        </member>
+        <member name="T:RelhaxModpack.PackageComparerByDisplayName">
+            <summary>
+            Enables comparison of Packages by their Name property
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.PackageComparerByDisplayName.Equals(RelhaxModpack.SelectablePackage,RelhaxModpack.SelectablePackage)">
+            <summary>
+            Determines if Name of package x is before or after Name of Package y
+            </summary>
+            <param name="x">The first package</param>
+            <param name="y">The second package</param>
+            <returns>1,0,-1 from string Name comparison</returns>
+        </member>
+        <member name="M:RelhaxModpack.PackageComparerByDisplayName.GetHashCode(RelhaxModpack.SelectablePackage)">
+            <summary>
+            Returns the hash code of the Name of the Package
+            </summary>
+            <param name="package">The package to get the hash code</param>
+            <returns>The hash code of the Name of the Package</returns>
+        </member>
         <member name="T:RelhaxModpack.SelectionTypes">
             <summary>
             The types of UI selections for building the selection tree
