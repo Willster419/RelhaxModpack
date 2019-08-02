@@ -2478,6 +2478,12 @@
             The name of the application settings file
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Settings.UISettingsColorFile">
+            <summary>
+            The name of the settings color file
+            </summary>
+            <remarks>Stores all settings</remarks>
+        </member>
         <member name="F:RelhaxModpack.Settings.OldModpackSettingsFilename">
             <summary>
             The name of the legacy application settings file
@@ -2845,10 +2851,86 @@
             Handles all custom UI settings
             </summary>
         </member>
+        <member name="F:RelhaxModpack.UISettings.CustomColorSettingsPath">
+            <summary>
+            The name of the Xml element to hold all custom color settings
+            </summary>
+            <remarks>See CustomSettings array for list of custom colors</remarks>
+        </member>
+        <member name="F:RelhaxModpack.UISettings.CustomSettings">
+            <summary>
+            A list of custom colors for controlling color behavior of components that 
+            </summary>
+            <remarks>Settings that exist in here don't directly map to 1 setting and control other color settings.
+            For example, changing the color of a selected component in the mod selection list</remarks>
+        </member>
+        <member name="F:RelhaxModpack.UISettings.UIDocument">
+            <summary>
+            The parsed XML document containing the xml color settings
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UISettings.SelectedPanelColor">
+            <summary>
+            The color to use for when a component is selected in the selection list
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UISettings.NotSelectedPanelColor">
+            <summary>
+            The color to use for when a component is not selection in the selection list
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UISettings.SelectedTextColor">
+            <summary>
+            The color to use when a component is selected in the selection list
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UISettings.NotSelectedTextColor">
+            <summary>
+            The color to use when a component is not selected in the selection list
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UISettings.NotSelectedTabColor">
+            <summary>
+            The color to use in the selection list for a tab which is not selected
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.UISettings.LoadSettings(System.Boolean)">
             <summary>
             Load the custom color definitions from XML
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.UISettings.ApplyUIColorSettings(System.Windows.Window)">
+            <summary>
+            Applies custom color settings to a window
+            </summary>
+            <param name="w">The Window object to apply color settings to</param>
+        </member>
+        <member name="M:RelhaxModpack.UISettings.ApplyUIColorsettingsV1(System.Windows.Window)">
+            <summary>
+            Applies color settings to a window of Xml document format 1.0
+            </summary>
+            <param name="w">The window to apply changes to</param>
+        </member>
+        <member name="M:RelhaxModpack.UISettings.ParseColorFromString(System.String,System.Windows.Media.Color@)">
+            <summary>
+            Tries to parse a hex code color to a color object
+            </summary>
+            <param name="color">The string hex code for the color to use</param>
+            <param name="outColor">The corresponding color object</param>
+            <returns>True if color parsing was successful, a default color otherwise</returns>
+            <remarks>Uses the 32bit color codes for generation (Alpha, Red, Green, Blue) Alpha is transparency</remarks>
+        </member>
+        <member name="M:RelhaxModpack.UISettings.VerifyPoints(System.Windows.Point)">
+            <summary>
+            Verifies that the points for applying color gradient directions are within 0-1
+            </summary>
+            <param name="p">The color gradient direction to verify</param>
+        </member>
+        <member name="M:RelhaxModpack.UISettings.DumpAllWindowColorSettingsToFile(System.String)">
+            <summary>
+            Saves all currently enabled color settings to an xml file
+            </summary>
+            <param name="savePath">The path to save the xml file to</param>
         </member>
         <member name="T:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter">
             <summary>

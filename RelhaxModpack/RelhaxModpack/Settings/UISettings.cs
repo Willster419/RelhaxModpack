@@ -20,8 +20,17 @@ namespace RelhaxModpack
     public static class UISettings
     {
         #region statics and constants
-        public const string UIRoot = "UISettings.xml";
+        /// <summary>
+        /// The name of the Xml element to hold all custom color settings
+        /// </summary>
+        /// <remarks>See CustomSettings array for list of custom colors</remarks>
         public const string CustomColorSettingsPath = "CustomColorSettings";
+
+        /// <summary>
+        /// A list of custom colors for controlling color behavior of components that 
+        /// </summary>
+        /// <remarks>Settings that exist in here don't directly map to 1 setting and control other color settings.
+        /// For example, changing the color of a selected component in the mod selection list</remarks>
         public static readonly string[] CustomSettings = new string[]
         {
             nameof(SelectedPanelColor),
@@ -29,13 +38,37 @@ namespace RelhaxModpack
             nameof(SelectedTextColor),
             nameof(NotSelectedTextColor)
         };
+
+        /// <summary>
+        /// The parsed XML document containing the xml color settings
+        /// </summary>
         public static XmlDocument UIDocument;
+
+#warning this needs to be finished
+        /// <summary>
+        /// The color to use for when a component is selected in the selection list
+        /// </summary>
         public static SolidColorBrush SelectedPanelColor = new SolidColorBrush(Colors.BlanchedAlmond);
+
+        /// <summary>
+        /// The color to use for when a component is not selection in the selection list
+        /// </summary>
         public static SolidColorBrush NotSelectedPanelColor = new SolidColorBrush(Colors.White);
+
+        /// <summary>
+        /// The color to use when a component is selected in the selection list
+        /// </summary>
         public static SolidColorBrush SelectedTextColor = SystemColors.ControlTextBrush;
+
+        /// <summary>
+        /// The color to use when a component is not selected in the selection list
+        /// </summary>
         public static SolidColorBrush NotSelectedTextColor = SystemColors.ControlTextBrush;
+
+        /// <summary>
+        /// The color to use in the selection list for a tab which is not selected
+        /// </summary>
         public static LinearGradientBrush NotSelectedTabColor = null;
-        public static Color DisabledComponentColor = Colors.Red;
         #endregion
 
         /// <summary>
@@ -46,67 +79,82 @@ namespace RelhaxModpack
             //check for single time making
             if(UIDocument != null && init)
             {
-                Logging.WriteToLog("UIDocument is not null and init=true! (is this not the first time in LoadSettings()?)",Logfiles.Application, LogLevel.Error);
+                Logging.Error("UIDocument is not null and init=true! (is this not the first time in LoadSettings()?)");
                 return;
             }
+
             if(init)
                 UIDocument = new XmlDocument();
+
             if(!File.Exists(Settings.UISettingsFileName))
             {
-                Logging.WriteToLog("UIDocument file does not exist, aborting!)",Logfiles.Application, LogLevel.Error);
+                Logging.Error("UIDocument file does not exist, skipping custom color settings");
                 return;
             }
+
             try
             {
                 UIDocument.Load(Settings.UISettingsFileName);
             }
             catch (XmlException exml)
             {
-                Logging.WriteToLog(string.Format("Failed to load UISettings.xml document\n{0}",exml.Message), Logfiles.Application, LogLevel.Error);
+                Logging.Error("Failed to load UISettings.xml document\n{0}",exml.Message);
                 return;
             }
-            Logging.WriteToLog("UIDocument xml file loaded sucessfully", Logfiles.Application, LogLevel.Debug);
+            Logging.Info("UIDocument xml file loaded successfully");
         }
 
         #region Apply to window
+        /// <summary>
+        /// Applies custom color settings to a window
+        /// </summary>
+        /// <param name="w">The Window object to apply color settings to</param>
         public static void ApplyUIColorSettings(Window w)
         {
             if(UIDocument == null)
             {
-                Logging.WriteToLog("in ApplyColorSettings(), UIDocument is null! ", Logfiles.Application, LogLevel.Error);
+                Logging.Error("UIDocument is null in ApplyColorSettings()");
                 return;
             }
+
             //get the UI format version of the xml file
-            string versionXpath = "//" + UIRoot + "/@version";
+            string versionXpath = "//" + Settings.UISettingsColorFile + "/@version";
             string formatVersion = XMLUtils.GetXMLStringFromXPath(UIDocument, versionXpath);
             if(string.IsNullOrWhiteSpace(formatVersion))
             {
                 Logging.WriteToLog("formatVersion string is null! in ApplyColorSettings()",Logfiles.Application, LogLevel.Error);
                 return;
             }
+
             switch(formatVersion)
             {
                 case "1.0":
                     ApplyUIColorsettingsV1(w);
                     break;
                 default:
-                    //unknonw
+                    //unknown
                     Logging.WriteToLog("formatVersion string not match case! in ApplyColorSettings()",Logfiles.Application, LogLevel.Error);
                     break;
             }
         }
         
+        /// <summary>
+        /// Applies color settings to a window of Xml document format 1.0
+        /// </summary>
+        /// <param name="w">The window to apply changes to</param>
         private static void ApplyUIColorsettingsV1(Window w)
         {
             //build the xpath string
             string windowXPathRefrence = w.GetType().ToString();
-            string XPathWindowColor = string.Format("//{0}/{1}",UIRoot,windowXPathRefrence);
+            string XPathWindowColor = string.Format("//{0}/{1}", Settings.UISettingsColorFile,windowXPathRefrence);
             XmlNode WindowColorSetting = XMLUtils.GetXMLNodeFromXPath(UIDocument, XPathWindowColor);
+
             //apply window color settings if exist
             if(WindowColorSetting !=null )
             {
                 ApplyBrushSettings(w,WindowColorSetting);
             }
+
             //build list of all internal framework components
             List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsVisual(w, false);
             foreach (FrameworkElement element in allWindowControls)
@@ -118,7 +166,7 @@ namespace RelhaxModpack
                     {
                         //https://msdn.microsoft.com/en-us/library/ms256086(v=vs.110).aspx
                         //get the xpath component
-                        string XPathColorSetting = string.Format("//{0}/{1}/ColorSetting[@ID = \"{2}\"]",UIRoot,windowXPathRefrence,ID);
+                        string XPathColorSetting = string.Format("//{0}/{1}/ColorSetting[@ID = \"{2}\"]", Settings.UISettingsColorFile,windowXPathRefrence,ID);
                         XmlNode brushSettings = XMLUtils.GetXMLNodeFromXPath(UIDocument, XPathColorSetting);
                         //make sure setting is there
                         if(brushSettings != null)
@@ -126,10 +174,12 @@ namespace RelhaxModpack
                     }
                 }
             }
+
             //custom code for ModSelectionList
-            if(w is ModSelectionList modSelectionList)
+            if(w is ModSelectionList SelectionList)
             {
-                //set enabled and disbled brushes properly
+#warning TODO
+                //set enabled and disabled brushes properly
             }
         }
         
@@ -152,6 +202,7 @@ namespace RelhaxModpack
                 }
             }  
         }
+
         private static bool ApplyTextBrushSettings(string componentName, string componentTag, XmlNode brushSettings, out Brush textColorToChange)
         {
             bool somethingApplied = false;
@@ -185,6 +236,7 @@ namespace RelhaxModpack
             }
             return somethingApplied;
         }
+
         private static bool ApplyBrushSettings(string componentName, string componentTag, XmlNode brushSettings,
             out Brush backgroundColorToChange)
         {
@@ -300,9 +352,16 @@ namespace RelhaxModpack
             return someThingApplied;
         }
         
-        public static bool ParseColorFromString(string color, out Color kolor)
+        /// <summary>
+        /// Tries to parse a hex code color to a color object
+        /// </summary>
+        /// <param name="color">The string hex code for the color to use</param>
+        /// <param name="outColor">The corresponding color object</param>
+        /// <returns>True if color parsing was successful, a default color otherwise</returns>
+        /// <remarks>Uses the 32bit color codes for generation (Alpha, Red, Green, Blue) Alpha is transparency</remarks>
+        public static bool ParseColorFromString(string color, out Color outColor)
         {
-            kolor = new Color();
+            outColor = new Color();
             string aPart = string.Empty;
             string rPart = string.Empty;
             string gPart = string.Empty;
@@ -325,7 +384,7 @@ namespace RelhaxModpack
                 (byte.TryParse(gPart, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte g))&&
                 (byte.TryParse(bPart, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte b)))
             {
-                kolor = Color.FromArgb(a, r, g, b);
+                outColor = Color.FromArgb(a, r, g, b);
                 return true;
             }
             else
@@ -334,56 +393,58 @@ namespace RelhaxModpack
             return false;
         }
         
+        /// <summary>
+        /// Verifies that the points for applying color gradient directions are within 0-1
+        /// </summary>
+        /// <param name="p">The color gradient direction to verify</param>
         public static void VerifyPoints(Point p)
         {
-            if(p.X > 1)
+            if(p.X > 1 || p.X < 0)
             {
-                Logging.WriteToLog(string.Format("point.X is out of bounds (must be between 0 and 1, current value={0}), setting to 1)")
-                    ,Logfiles.Application, LogLevel.Warning);
-                p.X = 1;
+                int settingToUse = p.X > 1 ? 1 : 0;
+                Logging.Warning("point.X is out of bounds (must be between 0 and 1, current value={0}), setting to {1})", p.X,settingToUse);
+                p.X = settingToUse;
             }
-            if(p.X < 0)
+            if(p.Y > 1 || p.Y < 0)
             {
-                Logging.WriteToLog(string.Format("point.X is out of bounds (must be between 0 and 1, current value={0}), setting to 0)")
-                    ,Logfiles.Application, LogLevel.Warning);
-                p.X = 0;
-            }
-            if(p.Y > 1)
-            {
-                Logging.WriteToLog(string.Format("point.Y is out of bounds (must be between 0 and 1, current value={0}), setting to 1)")
-                    ,Logfiles.Application, LogLevel.Warning);
-                p.Y = 1;
-            }
-            if(p.Y < 0)
-            {
-                Logging.WriteToLog(string.Format("point.Y is out of bounds (must be between 0 and 1, current value={0}), setting to 0)")
-                    ,Logfiles.Application, LogLevel.Warning);
-                p.Y = 0;
+                int settingToUse = p.Y > 1 ? 1 : 0;
+                Logging.Warning("point.Y is out of bounds (must be between 0 and 1, current value={0}), setting to {1})", p.Y, settingToUse);
+                p.Y = settingToUse;
             }
         }
         #endregion
 
         #region Dump to file
+        /// <summary>
+        /// Saves all currently enabled color settings to an xml file
+        /// </summary>
+        /// <param name="savePath">The path to save the xml file to</param>
         public static void DumpAllWindowColorSettingsToFile(string savePath)
         {
             //make xml document and declaration
             XmlDocument doc = new XmlDocument();
             XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
+
             //append declaration to document
             doc.AppendChild(dec);
+
             //make root element and version attribute
-            XmlElement root = doc.CreateElement(UIRoot);
-            //NOTE: version attribute should be incrimented when large change in color loading structure is done
+            XmlElement root = doc.CreateElement(Settings.UISettingsColorFile);
+
+            //NOTE: version attribute should be incremented when large change in color loading structure is done
             //allows us to make whole new method to load UI settings
             XmlAttribute version = doc.CreateAttribute("version");
+
             //append to document
             version.Value = "1.0";
             root.Attributes.Append(version);
             doc.AppendChild(root);
+
             //add all window instances to document:
             //make windows for all appropriate windows
-            //TODO: more windows
+#warning TODO: more windows
             DumpWindowColorSettingsToXml(root, doc, new MainWindow());
+
             //save custom color settings to document
             //for now, just use single solid color for these settings
             foreach(string s in CustomSettings)
@@ -394,6 +455,7 @@ namespace RelhaxModpack
                 element.Attributes.Append(color);
                 root.AppendChild(element);
             }
+
             //save xml file
             doc.Save(savePath);
         }
@@ -402,11 +464,14 @@ namespace RelhaxModpack
         {
             //make window element
             XmlElement windowElement = doc.CreateElement(w.GetType().ToString());
+
             //save attributes to element
             ApplyColorattributesToElement(windowElement, w.Background, doc);
+
             //same to root
             root.AppendChild(windowElement);
-            //get list of all frameowrk elements in the window
+
+            //get list of all framework elements in the window
             //TODO: this may not work due to visual not being shown
             //TODO: need to disable translations to save CPU TIME
             List<FrameworkElement> AllUIElements = Utils.GetAllWindowComponentsLogical(w, false);
@@ -429,6 +494,7 @@ namespace RelhaxModpack
                 }
                 i++;
             }
+
             //make xml entries for each UI element now
             foreach(FrameworkElement element in AllUIElements)
             {
@@ -446,6 +512,7 @@ namespace RelhaxModpack
                     continue;
                 windowElement.AppendChild(colorSetting);
             }
+
             w.Close();
             w = null;
         }
@@ -453,12 +520,14 @@ namespace RelhaxModpack
         private static void ApplyColorattributesToElement(XmlElement colorEntry, Brush brush, XmlDocument doc, Brush textBrush = null)
         {
             XmlAttribute colorType, color1, textColor;
+
             if(brush is SolidColorBrush solidColorBrush)
             {
                 //type
                 colorType = doc.CreateAttribute("type");
                 colorType.Value = nameof(SolidColorBrush);
                 colorEntry.Attributes.Append(colorType);
+
                 //color1
                 color1 = doc.CreateAttribute("color1");
                 color1.Value = solidColorBrush.Color.ToString(CultureInfo.InvariantCulture);
@@ -470,18 +539,22 @@ namespace RelhaxModpack
                 colorType = doc.CreateAttribute("type");
                 colorType.Value = nameof(LinearGradientBrush);
                 colorEntry.Attributes.Append(colorType);
+
                 //color1
                 color1 = doc.CreateAttribute("color1");
                 color1.Value = linearGradientBrush.GradientStops[0].Color.ToString(CultureInfo.InvariantCulture);
                 colorEntry.Attributes.Append(color1);
+
                 //color2
                 XmlAttribute color2 = doc.CreateAttribute("color2");
                 color2.Value = linearGradientBrush.GradientStops[linearGradientBrush.GradientStops.Count-1].Color.ToString(CultureInfo.InvariantCulture);
                 colorEntry.Attributes.Append(color2);
+
                 //point1
                 XmlAttribute point1 = doc.CreateAttribute("point1");
                 point1.Value = linearGradientBrush.StartPoint.ToString(CultureInfo.InvariantCulture);
                 colorEntry.Attributes.Append(point1);
+
                 //point2
                 XmlAttribute point2 = doc.CreateAttribute("point2");
                 point2.Value = linearGradientBrush.EndPoint.ToString(CultureInfo.InvariantCulture);
@@ -510,6 +583,7 @@ namespace RelhaxModpack
             {
                 //text color (forground)
                 textColor = doc.CreateAttribute("textColor");
+
                 //should all be solid color brushes...
                 SolidColorBrush solidColorTextBrush = (SolidColorBrush)textBrush;
                 textColor.Value = solidColorTextBrush.Color.ToString(CultureInfo.InvariantCulture);

@@ -27,6 +27,12 @@ namespace RelhaxModpack
         public const string ModpackSettingsFileName = "RelhaxSettingsV2.xml";
 
         /// <summary>
+        /// The name of the settings color file
+        /// </summary>
+        /// <remarks>Stores all settings</remarks>
+        public const string UISettingsColorFile = "UISettings.xml";
+
+        /// <summary>
         /// The name of the legacy application settings file
         /// </summary>
         public const string OldModpackSettingsFilename = "RelHaxSettings.xml";
