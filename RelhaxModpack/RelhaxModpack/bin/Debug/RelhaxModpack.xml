@@ -3128,6 +3128,31 @@
             The URL for which to start the process based on
             </summary>
         </member>
+        <member name="T:RelhaxModpack.UIComponents.TaskReportState">
+            <summary>
+            States of the Task reporter in display to the UI
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.TaskReportState.Inactive">
+            <summary>
+            Not used for this installation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.TaskReportState.Active">
+            <summary>
+            In use for this installation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.TaskReportState.Complete">
+            <summary>
+            In use for this installation and the task completed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.TaskReportState.Error">
+            <summary>
+            An error has occurred on that task
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter">
             <summary>
             Interaction logic for RelhaxInstallTaskReporter.xaml
@@ -3135,6 +3160,76 @@
             <summary>
             RelhaxInstallTaskReporter
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.#ctor">
+            <summary>
+            Create an instance of the RelhaxInstallTaskReporter and init the UI side of it
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.ReportState">
+            <summary>
+            Controls the UI state of the thread reporter
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.IsSubProgressActive">
+            <summary>
+            Toggle if the second progress bar should be visible
+            </summary>
+            <remarks>Some tasks (like zip file extraction) have "sub-tasks" that take enough time where tracking their progress is warranted.
+            For example, a zip file has many files to extract. That's the main task. However, each file has bytes to extract. If the file to extract
+            is large, a subtask to track the extraction progress could be useful</remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.TaskTitle">
+            <summary>
+            The name of this task to display
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.TaskText">
+            <summary>
+            The main reporting description of this task. Supports string formatting
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.TaskMinimum">
+            <summary>
+            The minimum value for the main task progress bar
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.TaskMaximum">
+            <summary>
+            The maximum value for the main task progress bar
+            </summary>
+            <remarks>This value can be changed for, example, the number of patches to run</remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.TaskValue">
+            <summary>
+            The current progress of this task. Value must be between Maximum and Minimum.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.SubTaskMinimum">
+            <summary>
+            The minimum value for the subtask progress bar
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.SubTaskMaximum">
+            <summary>
+            The maximum value for the subtask progress bar
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.SubTaskValue">
+            <summary>
+            The current value of the subtask progress. Must be between the maximum and minimum
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.PropertyChanged">
+            <summary>
+            Event to trigger when an internal property is changed. It forces a UI update
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.OnPropertyChanged(System.String)">
+            <summary>
+            Method to invoke the PropertyChanged event to update the UI
+            </summary>
+            <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
         </member>
         <member name="M:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.InitializeComponent">
             <summary>
