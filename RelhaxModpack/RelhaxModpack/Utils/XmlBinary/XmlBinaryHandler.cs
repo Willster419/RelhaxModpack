@@ -6,6 +6,7 @@ using System.Xml;
 
 namespace RelhaxModpack.XmlBinary
 {
+#pragma warning disable CS1591
     public partial class XmlBinaryHandler
     {
         private PackedSectionReader PS = new PackedSectionReader();
@@ -99,6 +100,7 @@ namespace RelhaxModpack.XmlBinary
             try
             {
                 FileStream F = new FileStream(file, FileMode.Open, FileAccess.Read);
+#warning this needs to be disposed and tested
                 BinaryReader reader = new BinaryReader(F);
 
                 XmlComment ptiComment = xDoc.CreateComment("DO NOT SAVE THIS FILE! THIS CODE IS JUST FOR INFORMATION PUPORSES!");
@@ -173,4 +175,5 @@ namespace RelhaxModpack.XmlBinary
             GC.Collect();
         }
     }
+#pragma warning restore CS1591
 }

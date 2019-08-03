@@ -6,6 +6,8 @@ using System.Xml;
 
 namespace RelhaxModpack.XmlBinary
 {
+    //https://stackoverflow.com/questions/22536518/is-it-possible-to-disable-specific-compiler-warnings
+#pragma warning disable CS1591
     public class PackedSectionReader
     {
         public static readonly Int32 Packed_Header = 0x62a14e45;
@@ -350,5 +352,6 @@ namespace RelhaxModpack.XmlBinary
 
         }
     }
+#pragma warning restore CS1591
 }
 

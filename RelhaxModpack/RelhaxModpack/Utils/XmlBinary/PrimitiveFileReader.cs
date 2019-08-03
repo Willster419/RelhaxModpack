@@ -4,6 +4,7 @@ using System.Xml;
 
 namespace RelhaxModpack.XmlBinary
 {
+#pragma warning disable CS1591
     public class PrimitiveFileReader
     {
         public void ReadPrimitives(BinaryReader reader, XmlNode element, XmlDocument xDoc)
@@ -61,4 +62,5 @@ namespace RelhaxModpack.XmlBinary
             }
         }
     }
+#pragma warning restore CS1591
 }
