@@ -14,7 +14,7 @@ namespace RelhaxModpack
     public enum ReturnCodes
     {
         /// <summary>
-        /// No error occured
+        /// No error occurred
         /// </summary>
         Sucess = 0,
         /// <summary>
@@ -32,7 +32,7 @@ namespace RelhaxModpack
         /// </summary>
         Stable,
         /// <summary>
-        /// The beta distrubution, for advanced users, may have new features or improvements, and bugs
+        /// The beta distribution, for advanced users, may have new features or improvements, and bugs
         /// </summary>
         Beta,
         /// <summary>
@@ -46,7 +46,7 @@ namespace RelhaxModpack
     public partial class App : Application
     {
         ExceptionCaptureDisplay exceptionCaptureDisplay = new ExceptionCaptureDisplay();
-        //when application is brought to forground
+        //when application is brought to foreground
         private void Application_Activated(object sender, EventArgs e)
         {
 
@@ -101,8 +101,8 @@ namespace RelhaxModpack
                     return Assembly.Load(assemblyData);
                 }
             };
-            //init loggine here
-            //"The application failed to open a logfile. Eithor check your file permissions or move the application to a folder with write access"
+            //init logging here
+            //"The application failed to open a logfile. Either check your file permissions or move the application to a folder with write access"
             if (!Logging.Init(Logfiles.Application))
             {
                 MessageBox.Show(Translations.GetTranslatedString("appFailedCreateLogfile"));
@@ -112,7 +112,7 @@ namespace RelhaxModpack
             Logging.Info(string.Format("| Relhax Modpack version {0}", Utils.GetApplicationVersion()));
             Logging.Info(string.Format("| Build version {0}, from date {1}", Settings.ApplicationVersion.ToString(), Utils.GetCompileTime()));
             Logging.Info(string.Format("| Running on OS {0}", Environment.OSVersion.ToString()));
-            //parse command line arguements here
+            //parse command line arguments here
             //get the command line args for testing of auto install
             CommandLineSettings.ParseCommandLine(Environment.GetCommandLineArgs());
             Logging.Debug("starting application in {0} mode", CommandLineSettings.ApplicationMode.ToString());
@@ -179,7 +179,7 @@ namespace RelhaxModpack
                     Logging.Info("Running patch mode");
                     if(CommandLineSettings.PatchFilenames.Count == 0)
                     {
-                        Logging.Error("0 patchfiles parsed from commandline!");
+                        Logging.Error("0 patch files parsed from command line!");
                         Current.Shutdown(-3);
                     }
                     else
