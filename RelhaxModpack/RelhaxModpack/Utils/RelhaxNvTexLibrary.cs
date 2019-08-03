@@ -10,38 +10,61 @@ using TeximpNet.Unmanaged;
 
 namespace RelhaxModpack
 {
+    /// <summary>
+    /// A wrapper class around the TexImpNet NvidiaTT library class
+    /// </summary>
+    /// <remarks>The class handles: 32 and 64 bit library loading determination, Extraction, and Loading into memory</remarks>
     public class RelhaxNvTexLibrary
     {
         private NvTextureToolsLibrary library = NvTextureToolsLibrary.Instance;
 
+        /// <summary>
+        /// Gets the name of the embedded zip file containing the dll, 32 or 64 bit version
+        /// </summary>
         public string EmbeddedFilename
         {
             get { return UnmanagedLibrary.Is64Bit ? "nvtt64.zip" : "nvtt32.zip"; }
         }
 
+        /// <summary>
+        /// Gets the name of the dll file inside the embedded zip file, 32 or 64bit version
+        /// </summary>
         public string ExtractedFilename
         {
             get { return UnmanagedLibrary.Is64Bit ? "nvtt64.dll" : "nvtt32.dll"; }
         }
 
+        /// <summary>
+        /// Gets the absolute path to the dll file
+        /// </summary>
         public string Filepath
         {
             get
             { return Path.Combine(Settings.RelhaxLibrariesFolder, ExtractedFilename); }
         }
 
+        /// <summary>
+        /// Determines if the file is extracted to the Filepath property location
+        /// </summary>
         public bool IsExtracted
         {
             get
             { return File.Exists(Filepath); }
         }
 
+        /// <summary>
+        /// Determines if the library is loaded into memory
+        /// </summary>
         public bool IsLoaded
         {
             get
             { return library.IsLibraryLoaded; }
         }
 
+        /// <summary>
+        /// Attempts to load the library using the Filepath property
+        /// </summary>
+        /// <returns>True if the library load was successful</returns>
         public bool Load()
         {
             if (!IsExtracted)
@@ -49,6 +72,9 @@ namespace RelhaxModpack
             return library.LoadLibrary(Filepath);
         }
 
+        /// <summary>
+        /// Extracts the embedded compressed library to the location in the Filepath property
+        /// </summary>
         public void Extract()
         {
             if (IsExtracted)

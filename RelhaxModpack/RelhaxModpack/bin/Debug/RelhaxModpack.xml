@@ -3692,6 +3692,90 @@
             <returns>Returns false if a setup error occurred, true otherwise</returns>
             <remarks>The return value of the method does NOT related to the success of the Unit Tests</remarks>
         </member>
+        <member name="T:RelhaxModpack.RelhaxFreeImageLibrary">
+            <summary>
+            A wrapper class around the TexImpNet FreeImage library class
+            </summary>
+            <remarks>The class handles: 32 and 64 bit library loading determination, Extraction, and Loading into memory</remarks>
+        </member>
+        <member name="P:RelhaxModpack.RelhaxFreeImageLibrary.EmbeddedFilename">
+            <summary>
+            Gets the name of the embedded zip file containing the dll, 32 or 64 bit version
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.RelhaxFreeImageLibrary.ExtractedFilename">
+            <summary>
+            Gets the name of the dll file inside the embedded zip file, 32 or 64bit version
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.RelhaxFreeImageLibrary.Filepath">
+            <summary>
+            Gets the absolute path to the dll file
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.RelhaxFreeImageLibrary.IsExtracted">
+            <summary>
+            Determines if the file is extracted to the Filepath property location
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.RelhaxFreeImageLibrary.IsLoaded">
+            <summary>
+            Determines if the library is loaded into memory
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.RelhaxFreeImageLibrary.Load">
+            <summary>
+            Attempts to load the library using the Filepath property
+            </summary>
+            <returns>True if the library load was successful</returns>
+        </member>
+        <member name="M:RelhaxModpack.RelhaxFreeImageLibrary.Extract">
+            <summary>
+            Extracts the embedded compressed library to the location in the Filepath property
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.RelhaxNvTexLibrary">
+            <summary>
+            A wrapper class around the TexImpNet NvidiaTT library class
+            </summary>
+            <remarks>The class handles: 32 and 64 bit library loading determination, Extraction, and Loading into memory</remarks>
+        </member>
+        <member name="P:RelhaxModpack.RelhaxNvTexLibrary.EmbeddedFilename">
+            <summary>
+            Gets the name of the embedded zip file containing the dll, 32 or 64 bit version
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.RelhaxNvTexLibrary.ExtractedFilename">
+            <summary>
+            Gets the name of the dll file inside the embedded zip file, 32 or 64bit version
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.RelhaxNvTexLibrary.Filepath">
+            <summary>
+            Gets the absolute path to the dll file
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.RelhaxNvTexLibrary.IsExtracted">
+            <summary>
+            Determines if the file is extracted to the Filepath property location
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.RelhaxNvTexLibrary.IsLoaded">
+            <summary>
+            Determines if the library is loaded into memory
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.RelhaxNvTexLibrary.Load">
+            <summary>
+            Attempts to load the library using the Filepath property
+            </summary>
+            <returns>True if the library load was successful</returns>
+        </member>
+        <member name="M:RelhaxModpack.RelhaxNvTexLibrary.Extract">
+            <summary>
+            Extracts the embedded compressed library to the location in the Filepath property
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.AskCloseWoT">
             <summary>
             Interaction logic for AskCloseWoT.xaml
