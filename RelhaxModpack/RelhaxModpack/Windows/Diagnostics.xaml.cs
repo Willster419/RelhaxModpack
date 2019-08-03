@@ -111,7 +111,7 @@ namespace RelhaxModpack.Windows
             };
 
             //use a nice diagnostic window to check if the user wants to include any other files
-            AddPicturesZip apz = new AddPicturesZip() { filesToAddalways = filesToCollect };
+            AddPicturesZip apz = new AddPicturesZip() { FilesToAddalways = filesToCollect };
 
             //add the already above collected files to the list
             foreach (string file in filesToCollect)

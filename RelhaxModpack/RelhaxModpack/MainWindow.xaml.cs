@@ -3,15 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using RelhaxModpack.Windows;
 using RelhaxModpack.UIComponents;
 using System.Xml;
@@ -45,6 +40,9 @@ namespace RelhaxModpack
         bool closingFromFailure = false;
         NewsViewer newsViewer = null;
         private WebClient client = null;
+        /// <summary>
+        /// The original width and height of the application before applying scaling
+        /// </summary>
         public double OriginalWidth, OriginalHeight = 0;
         private Timer autoInstallTimer = new Timer();
         private bool databaseUpdateAvailableFromAutoSync = false;
@@ -125,7 +123,7 @@ namespace RelhaxModpack
             progressIndicator.UpdateProgress(0);
             Utils.AllowUIToUpdate();
 
-            //load translations into cobobox
+            //load translations into combobox
             LanguagesSelector.Items.Clear();
             LanguagesSelector.Items.Add(Translations.LanguageEnglish);
             LanguagesSelector.Items.Add(Translations.LanguageFrench);
@@ -174,7 +172,7 @@ namespace RelhaxModpack
                 databaseVersion = DatabaseVersions.Test;
             }
 
-            //verify folder stucture for all folders in the directory
+            //verify folder structure for all folders in the directory
             progressIndicator.UpdateProgress(3, Translations.GetTranslatedString("verDirStructure"));
             Utils.AllowUIToUpdate();
             Logging.Info("Verifying folder structure");
@@ -214,11 +212,11 @@ namespace RelhaxModpack
             //set the file count and size for the backups folder
             if(!isApplicationUpToDate)
             {
-                Logging.Info("don't get filesize of backups, application is not up to date");
+                Logging.Info("don't get file size of backups, application is not up to date");
             }
             else
             {
-                Logging.Debug("starting async task of getting filesizes of backups");
+                Logging.Debug("starting async task of getting file sizes of backups");
                 Task.Run(() =>
                 {
                     totalSize = 0;
@@ -231,7 +229,7 @@ namespace RelhaxModpack
                     {
                         BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"), backupFiles.Count(), Utils.SizeSuffix((ulong)totalSize, 1, true));
                     });
-                    Logging.Debug("completed async task of getting filesizes of backups");
+                    Logging.Debug("completed async task of getting file sizes of backups");
                 });
             }
 
@@ -293,7 +291,7 @@ namespace RelhaxModpack
                         Logging.Info("upgrade to V2 complete, welcome to the future!");
                     }
 
-                    //else process settins for first time load
+                    //else process settings for first time load
                     else if (Settings.FirstLoad)
                     {
                         Logging.Info("running processes for first time loading");
@@ -364,10 +362,10 @@ namespace RelhaxModpack
                     Logging.Info("SilentStart found from command line, minimizing on startup");
                     WindowState = WindowState.Minimized;
                 }
-                //else if the auto-install option was set, immediatly start the installation
+                //else if the auto-install option was set, immediately start the installation
                 else if (!string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
                 {
-                    Logging.Info("auto-install specified to launce install using {0}", CommandLineSettings.AutoInstallFileName);
+                    Logging.Info("auto-install specified to launch install using {0}", CommandLineSettings.AutoInstallFileName);
                     if(!File.Exists(Path.Combine(Settings.RelhaxUserSelectionsFolder,CommandLineSettings.AutoInstallFileName)))
                     {
                         Logging.Error("configuration file not found in {0}, aborting", Settings.RelhaxUserSelectionsFolder);
@@ -475,7 +473,7 @@ namespace RelhaxModpack
                 };
                 progressIndicator.Show();
                 CheckForDatabaseUpdates(true);
-                //clean up progress inicaogr
+                //clean up progress indicator
                 progressIndicator.Close();
                 progressIndicator = null;
             }
@@ -533,7 +531,7 @@ namespace RelhaxModpack
         {
             Logging.Info("Checking for database updates in CheckForDatabaseUpdates()");
 
-            //if we are gettign a new ModInfo then do that
+            //if we are getting a new ModInfo then do that
             XmlDocument doc = null;
             if (refreshModInfo)
             {
@@ -551,7 +549,7 @@ namespace RelhaxModpack
                 string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoZipfile, "manager_version.xml");
                 if (string.IsNullOrEmpty(xmlString))
                 {
-                    Logging.WriteToLog("Failed to get get xml string from managerInfo.dat", Logfiles.Application, LogLevel.ApplicationHalt);
+                    Logging.WriteToLog("Failed to get xml string from managerInfo.dat", Logfiles.Application, LogLevel.ApplicationHalt);
                     return;
                 }
 
@@ -565,14 +563,14 @@ namespace RelhaxModpack
 
             if(string.IsNullOrWhiteSpace(Settings.DatabaseVersion))
             {
-                //auto apply and don't annouce. this usually happends when the application is loading for first time
+                //auto apply and don't announce. this usually happens when the application is loading for first time
                 Logging.Info("Settings.DatabaseVersion is empty, setting init value");
                 Settings.DatabaseVersion = databaseNewVersion;
                 DatabaseVersionLabel.Text = Translations.GetTranslatedString("databaseVersion") + " " + Settings.DatabaseVersion;
             }
             else if (!Settings.DatabaseVersion.Equals(databaseNewVersion))
             {
-                //this happends when user clicks to manually check for updates or from the auto install feature
+                //this happens when user clicks to manually check for updates or from the auto install feature
                 Logging.Info("new version of database applied");
                 Settings.DatabaseVersion = databaseNewVersion;
                 DatabaseVersionLabel.Text = Translations.GetTranslatedString("databaseVersion") + " " + Settings.DatabaseVersion;
@@ -597,7 +595,7 @@ namespace RelhaxModpack
                 return true;
             }
 
-            //if the request distro version is alpha, correct it to stable
+            //if the request distribution version is alpha, correct it to stable
             if (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Alpha)
             {
                 Logging.Warning("Alpha is invalid option for ModpackSettings.ApplicationDistroVersion, setting to stable");
@@ -698,7 +696,7 @@ namespace RelhaxModpack
                     string modpackURL = (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Stable) ?
                         Settings.ApplicationUpdateURL :
                         Settings.ApplicationBetaUpdateURL;
-                    //make sure to delte it if it's currently three
+                    //make sure to delete it if it's currently three
                     if (File.Exists(Settings.ApplicationUpdateFileName))
                         File.Delete(Settings.ApplicationUpdateFileName);
                     client.DownloadFileAsync(new Uri(modpackURL), Settings.ApplicationUpdateFileName);
@@ -923,7 +921,7 @@ namespace RelhaxModpack
                 Settings.WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2);
 
                 //determine if current detected version of the game is supported
-                //only if applicaition distro is not alhpa and databate distro is not test
+                //only if application distribution is not alpha and database distribution is not test
                 if (databaseVersion != DatabaseVersions.Test)
                 {
                     //make an array of all the supported versions
@@ -963,7 +961,7 @@ namespace RelhaxModpack
 
                     }
 
-                    //check to see if array of supported clients cas the detected WoT client version
+                    //check to see if array of supported clients has the detected WoT client version
                     if (Settings.ApplicationVersion != ApplicationVersions.Alpha && !supportedVersionsString.Contains(Settings.WoTClientVersion))
                     {
                         //log and inform the user
@@ -988,7 +986,7 @@ namespace RelhaxModpack
                     //if the user wants to, check if the database has actually changed
                     if (ModpackSettings.NotifyIfSameDatabase)
                     {
-                        //get the instal llog for last installed database version
+                        //get the install log for last installed database version
                         string installedfilesLogPath = Path.Combine(Settings.WoTDirectory, "logs", "installedRelhaxFiles.log");
                         if (File.Exists(installedfilesLogPath))
                         {
@@ -1005,7 +1003,7 @@ namespace RelhaxModpack
                         }
                         else
                         {
-                            Logging.Warning("installedRelhaxFiles.log does not exist, cannnot notify if same database");
+                            Logging.Warning("installedRelhaxFiles.log does not exist, cannot notify if same database");
                         }
                     }
                 }
@@ -1587,7 +1585,7 @@ namespace RelhaxModpack
                 };
                 foreach (DatabasePackage package in packagesToDownload)
                 {
-                    //increate it out here, not in the repeat loop
+                    //increment it out here, not in the repeat loop
                     ParentProgressBar.Value++;
                     downloadProgress.ChildCurrentProgress = package.ZipFile;
                     bool retry = true;
@@ -1825,7 +1823,7 @@ namespace RelhaxModpack
                     control.IsEnabled = toggle;
                 }
             }
-            //any to include here that arent any of the above class types
+            //any to include here that aren't any of the above class types
             AutoSyncFrequencyTexbox.IsEnabled = toggle;
         }
 
