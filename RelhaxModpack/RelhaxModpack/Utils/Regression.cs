@@ -7,22 +7,59 @@ using System.IO;
 
 namespace RelhaxModpack
 {
-
-    public enum RegressionTypes
+    /// <summary>
+    /// The types of patch regression tests that can be performed
+    /// </summary>
+    public enum PatchRegressionTypes
     {
+        /// <summary>
+        /// Json regression (standard, non-XVM)
+        /// </summary>
         json,
+
+        /// <summary>
+        /// Xml regression
+        /// </summary>
         xml,
+
+        /// <summary>
+        /// Regex regression
+        /// </summary>
         regex,
+
+        /// <summary>
+        /// Json regression (XVM style)
+        /// </summary>
         followPath
     }
 
+    /// <summary>
+    /// Represents a patch operation with a description and desired assertion condition
+    /// </summary>
     public class UnitTest
     {
+        /// <summary>
+        /// The patch operation object
+        /// </summary>
         public Patch Patch;
+
+        /// <summary>
+        /// A description of what the patch should do
+        /// </summary>
         public string Description;
+
+        /// <summary>
+        /// Determines if the patch should pass or fail the test
+        /// </summary>
         public bool ShouldPass;
     }
 
+    /// <summary>
+    /// A regression object is an entire regression test suite. Manages the unit tests and runs the test assertions
+    /// </summary>
+    /// <remarks>A regression test is designed to only test one type of patch i.e. a series of XML patches.
+    /// The patching system works by having a starting file and making changes at each unit test. It then loads the files and compares
+    /// the results. Results are logged to a new logfile each time a regression run is started</remarks>
     public class Regression
     {
 
@@ -35,12 +72,17 @@ namespace RelhaxModpack
         private string RegressionTypeString = "";
         private string RegressionExtension = "";
 
-        public Regression(RegressionTypes regressionType, List<UnitTest> unitTestsToRun)
+        /// <summary>
+        /// Make a regression object
+        /// </summary>
+        /// <param name="regressionType">The type of regressions to run</param>
+        /// <param name="unitTestsToRun">The list of unit tests to run</param>
+        public Regression(PatchRegressionTypes regressionType, List<UnitTest> unitTestsToRun)
         {
             UnitTests = unitTestsToRun;
             switch (regressionType)
             {
-                case RegressionTypes.json:
+                case PatchRegressionTypes.json:
                     RegressionTypeString = "json";
                     RegressionExtension = string.Format(".{0}",RegressionTypeString);
                     Startfile = string.Format("{0}{1}", Startfile, RegressionExtension);
@@ -48,7 +90,7 @@ namespace RelhaxModpack
                     RegressionLogfile = new Logfile(Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", RegressionTypeString,
                         DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") , ".log")),Logging.ApplicationLogfileTimestamp);
                     break;
-                case RegressionTypes.regex:
+                case PatchRegressionTypes.regex:
                     RegressionTypeString = "regex";
                     RegressionExtension = string.Format(".{0}", "txt");
                     Startfile = string.Format("{0}{1}", Startfile, RegressionExtension);
@@ -56,7 +98,7 @@ namespace RelhaxModpack
                     RegressionLogfile = new Logfile(Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", RegressionTypeString,
                         DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), ".log")), Logging.ApplicationLogfileTimestamp);
                     break;
-                case RegressionTypes.xml:
+                case PatchRegressionTypes.xml:
                     RegressionTypeString = "xml";
                     RegressionExtension = string.Format(".{0}", RegressionTypeString);
                     Startfile = string.Format("{0}{1}", Startfile, RegressionExtension);
@@ -64,7 +106,7 @@ namespace RelhaxModpack
                     RegressionLogfile = new Logfile(Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", RegressionTypeString,
                         DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), ".log")), Logging.ApplicationLogfileTimestamp);
                     break;
-                case RegressionTypes.followPath:
+                case PatchRegressionTypes.followPath:
                     RegressionTypeString = "json";
                     RegressionExtension = string.Format(".{0}", "xc");
                     Startfile = string.Format("{0}{1}", @"@xvm", RegressionExtension);
@@ -75,6 +117,11 @@ namespace RelhaxModpack
             }
         }
 
+        /// <summary>
+        /// Run a complete regression test based on the list of unit tests
+        /// </summary>
+        /// <returns>Returns false if a setup error occurred, true otherwise</returns>
+        /// <remarks>The return value of the method does NOT related to the success of the Unit Tests</remarks>
         public bool RunRegressions()
         {
             //if from the editor, enable verbose logging (allows it to get debug log statements)

@@ -741,7 +741,7 @@ namespace RelhaxModpack.Windows
             Logging.Patcher("Regex regressions start");
             await Task.Run(() =>
             {
-                Regression regression = new Regression(RegressionTypes.regex, BuildRegexUnittests());
+                Regression regression = new Regression(PatchRegressionTypes.regex, BuildRegexUnittests());
                 regression.RunRegressions();
             });
             Logging.Patcher("Regex regressions end");
@@ -758,7 +758,7 @@ namespace RelhaxModpack.Windows
             Logging.Patcher("Xml regressions start");
             await Task.Run(() =>
             {
-                Regression regression = new Regression(RegressionTypes.xml, BuildXmlUnittests());
+                Regression regression = new Regression(PatchRegressionTypes.xml, BuildXmlUnittests());
                 regression.RunRegressions();
             });
             Logging.Patcher("Xml regressions end");
@@ -775,7 +775,7 @@ namespace RelhaxModpack.Windows
             Logging.Patcher("Json regressions start");
             await Task.Run(() =>
             {
-                Regression regression = new Regression(RegressionTypes.json, BuildJsonUnittests());
+                Regression regression = new Regression(PatchRegressionTypes.json, BuildJsonUnittests());
                 regression.RunRegressions();
             });
             Logging.Patcher("Json regressions end");
@@ -792,7 +792,7 @@ namespace RelhaxModpack.Windows
             Logging.Patcher("FollowPath regressions start");
             await Task.Run(() =>
             {
-                Regression regression = new Regression(RegressionTypes.followPath, BuildFollowPathUnittests());
+                Regression regression = new Regression(PatchRegressionTypes.followPath, BuildFollowPathUnittests());
                 regression.RunRegressions();
             });
             Logging.Patcher("FollowPath regressions end");

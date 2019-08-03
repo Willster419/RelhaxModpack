@@ -3625,6 +3625,73 @@
             <param name="item">The item to test</param>
             <returns>True if the item is of StretchingTreeViewItem class, false otherwise</returns>
         </member>
+        <member name="T:RelhaxModpack.PatchRegressionTypes">
+            <summary>
+            The types of patch regression tests that can be performed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.PatchRegressionTypes.json">
+            <summary>
+            Json regression (standard, non-XVM)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.PatchRegressionTypes.xml">
+            <summary>
+            Xml regression
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.PatchRegressionTypes.regex">
+            <summary>
+            Regex regression
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.PatchRegressionTypes.followPath">
+            <summary>
+            Json regression (XVM style)
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UnitTest">
+            <summary>
+            Represents a patch operation with a description and desired assertion condition
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UnitTest.Patch">
+            <summary>
+            The patch operation object
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UnitTest.Description">
+            <summary>
+            A description of what the patch should do
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UnitTest.ShouldPass">
+            <summary>
+            Determines if the patch should pass or fail the test
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Regression">
+            <summary>
+            A regression object is an entire regression test suite. Manages the unit tests and runs the test assertions
+            </summary>
+            <remarks>A regression test is designed to only test one type of patch i.e. a series of XML patches.
+            The patching system works by having a starting file and making changes at each unit test. It then loads the files and compares
+            the results. Results are logged to a new logfile each time a regression run is started</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Regression.#ctor(RelhaxModpack.PatchRegressionTypes,System.Collections.Generic.List{RelhaxModpack.UnitTest})">
+            <summary>
+            Make a regression object
+            </summary>
+            <param name="regressionType">The type of regressions to run</param>
+            <param name="unitTestsToRun">The list of unit tests to run</param>
+        </member>
+        <member name="M:RelhaxModpack.Regression.RunRegressions">
+            <summary>
+            Run a complete regression test based on the list of unit tests
+            </summary>
+            <returns>Returns false if a setup error occurred, true otherwise</returns>
+            <remarks>The return value of the method does NOT related to the success of the Unit Tests</remarks>
+        </member>
         <member name="T:RelhaxModpack.Windows.AskCloseWoT">
             <summary>
             Interaction logic for AskCloseWoT.xaml
