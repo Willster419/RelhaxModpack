@@ -4006,6 +4006,24 @@
             <param name="p">The patch instructions object</param>
             <returns>The operation exit code</returns>
         </member>
+        <member name="T:RelhaxModpack.PatientWebClient">
+            <summary>
+            A WebClient that allows the use to set a custom timeout value
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.PatientWebClient.Timeout">
+            <summary>
+            Get or set the length of time, in milliseconds, until the operation will timeout
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.PatientWebClient.GetWebRequest(System.Uri)">
+            <summary>
+            Set the URL to get the request data from
+            </summary>
+            <param name="uri">The website URL</param>
+            <returns>The WebRequest object</returns>
+            <remarks>Overrides the GetWebRequest() method to expose the WebRequest object. In doing so, you can set a custom timeout.</remarks>
+        </member>
         <member name="T:RelhaxModpack.Languages">
             <summary>
             List of all supported Languages in the modpack
