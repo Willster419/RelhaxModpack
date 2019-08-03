@@ -21,12 +21,18 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class AddPicturesZip : RelhaxWindow
     {
+        /// <summary>
+        /// Create and initialize the AddPicturesZip window
+        /// </summary>
         public AddPicturesZip()
         {
             InitializeComponent();
         }
 
-        public List<string> filesToAddalways;
+        /// <summary>
+        /// A list of files to add for any diagnostic bug report
+        /// </summary>
+        public List<string> FilesToAddalways;
 
         private void AddFilesButton_Click(object sender, RoutedEventArgs e)
         {
@@ -47,7 +53,7 @@ namespace RelhaxModpack.Windows
         {
             for (int i = 0; i < FilesToAddList.SelectedItems.Count; i++)
             {
-                if (filesToAddalways.Contains(FilesToAddList.SelectedItems[i]))
+                if (FilesToAddalways.Contains(FilesToAddList.SelectedItems[i]))
                     MessageBox.Show("CantRemoveDefaultFile");
                 else
                 {
