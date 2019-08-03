@@ -3915,6 +3915,86 @@
             AdvancedProgress
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Windows.AdvancedProgress.#ctor">
+            <summary>
+            Create and initialize the AdvancedProgress window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AdvancedProgress.BackupModsReporter">
+            <summary>
+            The UI Reporting object for the step of backing up mods
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AdvancedProgress.BackupDataClearCacheClearLogsReporter">
+            <summary>
+            The UI Reporting object for the steps of backing up data, clearing cache, and clearing logs
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AdvancedProgress.CleanModsReporter">
+            <summary>
+            The UI Reporting object for the step of cleaning mods
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AdvancedProgress.ExtractionModsReporters">
+            <summary>
+            The UI Reporting object for the step of extracting mods
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AdvancedProgress.ExtractionUserModsReporter">
+            <summary>
+            The UI Reporting object for the step of extracting user mods
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AdvancedProgress.RestoreDataXmlUnpackReporter">
+            <summary>
+            The UI Reporting object for the step of unpacking xml files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AdvancedProgress.PatchReporter">
+            <summary>
+            The UI Reporting object for the step of patching files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AdvancedProgress.ShortcutsReporter">
+            <summary>
+            The UI Reporting object for the step of creating shortcuts
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AdvancedProgress.AtlasReporter">
+            <summary>
+            The UI Reporting object for the step of Creating atlas files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AdvancedProgress.FontInstallTrimDownloadCacheCleanupReporter">
+            <summary>
+            The UI Reporting object for the step of font install, trimming download cache, and cleanup
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.AdvancedProgress.OnReportAdvancedProgress(RelhaxModpack.UIComponents.RelhaxInstallerProgress)">
+            <summary>
+            Update the advanced progress UI objects
+            </summary>
+            <param name="progress">The progress report object</param>
+        </member>
+        <member name="M:RelhaxModpack.Windows.AdvancedProgress.ToggleComplete(RelhaxModpack.UIComponents.RelhaxInstallTaskReporter)">
+            <summary>
+            Toggle a reporting task to the complete state
+            </summary>
+            <param name="reporter">The task to toggle</param>
+        </member>
+        <member name="M:RelhaxModpack.Windows.AdvancedProgress.ToggleError(RelhaxModpack.UIComponents.RelhaxInstallTaskReporter)">
+            <summary>
+            Toggle a reporting task to the error state
+            </summary>
+            <param name="reporter">The task to toggle</param>
+        </member>
+        <member name="M:RelhaxModpack.Windows.AdvancedProgress.ToggleComplete(RelhaxModpack.InstallerComponents.InstallerExitCodes)">
+            <summary>
+            Toggle a reporting task to the complete state
+            </summary>
+            <param name="exitCode">The reporter of this corresponding install step</param>
+            <remarks>If the task reporter is null, it won't throw a NullRefrenceException</remarks>
+        </member>
         <member name="M:RelhaxModpack.Windows.AdvancedProgress.InitializeComponent">
             <summary>
             InitializeComponent
@@ -3926,6 +4006,16 @@
             </summary>
             <summary>
             AddPicturesZip
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.AddPicturesZip.#ctor">
+            <summary>
+            Create and initialize the AddPicturesZip window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AddPicturesZip.FilesToAddalways">
+            <summary>
+            A list of files to add for any diagnostic bug report
             </summary>
         </member>
         <member name="F:RelhaxModpack.Windows.AddPicturesZip.FilesToAddList">
@@ -4495,7 +4585,7 @@
         </member>
         <member name="F:RelhaxModpack.ReturnCodes.Sucess">
             <summary>
-            No error occured
+            No error occurred
             </summary>
         </member>
         <member name="F:RelhaxModpack.ReturnCodes.LogfileError">
@@ -4515,7 +4605,7 @@
         </member>
         <member name="F:RelhaxModpack.ApplicationVersions.Beta">
             <summary>
-            The beta distrubution, for advanced users, may have new features or improvements, and bugs
+            The beta distribution, for advanced users, may have new features or improvements, and bugs
             </summary>
         </member>
         <member name="F:RelhaxModpack.ApplicationVersions.Alpha">
@@ -4547,6 +4637,16 @@
             </summary>
             <summary>
             MainWindow
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.MainWindow.OriginalWidth">
+            <summary>
+            The original width and height of the application before applying scaling
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.MainWindow.OriginalHeight">
+            <summary>
+            The original width and height of the application before applying scaling
             </summary>
         </member>
         <member name="M:RelhaxModpack.MainWindow.#ctor">
