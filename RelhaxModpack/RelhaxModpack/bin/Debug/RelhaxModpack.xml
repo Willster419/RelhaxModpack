@@ -4200,9 +4200,39 @@
             The French language
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Languages.Russian">
+            <summary>
+            The Russian language
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Translations">
             <summary>
             Handles all localization for the application User Interface
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Translations.LanguageEnglish">
+            <summary>
+            English language string identifier in national language
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Translations.LanguagePolish">
+            <summary>
+            Polish language string identifier in national language
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Translations.LanguageGerman">
+            <summary>
+            German language string identifier in national language
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Translations.LanguageFrench">
+            <summary>
+            French language string identifier in national language
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Translations.LanguageRussian">
+            <summary>
+            French language string identifier in national language
             </summary>
         </member>
         <member name="M:RelhaxModpack.Translations.SetLanguage(RelhaxModpack.Languages)">
@@ -4221,6 +4251,14 @@
             Get a localized string in the currently selected language
             </summary>
             <param name="componentName">The key value of the string phrase</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Translations.Exists(System.String,RelhaxModpack.Languages)">
+            <summary>
+            Checks is a component (key value) exists in the given language (dictionary)
+            </summary>
+            <param name="componentName">The keyword phrase to check</param>
+            <param name="languageToCheck">The language dictionary to check in</param>
             <returns></returns>
         </member>
         <member name="M:RelhaxModpack.Translations.LoadTranslations">

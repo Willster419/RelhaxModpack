@@ -20,19 +20,25 @@ namespace RelhaxModpack
         /// The English language
         /// </summary>
         English,
+
         /// <summary>
         /// The German language
         /// </summary>
         German,
+
         /// <summary>
         /// The Polish language
         /// </summary>
         Polish,
+
         /// <summary>
         /// The French language
         /// </summary>
         French,
 
+        /// <summary>
+        /// The Russian language
+        /// </summary>
         Russian
     };
 
@@ -64,10 +70,25 @@ namespace RelhaxModpack
         private const string TranslationNeeded = "TODO";
         private static readonly string Blank = string.Empty;
 
+        /// <summary>
+        /// English language string identifier in national language
+        /// </summary>
         public const string LanguageEnglish = "English";
+        /// <summary>
+        /// Polish language string identifier in national language
+        /// </summary>
         public const string LanguagePolish = "Polski";
+        /// <summary>
+        /// German language string identifier in national language
+        /// </summary>
         public const string LanguageGerman = "Deutsch";
+        /// <summary>
+        /// French language string identifier in national language
+        /// </summary>
         public const string LanguageFrench = "Français";
+        /// <summary>
+        /// French language string identifier in national language
+        /// </summary>
         public const string LanguageRussian = "Pусский";
 
         private static Dictionary<string, string> English = new Dictionary<string, string>();
@@ -181,6 +202,12 @@ namespace RelhaxModpack
             return s;
         }
 
+        /// <summary>
+        /// Checks is a component (key value) exists in the given language (dictionary)
+        /// </summary>
+        /// <param name="componentName">The keyword phrase to check</param>
+        /// <param name="languageToCheck">The language dictionary to check in</param>
+        /// <returns></returns>
         public static bool Exists(string componentName, Languages languageToCheck = Languages.English)
         {
             //English will always have the most up to date translations. that's just how it is.
