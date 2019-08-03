@@ -12,19 +12,41 @@ using System.Globalization;
 
 namespace RelhaxModpack
 {
+    /// <summary>
+    /// Exit codes during a patch operation
+    /// </summary>
     public enum PatchExitCode
     {
+        /// <summary>
+        /// The patch operation succeeded
+        /// </summary>
         Success = 0,
+
+        /// <summary>
+        /// The patch operation succeeded, but with warnings
+        /// </summary>
         Warning = -1,
+
+        /// <summary>
+        /// The patch operation did not succeeded
+        /// </summary>
         Error = -2
     }
 
+    /// <summary>
+    /// A class for handling patch operations
+    /// </summary>
     public static class PatchUtils
     {
 
         private static PatchExitCode PatchExitCodeForJson = PatchExitCode.Error;
 
         #region Main Patch Method
+        /// <summary>
+        /// Run a patch operation
+        /// </summary>
+        /// <param name="p">The patch instructions object</param>
+        /// <returns>The operation exit code</returns>
         public static PatchExitCode RunPatch(Patch p)
         {
             //parse macros for when not from editor
@@ -173,6 +195,11 @@ namespace RelhaxModpack
         #endregion
 
         #region XML
+        /// <summary>
+        /// Run an XML patch operation
+        /// </summary>
+        /// <param name="p">The patch instructions object</param>
+        /// <returns>The operation exit code</returns>
         private static PatchExitCode XMLPatch(Patch p)
         {
             //load the xml document
@@ -409,8 +436,14 @@ namespace RelhaxModpack
         #endregion
 
         #region REGEX
-        //method to patch a standard text or json file
-        //fileLocation is relative to res_mods folder
+        /// <summary>
+        /// Run a regex patch operation
+        /// </summary>
+        /// <param name="p">The patch instructions object</param>
+        /// <param name="lines">The lines to patch on the file.</param>
+        /// <returns>The operation exit code</returns>
+        /// <remarks>Can be used to "batch patch" an xml or json file. See Database examples.
+        /// Use -1 to indicate the whole file is being patched. Use 0 to check every line.</remarks>
         private static PatchExitCode RegxPatch(Patch p, int[] lines)
         {
             //replace all "fake escape characters" with real escape characters
@@ -510,6 +543,11 @@ namespace RelhaxModpack
         #endregion
 
         #region JSON
+        /// <summary>
+        /// Run a Json patch operation
+        /// </summary>
+        /// <param name="p">The patch instructions object</param>
+        /// <returns>The operation exit code</returns>
         private static PatchExitCode JsonPatch(Patch p)
         {
             //apply and log legacy compatibilities

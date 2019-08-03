@@ -3950,6 +3950,62 @@
         <member name="F:RelhaxModpack.CiInfo.BuildTag">
             <summary>String of the build number and build date/time, and other useful info.</summary> 
         </member>
+        <member name="T:RelhaxModpack.PatchExitCode">
+            <summary>
+            Exit codes during a patch operation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.PatchExitCode.Success">
+            <summary>
+            The patch operation succeeded
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.PatchExitCode.Warning">
+            <summary>
+            The patch operation succeeded, but with warnings
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.PatchExitCode.Error">
+            <summary>
+            The patch operation did not succeeded
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.PatchUtils">
+            <summary>
+            A class for handling patch operations
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.PatchUtils.RunPatch(RelhaxModpack.Patch)">
+            <summary>
+            Run a patch operation
+            </summary>
+            <param name="p">The patch instructions object</param>
+            <returns>The operation exit code</returns>
+        </member>
+        <member name="M:RelhaxModpack.PatchUtils.XMLPatch(RelhaxModpack.Patch)">
+            <summary>
+            Run an XML patch operation
+            </summary>
+            <param name="p">The patch instructions object</param>
+            <returns>The operation exit code</returns>
+        </member>
+        <member name="M:RelhaxModpack.PatchUtils.RegxPatch(RelhaxModpack.Patch,System.Int32[])">
+            <summary>
+            Run a regex patch operation
+            </summary>
+            <param name="p">The patch instructions object</param>
+            <param name="lines">The lines to patch on the file.</param>
+            <returns>The operation exit code</returns>
+            <remarks>Can be used to "batch patch" an xml or json file. See Database examples.
+            Use -1 to indicate the whole file is being patched. Use 0 to check every line.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.PatchUtils.JsonPatch(RelhaxModpack.Patch)">
+            <summary>
+            Run a Json patch operation
+            </summary>
+            <param name="p">The patch instructions object</param>
+            <returns>The operation exit code</returns>
+        </member>
         <member name="T:RelhaxModpack.Languages">
             <summary>
             List of all supported Languages in the modpack
