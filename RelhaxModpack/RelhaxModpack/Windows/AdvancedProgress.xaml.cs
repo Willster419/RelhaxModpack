@@ -21,25 +21,62 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class AdvancedProgress : RelhaxWindow
     {
+        /// <summary>
+        /// Create and initialize the AdvancedProgress window
+        /// </summary>
         public AdvancedProgress()
         {
             InitializeComponent();
         }
 
         //make a bunch of handlers for referencing the install progress options later
+        /// <summary>
+        /// The UI Reporting object for the step of backing up mods
+        /// </summary>
         public RelhaxInstallTaskReporter BackupModsReporter = null;
+        /// <summary>
+        /// The UI Reporting object for the steps of backing up data, clearing cache, and clearing logs
+        /// </summary>
         public RelhaxInstallTaskReporter BackupDataClearCacheClearLogsReporter = null;
+        /// <summary>
+        /// The UI Reporting object for the step of cleaning mods
+        /// </summary>
         public RelhaxInstallTaskReporter CleanModsReporter = null;
+        /// <summary>
+        /// The UI Reporting object for the step of extracting mods
+        /// </summary>
         public RelhaxInstallTaskReporter[] ExtractionModsReporters;
+        /// <summary>
+        /// The UI Reporting object for the step of extracting user mods
+        /// </summary>
         public RelhaxInstallTaskReporter ExtractionUserModsReporter = null;
+        /// <summary>
+        /// The UI Reporting object for the step of unpacking xml files
+        /// </summary>
         public RelhaxInstallTaskReporter RestoreDataXmlUnpackReporter = null;
+        /// <summary>
+        /// The UI Reporting object for the step of patching files
+        /// </summary>
         public RelhaxInstallTaskReporter PatchReporter = null;
+        /// <summary>
+        /// The UI Reporting object for the step of creating shortcuts
+        /// </summary>
         public RelhaxInstallTaskReporter ShortcutsReporter = null;
+        /// <summary>
+        /// The UI Reporting object for the step of Creating atlas files
+        /// </summary>
         public RelhaxInstallTaskReporter AtlasReporter = null;
+        /// <summary>
+        /// The UI Reporting object for the step of font install, trimming download cache, and cleanup
+        /// </summary>
         public RelhaxInstallTaskReporter FontInstallTrimDownloadCacheCleanupReporter = null;
 
         private InstallerExitCodes lastExitCode = InstallerExitCodes.Success;
 
+        /// <summary>
+        /// Update the advanced progress UI objects
+        /// </summary>
+        /// <param name="progress">The progress report object</param>
         public void OnReportAdvancedProgress(RelhaxInstallerProgress progress)
         {
             //update the internal exit code only if it's reporting a new phase
@@ -282,6 +319,10 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        /// <summary>
+        /// Toggle a reporting task to the complete state
+        /// </summary>
+        /// <param name="reporter">The task to toggle</param>
         public void ToggleComplete(RelhaxInstallTaskReporter reporter)
         {
             if (reporter == null)
@@ -290,6 +331,10 @@ namespace RelhaxModpack.Windows
                 reporter.ReportState = TaskReportState.Complete;
         }
 
+        /// <summary>
+        /// Toggle a reporting task to the error state
+        /// </summary>
+        /// <param name="reporter">The task to toggle</param>
         public void ToggleError(RelhaxInstallTaskReporter reporter)
         {
             if (reporter == null)
@@ -298,6 +343,11 @@ namespace RelhaxModpack.Windows
                 reporter.ReportState = TaskReportState.Error;
         }
 
+        /// <summary>
+        /// Toggle a reporting task to the complete state
+        /// </summary>
+        /// <param name="exitCode">The reporter of this corresponding install step</param>
+        /// <remarks>If the task reporter is null, it won't throw a NullRefrenceException</remarks>
         private void ToggleComplete(InstallerExitCodes exitCode)
         {
             switch (exitCode)
