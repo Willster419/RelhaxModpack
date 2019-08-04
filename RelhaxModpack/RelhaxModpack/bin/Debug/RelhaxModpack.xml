@@ -4082,12 +4082,84 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.EditorUploadDownloadEventArgs">
+            <summary>
+            Event args returned to the editor for when an FTP upload or download is complete
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.EditorUploadDownloadEventArgs.Package">
+            <summary>
+            The package that was just uploaded
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.EditorUploadDownloadEventArgs.UploadedFilename">
+            <summary>
+            The path to the file that was uploaded or downloaded
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.EditorUploadDownloadEventArgs.UploadedFilepathOnline">
+            <summary>
+            The FTP path to the field that was uploaded or downloaded
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.EditorUploadDownloadClosed">
+            <summary>
+            The delegate for invocation of when the FTP upload or download finishes
+            </summary>
+            <param name="sender">The sending object</param>
+            <param name="e">The Upload or download event arguments</param>
+        </member>
         <member name="T:RelhaxModpack.Windows.DatabaseEditorDownload">
             <summary>
             Interaction logic for DatabaseEditorDownload.xaml
             </summary>
             <summary>
             DatabaseEditorDownload
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorDownload.ZipFilePathDisk">
+            <summary>
+            The path to the zip file on the disk
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorDownload.ZipFilePathOnline">
+            <summary>
+            The FTP path to the zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorDownload.ZipFileName">
+            <summary>
+            The complete name of the Zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorDownload.Credential">
+            <summary>
+            The FTP credentials
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorDownload.Upload">
+            <summary>
+            Flag to indicate upload or download. True is upload, false is download
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorDownload.PackageToUpdate">
+            <summary>
+            The package being updated. A null package with Upload=true indicates the item being uploaded is a media
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.Windows.DatabaseEditorDownload.OnEditorUploadDownloadClosed">
+            <summary>
+            The event callback used for the editor when an upload or download is finished
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorDownload.Countdown">
+            <summary>
+            The timeout, in seconds, until the window will automatically close
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.DatabaseEditorDownload.#ctor">
+            <summary>
+            Create an instance of the DatabaseEditorDownlaod class
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.DatabaseEditorDownload.InitializeComponent">

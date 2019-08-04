@@ -16,33 +16,89 @@ using System.Timers;
 
 namespace RelhaxModpack.Windows
 {
+    /// <summary>
+    /// Event args returned to the editor for when an FTP upload or download is complete
+    /// </summary>
     public class EditorUploadDownloadEventArgs : EventArgs
     {
+        /// <summary>
+        /// The package that was just uploaded
+        /// </summary>
         public DatabasePackage Package;
+
+        /// <summary>
+        /// The path to the file that was uploaded or downloaded
+        /// </summary>
         public string UploadedFilename;
+
+        /// <summary>
+        /// The FTP path to the field that was uploaded or downloaded
+        /// </summary>
         public string UploadedFilepathOnline;
     }
+
+    /// <summary>
+    /// The delegate for invocation of when the FTP upload or download finishes
+    /// </summary>
+    /// <param name="sender">The sending object</param>
+    /// <param name="e">The Upload or download event arguments</param>
     public delegate void EditorUploadDownloadClosed(object sender, EditorUploadDownloadEventArgs e);
+
     /// <summary>
     /// Interaction logic for DatabaseEditorDownload.xaml
     /// </summary>
     public partial class DatabaseEditorDownload : RelhaxWindow
     {
-
+        //public
+        /// <summary>
+        /// The path to the zip file on the disk
+        /// </summary>
         public string ZipFilePathDisk;
+
+        /// <summary>
+        /// The FTP path to the zip file
+        /// </summary>
         public string ZipFilePathOnline;
+
+        /// <summary>
+        /// The complete name of the Zip file
+        /// </summary>
         public string ZipFileName;
+
+        /// <summary>
+        /// The FTP credentials
+        /// </summary>
         public NetworkCredential Credential;
+
+        /// <summary>
+        /// Flag to indicate upload or download. True is upload, false is download
+        /// </summary>
         public bool Upload;
+
+        /// <summary>
+        /// The package being updated. A null package with Upload=true indicates the item being uploaded is a media
+        /// </summary>
         public DatabasePackage PackageToUpdate;
+
+        /// <summary>
+        /// The event callback used for the editor when an upload or download is finished
+        /// </summary>
         public event EditorUploadDownloadClosed OnEditorUploadDownloadClosed;
-        private long FTPDownloadFilesize = -1;
-        private Timer timer = new Timer() { AutoReset = true, Enabled = false, Interval=1000 };
+
+        /// <summary>
+        /// The timeout, in seconds, until the window will automatically close
+        /// </summary>
         public uint Countdown = 0;
 
+        //private
         private WebClient client;
         private string CompleteFTPPath;
+        private long FTPDownloadFilesize = -1;
+        private Timer timer = new Timer() { AutoReset = true, Enabled = false, Interval = 1000 };
 
+        /// <summary>
+        /// Create an instance of the DatabaseEditorDownlaod class
+        /// </summary>
         public DatabaseEditorDownload()
         {
             InitializeComponent();
