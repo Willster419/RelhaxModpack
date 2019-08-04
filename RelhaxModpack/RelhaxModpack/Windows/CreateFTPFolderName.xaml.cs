@@ -22,12 +22,29 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class CreateFTPFolderName : RelhaxWindow
     {
-
+        /// <summary>
+        /// The absolute FTP path to the current folder
+        /// </summary>
         public string FTPPath;
+
+        /// <summary>
+        /// The FTP credentials to use
+        /// </summary>
         public NetworkCredential Credential;
+
+        /// <summary>
+        /// The absolute FTP path to the newly created folder
+        /// </summary>
         public string FTPReturnPath;
+
+        /// <summary>
+        /// The newly created folder name
+        /// </summary>
         public string FTPReturnFolderName;
 
+        /// <summary>
+        /// Create an instance of the CreateFTPFolderName window
+        /// </summary>
         public CreateFTPFolderName()
         {
             InitializeComponent();

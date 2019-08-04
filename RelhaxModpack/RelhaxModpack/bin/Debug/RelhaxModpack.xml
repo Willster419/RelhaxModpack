@@ -3802,6 +3802,31 @@
             CreateFTPFolderName
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Windows.CreateFTPFolderName.FTPPath">
+            <summary>
+            The absolute FTP path to the current folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.CreateFTPFolderName.Credential">
+            <summary>
+            The FTP credentials to use
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.CreateFTPFolderName.FTPReturnPath">
+            <summary>
+            The absolute FTP path to the newly created folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.CreateFTPFolderName.FTPReturnFolderName">
+            <summary>
+            The newly created folder name
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.CreateFTPFolderName.#ctor">
+            <summary>
+            Create an instance of the CreateFTPFolderName window
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.CreateFTPFolderName.InitializeComponent">
             <summary>
             InitializeComponent
