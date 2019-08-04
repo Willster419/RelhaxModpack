@@ -4364,22 +4364,178 @@
             <param name="window">The window to apply translations to</param>
             <param name="applyToolTips">Set to true to seach and apply tooltips to the components</param>
         </member>
+        <member name="T:RelhaxModpack.ReplacementTypes">
+            <summary>
+            The types of text macro replacements
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ReplacementTypes.FilePath">
+            <summary>
+            Replacing macros with file paths
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ReplacementTypes.PatchArguements">
+            <summary>
+            Replacing patch arguments of the patch object
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ReplacementTypes.PatchFiles">
+            <summary>
+            Replacing modpack created macros (like [quote]) with the corresponding characters
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ReplacementTypes.TextEscape">
+            <summary>
+            Replacing literal interpretations of special characters like newline and tab with escaped versions
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ReplacementTypes.TextUnescape">
+            <summary>
+            Replacing escaped versions of special characters like newline and tab with the literal interpretations
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ReplacementTypes.ZipFilePath">
+            <summary>
+            Replacing zip path macros with absolute extraction paths
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.DatabaseBeforeAfter">
+            <summary>
+            Allows the old and new versions of a SelectablePackage to be saved temporarily for comparing differences between two database structures
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseBeforeAfter.Before">
+            <summary>
+            The package reference for the database before changes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseBeforeAfter.After">
+            <summary>
+            The package reference for the database after changes
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Utils">
             <summary>
             A utility class for static functions used in various places in the modpack
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Utils.TO_SECONDS">
+            <summary>
+            Multiply by this value to convert milliseconds to seconds
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.TO_MINUETS">
+            <summary>
+            Multiply by this value to convert seconds to minuets
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.SizeSuffixes">
+            <summary>
+            A list of file size constructs from bytes to Yotabytes
+            </summary>
+            <remarks>{ "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" }</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Utils.BYTES_TO_MBYTES">
+            <summary>
+            Multiply by this to convert bytes to megabytes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.FilePathDict">
+            <summary>
+            The dictionary to store filepath macros
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.PatchArguementsDict">
+            <summary>
+            The dictionary to store patch argument macros
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.PatchFilesDict">
+            <summary>
+            The dictionary to store patch file replacement macros
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.TextUnscapeDict">
+            <summary>
+            The dictionary to store escaped text characters with the literal versions
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.TextEscapeDict">
+            <summary>
+            The dictionary to store literal versions of characters with their escaped versions
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.FreeImageLibrary">
+            <summary>
+            The manager instance of the FreeImage Library
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.NvTexLibrary">
+            <summary>
+            The manager instance of the Nvidia Texture Tools Library
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetAssemblyName(System.String)">
+            <summary>
+            Get a complete assembly name based on a matching keyword
+            </summary>
+            <param name="keyword">The keyword to match</param>
+            <returns>The first matching assembly name, or null if no matches</returns>
+        </member>
+        <member name="T:RelhaxModpack.Utils.VersionInfos">
+            <summary>
+            A structure object to contain the WoT client version and online folder version. Allows for LINQ searching
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.VersionInfos.WoTClientVersion">
+            <summary>
+            The WoT client version e.g. 1.5.1.3
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.VersionInfos.WoTOnlineFolderVersion">
+            <summary>
+            The online folder number (major game version) that contains the game zip files
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Utils.VersionInfos.ToString">
+            <summary>
+            Overrides the ToString() function to display the two properties
+            </summary>
+            <returns>Displays the WoTClientVersion and WoTOnlineFolderVersion</returns>
+        </member>
         <member name="M:RelhaxModpack.Utils.GetApplicationVersion">
             <summary>
-            Return the entire assembely version
+            Return the entire assembly version
             </summary>
-            <returns>The entire assembely version string (major, minor, build, revision)</returns>
+            <returns>The entire assembly version string (major, minor, build, revision)</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.GetCompileTime">
             <summary>
             Return the date and time in EN-US form, the time that the application was built
             </summary>
             <returns>the application build date and time in EN-US form</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetManagerInfoDocumentAsync(System.Boolean)">
+            <summary>
+            Get the XmlDocument object of the managerInfo zip file
+            </summary>
+            <param name="overwrite">If the managerInfo zip file should be force refreshed</param>
+            <returns>An xmlDocument object of manager_version.xml</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetManagerInfoZipfileAsync(System.Boolean)">
+            <summary>
+            Download and store the latest managerInfo zip file
+            </summary>
+            <param name="overwrite">Set to true to force a download of the latest version</param>
+            <returns>The mangerInfo zip file in the Ionic.Zipfile object</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.IsManagerUptoDate(System.String)">
+            <summary>
+            Compares if the current application version is the same as the version checked from online
+            </summary>
+            <param name="currentVersion">The string representation of the latest modpack application version</param>
+            <returns>True if the manager string versions are the same, false otherwise</returns>
+            <remarks>IsManagerUptoDate will return false if it fails to get the latest managerInfo zip file</remarks>
         </member>
         <member name="M:RelhaxModpack.Utils.GetAllWindowComponentsVisual(System.Windows.Window,System.Boolean)">
             <summary>
@@ -4389,6 +4545,22 @@
             <param name="includeWindow">if the list should include the window itself</param>
             <returns>A list of type FrameowrkElement of all components</returns>
         </member>
+        <member name="M:RelhaxModpack.Utils.GetAllWindowComponentsLogical(System.Windows.Window,System.Boolean)">
+            <summary>
+            Get a list of all logical components in the window
+            </summary>
+            <param name="window">The window to get the list of</param>
+            <param name="includeWindow">if the list should include the window itself</param>
+            <returns>A list of type FrameowrkElement of all components</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetAllWindowComponentsLogical(System.Windows.FrameworkElement,System.Boolean)">
+            <summary>
+            Get a list of all logical components in the window
+            </summary>
+            <param name="rootElement">The element to get the list of logical items from</param>
+            <param name="addRoot">If this rootElement should be added to the list</param>
+            <returns></returns>
+        </member>
         <member name="M:RelhaxModpack.Utils.PointWithinScreen(System.Int32,System.Int32)">
             <summary>Checks if a point is inside the possible monitor space</summary>
             <param name="x">The x coordinate of the point</param>
@@ -4397,6 +4569,20 @@
         <member name="M:RelhaxModpack.Utils.PointWithinScreen(System.Drawing.Point)">
             <summary>Checks if a point is inside the possible monitor space</summary>
             <param name="p">The point to check</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.AllowUIToUpdate">
+            <summary>
+            Injects a Dispatcher frame followed by an idle backgrouned operation to allow for the UI to update during an intensive operation on the UI thread
+            </summary>
+            <remarks>See https://stackoverflow.com/questions/37787388/how-to-force-a-ui-update-during-a-lengthy-task-on-the-ui-thread 
+            <para>and https://stackoverflow.com/questions/2329978/the-calling-thread-must-be-sta-because-many-ui-components-require-this</para></remarks>
+        </member>
+        <member name="M:RelhaxModpack.Utils.ApplyApplicationScale(System.Windows.Window,System.Double)">
+            <summary>
+            Applies vector based application scaling to the specified window
+            </summary>
+            <param name="window">The window to apply scaling to</param>
+            <param name="scaleValue">The amount of scaling, in a multiplication factor, to apply to the window from</param>
         </member>
         <member name="M:RelhaxModpack.Utils.CreateMD5Hash(System.String)">
             <summary>
@@ -4421,57 +4607,353 @@
             <param name="password"></param>
             <returns></returns>
         </member>
+        <member name="M:RelhaxModpack.Utils.GetStringFromZip(Ionic.Zip.ZipFile,System.String,System.String)">
+            <summary>
+            Gets the string contents of a text based file inside a zip file
+            </summary>
+            <param name="zip">The zipfile to extract the entry from</param>
+            <param name="archivedFilename">The archive path to the entry</param>
+            <param name="password">The password to use when extracting the entry. Leave blank for no password</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.ProcessEmptyDirectories(System.String,System.Boolean,System.UInt32,System.UInt32)">
+            <summary>
+            Deletes any empty directories from a given path
+            </summary>
+            <param name="startLocation">The location to start from. Includes deleting empty directories from this point</param>
+            <param name="recursive">Toggle to check inside the starting location for empty folders</param>
+            <param name="numRetrys">The number of times the method should retry after receiving an exception</param>
+            <param name="timeout">The time to wait between retries</param>
+            <returns>True if the operation completed successfully, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.SizeSuffix(System.UInt64,System.UInt32,System.Boolean)">
+            <summary>
+            Calculates and returns the size magnitude of the file (kilo, mega, giga...)
+            </summary>
+            <param name="value">The file size in bytes</param>
+            <param name="decimalPlaces">The number of decimal places to maintain in the result</param>
+            <param name="sizeSuffix">If it should return the byte symbol with the size amount (KB, MB, etc.)</param>
+            <returns>The string representation to decimalPlaces of the file size optionally with the bytes parameter</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetFilesize(System.String)">
+            <summary>
+            Gets the size of the file in bytes
+            </summary>
+            <param name="filepath">The string path to the file</param>
+            <returns>The size of the file in bytes</returns>
+            <remarks>This is a wrapper for the FileInfo.Length property</remarks>
+        </member>
         <member name="M:RelhaxModpack.Utils.GetValidFilename(System.String)">
             <summary>
             Checks if a filename has invalid characters and replaces them with underscores
             </summary>
-            <param name="fileName"></param>
-            <returns></returns>
+            <param name="fileName">The filename to replace characters from</param>
+            <returns>The filename with valid characters</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.FileDelete(System.String,System.UInt32,System.UInt32)">
+            <summary>
+            Tries to delete a file from the given path
+            </summary>
+            <param name="file">The file to delete</param>
+            <param name="numRetrys">The number of retires if an exception is encountered</param>
+            <param name="timeout">The number of milliseconds between retries</param>
+            <returns>True is the file operation was successful, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.DirectoryDelete(System.String,System.Boolean,System.Boolean,System.UInt32,System.UInt32,System.String)">
+            <summary>
+            Deletes files in a directory
+            </summary>
+            <param name="folderPath">The directory to delete files in</param>
+            <param name="deleteSubfolders">Toggle if the method should recursively look inside directory</param>
+            <param name="deleteRoot">Toggle if the method should delete the folderPath directory</param>
+            <param name="numRetrys">The number of retires to delete a file entry before failing</param>
+            <param name="timeout">The time in milliseconds between retries</param>
+            <param name="pattern">The pattern of files to search for in a directory</param>
+            <returns>True if the complete operation was a success, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.DirectoryDeleteAsync(System.String,System.Boolean,System.Boolean,System.UInt32,System.UInt32,System.String)">
+            <summary>
+            Async wrapper around DirectoryDelete() method. Deletes files in a directory
+            </summary>
+            <param name="folderPath">The directory to delete files in</param>
+            <param name="deleteSubfolders">Toggle if the method should recursively look inside directory</param>
+            <param name="deleteRoot">Toggle if the method should delete the folderPath directory</param>
+            <param name="numRetrys">The number of retires to delete a file entry before failing</param>
+            <param name="timeout">The time in milliseconds between retries</param>
+            <param name="pattern">The pattern of files to search for in a directory</param>
+            <returns>True if the complete operation was a success, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.DirectoryMove(System.String,System.String,System.Boolean,System.UInt32,System.UInt32,System.String)">
+            <summary>
+            Move a directory and its files to a new location. Works across drive letters.
+            </summary>
+            <param name="source">The source path of the directory to move from</param>
+            <param name="destination">The destination path of the directory to move to</param>
+            <param name="recursive">Toggle if the sub-folders and files should be moved as well</param>
+            <param name="numRetrys">The number of retires to delete a file entry before failing</param>
+            <param name="timeout">The time in milliseconds between retries</param>
+            <param name="pattern">The pattern of files to search for in a directory</param>
+            <remarks>The DirectoryMove method works across drive letters and other physical separate drives because it deletes and re-creates folders rather then trying to move them</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Utils.DirectoryCopy(System.String,System.String,System.Boolean,System.UInt32,System.UInt32,System.String)">
+            <summary>
+            Copy a directory and its files to a new location
+            </summary>
+            <param name="source">The source path of the directory to move from</param>
+            <param name="destination">The destination path of the directory to move to</param>
+            <param name="recursive">Toggle if the sub-folders and files should be moved as well</param>
+            <param name="numRetrys">The number of retires to delete a file entry before failing</param>
+            <param name="timeout">The time in milliseconds between retries</param>
+            <param name="pattern">The pattern of files to search for in a directory</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.DirectorySearch(System.String,System.IO.SearchOption,System.Boolean,System.String,System.UInt32,System.UInt32,System.Boolean)">
+            <summary>
+            Return a list of files from a directory
+            </summary>
+            <param name="directoryPath">The directory to search for files</param>
+            <param name="option">Specifies to search this top directory or subdirectories to the Directory.GetFiles() method</param>
+            <param name="includeDirectoryRoot">Toggle if the directoryPath should be included in the list of files</param>
+            <param name="searchPattern">The search pattern for finding files in a directory</param>
+            <param name="numRetrys">The number of retires to delete a file entry before failing</param>
+            <param name="timeout">The time in milliseconds between retries</param>
+            <param name="applyFolderProperties">Toggle if the "Normal" file property as assigned to these files at the same time</param>
+            <returns>The list of files if the search operation was successful, otherwise null</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.ApplyNormalFileProperties(System.String)">
+            <summary>
+            Applies the "Normal" file attribute to a file
+            </summary>
+            <param name="file">The file to apply normal attributes to</param>
         </member>
         <member name="M:RelhaxModpack.Utils.ParseBool(System.String,System.Boolean)">
             <summary>
             Try to parse a boolean value based on string input
             </summary>
-            <param name="input">the string to try to parse</param>
-            <param name="defaultValue">the default value to use if parsing fails</param>
-            <returns>The bool value of the ipnut string, or the default value if parsing failes</returns>
+            <param name="input">The string to try to parse</param>
+            <param name="defaultValue">The default value to use if parsing fails</param>
+            <returns>The bool value of the input string, or the default value if parsing fails</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.ParseBool(System.String,System.Boolean@,System.Boolean)">
+            <summary>
+            Try to parse a boolean value based on string input
+            </summary>
+            <param name="input">The string to try to parse</param>
+            <param name="result">The result value</param>
+            <param name="defaultValue">The default value for result, if parse fails</param>
+            <returns>Returns if the TryParse() worked</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.ParseInt(System.String,System.Int32)">
             <summary>
-            Try to parse an intiger value based on string input
+            Try to parse an integer value based on string input
             </summary>
-            <param name="input">the string to try to parse</param>
-            <param name="defaultValue">the default value to use if parsing fails</param>
-            <returns>The int value of the ipnut string, or the default value if parsing failes</returns>
+            <param name="input">The string to try to parse</param>
+            <param name="defaultValue">The default value to use if parsing fails</param>
+            <returns>The int value of the input string, or the default value if parsing fails</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.ParseInt(System.String,System.Int32@,System.Int32)">
+            <summary>
+            Try to parse an integer value based on string input
+            </summary>
+            <param name="input">The string to try to parse</param>
+            <param name="result">The result value</param>
+            <param name="defaultValue">The default value for result, if parse fails</param>
+            <returns>Returns if the TryParse() worked</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.ParseFloat(System.String,System.Single)">
             <summary>
             Try to parse a float value based on string input
             </summary>
-            <param name="input">the string to try to parse</param>
-            <param name="defaultValue">the default value to use if parsing fails</param>
-            <returns>The float value of the ipnut string, or the default value if parsing failes</returns>
+            <param name="input">The string to try to parse</param>
+            <param name="defaultValue">The default value to use if parsing fails</param>
+            <returns>The float value of the input string, or the default value if parsing fails</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.ParseFloat(System.String,System.Single@,System.Single)">
+            <summary>
+            Try to parse a float value based on string input
+            </summary>
+            <param name="input">The string to try to parse</param>
+            <param name="result">The result value</param>
+            <param name="defaultValue">The default value for result, if parse fails</param>
+            <returns>Returns if the TryParse() worked</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.ParseLong(System.String,System.Int64)">
+            <summary>
+            Try to parse a long value based on string input
+            </summary>
+            <param name="input">The string to try to parse</param>
+            <param name="defaultValue">The default value to use if parsing fails</param>
+            <returns>The float value of the input string, or the default value if parsing fails</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.ParseLong(System.String,System.Int64@,System.Int64)">
+            <summary>
+            Try to parse a long value based on string input
+            </summary>
+            <param name="input">The string to try to parse</param>
+            <param name="result">The result value</param>
+            <param name="defaultValue">The default value for result, if parse fails</param>
+            <returns>Returns if the TryParse() worked</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.ParseuLong(System.String,System.UInt64)">
+            <summary>
+            Try to parse an unsigned long value based on string input
+            </summary>
+            <param name="input">The string to try to parse</param>
+            <param name="defaultValue">The default value to use if parsing fails</param>
+            <returns>The float value of the input string, or the default value if parsing fails</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.ParseuLong(System.String,System.UInt64@,System.UInt64)">
+            <summary>
+            Try to parse an unsigned long value based on string input
+            </summary>
+            <param name="input">The string to try to parse</param>
+            <param name="result">The result value</param>
+            <param name="defaultValue">The default value for result, if parse fails</param>
+            <returns>Returns if the TryParse() worked</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.ParseEnum``1(System.String,``0)">
+            <summary>
+            Tries to parse an enumeration of a given type
+            </summary>
+            <typeparam name="TEnum">The type of enumeration to parse as</typeparam>
+            <param name="input">The input string to parse</param>
+            <param name="defaultValue">The default value if the enumeration parse fails</param>
+            <returns>The parsed or default enumeration value</returns>
+            <remarks>see https://stackoverflow.com/questions/10685794/how-to-use-generic-tryparse-with-enum </remarks>
+        </member>
+        <member name="M:RelhaxModpack.Utils.CheckForDuplicates(System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Category},System.Collections.Generic.List{RelhaxModpack.Dependency})">
+            <summary>
+            Checks for any duplicate PackageName entries inside the provided lists
+            </summary>
+            <param name="globalDependencies">The list of global dependencies</param>
+            <param name="dependencies">The list of dependencies</param>
+            <param name="parsedCategoryList">The list of categories</param>
+            <param name="logicalDependencies">The list of logical dependencies</param>
+            <returns>A list of duplicate packages, or an empty list if no duplicates</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.IsDuplicateName(System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.String)">
+            <summary>
+            Checks if a packageName exists within a list of packages
+            </summary>
+            <param name="packagesToCheckWith">The list of packages to check inside</param>
+            <param name="nameToCheck">The PackageName parameter to check</param>
+            <returns>True if the nameToCheck exists in the list, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.SortDatabase(System.Collections.Generic.List{RelhaxModpack.Category})">
+            <summary>
+            Sorts the packages inside each Category object
+            </summary>
+            <param name="parsedCategoryList">The list of categories to sort</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.SortDatabase(System.Collections.Generic.List{RelhaxModpack.SelectablePackage},System.Boolean)">
+            <summary>
+            Sorts a list of packages
+            </summary>
+            <param name="packages">The list of packages to sort</param>
+            <param name="recursive">If the list should recursively sort</param>
         </member>
         <member name="M:RelhaxModpack.Utils.BuildLinksRefrence(System.Collections.Generic.List{RelhaxModpack.Category},System.Boolean)">
             <summary>
-            Links all the refrences (like parent, etc) for each class object making it possible to traverse the list tree in memory
+            Links all the references (like parent, etc) for each class object making it possible to traverse the list tree in memory
             </summary>
             <param name="ParsedCategoryList">The List of categories</param>
+            <param name="buildFakeParents">If the header parent SelectablePackage objects should be built as well</param>
         </member>
         <member name="M:RelhaxModpack.Utils.BuildLinksRefrence(RelhaxModpack.SelectablePackage,RelhaxModpack.Category,RelhaxModpack.SelectablePackage)">
             <summary>
-            Links all the refrences (like parent, etc) for each class object making it possible to traverse the list tree in memory
+            Links all the references (like parent, etc) for each class object making it possible to traverse the list tree in memory
             </summary>
             <param name="sp">The package to perform linking on</param>
             <param name="cat">The category that the SelectablePackagesp belongs to</param>
             <param name="parent">The tree parent of sp</param>
         </member>
+        <member name="M:RelhaxModpack.Utils.BuildLevelPerPackage(System.Collections.Generic.List{RelhaxModpack.Category},System.Int32)">
+            <summary>
+            Assigns the level parameter to the packages based on how recursively deep they are in the package sub lists
+            </summary>
+            <param name="ParsedCategoryList">The list of assign package values to</param>
+            <param name="startingLevel">The starting level to assign the level parameter</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.BuildLevelPerPackage(System.Collections.Generic.List{RelhaxModpack.SelectablePackage},System.Int32)">
+            <summary>
+            Assigns the level parameter to the packages based on how recursively deep they are in the package sub lists
+            </summary>
+            <param name="packages">The list of package values to</param>
+            <param name="level">The level to assign the level parameter</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.CalculateDependencies(System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.SelectablePackage},System.Collections.Generic.List{RelhaxModpack.Category})">
+            <summary>
+            Calculates which packages and dependencies are dependent on other dependencies and if each dependency that is selected for install is enabled for installation
+            </summary>
+            <param name="dependencies">The list of dependencies</param>
+            <param name="packages">The list of Selectable Packages</param>
+            <param name="parsedCategoryList">The list of Categories</param>
+            <returns>A list of calculated dependencies to install</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.CreateOrderedInstallList(System.Collections.Generic.List{RelhaxModpack.DatabasePackage})">
+            <summary>
+            Creates an array of DatabasePackage lists sorted by Installation groups i.e. list in array index 0 is packages of install group 0
+            </summary>
+            <param name="packagesToInstall"></param>
+            <returns>The array of DatabasePackage lists</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.PropagateInstallGroupsPerLevel(System.Collections.Generic.List{RelhaxModpack.DatabasePackage})">
+            <summary>
+            Offsets the InstallGroup for a package by adding the group with the level parameter
+            </summary>
+            <param name="packagesToInstall">The list of package to perform the offset on</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.ClearSelections(System.Collections.Generic.List{RelhaxModpack.Category})">
+            <summary>
+            Clears all selections in the given lists by setting the checked properties to false
+            </summary>
+            <param name="ParsedCategoryList">The list of Categories</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetMaxInstallGroupNumber(System.Collections.Generic.List{RelhaxModpack.DatabasePackage})">
+            <summary>
+            Gets the maximum InstallGroup number from a list of Packages
+            </summary>
+            <param name="listToCheck">The list of DatabasePackages</param>
+            <returns>The maximum InstallGroup number</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetMaxPatchGroupNumber(System.Collections.Generic.List{RelhaxModpack.DatabasePackage})">
+            <summary>
+            Gets the maximum PatchGroup number from a list of Packages
+            </summary>
+            <param name="listToCheck">The list of DatabasePackages</param>
+            <returns>The maximum PatchGroup number</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.SetObjectMember(System.Object,System.Reflection.MemberInfo,System.String)">
+            <summary>
+            Dynamically sets the properties and fields of and DatabasePackage object and children based on the property reflective info and the string value to set
+            </summary>
+            <param name="packageOfAnyType">The DatabasePackage object</param>
+            <param name="packageFieldOrProperty">The reflective info of the Field or Property to set the information on</param>
+            <param name="valueToSet">The string representation of the data to set on that field or property</param>
+            <returns>True if operation was successful, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.SetListEntriesField(System.Object,System.Reflection.FieldInfo,System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement})">
+            <summary>
+            Dynamically assigns field properties to custom objects of a custom type of a list
+            </summary>
+            <param name="objectThatHasListProperty">The List type object of other objects (Like the Media List)</param>
+            <param name="nameOfListField">The field type of from the Package Type (Like Media)</param>
+            <param name="xmlListItems">The XElement list of items (Like the xml list of media items)</param>
+            <returns>True if the operation was successful, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.BitmapToImageSource(System.Drawing.Bitmap)">
+            <summary>
+            Converts a Bitmap object to a BitmapImage object
+            </summary>
+            <param name="bitmap">The Bitmap object to convert</param>
+            <returns>The BitmapImage object</returns>
+        </member>
         <member name="M:RelhaxModpack.Utils.RandomString(System.Int32)">
             <summary>
-            https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings-in-c
+            Creates a string of random characters
             </summary>
-            <param name="length"></param>
-            <returns></returns>
+            <param name="length">The number of characters to create the random string</param>
+            <returns>The random string</returns>
+            <remarks>See https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings-in-c </remarks>
         </member>
         <member name="M:RelhaxModpack.Utils.CompareVersions(System.String,System.String)">
             <summary>
@@ -4481,7 +4963,8 @@
             <param name="strA">the first version</param>
             <param name="strB">the second version</param>
             <returns>less than zero if strA is less than strB, equal to zero if
-            strA equals strB, and greater than zero if strA is greater than strB
+            strA equals strB, and greater than zero if strA is greater than strB</returns>
+            <remarks> See https://stackoverflow.com/questions/30494/compare-version-identifiers
             Samples:
             1.0.0.0     | 1.0.0.1 = -1
             1.0.0.1     | 1.0.0.0 =  1
@@ -4489,7 +4972,7 @@
             1, 0.0.0    | 1.0.0.0 =  0
             9, 5, 1, 44 | 3.4.5.6 =  1
             1, 5, 1, 44 | 3.4.5.6 = -1
-            6,5,4,3     | 6.5.4.3 =  0</returns>
+            6,5,4,3     | 6.5.4.3 =  0 </remarks>
         </member>
         <member name="M:RelhaxModpack.Utils.GetCurrentUniversalFiletimeTimestamp">
             <summary>
@@ -4499,10 +4982,10 @@
         </member>
         <member name="M:RelhaxModpack.Utils.ConvertFiletimeTimestampToDate(System.Int64)">
             <summary>
-            
+            Converts a timestamp value to a string representation
             </summary>
-            <param name="timestamp"></param>
-            <returns></returns>
+            <param name="timestamp">The timestamp to convert</param>
+            <returns>The string representation of the timestamp</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.Base64Encode(System.String)">
             <summary>
@@ -4517,6 +5000,142 @@
             </summary>
             <param name="base64EncodedData">The base64 stirng</param>
             <returns>The plain text version</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetProcess(System.String,System.String)">
+            <summary>
+            Checks if a process is running on the system
+            </summary>
+            <param name="processName">The name of the process</param>
+            <param name="pathToMatch">(Optional) The directory that the process is running from</param>
+            <returns>The Process object that matches, or null if no matches</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.IsProcessRunning(System.String,System.String)">
+            <summary>
+            Wrapper for IsProcessRunning() to return boolean type
+            </summary>
+            <param name="processName">The name of the process</param>
+            <param name="pathToMatch">(Optional) The directory that the process is running from</param>
+            <returns>True if match, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetFlatList(System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Category})">
+            <summary>
+            Returns a flat list of the given recursive lists, in the order that the parameters are stated
+            </summary>
+            <param name="globalDependnecies">The list of global dependences</param>
+            <param name="dependencies">The list of dependencies</param>
+            <param name="logicalDependencies">The list of logical dependencies</param>
+            <param name="parsedCategoryList">The list of Categories</param>
+            <returns>The flat list</returns>
+            <remarks>In the case of Categories, the flat list has the sub-level packages added at the level of the parent</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetFlatSelectablePackageList(System.Collections.Generic.List{RelhaxModpack.Category})">
+            <summary>
+            Returns a flat list of the given recursive lists, in the order that the parameters are stated
+            </summary>
+            <param name="parsedCategoryList">The list of Categories</param>
+            <returns>The flat list</returns>
+            <remarks>In the case of Categories, the flat list has the sub-level packages added at the level of the parent</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Utils.StartProcess(System.Diagnostics.ProcessStartInfo)">
+            <summary>
+            Start a process
+            </summary>
+            <param name="startInfo">The ProcessStartInfo parameters object</param>
+            <returns>True if process start was successful, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.StartProcess(System.String)">
+            <summary>
+            Start a process
+            </summary>
+            <param name="command">The entire command as a string style commandline</param>
+            <returns>True if process start was successful, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.BuildFilepathMacroList">
+            <summary>
+            Builds the Filepath macro dictionary with settings that should be parsed from the Settings class
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Utils.MacroReplace(System.String,RelhaxModpack.ReplacementTypes)">
+            <summary>
+            Performs a replacement of macros using the specified macro replace operation
+            </summary>
+            <param name="inputString">The string to replace the macros of</param>
+            <param name="type">The type of macro replace operation</param>
+            <returns>The replaced string</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.AutoFindWoTDirectory(System.String@)">
+            <summary>
+            Checks the registry to get the latest location of where WoT is installed
+            </summary>
+            <param name="WoTRoot">The string to set to the WoT path</param>
+            <returns>True if operation success</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.CreateShortcut(RelhaxModpack.Shortcut,System.Text.StringBuilder)">
+            <summary>
+            Creates a shortcut on the user's desktop
+            </summary>
+            <param name="shortcut">The shortcut parameters</param>
+            <param name="sb">The StringBuilder to log the path to the created file</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.FTPMakeFolder(System.String,System.Net.ICredentials)">
+            <summary>
+            Create an FTP folder
+            </summary>
+            <param name="addressWithDirectory">The complete path to the folder to create</param>
+            <param name="credentials">The FTP server credentials</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.FTPMakeFolderAsync(System.String,System.Net.ICredentials)">
+            <summary>
+            Create an FTP folder
+            </summary>
+            <param name="addressWithDirectory">The complete path to the folder to create</param>
+            <param name="credentials">The FTP server credentials</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.FTPListFilesFolders(System.String,System.Net.ICredentials)">
+            <summary>
+            Get a list of files currently in an FTP folder
+            </summary>
+            <param name="address">The complete path to the FTP folder</param>
+            <param name="credentials">The FTP server credentials</param>
+            <returns>The list of files on the server, as well as the current directory "." and parent directory ".." characters</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.FTPListFilesFoldersAsync(System.String,System.Net.ICredentials)">
+            <summary>
+            Get a list of files currently in an FTP folder
+            </summary>
+            <param name="address">The complete path to the FTP folder</param>
+            <param name="credentials">The FTP server credentials</param>
+            <returns>The list of files on the server, as well as the current directory "." and parent directory ".." characters</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.FTPDeleteFile(System.String,System.Net.ICredentials)">
+            <summary>
+            Delete a file on an FTP server
+            </summary>
+            <param name="address">The complete path to the FTP file to delete</param>
+            <param name="credentials">The FTP server credentials</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.FTPDeleteFileAsync(System.String,System.Net.ICredentials)">
+            <summary>
+            Delete a file on an FTP server
+            </summary>
+            <param name="address">The complete path to the FTP file to delete</param>
+            <param name="credentials">The FTP server credentials</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.FTPGetFilesize(System.String,System.Net.ICredentials)">
+            <summary>
+            Get a file size of an FTP file
+            </summary>
+            <param name="address">The complete path to the FTP file</param>
+            <param name="credentials">The FTP server credentials</param>
+            <returns>The size of the file in bytes</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.FTPGetFilesizeAsync(System.String,System.Net.ICredentials)">
+            <summary>
+            Get a file size of an FTP file
+            </summary>
+            <param name="address">The complete path to the FTP file</param>
+            <param name="credentials">The FTP server credentials</param>
+            <returns>The size of the file in bytes</returns>
         </member>
         <member name="T:RelhaxModpack.XmlLoadType">
             <summary>

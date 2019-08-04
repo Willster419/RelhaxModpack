@@ -693,9 +693,9 @@ namespace RelhaxModpack.Windows
             List<DatabasePackage> disabledPackages = new List<DatabasePackage>();
             List<DatabasePackage> removedPackages = new List<DatabasePackage>();
             List<DatabasePackage> missingPackages = new List<DatabasePackage>();
-            List<BeforeAfter> renamedPackages = new List<BeforeAfter>();
-            List<BeforeAfter> internallyRenamed = new List<BeforeAfter>();
-            List<BeforeAfter> movedPackages = new List<BeforeAfter>();
+            List<DatabaseBeforeAfter> renamedPackages = new List<DatabaseBeforeAfter>();
+            List<DatabaseBeforeAfter> internallyRenamed = new List<DatabaseBeforeAfter>();
+            List<DatabaseBeforeAfter> movedPackages = new List<DatabaseBeforeAfter>();
 
             //init strings
             CurrentModInfoXml = string.Empty;
@@ -875,7 +875,7 @@ namespace RelhaxModpack.Windows
                 if(!selectablePackage.NameFormatted.Equals(result.NameFormatted))
                 {
                     Logging.Updater("package rename-> old:{0}, new:{1}", LogLevel.Info, result.PackageName, selectablePackage.PackageName);
-                    renamedPackages.Add(new BeforeAfter() {Before = result, After = selectablePackage });
+                    renamedPackages.Add(new DatabaseBeforeAfter() {Before = result, After = selectablePackage });
                 }
             }
 
@@ -894,7 +894,7 @@ namespace RelhaxModpack.Windows
                 if (completeNamePathChanged && completePackageNamePathChanged)
                 {
                     Logging.Updater("package moved: {0}", LogLevel.Info, selectablePackage.PackageName);
-                    movedPackages.Add(new BeforeAfter { Before = result, After = selectablePackage });
+                    movedPackages.Add(new DatabaseBeforeAfter { Before = result, After = selectablePackage });
                 }
             }
 
@@ -931,7 +931,7 @@ namespace RelhaxModpack.Windows
                     {
                         SelectablePackage addResult = addResultList[0];
                         SelectablePackage removeResult = removeResultList[0];
-                        internallyRenamed.Add(new BeforeAfter() { Before = removeResult, After = addResult });
+                        internallyRenamed.Add(new DatabaseBeforeAfter() { Before = removeResult, After = addResult });
                         addedPackages.Remove(addedPackages.Where(pack => pack.PackageName.Equals(addResult.PackageName)).ToList()[0]);
                         removedPackages.Remove(removedPackages.Where(pack => pack.PackageName.Equals(removeResult.PackageName)).ToList()[0]);
                     }
@@ -954,8 +954,8 @@ namespace RelhaxModpack.Windows
                     {
                         SelectablePackage addResult = addResultList[0];
                         SelectablePackage removeResult = removeResultList[0];
-                        movedPackages.Add(new BeforeAfter() { Before = removeResult, After = addResult });
-                        renamedPackages.Add(new BeforeAfter() { Before = removeResult, After = addResult });
+                        movedPackages.Add(new DatabaseBeforeAfter() { Before = removeResult, After = addResult });
+                        renamedPackages.Add(new DatabaseBeforeAfter() { Before = removeResult, After = addResult });
 
                         for(int i = 0; i < addedPackages.Count; i++)
                         {
@@ -1038,11 +1038,11 @@ namespace RelhaxModpack.Windows
                 databaseUpdateText.AppendLine(" - " + dp.CompletePath);
 
             databaseUpdateText.AppendLine("\nRenamed:");
-                foreach (BeforeAfter dp in renamedPackages)
+                foreach (DatabaseBeforeAfter dp in renamedPackages)
                 databaseUpdateText.AppendFormat(" - \"{0}\" was renamed to \"{1}\"\r\n", dp.Before.NameFormatted, dp.After.NameFormatted);
 
             databaseUpdateText.AppendLine("\nMoved:");
-            foreach (BeforeAfter dp in movedPackages)
+            foreach (DatabaseBeforeAfter dp in movedPackages)
                 databaseUpdateText.AppendFormat(" - \"{0}\" was moved to \"{1}\"\r\n", dp.Before.CompletePath, dp.After.CompletePath);
 
             databaseUpdateText.AppendLine("\nDisabled:");
