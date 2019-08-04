@@ -4066,6 +4066,17 @@
             DatabaseEditor
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseEditor.LaunchedFromMainWindow">
+            <summary>
+            Indicates if this editor instance was launched from the MainWindow or from command line
+            </summary>
+            <remarks>This changes the behavior of the logging for the editor</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Windows.DatabaseEditor.#ctor">
+            <summary>
+            Create an instance of the DatabaseEditor
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.DatabaseEditor.InitializeComponent">
             <summary>
             InitializeComponent

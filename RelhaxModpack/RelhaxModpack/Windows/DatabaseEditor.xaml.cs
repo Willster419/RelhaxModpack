@@ -26,6 +26,7 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class DatabaseEditor : RelhaxWindow
     {
+        //private
         private EditorSettings EditorSettings;
         private List<DatabasePackage> GlobalDependencies = new List<DatabasePackage>();
         private List<Dependency> Dependencies = new List<Dependency>();
@@ -45,14 +46,23 @@ namespace RelhaxModpack.Windows
         private object SelectedItem = null;
         private Preview Preview;
         private bool UnsavedChanges = false;
-        public bool LaunchedFromMainWindow = false;
         private string[] UIHeaders = new string[]
         {
             "-----Global Dependencies-----",
             "-----Dependencies-----",
         };
 
+        //public
+        /// <summary>
+        /// Indicates if this editor instance was launched from the MainWindow or from command line
+        /// </summary>
+        /// <remarks>This changes the behavior of the logging for the editor</remarks>
+        public bool LaunchedFromMainWindow = false;
+
         #region Stuff
+        /// <summary>
+        /// Create an instance of the DatabaseEditor
+        /// </summary>
         public DatabaseEditor()
         {
             InitializeComponent();
