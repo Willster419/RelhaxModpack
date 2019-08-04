@@ -84,6 +84,31 @@ namespace RelhaxModpack
     }
 
     /// <summary>
+    /// A structure object to contain the WoT client version and online folder version. Allows for LINQ searching
+    /// </summary>
+    public struct VersionInfos
+    {
+        /// <summary>
+        /// The WoT client version e.g. 1.5.1.3
+        /// </summary>
+        public string WoTClientVersion;
+
+        /// <summary>
+        /// The online folder number (major game version) that contains the game zip files
+        /// </summary>
+        public string WoTOnlineFolderVersion;
+
+        /// <summary>
+        /// Overrides the ToString() function to display the two properties
+        /// </summary>
+        /// <returns>Displays the WoTClientVersion and WoTOnlineFolderVersion</returns>
+        public override string ToString()
+        {
+            return string.Format("WoTClientVersion={0}, WoTOnlineFolderVersion={1}", WoTClientVersion, WoTOnlineFolderVersion);
+        }
+    }
+
+    /// <summary>
     /// A utility class for static functions used in various places in the modpack
     /// </summary>
     public static class Utils
@@ -190,32 +215,6 @@ namespace RelhaxModpack
         }
 
         #endregion
-
-#warning move this out of Utils class
-        /// <summary>
-        /// A structure object to contain the WoT client version and online folder version. Allows for LINQ searching
-        /// </summary>
-        public struct VersionInfos
-        {
-            /// <summary>
-            /// The WoT client version e.g. 1.5.1.3
-            /// </summary>
-            public string WoTClientVersion;
-
-            /// <summary>
-            /// The online folder number (major game version) that contains the game zip files
-            /// </summary>
-            public string WoTOnlineFolderVersion;
-
-            /// <summary>
-            /// Overrides the ToString() function to display the two properties
-            /// </summary>
-            /// <returns>Displays the WoTClientVersion and WoTOnlineFolderVersion</returns>
-            public override string ToString()
-            {
-                return string.Format("WoTClientVersion={0}, WoTOnlineFolderVersion={1}", WoTClientVersion, WoTOnlineFolderVersion);
-            }
-        }
 
         #region Application Utils
         /// <summary>

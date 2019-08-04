@@ -4175,6 +4175,11 @@
             DatabaseUpdater
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Windows.DatabaseUpdater.#ctor">
+            <summary>
+            Create an instance of the DatabaseUpdater window
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.DatabaseUpdater.InitializeComponent">
             <summary>
             InitializeComponent
@@ -4527,6 +4532,27 @@
             The package reference for the database after changes
             </summary>
         </member>
+        <member name="T:RelhaxModpack.VersionInfos">
+            <summary>
+            A structure object to contain the WoT client version and online folder version. Allows for LINQ searching
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.VersionInfos.WoTClientVersion">
+            <summary>
+            The WoT client version e.g. 1.5.1.3
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.VersionInfos.WoTOnlineFolderVersion">
+            <summary>
+            The online folder number (major game version) that contains the game zip files
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.VersionInfos.ToString">
+            <summary>
+            Overrides the ToString() function to display the two properties
+            </summary>
+            <returns>Displays the WoTClientVersion and WoTOnlineFolderVersion</returns>
+        </member>
         <member name="T:RelhaxModpack.Utils">
             <summary>
             A utility class for static functions used in various places in the modpack
@@ -4594,27 +4620,6 @@
             </summary>
             <param name="keyword">The keyword to match</param>
             <returns>The first matching assembly name, or null if no matches</returns>
-        </member>
-        <member name="T:RelhaxModpack.Utils.VersionInfos">
-            <summary>
-            A structure object to contain the WoT client version and online folder version. Allows for LINQ searching
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utils.VersionInfos.WoTClientVersion">
-            <summary>
-            The WoT client version e.g. 1.5.1.3
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utils.VersionInfos.WoTOnlineFolderVersion">
-            <summary>
-            The online folder number (major game version) that contains the game zip files
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Utils.VersionInfos.ToString">
-            <summary>
-            Overrides the ToString() function to display the two properties
-            </summary>
-            <returns>Displays the WoTClientVersion and WoTOnlineFolderVersion</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.GetApplicationVersion">
             <summary>

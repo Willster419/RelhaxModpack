@@ -51,27 +51,18 @@ namespace RelhaxModpack.Windows
         //the modInfoXml document name to upload to the modInfo online folder
         //only used for uploading to the server TODO: can be moved to step 4 ONLY
         //RENAME TO NewModInfoXml
-        string CurrentModInfoXml = "";
+        private string CurrentModInfoXml = "";
         //the last supported modInfo, gotten from the supported_clients.xml for comparing with the currentModInfoXml
         //LastSupportedModInfoXml is old name
-        string LastSupportedModInfoXml = "";
+        private string LastSupportedModInfoXml = "";
         //the new database version to upload
-        string DatabaseUpdateVersion = "";
+        private string DatabaseUpdateVersion = "";
         //the version number of the last supported WoT client, used for making backup online folder
-        string LastSupportedTanksVersion = "";
+        private string LastSupportedTanksVersion = "";
 
         #endregion
 
         #region Stuff for Cleaning online folders
-        public struct VersionInfos
-        {
-            public string WoTClientVersion;
-            public string WoTOnlineFolderVersion;
-            public override string ToString()
-            {
-                return string.Format("WoTClientVersion={0}, WoTOnlineFolderVersion={1}", WoTClientVersion, WoTOnlineFolderVersion);
-            }
-        }
         List<VersionInfos> VersionInfosList;
         VersionInfos selectedVersionInfos;
         bool cancelDelete = false;
@@ -139,6 +130,9 @@ namespace RelhaxModpack.Windows
 
         #region Boring stuff
 
+        /// <summary>
+        /// Create an instance of the DatabaseUpdater window
+        /// </summary>
         public DatabaseUpdater()
         {
             InitializeComponent();
