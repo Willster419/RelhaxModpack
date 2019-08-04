@@ -20,6 +20,9 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class AskCloseWoT : RelhaxWindow
     {
+        /// <summary>
+        /// Create an instance of the AskCloseWoT window
+        /// </summary>
         public AskCloseWoT()
         {
             InitializeComponent();

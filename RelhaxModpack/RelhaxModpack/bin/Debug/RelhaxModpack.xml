@@ -3784,6 +3784,11 @@
             AskCloseWoT
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Windows.AskCloseWoT.#ctor">
+            <summary>
+            Create an instance of the AskCloseWoT window
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.AskCloseWoT.InitializeComponent">
             <summary>
             InitializeComponent
