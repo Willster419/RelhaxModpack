@@ -1612,7 +1612,7 @@ namespace RelhaxModpack.Windows
                 ApplyDatabaseObject(SelectedItem);
             }
             //actually save
-            XMLUtils.SaveDatabase(DefaultSaveLocationSetting.Text, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
+            XmlUtils.SaveDatabase(DefaultSaveLocationSetting.Text, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
                 GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.Legacy);//temp set for old database for now
             UnsavedChanges = false;
         }
@@ -1642,7 +1642,7 @@ namespace RelhaxModpack.Windows
                 if (MessageBox.Show("Use this as default save location?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
             //actually save
-            XMLUtils.SaveDatabase(SaveDatabaseDialog.FileName, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
+            XmlUtils.SaveDatabase(SaveDatabaseDialog.FileName, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
                 GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.Legacy);//temp set for old database for now
             UnsavedChanges = false;
         }
@@ -1679,14 +1679,14 @@ namespace RelhaxModpack.Windows
             }
 
             //the file exists, load it
-            XmlDocument doc = XMLUtils.LoadXmlDocument(fileToLoad, XmlLoadType.FromFile);
+            XmlDocument doc = XmlUtils.LoadXmlDocument(fileToLoad, XmlLoadType.FromFile);
             if (doc == null)
             {
                 MessageBox.Show("Failed to load the database, check the logfile");
                 Logging.Editor("doc is null from LoadXmlDocument(fileToload, xmlType)");
                 return;
             }
-            if (!XMLUtils.ParseDatabase(doc, GlobalDependencies, Dependencies, ParsedCategoryList, Path.GetDirectoryName(fileToLoad)))
+            if (!XmlUtils.ParseDatabase(doc, GlobalDependencies, Dependencies, ParsedCategoryList, Path.GetDirectoryName(fileToLoad)))
             {
                 MessageBox.Show("Failed to load the database, check the logfile");
                 return;
@@ -1699,8 +1699,8 @@ namespace RelhaxModpack.Windows
             //set the onlineFolder and version
             //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
             //for the folder version: //modInfoAlpha.xml/@version
-            Settings.WoTClientVersion = XMLUtils.GetXMLStringFromXPath(doc, "//modInfoAlpha.xml/@version");
-            Settings.WoTModpackOnlineFolderVersion = XMLUtils.GetXMLStringFromXPath(doc, "//modInfoAlpha.xml/@onlineFolder");
+            Settings.WoTClientVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@version");
+            Settings.WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@onlineFolder");
             LoadUI(GlobalDependencies, Dependencies, ParsedCategoryList);
             UnsavedChanges = false;
         }
@@ -1720,14 +1720,14 @@ namespace RelhaxModpack.Windows
 
             //actually load
             //the file exists, load it
-            XmlDocument doc = XMLUtils.LoadXmlDocument(DefaultSaveLocationSetting.Text, XmlLoadType.FromFile);
+            XmlDocument doc = XmlUtils.LoadXmlDocument(DefaultSaveLocationSetting.Text, XmlLoadType.FromFile);
             if (doc == null)
             {
                 MessageBox.Show("Failed to load the database, check the logfile");
                 Logging.Editor("doc is null from LoadXmlDocument(fileToload, xmlType)");
                 return;
             }
-            if (!XMLUtils.ParseDatabase(doc, GlobalDependencies, Dependencies, ParsedCategoryList, Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
+            if (!XmlUtils.ParseDatabase(doc, GlobalDependencies, Dependencies, ParsedCategoryList, Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
             {
                 MessageBox.Show("Failed to load the database, check the logfile");
                 return;
@@ -1740,8 +1740,8 @@ namespace RelhaxModpack.Windows
             //set the onlineFolder and version
             //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
             //for the folder version: //modInfoAlpha.xml/@version
-            Settings.WoTClientVersion = XMLUtils.GetXMLStringFromXPath(doc, "//modInfoAlpha.xml/@version");
-            Settings.WoTModpackOnlineFolderVersion = XMLUtils.GetXMLStringFromXPath(doc, "//modInfoAlpha.xml/@onlineFolder");
+            Settings.WoTClientVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@version");
+            Settings.WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@onlineFolder");
             LoadUI(GlobalDependencies, Dependencies, ParsedCategoryList);
             UnsavedChanges = false;
         }

@@ -193,7 +193,7 @@ namespace RelhaxModpack
                                 continue;
                             }
                             Logging.Info("adding patches from file {0}", file);
-                            XMLUtils.AddPatchesFromFile(patchList, file);
+                            XmlUtils.AddPatchesFromFile(patchList, file);
                         }
                         if(patchList.Count == 0)
                         {

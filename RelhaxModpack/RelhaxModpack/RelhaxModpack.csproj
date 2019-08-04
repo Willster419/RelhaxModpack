@@ -248,7 +248,7 @@
     <Compile Include="Utils\XmlBinary\PackedSectionReader.cs" />
     <Compile Include="Utils\XmlBinary\PrimitiveFileReader.cs" />
     <Compile Include="Utils\XmlBinary\XmlBinaryHandler.cs" />
-    <Compile Include="Utils\XMLUtils.cs" />
+    <Compile Include="Utils\XmlUtils.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

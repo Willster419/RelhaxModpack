@@ -203,7 +203,7 @@ namespace RelhaxModpack
         private static PatchExitCode XMLPatch(Patch p)
         {
             //load the xml document
-            XmlDocument doc = XMLUtils.LoadXmlDocument(p.CompletePath,XmlLoadType.FromFile);
+            XmlDocument doc = XmlUtils.LoadXmlDocument(p.CompletePath,XmlLoadType.FromFile);
             if (doc == null)
             {
                 Logging.Error("xml document from xml path is null");
@@ -374,13 +374,13 @@ namespace RelhaxModpack
 
                     //remove empty elements
                     Logging.Debug("Removing any empty xml elements");
-                    XDocument doc2 = XMLUtils.DocumentToXDocument(doc);
+                    XDocument doc2 = XmlUtils.DocumentToXDocument(doc);
                     //note that XDocuemnt toString drops declaration
                     //https://stackoverflow.com/questions/1228976/xdocument-tostring-drops-xml-encoding-tag
                     doc2.Descendants().Where(e => string.IsNullOrEmpty(e.Value)).Remove();
 
                     //update doc with doc2
-                    doc = XMLUtils.LoadXmlDocument(doc2.ToString(), XmlLoadType.FromString);
+                    doc = XmlUtils.LoadXmlDocument(doc2.ToString(), XmlLoadType.FromString);
                     Logging.Debug("xml remove complete");
                     break;
             }

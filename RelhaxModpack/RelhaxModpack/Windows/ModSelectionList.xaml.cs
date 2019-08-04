@@ -316,7 +316,7 @@ namespace RelhaxModpack.Windows
                 }
 
                 //load the xml document into xml object
-                XmlDocument modInfoDocument = XMLUtils.LoadXmlDocument(modInfoXml, XmlLoadType.FromString);
+                XmlDocument modInfoDocument = XmlUtils.LoadXmlDocument(modInfoXml, XmlLoadType.FromString);
                 if(modInfoDocument == null)
                 {
                     Logging.Error("Failed to parse modInfoxml from xml string");
@@ -327,8 +327,8 @@ namespace RelhaxModpack.Windows
                 //if not stable db, update WoT current version and online folder version macros from modInfoxml itself
                 if (databaseVersion != DatabaseVersions.Stable)
                 {
-                    Settings.WoTModpackOnlineFolderVersion = XMLUtils.GetXMLStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@onlineFolder");
-                    Settings.WoTClientVersion = XMLUtils.GetXMLStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@version");
+                    Settings.WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@onlineFolder");
+                    Settings.WoTClientVersion = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@version");
                 }
 
                 //parse the modInfoXml to list in memory
@@ -354,7 +354,7 @@ namespace RelhaxModpack.Windows
                             return false;
                         }
                         */
-                        if (!XMLUtils.ParseDatabase(modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
+                        if (!XmlUtils.ParseDatabase(modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
                         {
                             Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
                             MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
@@ -409,7 +409,7 @@ namespace RelhaxModpack.Windows
                             MessageBox.Show(Translations.GetTranslatedString("failedToParse") + "database V2");
                             return false;
                         }*/
-                        if (!XMLUtils.ParseDatabase(modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
+                        if (!XmlUtils.ParseDatabase(modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
                         {
                             Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
                             MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
@@ -418,7 +418,7 @@ namespace RelhaxModpack.Windows
                         break;
 
                     case DatabaseVersions.Test:
-                        if (!XMLUtils.ParseDatabase1V1FromFiles(Path.GetDirectoryName(ModpackSettings.CustomModInfoPath), modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
+                        if (!XmlUtils.ParseDatabase1V1FromFiles(Path.GetDirectoryName(ModpackSettings.CustomModInfoPath), modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
                         {
                             Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
                             MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
@@ -444,7 +444,7 @@ namespace RelhaxModpack.Windows
                 }
                 else
                 {
-                    Md5HashDocument = XMLUtils.LoadXDocument(Settings.MD5HashDatabaseXmlFile, XmlLoadType.FromFile);
+                    Md5HashDocument = XmlUtils.LoadXDocument(Settings.MD5HashDatabaseXmlFile, XmlLoadType.FromFile);
                     if (Md5HashDocument == null)
                     {
                         Logging.Warning("Failed to load md5 hash document, creating new");
@@ -561,7 +561,7 @@ namespace RelhaxModpack.Windows
                         if(File.Exists(ModpackSettings.AutoOneclickSelectionFilePath))
                         {
                             //load the custom selection file
-                            SelectionsDocument = XMLUtils.LoadXmlDocument(ModpackSettings.AutoOneclickSelectionFilePath, XmlLoadType.FromFile);
+                            SelectionsDocument = XmlUtils.LoadXmlDocument(ModpackSettings.AutoOneclickSelectionFilePath, XmlLoadType.FromFile);
                             shouldLoadSomething = true;
                         }
                         else
@@ -574,7 +574,7 @@ namespace RelhaxModpack.Windows
                     //else check and load the use selection from auto launch command line
                     else if (!string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
                     {
-                        SelectionsDocument = XMLUtils.LoadXmlDocument(Path.Combine(Settings.RelhaxUserSelectionsFolder, CommandLineSettings.AutoInstallFileName), XmlLoadType.FromFile);
+                        SelectionsDocument = XmlUtils.LoadXmlDocument(Path.Combine(Settings.RelhaxUserSelectionsFolder, CommandLineSettings.AutoInstallFileName), XmlLoadType.FromFile);
                         shouldLoadSomething = true;
                     }
                     else if (ModpackSettings.SaveLastSelection)
@@ -582,19 +582,19 @@ namespace RelhaxModpack.Windows
                         if (!File.Exists(Settings.LastInstalledConfigFilepath))
                         {
                             Logging.Warning("LastInstalledConfigFile does not exist, loading as first time with check default mods");
-                            SelectionsDocument = XMLUtils.LoadXmlDocument(Utils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
+                            SelectionsDocument = XmlUtils.LoadXmlDocument(Utils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
                             shouldLoadSomething = true;
                         }
                         else
                         {
-                            SelectionsDocument = XMLUtils.LoadXmlDocument(Settings.LastInstalledConfigFilepath, XmlLoadType.FromFile);
+                            SelectionsDocument = XmlUtils.LoadXmlDocument(Settings.LastInstalledConfigFilepath, XmlLoadType.FromFile);
                             shouldLoadSomething = true;
                         }
                     }
                     else
                     {
                         //load default checked mods
-                        SelectionsDocument = XMLUtils.LoadXmlDocument(Utils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
+                        SelectionsDocument = XmlUtils.LoadXmlDocument(Utils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
                         shouldLoadSomething = true;
                     }
 
@@ -1577,7 +1577,7 @@ namespace RelhaxModpack.Windows
             //get the string version of the document, determine what to do from there
             string selectionVersion = "";
             //attribute example: "//root/element/@attribute"
-            selectionVersion = XMLUtils.GetXMLStringFromXPath(document, "//mods/@ver");
+            selectionVersion = XmlUtils.GetXmlStringFromXPath(document, "//mods/@ver");
             Logging.Debug("SelectionVersion={0}", selectionVersion);
             switch(selectionVersion)
             {

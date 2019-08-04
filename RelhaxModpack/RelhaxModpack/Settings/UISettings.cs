@@ -119,7 +119,7 @@ namespace RelhaxModpack
 
             //get the UI format version of the xml file
             string versionXpath = "//" + Settings.UISettingsColorFile + "/@version";
-            string formatVersion = XMLUtils.GetXMLStringFromXPath(UIDocument, versionXpath);
+            string formatVersion = XmlUtils.GetXmlStringFromXPath(UIDocument, versionXpath);
             if(string.IsNullOrWhiteSpace(formatVersion))
             {
                 Logging.WriteToLog("formatVersion string is null! in ApplyColorSettings()",Logfiles.Application, LogLevel.Error);
@@ -147,7 +147,7 @@ namespace RelhaxModpack
             //build the xpath string
             string windowXPathRefrence = w.GetType().ToString();
             string XPathWindowColor = string.Format("//{0}/{1}", Settings.UISettingsColorFile,windowXPathRefrence);
-            XmlNode WindowColorSetting = XMLUtils.GetXMLNodeFromXPath(UIDocument, XPathWindowColor);
+            XmlNode WindowColorSetting = XmlUtils.GetXmlNodeFromXPath(UIDocument, XPathWindowColor);
 
             //apply window color settings if exist
             if(WindowColorSetting !=null )
@@ -167,7 +167,7 @@ namespace RelhaxModpack
                         //https://msdn.microsoft.com/en-us/library/ms256086(v=vs.110).aspx
                         //get the xpath component
                         string XPathColorSetting = string.Format("//{0}/{1}/ColorSetting[@ID = \"{2}\"]", Settings.UISettingsColorFile,windowXPathRefrence,ID);
-                        XmlNode brushSettings = XMLUtils.GetXMLNodeFromXPath(UIDocument, XPathColorSetting);
+                        XmlNode brushSettings = XmlUtils.GetXmlNodeFromXPath(UIDocument, XPathColorSetting);
                         //make sure setting is there
                         if(brushSettings != null)
                             ApplyBrushSettings(element, brushSettings);

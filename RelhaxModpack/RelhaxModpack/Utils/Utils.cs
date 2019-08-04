@@ -260,7 +260,7 @@ namespace RelhaxModpack
                 return null;
             }
 
-            return XMLUtils.LoadXmlDocument(xmlString, XmlLoadType.FromString);
+            return XmlUtils.LoadXmlDocument(xmlString, XmlLoadType.FromString);
         }
 
         /// <summary>
@@ -319,8 +319,8 @@ namespace RelhaxModpack
             }
 
             string applicationOnlineVersion = (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Stable) ?
-                XMLUtils.GetXMLStringFromXPath(doc, "//version/relhax_v2_stable").Trim() ://stable
-                XMLUtils.GetXMLStringFromXPath(doc, "//version/relhax_v2_beta").Trim();//beta
+                XmlUtils.GetXmlStringFromXPath(doc, "//version/relhax_v2_stable").Trim() ://stable
+                XmlUtils.GetXmlStringFromXPath(doc, "//version/relhax_v2_beta").Trim();//beta
 
             Logging.Info("Current build is {0} Online build is {1}", currentVersion, applicationOnlineVersion);
 

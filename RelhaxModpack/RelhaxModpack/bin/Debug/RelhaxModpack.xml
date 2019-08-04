@@ -5144,58 +5144,298 @@
         </member>
         <member name="F:RelhaxModpack.XmlLoadType.FromFile">
             <summary>
-            loading xml from a file on disk
+            loading Xml from a file on disk
             </summary>
         </member>
         <member name="F:RelhaxModpack.XmlLoadType.FromString">
             <summary>
-            loading xml from a text string
+            loading Xml from a text string
             </summary>
         </member>
-        <member name="T:RelhaxModpack.XMLUtils">
+        <member name="T:RelhaxModpack.DatabaseXmlVersion">
             <summary>
-            Utility class for all XML static methods
+            The enumeration representations of the Xml database saving format
             </summary>
         </member>
-        <member name="M:RelhaxModpack.XMLUtils.IsValidXml(System.String)">
+        <member name="F:RelhaxModpack.DatabaseXmlVersion.Legacy">
             <summary>
-            check to make sure an xml file is valid
+            The Legacy format. All in one document
             </summary>
-            <param name="filePath">The path to the xml file</param>
-            <returns>True if valid XML, false otherwise</returns>
         </member>
-        <member name="M:RelhaxModpack.XMLUtils.IsValidXml(System.String,System.String)">
+        <member name="F:RelhaxModpack.DatabaseXmlVersion.OnePointOne">
             <summary>
-            check to make sure an xml file is valid
+            The 1.1 format. A root file, a file for the global and standard dependencies, and a file for each categories
             </summary>
-            <param name="xmlString">The xml text string</param>
+        </member>
+        <member name="T:RelhaxModpack.XmlUtils">
+            <summary>
+            Utility class for dealing with Xml features and functions
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.IsValidXml(System.String)">
+            <summary>
+            Check to make sure an Xml file is valid
+            </summary>
+            <param name="filePath">The path to the Xml file</param>
+            <returns>True if valid Xml, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.IsValidXml(System.String,System.String)">
+            <summary>
+            Check to make sure an Xml file is valid
+            </summary>
+            <param name="xmlString">The Xml text string</param>
             <param name="fileName">the name of the file, used for debugging purposes</param>
-            <returns>True if valid XML, false otherwise</returns>
+            <returns>True if valid Xml, false otherwise</returns>
         </member>
-        <member name="M:RelhaxModpack.XMLUtils.GetXMLStringFromXPath(System.String,System.String)">
+        <member name="M:RelhaxModpack.XmlUtils.GetXmlStringFromXPath(System.String,System.String)">
             <summary>
-            get an xml element attribute given an xml path
+            Get an Xml element attribute given an Xml path
             </summary>
-            <param name="file">The path to the XML file</param>
+            <param name="file">The path to the Xml file</param>
             <param name="xpath">The xpath search string</param>
             <returns>The value from the xpath search, otherwise null</returns>
         </member>
-        <member name="M:RelhaxModpack.XMLUtils.GetXMLStringFromXPath(System.String,System.String,System.String)">
+        <member name="M:RelhaxModpack.XmlUtils.GetXmlStringFromXPath(System.String,System.String,System.String)">
             <summary>
-            get an xml element attribute given an xml path
+            Get an Xml element attribute given an Xml path
             </summary>
-            <param name="xmlString">The XML text string</param>
+            <param name="xmlString">The Xml text string</param>
             <param name="xpath">The xpath search string</param>
             <param name="filename"></param>
             <returns>The value from the xpath search, otherwise null</returns>
         </member>
-        <member name="M:RelhaxModpack.XMLUtils.GetXMLStringFromXPath(System.Xml.XmlDocument,System.String)">
+        <member name="M:RelhaxModpack.XmlUtils.GetXmlStringFromXPath(System.Xml.XmlDocument,System.String)">
             <summary>
-            get an xml element attribute given an xml path
+            Get an Xml element attribute given an Xml path
             </summary>
-            <param name="doc">The XML document object to check</param>
+            <param name="doc">The Xml document object to check</param>
             <param name="xpath">The xpath search string</param>
             <returns>The value from the xpath search, otherwise null</returns>
+            <remarks>
+            The following are Xml attribute examples
+            element example: "//root/element"
+            attribute example: "//root/element/@attribute"
+            for the onlineFolder version: //modInfoAlpha.Xml/@onlineFolder
+            for the folder version: //modInfoAlpha.Xml/@version
+            </remarks>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.GetXmlNodeFromXPath(System.String,System.String)">
+            <summary>
+            Get an Xml node value given an Xml path
+            </summary>
+            <param name="file">The path to the Xml file</param>
+            <param name="xpath">The xpath search string</param>
+            <returns>The Xml node object of the search result, or null</returns>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.GetXmlNodeFromXPath(System.String,System.String,System.String)">
+            <summary>
+            Get an Xml node value given an Xml path
+            </summary>
+            <param name="xmlString">The Xml string to parse</param>
+            <param name="xpath">The xpath search string</param>
+            <param name="filename">The name of the file, used for logging purposes</param>
+            <returns>The Xml node object of the search result, or null</returns>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.GetXmlNodeFromXPath(System.Xml.XmlDocument,System.String)">
+            <summary>
+            Get an Xml node value given an Xml path
+            </summary>
+            <param name="doc">The XmlDocument object to search</param>
+            <param name="xpath">The xpath string</param>
+            <returns>The Xml node object of the search result, or null</returns>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.GetXmlNodesFromXPath(System.String,System.String)">
+            <summary>
+            Get a List of Xml nodes that match given an Xml path
+            </summary>
+            <param name="file">The path to the Xml file</param>
+            <param name="xpath">The xpath string</param>
+            <returns>The node list of matching results, or null</returns>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.GetXmlNodesFromXPath(System.String,System.String,System.String)">
+            <summary>
+            Get a List of Xml nodes that match given an Xml path
+            </summary>
+            <param name="xmlString">The xml document in a string</param>
+            <param name="filename">The name of the document for logging purposes</param>
+            <param name="xpath">The xpath string</param>
+            <returns>The node list of matching results, or null</returns>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.GetXmlNodesFromXPath(System.Xml.XmlDocument,System.String)">
+            <summary>
+            Get a List of Xml nodes that match given an Xml path
+            </summary>
+            <param name="doc">The XmlDocument to search</param>
+            <param name="xpath">The xml path string</param>
+            <returns>The node list of matching results, or null</returns>
+            <remarks>XmlElement and XmlAttribute inherit from XmlNode</remarks> 
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.ParseDatabase(System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Category},System.String)">
+            <summary>
+            Parse the Xml database of any type into lists in memory
+            </summary>
+            <param name="modInfoDocument">The root document. Can either be the entire document (Legacy) or the file with database header information only (OnePointOne)</param>
+            <param name="globalDependencies">The global dependencies list</param>
+            <param name="dependencies">The dependencies list</param>
+            <param name="parsedCategoryList">The category list</param>
+            <param name="location">The folder path to the OnePointOne+ additional xml files as part of the database</param>
+            <returns>True if database parsing was a success, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.ParseDatabase1V1FromFiles(System.String,System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Category})">
+            <summary>
+            Parse a database into the version 1.1 format from files on the disk
+            </summary>
+            <param name="rootPath">The path to the folder that contains all the xml database files</param>
+            <param name="rootDocument">The root document object</param>
+            <param name="globalDependencies">The list of global dependencies</param>
+            <param name="dependencies">The list of dependencies</param>
+            <param name="parsedCategoryList">The list of categories</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.ParseDatabase1V1FromStrings(System.String,System.String,System.Collections.Generic.List{System.String},System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Category})">
+            <summary>
+            Parse a database into version 1.1 from string representations of the Xml files
+            </summary>
+            <param name="globalDependenciesXml">The Xml string of the global dependencies document</param>
+            <param name="dependneciesXml">The Xml string of the dependencies document</param>
+            <param name="categoriesXml">The list of Xml strings of the categories document</param>
+            <param name="globalDependencies">The list of global dependencies</param>
+            <param name="dependencies">The list of dependencies</param>
+            <param name="parsedCategoryList">The list of categories</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.LoadDatabase1V1(System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{System.Xml.Linq.XDocument},System.Collections.Generic.List{RelhaxModpack.Category})">
+            <summary>
+            Parse a database into version 1.1 from XDocument objects
+            </summary>
+            <param name="globalDependenciesDoc">The Xml document of global dependencies</param>
+            <param name="globalDependenciesList">The list of global dependencies</param>
+            <param name="dependenciesDoc">The Xml document of dependencies</param>
+            <param name="dependenciesList">The list of dependencies</param>
+            <param name="categoryDocuments">The list of xml documents of the category Xml documents</param>
+            <param name="parsedCategoryList">The list of categories</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.DocumentToXDocument(System.Xml.XmlDocument)">
+            <summary>
+            Convert an XmlDocument to an XDocument
+            </summary>
+            <param name="doc">The XmlDocument to convert</param>
+            <returns>The converted XDocument</returns>
+            <remarks>See https://blogs.msdn.microsoft.com/xmlteam/2009/03/31/converting-from-xmldocument-to-xdocument/ </remarks>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.LoadXDocument(System.String,RelhaxModpack.XmlLoadType)">
+            <summary>
+            Load an Xml document to an XDocument object
+            </summary>
+            <param name="fileOrXml">The filepath or string representation of the Xml document</param>
+            <param name="type">The type to define if fileOrXml is a file path or the Xml string</param>
+            <returns>A parsed XDocument of the Xml document</returns>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.LoadXmlDocument(System.String,RelhaxModpack.XmlLoadType)">
+            <summary>
+            Load an Xml document to an XmlDocument object
+            </summary>
+            <param name="fileOrXml">The filepath or string representation of the Xml document</param>
+            <param name="type">The type to define if fileOrXml is a file path or the Xml string</param>
+            <returns>A parsed XmlDocument of the Xml document</returns>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.UnpackXmlFile(RelhaxModpack.XmlUnpack,System.Text.StringBuilder)">
+            <summary>
+            Copies an xml file from an archive or directory path and unpacks it from binary Xml to human-readable Xml
+            </summary>
+            <param name="xmlUnpack">The Xml unpack instructions object</param>
+            <param name="unpackBuilder">The stringBuilder to log the generated files location for the install log</param>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.Unpack(System.String,System.String,System.String)">
+            <summary>
+            Copies a file from one path or in an archive to a destination
+            </summary>
+            <param name="package">The zip archive to extract the file from</param>
+            <param name="sourceCompletePath">The complete path to the file. Could be a path on disk, or a path in a zip archive</param>
+            <param name="destinationCompletePath">The complete path to copy the destination file to</param>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.ParseDatabaseLegacy(System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Category},System.Boolean)">
+            <summary>
+            Parses the database Xml document from the legacy format into memory
+            </summary>
+            <param name="doc">The document to parse from</param>
+            <param name="globalDependencies">The list of global dependencies</param>
+            <param name="dependencies">The list of dependencies</param>
+            <param name="logicalDependencies">The list of logical dependencies</param>
+            <param name="parsedCatagoryList">The list of categories</param>
+            <param name="buildRefrences">Flag for if the list references (like level, parent, topParent) should be built as well</param>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.SaveDatabaseLegacy(System.String,System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Category})">
+            <summary>
+            Saves the current mod database into the legacy document format
+            </summary>
+            <param name="saveLocation">The file save location</param>
+            <param name="doc">The XmlDocument to save into</param>
+            <param name="globalDependencies">The list of global dependencies</param>
+            <param name="dependencies">The list of dependencies</param>
+            <param name="parsedCatagoryList">The list of categories</param>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.SaveDatabase(System.String,System.String,System.String,System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Category},RelhaxModpack.DatabaseXmlVersion)">
+            <summary>
+            Save the database to an Xml version
+            </summary>
+            <param name="saveLocation">The folder path to save the files into</param>
+            <param name="gameVersion">The version of the game that this database supports</param>
+            <param name="onlineFolderVersion">The online folder for the zip file location of this database</param>
+            <param name="globalDependencies">The list of global dependencies</param>
+            <param name="dependencies">The list of dependencies</param>
+            <param name="parsedCatagoryList">The list of categories</param>
+            <param name="versionToSaveAs">The Xml version of the database to save as</param>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.SaveDatabase1V1(System.String,System.Xml.XmlDocument,System.Xml.XmlDeclaration,System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Category})">
+            <summary>
+            Save the database to the Xml version 1.1 standard
+            </summary>
+            <param name="savePath">The path to save all the xml files to</param>
+            <param name="doc">The root XmlDocument to save the header information to</param>
+            <param name="xmlDeclaration">The Xml declaration to use for the database fails</param>
+            <param name="globalDependencies">The list of global dependencies</param>
+            <param name="dependencies">The list of dependencies</param>
+            <param name="parsedCatagoryList">The list of categories</param>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.SaveDatabaseList1V1(System.Collections.IList,System.Xml.XmlElement,System.Xml.XmlDocument,System.String)">
+            <summary>
+            Saves a list of packages to a document
+            </summary>
+            <param name="packagesToSave">The generic list of packages to save</param>
+            <param name="documentRootElement">The element that will be holding this list</param>
+            <param name="docToMakeElementsFrom">The document needed to create Xml elements and attributes</param>
+            <param name="nameToSaveElementsBy">The string name to save the Xml element name by</param>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.AddPatchesFromFile(System.Collections.Generic.List{RelhaxModpack.Patch},System.String,System.String)">
+            <summary>
+            Parse a list of patch instructions from an Xml file into patch objects
+            </summary>
+            <param name="patches">The list of patches to parse into</param>
+            <param name="filename">The name of the file to parse from</param>
+            <param name="originalNameFromZip">The original name when extracted from the zip file during install time</param>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.AddShortcutsFromFile(System.Collections.Generic.List{RelhaxModpack.Shortcut},System.String)">
+            <summary>
+            Parse a list of shortcut instructions from an Xml file into shortcut objects
+            </summary>
+            <param name="shortcuts">The list of shortcuts to parse into</param>
+            <param name="filename">The name of the file to parse from</param>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.AddXmlUnpackFromFile(System.Collections.Generic.List{RelhaxModpack.XmlUnpack},System.String)">
+            <summary>
+            Parse a list of Xml unpack instructions from an Xml file into XmlUnpack objects
+            </summary>
+            <param name="xmlUnpacks">The list of XmlUnpacks to parse into</param>
+            <param name="filename">The name of the file to parse from</param>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.AddAtlasFromFile(System.Collections.Generic.List{RelhaxModpack.Atlas},System.String)">
+            <summary>
+            Parse a list of Xml atlas creation instructions from an Xml file into Atlas objects
+            </summary>
+            <param name="atlases">The list of Atlases to parse into</param>
+            <param name="filename">The name of the file to parse from</param>
         </member>
         <member name="T:RelhaxModpack.ReturnCodes">
             <summary>

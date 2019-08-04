@@ -69,7 +69,7 @@ namespace RelhaxModpack.Windows
             }
 
             //load selections into stackpanel
-            XmlNodeList selectionsList = XMLUtils.GetXMLNodesFromXPath(doc, "//selections/selection");
+            XmlNodeList selectionsList = XmlUtils.GetXmlNodesFromXPath(doc, "//selections/selection");
             if(selectionsList == null || selectionsList.Count == 0)
             {
                 Logging.Error("selectionsList is null or count is 0 after download");

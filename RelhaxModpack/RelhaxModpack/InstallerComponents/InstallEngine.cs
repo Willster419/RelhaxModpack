@@ -682,7 +682,7 @@ namespace RelhaxModpack.InstallerComponents
                     Prog.Filename = xmlUnpack.FileName;
                     Progress.Report(Prog);
 
-                    XMLUtils.UnpackXmlFile(xmlUnpack, unpackBuilder);
+                    XmlUtils.UnpackXmlFile(xmlUnpack, unpackBuilder);
                 }
                 Logging.Installer(unpackBuilder.ToString());
                 Logging.Info("Unpack of xml files complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
@@ -2382,7 +2382,7 @@ namespace RelhaxModpack.InstallerComponents
                         }
                         Utils.ApplyNormalFileProperties(completePath);
                         //ok NOW actually add the file to the patch list
-                        XMLUtils.AddPatchesFromFile(patches, completePath, OriginalPatchNames[Path.GetFileName(filename)]);
+                        XmlUtils.AddPatchesFromFile(patches, completePath, OriginalPatchNames[Path.GetFileName(filename)]);
                     }
                 }
             }
@@ -2422,7 +2422,7 @@ namespace RelhaxModpack.InstallerComponents
                     Utils.ApplyNormalFileProperties(completePath);
                     //ok NOW actually add the file to the patch list
                     Logging.Info("Adding shortcuts from shortcutFile {1}", Logfiles.Application, filename);
-                    XMLUtils.AddShortcutsFromFile(shortcuts, filename);
+                    XmlUtils.AddShortcutsFromFile(shortcuts, filename);
                 }
             }
             return shortcuts;
@@ -2459,7 +2459,7 @@ namespace RelhaxModpack.InstallerComponents
 
                         //ok NOW actually add the file to the patch list
                         Logging.Info("Adding xml unpack entries from file {1}", Logfiles.Application, filename);
-                        XMLUtils.AddXmlUnpackFromFile(XmlUnpacks, filename);
+                        XmlUtils.AddXmlUnpackFromFile(XmlUnpacks, filename);
                     }
                 }
             }
@@ -2509,7 +2509,7 @@ namespace RelhaxModpack.InstallerComponents
                         Utils.ApplyNormalFileProperties(completePath);
                         //ok NOW actually add the file to the patch list
                         Logging.Info("Adding atlas entries from file {1}", Logfiles.Application, filename);
-                        XMLUtils.AddAtlasFromFile(atlases, filename);
+                        XmlUtils.AddAtlasFromFile(atlases, filename);
                     }
                 }
             }

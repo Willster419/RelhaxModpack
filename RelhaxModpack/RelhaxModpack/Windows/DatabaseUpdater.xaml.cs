@@ -151,8 +151,8 @@ namespace RelhaxModpack.Windows
                 LogOutput.Text = "Loading ModInfo...";
                 //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
                 //for the folder version: //modInfoAlpha.xml/@version
-                Settings.WoTModpackOnlineFolderVersion = XMLUtils.GetXMLStringFromXPath(SelectModInfo.FileName, "//modInfoAlpha.xml/@onlineFolder");
-                Settings.WoTClientVersion = XMLUtils.GetXMLStringFromXPath(SelectModInfo.FileName, "//modInfoAlpha.xml/@version");
+                Settings.WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(SelectModInfo.FileName, "//modInfoAlpha.xml/@onlineFolder");
+                Settings.WoTClientVersion = XmlUtils.GetXmlStringFromXPath(SelectModInfo.FileName, "//modInfoAlpha.xml/@version");
                 string versionInfo = string.Format("{0}={1},  {2}={3}", nameof(Settings.WoTModpackOnlineFolderVersion)
                     , Settings.WoTModpackOnlineFolderVersion, nameof(Settings.WoTClientVersion), Settings.WoTClientVersion);
                 Logging.Updater(versionInfo);
@@ -221,7 +221,7 @@ namespace RelhaxModpack.Windows
             List<Dependency> dependencies = new List<Dependency>();
             XmlDocument doc = new XmlDocument();
             doc.Load(SelectModInfo.FileName);
-            XMLUtils.ParseDatabase(doc, globalDependencies, dependencies, parsecCateogryList);
+            XmlUtils.ParseDatabase(doc, globalDependencies, dependencies, parsecCateogryList);
             //link stuff in memory or something
             Utils.BuildLinksRefrence(parsecCateogryList, false);
             //create variables
@@ -468,12 +468,12 @@ namespace RelhaxModpack.Windows
             using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
             {
                 string xml = await client.DownloadStringTaskAsync(PrivateStuff.FTPManagerInfoRoot + Settings.SupportedClients);
-                doc = XMLUtils.LoadXmlDocument(xml, XmlLoadType.FromString);
+                doc = XmlUtils.LoadXmlDocument(xml, XmlLoadType.FromString);
             }
             //parse each online folder to list type string
             ReportProgress("Parsing " + Settings.SupportedClients);
             CleanFoldersOnlineStep2b.Items.Clear();
-            XmlNodeList supportedClients = XMLUtils.GetXMLNodesFromXPath(doc, "//versions/version");
+            XmlNodeList supportedClients = XmlUtils.GetXmlNodesFromXPath(doc, "//versions/version");
             VersionInfosList = new List<VersionInfos>();
             foreach (XmlNode node in supportedClients)
             {
@@ -533,7 +533,7 @@ namespace RelhaxModpack.Windows
                     if(infos.WoTClientVersion.Equals("GITHUB"))
                     {
                         doc.LoadXml(await client.DownloadStringTaskAsync(Settings.BetaDatabaseV1URL));
-                        string betaDatabaseOnlineFolderVersion = XMLUtils.GetXMLStringFromXPath(doc, Settings.DatabaseOnlineFolderXpath);
+                        string betaDatabaseOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, Settings.DatabaseOnlineFolderXpath);
                         ReportProgress(string.Format("GITHUB online folder={0}, selected online folder to clean version={1}",
                             betaDatabaseOnlineFolderVersion, selectedVersionInfos.WoTOnlineFolderVersion));
                         if (!betaDatabaseOnlineFolderVersion.Equals(selectedVersionInfos.WoTOnlineFolderVersion))
@@ -552,7 +552,7 @@ namespace RelhaxModpack.Windows
                         doc.LoadXml(await client.DownloadStringTaskAsync(PrivateStuff.ModInfosLocation + newModInfoName));
                     }
                 }
-                if (!XMLUtils.ParseDatabase(doc, globalDependencies, dependencies, parsedCategoryList))
+                if (!XmlUtils.ParseDatabase(doc, globalDependencies, dependencies, parsedCategoryList))
                 {
                     ReportProgress("failed to parse modInfo to lists");
                     return;
@@ -707,7 +707,7 @@ namespace RelhaxModpack.Windows
             ReportProgress("Loading current modInfo.xml and checking for duplicates");
             XmlDocument currentDatabase = new XmlDocument();
             currentDatabase.Load(SelectModInfo.FileName);
-            if(!XMLUtils.ParseDatabase(currentDatabase,globalDependencies,dependencies,parsedCategoryList))
+            if(!XmlUtils.ParseDatabase(currentDatabase,globalDependencies,dependencies,parsedCategoryList))
             {
                 ReportProgress("failed to parse modInfo to lists");
                 return;
@@ -731,7 +731,7 @@ namespace RelhaxModpack.Windows
             string dateTimeFormat = string.Format("{0:yyyy-MM-dd}", DateTime.Now);
 
             //load manager version xml file
-            XmlDocument doc = XMLUtils.LoadXmlDocument(ManagerVersionPath, XmlLoadType.FromFile);
+            XmlDocument doc = XmlUtils.LoadXmlDocument(ManagerVersionPath, XmlLoadType.FromFile);
             XmlNode database_version_text = doc.SelectSingleNode("//version/database");
 
             //database update text is like this: <WoTVersion>_<Date>_<itteration>
@@ -782,7 +782,7 @@ namespace RelhaxModpack.Windows
             List<DatabasePackage> globalDependenciesOld = new List<DatabasePackage>();
             List<Dependency> dependenciesOld = new List<Dependency>();
             List<Category> parsedCateogryListOld = new List<Category>();
-            if(!XMLUtils.ParseDatabase(oldDatabase,globalDependenciesOld,dependenciesOld, parsedCateogryListOld))
+            if(!XmlUtils.ParseDatabase(oldDatabase,globalDependenciesOld,dependenciesOld, parsedCateogryListOld))
             {
                 ReportProgress("failed to parse modInfo to lists");
                 return;
@@ -1068,11 +1068,11 @@ namespace RelhaxModpack.Windows
             //save new modInfo.xml
             ReportProgress("Updating databases");
             File.Delete(SelectModInfo.FileName);
-            XMLUtils.SaveDatabase(SelectModInfo.FileName, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
+            XmlUtils.SaveDatabase(SelectModInfo.FileName, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
                 globalDependencies, dependencies, parsedCategoryList, DatabaseXmlVersion.Legacy);
 
             //and save it in new form as well
-            XMLUtils.SaveDatabase(RepoLatestDatabaseFolderPath, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
+            XmlUtils.SaveDatabase(RepoLatestDatabaseFolderPath, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
                 globalDependencies, dependencies, parsedCategoryList, DatabaseXmlVersion.OnePointOne);
 
             ReportProgress("Ready for step 4");
@@ -1137,7 +1137,7 @@ namespace RelhaxModpack.Windows
             if (!LastSupportedTanksVersion.Equals(Settings.WoTClientVersion))
             {
                 ReportProgress("DOES need to be updated/uploaded");
-                XmlDocument supportedClients = XMLUtils.LoadXmlDocument(SupportedClientsPath, XmlLoadType.FromFile);
+                XmlDocument supportedClients = XmlUtils.LoadXmlDocument(SupportedClientsPath, XmlLoadType.FromFile);
                 XmlNode versionRoot = supportedClients.SelectSingleNode("//versions");
                 XmlElement supported_client = supportedClients.CreateElement("version");
                 supported_client.InnerText = Settings.WoTClientVersion;

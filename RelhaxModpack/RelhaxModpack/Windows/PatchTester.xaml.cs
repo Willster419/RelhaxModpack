@@ -504,14 +504,14 @@ namespace RelhaxModpack.Windows
             }
             if((bool)OpenPatchfileDialog.ShowDialog())
             {
-                XmlDocument doc = XMLUtils.LoadXmlDocument(OpenPatchfileDialog.FileName, XmlLoadType.FromFile);
+                XmlDocument doc = XmlUtils.LoadXmlDocument(OpenPatchfileDialog.FileName, XmlLoadType.FromFile);
                 if(doc == null)
                 {
                     MessageBox.Show("Failed to load xml document, check the logs for more info");
                     return;
                 }
                 PatchesList.Items.Clear();
-                foreach(XmlNode node in XMLUtils.GetXMLNodesFromXPath(doc,"//patchs/patch"))
+                foreach(XmlNode node in XmlUtils.GetXmlNodesFromXPath(doc,"//patchs/patch"))
                 {
                     Patch patch = new Patch() { FromEditor = true };
                     foreach(XmlElement element in ((XmlElement)node).ChildNodes)

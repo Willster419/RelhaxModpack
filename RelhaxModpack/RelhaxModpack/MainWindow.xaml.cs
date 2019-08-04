@@ -554,11 +554,11 @@ namespace RelhaxModpack
                 }
 
                 //load the document info
-                doc = XMLUtils.LoadXmlDocument(xmlString, XmlLoadType.FromString);
+                doc = XmlUtils.LoadXmlDocument(xmlString, XmlLoadType.FromString);
             }
 
             //get new DB update version and compare
-            string databaseNewVersion = XMLUtils.GetXMLStringFromXPath(doc, "//version/database");
+            string databaseNewVersion = XmlUtils.GetXmlStringFromXPath(doc, "//version/database");
             Logging.Info(string.Format("Comparing database versions, old={0}, new={1}", Settings.DatabaseVersion, databaseNewVersion));
 
             if(string.IsNullOrWhiteSpace(Settings.DatabaseVersion))
@@ -917,7 +917,7 @@ namespace RelhaxModpack
 
                 //get the version of tanks in the format
                 //of the res_mods version folder i.e. 0.9.17.0.3
-                string versionTemp = XMLUtils.GetXMLStringFromXPath(Path.Combine(Settings.WoTDirectory, "version.xml"), "//version.xml/version");
+                string versionTemp = XmlUtils.GetXmlStringFromXPath(Path.Combine(Settings.WoTDirectory, "version.xml"), "//version.xml/version");
                 Settings.WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2);
 
                 //determine if current detected version of the game is supported
@@ -947,7 +947,7 @@ namespace RelhaxModpack
                     }
 
                     //copy inner text of each WoT version into a string array
-                    XmlNodeList supportedVersionsXML = XMLUtils.GetXMLNodesFromXPath(doc, "//versions/version");
+                    XmlNodeList supportedVersionsXML = XmlUtils.GetXmlNodesFromXPath(doc, "//versions/version");
                     string[] supportedVersionsString = new string[supportedVersionsXML.Count];
                     for (int i = 0; i < supportedVersionsXML.Count; i++)
                     {
@@ -1696,7 +1696,7 @@ namespace RelhaxModpack
             Logging.Info("Wot root directory parsed as " + Settings.WoTDirectory);
 
             //get the version of tanks in the format of the res_mods version folder i.e. 0.9.17.0.3
-            string versionTemp = XMLUtils.GetXMLStringFromXPath(Path.Combine(Settings.WoTDirectory, "version.xml"), "//version.xml/version");
+            string versionTemp = XmlUtils.GetXmlStringFromXPath(Path.Combine(Settings.WoTDirectory, "version.xml"), "//version.xml/version");
             Settings.WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2);
 
             //verify the uninstall

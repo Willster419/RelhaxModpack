@@ -216,14 +216,14 @@ namespace RelhaxModpack.AtlasesCreator
             Logging.Debug("atlas file {0}: atlas file unpack", Path.GetFileName(Atlas.AtlasFile));
             lock(DebugLockObject)
             {
-                XMLUtils.Unpack(Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.AtlasFile), tempAtlasImageFile);
+                XmlUtils.Unpack(Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.AtlasFile), tempAtlasImageFile);
             }
             Token.ThrowIfCancellationRequested();
 
             Logging.Debug("atlas file {0}: map file unpack", Path.GetFileName(Atlas.AtlasFile));
             lock (DebugLockObject)
             {
-                XMLUtils.Unpack(Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.MapFile), tempAtlasMapFile);
+                XmlUtils.Unpack(Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.MapFile), tempAtlasMapFile);
             }
             Token.ThrowIfCancellationRequested();
 
@@ -456,7 +456,7 @@ namespace RelhaxModpack.AtlasesCreator
             List<Texture> TextureList = new List<Texture>();
 
             //load the xml file
-            XDocument doc = XMLUtils.LoadXDocument(mapFile, XmlLoadType.FromFile);
+            XDocument doc = XmlUtils.LoadXDocument(mapFile, XmlLoadType.FromFile);
             if (doc == null)
             {
                 Logging.Error("Failed to load xml texture list in {0}", mapFile);
