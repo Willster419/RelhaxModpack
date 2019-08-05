@@ -421,6 +421,8 @@ namespace RelhaxModpack
             //apply the title change for beta application and beta database
             if (databaseVersion != DatabaseVersions.Stable)
                 Title = string.Format("{0} ({1} DB)", oldModpackTitle, databaseVersion.ToString());
+            else
+                Title = oldModpackTitle;
 
             if (ModpackSettings.ApplicationDistroVersion != ApplicationVersions.Stable)
             {
