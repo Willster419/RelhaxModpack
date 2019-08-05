@@ -3832,12 +3832,44 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.DevleoperSelectionsClosedEWventArgs">
+            <summary>
+            Event argument passed back to the caller for when the developer selection window is closed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.DevleoperSelectionsClosedEWventArgs.LoadSelection">
+            <summary>
+            Determines if a selection should be loaded (for example, if the user closed the window instead of selecting one)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.DevleoperSelectionsClosedEWventArgs.FileToLoad">
+            <summary>
+            the name of the file to load from the online list of selection files
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.DeveloperSelectionsClosedDelagate">
+            <summary>
+            The delegate callback for when the developer selections window is closed
+            </summary>
+            <param name="sender">The sender (this)</param>
+            <param name="e">The arguments</param>
+        </member>
         <member name="T:RelhaxModpack.Windows.DeveloperSelectionsViewer">
             <summary>
             Interaction logic for DeveloperSelectionsViewer.xaml
             </summary>
             <summary>
             DeveloperSelectionsViewer
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.Windows.DeveloperSelectionsViewer.OnDeveloperSelectionsClosed">
+            <summary>
+            Fires when the developer selection window is closed
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.DeveloperSelectionsViewer.#ctor">
+            <summary>
+            Create an instance of the DeveloperSelectionsViewer window
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.DeveloperSelectionsViewer.InitializeComponent">

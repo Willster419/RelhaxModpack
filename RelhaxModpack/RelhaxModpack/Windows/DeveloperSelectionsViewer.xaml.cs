@@ -16,24 +16,49 @@ using System.Xml;
 
 namespace RelhaxModpack.Windows
 {
+    /// <summary>
+    /// Event argument passed back to the caller for when the developer selection window is closed
+    /// </summary>
     public class DevleoperSelectionsClosedEWventArgs : EventArgs
     {
+        /// <summary>
+        /// Determines if a selection should be loaded (for example, if the user closed the window instead of selecting one)
+        /// </summary>
         public bool LoadSelection = false;
+
+        /// <summary>
+        /// the name of the file to load from the online list of selection files
+        /// </summary>
         public string FileToLoad = "";
     }
+
+    /// <summary>
+    /// The delegate callback for when the developer selections window is closed
+    /// </summary>
+    /// <param name="sender">The sender (this)</param>
+    /// <param name="e">The arguments</param>
     public delegate void DeveloperSelectionsClosedDelagate(object sender, DevleoperSelectionsClosedEWventArgs e);
+
     /// <summary>
     /// Interaction logic for DeveloperSelectionsViewer.xaml
     /// </summary>
     public partial class DeveloperSelectionsViewer : RelhaxWindow
     {
+        //public
+        /// <summary>
+        /// Fires when the developer selection window is closed
+        /// </summary>
+        public event DeveloperSelectionsClosedDelagate OnDeveloperSelectionsClosed;
+
+        //private
         //init it to false so that it only will get changed to true at that one point when it works
         private bool LoadSelection = false;
         private string FileToLoad = "";
-        public event DeveloperSelectionsClosedDelagate OnDeveloperSelectionsClosed;
         private WebClient client;
-        
 
+        /// <summary>
+        /// Create an instance of the DeveloperSelectionsViewer window
+        /// </summary>
         public DeveloperSelectionsViewer()
         {
             InitializeComponent();
