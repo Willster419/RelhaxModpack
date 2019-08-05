@@ -24,8 +24,14 @@ namespace RelhaxModpack.Windows
 
         private List<VersionInfos> VersionInfosList = new List<VersionInfos>();
 
+        /// <summary>
+        /// The selection version info struct that was selected from the user selection
+        /// </summary>
         public VersionInfos SelectedVersionInfo { get; private set; }
 
+        /// <summary>
+        /// Create an instance of the ExportModeSelect class
+        /// </summary>
         public ExportModeSelect()
         {
             InitializeComponent();

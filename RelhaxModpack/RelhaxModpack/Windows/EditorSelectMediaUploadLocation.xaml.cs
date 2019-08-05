@@ -20,12 +20,24 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class EditorSelectMediaUploadLocation : RelhaxWindow
     {
-
-        private string FTPPath = PrivateStuff.BigmodsFTPUsersMedias;
+        //public
+        /// <summary>
+        /// The FTP network credential
+        /// </summary>
         public NetworkCredential Credential;
+
+        /// <summary>
+        /// The FTP upload path to upload the media to
+        /// </summary>
         public string UploadPath;
+
+        //private
+        private string FTPPath = PrivateStuff.BigmodsFTPUsersMedias;
         private TreeViewItem root;
 
+        /// <summary>
+        /// Create an instance of the EditorSelectMediaUploadLocation window
+        /// </summary>
         public EditorSelectMediaUploadLocation()
         {
             InitializeComponent();

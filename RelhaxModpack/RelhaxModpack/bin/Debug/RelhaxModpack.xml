@@ -3951,6 +3951,21 @@
             EditorSelectMediaUploadLocation
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Windows.EditorSelectMediaUploadLocation.Credential">
+            <summary>
+            The FTP network credential
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.EditorSelectMediaUploadLocation.UploadPath">
+            <summary>
+            The FTP upload path to upload the media to
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.EditorSelectMediaUploadLocation.#ctor">
+            <summary>
+            Create an instance of the EditorSelectMediaUploadLocation window
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.EditorSelectMediaUploadLocation.InitializeComponent">
             <summary>
             InitializeComponent
@@ -3962,6 +3977,16 @@
             </summary>
             <summary>
             ExceptionCaptureDisplay
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ExceptionCaptureDisplay.#ctor">
+            <summary>
+            Create an instance of the ExceptionCaptureDisplay window
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.ExceptionCaptureDisplay.ExceptionText">
+            <summary>
+            Gets or sets the Exception text to display
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.ExceptionCaptureDisplay.InitializeComponent">
@@ -3977,20 +4002,40 @@
             ExportModeSelect
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Windows.ExportModeSelect.SelectedVersionInfo">
+            <summary>
+            The selection version info struct that was selected from the user selection
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ExportModeSelect.#ctor">
+            <summary>
+            Create an instance of the ExportModeSelect class
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.ExportModeSelect.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>
         </member>
-        <member name="T:RelhaxModpack.Windows.FirstLoadAknowledgements">
+        <member name="T:RelhaxModpack.Windows.FirstLoadAcknowledgments">
             <summary>
-            Interaction logic for FirstLoadAknowledgements.xaml
+            Interaction logic for FirstLoadAcknowledgments.xaml
             </summary>
             <summary>
-            FirstLoadAknowledgements
+            FirstLoadAcknowledgments
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.FirstLoadAknowledgements.InitializeComponent">
+        <member name="M:RelhaxModpack.Windows.FirstLoadAcknowledgments.#ctor">
+            <summary>
+            Create an instance of the FirstLoadAcknowledgments window
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.FirstLoadAcknowledgments.UserAgreed">
+            <summary>
+            Gets and sets is the user has agreed to the Acknowledgments before allowing him/her to use the application
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.FirstLoadAcknowledgments.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>
