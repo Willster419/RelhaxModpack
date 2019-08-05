@@ -4048,6 +4048,11 @@
             NewsViewer
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Windows.NewsViewer.#ctor">
+            <summary>
+            Create an instance of the NewsViewer window
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.NewsViewer.InitializeComponent">
             <summary>
             InitializeComponent

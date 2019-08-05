@@ -19,6 +19,9 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class NewsViewer : RelhaxWindow
     {
+        /// <summary>
+        /// Create an instance of the NewsViewer window
+        /// </summary>
         public NewsViewer()
         {
             InitializeComponent();
