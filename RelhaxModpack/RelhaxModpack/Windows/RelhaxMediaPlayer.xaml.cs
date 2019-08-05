@@ -14,17 +14,29 @@ namespace RelhaxModpack.UIComponents
     /// </summary>
     public partial class RelhaxMediaPlayer : UserControl
     {
-
-        private Timer UITimer = new Timer();
-        IWavePlayer waveOutDevice = new WaveOut();
-        MediaFoundationReader audioFileReader2;
+        //public
+        /// <summary>
+        /// The direct link to the audio file to preview
+        /// </summary>
         public string MediaURL { get; set; }
 
+        //private
+        private Timer UITimer = new Timer();
+        private IWavePlayer waveOutDevice = new WaveOut();
+        private MediaFoundationReader audioFileReader2;
+
+        /// <summary>
+        /// Creates an instance of the RelhaxMediaPlayer user control
+        /// </summary>
         public RelhaxMediaPlayer()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Creates an instance of the RelhaxMediaPlayer user control
+        /// </summary>
+        /// <param name="mediaURL">The direct link to the audio file to preview</param>
         public RelhaxMediaPlayer(string mediaURL)
         {
             InitializeComponent();

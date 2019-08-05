@@ -3481,6 +3481,22 @@
             RelhaxMediaPlayer
             </summary>
         </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxMediaPlayer.MediaURL">
+            <summary>
+            The direct link to the audio file to preview
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.#ctor">
+            <summary>
+            Creates an instance of the RelhaxMediaPlayer user control
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.#ctor(System.String)">
+            <summary>
+            Creates an instance of the RelhaxMediaPlayer user control
+            </summary>
+            <param name="mediaURL">The direct link to the audio file to preview</param>
+        </member>
         <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.InitializeComponent">
             <summary>
             InitializeComponent
