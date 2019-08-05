@@ -20,15 +20,44 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class EditorAddRemove : RelhaxWindow
     {
+        //public
+        /// <summary>
+        /// The list of parsed global dependencies
+        /// </summary>
         public List<DatabasePackage> GlobalDependencies;
+
+        /// <summary>
+        /// The list of parsed dependencies
+        /// </summary>
         public List<Dependency> Dependencies;
+
+        /// <summary>
+        /// The list of parsed categories
+        /// </summary>
         public List<Category> ParsedCategoryList;
+
+        /// <summary>
+        /// The referenced package when selecting to add, the package selected when removing
+        /// </summary>
         public DatabasePackage SelectedPackage = null;
+
+        /// <summary>
+        /// True is moving package, false is adding package
+        /// </summary>
         public bool EditOrAdd = true;
+
+        /// <summary>
+        /// Toggles if the user requests to add the package at a new level or in the same level as the referenced package
+        /// </summary>
         public bool AddSaveLevel = true;
+
+        //private
         private const string GlobalDependenciesCategoryHeader = "--Global Dependencies--";
         private const string DependenciesCategoryHeader = "--Dependencies--";
 
+        /// <summary>
+        /// Create an instance of the EditorAddRemove window
+        /// </summary>
         public EditorAddRemove()
         {
             InitializeComponent();

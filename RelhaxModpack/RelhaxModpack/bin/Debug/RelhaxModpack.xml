@@ -3903,6 +3903,41 @@
             EditorAddRemove
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Windows.EditorAddRemove.GlobalDependencies">
+            <summary>
+            The list of parsed global dependencies
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.EditorAddRemove.Dependencies">
+            <summary>
+            The list of parsed dependencies
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.EditorAddRemove.ParsedCategoryList">
+            <summary>
+            The list of parsed categories
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.EditorAddRemove.SelectedPackage">
+            <summary>
+            The referenced package when selecting to add, the package selected when removing
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.EditorAddRemove.EditOrAdd">
+            <summary>
+            True is moving package, false is adding package
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.EditorAddRemove.AddSaveLevel">
+            <summary>
+            Toggles if the user requests to add the package at a new level or in the same level as the referenced package
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.EditorAddRemove.#ctor">
+            <summary>
+            Create an instance of the EditorAddRemove window
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.EditorAddRemove.InitializeComponent">
             <summary>
             InitializeComponent
