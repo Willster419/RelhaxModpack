@@ -142,8 +142,8 @@ namespace RelhaxModpack
         /// The following are Xml attribute examples
         /// element example: "//root/element"
         /// attribute example: "//root/element/@attribute"
-        /// for the onlineFolder version: //modInfoAlpha.Xml/@onlineFolder
-        /// for the folder version: //modInfoAlpha.Xml/@version
+        /// for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
+        /// for the folder version: //modInfoAlpha.xml/@version
         /// </remarks>
         public static string GetXmlStringFromXPath(XmlDocument doc, string xpath)
         {
@@ -312,7 +312,7 @@ namespace RelhaxModpack
                 parsedCategoryList.Clear();
             //determine which version of the document we are loading. allows for loading of different versions if structure change
             //a blank value is assumed to be pre 2.0 version of the database
-            string versionString = GetXmlStringFromXPath(modInfoDocument, "//modInfoAlpha.Xml/@documentVersion");
+            string versionString = GetXmlStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@documentVersion");
             Logging.WriteToLog(nameof(versionString) + "=" + (string.IsNullOrEmpty(versionString)? "(null)" : versionString), Logfiles.Application, LogLevel.Info);
             if (string.IsNullOrEmpty(versionString))
                 Logging.Warning("versionString is null or empty, treating as legacy");
@@ -351,7 +351,7 @@ namespace RelhaxModpack
                 return false;
             }
             //document for global dependencies
-            string completeFilepath = Path.Combine(rootPath, GetXmlStringFromXPath(rootDocument, "/modInfoAlpha.Xml/globalDependencies/@file"));
+            string completeFilepath = Path.Combine(rootPath, GetXmlStringFromXPath(rootDocument, "/modInfoAlpha.xml/globalDependencies/@file"));
             if (!File.Exists(completeFilepath))
             {
                 Logging.Error("{0} file does not exist at {1}", "Global Dependency", completeFilepath);
@@ -361,7 +361,7 @@ namespace RelhaxModpack
             if (globalDepsDoc == null)
                 throw new BadMemeException("this should not be null");
             //document for dependencies
-            completeFilepath = Path.Combine(rootPath, GetXmlStringFromXPath(rootDocument, "/modInfoAlpha.Xml/dependencies/@file"));
+            completeFilepath = Path.Combine(rootPath, GetXmlStringFromXPath(rootDocument, "/modInfoAlpha.xml/dependencies/@file"));
             if (!File.Exists(completeFilepath))
             {
                 Logging.Error("{0} file does not exist at {1}", "Dependency", completeFilepath);
@@ -372,7 +372,7 @@ namespace RelhaxModpack
                 throw new BadMemeException("this should not be null");
             //list of documents for categories
             List<XDocument> categoryDocuments = new List<XDocument>();
-            foreach(XmlNode categoryNode in GetXmlNodesFromXPath(rootDocument, "//modInfoAlpha.Xml/categories/category"))
+            foreach(XmlNode categoryNode in GetXmlNodesFromXPath(rootDocument, "//modInfoAlpha.xml/categories/category"))
             {
                 //make string path
                 completeFilepath = Path.Combine(rootPath, categoryNode.Attributes["file"].Value);
@@ -732,7 +732,7 @@ namespace RelhaxModpack
             //LEGACY CONVERSION:
             //remove all the file loading stuff
             //add the global dependencies
-            foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.Xml/globaldependencies/globaldependency"))
+            foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/globaldependencies/globaldependency"))
             {
                 List<string> depNodeList = new List<string>() { "zipFile", "crc", "enabled", "packageName", "appendExtraction" };
                 List<string> optionalDepNodList = new List<string>() { "startAddress", "endAddress", "devURL", "timestamp", "logAtInstall" };
@@ -811,7 +811,7 @@ namespace RelhaxModpack
                 globalDependencies.Add(d);
             }
             //add the dependencies
-            foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.Xml/dependencies/dependency"))
+            foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/dependencies/dependency"))
             {
                 List<string> depNodeList = new List<string>() { "zipFile", "crc", "enabled", "packageName", "appendExtraction" };
                 List<string> optionalDepNodList = new List<string>() { "startAddress", "endAddress", "devURL", "timestamp" , "logicalDependencies", "logAtInstall" };
@@ -941,7 +941,7 @@ namespace RelhaxModpack
                 dependencies.Add(d);
             }
             //add the logicalDependencies
-            foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.Xml/logicalDependencies/logicalDependency"))
+            foreach (XElement dependencyNode in doc.XPathSelectElements("/modInfoAlpha.xml/logicalDependencies/logicalDependency"))
             {
                 List<string> depNodeList = new List<string>() { "zipFile", "crc", "enabled", "packageName", "logic" };
                 List<string> optionalDepNodList = new List<string>() { "startAddress", "endAddress", "devURL", "timestamp", "logAtInstall" };
@@ -1019,7 +1019,7 @@ namespace RelhaxModpack
                 }
                 logicalDependencies.Add(d);
             }
-            foreach (XElement catagoryHolder in doc.XPathSelectElements("/modInfoAlpha.Xml/catagories/catagory"))
+            foreach (XElement catagoryHolder in doc.XPathSelectElements("/modInfoAlpha.xml/catagories/catagory"))
             {
                 Category cat = new Category();
                 string[] catNodeList = new string[] { "name", "installGroup", "packages", "dependencies" };
@@ -2369,7 +2369,7 @@ namespace RelhaxModpack
             XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
             doc.AppendChild(xmlDeclaration);
             //database root modInfo.Xml
-            XmlElement root = doc.CreateElement("modInfoAlpha.Xml");
+            XmlElement root = doc.CreateElement("modInfoAlpha.xml");
             root.SetAttribute("version", gameVersion.Trim());
             root.SetAttribute("onlineFolder", onlineFolderVersion.Trim());
             //append the version information, game and online folder
@@ -2382,7 +2382,7 @@ namespace RelhaxModpack
 #pragma warning disable CS0612
                         SaveDatabaseLegacy(saveLocation, doc, globalDependencies, dependencies, parsedCatagoryList);
                     else
-                        SaveDatabaseLegacy(Path.Combine(saveLocation, "modInfoAlpha.Xml"), doc, globalDependencies, dependencies, parsedCatagoryList);
+                        SaveDatabaseLegacy(Path.Combine(saveLocation, "modInfoAlpha.xml"), doc, globalDependencies, dependencies, parsedCatagoryList);
                     break;
 #pragma warning enable CS0612
                 case DatabaseXmlVersion.OnePointOne:
