@@ -8,9 +8,15 @@ using System.Windows.Controls;
 
 namespace RelhaxModpack.UIComponents
 {
-    //https://stackoverflow.com/questions/35556975/horizontalalignment-stretch-not-working-in-treeviewitem
+    /// <summary>
+    /// Allows for the header control to stretch all the way across a filling container
+    /// </summary>
+    /// <remarks>see https://stackoverflow.com/questions/35556975/horizontalalignment-stretch-not-working-in-treeviewitem </remarks>
     public class StretchingTreeViewItem : TreeViewItem
     {
+        /// <summary>
+        /// Create an instance of the StretchingTreeViewItem UI component
+        /// </summary>
         public StretchingTreeViewItem()
         {
             this.Loaded += new RoutedEventHandler(StretchingTreeViewItem_Loaded);

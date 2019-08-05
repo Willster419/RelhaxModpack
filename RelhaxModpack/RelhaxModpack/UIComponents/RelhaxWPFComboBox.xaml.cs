@@ -35,6 +35,9 @@ namespace RelhaxModpack.UIComponents
         public SelectablePackage Package { get; set; }
 
 #warning this needs to be investigated. Why not use the onChecked and onEnabled?
+        /// <summary>
+        /// The event to subscribe to when the selection is changed
+        /// </summary>
         public SelectionChangedEventHandler Handler;
 
         /// <summary>
@@ -82,7 +85,11 @@ namespace RelhaxModpack.UIComponents
             }
         }
 
-
+        /// <summary>
+        /// Called from the database object to update the UI on a combobox selection change
+        /// </summary>
+        /// <param name="spc">The SelectablePakage that caused the update</param>
+        /// <param name="value">The checked value</param>
         public void OnDropDownSelectionChanged(SelectablePackage spc, bool value)
         {
             for (int i = 0; i < Items.Count; i++)

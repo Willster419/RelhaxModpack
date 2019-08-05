@@ -1330,7 +1330,10 @@ namespace RelhaxModpack
             return file;
         }
 
-        //returns the folder(s) to get to the xvm config folder directory
+        /// <summary>
+        /// Gets the absolute path to the Xvm configuration folder
+        /// </summary>
+        /// <returns>The absolute path of the Xvm configuration folder if it exists, otherwise returns "default"</returns>
         public static string GetXvmFolderName()
         {
             //form where it should be

@@ -3325,6 +3325,11 @@
             The package associated with this UI component
             </summary>
         </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxWPFComboBox.Handler">
+            <summary>
+            The event to subscribe to when the selection is changed
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.OnEnabledChanged(System.Boolean)">
             <summary>
             This is not implemented
@@ -3346,6 +3351,13 @@
             <summary>
             Set the brush of the ComboBox Panel Background property 
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.OnDropDownSelectionChanged(RelhaxModpack.SelectablePackage,System.Boolean)">
+            <summary>
+            Called from the database object to update the UI on a combobox selection change
+            </summary>
+            <param name="spc">The SelectablePakage that caused the update</param>
+            <param name="value">The checked value</param>
         </member>
         <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.DisabledColor">
             <summary>
@@ -3627,6 +3639,17 @@
             </summary>
             <param name="item">The item to test</param>
             <returns>True if the item is of StretchingTreeViewItem class, false otherwise</returns>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.StretchingTreeViewItem">
+            <summary>
+            Allows for the header control to stretch all the way across a filling container
+            </summary>
+            <remarks>see https://stackoverflow.com/questions/35556975/horizontalalignment-stretch-not-working-in-treeviewitem </remarks>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.StretchingTreeViewItem.#ctor">
+            <summary>
+            Create an instance of the StretchingTreeViewItem UI component
+            </summary>
         </member>
         <member name="M:RelhaxModpack.UIComponents.StretchingTreeViewItem.GetContainerForItemOverride">
             <summary>
@@ -4654,6 +4677,12 @@
             </summary>
             <param name="p">The patch instructions object</param>
             <returns>The operation exit code</returns>
+        </member>
+        <member name="M:RelhaxModpack.PatchUtils.GetXvmFolderName">
+            <summary>
+            Gets the absolute path to the Xvm configuration folder
+            </summary>
+            <returns>The absolute path of the Xvm configuration folder if it exists, otherwise returns "default"</returns>
         </member>
         <member name="T:RelhaxModpack.PatientWebClient">
             <summary>
