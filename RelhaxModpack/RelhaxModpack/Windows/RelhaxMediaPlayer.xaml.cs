@@ -12,7 +12,7 @@ namespace RelhaxModpack.UIComponents
     /// <summary>
     /// Interaction logic for RelhaxMediaPlayer.xaml
     /// </summary>
-    public partial class RelhaxMediaPlayer : UserControl
+    public partial class RelhaxMediaPlayer : UserControl, IDisposable
     {
         //public
         /// <summary>
@@ -162,5 +162,50 @@ namespace RelhaxModpack.UIComponents
             Seekbar.Value = (int)newPos;
             audioFileReader2.CurrentTime = new TimeSpan(0, 0, 0, 0, (int)Seekbar.Value);
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        /// <summary>
+        /// Dispose of the RelhaxMediaPlayer references
+        /// </summary>
+        /// <param name="disposing">True to dispose of managed objects</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects).
+                    UITimer.Dispose();
+                    UITimer = null;
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                // TODO: set large fields to null.
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        // ~RelhaxMediaPlayer()
+        // {
+        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        //   Dispose(false);
+        // }
+
+        // This code added to correctly implement the disposable pattern.
+        /// <summary>
+        /// Dispose of the RelhaxMediaPlayer references
+        /// </summary>
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }

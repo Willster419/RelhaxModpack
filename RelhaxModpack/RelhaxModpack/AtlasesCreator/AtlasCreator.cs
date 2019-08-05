@@ -104,7 +104,7 @@ namespace RelhaxModpack.AtlasesCreator
         /// </summary>
         /// <param name="allModFolderPaths">The list of absolute paths containing images to be loaded</param>
         /// <param name="token">The cancellation token</param>
-        /// <returns></returns>
+        /// <returns>The list of textures</returns>
         public static Task ParseModTexturesAsync(List<string> allModFolderPaths, CancellationToken token)
         {
             parseModTexturesTask = Task.Run(() =>
@@ -216,14 +216,14 @@ namespace RelhaxModpack.AtlasesCreator
             Logging.Debug("atlas file {0}: atlas file unpack", Path.GetFileName(Atlas.AtlasFile));
             lock(DebugLockObject)
             {
-                XmlUtils.Unpack(Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.AtlasFile), tempAtlasImageFile);
+                Utils.Unpack(Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.AtlasFile), tempAtlasImageFile);
             }
             Token.ThrowIfCancellationRequested();
 
             Logging.Debug("atlas file {0}: map file unpack", Path.GetFileName(Atlas.AtlasFile));
             lock (DebugLockObject)
             {
-                XmlUtils.Unpack(Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.MapFile), tempAtlasMapFile);
+                Utils.Unpack(Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.MapFile), tempAtlasMapFile);
             }
             Token.ThrowIfCancellationRequested();
 
@@ -352,7 +352,9 @@ namespace RelhaxModpack.AtlasesCreator
 
             // pack the image, generating a map only if desired
             FailCode result = imagePacker.PackImage(Atlas.TextureList, Atlas.PowOf2, Atlas.Square, Atlas.FastImagePacker, Atlas.AtlasWidth, Atlas.AtlasHeight,
+#pragma warning disable IDE0068 // Use recommended dispose pattern
                 Atlas.Padding, out Bitmap outputImage, out Dictionary<string, Rectangle> outputMap);
+#pragma warning restore IDE0068 // Use recommended dispose pattern
             if (result != 0)
             {
                 Logging.Error("atlas file {0}: There was an error making the image sheet", Path.GetFileName(Atlas.AtlasFile));

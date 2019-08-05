@@ -198,7 +198,6 @@ namespace RelhaxModpack
         /// </summary>
         public const string ManagerVersion = "manager_version.xml";
 
-#warning ManagerInfoDatFile refrences needs to be updated
         /// <summary>
         /// The location of the manager info zip file. Contains several xml files with database and client definitions
         /// </summary>
@@ -244,7 +243,7 @@ namespace RelhaxModpack
         /// The old default starting address of the location of mod packages (start + zip + end)
         /// </summary>
         [Obsolete("Database format V1 is deprecated, please use V2 instead.")]
-        public const string WotmodsDatabaseDatRoot = @"http://wotmods.relhaxmodpack.com/WoT/{onlineFolder}/";
+        public const string WotmodsDatabaseRoot = @"http://wotmods.relhaxmodpack.com/WoT/{onlineFolder}/";
 
         /// <summary>
         /// The URL to the v1 legacy beta database

@@ -323,8 +323,10 @@ namespace RelhaxModpack
                 default:
                     //parse legacy database
                     List<Dependency> logicalDependencies = new List<Dependency>();
+#pragma warning disable CS0612
                     ParseDatabaseLegacy(DocumentToXDocument(modInfoDocument), globalDependencies, dependencies, logicalDependencies,
                         parsedCategoryList, true);
+#pragma warning enable CS0612
                     dependencies.AddRange(logicalDependencies);
                     return true;
             }
@@ -697,7 +699,7 @@ namespace RelhaxModpack
                 return;
             }
 
-            Unpack(xmlUnpack.Pkg, sourceCompletePath, destinationCompletePath);
+            Utils.Unpack(xmlUnpack.Pkg, sourceCompletePath, destinationCompletePath);
             unpackBuilder.AppendLine(destinationCompletePath);
 
             Logging.Info("unpacking Xml binary file (if binary)");
@@ -709,56 +711,6 @@ namespace RelhaxModpack
             catch (Exception xmlUnpackExceptino)
             {
                 Logging.Exception(xmlUnpackExceptino.ToString());
-            }
-        }
-
-        /// <summary>
-        /// Copies a file from one path or in an archive to a destination
-        /// </summary>
-        /// <param name="package">The zip archive to extract the file from</param>
-        /// <param name="sourceCompletePath">The complete path to the file. Could be a path on disk, or a path in a zip archive</param>
-        /// <param name="destinationCompletePath">The complete path to copy the destination file to</param>
-#warning move this to Utils
-        public static void Unpack(string package, string sourceCompletePath, string destinationCompletePath)
-        {
-            string destinationFilename = Path.GetFileName(destinationCompletePath);
-            string destinationDirectory = Path.GetDirectoryName(destinationCompletePath);
-
-            //if the package entry is empty, then it's just a file copy
-            if (string.IsNullOrWhiteSpace(package))
-            {
-                if (File.Exists(sourceCompletePath))
-                    File.Copy(sourceCompletePath, destinationCompletePath);
-                Logging.Info("file copied");
-            }
-            else
-            {
-                if (!File.Exists(package))
-                {
-                    Logging.Error("packagefile does not exist, skipping");
-                    return;
-                }
-                using (ZipFile zip = new ZipFile(package))
-                {
-                    //get the files that match the specified path from the Xml entry
-                    string zipPath = sourceCompletePath.Replace(@"\", @"/");
-                    ZipEntry[] matchingEntries = zip.Where(zipp => zipp.FileName.Equals(zipPath)).ToArray();
-                    Logging.Debug("matching zip entries: {0}", matchingEntries.Count());
-                    if (matchingEntries.Count() > 0)
-                    {
-                        foreach (ZipEntry entry in matchingEntries)
-                        {
-                            //change the name to the destination
-                            entry.FileName = destinationFilename;
-
-                            //extract to disk and log
-                            entry.Extract(destinationDirectory, ExtractExistingFileAction.DoNotOverwrite);
-                            Logging.Info("entry extracted: {0}", destinationFilename);
-                        }
-                    }
-                    else
-                        Logging.Warning("no matching zip entries for file: {0}", zipPath);
-                }
             }
         }
         #endregion
@@ -864,8 +816,10 @@ namespace RelhaxModpack
                 List<string> depNodeList = new List<string>() { "zipFile", "crc", "enabled", "packageName", "appendExtraction" };
                 List<string> optionalDepNodList = new List<string>() { "startAddress", "endAddress", "devURL", "timestamp" , "logicalDependencies", "logAtInstall" };
                 List<string> unknownNodeList = new List<string>() { };
-                Dependency d = new Dependency();
-                d.wasLogicalDependencyLegacy = false;
+                Dependency d = new Dependency
+                {
+                    wasLogicalDependencyLegacy = false
+                };
                 foreach (XElement globs in dependencyNode.Elements())
                 {
                     switch (globs.Name.ToString())
@@ -913,8 +867,10 @@ namespace RelhaxModpack
                             foreach (XElement logDependencyHolder in globs.Elements())
                             {
                                 string[] logDepNodeList = new string[] { "packageName", "negateFlag" };
-                                DatabaseLogic ld = new DatabaseLogic();
-                                ld.Logic = Logic.AND;
+                                DatabaseLogic ld = new DatabaseLogic
+                                {
+                                    Logic = Logic.AND
+                                };
                                 foreach (XElement logDependencyNode in logDependencyHolder.Elements())
                                 {
                                     logDepNodeList = logDepNodeList.Except(new string[] { logDependencyNode.Name.ToString() }).ToArray();
@@ -990,8 +946,10 @@ namespace RelhaxModpack
                 List<string> depNodeList = new List<string>() { "zipFile", "crc", "enabled", "packageName", "logic" };
                 List<string> optionalDepNodList = new List<string>() { "startAddress", "endAddress", "devURL", "timestamp", "logAtInstall" };
                 List<string> unknownNodeList = new List<string>() { };
-                Dependency d = new Dependency();
-                d.wasLogicalDependencyLegacy = true;
+                Dependency d = new Dependency
+                {
+                    wasLogicalDependencyLegacy = true
+                };
                 foreach (XElement globs in dependencyNode.Elements())
                 {
                     switch (globs.Name.ToString())
@@ -1181,14 +1139,16 @@ namespace RelhaxModpack
                                                                     continue;
                                                                 if (innerText.Equals(""))
                                                                     continue;
-                                                                UserFile uf = new UserFile();
-                                                                uf.Pattern = innerText;
+                                                                UserFile uf = new UserFile
+                                                                {
+                                                                    Pattern = innerText
+                                                                };
                                                                 if (userDataNode.Attribute("before") != null)
-                                                                    uf.placeBeforeExtraction = Utils.ParseBool(userDataNode.Attribute("before").Value, false);
+                                                                    uf.PlaceBeforeExtraction = Utils.ParseBool(userDataNode.Attribute("before").Value, false);
                                                                 if (userDataNode.Attribute("pre") != null)
-                                                                    uf.placeBeforeExtraction = Utils.ParseBool(userDataNode.Attribute("pre").Value, false);
+                                                                    uf.PlaceBeforeExtraction = Utils.ParseBool(userDataNode.Attribute("pre").Value, false);
                                                                 if (userDataNode.Attribute("system") != null)
-                                                                    uf.systemInitiated = Utils.ParseBool(userDataNode.Attribute("system").Value, false);
+                                                                    uf.SystemInitiated = Utils.ParseBool(userDataNode.Attribute("system").Value, false);
                                                                 m.UserFiles.Add(uf);
                                                                 break;
                                                             default:
@@ -1578,14 +1538,16 @@ namespace RelhaxModpack
                                                     continue;
                                                 if (innerText.Equals(""))
                                                     continue;
-                                                UserFile uf = new UserFile();
-                                                uf.Pattern = innerText;
+                                                UserFile uf = new UserFile
+                                                {
+                                                    Pattern = innerText
+                                                };
                                                 if (userDataNode.Attribute("before") != null)
-                                                    uf.placeBeforeExtraction = Utils.ParseBool(userDataNode.Attribute("before").Value, false);
+                                                    uf.PlaceBeforeExtraction = Utils.ParseBool(userDataNode.Attribute("before").Value, false);
                                                 if (userDataNode.Attribute("pre") != null)
-                                                    uf.placeBeforeExtraction = Utils.ParseBool(userDataNode.Attribute("pre").Value, false);
+                                                    uf.PlaceBeforeExtraction = Utils.ParseBool(userDataNode.Attribute("pre").Value, false);
                                                 if (userDataNode.Attribute("system") != null)
-                                                    uf.systemInitiated = Utils.ParseBool(userDataNode.Attribute("system").Value, false);
+                                                    uf.SystemInitiated = Utils.ParseBool(userDataNode.Attribute("system").Value, false);
                                                 c.UserFiles.Add(uf);
                                                 break;
                                             default:
@@ -2174,10 +2136,10 @@ namespace RelhaxModpack
                         {
                             XmlElement userData = doc.CreateElement("userData");
                             userData.InnerText = us.Pattern.Trim();
-                            if (us.placeBeforeExtraction)
-                                userData.SetAttribute("pre", "" + us.placeBeforeExtraction);
-                            if (us.systemInitiated)
-                                userData.SetAttribute("system", "" + us.systemInitiated);
+                            if (us.PlaceBeforeExtraction)
+                                userData.SetAttribute("pre", "" + us.PlaceBeforeExtraction);
+                            if (us.SystemInitiated)
+                                userData.SetAttribute("system", "" + us.SystemInitiated);
                             modDatas.AppendChild(userData);
                         }
                         modRoot.AppendChild(modDatas);
@@ -2332,10 +2294,10 @@ namespace RelhaxModpack
                     {
                         XmlElement userData = doc.CreateElement("userData");
                         userData.InnerText = us.Pattern.Trim();
-                        if (us.placeBeforeExtraction)
-                            userData.SetAttribute("pre", "" + us.placeBeforeExtraction);
-                        if (us.systemInitiated)
-                            userData.SetAttribute("system", "" + us.systemInitiated);
+                        if (us.PlaceBeforeExtraction)
+                            userData.SetAttribute("pre", "" + us.PlaceBeforeExtraction);
+                        if (us.SystemInitiated)
+                            userData.SetAttribute("system", "" + us.SystemInitiated);
                         configDatas.AppendChild(userData);
                     }
                     configRoot.AppendChild(configDatas);
@@ -2417,31 +2379,31 @@ namespace RelhaxModpack
                 case DatabaseXmlVersion.Legacy:
                     //when legacy, saveLocation is a single file
                     if(Path.HasExtension(saveLocation))
+#pragma warning disable CS0612
                         SaveDatabaseLegacy(saveLocation, doc, globalDependencies, dependencies, parsedCatagoryList);
                     else
                         SaveDatabaseLegacy(Path.Combine(saveLocation, "modInfoAlpha.Xml"), doc, globalDependencies, dependencies, parsedCatagoryList);
                     break;
+#pragma warning enable CS0612
                 case DatabaseXmlVersion.OnePointOne:
                     //in 1.1, saveLocation is a document path
                     if (Path.HasExtension(saveLocation))
-                        SaveDatabase1V1(Path.GetDirectoryName(saveLocation), doc, xmlDeclaration, globalDependencies, dependencies, parsedCatagoryList);
+                        SaveDatabase1V1(Path.GetDirectoryName(saveLocation), doc, globalDependencies, dependencies, parsedCatagoryList);
                     else
-                        SaveDatabase1V1(saveLocation, doc, xmlDeclaration, globalDependencies, dependencies, parsedCatagoryList);
+                        SaveDatabase1V1(saveLocation, doc, globalDependencies, dependencies, parsedCatagoryList);
                     break;
             }            
         }
 
-#warning test if we can remove the xml declaration keyword
         /// <summary>
         /// Save the database to the Xml version 1.1 standard
         /// </summary>
         /// <param name="savePath">The path to save all the xml files to</param>
         /// <param name="doc">The root XmlDocument to save the header information to</param>
-        /// <param name="xmlDeclaration">The Xml declaration to use for the database fails</param>
         /// <param name="globalDependencies">The list of global dependencies</param>
         /// <param name="dependencies">The list of dependencies</param>
         /// <param name="parsedCatagoryList">The list of categories</param>
-        public static void SaveDatabase1V1(string savePath, XmlDocument doc, XmlDeclaration xmlDeclaration, List<DatabasePackage> globalDependencies,
+        public static void SaveDatabase1V1(string savePath, XmlDocument doc, List<DatabasePackage> globalDependencies,
         List<Dependency> dependencies, List<Category> parsedCatagoryList)
         {
             //save the root/header database file
@@ -2473,7 +2435,7 @@ namespace RelhaxModpack
 
             //save each of the other lists
             XmlDocument xmlGlobalDependenciesFile = new XmlDocument();
-            xmlDeclaration = xmlGlobalDependenciesFile.CreateXmlDeclaration("1.0", "UTF-8", "yes");
+            XmlDeclaration xmlDeclaration = xmlGlobalDependenciesFile.CreateXmlDeclaration("1.0", "UTF-8", "yes");
             xmlGlobalDependenciesFile.AppendChild(xmlDeclaration);
             XmlElement xmlGlobalDependenciesFileRoot = xmlGlobalDependenciesFile.CreateElement("GlobalDependencies");
             SaveDatabaseList1V1(globalDependencies, xmlGlobalDependenciesFileRoot, xmlGlobalDependenciesFile, "GlobalDependency");
@@ -2488,7 +2450,7 @@ namespace RelhaxModpack
             xmlDependenciesFile.AppendChild(xmlDependenciesFileRoot);
             xmlDependenciesFile.Save(Path.Combine(savePath, "dependencies.Xml"));
 
-            //for each cateory do the same thing
+            //for each category do the same thing
             foreach (Category cat in parsedCatagoryList)
             {
                 XmlDocument xmlCategoryFile = new XmlDocument();

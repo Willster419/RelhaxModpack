@@ -44,7 +44,7 @@ namespace RelhaxModpack
         /// </summary>
         public static XmlDocument UIDocument;
 
-#warning this needs to be finished
+#warning the color stuff needs to be finished
         /// <summary>
         /// The color to use for when a component is selected in the selection list
         /// </summary>
@@ -178,7 +178,7 @@ namespace RelhaxModpack
             //custom code for ModSelectionList
             if(w is ModSelectionList SelectionList)
             {
-#warning TODO
+                //TODO
                 //set enabled and disabled brushes properly
             }
         }
@@ -442,7 +442,7 @@ namespace RelhaxModpack
 
             //add all window instances to document:
             //make windows for all appropriate windows
-#warning TODO: more windows
+            //TODO
             DumpWindowColorSettingsToXml(root, doc, new MainWindow());
 
             //save custom color settings to document

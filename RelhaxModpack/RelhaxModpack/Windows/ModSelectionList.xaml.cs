@@ -112,7 +112,7 @@ namespace RelhaxModpack.Windows
         private int numTicks = 0;
         private Brush OriginalBrush = null;
         private Brush HighlightBrush = new SolidColorBrush(Colors.Blue);
-        private System.Windows.Forms.Timer FlashTimer = new System.Windows.Forms.Timer() { Interval=FLASH_TICK_INTERVAL };
+        private readonly System.Windows.Forms.Timer FlashTimer = new System.Windows.Forms.Timer() { Interval=FLASH_TICK_INTERVAL };
         private XDocument Md5HashDocument;
         private DatabaseVersions databaseVersion;
 
@@ -171,27 +171,32 @@ namespace RelhaxModpack.Windows
             ModpackSettings.ModSelectionHeight = (int)Height;
             ModpackSettings.ModSelectionWidth = (int)Width;
 
-            if (OnSelectionListReturn != null)
+            OnSelectionListReturn?.Invoke(this, new SelectionListEventArgs()
             {
-                OnSelectionListReturn(this, new SelectionListEventArgs()
-                {
-                    ContinueInstallation = continueInstallation,
-                    ParsedCategoryList = ParsedCategoryList,
-                    Dependencies = Dependencies,
-                    GlobalDependencies = GlobalDependencies,
-                    UserMods = userMods
-                });
-            }
+                ContinueInstallation = continueInstallation,
+                ParsedCategoryList = ParsedCategoryList,
+                Dependencies = Dependencies,
+                GlobalDependencies = GlobalDependencies,
+                UserMods = userMods
+            });
         }
 
         private void OnFlastTimerTick(object sender, EventArgs e)
         {
-            SelectablePackage packageToChange = FlashTimer.Tag as SelectablePackage;
-            if (packageToChange == null)
-                throw new BadMemeException("How did you fuck this up??");
-            Control control = packageToChange.UIComponent as Control;
-            if (control == null)
-                throw new BadMemeException("thinking face");
+            if(!(FlashTimer.Tag is SelectablePackage))
+            {
+                Logging.Error("FlashTimer.Tag is not of SelectablePackage type");
+                return;
+            }
+            SelectablePackage packageToChange = (SelectablePackage)FlashTimer.Tag;
+
+            if(!(packageToChange.UIComponent is Control))
+            {
+                Logging.Error("packageToChange.UiComponent is not of Control type");
+                return;
+            }
+            Control control = (Control)packageToChange.UIComponent;
+
             switch (numTicks++)
             {
                 case 0:
@@ -320,7 +325,8 @@ namespace RelhaxModpack.Windows
                     //from server download
                     case DatabaseVersions.Stable:
                         //make string
-                        string modInfoxmlURL = Settings.WotmodsDatabaseDatRoot + "modInfo.dat";
+#pragma warning disable CS0618
+                        string modInfoxmlURL = Settings.WotmodsDatabaseRoot + "modInfo.dat";
                         modInfoxmlURL = modInfoxmlURL.Replace("{onlineFolder}", Settings.WoTModpackOnlineFolderVersion);
 
                         //download latest modInfo xml
@@ -345,6 +351,7 @@ namespace RelhaxModpack.Windows
                             //aparently the #warning directive in this file causes an intellisense error with XDocuemtn for some reason
                             //#warning using V1 beta database
                             rootXml = Settings.BetaDatabaseV1URL;
+//#pragma warning enable CS0618
                             /////////
 
                             //download the xml string into "modInfoXml"
@@ -1915,7 +1922,7 @@ namespace RelhaxModpack.Windows
             }
             else if(e.Key == Key.Enter)
             {
-                OnSearchCBSelectionCommitted(SearchCB.SelectedItem as ComboBoxItem, false);
+                OnSearchCBSelectionCommitted(SearchCB.SelectedItem as ComboBoxItem);
             }
             //check if length 0 or whitespace
             else if (string.IsNullOrWhiteSpace(SearchCB.Text))
@@ -1968,7 +1975,7 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private async void OnSearchCBSelectionCommitted(ComboBoxItem committedItem, bool fromMouse)
+        private async void OnSearchCBSelectionCommitted(ComboBoxItem committedItem)
         {
             //test to make sure the UIComponent is a control (it should be, but at least a test to make sure it's not null)
             if (committedItem.Package.UIComponent is Control ctrl)
@@ -1997,7 +2004,7 @@ namespace RelhaxModpack.Windows
                 {
                     if (item.IsHighlighted && item.IsMouseOver)
                     {
-                        OnSearchCBSelectionCommitted(item, true);
+                        OnSearchCBSelectionCommitted(item);
                     }
                 }
             }

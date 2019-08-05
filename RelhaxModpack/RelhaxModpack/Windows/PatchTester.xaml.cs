@@ -26,13 +26,13 @@ namespace RelhaxModpack.Windows
         private bool IsPatchListScrolling = false;
         private bool RegressionsRunning = false;
         private Point BeforeDragDropPoint;
-        private string[] validXmlModes = new string[]
+        private readonly string[] validXmlModes = new string[]
         {
             "add",
             "edit",
             "remove"
         };
-        private string[] validJsonModes = new string[]
+        private readonly string[] validJsonModes = new string[]
         {
             "add",
             "arrayAdd",
@@ -301,7 +301,7 @@ namespace RelhaxModpack.Windows
             //check input from UI left panel side
 
             //file location
-            Logging.Patcher("File to Patch location mode: {0}", LogLevel.Info, FilePathType.SelectedItem == null ? "(null)" : FilePathType.SelectedItem);
+            Logging.Patcher("File to Patch location mode: {0}", LogLevel.Info, FilePathType.SelectedItem ?? "(null)");
             if(FilePathType.SelectedItem == null)
             {
                 Logging.Patcher("Invalid file path type", LogLevel.Info);
@@ -324,7 +324,7 @@ namespace RelhaxModpack.Windows
                     }
                     break;
                 case "Relative":
-                    Logging.Patcher("Using relative macro {0}", LogLevel.Info, PatchPathCombobox.SelectedItem == null ? "(null)" : PatchPathCombobox.SelectedItem);
+                    Logging.Patcher("Using relative macro {0}", LogLevel.Info, PatchPathCombobox.SelectedItem ?? "(null)");
                     string completePathForPatchFile = string.Empty;
                     switch(PatchPathCombobox.SelectedItem.ToString())
                     {
@@ -520,7 +520,6 @@ namespace RelhaxModpack.Windows
                                 {
                                     case "xvm":
                                         throw new BadMemeException("XVM IS NOT SUPPORTED PLEASE STOP USING IT");
-                                        break;
                                     //legacy compatibility, regx -> regex
                                     case "regx":
                                         patch.Type = "regex";

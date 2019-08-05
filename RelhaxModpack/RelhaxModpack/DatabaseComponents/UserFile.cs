@@ -15,18 +15,17 @@ namespace RelhaxModpack
         /// </summary>
         public string Pattern = string.Empty;
 
-#warning stuff below that's to remove properties so it's not picked up by fieldInfo
         /// <summary>
         /// Speed up the restore backup function in case of ClanIcons, the "backup folder" will be pushed back at once (and not file by file)
         /// </summary>
         [Obsolete("This is for legacy database compatibility and will be ignored in Relhax V2")]
-        public bool placeBeforeExtraction { get; set; } = false;
+        public bool PlaceBeforeExtraction { get; set; } = false;
 
         /// <summary>
         /// Entry will be processed in any case (if package is checked), even if "save user data" option is "false"
         /// </summary>
         [Obsolete("This is for legacy database compatibility and will be ignored in Relhax V2")]
-        public bool systemInitiated { get; set; } = false;
+        public bool SystemInitiated { get; set; } = false;
 
         /// <summary>
         /// The list of actual files saved to the temporary backup directory. Contains the full path and file name

@@ -80,7 +80,7 @@
             </summary>
             <param name="allModFolderPaths">The list of absolute paths containing images to be loaded</param>
             <param name="token">The cancellation token</param>
-            <returns></returns>
+            <returns>The list of textures</returns>
         </member>
         <member name="M:RelhaxModpack.AtlasesCreator.AtlasCreator.DisposeparseModTextures">
             <summary>
@@ -1062,12 +1062,12 @@
             The path or pattern to a file or files to backup to a temporary directory
             </summary>
         </member>
-        <member name="P:RelhaxModpack.UserFile.placeBeforeExtraction">
+        <member name="P:RelhaxModpack.UserFile.PlaceBeforeExtraction">
             <summary>
             Speed up the restore backup function in case of ClanIcons, the "backup folder" will be pushed back at once (and not file by file)
             </summary>
         </member>
-        <member name="P:RelhaxModpack.UserFile.systemInitiated">
+        <member name="P:RelhaxModpack.UserFile.SystemInitiated">
             <summary>
             Entry will be processed in any case (if package is checked), even if "save user data" option is "false"
             </summary>
@@ -2772,7 +2772,7 @@
             The default starting address of the location of mod packages (start + zip + end)
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.WotmodsDatabaseDatRoot">
+        <member name="F:RelhaxModpack.Settings.WotmodsDatabaseRoot">
             <summary>
             The old default starting address of the location of mod packages (start + zip + end)
             </summary>
@@ -3508,6 +3508,17 @@
             Creates an instance of the RelhaxMediaPlayer user control
             </summary>
             <param name="mediaURL">The direct link to the audio file to preview</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.Dispose(System.Boolean)">
+            <summary>
+            Dispose of the RelhaxMediaPlayer references
+            </summary>
+            <param name="disposing">True to dispose of managed objects</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.Dispose">
+            <summary>
+            Dispose of the RelhaxMediaPlayer references
+            </summary>
         </member>
         <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.InitializeComponent">
             <summary>
@@ -5514,6 +5525,14 @@
             <param name="shortcut">The shortcut parameters</param>
             <param name="sb">The StringBuilder to log the path to the created file</param>
         </member>
+        <member name="M:RelhaxModpack.Utils.Unpack(System.String,System.String,System.String)">
+            <summary>
+            Copies a file from one path or in an archive to a destination
+            </summary>
+            <param name="package">The zip archive to extract the file from</param>
+            <param name="sourceCompletePath">The complete path to the file. Could be a path on disk, or a path in a zip archive</param>
+            <param name="destinationCompletePath">The complete path to copy the destination file to</param>
+        </member>
         <member name="M:RelhaxModpack.Utils.FTPMakeFolder(System.String,System.Net.ICredentials)">
             <summary>
             Create an FTP folder
@@ -5784,14 +5803,6 @@
             <param name="xmlUnpack">The Xml unpack instructions object</param>
             <param name="unpackBuilder">The stringBuilder to log the generated files location for the install log</param>
         </member>
-        <member name="M:RelhaxModpack.XmlUtils.Unpack(System.String,System.String,System.String)">
-            <summary>
-            Copies a file from one path or in an archive to a destination
-            </summary>
-            <param name="package">The zip archive to extract the file from</param>
-            <param name="sourceCompletePath">The complete path to the file. Could be a path on disk, or a path in a zip archive</param>
-            <param name="destinationCompletePath">The complete path to copy the destination file to</param>
-        </member>
         <member name="M:RelhaxModpack.XmlUtils.ParseDatabaseLegacy(System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Category},System.Boolean)">
             <summary>
             Parses the database Xml document from the legacy format into memory
@@ -5825,13 +5836,12 @@
             <param name="parsedCatagoryList">The list of categories</param>
             <param name="versionToSaveAs">The Xml version of the database to save as</param>
         </member>
-        <member name="M:RelhaxModpack.XmlUtils.SaveDatabase1V1(System.String,System.Xml.XmlDocument,System.Xml.XmlDeclaration,System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Category})">
+        <member name="M:RelhaxModpack.XmlUtils.SaveDatabase1V1(System.String,System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Category})">
             <summary>
             Save the database to the Xml version 1.1 standard
             </summary>
             <param name="savePath">The path to save all the xml files to</param>
             <param name="doc">The root XmlDocument to save the header information to</param>
-            <param name="xmlDeclaration">The Xml declaration to use for the database fails</param>
             <param name="globalDependencies">The list of global dependencies</param>
             <param name="dependencies">The list of dependencies</param>
             <param name="parsedCatagoryList">The list of categories</param>

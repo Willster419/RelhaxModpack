@@ -99,6 +99,7 @@ namespace RelhaxModpack
             loading = true;
 
             //delete the updater scripts if they exist
+#pragma warning disable CS0618
             foreach (string s in new string[] { Settings.RelicBatchUpdateScript, Settings.RelicBatchUpdateScriptOld })
             {
                 if(File.Exists(s))
@@ -107,6 +108,7 @@ namespace RelhaxModpack
                     File.Delete(s);
                 }
             }
+#pragma warning enable CS0618
 
             //get size of original width and height of window
             OriginalHeight = Height;
@@ -266,7 +268,9 @@ namespace RelhaxModpack
 
                         //process libraries folder
                         Logging.Info("move old configs folder to selections folder");
+#pragma warning disable CS0612
                         Directory.Move(Settings.RelhaxUserConfigsFolderOld, Settings.RelhaxUserSelectionsFolder);
+#pragma warning enable CS0612
 
                         //process xml settings file
                         //delete the new one, move the old one, reload settings
@@ -638,9 +642,6 @@ namespace RelhaxModpack
                 return true;
             }
 
-            //get manager_info.xml into XmlDocument
-            XmlDocument doc = null;
-
             //if current application build does not equal requested distribution channel
             if (version != ModpackSettings.ApplicationDistroVersion)
             {
@@ -759,11 +760,10 @@ namespace RelhaxModpack
                     FileName = Path.Combine(Settings.ApplicationStartupPath,Settings.RelicBatchUpdateScript),
                     Arguments = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).ToArray())
                 };
-                Process installUpdate = new Process
+                using (Process installUpdate = new Process { StartInfo = info })
                 {
-                    StartInfo = info
-                };
-                installUpdate.Start();
+                    installUpdate.Start();
+                }
             }
             catch (Exception e3)
             {
@@ -1832,13 +1832,15 @@ namespace RelhaxModpack
             try
             {
                 Logging.Debug("launching button, link={0}", (sender as LinkButton).Link);
-                System.Diagnostics.Process.Start((sender as LinkButton).Link);
+                Process.Start((sender as LinkButton).Link);
             }
             catch (Exception ex)
             {
                 Logging.Exception(ex.ToString());
+#pragma warning disable CS0162
                 if (Settings.ApplicationVersion != ApplicationVersions.Stable)
                     MessageBox.Show(ex.ToString());
+#pragma warning enable CS0162
             }
         }
 

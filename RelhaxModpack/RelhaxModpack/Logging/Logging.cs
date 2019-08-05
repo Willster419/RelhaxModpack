@@ -162,7 +162,9 @@ namespace RelhaxModpack
         /// <summary>
         /// Event for subscribing as a callback event for when the logfile writes
         /// </summary>
+#pragma warning disable CA1009
         public static event LoggingUIThreadReport OnLoggingUIThreadReport;
+#pragma warning enable CA1009
 
         /// <summary>
         /// Initialize the logging system for the application
@@ -203,7 +205,9 @@ namespace RelhaxModpack
 
             if (fileToWriteTo != null)
                 throw new BadMemeException("only do this once jackass");
+#pragma warning disable IDE0068 // Use recommended dispose pattern
             fileToWriteTo = new Logfile(logfilePath, ApplicationLogfileTimestamp);
+#pragma warning restore IDE0068 // Use recommended dispose pattern
 
             //now that it's newed, the reference needs to be reverse assigned
             switch (logfile)
@@ -421,12 +425,8 @@ namespace RelhaxModpack
             }
             if (logfiles == Logfiles.Patcher)
             {
-#warning this is hackey and should be fixed
                 string temp = fileToWriteTo.Write(message, logLevel);
-                if(OnLoggingUIThreadReport != null)
-                {
-                    OnLoggingUIThreadReport(temp);
-                }
+                OnLoggingUIThreadReport?.Invoke(temp);
             }
             else
             {
