@@ -301,7 +301,7 @@ namespace RelhaxModpack
         /// <summary>
         /// The URL path of the latest V2 database release notes
         /// </summary>
-        public const string DatabaseNotesUrl = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/databaseUpdate.txt";
+        public const string DatabaseNotesUrl = "https://github.com/Willster419/RelhaxModpackDatabase/raw/master/resources/databaseUpdate.txt";
         #endregion
 
         #region Application and Database properties

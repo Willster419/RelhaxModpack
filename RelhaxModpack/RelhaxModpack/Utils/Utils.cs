@@ -270,8 +270,10 @@ namespace RelhaxModpack
         public static async Task<ZipFile> GetManagerInfoZipfileAsync(bool overwrite)
         {
             //first delete the old file if it exists, just to check
+#pragma warning disable CS0618 // Type or member is obsolete
             if (File.Exists(Settings.ManagerInfoDatFile))
                 File.Delete(Settings.ManagerInfoDatFile);
+#pragma warning restore CS0618 // Type or member is obsolete
 
             //if the zipfile is not null and no overwrite, then stop
             if (Settings.ManagerInfoZipfile != null && !overwrite)
