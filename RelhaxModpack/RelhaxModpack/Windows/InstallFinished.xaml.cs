@@ -11,6 +11,9 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class InstallFinished : RelhaxWindow
     {
+        /// <summary>
+        /// Create an instance of the InstallFinished window
+        /// </summary>
         public InstallFinished()
         {
             InitializeComponent();

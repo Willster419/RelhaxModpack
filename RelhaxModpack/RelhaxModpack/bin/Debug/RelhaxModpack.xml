@@ -4310,6 +4310,11 @@
             InstallFinished
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Windows.InstallFinished.#ctor">
+            <summary>
+            Create an instance of the InstallFinished window
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.InstallFinished.InitializeComponent">
             <summary>
             InitializeComponent
