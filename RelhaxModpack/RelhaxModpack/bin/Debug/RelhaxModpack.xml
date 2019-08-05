@@ -3885,6 +3885,11 @@
             Diagnostics
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Windows.Diagnostics.#ctor">
+            <summary>
+            Create an instance of the Diagnostics window
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.Diagnostics.InitializeComponent">
             <summary>
             InitializeComponent

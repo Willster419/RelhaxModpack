@@ -16,6 +16,9 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class Diagnostics : RelhaxWindow
     {
+        /// <summary>
+        /// Create an instance of the Diagnostics window
+        /// </summary>
         public Diagnostics()
         {
             InitializeComponent();
@@ -159,7 +162,7 @@ namespace RelhaxModpack.Windows
                         }
                         else
                         {
-                            //and the file to the zip file and grab the entry refrence
+                            //and the file to the zip file and grab the entry reference
                             ZipEntry entry = zip.AddFile(fileNameToAdd);
                             //then use it to modify the name of the entry in the zip file
                             entry.FileName = Path.GetFileName(fileNameToAdd);
@@ -198,6 +201,7 @@ namespace RelhaxModpack.Windows
             catch (IOException ioex)
             {
                 DiagnosticsStatusTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("failedToClearDownloadCache"), Environment.NewLine, Settings.RelhaxDownloadsFolder);
+                Logging.Exception(ioex.ToString());
             }
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleaningDownloadCacheComplete");
         }
@@ -212,6 +216,7 @@ namespace RelhaxModpack.Windows
             catch (IOException ioex)
             {
                 DiagnosticsStatusTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("failedToClearDownloadCache"), Environment.NewLine, Settings.RelhaxDownloadsFolder);
+                Logging.Exception(ioex.ToString());
             }
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleaningDownloadCacheComplete");
         }
