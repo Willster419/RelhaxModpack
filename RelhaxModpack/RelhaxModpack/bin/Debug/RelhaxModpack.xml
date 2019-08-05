@@ -4471,6 +4471,44 @@
             ProgressIndicator
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Windows.ProgressIndicator.ProgressMinimum">
+            <summary>
+            Gets or sets the minimum value of progress to display
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.ProgressIndicator.ProgressMaximum">
+            <summary>
+            Gets or sets the maximum value of progress to display
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.ProgressIndicator.Message">
+            <summary>
+            Gets or sets the progress message to display
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.ProgressIndicator.ProgressValue">
+            <summary>
+            Gets or sets the progress value to display
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ProgressIndicator.#ctor">
+            <summary>
+            Creates an instance of the ProgressIndicator class
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ProgressIndicator.UpdateProgress(System.Double)">
+            <summary>
+            Update the progress bar value
+            </summary>
+            <param name="percent">The progress report from minimum to maximum</param>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ProgressIndicator.UpdateProgress(System.Double,System.String)">
+            <summary>
+            Update the progress bar and message values
+            </summary>
+            <param name="percent">The progress report from minimum to maximum</param>
+            <param name="updatedmessage">The message to display</param>
+        </member>
         <member name="M:RelhaxModpack.Windows.ProgressIndicator.InitializeComponent">
             <summary>
             InitializeComponent

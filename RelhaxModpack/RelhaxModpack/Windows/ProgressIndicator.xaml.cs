@@ -19,30 +19,45 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class ProgressIndicator : RelhaxWindow
     {
+        /// <summary>
+        /// Gets or sets the minimum value of progress to display
+        /// </summary>
         public double ProgressMinimum
         {
             get { return LoadingProgressBar.Minimum; }
             set { LoadingProgressBar.Minimum = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the maximum value of progress to display
+        /// </summary>
         public double ProgressMaximum
         {
             get { return LoadingProgressBar.Maximum; }
             set { LoadingProgressBar.Maximum = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the progress message to display
+        /// </summary>
         public string Message
         {
             get { return LoadingText.Text; }
             set { LoadingText.Text = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the progress value to display
+        /// </summary>
         public double ProgressValue
         {
             get { return LoadingProgressBar.Value; }
             set { LoadingProgressBar.Value = value; }
         }
 
+        /// <summary>
+        /// Creates an instance of the ProgressIndicator class
+        /// </summary>
         public ProgressIndicator()
         {
             InitializeComponent();
@@ -50,7 +65,6 @@ namespace RelhaxModpack.Windows
 
         private void OnWindowLoad(object sender, RoutedEventArgs e)
         {
-            //TODO: happends after propeties set?
             if (ProgressMinimum != 0)
                 Logging.WriteToLog("progress minimum value is not 0! (is this the intent?)", Logfiles.Application, LogLevel.Warning);
             if (ProgressMaximum <= 0)
@@ -60,6 +74,10 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        /// <summary>
+        /// Update the progress bar value
+        /// </summary>
+        /// <param name="percent">The progress report from minimum to maximum</param>
         public void UpdateProgress(double percent)
         {
             if(percent > LoadingProgressBar.Maximum)
@@ -80,6 +98,11 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        /// <summary>
+        /// Update the progress bar and message values
+        /// </summary>
+        /// <param name="percent">The progress report from minimum to maximum</param>
+        /// <param name="updatedmessage">The message to display</param>
         public void UpdateProgress(double percent, string updatedmessage)
         {
             UpdateProgress(percent);
