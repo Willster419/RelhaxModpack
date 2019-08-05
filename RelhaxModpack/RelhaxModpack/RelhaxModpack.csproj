@@ -132,7 +132,7 @@
     <Compile Include="DatabaseComponents\SelectablePackage.cs" />
     <Compile Include="DatabaseComponents\Trigger.cs" />
     <Compile Include="DatabaseComponents\UserFile.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Utils\GlobalSuppressions.cs" />
     <Compile Include="InstallerComponents\Atlas.cs" />
     <Compile Include="InstallerComponents\InstallEngine.cs" />
     <Compile Include="InstallerComponents\Patch.cs" />
