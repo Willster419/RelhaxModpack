@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Xml;
 using Microsoft.Win32;
@@ -20,9 +17,6 @@ namespace RelhaxModpack.Windows
     public partial class PatchTester : RelhaxWindow
     {
         private PatchSettings PatchSettings;
-        private XmlDocument LoadedPatchesDocument;
-        //private List<Patch> LoadedPatches;
-        //private Patch LoadedPatch;
         private OpenFileDialog OpenPatchfileDialog;
         private OpenFileDialog OpenFileToPatchDialog;
         private SaveFileDialog SavePatchfileDialog;
@@ -49,6 +43,9 @@ namespace RelhaxModpack.Windows
             "arrayClear"
         };
 
+        /// <summary>
+        /// Create an instance of the PatchTester window
+        /// </summary>
         public PatchTester()
         {
             InitializeComponent();
@@ -809,7 +806,7 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region json regressions
+        #region Json regressions
         private List<UnitTest> BuildJsonUnittests()
         {
             return new List<UnitTest>()
@@ -1190,7 +1187,7 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region xml regressions
+        #region Xml regressions
         private List<UnitTest> BuildXmlUnittests()
         {
             return new List<UnitTest>()
@@ -1308,7 +1305,7 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region regex regressions
+        #region Regex regressions
         private List<UnitTest> BuildRegexUnittests()
         {
             return new List<UnitTest>()
@@ -1341,7 +1338,7 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region followPath regressions
+        #region FollowPath regressions
         private List<UnitTest> BuildFollowPathUnittests()
         {
             return new List<UnitTest>()

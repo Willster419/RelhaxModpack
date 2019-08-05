@@ -4425,6 +4425,11 @@
             PatchTester
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Windows.PatchTester.#ctor">
+            <summary>
+            Create an instance of the PatchTester window
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.PatchTester.InitializeComponent">
             <summary>
             InitializeComponent
