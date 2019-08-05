@@ -148,7 +148,7 @@ namespace RelhaxModpack
         public static string GetXmlStringFromXPath(XmlDocument doc, string xpath)
         {
             //set to something dumb for temporary purposes
-            XmlNode result = null;
+            XmlNode result;
             try
             {
                 result = doc.SelectSingleNode(xpath);

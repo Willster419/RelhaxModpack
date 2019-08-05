@@ -39,8 +39,6 @@ namespace RelhaxModpack.Windows
         private WebClient client;
         private bool authorized = false;
         private OpenFileDialog SelectModInfo = new OpenFileDialog() { Filter = "*.xml|*.xml" };
-        private OpenFileDialog SelectManyModInfo = new OpenFileDialog();
-        private OpenFileDialog SelectManyZip = new OpenFileDialog();
         private OpenFileDialog SelectV1Application = new OpenFileDialog() { Title = "Find V1 application to upload", Filter = "*.exe|*.exe" };
         private OpenFileDialog SelectV2Application = new OpenFileDialog() { Title = "Find V2 application to upload", Filter = "*.exe|*.exe" };
         private OpenFileDialog SelectManagerInfoXml = new OpenFileDialog() { Title = "Find manager_version.xml", Filter = "manager_version.xml|manager_version.xml" };
@@ -618,7 +616,7 @@ namespace RelhaxModpack.Windows
             }
             cancelDelete = false;
             CleanFoldersOnlineCancelStep3.Visibility = Visibility.Visible;
-            List<string> filesToDelete = new List<string>();
+            List<string> filesToDelete;
             filesToDelete = CleanZipFoldersTextbox.Text.Split('\n').ToList();
             string[] filesActuallyInFolder = await Utils.FTPListFilesFoldersAsync(
                 PrivateStuff.BigmodsFTPRootWoT + selectedVersionInfos.WoTOnlineFolderVersion,PrivateStuff.BigmodsNetworkCredential);

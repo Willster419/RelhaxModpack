@@ -869,7 +869,7 @@ namespace RelhaxModpack
                     Logfiles.Application, LogLevel.Warning);
                 numRetrys = 10;
             }
-            uint retryCounter = 0;
+            uint retryCounter;
             foreach (string file in Directory.GetFiles(folderPath,pattern,SearchOption.TopDirectoryOnly))
             {
                 retryCounter = 0;
@@ -2207,7 +2207,7 @@ namespace RelhaxModpack
         public static bool AutoFindWoTDirectory(ref string WoTRoot)
         {
             List<string> searchPathWoT = new List<string>();
-            string[] registryPathArray = new string[] { };
+            string[] registryPathArray;
 
             // here we need the value for the searchlist
             // check replay link

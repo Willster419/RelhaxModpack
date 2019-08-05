@@ -325,7 +325,7 @@ namespace RelhaxModpack.Windows
                     break;
                 case "Relative":
                     Logging.Patcher("Using relative macro {0}", LogLevel.Info, PatchPathCombobox.SelectedItem ?? "(null)");
-                    string completePathForPatchFile = string.Empty;
+                    string completePathForPatchFile;
                     switch(PatchPathCombobox.SelectedItem.ToString())
                     {
                         case "app":

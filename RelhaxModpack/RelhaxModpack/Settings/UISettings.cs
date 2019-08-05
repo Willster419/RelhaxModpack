@@ -514,7 +514,6 @@ namespace RelhaxModpack
             }
 
             w.Close();
-            w = null;
         }
 
         private static void ApplyColorattributesToElement(XmlElement colorEntry, Brush brush, XmlDocument doc, Brush textBrush = null)

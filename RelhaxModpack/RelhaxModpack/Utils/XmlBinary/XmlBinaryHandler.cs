@@ -25,7 +25,7 @@ namespace RelhaxModpack.XmlBinary
                 {
                     if (FileNameSave.Length == 0)
                         FileNameSave = FileNameLoad;
-                    saveFile(FileNameSave);
+                    SaveFile(FileNameSave);
                     Logging.Info(string.Format("Saved processed file: {0} ({1})", FileNameSave, Path.GetFileName(FileNameLoad)),Logfiles.Application);
                 }
             }
@@ -100,7 +100,6 @@ namespace RelhaxModpack.XmlBinary
             try
             {
                 FileStream F = new FileStream(file, FileMode.Open, FileAccess.Read);
-#warning this needs to be disposed and tested
                 BinaryReader reader = new BinaryReader(F);
 
                 XmlComment ptiComment = xDoc.CreateComment("DO NOT SAVE THIS FILE! THIS CODE IS JUST FOR INFORMATION PUPORSES!");
@@ -113,6 +112,7 @@ namespace RelhaxModpack.XmlBinary
                 xDoc.AppendChild(xmlprimitives);
 
                 DecodedXML.Append(FormatXml(xDoc.OuterXml));
+                reader.Dispose();
                 return false;       // send false in any case, so the content will not be saved !
             }
             catch (Exception ex)
@@ -161,7 +161,7 @@ namespace RelhaxModpack.XmlBinary
             return result;
         }
 
-        private void saveFile(string FileName)
+        private void SaveFile(string FileName)
         {
             xDoc.Save(FileName);
         }

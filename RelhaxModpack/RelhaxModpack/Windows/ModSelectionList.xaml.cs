@@ -1150,7 +1150,7 @@ namespace RelhaxModpack.Windows
             if (LoadingUI)
                 return;
             IPackageUIComponent ipc = (IPackageUIComponent)sender;
-            SelectablePackage spc = null;
+            SelectablePackage spc;
             if (ipc is RelhaxWPFComboBox cb2)
             {
                 ComboBoxItem cbi = (ComboBoxItem)cb2.SelectedItem;
@@ -1294,7 +1294,7 @@ namespace RelhaxModpack.Windows
         void PropagateChecked(SelectablePackage spc, SelectionPropagationDirection direction)
         {
             //the parent of the package we just checked
-            SelectablePackage parent = null;
+            SelectablePackage parent;
 
             //if we're going up the tree, set the package to it's parent
             //else use itself
@@ -1639,7 +1639,7 @@ namespace RelhaxModpack.Windows
         private void LoadSelection(XmlDocument document, bool silent)
         {
             //get the string version of the document, determine what to do from there
-            string selectionVersion = "";
+            string selectionVersion;
             //attribute example: "//root/element/@attribute"
             selectionVersion = XmlUtils.GetXmlStringFromXPath(document, "//mods/@ver");
             Logging.Debug("SelectionVersion={0}", selectionVersion);
@@ -2014,7 +2014,7 @@ namespace RelhaxModpack.Windows
         #region MD5 hash code
         private string GetMD5Hash(string inputFile)
         {
-            string hash = "";
+            string hash;
             //get filetime from file, convert it to string with base 10
             string filetime = Convert.ToString(File.GetLastWriteTime(inputFile).ToFileTime(), 10);
             //extract filename with path

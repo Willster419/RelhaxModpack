@@ -479,7 +479,6 @@ namespace RelhaxModpack
                 CheckForDatabaseUpdates(true);
                 //clean up progress indicator
                 progressIndicator.Close();
-                progressIndicator = null;
             }
             else
             {
@@ -536,7 +535,7 @@ namespace RelhaxModpack
             Logging.Info("Checking for database updates in CheckForDatabaseUpdates()");
 
             //if we are getting a new ModInfo then do that
-            XmlDocument doc = null;
+            XmlDocument doc;
             if (refreshModInfo)
             {
                 doc = await Utils.GetManagerInfoDocumentAsync(true);
@@ -2128,7 +2127,7 @@ namespace RelhaxModpack
                     UseBetaDatabaseCB.IsEnabled = true;
                     return;
                 }
-                JArray root = null;
+                JArray root;
                 try
                 {
                     root = JArray.Parse(jsonText);

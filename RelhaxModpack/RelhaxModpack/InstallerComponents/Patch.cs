@@ -91,7 +91,7 @@ namespace RelhaxModpack
             {
                 return string.Format("{0} patch, NativeProcessingFile={1}, ActualFile={2}," +
                     "{3}{4}PatchPath={5}, FileToPatch={6}," +
-                    "{7}{8}Lines={9}, Path={0}, Search={10}, Replace={11}",
+                    "{7}{8}Lines={9}, Path={10}, Search={11}, Replace={12}",
                     Type.ToLower(),
                     NativeProcessingFile,
                     ActualPatchName,

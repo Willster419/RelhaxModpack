@@ -179,6 +179,8 @@ namespace RelhaxModpack.UIComponents
                     // TODO: dispose managed state (managed objects).
                     UITimer.Dispose();
                     UITimer = null;
+                    waveOutDevice.Dispose();
+                    waveOutDevice = null;
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
