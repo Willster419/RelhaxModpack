@@ -20,13 +20,25 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class Preview : RelhaxWindow
     {
-
+        //public
+        /// <summary>
+        /// The package with media elements to preview
+        /// </summary>
         public SelectablePackage Package = null;
+
+        /// <summary>
+        /// Sets if the preview was launched from the editor or from the selection list
+        /// </summary>
         public bool EditorMode = false;
+
+        //private
         private MemoryStream ImageStream = null;
         private Media CurrentDispalyMedia = null;
         private WebBrowser browser = null;
 
+        /// <summary>
+        /// Create an instance of the Preview window
+        /// </summary>
         public Preview()
         {
             InitializeComponent();
