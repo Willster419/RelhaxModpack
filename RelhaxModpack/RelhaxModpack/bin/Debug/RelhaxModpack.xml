@@ -4578,6 +4578,16 @@
             VersionInfo
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Windows.VersionInfo.ConfirmUpdate">
+            <summary>
+            Gets if the user selected to accept the update
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.VersionInfo.#ctor">
+            <summary>
+            Create an instance of the VersionInfo class
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.VersionInfo.InitializeComponent">
             <summary>
             InitializeComponent

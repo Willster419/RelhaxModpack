@@ -21,14 +21,18 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class VersionInfo : RelhaxWindow
     {
+        /// <summary>
+        /// Gets if the user selected to accept the update
+        /// </summary>
         public bool ConfirmUpdate { get; private set; } = false;
 
+        /// <summary>
+        /// Create an instance of the VersionInfo class
+        /// </summary>
         public VersionInfo()
         {
             InitializeComponent();
         }
-
-
 
         private void OnHyperlinkClick(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
@@ -51,7 +55,7 @@ namespace RelhaxModpack.Windows
 
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            //update the textbox with the latest version
+            //update the text box with the latest version
             ApplicationUpdateNotes.Text = Translations.GetTranslatedString("loadingApplicationUpdateNotes");
             using (WebClient client = new WebClient())
             {
