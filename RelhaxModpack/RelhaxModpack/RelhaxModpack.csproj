@@ -190,8 +190,8 @@
     <Compile Include="Windows\ExportModeSelect.xaml.cs">
       <DependentUpon>ExportModeSelect.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\FirstLoadAknowledgements.xaml.cs">
-      <DependentUpon>FirstLoadAknowledgements.xaml</DependentUpon>
+    <Compile Include="Windows\FirstLoadAcknowledgments.xaml.cs">
+      <DependentUpon>FirstLoadAcknowledgments.xaml</DependentUpon>
     </Compile>
     <Compile Include="UIComponents\IPackageUIComponent.cs" />
     <Compile Include="Windows\NewsViewer.xaml.cs">
@@ -325,7 +325,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\FirstLoadAknowledgements.xaml">
+    <Page Include="Windows\FirstLoadAcknowledgments.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

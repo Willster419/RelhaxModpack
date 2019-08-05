@@ -247,7 +247,7 @@ namespace RelhaxModpack
                 if(Settings.FirstLoad || Settings.FirstLoadToV2)
                 {
                     //display the welcome window and make sure the user agrees to it
-                    FirstLoadAknowledgements firstLoadAknowledgements = new FirstLoadAknowledgements();
+                    FirstLoadAcknowledgments firstLoadAknowledgements = new FirstLoadAcknowledgments();
                     firstLoadAknowledgements.ShowDialog();
                     if(!firstLoadAknowledgements.UserAgreed)
                     {

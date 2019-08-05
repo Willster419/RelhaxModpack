@@ -1,28 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Diagnostics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace RelhaxModpack.Windows
 {
     /// <summary>
-    /// Interaction logic for FirstLoadAknowledgements.xaml
+    /// Interaction logic for FirstLoadAcknowledgments.xaml
     /// </summary>
-    public partial class FirstLoadAknowledgements : RelhaxWindow
+    public partial class FirstLoadAcknowledgments : RelhaxWindow
     {
-        public FirstLoadAknowledgements() => InitializeComponent();
+        /// <summary>
+        /// Create an instance of the FirstLoadAcknowledgments window
+        /// </summary>
+        public FirstLoadAcknowledgments() => InitializeComponent();
 
-        public bool UserAgreed { get; set; } = false;
+        /// <summary>
+        /// Gets and sets is the user has agreed to the Acknowledgments before allowing him/her to use the application
+        /// </summary>
+        public bool UserAgreed { get; private set; } = false;
 
         private void Link_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
             //Link clicking event that opens the browser
