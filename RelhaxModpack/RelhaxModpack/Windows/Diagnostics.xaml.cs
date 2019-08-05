@@ -186,8 +186,7 @@ namespace RelhaxModpack.Windows
 
         private void ToggleUIOptions(bool toggle)
         {
-            LaunchWoTLauncher.IsEnabled = toggle;
-            CollectLogInfo.IsEnabled = toggle;
+            CollectLogInfoButton.IsEnabled = toggle;
         }
 
         private async void ClearDownloadCache_Click(object sender, RoutedEventArgs e)
