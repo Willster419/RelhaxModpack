@@ -5682,8 +5682,8 @@
             The following are Xml attribute examples
             element example: "//root/element"
             attribute example: "//root/element/@attribute"
-            for the onlineFolder version: //modInfoAlpha.Xml/@onlineFolder
-            for the folder version: //modInfoAlpha.Xml/@version
+            for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
+            for the folder version: //modInfoAlpha.xml/@version
             </remarks>
         </member>
         <member name="M:RelhaxModpack.XmlUtils.GetXmlNodeFromXPath(System.String,System.String)">

@@ -273,27 +273,14 @@ namespace RelhaxModpack.Windows
 
             //show the list and hide this window
             loadingProgress.Show();
-            this.Hide();
+            Hide();
 
             //create and run async task (fire and forget style, keeps the UI thread open during the task operation)
-            try
-            {
-                Logging.Info("Starting async task: " + nameof(LoadModSelectionListAsync) + "()");
-                //https://blogs.msdn.microsoft.com/dotnet/2012/06/06/async-in-4-5-enabling-progress-and-cancellation-in-async-apis/
-                Progress<RelhaxProgress> progressIndicator = new Progress<RelhaxProgress>();
-                progressIndicator.ProgressChanged += OnWindowLoadReportProgress;
-                LoadModSelectionListAsync(progressIndicator);
-            }
-            catch (Exception ex)
-            {
-                Logging.WriteToLog("Failed to load ModSelectionList window\n" + ex.ToString(), Logfiles.Application, LogLevel.Exception);
-                MessageBox.Show(Translations.GetTranslatedString("failedToLoadSelectionList"),
-                    Translations.GetTranslatedString("critical"));
-                loadingProgress.Close();
-                loadingProgress = null;
-                this.Close();
-                return;
-            }
+            Logging.Info("Starting async task: " + nameof(LoadModSelectionListAsync) + "()");
+            //https://blogs.msdn.microsoft.com/dotnet/2012/06/06/async-in-4-5-enabling-progress-and-cancellation-in-async-apis/
+            Progress<RelhaxProgress> progressIndicator = new Progress<RelhaxProgress>();
+            progressIndicator.ProgressChanged += OnWindowLoadReportProgress;
+            LoadModSelectionListAsync(progressIndicator);
         }
 
         private Task LoadModSelectionListAsync(IProgress<RelhaxProgress> progress)
@@ -705,16 +692,28 @@ namespace RelhaxModpack.Windows
                             GlobalDependencies = GlobalDependencies,
                             UserMods = userMods
                         });
-                        this.Close();
+                        Close();
                     }
                     else
                     {
                         //show the UI for selection list, and if should be fullscreen or not
-                        this.Show();
-                        this.WindowState = ModpackSettings.ModSelectionFullscreen ? WindowState.Maximized : WindowState.Normal;
+                        Show();
+                        WindowState = ModpackSettings.ModSelectionFullscreen ? WindowState.Maximized : WindowState.Normal;
                     }
                 });
                 return true;
+            }).ContinueWith((t) =>
+            {
+                //https://stackoverflow.com/questions/32067034/how-to-handle-task-run-exception
+                if(t.IsFaulted)
+                {
+                    Logging.Exception(t.Exception.ToString());
+                    MessageBox.Show(Translations.GetTranslatedString("failedToLoadSelectionList"),
+                        Translations.GetTranslatedString("critical"));
+                    loadingProgress.Close();
+                    loadingProgress = null;
+                    this.Close();
+                }
             });
         }
 
