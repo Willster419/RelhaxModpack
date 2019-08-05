@@ -46,7 +46,7 @@ namespace RelhaxModpack.XmlBinary
         public class ElementDescriptor
         {
             public readonly int nameIndex;
-            public readonly DataDescriptor dataDescriptor;
+            public DataDescriptor dataDescriptor;
 
             public ElementDescriptor(int nameIndex, DataDescriptor dataDescriptor)
             {
@@ -134,7 +134,7 @@ namespace RelhaxModpack.XmlBinary
 
         public string ReadNumber(BinaryReader reader, int lengthInBytes)
         {
-            string Number = "";
+            string Number;
             switch (lengthInBytes)
             {
                 case 1:

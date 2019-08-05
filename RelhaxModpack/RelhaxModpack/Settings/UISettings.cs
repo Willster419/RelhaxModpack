@@ -176,11 +176,12 @@ namespace RelhaxModpack
             }
 
             //custom code for ModSelectionList
+            /*
             if(w is ModSelectionList SelectionList)
             {
                 //TODO
                 //set enabled and disabled brushes properly
-            }
+            }*/
         }
         
         private static void ApplyBrushSettings(FrameworkElement element, XmlNode brushSettings)

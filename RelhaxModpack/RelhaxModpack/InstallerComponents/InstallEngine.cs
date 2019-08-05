@@ -252,6 +252,7 @@ namespace RelhaxModpack.InstallerComponents
         /// <summary>
         /// A list of all current trigger event names
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly")]
         public static readonly string[] CompleteTriggerList = new string[]
         {
             TriggerContouricons,
@@ -301,6 +302,8 @@ namespace RelhaxModpack.InstallerComponents
         private Task AtlasDisposeTask;
 
         private object AtlasBuilderLockerObject = new object();
+        private object duplicatePatchNameObjectLocker = new object();
+
         /// <summary>
         /// Flag for if the install engine should honor the user setting or if installing user packages, disable triggers anyways
         /// </summary>
@@ -2145,7 +2148,7 @@ namespace RelhaxModpack.InstallerComponents
 
                                 //save the original and new names to the list to apply later
                                 //lock on a static
-                                lock(Settings.AppDataFolder)
+                                lock(duplicatePatchNameObjectLocker)
                                 {
                                     //key is sb, sb is new name for disk, is native processing file
                                     //value is original name from zip file
@@ -2370,7 +2373,7 @@ namespace RelhaxModpack.InstallerComponents
                 //if there wern't any, don't bother doing anything
                 if(patch_files.Count() > 0)
                 {
-                    string completePath = string.Empty;
+                    string completePath;
                     foreach (string filename in patch_files)
                     {
                         completePath = Path.Combine(Settings.WoTDirectory, Settings.PatchFolderName, filename);
@@ -2414,7 +2417,7 @@ namespace RelhaxModpack.InstallerComponents
             {
                 Logging.WriteToLog(string.Format("Number of shortcut xml instruction files: {0}", shortcut_files.Count()), Logfiles.Application, LogLevel.Debug);
                 //if there weren't any, don't bother doing anything
-                string completePath = string.Empty;
+                string completePath;
                 foreach (string filename in shortcut_files)
                 {
                     completePath = Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName, filename);
@@ -2452,7 +2455,7 @@ namespace RelhaxModpack.InstallerComponents
                 //if there wern't any, don't bother doing anything
                 if (unpack_files.Count() > 0)
                 {
-                    string completePath = string.Empty;
+                    string completePath;
                     foreach (string filename in unpack_files)
                     {
                         completePath = Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName, filename);
@@ -2501,7 +2504,7 @@ namespace RelhaxModpack.InstallerComponents
                 //if there wern't any, don't bother doing anything
                 if (atlas_files.Count() > 0)
                 {
-                    string completePath = string.Empty;
+                    string completePath;
                     foreach (string filename in atlas_files)
                     {
                         completePath = Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName, filename);
@@ -2521,7 +2524,9 @@ namespace RelhaxModpack.InstallerComponents
             return task == null || task.IsCompleted;
         }
 
+#pragma warning disable IDE0051 // Remove unused private members
         private bool TaskNullOrDone(Task[] tasks)
+#pragma warning restore IDE0051 // Remove unused private members
         {
             foreach (Task t in tasks)
                 if (!TaskNullOrDone(t))
@@ -2593,7 +2598,6 @@ namespace RelhaxModpack.InstallerComponents
                                 break;
                         }
                         tsk.Dispose();
-                        tsk = null;
                     }
                     CreatedChildTasks = null;
                     Logging.Info("all child threads stopped, stopping master");
@@ -2657,7 +2661,7 @@ namespace RelhaxModpack.InstallerComponents
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             Dispose(true);
             // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
+            GC.SuppressFinalize(this);
         }
         #endregion
     }

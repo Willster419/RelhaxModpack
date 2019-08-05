@@ -68,7 +68,6 @@ namespace RelhaxModpack.XmlBinary
                 {
                     xtw.Close();
                     xtw.Dispose();
-                    xtw = null;
                 }
             }
 
@@ -157,6 +156,7 @@ namespace RelhaxModpack.XmlBinary
             {
                 reader.Close();
                 F.Close();
+                F.Dispose();
             }
             return result;
         }

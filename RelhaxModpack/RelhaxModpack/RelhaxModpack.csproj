@@ -51,7 +51,7 @@
     <DocumentationFile>bin\Debug\RelhaxModpack.xml</DocumentationFile>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <CodeAnalysisRuleSet>Properties\RelhaxModpack.ruleset</CodeAnalysisRuleSet>
-    <NoWarn>1303, CS1658, CS4014, CA1009, CA1065, CA0507, 1009, IDE0060, IDE0044, CA2227</NoWarn>
+    <NoWarn>CS1658, CS4014, CA1009, CA1065, CA0507, 1009, IDE0060, IDE0044</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -132,6 +132,7 @@
     <Compile Include="DatabaseComponents\SelectablePackage.cs" />
     <Compile Include="DatabaseComponents\Trigger.cs" />
     <Compile Include="DatabaseComponents\UserFile.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="InstallerComponents\Atlas.cs" />
     <Compile Include="InstallerComponents\InstallEngine.cs" />
     <Compile Include="InstallerComponents\Patch.cs" />

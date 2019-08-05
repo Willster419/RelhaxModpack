@@ -163,6 +163,7 @@ namespace RelhaxModpack
         /// Event for subscribing as a callback event for when the logfile writes
         /// </summary>
 #pragma warning disable CA1009
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly")]
         public static event LoggingUIThreadReport OnLoggingUIThreadReport;
 #pragma warning enable CA1009
 

@@ -25,6 +25,7 @@ namespace RelhaxModpack
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
     public partial class MainWindow : Window
     {
         private System.Windows.Forms.NotifyIcon RelhaxIcon;
@@ -1787,7 +1788,9 @@ namespace RelhaxModpack
             double bytes_per_millisecond = (current_bytes_downloaded - last_bytes_downloaded) / (current_download_time - last_download_time);
             double bytes_per_second = bytes_per_millisecond / 1000;
             double kbytes_per_second = bytes_per_second / 1024;
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
             double mbytes_per_second = kbytes_per_second / 1024;
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
 
             //if we have a download rate, and a remaining size, then we can get a remaining time!
             double remaining_bytes = e.TotalBytesToReceive - e.BytesReceived;

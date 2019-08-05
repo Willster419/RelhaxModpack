@@ -459,6 +459,7 @@ namespace RelhaxModpack
         /// <summary>
         /// Determines if the UI package structure to this package is of all visible components.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
         public bool IsStructureVisible
         {
             get
@@ -486,6 +487,7 @@ namespace RelhaxModpack
         /// <summary>
         /// Determines if the UI package structure to this package is of all enabled components.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
         public bool IsStructureEnabled
         {
             get
