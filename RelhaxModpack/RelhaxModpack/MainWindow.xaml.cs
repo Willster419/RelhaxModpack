@@ -63,6 +63,7 @@ namespace RelhaxModpack
         };
         private DatabaseVersions databaseVersion;
         private bool loading = false;
+        private string oldModpackTitle = string.Empty;
 
         //temp list of components not to toggle
         Control[] tempDisabledBlacklist = null;
@@ -305,18 +306,10 @@ namespace RelhaxModpack
                     }
                 }
             }
-            //apply the title change for beta application and beta database
-            if (databaseVersion != DatabaseVersions.Stable)
-                Title = string.Format("{0} ({1} DB)", Title, databaseVersion.ToString());
 
-            if (ModpackSettings.ApplicationDistroVersion != ApplicationVersions.Stable)
-            {
-                //if it's real alpha, then put alpha
-                if(Settings.TrueAlpha)
-                    Title = string.Format("{0} ({1} APP)", Title, Settings.ApplicationVersion.ToString());
-                else
-                    Title = string.Format("{0} ({1} APP)", Title, ModpackSettings.ApplicationDistroVersion.ToString());
-            }
+            //save the old modpack title
+            oldModpackTitle = Title;
+            ProcessTitle();
 
             //if the editor unlock file exists, then enable the editor button
             if(File.Exists(Settings.EditorLaunchFromMainWindowFilename))
@@ -420,6 +413,22 @@ namespace RelhaxModpack
                         RelhaxIcon = null;
                     }
                 }
+            }
+        }
+
+        private void ProcessTitle()
+        {
+            //apply the title change for beta application and beta database
+            if (databaseVersion != DatabaseVersions.Stable)
+                Title = string.Format("{0} ({1} DB)", oldModpackTitle, databaseVersion.ToString());
+
+            if (ModpackSettings.ApplicationDistroVersion != ApplicationVersions.Stable)
+            {
+                //if it's real alpha, then put alpha
+                if (Settings.TrueAlpha)
+                    Title = string.Format("{0} ({1} APP)", Title, Settings.ApplicationVersion.ToString());
+                else
+                    Title = string.Format("{0} ({1} APP)", Title, ModpackSettings.ApplicationDistroVersion.ToString());
             }
         }
 
@@ -2172,10 +2181,16 @@ namespace RelhaxModpack
                 ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Stable;
             }
 
-            if (databaseVersion == DatabaseVersions.Test && !(sender is bool))
+            if (databaseVersion == DatabaseVersions.Test)
             {
                 MessageBox.Show("Database setting applied, but you are currently in test mode. Test mode will remain active until application restart.");
             }
+            else
+            {
+                databaseVersion = ModpackSettings.DatabaseDistroVersion;
+            }
+
+            ProcessTitle();
         }
 
         private void OnDefaultBordersV2Changed(object sender, RoutedEventArgs e)
