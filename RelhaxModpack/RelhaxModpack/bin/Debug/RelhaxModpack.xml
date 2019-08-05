@@ -4320,12 +4320,91 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.SelectionListEventArgs">
+            <summary>
+            Event arguments for when the selection list is closed
+            </summary>
+            <remarks>See https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c </remarks>
+        </member>
+        <member name="F:RelhaxModpack.Windows.SelectionListEventArgs.ContinueInstallation">
+            <summary>
+            If the installation should be continued or if the user canceled
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.SelectionListEventArgs.ParsedCategoryList">
+            <summary>
+            The list of categories
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.SelectionListEventArgs.Dependencies">
+            <summary>
+            The list of dependencies
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.SelectionListEventArgs.GlobalDependencies">
+            <summary>
+            The list of global dependencies
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.SelectionListEventArgs.UserMods">
+            <summary>
+            The list of use mods
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.SelectionListClosedDelegate">
+            <summary>
+            The delegate to invoke when calling back to the sender for the SelectionClosed event
+            </summary>
+            <param name="sender">The sender (this)</param>
+            <param name="e">The event arguments to send to the installer (MainWindow)</param>
+        </member>
+        <member name="T:RelhaxModpack.Windows.SelectionPropagationDirection">
+            <summary>
+            The UI checked propagation directions
+            </summary>
+            <remarks>When a UI package element is checked, it needs to propagate the checked behavior up or down to prevent an invalid selection</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Windows.SelectionPropagationDirection.PropagateUp">
+            <summary>
+            Up the higher parent levels
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.SelectionPropagationDirection.PropagateDown">
+            <summary>
+            Down to lower child levels
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.ModSelectionList">
             <summary>
             Interaction logic for ModSelectionList.xaml
             </summary>
             <summary>
             ModSelectionList
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.ModSelectionList.ParsedCategoryList">
+            <summary>
+            The list of categories
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.ModSelectionList.GlobalDependencies">
+            <summary>
+            The list of global dependencies
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.ModSelectionList.Dependencies">
+            <summary>
+            The list of dependencies
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.Windows.ModSelectionList.OnSelectionListReturn">
+            <summary>
+            The event that a caller can subscribe to wait for when the selection window actually closes, with arguments for the installation
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ModSelectionList.#ctor">
+            <summary>
+            Create an instance of the ModSelectionList window
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.ModSelectionList.InitializeComponent">

@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Xml;
@@ -17,39 +14,96 @@ using RelhaxModpack.UIComponents;
 using System.Xml.Linq;
 using ComboBoxItem = RelhaxModpack.UIComponents.ComboBoxItem;
 using System.Windows.Threading;
-using System.Collections;
 
 namespace RelhaxModpack.Windows
 {
-    #region structs and stuff
-    //https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c
+    #region Structs and stuff
+    /// <summary>
+    /// Event arguments for when the selection list is closed
+    /// </summary>
+    /// <remarks>See https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c </remarks>
     public class SelectionListEventArgs : EventArgs
     {
+        /// <summary>
+        /// If the installation should be continued or if the user canceled
+        /// </summary>
         public bool ContinueInstallation = false;
+
+        /// <summary>
+        /// The list of categories
+        /// </summary>
         public List<Category> ParsedCategoryList;
+
+        /// <summary>
+        /// The list of dependencies
+        /// </summary>
         public List<Dependency> Dependencies;
+
+        /// <summary>
+        /// The list of global dependencies
+        /// </summary>
         public List<DatabasePackage> GlobalDependencies;
+
+        /// <summary>
+        /// The list of use mods
+        /// </summary>
         public List<SelectablePackage> UserMods;
     }
+
+    /// <summary>
+    /// The delegate to invoke when calling back to the sender for the SelectionClosed event
+    /// </summary>
+    /// <param name="sender">The sender (this)</param>
+    /// <param name="e">The event arguments to send to the installer (MainWindow)</param>
     public delegate void SelectionListClosedDelegate(object sender, SelectionListEventArgs e);
 
-    public enum PropagationDirection
+    /// <summary>
+    /// The UI checked propagation directions
+    /// </summary>
+    /// <remarks>When a UI package element is checked, it needs to propagate the checked behavior up or down to prevent an invalid selection</remarks>
+    public enum SelectionPropagationDirection
     {
-        Up,
-        Down
+        /// <summary>
+        /// Up the higher parent levels
+        /// </summary>
+        PropagateUp,
+
+        /// <summary>
+        /// Down to lower child levels
+        /// </summary>
+        PropagateDown
     }
     #endregion
+
     /// <summary>
     /// Interaction logic for ModSelectionList.xaml
     /// </summary>
     public partial class ModSelectionList : RelhaxWindow
     {
+        //public
+        /// <summary>
+        /// The list of categories
+        /// </summary>
         public List<Category> ParsedCategoryList;
+
+        /// <summary>
+        /// The list of global dependencies
+        /// </summary>
         public List<DatabasePackage> GlobalDependencies;
+
+        /// <summary>
+        /// The list of dependencies
+        /// </summary>
         public List<Dependency> Dependencies;
+
+        /// <summary>
+        /// The event that a caller can subscribe to wait for when the selection window actually closes, with arguments for the installation
+        /// </summary>
+        public event SelectionListClosedDelegate OnSelectionListReturn;
+
+        //private
         private bool continueInstallation  = false;
         private ProgressIndicator loadingProgress;
-        public event SelectionListClosedDelegate OnSelectionListReturn;
         private bool LoadingUI = false;
         private List<SelectablePackage> userMods;
         private Preview p;
@@ -63,6 +117,9 @@ namespace RelhaxModpack.Windows
         private DatabaseVersions databaseVersion;
 
         #region Boring stuff
+        /// <summary>
+        /// Create an instance of the ModSelectionList window
+        /// </summary>
         public ModSelectionList()
         {
             InitializeComponent();
@@ -1126,10 +1183,10 @@ namespace RelhaxModpack.Windows
             spc.Checked = true;
 
             //down
-            PropagateChecked(spc, PropagationDirection.Down);
+            PropagateChecked(spc, SelectionPropagationDirection.PropagateDown);
 
             //up
-            PropagateChecked(spc, PropagationDirection.Up);
+            PropagateChecked(spc, SelectionPropagationDirection.PropagateUp);
         }
 
         //when a single_dropdown mod is selected
@@ -1169,7 +1226,7 @@ namespace RelhaxModpack.Windows
                 spc.Checked = true;
 
             //dropdown packages only need to propagate up when selected...
-            PropagateChecked(spc, PropagationDirection.Up);
+            PropagateChecked(spc, SelectionPropagationDirection.PropagateUp);
         }
 
         void OnUserPackageClick(object sender, EventArgs e)
@@ -1209,9 +1266,9 @@ namespace RelhaxModpack.Windows
                    // return;
 
                 //down
-                PropagateChecked(spc, PropagationDirection.Down);
+                PropagateChecked(spc, SelectionPropagationDirection.PropagateDown);
                 //up
-                PropagateChecked(spc, PropagationDirection.Up);
+                PropagateChecked(spc, SelectionPropagationDirection.PropagateUp);
             }
             else if (spc.Checked)
             {
@@ -1227,14 +1284,14 @@ namespace RelhaxModpack.Windows
         //propagates the change back up the selection tree
         //can be sent from any component
         //true = up, false = down
-        void PropagateChecked(SelectablePackage spc, PropagationDirection direction)
+        void PropagateChecked(SelectablePackage spc, SelectionPropagationDirection direction)
         {
             //the parent of the package we just checked
             SelectablePackage parent = null;
 
             //if we're going up the tree, set the package to it's parent
             //else use itself
-            if (direction == PropagationDirection.Up)
+            if (direction == SelectionPropagationDirection.PropagateUp)
                 parent = spc.Parent;
             else
                 parent = spc;
@@ -1274,7 +1331,7 @@ namespace RelhaxModpack.Windows
 
             //if going up, will only ever see radio buttons (not dropDown)
             //check if this package is of single type, if it is then we need to unselect all other packages of this level
-            if (direction == PropagationDirection.Up && (parent.Type == SelectionTypes.single1))
+            if (direction == SelectionPropagationDirection.PropagateUp && (parent.Type == SelectionTypes.single1))
             {
                 foreach (SelectablePackage childPackage in parent.Parent.Packages)
                 {
@@ -1297,7 +1354,7 @@ namespace RelhaxModpack.Windows
                     if ((childPackage.Type == SelectionTypes.single1) && childPackage.Enabled)
                     {
                         childPackage.Checked = true;
-                        PropagateChecked(childPackage, PropagationDirection.Down);
+                        PropagateChecked(childPackage, SelectionPropagationDirection.PropagateDown);
                         break;
                         //PropagateDownChecked(childPackage);
                     }
@@ -1331,10 +1388,10 @@ namespace RelhaxModpack.Windows
             }
             //last of all, check itself (if not checked already)
             parent.Checked = true;
-            if (direction == PropagationDirection.Up)
+            if (direction == SelectionPropagationDirection.PropagateUp)
                 if (parent.Level >= 0)
                     //recursively propagate the change back up the selection list
-                    PropagateChecked(parent, PropagationDirection.Up);
+                    PropagateChecked(parent, SelectionPropagationDirection.PropagateUp);
         }
 
         //propagates the change back up the selection tree
@@ -1743,7 +1800,7 @@ namespace RelhaxModpack.Windows
         }
         //checks for invalid structure in the selected packages
         //ex: a new mandatory option was added to a mod, but the user does not have it selected
-        public List<SelectablePackage> IsValidStructure(List<Category> ParsedCategoryList)
+        private List<SelectablePackage> IsValidStructure(List<Category> ParsedCategoryList)
         {
             List<SelectablePackage>  brokenPackages = new List<SelectablePackage>();
             foreach (Category cat in ParsedCategoryList)
