@@ -3742,6 +3742,17 @@
             <returns>Returns false if a setup error occurred, true otherwise</returns>
             <remarks>The return value of the method does NOT related to the success of the Unit Tests</remarks>
         </member>
+        <member name="M:RelhaxModpack.Regression.Dispose(System.Boolean)">
+            <summary>
+            Dispose of managed resources
+            </summary>
+            <param name="disposing">For redundant calls</param>
+        </member>
+        <member name="M:RelhaxModpack.Regression.Dispose">
+            <summary>
+            Dispose of managed resources
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.RelhaxFreeImageLibrary">
             <summary>
             A wrapper class around the TexImpNet FreeImage library class

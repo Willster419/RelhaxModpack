@@ -739,6 +739,7 @@ namespace RelhaxModpack.Windows
             {
                 Regression regression = new Regression(PatchRegressionTypes.regex, BuildRegexUnittests());
                 regression.RunRegressions();
+                regression.Dispose();
             });
             Logging.Patcher("Regex regressions end");
             Dispatcher.Invoke(new Action(() => { RegressionsRunning = false; }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
@@ -756,6 +757,7 @@ namespace RelhaxModpack.Windows
             {
                 Regression regression = new Regression(PatchRegressionTypes.xml, BuildXmlUnittests());
                 regression.RunRegressions();
+                regression.Dispose();
             });
             Logging.Patcher("Xml regressions end");
             Dispatcher.Invoke(new Action(() => { RegressionsRunning = false; }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
@@ -773,6 +775,7 @@ namespace RelhaxModpack.Windows
             {
                 Regression regression = new Regression(PatchRegressionTypes.json, BuildJsonUnittests());
                 regression.RunRegressions();
+                regression.Dispose();
             });
             Logging.Patcher("Json regressions end");
             Dispatcher.Invoke(new Action(() => { RegressionsRunning = false; }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
@@ -790,6 +793,7 @@ namespace RelhaxModpack.Windows
             {
                 Regression regression = new Regression(PatchRegressionTypes.followPath, BuildFollowPathUnittests());
                 regression.RunRegressions();
+                regression.Dispose();
             });
             Logging.Patcher("FollowPath regressions end");
             Dispatcher.Invoke(new Action(() => { RegressionsRunning = false; }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);

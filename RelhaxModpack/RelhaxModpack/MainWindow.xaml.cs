@@ -389,6 +389,12 @@ namespace RelhaxModpack
 
         private void TheMainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            //dispose of the timer if it's not already disposed
+            if(autoInstallTimer != null)
+            {
+                autoInstallTimer.Dispose();
+                autoInstallTimer = null;
+            }
             if(ModpackSettings.MinimizeToSystemTray)
             {
                 Logging.Debug("minimizing to system try");

@@ -60,7 +60,7 @@ namespace RelhaxModpack
     /// <remarks>A regression test is designed to only test one type of patch i.e. a series of XML patches.
     /// The patching system works by having a starting file and making changes at each unit test. It then loads the files and compares
     /// the results. Results are logged to a new logfile each time a regression run is started</remarks>
-    public class Regression
+    public class Regression : IDisposable
     {
 
         private Logfile RegressionLogfile;
@@ -277,5 +277,53 @@ namespace RelhaxModpack
             Logging.Debug(message);
             RegressionLogfile.Write(message);
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        /// <summary>
+        /// Dispose of managed resources
+        /// </summary>
+        /// <param name="disposing">For redundant calls</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects).
+                    if(RegressionLogfile != null)
+                    {
+                        RegressionLogfile.Dispose();
+                        RegressionLogfile = null;
+                    }
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                // TODO: set large fields to null.
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        // ~Regression()
+        // {
+        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        //   Dispose(false);
+        // }
+
+        // This code added to correctly implement the disposable pattern.
+        /// <summary>
+        /// Dispose of managed resources
+        /// </summary>
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }

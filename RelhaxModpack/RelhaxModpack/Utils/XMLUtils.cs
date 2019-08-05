@@ -69,21 +69,21 @@ namespace RelhaxModpack
         /// <returns>True if valid Xml, false otherwise</returns>
         public static bool IsValidXml(string xmlString, string fileName)
         {
-            using (XmlTextReader read = new XmlTextReader(xmlString))
+            XmlTextReader read = new XmlTextReader(xmlString);
+            try
             {
-                try
-                {
-                    //continue to read the entire document
-                    while (read.Read()) ;
-                    read.Close();
-                    return true;
-                }
-                catch (Exception e)
-                {
-                    Logging.WriteToLog(string.Format("Invalid Xml file: {0}\n{1}",fileName,e.Message),Logfiles.Application, LogLevel.Error);
-                    read.Close();
-                    return false;
-                }
+                //continue to read the entire document
+                while (read.Read()) ;
+                read.Close();
+                read.Dispose();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Logging.Error("Invalid Xml file: {0}\n{1}",fileName,e.Message);
+                read.Close();
+                read.Dispose();
+                return false;
             }
         }
         #endregion
