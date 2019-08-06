@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="First Load Acknowledgments" Height="235" Width="600" ResizeMode="NoResize" Loaded="RelhaxWindow_Loaded">
-
+        Title="First Load Acknowledgments" Height="235" Width="600" ResizeMode="NoResize" Loaded="RelhaxWindow_Loaded"
+        LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
 
     <Grid>
 

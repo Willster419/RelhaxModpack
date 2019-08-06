@@ -7,7 +7,8 @@
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
         xmlns:RelhaxModpack="clr-namespace:RelhaxModpack" x:Name="relhaxWindow" x:Class="RelhaxModpack.Windows.DatabaseEditor"
         mc:Ignorable="d"
-        Title="DatabaseEditor" Height="700" Width="1000" MinHeight="480" MinWidth="640" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="OnApplicationLoad" Closed="OnApplicationClose">
+        Title="DatabaseEditor" Height="700" Width="1000" MinHeight="480" MinWidth="640" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico"
+        Loaded="OnApplicationLoad" Closed="OnApplicationClose" LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <local:RelhaxWindow.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">

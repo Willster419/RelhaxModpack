@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="ModSelectionList" Height="480" Width="800" MinHeight="480" MinWidth="800" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="OnWindowLoad" Closed="RelhaxWindow_Closed" LocalizeWindow="True" ApplyToolTips="True">
+        Title="ModSelectionList" Height="480" Width="800" MinHeight="480" MinWidth="800" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="OnWindowLoad" Closed="RelhaxWindow_Closed"
+        LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <TextBlock x:Name="HelpLabel" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Right-click a selection component to see a preview window" VerticalAlignment="Top" Tag="HelpLabel"/>
         <TextBlock x:Name="InstallingTo" HorizontalAlignment="Left" Margin="10,26,0,0" TextWrapping="Wrap" Text="Installing to: " VerticalAlignment="Top" Tag="InstallingTo"/>

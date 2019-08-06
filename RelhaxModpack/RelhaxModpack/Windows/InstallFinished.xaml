@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="Install Finished" Height="202" Width="300" MinHeight="220" MinWidth="300" LocalizeWindow="True">
+        Title="Install Finished" Height="202" Width="300" MinHeight="220" MinWidth="300"
+        LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <Grid>
         <TextBox Tag="InstallationCompleteText" x:Name="InstallationCompleteText" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Installation Complete, would you like to..." VerticalAlignment="Top" TextAlignment="Left" Height="32"/>
         <StackPanel Orientation="Vertical" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,47,10,10">

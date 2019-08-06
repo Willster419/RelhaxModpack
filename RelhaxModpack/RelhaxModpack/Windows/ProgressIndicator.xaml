@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="Loading" Height="200" Width="350" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" ResizeMode="NoResize" Loaded="OnWindowLoad">
+        Title="Loading" Height="200" Width="350" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" ResizeMode="NoResize" Loaded="OnWindowLoad"
+        LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <Grid>
         <TextBlock HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Loading, Please Wait" VerticalAlignment="Top" TextAlignment="Center" Tag="LoadingHeader" x:Name="LoadingHeader"/>
         <TextBox HorizontalAlignment="Stretch" Margin="10,31,10,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Height="101" x:Name="LoadingText"/>

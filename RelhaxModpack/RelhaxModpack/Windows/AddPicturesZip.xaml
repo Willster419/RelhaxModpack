@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="AddPicturesZip" Height="330" Width="600" MinHeight="75" MinWidth="100" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico">
+        Title="AddPicturesZip" Height="330" Width="600" MinHeight="75" MinWidth="100"
+        LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False"
+        Icon="/RelhaxModpack;component/Resources/modpack_icon.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>

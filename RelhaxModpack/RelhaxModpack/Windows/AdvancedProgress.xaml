@@ -7,7 +7,8 @@
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         xmlns:user="clr-namespace:RelhaxModpack.UIComponents"
         mc:Ignorable="d"
-        Title="Advanced Installer Progress" Height="600" Width="400">
+        Title="Advanced Installer Progress" Height="600" Width="400"
+        LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <Grid Background="#FFE5E5E5" x:Name="MainGrid" Tag="MainGrid">
         <TabControl x:Name="MainTabControl">
             <TabItem Header="Pre-install Tasks" x:Name="PreInstallTab">
