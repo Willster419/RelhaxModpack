@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Windows;
+using System.Windows.Documents;
 
 namespace RelhaxModpack.Windows
 {
@@ -28,12 +29,15 @@ namespace RelhaxModpack.Windows
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
             if (Settings.FirstLoadToV2)
-                v2_upgrade_notice_text.Visibility = Visibility.Visible;
+                V2UpgradeNoticeText.Visibility = Visibility.Visible;
+
+            //apply custom translations
+            //LicenseLink = new Hyperlink(new Run("tes"));
         }
 
         private void CheckForContinueButton(object sender, RoutedEventArgs e)
         {
-            UserAgreed = continue_Button.IsEnabled = (bool)license_Agree.IsChecked && (bool)collect_stats.IsChecked && (bool)mod_hoster.IsChecked && (bool)support.IsChecked;
+            UserAgreed = ContinueButton.IsEnabled = (bool)license_Agree.IsChecked && (bool)collect_stats.IsChecked && (bool)mod_hoster.IsChecked && (bool)support.IsChecked;
         }
 
         private void Continue_Button_Click(object sender, RoutedEventArgs e)

@@ -1718,7 +1718,7 @@ namespace RelhaxModpack
 
             //verify the uninstall
             if (MessageBox.Show(string.Format(Translations.GetTranslatedString("verifyUninstallVersionAndLocation"), Settings.WoTDirectory, ModpackSettings.UninstallMode.ToString()),
-                Translations.GetTranslatedString("confirm"), MessageBoxButton.YesNo) == MessageBoxResult.No)
+                Translations.GetTranslatedString("verifyUninstallHeader"), MessageBoxButton.YesNo) == MessageBoxResult.No)
             {
                 ToggleUIButtons(true);
                 return;

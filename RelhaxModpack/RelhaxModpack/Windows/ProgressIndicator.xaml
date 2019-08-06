@@ -8,8 +8,8 @@
         Title="Loading" Height="200" Width="350" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" ResizeMode="NoResize" Loaded="OnWindowLoad"
         LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <Grid>
-        <TextBlock HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Loading, Please Wait" VerticalAlignment="Top" TextAlignment="Center" Tag="LoadingHeader" x:Name="LoadingHeader"/>
-        <TextBox HorizontalAlignment="Stretch" Margin="10,31,10,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Height="101" x:Name="LoadingText"/>
+        <TextBlock HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Loading, please wait" VerticalAlignment="Top" TextAlignment="Center" Tag="LoadingHeader" x:Name="LoadingHeader"/>
+        <TextBox HorizontalAlignment="Stretch" Margin="10,31,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="101" x:Name="LoadingText"/>
         <ProgressBar HorizontalAlignment="Stretch" Height="20" Margin="10,137,10,0" VerticalAlignment="Top" Tag="LoadingProgressBar" x:Name="LoadingProgressBar"/>
     </Grid>
 </local:RelhaxWindow>

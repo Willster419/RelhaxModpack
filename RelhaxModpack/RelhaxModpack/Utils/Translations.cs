@@ -63,9 +63,13 @@ namespace RelhaxModpack
             "AutoSyncCheckFrequencyTextBoxDescription",
             "DiagnosticsStatusTextBox",
             "seachCB",
-            //"backupModsSizeLabel",
             "PART_EditableTextBox",
-            "ApplyCustomScalingLabel"
+            "ApplyCustomScalingLabel",
+            "DatabaseUpdateText",
+            "ApplicationUpdateText",
+            "LoadingText",
+            "PreviewDescriptionBox",
+            "PreviewUpdatesBox"
         };
         private const string TranslationNeeded = "TODO";
         private static readonly string Blank = string.Empty;
@@ -162,7 +166,7 @@ namespace RelhaxModpack
         /// <returns></returns>
         public static string GetTranslatedString(string componentName)
         {
-            string s = "";
+            string s;
             //check if componentName key exists in current language
             if(CurrentLanguage.ContainsKey(componentName))
             {
@@ -192,7 +196,6 @@ namespace RelhaxModpack
                     {
                         //Log error it is todo in english
                         Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language=English", componentName), Logfiles.Application, LogLevel.Error);
-                        s = componentName;
                     }
                 }
                 //Log error it does not exist
@@ -1430,6 +1433,22 @@ namespace RelhaxModpack
             Polish.Add("MainWindowSelectSelectionFileToLoad", "Zaznacz plik wyboru do załadowania");
             French.Add("MainWindowSelectSelectionFileToLoad", TranslationNeeded);
             Russian.Add("MainWindowSelectSelectionFileToLoad", "Выберите предустановку для загрузки");
+
+            //Componet: verifyUninstallHeader
+            //
+            English.Add("verifyUninstallHeader", "Confirmation");
+            German.Add("verifyUninstallHeader", "Bestätigung");
+            Polish.Add("verifyUninstallHeader", "Potwierdź");
+            French.Add("verifyUninstallHeader", "Confirmation");
+            Russian.Add("verifyUninstallHeader", "Подтверждение");
+
+            //Componet: verifyUninstallVersionAndLocation
+            //
+            English.Add("verifyUninstallVersionAndLocation", "Confirm you wish to uninstall mods from WoT installation\n\n{0}\n\nUsing uninstall method '{1}'?");
+            German.Add("verifyUninstallVersionAndLocation", "Bitte bestätige das du alle Mods von Deinem WoT deinstalliert haben möchtest\n\n{0}\n\nVerwendung von Deinstallationsmethode '{1}'?");
+            Polish.Add("verifyUninstallVersionAndLocation", "Potwierdź usunięcie modyfikacji\n\n{0}\n\nPotwierdź metodę '{1}'");
+            French.Add("verifyUninstallVersionAndLocation", "Confirmer que vous voulez désinstaller les mods du dossier WoT\n\n{0}\n\nUsing la méthode de désinstallation '{1}'?");
+            Russian.Add("verifyUninstallVersionAndLocation", "Подтвердите необходимость удалить моды для WoT в этой папке: \n\n{0}\n\nИспользуем метод '{1}'?");
             #endregion
 
             #region ModSelectionList
@@ -1725,7 +1744,7 @@ namespace RelhaxModpack
             Russian.Add("updated", "обновлено");
             #endregion
 
-            #region Update Window
+            #region Application Update Window
             //Componet: updateAcceptButton
             //
             English.Add("updateAcceptButton", "yes");
@@ -2536,6 +2555,14 @@ namespace RelhaxModpack
             French.Add("InstallationCompleteOpenXVM", "Ouvrir votre navigateur Web vers le site de connexion aux statistiques xvm?");
             Russian.Add("InstallationCompleteOpenXVM", "Открыть браузер на сайте XVM для активации статистики?");
 
+            //Component: InstallationCompleteCloseThisWindow
+            //
+            English.Add("InstallationCompleteCloseThisWindow", "Close this window?");
+            German.Add("InstallationCompleteCloseThisWindow", TranslationNeeded);
+            Polish.Add("InstallationCompleteCloseThisWindow", TranslationNeeded);
+            French.Add("InstallationCompleteCloseThisWindow", TranslationNeeded);
+            Russian.Add("InstallationCompleteCloseThisWindow", TranslationNeeded);
+
             //Component: InstallationCompleteCloseApp
             //
             English.Add("InstallationCompleteCloseApp", "Close the application?");
@@ -2755,6 +2782,14 @@ namespace RelhaxModpack
             Polish.Add("DevUrlHeader", "Linki deweloperów");
             French.Add("DevUrlHeader", "Liens développeur");
             Russian.Add("DevUrlHeader", "Сайт разработчика");
+
+            //Component: dropDownItemsInside
+            //
+            English.Add("dropDownItemsInside", "Items Inside");
+            German.Add("dropDownItemsInside", TranslationNeeded);
+            Polish.Add("dropDownItemsInside", TranslationNeeded);
+            French.Add("dropDownItemsInside", TranslationNeeded);
+            Russian.Add("dropDownItemsInside", TranslationNeeded);
             #endregion
 
             #region Developer Selection Window
@@ -2936,6 +2971,93 @@ namespace RelhaxModpack
             French.Add("AdvancedInstallCleanup", "Nettoyer");
             Russian.Add("AdvancedInstallCleanup", "Очистка");
 
+            #endregion
+
+            #region News Viewer
+            //Component: application_Update_TabHeader
+            //
+            English.Add("application_Update_TabHeader", "Application News");
+            German.Add("application_Update_TabHeader", TranslationNeeded);
+            Polish.Add("application_Update_TabHeader", TranslationNeeded);
+            French.Add("application_Update_TabHeader", TranslationNeeded);
+            Russian.Add("application_Update_TabHeader", TranslationNeeded);
+
+            //Component: database_Update_TabHeader
+            //
+            English.Add("database_Update_TabHeader", "Database News");
+            German.Add("database_Update_TabHeader", TranslationNeeded);
+            Polish.Add("database_Update_TabHeader", TranslationNeeded);
+            French.Add("database_Update_TabHeader", TranslationNeeded);
+            Russian.Add("database_Update_TabHeader", TranslationNeeded);
+            #endregion
+
+            #region Loading Window
+            //Component: LoadingHeader
+            //
+            English.Add("LoadingHeader", "Loading, please wait");
+            German.Add("LoadingHeader", TranslationNeeded);
+            Polish.Add("LoadingHeader", TranslationNeeded);
+            French.Add("LoadingHeader", TranslationNeeded);
+            Russian.Add("LoadingHeader", TranslationNeeded);
+            #endregion
+
+            #region First Load acks (yes i wrote that to avoid spelling the whole thing cause I may not know how even enough for auto correct to fix it)
+            //Component: AgreementLicense
+            //
+            English.Add("AgreementLicense", "You have read and agree to the ");
+            German.Add("AgreementLicense", TranslationNeeded);
+            Polish.Add("AgreementLicense", TranslationNeeded);
+            French.Add("AgreementLicense", TranslationNeeded);
+            Russian.Add("AgreementLicense", TranslationNeeded);
+
+            //Component: AgreementSupport1
+            //
+            English.Add("AgreementSupport1", "If you need support you can either visit our ");
+            German.Add("AgreementSupport1", TranslationNeeded);
+            Polish.Add("AgreementSupport1", TranslationNeeded);
+            French.Add("AgreementSupport1", TranslationNeeded);
+            Russian.Add("AgreementSupport1", TranslationNeeded);
+
+            //Component: AgreementSupport2
+            //
+            English.Add("AgreementSupport2", "or our ");
+            German.Add("AgreementSupport2", TranslationNeeded);
+            Polish.Add("AgreementSupport2", TranslationNeeded);
+            French.Add("AgreementSupport2", TranslationNeeded);
+            Russian.Add("AgreementSupport2", TranslationNeeded);
+
+            //Component: AgreementHoster
+            //
+            English.Add("AgreementHoster", "I understand Relhax is a mod hosting and installation service and Relhax does not maintain every mod found in this Modpack");
+            German.Add("AgreementHoster", TranslationNeeded);
+            Polish.Add("AgreementHoster", TranslationNeeded);
+            French.Add("AgreementHoster", TranslationNeeded);
+            Russian.Add("AgreementHoster", TranslationNeeded);
+
+            //Component: AgreementAnonData
+            //
+            English.Add("AgreementAnonData", "I understand that Relhax V2 collects anonymous usage data to improve the application, and can be disabled in the advanced settings tab");
+            German.Add("AgreementAnonData", TranslationNeeded);
+            Polish.Add("AgreementAnonData", TranslationNeeded);
+            French.Add("AgreementAnonData", TranslationNeeded);
+            Russian.Add("AgreementAnonData", TranslationNeeded);
+
+            //Component: ContinueButton
+            //
+            English.Add("ContinueButton", "Continue");
+            German.Add("ContinueButton", TranslationNeeded);
+            Polish.Add("ContinueButton", TranslationNeeded);
+            French.Add("ContinueButton", TranslationNeeded);
+            Russian.Add("ContinueButton", TranslationNeeded);
+
+            //Component: V2UpgradeNoticeText
+            //
+            English.Add("V2UpgradeNoticeText", "It looks like you are running an upgrade from V1 to V2 for the first time." +
+                " Pressing continue will result in an upgrade to file structure that cannot be reverted. It is recommended to make a backup of your V1 folder before continuing");
+            German.Add("V2UpgradeNoticeText", TranslationNeeded);
+            Polish.Add("V2UpgradeNoticeText", TranslationNeeded);
+            French.Add("V2UpgradeNoticeText", TranslationNeeded);
+            Russian.Add("V2UpgradeNoticeText", TranslationNeeded);
             #endregion
         }
         #endregion
