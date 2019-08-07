@@ -1083,6 +1083,682 @@
             </summary>
             <returns>The string pattern</returns>
         </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxHyperlink">
+            <summary>
+            Interaction logic for RelhaxHyperlink.xaml
+            </summary>
+            <summary>
+            RelhaxHyperlink
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxHyperlink.#ctor">
+            <summary>
+            Create an instance of RelhaxHyperlink
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxHyperlink.#ctor(System.String,System.String)">
+            <summary>
+            Create an instance of RelhaxHyperlink
+            </summary>
+            <param name="URL">The URL to open when the hyperlink is clicked</param>
+            <param name="text">The text of the hyperlink</param>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxHyperlink.URL">
+            <summary>
+            Get or set the link URL
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxHyperlink.Text">
+            <summary>
+            Get or set the link text
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxHyperlink.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ComboBoxItem">
+            <summary>
+            The ComboBoxItem class is a wrapper class for displaying SelectablePackages as combo box items. The ToString() allows for display of the package name
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ComboBoxItem.Package">
+            <summary>
+            The SelectablePackage object that is being wrapped around
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ComboBoxItem.DisplayName">
+            <summary>
+            The text to display in the Combobox
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.ComboBoxItem.#ctor(RelhaxModpack.SelectablePackage,System.String)">
+            <summary>
+            Creates an instance of the ComboBoxItem class
+            </summary>
+            <param name="package">The package to wrap around</param>
+            <param name="display">The text to display in the Combobox</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.ComboBoxItem.ToString">
+            <summary>
+            Allows for displaying of custom text in the Combobox
+            </summary>
+            <returns>The text to display in the Combobox (DisplayName property)</returns>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.EditorComboBoxItem">
+            <summary>
+            The EditorComboBoxItem class is a wrapper class for displaying DatabaseObjects as combo box items. The ToString() allows for display of the internal PackageName property
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.EditorComboBoxItem.Package">
+            <summary>
+            The DatabasePackage object that is being wrapped around
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.EditorComboBoxItem.DisplayName">
+            <summary>
+            A wrapper property around the Package's PackageName object
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.EditorComboBoxItem.#ctor(RelhaxModpack.DatabasePackage)">
+            <summary>
+            Creates an instance of the EditorComboBoxItem class
+            </summary>
+            <param name="package">The package to wrap around</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.EditorComboBoxItem.ToString">
+            <summary>
+            Allows for displaying of custom text in the Combobox
+            </summary>
+            <returns>The text to display in the Combobox (DisplayName property -> PackageName)</returns>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.EditorSearchBoxItem">
+            <summary>
+            The EditorSearchBoxItem class is a wrapper class for displaying DatabaseObjects as combo box items. The ToString() allows for display of any string property
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.EditorSearchBoxItem.Package">
+            <summary>
+            The DatabasePackage object that is being wrapped around
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.EditorSearchBoxItem.DisplayName">
+            <summary>
+            The text to display in the Combobox
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.EditorSearchBoxItem.#ctor(RelhaxModpack.DatabasePackage,System.String)">
+            <summary>
+            Creates an instance of the EditorSearchBoxItem class
+            </summary>
+            <param name="package">The package to wrap around</param>
+            <param name="display">The text to display in the Combobox</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.EditorSearchBoxItem.ToString">
+            <summary>
+            Allows for displaying of custom text in the Combobox
+            </summary>
+            <returns>The text to display in the Combobox</returns>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.LinkButton">
+            <summary>
+            Wrapper class for the Button class of the System.Windows.Controls namespace. Adds the Link property.
+            </summary>
+            <remarks>Allows for starting a process from the Link value to a website</remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.LinkButton.Link">
+            <summary>
+            The URL for which to start the process based on
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.TaskReportState">
+            <summary>
+            States of the Task reporter in display to the UI
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.TaskReportState.Inactive">
+            <summary>
+            Not used for this installation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.TaskReportState.Active">
+            <summary>
+            In use for this installation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.TaskReportState.Complete">
+            <summary>
+            In use for this installation and the task completed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.TaskReportState.Error">
+            <summary>
+            An error has occurred on that task
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter">
+            <summary>
+            Interaction logic for RelhaxInstallTaskReporter.xaml
+            </summary>
+            <summary>
+            RelhaxInstallTaskReporter
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.#ctor">
+            <summary>
+            Create an instance of the RelhaxInstallTaskReporter and init the UI side of it
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.ReportState">
+            <summary>
+            Controls the UI state of the thread reporter
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.IsSubProgressActive">
+            <summary>
+            Toggle if the second progress bar should be visible
+            </summary>
+            <remarks>Some tasks (like zip file extraction) have "sub-tasks" that take enough time where tracking their progress is warranted.
+            For example, a zip file has many files to extract. That's the main task. However, each file has bytes to extract. If the file to extract
+            is large, a subtask to track the extraction progress could be useful</remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.TaskTitle">
+            <summary>
+            The name of this task to display
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.TaskText">
+            <summary>
+            The main reporting description of this task. Supports string formatting
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.TaskMinimum">
+            <summary>
+            The minimum value for the main task progress bar
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.TaskMaximum">
+            <summary>
+            The maximum value for the main task progress bar
+            </summary>
+            <remarks>This value can be changed for, example, the number of patches to run</remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.TaskValue">
+            <summary>
+            The current progress of this task. Value must be between Maximum and Minimum.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.SubTaskMinimum">
+            <summary>
+            The minimum value for the subtask progress bar
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.SubTaskMaximum">
+            <summary>
+            The maximum value for the subtask progress bar
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.SubTaskValue">
+            <summary>
+            The current value of the subtask progress. Must be between the maximum and minimum
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.PropertyChanged">
+            <summary>
+            Event to trigger when an internal property is changed. It forces a UI update
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.OnPropertyChanged(System.String)">
+            <summary>
+            Method to invoke the PropertyChanged event to update the UI
+            </summary>
+            <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxWPFCheckBox">
+            <summary>
+            Interaction logic for RelhaxWPFCheckBox.xaml
+            </summary>
+            <summary>
+            RelhaxWPFCheckBox
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.#ctor">
+            <summary>
+            Create an instance of the RelhaxWPFCheckBox class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.Package">
+            <summary>
+            The package associated with this UI component
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.OnEnabledChanged(System.Boolean)">
+            <summary>
+            Change any UI parent class properties that depends on the enabled SelectablePackage
+            </summary>
+            <param name="Enabled">The value from the SelectablePackage</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.OnCheckedChanged(System.Boolean)">
+            <summary>
+            Change any UI parent class properties that depends on the checked SelectablePackage
+            </summary>
+            <param name="Checked">The value from the SelectablePackage</param>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.TextColor">
+            <summary>
+            Set the color of the Checkbox Foreground property
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.PanelColor">
+            <summary>
+            Set the brush of the Checkbox Panel Background property 
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.DisabledColor">
+            <summary>
+            Set the value of the disabled component color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.PopularModVisability">
+            <summary>
+            Set the visibility of the popular mod icon
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.GreyAreaVisability">
+            <summary>
+            Set visibility of the Grey area icon
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.PropertyChanged">
+            <summary>
+            Event to trigger when an internal property is changed. It forces a UI update
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.OnPropertyChanged(System.String)">
+            <summary>
+            Method to invoke the PropertyChanged event to update the UI
+            </summary>
+            <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxWPFComboBox">
+            <summary>
+            Interaction logic for RelhaxWPFComboBox.xaml
+            </summary>
+            <summary>
+            RelhaxWPFComboBox
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.#ctor">
+            <summary>
+            Create an instance of the RelhaxWPFComboBox class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.Package">
+            <summary>
+            The package associated with this UI component
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxWPFComboBox.Handler">
+            <summary>
+            The event to subscribe to when the selection is changed
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.OnEnabledChanged(System.Boolean)">
+            <summary>
+            This is not implemented
+            </summary>
+            <param name="Enabled">The value from the SelectablePackage</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.OnCheckedChanged(System.Boolean)">
+            <summary>
+            This is not implemented
+            </summary>
+            <param name="Checked">The value from the SelectablePackage</param>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.TextColor">
+            <summary>
+            This is not implemented
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.PanelColor">
+            <summary>
+            Set the brush of the ComboBox Panel Background property 
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.OnDropDownSelectionChanged(RelhaxModpack.SelectablePackage,System.Boolean)">
+            <summary>
+            Called from the database object to update the UI on a combobox selection change
+            </summary>
+            <param name="spc">The SelectablePakage that caused the update</param>
+            <param name="value">The checked value</param>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.DisabledColor">
+            <summary>
+            Set the value of the disabled component color
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.UIComponents.RelhaxWPFComboBox.PropertyChanged">
+            <summary>
+            Event to trigger when an internal property is changed. It forces a UI update
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.OnPropertyChanged(System.String)">
+            <summary>
+            Method to invoke the PropertyChanged event to update the UI
+            </summary>
+            <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxWPFRadioButton">
+            <summary>
+            Interaction logic for RelhaxWPFRadioButton.xaml
+            </summary>
+            <summary>
+            RelhaxWPFRadioButton
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.#ctor">
+            <summary>
+            Create an instance of the RelhaxWPFRadioButton class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.Package">
+            <summary>
+            The package associated with this UI component
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.OnEnabledChanged(System.Boolean)">
+            <summary>
+            Change any UI parent class properties that depends on the enabled SelectablePackage
+            </summary>
+            <param name="Enabled">The value from the SelectablePackage</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.OnCheckedChanged(System.Boolean)">
+            <summary>
+            Change any UI parent class properties that depends on the checked SelectablePackage
+            </summary>
+            <param name="Checked">The value from the SelectablePackage</param>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.TextColor">
+            <summary>
+            Set the color of the RadioButton Foreground property
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.PanelColor">
+            <summary>
+            Set the brush of the RadioButton Panel Background property 
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.DisabledColor">
+            <summary>
+            Set the value of the disabled component color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.PopularModVisability">
+            <summary>
+            Set the visibility of the popular mod icon
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.GreyAreaVisability">
+            <summary>
+            Set visibility of the Grey area icon
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.PropertyChanged">
+            <summary>
+            Event to trigger when an internal property is changed. It forces a UI update
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.OnPropertyChanged(System.String)">
+            <summary>
+            Method to invoke the PropertyChanged event to update the UI
+            </summary>
+            <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.IPackageUIComponent">
+            <summary>
+            The PackageUIComponent class acts as a handler for when the enabled and checked properties are set from the Package.
+            It can simplify the ModSelectionList code, clean it up, allow for uniform logic for all UI,
+            and allow for easy implementation of another UI.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.IPackageUIComponent.Package">
+            <summary>
+            The package that the UI component belongs to
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.IPackageUIComponent.OnEnabledChanged(System.Boolean)">
+            <summary>
+            Method signature for when the enabled property changes
+            </summary>
+            <param name="Enabled">The value of the enabled property</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.IPackageUIComponent.OnCheckedChanged(System.Boolean)">
+            <summary>
+            Method signature for when the checked property changes
+            </summary>
+            <param name="Checked">The value of the checked property</param>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.IPackageUIComponent.TextColor">
+            <summary>
+            The color of the text of the UI display
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.IPackageUIComponent.PanelColor">
+            <summary>
+            The color of the back panel of the UI display
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxMediaPlayer">
+            <summary>
+            Interaction logic for RelhaxMediaPlayer.xaml
+            </summary>
+            <summary>
+            RelhaxMediaPlayer
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxMediaPlayer.MediaURL">
+            <summary>
+            The direct link to the audio file to preview
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.#ctor">
+            <summary>
+            Creates an instance of the RelhaxMediaPlayer user control
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.#ctor(System.String)">
+            <summary>
+            Creates an instance of the RelhaxMediaPlayer user control
+            </summary>
+            <param name="mediaURL">The direct link to the audio file to preview</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.Dispose(System.Boolean)">
+            <summary>
+            Dispose of the RelhaxMediaPlayer references
+            </summary>
+            <param name="disposing">True to dispose of managed objects</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.Dispose">
+            <summary>
+            Dispose of the RelhaxMediaPlayer references
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxProgress">
+            <summary>
+            The base class for reporting async progress to any UI receiver task.
+            There are up to 3 levels of tasks that can be reported: child, parent, and total. At least total will be implemented an any given usage case.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ChildCurrent">
+            <summary>
+            The current completed and total child level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ChildTotal">
+            <summary>
+            The current completed and total child level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ChildCurrentProgress">
+            <summary>
+            A custom formatted string to use if the async task supports/implements it
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ParrentCurrent">
+            <summary>
+            The current completed and total parent level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ParrentTotal">
+            <summary>
+            The current completed and total parent level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ParrentCurrentProgress">
+            <summary>
+            A custom formatted string to use if the async task supports/implements it
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.TotalCurrent">
+            <summary>
+            The current completed and total level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.TotalTotal">
+            <summary>
+            The current completed and total level tasks. (Tasks are arbitrary and defined by the task itself)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.TotalCurrentProgress">
+            <summary>
+            A custom formatted string to use if the async task supports/implements it
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ReportMessage">
+            <summary>
+            A custom formatted string to use if the async task supports/implements it
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxInstallerProgress">
+            <summary>
+            The RelhaxInstallerProgress class adds additional properties for zip file extraction
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.BytesProcessed">
+            <summary>
+            During zip file extraction, the number of processed bytes extracted, and the total bytes to extract.
+            During copy operations, the number of processed copied bytes, and the total bytes to copy.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.BytesTotal">
+            <summary>
+            During zip file extraction, the number of processed bytes extracted, and the total bytes to extract.
+            During copy operations, the number of processed copied bytes, and the total bytes to copy.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.Filename">
+            <summary>
+            The name of the file currently being processed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.EntryFilename">
+            <summary>
+            During zip file extraction, the entry inside the zip file being processed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.EntriesProcessed">
+            <summary>
+            The number of entries currently processed in this zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.EntriesTotal">
+            <summary>
+            The total number of entries in this zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.ThreadID">
+            <summary>
+            The ID number of the thread that this zip file belongs to
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.InstallStatus">
+            <summary>
+            The current status of the installer. Represents the current state of the installer. When it exists, it is also used as an exit code.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.UninstallStatus">
+            <summary>
+            The current status of the uninstaller. Also used as exit code.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.StretchingTreeView">
+            <summary>
+            A tree view that allows for stretch horizontal alignment of the header item
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.StretchingTreeView.GetContainerForItemOverride">
+            <summary>
+            Overrides the parent GetContainerForItemOverride() method
+            </summary>
+            <returns>A new StretchingTreeViewItem object</returns>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.StretchingTreeView.IsItemItsOwnContainerOverride(System.Object)">
+            <summary>
+            Overrides the parent IsItemItsOwnContainerOverride() method
+            </summary>
+            <param name="item">The item to test</param>
+            <returns>True if the item is of StretchingTreeViewItem class, false otherwise</returns>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.StretchingTreeViewItem">
+            <summary>
+            Allows for the header control to stretch all the way across a filling container
+            </summary>
+            <remarks>see https://stackoverflow.com/questions/35556975/horizontalalignment-stretch-not-working-in-treeviewitem </remarks>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.StretchingTreeViewItem.#ctor">
+            <summary>
+            Create an instance of the StretchingTreeViewItem UI component
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.StretchingTreeViewItem.GetContainerForItemOverride">
+            <summary>
+            Overrides the parent GetContainerForItemOverride() method
+            </summary>
+            <returns>A new StretchingTreeViewItem object</returns>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.StretchingTreeViewItem.IsItemItsOwnContainerOverride(System.Object)">
+            <summary>
+            Overrides the parent IsItemItsOwnContainerOverride() method
+            </summary>
+            <param name="item">The item to test</param>
+            <returns>True if the item is of StretchingTreeViewItem class, false otherwise</returns>
+        </member>
         <member name="T:RelhaxModpack.Atlas">
             <summary>
             A class that serves as a description of an atlas file with processing instructions
@@ -3033,647 +3709,6 @@
             Saves all currently enabled color settings to an xml file
             </summary>
             <param name="savePath">The path to save the xml file to</param>
-        </member>
-        <member name="T:RelhaxModpack.UIComponents.ComboBoxItem">
-            <summary>
-            The ComboBoxItem class is a wrapper class for displaying SelectablePackages as combo box items. The ToString() allows for display of the package name
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.ComboBoxItem.Package">
-            <summary>
-            The SelectablePackage object that is being wrapped around
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.ComboBoxItem.DisplayName">
-            <summary>
-            The text to display in the Combobox
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.ComboBoxItem.#ctor(RelhaxModpack.SelectablePackage,System.String)">
-            <summary>
-            Creates an instance of the ComboBoxItem class
-            </summary>
-            <param name="package">The package to wrap around</param>
-            <param name="display">The text to display in the Combobox</param>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.ComboBoxItem.ToString">
-            <summary>
-            Allows for displaying of custom text in the Combobox
-            </summary>
-            <returns>The text to display in the Combobox (DisplayName property)</returns>
-        </member>
-        <member name="T:RelhaxModpack.UIComponents.EditorComboBoxItem">
-            <summary>
-            The EditorComboBoxItem class is a wrapper class for displaying DatabaseObjects as combo box items. The ToString() allows for display of the internal PackageName property
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.EditorComboBoxItem.Package">
-            <summary>
-            The DatabasePackage object that is being wrapped around
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.EditorComboBoxItem.DisplayName">
-            <summary>
-            A wrapper property around the Package's PackageName object
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.EditorComboBoxItem.#ctor(RelhaxModpack.DatabasePackage)">
-            <summary>
-            Creates an instance of the EditorComboBoxItem class
-            </summary>
-            <param name="package">The package to wrap around</param>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.EditorComboBoxItem.ToString">
-            <summary>
-            Allows for displaying of custom text in the Combobox
-            </summary>
-            <returns>The text to display in the Combobox (DisplayName property -> PackageName)</returns>
-        </member>
-        <member name="T:RelhaxModpack.UIComponents.EditorSearchBoxItem">
-            <summary>
-            The EditorSearchBoxItem class is a wrapper class for displaying DatabaseObjects as combo box items. The ToString() allows for display of any string property
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.EditorSearchBoxItem.Package">
-            <summary>
-            The DatabasePackage object that is being wrapped around
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.EditorSearchBoxItem.DisplayName">
-            <summary>
-            The text to display in the Combobox
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.EditorSearchBoxItem.#ctor(RelhaxModpack.DatabasePackage,System.String)">
-            <summary>
-            Creates an instance of the EditorSearchBoxItem class
-            </summary>
-            <param name="package">The package to wrap around</param>
-            <param name="display">The text to display in the Combobox</param>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.EditorSearchBoxItem.ToString">
-            <summary>
-            Allows for displaying of custom text in the Combobox
-            </summary>
-            <returns>The text to display in the Combobox</returns>
-        </member>
-        <member name="T:RelhaxModpack.UIComponents.LinkButton">
-            <summary>
-            Wrapper class for the Button class of the System.Windows.Controls namespace. Adds the Link property.
-            </summary>
-            <remarks>Allows for starting a process from the Link value to a website</remarks>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.LinkButton.Link">
-            <summary>
-            The URL for which to start the process based on
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.UIComponents.TaskReportState">
-            <summary>
-            States of the Task reporter in display to the UI
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.TaskReportState.Inactive">
-            <summary>
-            Not used for this installation
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.TaskReportState.Active">
-            <summary>
-            In use for this installation
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.TaskReportState.Complete">
-            <summary>
-            In use for this installation and the task completed
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.TaskReportState.Error">
-            <summary>
-            An error has occurred on that task
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter">
-            <summary>
-            Interaction logic for RelhaxInstallTaskReporter.xaml
-            </summary>
-            <summary>
-            RelhaxInstallTaskReporter
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.#ctor">
-            <summary>
-            Create an instance of the RelhaxInstallTaskReporter and init the UI side of it
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.ReportState">
-            <summary>
-            Controls the UI state of the thread reporter
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.IsSubProgressActive">
-            <summary>
-            Toggle if the second progress bar should be visible
-            </summary>
-            <remarks>Some tasks (like zip file extraction) have "sub-tasks" that take enough time where tracking their progress is warranted.
-            For example, a zip file has many files to extract. That's the main task. However, each file has bytes to extract. If the file to extract
-            is large, a subtask to track the extraction progress could be useful</remarks>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.TaskTitle">
-            <summary>
-            The name of this task to display
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.TaskText">
-            <summary>
-            The main reporting description of this task. Supports string formatting
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.TaskMinimum">
-            <summary>
-            The minimum value for the main task progress bar
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.TaskMaximum">
-            <summary>
-            The maximum value for the main task progress bar
-            </summary>
-            <remarks>This value can be changed for, example, the number of patches to run</remarks>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.TaskValue">
-            <summary>
-            The current progress of this task. Value must be between Maximum and Minimum.
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.SubTaskMinimum">
-            <summary>
-            The minimum value for the subtask progress bar
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.SubTaskMaximum">
-            <summary>
-            The maximum value for the subtask progress bar
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.SubTaskValue">
-            <summary>
-            The current value of the subtask progress. Must be between the maximum and minimum
-            </summary>
-        </member>
-        <member name="E:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.PropertyChanged">
-            <summary>
-            Event to trigger when an internal property is changed. It forces a UI update
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.OnPropertyChanged(System.String)">
-            <summary>
-            Method to invoke the PropertyChanged event to update the UI
-            </summary>
-            <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.UIComponents.RelhaxWPFCheckBox">
-            <summary>
-            Interaction logic for RelhaxWPFCheckBox.xaml
-            </summary>
-            <summary>
-            RelhaxWPFCheckBox
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.#ctor">
-            <summary>
-            Create an instance of the RelhaxWPFCheckBox class
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.Package">
-            <summary>
-            The package associated with this UI component
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.OnEnabledChanged(System.Boolean)">
-            <summary>
-            Change any UI parent class properties that depends on the enabled SelectablePackage
-            </summary>
-            <param name="Enabled">The value from the SelectablePackage</param>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.OnCheckedChanged(System.Boolean)">
-            <summary>
-            Change any UI parent class properties that depends on the checked SelectablePackage
-            </summary>
-            <param name="Checked">The value from the SelectablePackage</param>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.TextColor">
-            <summary>
-            Set the color of the Checkbox Foreground property
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.PanelColor">
-            <summary>
-            Set the brush of the Checkbox Panel Background property 
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.DisabledColor">
-            <summary>
-            Set the value of the disabled component color
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.PopularModVisability">
-            <summary>
-            Set the visibility of the popular mod icon
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.GreyAreaVisability">
-            <summary>
-            Set visibility of the Grey area icon
-            </summary>
-        </member>
-        <member name="E:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.PropertyChanged">
-            <summary>
-            Event to trigger when an internal property is changed. It forces a UI update
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.OnPropertyChanged(System.String)">
-            <summary>
-            Method to invoke the PropertyChanged event to update the UI
-            </summary>
-            <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.UIComponents.RelhaxWPFComboBox">
-            <summary>
-            Interaction logic for RelhaxWPFComboBox.xaml
-            </summary>
-            <summary>
-            RelhaxWPFComboBox
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.#ctor">
-            <summary>
-            Create an instance of the RelhaxWPFComboBox class
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.Package">
-            <summary>
-            The package associated with this UI component
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxWPFComboBox.Handler">
-            <summary>
-            The event to subscribe to when the selection is changed
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.OnEnabledChanged(System.Boolean)">
-            <summary>
-            This is not implemented
-            </summary>
-            <param name="Enabled">The value from the SelectablePackage</param>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.OnCheckedChanged(System.Boolean)">
-            <summary>
-            This is not implemented
-            </summary>
-            <param name="Checked">The value from the SelectablePackage</param>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.TextColor">
-            <summary>
-            This is not implemented
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.PanelColor">
-            <summary>
-            Set the brush of the ComboBox Panel Background property 
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.OnDropDownSelectionChanged(RelhaxModpack.SelectablePackage,System.Boolean)">
-            <summary>
-            Called from the database object to update the UI on a combobox selection change
-            </summary>
-            <param name="spc">The SelectablePakage that caused the update</param>
-            <param name="value">The checked value</param>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.DisabledColor">
-            <summary>
-            Set the value of the disabled component color
-            </summary>
-        </member>
-        <member name="E:RelhaxModpack.UIComponents.RelhaxWPFComboBox.PropertyChanged">
-            <summary>
-            Event to trigger when an internal property is changed. It forces a UI update
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.OnPropertyChanged(System.String)">
-            <summary>
-            Method to invoke the PropertyChanged event to update the UI
-            </summary>
-            <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.UIComponents.RelhaxWPFRadioButton">
-            <summary>
-            Interaction logic for RelhaxWPFRadioButton.xaml
-            </summary>
-            <summary>
-            RelhaxWPFRadioButton
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.#ctor">
-            <summary>
-            Create an instance of the RelhaxWPFRadioButton class
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.Package">
-            <summary>
-            The package associated with this UI component
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.OnEnabledChanged(System.Boolean)">
-            <summary>
-            Change any UI parent class properties that depends on the enabled SelectablePackage
-            </summary>
-            <param name="Enabled">The value from the SelectablePackage</param>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.OnCheckedChanged(System.Boolean)">
-            <summary>
-            Change any UI parent class properties that depends on the checked SelectablePackage
-            </summary>
-            <param name="Checked">The value from the SelectablePackage</param>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.TextColor">
-            <summary>
-            Set the color of the RadioButton Foreground property
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.PanelColor">
-            <summary>
-            Set the brush of the RadioButton Panel Background property 
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.DisabledColor">
-            <summary>
-            Set the value of the disabled component color
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.PopularModVisability">
-            <summary>
-            Set the visibility of the popular mod icon
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.GreyAreaVisability">
-            <summary>
-            Set visibility of the Grey area icon
-            </summary>
-        </member>
-        <member name="E:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.PropertyChanged">
-            <summary>
-            Event to trigger when an internal property is changed. It forces a UI update
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.OnPropertyChanged(System.String)">
-            <summary>
-            Method to invoke the PropertyChanged event to update the UI
-            </summary>
-            <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.UIComponents.IPackageUIComponent">
-            <summary>
-            The PackageUIComponent class acts as a handler for when the enabled and checked properties are set from the Package.
-            It can simplify the ModSelectionList code, clean it up, allow for uniform logic for all UI,
-            and allow for easy implementation of another UI.
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.IPackageUIComponent.Package">
-            <summary>
-            The package that the UI component belongs to
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.IPackageUIComponent.OnEnabledChanged(System.Boolean)">
-            <summary>
-            Method signature for when the enabled property changes
-            </summary>
-            <param name="Enabled">The value of the enabled property</param>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.IPackageUIComponent.OnCheckedChanged(System.Boolean)">
-            <summary>
-            Method signature for when the checked property changes
-            </summary>
-            <param name="Checked">The value of the checked property</param>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.IPackageUIComponent.TextColor">
-            <summary>
-            The color of the text of the UI display
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.IPackageUIComponent.PanelColor">
-            <summary>
-            The color of the back panel of the UI display
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.UIComponents.RelhaxMediaPlayer">
-            <summary>
-            Interaction logic for RelhaxMediaPlayer.xaml
-            </summary>
-            <summary>
-            RelhaxMediaPlayer
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxMediaPlayer.MediaURL">
-            <summary>
-            The direct link to the audio file to preview
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.#ctor">
-            <summary>
-            Creates an instance of the RelhaxMediaPlayer user control
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.#ctor(System.String)">
-            <summary>
-            Creates an instance of the RelhaxMediaPlayer user control
-            </summary>
-            <param name="mediaURL">The direct link to the audio file to preview</param>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.Dispose(System.Boolean)">
-            <summary>
-            Dispose of the RelhaxMediaPlayer references
-            </summary>
-            <param name="disposing">True to dispose of managed objects</param>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.Dispose">
-            <summary>
-            Dispose of the RelhaxMediaPlayer references
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.UIComponents.RelhaxProgress">
-            <summary>
-            The base class for reporting async progress to any UI receiver task.
-            There are up to 3 levels of tasks that can be reported: child, parent, and total. At least total will be implemented an any given usage case.
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ChildCurrent">
-            <summary>
-            The current completed and total child level tasks. (Tasks are arbitrary and defined by the task itself)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ChildTotal">
-            <summary>
-            The current completed and total child level tasks. (Tasks are arbitrary and defined by the task itself)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ChildCurrentProgress">
-            <summary>
-            A custom formatted string to use if the async task supports/implements it
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ParrentCurrent">
-            <summary>
-            The current completed and total parent level tasks. (Tasks are arbitrary and defined by the task itself)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ParrentTotal">
-            <summary>
-            The current completed and total parent level tasks. (Tasks are arbitrary and defined by the task itself)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ParrentCurrentProgress">
-            <summary>
-            A custom formatted string to use if the async task supports/implements it
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.TotalCurrent">
-            <summary>
-            The current completed and total level tasks. (Tasks are arbitrary and defined by the task itself)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.TotalTotal">
-            <summary>
-            The current completed and total level tasks. (Tasks are arbitrary and defined by the task itself)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.TotalCurrentProgress">
-            <summary>
-            A custom formatted string to use if the async task supports/implements it
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxProgress.ReportMessage">
-            <summary>
-            A custom formatted string to use if the async task supports/implements it
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.UIComponents.RelhaxInstallerProgress">
-            <summary>
-            The RelhaxInstallerProgress class adds additional properties for zip file extraction
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.BytesProcessed">
-            <summary>
-            During zip file extraction, the number of processed bytes extracted, and the total bytes to extract.
-            During copy operations, the number of processed copied bytes, and the total bytes to copy.
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.BytesTotal">
-            <summary>
-            During zip file extraction, the number of processed bytes extracted, and the total bytes to extract.
-            During copy operations, the number of processed copied bytes, and the total bytes to copy.
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.Filename">
-            <summary>
-            The name of the file currently being processed
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.EntryFilename">
-            <summary>
-            During zip file extraction, the entry inside the zip file being processed
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.EntriesProcessed">
-            <summary>
-            The number of entries currently processed in this zip file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.EntriesTotal">
-            <summary>
-            The total number of entries in this zip file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.ThreadID">
-            <summary>
-            The ID number of the thread that this zip file belongs to
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.InstallStatus">
-            <summary>
-            The current status of the installer. Represents the current state of the installer. When it exists, it is also used as an exit code.
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.UninstallStatus">
-            <summary>
-            The current status of the uninstaller. Also used as exit code.
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.UIComponents.StretchingTreeView">
-            <summary>
-            A tree view that allows for stretch horizontal alignment of the header item
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.StretchingTreeView.GetContainerForItemOverride">
-            <summary>
-            Overrides the parent GetContainerForItemOverride() method
-            </summary>
-            <returns>A new StretchingTreeViewItem object</returns>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.StretchingTreeView.IsItemItsOwnContainerOverride(System.Object)">
-            <summary>
-            Overrides the parent IsItemItsOwnContainerOverride() method
-            </summary>
-            <param name="item">The item to test</param>
-            <returns>True if the item is of StretchingTreeViewItem class, false otherwise</returns>
-        </member>
-        <member name="T:RelhaxModpack.UIComponents.StretchingTreeViewItem">
-            <summary>
-            Allows for the header control to stretch all the way across a filling container
-            </summary>
-            <remarks>see https://stackoverflow.com/questions/35556975/horizontalalignment-stretch-not-working-in-treeviewitem </remarks>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.StretchingTreeViewItem.#ctor">
-            <summary>
-            Create an instance of the StretchingTreeViewItem UI component
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.StretchingTreeViewItem.GetContainerForItemOverride">
-            <summary>
-            Overrides the parent GetContainerForItemOverride() method
-            </summary>
-            <returns>A new StretchingTreeViewItem object</returns>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.StretchingTreeViewItem.IsItemItsOwnContainerOverride(System.Object)">
-            <summary>
-            Overrides the parent IsItemItsOwnContainerOverride() method
-            </summary>
-            <param name="item">The item to test</param>
-            <returns>True if the item is of StretchingTreeViewItem class, false otherwise</returns>
         </member>
         <member name="T:RelhaxModpack.PatchRegressionTypes">
             <summary>
