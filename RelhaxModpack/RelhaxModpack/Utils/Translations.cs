@@ -69,7 +69,10 @@ namespace RelhaxModpack
             "ApplicationUpdateText",
             "LoadingText",
             "PreviewDescriptionBox",
-            "PreviewUpdatesBox"
+            "PreviewUpdatesBox",
+            //RelhaxHyperlink components
+            "ParentTextBlock",
+            "ChildTextblock"
         };
         private const string TranslationNeeded = "TODO";
         private static readonly string Blank = string.Empty;
@@ -3010,6 +3013,14 @@ namespace RelhaxModpack
             French.Add("AgreementLicense", TranslationNeeded);
             Russian.Add("AgreementLicense", TranslationNeeded);
 
+            //Component: LicenseLink
+            //
+            English.Add("LicenseLink", "License Agreement");
+            German.Add("LicenseLink", TranslationNeeded);
+            Polish.Add("LicenseLink", TranslationNeeded);
+            French.Add("LicenseLink", TranslationNeeded);
+            Russian.Add("LicenseLink", TranslationNeeded);
+
             //Component: AgreementSupport1
             //
             English.Add("AgreementSupport1", "If you need support you can either visit our ");
@@ -3018,13 +3029,29 @@ namespace RelhaxModpack
             French.Add("AgreementSupport1", TranslationNeeded);
             Russian.Add("AgreementSupport1", TranslationNeeded);
 
+            //Component: AgreementSupportForums
+            //
+            English.Add("AgreementSupportForums", "Forums");
+            German.Add("AgreementSupportForums", TranslationNeeded);
+            Polish.Add("AgreementSupportForums", TranslationNeeded);
+            French.Add("AgreementSupportForums", TranslationNeeded);
+            Russian.Add("AgreementSupportForums", TranslationNeeded);
+
             //Component: AgreementSupport2
             //
-            English.Add("AgreementSupport2", "or our ");
+            English.Add("AgreementSupport2", " or our ");
             German.Add("AgreementSupport2", TranslationNeeded);
             Polish.Add("AgreementSupport2", TranslationNeeded);
             French.Add("AgreementSupport2", TranslationNeeded);
             Russian.Add("AgreementSupport2", TranslationNeeded);
+
+            //Component: AgreementSupportDiscord
+            //
+            English.Add("AgreementSupportDiscord", "Discord");
+            German.Add("AgreementSupportDiscord", TranslationNeeded);
+            Polish.Add("AgreementSupportDiscord", TranslationNeeded);
+            French.Add("AgreementSupportDiscord", TranslationNeeded);
+            Russian.Add("AgreementSupportDiscord", TranslationNeeded);
 
             //Component: AgreementHoster
             //
@@ -3113,7 +3140,17 @@ namespace RelhaxModpack
                     {
                         if(Exists(headeredContentControl.Name + "Description"))
                             headeredContentControl.ToolTip = GetTranslatedString(headeredContentControl.Name + "Description");
-                    }  
+                    }
+                }
+                //RelhaxHyperlink has text stored at the child textbox
+                else if (control is UIComponents.RelhaxHyperlink link)
+                {
+                    link.Text = GetTranslatedString(componentName);
+                    if (applyToolTips)
+                    {
+                        if (Exists(componentName + "Description"))
+                            link.ToolTip = GetTranslatedString(componentName + "Description");
+                    }
                 }
                 //content controls have only a heder
                 else if (control is ContentControl contentControl)
@@ -3137,7 +3174,6 @@ namespace RelhaxModpack
                             textBox.ToolTip = GetTranslatedString(textBox.Name + "Description");
                     }
                 }
-                
             }
             else if (frameworkElement is TextBlock textBlock)
             {
