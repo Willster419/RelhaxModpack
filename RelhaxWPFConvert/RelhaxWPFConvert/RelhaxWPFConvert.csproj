@@ -92,6 +92,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="RelhaxHyperlink.xaml.cs">
+      <DependentUpon>RelhaxHyperlink.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StretchingTreeViewItem.cs" />
     <Compile Include="RelhaxCheckBox.xaml.cs">
       <DependentUpon>RelhaxCheckBox.xaml</DependentUpon>
@@ -114,6 +117,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="RelhaxCheckBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RelhaxHyperlink.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

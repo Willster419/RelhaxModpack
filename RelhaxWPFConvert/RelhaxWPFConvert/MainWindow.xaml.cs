@@ -490,6 +490,7 @@ namespace RelhaxWPFConvert
         private void ChangeHyperlinkTextLikeTranslations_Click(object sender, RoutedEventArgs e)
         {
             hyperLinkText.Text = "new text";
+            CustomHyperlink.Text = "another test";
         }
         #endregion
     }

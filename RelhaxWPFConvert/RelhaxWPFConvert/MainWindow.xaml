@@ -201,12 +201,13 @@
                 </GroupBox>
                 <GroupBox Header="Hyperlink" HorizontalAlignment="Left" Height="63" Margin="351,262,0,0" VerticalAlignment="Top" Width="205">
                     <Grid >
-                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="22">
+                        <TextBlock VerticalAlignment="Top" Height="22" HorizontalAlignment="Left">
                             <!-- https://stackoverflow.com/questions/10238694/example-using-hyperlink-in-wpf#comment33979391_10238715 -->
                             <Hyperlink NavigateUri="https://bing.com">
                                 <TextBlock x:Name="hyperLinkText" Text="reeee"/>
                             </Hyperlink>
                         </TextBlock>
+                        <local:RelhaxHyperlink x:Name="CustomHyperlink" HorizontalAlignment="Left" VerticalAlignment="Top" Height="22" URL="https://bing.com" Text="This is a test" Margin="34,0,0,0"/>
                         <Button x:Name="changeHyperlinkTextLikeTranslations" Click="ChangeHyperlinkTextLikeTranslations_Click" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="128" Content="Change hyperlink text" Margin="0,22,0,0"/>
                     </Grid>
                 </GroupBox>
