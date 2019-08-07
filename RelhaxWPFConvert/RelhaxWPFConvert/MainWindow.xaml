@@ -193,10 +193,21 @@
                 </GroupBox>
                 <GroupBox Header="Task Cancel Stuff" x:Name="TaskCancelTestingGroupBox" HorizontalAlignment="Left" Height="102" Margin="561,223,0,0" VerticalAlignment="Top" Width="215">
                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                        <TextBlock x:Name="TaskCancelTestingBlock" HorizontalAlignment="Left" Margin="10,32,0,0" TextWrapping="Wrap" Text="Task Not started" VerticalAlignment="Top" Width="183" />
+                        <TextBlock x:Name="TaskCancelTestingBlock" HorizontalAlignment="Left" Margin="10,32,0,0" TextWrapping="Wrap" Text="Task Not started" VerticalAlignment="Top" Width="183" Style="{DynamicResource TextBlockStyle1}" />
                         <Button x:Name="TaskCancelTestingButton" Content="Start Task" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="74" Height="20" Click="TaskCancelTestingButton_Click"/>
                         <ProgressBar x:Name="TaskCancelTestingProgress" HorizontalAlignment="Left" Height="17" Margin="10,53,0,0" VerticalAlignment="Top" Width="183" Minimum="0" Value="0" Maximum="10"/>
                         <Button x:Name="TaskCancelTestingCancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="89,10,0,0" VerticalAlignment="Top" Width="75" Click="TaskCancelTestingCancelButton_Click"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Hyperlink" HorizontalAlignment="Left" Height="63" Margin="351,262,0,0" VerticalAlignment="Top" Width="205">
+                    <Grid >
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="22">
+                            <!-- https://stackoverflow.com/questions/10238694/example-using-hyperlink-in-wpf#comment33979391_10238715 -->
+                            <Hyperlink NavigateUri="https://bing.com">
+                                <TextBlock x:Name="hyperLinkText" Text="reeee"/>
+                            </Hyperlink>
+                        </TextBlock>
+                        <Button x:Name="changeHyperlinkTextLikeTranslations" Click="ChangeHyperlinkTextLikeTranslations_Click" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="128" Content="Change hyperlink text" Margin="0,22,0,0"/>
                     </Grid>
                 </GroupBox>
             </Grid>

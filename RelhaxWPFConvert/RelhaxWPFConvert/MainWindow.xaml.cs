@@ -483,8 +483,14 @@ namespace RelhaxWPFConvert
             TaskCancelTestingBlock.Text = e.update;
             TaskCancelTestingProgress.Value = e.value;
         }
+
         #endregion
 
-
+        #region Hyperlink Design testing
+        private void ChangeHyperlinkTextLikeTranslations_Click(object sender, RoutedEventArgs e)
+        {
+            hyperLinkText.Text = "new text";
+        }
+        #endregion
     }
 }
