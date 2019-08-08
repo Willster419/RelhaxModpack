@@ -77,18 +77,12 @@ namespace RelhaxModpack
             WindowState = WindowState.Minimized;
             tempDisabledBlacklist = new Control[]
             {
-                MulticoreExtractionCB,
-                InstallWhileDownloadingCB,
-                BackupModsCB,
-                AdvancedInstallationProgress,
                 ThemeDefault,
                 ThemeDark,
                 ThemeCustom,
                 UseBetaApplicationCB,
                 DisableTriggersCB,
-                AutoInstallCB,
-                OneClickInstallCB,
-                ExportModeCB
+                VerboseLoggingCB
             };
         }
 
@@ -1838,8 +1832,9 @@ namespace RelhaxModpack
                 if (control is Button || control is CheckBox || control is RadioButton)
                 {
                     if (tempDisabledBlacklist.Contains(control))
-                        continue;
-                    control.IsEnabled = toggle;
+                        control.IsEnabled = false;
+                    else
+                        control.IsEnabled = toggle;
                 }
             }
             //any to include here that aren't any of the above class types
