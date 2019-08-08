@@ -1554,7 +1554,7 @@ namespace RelhaxModpack
             English.Add("FirstTimeUserModsWarning", "This tab is for selecting zip files you place in the \"RelhaxUserMods\" folder. They must be zip files, and should use a root directory folder of the \"World_of_Tanks\" directory");
             German.Add("FirstTimeUserModsWarning", "Auf dieser Registerkarte können Sie ZIP-Dateien auswählen, die Sie im Ordner \"RelhaxUserMods\" ablegen. Sie müssen Zip-Dateien sein und sollten einen Stammverzeichnisordner des Verzeichnisses \"World_of_Tanks\" verwenden");
             Polish.Add("FirstTimeUserModsWarning", TranslationNeeded);
-            French.Add("FirstTimeUserModsWarning", "Cet onglet sert à sélectionner les fichiers zip que vous placez dans le dossier \"RelhaxUserMods \". Il doit s'agir de fichiers zip et utiliser un dossier dans le dossier racine du répertoire \" World_of_Tanks \ "");
+            French.Add("FirstTimeUserModsWarning", "Cet onglet sert à sélectionner les fichiers zip que vous placez dans le dossier \"RelhaxUserMods \". Il doit s'agir de fichiers zip et utiliser un dossier dans le dossier racine du répertoire \"World_of_Tanks \"");
             Russian.Add("FirstTimeUserModsWarning", "Данная вкладка предназначена для выбора модов, расположенных в папке \"RelhaxUserMods\". Они должны быть в виде ZIP-архивов и использовать корневую папку World of Tanks.");
 
             //Component: downloadingDatabase
@@ -3052,7 +3052,7 @@ namespace RelhaxModpack
             English.Add("AgreementSupportDiscord", "Discord");
             German.Add("AgreementSupportDiscord", TranslationNeeded);
             Polish.Add("AgreementSupportDiscord", TranslationNeeded);
-            French.Add("AgreementSupportDiscord", Discord);
+            French.Add("AgreementSupportDiscord", "Discord");
             Russian.Add("AgreementSupportDiscord", "Discord");
 
             //Component: AgreementHoster
@@ -3086,6 +3086,7 @@ namespace RelhaxModpack
             German.Add("V2UpgradeNoticeText", TranslationNeeded);
             Polish.Add("V2UpgradeNoticeText", TranslationNeeded);
             French.Add("V2UpgradeNoticeText", "Il semble que vous exécutiez une mise à niveau de V1 à V2 pour la première fois." +
+                " Appuyer sur Continuer entraînera une mise à niveau de la structure de fichiers qui ne peut pas être annulée. Il est recommandé de faire une sauvegarde de votre dossier V1 avant de continuer");
             Russian.Add("V2UpgradeNoticeText", "Похоже, что вы производите апгрейд с V1 на V2 в первый раз. Нажатие кнопки продолжения произведёт обновление структуры файлов, которое невозможно откатить. Рекомендуется создание бэкапа папки с V1 перед продолжением");
             #endregion
         }
