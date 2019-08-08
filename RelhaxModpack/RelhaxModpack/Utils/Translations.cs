@@ -35,6 +35,11 @@ namespace RelhaxModpack
         /// The French language
         /// </summary>
         French,
+        
+        /// <summary>
+        /// The Spanish language
+        /// </summary>
+        Spanish,
 
         /// <summary>
         /// The Russian language
@@ -94,7 +99,11 @@ namespace RelhaxModpack
         /// </summary>
         public const string LanguageFrench = "Français";
         /// <summary>
-        /// French language string identifier in national language
+        /// Spanish language string identifier in national language
+        /// </summary>
+        public const string LanguageEnglish = "Español";
+        /// <summary>
+        /// Russian language string identifier in national language
         /// </summary>
         public const string LanguageRussian = "Pусский";
 
@@ -102,6 +111,7 @@ namespace RelhaxModpack
         private static Dictionary<string, string> German = new Dictionary<string, string>();
         private static Dictionary<string, string> Polish = new Dictionary<string, string>();
         private static Dictionary<string, string> French = new Dictionary<string, string>();
+        private static Dictionary<string, string> Spanish = new Dictionary<string, string>();
         private static Dictionary<string, string> Russian = new Dictionary<string, string>();
 
         //default is to use english
@@ -126,6 +136,9 @@ namespace RelhaxModpack
                     break;
                 case Languages.Polish:
                     CurrentLanguage = Polish;
+                    break;
+                case Languages.Spanish:
+                    CurrentLanguage = Spanish;
                     break;
                 case Languages.Russian:
                     CurrentLanguage = Russian;
@@ -152,6 +165,9 @@ namespace RelhaxModpack
                     break;
                 case "fr":
                     SetLanguage(Languages.French);
+                    break;
+                case "ru":
+                    SetLanguage(Languages.Spanish);
                     break;
                 case "ru":
                     SetLanguage(Languages.Russian);
@@ -226,6 +242,9 @@ namespace RelhaxModpack
                 case Languages.French:
                     DictToCheck = French;
                     break;
+                case Languages.Spanish:
+                    DictToCheck = Spanish;
+                    break;
                 case Languages.German:
                     DictToCheck = German;
                     break;
@@ -244,6 +263,7 @@ namespace RelhaxModpack
             German.Add(key, message);
             Polish.Add(key, message);
             French.Add(key, message);
+            Spanish.Add(key, message);
             Russian.Add(key, message);
         }
         /// <summary>
@@ -259,84 +279,98 @@ namespace RelhaxModpack
             German.Add("yes", "ja");
             Polish.Add("yes", "Tak");
             French.Add("yes", "Oui");
+            Spanish.Add("yes", "Sí");
             Russian.Add("yes", "Да");
 
             English.Add("no", "no");
             German.Add("no", "nein");
             Polish.Add("no", "Nie");
             French.Add("no", "Non");
+            Spanish.Add("no", "No");
             Russian.Add("no", "Нет");
 
             English.Add("cancel", "Cancel");
             German.Add("cancel", "Abbrechen");
             Polish.Add("cancel", "Anuluj");
             French.Add("cancel", "Anuler");
+            Spanish.Add("cancel", "Cancelar");
             Russian.Add("cancel", "Отмена");
 
             English.Add("delete", "Delete");
             German.Add("delete", "Löschen");
             Polish.Add("delete", "Usuń");
             French.Add("delete", "Supprimer");
+            Spanish.Add("delete", "Eliminar");
             Russian.Add("delete", "Удалить");
 
             English.Add("warning", "WARNING");
             German.Add("warning", "WARNUNG");
             Polish.Add("warning", "OSTRZEŻENIE");
             French.Add("warning", "ATTENTION");
+            Spanish.Add("warning", "ATENCIÓN");
             Russian.Add("warning", "ВНИМАНИЕ");
 
             English.Add("critical", "CRITICAL");
             German.Add("critical", "KRITISCH");
             Polish.Add("critical", "BŁĄD KRYTYCZNY");
             French.Add("critical", "CRITIQUAL");
+            Spanish.Add("critical", "CRÍTICO");
             Russian.Add("critical", "КРИТИЧЕСКАЯ ОШИБКА");
 
             English.Add("information", "Information");
             German.Add("information", "Information");
             Polish.Add("information", "Informacja");
             French.Add("information", "information");
+            Spanish.Add("information", "Información");
             Russian.Add("information", "Информация");
 
             English.Add("select", "Select");
             German.Add("select", "Auswählen");
             Polish.Add("select", "Wybierz");
             French.Add("select", "Sélectionner");
+            Spanish.Add("select", "Seleccionar");
             Russian.Add("select", "Выбрать");
 
             English.Add("abort", "Abort");
             German.Add("abort", "Abbrechen");
             Polish.Add("abort", "Przerwij");
             French.Add("abort", "Annuler");
+            Spanish.Add("abort", "Abortar");
             Russian.Add("abort", "Отменить");
 
             English.Add("error", "Error");
             German.Add("error", "Fehler");
             Polish.Add("error", "Błąd");
             French.Add("error", "Erreur");
+            Spanish.Add("error", "Error");
             Russian.Add("error", "Ошибка");
 
             English.Add("retry", "Retry");
             German.Add("retry", "Wiederholen");
             Polish.Add("retry", "Spróbuj ponownie");
             French.Add("retry", "Reaissayer");
+            Spanish.Add("retry", "Reintentar");
             Russian.Add("retry", "Повторить");
 
             English.Add("ignore", "Ignore");
             German.Add("ignore", "Ignorieren");
             Polish.Add("ignore", "Ignoruj");
             French.Add("ignore", "Ignorer");
+            Spanish.Add("ignore", "Ignorar");
             Russian.Add("ignore", "Игнорировать");
 
             English.Add("lastUpdated", "Last Updated: ");
             German.Add("lastUpdated", "Letzte Aktualisierung: ");
             Polish.Add("lastUpdated", "Ostatnio zaktualizowano: ");
             French.Add("lastUpdated", "Dernière mise à jour: ");
+            Spanish.Add("lastUpdated", "Última actualización: ");
             Russian.Add("lastUpdated", "Последнее обновление: ");
 
             English.Add("stepsComplete", "tasks completed");
             German.Add("stepsComplete", "erledigte Aufgaben");
             Polish.Add("stepsComplete", "zadania zakończone");
             French.Add("stepsComplete", "tâches terminées");
+            Spanish.Add("stepsComplete", "Operaciones completadas");
             Russian.Add("stepsComplete", "заданий выполнено");
             #endregion
 
@@ -347,6 +381,7 @@ namespace RelhaxModpack
             German.Add("MenuItemRestore", "Wiederherstellen");
             Polish.Add("MenuItemRestore", "Przywróć");
             French.Add("MenuItemRestore", "Restaurer");
+            Spanish.Add("MenuItemRestore", "Restaurar");
             Russian.Add("MenuItemRestore", "Восстановить");
 
             //Component: MenuItemCheckUpdates
@@ -355,6 +390,7 @@ namespace RelhaxModpack
             German.Add("MenuItemCheckUpdates", "Nach Updates suchen");
             Polish.Add("MenuItemCheckUpdates", "Sprawdź aktualizacje");
             French.Add("MenuItemCheckUpdates", "Vérifier les mises à jour");
+            Spanish.Add("MenuItemCheckUpdates", "Comprobar actualizaciones");
             Russian.Add("MenuItemCheckUpdates", "Проверить наличие обновлений");
 
             //Component: MenuItemAppClose
@@ -363,6 +399,7 @@ namespace RelhaxModpack
             German.Add("MenuItemAppClose", "Schließen");
             Polish.Add("MenuItemAppClose", "Zamknij");
             French.Add("MenuItemAppClose", "Fermer");
+            Spanish.Add("MenuItemAppClose", "Cerrar");
             Russian.Add("MenuItemAppClose", "Закрыть");
 
             //Component: newDBApplied
@@ -371,6 +408,7 @@ namespace RelhaxModpack
             German.Add("newDBApplied", "Neue Datenbankversion angewendet");
             Polish.Add("newDBApplied", "Zastosowano nową bazę danych");
             French.Add("newDBApplied", "Nouvelle version de base de données appliquée");
+            Spanish.Add("newDBApplied", "Aplicada nueva versión de la base de datos");
             Russian.Add("newDBApplied", "Применена новая версия базы данных");
             #endregion
 
@@ -381,6 +419,7 @@ namespace RelhaxModpack
             German.Add("InstallModpackButton", "Auswahl der Mods");
             Polish.Add("InstallModpackButton", "Przejdź Do Wyboru Modyfikacji");
             French.Add("InstallModpackButton", "Sélection des mods");
+            Spanish.Add("InstallModpackButton", "Comenzar selección de Mods");
             Russian.Add("InstallModpackButton", "Начать выбор модов");
 
             //Component: InstallModpackButtonDescription
@@ -389,6 +428,7 @@ namespace RelhaxModpack
             German.Add("InstallModpackButtonDescription", "Wählen Sie die Mods aus, die Sie auf ihrem WoT CLient installieren möchten");
             Polish.Add("InstallModpackButtonDescription", "Zaznacz modyfikacje, które chcesz zainstalować w swoim kliencie WoT");
             French.Add("InstallModpackButtonDescription", "Sélectionnez les mods que vous souhaitez installer sur votre client WoT");
+            Spanish.Add("InstallModpackButtonDescription", "Seleccione los Mods que quiere instalar a su cliente de WoT");
             Russian.Add("InstallModpackButtonDescription", "Выберите моды, которые вы хотите установить в клиент World of Tanks");
 
             //Component: UninstallModpackButton
@@ -397,6 +437,7 @@ namespace RelhaxModpack
             German.Add("UninstallModpackButton", "Relhax Modpack deinstallieren");
             Polish.Add("UninstallModpackButton", "Odinstaluj Paczkę Relhax");
             French.Add("UninstallModpackButton", "Désinstaller Relhax Modpack");
+            Spanish.Add("UninstallModpackButton", "Desinstalar Relhax Modpack");
             Russian.Add("UninstallModpackButton", "Удалить модпак Relhax");
 
             //Component: UninstallModpackButtonDescription
@@ -405,6 +446,7 @@ namespace RelhaxModpack
             German.Add("UninstallModpackButtonDescription", "*Alle* Mods entfernen, die auf deinem WoT-Client installiert sind");
             Polish.Add("UninstallModpackButtonDescription", "Usuń wszystkie zainstalowane modyfikacje do klienta WoT");
             French.Add("UninstallModpackButtonDescription", "Supprimer *tous* les mods installés sur votre client WoT");
+            Spanish.Add("UninstallModpackButtonDescription", "Eliminar *todos* los Mods installados en su cliente de WoT");
             Russian.Add("UninstallModpackButtonDescription", "Удаление *всех* установленных в клиент WoT модификаций");
 
             //Component: ViewNewsButton
@@ -413,6 +455,7 @@ namespace RelhaxModpack
             German.Add("ViewNewsButton", "Aktualisierungsnachrichten anzeigen");
             Polish.Add("ViewNewsButton", "Zobacz wiadomości o aktualizacjach");
             French.Add("ViewNewsButton", "Voir les mises à jour");
+            Spanish.Add("ViewNewsButton", "Ver noticias de actualizaciones");
             Russian.Add("ViewNewsButton", "Новости обновлений");
 
             //Component: ViewNewsButtonDescription
@@ -421,6 +464,7 @@ namespace RelhaxModpack
             German.Add("ViewNewsButtonDescription", "Anzeigen von Anwendungs-, Datenbank- und anderen Aktualisierungsnachrichten");
             Polish.Add("ViewNewsButtonDescription", "Zobacz aplikację, bazę danych i inne wiadomości o aktualizacjach");
             French.Add("ViewNewsButtonDescription", "Afficher les actualités sur l'applications, les bases de données et autres");
+            Spanish.Add("ViewNewsButtonDescription", "Ver noticias sobre actualizaciones de la aplicación, base de datos, y otros");
             Russian.Add("ViewNewsButtonDescription", "Показать новости об обновлениях приложения, БД и прочее");
 
             //Component: ForceManuelGameDetectionCB
@@ -429,6 +473,7 @@ namespace RelhaxModpack
             German.Add("ForceManuelGameDetectionCB", "Erzwinge manuelle Spielerkennung");
             Polish.Add("ForceManuelGameDetectionCB", "Wymuś ręczną weryfikację ścieżki gry");
             French.Add("ForceManuelGameDetectionCB", "Forcer détection manuel");
+            Spanish.Add("ForceManuelGameDetectionCB", "Forzar detección manual del cliente");
             Russian.Add("ForceManuelGameDetectionCB", "Принудительно указать папку с игрой");
 
             //Component: ForceManuelGameDetectionCBDescription
@@ -441,6 +486,8 @@ namespace RelhaxModpack
                     "Zaznacz, jeśli masz problem z automatycznym znalezieniem ścieżki dostępu do gry.");
             French.Add("ForceManuelGameDetectionCBDescription", "Cette option consiste à forcer une détection manuel" +
                     "de World of Tanks. Sélectionnez cette option si vous rencontrez des problèmes pour localiser automatiquement le jeu.");
+            Spanish.Add("ForceManuelGameDetectionCBDescription", "Esta opción es utilizada para forzar una detección manual de la" +
+                    "ruta de instalación de World of Tanks. Marque esta casilla si tiene problemas encontrando el juego automáticamente);
             Russian.Add("ForceManuelGameDetectionCBDescription", "Эта опция для принудительного указания папки с World of Tanks." +
                     "Поставьте галочку только в случае проблем с автоматическим определением расположения игры.");
 
@@ -450,6 +497,7 @@ namespace RelhaxModpack
             German.Add("LanguageSelectionGBHeader", "Sprachauswahl");
             Polish.Add("LanguageSelectionGBHeader", "Wybór języka");
             French.Add("LanguageSelectionGBHeader", "Choix de langue");
+            Spanish.Add("LanguageSelectionGBHeader", "Selección de idioma");
             Russian.Add("LanguageSelectionGBHeader", "Выбрать язык");
 
             //Component: Forms_ENG_NAButtonDescription
@@ -457,6 +505,7 @@ namespace RelhaxModpack
             German.Add("Forms_ENG_NAButtonDescription", "Gehe zur englischsprachigen 'World of Tanks' Forum Seite für den NA Server");
             Polish.Add("Forms_ENG_NAButtonDescription", "Idź do anglojęzycznego forum 'World of Tanks' dla serwerów NA");
             French.Add("Forms_ENG_NAButtonDescription", "Accéder au forum anglophone 'World of Tanks' pour le serveur NA");
+            Spanish.Add("Forms_ENG_NAButtonDescription", "Acceder a la página en inglés del foro de 'World of Tanks' del servidor de NA");
             Russian.Add("Forms_ENG_NAButtonDescription", "Перейти на страницу модпака на World of Tanks NA (страница на английском)");
 
             //Component: FormsENG_EUButtonDescription
@@ -464,6 +513,7 @@ namespace RelhaxModpack
             German.Add("Forms_ENG_EUButtonDescription", "Gehe zur englischsprachigen 'World of Tanks' Forum Seite für den EU Server");
             Polish.Add("Forms_ENG_EUButtonDescription", "Idź do anglojęzycznego forum 'World of Tanks' dla serwerów EU");
             French.Add("Forms_ENG_EUButtonDescription", "Accéder au forum anglophone 'World of Tanks' pour le serveur EU");
+            Spanish.Add("Forms_ENG_EUButtonDescription", "Acceder a la página en inglés del foro de 'World of Tanks' del servidor de EU");
             Russian.Add("FormsENG_EUButtonDescription", "Перейти на страницу модпака на World of Tanks EU (страница на английском)");
 
             //Component: FormsENG_GERButtonDescription
@@ -471,6 +521,7 @@ namespace RelhaxModpack
             German.Add("Forms_GER_EUButtonDescription", "Gehe zur deutschsprachigen 'World of Tanks' Forum Seite für den EU Server");
             Polish.Add("Forms_GER_EUButtonDescription", "Idź do niemieckojęzycznego forum 'World of Tanks' dla serwerów NA");
             French.Add("Forms_GER_EUButtonDescription", "Allez sur la page du forum allemand 'World of Tanks' pour le serveur EU");
+            Spanish.Add("Forms_GER_EUButtonDescription", "Acceder a la página en alemán del foro de 'World of Tanks' del servidor de EU");
             Russian.Add("FormsENG_GERButtonDescription", "Перейти на страницу модпака на World of Tanks EU (страница на немецком)");
 
             //Component: SaveUserDataCB
