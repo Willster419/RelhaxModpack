@@ -1040,7 +1040,7 @@ namespace RelhaxModpack
             English.Add("ExportModeCBDescription", "Export mode will allow you to select a folder and WoT version you wish to export your mods installation to. For advanced users only." +
                 "Note it will NOT: Unpack game xml files, patch files (provided from the game), or create the atlas files. Instructions can be found in the export directory.");
             German.Add("ExportModeCBDescription", "Der Export-Modus ermöglicht es Ihnen, einen Ordner und WoT-Version zu wählen, in die Sie Ihre Mods-Installation exportieren möchten." +
-                " Nur für fortgeschrittene Benutzer. Bitte beachten: es werden KEINE: Spiel-XML-Dateien entpackt und nicht modifiziert oder Atlas Dateien erstellt (jeweils aus dem Spiel" +
+                " Nur für fortgeschrittene Benutzer. Bitte beachten: es werden KEINE Spiel-XML-Dateien entpackt und nicht modifiziert oder Atlas Dateien erstellt (jeweils aus dem Spiel" +
                 " bereitgestellt). Anweisungen dazu finden Sie im Export-Verzeichnis.");
             Polish.Add("ExportModeCBDescription", "Tryb wyboru ścieżki wypakowania pozwala na wybór folderu i wersji WoT, do których chcesz zainstalować modyfikacje. Tylko dla zaawansowanych użytkowników." +
                 " Tryb: nie rozpakuje plików gry xml, plików patchy (zapewnianych przez grę), oraz niestworzy plików atlasu. Instrukcje można znaleźć pod ścieżką wypakowania.");
@@ -2563,7 +2563,7 @@ namespace RelhaxModpack
             //Component: InstallationCompleteCloseThisWindow
             //
             English.Add("InstallationCompleteCloseThisWindow", "Close this window?");
-            German.Add("InstallationCompleteCloseThisWindow", TranslationNeeded);
+            German.Add("InstallationCompleteCloseThisWindow", "Schließe dieses Fenster?");
             Polish.Add("InstallationCompleteCloseThisWindow", TranslationNeeded);
             French.Add("InstallationCompleteCloseThisWindow", "Fermer cette fenêtre?");
             Russian.Add("InstallationCompleteCloseThisWindow", "Закрыть окно?");
@@ -2791,7 +2791,7 @@ namespace RelhaxModpack
             //Component: dropDownItemsInside
             //
             English.Add("dropDownItemsInside", "Items Inside");
-            German.Add("dropDownItemsInside", TranslationNeeded);
+            German.Add("dropDownItemsInside", "Gegenstände im Inneren");
             Polish.Add("dropDownItemsInside", TranslationNeeded);
             French.Add("dropDownItemsInside", "Articles à l'intérieur");
             Russian.Add("dropDownItemsInside", "Элементов внутри");
@@ -2982,7 +2982,7 @@ namespace RelhaxModpack
             //Component: application_Update_TabHeader
             //
             English.Add("application_Update_TabHeader", "Application News");
-            German.Add("application_Update_TabHeader", TranslationNeeded);
+            German.Add("application_Update_TabHeader", "App Neuigkeiten");
             Polish.Add("application_Update_TabHeader", TranslationNeeded);
             French.Add("application_Update_TabHeader", "Nouvelles d'application");
             Russian.Add("application_Update_TabHeader", "Новости приложения");
@@ -2990,7 +2990,7 @@ namespace RelhaxModpack
             //Component: database_Update_TabHeader
             //
             English.Add("database_Update_TabHeader", "Database News");
-            German.Add("database_Update_TabHeader", TranslationNeeded);
+            German.Add("database_Update_TabHeader", "Datenbank Neuigkeiten");
             Polish.Add("database_Update_TabHeader", TranslationNeeded);
             French.Add("database_Update_TabHeader", "Nouvelles de la base de données");
             Russian.Add("database_Update_TabHeader", "Новости базы данных");
@@ -3000,7 +3000,7 @@ namespace RelhaxModpack
             //Component: LoadingHeader
             //
             English.Add("LoadingHeader", "Loading, please wait");
-            German.Add("LoadingHeader", TranslationNeeded);
+            German.Add("LoadingHeader", "Lade, bitte warten");
             Polish.Add("LoadingHeader", TranslationNeeded);
             French.Add("LoadingHeader", "Chargement, veuillez patienter");
             Russian.Add("LoadingHeader", TranslationNeeded);
@@ -3010,7 +3010,7 @@ namespace RelhaxModpack
             //Component: AgreementLicense
             //
             English.Add("AgreementLicense", "You have read and agree to the ");
-            German.Add("AgreementLicense", TranslationNeeded);
+            German.Add("AgreementLicense", "Sie haben Folgendes gelesen und zugestimmt: ");
             Polish.Add("AgreementLicense", TranslationNeeded);
             French.Add("AgreementLicense", "Vous avez lu et accepté le ");
             Russian.Add("AgreementLicense", "Вы прочли и согласны с ");
@@ -3018,7 +3018,7 @@ namespace RelhaxModpack
             //Component: LicenseLink
             //
             English.Add("LicenseLink", "License Agreement");
-            German.Add("LicenseLink", TranslationNeeded);
+            German.Add("LicenseLink", "Lizenzvereinbarung");
             Polish.Add("LicenseLink", TranslationNeeded);
             French.Add("LicenseLink", "Contrat de licence");
             Russian.Add("LicenseLink", "условиями лицензионного соглашения");
@@ -3026,7 +3026,7 @@ namespace RelhaxModpack
             //Component: AgreementSupport1
             //
             English.Add("AgreementSupport1", "If you need support you can either visit our ");
-            German.Add("AgreementSupport1", TranslationNeeded);
+            German.Add("AgreementSupport1", "Falls sie Unterstützung benötigen, besuchen Sie entweder unser ");
             Polish.Add("AgreementSupport1", TranslationNeeded);
             French.Add("AgreementSupport1", "Si vous avez besoin d'aide, vous pouvez soit visiter notre ");
             Russian.Add("AgreementSupport1", "Если понадобится помощь, вы смодете посетить наш ");
@@ -3034,7 +3034,7 @@ namespace RelhaxModpack
             //Component: AgreementSupportForums
             //
             English.Add("AgreementSupportForums", "Forums");
-            German.Add("AgreementSupportForums", TranslationNeeded);
+            German.Add("AgreementSupportForums", "Forum");
             Polish.Add("AgreementSupportForums", TranslationNeeded);
             French.Add("AgreementSupportForums", "forum");
             Russian.Add("AgreementSupportForums", "форум");
@@ -3042,7 +3042,7 @@ namespace RelhaxModpack
             //Component: AgreementSupport2
             //
             English.Add("AgreementSupport2", " or our ");
-            German.Add("AgreementSupport2", TranslationNeeded);
+            German.Add("AgreementSupport2", " oder unseren ");
             Polish.Add("AgreementSupport2", TranslationNeeded);
             French.Add("AgreementSupport2", "ou notre");
             Russian.Add("AgreementSupport2", " или наш ");
@@ -3050,7 +3050,7 @@ namespace RelhaxModpack
             //Component: AgreementSupportDiscord
             //
             English.Add("AgreementSupportDiscord", "Discord");
-            German.Add("AgreementSupportDiscord", TranslationNeeded);
+            German.Add("AgreementSupportDiscord", "D15C0RD");
             Polish.Add("AgreementSupportDiscord", TranslationNeeded);
             French.Add("AgreementSupportDiscord", "Discord");
             Russian.Add("AgreementSupportDiscord", "Discord");
@@ -3058,7 +3058,7 @@ namespace RelhaxModpack
             //Component: AgreementHoster
             //
             English.Add("AgreementHoster", "I understand Relhax is a mod hosting and installation service and Relhax does not maintain every mod found in this Modpack");
-            German.Add("AgreementHoster", TranslationNeeded);
+            German.Add("AgreementHoster", "Ich verstehe, dass Relhax ein Mod-Hosting- und Installationsservice ist und Relhax nicht alle Mods verwaltet, die in diesem Modpack enthalten sind");
             Polish.Add("AgreementHoster", TranslationNeeded);
             French.Add("AgreementHoster", "Je comprends que Relhax est un service d'installation et d'hébergement de mods et Relhax ne gère pas tous les mods trouvés dans ce Modpack");
             Russian.Add("AgreementHoster", "Я понимаю, что Relhax является площадкой хостинга модов и сервисом их установки и то, что Relhax не занимается разработкой каждого мода из этого модпака");
@@ -3066,7 +3066,7 @@ namespace RelhaxModpack
             //Component: AgreementAnonData
             //
             English.Add("AgreementAnonData", "I understand that Relhax V2 collects anonymous usage data to improve the application, and can be disabled in the advanced settings tab");
-            German.Add("AgreementAnonData", TranslationNeeded);
+            German.Add("AgreementAnonData", "Ich verstehe, dass Relhax V2 anonyme Nutzungsdaten sammelt, um die Anwendung zu verbessern, und auf der Registerkarte  für erweiterte Einstellungen deaktiviert werden kann");
             Polish.Add("AgreementAnonData", TranslationNeeded);
             French.Add("AgreementAnonData", "Je comprends que Relhax V2 collecte des données d'utilisation anonymes pour améliorer l'application et peut être désactivé dans l'onglet Paramètres avancés");
             Russian.Add("AgreementAnonData", "Я понимаю, что Relhax V2 собирает анонимные сведения об использовании для улучшения приложения и могу отключить сбор данных в разделе расширенных настроек");
@@ -3074,7 +3074,7 @@ namespace RelhaxModpack
             //Component: ContinueButton
             //
             English.Add("ContinueButton", "Continue");
-            German.Add("ContinueButton", TranslationNeeded);
+            German.Add("ContinueButton", "Fortsetzen");
             Polish.Add("ContinueButton", TranslationNeeded);
             French.Add("ContinueButton", "Continuer");
             Russian.Add("ContinueButton", "Продолжить");
@@ -3083,7 +3083,8 @@ namespace RelhaxModpack
             //
             English.Add("V2UpgradeNoticeText", "It looks like you are running an upgrade from V1 to V2 for the first time." +
                 " Pressing continue will result in an upgrade to file structure that cannot be reverted. It is recommended to make a backup of your V1 folder before continuing");
-            German.Add("V2UpgradeNoticeText", TranslationNeeded);
+            German.Add("V2UpgradeNoticeText", "Es sieht so aus, als würden Sie zum ersten Mal ein Upgrade von V1 auf V2 ausführen. " + 
+                " Wenn Sie auf Fortsetzen klicken, wird ein Upgrade der Dateistruktur durchgeführt, das nicht wiederhergestellt werden kann. Es wird empfohlen, eine Sicherungskopie Ihres V1-Ordners zu erstellen, bevor Sie fortfahren");
             Polish.Add("V2UpgradeNoticeText", TranslationNeeded);
             French.Add("V2UpgradeNoticeText", "Il semble que vous exécutiez une mise à niveau de V1 à V2 pour la première fois." +
                 " Appuyer sur Continuer entraînera une mise à niveau de la structure de fichiers qui ne peut pas être annulée. Il est recommandé de faire une sauvegarde de votre dossier V1 avant de continuer");
