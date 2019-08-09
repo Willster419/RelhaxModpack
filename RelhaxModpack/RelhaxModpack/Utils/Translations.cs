@@ -1126,6 +1126,8 @@ namespace RelhaxModpack
                 " Jedynie dla dysków SSD.");// I always skip 'When enabled'...
             French.Add("MulticoreExtractionCBDescription", "Le programme d'installation utilise une méthode d'extraction parallèle. Il va extraire plusieurs fichiers" +
                 " zip en même temps, réduisant ainsi le temps d'installation. Pour les disques SSD SEULEMENT.");
+            Spanish.Add("MulticoreExtractionCBDescription", "El instaladór utilizará un método de extracción paralela. Extraerá varios archivos zip al mismo tiempo, " +
+                " reduciendo el tiempo de instalación. SÓLO para discos SSD.");
             Russian.Add("MulticoreExtractionCBDescription", "Tо установщик будет использовать метод параллельной распаковки. Будет извлекаться несколько ZIP-архивов одновременно," +
                 " снижая время установки. ТОЛЬКО ДЛЯ SSD ДИСКОВ!");
 
@@ -1135,6 +1137,7 @@ namespace RelhaxModpack
             German.Add("UninstallDefault", "Standard");
             Polish.Add("UninstallDefault", "Standardowa");
             French.Add("UninstallDefault", "Défaut");
+            Spanish.Add("UninstallDefault", "Estándar");
             Russian.Add("UninstallDefault", "Стандартный");
 
             //Component: UninstallQuick
@@ -1143,6 +1146,7 @@ namespace RelhaxModpack
             German.Add("UninstallQuick", "Schnell");
             Polish.Add("UninstallQuick", "Szybka");
             French.Add("UninstallQuick", "Rapide");
+            Spanish.Add("UninstallQuick", "Rápida");
             Russian.Add("UninstallQuick", "Быстрый");
 
             //Component: ExportModeCB
@@ -1151,6 +1155,7 @@ namespace RelhaxModpack
             German.Add("ExportModeCB", "Export-Modus");
             Polish.Add("ExportModeCB", "Tryb wyboru ścieżki wypakowywania");
             French.Add("ExportModeCB", "Mode d'exportation");
+            Spanish.Add("ExportModeCB", "Modo de exportación");
             Russian.Add("ExportModeCB", "Режим экспорта");
 
             //Component: ExportModeCBDescription
@@ -1165,6 +1170,8 @@ namespace RelhaxModpack
             French.Add("ExportModeCBDescription", "Le mode Export vous permettra de sélectionner un dossier et la version de WoT vers lesquels vous souhaitez exporter votre installation" +
                 " de mods. Pour les utilisateurs avancés, notez que l'installation ne fera pas: Déballez " +
                 "les fichiers xml du jeu, corrigez les fichiers (fournis depuis le jeu) ou créez l'atlas. Les instructions peuvent être trouvées dans le répertoire d'exportation.");
+            Spanish.Add("ExportModeCBDescription", "El modo de exportación le permitirá seleccionar una carpeta y versión de WoT a la que exportar la instalación de Mods. Sólo para usuarios avanzados." +
+                " Tenga en cuenta que NO: desempaquetará archivos XML, archivos de parche (proporcionados por el juego), o creará los archivos de tipo atlas. Habrá instrucciones en el directorio exportado.");
             Russian.Add("ExportModeCBDescription", "Режим экспорта позволит выбрать папку для экспорта установленных модификаций в игру. Только для продвинутых пользователей." +
                 "Учтите, что эта опция НЕ распакует XML-файлы игры, патчить их или создавать атласы. Инструкции находятся в папке экспорта.");
 
@@ -1174,6 +1181,7 @@ namespace RelhaxModpack
             German.Add("ExportWindowDesctiption", "Wählen Sie die Version von WoT, für die Sie exportieren möchten");
             Polish.Add("ExportWindowDesctiption", "Wybór wersji WoT");
             French.Add("ExportWindowDesctiption", "Sélection de la version de WoT que vous souhaitez exporter");
+            Spanish.Add("ExportWindowDescription", "Seleccione la versión de WoT para la que quiere exportar");
             Russian.Add("ExportWindowDesctiption", "Выберите версию WoT, для которой нужно произвести экспорт");
 
             //Component: HelperText
@@ -1186,6 +1194,8 @@ namespace RelhaxModpack
                 " Kliknik PPM na opcji, by wyświetlić opis. Nie zobaczysz tej wiadomości ponownie, dopóki nie usuniesz pliku ustawień xml.");
             French.Add("HelperText", "Bienvenue au Modpack Relhax! J'ai aissayé de faire le modpack le plus simple possible, mais des questions peuvent survenir." +
                 " Survolez un paramètre pour voire une explication. Vous n'allez plus voire cette boite, sauf si vous supprimez le fichier de configuration xml ");
+            Spanish.Add("HelperText", "¡Bienvenido a RelHax Modpack! He intentado hacer el Modpack tan sencillo como ha sido posible, pero aún así pueden surgir dudas." +
+                " Mantenga el ratón sobre una opción para obtener una explicación. No volverá a ver esta ventana de diálogo a menos que borre el archivo de opciones en formato XML");
             Russian.Add("HelperText", "Добро пожаловать в модпак Relhax! Я пытался сделать модпак максимально простым для использования, но вопросы всё же могут возникнуть." +
                 " Наведите курсор мыши на любую настройку, и вы увидите пояснение к ней. Данное диалоговое окно больше не появится, если не удалите XML-файл с настройками.");
 
@@ -1195,6 +1205,7 @@ namespace RelhaxModpack
             German.Add("helperTextShort", "Willkommen im Relhax Modpack!");
             Polish.Add("helperTextShort", "Witamy w paczce Relhax!");
             French.Add("helperTextShort", "Bienvenue au Modpack Relhax!");
+            Spanish.Add("helperTextShort", "¡Bienvenido a RelHax Modpack!");
             Russian.Add("helperTextShort", "Добро пожаловать в модпак Relhax!");
 
             //Component: NotifyIfSameDatabaseCB
@@ -1203,6 +1214,7 @@ namespace RelhaxModpack
             German.Add("NotifyIfSameDatabaseCB", "Hinweis wenn keine Aktuallisierungen erfolgt sind");
             Polish.Add("NotifyIfSameDatabaseCB", "Poinformuj, jeśli nie będzie dostępna nowa baza danych");
             French.Add("NotifyIfSameDatabaseCB", "Informer si aucune nouvelle base de données est disponible");
+            Spanish.Add("NotifyIfSameDatabaseCB", "Informar si no hay nueva base de datos");
             Russian.Add("NotifyIfSameDatabaseCB", "Уведомлять при отстутсвии новых баз данных");
 
             //Component: NotifyIfSameDatabaseCBDescription
@@ -1212,6 +1224,8 @@ namespace RelhaxModpack
             Polish.Add("NotifyIfSameDatabaseCBDescription", "Powiadom, jeśli ostatnia zainstalowana wersja bazy danych jest taka sama. Jeśli tak, to nie ma potrzeby aktualizacji modyfikacji.");
             French.Add("NotifyIfSameDatabaseCBDescription", "Avertir si votre dernière version de base de données installée est identique. Si c'est le cas," +
                 " cela signifie qu'il n'y a pas de mise à jour de mods.");
+            Spanish.Add("NotifyIfSameDatabaseCBDescription", "Mostrar una notificación si la última instalación tiene la misma versión de la base de datos." +
+                " De ser así, significa que no hay ninguna actualización para ningún Mod");
             Russian.Add("NotifyIfSameDatabaseCBDescription", "Уведомлять в случае совпадения версий баз данных. Это означает отсутствие обновлений к каким-либо модам.");
 
             //Component: ShowInstallCompleteWindowCB
@@ -1220,6 +1234,7 @@ namespace RelhaxModpack
             German.Add("ShowInstallCompleteWindowCB", "Zeige erweitertes Fenster bei abgeschlossener Installation");
             Polish.Add("ShowInstallCompleteWindowCB", "Pokaż zaawansowane okno po skończonej instalacji");
             French.Add("ShowInstallCompleteWindowCB", "Afficher la fenêtre d'installation terminée");
+            Spanish.Add("ShowInstallCompleteWindowCB", "Ver ventana de instalación completada avanzada");
             Russian.Add("ShowInstallCompleteWindowCB", "Показывать расширенное окно окончания установки");
 
             //Component: ShowInstallCompleteWindowCBDescription
@@ -1231,6 +1246,8 @@ namespace RelhaxModpack
             Polish.Add("ShowInstallCompleteWindowCBDescription", "Po zakończeniu instalacji otwórz okno dalszych akcji.");
             French.Add("ShowInstallCompleteWindowCBDescription", "Afficher une fenêtre lors de l'achèvement de l'installation avec des opérations populaires à" +
                 " effectuer après l'installation de Modpack, telles que le lancement du jeu, le site Web de XVM, etc.");
+            Spanish.Add("ShowInstallCompleteWindowCBDescription", "Muestra una ventana al completar la instalación con opciones comunes tras la instalación del Modpack," +
+                " tales como iniciar el juego, visitar la página web del XVM, etc);
             Russian.Add("ShowInstallCompleteWindowCBDescription", "Показывать окно по окончании установки с частыми действиями после установки" +
                 " модпака (запуск игры, открыть сайт XVM, и т. п.)");
 
@@ -1240,6 +1257,7 @@ namespace RelhaxModpack
             German.Add("applicationVersion", "Programmversion");
             Polish.Add("applicationVersion", "Wersja Aplikacji");
             French.Add("applicationVersion", "Version de l'application");
+            Spanish.Add("applicationVersion", "Versión de la aplicación");
             Russian.Add("applicationVersion", "Версия ПО");
 
             //Component: databaseVersion
@@ -1248,6 +1266,7 @@ namespace RelhaxModpack
             German.Add("databaseVersion", "Datenbank");
             Polish.Add("databaseVersion", "Baza danych");
             French.Add("databaseVersion", "Base de donnés");
+            Spanish.Add("databaseVersion", "Última base de datos");
             Russian.Add("databaseVersion", "Версия БД");
 
             //Component: ClearCacheCB
@@ -1256,6 +1275,7 @@ namespace RelhaxModpack
             German.Add("ClearCacheCB", "Cache-Daten für WoT löschen");
             Polish.Add("ClearCacheCB", "Usuń dane WoT cache");
             French.Add("ClearCacheCB", "Nettoyer le dossier de Cache WoT");
+            Spanish.Add("ClearCacheCB", "Limpiar los datos de caché de WoT");
             Russian.Add("ClearCacheCB", "Очистить кэш World of Tanks");
 
             //Component: ClearCachCBDescription
