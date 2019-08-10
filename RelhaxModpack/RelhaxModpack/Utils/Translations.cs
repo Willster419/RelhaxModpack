@@ -106,6 +106,7 @@ namespace RelhaxModpack
 
         //default is to use english
         private static Dictionary<string, string> CurrentLanguage = English;
+
         #region Language methods
         /// <summary>
         /// Sets the language dictionary to use when returning a localized string
@@ -338,6 +339,24 @@ namespace RelhaxModpack
             Polish.Add("stepsComplete", "zadania zakończone");
             French.Add("stepsComplete", "tâches terminées");
             Russian.Add("stepsComplete", "заданий выполнено");
+            #endregion
+
+            #region Application messages
+            //Component: appFailedCreateLogfile
+            //When the application first starts, it tries to open a logfile
+            English.Add("appFailedCreateLogfile", "The application failed to open a logfile. Check your file permissions or move the application to a folder with write access.");
+            German.Add("appFailedCreateLogfile", TranslationNeeded);
+            Polish.Add("appFailedCreateLogfile", TranslationNeeded);
+            French.Add("appFailedCreateLogfile", TranslationNeeded);
+            Russian.Add("appFailedCreateLogfile", TranslationNeeded);
+
+            //Component: failedToParse
+            //
+            English.Add("failedToParse", "Failed to parse the file");
+            German.Add("failedToParse", TranslationNeeded);
+            Polish.Add("failedToParse", TranslationNeeded);
+            French.Add("failedToParse", TranslationNeeded);
+            Russian.Add("failedToParse", TranslationNeeded);
             #endregion
 
             #region Tray Icon
@@ -1454,6 +1473,46 @@ namespace RelhaxModpack
             Polish.Add("verifyUninstallVersionAndLocation", "Potwierdź usunięcie modyfikacji\n\n{0}\n\nPotwierdź metodę '{1}'");
             French.Add("verifyUninstallVersionAndLocation", "Confirmer que vous voulez désinstaller les mods du dossier WoT\n\n{0}\n\nUsing la méthode de désinstallation '{1}'?");
             Russian.Add("verifyUninstallVersionAndLocation", "Подтвердите необходимость удалить моды для WoT в этой папке: \n\n{0}\n\nИспользуем метод '{1}'?");
+
+            //Component: failedVerifyFolderStructure
+            //When the application first starts, it tries to open a logfile
+            English.Add("failedVerifyFolderStructure", "The application failed to create the required folder structure. Check your file permissions or move the application to a folder with write access.");
+            German.Add("failedVerifyFolderStructure", TranslationNeeded);
+            Polish.Add("failedVerifyFolderStructure", TranslationNeeded);
+            French.Add("failedVerifyFolderStructure", TranslationNeeded);
+            Russian.Add("failedVerifyFolderStructure", TranslationNeeded);
+
+            //Component: failedToExtractUpdateArchive
+            //Upon update download, if it can't extract the exe
+            English.Add("failedToExtractUpdateArchive", "The application failed to extract the update files. Check your file permissions and antivirus application.");
+            German.Add("failedToExtractUpdateArchive", TranslationNeeded);
+            Polish.Add("failedToExtractUpdateArchive", TranslationNeeded);
+            French.Add("failedToExtractUpdateArchive", TranslationNeeded);
+            Russian.Add("failedToExtractUpdateArchive", TranslationNeeded);
+
+            //Component: downloadingUpdate
+            //
+            English.Add("downloadingUpdate", "Downloading application update");
+            German.Add("downloadingUpdate", TranslationNeeded);
+            Polish.Add("downloadingUpdate", TranslationNeeded);
+            French.Add("downloadingUpdate", TranslationNeeded);
+            Russian.Add("downloadingUpdate", TranslationNeeded);
+
+            //Component: autoOneclickSelectionFileNotExist
+            //
+            English.Add("autoOneclickSelectionFileNotExist", "The supplied path to the selection file does not exist");
+            German.Add("autoOneclickSelectionFileNotExist", TranslationNeeded);
+            Polish.Add("autoOneclickSelectionFileNotExist", TranslationNeeded);
+            French.Add("autoOneclickSelectionFileNotExist", TranslationNeeded);
+            Russian.Add("autoOneclickSelectionFileNotExist", TranslationNeeded);
+
+            //Component: noAutoInstallWithBeta
+            //
+            English.Add("noAutoInstallWithBeta", "Auto install mode cannot be used with the beta database");
+            German.Add("noAutoInstallWithBeta", TranslationNeeded);
+            Polish.Add("noAutoInstallWithBeta", TranslationNeeded);
+            French.Add("noAutoInstallWithBeta", TranslationNeeded);
+            Russian.Add("noAutoInstallWithBeta", TranslationNeeded);
             #endregion
 
             #region ModSelectionList
@@ -1733,20 +1792,36 @@ namespace RelhaxModpack
             French.Add("InstallingTo", "Installation à: {0}");
             Russian.Add("InstallingTo", "Установка в {0}");
 
-            //Section saveConfig
+            //Component: saveConfig
             //
             English.Add("selectWhereToSave", "Select where to save selection file");
             German.Add("selectWhereToSave", "Wählen Sie aus, wo die Auswahldatei gespeichert werden soll");
             Polish.Add("selectWhereToSave", "Wybierz, gdzie zapisać plik konfiguracji");
             French.Add("selectWhereToSave", "Sélectionner où sauvegarder le fichier de sélection");
 
-            //Section addModTreeview
-            //
+            //Component: updated
+            //shows (updated) next to a component
             English.Add("updated", "updated");
             German.Add("updated", "aktualisiert");
             Polish.Add("updated", "zaktualizowane");
             French.Add("updated", "Mis à jours");
             Russian.Add("updated", "обновлено");
+
+            //Component: disabled
+            //shows (disabled) next to a component
+            English.Add("disabled", "disabled");
+            German.Add("disabled", TranslationNeeded);
+            Polish.Add("disabled", TranslationNeeded);
+            French.Add("disabled", TranslationNeeded);
+            Russian.Add("disabled", TranslationNeeded);
+
+            //Component: invisible
+            //shows (invisible) next to a component
+            English.Add("invisible", "invisible");
+            German.Add("invisible", TranslationNeeded);
+            Polish.Add("invisible", TranslationNeeded);
+            French.Add("invisible", TranslationNeeded);
+            Russian.Add("invisible", TranslationNeeded);
             #endregion
 
             #region Application Update Window
@@ -2525,6 +2600,14 @@ namespace RelhaxModpack
             Polish.Add("DeleteBackupFolder", "Kopie zapasowe");
             French.Add("DeleteBackupFolder", "Sauvegardes");
             Russian.Add("DeleteBackupFolder", "Бэкапы");
+
+            //Component: installFailed
+            //
+            English.Add("installFailed", "The installation failed at step");
+            German.Add("installFailed", TranslationNeeded);
+            Polish.Add("installFailed", TranslationNeeded);
+            French.Add("installFailed", TranslationNeeded);
+            Russian.Add("installFailed", TranslationNeeded);
             #endregion
 
             #region Install finished window
@@ -3089,6 +3172,56 @@ namespace RelhaxModpack
             French.Add("V2UpgradeNoticeText", "Il semble que vous exécutiez une mise à niveau de V1 à V2 pour la première fois." +
                 " Appuyer sur Continuer entraînera une mise à niveau de la structure de fichiers qui ne peut pas être annulée. Il est recommandé de faire une sauvegarde de votre dossier V1 avant de continuer");
             Russian.Add("V2UpgradeNoticeText", "Похоже, что вы производите апгрейд с V1 на V2 в первый раз. Нажатие кнопки продолжения произведёт обновление структуры файлов, которое невозможно откатить. Рекомендуется создание бэкапа папки с V1 перед продолжением");
+            #endregion
+
+            #region Export Mode
+            //Component: selectLocationToExport
+            //
+            English.Add("selectLocationToExport", "Select the folder to export the mod installation into");
+            German.Add("selectLocationToExport", TranslationNeeded);
+            Polish.Add("selectLocationToExport", TranslationNeeded);
+            French.Add("selectLocationToExport", TranslationNeeded);
+            Russian.Add("selectLocationToExport", TranslationNeeded);
+
+            //Component: ExportSelectVersionHeader
+            //
+            English.Add("ExportSelectVersionHeader", "Please select the version of the WoT client you want to export for");
+            German.Add("ExportSelectVersionHeader", TranslationNeeded);
+            Polish.Add("ExportSelectVersionHeader", TranslationNeeded);
+            French.Add("ExportSelectVersionHeader", TranslationNeeded);
+            Russian.Add("ExportSelectVersionHeader", TranslationNeeded);
+
+            //Component: ExportContinueButton
+            //
+            English.Add("ExportContinueButton", "Continue");
+            German.Add("ExportContinueButton", TranslationNeeded);
+            Polish.Add("ExportContinueButton", TranslationNeeded);
+            French.Add("ExportContinueButton", TranslationNeeded);
+            Russian.Add("ExportContinueButton", TranslationNeeded);
+
+            //Component: ExportCancelButton
+            //
+            English.Add("ExportCancelButton", "Cancel");
+            German.Add("ExportCancelButton", TranslationNeeded);
+            Polish.Add("ExportCancelButton", TranslationNeeded);
+            French.Add("ExportCancelButton", TranslationNeeded);
+            Russian.Add("ExportCancelButton", TranslationNeeded);
+
+            //Component: ExportModeMajorVersion
+            //
+            English.Add("ExportModeMajorVersion", "Online folder version");
+            German.Add("ExportModeMajorVersion", TranslationNeeded);
+            Polish.Add("ExportModeMajorVersion", TranslationNeeded);
+            French.Add("ExportModeMajorVersion", TranslationNeeded);
+            Russian.Add("ExportModeMajorVersion", TranslationNeeded);
+
+            //Component: ExportModeMinorVersion
+            //
+            English.Add("ExportModeMinorVersion", "WoT version");
+            German.Add("ExportModeMinorVersion", TranslationNeeded);
+            Polish.Add("ExportModeMinorVersion", TranslationNeeded);
+            French.Add("ExportModeMinorVersion", TranslationNeeded);
+            Russian.Add("ExportModeMinorVersion", TranslationNeeded);
             #endregion
         }
         #endregion

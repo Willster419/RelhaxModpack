@@ -1400,7 +1400,7 @@ namespace RelhaxModpack
             else
             {
                 //explain why if failed
-                MessageBox.Show(string.Format("{0}{1}{2}", Translations.GetTranslatedString("installFailed"), Environment.NewLine, results.ExitCode.ToString()));
+                MessageBox.Show(string.Format("{0}{1}{2}", Translations.GetTranslatedString("installFailed") + ":", Environment.NewLine, results.ExitCode.ToString()));
                 //and log
                 Logging.WriteToLog(string.Format("Installer failed to install, exit code {0}\n{1}", results.ExitCode.ToString(), results.ErrorMessage),
                     Logfiles.Application, LogLevel.Exception);
