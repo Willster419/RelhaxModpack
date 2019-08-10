@@ -349,6 +349,10 @@ namespace RelhaxModpack.InstallerComponents
                 //stop the log file if it was started
                 if (Logging.IsLogOpen(Logfiles.Installer))
                     Logging.DisposeLogging(Logfiles.Installer);
+
+                //check if the task status failed to log it to the installer
+                if (taskk.IsFaulted)
+                    Logging.Exception(taskk.Exception.ToString());
                 return InstallFinishedArgs;
             });
             return task;
@@ -377,6 +381,10 @@ namespace RelhaxModpack.InstallerComponents
                 CheckForCancel();
                 if (Logging.IsLogOpen(Logfiles.Uninstaller))
                     Logging.DisposeLogging(Logfiles.Uninstaller);
+
+                //check if the task status failed to log it to the installer
+                if (taskk.IsFaulted)
+                    Logging.Exception(taskk.Exception.ToString());
                 return InstallFinishedArgs;
             });
             return task;
