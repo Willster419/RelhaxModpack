@@ -1733,17 +1733,17 @@ namespace RelhaxModpack.Windows
                 if(disabledMods.Count > 0)
                 {
                     //disabled selections
-                    MessageBox.Show(Translations.GetTranslatedString("modsDisabled") + "\n" + string.Join("\n",disabledMods));
+                    MessageBox.Show(Translations.GetTranslatedString("modDeactivated") + "\n" + string.Join("\n",disabledMods));
                 }
                 if(stringSelections.Count > 0)
                 {
                     //removed selections
-                    MessageBox.Show(Translations.GetTranslatedString("modsNotRemovedTechnical") + "\n" + string.Join("\n", stringSelections));
+                    MessageBox.Show(Translations.GetTranslatedString("modsNotFoundTechnical") + "\n" + string.Join("\n", stringSelections));
                 }
                 if(stringUserSelections.Count > 0)
                 {
                     //removed user selections
-                    MessageBox.Show(Translations.GetTranslatedString("userModsRemovedTechnical") + "\n" + string.Join("\n", stringUserSelections));
+                    MessageBox.Show(Translations.GetTranslatedString("modsNotFoundTechnical") + "\n" + string.Join("\n", stringUserSelections));
                 }
                 if(disabledStructureMods.Count > 0)
                 {

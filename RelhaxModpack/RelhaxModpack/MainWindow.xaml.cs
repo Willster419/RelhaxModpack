@@ -1637,8 +1637,8 @@ namespace RelhaxModpack
                             {
                                 Logging.Error("failed to download the file {0} {1} {2}", package.ZipFile, Environment.NewLine, ex.ToString());
                                 //show abort retry ignore window TODO
-                                MessageBoxResult result = MessageBox.Show(string.Format("{0} \"{1}\" {2}",
-                                    Translations.GetTranslatedString("failedToDownload1"),
+                                MessageBoxResult result = MessageBox.Show(string.Format("{0} {1} \"{2}\" {3}",
+                                    Translations.GetTranslatedString("failedToDownload1"), Environment.NewLine,
                                     package.ZipFile, Translations.GetTranslatedString("failedToDownload2")),
                                     Translations.GetTranslatedString("failedToDownloadHeader"), MessageBoxButton.YesNoCancel);
                                 switch (result)
@@ -1712,7 +1712,7 @@ namespace RelhaxModpack
 
             //verify the uninstall
             if (MessageBox.Show(string.Format(Translations.GetTranslatedString("verifyUninstallVersionAndLocation"), Settings.WoTDirectory, ModpackSettings.UninstallMode.ToString()),
-                Translations.GetTranslatedString("verifyUninstallHeader"), MessageBoxButton.YesNo) == MessageBoxResult.No)
+                Translations.GetTranslatedString("confirmUninstallHeader"), MessageBoxButton.YesNo) == MessageBoxResult.No)
             {
                 ToggleUIButtons(true);
                 return;
@@ -1738,8 +1738,8 @@ namespace RelhaxModpack
             ChildProgressBar.Value = ChildProgressBar.Maximum;
             if (results.ExitCode == InstallerComponents.InstallerExitCodes.Success)
             {
-                InstallProgressTextBox.Text = Translations.GetTranslatedString("uninstallSuccess");
-                MessageBox.Show(Translations.GetTranslatedString("uninstallSuccess"));
+                InstallProgressTextBox.Text = Translations.GetTranslatedString("uninstallFinished");
+                MessageBox.Show(Translations.GetTranslatedString("uninstallFinished"));
             }
             else
             {
@@ -1758,7 +1758,7 @@ namespace RelhaxModpack
                 ChildProgressBar.Value = e.ChildCurrent;
             if(e.UninstallStatus == InstallerComponents.UninstallerExitCodes.GettingFilelistError)
             {
-                InstallProgressTextBox.Text = Translations.GetTranslatedString("gettingUninstallFilesList");
+                InstallProgressTextBox.Text = Translations.GetTranslatedString("scanningModsFolders");
             }
             else if (e.UninstallStatus == InstallerComponents.UninstallerExitCodes.UninstallError)
             {
@@ -1931,7 +1931,6 @@ namespace RelhaxModpack
             if(installEngine == null)
             {
                 Logging.Error("Cancel request failed because installEngine is null!");
-                MessageBox.Show(Translations.GetTranslatedString("CancelInstallRequestFailed"));
             }
             else if(!cancellationTokenSource.IsCancellationRequested)
             {

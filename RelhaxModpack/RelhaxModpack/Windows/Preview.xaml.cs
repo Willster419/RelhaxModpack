@@ -49,7 +49,7 @@ namespace RelhaxModpack.Windows
             //check to make sure the Package element exists
             if(Package == null)
             {
-                Logging.Error("Package is null, it should never be null!", nameof(Preview));
+                Logging.Error("Package is null, it should never be null!");
                 MessageBox.Show(Translations.GetTranslatedString("previewEncounteredError"));
                 Close();
             }
@@ -57,7 +57,7 @@ namespace RelhaxModpack.Windows
             //and for the medias element
             if(Package.Medias == null)
             {
-                Logging.Error("Package.Medias is null, it should never be null!", nameof(Preview));
+                Logging.Error("Package.Medias is null, it should never be null!");
                 MessageBox.Show(Translations.GetTranslatedString("previewEncounteredError"));
                 Close();
             }

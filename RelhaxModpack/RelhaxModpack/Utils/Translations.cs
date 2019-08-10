@@ -339,6 +339,14 @@ namespace RelhaxModpack
             Polish.Add("stepsComplete", "zadania zakończone");
             French.Add("stepsComplete", "tâches terminées");
             Russian.Add("stepsComplete", "заданий выполнено");
+
+            //Component: allFiles
+            //
+            English.Add("allFiles", "All files");
+            German.Add("allFiles", TranslationNeeded);
+            Polish.Add("allFiles", TranslationNeeded);
+            French.Add("allFiles", TranslationNeeded);
+            Russian.Add("allFiles", TranslationNeeded);
             #endregion
 
             #region Application messages
@@ -1513,6 +1521,22 @@ namespace RelhaxModpack
             Polish.Add("noAutoInstallWithBeta", TranslationNeeded);
             French.Add("noAutoInstallWithBeta", TranslationNeeded);
             Russian.Add("noAutoInstallWithBeta", TranslationNeeded);
+
+            //Component: ColorDumpSaveFileDialog
+            //
+            English.Add("ColorDumpSaveFileDialog", "Select where to save the colors customization file");
+            German.Add("ColorDumpSaveFileDialog", TranslationNeeded);
+            Polish.Add("ColorDumpSaveFileDialog", TranslationNeeded);
+            French.Add("ColorDumpSaveFileDialog", TranslationNeeded);
+            Russian.Add("ColorDumpSaveFileDialog", TranslationNeeded);
+
+            //Component: loadingBranches
+            //"branch" is this context is git respoitory branches
+            English.Add("loadingBranches", "Loading branches");
+            German.Add("loadingBranches", TranslationNeeded);
+            Polish.Add("loadingBranches", TranslationNeeded);
+            French.Add("loadingBranches", TranslationNeeded);
+            Russian.Add("loadingBranches", TranslationNeeded);
             #endregion
 
             #region ModSelectionList
@@ -1768,6 +1792,22 @@ namespace RelhaxModpack
             French.Add("selectionsCleared", "Sélections effacées");
             Russian.Add("selectionsCleared", "Список выбранных модов очищен");
 
+            //Component: failedLoadSelection
+            //
+            English.Add("failedLoadSelection", "Failed to load selection");
+            German.Add("failedLoadSelection", TranslationNeeded);
+            Polish.Add("failedLoadSelection", TranslationNeeded);
+            French.Add("failedLoadSelection", TranslationNeeded);
+            Russian.Add("failedLoadSelection", TranslationNeeded);
+
+            //Component: unknownselectionFileFormat
+            //
+            English.Add("unknownselectionFileFormat", "Unknown selection file version");
+            German.Add("unknownselectionFileFormat", TranslationNeeded);
+            Polish.Add("unknownselectionFileFormat", TranslationNeeded);
+            French.Add("unknownselectionFileFormat", TranslationNeeded);
+            Russian.Add("unknownselectionFileFormat", TranslationNeeded);
+
             //Component: ExpandAllButton
             //
             English.Add("ExpandAllButton", "Expand Current Tab");
@@ -2004,14 +2044,21 @@ namespace RelhaxModpack
             French.Add("of", "de");
             Russian.Add("of", "из");
 
+            //Component: failedToDownload1
+            //
+            English.Add("failedToDownload1", "Failed to download the package");
+            German.Add("failedToDownload1", TranslationNeeded);
+            Polish.Add("failedToDownload1", TranslationNeeded);
+            French.Add("failedToDownload1", TranslationNeeded);
+            Russian.Add("failedToDownload1", TranslationNeeded);
+
             //Component: failedToDownload2
             //
-            English.Add("failedToDownload2", "If you know which mod this is, uncheck it and you should be fine. It will be fixed soon.");
-            German.Add("failedToDownload2", "Wenn du weisst, welcher Mod das ist, deaktiviere ihn und alles sollte funktionieren. Es wird bald behoben.");
-            Polish.Add("failedToDownload2", "Jeśli wiesz który to mod, odznacz go i wszystko powinno byćw porządku. Wkrótce naprawimy błąd.");
-            French.Add("failedToDownload2", "Si vous savez quel mod est la cause, déséléectionnez celui-ci. Un corrigé vas être disponible bientôt.");
-            Russian.Add("failedToDownload2", "Если вы знаете, что это за мод, снимите галочку с него и всё должно встать на свои места. Скоро это будет" +
-                " исправлено. Перезапустите программу, когда она закроется.");
+            English.Add("failedToDownload2", "Would you like to retry the download, abort the installation, or continue?");
+            German.Add("failedToDownload2", TranslationNeeded);
+            Polish.Add("failedToDownload2", TranslationNeeded);
+            French.Add("failedToDownload2", TranslationNeeded);
+            Russian.Add("failedToDownload2", TranslationNeeded);
 
             //Component: 
             //
@@ -2186,6 +2233,14 @@ namespace RelhaxModpack
             Polish.Add("uninstallFinished", "Deinstalacja (modyfikacji) zakończona");
             French.Add("uninstallFinished", "Désinstallation des mods terminé");
             Russian.Add("uninstallfinished", "Удаление модов завершено.");
+
+            //Component: uninstallFail
+            //
+            English.Add("uninstallFail", "The uninstallation failed. You could try another uninstallation mode or submit a bug report.");
+            German.Add("uninstallFail", TranslationNeeded);
+            Polish.Add("uninstallFail", TranslationNeeded);
+            French.Add("uninstallFail", TranslationNeeded);
+            Russian.Add("uninstallFail", TranslationNeeded);
 
             //Component: 
             //
@@ -2510,22 +2565,6 @@ namespace RelhaxModpack
 
             //Component:
             //
-            English.Add("WoTRunningHeader", "WoT is Running");
-            German.Add("WoTRunningHeader", "WoT wird gerade ausgeführt.");
-            Polish.Add("WoTRunningHeader", "WoT jest uruchomiony");
-            French.Add("WoTRunningHeader", "WoT est en cours d`éxecution");
-            Russian.Add("WoTRunningHeader", "World of Tanks запущен");
-
-            //Component:
-            //
-            English.Add("WoTRunningMessage", "Please close World of Tanks to continue");
-            German.Add("WoTRunningMessage", "Um Fortzufahren, schliesse bitte World of Tanks.");
-            Polish.Add("WoTRunningMessage", "Proszę zamknąć World of Tanks, aby kontynuować");
-            French.Add("WoTRunningMessage", "Veuillez fermer World of Tanks pour continuer");
-            Russian.Add("WoTRunningMessage", "Закройтие игру, чтобы продолжить");
-
-            //Component:
-            //
             English.Add("zipReadingErrorHeader", "Incomplete Download");
             German.Add("zipReadingErrorHeader", "Unvollständiger Download");
             Polish.Add("zipReadingErrorHeader", "Ściąganie niekompletne");
@@ -2820,6 +2859,14 @@ namespace RelhaxModpack
             Polish.Add("zipSavedTo", "Plik zip zapisano do: ");
             French.Add("zipSavedTo", "Fichier zip sauvegarder à: ");
             Russian.Add("zipSavedTo", "ZIP-архив успешно сохранён в: ");
+
+            //Component: selectFilesToInclude
+            //
+            English.Add("selectFilesToInclude", "Select files to include in the bug report");
+            German.Add("selectFilesToInclude", TranslationNeeded);
+            Polish.Add("selectFilesToInclude", TranslationNeeded);
+            French.Add("selectFilesToInclude", TranslationNeeded);
+            Russian.Add("selectFilesToInclude", TranslationNeeded);
             #endregion
 
             #region Preview Window
@@ -2878,6 +2925,22 @@ namespace RelhaxModpack
             Polish.Add("dropDownItemsInside", TranslationNeeded);
             French.Add("dropDownItemsInside", "Articles à l'intérieur");
             Russian.Add("dropDownItemsInside", "Элементов внутри");
+
+            //Component: popular
+            //
+            English.Add("popular", "popular");
+            German.Add("popular", TranslationNeeded);
+            Polish.Add("popular", TranslationNeeded);
+            French.Add("popular", TranslationNeeded);
+            Russian.Add("popular", TranslationNeeded);
+
+            //Component: previewEncounteredError
+            //
+            English.Add("previewEncounteredError", "The preview window encountered an error. Failed to display preview.");
+            German.Add("previewEncounteredError", TranslationNeeded);
+            Polish.Add("previewEncounteredError", TranslationNeeded);
+            French.Add("previewEncounteredError", TranslationNeeded);
+            Russian.Add("previewEncounteredError", TranslationNeeded);
             #endregion
 
             #region Developer Selection Window
@@ -3222,6 +3285,48 @@ namespace RelhaxModpack
             Polish.Add("ExportModeMinorVersion", TranslationNeeded);
             French.Add("ExportModeMinorVersion", TranslationNeeded);
             Russian.Add("ExportModeMinorVersion", TranslationNeeded);
+            #endregion
+
+            #region Asking to close WoT
+            //Component: WoTRunningTitle
+            //
+            English.Add("WoTRunningTitle", "WoT is Running");
+            German.Add("WoTRunningTitle", "WoT wird gerade ausgeführt.");
+            Polish.Add("WoTRunningTitle", "WoT jest uruchomiony");
+            French.Add("WoTRunningTitle", "WoT est en cours d`éxecution");
+            Russian.Add("WoTRunningTitle", "World of Tanks запущен");
+
+            //Component: WoTRunningHeader
+            //
+            English.Add("WoTRunningHeader", "It looks like your WoT install is currently open. Please close it before we can proceed");
+            German.Add("WoTRunningHeader", TranslationNeeded);
+            Polish.Add("WoTRunningHeader", TranslationNeeded);
+            French.Add("WoTRunningHeader", TranslationNeeded);
+            Russian.Add("WoTRunningHeader", TranslationNeeded);
+
+            //Component: WoTRunningCancelInstallButton
+            //
+            English.Add("WoTRunningCancelInstallButton", "Cancel Installation");
+            German.Add("WoTRunningCancelInstallButton", TranslationNeeded);
+            Polish.Add("WoTRunningCancelInstallButton", TranslationNeeded);
+            French.Add("WoTRunningCancelInstallButton", TranslationNeeded);
+            Russian.Add("WoTRunningCancelInstallButton", TranslationNeeded);
+
+            //Component: WoTRunningRetryButton
+            //
+            English.Add("WoTRunningRetryButton", "Re-detect");
+            German.Add("WoTRunningRetryButton", TranslationNeeded);
+            Polish.Add("WoTRunningRetryButton", TranslationNeeded);
+            French.Add("WoTRunningRetryButton", TranslationNeeded);
+            Russian.Add("WoTRunningRetryButton", TranslationNeeded);
+
+            //Component: WoTRunningForceCloseButton
+            //
+            English.Add("WoTRunningForceCloseButton", "Force close the game");
+            German.Add("WoTRunningForceCloseButton", TranslationNeeded);
+            Polish.Add("WoTRunningForceCloseButton", TranslationNeeded);
+            French.Add("WoTRunningForceCloseButton", TranslationNeeded);
+            Russian.Add("WoTRunningForceCloseButton", TranslationNeeded);
             #endregion
         }
         #endregion
