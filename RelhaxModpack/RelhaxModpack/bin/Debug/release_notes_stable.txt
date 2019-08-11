@@ -1,3 +1,9 @@
+Application version 0.29.0.8 (2019-08-11)
+https://www.virustotal.com/gui/file/87cce17604835a1d0d1031594be039a0ffca9e1aa563d08bb2923b006e1c54ae/detection
+- Fixed a UI framework reference for Windows 7 Compatibility 
+- Fixed issues with the database editor
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 0.29.0.7 (2019-08-10)
 https://www.virustotal.com/gui/file/078d5f1a37972f2c975b2a4c4f13024f014b9a7e8d3cea21be4bbe36bed892e0/detection
 - Added logging for when/if the installer or uninstaller thread ends early due to an exception
