@@ -1471,18 +1471,27 @@ namespace RelhaxModpack.Windows
 
         private void ZipDownload_Click(object sender, RoutedEventArgs e)
         {
+            //make sure something is selected
             if(SelectedItem == null)
             {
                 MessageBox.Show("No item selected");
                 Logging.Editor("Tried to download a zip, but SelectedItem is null");
                 return;
             }
+
             //make sure it actually has a zip file to download
-            if (string.IsNullOrWhiteSpace((SelectedItem as EditorComboBoxItem).Package.ZipFile))
+            //first check if it's an editor combobox item (selected from checkbox) or the direct item
+            if(SelectedItem is EditorComboBoxItem ecbi && string.IsNullOrWhiteSpace(ecbi.Package.ZipFile))
             {
                 MessageBox.Show("no zip file to download");
                 return;
             }
+            else if(SelectedItem is DatabasePackage pack && string.IsNullOrWhiteSpace(pack.ZipFile))
+            {
+                MessageBox.Show("no zip file to download");
+                return;
+            }
+
             //make sure FTP credentials are at least entered
             if (string.IsNullOrWhiteSpace(EditorSettings.BigmodsPassword) || string.IsNullOrWhiteSpace(EditorSettings.BigmodsUsername))
             {
