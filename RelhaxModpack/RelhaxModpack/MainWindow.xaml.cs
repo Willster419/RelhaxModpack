@@ -113,7 +113,7 @@ namespace RelhaxModpack
             //load the progress report window
             ProgressIndicator progressIndicator = new ProgressIndicator()
             {
-                Message = "Loading Translations",// Translations.GetTranslatedString("loadingTranslations"),
+                Message = "Loading...",
                 ProgressMinimum = 0,
                 ProgressMaximum = 4
             };
@@ -134,21 +134,19 @@ namespace RelhaxModpack
             Translations.SetLanguage(Languages.English);
             LanguagesSelector.SelectedIndex = 0;
 
-            //apply translations to loading window
-            progressIndicator.Message = Translations.GetTranslatedString("loadingTranslations");
-
-            //apply translations to this window
-            Translations.LocalizeWindow(this,true);
+            //apply translation settings after loading so it's at least in English
+            Translations.LocalizeWindow(this, true);
             ApplyCustomUILocalizations(false);
 
             //create tray icons and menus
             CreateTray();
 
             //load and apply modpack settings
-            progressIndicator.UpdateProgress(2, Translations.GetTranslatedString("loadingSettings"));
             Utils.AllowUIToUpdate();
             Settings.LoadSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude,null);
+            //note: if loadSettings load the language, apply to UI sets the UI option and triggers translation of MainWindow
             ApplySettingsToUI();
+
 
             //apply forced debugging settings
 #warning forced debugging settings is active
@@ -156,6 +154,7 @@ namespace RelhaxModpack
             ModpackSettings.VerboseLogging = true;
 
             //apply settings to UI elements
+            progressIndicator.UpdateProgress(2, Translations.GetTranslatedString("loadingSettings"));
             UISettings.LoadSettings(true);
             UISettings.ApplyUIColorSettings(this);
 

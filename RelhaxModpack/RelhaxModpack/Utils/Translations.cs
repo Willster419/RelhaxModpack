@@ -72,10 +72,17 @@ namespace RelhaxModpack
             "PreviewUpdatesBox",
             //RelhaxHyperlink components
             "ParentTextBlock",
-            "ChildTextblock"
+            "ChildTextblock",
+            //loading header for loading window
+            "LoadingHeader"
         };
         private const string TranslationNeeded = "TODO";
         private static readonly string Blank = string.Empty;
+
+        /// <summary>
+        /// Get if the translation dictionaries have been loaded yet
+        /// </summary>
+        public static bool TranslationsLoaded { get; private set; } = false;
 
         /// <summary>
         /// English language string identifier in national language
@@ -3328,6 +3335,9 @@ namespace RelhaxModpack
             French.Add("WoTRunningForceCloseButton", TranslationNeeded);
             Russian.Add("WoTRunningForceCloseButton", TranslationNeeded);
             #endregion
+
+            //apply the bool
+            TranslationsLoaded = true;
         }
         #endregion
 
