@@ -976,7 +976,27 @@ namespace RelhaxModpack.InstallerComponents
 
             //get a list of all files and folders in the install log (assuming checking for logfile already done and exists)
             Logging.Debug("creating list of files to delete from reading uninstall logfile");
-            List<string> ListOfAllItems = File.ReadAllLines(Path.Combine(Settings.WoTDirectory, "logs", Logging.InstallLogFilename)).ToList();
+            string regularlogfilePath = Path.Combine(Settings.WoTDirectory, "logs", Logging.InstallLogFilename);
+            string backuplogfilePath = Path.Combine(Settings.WoTDirectory, "logs", Logging.InstallLogFilenameBackup);
+            List<string> ListOfAllItems = new List<string>();
+
+            //if the original log exists, then use it
+            if(File.Exists(regularlogfilePath))
+            {
+                Logging.Debug("using regular install log");
+                ListOfAllItems.AddRange(File.ReadAllLines(regularlogfilePath));
+            }
+            //else if the backup exists, then use it
+            else if (File.Exists(backuplogfilePath))
+            {
+                Logging.Warning("regular install log does not exist, but backup does. previous install or uninstall failure?");
+                ListOfAllItems.AddRange(File.ReadAllLines(backuplogfilePath));
+            }
+            //else we can't use one
+            else
+            {
+                Logging.Warning("regular and backup install log files do not exist, first run or used WoT cleaner tool?");
+            }
 
             //combine with a list of all files and folders in mods and res_mods
             Logging.Debug("adding any files in res_mods and mods by scanning the folders if they aren't on the list already");
