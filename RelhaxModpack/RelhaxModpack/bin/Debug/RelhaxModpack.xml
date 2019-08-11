@@ -4794,6 +4794,11 @@
             Handles all localization for the application User Interface
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Translations.TranslationsLoaded">
+            <summary>
+            Get if the translation dictionaries have been loaded yet
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Translations.LanguageEnglish">
             <summary>
             English language string identifier in national language
