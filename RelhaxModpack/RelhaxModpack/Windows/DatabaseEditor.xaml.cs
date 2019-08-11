@@ -1574,9 +1574,11 @@ namespace RelhaxModpack.Windows
 
         private void OnEditorUploadFinished(object sender, EditorUploadDownloadEventArgs e)
         {
+            Logging.Editor("upload finished, applying change");
             UnsavedChanges = true;
             if(e.Package == null)
             {
+                Logging.Editor("upload was media, applying media change");
                 //uploaded media
                 Logging.Editor("Upload of {0} success, adding entry in editor", LogLevel.Info, e.UploadedFilename);
                 SelectablePackage selectedPackage = GetSelectablePackage(SelectedItem);
@@ -1591,12 +1593,21 @@ namespace RelhaxModpack.Windows
                 foreach (Media logic in selectedPackage.Medias)
                     PackageMediasDisplay.Items.Add(logic);
             }
-            else if ((SelectedItem as EditorComboBoxItem).Package.Equals(e.Package))
+            //else uploaded package zipfile entry
+            else
             {
-                PackageZipFileDisplay.Text = e.Package.ZipFile;
-                if (!(SelectedItem as EditorComboBoxItem).Package.ZipFile.Equals(e.Package.ZipFile))
+                Logging.Editor("upload was package zipfile, checking if currently displayed");
+                if ((SelectedItem as EditorComboBoxItem).Package.Equals(e.Package))
                 {
-                    throw new BadMemeException("You have made a mistake");
+                    Logging.Editor("it's currently displayed, updating entry for display");
+                    ApplyDatabaseObject(e.Package);
+                }
+                else
+                {
+                    Logging.Editor("it's currently not displayed, updating entry for not display");
+                    //update the package crc and timestamp values
+                    e.Package.CRC = "f";
+                    e.Package.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
                 }
             }
         }
