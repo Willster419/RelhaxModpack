@@ -10,6 +10,10 @@
         Title="DatabaseEditor" Height="700" Width="1000" MinHeight="480" MinWidth="640" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico"
         Loaded="OnApplicationLoad" Closed="OnApplicationClose" LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <local:RelhaxWindow.Resources>
+        <!-- https://stackoverflow.com/questions/8198645/wpf-combobox-performance-problems-by-binding-a-large-collections -->
+        <ItemsPanelTemplate x:Key="VSP">
+            <VirtualizingStackPanel VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling"/>
+        </ItemsPanelTemplate>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
                 <Setter.Value>
@@ -544,7 +548,11 @@
                     </Grid>
                 </TabItem>
             </TabControl>
-            <ComboBox x:Name="SearchBox" HorizontalAlignment="Stretch" VerticalAlignment="Top" IsEditable="True" Grid.Column="2"  PreviewKeyDown="SearchBox_PreviewKeyDown" KeyUp="SearchBox_KeyUp" PreviewMouseDown="SearchBox_PreviewMouseDown" IsTextSearchEnabled="False" Style="{DynamicResource ComboBoxStyle1}"  />
+            <ComboBox x:Name="SearchBox" HorizontalAlignment="Stretch" VerticalAlignment="Top" IsEditable="True" Grid.Column="2"
+                      PreviewKeyDown="SearchBox_PreviewKeyDown" KeyUp="SearchBox_KeyUp" PreviewMouseDown="SearchBox_PreviewMouseDown"
+                      IsTextSearchEnabled="False" Style="{DynamicResource ComboBoxStyle1}" ItemsSource="{Binding}" ItemsPanel="{StaticResource VSP}">
+                
+            </ComboBox>
         </Grid>
         <TextBlock x:Name="DragDropTest" HorizontalAlignment="Stretch" Margin="250,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Height="50" />
     </Grid>
