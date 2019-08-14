@@ -56,5 +56,21 @@ namespace RelhaxModpack
         {
             return PackageName;
         }
+
+        /// <summary>
+        /// Create a copy of the given DatabaseLogic object
+        /// </summary>
+        /// <param name="databaseLogicToCopy">The object to copy</param>
+        /// <returns>A new DatabaseLogic object with the same values</returns>
+        public static DatabaseLogic Copy(DatabaseLogic databaseLogicToCopy)
+        {
+            return new DatabaseLogic()
+            {
+                Logic = databaseLogicToCopy.Logic,
+                NotFlag = databaseLogicToCopy.NotFlag,
+                PackageName = databaseLogicToCopy.PackageName,
+                WillBeInstalled = databaseLogicToCopy.WillBeInstalled
+            };
+        }
     }
 }

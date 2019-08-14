@@ -193,6 +193,53 @@ namespace RelhaxModpack
         /// </summary>
         public virtual string CompletePackageNamePath
         { get { return PackageName; } }
+
+        /// <summary>
+        /// Create a copy of the DatabasePackage object
+        /// </summary>
+        /// <param name="packageToCopy">The object to copy</param>
+        /// <returns>A new DatabasePackage object with the same values</returns>
+        public static DatabasePackage Copy(DatabasePackage packageToCopy)
+        {
+            if (packageToCopy == null)
+                return null;
+
+            DatabasePackage newPackage = new DatabasePackage()
+            {
+                PackageName = packageToCopy.PackageName,
+                Version = packageToCopy.Version,
+                Timestamp = packageToCopy.Timestamp,
+                ZipFile = packageToCopy.ZipFile,
+                Enabled = packageToCopy.Enabled,
+                CRC = packageToCopy.CRC,
+                StartAddress = packageToCopy.StartAddress,
+                EndAddress = packageToCopy.EndAddress,
+                LogAtInstall = packageToCopy.LogAtInstall,
+                Triggers = new List<string>(),
+                DevURL = packageToCopy.DevURL,
+                InstallGroup = packageToCopy.InstallGroup,
+                PatchGroup = packageToCopy.PatchGroup,
+                _Enabled = packageToCopy._Enabled
+            };
+            return newPackage;
+        }
+
+        /// <summary>
+        /// Create a copy of the DatabasePackage object
+        /// </summary>
+        /// <param name="packageToCopy">The object to copy</param>
+        /// <returns>A new DatabasePackage object with the same values and new list elements with the same values</returns>
+        public static DatabasePackage DeepCopy(DatabasePackage packageToCopy)
+        {
+            if (packageToCopy == null)
+                return null;
+
+            DatabasePackage newPackage = Copy(packageToCopy);
+            foreach (string s in packageToCopy.Triggers)
+                newPackage.Triggers.Add(s);
+
+            return newPackage;
+        }
         #endregion
     }
 }

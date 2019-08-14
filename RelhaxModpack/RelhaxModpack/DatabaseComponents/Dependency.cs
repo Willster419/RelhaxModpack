@@ -72,5 +72,51 @@ namespace RelhaxModpack
             PatchGroup = 2;
         }
         #endregion
+
+        #region Other Properties and Methods
+
+        /// <summary>
+        /// Create a copy of the Dependency object
+        /// </summary>
+        /// <param name="dependencyToCopy">The object to copy</param>
+        /// <returns>A new Dependency object with the same values</returns>
+        public static Dependency Copy(Dependency dependencyToCopy)
+        {
+            if (dependencyToCopy == null)
+                return null;
+
+            Dependency dep = (Dependency)Copy(dependencyToCopy);
+#pragma warning disable CS0618 // Type or member is obsolete
+            dep.wasLogicalDependencyLegacy = dependencyToCopy.wasLogicalDependencyLegacy;
+
+            dep.DatabasePackageLogic = new List<DatabaseLogic>();
+            dep.Dependencies = new List<DatabaseLogic>();
+
+            return dep;
+        }
+
+        /// <summary>
+        /// Create a copy of the Dependency object
+        /// </summary>
+        /// <param name="dependencyToCopy">The object to copy</param>
+        /// <returns>A new Dependency object with the same values and new list elements with the same values</returns>
+        public static Dependency DeepCopy(Dependency dependencyToCopy)
+        {
+            if (dependencyToCopy == null)
+                return null;
+
+            Dependency dep = (Dependency)DatabasePackage.DeepCopy(dependencyToCopy);
+            dep.wasLogicalDependencyLegacy = dependencyToCopy.wasLogicalDependencyLegacy;
+#pragma warning restore CS0618 // Type or member is obsolete
+            dep.DatabasePackageLogic = new List<DatabaseLogic>();
+            dep.Dependencies = new List<DatabaseLogic>();
+
+            foreach (DatabaseLogic logic in dependencyToCopy.Dependencies)
+                dep.Dependencies.Add(DatabaseLogic.Copy(logic));
+
+            return dep;
+
+        }
+        #endregion
     }
 }

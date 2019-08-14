@@ -168,94 +168,6 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region Copy Methods
-
-        private DatabasePackage CopyGlobalDependency(DatabasePackage packageToCopy)
-        {
-            DatabasePackage newPackage = new DatabasePackage()
-            {
-                PackageName = packageToCopy.PackageName,
-                Version = packageToCopy.Version,
-                Timestamp = packageToCopy.Timestamp,
-                ZipFile = packageToCopy.ZipFile,
-                Enabled = packageToCopy.Enabled,
-                CRC = packageToCopy.CRC,
-                StartAddress = packageToCopy.StartAddress,
-                EndAddress = packageToCopy.EndAddress,
-                LogAtInstall = packageToCopy.LogAtInstall,
-                Triggers = new List<string>(),
-                DevURL = packageToCopy.DevURL,
-                InstallGroup = packageToCopy.InstallGroup,
-                PatchGroup = packageToCopy.PatchGroup,
-                _Enabled = packageToCopy._Enabled
-            };
-            //foreach (string s in packageToCopy.Triggers)
-            //newPackage.Triggers.Add(s);
-            return newPackage;
-        }
-
-        private Dependency CopyDependency(DatabasePackage packageToCopy)
-        {
-            Dependency dep = new Dependency()
-            {
-                PackageName = packageToCopy.PackageName,
-                Version = packageToCopy.Version,
-                Timestamp = packageToCopy.Timestamp,
-                ZipFile = packageToCopy.ZipFile,
-                Enabled = packageToCopy.Enabled,
-                CRC = packageToCopy.CRC,
-                StartAddress = packageToCopy.StartAddress,
-                EndAddress = packageToCopy.EndAddress,
-                LogAtInstall = packageToCopy.LogAtInstall,
-                Triggers = new List<string>(),
-                DevURL = packageToCopy.DevURL,
-                InstallGroup = packageToCopy.InstallGroup,
-                PatchGroup = packageToCopy.PatchGroup,
-                _Enabled = packageToCopy._Enabled
-            };
-            dep.DatabasePackageLogic = new List<DatabaseLogic>();
-            dep.Dependencies = new List<DatabaseLogic>();
-            return dep;
-        }
-
-        private SelectablePackage CopySelectablePackage(DatabasePackage packageToCopy)
-        {
-            SelectablePackage sp = new SelectablePackage()
-            {
-                PackageName = packageToCopy.PackageName,
-                Version = packageToCopy.Version,
-                Timestamp = packageToCopy.Timestamp,
-                ZipFile = packageToCopy.ZipFile,
-                Enabled = packageToCopy.Enabled,
-                CRC = packageToCopy.CRC,
-                StartAddress = packageToCopy.StartAddress,
-                EndAddress = packageToCopy.EndAddress,
-                LogAtInstall = packageToCopy.LogAtInstall,
-                Triggers = new List<string>(),
-                DevURL = packageToCopy.DevURL,
-                InstallGroup = packageToCopy.InstallGroup,
-                PatchGroup = packageToCopy.PatchGroup,
-                _Enabled = packageToCopy._Enabled
-            };
-            sp.Type = SelectionTypes.multi;
-            sp.Name = "WRITE_NEW_NAME";
-            sp.Visible = true;
-            sp.Size = 0;
-            sp.UpdateComment = string.Empty;
-            sp.Description = string.Empty;
-            sp.PopularMod = false;
-            sp._Checked = false;
-            sp.Level = -2;
-            sp.UserFiles = new List<UserFile>();
-            sp.Packages = new List<SelectablePackage>();
-            sp.Medias = new List<Media>();
-            sp.Dependencies = new List<DatabaseLogic>();
-            sp.ConflictingPackages = new List<string>();
-            sp.ShowInSearchList = true;
-            return sp;
-        }
-        #endregion
-
         #region Load UI Views
 
         private void LoadUI(List<DatabasePackage> globalDependencies, List<Dependency> dependnecies, List<Category> parsedCategoryList, int numToAddEnd = 5)
@@ -1154,15 +1066,15 @@ namespace RelhaxModpack.Windows
                 Logging.Editor("Effects is copy, making new copy instance of {0}", LogLevel.Info, packageToMove.PackageName);
                 if (packageCurrentlyOver is SelectablePackage)
                 {
-                    packageToMove = CopySelectablePackage(packageToMove);
+                    packageToMove = SelectablePackage.Copy(packageToMove);
                 }
                 else if (packageCurrentlyOver is Dependency)
                 {
-                    packageToMove = CopyDependency(packageToMove);
+                    packageToMove = Dependency.Copy(packageToMove);
                 }
                 else
                 {
-                    packageToMove = CopyGlobalDependency(packageToMove);
+                    packageToMove = DatabasePackage.Copy(packageToMove);
                 }
                 //the packageName needs to stay unique as well
                 int i = 0;
@@ -1178,7 +1090,7 @@ namespace RelhaxModpack.Windows
             {
                 //we need to make a new item if it's subclassing. can't cast into a subclass
                 if (!(packageToMove is SelectablePackage))
-                    packageToMove = CopySelectablePackage(packageToMove);
+                    packageToMove = SelectablePackage.Copy(packageToMove);
                 //unless alt is pressed to copy new item inside
                 if (addBelowItem)
                     selectablePackageCurrentlyOverFOrInsert.Packages.Add((SelectablePackage)packageToMove);
@@ -1188,13 +1100,13 @@ namespace RelhaxModpack.Windows
             else if (packageCurrentlyOver is Dependency dependnecyCurrentlyOverForInsert)
             {
                 if (!(packageToMove is Dependency))
-                    packageToMove = CopyDependency(packageToMove);
+                    packageToMove = Dependency.Copy(packageToMove);
                 Dependencies.Insert(Dependencies.IndexOf(dependnecyCurrentlyOverForInsert) + 1, (Dependency)packageToMove);
             }
             else
             {
                 if ((packageToMove is Dependency) || (packageToMove is SelectablePackage))
-                    packageToMove = CopyGlobalDependency(packageToMove);
+                    packageToMove = DatabasePackage.Copy(packageToMove);
                 GlobalDependencies.Insert(GlobalDependencies.IndexOf(packageCurrentlyOver) + 1, (DatabasePackage)packageToMove);
             }
 

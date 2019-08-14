@@ -610,6 +610,75 @@ namespace RelhaxModpack
             }
             return false;
         }
+
+        /// <summary>
+        /// Create a copy of the SelectablePackage object
+        /// </summary>
+        /// <param name="packageToCopy">The object to copy</param>
+        /// <returns>A new SelectablePackage object with the same values</returns>
+        public static SelectablePackage Copy(SelectablePackage packageToCopy)
+        {
+            if (packageToCopy == null)
+                return null;
+
+            SelectablePackage sp = (SelectablePackage)DatabasePackage.Copy(packageToCopy);
+            sp.Type = packageToCopy.Type;
+            sp.Name = "WRITE_NEW_NAME";
+            sp.Visible = packageToCopy.Visible;
+            sp.Size = 0;
+            sp.UpdateComment = string.Empty;
+            sp.Description = string.Empty;
+            sp.PopularMod = false;
+            sp._Checked = false;
+            sp.Level = -2;
+            sp.UserFiles = new List<UserFile>();
+            sp.Packages = new List<SelectablePackage>();
+            sp.Medias = new List<Media>();
+            sp.Dependencies = new List<DatabaseLogic>();
+            sp.ConflictingPackages = new List<string>();
+            sp.ShowInSearchList = packageToCopy.ShowInSearchList;
+
+            return packageToCopy;
+        }
+
+        /// <summary>
+        /// Create a copy of the SelectablePackage object
+        /// </summary>
+        /// <param name="packageToCopy">The object to copy</param>
+        /// <returns>A new SelectablePackage object with the same values and new list elements with the same values</returns>
+        public static SelectablePackage DeepCopy(SelectablePackage packageToCopy)
+        {
+            if (packageToCopy == null)
+                return null;
+
+            SelectablePackage sp = (SelectablePackage)DatabasePackage.DeepCopy(packageToCopy);
+            sp.Type = packageToCopy.Type;
+            sp.Name = "WRITE_NEW_NAME";
+            sp.Visible = packageToCopy.Visible;
+            sp.Size = 0;
+            sp.UpdateComment = string.Empty;
+            sp.Description = string.Empty;
+            sp.PopularMod = false;
+            sp._Checked = false;
+            sp.Level = -2;
+            sp.UserFiles = new List<UserFile>();
+            sp.Packages = new List<SelectablePackage>();
+            sp.Medias = new List<Media>();
+            sp.Dependencies = new List<DatabaseLogic>();
+            sp.ConflictingPackages = new List<string>();
+            sp.ShowInSearchList = packageToCopy.ShowInSearchList;
+
+            foreach (UserFile file in packageToCopy.UserFiles)
+                sp.UserFiles.Add(UserFile.DeepCopy(file));
+
+            foreach (Media file in packageToCopy.Medias)
+                sp.Medias.Add(Media.Copy(file));
+
+            foreach (DatabaseLogic file in packageToCopy.Dependencies)
+                sp.Dependencies.Add(DatabaseLogic.Copy(file));
+
+            return packageToCopy;
+        }
         #endregion
     }
 }

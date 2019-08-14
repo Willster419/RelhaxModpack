@@ -432,6 +432,13 @@
             </summary>
             <returns>The name of the package this object attaches to</returns>
         </member>
+        <member name="M:RelhaxModpack.DatabaseLogic.Copy(RelhaxModpack.DatabaseLogic)">
+            <summary>
+            Create a copy of the given DatabaseLogic object
+            </summary>
+            <param name="databaseLogicToCopy">The object to copy</param>
+            <returns>A new DatabaseLogic object with the same values</returns>
+        </member>
         <member name="T:RelhaxModpack.DatabasePackage">
             <summary>
             A database component is the base class for all other packages
@@ -573,6 +580,20 @@
             Provides a complete tree style path to the package using its internal packageName, starting with the category
             </summary>
         </member>
+        <member name="M:RelhaxModpack.DatabasePackage.Copy(RelhaxModpack.DatabasePackage)">
+            <summary>
+            Create a copy of the DatabasePackage object
+            </summary>
+            <param name="packageToCopy">The object to copy</param>
+            <returns>A new DatabasePackage object with the same values</returns>
+        </member>
+        <member name="M:RelhaxModpack.DatabasePackage.DeepCopy(RelhaxModpack.DatabasePackage)">
+            <summary>
+            Create a copy of the DatabasePackage object
+            </summary>
+            <param name="packageToCopy">The object to copy</param>
+            <returns>A new DatabasePackage object with the same values and new list elements with the same values</returns>
+        </member>
         <member name="T:RelhaxModpack.Dependency">
             <summary>
             Represents a package with logical calculations. A dependency is only installed when a selectable package is checked
@@ -615,6 +636,20 @@
             <summary>
             Constructor to over-ride DatabasePackage default values
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Dependency.Copy(RelhaxModpack.Dependency)">
+            <summary>
+            Create a copy of the Dependency object
+            </summary>
+            <param name="dependencyToCopy">The object to copy</param>
+            <returns>A new Dependency object with the same values</returns>
+        </member>
+        <member name="M:RelhaxModpack.Dependency.DeepCopy(RelhaxModpack.Dependency)">
+            <summary>
+            Create a copy of the Dependency object
+            </summary>
+            <param name="dependencyToCopy">The object to copy</param>
+            <returns>A new Dependency object with the same values and new list elements with the same values</returns>
         </member>
         <member name="T:RelhaxModpack.DatabaseComponents.IComponentWithDependencies">
             <summary>
@@ -677,6 +712,13 @@
             The string properties of the object
             </summary>
             <returns>The integer code of the MediaType and the first 80 characters of the URL</returns>
+        </member>
+        <member name="M:RelhaxModpack.Media.Copy(RelhaxModpack.Media)">
+            <summary>
+            Create a copy of the Media object
+            </summary>
+            <param name="mediaToCopy">The object to copy</param>
+            <returns>A new Media object with the same values</returns>
         </member>
         <member name="T:RelhaxModpack.PackageComparerByPackageName">
             <summary>
@@ -1021,6 +1063,20 @@
             </summary>
             <returns>True if another package at this level is checked and enabled, false otherwise</returns>
         </member>
+        <member name="M:RelhaxModpack.SelectablePackage.Copy(RelhaxModpack.SelectablePackage)">
+            <summary>
+            Create a copy of the SelectablePackage object
+            </summary>
+            <param name="packageToCopy">The object to copy</param>
+            <returns>A new SelectablePackage object with the same values</returns>
+        </member>
+        <member name="M:RelhaxModpack.SelectablePackage.DeepCopy(RelhaxModpack.SelectablePackage)">
+            <summary>
+            Create a copy of the SelectablePackage object
+            </summary>
+            <param name="packageToCopy">The object to copy</param>
+            <returns>A new SelectablePackage object with the same values and new list elements with the same values</returns>
+        </member>
         <member name="T:RelhaxModpack.Trigger">
             <summary>
             Represents a trigger object used in the installer as an event starter.
@@ -1082,6 +1138,20 @@
             The string representation of the UserFile object
             </summary>
             <returns>The string pattern</returns>
+        </member>
+        <member name="M:RelhaxModpack.UserFile.Copy(RelhaxModpack.UserFile)">
+            <summary>
+            Create a copy of the UserFile object
+            </summary>
+            <param name="userFileToCopy">The object to copy</param>
+            <returns>A new UserFile object with the same values</returns>
+        </member>
+        <member name="M:RelhaxModpack.UserFile.DeepCopy(RelhaxModpack.UserFile)">
+            <summary>
+            Create a deep copy of the UserFile object
+            </summary>
+            <param name="userFileToCopy">The object to copy</param>
+            <returns>A new UserFile object with the same values and new list elements with the same values</returns>
         </member>
         <member name="T:RelhaxModpack.UIComponents.RelhaxHyperlink">
             <summary>
