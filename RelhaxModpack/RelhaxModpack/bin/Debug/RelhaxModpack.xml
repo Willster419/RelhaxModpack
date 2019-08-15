@@ -3397,39 +3397,66 @@
             The root filename of the list of selection files
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxDownloadsFolder">
+        <member name="F:RelhaxModpack.Settings.RelhaxDownloadsFolderPath">
             <summary>
             The absolute path of the application zip file and zip database file folder
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxModBackupFolder">
+        <member name="F:RelhaxModpack.Settings.RelhaxDownloadsFolderPathOld">
+            <summary>
+            The old absolute path of the application zip file and zip database file folder
+            </summary>
+            [Obsolete]
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelhaxModBackupFolderPath">
             <summary>
             The absolute path of the application mod backup folder
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxUserSelectionsFolder">
+        <member name="F:RelhaxModpack.Settings.RelhaxModBackupFolderPathOld">
+            <summary>
+            The old absolute path of the application mod backup folder
+            </summary>
+            [Obsolete]
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelhaxUserSelectionsFolderPath">
             <summary>
             The absolute path of the application user selections folder. Default location 
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxUserConfigsFolderOld">
+        <member name="F:RelhaxModpack.Settings.RelhaxUserSelectionsFolderPathOld">
             <summary>
             The old absolute path of the application user selections folder. Old Default location
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxUserModsFolder">
+        <member name="F:RelhaxModpack.Settings.RelhaxUserModsFolderPath">
             <summary>
             The absolute path of the application folder where users can place custom mod zip files
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxTempFolder">
+        <member name="F:RelhaxModpack.Settings.RelhaxUserModsFolderPathOld">
+            <summary>
+            The old absolute path of the application folder where users can place custom mod zip files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelhaxTempFolderPath">
             <summary>
             The absolute path of the application temporary folder
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxLibrariesFolder">
+        <member name="F:RelhaxModpack.Settings.RelhaxTempFolderPathOld">
+            <summary>
+            The old absolute path of the application temporary folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelhaxLibrariesFolderPath">
             <summary>
             The absolute path of the application 3rd party dll references folder. Currently used to hold atlas file libraries
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelhaxLibrariesFolderPathOld">
+            <summary>
+            The old absolute path of the application 3rd party dll references folder. Currently used to hold atlas file libraries
             </summary>
         </member>
         <member name="F:RelhaxModpack.Settings.PatchFolderName">
