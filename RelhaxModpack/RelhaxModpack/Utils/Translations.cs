@@ -3242,6 +3242,14 @@ namespace RelhaxModpack
             French.Add("V2UpgradeNoticeText", "Il semble que vous exécutiez une mise à niveau de V1 à V2 pour la première fois." +
                 " Appuyer sur Continuer entraînera une mise à niveau de la structure de fichiers qui ne peut pas être annulée. Il est recommandé de faire une sauvegarde de votre dossier V1 avant de continuer");
             Russian.Add("V2UpgradeNoticeText", "Похоже, что вы производите апгрейд с V1 на V2 в первый раз. Нажатие кнопки продолжения произведёт обновление структуры файлов, которое невозможно откатить. Рекомендуется создание бэкапа папки с V1 перед продолжением");
+
+            //Component: upgradingStructure
+            //
+            English.Add("upgradingStructure", "Upgrading V1 file and folder structure");
+            German.Add("upgradingStructure", TranslationNeeded);
+            Polish.Add("upgradingStructure", TranslationNeeded);
+            French.Add("upgradingStructure", TranslationNeeded);
+            Russian.Add("upgradingStructure", TranslationNeeded);
             #endregion
 
             #region Export Mode
