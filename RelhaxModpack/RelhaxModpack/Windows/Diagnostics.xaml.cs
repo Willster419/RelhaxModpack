@@ -194,12 +194,12 @@ namespace RelhaxModpack.Windows
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("clearingDownloadCache");
             try
             {
-                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolder, false, false, 3, 100, "*.zip");
-                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolder, false, false, 3, 100, "*.xml");
+                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolderPath, false, false, 3, 100, "*.zip");
+                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolderPath, false, false, 3, 100, "*.xml");
             }
             catch (IOException ioex)
             {
-                DiagnosticsStatusTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("failedToClearDownloadCache"), Environment.NewLine, Settings.RelhaxDownloadsFolder);
+                DiagnosticsStatusTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("failedToClearDownloadCache"), Environment.NewLine, Settings.RelhaxDownloadsFolderPath);
                 Logging.Exception(ioex.ToString());
             }
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleaningDownloadCacheComplete");
@@ -210,11 +210,11 @@ namespace RelhaxModpack.Windows
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("clearingDownloadCacheDatabase ");
             try
             {
-                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolder, false, false, 3, 100, "*.xml");
+                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolderPath, false, false, 3, 100, "*.xml");
             }
             catch (IOException ioex)
             {
-                DiagnosticsStatusTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("failedToClearDownloadCache"), Environment.NewLine, Settings.RelhaxDownloadsFolder);
+                DiagnosticsStatusTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("failedToClearDownloadCache"), Environment.NewLine, Settings.RelhaxDownloadsFolderPath);
                 Logging.Exception(ioex.ToString());
             }
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleaningDownloadCacheComplete");

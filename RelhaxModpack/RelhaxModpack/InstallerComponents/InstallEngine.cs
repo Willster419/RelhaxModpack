@@ -1174,12 +1174,12 @@ namespace RelhaxModpack.InstallerComponents
             Progress.Report(Prog);
 
             //check first if the modpack backup directory exists first
-            if (!Directory.Exists(Settings.RelhaxModBackupFolder))
-                Directory.CreateDirectory(Settings.RelhaxModBackupFolder);
+            if (!Directory.Exists(Settings.RelhaxModBackupFolderPath))
+                Directory.CreateDirectory(Settings.RelhaxModBackupFolderPath);
 
             //create the directory for this version to backup to
             string zipFileName = string.Format("{0:yyyy-MM-dd-HH-mm-ss}_{1}.zip", DateTime.Now,Settings.WoTClientVersion);
-            string zipFileFullPath = Path.Combine(Settings.RelhaxModBackupFolder, zipFileName);
+            string zipFileFullPath = Path.Combine(Settings.RelhaxModBackupFolderPath, zipFileName);
             Logging.Debug("started backupMods(), making zipfile {0}", zipFileFullPath);
 
             //make a zip file of the mods and res_mods and appdata
@@ -1327,7 +1327,7 @@ namespace RelhaxModpack.InstallerComponents
                     Prog.ChildTotal = filesToSave.Count();
 
                     //make the temp directory to place the files based on this package
-                    string tempFolderPath = Path.Combine(Settings.RelhaxTempFolder, package.PackageName);
+                    string tempFolderPath = Path.Combine(Settings.RelhaxTempFolderPath, package.PackageName);
                     if(!Directory.Exists(tempFolderPath))
                         Directory.CreateDirectory(tempFolderPath);
 
@@ -1370,7 +1370,7 @@ namespace RelhaxModpack.InstallerComponents
             Logging.Info("Appdata folder exists, backing up user settings and clearing cache");
 
             //make the temp folder if it does not already exist
-            string AppPathTempFolder = Path.Combine(Settings.RelhaxTempFolder, "AppDataBackup");
+            string AppPathTempFolder = Path.Combine(Settings.RelhaxTempFolderPath, "AppDataBackup");
             //delete if possibly from previous install
             if (Directory.Exists(AppPathTempFolder))
                 Utils.DirectoryDelete(AppPathTempFolder, true);
@@ -1548,7 +1548,7 @@ namespace RelhaxModpack.InstallerComponents
                     foreach (DatabasePackage packa in packages.Where(pack => pack.Size == 0 && !string.IsNullOrWhiteSpace(pack.ZipFile)))
                     {
                         Logging.Debug("package {0} has size 0 and zipfile entry, getting size", packa.PackageName);
-                        string zipFile = Path.Combine(Settings.RelhaxDownloadsFolder, packa.ZipFile);
+                        string zipFile = Path.Combine(Settings.RelhaxDownloadsFolderPath, packa.ZipFile);
                         if (File.Exists(zipFile))
                             packa.Size = (ulong)Utils.GetFilesize(zipFile);
                         Logging.Debug("size parsed to {0}", packa.Size.ToString());
@@ -1641,7 +1641,7 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.Info(string.Format("Restore data of package {0} starting", package.PackageName));
 
                 //check if the package name folder exists first
-                string tempBackupFolder = Path.Combine(Settings.RelhaxTempFolder, package.PackageName);
+                string tempBackupFolder = Path.Combine(Settings.RelhaxTempFolderPath, package.PackageName);
                 if(!Directory.Exists(tempBackupFolder))
                 {
                     Logging.WriteToLog(string.Format("folder {0} does not exist, skipping", package.PackageName), Logfiles.Application, LogLevel.Error);
@@ -1653,7 +1653,7 @@ namespace RelhaxModpack.InstallerComponents
                     foreach(string savedFile in files.Files_saved)
                     {
                         //Files_saved should have the complete path of the destination
-                        string fileSourcePath = Path.Combine(Settings.RelhaxTempFolder, package.PackageName, Path.GetFileName(savedFile));
+                        string fileSourcePath = Path.Combine(Settings.RelhaxTempFolderPath, package.PackageName, Path.GetFileName(savedFile));
                         if (File.Exists(fileSourcePath))
                         {
                             Logging.Info(string.Format("Restoring file {0} of {1}", Path.GetFileName(savedFile), package.PackageName));
@@ -1974,7 +1974,7 @@ namespace RelhaxModpack.InstallerComponents
             List<string> zipFilesInDatabase = allFlatList.Select(package => package.ZipFile).ToList();
 
             //get a list of all files in the download cache folder
-            List<string> zipFilesInCache = Utils.DirectorySearch(Settings.RelhaxDownloadsFolder, SearchOption.TopDirectoryOnly, false, "*.zip").ToList();
+            List<string> zipFilesInCache = Utils.DirectorySearch(Settings.RelhaxDownloadsFolderPath, SearchOption.TopDirectoryOnly, false, "*.zip").ToList();
             if(zipFilesInCache == null)
             {
                 Logging.Error("failed to get list of zip files in download cache, skipping this step");
@@ -2001,7 +2001,7 @@ namespace RelhaxModpack.InstallerComponents
                     Prog.Filename = zipfile;
                     Progress.Report(Prog);
 
-                    Utils.FileDelete(Path.Combine(Settings.RelhaxDownloadsFolder, zipfile));
+                    Utils.FileDelete(Path.Combine(Settings.RelhaxDownloadsFolderPath, zipfile));
                 }
             }
             return true;
@@ -2125,7 +2125,7 @@ namespace RelhaxModpack.InstallerComponents
         private void Unzip(DatabasePackage package, int threadNum, StringBuilder zipLogger)
         {
             //for each zip file, put it in a try catch to see if we can catch any issues in case of a one-off IO error
-            string zipFilePath = Path.Combine(Settings.RelhaxDownloadsFolder, package.ZipFile);
+            string zipFilePath = Path.Combine(Settings.RelhaxDownloadsFolderPath, package.ZipFile);
             for(int i = 3; i > 0; i--)//3 strikes and you're out
             {
                 try

@@ -40,7 +40,7 @@ namespace RelhaxModpack
         public string Filepath
         {
             get
-            { return Path.Combine(Settings.RelhaxLibrariesFolder, ExtractedFilename); }
+            { return Path.Combine(Settings.RelhaxLibrariesFolderPath, ExtractedFilename); }
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace RelhaxModpack
             using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
             using (ZipFile zout = ZipFile.Read(stream))
             {
-                zout.ExtractAll(Settings.RelhaxLibrariesFolder);
+                zout.ExtractAll(Settings.RelhaxLibrariesFolderPath);
             }
         }
     }

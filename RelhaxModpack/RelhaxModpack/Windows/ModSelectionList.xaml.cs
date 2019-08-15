@@ -509,7 +509,7 @@ namespace RelhaxModpack.Windows
                 foreach (DatabasePackage package in flatListZips)
                 {
                     //make path for the zipfile
-                    string zipFile = Path.Combine(Settings.RelhaxDownloadsFolder, package.ZipFile);
+                    string zipFile = Path.Combine(Settings.RelhaxDownloadsFolderPath, package.ZipFile);
 
                     //only look for a crc if the cache file exists
                     if (!File.Exists(zipFile))
@@ -625,7 +625,7 @@ namespace RelhaxModpack.Windows
                     //else check and load the use selection from auto launch command line
                     else if (!string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
                     {
-                        SelectionsDocument = XmlUtils.LoadXmlDocument(Path.Combine(Settings.RelhaxUserSelectionsFolder, CommandLineSettings.AutoInstallFileName), XmlLoadType.FromFile);
+                        SelectionsDocument = XmlUtils.LoadXmlDocument(Path.Combine(Settings.RelhaxUserSelectionsFolderPath, CommandLineSettings.AutoInstallFileName), XmlLoadType.FromFile);
                         shouldLoadSomething = true;
                     }
                     else if (ModpackSettings.SaveLastSelection)
@@ -720,7 +720,7 @@ namespace RelhaxModpack.Windows
         private void InitUsermods()
         {
             //get a list of all zip files in the folder
-            string[] zipFilesUserMods = Utils.DirectorySearch(Settings.RelhaxUserModsFolder, SearchOption.TopDirectoryOnly, false, @"*.zip", 5, 3, true);
+            string[] zipFilesUserMods = Utils.DirectorySearch(Settings.RelhaxUserModsFolderPath, SearchOption.TopDirectoryOnly, false, @"*.zip", 5, 3, true);
             userMods = new List<SelectablePackage>();
             foreach (string s in zipFilesUserMods)
             {
@@ -1535,7 +1535,7 @@ namespace RelhaxModpack.Windows
         {
             SaveFileDialog selectSavePath = new SaveFileDialog()
             {
-                InitialDirectory = Settings.RelhaxUserSelectionsFolder,
+                InitialDirectory = Settings.RelhaxUserSelectionsFolderPath,
                 AddExtension = true,
                 Filter = "XML files|*.xml",
                 ValidateNames = true
@@ -1565,7 +1565,7 @@ namespace RelhaxModpack.Windows
             {
                 OpenFileDialog selectLoadPath = new OpenFileDialog()
                 {
-                    InitialDirectory = Settings.RelhaxUserSelectionsFolder,
+                    InitialDirectory = Settings.RelhaxUserSelectionsFolderPath,
                     CheckFileExists = true,
                     CheckPathExists = true,
                     AddExtension = true,
@@ -1714,7 +1714,7 @@ namespace RelhaxModpack.Windows
             //do the same as above but for user mods
             foreach(SelectablePackage package in userMods)
             {
-                if(stringUserSelections.Contains(package.ZipFile) && File.Exists(Path.Combine(Settings.RelhaxUserModsFolder,package.ZipFile)))
+                if(stringUserSelections.Contains(package.ZipFile) && File.Exists(Path.Combine(Settings.RelhaxUserModsFolderPath,package.ZipFile)))
                 {
                     Logging.Info(string.Format("Checking User Mod {0}",package.ZipFile));
                     package.Enabled = true;

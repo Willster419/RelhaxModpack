@@ -217,7 +217,7 @@ namespace RelhaxModpack
                 Task.Run(() =>
                 {
                     totalSize = 0;
-                    backupFiles = Utils.DirectorySearch(Settings.RelhaxModBackupFolder, SearchOption.TopDirectoryOnly, false, "*.zip", 5, 3, false);
+                    backupFiles = Utils.DirectorySearch(Settings.RelhaxModBackupFolderPath, SearchOption.TopDirectoryOnly, false, "*.zip", 5, 3, false);
                     foreach (string file in backupFiles)
                     {
                         totalSize += Utils.GetFilesize(file);
@@ -262,9 +262,14 @@ namespace RelhaxModpack
                         Logging.Info("starting upgrade to V2");
 
                         //process libraries folder
-                        Logging.Info("move old configs folder to selections folder");
+                        Logging.Info("upgrade folders to new names");
 #pragma warning disable CS0612
-                        Directory.Move(Settings.RelhaxUserConfigsFolderOld, Settings.RelhaxUserSelectionsFolder);
+                        MoveFolder(Settings.RelhaxDownloadsFolderPathOld, Settings.RelhaxDownloadsFolderPath);
+                        MoveFolder(Settings.RelhaxModBackupFolderPathOld, Settings.RelhaxModBackupFolderPath);
+                        MoveFolder(Settings.RelhaxUserSelectionsFolderPathOld, Settings.RelhaxUserSelectionsFolderPath);
+                        MoveFolder(Settings.RelhaxUserModsFolderPathOld, Settings.RelhaxUserModsFolderPath);
+                        MoveFolder(Settings.RelhaxTempFolderPathOld, Settings.RelhaxTempFolderPath);
+                        MoveFolder(Settings.RelhaxLibrariesFolderPathOld, Settings.RelhaxLibrariesFolderPath);
 #pragma warning enable CS0612
 
                         //process xml settings file
@@ -357,9 +362,9 @@ namespace RelhaxModpack
                 else if (!string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
                 {
                     Logging.Info("auto-install specified to launch install using {0}", CommandLineSettings.AutoInstallFileName);
-                    if(!File.Exists(Path.Combine(Settings.RelhaxUserSelectionsFolder,CommandLineSettings.AutoInstallFileName)))
+                    if(!File.Exists(Path.Combine(Settings.RelhaxUserSelectionsFolderPath,CommandLineSettings.AutoInstallFileName)))
                     {
-                        Logging.Error("configuration file not found in {0}, aborting", Settings.RelhaxUserSelectionsFolder);
+                        Logging.Error("configuration file not found in {0}, aborting", Settings.RelhaxUserSelectionsFolderPath);
                         CommandLineSettings.AutoInstallFileName = string.Empty;
                     }
                     else
@@ -1546,7 +1551,7 @@ namespace RelhaxModpack
                     {
                         package.StartAddress = package.StartAddress.Replace("{onlineFolder}", Settings.WoTModpackOnlineFolderVersion);
                         fileToDownload = package.StartAddress + package.ZipFile + package.EndAddress;
-                        fileToSaveTo = Path.Combine(Settings.RelhaxDownloadsFolder, package.ZipFile);
+                        fileToSaveTo = Path.Combine(Settings.RelhaxDownloadsFolderPath, package.ZipFile);
                         try
                         {
                             Logging.Info("Async download of {0} start", package.ZipFile);
@@ -1604,7 +1609,7 @@ namespace RelhaxModpack
                         //replace the start address macro
                         package.StartAddress = package.StartAddress.Replace("{onlineFolder}", Settings.WoTModpackOnlineFolderVersion);
                         fileToDownload = package.StartAddress + package.ZipFile + package.EndAddress;
-                        fileToSaveTo = Path.Combine(Settings.RelhaxDownloadsFolder, package.ZipFile);
+                        fileToSaveTo = Path.Combine(Settings.RelhaxDownloadsFolderPath, package.ZipFile);
                         current_bytes_downloaded = 0;
                         last_bytes_downloaded = 0;
                         last_download_time = 0;
@@ -2292,7 +2297,7 @@ namespace RelhaxModpack
             {
                 Filter = "*.xml|*.xml",
                 Title = Translations.GetTranslatedString("MainWindowSelectSelectionFileToLoad"),
-                InitialDirectory = Settings.RelhaxUserSelectionsFolder,
+                InitialDirectory = Settings.RelhaxUserSelectionsFolderPath,
                 Multiselect = false
             };
             if (!(bool)selectAutoSyncSelectionFileDialog.ShowDialog())
@@ -2516,5 +2521,25 @@ namespace RelhaxModpack
             }
         }
         #endregion
+
+        //move folders with a special middle step
+        private void MoveFolder(string oldPath, string newPath)
+        {
+            Logging.Info("Upgrading folder {0} to {1}", Path.GetFileName(oldPath), Path.GetFileName(newPath));
+            if(!Directory.Exists(oldPath))
+            {
+                Logging.Warning("folder {0} does not exist, skipping", Path.GetFileName(oldPath));
+                return;
+            }
+
+            //step 1 is to move it to a temp folder
+            string middlePath = oldPath + "_";
+            Directory.Move(oldPath, middlePath);
+
+            //step 2 is to move it to the real folder
+            Directory.Move(middlePath, oldPath);
+
+            Logging.Info("upgrade successful");
+        }
     }
 }
