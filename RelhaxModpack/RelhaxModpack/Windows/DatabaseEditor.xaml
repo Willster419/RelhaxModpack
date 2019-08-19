@@ -316,7 +316,10 @@
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center"/>
             <TabControl x:Name="LeftTabView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" SelectionChanged="LeftTabView_SelectionChanged">
                 <TabItem x:Name="DatabaseViewTab" Header="Database Tree View">
-                    <TreeView x:Name="DatabaseTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="True" Drop="OnTreeViewDatabaseDrop" DragOver="OnTreeViewDatabaseDragOver" MouseMove="OnTreeViewMouseMove" ScrollViewer.ScrollChanged="OnTreeViewScroll" PreviewMouseDown="OnTreeViewMouseDownPreview" PreviewMouseUp="OnTreeViewMouseUpPreview" SelectedItemChanged="DatabaseTreeView_SelectedItemChanged">
+                    <TreeView x:Name="DatabaseTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="True" Drop="OnTreeViewDatabaseDrop"
+                              DragOver="OnTreeViewDatabaseDragOver"  ScrollViewer.ScrollChanged="OnTreeViewScroll" PreviewMouseDown="OnTreeViewMouseDownPreview"
+                              PreviewMouseUp="OnTreeViewMouseUpPreview" SelectedItemChanged="DatabaseTreeView_SelectedItemChanged" KeyDown="DatabaseTreeView_KeyDown"
+                              PreviewMouseMove="DatabaseTreeView_PreviewMouseMove">
                         <TreeView.Resources>
                             <!-- Style the inactive selection the same as active -->
                             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
@@ -325,7 +328,9 @@
                     </TreeView>
                 </TabItem>
                 <TabItem x:Name="InstallGroupsTab" Header="Install Groups">
-                    <TreeView x:Name="InstallGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="True"  MouseMove="OnTreeViewMouseMove" ScrollViewer.ScrollChanged="OnTreeViewScroll" PreviewMouseDown="OnTreeViewMouseDownPreview" PreviewMouseUp="OnTreeViewMouseUpPreview" Drop="OnTreeViewGroupsDrop" DragOver="OnTreeViewGroupsDragOver" >
+                    <TreeView x:Name="InstallGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="True" PreviewMouseMove="DatabaseTreeView_PreviewMouseMove"
+                              ScrollViewer.ScrollChanged="OnTreeViewScroll" PreviewMouseDown="OnTreeViewMouseDownPreview" PreviewMouseUp="OnTreeViewMouseUpPreview"
+                              Drop="OnTreeViewGroupsDrop" DragOver="OnTreeViewGroupsDragOver" >
                         <TreeView.Resources>
                             <!-- Style the inactive selection the same as active -->
                             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
@@ -334,7 +339,9 @@
                     </TreeView>
                 </TabItem>
                 <TabItem x:Name="PatchGroupsTab" Header="Patch Groups">
-                    <TreeView x:Name="PatchGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="True" Drop="OnTreeViewGroupsDrop" DragOver="OnTreeViewGroupsDragOver" MouseMove="OnTreeViewMouseMove" ScrollViewer.ScrollChanged="OnTreeViewScroll" PreviewMouseDown="OnTreeViewMouseDownPreview" PreviewMouseUp="OnTreeViewMouseUpPreview" >
+                    <TreeView x:Name="PatchGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="True" Drop="OnTreeViewGroupsDrop"
+                              DragOver="OnTreeViewGroupsDragOver" PreviewMouseMove="DatabaseTreeView_PreviewMouseMove" ScrollViewer.ScrollChanged="OnTreeViewScroll"
+                              PreviewMouseDown="OnTreeViewMouseDownPreview" PreviewMouseUp="OnTreeViewMouseUpPreview" >
                         <TreeView.Resources>
                             <!-- Style the inactive selection the same as active -->
                             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />

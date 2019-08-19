@@ -469,12 +469,21 @@ namespace RelhaxModpack.Windows
                         break;
 
                     case DatabaseVersions.Test:
+#warning using old database for test mode
+                        if (!XmlUtils.ParseDatabase(modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
+                        {
+                            Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
+                            MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
+                            return false;
+                        }
+                        /*
                         if (!XmlUtils.ParseDatabase1V1FromFiles(Path.GetDirectoryName(ModpackSettings.CustomModInfoPath), modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
                         {
                             Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
                             MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
                             return false;
                         }
+                        */
                         break;
                 }
 

@@ -1,22 +1,16 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using RelhaxModpack.DatabaseComponents;
+using RelhaxModpack.UIComponents;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Xml;
-using Microsoft.Win32;
-using RelhaxModpack.UIComponents;
-using RelhaxModpack.DatabaseComponents;
-using System.Net;
 using Path = System.IO.Path;
 
 namespace RelhaxModpack.Windows
@@ -1305,11 +1299,32 @@ namespace RelhaxModpack.Windows
             return (horizontalMovement | verticalMovement);
         }
 
-        private void OnTreeViewMouseMove(object sender, MouseEventArgs e)
+        //to get and stop the alt key from causing the event to fire extra. the issue is that OnTreeViewMouseMove fires when alt key is pressed, released, and mouse is moved and clicked
+        //note this only happens with the alt key
+        bool altKeyFired = false;
+        private void DatabaseTreeView_KeyDown(object sender, KeyEventArgs e)
+        {
+            altKeyFired = true;
+        }
+
+        private void DatabaseTreeView_PreviewMouseMove(object sender, MouseEventArgs e)
         {
             if (!(sender is TreeView tv))
                 return;
             TreeView treeView = (TreeView)sender;
+
+            //check if the alt key is responsible for this one
+            if (altKeyFired)
+            {
+                altKeyFired = false;
+                return;
+            }
+
+            if(Keyboard.IsKeyDown(Key.LeftAlt))
+            {
+                //yes i know this does nothing but polling for the key seems to allow the alt key event queue to drain out
+            }
+
             //make sure the mouse is pressed and the drag movement is confirmed
             bool isDragConfirmed = IsDragConfirmed(e.GetPosition(treeView));
             if (e.LeftButton == MouseButtonState.Pressed && isDragConfirmed && !IsScrolling)
@@ -1329,11 +1344,11 @@ namespace RelhaxModpack.Windows
                     }
                 }
             }
-            else if (!AlreadyLoggedMouseMove)
+            else if (e.LeftButton == MouseButtonState.Pressed)
             {
                 AlreadyLoggedMouseMove = true;
                 //yeah...that got annoying real quick
-                //Logging.Editor("MouseMove DragDrop movement not accepted, leftButton={0}, isDragConfirmed={1}, IsScrolling={2}", e.LeftButton.ToString(), isDragConfirmed.ToString(), IsScrolling.ToString());
+                //Logging.Editor("MouseMove DragDrop movement not accepted, leftButton={0}, isDragConfirmed={1}, IsScrolling={2}", LogLevel.Info, e.LeftButton.ToString(), isDragConfirmed.ToString(), IsScrolling.ToString());
             }
         }
 
@@ -1342,7 +1357,7 @@ namespace RelhaxModpack.Windows
             if (!(sender is TreeView tv))
                 return;
             TreeView treeView = (TreeView)sender;
-            //Logging.Editor("MouseDown, leftButton={0}, saving mouse location if pressed", e.LeftButton.ToString());
+            //Logging.Editor("MouseDown, leftButton={0}, saving mouse location if pressed", LogLevel.Info, e.LeftButton.ToString());
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 BeforeDragDropPoint = e.GetPosition(treeView);
