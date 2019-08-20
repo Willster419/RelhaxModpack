@@ -75,6 +75,11 @@ namespace RelhaxModpack.Windows
             {
                 Logging.Editor("Editor settings loaded success");
             }
+
+#warning forcing sort categories to be off
+            Logging.Editor("forcing sort categories off", LogLevel.Warning);
+            EditorSettings.SortDatabaseList = false;
+
             //check if we are loading the document auto from the command line
             LoadSettingsToUI();
             if (!string.IsNullOrWhiteSpace(CommandLineSettings.EditorAutoLoadFileName))
