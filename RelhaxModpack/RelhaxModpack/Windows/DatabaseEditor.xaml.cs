@@ -40,8 +40,7 @@ namespace RelhaxModpack.Windows
         private object SelectedItem = null;
         private Preview Preview;
         private bool UnsavedChanges = false;
-        private bool revertToOldValue = false;
-        private bool stillRevertToOldValue = false;
+        System.Windows.Forms.Timer ReselectOldItem = new System.Windows.Forms.Timer() { Interval = 50 };
         private string[] UIHeaders = new string[]
         {
             "-----Global Dependencies-----",
@@ -66,6 +65,7 @@ namespace RelhaxModpack.Windows
 
         private void OnApplicationLoad(object sender, RoutedEventArgs e)
         {
+            ReselectOldItem.Tick += AwesomeHack_Tick;
             Logging.Editor("Editor start");
             EditorSettings = new EditorSettings();
             Logging.Editor("Loading editor settings");
@@ -122,7 +122,12 @@ namespace RelhaxModpack.Windows
             }
         }
 
-
+        private void AwesomeHack_Tick(object sender, EventArgs e)
+        {
+            (SelectedItem as EditorComboBoxItem).Package.EditorTreeViewItem.IsSelected = true;
+            ReselectOldItem.Enabled = false;
+            ReselectOldItem.Stop();
+        }
 
         private void OnDragDropTimerTick(object sender, EventArgs e)
         {
@@ -581,6 +586,7 @@ namespace RelhaxModpack.Windows
         {
             //set handled parameter so that the parent events don't fire
             e.Handled = true;
+
             //check to make sure it's a TreeViewItem (should always be)
             if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem)
             {
@@ -613,13 +619,8 @@ namespace RelhaxModpack.Windows
                 else
                 {
                     Logging.Editor("applyDatabaseObject failed, not changing entry");
-                    //previousTreeViewItemOfSelectedItem.IsSelected = true;
-                    //revertToOldValue = true;
-                    //DatabaseTreeView.SelectedItemChanged -= DatabaseTreeView_SelectedItemChanged;
-                    //(e.OldValue as TreeViewItem).IsSelected = true;
-                    //(e.OldValue as TreeViewItem).Focus();
-                    //TreeViewExtension.SetSelectedItem(DatabaseTreeView, previousTreeViewItemOfSelectedItem);
-                    //DatabaseTreeView.SelectedItemChanged += DatabaseTreeView_SelectedItemChanged;
+                    ReselectOldItem.Start();
+                    ReselectOldItem.Enabled = true;
                     return;
                 }
             }
@@ -2632,44 +2633,5 @@ namespace RelhaxModpack.Windows
             }
         }
         #endregion
-    }
-}
-
-public static class TreeViewExtension
-{
-    public static bool SetSelectedItem(this TreeView treeView, object item)
-    {
-        return SetSelected(treeView, item);
-    }
-
-    private static bool SetSelected(ItemsControl parent, object child)
-    {
-        if (parent == null || child == null)
-            return false;
-
-        TreeViewItem childNode = parent.ItemContainerGenerator
-        .ContainerFromItem(child) as TreeViewItem;
-
-        if (childNode != null)
-        {
-            childNode.Focus();
-            return childNode.IsSelected = true;
-        }
-
-        if (parent.Items.Count > 0)
-        {
-            foreach (object childItem in parent.Items)
-            {
-                ItemsControl childControl = parent
-                  .ItemContainerGenerator
-                  .ContainerFromItem(childItem)
-                  as ItemsControl;
-
-                if (SetSelected(childControl, child))
-                    return true;
-            }
-        }
-
-        return false;
     }
 }
