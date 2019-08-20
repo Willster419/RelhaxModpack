@@ -1930,6 +1930,11 @@ namespace RelhaxModpack.Windows
             }
             else if(e.Key == Key.Enter)
             {
+                if(SearchCB.SelectedItem == null)
+                {
+                    Logging.Info("enter key pressed for search, but no actual package selected. ignoring");
+                    return;
+                }
                 OnSearchCBSelectionCommitted(SearchCB.SelectedItem as ComboBoxItem);
             }
             //check if length 0 or whitespace
@@ -1986,22 +1991,38 @@ namespace RelhaxModpack.Windows
         private async void OnSearchCBSelectionCommitted(ComboBoxItem committedItem)
         {
             //test to make sure the UIComponent is a control (it should be, but at least a test to make sure it's not null)
-            if (committedItem.Package.UIComponent is Control ctrl)
+            Control ctrl = null;
+            if (committedItem.Package.UIComponent is Control control)
             {
-                //focus the tab first, so it is brought into view
-                committedItem.Package.ParentCategory.TabPage.Focusable = true;
-                committedItem.Package.ParentCategory.TabPage.Focus();
-                //https://stackoverflow.com/questions/38532196/bringintoview-is-not-working
-                //Note that due to the dispatcher's priority queue, the content may not be available as soon as you make changes (such as select a tab).
-                //In that case, you may want to post the bring-into-view request in a lower priority:
-                await Dispatcher.InvokeAsync(() => ctrl.BringIntoView(), System.Windows.Threading.DispatcherPriority.Background);
-                //start the timer to show the item
+                ctrl = control;
                 FlashTimer.Tag = committedItem.Package;
-                OnFlastTimerTick(null, null);
-                FlashTimer.Start();
             }
-            else if (committedItem.Package.UIComponent == null)
-                throw new BadMemeException("WHYYYYYYYY!?!?");
+            else if (committedItem.Package.UIComponent == null && (committedItem.Package.Type == SelectionTypes.single_dropdown1 || committedItem.Package.Type == SelectionTypes.single_dropdown2))
+            {
+                if(committedItem.Package.Parent.UIComponent is Control ctrll)
+                {
+                    ctrl = ctrll;
+                    FlashTimer.Tag = committedItem.Package.Parent;
+                }
+            }
+            
+            if(ctrl == null)
+            {
+                throw new BadMemeException("Invalid search box selection encountered");
+            }
+
+            //focus the tab first, so it is brought into view
+            committedItem.Package.ParentCategory.TabPage.Focusable = true;
+            committedItem.Package.ParentCategory.TabPage.Focus();
+
+            //https://stackoverflow.com/questions/38532196/bringintoview-is-not-working
+            //Note that due to the dispatcher's priority queue, the content may not be available as soon as you make changes (such as select a tab).
+            //In that case, you may want to post the bring-into-view request in a lower priority:
+            await Dispatcher.InvokeAsync(() => ctrl.BringIntoView(), DispatcherPriority.Background);
+
+            //start the timer to show the item
+            OnFlastTimerTick(null, null);
+            FlashTimer.Start();
         }
 
         private void SearchCB_PreviewMouseDown(object sender, MouseButtonEventArgs e)
