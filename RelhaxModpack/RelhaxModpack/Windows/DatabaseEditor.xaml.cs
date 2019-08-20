@@ -40,6 +40,8 @@ namespace RelhaxModpack.Windows
         private object SelectedItem = null;
         private Preview Preview;
         private bool UnsavedChanges = false;
+        private bool revertToOldValue = false;
+        private bool stillRevertToOldValue = false;
         private string[] UIHeaders = new string[]
         {
             "-----Global Dependencies-----",
@@ -596,17 +598,36 @@ namespace RelhaxModpack.Windows
             //check if we should save the item before updating what the current entry is
             if (EditorSettings.SaveSelectionBeforeLeave && SelectedItem != null)
             {
-                ApplyDatabaseObject(SelectedItem);
-                if(previousTreeViewItemOfSelectedItem != null)
+                if (ApplyDatabaseObject(SelectedItem))
                 {
-                    //trigger a UI update
-                    object tempRef = previousTreeViewItemOfSelectedItem.Header;
-                    previousTreeViewItemOfSelectedItem.Header = null;
-                    previousTreeViewItemOfSelectedItem.Header = tempRef;
+                    if (previousTreeViewItemOfSelectedItem != null)
+                    {
+                        //trigger a UI update
+                        object tempRef = previousTreeViewItemOfSelectedItem.Header;
+                        previousTreeViewItemOfSelectedItem.Header = null;
+                        previousTreeViewItemOfSelectedItem.Header = tempRef;
+                    }
+                    SelectedItem = obj;
+                    ShowDatabaseObject(SelectedItem);
+                }
+                else
+                {
+                    Logging.Editor("applyDatabaseObject failed, not changing entry");
+                    //previousTreeViewItemOfSelectedItem.IsSelected = true;
+                    //revertToOldValue = true;
+                    //DatabaseTreeView.SelectedItemChanged -= DatabaseTreeView_SelectedItemChanged;
+                    //(e.OldValue as TreeViewItem).IsSelected = true;
+                    //(e.OldValue as TreeViewItem).Focus();
+                    //TreeViewExtension.SetSelectedItem(DatabaseTreeView, previousTreeViewItemOfSelectedItem);
+                    //DatabaseTreeView.SelectedItemChanged += DatabaseTreeView_SelectedItemChanged;
+                    return;
                 }
             }
-            SelectedItem = obj;
-            ShowDatabaseObject(SelectedItem);
+            else
+            {
+                SelectedItem = obj;
+                ShowDatabaseObject(SelectedItem);
+            }
         }
 
         private void ShowDatabaseObject(object obj)
@@ -735,23 +756,32 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void ApplyDatabaseObject(object obj)
+        private bool ApplyDatabaseObject(object obj)
         {
+            bool saveApplied = false;
             if (obj is Category category)
-                ApplyDatabaseCategory(category);
+                saveApplied =  ApplyDatabaseCategory(category);
             else if (obj is DatabasePackage package)
-                ApplyDatabasePackage(package);
+                saveApplied = ApplyDatabasePackage(package);
             else if (obj is EditorComboBoxItem editorComboBoxItem)
-                ApplyDatabasePackage(editorComboBoxItem.Package);
+                saveApplied = ApplyDatabasePackage(editorComboBoxItem.Package);
 
             //if user requests apply to also save to disk, then do that now
-            if (EditorSettings.ApplyBehavior == ApplyBehavior.ApplyTriggersSave)
+            if (saveApplied)
             {
-                SaveDatabaseButton_Click(null, null);
+                if (EditorSettings.ApplyBehavior == ApplyBehavior.ApplyTriggersSave)
+                {
+                    SaveDatabaseButton_Click(null, null);
+                }
             }
+            else
+            {
+                Logging.Editor("apply failed, not saving", LogLevel.Warning);
+            }
+            return saveApplied;
         }
 
-        private void ApplyDatabaseCategory(Category category)
+        private bool ApplyDatabaseCategory(Category category)
         {
             Logging.Editor("ApplyDatabaseCategory(), category saving= {0}", LogLevel.Info, category.Name);
 
@@ -769,6 +799,7 @@ namespace RelhaxModpack.Windows
             }
             else
                 Logging.Editor("Category was not modified, no change to set");
+            return true;
         }
 
         private bool DependenciesWereModified(List<DatabaseLogic> dependencies)
@@ -939,7 +970,7 @@ namespace RelhaxModpack.Windows
             return false;
         }
 
-        private void ApplyDatabasePackage(DatabasePackage package)
+        private bool ApplyDatabasePackage(DatabasePackage package)
         {
             Logging.Editor("ApplyDatabasePackage(), package saving = {0}", LogLevel.Info, package.PackageName);
 
@@ -950,7 +981,7 @@ namespace RelhaxModpack.Windows
                 if(Utils.IsDuplicateName(Utils.GetFlatList(GlobalDependencies,Dependencies,null,ParsedCategoryList), PackagePackageNameDisplay.Text))
                 {
                     MessageBox.Show(string.Format("Duplicate packageName: {0} is already used", PackagePackageNameDisplay.Text));
-                    return;
+                    return false;
                 }
             }
 
@@ -958,8 +989,15 @@ namespace RelhaxModpack.Windows
             if(!PackageWasModified(package))
             {
                 Logging.Editor("package was not modified, don't apply anything");
-                return;
+                return true;
             }
+
+            if (!package.ZipFile.Equals(PackageZipFileDisplay.Text) && !Path.GetExtension(PackageZipFileDisplay.Text).Equals(".zip"))
+            {
+                MessageBox.Show("no zip in file extension, was this a mistake?");
+                return false;
+            }
+
             Logging.Editor("package was modified, saving changes to memory and setting changes switch");
 
             //save everything from the UI into the package
@@ -1026,6 +1064,7 @@ namespace RelhaxModpack.Windows
 
             //there now are unsaved changes
             UnsavedChanges = true;
+            return true;
         }
         #endregion
 
@@ -2593,5 +2632,44 @@ namespace RelhaxModpack.Windows
             }
         }
         #endregion
+    }
+}
+
+public static class TreeViewExtension
+{
+    public static bool SetSelectedItem(this TreeView treeView, object item)
+    {
+        return SetSelected(treeView, item);
+    }
+
+    private static bool SetSelected(ItemsControl parent, object child)
+    {
+        if (parent == null || child == null)
+            return false;
+
+        TreeViewItem childNode = parent.ItemContainerGenerator
+        .ContainerFromItem(child) as TreeViewItem;
+
+        if (childNode != null)
+        {
+            childNode.Focus();
+            return childNode.IsSelected = true;
+        }
+
+        if (parent.Items.Count > 0)
+        {
+            foreach (object childItem in parent.Items)
+            {
+                ItemsControl childControl = parent
+                  .ItemContainerGenerator
+                  .ContainerFromItem(childItem)
+                  as ItemsControl;
+
+                if (SetSelected(childControl, child))
+                    return true;
+            }
+        }
+
+        return false;
     }
 }
