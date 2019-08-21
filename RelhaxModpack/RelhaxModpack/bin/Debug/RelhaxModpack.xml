@@ -2899,6 +2899,11 @@
             The timeout, in seconds, until the FTP upload or download window will close. Set to 0 to disable timeout.
             </summary>
         </member>
+        <member name="F:RelhaxModpack.EditorSettings.SaveAsDatabaseVersion">
+            <summary>
+            The form to save the database in when "save as" is pressed
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.EditorSettings.#ctor">
             <summary>
             Create an instance of the EditorSettings class. Settings should be set via property initialization style.

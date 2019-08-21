@@ -326,6 +326,8 @@ namespace RelhaxModpack.Windows
             DefaultSaveLocationSetting.Text = EditorSettings.DefaultEditorSaveLocation;
             FtpUpDownAutoCloseTimoutSlider.Value = EditorSettings.FTPUploadDownloadWindowTimeout;
             FtpUpDownAutoCloseTimoutDisplayLabel.Text = EditorSettings.FTPUploadDownloadWindowTimeout.ToString();
+            SaveDatabaseLegacySetting.IsChecked = EditorSettings.SaveAsDatabaseVersion == DatabaseXmlVersion.Legacy ? true : false;
+            SaveDatabaseOnePointOneSetting.IsChecked = EditorSettings.SaveAsDatabaseVersion == DatabaseXmlVersion.OnePointOne ? true : false;
         }
         #endregion
 
@@ -1634,18 +1636,29 @@ namespace RelhaxModpack.Windows
                     DefaultExt = "xml",
                     InitialDirectory = string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ? Settings.ApplicationStartupPath :
                     Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)) ? DefaultSaveLocationSetting.Text : Settings.ApplicationStartupPath,
-                    Title = "Save Database"
+                    Title = string.Format("Save Database: version = {0}", EditorSettings.SaveAsDatabaseVersion.ToString())
                 };
             if (!(bool)SaveDatabaseDialog.ShowDialog())
                 return;
+
             //if what the user just specified is not the same as the current default, then ask to update it
             if(string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ||
                 !Path.GetDirectoryName(SaveDatabaseDialog.FileName).Equals(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
                 if (MessageBox.Show("Use this as default save location?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
+
             //actually save
-            XmlUtils.SaveDatabase(SaveDatabaseDialog.FileName, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
+            switch (EditorSettings.SaveAsDatabaseVersion)
+            {
+                case DatabaseXmlVersion.Legacy:
+                    XmlUtils.SaveDatabase(SaveDatabaseDialog.FileName, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
                 GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.Legacy);//temp set for old database for now
+                    return;
+                case DatabaseXmlVersion.OnePointOne:
+                    XmlUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(SaveDatabaseDialog.FileName), Settings.BetaDatabaseV2RootFilename), Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
+                GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.Legacy);//temp set for old database for now
+                    return;
+            }
             UnsavedChanges = false;
         }
 

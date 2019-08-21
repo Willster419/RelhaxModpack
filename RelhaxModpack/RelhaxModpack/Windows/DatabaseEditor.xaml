@@ -361,7 +361,7 @@
                             <RowDefinition Height="45"/>
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="30"/>
-                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="40"/>
                             <RowDefinition Height="20"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
@@ -393,6 +393,11 @@
                             <Slider x:Name="FtpUpDownAutoCloseTimoutSlider" HorizontalAlignment="Stretch" VerticalAlignment="Center" IsEnabled="True" ValueChanged="FtpUpDownAutoCloseTimoutSlider_ValueChanged" IsSnapToTickEnabled="True"/>
                             <TextBlock x:Name="FtpUpDownAutoCloseTimoutDisplayLabel" HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="Test" Grid.Column="1"/>
                         </Grid>
+                        <TextBlock x:Name="SaveAsDatabaseType" HorizontalAlignment="Stretch"  Grid.Row="9" TextWrapping="Wrap" Text="&quot;Save as&quot; saves as database type:" VerticalAlignment="Center"/>
+                        <StackPanel HorizontalAlignment="Left" Grid.Column="1" Grid.Row="9" VerticalAlignment="Center">
+                            <RadioButton x:Name="SaveDatabaseLegacySetting" Content="Legacy" Checked="ApplyBehaviorSetting_Checked"/>
+                            <RadioButton x:Name="SaveDatabaseOnePointOneSetting" Content="1.1" Checked="ApplyBehaviorSetting_Checked"/>
+                        </StackPanel>
                     </Grid>
                 </TabItem>
             </TabControl>
@@ -558,7 +563,7 @@
             <ComboBox x:Name="SearchBox" HorizontalAlignment="Stretch" VerticalAlignment="Top" IsEditable="True" Grid.Column="2"
                       PreviewKeyDown="SearchBox_PreviewKeyDown" KeyUp="SearchBox_KeyUp" PreviewMouseDown="SearchBox_PreviewMouseDown"
                       IsTextSearchEnabled="False" Style="{DynamicResource ComboBoxStyle1}" ItemsSource="{Binding}" ItemsPanel="{StaticResource VSP}">
-                
+
             </ComboBox>
         </Grid>
         <TextBlock x:Name="DragDropTest" HorizontalAlignment="Stretch" Margin="250,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Height="50" />
