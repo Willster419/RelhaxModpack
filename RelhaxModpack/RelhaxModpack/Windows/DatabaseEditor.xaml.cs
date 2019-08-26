@@ -1026,6 +1026,7 @@ namespace RelhaxModpack.Windows
                 package.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
                 PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
             }
+
             //see if it's a dependency
             if (package is Dependency dependency)
             {
@@ -1510,7 +1511,7 @@ namespace RelhaxModpack.Windows
             name.Show();
         }
 
-        private void ZipUload_Click(object sender, RoutedEventArgs e)
+        private void ZipUpload_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedItem == null)
             {
@@ -1582,17 +1583,27 @@ namespace RelhaxModpack.Windows
             else
             {
                 Logging.Editor("upload was package zipfile, checking if currently displayed");
-                if ((SelectedItem as EditorComboBoxItem).Package.Equals(e.Package))
+                DatabasePackage selectedItem = null;
+                if (SelectedItem is DatabasePackage dp)
+                    selectedItem = dp;
+                else if (SelectedItem is EditorComboBoxItem editorComboBoxItem)
+                    selectedItem = editorComboBoxItem.Package;
+
+                string tempZipName = e.Package.ZipFile;
+                //update the package crc and timestamp values
+                e.Package.CRC = "f";
+                e.Package.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
+
+                if (selectedItem.Equals(e.Package))
                 {
                     Logging.Editor("it's currently displayed, updating entry for display");
                     ApplyDatabaseObject(e.Package);
+                    e.Package.ZipFile = tempZipName;
+                    ShowDatabasePackage(e.Package);
                 }
                 else
                 {
                     Logging.Editor("it's currently not displayed, updating entry for not display");
-                    //update the package crc and timestamp values
-                    e.Package.CRC = "f";
-                    e.Package.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
                 }
             }
         }
