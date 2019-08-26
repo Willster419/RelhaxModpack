@@ -60,7 +60,9 @@ namespace RelhaxModpack
         /// </summary>
         [Obsolete("This is for legacy database compatibility and will be ignored in Relhax V2")]
         public bool wasLogicalDependencyLegacy = false;
-        
+        #endregion
+
+        #region Other Properties and Methods
         /// <summary>
         /// Constructor to over-ride DatabasePackage default values
         /// </summary>
@@ -71,51 +73,34 @@ namespace RelhaxModpack
             InstallGroup = 2;
             PatchGroup = 2;
         }
-        #endregion
 
-        #region Other Properties and Methods
-
-        /// <summary>
-        /// Create a copy of the Dependency object
-        /// </summary>
-        /// <param name="dependencyToCopy">The object to copy</param>
-        /// <returns>A new Dependency object with the same values</returns>
-        public static Dependency Copy(Dependency dependencyToCopy)
+        public Dependency(DatabasePackage packageToCopyFrom, bool deep) : base(packageToCopyFrom, deep)
         {
-            if (dependencyToCopy == null)
-                return null;
-
-            Dependency dep = (Dependency)Copy(dependencyToCopy);
+            InstallGroup = 2;
+            PatchGroup = 2;
+            if (packageToCopyFrom is Dependency dep)
+            {
 #pragma warning disable CS0618 // Type or member is obsolete
-            dep.wasLogicalDependencyLegacy = dependencyToCopy.wasLogicalDependencyLegacy;
-
-            dep.DatabasePackageLogic = new List<DatabaseLogic>();
-            dep.Dependencies = new List<DatabaseLogic>();
-
-            return dep;
-        }
-
-        /// <summary>
-        /// Create a copy of the Dependency object
-        /// </summary>
-        /// <param name="dependencyToCopy">The object to copy</param>
-        /// <returns>A new Dependency object with the same values and new list elements with the same values</returns>
-        public static Dependency DeepCopy(Dependency dependencyToCopy)
-        {
-            if (dependencyToCopy == null)
-                return null;
-
-            Dependency dep = (Dependency)DatabasePackage.DeepCopy(dependencyToCopy);
-            dep.wasLogicalDependencyLegacy = dependencyToCopy.wasLogicalDependencyLegacy;
+                this.wasLogicalDependencyLegacy = dep.wasLogicalDependencyLegacy;
+                this.DatabasePackageLogic = new List<DatabaseLogic>();
+                this.Dependencies = new List<DatabaseLogic>();
 #pragma warning restore CS0618 // Type or member is obsolete
-            dep.DatabasePackageLogic = new List<DatabaseLogic>();
-            dep.Dependencies = new List<DatabaseLogic>();
 
-            foreach (DatabaseLogic logic in dependencyToCopy.Dependencies)
-                dep.Dependencies.Add(DatabaseLogic.Copy(logic));
-
-            return dep;
-
+                if (deep)
+                {
+                    foreach (DatabaseLogic logic in dep.Dependencies)
+                        this.Dependencies.Add(DatabaseLogic.Copy(logic));
+                }
+            }
+            else if (packageToCopyFrom is SelectablePackage sp)
+            {
+                this.Dependencies = new List<DatabaseLogic>();
+                if(deep)
+                {
+                    foreach (DatabaseLogic logic in sp.Dependencies)
+                        this.Dependencies.Add(DatabaseLogic.Copy(logic));
+                }
+            }
         }
         #endregion
     }

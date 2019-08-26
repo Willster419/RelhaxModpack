@@ -1107,16 +1107,17 @@ namespace RelhaxModpack.Windows
                 Logging.Editor("Effects is copy, making new copy instance of {0}", LogLevel.Info, packageToMove.PackageName);
                 if (packageCurrentlyOver is SelectablePackage)
                 {
-                    packageToMove = SelectablePackage.Copy(packageToMove);
+                    packageToMove = new SelectablePackage(packageToMove, false);
                 }
                 else if (packageCurrentlyOver is Dependency)
                 {
-                    packageToMove = Dependency.Copy(packageToMove);
+                    packageToMove = new Dependency(packageToMove, false);
                 }
                 else
                 {
-                    packageToMove = DatabasePackage.Copy(packageToMove);
+                    packageToMove = new DatabasePackage(packageToMove, false);
                 }
+
                 //the packageName needs to stay unique as well
                 int i = 0;
                 string origName = packageToMove.PackageName;
@@ -1127,27 +1128,28 @@ namespace RelhaxModpack.Windows
 
             Logging.Editor("for insert process, packageCurrentlyOver type is {0}, packageToMove type is {1}", LogLevel.Info, packageCurrentlyOver.GetType().Name, packageToMove.GetType().Name);
             //insert packageToMove into corresponding list that it's over
-            if (packageCurrentlyOver is SelectablePackage selectablePackageCurrentlyOverFOrInsert)
+            if (packageCurrentlyOver is SelectablePackage selectablePackageCurrentlyOverForInsert)
             {
                 //we need to make a new item if it's subclassing. can't cast into a subclass
                 if (!(packageToMove is SelectablePackage))
-                    packageToMove = SelectablePackage.Copy(packageToMove);
+                    packageToMove = new SelectablePackage(packageToMove,false);
+
                 //unless alt is pressed to copy new item inside
                 if (addBelowItem)
-                    selectablePackageCurrentlyOverFOrInsert.Packages.Add((SelectablePackage)packageToMove);
+                    selectablePackageCurrentlyOverForInsert.Packages.Add((SelectablePackage)packageToMove);
                 else
-                    selectablePackageCurrentlyOverFOrInsert.Parent.Packages.Insert(selectablePackageCurrentlyOverFOrInsert.Parent.Packages.IndexOf(selectablePackageCurrentlyOverFOrInsert) + 1, (SelectablePackage)packageToMove);
+                    selectablePackageCurrentlyOverForInsert.Parent.Packages.Insert(selectablePackageCurrentlyOverForInsert.Parent.Packages.IndexOf(selectablePackageCurrentlyOverForInsert) + 1, (SelectablePackage)packageToMove);
             }
             else if (packageCurrentlyOver is Dependency dependnecyCurrentlyOverForInsert)
             {
                 if (!(packageToMove is Dependency))
-                    packageToMove = Dependency.Copy(packageToMove);
+                    packageToMove = new Dependency(packageToMove, false);
                 Dependencies.Insert(Dependencies.IndexOf(dependnecyCurrentlyOverForInsert) + 1, (Dependency)packageToMove);
             }
             else
             {
                 if ((packageToMove is Dependency) || (packageToMove is SelectablePackage))
-                    packageToMove = DatabasePackage.Copy(packageToMove);
+                    packageToMove = new DatabasePackage(packageToMove, false);
                 GlobalDependencies.Insert(GlobalDependencies.IndexOf(packageCurrentlyOver) + 1, (DatabasePackage)packageToMove);
             }
 
@@ -1628,6 +1630,8 @@ namespace RelhaxModpack.Windows
             {
                 ApplyDatabaseObject(SelectedItem);
             }
+
+            //create the save dialog if it doesn't already exist
             if (SaveDatabaseDialog == null)
                 SaveDatabaseDialog = new SaveFileDialog()
                 {
@@ -1638,14 +1642,20 @@ namespace RelhaxModpack.Windows
                     Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)) ? DefaultSaveLocationSetting.Text : Settings.ApplicationStartupPath,
                     Title = string.Format("Save Database: version = {0}", EditorSettings.SaveAsDatabaseVersion.ToString())
                 };
+
+            //then show it and only continue if a selection was committed
             if (!(bool)SaveDatabaseDialog.ShowDialog())
                 return;
 
             //if what the user just specified is not the same as the current default, then ask to update it
-            if(string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ||
-                !Path.GetDirectoryName(SaveDatabaseDialog.FileName).Equals(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
-                if (MessageBox.Show("Use this as default save location?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                    DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
+            //but only if we're in legacy mode for now
+            if (EditorSettings.SaveAsDatabaseVersion == DatabaseXmlVersion.Legacy)
+            {
+                if (string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ||
+                    !Path.GetDirectoryName(SaveDatabaseDialog.FileName).Equals(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
+                    if (MessageBox.Show("Use this as default save location?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                        DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
+            }
 
             //actually save
             switch (EditorSettings.SaveAsDatabaseVersion)
@@ -1655,11 +1665,12 @@ namespace RelhaxModpack.Windows
                 GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.Legacy);//temp set for old database for now
                     return;
                 case DatabaseXmlVersion.OnePointOne:
-                    XmlUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(SaveDatabaseDialog.FileName), Settings.BetaDatabaseV2RootFilename), Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
-                GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.Legacy);//temp set for old database for now
+                    XmlUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(SaveDatabaseDialog.FileName), Settings.BetaDatabaseV2RootFilename),
+                        Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
                     return;
             }
-            UnsavedChanges = false;
+            if (EditorSettings.SaveAsDatabaseVersion == DatabaseXmlVersion.Legacy)
+                UnsavedChanges = false;
         }
 
         private void LoadAsDatabaseButton_Click(object sender, RoutedEventArgs e)

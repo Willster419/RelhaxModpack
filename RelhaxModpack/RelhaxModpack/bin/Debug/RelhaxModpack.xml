@@ -580,20 +580,6 @@
             Provides a complete tree style path to the package using its internal packageName, starting with the category
             </summary>
         </member>
-        <member name="M:RelhaxModpack.DatabasePackage.Copy(RelhaxModpack.DatabasePackage)">
-            <summary>
-            Create a copy of the DatabasePackage object
-            </summary>
-            <param name="packageToCopy">The object to copy</param>
-            <returns>A new DatabasePackage object with the same values</returns>
-        </member>
-        <member name="M:RelhaxModpack.DatabasePackage.DeepCopy(RelhaxModpack.DatabasePackage)">
-            <summary>
-            Create a copy of the DatabasePackage object
-            </summary>
-            <param name="packageToCopy">The object to copy</param>
-            <returns>A new DatabasePackage object with the same values and new list elements with the same values</returns>
-        </member>
         <member name="T:RelhaxModpack.Dependency">
             <summary>
             Represents a package with logical calculations. A dependency is only installed when a selectable package is checked
@@ -636,20 +622,6 @@
             <summary>
             Constructor to over-ride DatabasePackage default values
             </summary>
-        </member>
-        <member name="M:RelhaxModpack.Dependency.Copy(RelhaxModpack.Dependency)">
-            <summary>
-            Create a copy of the Dependency object
-            </summary>
-            <param name="dependencyToCopy">The object to copy</param>
-            <returns>A new Dependency object with the same values</returns>
-        </member>
-        <member name="M:RelhaxModpack.Dependency.DeepCopy(RelhaxModpack.Dependency)">
-            <summary>
-            Create a copy of the Dependency object
-            </summary>
-            <param name="dependencyToCopy">The object to copy</param>
-            <returns>A new Dependency object with the same values and new list elements with the same values</returns>
         </member>
         <member name="T:RelhaxModpack.DatabaseComponents.IComponentWithDependencies">
             <summary>
@@ -1062,20 +1034,6 @@
             Check if the color change should be changed on or off, based on if any other packages at this level are enabled and checked
             </summary>
             <returns>True if another package at this level is checked and enabled, false otherwise</returns>
-        </member>
-        <member name="M:RelhaxModpack.SelectablePackage.Copy(RelhaxModpack.SelectablePackage)">
-            <summary>
-            Create a copy of the SelectablePackage object
-            </summary>
-            <param name="packageToCopy">The object to copy</param>
-            <returns>A new SelectablePackage object with the same values</returns>
-        </member>
-        <member name="M:RelhaxModpack.SelectablePackage.DeepCopy(RelhaxModpack.SelectablePackage)">
-            <summary>
-            Create a copy of the SelectablePackage object
-            </summary>
-            <param name="packageToCopy">The object to copy</param>
-            <returns>A new SelectablePackage object with the same values and new list elements with the same values</returns>
         </member>
         <member name="T:RelhaxModpack.Trigger">
             <summary>

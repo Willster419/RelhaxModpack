@@ -611,73 +611,56 @@ namespace RelhaxModpack
             return false;
         }
 
-        /// <summary>
-        /// Create a copy of the SelectablePackage object
-        /// </summary>
-        /// <param name="packageToCopy">The object to copy</param>
-        /// <returns>A new SelectablePackage object with the same values</returns>
-        public static SelectablePackage Copy(SelectablePackage packageToCopy)
+        public SelectablePackage(DatabasePackage packageToCopyFrom, bool deep) : base(packageToCopyFrom,deep)
         {
-            if (packageToCopy == null)
-                return null;
+            InstallGroup = 4;
+            PatchGroup = 4;
 
-            SelectablePackage sp = (SelectablePackage)DatabasePackage.Copy(packageToCopy);
-            sp.Type = packageToCopy.Type;
-            sp.Name = "WRITE_NEW_NAME";
-            sp.Visible = packageToCopy.Visible;
-            sp.Size = 0;
-            sp.UpdateComment = string.Empty;
-            sp.Description = string.Empty;
-            sp.PopularMod = false;
-            sp._Checked = false;
-            sp.Level = -2;
-            sp.UserFiles = new List<UserFile>();
-            sp.Packages = new List<SelectablePackage>();
-            sp.Medias = new List<Media>();
-            sp.Dependencies = new List<DatabaseLogic>();
-            sp.ConflictingPackages = new List<string>();
-            sp.ShowInSearchList = packageToCopy.ShowInSearchList;
+            if (packageToCopyFrom is Dependency dep)
+            {
+                if(deep)
+                {
+                    foreach (DatabaseLogic file in dep.Dependencies)
+                        this.Dependencies.Add(DatabaseLogic.Copy(file));
+                }
+            }
+            else if (packageToCopyFrom is SelectablePackage sp)
+            {
+                this.Type = sp.Type;
+                this.Name = "WRITE_NEW_NAME";
+                this.Visible = sp.Visible;
+                this.Size = 0;
 
-            return packageToCopy;
-        }
+                this.UpdateComment = string.Empty;
+                this.Description = string.Empty;
+                this.PopularMod = false;
+                this._Checked = false;
 
-        /// <summary>
-        /// Create a copy of the SelectablePackage object
-        /// </summary>
-        /// <param name="packageToCopy">The object to copy</param>
-        /// <returns>A new SelectablePackage object with the same values and new list elements with the same values</returns>
-        public static SelectablePackage DeepCopy(SelectablePackage packageToCopy)
-        {
-            if (packageToCopy == null)
-                return null;
+                this.Level = -2;
+                this.UserFiles = new List<UserFile>();
+                this.Packages = new List<SelectablePackage>();
+                this.Medias = new List<Media>();
+                this.Dependencies = new List<DatabaseLogic>();
+                this.ConflictingPackages = new List<string>();
+                this.ShowInSearchList = sp.ShowInSearchList;
 
-            SelectablePackage sp = (SelectablePackage)DatabasePackage.DeepCopy(packageToCopy);
-            sp.Type = packageToCopy.Type;
-            sp.Name = "WRITE_NEW_NAME";
-            sp.Visible = packageToCopy.Visible;
-            sp.Size = 0;
-            sp.UpdateComment = string.Empty;
-            sp.Description = string.Empty;
-            sp.PopularMod = false;
-            sp._Checked = false;
-            sp.Level = -2;
-            sp.UserFiles = new List<UserFile>();
-            sp.Packages = new List<SelectablePackage>();
-            sp.Medias = new List<Media>();
-            sp.Dependencies = new List<DatabaseLogic>();
-            sp.ConflictingPackages = new List<string>();
-            sp.ShowInSearchList = packageToCopy.ShowInSearchList;
+                if (deep)
+                {
+                    this.UpdateComment = sp.UpdateComment;
+                    this.Description = sp.Description;
+                    this.PopularMod = sp.PopularMod;
+                    this._Checked = sp._Checked;
 
-            foreach (UserFile file in packageToCopy.UserFiles)
-                sp.UserFiles.Add(UserFile.DeepCopy(file));
+                    foreach (UserFile file in this.UserFiles)
+                        this.UserFiles.Add(UserFile.DeepCopy(file));
 
-            foreach (Media file in packageToCopy.Medias)
-                sp.Medias.Add(Media.Copy(file));
+                    foreach (Media file in this.Medias)
+                        this.Medias.Add(Media.Copy(file));
 
-            foreach (DatabaseLogic file in packageToCopy.Dependencies)
-                sp.Dependencies.Add(DatabaseLogic.Copy(file));
-
-            return packageToCopy;
+                    foreach (DatabaseLogic file in this.Dependencies)
+                        this.Dependencies.Add(DatabaseLogic.Copy(file));
+                }
+            }
         }
         #endregion
     }
