@@ -1,3 +1,13 @@
+Application version 0.29.0.10 (2019-08-25)
+https://www.virustotal.com/gui/file/22bdead25709069049ac5884198058f4af44b8f67d85fff9bd802b65cd9cddfd/detection
+- Fixed bug in editor and selection list where user could select a null package.
+- Added check in editor to verify package has zip file extension. This involved the UI and was harder then you think.
+- Added ability in editor to allow specification of "save as" to save database as legacy or 1.1 database format. "save" is still legacy.
+- Re-worked system for making copies of packages based on class type.
+- Fixed editor bug of uploaded zip filenames not being applied
+- Fixed issues with user mod selection
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 0.29.0.9 (2019-08-18)
 https://www.virustotal.com/gui/file/351c97edea9336aec295b530386d287009d4c4cc1c8f4daa4fc41da5196fac14/detection
 - Improved search box speed both in selection list and editor tool.
