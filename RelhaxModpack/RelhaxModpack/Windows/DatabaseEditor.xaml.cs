@@ -124,9 +124,18 @@ namespace RelhaxModpack.Windows
 
         private void AwesomeHack_Tick(object sender, EventArgs e)
         {
-            (SelectedItem as EditorComboBoxItem).Package.EditorTreeViewItem.IsSelected = true;
-            ReselectOldItem.Enabled = false;
-            ReselectOldItem.Stop();
+            if(SelectedItem is DatabasePackage db)
+            {
+                db.EditorTreeViewItem.IsSelected = true;
+                ReselectOldItem.Enabled = false;
+                ReselectOldItem.Stop();
+            }
+            else if (SelectedItem is EditorComboBoxItem edit)
+            {
+                edit.Package.EditorTreeViewItem.IsSelected = true;
+                ReselectOldItem.Enabled = false;
+                ReselectOldItem.Stop();
+            }
         }
 
         private void OnDragDropTimerTick(object sender, EventArgs e)
@@ -604,33 +613,37 @@ namespace RelhaxModpack.Windows
         private void SelectDatabaseObject(object obj, TreeViewItem previousTreeViewItemOfSelectedItem)
         {
             //check if we should save the item before updating what the current entry is
-            if (EditorSettings.SaveSelectionBeforeLeave && SelectedItem != null)
+            if (EditorSettings.SaveSelectionBeforeLeave)
             {
-                if (ApplyDatabaseObject(SelectedItem))
+                //only try to save database object if selected item is of correct type
+                if (SelectedItem is EditorComboBoxItem || SelectedItem is DatabasePackage)
                 {
-                    if (previousTreeViewItemOfSelectedItem != null)
+                    if (ApplyDatabaseObject(SelectedItem))
                     {
-                        //trigger a UI update
-                        object tempRef = previousTreeViewItemOfSelectedItem.Header;
-                        previousTreeViewItemOfSelectedItem.Header = null;
-                        previousTreeViewItemOfSelectedItem.Header = tempRef;
+                        if (previousTreeViewItemOfSelectedItem != null)
+                        {
+                            //trigger a UI update
+                            object tempRef = previousTreeViewItemOfSelectedItem.Header;
+                            previousTreeViewItemOfSelectedItem.Header = null;
+                            previousTreeViewItemOfSelectedItem.Header = tempRef;
+                        }
                     }
-                    SelectedItem = obj;
-                    ShowDatabaseObject(SelectedItem);
+                    else
+                    {
+                        Logging.Editor("applyDatabaseObject failed, not changing entry");
+                        //only start the hack when it's supposed to be used as a revert for changing back to a package selection
+                        ReselectOldItem.Start();
+                        ReselectOldItem.Enabled = true;
+                        return;
+                    }
                 }
                 else
                 {
-                    Logging.Editor("applyDatabaseObject failed, not changing entry");
-                    ReselectOldItem.Start();
-                    ReselectOldItem.Enabled = true;
-                    return;
+                    Logging.Editor("SelectedItem is of wrong type, not counting for save before leave ()", LogLevel.Info, (SelectedItem == null? "(null)" : SelectedItem.ToString()));
                 }
             }
-            else
-            {
-                SelectedItem = obj;
-                ShowDatabaseObject(SelectedItem);
-            }
+            SelectedItem = obj;
+            ShowDatabaseObject(SelectedItem);
         }
 
         private void ShowDatabaseObject(object obj)
@@ -995,10 +1008,14 @@ namespace RelhaxModpack.Windows
                 return true;
             }
 
-            if (!package.ZipFile.Equals(PackageZipFileDisplay.Text) && !Path.GetExtension(PackageZipFileDisplay.Text).Equals(".zip"))
+            //only check for missing zip file if there is text be begin with
+            if (!string.IsNullOrWhiteSpace(PackageZipFileDisplay.Text))
             {
-                MessageBox.Show("no zip in file extension, was this a mistake?");
-                return false;
+                if (!package.ZipFile.Equals(PackageZipFileDisplay.Text) && !Path.GetExtension(PackageZipFileDisplay.Text).Equals(".zip"))
+                {
+                    MessageBox.Show("no zip in file extension, was this a mistake?");
+                    return false;
+                }
             }
 
             Logging.Editor("package was modified, saving changes to memory and setting changes switch");
