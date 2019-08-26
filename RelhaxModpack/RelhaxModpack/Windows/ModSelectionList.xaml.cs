@@ -775,6 +775,7 @@ namespace RelhaxModpack.Windows
                     PopularModVisability = Visibility.Hidden,
                     GreyAreaVisability = Visibility.Hidden
                 };
+                package.UIComponent = userMod;
                 userMod.Click += OnUserPackageClick;
                 //EVENT TODO
                 userStackPanel.Children.Add(userMod);
@@ -1684,6 +1685,7 @@ namespace RelhaxModpack.Windows
             List<string> stringUserSelections = new List<string>();
             List<string> disabledMods = new List<string>();
             List<string> disabledStructureMods = new List<string>();
+
             foreach(XmlNode node in xmlSelections)
                 stringSelections.Add(node.InnerText);
             foreach(XmlNode node in xmluserSelections)
@@ -1723,12 +1725,12 @@ namespace RelhaxModpack.Windows
             //do the same as above but for user mods
             foreach(SelectablePackage package in userMods)
             {
-                if(stringUserSelections.Contains(package.ZipFile) && File.Exists(Path.Combine(Settings.RelhaxUserModsFolderPath,package.ZipFile)))
+                if(stringUserSelections.Contains(Path.GetFileNameWithoutExtension(package.ZipFile)) && File.Exists(Path.Combine(Settings.RelhaxUserModsFolderPath,package.ZipFile)))
                 {
                     Logging.Info(string.Format("Checking User Mod {0}",package.ZipFile));
                     package.Enabled = true;
                     package.Checked = true;
-                    stringUserSelections.Remove(package.ZipFile);
+                    stringUserSelections.Remove(Path.GetFileNameWithoutExtension(package.ZipFile));
                 }
             }
             //now check for the correct structure of mods
