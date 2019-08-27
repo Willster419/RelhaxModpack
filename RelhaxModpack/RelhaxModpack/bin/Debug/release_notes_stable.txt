@@ -1,3 +1,9 @@
+Application version 0.29.0.11 (2019-08-26)
+https://www.virustotal.com/gui/file/f590f327d73b06a97c0b2f5e84098b6b6ff24303d327992c579b27dc9d527fe2/detection
+- Fixed bugs with item selection in the editor.
+- Fixed bug in editor where zip extension check happends when zip field is blank.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 0.29.0.10 (2019-08-25)
 https://www.virustotal.com/gui/file/22bdead25709069049ac5884198058f4af44b8f67d85fff9bd802b65cd9cddfd/detection
 - Fixed bug in editor and selection list where user could select a null package.
