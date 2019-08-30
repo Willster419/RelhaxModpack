@@ -74,7 +74,9 @@ namespace RelhaxModpack
             "ParentTextBlock",
             "ChildTextblock",
             //loading header for loading window
-            "LoadingHeader"
+            "LoadingHeader",
+            //application update notes textbox
+            "ApplicationUpdateNotes"
         };
         private const string TranslationNeeded = "TODO";
         private static readonly string Blank = string.Empty;
@@ -1872,54 +1874,45 @@ namespace RelhaxModpack
             #endregion
 
             #region Application Update Window
-            //Componet: updateAcceptButton
+            //Componet: VersionInfoYesButton
             //
-            English.Add("updateAcceptButton", "yes");
-            German.Add("updateAcceptButton", "ja");
-            Polish.Add("updateAcceptButton", "Tak");
-            French.Add("updateAcceptButton", "Oui");
-            Russian.Add("updateAcceptButton", "Да");
+            English.Add("VersionInfoYesButton", "yes");
+            German.Add("VersionInfoYesButton", "ja");
+            Polish.Add("VersionInfoYesButton", "Tak");
+            French.Add("VersionInfoYesButton", "Oui");
+            Russian.Add("VersionInfoYesButton", "Да");
 
-            //Componet: updateDeclineButton
+            //Componet: VersionInfoNoButton
             //
-            English.Add("updateDeclineButton", "no");
-            German.Add("updateDeclineButton", "nein");
-            Polish.Add("updateDeclineButton", "Nie");
-            French.Add("updateDeclineButton", "Non");
-            Russian.Add("updateDeclineButton", "Нет");
+            English.Add("VersionInfoNoButton", "no");
+            German.Add("VersionInfoNoButton", "nein");
+            Polish.Add("VersionInfoNoButton", "Nie");
+            French.Add("VersionInfoNoButton", "Non");
+            Russian.Add("VersionInfoNoButton", "Нет");
 
-            //Componet: newVersionAvailableLabel
+            //Componet: NewVersionAvailable
             //
-            English.Add("newVersionAvailableLabel", "New version available");
-            German.Add("newVersionAvailableLabel", "Neue version verfügbar");
-            Polish.Add("newVersionAvailableLabel", "Dostępna nowa wersja");
-            French.Add("newVersionAvailableLabel", "Nouvelle version disponible");
-            Russian.Add("newVersionAvailableLabel", "Доступна новая версия");
+            English.Add("NewVersionAvailable", "New version available");
+            German.Add("NewVersionAvailable", "Neue version verfügbar");
+            Polish.Add("NewVersionAvailable", "Dostępna nowa wersja");
+            French.Add("NewVersionAvailable", "Nouvelle version disponible");
+            Russian.Add("NewVersionAvailable", "Доступна новая версия");
 
-            //Componet: updateQuestionLabel
+            //Componet: HavingProblemsTextBlock
             //
-            English.Add("updateQuestionLabel", "Update?");
-            German.Add("updateQuestionLabel", "Aktualisieren?");
-            Polish.Add("updateQuestionLabel", "Zaktualizować?");
-            French.Add("updateQuestionLabel", "Mettre à jour?");
-            Russian.Add("updateQuestionLabel", "Обновить?");
+            English.Add("HavingProblemsTextBlock", "If you are having problems updating, please");
+            German.Add("HavingProblemsTextBlock", "Wenn Sie Probleme mit der Aktualisierung haben, bitte");
+            Polish.Add("HavingProblemsTextBlock", "Jeśli masz problemy z aktualizają proszę");
+            French.Add("HavingProblemsTextBlock", "Si vous avez des problèmes avec la mise à jour, s'il vous plaît");
+            Russian.Add("HavingProblemsTextBlock", "При наличии проблем в процессе обновлений, пожалуйста,");
 
-            //Componet: problemsUpdatingLabel
+            //Componet: ManualUpdateLink
             //
-            English.Add("problemsUpdatingLabel", "If you are having problems updating, please");
-            German.Add("problemsUpdatingLabel", "Wenn Sie Probleme mit der Aktualisierung haben, bitte");
-            Polish.Add("problemsUpdatingLabel", "Jeśli masz problemy z aktualizają proszę");
-            French.Add("problemsUpdatingLabel", "Si vous avez des problèmes avec la mise à jour, s'il vous plaît");
-            Russian.Add("problemsUpdatingLabel", "При наличии проблем в процессе обновлений, пожалуйста,");
-
-
-            //Componet: 
-            //
-            English.Add("clickHereUpdateLabel", "click here");
-            German.Add("clickHereUpdateLabel", "klick hier");
-            Polish.Add("clickHereUpdateLabel", "kliknij tutaj");
-            French.Add("clickHereUpdateLabel", "Cliquez ici");
-            Russian.Add("clickHereUpdateLabel", "нажмите сюда.");
+            English.Add("ManualUpdateLink", "click here");
+            German.Add("ManualUpdateLink", "klick hier");
+            Polish.Add("ManualUpdateLink", "kliknij tutaj");
+            French.Add("ManualUpdateLink", "Cliquez ici");
+            Russian.Add("ManualUpdateLink", "нажмите сюда.");
 
             //Component: loadingApplicationUpdateNotes
             //
