@@ -196,7 +196,7 @@
                         <CheckBox x:Name="OneClickInstallCB" Tag="AutoInstallCheckbox" IsEnabled="True" Click="OneClickInstallCB_Click">
                             <TextBlock x:Name="OneClickInstallText" Text="Enable one-click install" TextWrapping="Wrap"/>
                         </CheckBox>
-                        <TextBox Tag="AutoSyncSelectionFileTextBox"  x:Name="AutoInstallOneClickInstallSelectionFilePath" Height="46" TextWrapping="Wrap" Margin="0,3,0,0" />
+                        <TextBox Tag="AutoSyncSelectionFileTextBox"  x:Name="AutoInstallOneClickInstallSelectionFilePath" Height="46" TextWrapping="Wrap" Margin="0,3,0,0" VerticalScrollBarVisibility="Auto"/>
                         <Button x:Name="LoadAutoSyncSelectionFile" Tag="LoadAutoSyncSelectionFile" HorizontalAlignment="Stretch" Margin="0,3,0,0" Click="LoadAutoSyncSelectionFile_Click" IsEnabled="True">
                             <TextBlock x:Name="LoadAutoSyncSelectionFileText" Text="Load selection file" TextWrapping="Wrap"/>
                         </Button>
