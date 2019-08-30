@@ -2025,8 +2025,17 @@ namespace RelhaxModpack
             if (e.LeftButton == MouseButtonState.Released)
             {
                 ApplyCustomScalingLabel.Text = string.Format("{0}x", ApplyCustomScalingSlider.Value.ToString("N"));
+                double oldTempValue = ModpackSettings.DisplayScale;
                 ModpackSettings.DisplayScale = ApplyCustomScalingSlider.Value;
                 Utils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
+                ScalingConfirmation confirmation = new ScalingConfirmation();
+                if(!(bool)confirmation.ShowDialog())
+                {
+                    ModpackSettings.DisplayScale = oldTempValue;
+                    Utils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
+                    ApplyCustomScalingSlider.Value = ModpackSettings.DisplayScale;
+                    ApplyCustomScalingLabel.Text = string.Format("{0}x", ApplyCustomScalingSlider.Value.ToString("N"));
+                }
             }
         }
 

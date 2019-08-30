@@ -4710,6 +4710,24 @@
             Creates an instance of the RelhaxWindow class
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.ScalingConfirmation">
+            <summary>
+            Interaction logic for ScalingConfirmation.xaml
+            </summary>
+            <summary>
+            ScalingConfirmation
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ScalingConfirmation.#ctor">
+            <summary>
+            Create an instance of the ScalingConfirmation window
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ScalingConfirmation.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.VersionInfo">
             <summary>
             Interaction logic for VersionInfo.xaml

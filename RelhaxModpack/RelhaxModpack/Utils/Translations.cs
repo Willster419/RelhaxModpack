@@ -3337,6 +3337,40 @@ namespace RelhaxModpack
             Russian.Add("WoTRunningForceCloseButton", TranslationNeeded);
             #endregion
 
+            #region Sacling Confirmation
+            //Component: ScalingConfirmationHeader
+            //
+            English.Add("ScalingConfirmationHeader", "The scaling value has changed. Would you like to keep it?");
+            German.Add("ScalingConfirmationHeader", TranslationNeeded);
+            Polish.Add("ScalingConfirmationHeader", TranslationNeeded);
+            French.Add("ScalingConfirmationHeader", TranslationNeeded);
+            Russian.Add("ScalingConfirmationHeader", TranslationNeeded);
+
+            //Component: ScalingConfirmationRevertTime
+            //
+            English.Add("ScalingConfirmationRevertTime", "Reverting in {0} Second(s)");
+            German.Add("ScalingConfirmationRevertTime", TranslationNeeded);
+            Polish.Add("ScalingConfirmationRevertTime", TranslationNeeded);
+            French.Add("ScalingConfirmationRevertTime", TranslationNeeded);
+            Russian.Add("ScalingConfirmationRevertTime", TranslationNeeded);
+
+            //Component: ScalingConfirmationKeep
+            //
+            English.Add("ScalingConfirmationKeep", "Keep");
+            German.Add("ScalingConfirmationKeep", TranslationNeeded);
+            Polish.Add("ScalingConfirmationKeep", TranslationNeeded);
+            French.Add("ScalingConfirmationKeep", TranslationNeeded);
+            Russian.Add("ScalingConfirmationKeep", TranslationNeeded);
+
+            //Component: ScalingConfirmationDiscard
+            //
+            English.Add("ScalingConfirmationDiscard", "Discard");
+            German.Add("ScalingConfirmationDiscard", TranslationNeeded);
+            Polish.Add("ScalingConfirmationDiscard", TranslationNeeded);
+            French.Add("ScalingConfirmationDiscard", TranslationNeeded);
+            Russian.Add("ScalingConfirmationDiscard", TranslationNeeded);
+            #endregion
+
             //apply the bool
             TranslationsLoaded = true;
         }
