@@ -284,7 +284,7 @@
             <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,147,2,0" VerticalAlignment="Top" x:Name="TotalProgressBar"/>
             <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,167,2,0" VerticalAlignment="Top" x:Name="ParentProgressBar"/>
             <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,187,2,0" VerticalAlignment="Top" x:Name="ChildProgressBar"/>
-            <TextBox HorizontalAlignment="Stretch" Height="92" Margin="2,50,2,0" VerticalAlignment="Top" x:Name="InstallProgressTextBox" TextWrapping="Wrap"/>
+            <TextBox HorizontalAlignment="Stretch" Height="92" Margin="2,50,2,0" VerticalAlignment="Top" x:Name="InstallProgressTextBox" TextWrapping="Wrap" IsReadOnly="True"/>
             <GroupBox Header="Language" HorizontalAlignment="Left" Height="45" Margin="360,0,0,0" VerticalAlignment="Top" Width="150" x:Name="LanguageSelectionGB">
                 <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Tag="LanguagesSelector" x:Name="LanguagesSelector" SelectionChanged="OnLanguageSelectionChanged" Margin="0,0,0,0">
                 </ComboBox>
