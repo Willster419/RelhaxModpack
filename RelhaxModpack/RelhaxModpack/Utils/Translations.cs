@@ -1908,11 +1908,11 @@ namespace RelhaxModpack
 
             //Componet: ManualUpdateLink
             //
-            English.Add("ManualUpdateLink", "click here");
-            German.Add("ManualUpdateLink", "klick hier");
-            Polish.Add("ManualUpdateLink", "kliknij tutaj");
-            French.Add("ManualUpdateLink", "Cliquez ici");
-            Russian.Add("ManualUpdateLink", "нажмите сюда.");
+            English.Add("ManualUpdateLink", "Click Here");
+            German.Add("ManualUpdateLink", "Klick Hier");
+            Polish.Add("ManualUpdateLink", "Kliknij Tutaj");
+            French.Add("ManualUpdateLink", "Cliquez Ici");
+            Russian.Add("ManualUpdateLink", "Hажмите Cюда.");
 
             //Component: loadingApplicationUpdateNotes
             //
