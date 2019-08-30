@@ -1473,14 +1473,22 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            //make sure it actually has a zip file to download
-            //first check if it's an editor combobox item (selected from checkbox) or the direct item
-            if (SelectedItem is EditorComboBoxItem ecbi && string.IsNullOrWhiteSpace(ecbi.Package.ZipFile))
+            DatabasePackage packToWorkOn = null;
+            if (SelectedItem is EditorComboBoxItem ecbi)
+                packToWorkOn = ecbi.Package;
+            else if (SelectedItem is DatabasePackage pack)
+                packToWorkOn = pack;
+
+            if(packToWorkOn == null)
             {
-                MessageBox.Show("no zip file to download");
+                Logging.Editor("packToWorkOn is null (not EditorComboboxItem or Databasepackage",LogLevel.Error);
+                MessageBox.Show("packToWorkOn is null (not EditorComboboxItem or Databasepackage), abort");
                 return;
             }
-            else if (SelectedItem is DatabasePackage pack && string.IsNullOrWhiteSpace(pack.ZipFile))
+
+            //make sure it actually has a zip file to download
+            //first check if it's an editor combobox item (selected from checkbox) or the direct item
+            if (string.IsNullOrWhiteSpace(packToWorkOn.ZipFile))
             {
                 MessageBox.Show("no zip file to download");
                 return;
@@ -1505,12 +1513,12 @@ namespace RelhaxModpack.Windows
                     //https://stackoverflow.com/questions/4353487/what-does-the-filedialog-restoredirectory-property-actually-do
                     //InitialDirectory = Settings.ApplicationStartupPath,
                     Title = "Select destination for zip file",
-                    FileName = (SelectedItem as EditorComboBoxItem).Package.ZipFile
+                    FileName = packToWorkOn.ZipFile
                 };
             }
             else
             {
-                SaveZipFileDialog.FileName = (SelectedItem as EditorComboBoxItem).Package.ZipFile;
+                SaveZipFileDialog.FileName = packToWorkOn.ZipFile;
             }
             if (!(bool)SaveZipFileDialog.ShowDialog())
                 return;
@@ -1519,7 +1527,7 @@ namespace RelhaxModpack.Windows
             {
                 ZipFilePathDisk = SaveZipFileDialog.FileName,
                 ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPUsersRoot, Settings.WoTModpackOnlineFolderVersion),
-                ZipFileName = Path.GetFileName((SelectedItem as EditorComboBoxItem).Package.ZipFile),
+                ZipFileName = Path.GetFileName(packToWorkOn.ZipFile),
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
                 Upload = false,
                 PackageToUpdate = null,
@@ -1536,12 +1544,27 @@ namespace RelhaxModpack.Windows
                 Logging.Editor("Tried to download a zip, but SelectedItem is null");
                 return;
             }
+
             //make sure FTP credentials are at least entered
             if (string.IsNullOrWhiteSpace(EditorSettings.BigmodsPassword) || string.IsNullOrWhiteSpace(EditorSettings.BigmodsUsername))
             {
                 MessageBox.Show("Missing FTP credentials");
                 return;
             }
+
+            DatabasePackage packToWorkOn = null;
+            if (SelectedItem is EditorComboBoxItem ecbi)
+                packToWorkOn = ecbi.Package;
+            else if (SelectedItem is DatabasePackage pack)
+                packToWorkOn = pack;
+
+            if (packToWorkOn == null)
+            {
+                Logging.Editor("packToWorkOn is null (not EditorComboboxItem or Databasepackage", LogLevel.Error);
+                MessageBox.Show("packToWorkOn is null (not EditorComboboxItem or Databasepackage), abort");
+                return;
+            }
+
             string zipFileToUpload = string.Empty;
             if (OpenZipFileDialog == null)
                 OpenZipFileDialog = new OpenFileDialog()
@@ -1550,16 +1573,19 @@ namespace RelhaxModpack.Windows
                     CheckFileExists = true,
                     CheckPathExists = true,
                     DefaultExt = "zip",
+                    //don't set InitialDirectory to allow it to remember last folder
                     //InitialDirectory = Settings.ApplicationStartupPath,
                     Multiselect = false,
                     Title = "Select zip file to upload"
                 };
+
             if ((bool)OpenZipFileDialog.ShowDialog() && File.Exists(OpenZipFileDialog.FileName))
             {
                 zipFileToUpload = OpenZipFileDialog.FileName;
             }
             else
                 return;
+
             //make and run the uploader instance
             DatabaseEditorDownload name = new DatabaseEditorDownload()
             {
@@ -1568,7 +1594,7 @@ namespace RelhaxModpack.Windows
                 ZipFileName = Path.GetFileName(zipFileToUpload),
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
                 Upload = true,
-                PackageToUpdate = (SelectedItem as EditorComboBoxItem).Package,
+                PackageToUpdate = packToWorkOn,
                 Countdown = EditorSettings.FTPUploadDownloadWindowTimeout
             };
             name.OnEditorUploadDownloadClosed += OnEditorUploadFinished;
