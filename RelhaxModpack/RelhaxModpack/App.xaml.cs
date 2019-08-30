@@ -61,6 +61,8 @@ namespace RelhaxModpack
         //when application is closing (cannot be stopped)
         private void Application_Exit(object sender, ExitEventArgs e)
         {
+            if (Logging.IsLogOpen(Logfiles.Application))
+                Logging.Info("Disposing log");
             CloseApplicationLog(true);
         }
 

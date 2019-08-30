@@ -404,13 +404,21 @@ namespace RelhaxModpack
                             if (Logging.IsLogOpen(Logfiles.Application))
                                 Logging.Info("Settings saved");
                     if (Logging.IsLogOpen(Logfiles.Application))
-                        Logging.Info("Disposing tray icon");
+                        Logging.Info("Disposing tray");
                     if (RelhaxIcon != null)
                     {
                         RelhaxIcon.Dispose();
                         RelhaxIcon = null;
+                        if (Logging.IsLogOpen(Logfiles.Application))
+                            Logging.Info("Tray disposed");
+                    }
+                    else
+                    {
+                        if (Logging.IsLogOpen(Logfiles.Application))
+                            Logging.Info("Tray already null");
                     }
                 }
+                Application.Current.Shutdown(0);
             }
         }
 
