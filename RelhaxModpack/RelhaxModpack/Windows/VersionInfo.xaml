@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="VersionInfo" Height="300" Width="500" MinHeight="300" MinWidth="500" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="RelhaxWindow_Loaded"
+        Title="Update" Height="300" Width="500" MinHeight="300" MinWidth="500" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="RelhaxWindow_Loaded"
         LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <Grid Tag="VersionInfoGrid">
         <TextBlock x:Name="NewVersionAvailable" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="New Version Available" VerticalAlignment="Top" Tag="NewVersionAvailable"/>

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="NewsViewer" Height="450" Width="420" MinWidth="420" MinHeight="450" Loaded="RelhaxWindow_Loaded"
+        Title="News" Height="450" Width="420" MinWidth="420" MinHeight="450" Loaded="RelhaxWindow_Loaded"
         LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <Grid>
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
