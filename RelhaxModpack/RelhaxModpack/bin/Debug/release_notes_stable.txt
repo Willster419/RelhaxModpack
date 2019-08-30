@@ -1,7 +1,19 @@
+Application version 0.29.0.13 (2019-08-30)
+https://www.virustotal.com/gui/file/dd288b837f9a1bc8a5436caa845f757c720f86c57075f96ca6f71074ecb93911/detection
+- Re-worked design of several UI components to allow for text wrapping. This allows the text of other languages to not clip and get cut off in the application.
+- Added feature from Relhax V1 where a dialog box will appear when applying application scaling, to confirm if you want to apply it (or if you physically can't, it will revert).
+- Fixed translation issues with the update window.
+- Fixed some text boxes to be read only.
+- Fixed window titles.
+- Added showing the scroll bar in the auto/one click install file path text box in case of a long file path.
+- Changed behavior of failing to delete a log in the installer's "clean logs" step from failure to warning.
+- Fixed bugs with the database editor.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 0.29.0.11 (2019-08-26)
 https://www.virustotal.com/gui/file/f590f327d73b06a97c0b2f5e84098b6b6ff24303d327992c579b27dc9d527fe2/detection
 - Fixed bugs with item selection in the editor.
-- Fixed bug in editor where zip extension check happends when zip field is blank.
+- Fixed bug in editor where zip extension check happens when zip field is blank.
 --------------------------------------------------------------------------------------------------------------------------------------------
 
 Application version 0.29.0.10 (2019-08-25)
