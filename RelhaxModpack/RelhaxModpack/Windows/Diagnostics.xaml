@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="Diagnostics" MinHeight="300" MinWidth="525" Height="300" Width="525"
+        Title="Diagnostics" MinHeight="320" MinWidth="525" Height="300" Width="525"
         Loaded="RelhaxWindow_Loaded" LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <Grid >
-        <TextBox x:Name="DiagnosticsMainTextBox" Tag="DiagnosticsMainTextBox" HorizontalAlignment="Stretch" Height="21" Margin="10,10,10,0" TextWrapping="Wrap" Text="Helpful explanation window" VerticalAlignment="Top" IsReadOnly="True"/>
-        <TextBlock Tag="SelectedInstallation" x:Name="SelectedInstallation" HorizontalAlignment="Stretch" Margin="10,36,10,0" TextWrapping="Wrap" Text="Currently Selected Installation:" VerticalAlignment="Top" Height="34" />
-        <TextBox Tag="DiagnosticsStatusTextBox" x:Name="DiagnosticsStatusTextBox" HorizontalAlignment="Stretch" Height="50" Margin="10,209,10,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True"/>
-        <Grid HorizontalAlignment="Stretch" Height="129" Margin="10,75,10,0" VerticalAlignment="Top" >
+        <TextBox x:Name="DiagnosticsMainTextBox" Tag="DiagnosticsMainTextBox" HorizontalAlignment="Stretch" Height="42" Margin="10,10,10,0" TextWrapping="Wrap" Text="Helpful explanation window" VerticalAlignment="Top" IsReadOnly="True"/>
+        <TextBlock Tag="SelectedInstallation" x:Name="SelectedInstallation" HorizontalAlignment="Stretch" Margin="12,57,8,0" TextWrapping="Wrap" Text="Currently Selected Installation:" VerticalAlignment="Top" Height="34" />
+        <TextBox Tag="DiagnosticsStatusTextBox" x:Name="DiagnosticsStatusTextBox" HorizontalAlignment="Stretch" Height="50" Margin="12,230,8,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True"/>
+        <Grid HorizontalAlignment="Stretch" Height="129" Margin="12,96,8,0" VerticalAlignment="Top" >
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
