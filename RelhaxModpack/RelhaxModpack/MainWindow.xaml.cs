@@ -424,6 +424,11 @@ namespace RelhaxModpack
 
         private void ProcessTitle()
         {
+            if(string.IsNullOrEmpty(oldModpackTitle))
+            {
+                Logging.Info("oldModpackTitle is empty, don't update text!");
+                return;
+            }
             //apply the title change for beta application and beta database
             if (databaseVersion != DatabaseVersions.Stable)
                 Title = string.Format("{0} ({1} DB)", oldModpackTitle, databaseVersion.ToString());
