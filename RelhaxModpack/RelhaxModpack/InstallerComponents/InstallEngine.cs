@@ -1478,8 +1478,12 @@ namespace RelhaxModpack.InstallerComponents
                 Prog.Filename = s;
                 Progress.Report(Prog);
                 if (File.Exists(s))
+                {
                     if (!Utils.FileDelete(s))
-                        return false;
+                    {
+                        Logging.Warning("Unable to delete the logfile {0}", Path.GetFileName(s));
+                    }
+                }
             }
             return true;
         }
