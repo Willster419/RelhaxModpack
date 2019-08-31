@@ -255,8 +255,13 @@ namespace RelhaxModpack
                 //toggle the Tab Color based on if anything is selected, done for level -1 top item
                 if(Level == -1)
                 {
+                    //if the color is not saved yet, then save what the default currently is
                     if (UISettings.NotSelectedTabColor == null)
-                        UISettings.NotSelectedTabColor = (System.Windows.Media.LinearGradientBrush)TabIndex.Background;
+                    {
+                        //windows 10 uses a linear gradient brush (at least mine does)
+                        //windows 7 in classic theme uses a solid color brush
+                        UISettings.NotSelectedTabColor = TabIndex.Background;
+                    }
                     if (_Checked)
                         TabIndex.Background = UISettings.SelectedPanelColor;
                     else
