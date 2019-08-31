@@ -155,7 +155,10 @@ namespace RelhaxModpack.Windows
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!authorized)
+            {
+                AuthStatusTab.IsSelected = true;
                 AuthStatusTab.Focus();
+            }
         }
 
         private void ReportProgress(string message)
@@ -199,6 +202,71 @@ namespace RelhaxModpack.Windows
         {
             if (e.Key == Key.Enter)
                 PasswordButton_Click(null, null);
+        }
+        #endregion
+
+        #region Util methods
+        private async Task RunPhpScript(NetworkCredential credentials, string URL, int timeoutMilliseconds)
+        {
+            using (client = new PatientWebClient()
+            { Credentials = credentials, Timeout = timeoutMilliseconds })
+            {
+                try
+                {
+                    string result = await client.DownloadStringTaskAsync(URL);
+                    ReportProgress(result.Replace("<br />", "\n"));
+                }
+                catch (WebException wex)
+                {
+                    ReportProgress("failed to run script");
+                    ReportProgress(wex.ToString());
+                }
+            }
+        }
+
+        private async void GenerateMD5Button_Click(object sender, RoutedEventArgs e)
+        {
+            ReportProgress("Starting hashing");
+            OpenFileDialog zipsToHash = new OpenFileDialog()
+            {
+                DefaultExt = "zip",
+                Filter = "*.zip|*.zip",
+                Multiselect = true,
+                Title = "Load zip files to hash"
+            };
+            if (!(bool)zipsToHash.ShowDialog())
+            {
+                ReportProgress("Hashing Aborted");
+                return;
+            }
+            foreach (string s in zipsToHash.FileNames)
+            {
+                ReportProgress(string.Format("hash of {0}:", Path.GetFileName(s)));
+                ReportProgress(await Utils.CreateMD5HashAsync(s));
+            }
+            ReportProgress("Done");
+        }
+
+        private void ClearUILog()
+        {
+            LogOutput.Clear();
+            ReportProgress("Log Cleared");
+        }
+
+        private void ToggleUI(TabControl tab, bool toggle)
+        {
+            foreach (Control control in Utils.GetAllWindowComponentsLogical(tab, false))
+            {
+                if (control is Button butt)
+                    butt.IsEnabled = toggle;
+            }
+            SetProgress(JobProgressBar.Minimum);
+        }
+
+        private void SetProgress(double prog)
+        {
+            JobProgressBar.Value = prog;
+            Utils.AllowUIToUpdate();
         }
         #endregion
 
@@ -304,7 +372,6 @@ namespace RelhaxModpack.Windows
         #region Application update V1
         private async void UpdateApplicationV1UploadApplicationStable(object sender, RoutedEventArgs e)
         {
-            LogOutput.Clear();
             ReportProgress("Running Upload Stable Application");
             if (!(bool)SelectV1Application.ShowDialog())
                 return;
@@ -378,7 +445,6 @@ namespace RelhaxModpack.Windows
         #region Application update V2
         private async void UpdateApplicationV2UploadApplicationStable(object sender, RoutedEventArgs e)
         {
-            LogOutput.Clear();
             ReportProgress("Running Upload Stable Application");
             if (!(bool)SelectV2Application.ShowDialog())
                 return;
@@ -393,7 +459,6 @@ namespace RelhaxModpack.Windows
 
         private async void UpdateApplicationV2UploadApplicationBeta(object sender, RoutedEventArgs e)
         {
-            LogOutput.Clear();
             ReportProgress("Running Upload Beta Application");
             if (!(bool)SelectV2Application.ShowDialog())
                 return;
@@ -408,7 +473,6 @@ namespace RelhaxModpack.Windows
 
         private async void UpdateApplicationV2UploadManagerInfo(object sender, RoutedEventArgs e)
         {
-            LogOutput.Clear();
             ReportProgress("Running upload manager_info.xml");
             if (!(bool)SelectManagerInfoXml.ShowDialog())
                 return;
@@ -429,21 +493,18 @@ namespace RelhaxModpack.Windows
 
         private async void UpdateApplicationV2CreateUpdatePackages(object sender, RoutedEventArgs e)
         {
-            LogOutput.Clear();
             ReportProgress("Running script to create update packages (bigmods)...");
             await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateUpdatePackagesPHP, 100000);
         }
 
         private async void UpdateApplicationV2CreateManagerInfoWotmods(object sender, RoutedEventArgs e)
         {
-            LogOutput.Clear();
             ReportProgress("Running script to create manager info (wotmods)...");
             await RunPhpScript(PrivateStuff.WotmodsNetworkCredential, PrivateStuff.CreateManagerInfoPHP, 100000);
         }
 
         private async void UpdateApplicationV2CreateManagerInfoBigmods(object sender, RoutedEventArgs e)
         {
-            LogOutput.Clear();
             ReportProgress("Running script to create manager info (bigmods)...");
             await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateManagerInfoPHP, 30 * Utils.TO_SECONDS);
         }
@@ -452,7 +513,6 @@ namespace RelhaxModpack.Windows
         #region Cleaning online folders
         private async void CleanFoldersOnlineStep1_Click(object sender, RoutedEventArgs e)
         {
-            LogOutput.Clear();
             ReportProgress("Running Clean online folders step 1");
             ReportProgress("Downloading and parsing " + Settings.SupportedClients);
             //download supported_clients
@@ -482,7 +542,6 @@ namespace RelhaxModpack.Windows
 
         private async void CleanFoldersOnlineStep2_Click(object sender, RoutedEventArgs e)
         {
-            LogOutput.Clear();
             ReportProgress("Running Clean Folders online step 2");
             if(CleanFoldersOnlineStep2b.Items.Count == 0)
             {
@@ -647,7 +706,6 @@ namespace RelhaxModpack.Windows
         #region Database Updating
         private async void UpdateDatabaseStep2_Click(object sender, RoutedEventArgs e)
         {
-            LogOutput.Clear();
             ReportProgress("Starting Update database step 2...");
             ReportProgress("Running script to update online hash database...");
             //a PatientWebClient should allow a timeout value of 5 mins (or more)
@@ -658,7 +716,6 @@ namespace RelhaxModpack.Windows
         {
             //getting local crcs and comparing them on server
             //init UI
-            LogOutput.Clear();
             ReportProgress("Starting DatabaseUpdate step 3");
 
             //checks
@@ -1075,7 +1132,6 @@ namespace RelhaxModpack.Windows
         private async void UpdateDatabaseStep4_Click(object sender, RoutedEventArgs e)
         {
             //check for stuff
-            LogOutput.Clear();
             ReportProgress("Starting DatabaseUpdate step 4");
 
             //checks
@@ -1161,7 +1217,6 @@ namespace RelhaxModpack.Windows
 
         private async void UpdateDatabaseStep5_Click(object sender, RoutedEventArgs e)
         {
-            LogOutput.Clear();
             ReportProgress("Starting update database step 5...");
             ReportProgress("Running script to create mod info");
             await RunPhpScript(PrivateStuff.WotmodsNetworkCredential, PrivateStuff.CreateModInfoPHP, 100000);
@@ -1169,7 +1224,6 @@ namespace RelhaxModpack.Windows
 
         private async void UpdateDatabaseStep6a_Click(object sender, RoutedEventArgs e)
         {
-            LogOutput.Clear();
             ReportProgress("Starting Update database step 6a...");
             ReportProgress("Running script to create manager info (wotmods)");
             await RunPhpScript(PrivateStuff.WotmodsNetworkCredential, PrivateStuff.CreateManagerInfoPHP, 100000);
@@ -1177,7 +1231,6 @@ namespace RelhaxModpack.Windows
 
         private async void UpdateDatabaseStep6b_Click(object sender, RoutedEventArgs e)
         {
-            LogOutput.Clear();
             ReportProgress("Starting Update database step 6a...");
             ReportProgress("Running script to create manager info (bigmods)");
             await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateManagerInfoPHP, 100000);
@@ -1198,50 +1251,10 @@ namespace RelhaxModpack.Windows
             System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/624499-");
         }
         #endregion
-
-        #region Util methods
-
-        private async Task RunPhpScript(NetworkCredential credentials, string URL, int timeoutMilliseconds)
+        
+        private void ClearLogButton_Click(object sender, RoutedEventArgs e)
         {
-            using (client = new PatientWebClient()
-            { Credentials = credentials, Timeout = timeoutMilliseconds })
-            {
-                try
-                {
-                    string result = await client.DownloadStringTaskAsync(URL);
-                    LogOutput.Text = result.Replace("<br />", "\n");
-                }
-                catch (WebException wex)
-                {
-                    ReportProgress("failed to run script");
-                    ReportProgress(wex.ToString());
-                }
-            }
+            ClearUILog();
         }
-
-        private async void GenerateMD5Button_Click(object sender, RoutedEventArgs e)
-        {
-            LogOutput.Clear();
-            ReportProgress("Starting hashing");
-            OpenFileDialog zipsToHash = new OpenFileDialog()
-            {
-                DefaultExt = "zip",
-                Filter = "*.zip|*.zip",
-                Multiselect = true,
-                Title = "Load zip files to hash"
-            };
-            if (!(bool)zipsToHash.ShowDialog())
-            {
-                ReportProgress("Hashing Aborted");
-                return;
-            }
-            foreach (string s in zipsToHash.FileNames)
-            {
-                ReportProgress(string.Format("hash of {0}:", System.IO.Path.GetFileName(s)));
-                ReportProgress(await Utils.CreateMD5HashAsync(s));
-            }
-            ReportProgress("Done");
-        }
-        #endregion
     }
 }
