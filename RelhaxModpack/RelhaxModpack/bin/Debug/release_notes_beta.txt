@@ -1,3 +1,9 @@
+Application version 0.29.0.14 (2019-08-31)
+https://www.virustotal.com/gui/file/103e2aecc812f148bfba30b841491b628890eab7c55d5881d72cdeac5de6f432/detection
+- Fixed compatibility issues with Windows 7 and some themes.
+- Fixed issues with the database update utility.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 0.29.0.13 (2019-08-30)
 https://www.virustotal.com/gui/file/dd288b837f9a1bc8a5436caa845f757c720f86c57075f96ca6f71074ecb93911/detection
 - Re-worked design of several UI components to allow for text wrapping. This allows the text of other languages to not clip and get cut off in the application.
