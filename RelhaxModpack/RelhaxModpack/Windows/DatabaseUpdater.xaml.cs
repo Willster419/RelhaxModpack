@@ -27,7 +27,7 @@ namespace RelhaxModpack.Windows
         private const string RepoResourcesFolder = "resources";
         private const string RepoLatestDatabaseFolder = "latest_database";
         private const string HardCodeRepoPath = "F:\\Tanks Stuff\\RelhaxModpackDatabase";
-        private const bool UseHardCodePath = true;
+        private const bool UseHardCodePath = false;
         private static readonly string DatabaseUpdatePath = Path.Combine(UseHardCodePath ? HardCodeRepoPath : Settings.ApplicationStartupPath, RepoResourcesFolder, DatabaseUpdateFilename);
         private static readonly string SupportedClientsPath = Path.Combine(UseHardCodePath ? HardCodeRepoPath : Settings.ApplicationStartupPath, RepoResourcesFolder, Settings.SupportedClients);
         private static readonly string ManagerVersionPath = Path.Combine(UseHardCodePath ? HardCodeRepoPath : Settings.ApplicationStartupPath, RepoResourcesFolder, Settings.ManagerVersion);
@@ -127,7 +127,6 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Boring stuff
-
         /// <summary>
         /// Create an instance of the DatabaseUpdater window
         /// </summary>
@@ -156,16 +155,18 @@ namespace RelhaxModpack.Windows
         {
             if (!authorized)
             {
-                AuthStatusTab.IsSelected = true;
-                AuthStatusTab.Focus();
+                //only MD5 and database output are allowed
+                if(GenerateHashesTab.IsSelected || DatabaseOutputTab.IsSelected)
+                {
+                    //don't do anything
+                }
+                else
+                {
+                    ReportProgress("You are not authorized to use this tab");
+                    AuthStatusTab.IsSelected = true;
+                    AuthStatusTab.Focus();
+                }
             }
-        }
-
-        private void ReportProgress(string message)
-        {
-            //reports to the log file and the console otuptu
-            Logging.Updater(message);
-            LogOutput.AppendText(message + "\n");
         }
 
         private void LogOutput_TextChanged(object sender, TextChangedEventArgs e)
@@ -203,11 +204,41 @@ namespace RelhaxModpack.Windows
             if (e.Key == Key.Enter)
                 PasswordButton_Click(null, null);
         }
+
+        private void ClearLogButton_Click(object sender, RoutedEventArgs e)
+        {
+            ClearUILog();
+        }
+
+        private async void LoadPasswordFromFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openPassword = new OpenFileDialog()
+            {
+                Title = "Locate password text file",
+                AddExtension = true,
+                CheckFileExists = true,
+                CheckPathExists = true,
+                //Office Files|*.doc;*.xls;*.ppt
+                Filter = "Text Files|*.txt",
+                Multiselect = false
+            };
+            if ((bool)openPassword.ShowDialog())
+            {
+                await AttemptAuthFromFile(openPassword.FileName);
+            }
+        }
         #endregion
 
         #region Util methods
+        private void ReportProgress(string message)
+        {
+            //reports to the log file and the console otuptu
+            Logging.Updater(message);
+            LogOutput.AppendText(message + "\n");
+        }
         private async Task RunPhpScript(NetworkCredential credentials, string URL, int timeoutMilliseconds)
         {
+            ToggleUI((TabController.SelectedContent as TabControl), false);
             using (client = new PatientWebClient()
             { Credentials = credentials, Timeout = timeoutMilliseconds })
             {
@@ -215,17 +246,20 @@ namespace RelhaxModpack.Windows
                 {
                     string result = await client.DownloadStringTaskAsync(URL);
                     ReportProgress(result.Replace("<br />", "\n"));
+                    ToggleUI((TabController.SelectedContent as TabControl), true);
                 }
                 catch (WebException wex)
                 {
                     ReportProgress("failed to run script");
                     ReportProgress(wex.ToString());
+                    ToggleUI((TabController.SelectedContent as TabControl), true);
                 }
             }
         }
 
         private async void GenerateMD5Button_Click(object sender, RoutedEventArgs e)
         {
+            ToggleUI((TabController.SelectedContent as TabControl), false);
             ReportProgress("Starting hashing");
             OpenFileDialog zipsToHash = new OpenFileDialog()
             {
@@ -237,6 +271,7 @@ namespace RelhaxModpack.Windows
             if (!(bool)zipsToHash.ShowDialog())
             {
                 ReportProgress("Hashing Aborted");
+                ToggleUI((TabController.SelectedContent as TabControl), true);
                 return;
             }
             foreach (string s in zipsToHash.FileNames)
@@ -245,12 +280,14 @@ namespace RelhaxModpack.Windows
                 ReportProgress(await Utils.CreateMD5HashAsync(s));
             }
             ReportProgress("Done");
+            ToggleUI((TabController.SelectedContent as TabControl), true);
         }
 
         private void ClearUILog()
         {
             LogOutput.Clear();
             ReportProgress("Log Cleared");
+            ToggleUI((TabController.SelectedContent as TabControl), true);
         }
 
         private void ToggleUI(TabControl tab, bool toggle)
@@ -261,6 +298,7 @@ namespace RelhaxModpack.Windows
                     butt.IsEnabled = toggle;
             }
             SetProgress(JobProgressBar.Minimum);
+            Utils.AllowUIToUpdate();
         }
 
         private void SetProgress(double prog)
@@ -273,6 +311,7 @@ namespace RelhaxModpack.Windows
         #region Database output
         private void SaveDatabaseText(bool @internal)
         {
+            ToggleUI((TabController.SelectedContent as TabControl), false);
             //true = internal, false = user
             string notApplicable = "n/a";
             //list creation and parsing
@@ -287,7 +326,7 @@ namespace RelhaxModpack.Windows
             //create variables
             StringBuilder sb = new StringBuilder();
             string saveLocation = @internal ? System.IO.Path.Combine(Settings.ApplicationStartupPath, "database_internal.csv") :
-                System.IO.Path.Combine(Settings.ApplicationStartupPath, "database_user.csv");
+                Path.Combine(Settings.ApplicationStartupPath, "database_user.csv");
             //global dependencies
             string header = @internal ? "PackageName\tCategory\tPackage\tLevel\tZip\tDevURL\tEnabled\tVisible" : "Category\tMod\tDevURL";
             sb.AppendLine(header);
@@ -334,16 +373,16 @@ namespace RelhaxModpack.Windows
             {
                 File.WriteAllText(saveLocation, sb.ToString());
                 ReportProgress("Saved in " + saveLocation);
+                ToggleUI((TabController.SelectedContent as TabControl), true);
             }
             catch (IOException)
             {
                 ReportProgress("Failed to save in " + saveLocation + " (IOException, probably file open in another window)");
+                ToggleUI((TabController.SelectedContent as TabControl), true);
             }
         }
         private void DatabaseOutputStep2a_Click(object sender, RoutedEventArgs e)
         {
-            //init
-            LogOutput.Text = "";
             ReportProgress("Generation of internal csv...");
             //check
             if (string.IsNullOrEmpty(Settings.WoTClientVersion) || string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
@@ -356,8 +395,6 @@ namespace RelhaxModpack.Windows
 
         private void DatabaseOutputStep2b_Click(object sender, RoutedEventArgs e)
         {
-            //init
-            LogOutput.Text = "";
             ReportProgress("Generation of user csv...");
             //check
             if (string.IsNullOrEmpty(Settings.WoTClientVersion) || string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
@@ -372,9 +409,13 @@ namespace RelhaxModpack.Windows
         #region Application update V1
         private async void UpdateApplicationV1UploadApplicationStable(object sender, RoutedEventArgs e)
         {
+            ToggleUI((TabController.SelectedContent as TabControl), false);
             ReportProgress("Running Upload Stable Application");
             if (!(bool)SelectV1Application.ShowDialog())
+            {
+                ToggleUI((TabController.SelectedContent as TabControl), true);
                 return;
+            }
 
             ReportProgress("Uploading stable exe to wotmods...");
             using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
@@ -382,14 +423,18 @@ namespace RelhaxModpack.Windows
                 await client.UploadFileTaskAsync(PrivateStuff.FTPModpackRoot + Path.GetFileName(SelectV1Application.FileName), SelectV1Application.FileName);
             }
             ReportProgress("Done");
+            ToggleUI((TabController.SelectedContent as TabControl), true);
         }
 
         private async void UpdateApplicationV1UploadApplicationBeta(object sender, RoutedEventArgs e)
         {
-            LogOutput.Clear();
+            ToggleUI((TabController.SelectedContent as TabControl), false);
             ReportProgress("Running Upload Beta Application");
             if (!(bool)SelectV1Application.ShowDialog())
+            {
+                ToggleUI((TabController.SelectedContent as TabControl), true);
                 return;
+            }
 
             ReportProgress("Uploading beta exe to wotmods...");
             using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
@@ -397,14 +442,18 @@ namespace RelhaxModpack.Windows
                 await client.UploadFileTaskAsync(PrivateStuff.FTPModpackRoot + Path.GetFileName(SelectV1Application.FileName), SelectV1Application.FileName);
             }
             ReportProgress("Done");
+            ToggleUI((TabController.SelectedContent as TabControl), true);
         }
 
         private async void UpdateApplicationV1UploadManagerInfo(object sender, RoutedEventArgs e)
         {
-            LogOutput.Clear();
+            ToggleUI((TabController.SelectedContent as TabControl), false);
             ReportProgress("Running upload manager_info.xml");
             if (!(bool)SelectManagerInfoXml.ShowDialog())
+            {
+                ToggleUI((TabController.SelectedContent as TabControl), true);
                 return;
+            }
 
             ReportProgress("Upload manager_info.xml to wotmods");
             using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
@@ -418,25 +467,23 @@ namespace RelhaxModpack.Windows
                 await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Path.GetFileName(SelectManagerInfoXml.FileName), SelectManagerInfoXml.FileName);
             }
             ReportProgress("Done");
+            ToggleUI((TabController.SelectedContent as TabControl), true);
         }
 
         private async void UpdateApplicationV1CreateUpdatePackages(object sender, RoutedEventArgs e)
         {
-            LogOutput.Clear();
             ReportProgress("Running script to create update packages (wotmods)...");
             await RunPhpScript(PrivateStuff.WotmodsNetworkCredential, PrivateStuff.CreateUpdatePackagesPHP, 30 * Utils.TO_SECONDS);
         }
 
         private async void UpdateApplicationV1CreateManagerInfoWotmods(object sender, RoutedEventArgs e)
         {
-            LogOutput.Clear();
             ReportProgress("Running script to create manager info (wotmods)...");
             await RunPhpScript(PrivateStuff.WotmodsNetworkCredential, PrivateStuff.CreateManagerInfoPHP, 30 * Utils.TO_SECONDS);
         }
 
         private async void UpdateApplicationV1CreateManagerInfoBigmods(object sender, RoutedEventArgs e)
         {
-            LogOutput.Clear();
             ReportProgress("Running script to create manager info (bigmods)...");
             await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateManagerInfoPHP, 30 * Utils.TO_SECONDS);
         }
@@ -445,9 +492,13 @@ namespace RelhaxModpack.Windows
         #region Application update V2
         private async void UpdateApplicationV2UploadApplicationStable(object sender, RoutedEventArgs e)
         {
+            ToggleUI((TabController.SelectedContent as TabControl), false);
             ReportProgress("Running Upload Stable Application");
             if (!(bool)SelectV2Application.ShowDialog())
+            {
+                ToggleUI((TabController.SelectedContent as TabControl), true);
                 return;
+            }
 
             ReportProgress("Uploading stable exe to wotmods...");
             using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
@@ -455,13 +506,18 @@ namespace RelhaxModpack.Windows
                 await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackRelhaxModpack + Path.GetFileName(SelectV2Application.FileName), SelectV2Application.FileName);
             }
             ReportProgress("Done");
+            ToggleUI((TabController.SelectedContent as TabControl), true);
         }
 
         private async void UpdateApplicationV2UploadApplicationBeta(object sender, RoutedEventArgs e)
         {
+            ToggleUI((TabController.SelectedContent as TabControl), false);
             ReportProgress("Running Upload Beta Application");
             if (!(bool)SelectV2Application.ShowDialog())
+            {
+                ToggleUI((TabController.SelectedContent as TabControl), true);
                 return;
+            }
 
             ReportProgress("Uploading beta exe to wotmods...");
             using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
@@ -469,13 +525,18 @@ namespace RelhaxModpack.Windows
                 await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackRelhaxModpack + Path.GetFileName(SelectV2Application.FileName), SelectV2Application.FileName);
             }
             ReportProgress("Done");
+            ToggleUI((TabController.SelectedContent as TabControl), true);
         }
 
         private async void UpdateApplicationV2UploadManagerInfo(object sender, RoutedEventArgs e)
         {
+            ToggleUI((TabController.SelectedContent as TabControl), false);
             ReportProgress("Running upload manager_info.xml");
             if (!(bool)SelectManagerInfoXml.ShowDialog())
+            {
+                ToggleUI((TabController.SelectedContent as TabControl), true);
                 return;
+            }
 
             ReportProgress("Upload manager_info.xml to wotmods");
             using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
@@ -489,6 +550,7 @@ namespace RelhaxModpack.Windows
                 await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Path.GetFileName(SelectManagerInfoXml.FileName), SelectManagerInfoXml.FileName);
             }
             ReportProgress("Done");
+            ToggleUI((TabController.SelectedContent as TabControl), true);
         }
 
         private async void UpdateApplicationV2CreateUpdatePackages(object sender, RoutedEventArgs e)
@@ -513,6 +575,7 @@ namespace RelhaxModpack.Windows
         #region Cleaning online folders
         private async void CleanFoldersOnlineStep1_Click(object sender, RoutedEventArgs e)
         {
+            ToggleUI((TabController.SelectedContent as TabControl), false);
             ReportProgress("Running Clean online folders step 1");
             ReportProgress("Downloading and parsing " + Settings.SupportedClients);
             //download supported_clients
@@ -538,29 +601,35 @@ namespace RelhaxModpack.Windows
                 CleanFoldersOnlineStep2b.Items.Add(newVersionInfo);
             }
             ReportProgress("Done");
+            ToggleUI((TabController.SelectedContent as TabControl), true);
         }
 
         private async void CleanFoldersOnlineStep2_Click(object sender, RoutedEventArgs e)
         {
+            ToggleUI((TabController.SelectedContent as TabControl), false);
             ReportProgress("Running Clean Folders online step 2");
             if(CleanFoldersOnlineStep2b.Items.Count == 0)
             {
                 ReportProgress("Combobox items count = 0");
+                ToggleUI((TabController.SelectedContent as TabControl), true);
                 return;
             }
             if(VersionInfosList == null)
             {
                 ReportProgress("VersionsInfoList == null");
+                ToggleUI((TabController.SelectedContent as TabControl), true);
                 return;
             }
             if(CleanFoldersOnlineStep2b.SelectedItem == null)
             {
                 ReportProgress("Item not selected");
+                ToggleUI((TabController.SelectedContent as TabControl), true);
                 return;
             }
             if(VersionInfosList.Count == 0)
             {
                 ReportProgress("VersionsInfosList count = 0");
+                ToggleUI((TabController.SelectedContent as TabControl), true);
                 return;
             }
             selectedVersionInfos = (VersionInfos)CleanFoldersOnlineStep2b.SelectedItem;
@@ -608,6 +677,7 @@ namespace RelhaxModpack.Windows
                 if (!XmlUtils.ParseDatabase(doc, globalDependencies, dependencies, parsedCategoryList))
                 {
                     ReportProgress("failed to parse modInfo to lists");
+                    ToggleUI((TabController.SelectedContent as TabControl), true);
                     return;
                 }
                 Utils.BuildLinksRefrence(parsedCategoryList, false);
@@ -644,37 +714,46 @@ namespace RelhaxModpack.Windows
             {
                 ReportProgress("ERROR: missing files on the server! (Saved in textbox)");
                 CleanZipFoldersTextbox.AppendText(string.Join("\n", missingFiles));
+                ToggleUI((TabController.SelectedContent as TabControl), true);
                 return;
             }
             else if(notUsedFiles.Count == 0)
             {
                 ReportProgress("No files to clean!");
+                ToggleUI((TabController.SelectedContent as TabControl), true);
             }
             else
             {
                 CleanZipFoldersTextbox.AppendText(string.Join("\n", notUsedFiles));
                 ReportProgress("Complete");
+                ToggleUI((TabController.SelectedContent as TabControl), true);
             }
         }
 
         private void CleanFoldersOnlineCancel_Click(object sender, RoutedEventArgs e)
         {
             cancelDelete = true;
+            ToggleUI((TabController.SelectedContent as TabControl), true);
         }
 
         private async void CleanFoldersOnlineStep3_Click(object sender, RoutedEventArgs e)
         {
-            if(string.IsNullOrWhiteSpace(CleanZipFoldersTextbox.Text))
+            ToggleUI((TabController.SelectedContent as TabControl), false);
+            if (string.IsNullOrWhiteSpace(CleanZipFoldersTextbox.Text))
             {
                 ReportProgress("textbox is empty");
+                ToggleUI((TabController.SelectedContent as TabControl), true);
+                return;
             }
             if(string.IsNullOrWhiteSpace(selectedVersionInfos.WoTOnlineFolderVersion))
             {
                 ReportProgress("selectedVersionInfos is null");
+                ToggleUI((TabController.SelectedContent as TabControl), true);
                 return;
             }
             cancelDelete = false;
             CleanFoldersOnlineCancelStep3.Visibility = Visibility.Visible;
+            CleanFoldersOnlineCancelStep3.IsEnabled = true;
             List<string> filesToDelete;
             filesToDelete = CleanZipFoldersTextbox.Text.Split('\n').ToList();
             string[] filesActuallyInFolder = await Utils.FTPListFilesFoldersAsync(
@@ -685,6 +764,7 @@ namespace RelhaxModpack.Windows
                 if(cancelDelete)
                 {
                     ReportProgress("Cancel Requested");
+                    ToggleUI((TabController.SelectedContent as TabControl), true);
                     return;
                 }
                 if(!filesActuallyInFolder.Contains(s))
@@ -700,6 +780,7 @@ namespace RelhaxModpack.Windows
             CleanZipFoldersTextbox.Clear();
             CleanFoldersOnlineCancelStep3.Visibility = Visibility.Hidden;
             ReportProgress("Done");
+            ToggleUI((TabController.SelectedContent as TabControl), true);
         }
         #endregion
 
@@ -714,6 +795,7 @@ namespace RelhaxModpack.Windows
               
         private async void UpdateDatabaseStep3_Click(object sender, RoutedEventArgs e)
         {
+            ToggleUI((TabController.SelectedContent as TabControl), false);
             //getting local crcs and comparing them on server
             //init UI
             ReportProgress("Starting DatabaseUpdate step 3");
@@ -722,11 +804,13 @@ namespace RelhaxModpack.Windows
             if(string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
             {
                 ReportProgress("wot online folder version is empty");
+                ToggleUI((TabController.SelectedContent as TabControl), true);
                 return;
             }
             if(!File.Exists(SelectModInfo.FileName))
             {
                 ReportProgress("selectMofInfo file selected does not exist:" + SelectModInfo.FileName);
+                ToggleUI((TabController.SelectedContent as TabControl), true);
                 return;
             }
 
@@ -761,6 +845,7 @@ namespace RelhaxModpack.Windows
             if(!XmlUtils.ParseDatabase(currentDatabase,globalDependencies,dependencies,parsedCategoryList))
             {
                 ReportProgress("failed to parse modInfo to lists");
+                ToggleUI((TabController.SelectedContent as TabControl), true);
                 return;
             }
 
@@ -774,6 +859,7 @@ namespace RelhaxModpack.Windows
                 ReportProgress("ERROR: Duplicates found!");
                 foreach (string s in duplicates)
                     ReportProgress(s);
+                ToggleUI((TabController.SelectedContent as TabControl), true);
                 return;
             }
 
@@ -836,6 +922,7 @@ namespace RelhaxModpack.Windows
             if(!XmlUtils.ParseDatabase(oldDatabase,globalDependenciesOld,dependenciesOld, parsedCateogryListOld))
             {
                 ReportProgress("failed to parse modInfo to lists");
+                ToggleUI((TabController.SelectedContent as TabControl), true);
                 return;
             }
             Utils.BuildLinksRefrence(parsedCateogryListOld, true);
@@ -870,7 +957,7 @@ namespace RelhaxModpack.Windows
                 {
                     string newCRC = databaseEntry.Attributes["md5"].Value;
                     if (string.IsNullOrWhiteSpace(newCRC))
-                        throw new BadMemeException("newCRC string is null or whitespace, and you suck at writing code");
+                        throw new BadMemeException("newCRC string is null or whitespace");
                     if (!package.CRC.Equals(newCRC))
                     {
                         package.CRC = newCRC;
@@ -1070,6 +1157,7 @@ namespace RelhaxModpack.Windows
                     filesNotFoundSB.AppendLine(package.ZipFile);
                 File.WriteAllText(MissingPackagesTxt, filesNotFoundSB.ToString());
                 ReportProgress("ERROR: " + missingPackages.Count + " packages missing files! (saved to missingPackages.txt)");
+                ToggleUI((TabController.SelectedContent as TabControl), true);
                 return;
             }
 
@@ -1123,14 +1211,19 @@ namespace RelhaxModpack.Windows
                 globalDependencies, dependencies, parsedCategoryList, DatabaseXmlVersion.Legacy);
 
             //and save it in new form as well
-            XmlUtils.SaveDatabase(RepoLatestDatabaseFolderPath, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
-                globalDependencies, dependencies, parsedCategoryList, DatabaseXmlVersion.OnePointOne);
+            if ((bool)SaveV2StructureTest.IsChecked)
+            {
+                XmlUtils.SaveDatabase(RepoLatestDatabaseFolderPath, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
+                    globalDependencies, dependencies, parsedCategoryList, DatabaseXmlVersion.OnePointOne);
+            }
 
             ReportProgress("Ready for step 4");
+            ToggleUI((TabController.SelectedContent as TabControl), true);
         }
 
         private async void UpdateDatabaseStep4_Click(object sender, RoutedEventArgs e)
         {
+            ToggleUI((TabController.SelectedContent as TabControl), false);
             //check for stuff
             ReportProgress("Starting DatabaseUpdate step 4");
 
@@ -1138,21 +1231,25 @@ namespace RelhaxModpack.Windows
             if (string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
             {
                 ReportProgress("wot online folder version is empty");
+                ToggleUI((TabController.SelectedContent as TabControl), true);
                 return;
             }
             if (!File.Exists(SelectModInfo.FileName))
             {
                 ReportProgress("selectMofInfo file selected does not exist:" + SelectModInfo.FileName);
+                ToggleUI((TabController.SelectedContent as TabControl), true);
                 return;
             }
             if(string.IsNullOrEmpty(DatabaseUpdateVersion))
             {
                 ReportProgress("DatabaseUpdateVersion is null");
+                ToggleUI((TabController.SelectedContent as TabControl), true);
                 return;
             }
             if(!File.Exists(ManagerVersionPath))
             {
                 ReportProgress("manager_version.xml does not exist");
+                ToggleUI((TabController.SelectedContent as TabControl), true);
                 return;
             }
 
@@ -1213,6 +1310,7 @@ namespace RelhaxModpack.Windows
                 ReportProgress("DOES NOT need to be updated/uploaded");
             }
             ReportProgress("Done");
+            ToggleUI((TabController.SelectedContent as TabControl), true);
         }
 
         private async void UpdateDatabaseStep5_Click(object sender, RoutedEventArgs e)
@@ -1251,10 +1349,5 @@ namespace RelhaxModpack.Windows
             System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/624499-");
         }
         #endregion
-        
-        private void ClearLogButton_Click(object sender, RoutedEventArgs e)
-        {
-            ClearUILog();
-        }
     }
 }
