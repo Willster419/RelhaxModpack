@@ -404,11 +404,16 @@ namespace RelhaxModpack
                     GetAllWindowComponentsVisual(subV, allWindowComponents);
             }
         }
-        //Gets any logical components that are not currently shown (like elemnts behind a tab)
+        //Gets any logical components that are not currently shown (like elements behind a tab)
         private static void GetAllWindowComponentsLogical(FrameworkElement v, List<FrameworkElement> allWindowComponents)
         {
             //NOTE: v has been added
             //have to use var here cause i got NO CLUE what type it is #niceMeme
+            if(v == null)
+            {
+                Logging.Error("parameter \"v\" is null, skipping");
+                return;
+            }
             var children = LogicalTreeHelper.GetChildren(v);
             //Type temp = children.GetType();
             foreach (var child in children)

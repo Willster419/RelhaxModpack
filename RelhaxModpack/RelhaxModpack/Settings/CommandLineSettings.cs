@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using RelhaxModpack.Windows;
+using System.Collections.Generic;
 using System.IO;
 
 
@@ -146,6 +147,10 @@ namespace RelhaxModpack
                     case "database-updater":
                         ApplicationMode = ApplicationMode.Updater;
                         Logging.Info("database-updater, loading in database update mode");
+                        break;
+                    case "updater-hardcode-path":
+                        Logging.Info("updater-hardcode-path, forcing folder path as {0}", DatabaseUpdater.HardCodeRepoPath);
+                        DatabaseUpdater.UseHardCodePath = true;
                         break;
                     case "database-editor":
                         ApplicationMode = ApplicationMode.Editor;
