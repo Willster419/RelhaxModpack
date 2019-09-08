@@ -104,6 +104,7 @@
     <Compile Include="TestSubWindow.xaml.cs">
       <DependentUpon>TestSubWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ZoomBorder.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -168,6 +169,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\popular_icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\NEW_LOCK_SCREEN.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

@@ -213,5 +213,13 @@
                 </GroupBox>
             </Grid>
         </TabItem>
+        <TabItem Header="Image Pan and Zoom" x:Name="ImagePanZoomTab">
+            <Grid>
+                <local:ZoomBorder x:Name="border" ClipToBounds="True" Background="Gray" Margin="0,0,0,33">
+                    <Image x:Name="ImageDisplay" Source="Resources/popular_icon.png"/>
+                </local:ZoomBorder>
+                <Slider HorizontalAlignment="Left" Margin="0,0,0,10" VerticalAlignment="Bottom" Width="786"/>
+            </Grid>
+        </TabItem>
     </TabControl>
 </Window>

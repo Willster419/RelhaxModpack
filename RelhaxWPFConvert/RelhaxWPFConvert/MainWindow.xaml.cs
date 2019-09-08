@@ -493,5 +493,12 @@ namespace RelhaxWPFConvert
             CustomHyperlink.Text = "another test";
         }
         #endregion
+
+        #region Image pan and zoom
+        private void ImageDisplay_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            
+        }
+        #endregion
     }
 }
