@@ -6,7 +6,7 @@ using System.Windows.Media;
 
 namespace RelhaxWPFConvert
 {
-    //taken from https://stackoverflow.com/a/6782715/3128017
+    //modified from https://stackoverflow.com/a/6782715/3128017
 
     /// <summary>
     /// Represents a border that allows for panning and zooming of the UIElement object inside
@@ -121,12 +121,15 @@ namespace RelhaxWPFConvert
 
             Point relative = e.GetPosition(child);
 
+            //zoom on the position of the mouse
             double abosuluteX = relative.X * scaleTransform.ScaleX + translateTransform.X;
             double abosuluteY = relative.Y * scaleTransform.ScaleY + translateTransform.Y;
 
+            //apply the zoom scaling
             scaleTransform.ScaleX += zoomFactor;
             scaleTransform.ScaleY += zoomFactor;
 
+            //zoom on the position of the mouse
             translateTransform.X = abosuluteX - relative.X * scaleTransform.ScaleX;
             translateTransform.Y = abosuluteY - relative.Y * scaleTransform.ScaleY;
         }
