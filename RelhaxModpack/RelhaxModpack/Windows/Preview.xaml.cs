@@ -35,6 +35,7 @@ namespace RelhaxModpack.Windows
         private MemoryStream ImageStream = null;
         private Media CurrentDispalyMedia = null;
         private WebBrowser browser = null;
+        private ZoomBorder zoomBorder = null;
 
         /// <summary>
         /// Create an instance of the Preview window
@@ -221,7 +222,7 @@ namespace RelhaxModpack.Windows
                 case MediaType.Picture:
                     //https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.image?view=netframework-4.7.2
                     Image pictureViewer = new Image();
-                    pictureViewer.MouseLeftButtonDown += PictureViewer_MouseLeftButtonDown;
+                    MainContentControl.MouseDoubleClick += MainContentControl_MouseDoubleClick;
                     MainPreviewBorder.Child = new ProgressBar()
                     {
                         Minimum = 0,
@@ -253,7 +254,17 @@ namespace RelhaxModpack.Windows
                             Logging.Error(ex.ToString());
                             pictureViewer.Source = Utils.BitmapToImageSource(Properties.Resources.error_loading_picture);
                         }
-                        MainPreviewBorder.Child = pictureViewer;
+                        //put the zoom border inside the main preview one. already set, might as well use it
+                        zoomBorder = new ZoomBorder()
+                        {
+                            Child = pictureViewer,
+                            HorizontalAlignment = HorizontalAlignment.Stretch,
+                            VerticalAlignment = VerticalAlignment.Stretch,
+                            BorderThickness = new Thickness(1.0),
+                            BorderBrush = Brushes.Black
+                        };
+                        MainPreviewBorder.BorderThickness = new Thickness(0.0);
+                        MainPreviewBorder.Child = zoomBorder;
                     }
                     break;
                 case MediaType.Webpage:
@@ -270,6 +281,8 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        
+
         private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             if(MainPreviewBorder.Child is ProgressBar bar)
@@ -280,12 +293,13 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void PictureViewer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void MainContentControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (WindowState != WindowState.Maximized)
                 WindowState = WindowState.Maximized;
             else
                 WindowState = WindowState.Normal;
+            zoomBorder.Reset();
         }
 
         private void RelhaxWindow_Closed(object sender, EventArgs e)
@@ -303,7 +317,7 @@ namespace RelhaxModpack.Windows
                 }
             }
 
-            Logging.Debug(" Preview:  Disposing image memory stream");
+            Logging.Debug("Preview:  Disposing image memory stream");
             if(ImageStream != null)
             {
                 ImageStream.Dispose();

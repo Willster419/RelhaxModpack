@@ -1146,6 +1146,35 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.UIComponents.ZoomBorder">
+            <summary>
+            Represents a border that allows for panning and zooming of the UIElement object inside
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.ZoomBorder.GetTranslateTransform(System.Windows.UIElement)">
+            <summary>
+            Returns the TranslateTransform part of the UIElement's RenderTransform
+            </summary>
+            <param name="element">The element to get the transformation parameter from</param>
+            <returns>The TranslateTransformpart of the UIElement's RenderTransform</returns>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.ZoomBorder.GetScaleTransform(System.Windows.UIElement)">
+            <summary>
+            Returns the ScaleTransform part of the UIElement's RenderTransform
+            </summary>
+            <param name="element">The element to get the transformation parameter from</param>
+            <returns>The ScaleTransform of the UIElement's RenderTransform</returns>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ZoomBorder.Child">
+            <summary>
+            Gets or Sets the child UIElement inside this border
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.ZoomBorder.Reset">
+            <summary>
+            Reset the scale and translation (zoom and pan) values
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.UIComponents.ComboBoxItem">
             <summary>
             The ComboBoxItem class is a wrapper class for displaying SelectablePackages as combo box items. The ToString() allows for display of the package name
