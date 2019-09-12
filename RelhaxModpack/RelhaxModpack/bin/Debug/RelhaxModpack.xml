@@ -1151,6 +1151,11 @@
             Represents a border that allows for panning and zooming of the UIElement object inside
             </summary>
         </member>
+        <member name="F:RelhaxModpack.UIComponents.ZoomBorder.CancelMouseDown">
+            <summary>
+            Cancel the mouse down event for panning
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.UIComponents.ZoomBorder.GetTranslateTransform(System.Windows.UIElement)">
             <summary>
             Returns the TranslateTransform part of the UIElement's RenderTransform

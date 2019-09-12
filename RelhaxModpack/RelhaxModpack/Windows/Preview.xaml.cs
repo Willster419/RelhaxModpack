@@ -223,8 +223,8 @@ namespace RelhaxModpack.Windows
                     //https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.image?view=netframework-4.7.2
                     Image pictureViewer = new Image();
                     pictureViewer.ClipToBounds = true;
-                    MainContentControl.MouseDoubleClick += MainContentControl_MouseDoubleClick;
                     MainContentControl.MouseRightButtonDown += MainContentControl_MouseRightButtonDown;
+                    MainContentControl.PreviewMouseDoubleClick += MainContentControl_PreviewMouseDoubleClick;
                     MainPreviewBorder.Child = new ProgressBar()
                     {
                         Minimum = 0,
@@ -287,6 +287,24 @@ namespace RelhaxModpack.Windows
         }
 
         #region image mouse click and resizing
+        private void MainContentControl_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            //only work on left button
+            if (e.LeftButton != MouseButtonState.Pressed)
+                return;
+
+            //send cancel for the mouse click drag in the zoom border
+            if(zoomBorder != null)
+            {
+                zoomBorder.CancelMouseDown = true;
+            }
+
+            if (WindowState != WindowState.Maximized)
+                WindowState = WindowState.Maximized;
+            else
+                WindowState = WindowState.Normal;
+        }
+
         private void ZoomBorder_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             zoomBorder.Reset();
@@ -295,18 +313,6 @@ namespace RelhaxModpack.Windows
         private void MainContentControl_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             zoomBorder.Reset();
-        }
-
-        private void MainContentControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            //only work on left button
-            if (e.LeftButton != MouseButtonState.Pressed)
-                return;
-
-            if (WindowState != WindowState.Maximized)
-                WindowState = WindowState.Maximized;
-            else
-                WindowState = WindowState.Normal;
         }
         #endregion
 

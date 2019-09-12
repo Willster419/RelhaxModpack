@@ -18,6 +18,11 @@ namespace RelhaxModpack.UIComponents
         private Point start;
 
         /// <summary>
+        /// Cancel the mouse down event for panning
+        /// </summary>
+        public bool CancelMouseDown = false;
+
+        /// <summary>
         /// Returns the TranslateTransform part of the UIElement's RenderTransform
         /// </summary>
         /// <param name="element">The element to get the transformation parameter from</param>
@@ -138,6 +143,14 @@ namespace RelhaxModpack.UIComponents
         {
             if (child == null)
                 return;
+
+            //check for a cancel from preview double click
+            if(CancelMouseDown)
+            {
+                CancelMouseDown = false;
+                Reset();
+                return;
+            }
 
             TranslateTransform translateTransform = GetTranslateTransform(child);
             //set where the mouse is starting the operation from, treat it as "0" (new starting point)
