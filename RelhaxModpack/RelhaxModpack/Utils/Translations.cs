@@ -1318,7 +1318,7 @@ namespace RelhaxModpack
             German.Add("DiagnosticUtilitiesButton", "Diagnosedienstprogramme");
             Polish.Add("DiagnosticUtilitiesButton", "Narzędzia diagnostyczne");
             French.Add("DiagnosticUtilitiesButton", "Utilitaires de diagnostique");
-            Spanish.Addp 
+            Spanish.Add("DiagnosticUtilitiesButton", "Utilidades de diagnóstico");
             Russian.Add("DiagnosticUtilitiesButton", "Диагностика");
 
             //Component: DiagnosticUtilitiesButtonDescription
@@ -1327,6 +1327,7 @@ namespace RelhaxModpack
             German.Add("DiagnosticUtilitiesButtonDescription", "Fehler melden, versuche eine Client Reparatur, etc.");
             Polish.Add("DiagnosticUtilitiesButtonDescription", "Zgłoś błąd, spróbuj naprawić klienta WG, itp.");
             French.Add("DiagnosticUtilitiesButtonDescription", "Signaler un bug, tenter de réparer un client du groupe de travail, etc.");
+            Spanish.Add("DiagnosticUtilitiesButtonDescription", "");
             Russian.Add("DiagnosticUtilitiesButtonDescription", "Сообщить о баге, попытаться починить клиент, и т. д.");
 
             //Component: UninstallModeGroupBox
