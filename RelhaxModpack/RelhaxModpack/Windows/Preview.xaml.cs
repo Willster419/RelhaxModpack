@@ -222,7 +222,9 @@ namespace RelhaxModpack.Windows
                 case MediaType.Picture:
                     //https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.image?view=netframework-4.7.2
                     Image pictureViewer = new Image();
+                    pictureViewer.ClipToBounds = true;
                     MainContentControl.MouseDoubleClick += MainContentControl_MouseDoubleClick;
+                    MainContentControl.MouseRightButtonDown += MainContentControl_MouseRightButtonDown;
                     MainPreviewBorder.Child = new ProgressBar()
                     {
                         Minimum = 0,
@@ -261,8 +263,11 @@ namespace RelhaxModpack.Windows
                             HorizontalAlignment = HorizontalAlignment.Stretch,
                             VerticalAlignment = VerticalAlignment.Stretch,
                             BorderThickness = new Thickness(1.0),
-                            BorderBrush = Brushes.Black
+                            BorderBrush = Brushes.Black,
+                            ClipToBounds = true
                         };
+                        zoomBorder.SizeChanged += ZoomBorder_SizeChanged;
+                        MainPreviewBorder.ClipToBounds = true;
                         MainPreviewBorder.BorderThickness = new Thickness(0.0);
                         MainPreviewBorder.Child = zoomBorder;
                     }
@@ -281,25 +286,38 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        
+        #region image mouse click and resizing
+        private void ZoomBorder_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            zoomBorder.Reset();
+        }
+
+        private void MainContentControl_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            zoomBorder.Reset();
+        }
+
+        private void MainContentControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            //only work on left button
+            if (e.LeftButton != MouseButtonState.Pressed)
+                return;
+
+            if (WindowState != WindowState.Maximized)
+                WindowState = WindowState.Maximized;
+            else
+                WindowState = WindowState.Normal;
+        }
+        #endregion
 
         private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            if(MainPreviewBorder.Child is ProgressBar bar)
+            if (MainPreviewBorder.Child is ProgressBar bar)
             {
                 if (bar.Maximum != e.TotalBytesToReceive)
                     bar.Maximum = e.TotalBytesToReceive;
                 bar.Value = e.BytesReceived;
             }
-        }
-
-        private void MainContentControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (WindowState != WindowState.Maximized)
-                WindowState = WindowState.Maximized;
-            else
-                WindowState = WindowState.Normal;
-            zoomBorder.Reset();
         }
 
         private void RelhaxWindow_Closed(object sender, EventArgs e)
