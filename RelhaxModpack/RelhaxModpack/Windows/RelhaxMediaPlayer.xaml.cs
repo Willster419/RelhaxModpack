@@ -6,7 +6,6 @@ using System.IO;
 using System.Threading.Tasks;
 using NAudio.Wave;
 
-
 namespace RelhaxModpack.UIComponents
 {
     /// <summary>
@@ -20,10 +19,16 @@ namespace RelhaxModpack.UIComponents
         /// </summary>
         public string MediaURL { get; set; }
 
+        /// <summary>
+        /// The raw audio data to parse
+        /// </summary>
+        public byte[] AudioData { get; set; }
+
         //private
         private Timer UITimer = new Timer();
         private IWavePlayer waveOutDevice = new WaveOut();
-        private MediaFoundationReader audioFileReader2;
+        private MemoryStream audioStream;
+        private WaveStream audioFileReader2;
 
         /// <summary>
         /// Creates an instance of the RelhaxMediaPlayer user control
@@ -33,18 +38,12 @@ namespace RelhaxModpack.UIComponents
             InitializeComponent();
         }
 
-        /// <summary>
-        /// Creates an instance of the RelhaxMediaPlayer user control
-        /// </summary>
-        /// <param name="mediaURL">The direct link to the audio file to preview</param>
-        public RelhaxMediaPlayer(string mediaURL)
-        {
-            InitializeComponent();
-            MediaURL = mediaURL;
-        }
-
         private async void OnComponentLoad(object sender, RoutedEventArgs e)
         {
+            if (AudioData == null)
+                throw new BadMemeException("lol you forgot to set the audio data");
+            if (string.IsNullOrEmpty(MediaURL))
+                throw new BadMemeException("lol you forgot to pass in the Media URL");
             //tell the user it's loading the file
             FileName.Text = Translations.GetTranslatedString("loading");
             //use an async load
@@ -53,7 +52,18 @@ namespace RelhaxModpack.UIComponents
             {
                 try
                 {
-                    audioFileReader2 = new MediaFoundationReader(MediaURL);
+                    audioStream = new MemoryStream(AudioData);
+                    switch (Path.GetExtension(MediaURL).ToLower())
+                    {
+                        case ".mp3":
+                            audioFileReader2 = new Mp3FileReader(audioStream);
+                            break;
+                        case ".wav":
+                            audioFileReader2 = new WaveFileReader(audioStream);
+                            break;
+                        default:
+                            throw new NotSupportedException("wave and mp3 only k thanks");
+                    }
                     waveOutDevice.Init(audioFileReader2);
                     waveOutDevice.Stop();
                     taskComplete = true;
@@ -94,10 +104,13 @@ namespace RelhaxModpack.UIComponents
 
         private void OnUITimerElapse(object sender, ElapsedEventArgs e)
         {
-            if (waveOutDevice.PlaybackState != PlaybackState.Playing)
-                StopButton_Click(null, null);
-            if (Seekbar.Minimum <= audioFileReader2.CurrentTime.TotalMilliseconds && audioFileReader2.CurrentTime.TotalMilliseconds <= Seekbar.Maximum)
-                Seekbar.Value = (int)audioFileReader2.CurrentTime.TotalMilliseconds;
+            Dispatcher.InvokeAsync(() =>
+            {
+                if (waveOutDevice.PlaybackState != PlaybackState.Playing)
+                    StopButton_Click(null, null);
+                if (Seekbar.Minimum <= audioFileReader2.CurrentTime.TotalMilliseconds && audioFileReader2.CurrentTime.TotalMilliseconds <= Seekbar.Maximum)
+                    Seekbar.Value = (int)audioFileReader2.CurrentTime.TotalMilliseconds;
+            });
         }
 
         private void OnWaveDevicePlaybackStopped(object sender, StoppedEventArgs e)
@@ -181,6 +194,10 @@ namespace RelhaxModpack.UIComponents
                     UITimer = null;
                     waveOutDevice.Dispose();
                     waveOutDevice = null;
+                    audioStream.Dispose();
+                    audioStream = null;
+                    audioFileReader2.Dispose();
+                    audioFileReader2 = null;
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.

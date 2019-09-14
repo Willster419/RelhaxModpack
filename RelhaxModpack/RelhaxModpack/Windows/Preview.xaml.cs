@@ -199,7 +199,8 @@ namespace RelhaxModpack.Windows
             //null the child element and make it again
             MainPreviewBorder.Child = null;
             Logging.Debug("loading preview of MediaType {0}, URL={1}", media.MediaType.ToString(), media.URL);
-            switch(media.MediaType)
+            Image pictureViewer;
+            switch (media.MediaType)
             {
                 case MediaType.Unknown:
                 default:
@@ -217,12 +218,50 @@ namespace RelhaxModpack.Windows
                     MainPreviewBorder.Child = browser;
                     break;
                 case MediaType.MediaFile:
-                    MainPreviewBorder.Child = new RelhaxMediaPlayer(media.URL);
+                    //show progress first
+                    MainPreviewBorder.Child = new ProgressBar()
+                    {
+                        Minimum = 0,
+                        Maximum = 1,
+                        Value = 0,
+                        HorizontalAlignment = HorizontalAlignment.Stretch,
+                        VerticalAlignment = VerticalAlignment.Top,
+                        Margin = new Thickness(0, 20, 0, 0),
+                        Height = 20
+                    };
+                    using (WebClient client = new WebClient() { })
+                    {
+                        client.DownloadProgressChanged += Client_DownloadProgressChanged;
+
+                        //now load the media
+                        try
+                        {
+                            byte[] data = await client.DownloadDataTaskAsync(media.URL);
+                            MainPreviewBorder.Child = new RelhaxMediaPlayer()
+                            {
+                                AudioData = data,
+                                MediaURL = media.URL
+                            };
+                        }
+                        catch (Exception ex)
+                        {
+                            Logging.Exception("failed to load audio data");
+                            Logging.Exception(ex.ToString());
+                            pictureViewer = new Image
+                            {
+                                ClipToBounds = true
+                            };
+                            pictureViewer.Source = Utils.BitmapToImageSource(Properties.Resources.error_loading_picture);
+                            MainPreviewBorder.Child = pictureViewer;
+                        }
+                    }
                     break;
                 case MediaType.Picture:
                     //https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.image?view=netframework-4.7.2
-                    Image pictureViewer = new Image();
-                    pictureViewer.ClipToBounds = true;
+                    pictureViewer = new Image
+                    {
+                        ClipToBounds = true
+                    };
                     MainContentControl.MouseRightButtonDown += MainContentControl_MouseRightButtonDown;
                     MainContentControl.PreviewMouseDoubleClick += MainContentControl_PreviewMouseDoubleClick;
                     MainPreviewBorder.Child = new ProgressBar()
@@ -252,25 +291,25 @@ namespace RelhaxModpack.Windows
                         }
                         catch(Exception ex)
                         {
-                            Logging.Error("failed to load picture");
-                            Logging.Error(ex.ToString());
+                            Logging.Exception("failed to load picture");
+                            Logging.Exception(ex.ToString());
                             pictureViewer.Source = Utils.BitmapToImageSource(Properties.Resources.error_loading_picture);
                         }
-                        //put the zoom border inside the main preview one. already set, might as well use it
-                        zoomBorder = new ZoomBorder()
-                        {
-                            Child = pictureViewer,
-                            HorizontalAlignment = HorizontalAlignment.Stretch,
-                            VerticalAlignment = VerticalAlignment.Stretch,
-                            BorderThickness = new Thickness(1.0),
-                            BorderBrush = Brushes.Black,
-                            ClipToBounds = true
-                        };
-                        zoomBorder.SizeChanged += ZoomBorder_SizeChanged;
-                        MainPreviewBorder.ClipToBounds = true;
-                        MainPreviewBorder.BorderThickness = new Thickness(0.0);
-                        MainPreviewBorder.Child = zoomBorder;
                     }
+                    //put the zoom border inside the main preview one. already set, might as well use it
+                    zoomBorder = new ZoomBorder()
+                    {
+                        Child = pictureViewer,
+                        HorizontalAlignment = HorizontalAlignment.Stretch,
+                        VerticalAlignment = VerticalAlignment.Stretch,
+                        BorderThickness = new Thickness(1.0),
+                        BorderBrush = Brushes.Black,
+                        ClipToBounds = true
+                    };
+                    zoomBorder.SizeChanged += ZoomBorder_SizeChanged;
+                    MainPreviewBorder.ClipToBounds = true;
+                    MainPreviewBorder.BorderThickness = new Thickness(0.0);
+                    MainPreviewBorder.Child = zoomBorder;
                     break;
                 case MediaType.Webpage:
                     if (browser != null)
