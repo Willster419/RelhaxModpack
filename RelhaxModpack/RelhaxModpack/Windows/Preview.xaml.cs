@@ -196,6 +196,12 @@ namespace RelhaxModpack.Windows
         private async void DisplayMedia(Media media)
         {
             CurrentDispalyMedia = media;
+            //if the child is our media player, then stop and dispose
+            if(MainPreviewBorder.Child != null && MainPreviewBorder.Child is RelhaxMediaPlayer player)
+            {
+                player.StopPlaybackIfPlaying();
+                player.Dispose();
+            }
             //null the child element and make it again
             MainPreviewBorder.Child = null;
             Logging.Debug("loading preview of MediaType {0}, URL={1}", media.MediaType.ToString(), media.URL);

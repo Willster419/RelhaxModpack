@@ -104,6 +104,11 @@ namespace RelhaxModpack.UIComponents
 
         private void OnUITimerElapse(object sender, ElapsedEventArgs e)
         {
+            if(waveOutDevice == null)
+            {
+                UITimer.Stop();
+                return;
+            }
             Dispatcher.InvokeAsync(() =>
             {
                 if (waveOutDevice.PlaybackState != PlaybackState.Playing)
@@ -111,6 +116,15 @@ namespace RelhaxModpack.UIComponents
                 if (Seekbar.Minimum <= audioFileReader2.CurrentTime.TotalMilliseconds && audioFileReader2.CurrentTime.TotalMilliseconds <= Seekbar.Maximum)
                     Seekbar.Value = (int)audioFileReader2.CurrentTime.TotalMilliseconds;
             });
+        }
+
+        /// <summary>
+        /// Stops playback from an outside source, like if changing previews
+        /// </summary>
+        public void StopPlaybackIfPlaying()
+        {
+            if (waveOutDevice.PlaybackState == PlaybackState.Playing)
+                StopButton_Click(null, null);
         }
 
         private void OnWaveDevicePlaybackStopped(object sender, StoppedEventArgs e)

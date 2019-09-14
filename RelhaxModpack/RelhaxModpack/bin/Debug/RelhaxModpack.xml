@@ -1654,6 +1654,11 @@
             Creates an instance of the RelhaxMediaPlayer user control
             </summary>
         </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.StopPlaybackIfPlaying">
+            <summary>
+            Stops playback from an outside source, like if changing previews
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.Dispose(System.Boolean)">
             <summary>
             Dispose of the RelhaxMediaPlayer references
