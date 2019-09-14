@@ -44,8 +44,10 @@ namespace RelhaxModpack.UIComponents
                 throw new BadMemeException("lol you forgot to set the audio data");
             if (string.IsNullOrEmpty(MediaURL))
                 throw new BadMemeException("lol you forgot to pass in the Media URL");
+
             //tell the user it's loading the file
             FileName.Text = Translations.GetTranslatedString("loading");
+
             //use an async load
             bool taskComplete = false;
             await Task.Factory.StartNew(() =>
@@ -88,13 +90,15 @@ namespace RelhaxModpack.UIComponents
             //https://stackoverflow.com/questions/10371741/naudio-seeking-and-navigation-to-play-from-the-specified-position
             Seekbar.Maximum = (int)audioFileReader2.TotalTime.TotalMilliseconds;
             FileName.Text = Path.GetFileName(MediaURL);
+
             //start off the volume at 50%
             Volume.Minimum = 0;
             Volume.Maximum = 100;
             Volume.Value = 50;
-            VolumeNumber.Text = Volume.Value.ToString();
+            VolumeNumber.Text = Volume.Value.ToString("F1");
             waveOutDevice.Volume = (float)(Volume.Value / Volume.Maximum);// 50 / 100 = 0.5f
             waveOutDevice.PlaybackStopped += OnWaveDevicePlaybackStopped;
+
             //setup the UI timer to make the display updated based on position of audio
             UITimer.Interval = 100;
             UITimer.Elapsed += OnUITimerElapse;
@@ -113,6 +117,7 @@ namespace RelhaxModpack.UIComponents
             {
                 if (waveOutDevice.PlaybackState != PlaybackState.Playing)
                     StopButton_Click(null, null);
+
                 if (Seekbar.Minimum <= audioFileReader2.CurrentTime.TotalMilliseconds && audioFileReader2.CurrentTime.TotalMilliseconds <= Seekbar.Maximum)
                     Seekbar.Value = (int)audioFileReader2.CurrentTime.TotalMilliseconds;
             });
@@ -136,7 +141,7 @@ namespace RelhaxModpack.UIComponents
         private void OnVolumeScroll(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             waveOutDevice.Volume = (float)(Volume.Value / Volume.Maximum);
-            VolumeNumber.Text = Volume.Value.ToString();
+            VolumeNumber.Text = Volume.Value.ToString("F1");
         }
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
@@ -167,23 +172,43 @@ namespace RelhaxModpack.UIComponents
         {
             if (e.LeftButton != System.Windows.Input.MouseButtonState.Pressed)
                 return;
+
+            //because of the unusable first 10 pixels or so
+            //subtract out the area we can't use for scrolling. it's always constant (or very close)
+            ProcessMouseMove(e.GetPosition(Seekbar).X);
+        }
+
+        private void Seekbar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.LeftButton != System.Windows.Input.MouseButtonState.Pressed)
+                return;
+
+            //because of the unusable first 10 pixels or so
+            //subtract out the area we can't use for scrolling. it's always constant (or very close)
+            ProcessMouseMove(e.GetPosition(Seekbar).X);
+        }
+
+        //processes mouse scrolling
+        private void ProcessMouseMove(double mouseX)
+        {
             //pause
             waveOutDevice.Pause();
             UITimer.Stop();
-            //becuase of the unusable first 10 pixels or so
-            //subtract out the area we can't use for scrolling. it's always constant (or very close)
-            //TODO:test
-            double mouseX = e.GetPosition(Seekbar).X;
+
             //get the total scroll bar usable length
-            double scrollWidth = Seekbar.Width - 20;
+            double scrollWidth = Seekbar.ActualWidth - 20;
+
             //make sure it's a positive number (border at beginning of scroll bar)
             if (mouseX < 0)
                 mouseX = 0;
+
             //border at end of scroll bar
             if (mouseX > scrollWidth)
                 mouseX = scrollWidth;
+
             //get the percent of where the seekbar is, 0-1 form
             double seekPos = mouseX / scrollWidth;
+
             //set the seekbar UI value to the scrolled location
             double newPos = Seekbar.Maximum * seekPos;
             Seekbar.Value = (int)newPos;
@@ -240,5 +265,6 @@ namespace RelhaxModpack.UIComponents
             GC.SuppressFinalize(this);
         }
         #endregion
+
     }
 }
