@@ -356,6 +356,14 @@ namespace RelhaxModpack
             Polish.Add("allFiles", TranslationNeeded);
             French.Add("allFiles", TranslationNeeded);
             Russian.Add("allFiles", TranslationNeeded);
+
+            //Component: GoogleTranslateLanguageKey
+            //
+            English.Add("GoogleTranslateLanguageKey", "en");
+            German.Add("GoogleTranslateLanguageKey", "de");
+            Polish.Add("GoogleTranslateLanguageKey", "pl");
+            French.Add("GoogleTranslateLanguageKey", "fr");
+            Russian.Add("GoogleTranslateLanguageKey", "ru");
             #endregion
 
             #region Application messages
@@ -1921,6 +1929,14 @@ namespace RelhaxModpack
             Polish.Add("loadingApplicationUpdateNotes", "Ładowanie historii zmian aplikacji...");
             French.Add("loadingApplicationUpdateNotes", "Chargement des notes de mise à jour de l'application ...");
             Russian.Add("loadingApplicationUpdateNotes", "Загружается список изменений в обновлении...");
+
+            //Component: ViewUpdateNotesOnGoogleTranslate
+            //
+            English.Add("ViewUpdateNotesOnGoogleTranslate", "View this on Google Translate");
+            German.Add("ViewUpdateNotesOnGoogleTranslate", TranslationNeeded);
+            Polish.Add("ViewUpdateNotesOnGoogleTranslate", TranslationNeeded);
+            French.Add("ViewUpdateNotesOnGoogleTranslate", TranslationNeeded);
+            Russian.Add("ViewUpdateNotesOnGoogleTranslate", TranslationNeeded);
             #endregion
 
             #region Installer Messages
@@ -3140,6 +3156,14 @@ namespace RelhaxModpack
             Polish.Add("database_Update_TabHeader", TranslationNeeded);
             French.Add("database_Update_TabHeader", "Nouvelles de la base de données");
             Russian.Add("database_Update_TabHeader", "Новости базы данных");
+
+            //Component: ViewNewsOnGoogleTranslate
+            //
+            English.Add("ViewNewsOnGoogleTranslate", "View this on Google Translate");
+            German.Add("ViewNewsOnGoogleTranslate", TranslationNeeded);
+            Polish.Add("ViewNewsOnGoogleTranslate", TranslationNeeded);
+            French.Add("ViewNewsOnGoogleTranslate", TranslationNeeded);
+            Russian.Add("ViewNewsOnGoogleTranslate", TranslationNeeded);
             #endregion
 
             #region Loading Window

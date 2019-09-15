@@ -5665,6 +5665,13 @@
             <param name="command">The entire command as a string style commandline</param>
             <returns>True if process start was successful, false otherwise</returns>
         </member>
+        <member name="M:RelhaxModpack.Utils.OpenInGoogleTranslate(System.String)">
+            <summary>
+            Opens the selected text in Google translate web page
+            </summary>
+            <param name="message">The text to translate</param>
+            <returns></returns>
+        </member>
         <member name="M:RelhaxModpack.Utils.BuildFilepathMacroList">
             <summary>
             Builds the Filepath macro dictionary with settings that should be parsed from the Settings class

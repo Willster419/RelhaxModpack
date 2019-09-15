@@ -28,6 +28,7 @@ using Size = System.Drawing.Size;
 using RelhaxModpack.Windows;
 using System.Threading;
 using System.Windows.Media.Imaging;
+using System.Web;
 
 namespace RelhaxModpack
 {
@@ -2135,6 +2136,35 @@ namespace RelhaxModpack
                 Logging.Exception(ex.ToString());
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Opens the selected text in Google translate web page
+        /// </summary>
+        /// <param name="message">The text to translate</param>
+        /// <returns></returns>
+        public static bool OpenInGoogleTranslate(string message)
+        {
+            //sample:
+            //https://translate.google.com/#view=home&op=translate&sl=en&tl=de&text=test
+
+            //replace percent
+            message = message.Replace(@"%", @"percent");
+
+            //google translate has a limit of 5000 characters
+            if (message.Length > 4999)
+            {
+                message = message.Substring(0, 4999);
+            }
+            string textToSend = HttpUtility.UrlPathEncode(message);
+
+            //replace comma: %2C
+            textToSend = textToSend.Replace(@",", @"%2C");
+
+            //remove colon escapes and slash escapes
+            string completeTemplate = string.Format("https://translate.google.com/#view=home&op=translate&sl=en&tl={0}&text={1}",
+                Translations.GetTranslatedString("GoogleTranslateLanguageKey"), textToSend);
+            return StartProcess(completeTemplate);
         }
         #endregion
 
