@@ -324,10 +324,17 @@ namespace RelhaxModpack
                 XmlUtils.GetXmlStringFromXPath(doc, "//version/relhax_v2_stable").Trim() ://stable
                 XmlUtils.GetXmlStringFromXPath(doc, "//version/relhax_v2_beta").Trim();//beta
 
-            Logging.Info("Current build is {0} Online build is {1}", currentVersion, applicationOnlineVersion);
+            Logging.Info("Current build is {0} online build is {1}", currentVersion, applicationOnlineVersion);
 
             //check if versions are equal
-            return currentVersion.Equals(applicationOnlineVersion);
+            //return currentVersion.Equals(applicationOnlineVersion);
+            //currentVersion = strA, applicationOnline=strB
+            //if currentVersion >  applicationOnline, probably testing, ok
+            //if currentVersion == applicationOnline, same version, ok
+            //if currentVersion <  applicationOnline, update available, not ok
+            //when strA < strB, it returns -1
+            bool outOfDate = (CompareVersions(currentVersion, applicationOnlineVersion) == -1);
+            return !outOfDate;
         }
         #endregion
 
@@ -1936,21 +1943,34 @@ namespace RelhaxModpack
         /// <param name="strB">the second version</param>
         /// <returns>less than zero if strA is less than strB, equal to zero if
         /// strA equals strB, and greater than zero if strA is greater than strB</returns>
-        /// <remarks> See https://stackoverflow.com/questions/30494/compare-version-identifiers
+        /// <remarks>
+        /// See https://stackoverflow.com/questions/30494/compare-version-identifiers
         /// Samples:
+        /// strA        | strB
         /// 1.0.0.0     | 1.0.0.1 = -1
         /// 1.0.0.1     | 1.0.0.0 =  1
         /// 1.0.0.0     | 1.0.0.0 =  0
         /// 1, 0.0.0    | 1.0.0.0 =  0
         /// 9, 5, 1, 44 | 3.4.5.6 =  1
         /// 1, 5, 1, 44 | 3.4.5.6 = -1
-        /// 6,5,4,3     | 6.5.4.3 =  0 </remarks>
+        /// 6,5,4,3     | 6.5.4.3 =  0
+        /// </remarks>
         public static int CompareVersions(string strA, string strB)
         {
-            Version vA = new Version(strA.Replace(",", "."));
-            Version vB = new Version(strB.Replace(",", "."));
+            try
+            {
+                Version vA = new Version(strA.Replace(",", "."));
+                Version vB = new Version(strB.Replace(",", "."));
 
-            return vA.CompareTo(vB);
+                return vA.CompareTo(vB);
+            }
+            catch(Exception ex)
+            {
+                Logging.Exception("failed to parse versions in CompareVersions, vA=strA={0}, vB=strB={1}", strA, strB);
+                Logging.Exception(ex.ToString());
+                //assume out of date
+                return -1;
+            }
         }
 
         /// <summary>
