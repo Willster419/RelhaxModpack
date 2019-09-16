@@ -213,7 +213,6 @@ namespace RelhaxModpack
             this.Version = packageToCopy.Version;
             this.Timestamp = packageToCopy.Timestamp;
             this.ZipFile = packageToCopy.ZipFile;
-            this.Enabled = packageToCopy.Enabled;
             this.CRC = packageToCopy.CRC;
             this.StartAddress = packageToCopy.StartAddress;
             this.EndAddress = packageToCopy.EndAddress;
@@ -222,6 +221,7 @@ namespace RelhaxModpack
             this.DevURL = packageToCopy.DevURL;
             this.InstallGroup = packageToCopy.InstallGroup;
             this.PatchGroup = packageToCopy.PatchGroup;
+            //don't call the property for enabled, just the internal field
             this._Enabled = packageToCopy._Enabled;
 
             if (deep)
