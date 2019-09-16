@@ -34,7 +34,7 @@ namespace RelhaxModpack.Windows
         private TreeViewItem ItemToExpand;
         private Point BeforeDragDropPoint;
         private bool IsScrolling = false;
-        private bool AlreadyLoggedMouseMove = false;
+        //private bool AlreadyLoggedMouseMove = false;
         private bool AlreadyLoggedScroll = false;
         private bool Init = true;
         private object SelectedItem = null;
@@ -1413,7 +1413,7 @@ namespace RelhaxModpack.Windows
             }
             else if (e.LeftButton == MouseButtonState.Pressed)
             {
-                AlreadyLoggedMouseMove = true;
+                //AlreadyLoggedMouseMove = true;
                 //yeah...that got annoying real quick
                 //Logging.Editor("MouseMove DragDrop movement not accepted, leftButton={0}, isDragConfirmed={1}, IsScrolling={2}", LogLevel.Info, e.LeftButton.ToString(), isDragConfirmed.ToString(), IsScrolling.ToString());
             }
@@ -1453,7 +1453,7 @@ namespace RelhaxModpack.Windows
             if (e.LeftButton == MouseButtonState.Released)
             {
                 IsScrolling = false;
-                AlreadyLoggedMouseMove = false;
+                //AlreadyLoggedMouseMove = false;
                 AlreadyLoggedScroll = false;
                 if (DragDropTest.Visibility == Visibility.Visible)
                     DragDropTest.Visibility = Visibility.Hidden;
