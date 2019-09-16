@@ -192,8 +192,7 @@ namespace RelhaxModpack
             Logging.Info("Structure verified");
 
             //set the application appData directory
-            Settings.AppDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "Wargaming.net", "WorldOfTanks");
+            Settings.AppDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Wargaming.net", "WorldOfTanks");
             if (!Directory.Exists(Settings.AppDataFolder))
             {
                 Logging.WriteToLog(string.Format("AppDataFolder does not exist at {0}, creating it", Settings.AppDataFolder),
