@@ -1232,7 +1232,10 @@ namespace RelhaxModpack
             if (ModpackSettings.AdvancedInstalProgress)
             {
                 Logging.Debug("advancedInstallProgress is true, making window and populating with reporters");
-                AdvancedProgressWindow = new AdvancedProgress();
+                AdvancedProgressWindow = new AdvancedProgress()
+                {
+                    ShouldUserInstallBeCalled = userModsToInstall.Count > 0
+                };
                 //build the number of InstallTaskReporter objects based on what we are doing
                 //if we are making a backup of the mods then make a reporter for it
                 if (ModpackSettings.BackupModFolder)

@@ -29,43 +29,57 @@ namespace RelhaxModpack.Windows
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Flag for if the user installation reporter should have been called
+        /// </summary>
+        public bool ShouldUserInstallBeCalled = false;
+
         //make a bunch of handlers for referencing the install progress options later
         /// <summary>
         /// The UI Reporting object for the step of backing up mods
         /// </summary>
         public RelhaxInstallTaskReporter BackupModsReporter = null;
+
         /// <summary>
         /// The UI Reporting object for the steps of backing up data, clearing cache, and clearing logs
         /// </summary>
         public RelhaxInstallTaskReporter BackupDataClearCacheClearLogsReporter = null;
+
         /// <summary>
         /// The UI Reporting object for the step of cleaning mods
         /// </summary>
         public RelhaxInstallTaskReporter CleanModsReporter = null;
+
         /// <summary>
         /// The UI Reporting object for the step of extracting mods
         /// </summary>
         public RelhaxInstallTaskReporter[] ExtractionModsReporters;
+
         /// <summary>
         /// The UI Reporting object for the step of extracting user mods
         /// </summary>
         public RelhaxInstallTaskReporter ExtractionUserModsReporter = null;
+
         /// <summary>
         /// The UI Reporting object for the step of unpacking xml files
         /// </summary>
         public RelhaxInstallTaskReporter RestoreDataXmlUnpackReporter = null;
+
         /// <summary>
         /// The UI Reporting object for the step of patching files
         /// </summary>
         public RelhaxInstallTaskReporter PatchReporter = null;
+
         /// <summary>
         /// The UI Reporting object for the step of creating shortcuts
         /// </summary>
         public RelhaxInstallTaskReporter ShortcutsReporter = null;
+
         /// <summary>
         /// The UI Reporting object for the step of Creating atlas files
         /// </summary>
         public RelhaxInstallTaskReporter AtlasReporter = null;
+
         /// <summary>
         /// The UI Reporting object for the step of font install, trimming download cache, and cleanup
         /// </summary>
@@ -114,6 +128,16 @@ namespace RelhaxModpack.Windows
             switch (progress.InstallStatus)
             {
                 case InstallerExitCodes.BackupModsError:
+                    if(BackupModsReporter == null)
+                    {
+                        bool isBackupMod = ModpackSettings.BackupModFolder && !ModpackSettings.ExportMode;
+                        if (isBackupMod)
+                        {
+                            Logging.Error("BackupModFolder is true, not export mode but its task reporter is null!");
+                        }
+                        break;
+                    }
+
                     if (BackupModsReporter.ReportState != TaskReportState.Active)
                         BackupModsReporter.ReportState = TaskReportState.Active;
 
@@ -136,6 +160,16 @@ namespace RelhaxModpack.Windows
                 case InstallerExitCodes.BackupDataError:
                 case InstallerExitCodes.ClearCacheError:
                 case InstallerExitCodes.ClearLogsError:
+                    if(BackupDataClearCacheClearLogsReporter == null)
+                    {
+                        if ((ModpackSettings.SaveUserData || ModpackSettings.ClearCache || ModpackSettings.DeleteLogs) && (!ModpackSettings.ExportMode))
+                        {
+                            Logging.Error("Backup Data/Clear Cache/Clear Logs reporter is null and export mod is false! SaveUserData={0}, ClearCache={1}, DeleteLogs={2}",
+                                ModpackSettings.SaveUserData, ModpackSettings.ClearCache, ModpackSettings.DeleteLogs);
+                        }
+                        break;
+                    }
+
                     if (BackupDataClearCacheClearLogsReporter.ReportState != TaskReportState.Active)
                         BackupDataClearCacheClearLogsReporter.ReportState = TaskReportState.Active;
 
@@ -164,6 +198,16 @@ namespace RelhaxModpack.Windows
                     }
                     break;
                 case InstallerExitCodes.CleanModsError:
+                    if(CleanModsReporter == null)
+                    {
+                        if(ModpackSettings.CleanInstallation || ModpackSettings.ExportMode || ModpackSettings.AutoInstall || !string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
+                        {
+                            Logging.Error("CleanModsReporter is null when it should not be! CleanInstallation={0}, ExportMode={1}, AutoInstall={2}, AutoInstallFileName={3}",
+                                ModpackSettings.CleanInstallation, ModpackSettings.ExportMode, ModpackSettings.AutoInstall, CommandLineSettings.AutoInstallFileName);
+                        }
+                        break;
+                    }
+
                     if (CleanModsReporter.ReportState != TaskReportState.Active)
                         CleanModsReporter.ReportState = TaskReportState.Active;
 
@@ -177,6 +221,12 @@ namespace RelhaxModpack.Windows
                         CleanModsReporter.SubTaskValue = progress.ChildCurrent;
                     break;
                 case InstallerExitCodes.ExtractionError:
+                    if(ExtractionModsReporters[progress.ThreadID] == null)
+                    {
+                        Logging.Error("Extraction reporter for thread {0} is null! ID={0}", progress.ThreadID);
+                        break;
+                    }
+
                     if (ExtractionModsReporters[progress.ThreadID].ReportState != TaskReportState.Active)
                         ExtractionModsReporters[progress.ThreadID].ReportState = TaskReportState.Active;
 
@@ -186,6 +236,15 @@ namespace RelhaxModpack.Windows
                         progress.EntryFilename);
                     break;
                 case InstallerExitCodes.UserExtractionError:
+                    if(ExtractionUserModsReporter == null)
+                    {
+                        if(ShouldUserInstallBeCalled)
+                        {
+                            Logging.Error("ExtractionUserModsReporter is null when user has mods to extract!");
+                        }
+                        break;
+                    }
+
                     if (ExtractionUserModsReporter.ReportState != TaskReportState.Active)
                         ExtractionUserModsReporter.ReportState = TaskReportState.Active;
 
