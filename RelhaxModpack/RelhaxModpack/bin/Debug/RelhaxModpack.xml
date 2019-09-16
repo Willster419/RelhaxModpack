@@ -4294,6 +4294,11 @@
             Create and initialize the AdvancedProgress window
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Windows.AdvancedProgress.ShouldUserInstallBeCalled">
+            <summary>
+            Flag for if the user installation reporter should have been called
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Windows.AdvancedProgress.BackupModsReporter">
             <summary>
             The UI Reporting object for the step of backing up mods
