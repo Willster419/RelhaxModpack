@@ -17,12 +17,12 @@ namespace RelhaxModpack.UIComponents
         /// <summary>
         /// The direct link to the audio file to preview
         /// </summary>
-        public string MediaURL { get; set; }
+        private string mediaURL { get; set; }
 
         /// <summary>
         /// The raw audio data to parse
         /// </summary>
-        public byte[] AudioData { get; set; }
+        private byte[] audioData { get; set; }
 
         //private
         private Timer UITimer = new Timer();
@@ -33,16 +33,20 @@ namespace RelhaxModpack.UIComponents
         /// <summary>
         /// Creates an instance of the RelhaxMediaPlayer user control
         /// </summary>
-        public RelhaxMediaPlayer()
+        /// <param name="_audioData">The audio data to use in the preview</param>
+        /// <param name="_mediaURL">The URL to the audio source. Used for audio type parsing.</param>
+        public RelhaxMediaPlayer( string _mediaURL, byte[] _audioData)
         {
+            mediaURL = _mediaURL;
+            audioData = _audioData;
             InitializeComponent();
         }
 
         private async void OnComponentLoad(object sender, RoutedEventArgs e)
         {
-            if (AudioData == null)
+            if (audioData == null)
                 throw new BadMemeException("lol you forgot to set the audio data");
-            if (string.IsNullOrEmpty(MediaURL))
+            if (string.IsNullOrEmpty(mediaURL))
                 throw new BadMemeException("lol you forgot to pass in the Media URL");
 
             //tell the user it's loading the file
@@ -54,8 +58,8 @@ namespace RelhaxModpack.UIComponents
             {
                 try
                 {
-                    audioStream = new MemoryStream(AudioData);
-                    switch (Path.GetExtension(MediaURL).ToLower())
+                    audioStream = new MemoryStream(audioData);
+                    switch (Path.GetExtension(mediaURL).ToLower())
                     {
                         case ".mp3":
                             audioFileReader2 = new Mp3FileReader(audioStream);
@@ -72,7 +76,7 @@ namespace RelhaxModpack.UIComponents
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception("Failed to load audio preview: {0}", MediaURL);
+                    Logging.Exception("Failed to load audio preview: {0}", mediaURL);
                     Logging.Exception(ex.ToString());
                 }
             });
@@ -85,11 +89,11 @@ namespace RelhaxModpack.UIComponents
                 Volume.IsEnabled = false;
                 return;
             }
-            
+
             //now that it's loaded, setup the UI
             //https://stackoverflow.com/questions/10371741/naudio-seeking-and-navigation-to-play-from-the-specified-position
             Seekbar.Maximum = (int)audioFileReader2.TotalTime.TotalMilliseconds;
-            FileName.Text = Path.GetFileName(MediaURL);
+            FileName.Text = Path.GetFileName(mediaURL);
 
             //start off the volume at 50%
             Volume.Minimum = 0;
@@ -108,7 +112,7 @@ namespace RelhaxModpack.UIComponents
 
         private void OnUITimerElapse(object sender, ElapsedEventArgs e)
         {
-            if(waveOutDevice == null)
+            if (waveOutDevice == null)
             {
                 UITimer.Stop();
                 return;

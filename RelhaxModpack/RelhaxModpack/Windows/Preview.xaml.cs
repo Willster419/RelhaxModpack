@@ -243,11 +243,7 @@ namespace RelhaxModpack.Windows
                         try
                         {
                             byte[] data = await client.DownloadDataTaskAsync(media.URL);
-                            MainPreviewBorder.Child = new RelhaxMediaPlayer()
-                            {
-                                AudioData = data,
-                                MediaURL = media.URL
-                            };
+                            MainPreviewBorder.Child = new RelhaxMediaPlayer(media.URL, data);
                         }
                         catch (Exception ex)
                         {
