@@ -580,6 +580,18 @@
             Provides a complete tree style path to the package using its internal packageName, starting with the category
             </summary>
         </member>
+        <member name="M:RelhaxModpack.DatabasePackage.#ctor">
+            <summary>
+            Creates an instance of the DatabasePackage class
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.DatabasePackage.#ctor(RelhaxModpack.DatabasePackage,System.Boolean)">
+            <summary>
+            Creates an instance of the DatabasePackage class based on the provided DatabasePackage
+            </summary>
+            <param name="packageToCopy">The package to copy the information from</param>
+            <param name="deep">Set to true to copy list objects, false to use new lists</param>
+        </member>
         <member name="T:RelhaxModpack.Dependency">
             <summary>
             Represents a package with logical calculations. A dependency is only installed when a selectable package is checked
@@ -620,8 +632,15 @@
         </member>
         <member name="M:RelhaxModpack.Dependency.#ctor">
             <summary>
-            Constructor to over-ride DatabasePackage default values
+            Create an instance of the Dependency class and over-ride DatabasePackage default values
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Dependency.#ctor(RelhaxModpack.DatabasePackage,System.Boolean)">
+            <summary>
+            Create an instance of the Dependency class and over-ride DatabasePackage default values, while using values provided for copy objects
+            </summary>
+            <param name="packageToCopyFrom">The package to copy the information from</param>
+            <param name="deep">Set to true to copy list objects, false to use new lists</param>
         </member>
         <member name="T:RelhaxModpack.DatabaseComponents.IComponentWithDependencies">
             <summary>
@@ -781,7 +800,7 @@
         </member>
         <member name="M:RelhaxModpack.SelectablePackage.#ctor">
             <summary>
-            Constructor to over-ride DatabasePackage default values
+            Create an instance of the SelectablePackage class and over-ride DatabasePackage default values
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.Name">
@@ -1034,6 +1053,13 @@
             Check if the color change should be changed on or off, based on if any other packages at this level are enabled and checked
             </summary>
             <returns>True if another package at this level is checked and enabled, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.SelectablePackage.#ctor(RelhaxModpack.DatabasePackage,System.Boolean)">
+            <summary>
+            Create an instance of the SelectablePackage class and over-ride DatabasePackage default values, while using values provided for copy objects
+            </summary>
+            <param name="packageToCopyFrom">The package to copy the information from</param>
+            <param name="deep">Set to true to copy list objects, false to use new lists</param>
         </member>
         <member name="T:RelhaxModpack.Trigger">
             <summary>
@@ -1639,20 +1665,22 @@
             RelhaxMediaPlayer
             </summary>
         </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxMediaPlayer.MediaURL">
+        <member name="P:RelhaxModpack.UIComponents.RelhaxMediaPlayer.mediaURL">
             <summary>
             The direct link to the audio file to preview
             </summary>
         </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxMediaPlayer.AudioData">
+        <member name="P:RelhaxModpack.UIComponents.RelhaxMediaPlayer.audioData">
             <summary>
             The raw audio data to parse
             </summary>
         </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.#ctor">
+        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.#ctor(System.String,System.Byte[])">
             <summary>
             Creates an instance of the RelhaxMediaPlayer user control
             </summary>
+            <param name="_audioData">The audio data to use in the preview</param>
+            <param name="_mediaURL">The URL to the audio source. Used for audio type parsing.</param>
         </member>
         <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.StopPlaybackIfPlaying">
             <summary>
@@ -4491,6 +4519,20 @@
             DatabaseUpdater
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseUpdater.HardCodeRepoPath">
+            <summary>
+            The current path for Willster419's database repository
+            </summary>
+            <remarks>
+            This was done because the database repository is different then the application repository.
+            During debug, this can be set to have the updater (in the repository path) assume that it's in the database repository.
+            </remarks>
+        </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseUpdater.UseHardCodePath">
+            <summary>
+            Flag to use the 
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.DatabaseUpdater.#ctor">
             <summary>
             Create an instance of the DatabaseUpdater window
@@ -5579,15 +5621,18 @@
             <param name="strB">the second version</param>
             <returns>less than zero if strA is less than strB, equal to zero if
             strA equals strB, and greater than zero if strA is greater than strB</returns>
-            <remarks> See https://stackoverflow.com/questions/30494/compare-version-identifiers
+            <remarks>
+            See https://stackoverflow.com/questions/30494/compare-version-identifiers
             Samples:
+            strA        | strB
             1.0.0.0     | 1.0.0.1 = -1
             1.0.0.1     | 1.0.0.0 =  1
             1.0.0.0     | 1.0.0.0 =  0
             1, 0.0.0    | 1.0.0.0 =  0
             9, 5, 1, 44 | 3.4.5.6 =  1
             1, 5, 1, 44 | 3.4.5.6 = -1
-            6,5,4,3     | 6.5.4.3 =  0 </remarks>
+            6,5,4,3     | 6.5.4.3 =  0
+            </remarks>
         </member>
         <member name="M:RelhaxModpack.Utils.GetCurrentUniversalFiletimeTimestamp">
             <summary>
