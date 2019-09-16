@@ -1,3 +1,18 @@
+Application version 0.29.1.0 (2019-09-15)
+https://www.virustotal.com/gui/file/28f30828e31c36d0970afc41977614bd64c226f35c267e61ed62c12749d01263/detection
+- Finally fixed the crash when using the advanced installation progress.
+- Added ability to zoom and pan preview images.
+- Added links in the version info and news viewer to view the text in google translate, in your browser, in your language.
+- Fixed issues preventing the audio preview from working.
+- Fixed issue of audio preview not stopping when selection changes.
+- Fixed layout issues of audio preview.
+- Moved downloading of audio preview data to preview window rather than UI component. This means that a progress bar will show when downloading the media for preview, like when loading images.
+- Implimented version info checking from Relhax V1.
+- Updated (some) translations.
+- Fixed UI positioning of some components in the database updater tool.
+- General code cleanup.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 0.29.0.14 (2019-08-31)
 https://www.virustotal.com/gui/file/103e2aecc812f148bfba30b841491b628890eab7c55d5881d72cdeac5de6f432/detection
 - Fixed compatibility issues with Windows 7 and some themes.
