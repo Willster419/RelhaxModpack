@@ -194,11 +194,19 @@ namespace RelhaxModpack
         public virtual string CompletePackageNamePath
         { get { return PackageName; } }
 
+        /// <summary>
+        /// Creates an instance of the DatabasePackage class
+        /// </summary>
         public DatabasePackage()
         {
 
         }
 
+        /// <summary>
+        /// Creates an instance of the DatabasePackage class based on the provided DatabasePackage
+        /// </summary>
+        /// <param name="packageToCopy">The package to copy the information from</param>
+        /// <param name="deep">Set to true to copy list objects, false to use new lists</param>
         public DatabasePackage(DatabasePackage packageToCopy, bool deep)
         {
             this.PackageName = packageToCopy.PackageName;

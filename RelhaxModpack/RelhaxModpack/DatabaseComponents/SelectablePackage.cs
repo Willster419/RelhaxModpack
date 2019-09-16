@@ -87,7 +87,7 @@ namespace RelhaxModpack
 
         #region Database Properties
         /// <summary>
-        /// Constructor to over-ride DatabasePackage default values
+        /// Create an instance of the SelectablePackage class and over-ride DatabasePackage default values
         /// </summary>
         public SelectablePackage()
         {
@@ -616,6 +616,11 @@ namespace RelhaxModpack
             return false;
         }
 
+        /// <summary>
+        /// Create an instance of the SelectablePackage class and over-ride DatabasePackage default values, while using values provided for copy objects
+        /// </summary>
+        /// <param name="packageToCopyFrom">The package to copy the information from</param>
+        /// <param name="deep">Set to true to copy list objects, false to use new lists</param>
         public SelectablePackage(DatabasePackage packageToCopyFrom, bool deep) : base(packageToCopyFrom,deep)
         {
             InstallGroup = 4;

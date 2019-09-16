@@ -26,7 +26,17 @@ namespace RelhaxModpack.Windows
         private const string MissingPackagesTxt = "missingPackages.txt";
         private const string RepoResourcesFolder = "resources";
         private const string RepoLatestDatabaseFolder = "latest_database";
+        /// <summary>
+        /// The current path for Willster419's database repository
+        /// </summary>
+        /// <remarks>
+        /// This was done because the database repository is different then the application repository.
+        /// During debug, this can be set to have the updater (in the repository path) assume that it's in the database repository.
+        /// </remarks>
         public const string HardCodeRepoPath = "F:\\Tanks Stuff\\RelhaxModpackDatabase";
+        /// <summary>
+        /// Flag to use the 
+        /// </summary>
         public static bool UseHardCodePath = false;
         #endregion
 
