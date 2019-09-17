@@ -59,8 +59,15 @@ namespace RelhaxModpack.Windows
 
         private void InstallationCompleteCloseAppButton_Click(object sender, RoutedEventArgs e)
         {
+            DialogResult = true;
             Close();
             Application.Current.Shutdown();
+        }
+
+        private void InstallationCompleteCloseThisWindowButton_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
+            Close();
         }
     }
 }
