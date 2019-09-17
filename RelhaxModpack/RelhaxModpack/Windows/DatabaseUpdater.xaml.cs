@@ -72,6 +72,8 @@ namespace RelhaxModpack.Windows
         private OpenFileDialog SelectManagerInfoXml = new OpenFileDialog() { Title = "Find manager_version.xml", Filter = "manager_version.xml|manager_version.xml" };
         #endregion
 
+        private bool loading = true;
+
         #region Stuff for parts 3 and 4 to share
         //strings
         //the modInfoXml document name to upload to the modInfo online folder
@@ -113,6 +115,7 @@ namespace RelhaxModpack.Windows
             {
                 Logging.Updater("Loading without pre-file authorization");
             }
+            loading = false;
         }
 
         private void PasswordButton_Click(object sender, RoutedEventArgs e)
@@ -181,7 +184,7 @@ namespace RelhaxModpack.Windows
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!authorized)
+            if (!authorized && !loading)
             {
                 //only MD5 and database output are allowed
                 if(GenerateHashesTab.IsSelected || DatabaseOutputTab.IsSelected)
