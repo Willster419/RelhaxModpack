@@ -123,9 +123,9 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <TextBox x:Name="LogOutput" Grid.Column="2" HorizontalAlignment="Stretch" Margin="0,0,0,20" TextWrapping="Wrap" VerticalAlignment="Stretch"
+        <TextBox x:Name="LogOutput" Grid.Column="2" HorizontalAlignment="Stretch" Margin="0,0,0,30" TextWrapping="Wrap" VerticalAlignment="Stretch"
                  VerticalScrollBarVisibility="Visible" TextChanged="LogOutput_TextChanged" IsReadOnly="True"/>
-        <Button x:Name="ClearLogButton" Content="Clear Log" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Grid.Column="2" Click="ClearLogButton_Click"/>
-        <ProgressBar x:Name="JobProgressBar" Grid.Column="2" HorizontalAlignment="Stretch" Height="20" VerticalAlignment="Bottom" Maximum="100" Minimum="0" Value="0" Margin="0,0,80,0" />
+        <Button x:Name="ClearLogButton" Content="Clear Log" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Grid.Column="2" Click="ClearLogButton_Click" Margin="0,0,5,5"/>
+        <ProgressBar x:Name="JobProgressBar" Grid.Column="2" HorizontalAlignment="Stretch" Height="20" VerticalAlignment="Bottom" Maximum="100" Minimum="0" Value="0" Margin="0,0,85,5" />
     </Grid>
 </local:RelhaxWindow>
