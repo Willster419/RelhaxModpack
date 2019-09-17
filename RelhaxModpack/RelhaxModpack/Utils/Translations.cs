@@ -103,7 +103,7 @@ namespace RelhaxModpack
         /// </summary>
         public const string LanguageFrench = "Français";
         /// <summary>
-        /// French language string identifier in national language
+        /// Russian language string identifier in national language
         /// </summary>
         public const string LanguageRussian = "Pусский";
 
@@ -113,7 +113,7 @@ namespace RelhaxModpack
         private static Dictionary<string, string> French = new Dictionary<string, string>();
         private static Dictionary<string, string> Russian = new Dictionary<string, string>();
 
-        //default is to use english
+        //default is to use English
         private static Dictionary<string, string> CurrentLanguage = English;
 
         #region Language methods
@@ -143,6 +143,7 @@ namespace RelhaxModpack
             }            
             ModpackSettings.Language = language;
         }
+
         /// <summary>
         /// Change the language to the active language code installed on the computer, if we support
         /// </summary>
@@ -172,6 +173,7 @@ namespace RelhaxModpack
             }
             Logging.Info("Language has been set: {0}", ModpackSettings.Language.ToString());
         }
+
         /// <summary>
         /// Get a localized string in the currently selected language
         /// </summary>
@@ -256,6 +258,7 @@ namespace RelhaxModpack
             French.Add(key, message);
             Russian.Add(key, message);
         }
+
         /// <summary>
         /// Loads all translation dictionaries. Should only be done once (at application start)
         /// </summary>

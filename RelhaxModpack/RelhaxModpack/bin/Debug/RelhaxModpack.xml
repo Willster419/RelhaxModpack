@@ -4984,7 +4984,7 @@
         </member>
         <member name="F:RelhaxModpack.Translations.LanguageRussian">
             <summary>
-            French language string identifier in national language
+            Russian language string identifier in national language
             </summary>
         </member>
         <member name="M:RelhaxModpack.Translations.SetLanguage(RelhaxModpack.Languages)">
