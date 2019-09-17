@@ -1980,10 +1980,11 @@ namespace RelhaxModpack.Windows
                 SearchCB.Items.Clear();
                 foreach (SelectablePackage package in searchComponents)
                 {
-                    SearchCB.Items.Add(new ComboBoxItem(package, package.NameFormatted)
+                    string formatForText = string.Format("{0} [{1}]", package.NameFormatted, package.ParentCategory.Name);
+                    SearchCB.Items.Add(new ComboBoxItem(package, formatForText)
                     {
                         IsEnabled = true,
-                        Content = package.NameFormatted
+                        Content = formatForText
                     });
                 }
                 SearchCB.IsDropDownOpen = true;
