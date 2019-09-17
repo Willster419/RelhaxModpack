@@ -499,6 +499,7 @@ namespace RelhaxModpack.Windows
                 PackageEndAddressDisplay.IsEnabled = true;
                 PackageDevURLDisplay.IsEnabled = true;
                 PackageVersionDisplay.IsEnabled = true;
+                PackageAuthorDisplay.IsEnabled = true;
                 PackageInstallGroupDisplay.IsEnabled = true;
                 PackagePatchGroupDisplay.IsEnabled = true;
                 PackageLastUpdatedDisplay.IsEnabled = true;
@@ -676,6 +677,7 @@ namespace RelhaxModpack.Windows
             PackageZipFileDisplay.Text = package.ZipFile;
             PackageEndAddressDisplay.Text = package.EndAddress;
             PackageVersionDisplay.Text = package.Version;
+            PackageAuthorDisplay.Text = package.Author;
             PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
             foreach (int i in PackageInstallGroupDisplay.Items)
             {
@@ -927,6 +929,8 @@ namespace RelhaxModpack.Windows
                 return true;
             if (!package.Version.Equals(PackageVersionDisplay.Text))
                 return true;
+            if (!package.Author.Equals(PackageAuthorDisplay.Text))
+                return true;
             if (!package.InstallGroup.Equals((int)PackageInstallGroupDisplay.SelectedItem))
                 return true;
             if (!package.PatchGroup.Equals((int)PackagePatchGroupDisplay.SelectedItem))
@@ -1029,6 +1033,7 @@ namespace RelhaxModpack.Windows
             //devURL is separated by newlines for array list, so it's not necessary to escape
             package.DevURL = Utils.MacroReplace(PackageDevURLDisplay.Text, ReplacementTypes.TextEscape);
             package.Version = PackageVersionDisplay.Text;
+            package.Author = PackageAuthorDisplay.Text;
             package.InstallGroup = (int)PackageInstallGroupDisplay.SelectedItem;
             package.PatchGroup = (int)PackagePatchGroupDisplay.SelectedItem;
             package.LogAtInstall = (bool)PackageLogAtInstallDisplay.IsChecked;

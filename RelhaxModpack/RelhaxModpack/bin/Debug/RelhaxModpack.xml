@@ -549,6 +549,11 @@
             Internal instructions for updating the mod for database managers
             </summary>
         </member>
+        <member name="F:RelhaxModpack.DatabasePackage.Author">
+            <summary>
+            The name of the author of the mod/configuration/etc.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.DatabasePackage.AppendExtraction">
             <summary>
             Determines if this package should be put into a list that will be installed last. Used for when the package is possibly overwriting files, for example

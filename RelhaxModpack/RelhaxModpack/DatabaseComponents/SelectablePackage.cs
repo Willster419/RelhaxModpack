@@ -104,9 +104,12 @@ namespace RelhaxModpack
         /// </summary>
         public string NameFormatted
         {
-            get {
-                    return Name.Replace("{version}",Version);
-                }
+            get
+            {
+                return Name
+                    .Replace(@"{version}", Version)
+                    .Replace(@"{author}", Author);
+            }
         }
 
         /// <summary>

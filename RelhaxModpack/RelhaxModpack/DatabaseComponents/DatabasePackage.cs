@@ -31,7 +31,8 @@ namespace RelhaxModpack
             nameof(EndAddress),
             nameof(Triggers),
             nameof(DevURL),
-            nameof(InternalNotes)
+            nameof(InternalNotes),
+            nameof(Author)
         };
 
         /// <summary>
@@ -151,6 +152,11 @@ namespace RelhaxModpack
         /// Internal instructions for updating the mod for database managers
         /// </summary>
         public string InternalNotes = string.Empty;
+
+        /// <summary>
+        /// The name of the author of the mod/configuration/etc.
+        /// </summary>
+        public string Author = string.Empty;
 
         //append extraction flag
         /// <summary>
