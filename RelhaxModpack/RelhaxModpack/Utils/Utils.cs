@@ -2170,6 +2170,7 @@ namespace RelhaxModpack
 
             //replace percent
             message = message.Replace(@"%", @"percent");
+            message = message.Replace(@"&", @"and");
 
             //google translate has a limit of 5000 characters
             if (message.Length > 4999)
