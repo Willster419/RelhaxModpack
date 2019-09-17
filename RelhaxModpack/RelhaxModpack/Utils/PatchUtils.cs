@@ -244,7 +244,16 @@ namespace RelhaxModpack
 
                     //in each node check if the element exist with the replace innerText
                     Logging.Debug("full path to check if exists created as '{0}'", fullNodePath);
-                    XmlNodeList fullPathNodeList = doc.SelectNodes(fullNodePath);
+                    XmlNodeList fullPathNodeList = null;
+                    try
+                    {
+                        fullPathNodeList = doc.SelectNodes(fullNodePath);
+                    }
+                    catch (System.Xml.XPath.XPathException)
+                    {
+                        Logging.Error("invalid xpath: {0}", fullNodePath);
+                        return PatchExitCode.Error;
+                    }
                     if (fullPathNodeList.Count > 0)
                     {
                         foreach (XmlElement fullPathMatch in fullPathNodeList)
@@ -315,8 +324,18 @@ namespace RelhaxModpack
                     //check to see if it's already there
                     Logging.Debug("checking if element exists in all results");
 
-                    XmlNodeList xpathResults = doc.SelectNodes(p.Path);
-                    if(xpathResults.Count == 0)
+                    XmlNodeList xpathResults = null;
+                    try
+                    {
+                        xpathResults = doc.SelectNodes(p.Path);
+                    }
+                    catch (System.Xml.XPath.XPathException)
+                    {
+                        Logging.Error("invalid xpath: {0}", p.Path);
+                        return PatchExitCode.Error;
+                    }
+
+                    if (xpathResults.Count == 0)
                     {
                         Logging.Error("xpath not found");
                         return PatchExitCode.Error;
@@ -359,7 +378,17 @@ namespace RelhaxModpack
 
                 case "remove":
                     //check to see if it's there
-                    XmlNodeList xpathMatchesToRemove = doc.SelectNodes(p.Path);
+                    XmlNodeList xpathMatchesToRemove = null;
+                    try
+                    {
+                        xpathMatchesToRemove = doc.SelectNodes(p.Path);
+                    }
+                    catch (System.Xml.XPath.XPathException)
+                    {
+                        Logging.Error("invalid xpath: {0}", p.Path);
+                        return PatchExitCode.Error;
+                    }
+
                     foreach (XmlElement match in xpathMatchesToRemove)
                     {
                         if (Regex.IsMatch(match.InnerText.Trim(), p.Search))
