@@ -7,7 +7,7 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="RelhaxModpack.Windows.DatabaseUpdater"
         mc:Ignorable="d"
         Title="DatabaseUpdater" Height="480" Width="1200" MinHeight="300" MinWidth="400"
-    Loaded="RelhaxWindow_Loaded" Closing="OnApplicationClose" LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
+        Loaded="RelhaxWindow_Loaded" Closing="OnApplicationClose" LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="390" MinWidth="200"/>
