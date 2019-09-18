@@ -1327,7 +1327,7 @@ namespace RelhaxModpack
             German.Add("DiagnosticUtilitiesButtonDescription", "Fehler melden, versuche eine Client Reparatur, etc.");
             Polish.Add("DiagnosticUtilitiesButtonDescription", "Zgłoś błąd, spróbuj naprawić klienta WG, itp.");
             French.Add("DiagnosticUtilitiesButtonDescription", "Signaler un bug, tenter de réparer un client du groupe de travail, etc.");
-            Spanish.Add("DiagnosticUtilitiesButtonDescription", "");
+            Spanish.Add("DiagnosticUtilitiesButtonDescription", "Informar de un error, intentar una reparación del cliente de WG, etc.");
             Russian.Add("DiagnosticUtilitiesButtonDescription", "Сообщить о баге, попытаться починить клиент, и т. д.");
 
             //Component: UninstallModeGroupBox
@@ -1336,6 +1336,7 @@ namespace RelhaxModpack
             German.Add("UninstallModeGroupBox", "Deinstallationsmodus:");
             Polish.Add("UninstallModeGroupBox", "Tryb Deinstalacji:");
             French.Add("UninstallModeGroupBox", "Mode de désinstallation:");
+            Spanish.Add("UninstallModeGroupBox", "Modo de desinstalación:");
             Russian.Add("UninstallModeGroupBox", "Режим деинсталляции: ");
 
             //Component: UninstallModeGroupBoxDescription
@@ -1343,6 +1344,7 @@ namespace RelhaxModpack
             German.Add("UninstallModeGroupBoxDescription", "Wähle den Deinstallationsmodus");
             Polish.Add("UninstallModeGroupBoxDescription", "Zaznacz tryb deinstalcji");
             French.Add("UninstallModeGroupBoxDescription", "Sélectionnez le mode de désinstallation à utiliser");
+            Spanish.Add("UninstallModeGroupBoxDescription", "Seleccione el modo de desinstalación a utilizar");
             Russian.Add("UninstallModeGroupBoxDescription", "Выбрать метод удаления");
 
             //Component: FacebookButtonDescription
@@ -1350,6 +1352,7 @@ namespace RelhaxModpack
             German.Add("FacebookButtonDescription", "Unsere Facebook Seite aufrufen");
             Polish.Add("FacebookButtonDescription", "Strona FB");
             French.Add("FacebookButtonDescription", "Page Facebook");
+            Spanish.Add("FacebookButtonDescription", "Ir a nuestra página de Faceboook");
             Russian.Add("FacebookButtonDescription", "Перейти на нашу страницу в Facebook");
 
             //Component: DiscordButtonDescription
@@ -1357,6 +1360,7 @@ namespace RelhaxModpack
             German.Add("DiscordButtonDescription", "Zum Discord Server");
             Polish.Add("DiscordButtonDescription", "Serwer Discord");
             French.Add("DiscordButtonDescription", "Serveur Discord");
+            Spanish.Add("DiscordButtonDescription", "Ir a nuestro servidor de Discord");
             Russian.Add("DiscordButtonDescription", "Перейти на наш сервер Discord");
 
             //Component: TwitterButtonDescription
@@ -1364,6 +1368,7 @@ namespace RelhaxModpack
             German.Add("TwitterButtonDescription", "Unsere Twitter Seite aufrufen");
             Polish.Add("TwitterButtonDescription", "Strona Twitter");
             French.Add("TwitterButtonDescription", "Page Twitter");
+            Spanish.Add("TwitterButtonDescription", "Ir a nuestra página de Twitter");
             Russian.Add("TwitterButtonDescription", "Перейти на нашу страницу в Twitter");
 
             //Component: SendEmailButtonDescription
@@ -1371,6 +1376,7 @@ namespace RelhaxModpack
             German.Add("SendEmailButtonDescription", "Sende uns eine eMail (kein Modpack Support)");
             Polish.Add("SendEmailButtonDescription", "Wyślij maila do nas (Bez wsparcia)");
             French.Add("SendEmailButtonDescription", "Envoyez-nous un email (Pas de support modpack)");
+            Spanish.Add("SendEmailButtonDescription", "Envíanos un e-mail (soporte del modpack no)");
             Russian.Add("SendEmailButtonDescription", "Отправить нам письмо на e-mail (Не для техподдержки)");
 
             //Component: HomepageButtonDescription
@@ -1378,6 +1384,7 @@ namespace RelhaxModpack
             German.Add("HomepageButtonDescription", "Zu unserer Homepage");
             Polish.Add("HomepageButtonDescription", "Odwiedz nasza strone");
             French.Add("HomepageButtonDescription", "Visiter notre site web");
+            Spanish.Add("HomepageButtonDescription", "Visita nuestra página web");
             Russian.Add("HomepageButtonDescription", "Посетить наш веб-сайт");
 
             //Component: DonateButtonDescription
@@ -1385,6 +1392,7 @@ namespace RelhaxModpack
             German.Add("DonateButtonDescription", "Spende für die Weiterentwicklung");
             Polish.Add("DonateButtonDescription", "Dotacja na dalszy rozwój");
             French.Add("DonateButtonDescription", "Donation pour aider au développement");
+            Spanish.Add("DonateButtonDescription", "Donaciones para el desarrollo");
             Russian.Add("DonateButtonDescription", "Поддержать копеечкой для дальнейшей разработки");
 
             //Component: FindBugAddModButtonDescription
@@ -1392,6 +1400,7 @@ namespace RelhaxModpack
             German.Add("FindBugAddModButtonDescription", "Fehler gefunden? Willst Du einen Mod hinzufügen? Bitte hier melden!");
             Polish.Add("FindBugAddModButtonDescription", "Znalazłeś błąd? Chcesz dodać mod?");
             French.Add("FindBugAddModButtonDescription", "Trouvé un bug? Recommandation de mod?");
+            Spanish.Add("FindBugAddModButtonDescription", "¿Ha encontrado un error? ¿Quiere que un mod sea añadido? Informa aquí");
             Russian.Add("FindBugAddModButtonDescription", "Нашли баг? Хотите добавить мод? Пишите сюда!");
 
             //Component: Mod Selection view Group Box
@@ -1400,6 +1409,7 @@ namespace RelhaxModpack
             German.Add("SelectionViewGB", "Darstellungsart");
             Polish.Add("SelectionViewGB", "Widok wyborów");
             French.Add("SelectionViewGB", "Affichage de sélection");
+            Spanish.Add("SelectionViewGB", "Vista de selección");
             Russian.Add("SelectionViewGB", "Вид списка");
 
             //Component: Mod selection view default (relhax) [NOW WPF VERSION IS DEFAULT]
@@ -1408,6 +1418,7 @@ namespace RelhaxModpack
             German.Add("SelectionDefault", "Standard");
             Polish.Add("SelectionDefault", "Domyślne");
             French.Add("SelectionDefault", "Normal");
+            Spanish.Add("SelectionDefault", "Por defecto");
             Russian.Add("SelectionDefault", "Стандартный");
 
             //Component: Mod selection view legacy (OMC)
@@ -1420,6 +1431,7 @@ namespace RelhaxModpack
             German.Add("SelectionLayoutDescription", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nalternativ: OMC Baumstruktur");
             Polish.Add("SelectionLayoutDescription", "Wybierz tryb widoku wyborów modyfikacji\nDomyślnie: Tryb widoku listy RelHax\nSpuścizna: Tryb widoku listy OMC");
             French.Add("SelectionLayoutDescription", "Sélectionnez un style de liste pour la sélection\nNormal: Liste de sélection Relhax\nLegacy: Liste de vue arbre OMC");
+            Spanish.Add("SelectionLayoutDescription", "Selecciona un modo de la lista de selección.\nPor defecto: modo de Relhax.\nLegacy: lista en árbol de OMC");
             Russian.Add("SelectionLayoutDescription", "Выберите вид списка модов\nОбычный: как в Relhax (постранично)\nLegacy: как в OMC (деревом)");
 
             //Componet: Mod selection Description
@@ -1428,6 +1440,7 @@ namespace RelhaxModpack
             German.Add("SelectionDefaultDescription", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nalternativ: OMC Baumstruktur");
             Polish.Add("SelectionDefaultDescription", "Wybierz tryb widoku wyborów modyfikacji\nDomyślnie: Tryb widoku listy RelHax\nSpuścizna: Tryb widoku listy OMC");
             French.Add("SelectionDefaultDescription", "Sélectionnez un style de liste pour la sélection\nNormal: Liste de sélection Relhax\nLegacy: Liste de vue arbre OMC");
+            Spanish.Add("SelectionDefaultDescription", "Selecciona un modo de la lista de selección\nPor defecto: modo de Relhax\nLegacy: lista en árbol de OMC");
             Russian.Add("SelectionDefaultDescription", "Выберите вид списка модов\nОбычный: как в Relhax (постранично)\nLegacy: как в OMC (деревом)");
 
             //Componet: Mod selection Description
@@ -1436,6 +1449,7 @@ namespace RelhaxModpack
             German.Add("SelectionLegacyDescription", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nalternativ: OMC Baumstruktur");
             Polish.Add("SelectionLegacyDescription", "Wybierz tryb widoku wyborów modyfikacji\nDomyślnie: Tryb widoku listy RelHax\nSpuścizna: Tryb widoku listy OMC");
             French.Add("SelectionLegacyDescription", "Sélectionnez un style de liste pour la sélection\nNormal: Liste de sélection Relhax\nLegacy: Liste de vue arbre OMC");
+            Spanish.Add("SelectionLegacyDescription", "Selecciona un modo de la lista de selección\nPor defecto: modo de Relhax\nLegacy: lista en árbol de OMC");
             Russian.Add("SelectionLegacyDescription", "Выберите вид списка модов\nОбычный: как в Relhax (постранично)\nLegacy: как в OMC (деревом)");
 
             //Component: LanguageSelectionGBDescription
@@ -1444,6 +1458,7 @@ namespace RelhaxModpack
             German.Add("LanguageSelectionGBDescription", "wähle Deine bevorzugte Sprache");
             Polish.Add("LanguageSelectionGBDescription", "Wybierz preferowany język.");
             French.Add("LanguageSelectionGBDescription", "Sélectionnez votre langue préféré");
+            Spanish.Add("LanguageSelectionGBDescription", "Seleccione su idioma preferido");
             Russian.Add("LanguageSelectionGBDescription", "Выберите желаемый язык");
 
             //Component: expandNodesDefault
@@ -1452,6 +1467,7 @@ namespace RelhaxModpack
             German.Add("expandNodesDefault", "Alle erweitern");
             Polish.Add("expandNodesDefault", "Rozwiń wszystkie");
             French.Add("expandNodesDefault", "Développer tout");
+            Spanish.Add("expandNodesDefault", "Expandir todo");
             Russian.Add("expandNodesDefault", "Раскрыть все");
 
             //Component: expandNodesDefault2
@@ -1460,6 +1476,7 @@ namespace RelhaxModpack
             German.Add("expandNodesDefault2", "Alle erweitern");
             Polish.Add("expandNodesDefault2", "Rozwiń wszystkie");
             French.Add("expandNodesDefault2", "Développer tout");
+            Spanish.Add("expandNodesDefault2", "Expandir todo");
             Russian.Add("expandNodesDefault2", "Раскрыть все");
 
             //Component: expandNodesDefaultDescription
@@ -1468,6 +1485,7 @@ namespace RelhaxModpack
             German.Add("expandNodesDefaultDescription", "Erweitere alle Einträge auf allen Registerkarten automatisch. Nur bei Ansicht als Baumstruktur.");
             Polish.Add("expandNodesDefaultDescription", "Zaznacz to, aby wszystkie opcje zostały automatycznie rozwinięte. Dotyczy tylko opcji Legacy Selection.");
             French.Add("expandNodesDefaultDescription", "Sélectionnez cette option pour que toutes les options s'élargis automatiquement. S'applique uniquement à la Sélection Legacy.");
+            Spanish.Add("expandNodesDefaultDescription", "Seleccionar para tener todas las opciones expandidas automáticamente. Sólo se aplica en el modo de selección de legado");
             Russian.Add("expandNodesDefaultDescription", "Выберите этот пункт для автоматического раскрытия всех списков. Применимо только для legacy.");
 
 
@@ -1477,6 +1495,7 @@ namespace RelhaxModpack
             German.Add("EnableBordersDefaultV2CB", "Einrahmen");
             Polish.Add("EnableBordersDefaultV2CB", "Włącz granice");
             French.Add("EnableBordersDefaultV2CB", "Activer les bordures");
+            Spanish.Add("enableBordersDefaultV2CB", "Habilitar bordes");
             Russian.Add("EnableBordersDefaultV2CB", "Включить границы");
 
             //Component: EnableBordersLegacyCB
@@ -1485,6 +1504,7 @@ namespace RelhaxModpack
             German.Add("EnableBordersLegacyCB", "Einrahmen");
             Polish.Add("EnableBordersLegacyCB", "Włącz granice");
             French.Add("EnableBordersLegacyCB", "Activer les bordures");
+            Spanish.Add("EnableBordersLegacyCB", "Habilitar bordes");
             Russian.Add("EnableBordersLegacyCB", "Включить границы");
 
             //Component: EnableBordersDefaultV2CBDescription
