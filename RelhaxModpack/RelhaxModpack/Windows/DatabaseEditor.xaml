@@ -413,7 +413,7 @@
                             <RowDefinition Height="20"/>
                             <RowDefinition Height="20"/>
                             <RowDefinition Height="20"/>
-                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="40"/>
                             <RowDefinition Height="20"/>
                             <RowDefinition Height="20"/>
                             <RowDefinition Height="20"/>
@@ -455,7 +455,7 @@
                         <TextBox x:Name="PackageNameDisplay" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox x:Name="PackagePackageNameDisplay" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox x:Name="PackageStartAddressDisplay" HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                        <TextBox x:Name="PackageZipFileDisplay" HorizontalAlignment="Stretch" Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <TextBox x:Name="PackageZipFileDisplay" HorizontalAlignment="Stretch" Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Stretch" />
                         <TextBox x:Name="PackageEndAddressDisplay" HorizontalAlignment="Stretch" Grid.Row="5" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox x:Name="PackageVersionDisplay" HorizontalAlignment="Stretch" Grid.Row="6" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox x:Name="PackageAuthorDisplay" HorizontalAlignment="Stretch" Grid.Row="7" Grid.Column="1" TextWrapping="Wrap" VerticalAlignment="Center" />
