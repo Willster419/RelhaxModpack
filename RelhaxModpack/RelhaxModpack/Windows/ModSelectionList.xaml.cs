@@ -701,7 +701,6 @@ namespace RelhaxModpack.Windows
                             GlobalDependencies = GlobalDependencies,
                             UserMods = userMods
                         });
-                        Close();
                     }
                     else
                     {
