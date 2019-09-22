@@ -2871,6 +2871,54 @@ namespace RelhaxModpack
             French.Add("ClearDownloadCacheDatabaseDescription", "Supprimez le fichier de base de données XML. L’intégrité de tous les fichiers zip sera à nouveau vérifiée. \nTous les fichiers non valides seront re-téléchargés s’ils sont sélectionnés lors de votre prochaine installation.");
             Russian.Add("ClearDownloadCacheDatabaseDescription", "Удаление XML-файла базы данных. Это приведёт к тому, что все скачанныые ZIP-архивы будут проверены на целостность.\nВсе повреждённые файлы будут загружены заново в случае, если вы ещё раз выберете моды, соотвествующие этим архивам.");
 
+            //Component: clearingDownloadCache
+            //
+            English.Add("clearingDownloadCache", "Clearing download cache");
+            German.Add("clearingDownloadCache", TranslationNeeded);
+            Polish.Add("clearingDownloadCache", TranslationNeeded);
+            French.Add("clearingDownloadCache", TranslationNeeded);
+            Russian.Add("clearingDownloadCache", TranslationNeeded);
+
+            //Component: failedToClearDownloadCache
+            //
+            English.Add("failedToClearDownloadCache", "Failed to clear download cache");
+            German.Add("failedToClearDownloadCache", TranslationNeeded);
+            Polish.Add("failedToClearDownloadCache", TranslationNeeded);
+            French.Add("failedToClearDownloadCache", TranslationNeeded);
+            Russian.Add("failedToClearDownloadCache", TranslationNeeded);
+
+            //Component: cleaningDownloadCacheComplete
+            //
+            English.Add("cleaningDownloadCacheComplete", "Download cache cleared");
+            German.Add("cleaningDownloadCacheComplete", TranslationNeeded);
+            Polish.Add("cleaningDownloadCacheComplete", TranslationNeeded);
+            French.Add("cleaningDownloadCacheComplete", TranslationNeeded);
+            Russian.Add("cleaningDownloadCacheComplete", TranslationNeeded);
+
+            //Component: clearingDownloadCacheDatabase
+            //
+            English.Add("clearingDownloadCacheDatabase", "Deleting xml database cache file");
+            German.Add("clearingDownloadCacheDatabase", TranslationNeeded);
+            Polish.Add("clearingDownloadCacheDatabase", TranslationNeeded);
+            French.Add("clearingDownloadCacheDatabase", TranslationNeeded);
+            Russian.Add("clearingDownloadCacheDatabase", TranslationNeeded);
+
+            //Component: failedToClearDownloadCacheDatabase
+            //
+            English.Add("failedToClearDownloadCacheDatabase", "Failed to delete xml database cache file");
+            German.Add("failedToClearDownloadCacheDatabase", TranslationNeeded);
+            Polish.Add("failedToClearDownloadCacheDatabase", TranslationNeeded);
+            French.Add("failedToClearDownloadCacheDatabase", TranslationNeeded);
+            Russian.Add("failedToClearDownloadCacheDatabase", TranslationNeeded);
+
+            //Component: cleaningDownloadCacheDatabaseComplete
+            //
+            English.Add("cleaningDownloadCacheDatabaseComplete", "Xml database cache file deleted");
+            German.Add("cleaningDownloadCacheDatabaseComplete", TranslationNeeded);
+            Polish.Add("cleaningDownloadCacheDatabaseComplete", TranslationNeeded);
+            French.Add("cleaningDownloadCacheDatabaseComplete", TranslationNeeded);
+            Russian.Add("cleaningDownloadCacheDatabaseComplete", TranslationNeeded);
+
             //Component: ChangeInstall
             //
             English.Add("ChangeInstall", "Change the currently selected WoT installation");
