@@ -1223,6 +1223,8 @@ namespace RelhaxModpack
                 CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Install_Click;
                 CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Download_Click;
             }
+            else if (packagesToDownload.Count == 0)
+                Logging.Info("no packages to download");
 
             //now let's start the install procedures
             //like if we need to make the advanced install window
@@ -1313,6 +1315,8 @@ namespace RelhaxModpack
 
                 AdvancedProgressWindow.Show();
             }
+            else
+                Logging.Debug("advancedInstallProgress is false");
 
             //make sure each trigger list for each package is unique
             foreach (DatabasePackage package in packagesToInstall)
@@ -1331,6 +1335,8 @@ namespace RelhaxModpack
             //create the cancellation token source
             cancellationTokenSource = new CancellationTokenSource();
 
+            Logging.Debug("userMods install count: {0}", userModsToInstall.Count);
+
             //if user mods are being installed, then disable triggers
             disableTriggersBackupVal = ModpackSettings.DisableTriggers;
             if (userModsToInstall.Count > 0 && !ModpackSettings.DisableTriggers)
@@ -1339,6 +1345,7 @@ namespace RelhaxModpack
                 disableTriggersBackupVal = true;
             }
 
+            Logging.Debug("creating install engine, cancel options and progress reporting");
             //and create and link the install engine
             installEngine = new InstallerComponents.InstallEngine()
             {
@@ -1365,7 +1372,9 @@ namespace RelhaxModpack
             progress.ProgressChanged += OnInstallProgressChanged;
 
             //run install
+            Logging.Debug("running installation from MainWindow");
             InstallerComponents.RelhaxInstallFinishedEventArgs results = await installEngine.RunInstallationAsync(progress);
+            Logging.Debug("installation has finished, returned to MainWindow");
             installEngine.Dispose();
             installEngine = null;
 
@@ -1842,6 +1851,7 @@ namespace RelhaxModpack
 
         private void ToggleUIButtons(bool toggle)
         {
+            Logging.Debug("The main window UI was toggled: {0}", toggle.ToString());
             List<FrameworkElement> controlsToToggle = Utils.GetAllWindowComponentsLogical(this, false);
             //any to remove here
             if (controlsToToggle.Contains(CancelDownloadInstallButton))
