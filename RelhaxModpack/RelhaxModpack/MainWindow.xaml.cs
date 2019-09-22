@@ -31,28 +31,16 @@ namespace RelhaxModpack
         private System.Windows.Forms.NotifyIcon RelhaxIcon;
         private Stopwatch stopwatch = new Stopwatch();
         private ModSelectionList modSelectionList;
-        private Stopwatch downloadTimer = new Stopwatch();
-        private double last_download_time;
-        private double current_download_time;
-        private long last_bytes_downloaded;
-        private long current_bytes_downloaded;
         private RelhaxProgress downloadProgress = null;
         private AdvancedProgress AdvancedProgressWindow;
-        bool closingFromFailure = false;
-        NewsViewer newsViewer = null;
+        private bool closingFromFailure = false;
+        private NewsViewer newsViewer = null;
         private WebClient client = null;
-        /// <summary>
-        /// The original width and height of the application before applying scaling
-        /// </summary>
-        public double OriginalWidth, OriginalHeight = 0;
         private Timer autoInstallTimer = new Timer();
         private bool databaseUpdateAvailableFromAutoSync = false;
         private bool autoInstallTimerRegistered = false;
         private CancellationTokenSource cancellationTokenSource;
         private InstallerComponents.InstallEngine installEngine;
-        private bool disableTriggersBackupVal = true;
-        private long totalSize = 0;
-        private string[] backupFiles = null;
         private OpenFileDialog FindTestDatabaseDialog = new OpenFileDialog()
         {
             AddExtension = true,
@@ -64,9 +52,32 @@ namespace RelhaxModpack
         private DatabaseVersions databaseVersion;
         private bool loading = false;
         private string oldModpackTitle = string.Empty;
-
         //temp list of components not to toggle
         Control[] tempDisabledBlacklist = null;
+        //backup components
+        private bool disableTriggersBackupVal = true;
+        private long backupFolderTotalSize = 0;
+        private string[] backupFiles = null;
+        //download ETA variables
+        //measures elapsed time since download started
+        private Stopwatch downloadTimer;
+        //timer to fire every second to update the display download rate
+        private Timer downloadDisplayTimer;
+        //for download rate display, last internal's bytes downloaded
+        private long lastBytesDownloaded;
+        //for both rates, the current bytes downloaded
+        private long currentBytesDownloaded;
+        //for eta rate, the total byptes needed to download
+        private long totalBytesToDownload;
+        //download rate over the last second
+        private double downloadRateDisplay;
+        //remaining time
+        private long remainingMilliseconds;
+
+        /// <summary>
+        /// The original width and height of the application before applying scaling
+        /// </summary>
+        public double OriginalWidth, OriginalHeight = 0;
 
         /// <summary>
         /// Creates the instance of the MainWindow class
@@ -215,15 +226,15 @@ namespace RelhaxModpack
                 Logging.Debug("starting async task of getting file sizes of backups");
                 Task.Run(() =>
                 {
-                    totalSize = 0;
+                    backupFolderTotalSize = 0;
                     backupFiles = Utils.DirectorySearch(Settings.RelhaxModBackupFolderPath, SearchOption.TopDirectoryOnly, false, "*.zip", 5, 3, false);
                     foreach (string file in backupFiles)
                     {
-                        totalSize += Utils.GetFilesize(file);
+                        backupFolderTotalSize += Utils.GetFilesize(file);
                     }
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"), backupFiles.Count(), Utils.SizeSuffix((ulong)totalSize, 1, true));
+                        BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"), backupFiles.Count(), Utils.SizeSuffix((ulong)backupFolderTotalSize, 1, true));
                     });
                     Logging.Debug("completed async task of getting file sizes of backups");
                 });
@@ -1199,6 +1210,10 @@ namespace RelhaxModpack
                 CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
                 CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Download_Click;
                 bool downlaodTaskComplete = await ProcessDownloads(packagesToDownload);
+                //stop and end the timer
+                downloadDisplayTimer.Stop();
+                downloadDisplayTimer.Dispose();
+                downloadDisplayTimer = null;
                 if (!downlaodTaskComplete)
                 {
                     Logging.Info("download task was canceled, canceling installation");
@@ -1606,8 +1621,8 @@ namespace RelhaxModpack
 
         private async Task<bool> ProcessDownloads(List<DatabasePackage> packagesToDownload)
         {
-            //remember this is on the UI thread so we can update the progress via this
-            //and also update the UI info
+            //remember this is on the UI thread
+            //reset the UI info
             ParentProgressBar.Minimum = 0;
             ParentProgressBar.Maximum = packagesToDownload.Count;
             ParentProgressBar.Value = 0;
@@ -1634,15 +1649,10 @@ namespace RelhaxModpack
                         package.StartAddress = package.StartAddress.Replace("{onlineFolder}", Settings.WoTModpackOnlineFolderVersion);
                         fileToDownload = package.StartAddress + package.ZipFile + package.EndAddress;
                         fileToSaveTo = Path.Combine(Settings.RelhaxDownloadsFolderPath, package.ZipFile);
-                        current_bytes_downloaded = 0;
-                        last_bytes_downloaded = 0;
-                        last_download_time = 0;
-                        current_download_time = 0;
-                        //restarting the time should be the last thing to happen before starting file download
-                        //kind of like a timing constraint
-                        downloadTimer.Restart();
                         try
                         {
+                            //reset current bytes downloaded
+                            currentBytesDownloaded = 0;
                             Logging.Info("Download of {0} start", package.ZipFile);
                             await client.DownloadFileTaskAsync(fileToDownload, fileToSaveTo);
                             Logging.Info("Download of {0} finish", package.ZipFile);
@@ -1654,6 +1664,7 @@ namespace RelhaxModpack
                             if (ex.Status == WebExceptionStatus.RequestCanceled)
                             {
                                 Logging.Info("Download canceled from UI request, stopping installation");
+                                downloadTimer.Stop();
                                 ToggleUIButtons(true);
                                 ResetUI();
                                 retry = false;
@@ -1686,10 +1697,12 @@ namespace RelhaxModpack
                                         return false;
                                 }
                             }
-                            //if it failed or not, the file should be deleted
+                            //if it failed or canceled, the file should be deleted
                             if (File.Exists(fileToSaveTo))
                                 File.Delete(fileToSaveTo);
                         }
+                        //stop the timer
+                        downloadDisplayTimer.Stop();
                     }
                 }
             }
@@ -1799,54 +1812,84 @@ namespace RelhaxModpack
         #region UI events
         private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            //update the ETA
-            //ignore the first hit of this method, because the timer started while the connection was
-            //setting up, and not actually downloading in constant stream
-            if (current_bytes_downloaded + current_download_time + last_bytes_downloaded + last_download_time == 0)
+            //if current is 0 then use it as an initial block
+            if (currentBytesDownloaded == 0)
             {
-                //set a starting point for the "current" download timer value and size downloaded
-                current_bytes_downloaded = e.BytesReceived;
-                current_download_time = downloadTimer.Elapsed.TotalMilliseconds;
-                return;
+                //init elapsed timer
+                if(downloadTimer == null)
+                {
+                    downloadTimer = new Stopwatch();
+                }
+                downloadTimer.Restart();
+                //init update timer
+                if(downloadDisplayTimer == null)
+                {
+                    downloadDisplayTimer = new Timer()
+                    {
+                        Interval = 1000,
+                        AutoReset = true
+                    };
+                    downloadDisplayTimer.Elapsed += DownloadDisplayTimer_Elapsed;
+                }
+                downloadDisplayTimer.Stop();
+                downloadDisplayTimer.Start();
+                //init rates and history
+                lastBytesDownloaded = 0;
+                downloadRateDisplay = 0;
             }
-
-            //otherwise use standard estimating procedures
-            //set current to last and get new currents
-            last_bytes_downloaded = current_bytes_downloaded;
-            last_download_time = current_download_time;
-            current_bytes_downloaded = e.BytesReceived;
-            current_download_time = downloadTimer.Elapsed.TotalMilliseconds;
-
-            //get the current bytes per millisecond
-            double bytes_per_millisecond = (current_bytes_downloaded - last_bytes_downloaded) / (current_download_time - last_download_time);
-            double bytes_per_second = bytes_per_millisecond / 1000;
-            double kbytes_per_second = bytes_per_second / 1024;
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
-            double mbytes_per_second = kbytes_per_second / 1024;
-#pragma warning restore IDE0059 // Unnecessary assignment of a value
-
-            //if we have a download rate, and a remaining size, then we can get a remaining time!
-            double remaining_bytes = e.TotalBytesToReceive - e.BytesReceived;
-            double remaining_milliseconds = remaining_bytes / bytes_per_millisecond;
-            double remaining_seconds = remaining_milliseconds / 1000;
+            currentBytesDownloaded = e.BytesReceived;
+            totalBytesToDownload = e.TotalBytesToReceive;
 
             ChildProgressBar.Maximum = e.TotalBytesToReceive;
             ChildProgressBar.Minimum = 0;
             ChildProgressBar.Value = e.BytesReceived;
 
             //break it up into lines cause it's hard to read
+            //"downloading 2 of 4"
             string line1 = string.Format("{0} {1} {2} {3}",
                 Translations.GetTranslatedString("Downloading"), ParentProgressBar.Value, Translations.GetTranslatedString("of"), ParentProgressBar.Maximum);
 
+            //"zip file name"
             string line2 = downloadProgress.ChildCurrentProgress;
 
-            string line3 = string.Format("{0} {1} {2}",
-                Utils.SizeSuffix((ulong)e.BytesReceived, 1, true), Translations.GetTranslatedString("of"), Utils.SizeSuffix((ulong)e.TotalBytesToReceive, 1, true));
+            //https://stackoverflow.com/questions/9869346/double-string-format
+            //"2MB of 8MB at 1 MB/S"
+            string line3 = string.Format("{0} {1} {2} {3} {4}/s",
+                Utils.SizeSuffix((ulong)e.BytesReceived, 1, true), Translations.GetTranslatedString("of"), Utils.SizeSuffix((ulong)e.TotalBytesToReceive, 1, true),
+                Translations.GetTranslatedString("at"), Utils.SizeSuffix((ulong)downloadRateDisplay,1,true));
 
-            string line4 = string.Format("{0} {1}", Math.Round(remaining_seconds, 1), Translations.GetTranslatedString("seconds"));
+            //"4 seconds"
+            //https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-timespan-format-strings
+            TimeSpan remain = TimeSpan.FromMilliseconds(remainingMilliseconds);
+            string line4 = string.Format("{0} {1} {2} {3}", remain.Minutes, Translations.GetTranslatedString("minutes"), remain.ToString(@"ss\.f"),
+                Translations.GetTranslatedString("seconds"));
 
             //also report to the download message process
             InstallProgressTextBox.Text = string.Format("{0}\n{1}\n{2}\n{3}", line1, line2, line3, line4);
+        }
+
+        private void DownloadDisplayTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            //update download rate display values
+            downloadRateDisplay = currentBytesDownloaded - lastBytesDownloaded;
+
+            //update download rate ETA values
+            //bytes remaining
+            long bytesRemainToDownload = totalBytesToDownload - currentBytesDownloaded;
+
+            //overall download rate bytes/msec
+            double downloadRateOverall = 0;
+            if (downloadTimer.Elapsed.TotalMilliseconds > 0)
+                downloadRateOverall =  currentBytesDownloaded / downloadTimer.Elapsed.TotalMilliseconds;
+
+            //remaining time msec
+            if ((long)downloadRateOverall > 0)
+                remainingMilliseconds = bytesRemainToDownload / (long)downloadRateOverall;
+            else
+                remainingMilliseconds = 0;
+
+            //set current to previous
+            lastBytesDownloaded = currentBytesDownloaded;
         }
 
         private void ToggleUIButtons(bool toggle)
@@ -2064,7 +2107,7 @@ namespace RelhaxModpack
 
             //display the backup file sizes (if requested)
             if (displaySize)
-                BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"), backupFiles.Count(), Utils.SizeSuffix((ulong)totalSize, 1, true));
+                BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"), backupFiles.Count(), Utils.SizeSuffix((ulong)backupFolderTotalSize, 1, true));
         }
         #endregion
 

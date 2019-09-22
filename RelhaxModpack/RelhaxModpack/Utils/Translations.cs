@@ -367,6 +367,30 @@ namespace RelhaxModpack
             Polish.Add("GoogleTranslateLanguageKey", "pl");
             French.Add("GoogleTranslateLanguageKey", "fr");
             Russian.Add("GoogleTranslateLanguageKey", "ru");
+
+            //Component: at
+            //example: downloading file x "at" 10MB/s
+            English.Add("at", "at");
+            German.Add("at", "bei");
+            Polish.Add("at", "w");
+            French.Add("at", "à");
+            Russian.Add("at", "в");
+
+            //Component: seconds
+            //
+            English.Add("seconds", "seconds");
+            German.Add("seconds", "sekunden");
+            Polish.Add("seconds", "sekund");
+            French.Add("seconds", "secondes");
+            Russian.Add("seconds", "сек");
+
+            //Component: minutes
+            //
+            English.Add("minutes", "minutes");
+            German.Add("minutes", "minuten");
+            Polish.Add("minutes", "minuty");
+            French.Add("minutes", "minutes");
+            Russian.Add("minutes", "минуты");
             #endregion
 
             #region Application messages
@@ -1950,14 +1974,6 @@ namespace RelhaxModpack
             Polish.Add("Downloading", "Pobieranie");
             French.Add("Downloading", "Téléchargement");
             Russian.Add("Downloading", "Идёт скачивание");
-
-            //Component: seconds
-            //
-            English.Add("seconds", "seconds");
-            German.Add("seconds", "Sekunden");
-            Polish.Add("seconds", "sekund");
-            French.Add("seconds", "secondes");
-            Russian.Add("seconds", "сек.");
 
             //Component: 
             //
