@@ -276,7 +276,16 @@ namespace RelhaxModpack.AtlasesCreator
                 //rectangle of desired area to clone
                 Rectangle textureRect = new Rectangle(texture.X, texture.Y, texture.Width, texture.Height);
                 //copy the bitmap
-                texture.AtlasImage = atlasImage.Clone(textureRect, atlasImage.PixelFormat);
+                try
+                {
+                    texture.AtlasImage = atlasImage.Clone(textureRect, atlasImage.PixelFormat);
+                }
+                catch(Exception ex)
+                {
+                    Logging.Exception("failed to clone atlas image data");
+                    Logging.Exception(ex.ToString());
+                    return FailCode.ImageImporter;
+                }
             }
             OnAtlasProgres?.Invoke(this);
 
