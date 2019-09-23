@@ -54,6 +54,12 @@
             Failed to create the atlas bitmap object
             </summary>
         </member>
+        <member name="T:RelhaxModpack.AtlasesCreator.AtlasProgressDelegate">
+            <summary>
+            The delegate to invoke when calling back to the sender for the AtlasProgres event
+            </summary>
+            <param name="sender"></param>
+        </member>
         <member name="T:RelhaxModpack.AtlasesCreator.AtlasCreator">
             <summary>
             Represents the entire process of building an atlas image
@@ -72,6 +78,11 @@
         <member name="F:RelhaxModpack.AtlasesCreator.AtlasCreator.Token">
             <summary>
             The token for handling a cancel call from the user
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.AtlasesCreator.AtlasCreator.OnAtlasProgres">
+            <summary>
+            The event when atlas child progress occurs
             </summary>
         </member>
         <member name="M:RelhaxModpack.AtlasesCreator.AtlasCreator.ParseModTexturesAsync(System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">

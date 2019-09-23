@@ -1751,6 +1751,9 @@ namespace RelhaxModpack.InstallerComponents
                 //initial progress report
                 ProgAtlas = CopyProgress(Prog);
                 ProgAtlas.ParrentTotal = atlases.Count;
+                //child tasks are based on subtasks in the atlas
+                ProgAtlas.ChildTotal = atlases.Count * 10;
+                ProgAtlas.ChildCurrent = 0;
                 ProgAtlas.InstallStatus = InstallerExitCodes.ContourIconAtlasError;
                 LockProgress();
 
@@ -1823,6 +1826,7 @@ namespace RelhaxModpack.InstallerComponents
                             Token = CancellationToken,
                             DebugLockObject = AtlasBuilderLockerObject
                         };
+                        atlasCreator.OnAtlasProgres += AtlasCreator_OnAtlasProgres;
                         {
                             lock(AtlasBuilderLockerObject)
                             {
@@ -1874,10 +1878,17 @@ namespace RelhaxModpack.InstallerComponents
                     }
                     atlasCreators = null;
                     AtlasesCreator.AtlasCreator.DisposeparseModTextures();
+                    Logging.Debug("atlas disposal completes");
                 });
             }
             else
                 Logging.Info("...skipped (no atlas entries parsed)");
+        }
+
+        private void AtlasCreator_OnAtlasProgres(object sender)
+        {
+            ProgAtlas.ChildCurrent++;
+            LockProgress();
         }
 
         private void InstallFonts()

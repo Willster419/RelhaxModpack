@@ -1579,8 +1579,10 @@ namespace RelhaxModpack
                         line2 = e.Filename;
                         break;
                     case InstallerComponents.InstallerExitCodes.ContourIconAtlasError:
-                        line1 = Translations.GetTranslatedString("installContourIconAtlas");
-                        line2 = e.Filename;
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installContourIconAtlas"), e.ParrentCurrent.ToString(),
+                            Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
+                        line2 = string.Format("{0} {1} {2} {3}", e.ChildCurrent.ToString(), Translations.GetTranslatedString("of"), e.ChildTotal.ToString(),
+                            Translations.GetTranslatedString("stepsComplete"));
                         break;
                     case InstallerComponents.InstallerExitCodes.FontInstallError:
                         line1 = Translations.GetTranslatedString("installFonts");

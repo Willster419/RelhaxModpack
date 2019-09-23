@@ -403,13 +403,32 @@ namespace RelhaxModpack.Windows
                     {
                         AtlasReporter = new RelhaxInstallTaskReporter()
                         {
-                            IsSubProgressActive = false,
+                            IsSubProgressActive = true,
                             TaskTitle = Translations.GetTranslatedString("AdvancedInstallCreateAtlas"),
                             ReportState = TaskReportState.Active
                         };
                         PostInstallPanel.Children.Add(AtlasReporter);
                     }
 
+                    StringBuilder sb = new StringBuilder();
+                    sb.AppendFormat("{0} {1} {2} {3}\n", Translations.GetTranslatedString("installContourIconAtlas"), progress.ParrentCurrent.ToString(),
+                            Translations.GetTranslatedString("of"), progress.ParrentTotal.ToString());
+                    sb.AppendFormat("{0} {1} {2} {3}\n", progress.ChildCurrent.ToString(), Translations.GetTranslatedString("of"), progress.ChildTotal.ToString(),
+                            Translations.GetTranslatedString("stepsComplete"));
+
+                    if (AtlasReporter.TaskMinimum != 0)
+                        AtlasReporter.TaskMinimum = 0;
+                    if (AtlasReporter.TaskMaximum != progress.ParrentTotal)
+                        AtlasReporter.TaskMaximum = progress.ParrentTotal;
+                    if (AtlasReporter.TaskValue != progress.ParrentCurrent)
+                        AtlasReporter.TaskValue = progress.ParrentCurrent;
+
+                    if (AtlasReporter.SubTaskMinimum != 0)
+                        AtlasReporter.SubTaskMinimum = 0;
+                    if (AtlasReporter.SubTaskMaximum != progress.ChildTotal)
+                        AtlasReporter.SubTaskMinimum = progress.ChildTotal;
+                    if (AtlasReporter.SubTaskValue != progress.ChildCurrent)
+                        AtlasReporter.SubTaskValue = progress.ChildCurrent;
                     break;
                 case InstallerExitCodes.FontInstallError:
                 case InstallerExitCodes.TrimDownloadCacheError:
