@@ -155,7 +155,7 @@ namespace RelhaxModpack.Windows
                     if (BackupModsReporter.SubTaskMinimum != 0)
                         BackupModsReporter.SubTaskMinimum = 0;
                     if (BackupModsReporter.SubTaskMaximum != progress.ChildTotal)
-                        BackupModsReporter.SubTaskMinimum = progress.ChildTotal;
+                        BackupModsReporter.SubTaskMaximum = progress.ChildTotal;
                     if (BackupModsReporter.SubTaskValue != progress.ChildCurrent)
                         BackupModsReporter.SubTaskValue = progress.ChildCurrent;
                     break;
@@ -426,9 +426,11 @@ namespace RelhaxModpack.Windows
                     if (AtlasReporter.SubTaskMinimum != 0)
                         AtlasReporter.SubTaskMinimum = 0;
                     if (AtlasReporter.SubTaskMaximum != progress.ChildTotal)
-                        AtlasReporter.SubTaskMinimum = progress.ChildTotal;
+                        AtlasReporter.SubTaskMaximum = progress.ChildTotal;
                     if (AtlasReporter.SubTaskValue != progress.ChildCurrent)
                         AtlasReporter.SubTaskValue = progress.ChildCurrent;
+
+                    AtlasReporter.TaskText = sb.ToString();
                     break;
                 case InstallerExitCodes.FontInstallError:
                 case InstallerExitCodes.TrimDownloadCacheError:
