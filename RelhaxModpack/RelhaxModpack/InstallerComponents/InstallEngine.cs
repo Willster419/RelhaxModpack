@@ -1594,10 +1594,19 @@ namespace RelhaxModpack.InstallerComponents
 
                     //start the threads
                     Logging.Debug("Starting {0} threads", tasks.Count());
+                    //setup progress reporting for threads
+                    Prog.CompletedPackagesOfAThread = new uint[tasks.Count()];
+                    Prog.TotalPackagesofAThread = new uint[tasks.Count()];
+                    Prog.EntriesTotalOfAThread = new uint[tasks.Count()];
+                    Prog.EntriesProcessedOfAThread = new uint[tasks.Count()];
+                    Prog.EntryFilenameOfAThread = new string[tasks.Count()];
+                    Prog.BytesProcessedOfAThread = new long[tasks.Count()];
+                    Prog.BytesTotalOfAThread = new long[tasks.Count()];
+
                     for (int k = 0; k < tasks.Count(); k++)
                     {
                         //if number of threads to use > number of packages, then skip making threads that won't be used
-                        if(packageThreads[k].Count > 0)
+                        if (packageThreads[k].Count > 0)
                         {
                             Logging.Info("thread {0} starting task, packages to extract={1}", k, packageThreads[k].Count);
                             tasks[k] = Task.Run(() =>
@@ -2060,7 +2069,13 @@ namespace RelhaxModpack.InstallerComponents
         #region Util Methods
         private void ExtractFiles(List<DatabasePackage> packagesToExtract, int threadNum)
         {
+            //setup progressing
+            Prog.TotalPackagesofAThread[threadNum] = (uint)packagesToExtract.Count();
+            Prog.CompletedPackagesOfAThread[threadNum] = 0;
+
             bool notAllPackagesExtracted = true;
+            //setup progress reporting of this thread
+
             //in case the user selected to "download while installing", there may be cases where
             //some items in this list (earlier, for sake of argument) are not downloaded yet, but others below are.
             //if this is the case, then we need to skip over those items and install others while we wait
@@ -2110,6 +2125,9 @@ namespace RelhaxModpack.InstallerComponents
 
                         //update progress of total packages extracted
                         Prog.ParrentCurrent++;
+
+                        //update progress of packages extracted on this thread
+                        Prog.CompletedPackagesOfAThread[threadNum]++;
 
                         //after zip file extraction, process triggers (if enabled)
                         if (!DisableTriggersForInstall)
@@ -2208,6 +2226,8 @@ namespace RelhaxModpack.InstallerComponents
                         //set total number of entries
                         Prog.EntriesTotal = (uint)zip.Entries.Count;
                         Prog.EntriesProcessed = 0;
+                        Prog.EntriesProcessedOfAThread[threadNum] = 0;
+                        Prog.EntriesTotalOfAThread[threadNum] = (uint)zip.Entries.Count;
                         //second loop extracts each file and checks for extraction macros
                         for (int j = 0; j < zip.Entries.Count; j++)
                         {
@@ -2254,6 +2274,7 @@ namespace RelhaxModpack.InstallerComponents
                             loggingCompletePath = Path.Combine(extractPath, zipFilename.Replace(@"/", @"\"));
                             zipLogger.AppendLine(package.LogAtInstall ? loggingCompletePath : "#" + loggingCompletePath);
                             Prog.EntriesProcessed++;
+                            Prog.EntriesProcessedOfAThread[threadNum]++;
                         }
                     }
                     //set i to 0 so that it breaks out of the loop
@@ -2311,8 +2332,10 @@ namespace RelhaxModpack.InstallerComponents
                         Prog.BytesTotal = (int)e.TotalBytesToTransfer;
                         Prog.ChildCurrent = (int)e.BytesTransferred;
                         Prog.ChildTotal = (int)e.TotalBytesToTransfer;
-
+                        Prog.BytesProcessedOfAThread[(uint)(sender as RelhaxZipFile).ThreadID] = e.BytesTransferred;
+                        Prog.BytesTotalOfAThread[(uint)(sender as RelhaxZipFile).ThreadID] = e.TotalBytesToTransfer;
                         Prog.EntryFilename = e.CurrentEntry.FileName;
+                        Prog.EntryFilenameOfAThread[(uint)(sender as RelhaxZipFile).ThreadID] = e.CurrentEntry.FileName;
                         Prog.Filename = e.ArchiveName;
                         Prog.ThreadID = (uint)(sender as RelhaxZipFile).ThreadID;
                         Progress.Report(Prog);
