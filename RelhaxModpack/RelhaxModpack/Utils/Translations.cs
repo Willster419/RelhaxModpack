@@ -2448,6 +2448,30 @@ namespace RelhaxModpack
             French.Add("installExtractingMods", "Extraction du package");
             Russian.Add("installExtractingMods", "Распаковывается пакет");
 
+            //Component: installZipFileEntry
+            //
+            English.Add("installZipFileEntry", "File entry");
+            German.Add("installZipFileEntry", TranslationNeeded);
+            Polish.Add("installZipFileEntry", TranslationNeeded);
+            French.Add("installZipFileEntry", TranslationNeeded);
+            Russian.Add("installZipFileEntry", TranslationNeeded);
+
+            //Component: installExtractingCompletedThreads
+            //
+            English.Add("installExtractingCompletedThreads", "Completed extraction threads");
+            German.Add("installExtractingCompletedThreads", TranslationNeeded);
+            Polish.Add("installExtractingCompletedThreads", TranslationNeeded);
+            French.Add("installExtractingCompletedThreads", TranslationNeeded);
+            Russian.Add("installExtractingCompletedThreads", TranslationNeeded);
+
+            //Component: installExtractingOfGroup
+            //
+            English.Add("installExtractingOfGroup", "of install group");
+            German.Add("installExtractingOfGroup", TranslationNeeded);
+            Polish.Add("installExtractingOfGroup", TranslationNeeded);
+            French.Add("installExtractingOfGroup", TranslationNeeded);
+            Russian.Add("installExtractingOfGroup", TranslationNeeded);
+
             //Component: extractingUserMod
             //
             English.Add("extractingUserMod", "Extracting user package");

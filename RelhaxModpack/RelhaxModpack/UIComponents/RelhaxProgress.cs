@@ -86,6 +86,26 @@ namespace RelhaxModpack.UIComponents
         public uint ThreadID = 0;
 
         /// <summary>
+        /// The total number of extraction threads
+        /// </summary>
+        public uint TotalThreads = 0;
+
+        /// <summary>
+        /// The number of completed extraction threads
+        /// </summary>
+        public uint CompletedThreads = 0;
+
+        /// <summary>
+        /// The extraction installation group
+        /// </summary>
+        public uint InstallGroup = 0;
+
+        /// <summary>
+        /// The total number of install groups
+        /// </summary>
+        public uint TotalInstallGroups = 0;
+
+        /// <summary>
         /// The current status of the installer. Represents the current state of the installer. When it exists, it is also used as an exit code.
         /// </summary>
         public InstallerExitCodes InstallStatus = InstallerExitCodes.DownloadModsError;

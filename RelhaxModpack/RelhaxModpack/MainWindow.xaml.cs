@@ -1523,30 +1523,55 @@ namespace RelhaxModpack
                         line2 = e.Filename;
                         break;
                     case InstallerComponents.InstallerExitCodes.ExtractionError:
-                        line1 = Translations.GetTranslatedString("installExtractingMods");
-                        line2 = Path.GetFileName(e.Filename);
-                        line3 = string.Format("{0} {1} {2}", e.EntriesProcessed, Translations.GetTranslatedString("of"), e.EntriesTotal);
-                        line4 = e.EntryFilename;
+                        if(ModpackSettings.MulticoreExtraction && !ModpackSettings.AdvancedInstalProgress)
+                        {
+                            ChildProgressBar.Maximum = e.TotalInstallGroups;
+                            ChildProgressBar.Value = e.InstallGroup;
+                            line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installExtractingMods"), e.ParrentCurrent.ToString(),
+                                Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
+                            line2 = string.Format("{0}: {1} {2} {3} {4} {5}", Translations.GetTranslatedString("installExtractingCompletedThreads"), e.CompletedThreads.ToString(),
+                                Translations.GetTranslatedString("of"), e.TotalThreads.ToString(), Translations.GetTranslatedString("installExtractingOfGroup"), e.InstallGroup.ToString());
+                            line3 = Path.GetFileName(e.Filename);
+                            line4 = e.EntryFilename;
+                        }
+                        else
+                        {
+                            ChildProgressBar.Maximum = e.BytesTotal;
+                            ChildProgressBar.Value = e.BytesProcessed;
+                            line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installExtractingMods"), e.ParrentCurrent.ToString(),
+                                Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
+                            line2 = Path.GetFileName(e.Filename);
+                            line3 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installZipFileEntry"), e.EntriesProcessed.ToString(),
+                                Translations.GetTranslatedString("of"), e.EntriesTotal.ToString());
+                            line4 = e.EntryFilename;
+                        }
                         break;
                     case InstallerComponents.InstallerExitCodes.UserExtractionError:
-                        line1 = Translations.GetTranslatedString("extractingUserMod");
+                        ChildProgressBar.Maximum = e.BytesTotal;
+                        ChildProgressBar.Value = e.BytesProcessed;
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("extractingUserMod"), e.ParrentCurrent.ToString(),
+                            Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = Path.GetFileName(e.Filename);
-                        line3 = string.Format("{0} {1} {2}", e.EntriesProcessed, Translations.GetTranslatedString("of"), e.EntriesTotal);
+                        line3 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installZipFileEntry"), e.EntriesProcessed.ToString(),
+                            Translations.GetTranslatedString("of"), e.EntriesTotal.ToString());
                         line4 = e.EntryFilename;
                         break;
                     case InstallerComponents.InstallerExitCodes.RestoreUserdataError:
                         //filename is name of file in package to backup
                         //parrentCurrentProgress is name of package
-                        line1 = Translations.GetTranslatedString("installRestoreUserdata");
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installRestoreUserdata"), e.ParrentCurrent.ToString(),
+                            Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = e.Filename;
                         line3 = e.ParrentCurrentProgress;
                         break;
                     case InstallerComponents.InstallerExitCodes.XmlUnpackError:
-                        line1 = Translations.GetTranslatedString("installXmlUnpack");
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installXmlUnpack"), e.ParrentCurrent.ToString(),
+                            Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = e.Filename;
                         break;
                     case InstallerComponents.InstallerExitCodes.PatchError:
-                        line1 = Translations.GetTranslatedString("installPatchFiles");
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installPatchFiles"), e.ParrentCurrent.ToString(),
+                            Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = e.Filename;
                         break;
                     case InstallerComponents.InstallerExitCodes.ShortcutsError:

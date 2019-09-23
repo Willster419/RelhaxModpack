@@ -1520,17 +1520,19 @@ namespace RelhaxModpack.InstallerComponents
             //this is the only really new one. for each install group, spawn a bunch of threads to start the install process
             //get the number of threads we will use for each of the install steps
             int numThreads = ModpackSettings.MulticoreExtraction ? Settings.NumLogicalProcesors : 1;
+            Prog.TotalThreads = (uint)numThreads;
 
             Logging.Info(string.Format("Number of threads to use for install is {0}, (MulticoreExtraction={1}, LogicalProcesosrs={2}",
                 numThreads, ModpackSettings.MulticoreExtraction, Settings.NumLogicalProcesors));
 
             //setup progress reporting for parent
-            Prog.ParrentTotal = OrderedPackagesToInstall.Count();
+            Prog.ParrentTotal = PackagesToInstall.Count();
+            Prog.TotalInstallGroups = (uint)OrderedPackagesToInstall.Count();
 
             for (int i = 0; i < OrderedPackagesToInstall.Count(); i++)
             {
                 Logging.Info("Install Group " + i + " starts now");
-                Prog.ParrentCurrent++;
+                Prog.InstallGroup = (uint)i;
                 Progress.Report(Prog);
 
                 //clear the list of child tasks
@@ -1546,7 +1548,7 @@ namespace RelhaxModpack.InstallerComponents
                 if(packages.Count > 0)
                 {
                     //set it for the progress report
-                    Prog.ChildTotal = packages.Count;
+                    Prog.CompletedThreads = 0;
 
                     //get the size of any packages where the size is invalid before sorting
                     foreach (DatabasePackage packa in packages.Where(pack => pack.Size == 0 && !string.IsNullOrWhiteSpace(pack.ZipFile)))
@@ -1603,6 +1605,7 @@ namespace RelhaxModpack.InstallerComponents
                                 int temp = k;
                                 valueLocked = true;
                                 ExtractFiles(packageThreads[temp], temp);
+                                Prog.CompletedThreads++;
                             });
                             Logging.Debug("thread {0} started, waiting for thread ID value to be locked", k);
                             while (!valueLocked) ;
@@ -2105,6 +2108,9 @@ namespace RelhaxModpack.InstallerComponents
                         //increment counter
                         Logging.Info("Thread ID={0}, extracted {1} of {2}", threadNum, ++numExtracted, packagesToExtract.Count);
 
+                        //update progress of total packages extracted
+                        Prog.ParrentCurrent++;
+
                         //after zip file extraction, process triggers (if enabled)
                         if (!DisableTriggersForInstall)
                         {
@@ -2117,12 +2123,6 @@ namespace RelhaxModpack.InstallerComponents
                     notAllPackagesExtracted = false;
                 else
                     Thread.Sleep(200);
-            }
-            //report progress on the thread. in case multiple threads, make sure you lock it
-            lock(Prog)
-            {
-                Prog.ChildCurrent++;
-                Progress.Report(Prog);
             }
         }
 
@@ -2205,6 +2205,9 @@ namespace RelhaxModpack.InstallerComponents
                         }
                         //attach the event handler to report progress
                         zip.ExtractProgress += OnZipfileExtractProgress;
+                        //set total number of entries
+                        Prog.EntriesTotal = (uint)zip.Entries.Count;
+                        Prog.EntriesProcessed = 0;
                         //second loop extracts each file and checks for extraction macros
                         for (int j = 0; j < zip.Entries.Count; j++)
                         {
@@ -2250,6 +2253,7 @@ namespace RelhaxModpack.InstallerComponents
                             }
                             loggingCompletePath = Path.Combine(extractPath, zipFilename.Replace(@"/", @"\"));
                             zipLogger.AppendLine(package.LogAtInstall ? loggingCompletePath : "#" + loggingCompletePath);
+                            Prog.EntriesProcessed++;
                         }
                     }
                     //set i to 0 so that it breaks out of the loop
@@ -2299,21 +2303,15 @@ namespace RelhaxModpack.InstallerComponents
             switch (e.EventType)
             {
                 case ZipProgressEventType.Extracting_EntryBytesWritten:
-                    lock (Progress)
-                    {
-                        Prog.ChildCurrent = (int)e.BytesTransferred;
-                        Prog.ChildTotal = (int)e.TotalBytesToTransfer;
-                        Prog.Filename = e.ArchiveName;
-                        Prog.ThreadID = (uint)(sender as RelhaxZipFile).ThreadID;
-                        Progress.Report(Prog);
-                    }
-                    break;
                 case ZipProgressEventType.Extracting_BeforeExtractEntry:
                 case ZipProgressEventType.Extracting_AfterExtractEntry:
                     lock (Progress)
                     {
-                        Prog.ParrentCurrent = e.EntriesExtracted;
-                        Prog.ParrentTotal = e.EntriesTotal;
+                        Prog.BytesProcessed = (int)e.BytesTransferred;
+                        Prog.BytesTotal = (int)e.TotalBytesToTransfer;
+                        Prog.ChildCurrent = (int)e.BytesTransferred;
+                        Prog.ChildTotal = (int)e.TotalBytesToTransfer;
+
                         Prog.EntryFilename = e.CurrentEntry.FileName;
                         Prog.Filename = e.ArchiveName;
                         Prog.ThreadID = (uint)(sender as RelhaxZipFile).ThreadID;

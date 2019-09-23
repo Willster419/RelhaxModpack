@@ -1806,6 +1806,26 @@
             The ID number of the thread that this zip file belongs to
             </summary>
         </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.TotalThreads">
+            <summary>
+            The total number of extraction threads
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.CompletedThreads">
+            <summary>
+            The number of completed extraction threads
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.InstallGroup">
+            <summary>
+            The extraction installation group
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.TotalInstallGroups">
+            <summary>
+            The total number of install groups
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.InstallStatus">
             <summary>
             The current status of the installer. Represents the current state of the installer. When it exists, it is also used as an exit code.
