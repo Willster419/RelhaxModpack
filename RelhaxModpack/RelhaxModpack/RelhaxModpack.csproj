@@ -123,6 +123,7 @@
     <Compile Include="AtlasesCreator\Packing\ImagePacker.cs" />
     <Compile Include="AtlasesCreator\Packing\OutOfSpaceException.cs" />
     <Compile Include="AtlasesCreator\Packing\RectanglePacker.cs" />
+    <Compile Include="AtlasesCreator\IRelhaxUnmanagedLibrary.cs" />
     <Compile Include="DatabaseComponents\Category.cs" />
     <Compile Include="DatabaseComponents\DatabaseLogic.cs" />
     <Compile Include="DatabaseComponents\DatabasePackage.cs" />
