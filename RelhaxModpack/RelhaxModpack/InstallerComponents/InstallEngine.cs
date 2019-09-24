@@ -1762,6 +1762,7 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     Logging.Info("freeimage library is not loaded, loading");
                     Utils.FreeImageLibrary.Load();
+                    Logging.Info("freeimage library loaded");
                 }
                 else
                     Logging.Info("freeimage library is loaded");
@@ -1769,6 +1770,7 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     Logging.Info("nvtt library is not loaded, loading");
                     Utils.NvTexLibrary.Load();
+                    Logging.Info("nvtt library loaded");
                 }
                 else
                     Logging.Info("nvtt library is loaded");
