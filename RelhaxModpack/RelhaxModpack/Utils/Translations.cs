@@ -2754,6 +2754,7 @@ namespace RelhaxModpack
             German.Add("zipReadingErrorHeader", "Unvollständiger Download");
             Polish.Add("zipReadingErrorHeader", "Ściąganie niekompletne");
             French.Add("zipReadingErrorHeader", "Téléchargement incomplet");
+            Spanish.Add("zipReadingErrorHeader", "Descarga incompleta");
             Russian.Add("zipReadingErrorHeader", "Незаконченная загрузка");
 
             //Component:
@@ -2762,6 +2763,7 @@ namespace RelhaxModpack
             German.Add("zipReadingErrorMessage1", "Die Zip-Datei");
             Polish.Add("zipReadingErrorMessage1", "Plik skomresowany formatu ZIP ");
             French.Add("zipReadingErrorMessage1", "Le fichier ZIP");
+            Spanish.Add("zipReadingErrorMessage1", "El archivo zip");
             Russian.Add("zipReadingErrorMessage1", "ZIP-архив");
 
             //Component:
@@ -2770,6 +2772,7 @@ namespace RelhaxModpack
             German.Add("zipReadingErrorMessage2", "Konnte nicht gelesen werden, da es höchstwahrscheinlich ein unvollständiger Download ist. Bitte versuche es später nochmal.");
             Polish.Add("zipReadingErrorMessage2", "Nie można odczytać, prawdopodobnie niekompletność pobranych plików. Proszę spróbować ponownie");
             French.Add("zipReadingErrorMessage2", "n'as pas pus être lus, probablement un téléchargement incomplet. Veuillez réeissayer.");
+            Spanish.Add("zipReadingErrorMessage2", "no ha podido ser leído, probablemente por una descarga incompleta. Por favor vuelva a intentarlo.");
             Russian.Add("zipReadingErrorMessage2", "не может быть прочитан, возможно, причиной послужила незаконченная загрузка. Попробуйте ещё раз.");
 
             //Component:
@@ -2778,6 +2781,7 @@ namespace RelhaxModpack
             German.Add("zipReadingErrorMessage3", "Konnte nicht gelesen werden.");
             Polish.Add("zipReadingErrorMessage3", "Nie można odczytać.");
             French.Add("zipReadingErrorMessage3", "n'as pas pus être lus");
+            Spanish.Add("zipReadingErrorMessage3", "No ha podido ser leído.");
             Russian.Add("zipReadingErrorMessage3", "Сбой чтения");
 
             //Component: 
@@ -2790,6 +2794,8 @@ namespace RelhaxModpack
                 " pozwoleń dostępu do folderów.");
             French.Add("patchingSystemDeneidAccessMessage", "Le système de patching s'est vu refuser l'accès au dossier de patch. Réessayez en tant qu'administrateur. Si vous voyez ceci" +
                 " à nouveau, assurez vous que vos permissions de sécurités de dossiers et de fichiers son suffisantes.");
+            Spanish.Add("patchingSystemDeneidAccessMessage", "Se ha denegado el acceso del sistema de parcheo a la carpeta del parche. Vuelva a intentarlo como Administrador. Si vuelve a ver este mensaje," +
+                " tiene que corregir los permisos de seguridad de sus archivos y carpetas);
             Russian.Add("patchingSystemDeneidAccessMessage", "Системе патчинга был отказан доступ к папке с патчами. Попробуйте повторить операцию от имени администратора. " +
                 "Если вы снова видите это окно, то исправьте ошибки в правах доступа к файлам и папкам.");
 
@@ -2799,6 +2805,7 @@ namespace RelhaxModpack
             German.Add("patchingSystemDeneidAccessHeader", "Zugriff abgelehnt");
             Polish.Add("patchingSystemDeneidAccessHeader", "Odmowa dostępu");
             French.Add("patchingSystemDeneidAccessHeader", "Accès refusé");
+            Spanish.Add("patchingSystemDeniedAccessHeader", "Acceso denegado");
             Russian.Add("patchingSystemDeneidAccessHeader", "В доступе отказано");
 
             //Component: Failed To Delete folder
@@ -2807,6 +2814,7 @@ namespace RelhaxModpack
             German.Add("folderDeleteFailed", "Löschen des Verzeichnis fehlgeschlagen");
             Polish.Add("folderDeleteFailed", "Próba usunięcia folderu zakończona niepowodzeniem");
             French.Add("folderDeleteFailed", "Échec de la suppression du dossier");
+            Spanish.Add("folderDeleteFailed", "No se ha podido eliminar la carpeta");
             Russian.Add("folderDeleteFailed", "Не удалось удалить папку");
 
             //Component: Failed To Delete file
@@ -2815,6 +2823,7 @@ namespace RelhaxModpack
             German.Add("fileDeleteFailed", "Löschen der Datei fehlgeschlagen");
             Polish.Add("fileDeleteFailed", "Próba usunięcia pliku zakończona niepowodzeniem");
             French.Add("fileDeleteFailed", "Échec de la supression du fichier");
+            Spanish.Add("fileDeleteFailed", "No se ha podido eliminar el archivo");
             Russian.Add("fileDeleteFailed", "Не удалось удалить файл");
 
             //Component: DeleteBackupFolder
@@ -2823,6 +2832,7 @@ namespace RelhaxModpack
             German.Add("DeleteBackupFolder", "Sicherungen");
             Polish.Add("DeleteBackupFolder", "Kopie zapasowe");
             French.Add("DeleteBackupFolder", "Sauvegardes");
+            Spanish.Add("DeleteBackupFolder", "Copias de seguridad");
             Russian.Add("DeleteBackupFolder", "Бэкапы");
             #endregion
 
@@ -2833,6 +2843,7 @@ namespace RelhaxModpack
             German.Add("InstallationCompleteText", "Installation ist beendet. Willst du...");
             Polish.Add("InstallationCompleteText", "Instalacja jest zakończona. Czy chciałbyś...");
             French.Add("InstallationCompleteText", "L'installation est terminée. Voudriez-vous...");
+            Spanish.Add("InstallationCompleteText", "La instalación ha sido completada. Quiere...");
             Russian.Add("InstallationCompleteText", "Установка завершена. Хотите...");
 
             //Component: InstallationCompleteStartWoT
@@ -2841,6 +2852,7 @@ namespace RelhaxModpack
             German.Add("InstallationCompleteStartWoT", "Das Spiel starten? (WorldofTanks.exe)");
             Polish.Add("InstallationCompleteStartWoT", "Uruchomić grę? (WorldofTanks.exe)");
             French.Add("InstallationCompleteStartWoT", "Démarrez le jeu? (WorldofTanks.exe)");
+            Spanish.Add("InstallationCompleteStartWoT", "¿Iniciar el juego?");
             Russian.Add("InstallationCompleteStartWoT", "Запустить игру? (WorldofTanks.exe)");
 
             //Component: InstallationCompleteStartGameCenter
@@ -2849,6 +2861,7 @@ namespace RelhaxModpack
             German.Add("InstallationCompleteStartGameCenter", "Starte WG Game Center (WoTLauncher.exe)?");
             Polish.Add("InstallationCompleteStartGameCenter", "Czy uruchomić WG Game Center (WoTLauncher.exe)?");
             French.Add("InstallationCompleteStartGameCenter", "Démarrer WG Game Center (WoTLauncher.exe)?");
+            Spanish.Add("InstallationCompleteStartGameCenter", "¿Iniciar WG Game Center (WoTLauncher.exe)?");
             Russian.Add("InstallationCompleteStartGameCenter", "Запустить WG Game Center (или WoTLauncher.exe)?");
 
             //Component: InstallationCompleteOpenXVM
@@ -2857,6 +2870,7 @@ namespace RelhaxModpack
             German.Add("InstallationCompleteOpenXVM", "Öffne Deinen Browser auf der XVM Statistik Login Webseite?");
             Polish.Add("InstallationCompleteOpenXVM", "Otworzyć stronę statystyk XVM ?");
             French.Add("InstallationCompleteOpenXVM", "Ouvrir votre navigateur Web vers le site de connexion aux statistiques xvm?");
+            Spanish.Add("InstallationCompleteOpenXVM", "¿Abrir su explorador en la página de inicio de sesión de las estadísticas de XVM?");
             Russian.Add("InstallationCompleteOpenXVM", "Открыть браузер на сайте XVM для активации статистики?");
 
             //Component: InstallationCompleteCloseThisWindow
@@ -2865,6 +2879,7 @@ namespace RelhaxModpack
             German.Add("InstallationCompleteCloseThisWindow", TranslationNeeded);
             Polish.Add("InstallationCompleteCloseThisWindow", TranslationNeeded);
             French.Add("InstallationCompleteCloseThisWindow", "Fermer cette fenêtre?");
+            Spanish.Add("InstallationCompleteCloseThisWindow", "¿Cerrar esta ventana?");
             Russian.Add("InstallationCompleteCloseThisWindow", "Закрыть окно?");
 
             //Component: InstallationCompleteCloseApp
@@ -2873,6 +2888,7 @@ namespace RelhaxModpack
             German.Add("InstallationCompleteCloseApp", "Anwendung schließen");
             Polish.Add("InstallationCompleteCloseApp", "Zamknij aplikację");
             French.Add("InstallationCompleteCloseApp", "Fermer l'application");
+            Spanish.Add("InstallationCompleteCloseApp", "¿Cerrar la aplicación?");
             Russian.Add("InstallationCompleteCloseApp", "Закрыть приложение?");
 
             //Component: StartXVMStatButton_Click
@@ -2881,6 +2897,7 @@ namespace RelhaxModpack
             German.Add("xvmUrlLocalisation", "de");
             Polish.Add("xvmUrlLocalisation", "en");
             French.Add("xvmUrlLocalisation", "fr");
+            Spanish.Add("xvmURLLocalisation", "es");
             Russian.Add("xvmUrlLocalisation", "ru");
 
             //Component: CouldNotStartProcess
@@ -2889,6 +2906,7 @@ namespace RelhaxModpack
             German.Add("CouldNotStartProcess","Konnte Prozess nicht starten");
             Polish.Add("CouldNotStartProcess", "Nie można rozpocząć procesu");
             French.Add("CouldNotStartProcess", "Impossible de démarrer le processus");
+            Spanish.Add("CouldNotStartProcess", "No se ha podido iniciar el proceso");
             Russian.Add("CouldNotStartProcess", "Не удалось запустить процесс");
             #endregion
 
@@ -2899,6 +2917,7 @@ namespace RelhaxModpack
             German.Add("DiagnosticsMainTextBox", "Du kannst mit den untenstehenden Optionen Probleme mit dem Spiel zu diagnostizieren und ggf. zu beheben.");
             Polish.Add("DiagnosticsMainTextBox", "Opcje diagnostyczne i rozwiązywanie problemów");
             French.Add("DiagnosticsMainTextBox", "Vous pouvez utiliser les options ci dessous pour essayer de diagnostiqué ou résoudre les soucis que vous avez");
+            Spanish.Add("DiagnosticsMainTextBox", "Puede utilizar las opciones a continuación para intentar diagnosticar o resolver problemas");
             Russian.Add("DiagnosticsMainTextBox", "Вы можете попробовать способы ниже для диагностики или выявления проблем с клиентом игры.");
 
             //Component: LaunchWoTLauncher
@@ -2907,6 +2926,7 @@ namespace RelhaxModpack
             German.Add("LaunchWoTLauncher", "Starte den \"World of Tanks Launcher\" im Integritätsvalidierungsmodus");
             Polish.Add("LaunchWoTLauncher", "Uruchom launcher World of Tanks w trybie sprawdzania integralności.");
             French.Add("LaunchWoTLauncher", "Lancé le launcher world of tanks en mode vérification d'intégrité");
+            Spanish.Add("LaunchWoTLauncher", "Inicia el lanzador de World of Tanks en el modo de validación de integridad");
             Russian.Add("LaunchWoTLauncher", "Запустить лаунчер World of Tanks в режиме проверки целостности");
 
             //Component: CollectLogInfo
@@ -2915,6 +2935,7 @@ namespace RelhaxModpack
             German.Add("CollectLogInfo", "Sammle und packe Protokolldateien in einer ZIP-Datei um ein Problem zu melden");
             Polish.Add("CollectLogInfo", "Zbierz pliki logów do pliku zip, aby zgłosić problem");
             French.Add("CollectLogInfo", "Recueillir les fichiers journaux dans un fichier zip pour signaler un problème");
+            Spanish.Add("CollectLogInfo", "Recoge los archivos de registro en un archivo zip para informar de un problema");
             Russian.Add("CollectLogInfo", "Собрать log-файлы в ZIP-архив для отчёта об ошибке");
 
             //Component: SelectedInstallation
@@ -2923,6 +2944,7 @@ namespace RelhaxModpack
             German.Add("SelectedInstallation", "Aktuell gewählte Installation:");
             Polish.Add("SelectedInstallation", "Obecnie Wybrana Instalacja:");
             French.Add("SelectedInstallation", "Installation actuellement sélectionner:");
+            Spanish.Add("SelectedInstallation", "Instalación seleccionada actualmente:");
             Russian.Add("SelectedInstallation", "Текущая папка с игрой:");
 
             //Component: SelectedInstallationNone
@@ -2931,6 +2953,7 @@ namespace RelhaxModpack
             German.Add("SelectedInstallationNone", "(nichts)");
             Polish.Add("SelectedInstallationNone", "(nic)");
             French.Add("SelectedInstallationNone", "(aucun)");
+            Spanish.Add("SelectedInstallationNone", "(ninguna)");
             Russian.Add("SelectedInstallationNone", "(не выбрана)");
 
             //Component: collectionLogInfo
@@ -2939,6 +2962,7 @@ namespace RelhaxModpack
             German.Add("collectionLogInfo", "Sammeln der Protokolldateien...");
             Polish.Add("collectionLogInfo", "Zbieranie logów...");
             French.Add("collectionLogInfo", "Collection des fichiers log...");
+            Spanish.Add("collectionLogInfo", "Reuniendo los archivos de registro...");
             Russian.Add("collectionLogInfo", "Идёт сбор log-файлов...");
 
             //Component: startingLauncherRepairMode
@@ -2947,6 +2971,7 @@ namespace RelhaxModpack
             German.Add("startingLauncherRepairMode", "Starte den WoT Launcher im Integritätsvalidierungsmodus...");
             Polish.Add("startingLauncherRepairMode", "Uruchamianie WoTLaunchera w trybie sprawdzania integralności...");
             French.Add("startingLauncherRepairMode", "Lancement de WoTLauncher and mode the validation d'intégrité...");
+            Spanish.Add("startingLauncherRepairMode", "Inicia WoTLauncher en el modo de validación de integridad...");
             Russian.Add("startingLauncherRepairMode", "Запускаю WoTLauncher в режиме проверки целостности...");
 
             //Component: failedStartLauncherRepairMode
@@ -2955,6 +2980,7 @@ namespace RelhaxModpack
             German.Add("failedStartLauncherRepairMode", "Der WoT Launcher konnte nicht im Reparaturmodus gestartet werden");
             Polish.Add("failedStartLauncherRepairMode", "Nie udało się uruchomić launchera WoT w trybie naprawy");
             French.Add("failedStartLauncherRepairMode", "Erreur lors du lancement de WoTLauncher en mode de réparation");
+            Spanish.Add("failedStartLauncherRepairMode", "No se ha podido iniciar el lanzador de WoT en modo reparación");
             Russian.Add("failedStartLauncherRepairMode", "Не удалось запустить WoTLauncher в режиме проверки целостности");
 
             //Component: failedCollectFile
@@ -2963,6 +2989,7 @@ namespace RelhaxModpack
             German.Add("failedCollectFile", "Fehler beim Sammeln der Datei ");
             Polish.Add("failedCollectFile", "Nie udało się zebrać plików ");
             French.Add("failedCollectFile", "Erreur lors de la collecte du fichier");
+            Spanish.Add("failedCollectFile", "No se ha podido obtener el archivo ");
             Russian.Add("failedCollectFile", "Не найден файл ");
 
             //Component: failedCreateZipfile
@@ -2971,6 +2998,7 @@ namespace RelhaxModpack
             German.Add("failedCreateZipfile", "Fehler beim Erstellen der Zip-Datei ");
             Polish.Add("failedCreateZipfile", "Nie udało się stworzyć pliku zip ");
             French.Add("failedCreateZipfile", "Erreur lors de la création du fichier zip ");
+            Spanish.Add("failedCreateZipfile", "No se ha podido crear el archivo zip ");
             Russian.Add("failedCreateZipfile", "Не удалось создать ZIP-архив");
 
             //Component: launcherRepairModeStarted
@@ -2979,6 +3007,7 @@ namespace RelhaxModpack
             German.Add("launcherRepairModeStarted", "Reparaturmodus wurde erfolgreich gestartet");
             Polish.Add("launcherRepairModeStarted", "Uruchomiono tryb naprawy");
             French.Add("launcherRepairModeStarted", "Mode de réparation démarrer avec succès");
+            Spanish.Add("launcherRepairModeStarted", "Modo de reparación iniciado correctamente");
             Russian.Add("launcherRepairModeStarted", "Проверка целостности успешно начата");
 
             //Component: ClearDownloadCache
@@ -2987,6 +3016,7 @@ namespace RelhaxModpack
             German.Add("ClearDownloadCache", "Lösche Downlaod Cache");
             Polish.Add("ClearDownloadCache", "Wyczyść ściągnięte pliki cache");
             French.Add("ClearDownloadCache", "Effacer le cache de téléchargement");
+            Spanish.Add("ClearDownloadCache", "Limpiar la caché de descarga");
             Russian.Add("ClearDownloadCache", "Очистить кэш загрузок");
 
             //Component: ClearDownloadCacheDatabase
@@ -2995,6 +3025,7 @@ namespace RelhaxModpack
             German.Add("ClearDownloadCacheDatabase", "Lösche Datenbank-Cache");
             Polish.Add("ClearDownloadCacheDatabase", "Usuń ściągnięte pliki cache baz danych");
             French.Add("ClearDownloadCacheDatabase", "Supprimer le fichier de base de données de cache de téléchargement");
+            Spanish.Add("ClearDownloadCacheDatabase", "Elimina el archivo de caché de descarga");
             Russian.Add("ClearDownloadCacheDatabase", "Удалить кэш базы данных");
 
             //Component: ClearDownloadCacheDescription
@@ -3003,6 +3034,7 @@ namespace RelhaxModpack
             German.Add("ClearDownloadCacheDescription", "Lösche alle Daten aus dem \"RelhaxDownloads\" Ordner");
             Polish.Add("ClearDownloadCacheDescription", "Usuń wszystkie pliki w folderze \"RelhaxDownloads\"");
             French.Add("ClearDownloadCacheDescription", "Supprimez tous les fichiers dans le répertoire \"RelhaxDownloads\"");
+            Spanish.Add("ClearDownloadCacheDescription", "Elimina todos los archivos en la carpeta \"RelhaxDownloads\"");
             Russian.Add("ClearDownloadCacheDescription", "Удаление всех файлов в папке \"RelhaxDownloads\"");
 
             //Component: ClearDownloadCacheDatabaseDescription
