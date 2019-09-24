@@ -956,10 +956,12 @@ namespace RelhaxModpack
                 //get the version of tanks in the format
                 //of the res_mods version folder i.e. 0.9.17.0.3
                 string versionTemp = XmlUtils.GetXmlStringFromXPath(Path.Combine(Settings.WoTDirectory, "version.xml"), "//version.xml/version");
-                Settings.WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2);
+                Settings.WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2).Trim();
+                Logging.Info("detected client version: {0}", Settings.WoTClientVersion);
 
                 //determine if current detected version of the game is supported
                 //only if application distribution is not alpha and database distribution is not test
+                //the warning will therefore also happen in beta, but not take effect
                 if (databaseVersion != DatabaseVersions.Test)
                 {
                     //make an array of all the supported versions
@@ -971,14 +973,11 @@ namespace RelhaxModpack
                         ToggleUIButtons(true);
                         return;
                     }
-                    XmlDocument doc = new XmlDocument();
-                    try
+
+                    XmlDocument doc = XmlUtils.LoadXmlDocument(supportedClientsXML, XmlLoadType.FromString);
+                    if(doc == null)
                     {
-                        doc.LoadXml(supportedClientsXML);
-                    }
-                    catch (XmlException ex)
-                    {
-                        Logging.Info("Failed to parse supported_clients.xml to xml\n" + ex.ToString(), Logfiles.Application, LogLevel.Exception);
+                        Logging.Error("Failed to parse supported_clients.xml ");
                         MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " supported_clients.xml");
                         ToggleUIButtons(true);
                         return;
@@ -989,36 +988,36 @@ namespace RelhaxModpack
                     string[] supportedVersionsString = new string[supportedVersionsXML.Count];
                     for (int i = 0; i < supportedVersionsXML.Count; i++)
                     {
-                        supportedVersionsString[i] = supportedVersionsXML[i].InnerText;
+                        supportedVersionsString[i] = supportedVersionsXML[i].InnerText.Trim();
+
                         //see if this supported client version is the same as what was parsed to be the current client version
-                        if (supportedVersionsXML[i].InnerText.Equals(Settings.WoTClientVersion))
+                        if (supportedVersionsString[i].Equals(Settings.WoTClientVersion))
                         {
-                            //WoTClientVersions is already set, set the online folder
+                            //set the online folder
                             Settings.WoTModpackOnlineFolderVersion = supportedVersionsXML[i].Attributes["folder"].Value;
                         }
-
                     }
 
                     //check to see if array of supported clients has the detected WoT client version
-                    if (Settings.ApplicationVersion != ApplicationVersions.Alpha && !supportedVersionsString.Contains(Settings.WoTClientVersion))
-                    {
-                        //log and inform the user
-                        Logging.WriteToLog("Detected client version is " + Settings.WoTClientVersion + ", not supported",
-                            Logfiles.Application, LogLevel.Warning);
-                        Logging.Info("Supported versions are: " + string.Join(", ", supportedVersionsString));
-                        MessageBox.Show(string.Format("{0}: {1}\n{2}\n\n{3}:\n{4}", Translations.GetTranslatedString("detectedClientVersion"),
-                            Settings.WoTClientVersion, Translations.GetTranslatedString("supportNotGuarnteed"),
-                            Translations.GetTranslatedString("supportedClientVersions"), string.Join("\n", supportedVersionsString)),
-                            Translations.GetTranslatedString("critical"));
-                        //set the version and online folder to the last ones
-                        Settings.WoTClientVersion = supportedVersionsXML[supportedVersionsXML.Count - 1].InnerText;
-                        Settings.WoTModpackOnlineFolderVersion = supportedVersionsXML[supportedVersionsXML.Count - 1].Attributes["folder"].Value;
-                    }
-
-                    //if the version does not match, then we need to set the online download version (even if we are in test mode)
+                    //if the version does not match, then we need to set the online folder download version
                     if (!supportedVersionsString.Contains(Settings.WoTClientVersion))
                     {
                         Settings.WoTModpackOnlineFolderVersion = supportedVersionsXML[supportedVersionsXML.Count - 1].Attributes["folder"].Value;
+
+                        //if it's not alpha, show the warning messages
+                        if (Settings.ApplicationVersion != ApplicationVersions.Alpha)
+                        {
+                            //log and inform the user
+                            Logging.Warning("current client version {0} does not exist in list: {1}", Settings.WoTClientVersion, string.Join(", ", supportedVersionsString));
+                            MessageBox.Show(string.Format("{0}: {1}\n{2} {3}\n\n{4}:\n{5}",
+                                Translations.GetTranslatedString("detectedClientVersion"),//0
+                                Settings.WoTClientVersion,//1
+                                Translations.GetTranslatedString("supportNotGuarnteed"),//2
+                                Translations.GetTranslatedString("couldTryBeta"),//3
+                                Translations.GetTranslatedString("supportedClientVersions"),//4
+                                string.Join("\n", supportedVersionsString)),//5
+                                Translations.GetTranslatedString("critical"));//header
+                        }
                     }
 
                     //if the user wants to, check if the database has actually changed
@@ -1053,7 +1052,7 @@ namespace RelhaxModpack
                 //set the owner
                 //https://stackoverflow.com/questions/21756542/why-is-window-showdialog-not-blocking-in-taskscheduler-task
                 //https://docs.microsoft.com/en-us/dotnet/api/system.windows.window.owner?view=netframework-4.8
-                Owner = Window.GetWindow(this)
+                Owner = GetWindow(this)
             };
             //https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c
             modSelectionList.OnSelectionListReturn += ModSelectionList_OnSelectionListReturn;

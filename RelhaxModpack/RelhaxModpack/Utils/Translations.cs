@@ -2392,6 +2392,14 @@ namespace RelhaxModpack
             French.Add("supportNotGuarnteed", "Ce client n'est pas supporté officiellement. Les mods risque de ne pas fonctionner.");
             Russian.Add("supportNotGuarnteed", "Эта версия клиента официально не поддерживается. Моды могут не работать.");
 
+            //Component: couldTryBeta
+            //
+            English.Add("couldTryBeta", "If a game patch was recently released, the team is working on supporting it. You could try using the beta database.");
+            German.Add("couldTryBeta", TranslationNeeded);
+            Polish.Add("couldTryBeta", TranslationNeeded);
+            French.Add("couldTryBeta", TranslationNeeded);
+            Russian.Add("couldTryBeta", TranslationNeeded);
+
             //Component: notifying the user the change won't take effect until application restart
             //
             English.Add("noChangeUntilRestart", "This option won't take effect until application restart");
