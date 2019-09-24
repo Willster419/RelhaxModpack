@@ -3043,6 +3043,7 @@ namespace RelhaxModpack
             German.Add("ClearDownloadCacheDatabaseDescription", "Löschen Sie die XML-Datenbankdatei. Dadurch werden alle ZIP-Dateien erneut auf Integrität überprüft. \nAlle ungültigen Dateien werden erneut heruntergeladen, wenn sie bei Ihrer nächsten Installation ausgewählt werden");
             Polish.Add("ClearDownloadCacheDatabaseDescription", "Usuń plik bazy danych xml. Spowoduje to ponowne sprawdzenie integralności wszystkich plików zip.\nWszystkie nieprawidłowe pliki zostaną ponownie pobrane, jeśli zostaną wybrane w następnej instalacji");
             French.Add("ClearDownloadCacheDatabaseDescription", "Supprimez le fichier de base de données XML. L’intégrité de tous les fichiers zip sera à nouveau vérifiée. \nTous les fichiers non valides seront re-téléchargés s’ils sont sélectionnés lors de votre prochaine installation.");
+            Spanish.Add("ClearDownloadCacheDatabaseDescription", "Elimina el archivo de base de datos XML. Esto causará que la integridad de todos los archivos zip vuelva a ser comprobada.\nTodos los archivos inválidos volverán a ser descargados si son seleccionados en su próxima instalación.");
             Russian.Add("ClearDownloadCacheDatabaseDescription", "Удаление XML-файла базы данных. Это приведёт к тому, что все скачанныые ZIP-архивы будут проверены на целостность.\nВсе повреждённые файлы будут загружены заново в случае, если вы ещё раз выберете моды, соотвествующие этим архивам.");
 
             //Component: ChangeInstall
@@ -3051,6 +3052,7 @@ namespace RelhaxModpack
             German.Add("ChangeInstall", "Ändern Sie die aktuell ausgewählte WoT-Installation");
             Polish.Add("ChangeInstall", "Zmień obecnie wybraną instalację WoT");
             French.Add("ChangeInstall", "Modifier l'installation WOT sélectionné");
+            Spanish.Add("ChangeInstall", "Cambia la instalación de WoT seleccionada actualmente");
             Russian.Add("ChangeInstall", "Изменить выбранную папку с World of Tanks");
 
             //Component: ChangeInstallDescription
@@ -3059,6 +3061,7 @@ namespace RelhaxModpack
             German.Add("ChangeInstallDescription", "Dadurch wird geändert, welche Protokolldateien zur ZIP-Diagnosedatei hinzugefügt werden");
             Polish.Add("ChangeInstallDescription", "Spowoduje to zmianę logów, które zostaną dodane do diagnostycznego pliku zip");
             French.Add("ChangeInstallDescription", "Cela modifiera quel fichiers journaux qui seront ajoutés au fichier zip de diagnostic.");
+            Spanish.Add("ChangeInstallDescription", "Esto cambiará qué archivos de registro serán añadidos en el archivo zip de diagnóstico");
             Russian.Add("ChangeInstallDescription", "Это изменит набор файлов отчёта об ошибках, добавляемых в ZIP-архив.");
 
             //Component: zipSavedTo
@@ -3067,6 +3070,7 @@ namespace RelhaxModpack
             German.Add("zipSavedTo", "Zip-Datei gespeichert in: ");
             Polish.Add("zipSavedTo", "Plik zip zapisano do: ");
             French.Add("zipSavedTo", "Fichier zip sauvegarder à: ");
+            Spanish.Add("zipSavedTo", "Archivo zip guardado en: ");
             Russian.Add("zipSavedTo", "ZIP-архив успешно сохранён в: ");
             #endregion
 
@@ -3077,6 +3081,7 @@ namespace RelhaxModpack
             German.Add("noDescription", "Keine Beschreibung verfügbar");
             Polish.Add("noDescription", "Nie podano opisu");
             French.Add("noDescription", "NPas de description fournie");
+            Spanish.Add("noDescription", "No hay descripción disponible");
             Russian.Add("noDescription", "Описание отсутствует");
 
             //Component: noUpdateInfo
@@ -3085,6 +3090,7 @@ namespace RelhaxModpack
             German.Add("noUpdateInfo", "Keine Aktualisierungsinformationen verfügbar");
             Polish.Add("noUpdateInfo", "Brak informacji o aktualizacji");
             French.Add("noUpdateInfo", "Aucune information de mise à jour fournie");
+            Spanish.Add("noUpdateInfo", "No hay información de actualización disponible");
             Russian.Add("noUpdateInfo", "Отсутствует информация об обновлении");
 
             //Component: noTimestamp
@@ -3093,6 +3099,7 @@ namespace RelhaxModpack
             German.Add("noTimestamp", "Kein Zeitstempel verfügbar");
             Polish.Add("noTimestamp", "Brak znacznika czasowego");
             French.Add("noTimestamp", "Pas d'horodatage fourni");
+            Spanish.Add("noTimestamp", "No hay marca de tiempo disponible");
             Russian.Add("noTimestamp", "Нет метки с датой");
 
             //Component: PreviewNextPicButton
@@ -3101,6 +3108,7 @@ namespace RelhaxModpack
             German.Add("PreviewNextPicButton", "Weiter");
             Polish.Add("PreviewNextPicButton", "Dalej");
             French.Add("PreviewNextPicButton", "Suivant");
+            Spanish.Add("PreviewNextPicButton", "Siguiente");
             Russian.Add("PreviewNextPicButton", "след.");
 
             //Component: PreviewPreviousPicButton
@@ -3109,6 +3117,7 @@ namespace RelhaxModpack
             German.Add("PreviewPreviousPicButton", "Zurück");
             Polish.Add("PreviewPreviousPicButton", "Wstecz");
             French.Add("PreviewPreviousPicButton", "Précedent");
+            Spanish.Add("PreviewPreviousPicButton", "Anterior");
             Russian.Add("PreviewPreviousPicButton", "пред.");
 
             //Component: DevUrlHeader
@@ -3117,6 +3126,7 @@ namespace RelhaxModpack
             German.Add("DevUrlHeader", "Entwickler-Link");
             Polish.Add("DevUrlHeader", "Linki deweloperów");
             French.Add("DevUrlHeader", "Liens développeur");
+            Spanish.Add("DevUrlHeader", "Links de los desarrolladores");
             Russian.Add("DevUrlHeader", "Сайт разработчика");
 
             //Component: dropDownItemsInside
@@ -3125,6 +3135,7 @@ namespace RelhaxModpack
             German.Add("dropDownItemsInside", TranslationNeeded);
             Polish.Add("dropDownItemsInside", TranslationNeeded);
             French.Add("dropDownItemsInside", "Articles à l'intérieur");
+            Spanish.Add("dropDownItemsInside", "Artículos en el interior");
             Russian.Add("dropDownItemsInside", "Элементов внутри");
             #endregion
 
@@ -3135,6 +3146,7 @@ namespace RelhaxModpack
             German.Add("DeveloperSelectionsViewer", "Auswahl-Betrachter");
             Polish.Add("DeveloperSelectionsViewer", "Wybór Widoku");
             French.Add("DeveloperSelectionsViewer", "Visualiseur de sélections");
+            Spanish.Add("DeveloperSelectionsViewer", "Visor de selecciones");
             Russian.Add("DeveloperSelectionsViewer", "Просмотр наборов");
 
             //Component: DeveloperSelectionsTextHeader
@@ -3143,6 +3155,7 @@ namespace RelhaxModpack
             German.Add("DeveloperSelectionsTextHeader", "Auswahl zum Laden");
             Polish.Add("DeveloperSelectionsTextHeader", "Wybór do załadowania");
             French.Add("DeveloperSelectionsTextHeader", "Sélection à charger");
+            Spanish.Add("DeveloperSelectionsTextHeader", "Selección a cargar");
             Russian.Add("DeveloperSelectionsTextHeader", "Набор для загрузки");
 
             //Component: DeveloperSelectionsCancelButton
@@ -3151,6 +3164,7 @@ namespace RelhaxModpack
             German.Add("DeveloperSelectionsCancelButton", "Abbrechen");
             Polish.Add("DeveloperSelectionsCancelButton", "Anuluj");
             French.Add("DeveloperSelectionsCancelButton", "Annuler");
+            Spanish.Add("DeveloperSelectionsCancelButton", "Cancelar");
             Russian.Add("DeveloperSelectionsCancelButton", "Отмена");
 
             //Component: DeveloperSelectionsLocalFile
@@ -3159,6 +3173,7 @@ namespace RelhaxModpack
             German.Add("DeveloperSelectionsLocalFile", "Lokale Datei");
             Polish.Add("DeveloperSelectionsLocalFile", "Plik lokalny");
             French.Add("DeveloperSelectionsLocalFile", "Fichier local");
+            Spanish.Add("DeveloperSelectionsLocalFile", "Archivo local");
             Russian.Add("DeveloperSelectionsLocalFile", "Локальный файл");
 
             //Component: DeveloperSelectionsContinueButton
@@ -3167,6 +3182,7 @@ namespace RelhaxModpack
             German.Add("DeveloperSelectionsContinueButton", "Auswahl bestätigen");
             Polish.Add("DeveloperSelectionsContinueButton", "Wybierz");
             French.Add("DeveloperSelectionsContinueButton", "Selectionner");
+            Spanish.Add("DeveloperSelectionsContinueButton", "Seleccionar");
             Russian.Add("DeveloperSelectionsContinueButton", "Выбрать");
 
             //Component: failedToParseSelections
@@ -3175,6 +3191,7 @@ namespace RelhaxModpack
             German.Add("failedToParseSelections", "Auswahl konnte nicht analysiert werden");
             Polish.Add("failedToParseSelections", "Nie udało się przeanalizować konfiguracji");
             French.Add("failedToParseSelections", "Échec de l'analyse des sélections");
+            Spanish.Add("failedToParseSelections", "No se han podido analizar las selecciones");
             Russian.Add("failedToParseSelections", "Сбой обработки набора");
 
             //Component: lastModified
@@ -3183,6 +3200,7 @@ namespace RelhaxModpack
             German.Add("lastModified", "Zuletzt geändert");
             Polish.Add("lastModified", "Ostatnio zmodyfikowano");
             French.Add("lastModified", "Dernière modification");
+            Spanish.Add("lastModified", "Modificado por última vez");
             Russian.Add("lastModified", "Последнее изменение");
             #endregion
 
@@ -3193,6 +3211,7 @@ namespace RelhaxModpack
             German.Add("AdvancedInstallBackupMods", "Sichere derzeitige Installation (Backup)");
             Polish.Add("AdvancedInstallBackupMods", "Kopia zapasowa obecnej instalacji");
             French.Add("AdvancedInstallBackupMods", "Sauvegarder l'installation actuelle");
+            Spanish.Add("AdvancedInstallBackupMods", "Hacer una copia de seguridad de la instalación actual");
             Russian.Add("AdvancedInstallBackupMods", "Бэкап имеющихся модов");
 
             //Component: AdvancedInstallBackupData
@@ -3201,6 +3220,7 @@ namespace RelhaxModpack
             German.Add("AdvancedInstallBackupData", "Sichern Sie die Mod-Daten");
             Polish.Add("AdvancedInstallBackupData", "Dane kopii zapasowej modyfikacji");
             French.Add("AdvancedInstallBackupData", "Sauvegarder les données du mod");
+            Spanish.Add("AdvancedInstallBackupData", "Hacer una copia de seguridad de los datos de los mods");
             Russian.Add("AdvancedInstallBackupData", "Бэкап данных модов");
 
             //Component: AdvancedInstallClearCache
@@ -3209,6 +3229,7 @@ namespace RelhaxModpack
             German.Add("AdvancedInstallClearCache", "Lösche den WoT Cache");
             Polish.Add("AdvancedInstallClearCache", "Wyczyść cache WoT");
             French.Add("AdvancedInstallClearCache", "Effacer le cache de WoT");
+            Spanish.Add("AdvancedInstallClearCache", "Limpiar caché de WoT");
             Russian.Add("AdvancedInstallClearCache", "Очистить кэш WoT");
 
             //Component: AdvancedInstallClearLogs
@@ -3217,6 +3238,7 @@ namespace RelhaxModpack
             German.Add("AdvancedInstallClearLogs", "Lösche Protokolldateien");
             Polish.Add("AdvancedInstallClearLogs", "Wyczyść pliki logów");
             French.Add("AdvancedInstallClearLogs", "Effacer les fichiers journaux");
+            Spanish.Add("AdvancedInstalledClearLogs", "Limpiar archivos de registro");
             Russian.Add("AdvancedInstallClearLogs", "Очистить логи");
 
             //Component: AdvancedInstallClearMods
@@ -3225,6 +3247,7 @@ namespace RelhaxModpack
             German.Add("AdvancedInstallClearMods", "Deinstalliere letzte Installation");
             Polish.Add("AdvancedInstallClearMods", "Odinstaluj poprzednią instalację");
             French.Add("AdvancedInstallClearMods", "Désinstaller l'installation précédente");
+            Spanish.Add("AdvancedInstallClearMods", "Desinstalar instalación anterior");
             Russian.Add("AdvancedInstallClearMods", "Удалить старые моды");
 
             //Component: AdvancedInstallInstallMods
@@ -3233,6 +3256,7 @@ namespace RelhaxModpack
             German.Add("AdvancedInstallInstallMods", "Installiere Thread");
             Polish.Add("AdvancedInstallInstallMods", "Zainstaluj wątek");
             French.Add("AdvancedInstallInstallMods", "Fil d'installation");
+            Spanish.Add("AdvancedInstallInstallMods", "Hilo de instalación");
             Russian.Add("AdvancedInstallInstallMods", "Поток установки");
 
             //Component: AdvancedInstallUserInstallMods
