@@ -136,6 +136,11 @@ namespace RelhaxModpack
         /// </summary>
         public const long BYTES_TO_MBYTES = 1048576;
 
+        /// <summary>
+        /// The link to the Microsoft Visual C++ dll package required by the atlas processing libraries
+        /// </summary>
+        public const string MSVCPLink = "https://www.microsoft.com/en-us/download/details.aspx?id=40784";
+
         //MACROS
         //FilePath macro
         //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/how-to-initialize-a-dictionary-with-a-collection-initializer
@@ -204,6 +209,71 @@ namespace RelhaxModpack
         /// The manager instance of the Nvidia Texture Tools Library
         /// </summary>
         public static RelhaxNvTexLibrary NvTexLibrary = new RelhaxNvTexLibrary();
+
+        /// <summary>
+        /// Test the ability to load an unmanaged library
+        /// </summary>
+        /// <returns>True if library loaded, false otherwise</returns>
+        public static bool TestLibrary(IRelhaxUnmanagedLibrary library, string name, bool unload)
+        {
+            Logging.Info("testing {0} library", name);
+            bool libraryLoaded;
+            if (!library.IsLoaded)
+            {
+                if (library.Load())
+                {
+                    Logging.Info("library loaded successfully");
+                    libraryLoaded = true;
+                }
+                else
+                {
+                    Logging.Error("library failed to load");
+                    libraryLoaded = false;
+                }
+            }
+            else
+            {
+                Logging.Info("library already loaded");
+                libraryLoaded = true;
+            }
+
+            if(unload && library.IsLoaded)
+            {
+                Logging.Info("unload requested and library is loaded, unloading");
+                if (library.Unload())
+                {
+                    Logging.Info("library unloaded successfully");
+                }
+                else
+                {
+                    Logging.Error("library failed to unload library");
+                    libraryLoaded = false;
+                }
+            }
+            return libraryLoaded;
+        }
+
+        /// <summary>
+        /// Test the ability to load and unload all the atlas image processing libraries
+        /// </summary>
+        /// <returns>True if both libraries loaded, false otherwise</returns>
+        public static bool TestLoadAtlasLibraries(bool unload)
+        {
+            bool freeImageLoaded = TestLibrary(FreeImageLibrary, "FreeImage", true);
+            bool nvttLoaded = TestLibrary(NvTexLibrary, "nvtt", true);
+
+            if(nvttLoaded && freeImageLoaded)
+            {
+                Logging.Info("TestLoadAtlasLibraries(): both libraries loaded");
+                return true;
+            }
+            else
+            {
+                Logging.Error("TestLoadAtlasLibraries(): failed to load one or more atlas processing libraries: freeImage={0}, nvtt={1}",
+                    freeImageLoaded.ToString(), nvttLoaded.ToString());
+                return false;
+            }
+        }
 
         /// <summary>
         /// Get a complete assembly name based on a matching keyword

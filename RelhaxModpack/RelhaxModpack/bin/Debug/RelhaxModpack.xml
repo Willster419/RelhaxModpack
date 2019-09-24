@@ -325,6 +325,53 @@
             <param name="placement">Output parameter receiving the rectangle's placement</param>
             <returns>True if space for the rectangle could be allocated</returns>
         </member>
+        <member name="T:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary">
+            <summary>
+            Represents an interface that all unmanaged libraries in the Modpack use. Allows for one method of testing.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.EmbeddedFilename">
+            <summary>
+            Gets the name of the embedded zip file containing the dll, 32 or 64 bit version
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.ExtractedFilename">
+            <summary>
+            Gets the name of the dll file inside the embedded zip file, 32 or 64bit version
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.Filepath">
+            <summary>
+            Gets the absolute path to the dll file
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.IsExtracted">
+            <summary>
+            Determines if the file is extracted to the Filepath property location
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.IsLoaded">
+            <summary>
+            Determines if the library is loaded into memory
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.Load">
+            <summary>
+            Attempts to load the library using the Filepath property
+            </summary>
+            <returns>True if the library load was successful</returns>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.Unload">
+            <summary>
+            Attempts to unload the library
+            </summary>
+            <returns>True if the library was unloaded, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.Extract">
+            <summary>
+            Extracts the embedded compressed library to the location in the Filepath property
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Category">
             <summary>
             a category is what makes up each tab in the mod selection display window. It holds the first level of list of SelectablePackages
@@ -3075,6 +3122,11 @@
             </summary>
             <remarks>URL for the repository: https://github.com/Willster419/RelhaxModpackDatabase </remarks>
         </member>
+        <member name="F:RelhaxModpack.ModpackSettings.AtlasLibrariesCanBeLoaded">
+            <summary>
+            Flag to track when/if the user has MSVCP2013 installed to load the atlas image processing libraries
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.ModpackSettings.NotifyIfSameDatabase">
             <summary>
             Toggle if the program should notify the user if the database version is the same as the last installed version
@@ -4022,6 +4074,12 @@
             </summary>
             <returns>True if the library load was successful</returns>
         </member>
+        <member name="M:RelhaxModpack.RelhaxFreeImageLibrary.Unload">
+            <summary>
+            Attempts to unload the library
+            </summary>
+            <returns>True if the library was unloaded, false otherwise</returns>
+        </member>
         <member name="M:RelhaxModpack.RelhaxFreeImageLibrary.Extract">
             <summary>
             Extracts the embedded compressed library to the location in the Filepath property
@@ -4063,6 +4121,12 @@
             Attempts to load the library using the Filepath property
             </summary>
             <returns>True if the library load was successful</returns>
+        </member>
+        <member name="M:RelhaxModpack.RelhaxNvTexLibrary.Unload">
+            <summary>
+            Attempts to unload the library
+            </summary>
+            <returns>True if the library was unloaded, false otherwise</returns>
         </member>
         <member name="M:RelhaxModpack.RelhaxNvTexLibrary.Extract">
             <summary>
@@ -5194,6 +5258,11 @@
             Multiply by this to convert bytes to megabytes
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Utils.MSVCPLink">
+            <summary>
+            The link to the Microsoft Visual C++ dll package required by the atlas processing libraries
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Utils.FilePathDict">
             <summary>
             The dictionary to store filepath macros
@@ -5228,6 +5297,18 @@
             <summary>
             The manager instance of the Nvidia Texture Tools Library
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Utils.TestLibrary(RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary,System.String,System.Boolean)">
+            <summary>
+            Test the ability to load an unmanaged library
+            </summary>
+            <returns>True if library loaded, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.TestLoadAtlasLibraries(System.Boolean)">
+            <summary>
+            Test the ability to load and unload all the atlas image processing libraries
+            </summary>
+            <returns>True if both libraries loaded, false otherwise</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.GetAssemblyName(System.String)">
             <summary>

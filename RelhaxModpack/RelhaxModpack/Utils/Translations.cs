@@ -2400,6 +2400,30 @@ namespace RelhaxModpack
             French.Add("couldTryBeta", TranslationNeeded);
             Russian.Add("couldTryBeta", TranslationNeeded);
 
+            //Component: missingMSVCPLibrariesHeader
+            //M
+            English.Add("missingMSVCPLibrariesHeader", "Failed to load required libraries");
+            German.Add("missingMSVCPLibrariesHeader", TranslationNeeded);
+            Polish.Add("missingMSVCPLibrariesHeader", TranslationNeeded);
+            French.Add("missingMSVCPLibrariesHeader", TranslationNeeded);
+            Russian.Add("missingMSVCPLibrariesHeader", TranslationNeeded);
+
+            //Component: missingMSVCPLibraries
+            //Microsoft Visual C++ 2013 libraries (msvcp120.dll, etc.) are required to load and process atlas images
+            English.Add("missingMSVCPLibraries", "The contour icon image processing libraries failed to load. This could indicate you are missing a required Microsoft dll package.");
+            German.Add("missingMSVCPLibraries", TranslationNeeded);
+            Polish.Add("missingMSVCPLibraries", TranslationNeeded);
+            French.Add("missingMSVCPLibraries", TranslationNeeded);
+            Russian.Add("missingMSVCPLibraries", TranslationNeeded);
+
+            //Component: openLinkToMSVCP
+            //Microsoft Visual C++ 2013 libraries (msvcp120.dll, etc.) are required to load and process atlas images
+            English.Add("openLinkToMSVCP", "Would you like to open your browser to the package download page?");
+            German.Add("openLinkToMSVCP", TranslationNeeded);
+            Polish.Add("openLinkToMSVCP", TranslationNeeded);
+            French.Add("openLinkToMSVCP", TranslationNeeded);
+            Russian.Add("openLinkToMSVCP", TranslationNeeded);
+
             //Component: notifying the user the change won't take effect until application restart
             //
             English.Add("noChangeUntilRestart", "This option won't take effect until application restart");

@@ -383,6 +383,29 @@ namespace RelhaxModpack
                         InstallModpackButton_Click(null, null);
                     }
                 }
+                //loading in normal mode, check if atlas image processing libraries can be loaded
+                else if(!ModpackSettings.AtlasLibrariesCanBeLoaded)
+                {
+                    Logging.Info("Atlas libraries never recorded being loaded, testing now via async task");
+                    Task.Run(async () =>
+                    {
+                        await Task.Delay(1000);
+
+                        ModpackSettings.AtlasLibrariesCanBeLoaded = Utils.TestLoadAtlasLibraries(true);
+                        //if after test, it fails, inform the user
+                        if (!ModpackSettings.AtlasLibrariesCanBeLoaded)
+                        {
+                            if (MessageBox.Show(string.Format("{0}\n{1}", Translations.GetTranslatedString("missingMSVCPLibraries"), Translations.GetTranslatedString("openLinkToMSVCP")),
+                                Translations.GetTranslatedString("missingMSVCPLibrariesHeader"), MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                            {
+                                if (!Utils.StartProcess(Utils.MSVCPLink))
+                                {
+                                    Logging.Error("failed to open url to MSVCP: {0}", Utils.MSVCPLink);
+                                }
+                            }
+                        }
+                    });
+                }
 
                 //unset loading flag
                 loading = false;
