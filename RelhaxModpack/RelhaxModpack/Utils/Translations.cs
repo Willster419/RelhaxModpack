@@ -166,7 +166,7 @@ namespace RelhaxModpack
                 case "fr":
                     SetLanguage(Languages.French);
                     break;
-                case "ru":
+                case "es":
                     SetLanguage(Languages.Spanish);
                     break;
                 case "ru":
@@ -977,7 +977,7 @@ namespace RelhaxModpack
             French.Add("InstallWhileDownloadingCBDescription", "Quand activé, l'installateur vas extraire un fichier zip dès qu'il est télécharger, au lieu" +
                 " d'attendre que chaque fichier zip soit télécharger pour l'extraction.");
             Spanish.Add("InstallWhileDownloadingCBDescription", "Cuando está habilitada, el instalador extraerá cada archivo zip tan pronto como se descargue" + 
-                " en lugar de esperar a que todos los archivos sean descargados para la extracción.);
+                " en lugar de esperar a que todos los archivos sean descargados para la extracción.");
             Russian.Add("InstallWhileDownloadingCBDescription", "Если включено, то установщик будет распаковывать ZIP-архив сразу после скачивания, вместо того," +
                 " чтобы ждать окончания загрузки всех файлов перед распаковкой.");
 
@@ -1247,7 +1247,7 @@ namespace RelhaxModpack
             French.Add("ShowInstallCompleteWindowCBDescription", "Afficher une fenêtre lors de l'achèvement de l'installation avec des opérations populaires à" +
                 " effectuer après l'installation de Modpack, telles que le lancement du jeu, le site Web de XVM, etc.");
             Spanish.Add("ShowInstallCompleteWindowCBDescription", "Muestra una ventana al completar la instalación con opciones comunes tras la instalación del Modpack," +
-                " tales como iniciar el juego, visitar la página web del XVM, etc);
+                " tales como iniciar el juego, visitar la página web del XVM, etc.");
             Russian.Add("ShowInstallCompleteWindowCBDescription", "Показывать окно по окончании установки с частыми действиями после установки" +
                 " модпака (запуск игры, открыть сайт XVM, и т. п.)");
 
@@ -2795,7 +2795,7 @@ namespace RelhaxModpack
             French.Add("patchingSystemDeneidAccessMessage", "Le système de patching s'est vu refuser l'accès au dossier de patch. Réessayez en tant qu'administrateur. Si vous voyez ceci" +
                 " à nouveau, assurez vous que vos permissions de sécurités de dossiers et de fichiers son suffisantes.");
             Spanish.Add("patchingSystemDeneidAccessMessage", "Se ha denegado el acceso del sistema de parcheo a la carpeta del parche. Vuelva a intentarlo como Administrador. Si vuelve a ver este mensaje," +
-                " tiene que corregir los permisos de seguridad de sus archivos y carpetas);
+                " tiene que corregir los permisos de seguridad de sus archivos y carpetas.");
             Russian.Add("patchingSystemDeneidAccessMessage", "Системе патчинга был отказан доступ к папке с патчами. Попробуйте повторить операцию от имени администратора. " +
                 "Если вы снова видите это окно, то исправьте ошибки в правах доступа к файлам и папкам.");
 
