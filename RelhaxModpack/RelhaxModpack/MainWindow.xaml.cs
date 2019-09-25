@@ -36,6 +36,7 @@ namespace RelhaxModpack
         private bool closingFromFailure = false;
         private NewsViewer newsViewer = null;
         private WebClient client = null;
+        private VersionInfo versionInfo = null;
         private Timer autoInstallTimer = new Timer();
         private bool databaseUpdateAvailableFromAutoSync = false;
         private bool autoInstallTimerRegistered = false;
@@ -214,6 +215,14 @@ namespace RelhaxModpack
             //check for updates to database and application
             progressIndicator.UpdateProgress(4, Translations.GetTranslatedString("checkForUpdates"));
             bool isApplicationUpToDate = await CheckForApplicationUpdates();
+            if(!isApplicationUpToDate && versionInfo != null && !versionInfo.ConfirmUpdate)
+            {
+                Logging.Info("application is not up to date and user said don't update. we're done here.");
+                Close();
+                //https://stackoverflow.com/questions/57654546/taskcanceledexception-after-closing-window
+                Environment.Exit(0);
+                return;
+            }
             CheckForDatabaseUpdates(false);
 
             //set the file count and size for the backups folder
@@ -721,7 +730,7 @@ namespace RelhaxModpack
             }
 
             Logging.Info("Application is out of date, display update window");
-            VersionInfo versionInfo = new VersionInfo();
+            versionInfo = new VersionInfo();
             versionInfo.ShowDialog();
             if (versionInfo.ConfirmUpdate)
             {
@@ -767,7 +776,6 @@ namespace RelhaxModpack
             else
             {
                 Logging.Info("User pressed x or said no");
-                Application.Current.Shutdown();
                 return false;
             }
             return false;
