@@ -158,7 +158,7 @@
                             <TextBlock x:Name="UseBetaDatabaseText" Text="Use beta database" TextWrapping="Wrap"/>
                         </CheckBox>
                         <ComboBox Tag="UseBetaDatabaseBranches" x:Name="UseBetaDatabaseBranches" SelectionChanged="OnBetaDatabaseSelectionChanged" Margin="20,0,0,0" IsEnabled="False"/>
-                        <CheckBox Tag="UseBetaApplicationCB" x:Name="UseBetaApplicationCB" Click="OnUseBetaAppChanged" IsEnabled="False">
+                        <CheckBox Tag="UseBetaApplicationCB" x:Name="UseBetaApplicationCB" Click="OnUseBetaAppChanged">
                             <TextBlock x:Name="UseBetaApplicationText" Text="Use beta application" TextWrapping="Wrap"/>
                         </CheckBox>
                         <TextBlock Text="Uninstall Mode:" Tag="UninstallModeGroupBox" x:Name="UninstallModeGroupBox" TextWrapping="Wrap"/>

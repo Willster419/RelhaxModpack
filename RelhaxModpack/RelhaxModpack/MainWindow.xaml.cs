@@ -2233,9 +2233,14 @@ namespace RelhaxModpack
         private void OnUseBetaAppChanged(object sender, RoutedEventArgs e)
         {
             if ((bool)UseBetaApplicationCB.IsChecked)
+            {
                 ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Beta;
+                MessageBox.Show(Translations.GetTranslatedString("noChangeUntilRestart"));
+            }
             else if (!(bool)UseBetaApplicationCB.IsChecked)
+            {
                 ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
+            }
         }
 
         private async void OnUseBetaDatabaseChanged(object sender, RoutedEventArgs e)
@@ -2583,7 +2588,8 @@ namespace RelhaxModpack
             }
             else
             {
-                Logging.Warning("AutoInstallFrequencyTimeUnit is not valid selection, setting to default");
+                if(!loading)
+                    Logging.Warning("AutoInstallFrequencyTimeUnit is not valid selection, setting to default");
                 AutoSyncFrequencyComboBox.SelectedIndex = 0;
             }
 
