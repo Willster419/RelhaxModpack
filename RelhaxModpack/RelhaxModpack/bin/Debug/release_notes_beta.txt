@@ -1,5 +1,4 @@
 Application version 0.29.2.0 (2019-09-24)
-url here
 https://www.virustotal.com/gui/file/393eb1f420710822b08ad8e2de5766ee25ea5affccea757ec18baaaf2bd425ee/detection
 - Reverted logic of WoT version parsing for standard database. During patch days, if the current WoT version isn't supported, it will still install using the previous database, but install to the current WoT folder, like in V1.
 - Added message if client isn't supported about usage of beta database.
