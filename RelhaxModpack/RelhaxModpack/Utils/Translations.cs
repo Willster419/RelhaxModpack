@@ -2401,7 +2401,7 @@ namespace RelhaxModpack
             Russian.Add("couldTryBeta", TranslationNeeded);
 
             //Component: missingMSVCPLibrariesHeader
-            //M
+            //
             English.Add("missingMSVCPLibrariesHeader", "Failed to load required libraries");
             German.Add("missingMSVCPLibrariesHeader", TranslationNeeded);
             Polish.Add("missingMSVCPLibrariesHeader", TranslationNeeded);
@@ -3006,6 +3006,38 @@ namespace RelhaxModpack
             Polish.Add("selectFilesToInclude", TranslationNeeded);
             French.Add("selectFilesToInclude", TranslationNeeded);
             Russian.Add("selectFilesToInclude", TranslationNeeded);
+
+            //Component: TestLoadImageLibraries
+            //
+            English.Add("TestLoadImageLibraries", "Test loading the atlas image processing libraries");
+            German.Add("TestLoadImageLibraries", TranslationNeeded);
+            Polish.Add("TestLoadImageLibraries", TranslationNeeded);
+            French.Add("TestLoadImageLibraries", TranslationNeeded);
+            Russian.Add("TestLoadImageLibraries", TranslationNeeded);
+
+            //Component: loadingAtlasImageLibraries
+            //
+            English.Add("loadingAtlasImageLibraries", "Loading atlas image processing libraries");
+            German.Add("loadingAtlasImageLibraries", TranslationNeeded);
+            Polish.Add("loadingAtlasImageLibraries", TranslationNeeded);
+            French.Add("loadingAtlasImageLibraries", TranslationNeeded);
+            Russian.Add("loadingAtlasImageLibraries", TranslationNeeded);
+
+            //Component: loadingAtlasImageLibrariesSuccess
+            //
+            English.Add("loadingAtlasImageLibrariesSuccess", "Successfully loaded atlas image processing libraries");
+            German.Add("loadingAtlasImageLibrariesSuccess", TranslationNeeded);
+            Polish.Add("loadingAtlasImageLibrariesSuccess", TranslationNeeded);
+            French.Add("loadingAtlasImageLibrariesSuccess", TranslationNeeded);
+            Russian.Add("loadingAtlasImageLibrariesSuccess", TranslationNeeded);
+
+            //Component: loadingAtlasImageLibrariesFail
+            //
+            English.Add("loadingAtlasImageLibrariesFail", "Failed to load atlas image processing libraries");
+            German.Add("loadingAtlasImageLibrariesFail", TranslationNeeded);
+            Polish.Add("loadingAtlasImageLibrariesFail", TranslationNeeded);
+            French.Add("loadingAtlasImageLibrariesFail", TranslationNeeded);
+            Russian.Add("loadingAtlasImageLibrariesFail", TranslationNeeded);
             #endregion
 
             #region Preview Window

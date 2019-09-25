@@ -38,6 +38,7 @@ namespace RelhaxModpack.Windows
 
         private void ChangeInstall_Click(object sender, RoutedEventArgs e)
         {
+            Logging.Info("Diagnostics: Selecting WoT install");
             //show a standard WoT selection window from manual fine WoT.exe
             OpenFileDialog manualWoTFind = new OpenFileDialog()
             {
@@ -52,10 +53,11 @@ namespace RelhaxModpack.Windows
             {
                 Settings.WoTDirectory = Path.GetDirectoryName(manualWoTFind.FileName);
                 SelectedInstallation.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("SelectedInstallation"), Settings.WoTDirectory);
+                Logging.Info("Diagnostics: Selected WoT install -> {0}",Settings.WoTDirectory);
             }
             else
             {
-                Logging.Info("User Canceled selection");
+                Logging.Info("Diagnostics: User canceled selection");
             }
 
             //check to make sure a selected tanks installation is selected
@@ -130,7 +132,7 @@ namespace RelhaxModpack.Windows
             apz = null;
 
             //check in the list to make sure that the entries are valid and paths exist
-            Logging.Debug("Filtering list of files to collect");
+            Logging.Info("Filtering list of files to collect");
             filesToCollect = filesToCollect.Where(fileEntry => !string.IsNullOrWhiteSpace(fileEntry) && File.Exists(fileEntry)).ToList();
             try
             {
@@ -144,11 +146,11 @@ namespace RelhaxModpack.Windows
                         string fileNameToAdd = Path.GetFileName(s);
 
                         //run a loop to check if the file already exists in the zip with the same name, if it does then pad it until it does not
-                        Logging.Debug("Attempting to add filename {0} in zip entry", fileNameToAdd);
+                        Logging.Info("Attempting to add filename {0} in zip entry", fileNameToAdd);
                         while (zip.ContainsEntry(fileNameToAdd))
                         {
                             fileNameToAdd = string.Format("{0}_{1}.{2}", Path.GetFileNameWithoutExtension(fileNameToAdd), duplicate++, Path.GetExtension(fileNameToAdd));
-                            Logging.Debug("exists, using filename {0}", fileNameToAdd);
+                            Logging.Info("exists, using filename {0}", fileNameToAdd);
                         }
 
                         //after padding, put the full path back together
@@ -191,6 +193,7 @@ namespace RelhaxModpack.Windows
 
         private async void ClearDownloadCache_Click(object sender, RoutedEventArgs e)
         {
+            Logging.Info("Diagnostics: Deleting download cache");
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("clearingDownloadCache");
             try
             {
@@ -203,10 +206,12 @@ namespace RelhaxModpack.Windows
                 Logging.Exception(ioex.ToString());
             }
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleaningDownloadCacheComplete");
+            Logging.Info("Diagnostics: Deleted download cache");
         }
 
         private async void ClearDownloadCacheDatabase_Click(object sender, RoutedEventArgs e)
         {
+            Logging.Info("Diagnostics: Deleting database cache file");
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("clearingDownloadCacheDatabase");
             try
             {
@@ -218,6 +223,32 @@ namespace RelhaxModpack.Windows
                 Logging.Exception(ioex.ToString());
             }
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleaningDownloadCacheDatabaseComplete");
+            Logging.Info("Diagnostics: Deleted database cache file");
+        }
+
+        private void TestLoadImageLibrariesButton_Click(object sender, RoutedEventArgs e)
+        {
+            Logging.Info("Diagnostics: Test load image libraries");
+            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("loadingAtlasImageLibraries");
+            Utils.AllowUIToUpdate();
+            if (Utils.TestLoadAtlasLibraries(true))
+            {
+                DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("loadingAtlasImageLibrariesSuccess");
+                Logging.Info("Diagnostics: Test load image libraries pass");
+            }
+            else
+            {
+                DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("loadingAtlasImageLibrariesFail");
+                if (MessageBox.Show(string.Format("{0}\n{1}", Translations.GetTranslatedString("missingMSVCPLibraries"), Translations.GetTranslatedString("openLinkToMSVCP")),
+                                Translations.GetTranslatedString("missingMSVCPLibrariesHeader"), MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    if (!Utils.StartProcess(Utils.MSVCPLink))
+                    {
+                        Logging.Error("failed to open url to MSVCP: {0}", Utils.MSVCPLink);
+                    }
+                }
+                Logging.Info("Diagnostics: Test load image libraries fail");
+            }
         }
     }
 }

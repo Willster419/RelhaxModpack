@@ -22,16 +22,19 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Button HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" Click="ChangeInstall_Click" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-                <TextBlock Tag="ChangeInstall" x:Name="ChangeInstall" Text="Change the currently selected WoT installation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="2,0,2,0"/>
+                <TextBlock Tag="ChangeInstall" x:Name="ChangeInstall" Text="Change the currently selected WoT installation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="2,0,2,0" TextAlignment="Center"/>
             </Button>
             <Button HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"  Click="LaunchWoTLauncher_Click" Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-                <TextBlock Tag="LaunchWoTLauncher" x:Name="LaunchWoTLauncher" Text="Start the World of Tanks launcher in integrity validation mode" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="2,0,2,0"/>
+                <TextBlock Tag="LaunchWoTLauncher" x:Name="LaunchWoTLauncher" Text="Start the World of Tanks launcher in integrity validation mode" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="2,0,2,0" TextAlignment="Center" IsEnabled="False"/>
             </Button>
             <Button Tag="ClearDownloadCache" x:Name="ClearDownloadCache" Content="Clear download cache" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" Click="ClearDownloadCache_Click" Grid.Column="1" />
             <Button x:Name="CollectLogInfoButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"  Click="CollectLogInfo_Click" Grid.Row="2" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-                <TextBlock Tag="CollectLogInfo" x:Name="CollectLogInfo" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="Collect log files into a zip file to report a problem" Margin="2,0,2,0"/>
+                <TextBlock Tag="CollectLogInfo" x:Name="CollectLogInfo" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="Collect log files into a zip file to report a problem" Margin="2,0,2,0" TextAlignment="Center"/>
             </Button>
             <Button Tag="ClearDownloadCacheDatabase" x:Name="ClearDownloadCacheDatabase" Content="Delete download cache database file" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="2,2,2,2" Grid.Column="1" Grid.Row="1"  Click="ClearDownloadCacheDatabase_Click"/>
+            <Button x:Name="TestLoadImageLibrariesButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" Click="TestLoadImageLibrariesButton_Click" Grid.Row="2" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Column="1">
+                <TextBlock Tag="TestLoadImageLibraries" x:Name="TestLoadImageLibraries" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="Test loading the atlas image processing libraries" TextAlignment="Center"/>
+            </Button>
         </Grid>
     </Grid>
 </local:RelhaxWindow>
