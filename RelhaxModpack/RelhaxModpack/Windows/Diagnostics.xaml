@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="Diagnostics" MinHeight="320" MinWidth="525" Height="300" Width="525"
+        Title="Diagnostics" Height="320" Width="525" ResizeMode="CanMinimize"
         Loaded="RelhaxWindow_Loaded" LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <Grid >
         <TextBox x:Name="DiagnosticsMainTextBox" Tag="DiagnosticsMainTextBox" HorizontalAlignment="Stretch" Height="42" Margin="10,10,10,0" TextWrapping="Wrap" Text="Helpful explanation window" VerticalAlignment="Top" IsReadOnly="True"/>
