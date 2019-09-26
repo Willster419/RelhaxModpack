@@ -544,7 +544,7 @@ namespace RelhaxModpack
             German.Add("ForceManuelGameDetectionText", "Erzwinge manuelle Spielerkennung");
             Polish.Add("ForceManuelGameDetectionText", "Wymuś ręczną weryfikację ścieżki gry");
             French.Add("ForceManuelGameDetectionText", "Forcer détection manuel");
-            Russian.Add("ForceManuelGameDetectionText", "Принудительно указать папку с игрой");
+            Spanish.Add("ForceManuelGameDetectionText", "Forzar detección manual del cliente");
             Russian.Add("ForceManuelGameDetectionText", "Принудительно указать папку с игрой");
 
             //Component: ForceManuelGameDetectionCBDescription
@@ -2418,7 +2418,7 @@ namespace RelhaxModpack
             German.Add("autoDetectFailed", "Die automatische Erkennung ist fehlgeschlagen. Bitte benutze die 'erzwinge manuelle Spielerkennung' Option");
             Polish.Add("autoDetectFailed", "Niepowodzenie automatycznego wykrywania. Proszę wybrać opcję ręcznego znajdowania ścieżki gry.");
             French.Add("autoDetectFailed", "Échec de la détection automatique. Utilisez l'option 'Forcer détection manuel'");
-            Spanish.Add("cantStartNewApp", "La detección automática ha fallado. Por favor, use la opción de 'forzar detección manual'");
+            Spanish.Add("autoDetectFailed", "La detección automática ha fallado. Por favor, use la opción de 'forzar detección manual'");
             Russian.Add("autoDetectFailed", "Сбой автоматического обнаружения игры. Используйте опцию принудительного указания.");
 
             //Component: MainWindow_Load

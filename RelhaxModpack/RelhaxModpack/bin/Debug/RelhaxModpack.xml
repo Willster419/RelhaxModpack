@@ -5082,6 +5082,11 @@
             The French language
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Languages.Spanish">
+            <summary>
+            The Spanish language
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Languages.Russian">
             <summary>
             The Russian language
@@ -5115,6 +5120,11 @@
         <member name="F:RelhaxModpack.Translations.LanguageFrench">
             <summary>
             French language string identifier in national language
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Translations.LanguageSpanish">
+            <summary>
+            Spanish language string identifier in national language
             </summary>
         </member>
         <member name="F:RelhaxModpack.Translations.LanguageRussian">
