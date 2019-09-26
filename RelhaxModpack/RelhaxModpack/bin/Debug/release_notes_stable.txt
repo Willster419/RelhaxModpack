@@ -1,3 +1,12 @@
+Application version 0.29.2.2 (2019-09-25)
+https://www.virustotal.com/gui/file/ec39c8ea1886c94a92af50efc27017ba1bacbf3e0c94e6975ed4e16c27485761/detection
+- Added spanish translatons. Thanks to LordFelix of the EU server.
+- Added auto-install frequency check dropdown menu to list of components to toggle during an installation.
+- Fixed minor issue where the application tries to apply a "new" scaling value, even if it's the same scale factor.
+- Fixed warning messages about SizeSuffix being 0 during package download.
+- Other general code cleanup and optimizations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 0.29.2.0 (2019-09-24)
 https://www.virustotal.com/gui/file/393eb1f420710822b08ad8e2de5766ee25ea5affccea757ec18baaaf2bd425ee/detection
 - Reverted logic of WoT version parsing for standard database. During patch days, if the current WoT version isn't supported, it will still install using the previous database, but install to the current WoT folder, like in V1.
