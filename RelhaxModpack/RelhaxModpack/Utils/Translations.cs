@@ -3344,6 +3344,7 @@ namespace RelhaxModpack
             German.Add("selectFilesToInclude", "Wähle Dateien um diese dem Fehlerbericht hinzuzufügen");
             Polish.Add("selectFilesToInclude", TranslationNeeded);
             French.Add("selectFilesToInclude", TranslationNeeded);
+            Spanish.Add("selectFilesToInclude", TranslationNeeded);
             Russian.Add("selectFilesToInclude", TranslationNeeded);
 
             //Component: TestLoadImageLibraries
@@ -3352,6 +3353,7 @@ namespace RelhaxModpack
             German.Add("TestLoadImageLibraries", TranslationNeeded);
             Polish.Add("TestLoadImageLibraries", TranslationNeeded);
             French.Add("TestLoadImageLibraries", TranslationNeeded);
+            Spanish.Add("TestLoadImageLibraries", TranslationNeeded);
             Russian.Add("TestLoadImageLibraries", TranslationNeeded);
 
             //Component: loadingAtlasImageLibraries
@@ -3360,6 +3362,7 @@ namespace RelhaxModpack
             German.Add("loadingAtlasImageLibraries", TranslationNeeded);
             Polish.Add("loadingAtlasImageLibraries", TranslationNeeded);
             French.Add("loadingAtlasImageLibraries", TranslationNeeded);
+            Spanish.Add("loadingAtlasImageLibraries", TranslationNeeded);
             Russian.Add("loadingAtlasImageLibraries", TranslationNeeded);
 
             //Component: loadingAtlasImageLibrariesSuccess
@@ -3368,6 +3371,7 @@ namespace RelhaxModpack
             German.Add("loadingAtlasImageLibrariesSuccess", TranslationNeeded);
             Polish.Add("loadingAtlasImageLibrariesSuccess", TranslationNeeded);
             French.Add("loadingAtlasImageLibrariesSuccess", TranslationNeeded);
+            Spanish.Add("loadingAtlasImageLibrariesSuccess", TranslationNeeded);
             Russian.Add("loadingAtlasImageLibrariesSuccess", TranslationNeeded);
 
             //Component: loadingAtlasImageLibrariesFail
@@ -3376,6 +3380,7 @@ namespace RelhaxModpack
             German.Add("loadingAtlasImageLibrariesFail", TranslationNeeded);
             Polish.Add("loadingAtlasImageLibrariesFail", TranslationNeeded);
             French.Add("loadingAtlasImageLibrariesFail", TranslationNeeded);
+            Spanish.Add("loadingAtlasImageLibrariesFail", TranslationNeeded);
             Russian.Add("loadingAtlasImageLibrariesFail", TranslationNeeded);
             #endregion
 
@@ -3688,6 +3693,7 @@ namespace RelhaxModpack
             German.Add("ViewNewsOnGoogleTranslate", TranslationNeeded);
             Polish.Add("ViewNewsOnGoogleTranslate", TranslationNeeded);
             French.Add("ViewNewsOnGoogleTranslate", TranslationNeeded);
+            Spanish.Add("ViewNewsOnGoogleTranslate", TranslationNeeded);
             Russian.Add("ViewNewsOnGoogleTranslate", TranslationNeeded);
             #endregion
 
