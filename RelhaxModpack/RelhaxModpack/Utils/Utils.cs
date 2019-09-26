@@ -814,12 +814,15 @@ namespace RelhaxModpack
         /// <param name="value">The file size in bytes</param>
         /// <param name="decimalPlaces">The number of decimal places to maintain in the result</param>
         /// <param name="sizeSuffix">If it should return the byte symbol with the size amount (KB, MB, etc.)</param>
+        /// <param name="ignoreSizeWarningIf0">If set to true, the application log will not show values about the passed in value for size calculation being 0. 
+        /// File of 0 size, for example.</param>
         /// <returns>The string representation to decimalPlaces of the file size optionally with the bytes parameter</returns>
-        public static string SizeSuffix(ulong value, uint decimalPlaces = 1, bool sizeSuffix = false)
+        public static string SizeSuffix(ulong value, uint decimalPlaces = 1, bool sizeSuffix = false, bool ignoreSizeWarningIf0 = false)
         {
             if (value == 0)
             {
-                Logging.Warning("SizeSuffix value is 0 (why did you even call this method?)");
+                if(!ignoreSizeWarningIf0)
+                    Logging.Warning("SizeSuffix value is 0 (is this the intent?)");
                 if (sizeSuffix)
                     return "0.0 bytes";
                 else

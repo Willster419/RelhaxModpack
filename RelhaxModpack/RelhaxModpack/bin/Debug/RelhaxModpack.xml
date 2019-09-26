@@ -5450,13 +5450,15 @@
             <param name="timeout">The time to wait between retries</param>
             <returns>True if the operation completed successfully, false otherwise</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.SizeSuffix(System.UInt64,System.UInt32,System.Boolean)">
+        <member name="M:RelhaxModpack.Utils.SizeSuffix(System.UInt64,System.UInt32,System.Boolean,System.Boolean)">
             <summary>
             Calculates and returns the size magnitude of the file (kilo, mega, giga...)
             </summary>
             <param name="value">The file size in bytes</param>
             <param name="decimalPlaces">The number of decimal places to maintain in the result</param>
             <param name="sizeSuffix">If it should return the byte symbol with the size amount (KB, MB, etc.)</param>
+            <param name="ignoreSizeWarningIf0">If set to true, the application log will not show values about the passed in value for size calculation being 0. 
+            File of 0 size, for example.</param>
             <returns>The string representation to decimalPlaces of the file size optionally with the bytes parameter</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.GetFilesize(System.String)">

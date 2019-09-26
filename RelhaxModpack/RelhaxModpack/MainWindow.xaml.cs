@@ -1914,7 +1914,7 @@ namespace RelhaxModpack
             //"2MB of 8MB at 1 MB/S"
             string line3 = string.Format("{0} {1} {2} {3} {4}/s",
                 Utils.SizeSuffix((ulong)e.BytesReceived, 1, true), Translations.GetTranslatedString("of"), Utils.SizeSuffix((ulong)e.TotalBytesToReceive, 1, true),
-                Translations.GetTranslatedString("at"), Utils.SizeSuffix((ulong)downloadRateDisplay,1,true));
+                Translations.GetTranslatedString("at"), Utils.SizeSuffix((ulong)downloadRateDisplay,1,true, true));
 
             //"4 seconds"
             //https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-timespan-format-strings
