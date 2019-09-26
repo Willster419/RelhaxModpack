@@ -140,6 +140,7 @@ namespace RelhaxModpack
             LanguagesSelector.Items.Add(Translations.LanguageGerman);
             LanguagesSelector.Items.Add(Translations.LanguagePolish);
             LanguagesSelector.Items.Add(Translations.LanguageRussian);
+            LanguagesSelector.Items.Add(Translations.LanguageSpanish);
 
             //load translation hashes and set default language
             Translations.LoadTranslations();
@@ -2379,6 +2380,9 @@ namespace RelhaxModpack
                 case Translations.LanguageRussian:
                     Translations.SetLanguage(Languages.Russian);
                     break;
+                case Translations.LanguageSpanish:
+                    Translations.SetLanguage(Languages.Spanish);
+                    break;
             }
             Translations.LocalizeWindow(this, true);
             ApplyCustomUILocalizations(!loading);
@@ -2628,6 +2632,9 @@ namespace RelhaxModpack
                     break;
                 case Languages.Russian:
                     LanguagesSelector.SelectedItem = Translations.LanguageRussian;
+                    break;
+                case Languages.Spanish:
+                    LanguagesSelector.SelectedItem = Translations.LanguageSpanish;
                     break;
             }
 
