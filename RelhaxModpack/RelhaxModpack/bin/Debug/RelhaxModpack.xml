@@ -58,7 +58,8 @@
             <summary>
             The delegate to invoke when calling back to the sender for the AtlasProgres event
             </summary>
-            <param name="sender"></param>
+            <param name="sender">The sending Atlas Creator</param>
+            <param name="e">Event arguments</param>
         </member>
         <member name="T:RelhaxModpack.AtlasesCreator.AtlasCreator">
             <summary>

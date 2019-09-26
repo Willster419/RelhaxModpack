@@ -70,8 +70,9 @@ namespace RelhaxModpack.AtlasesCreator
     /// <summary>
     /// The delegate to invoke when calling back to the sender for the AtlasProgres event
     /// </summary>
-    /// <param name="sender"></param>
-    public delegate void AtlasProgressDelegate(object sender);
+    /// <param name="sender">The sending Atlas Creator</param>
+    /// <param name="e">Event arguments</param>
+    public delegate void AtlasProgressDelegate(object sender, EventArgs e);
 
     /// <summary>
     /// Represents the entire process of building an atlas image
@@ -229,7 +230,7 @@ namespace RelhaxModpack.AtlasesCreator
             {
                 Utils.Unpack(Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.AtlasFile), tempAtlasImageFile);
             }
-            OnAtlasProgres?.Invoke(this);
+            OnAtlasProgres?.Invoke(this,null);
             Token.ThrowIfCancellationRequested();
 
             Logging.Debug("atlas file {0}: map file unpack", Path.GetFileName(Atlas.AtlasFile));
@@ -237,7 +238,7 @@ namespace RelhaxModpack.AtlasesCreator
             {
                 Utils.Unpack(Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.MapFile), tempAtlasMapFile);
             }
-            OnAtlasProgres?.Invoke(this);
+            OnAtlasProgres?.Invoke(this, null);
             Token.ThrowIfCancellationRequested();
 
             stopwatch.Stop();
@@ -248,7 +249,7 @@ namespace RelhaxModpack.AtlasesCreator
             Logging.Info("atlas file {0}: parsing map file", Path.GetFileName(Atlas.AtlasFile));
             Logging.Debug("atlas file {0}: using map file {1}", Path.GetFileName(Atlas.AtlasFile), tempAtlasMapFile);
             Atlas.TextureList = LoadMapFile(tempAtlasMapFile);
-            OnAtlasProgres?.Invoke(this);
+            OnAtlasProgres?.Invoke(this, null);
 
             //using the parsed size and location definitions from above, copy each individual subtexture to the texture list
             Size originalAtlasSize = new Size();
@@ -260,7 +261,7 @@ namespace RelhaxModpack.AtlasesCreator
                 //the native library can only be used once at a time
                 atlasImage = LoadDDS(tempAtlasImageFile);
             }
-            OnAtlasProgres?.Invoke(this);
+            OnAtlasProgres?.Invoke(this, null);
             Token.ThrowIfCancellationRequested();
 
             //get the size from grumpel code
@@ -287,7 +288,7 @@ namespace RelhaxModpack.AtlasesCreator
                     return FailCode.ImageImporter;
                 }
             }
-            OnAtlasProgres?.Invoke(this);
+            OnAtlasProgres?.Invoke(this, null);
 
             stopwatch.Stop();
             Logging.Info("atlas file {0}: parsing bitmap data completed in {1} msec", Path.GetFileName(Atlas.AtlasFile), stopwatch.ElapsedMilliseconds);
@@ -335,7 +336,7 @@ namespace RelhaxModpack.AtlasesCreator
             Logging.Info("atlas file {0}: waiting for mod texture parse task", Path.GetFileName(Atlas.AtlasFile));
             parseModTexturesTask.Wait();
             Logging.Info("atlas file {0}: mod texture parse task complete, continue execution", Path.GetFileName(Atlas.AtlasFile));
-            OnAtlasProgres?.Invoke(this);
+            OnAtlasProgres?.Invoke(this, null);
 
             //check if any custom mod contour icons were parsed
             if (realModTextures.Count > 0)
@@ -369,7 +370,7 @@ namespace RelhaxModpack.AtlasesCreator
                 Atlas.TextureList[i].Height = textureResult.AtlasImage.Height;
                 Atlas.TextureList[i].Width = textureResult.AtlasImage.Width;
             }
-            OnAtlasProgres?.Invoke(this);
+            OnAtlasProgres?.Invoke(this, null);
             stopwatch.Stop();
             Logging.Info("atlas file {0}: mod images replacing completed in {1} msec", Path.GetFileName(Atlas.AtlasFile), stopwatch.ElapsedMilliseconds);
             
@@ -382,7 +383,7 @@ namespace RelhaxModpack.AtlasesCreator
 #pragma warning disable IDE0068 // Use recommended dispose pattern
                 Atlas.Padding, out Bitmap outputImage, out Dictionary<string, Rectangle> outputMap);
 #pragma warning restore IDE0068 // Use recommended dispose pattern
-            OnAtlasProgres?.Invoke(this);
+            OnAtlasProgres?.Invoke(this, null);
             if (result != 0)
             {
                 Logging.Error("atlas file {0}: There was an error making the image sheet", Path.GetFileName(Atlas.AtlasFile));
@@ -403,7 +404,7 @@ namespace RelhaxModpack.AtlasesCreator
                 File.Delete(Atlas.AtlasFile);
             //then save
             SaveDDS(Atlas.AtlasFile, outputImage);
-            OnAtlasProgres?.Invoke(this);
+            OnAtlasProgres?.Invoke(this, null);
             Logging.Info("atlas file {0}: successfully created Atlas image: {1}", Path.GetFileName(Atlas.AtlasFile), Atlas.AtlasFile);
 
             //export the mapfile
@@ -413,7 +414,7 @@ namespace RelhaxModpack.AtlasesCreator
 
             //then save
             SaveMapfile(Atlas.MapFile, outputMap);
-            OnAtlasProgres?.Invoke(this);
+            OnAtlasProgres?.Invoke(this, null);
             Logging.Info("atlas file {0}: successfully created map: {1}", Path.GetFileName(Atlas.AtlasFile), Atlas.MapFile);
 
             stopwatch.Stop();

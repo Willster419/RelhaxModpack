@@ -1887,7 +1887,7 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.Info("...skipped (no atlas entries parsed)");
         }
 
-        private void AtlasCreator_OnAtlasProgres(object sender)
+        private void AtlasCreator_OnAtlasProgres(object sender, EventArgs e)
         {
             ProgAtlas.ChildCurrent++;
             LockProgress();
