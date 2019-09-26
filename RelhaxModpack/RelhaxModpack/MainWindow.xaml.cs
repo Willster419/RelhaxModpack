@@ -1968,6 +1968,7 @@ namespace RelhaxModpack
             }
             //any to include here that aren't any of the above class types
             AutoSyncFrequencyTexbox.IsEnabled = toggle;
+            AutoSyncFrequencyComboBox.IsEnabled = toggle;
         }
 
         private void OnLinkButtonClick(object sender, RoutedEventArgs e)
