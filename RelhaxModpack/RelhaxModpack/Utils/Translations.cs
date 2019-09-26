@@ -110,7 +110,7 @@ namespace RelhaxModpack
         /// <summary>
         /// Spanish language string identifier in national language
         /// </summary>
-        public const string LanguageEnglish = "Español";
+        public const string LanguageSpanish = "Español";
         /// <summary>
         /// Russian language string identifier in national language
         /// </summary>
@@ -558,7 +558,7 @@ namespace RelhaxModpack
             French.Add("ForceManuelGameDetectionCBDescription", "Cette option consiste à forcer une détection manuel" +
                     "de World of Tanks. Sélectionnez cette option si vous rencontrez des problèmes pour localiser automatiquement le jeu.");
             Spanish.Add("ForceManuelGameDetectionCBDescription", "Esta opción es utilizada para forzar una detección manual de la" +
-                    "ruta de instalación de World of Tanks. Marque esta casilla si tiene problemas encontrando el juego automáticamente);
+                    "ruta de instalación de World of Tanks. Marque esta casilla si tiene problemas encontrando el juego automáticamente.");
             Russian.Add("ForceManuelGameDetectionCBDescription", "Эта опция для принудительного указания папки с World of Tanks." +
                     "Поставьте галочку только в случае проблем с автоматическим определением расположения игры.");
 
@@ -664,7 +664,7 @@ namespace RelhaxModpack
             French.Add("BackupModsCBDescription", "Sélectionnez cette option pour effectuer une sauvegarde de votre installation de mods actuelle. "+
                      "Ils sont stockés dans le dossier 'RelHaxModBackup' en tant que fichier zip, nommé par un horodatage.");
             Spanish.Add("BackupModsCBDescription", "Seleccione esta opción para crear una copia de seguridad de los Mods actualmente instalados." +
-                    "Será almacenada en la carpeta 'RelHaxModBackup' como archivo zip, nombrado por una timestamp);
+                    "Será almacenada en la carpeta 'RelHaxModBackup' como archivo zip, nombrado por una timestamp.");
             Russian.Add("BackupModsCBDescription", "Выберите для создания бэкапа имеющихся модов. Они будут находиться в папке 'RelHaxModBackup' в виде ZIP-архива и иметь в названии файла дату создания.");
 
             //Component: SaveLastInstallText
@@ -3697,7 +3697,6 @@ namespace RelhaxModpack
             #endregion
 
             #region First Load acks (yes i wrote that to avoid spelling the whole thing cause I may not know how even enough for auto correct to fix it)
-            #region First Load acknowledgements
             //Component: AgreementLicense
             //
             English.Add("AgreementLicense", "You have read and agree to the ");
