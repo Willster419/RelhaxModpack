@@ -2137,6 +2137,12 @@ namespace RelhaxModpack
         {
             if (e.LeftButton == MouseButtonState.Released)
             {
+                //if the new slider and old display scale are the same, then no need to apply
+                if(ModpackSettings.DisplayScale == ApplyCustomScalingSlider.Value)
+                {
+                    Logging.Debug("ModpackSettings.DisplayScale is same as Slider.Value, no need to apply");
+                    return;
+                }
                 ApplyCustomScalingLabel.Text = string.Format("{0}x", ApplyCustomScalingSlider.Value.ToString("N"));
                 double oldTempValue = ModpackSettings.DisplayScale;
                 ModpackSettings.DisplayScale = ApplyCustomScalingSlider.Value;
