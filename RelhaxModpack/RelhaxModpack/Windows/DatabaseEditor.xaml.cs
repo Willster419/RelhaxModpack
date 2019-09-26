@@ -1,22 +1,16 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using RelhaxModpack.DatabaseComponents;
+using RelhaxModpack.UIComponents;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Xml;
-using Microsoft.Win32;
-using RelhaxModpack.UIComponents;
-using RelhaxModpack.DatabaseComponents;
-using System.Net;
 using Path = System.IO.Path;
 
 namespace RelhaxModpack.Windows
@@ -40,12 +34,13 @@ namespace RelhaxModpack.Windows
         private TreeViewItem ItemToExpand;
         private Point BeforeDragDropPoint;
         private bool IsScrolling = false;
-        private bool AlreadyLoggedMouseMove = false;
+        //private bool AlreadyLoggedMouseMove = false;
         private bool AlreadyLoggedScroll = false;
         private bool Init = true;
         private object SelectedItem = null;
         private Preview Preview;
         private bool UnsavedChanges = false;
+        System.Windows.Forms.Timer ReselectOldItem = new System.Windows.Forms.Timer() { Interval = 50 };
         private string[] UIHeaders = new string[]
         {
             "-----Global Dependencies-----",
@@ -70,6 +65,7 @@ namespace RelhaxModpack.Windows
 
         private void OnApplicationLoad(object sender, RoutedEventArgs e)
         {
+            ReselectOldItem.Tick += AwesomeHack_Tick;
             Logging.Editor("Editor start");
             EditorSettings = new EditorSettings();
             Logging.Editor("Loading editor settings");
@@ -81,11 +77,16 @@ namespace RelhaxModpack.Windows
             {
                 Logging.Editor("Editor settings loaded success");
             }
+
+#warning forcing sort categories to be off
+            Logging.Editor("forcing sort categories off", LogLevel.Warning);
+            EditorSettings.SortDatabaseList = false;
+
             //check if we are loading the document auto from the command line
             LoadSettingsToUI();
             if (!string.IsNullOrWhiteSpace(CommandLineSettings.EditorAutoLoadFileName))
             {
-                Logging.Editor("Attempting to auto-load xml file from {0}",LogLevel.Info, CommandLineSettings.EditorAutoLoadFileName);
+                Logging.Editor("Attempting to auto-load xml file from {0}", LogLevel.Info, CommandLineSettings.EditorAutoLoadFileName);
                 if (File.Exists(CommandLineSettings.EditorAutoLoadFileName))
                 {
                     OnLoadDatabaseClick(null, null);
@@ -121,7 +122,21 @@ namespace RelhaxModpack.Windows
             }
         }
 
-
+        private void AwesomeHack_Tick(object sender, EventArgs e)
+        {
+            if(SelectedItem is DatabasePackage db)
+            {
+                db.EditorTreeViewItem.IsSelected = true;
+                ReselectOldItem.Enabled = false;
+                ReselectOldItem.Stop();
+            }
+            else if (SelectedItem is EditorComboBoxItem edit)
+            {
+                edit.Package.EditorTreeViewItem.IsSelected = true;
+                ReselectOldItem.Enabled = false;
+                ReselectOldItem.Stop();
+            }
+        }
 
         private void OnDragDropTimerTick(object sender, EventArgs e)
         {
@@ -148,7 +163,7 @@ namespace RelhaxModpack.Windows
             }
             if (!Logging.IsLogDisposed(Logfiles.Editor))
             {
-                if(Logging.IsLogOpen(Logfiles.Editor))
+                if (Logging.IsLogOpen(Logfiles.Editor))
                     Logging.Editor("Saving editor settings");
                 if (Settings.SaveSettings(Settings.EditorSettingsFilename, typeof(EditorSettings), null, EditorSettings))
                     if (Logging.IsLogOpen(Logfiles.Editor))
@@ -168,94 +183,6 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region Copy Methods
-
-        private DatabasePackage CopyGlobalDependency(DatabasePackage packageToCopy)
-        {
-            DatabasePackage newPackage = new DatabasePackage()
-            {
-                PackageName = packageToCopy.PackageName,
-                Version = packageToCopy.Version,
-                Timestamp = packageToCopy.Timestamp,
-                ZipFile = packageToCopy.ZipFile,
-                Enabled = packageToCopy.Enabled,
-                CRC = packageToCopy.CRC,
-                StartAddress = packageToCopy.StartAddress,
-                EndAddress = packageToCopy.EndAddress,
-                LogAtInstall = packageToCopy.LogAtInstall,
-                Triggers = new List<string>(),
-                DevURL = packageToCopy.DevURL,
-                InstallGroup = packageToCopy.InstallGroup,
-                PatchGroup = packageToCopy.PatchGroup,
-                _Enabled = packageToCopy._Enabled
-            };
-            //foreach (string s in packageToCopy.Triggers)
-            //newPackage.Triggers.Add(s);
-            return newPackage;
-        }
-
-        private Dependency CopyDependency(DatabasePackage packageToCopy)
-        {
-            Dependency dep = new Dependency()
-            {
-                PackageName = packageToCopy.PackageName,
-                Version = packageToCopy.Version,
-                Timestamp = packageToCopy.Timestamp,
-                ZipFile = packageToCopy.ZipFile,
-                Enabled = packageToCopy.Enabled,
-                CRC = packageToCopy.CRC,
-                StartAddress = packageToCopy.StartAddress,
-                EndAddress = packageToCopy.EndAddress,
-                LogAtInstall = packageToCopy.LogAtInstall,
-                Triggers = new List<string>(),
-                DevURL = packageToCopy.DevURL,
-                InstallGroup = packageToCopy.InstallGroup,
-                PatchGroup = packageToCopy.PatchGroup,
-                _Enabled = packageToCopy._Enabled
-            };
-            dep.DatabasePackageLogic = new List<DatabaseLogic>();
-            dep.Dependencies = new List<DatabaseLogic>();
-            return dep;
-        }
-
-        private SelectablePackage CopySelectablePackage(DatabasePackage packageToCopy)
-        {
-            SelectablePackage sp = new SelectablePackage()
-            {
-                PackageName = packageToCopy.PackageName,
-                Version = packageToCopy.Version,
-                Timestamp = packageToCopy.Timestamp,
-                ZipFile = packageToCopy.ZipFile,
-                Enabled = packageToCopy.Enabled,
-                CRC = packageToCopy.CRC,
-                StartAddress = packageToCopy.StartAddress,
-                EndAddress = packageToCopy.EndAddress,
-                LogAtInstall = packageToCopy.LogAtInstall,
-                Triggers = new List<string>(),
-                DevURL = packageToCopy.DevURL,
-                InstallGroup = packageToCopy.InstallGroup,
-                PatchGroup = packageToCopy.PatchGroup,
-                _Enabled = packageToCopy._Enabled
-            };
-            sp.Type = SelectionTypes.multi;
-            sp.Name = "WRITE_NEW_NAME";
-            sp.Visible = true;
-            sp.Size = 0;
-            sp.UpdateComment = string.Empty;
-            sp.Description = string.Empty;
-            sp.PopularMod = false;
-            sp._Checked = false;
-            sp.Level = -2;
-            sp.UserFiles = new List<UserFile>();
-            sp.Packages = new List<SelectablePackage>();
-            sp.Medias = new List<Media>();
-            sp.Dependencies = new List<DatabaseLogic>();
-            sp.ConflictingPackages = new List<string>();
-            sp.ShowInSearchList = true;
-            return sp;
-        }
-        #endregion
-
         #region Load UI Views
 
         private void LoadUI(List<DatabasePackage> globalDependencies, List<Dependency> dependnecies, List<Category> parsedCategoryList, int numToAddEnd = 5)
@@ -264,7 +191,7 @@ namespace RelhaxModpack.Windows
             ResetRightPanels(null);
 
             //also make the selected item null just in case
-            if(SelectedItem != null)
+            if (SelectedItem != null)
             {
                 Logging.Editor("from LoadUI(), selectedItem is not null, setting to null (user pressed a load database function) previous={0}", LogLevel.Info, SelectedItem.ToString());
                 SelectedItem = null;
@@ -408,6 +335,8 @@ namespace RelhaxModpack.Windows
             DefaultSaveLocationSetting.Text = EditorSettings.DefaultEditorSaveLocation;
             FtpUpDownAutoCloseTimoutSlider.Value = EditorSettings.FTPUploadDownloadWindowTimeout;
             FtpUpDownAutoCloseTimoutDisplayLabel.Text = EditorSettings.FTPUploadDownloadWindowTimeout.ToString();
+            SaveDatabaseLegacySetting.IsChecked = EditorSettings.SaveAsDatabaseVersion == DatabaseXmlVersion.Legacy ? true : false;
+            SaveDatabaseOnePointOneSetting.IsChecked = EditorSettings.SaveAsDatabaseVersion == DatabaseXmlVersion.OnePointOne ? true : false;
         }
         #endregion
 
@@ -427,7 +356,7 @@ namespace RelhaxModpack.Windows
                     MoveDatabaseObjectButton.IsEnabled = true;
                     AddDatabaseObjectButton.IsEnabled = true;
                     //check if the database is actually loaded before Loading the database view
-                    if(GlobalDependencies.Count == 0)
+                    if (GlobalDependencies.Count == 0)
                     {
                         Logging.Editor("Database is not yet loaded, skipping UI loading");
                     }
@@ -485,12 +414,12 @@ namespace RelhaxModpack.Windows
         private void PackageDevURLDisplay_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             //since it is multiple lines, split into array
-            string[] DevURLs = PackageDevURLDisplay.Text.Split(new string[] { "\r\n" },StringSplitOptions.RemoveEmptyEntries);
+            string[] DevURLs = PackageDevURLDisplay.Text.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
             int lastCount = 1;
-            foreach(string DevURL in DevURLs)
+            foreach (string DevURL in DevURLs)
             {
                 lastCount += DevURL.Length;
-                if(PackageDevURLDisplay.SelectionStart <= lastCount)
+                if (PackageDevURLDisplay.SelectionStart <= lastCount)
                 {
                     Logging.Editor("DevURL selection parsed at selectionStart={0} (total={1}, current={2}, lines total={3}), opening URL as {4}", LogLevel.Info,
                             PackageDevURLDisplay.SelectionStart, PackageDevURLDisplay.Text.Length, DevURL.Length, DevURLs.Count(), DevURL.Trim());
@@ -509,7 +438,7 @@ namespace RelhaxModpack.Windows
 
         private void ResetRightPanels(DatabasePackage package)
         {
-            Logging.Editor("ResetRightPanels(), package type = {0}, name= {1}", LogLevel.Info, package == null? "(null)": package.GetType().ToString(), package == null ? "(null)" : package.PackageName);
+            Logging.Editor("ResetRightPanels(), package type = {0}, name= {1}", LogLevel.Info, package == null ? "(null)" : package.GetType().ToString(), package == null ? "(null)" : package.PackageName);
             //for each tab, disable all components. then enable them back of tye type of database object
             List<Control> controlsToDisable = new List<Control>();
             foreach (TabItem tabItem in RightTab.Items)
@@ -570,6 +499,7 @@ namespace RelhaxModpack.Windows
                 PackageEndAddressDisplay.IsEnabled = true;
                 PackageDevURLDisplay.IsEnabled = true;
                 PackageVersionDisplay.IsEnabled = true;
+                PackageAuthorDisplay.IsEnabled = true;
                 PackageInstallGroupDisplay.IsEnabled = true;
                 PackagePatchGroupDisplay.IsEnabled = true;
                 PackageLastUpdatedDisplay.IsEnabled = true;
@@ -648,9 +578,9 @@ namespace RelhaxModpack.Windows
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
             //check if we should ask a confirm first
-            if(EditorSettings.ShowConfirmationOnPackageApply)
+            if (EditorSettings.ShowConfirmationOnPackageApply)
             {
-                if(MessageBox.Show("Confirm to apply changes?", "", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                if (MessageBox.Show("Confirm to apply changes?", "", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
                     return;
             }
             //first make sure databaseTreeView selected item is treeviewitem
@@ -668,6 +598,7 @@ namespace RelhaxModpack.Windows
         {
             //set handled parameter so that the parent events don't fire
             e.Handled = true;
+
             //check to make sure it's a TreeViewItem (should always be)
             if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem)
             {
@@ -683,15 +614,33 @@ namespace RelhaxModpack.Windows
         private void SelectDatabaseObject(object obj, TreeViewItem previousTreeViewItemOfSelectedItem)
         {
             //check if we should save the item before updating what the current entry is
-            if (EditorSettings.SaveSelectionBeforeLeave && SelectedItem != null)
+            if (EditorSettings.SaveSelectionBeforeLeave)
             {
-                ApplyDatabaseObject(SelectedItem);
-                if(previousTreeViewItemOfSelectedItem != null)
+                //only try to save database object if selected item is of correct type
+                if (SelectedItem is EditorComboBoxItem || SelectedItem is DatabasePackage)
                 {
-                    //trigger a UI update
-                    object tempRef = previousTreeViewItemOfSelectedItem.Header;
-                    previousTreeViewItemOfSelectedItem.Header = null;
-                    previousTreeViewItemOfSelectedItem.Header = tempRef;
+                    if (ApplyDatabaseObject(SelectedItem))
+                    {
+                        if (previousTreeViewItemOfSelectedItem != null)
+                        {
+                            //trigger a UI update
+                            object tempRef = previousTreeViewItemOfSelectedItem.Header;
+                            previousTreeViewItemOfSelectedItem.Header = null;
+                            previousTreeViewItemOfSelectedItem.Header = tempRef;
+                        }
+                    }
+                    else
+                    {
+                        Logging.Editor("applyDatabaseObject failed, not changing entry");
+                        //only start the hack when it's supposed to be used as a revert for changing back to a package selection
+                        ReselectOldItem.Start();
+                        ReselectOldItem.Enabled = true;
+                        return;
+                    }
+                }
+                else
+                {
+                    Logging.Editor("SelectedItem is of wrong type, not counting for save before leave ()", LogLevel.Info, (SelectedItem == null? "(null)" : SelectedItem.ToString()));
                 }
             }
             SelectedItem = obj;
@@ -728,6 +677,7 @@ namespace RelhaxModpack.Windows
             PackageZipFileDisplay.Text = package.ZipFile;
             PackageEndAddressDisplay.Text = package.EndAddress;
             PackageVersionDisplay.Text = package.Version;
+            PackageAuthorDisplay.Text = package.Author;
             PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
             foreach (int i in PackageInstallGroupDisplay.Items)
             {
@@ -751,10 +701,10 @@ namespace RelhaxModpack.Windows
             //devURL
             //each url is separated by newline characters "\n"
             //should be displayed with newlines already, so no change needed
-            PackageDevURLDisplay.Text = Utils.MacroReplace(package.DevURL,ReplacementTypes.TextUnescape);
+            PackageDevURLDisplay.Text = Utils.MacroReplace(package.DevURL, ReplacementTypes.TextUnescape);
 
             //internal notes
-            PackageInternalNotesDisplay.Text = Utils.MacroReplace(package.InternalNotes,ReplacementTypes.TextUnescape);
+            PackageInternalNotesDisplay.Text = Utils.MacroReplace(package.InternalNotes, ReplacementTypes.TextUnescape);
 
             //triggers
             foreach (string s in package.Triggers)
@@ -824,23 +774,32 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void ApplyDatabaseObject(object obj)
+        private bool ApplyDatabaseObject(object obj)
         {
+            bool saveApplied = false;
             if (obj is Category category)
-                ApplyDatabaseCategory(category);
+                saveApplied = ApplyDatabaseCategory(category);
             else if (obj is DatabasePackage package)
-                ApplyDatabasePackage(package);
+                saveApplied = ApplyDatabasePackage(package);
             else if (obj is EditorComboBoxItem editorComboBoxItem)
-                ApplyDatabasePackage(editorComboBoxItem.Package);
+                saveApplied = ApplyDatabasePackage(editorComboBoxItem.Package);
 
             //if user requests apply to also save to disk, then do that now
-            if (EditorSettings.ApplyBehavior == ApplyBehavior.ApplyTriggersSave)
+            if (saveApplied)
             {
-                SaveDatabaseButton_Click(null, null);
+                if (EditorSettings.ApplyBehavior == ApplyBehavior.ApplyTriggersSave)
+                {
+                    SaveDatabaseButton_Click(null, null);
+                }
             }
+            else
+            {
+                Logging.Editor("apply failed, not saving", LogLevel.Warning);
+            }
+            return saveApplied;
         }
 
-        private void ApplyDatabaseCategory(Category category)
+        private bool ApplyDatabaseCategory(Category category)
         {
             Logging.Editor("ApplyDatabaseCategory(), category saving= {0}", LogLevel.Info, category.Name);
 
@@ -858,6 +817,7 @@ namespace RelhaxModpack.Windows
             }
             else
                 Logging.Editor("Category was not modified, no change to set");
+            return true;
         }
 
         private bool DependenciesWereModified(List<DatabaseLogic> dependencies)
@@ -868,7 +828,7 @@ namespace RelhaxModpack.Windows
 
             int i = 0;
             //check packagename, notflag, logic
-            foreach(DatabaseLogic logic in PackageDependenciesDisplay.Items)
+            foreach (DatabaseLogic logic in PackageDependenciesDisplay.Items)
             {
                 if (!logic.Equals(dependencies[i]))
                     return true;
@@ -916,7 +876,7 @@ namespace RelhaxModpack.Windows
                 return true;
 
             int i = 0;
-            foreach(Media media in PackageMediasDisplay.Items)
+            foreach (Media media in PackageMediasDisplay.Items)
             {
                 if (!media.Equals(Medias[i]))
                     return true;
@@ -968,6 +928,8 @@ namespace RelhaxModpack.Windows
             if (!package.DevURL.Equals(Utils.MacroReplace(PackageDevURLDisplay.Text, ReplacementTypes.TextEscape)))
                 return true;
             if (!package.Version.Equals(PackageVersionDisplay.Text))
+                return true;
+            if (!package.Author.Equals(PackageAuthorDisplay.Text))
                 return true;
             if (!package.InstallGroup.Equals((int)PackageInstallGroupDisplay.SelectedItem))
                 return true;
@@ -1028,27 +990,38 @@ namespace RelhaxModpack.Windows
             return false;
         }
 
-        private void ApplyDatabasePackage(DatabasePackage package)
+        private bool ApplyDatabasePackage(DatabasePackage package)
         {
             Logging.Editor("ApplyDatabasePackage(), package saving = {0}", LogLevel.Info, package.PackageName);
 
             //check if the to save packagename is unique
-            if(!PackagePackageNameDisplay.Text.Equals(package.PackageName))
+            if (!PackagePackageNameDisplay.Text.Equals(package.PackageName))
             {
                 Logging.Editor("packageName is new, checking if it is unique");
-                if(Utils.IsDuplicateName(Utils.GetFlatList(GlobalDependencies,Dependencies,null,ParsedCategoryList), PackagePackageNameDisplay.Text))
+                if (Utils.IsDuplicateName(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList), PackagePackageNameDisplay.Text))
                 {
                     MessageBox.Show(string.Format("Duplicate packageName: {0} is already used", PackagePackageNameDisplay.Text));
-                    return;
+                    return false;
                 }
             }
 
             //check if package was actually modified before saving all these delicious properties
-            if(!PackageWasModified(package))
+            if (!PackageWasModified(package))
             {
                 Logging.Editor("package was not modified, don't apply anything");
-                return;
+                return true;
             }
+
+            //only check for missing zip file if there is text be begin with
+            if (!string.IsNullOrWhiteSpace(PackageZipFileDisplay.Text))
+            {
+                if (!package.ZipFile.Equals(PackageZipFileDisplay.Text) && !Path.GetExtension(PackageZipFileDisplay.Text).Equals(".zip"))
+                {
+                    MessageBox.Show("no zip in file extension, was this a mistake?");
+                    return false;
+                }
+            }
+
             Logging.Editor("package was modified, saving changes to memory and setting changes switch");
 
             //save everything from the UI into the package
@@ -1058,13 +1031,14 @@ namespace RelhaxModpack.Windows
             package.EndAddress = PackageEndAddressDisplay.Text;
 
             //devURL is separated by newlines for array list, so it's not necessary to escape
-            package.DevURL = Utils.MacroReplace(PackageDevURLDisplay.Text,ReplacementTypes.TextEscape);
+            package.DevURL = Utils.MacroReplace(PackageDevURLDisplay.Text, ReplacementTypes.TextEscape);
             package.Version = PackageVersionDisplay.Text;
+            package.Author = PackageAuthorDisplay.Text;
             package.InstallGroup = (int)PackageInstallGroupDisplay.SelectedItem;
             package.PatchGroup = (int)PackagePatchGroupDisplay.SelectedItem;
             package.LogAtInstall = (bool)PackageLogAtInstallDisplay.IsChecked;
             package.Enabled = (bool)PackageEnabledDisplay.IsChecked;
-            package.InternalNotes = Utils.MacroReplace(PackageInternalNotesDisplay.Text,ReplacementTypes.TextEscape);
+            package.InternalNotes = Utils.MacroReplace(PackageInternalNotesDisplay.Text, ReplacementTypes.TextEscape);
 
             //if the zipfile was updated, then update the last modified date
             if (!package.ZipFile.Equals(PackageZipFileDisplay.Text))
@@ -1074,6 +1048,7 @@ namespace RelhaxModpack.Windows
                 package.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
                 PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
             }
+
             //see if it's a dependency
             if (package is Dependency dependency)
             {
@@ -1115,6 +1090,7 @@ namespace RelhaxModpack.Windows
 
             //there now are unsaved changes
             UnsavedChanges = true;
+            return true;
         }
         #endregion
 
@@ -1154,16 +1130,17 @@ namespace RelhaxModpack.Windows
                 Logging.Editor("Effects is copy, making new copy instance of {0}", LogLevel.Info, packageToMove.PackageName);
                 if (packageCurrentlyOver is SelectablePackage)
                 {
-                    packageToMove = CopySelectablePackage(packageToMove);
+                    packageToMove = new SelectablePackage(packageToMove, false);
                 }
                 else if (packageCurrentlyOver is Dependency)
                 {
-                    packageToMove = CopyDependency(packageToMove);
+                    packageToMove = new Dependency(packageToMove, false);
                 }
                 else
                 {
-                    packageToMove = CopyGlobalDependency(packageToMove);
+                    packageToMove = new DatabasePackage(packageToMove, false);
                 }
+
                 //the packageName needs to stay unique as well
                 int i = 0;
                 string origName = packageToMove.PackageName;
@@ -1174,27 +1151,28 @@ namespace RelhaxModpack.Windows
 
             Logging.Editor("for insert process, packageCurrentlyOver type is {0}, packageToMove type is {1}", LogLevel.Info, packageCurrentlyOver.GetType().Name, packageToMove.GetType().Name);
             //insert packageToMove into corresponding list that it's over
-            if (packageCurrentlyOver is SelectablePackage selectablePackageCurrentlyOverFOrInsert)
+            if (packageCurrentlyOver is SelectablePackage selectablePackageCurrentlyOverForInsert)
             {
                 //we need to make a new item if it's subclassing. can't cast into a subclass
                 if (!(packageToMove is SelectablePackage))
-                    packageToMove = CopySelectablePackage(packageToMove);
+                    packageToMove = new SelectablePackage(packageToMove, false);
+
                 //unless alt is pressed to copy new item inside
                 if (addBelowItem)
-                    selectablePackageCurrentlyOverFOrInsert.Packages.Add((SelectablePackage)packageToMove);
+                    selectablePackageCurrentlyOverForInsert.Packages.Add((SelectablePackage)packageToMove);
                 else
-                    selectablePackageCurrentlyOverFOrInsert.Parent.Packages.Insert(selectablePackageCurrentlyOverFOrInsert.Parent.Packages.IndexOf(selectablePackageCurrentlyOverFOrInsert) + 1, (SelectablePackage)packageToMove);
+                    selectablePackageCurrentlyOverForInsert.Parent.Packages.Insert(selectablePackageCurrentlyOverForInsert.Parent.Packages.IndexOf(selectablePackageCurrentlyOverForInsert) + 1, (SelectablePackage)packageToMove);
             }
             else if (packageCurrentlyOver is Dependency dependnecyCurrentlyOverForInsert)
             {
                 if (!(packageToMove is Dependency))
-                    packageToMove = CopyDependency(packageToMove);
+                    packageToMove = new Dependency(packageToMove, false);
                 Dependencies.Insert(Dependencies.IndexOf(dependnecyCurrentlyOverForInsert) + 1, (Dependency)packageToMove);
             }
             else
             {
                 if ((packageToMove is Dependency) || (packageToMove is SelectablePackage))
-                    packageToMove = CopyGlobalDependency(packageToMove);
+                    packageToMove = new DatabasePackage(packageToMove, false);
                 GlobalDependencies.Insert(GlobalDependencies.IndexOf(packageCurrentlyOver) + 1, (DatabasePackage)packageToMove);
             }
 
@@ -1393,11 +1371,32 @@ namespace RelhaxModpack.Windows
             return (horizontalMovement | verticalMovement);
         }
 
-        private void OnTreeViewMouseMove(object sender, MouseEventArgs e)
+        //to get and stop the alt key from causing the event to fire extra. the issue is that OnTreeViewMouseMove fires when alt key is pressed, released, and mouse is moved and clicked
+        //note this only happens with the alt key
+        bool altKeyFired = false;
+        private void DatabaseTreeView_KeyDown(object sender, KeyEventArgs e)
+        {
+            altKeyFired = true;
+        }
+
+        private void DatabaseTreeView_PreviewMouseMove(object sender, MouseEventArgs e)
         {
             if (!(sender is TreeView tv))
                 return;
             TreeView treeView = (TreeView)sender;
+
+            //check if the alt key is responsible for this one
+            if (altKeyFired)
+            {
+                altKeyFired = false;
+                return;
+            }
+
+            if (Keyboard.IsKeyDown(Key.LeftAlt))
+            {
+                //yes i know this does nothing but polling for the key seems to allow the alt key event queue to drain out
+            }
+
             //make sure the mouse is pressed and the drag movement is confirmed
             bool isDragConfirmed = IsDragConfirmed(e.GetPosition(treeView));
             if (e.LeftButton == MouseButtonState.Pressed && isDragConfirmed && !IsScrolling)
@@ -1417,11 +1416,11 @@ namespace RelhaxModpack.Windows
                     }
                 }
             }
-            else if (!AlreadyLoggedMouseMove)
+            else if (e.LeftButton == MouseButtonState.Pressed)
             {
-                AlreadyLoggedMouseMove = true;
+                //AlreadyLoggedMouseMove = true;
                 //yeah...that got annoying real quick
-                //Logging.Editor("MouseMove DragDrop movement not accepted, leftButton={0}, isDragConfirmed={1}, IsScrolling={2}", e.LeftButton.ToString(), isDragConfirmed.ToString(), IsScrolling.ToString());
+                //Logging.Editor("MouseMove DragDrop movement not accepted, leftButton={0}, isDragConfirmed={1}, IsScrolling={2}", LogLevel.Info, e.LeftButton.ToString(), isDragConfirmed.ToString(), IsScrolling.ToString());
             }
         }
 
@@ -1430,7 +1429,7 @@ namespace RelhaxModpack.Windows
             if (!(sender is TreeView tv))
                 return;
             TreeView treeView = (TreeView)sender;
-            //Logging.Editor("MouseDown, leftButton={0}, saving mouse location if pressed", e.LeftButton.ToString());
+            //Logging.Editor("MouseDown, leftButton={0}, saving mouse location if pressed", LogLevel.Info, e.LeftButton.ToString());
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 BeforeDragDropPoint = e.GetPosition(treeView);
@@ -1459,7 +1458,7 @@ namespace RelhaxModpack.Windows
             if (e.LeftButton == MouseButtonState.Released)
             {
                 IsScrolling = false;
-                AlreadyLoggedMouseMove = false;
+                //AlreadyLoggedMouseMove = false;
                 AlreadyLoggedScroll = false;
                 if (DragDropTest.Visibility == Visibility.Visible)
                     DragDropTest.Visibility = Visibility.Hidden;
@@ -1471,18 +1470,35 @@ namespace RelhaxModpack.Windows
 
         private void ZipDownload_Click(object sender, RoutedEventArgs e)
         {
-            if(SelectedItem == null)
+            //make sure something is selected
+            if (SelectedItem == null)
             {
                 MessageBox.Show("No item selected");
                 Logging.Editor("Tried to download a zip, but SelectedItem is null");
                 return;
             }
+
+            DatabasePackage packToWorkOn = null;
+            if (SelectedItem is EditorComboBoxItem ecbi)
+                packToWorkOn = ecbi.Package;
+            else if (SelectedItem is DatabasePackage pack)
+                packToWorkOn = pack;
+
+            if(packToWorkOn == null)
+            {
+                Logging.Editor("packToWorkOn is null (not EditorComboboxItem or Databasepackage",LogLevel.Error);
+                MessageBox.Show("packToWorkOn is null (not EditorComboboxItem or Databasepackage), abort");
+                return;
+            }
+
             //make sure it actually has a zip file to download
-            if (string.IsNullOrWhiteSpace((SelectedItem as EditorComboBoxItem).Package.ZipFile))
+            //first check if it's an editor combobox item (selected from checkbox) or the direct item
+            if (string.IsNullOrWhiteSpace(packToWorkOn.ZipFile))
             {
                 MessageBox.Show("no zip file to download");
                 return;
             }
+
             //make sure FTP credentials are at least entered
             if (string.IsNullOrWhiteSpace(EditorSettings.BigmodsPassword) || string.IsNullOrWhiteSpace(EditorSettings.BigmodsUsername))
             {
@@ -1502,12 +1518,12 @@ namespace RelhaxModpack.Windows
                     //https://stackoverflow.com/questions/4353487/what-does-the-filedialog-restoredirectory-property-actually-do
                     //InitialDirectory = Settings.ApplicationStartupPath,
                     Title = "Select destination for zip file",
-                    FileName = (SelectedItem as EditorComboBoxItem).Package.ZipFile
+                    FileName = packToWorkOn.ZipFile
                 };
             }
             else
             {
-                SaveZipFileDialog.FileName = (SelectedItem as EditorComboBoxItem).Package.ZipFile;
+                SaveZipFileDialog.FileName = packToWorkOn.ZipFile;
             }
             if (!(bool)SaveZipFileDialog.ShowDialog())
                 return;
@@ -1516,7 +1532,7 @@ namespace RelhaxModpack.Windows
             {
                 ZipFilePathDisk = SaveZipFileDialog.FileName,
                 ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPUsersRoot, Settings.WoTModpackOnlineFolderVersion),
-                ZipFileName = Path.GetFileName((SelectedItem as EditorComboBoxItem).Package.ZipFile),
+                ZipFileName = Path.GetFileName(packToWorkOn.ZipFile),
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
                 Upload = false,
                 PackageToUpdate = null,
@@ -1525,7 +1541,7 @@ namespace RelhaxModpack.Windows
             name.Show();
         }
 
-        private void ZipUload_Click(object sender, RoutedEventArgs e)
+        private void ZipUpload_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedItem == null)
             {
@@ -1533,12 +1549,27 @@ namespace RelhaxModpack.Windows
                 Logging.Editor("Tried to download a zip, but SelectedItem is null");
                 return;
             }
+
             //make sure FTP credentials are at least entered
             if (string.IsNullOrWhiteSpace(EditorSettings.BigmodsPassword) || string.IsNullOrWhiteSpace(EditorSettings.BigmodsUsername))
             {
                 MessageBox.Show("Missing FTP credentials");
                 return;
             }
+
+            DatabasePackage packToWorkOn = null;
+            if (SelectedItem is EditorComboBoxItem ecbi)
+                packToWorkOn = ecbi.Package;
+            else if (SelectedItem is DatabasePackage pack)
+                packToWorkOn = pack;
+
+            if (packToWorkOn == null)
+            {
+                Logging.Editor("packToWorkOn is null (not EditorComboboxItem or Databasepackage", LogLevel.Error);
+                MessageBox.Show("packToWorkOn is null (not EditorComboboxItem or Databasepackage), abort");
+                return;
+            }
+
             string zipFileToUpload = string.Empty;
             if (OpenZipFileDialog == null)
                 OpenZipFileDialog = new OpenFileDialog()
@@ -1547,16 +1578,19 @@ namespace RelhaxModpack.Windows
                     CheckFileExists = true,
                     CheckPathExists = true,
                     DefaultExt = "zip",
+                    //don't set InitialDirectory to allow it to remember last folder
                     //InitialDirectory = Settings.ApplicationStartupPath,
                     Multiselect = false,
                     Title = "Select zip file to upload"
                 };
+
             if ((bool)OpenZipFileDialog.ShowDialog() && File.Exists(OpenZipFileDialog.FileName))
             {
                 zipFileToUpload = OpenZipFileDialog.FileName;
             }
             else
                 return;
+
             //make and run the uploader instance
             DatabaseEditorDownload name = new DatabaseEditorDownload()
             {
@@ -1565,7 +1599,7 @@ namespace RelhaxModpack.Windows
                 ZipFileName = Path.GetFileName(zipFileToUpload),
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
                 Upload = true,
-                PackageToUpdate = (SelectedItem as EditorComboBoxItem).Package,
+                PackageToUpdate = packToWorkOn,
                 Countdown = EditorSettings.FTPUploadDownloadWindowTimeout
             };
             name.OnEditorUploadDownloadClosed += OnEditorUploadFinished;
@@ -1574,9 +1608,11 @@ namespace RelhaxModpack.Windows
 
         private void OnEditorUploadFinished(object sender, EditorUploadDownloadEventArgs e)
         {
+            Logging.Editor("upload finished, applying change");
             UnsavedChanges = true;
-            if(e.Package == null)
+            if (e.Package == null)
             {
+                Logging.Editor("upload was media, applying media change");
                 //uploaded media
                 Logging.Editor("Upload of {0} success, adding entry in editor", LogLevel.Info, e.UploadedFilename);
                 SelectablePackage selectedPackage = GetSelectablePackage(SelectedItem);
@@ -1591,12 +1627,31 @@ namespace RelhaxModpack.Windows
                 foreach (Media logic in selectedPackage.Medias)
                     PackageMediasDisplay.Items.Add(logic);
             }
-            else if ((SelectedItem as EditorComboBoxItem).Package.Equals(e.Package))
+            //else uploaded package zipfile entry
+            else
             {
-                PackageZipFileDisplay.Text = e.Package.ZipFile;
-                if (!(SelectedItem as EditorComboBoxItem).Package.ZipFile.Equals(e.Package.ZipFile))
+                Logging.Editor("upload was package zipfile, checking if currently displayed");
+                DatabasePackage selectedItem = null;
+                if (SelectedItem is DatabasePackage dp)
+                    selectedItem = dp;
+                else if (SelectedItem is EditorComboBoxItem editorComboBoxItem)
+                    selectedItem = editorComboBoxItem.Package;
+
+                string tempZipName = e.Package.ZipFile;
+                //update the package crc and timestamp values
+                e.Package.CRC = "f";
+                e.Package.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
+
+                if (selectedItem.Equals(e.Package))
                 {
-                    throw new BadMemeException("You have made a mistake");
+                    Logging.Editor("it's currently displayed, updating entry for display");
+                    ApplyDatabaseObject(e.Package);
+                    e.Package.ZipFile = tempZipName;
+                    ShowDatabasePackage(e.Package);
+                }
+                else
+                {
+                    Logging.Editor("it's currently not displayed, updating entry for not display");
                 }
             }
         }
@@ -1634,6 +1689,8 @@ namespace RelhaxModpack.Windows
             {
                 ApplyDatabaseObject(SelectedItem);
             }
+
+            //create the save dialog if it doesn't already exist
             if (SaveDatabaseDialog == null)
                 SaveDatabaseDialog = new SaveFileDialog()
                 {
@@ -1642,19 +1699,37 @@ namespace RelhaxModpack.Windows
                     DefaultExt = "xml",
                     InitialDirectory = string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ? Settings.ApplicationStartupPath :
                     Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)) ? DefaultSaveLocationSetting.Text : Settings.ApplicationStartupPath,
-                    Title = "Save Database"
+                    Title = string.Format("Save Database: version = {0}", EditorSettings.SaveAsDatabaseVersion.ToString())
                 };
+
+            //then show it and only continue if a selection was committed
             if (!(bool)SaveDatabaseDialog.ShowDialog())
                 return;
+
             //if what the user just specified is not the same as the current default, then ask to update it
-            if(string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ||
-                !Path.GetDirectoryName(SaveDatabaseDialog.FileName).Equals(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
-                if (MessageBox.Show("Use this as default save location?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                    DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
+            //but only if we're in legacy mode for now
+            if (EditorSettings.SaveAsDatabaseVersion == DatabaseXmlVersion.Legacy)
+            {
+                if (string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ||
+                    !Path.GetDirectoryName(SaveDatabaseDialog.FileName).Equals(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
+                    if (MessageBox.Show("Use this as default save location?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                        DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
+            }
+
             //actually save
-            XmlUtils.SaveDatabase(SaveDatabaseDialog.FileName, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
+            switch (EditorSettings.SaveAsDatabaseVersion)
+            {
+                case DatabaseXmlVersion.Legacy:
+                    XmlUtils.SaveDatabase(SaveDatabaseDialog.FileName, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
                 GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.Legacy);//temp set for old database for now
-            UnsavedChanges = false;
+                    return;
+                case DatabaseXmlVersion.OnePointOne:
+                    XmlUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(SaveDatabaseDialog.FileName), Settings.BetaDatabaseV2RootFilename),
+                        Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
+                    return;
+            }
+            if (EditorSettings.SaveAsDatabaseVersion == DatabaseXmlVersion.Legacy)
+                UnsavedChanges = false;
         }
 
         private void LoadAsDatabaseButton_Click(object sender, RoutedEventArgs e)
@@ -1907,9 +1982,9 @@ namespace RelhaxModpack.Windows
             Logging.Editor("adding dependency to component");
             IComponentWithDependencies component = null;
             //convert it out of editorComboBoxItem if it is in one
-            if(SelectedItem is EditorComboBoxItem editorComboBoxItem)
+            if (SelectedItem is EditorComboBoxItem editorComboBoxItem)
             {
-                if(editorComboBoxItem.Package is IComponentWithDependencies componentWithDependencies)
+                if (editorComboBoxItem.Package is IComponentWithDependencies componentWithDependencies)
                     component = componentWithDependencies;
             }
             else if (SelectedItem is IComponentWithDependencies componentWithDependencies)
@@ -1974,7 +2049,7 @@ namespace RelhaxModpack.Windows
             PackageDependenciesDisplay.Items.Remove(PackageDependenciesDisplay.SelectedItem);
 
             //remove it from the list of logics/dependencies of the selected item
-            if(SelectedItem is IComponentWithDependencies packageLogic)
+            if (SelectedItem is IComponentWithDependencies packageLogic)
             {
                 packageLogic.DependenciesProp.Remove(PackageDependenciesDisplay.SelectedItem as DatabaseLogic);
             }
@@ -2127,7 +2202,7 @@ namespace RelhaxModpack.Windows
                 return;
 
             //start upload
-            foreach(string mediaToUploadPath in OpenPictureDialog.FileNames)
+            foreach (string mediaToUploadPath in OpenPictureDialog.FileNames)
             {
                 string mediaToUploadFilename = Path.GetFileName(mediaToUploadPath);
                 DatabaseEditorDownload name = new DatabaseEditorDownload()
@@ -2228,7 +2303,7 @@ namespace RelhaxModpack.Windows
         private void UserdataAddUserdataButton_Click(object sender, RoutedEventArgs e)
         {
             //check if valid input
-            if(string.IsNullOrWhiteSpace(UserDataEditBox.Text))
+            if (string.IsNullOrWhiteSpace(UserDataEditBox.Text))
             {
                 MessageBox.Show("no user data path specified");
                 return;
@@ -2542,7 +2617,7 @@ namespace RelhaxModpack.Windows
 
         private void OnSearchBoxCommitted(EditorSearchBoxItem item, bool fromMouse)
         {
-            if(item == null)
+            if (item == null)
             {
                 Logging.Editor("User tried to search from item that does not exist, stopping");
                 Logging.Editor("searched text: {0}", LogLevel.Info, SearchBox.Text);
@@ -2641,5 +2716,13 @@ namespace RelhaxModpack.Windows
             }
         }
         #endregion
+
+        private void SaveDatabaseSetting_Checked(object sender, RoutedEventArgs e)
+        {
+            if ((bool)SaveDatabaseLegacySetting.IsChecked)
+                EditorSettings.SaveAsDatabaseVersion = DatabaseXmlVersion.Legacy;
+            else if ((bool)SaveDatabaseOnePointOneSetting.IsChecked)
+                EditorSettings.SaveAsDatabaseVersion = DatabaseXmlVersion.OnePointOne;
+        }
     }
 }

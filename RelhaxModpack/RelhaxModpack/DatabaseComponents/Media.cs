@@ -58,5 +58,19 @@
             else
                 return "Type: " + (int)MediaType + " - " + URL;
         }
+
+        /// <summary>
+        /// Create a copy of the Media object
+        /// </summary>
+        /// <param name="mediaToCopy">The object to copy</param>
+        /// <returns>A new Media object with the same values</returns>
+        public static Media Copy(Media mediaToCopy)
+        {
+            return new Media()
+            {
+                URL = mediaToCopy.URL,
+                MediaType = mediaToCopy.MediaType
+            };
+        }
     }
 }

@@ -29,49 +29,65 @@ namespace RelhaxModpack.Windows
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Flag for if the user installation reporter should have been called
+        /// </summary>
+        public bool ShouldUserInstallBeCalled = false;
+
         //make a bunch of handlers for referencing the install progress options later
         /// <summary>
         /// The UI Reporting object for the step of backing up mods
         /// </summary>
         public RelhaxInstallTaskReporter BackupModsReporter = null;
+
         /// <summary>
         /// The UI Reporting object for the steps of backing up data, clearing cache, and clearing logs
         /// </summary>
         public RelhaxInstallTaskReporter BackupDataClearCacheClearLogsReporter = null;
+
         /// <summary>
         /// The UI Reporting object for the step of cleaning mods
         /// </summary>
         public RelhaxInstallTaskReporter CleanModsReporter = null;
+
         /// <summary>
         /// The UI Reporting object for the step of extracting mods
         /// </summary>
         public RelhaxInstallTaskReporter[] ExtractionModsReporters;
+
         /// <summary>
         /// The UI Reporting object for the step of extracting user mods
         /// </summary>
         public RelhaxInstallTaskReporter ExtractionUserModsReporter = null;
+
         /// <summary>
         /// The UI Reporting object for the step of unpacking xml files
         /// </summary>
         public RelhaxInstallTaskReporter RestoreDataXmlUnpackReporter = null;
+
         /// <summary>
         /// The UI Reporting object for the step of patching files
         /// </summary>
         public RelhaxInstallTaskReporter PatchReporter = null;
+
         /// <summary>
         /// The UI Reporting object for the step of creating shortcuts
         /// </summary>
         public RelhaxInstallTaskReporter ShortcutsReporter = null;
+
         /// <summary>
         /// The UI Reporting object for the step of Creating atlas files
         /// </summary>
         public RelhaxInstallTaskReporter AtlasReporter = null;
+
         /// <summary>
         /// The UI Reporting object for the step of font install, trimming download cache, and cleanup
         /// </summary>
         public RelhaxInstallTaskReporter FontInstallTrimDownloadCacheCleanupReporter = null;
 
         private InstallerExitCodes lastExitCode = InstallerExitCodes.Success;
+
+        private int lastInstallGroup = -1;
 
         /// <summary>
         /// Update the advanced progress UI objects
@@ -114,6 +130,16 @@ namespace RelhaxModpack.Windows
             switch (progress.InstallStatus)
             {
                 case InstallerExitCodes.BackupModsError:
+                    if(BackupModsReporter == null)
+                    {
+                        bool isBackupMod = ModpackSettings.BackupModFolder && !ModpackSettings.ExportMode;
+                        if (isBackupMod)
+                        {
+                            Logging.Error("BackupModFolder is true, not export mode but its task reporter is null!");
+                        }
+                        break;
+                    }
+
                     if (BackupModsReporter.ReportState != TaskReportState.Active)
                         BackupModsReporter.ReportState = TaskReportState.Active;
 
@@ -129,13 +155,23 @@ namespace RelhaxModpack.Windows
                     if (BackupModsReporter.SubTaskMinimum != 0)
                         BackupModsReporter.SubTaskMinimum = 0;
                     if (BackupModsReporter.SubTaskMaximum != progress.ChildTotal)
-                        BackupModsReporter.SubTaskMinimum = progress.ChildTotal;
+                        BackupModsReporter.SubTaskMaximum = progress.ChildTotal;
                     if (BackupModsReporter.SubTaskValue != progress.ChildCurrent)
                         BackupModsReporter.SubTaskValue = progress.ChildCurrent;
                     break;
                 case InstallerExitCodes.BackupDataError:
                 case InstallerExitCodes.ClearCacheError:
                 case InstallerExitCodes.ClearLogsError:
+                    if(BackupDataClearCacheClearLogsReporter == null)
+                    {
+                        if ((ModpackSettings.SaveUserData || ModpackSettings.ClearCache || ModpackSettings.DeleteLogs) && (!ModpackSettings.ExportMode))
+                        {
+                            Logging.Error("Backup Data/Clear Cache/Clear Logs reporter is null and export mod is false! SaveUserData={0}, ClearCache={1}, DeleteLogs={2}",
+                                ModpackSettings.SaveUserData, ModpackSettings.ClearCache, ModpackSettings.DeleteLogs);
+                        }
+                        break;
+                    }
+
                     if (BackupDataClearCacheClearLogsReporter.ReportState != TaskReportState.Active)
                         BackupDataClearCacheClearLogsReporter.ReportState = TaskReportState.Active;
 
@@ -164,28 +200,102 @@ namespace RelhaxModpack.Windows
                     }
                     break;
                 case InstallerExitCodes.CleanModsError:
+                    if(CleanModsReporter == null)
+                    {
+                        if(ModpackSettings.CleanInstallation || ModpackSettings.ExportMode || ModpackSettings.AutoInstall || !string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
+                        {
+                            Logging.Error("CleanModsReporter is null when it should not be! CleanInstallation={0}, ExportMode={1}, AutoInstall={2}, AutoInstallFileName={3}",
+                                ModpackSettings.CleanInstallation, ModpackSettings.ExportMode, ModpackSettings.AutoInstall, CommandLineSettings.AutoInstallFileName);
+                        }
+                        break;
+                    }
+
                     if (CleanModsReporter.ReportState != TaskReportState.Active)
                         CleanModsReporter.ReportState = TaskReportState.Active;
 
                     CleanModsReporter.TaskText = string.Format("{0}\n{1}", Translations.GetTranslatedString("installCleanMods"), progress.Filename);
 
-                    if (CleanModsReporter.SubTaskMinimum != 0)
-                        CleanModsReporter.SubTaskMinimum = 0;
-                    if (CleanModsReporter.SubTaskMaximum != progress.ChildTotal)
-                        CleanModsReporter.SubTaskMinimum = progress.ChildTotal;
-                    if (CleanModsReporter.SubTaskValue != progress.ChildCurrent)
-                        CleanModsReporter.SubTaskValue = progress.ChildCurrent;
+                    if (CleanModsReporter.TaskMinimum != 0)
+                        CleanModsReporter.TaskMinimum = 0;
+                    if (CleanModsReporter.TaskMaximum != progress.ChildTotal)
+                        CleanModsReporter.TaskMaximum = progress.ChildTotal;
+                    if (CleanModsReporter.TaskValue != progress.ChildCurrent)
+                        CleanModsReporter.TaskValue = progress.ChildCurrent;
                     break;
                 case InstallerExitCodes.ExtractionError:
-                    if (ExtractionModsReporters[progress.ThreadID].ReportState != TaskReportState.Active)
-                        ExtractionModsReporters[progress.ThreadID].ReportState = TaskReportState.Active;
+                    if(ExtractionModsReporters[progress.ThreadID] == null)
+                    {
+                        Logging.Error("Extraction reporter for thread {0} is null! ID={0}", progress.ThreadID);
+                        break;
+                    }
 
-                    ExtractionModsReporters[progress.ThreadID].TaskText = string.Format("{0}\n{1}\n{2}",
-                        Path.GetFileName(progress.Filename),
-                        string.Format("{0} {1} {2}", progress.EntriesProcessed, Translations.GetTranslatedString("of"), progress.EntriesTotal),
-                        progress.EntryFilename);
+                    if (lastInstallGroup != (int)progress.InstallGroup)
+                    {
+                        lastInstallGroup = (int)progress.InstallGroup;
+                        for (int i = 0; i < progress.TotalThreads; i++)
+                        {
+                            ExtractionModsReporters[i].ReportState = TaskReportState.Inactive;
+                        }
+                    }
+                    else if (ExtractionModsReporters[progress.ThreadID].ReportState != TaskReportState.Active)
+                    {
+                        ExtractionModsReporters[progress.ThreadID].ReportState = TaskReportState.Active;
+                    }
+
+                    StringBuilder builder = new StringBuilder();
+
+                    if (progress.TotalPackagesofAThread == null || progress.CompletedPackagesOfAThread == null)
+                    {
+                        builder.AppendFormat("{0} {1} {2} {3} \n", Translations.GetTranslatedString("installExtractingMods"), Translations.GetTranslatedString("of"),
+                            Translations.GetTranslatedString("installExtractingOfGroup"), progress.InstallGroup);
+                    }
+                    else
+                    {
+                        builder.AppendFormat("{0} {1} {2} {3} {4} {5}\n", Translations.GetTranslatedString("installExtractingMods"), progress.CompletedPackagesOfAThread[progress.ThreadID],
+                            Translations.GetTranslatedString("of"), progress.TotalPackagesofAThread[progress.ThreadID], Translations.GetTranslatedString("installExtractingOfGroup"),
+                            progress.InstallGroup);
+                    }
+
+                    builder.AppendFormat("{0}\n", progress.Filename);
+
+                    if (progress.EntriesProcessedOfAThread != null && progress.EntriesTotalOfAThread != null)
+                    {
+                        builder.AppendFormat("{0} {1} {2} {3}\n", Translations.GetTranslatedString("installZipFileEntry"), progress.EntriesProcessedOfAThread[progress.ThreadID],
+                                Translations.GetTranslatedString("of"), progress.EntriesTotalOfAThread[progress.ThreadID]);
+
+                        if (ExtractionModsReporters[progress.ThreadID].TaskMinimum != 0)
+                            ExtractionModsReporters[progress.ThreadID].TaskMinimum = 0;
+                        if (ExtractionModsReporters[progress.ThreadID].TaskMaximum != (int)progress.EntriesTotalOfAThread[progress.ThreadID])
+                            ExtractionModsReporters[progress.ThreadID].TaskMaximum = (int)progress.EntriesTotalOfAThread[progress.ThreadID];
+                        if (ExtractionModsReporters[progress.ThreadID].TaskValue != (int)progress.EntriesProcessedOfAThread[progress.ThreadID])
+                            ExtractionModsReporters[progress.ThreadID].TaskValue = (int)progress.EntriesProcessedOfAThread[progress.ThreadID];
+                    }
+
+                    if(progress.EntryFilenameOfAThread != null)
+                        builder.AppendFormat("{0}\n", progress.EntryFilenameOfAThread[progress.ThreadID]);
+
+                    if(progress.BytesProcessedOfAThread != null && progress.BytesTotalOfAThread != null)
+                    {
+                        if (ExtractionModsReporters[progress.ThreadID].SubTaskMinimum != 0)
+                            ExtractionModsReporters[progress.ThreadID].SubTaskMinimum = 0;
+                        if (ExtractionModsReporters[progress.ThreadID].SubTaskMaximum != (int)progress.BytesTotalOfAThread[progress.ThreadID])
+                            ExtractionModsReporters[progress.ThreadID].SubTaskMaximum = (int)progress.BytesTotalOfAThread[progress.ThreadID];
+                        if (ExtractionModsReporters[progress.ThreadID].SubTaskValue != (int)progress.BytesProcessedOfAThread[progress.ThreadID])
+                            ExtractionModsReporters[progress.ThreadID].SubTaskValue = (int)progress.BytesProcessedOfAThread[progress.ThreadID];
+                    }
+
+                    ExtractionModsReporters[progress.ThreadID].TaskText = builder.ToString();
                     break;
                 case InstallerExitCodes.UserExtractionError:
+                    if(ExtractionUserModsReporter == null)
+                    {
+                        if(ShouldUserInstallBeCalled)
+                        {
+                            Logging.Error("ExtractionUserModsReporter is null when user has mods to extract!");
+                        }
+                        break;
+                    }
+
                     if (ExtractionUserModsReporter.ReportState != TaskReportState.Active)
                         ExtractionUserModsReporter.ReportState = TaskReportState.Active;
 
@@ -217,21 +327,23 @@ namespace RelhaxModpack.Windows
                         case InstallerExitCodes.RestoreUserdataError:
                             if (RestoreDataXmlUnpackReporter.TaskValue != 1)
                                 RestoreDataXmlUnpackReporter.TaskValue = 1;
-                            RestoreDataXmlUnpackReporter.TaskText = string.Format("{0}\n{1}", Translations.GetTranslatedString("AdvancedInstallRestoreData"), progress.Filename);
+                            RestoreDataXmlUnpackReporter.TaskText = string.Format("{0} {1} {2} {3}\n{4}", Translations.GetTranslatedString("installRestoreUserdata"), progress.ParrentCurrent.ToString(),
+                            Translations.GetTranslatedString("of"), progress.ParrentTotal.ToString(), progress.Filename);
                             break;
                         case InstallerExitCodes.XmlUnpackError:
                             if (RestoreDataXmlUnpackReporter.TaskValue != 2)
                                 RestoreDataXmlUnpackReporter.TaskValue = 2;
-                            RestoreDataXmlUnpackReporter.TaskText = string.Format("{0}\n{1}", Translations.GetTranslatedString("AdvancedInstallXmlUnpack"), progress.Filename);
+                            RestoreDataXmlUnpackReporter.TaskText = string.Format("{0} {1} {2} {3}\n{4}", Translations.GetTranslatedString("installXmlUnpack"), progress.ParrentCurrent.ToString(),
+                            Translations.GetTranslatedString("of"), progress.ParrentTotal.ToString(), progress.Filename);
                             break;
                     }
 
                     if (RestoreDataXmlUnpackReporter.SubTaskMinimum != 0)
                         RestoreDataXmlUnpackReporter.SubTaskMinimum = 0;
-                    if (RestoreDataXmlUnpackReporter.SubTaskMaximum != progress.ChildTotal)
-                        RestoreDataXmlUnpackReporter.SubTaskMinimum = progress.ChildTotal;
-                    if (RestoreDataXmlUnpackReporter.SubTaskValue != progress.ChildCurrent)
-                        RestoreDataXmlUnpackReporter.SubTaskValue = progress.ChildCurrent;
+                    if (RestoreDataXmlUnpackReporter.SubTaskMaximum != progress.ParrentTotal)
+                        RestoreDataXmlUnpackReporter.SubTaskMaximum = progress.ParrentTotal;
+                    if (RestoreDataXmlUnpackReporter.SubTaskValue != progress.ParrentCurrent)
+                        RestoreDataXmlUnpackReporter.SubTaskValue = progress.ParrentCurrent;
 
                     break;
                 case InstallerExitCodes.PatchError:
@@ -248,6 +360,16 @@ namespace RelhaxModpack.Windows
                         PostInstallPanel.Children.Add(PatchReporter);
                     }
 
+                    PatchReporter.TaskText = string.Format("{0} {1} {2} {3}\n{4}", Translations.GetTranslatedString("installPatchFiles"), progress.ParrentCurrent.ToString(),
+                            Translations.GetTranslatedString("of"), progress.ParrentTotal.ToString(), progress.Filename);
+
+                    if (PatchReporter.TaskMinimum != 0)
+                        PatchReporter.TaskMinimum = 0;
+                    if (PatchReporter.TaskMaximum != progress.ParrentTotal)
+                        PatchReporter.TaskMaximum = progress.ParrentTotal;
+                    if (PatchReporter.TaskValue != progress.ParrentCurrent)
+                        PatchReporter.TaskValue = progress.ParrentCurrent;
+
                     break;
                 case InstallerExitCodes.ShortcutsError:
                     if (!ModpackSettings.CreateShortcuts)
@@ -259,11 +381,21 @@ namespace RelhaxModpack.Windows
                         ShortcutsReporter = new RelhaxInstallTaskReporter()
                         {
                             IsSubProgressActive = false,
-                            TaskTitle = Translations.GetTranslatedString("AdvancedInstallInstallFonts"),
+                            TaskTitle = Translations.GetTranslatedString("AdvancedInstallPatchFiles"),
                             ReportState = TaskReportState.Active
                         };
                         PostInstallPanel.Children.Add(ShortcutsReporter);
                     }
+
+                    ShortcutsReporter.TaskText = string.Format("{0} {1} {2} {3}\n{4}", Translations.GetTranslatedString("AdvancedInstallCreateShortcuts"), progress.ParrentCurrent.ToString(),
+                            Translations.GetTranslatedString("of"), progress.ParrentTotal.ToString(), progress.Filename);
+
+                    if (ShortcutsReporter.TaskMinimum != 0)
+                        ShortcutsReporter.TaskMinimum = 0;
+                    if (ShortcutsReporter.TaskMaximum != progress.ParrentTotal)
+                        ShortcutsReporter.TaskMaximum = progress.ParrentTotal;
+                    if (ShortcutsReporter.TaskValue != progress.ParrentCurrent)
+                        ShortcutsReporter.TaskValue = progress.ParrentCurrent;
 
                     break;
                 case InstallerExitCodes.ContourIconAtlasError:
@@ -271,13 +403,34 @@ namespace RelhaxModpack.Windows
                     {
                         AtlasReporter = new RelhaxInstallTaskReporter()
                         {
-                            IsSubProgressActive = false,
+                            IsSubProgressActive = true,
                             TaskTitle = Translations.GetTranslatedString("AdvancedInstallCreateAtlas"),
                             ReportState = TaskReportState.Active
                         };
                         PostInstallPanel.Children.Add(AtlasReporter);
                     }
 
+                    StringBuilder sb = new StringBuilder();
+                    sb.AppendFormat("{0} {1} {2} {3}\n", Translations.GetTranslatedString("installContourIconAtlas"), progress.ParrentCurrent.ToString(),
+                            Translations.GetTranslatedString("of"), progress.ParrentTotal.ToString());
+                    sb.AppendFormat("{0} {1} {2} {3}\n", progress.ChildCurrent.ToString(), Translations.GetTranslatedString("of"), progress.ChildTotal.ToString(),
+                            Translations.GetTranslatedString("stepsComplete"));
+
+                    if (AtlasReporter.TaskMinimum != 0)
+                        AtlasReporter.TaskMinimum = 0;
+                    if (AtlasReporter.TaskMaximum != progress.ParrentTotal)
+                        AtlasReporter.TaskMaximum = progress.ParrentTotal;
+                    if (AtlasReporter.TaskValue != progress.ParrentCurrent)
+                        AtlasReporter.TaskValue = progress.ParrentCurrent;
+
+                    if (AtlasReporter.SubTaskMinimum != 0)
+                        AtlasReporter.SubTaskMinimum = 0;
+                    if (AtlasReporter.SubTaskMaximum != progress.ChildTotal)
+                        AtlasReporter.SubTaskMaximum = progress.ChildTotal;
+                    if (AtlasReporter.SubTaskValue != progress.ChildCurrent)
+                        AtlasReporter.SubTaskValue = progress.ChildCurrent;
+
+                    AtlasReporter.TaskText = sb.ToString();
                     break;
                 case InstallerExitCodes.FontInstallError:
                 case InstallerExitCodes.TrimDownloadCacheError:

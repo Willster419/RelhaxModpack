@@ -193,7 +193,7 @@
                 </GroupBox>
                 <GroupBox Header="Task Cancel Stuff" x:Name="TaskCancelTestingGroupBox" HorizontalAlignment="Left" Height="102" Margin="561,223,0,0" VerticalAlignment="Top" Width="215">
                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                        <TextBlock x:Name="TaskCancelTestingBlock" HorizontalAlignment="Left" Margin="10,32,0,0" TextWrapping="Wrap" Text="Task Not started" VerticalAlignment="Top" Width="183" Style="{DynamicResource TextBlockStyle1}" />
+                        <TextBlock x:Name="TaskCancelTestingBlock" HorizontalAlignment="Left" Margin="10,32,0,0" TextWrapping="Wrap" Text="Task Not started" VerticalAlignment="Top" Width="183"/>
                         <Button x:Name="TaskCancelTestingButton" Content="Start Task" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="74" Height="20" Click="TaskCancelTestingButton_Click"/>
                         <ProgressBar x:Name="TaskCancelTestingProgress" HorizontalAlignment="Left" Height="17" Margin="10,53,0,0" VerticalAlignment="Top" Width="183" Minimum="0" Value="0" Maximum="10"/>
                         <Button x:Name="TaskCancelTestingCancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="89,10,0,0" VerticalAlignment="Top" Width="75" Click="TaskCancelTestingCancelButton_Click"/>
@@ -211,6 +211,14 @@
                         <Button x:Name="changeHyperlinkTextLikeTranslations" Click="ChangeHyperlinkTextLikeTranslations_Click" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="128" Content="Change hyperlink text" Margin="0,22,0,0"/>
                     </Grid>
                 </GroupBox>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Image Pan and Zoom" x:Name="ImagePanZoomTab">
+            <Grid>
+                <local:ZoomBorder x:Name="border" ClipToBounds="True" Background="Gray" Margin="0,0,0,33">
+                    <Image x:Name="ImageDisplay" Source="Resources/popular_icon.png"/>
+                </local:ZoomBorder>
+                <Slider HorizontalAlignment="Left" Margin="0,0,0,10" VerticalAlignment="Bottom" Width="786"/>
             </Grid>
         </TabItem>
     </TabControl>

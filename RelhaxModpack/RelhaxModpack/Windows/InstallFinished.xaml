@@ -19,7 +19,7 @@
             <Button x:Name="InstallationCompleteOpenXVMButton" HorizontalAlignment="Stretch" Margin="0,0,0,2" VerticalAlignment="Top" Click="InstallationCompleteOpenXVMButton_Click" >
                 <TextBlock Tag="InstallationCompleteOpenXVM" x:Name="InstallationCompleteOpenXVM" Text="Open your web browser to the xvm statistics login website?" TextWrapping="Wrap"/>
             </Button>
-            <Button x:Name="InstallationCompleteCloseThisWindowButton" HorizontalAlignment="Stretch" Margin="0,0,0,2" VerticalAlignment="Top" >
+            <Button x:Name="InstallationCompleteCloseThisWindowButton" HorizontalAlignment="Stretch" Margin="0,0,0,2" VerticalAlignment="Top" Click="InstallationCompleteCloseThisWindowButton_Click" >
                 <TextBlock Tag="InstallationCompleteCloseApp" x:Name="InstallationCompleteCloseThisWindow" Text="Close this window?" TextWrapping="Wrap"/>
             </Button>
             <Button x:Name="InstallationCompleteCloseAppButton" HorizontalAlignment="Stretch" Margin="0,0,0,2" VerticalAlignment="Top" Click="InstallationCompleteCloseAppButton_Click" >

@@ -41,10 +41,11 @@
     <ProjectSummary>This is the root of the Relhax Modpack Documentation project</ProjectSummary>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="(global)" isDocumented="True">Relhax Modpack Root Namespace</NamespaceSummaryItem>
-<NamespaceSummaryItem name="RelhaxModpack" isDocumented="True" />
-<NamespaceSummaryItem name="RelhaxModpack.InstallerComponents" isDocumented="True" />
-<NamespaceSummaryItem name="RelhaxModpack.UIComponents" isDocumented="True" />
-<NamespaceSummaryItem name="RelhaxModpack.Windows" isDocumented="True" /></NamespaceSummaries>
+      <NamespaceSummaryItem name="RelhaxModpack" isDocumented="True" />
+      <NamespaceSummaryItem name="RelhaxModpack.InstallerComponents" isDocumented="True" />
+      <NamespaceSummaryItem name="RelhaxModpack.UIComponents" isDocumented="True" />
+      <NamespaceSummaryItem name="RelhaxModpack.Windows" isDocumented="True" />
+    </NamespaceSummaries>
     <MissingTags>Summary, Parameter, Returns, Value, AutoDocumentCtors, Namespace, TypeParameter, IncludeTargets, AutoDocumentDispose</MissingTags>
     <HelpTitle>Relhax Modpack Documentation</HelpTitle>
     <HelpFileVersion>1.0.0.3</HelpFileVersion>
@@ -62,8 +63,8 @@
     <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, InheritedFrameworkInternalMembers, Internals, Privates, Protected, SealedProtected</VisibleItems>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="RelhaxModpack" isExposed="True" xmlns="">
-  <Filter entryType="Class" fullName="RelhaxModpack.PrivateStuff" filterName="PrivateStuff" isExposed="False" />
-</Filter>
+        <Filter entryType="Class" fullName="RelhaxModpack.PrivateStuff" filterName="PrivateStuff" isExposed="False" />
+      </Filter>
     </ApiFilter>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform

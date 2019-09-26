@@ -469,12 +469,21 @@ namespace RelhaxModpack.Windows
                         break;
 
                     case DatabaseVersions.Test:
+#warning using old database for test mode
+                        if (!XmlUtils.ParseDatabase(modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
+                        {
+                            Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
+                            MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
+                            return false;
+                        }
+                        /*
                         if (!XmlUtils.ParseDatabase1V1FromFiles(Path.GetDirectoryName(ModpackSettings.CustomModInfoPath), modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
                         {
                             Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
                             MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
                             return false;
                         }
+                        */
                         break;
                 }
 
@@ -509,7 +518,7 @@ namespace RelhaxModpack.Windows
                 foreach (DatabasePackage package in flatListZips)
                 {
                     //make path for the zipfile
-                    string zipFile = Path.Combine(Settings.RelhaxDownloadsFolder, package.ZipFile);
+                    string zipFile = Path.Combine(Settings.RelhaxDownloadsFolderPath, package.ZipFile);
 
                     //only look for a crc if the cache file exists
                     if (!File.Exists(zipFile))
@@ -625,7 +634,7 @@ namespace RelhaxModpack.Windows
                     //else check and load the use selection from auto launch command line
                     else if (!string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
                     {
-                        SelectionsDocument = XmlUtils.LoadXmlDocument(Path.Combine(Settings.RelhaxUserSelectionsFolder, CommandLineSettings.AutoInstallFileName), XmlLoadType.FromFile);
+                        SelectionsDocument = XmlUtils.LoadXmlDocument(Path.Combine(Settings.RelhaxUserSelectionsFolderPath, CommandLineSettings.AutoInstallFileName), XmlLoadType.FromFile);
                         shouldLoadSomething = true;
                     }
                     else if (ModpackSettings.SaveLastSelection)
@@ -692,7 +701,6 @@ namespace RelhaxModpack.Windows
                             GlobalDependencies = GlobalDependencies,
                             UserMods = userMods
                         });
-                        Close();
                     }
                     else
                     {
@@ -720,7 +728,7 @@ namespace RelhaxModpack.Windows
         private void InitUsermods()
         {
             //get a list of all zip files in the folder
-            string[] zipFilesUserMods = Utils.DirectorySearch(Settings.RelhaxUserModsFolder, SearchOption.TopDirectoryOnly, false, @"*.zip", 5, 3, true);
+            string[] zipFilesUserMods = Utils.DirectorySearch(Settings.RelhaxUserModsFolderPath, SearchOption.TopDirectoryOnly, false, @"*.zip", 5, 3, true);
             userMods = new List<SelectablePackage>();
             foreach (string s in zipFilesUserMods)
             {
@@ -766,6 +774,7 @@ namespace RelhaxModpack.Windows
                     PopularModVisability = Visibility.Hidden,
                     GreyAreaVisability = Visibility.Hidden
                 };
+                package.UIComponent = userMod;
                 userMod.Click += OnUserPackageClick;
                 //EVENT TODO
                 userStackPanel.Children.Add(userMod);
@@ -1535,7 +1544,7 @@ namespace RelhaxModpack.Windows
         {
             SaveFileDialog selectSavePath = new SaveFileDialog()
             {
-                InitialDirectory = Settings.RelhaxUserSelectionsFolder,
+                InitialDirectory = Settings.RelhaxUserSelectionsFolderPath,
                 AddExtension = true,
                 Filter = "XML files|*.xml",
                 ValidateNames = true
@@ -1565,7 +1574,7 @@ namespace RelhaxModpack.Windows
             {
                 OpenFileDialog selectLoadPath = new OpenFileDialog()
                 {
-                    InitialDirectory = Settings.RelhaxUserSelectionsFolder,
+                    InitialDirectory = Settings.RelhaxUserSelectionsFolderPath,
                     CheckFileExists = true,
                     CheckPathExists = true,
                     AddExtension = true,
@@ -1675,6 +1684,7 @@ namespace RelhaxModpack.Windows
             List<string> stringUserSelections = new List<string>();
             List<string> disabledMods = new List<string>();
             List<string> disabledStructureMods = new List<string>();
+
             foreach(XmlNode node in xmlSelections)
                 stringSelections.Add(node.InnerText);
             foreach(XmlNode node in xmluserSelections)
@@ -1714,12 +1724,12 @@ namespace RelhaxModpack.Windows
             //do the same as above but for user mods
             foreach(SelectablePackage package in userMods)
             {
-                if(stringUserSelections.Contains(package.ZipFile) && File.Exists(Path.Combine(Settings.RelhaxUserModsFolder,package.ZipFile)))
+                if(stringUserSelections.Contains(Path.GetFileNameWithoutExtension(package.ZipFile)) && File.Exists(Path.Combine(Settings.RelhaxUserModsFolderPath,package.ZipFile)))
                 {
                     Logging.Info(string.Format("Checking User Mod {0}",package.ZipFile));
                     package.Enabled = true;
                     package.Checked = true;
-                    stringUserSelections.Remove(package.ZipFile);
+                    stringUserSelections.Remove(Path.GetFileNameWithoutExtension(package.ZipFile));
                 }
             }
             //now check for the correct structure of mods
@@ -1733,17 +1743,17 @@ namespace RelhaxModpack.Windows
                 if(disabledMods.Count > 0)
                 {
                     //disabled selections
-                    MessageBox.Show(Translations.GetTranslatedString("modsDisabled") + "\n" + string.Join("\n",disabledMods));
+                    MessageBox.Show(Translations.GetTranslatedString("modDeactivated") + "\n" + string.Join("\n",disabledMods));
                 }
                 if(stringSelections.Count > 0)
                 {
                     //removed selections
-                    MessageBox.Show(Translations.GetTranslatedString("modsNotRemovedTechnical") + "\n" + string.Join("\n", stringSelections));
+                    MessageBox.Show(Translations.GetTranslatedString("modsNotFoundTechnical") + "\n" + string.Join("\n", stringSelections));
                 }
                 if(stringUserSelections.Count > 0)
                 {
                     //removed user selections
-                    MessageBox.Show(Translations.GetTranslatedString("userModsRemovedTechnical") + "\n" + string.Join("\n", stringUserSelections));
+                    MessageBox.Show(Translations.GetTranslatedString("modsNotFoundTechnical") + "\n" + string.Join("\n", stringUserSelections));
                 }
                 if(disabledStructureMods.Count > 0)
                 {
@@ -1921,6 +1931,11 @@ namespace RelhaxModpack.Windows
             }
             else if(e.Key == Key.Enter)
             {
+                if(SearchCB.SelectedItem == null)
+                {
+                    Logging.Info("enter key pressed for search, but no actual package selected. ignoring");
+                    return;
+                }
                 OnSearchCBSelectionCommitted(SearchCB.SelectedItem as ComboBoxItem);
             }
             //check if length 0 or whitespace
@@ -1964,10 +1979,11 @@ namespace RelhaxModpack.Windows
                 SearchCB.Items.Clear();
                 foreach (SelectablePackage package in searchComponents)
                 {
-                    SearchCB.Items.Add(new ComboBoxItem(package, package.NameFormatted)
+                    string formatForText = string.Format("{0} [{1}]", package.NameFormatted, package.ParentCategory.Name);
+                    SearchCB.Items.Add(new ComboBoxItem(package, formatForText)
                     {
                         IsEnabled = true,
-                        Content = package.NameFormatted
+                        Content = formatForText
                     });
                 }
                 SearchCB.IsDropDownOpen = true;
@@ -1977,22 +1993,38 @@ namespace RelhaxModpack.Windows
         private async void OnSearchCBSelectionCommitted(ComboBoxItem committedItem)
         {
             //test to make sure the UIComponent is a control (it should be, but at least a test to make sure it's not null)
-            if (committedItem.Package.UIComponent is Control ctrl)
+            Control ctrl = null;
+            if (committedItem.Package.UIComponent is Control control)
             {
-                //focus the tab first, so it is brought into view
-                committedItem.Package.ParentCategory.TabPage.Focusable = true;
-                committedItem.Package.ParentCategory.TabPage.Focus();
-                //https://stackoverflow.com/questions/38532196/bringintoview-is-not-working
-                //Note that due to the dispatcher's priority queue, the content may not be available as soon as you make changes (such as select a tab).
-                //In that case, you may want to post the bring-into-view request in a lower priority:
-                await Dispatcher.InvokeAsync(() => ctrl.BringIntoView(), System.Windows.Threading.DispatcherPriority.Background);
-                //start the timer to show the item
+                ctrl = control;
                 FlashTimer.Tag = committedItem.Package;
-                OnFlastTimerTick(null, null);
-                FlashTimer.Start();
             }
-            else if (committedItem.Package.UIComponent == null)
-                throw new BadMemeException("WHYYYYYYYY!?!?");
+            else if (committedItem.Package.UIComponent == null && (committedItem.Package.Type == SelectionTypes.single_dropdown1 || committedItem.Package.Type == SelectionTypes.single_dropdown2))
+            {
+                if(committedItem.Package.Parent.UIComponent is Control ctrll)
+                {
+                    ctrl = ctrll;
+                    FlashTimer.Tag = committedItem.Package.Parent;
+                }
+            }
+            
+            if(ctrl == null)
+            {
+                throw new BadMemeException("Invalid search box selection encountered");
+            }
+
+            //focus the tab first, so it is brought into view
+            committedItem.Package.ParentCategory.TabPage.Focusable = true;
+            committedItem.Package.ParentCategory.TabPage.Focus();
+
+            //https://stackoverflow.com/questions/38532196/bringintoview-is-not-working
+            //Note that due to the dispatcher's priority queue, the content may not be available as soon as you make changes (such as select a tab).
+            //In that case, you may want to post the bring-into-view request in a lower priority:
+            await Dispatcher.InvokeAsync(() => ctrl.BringIntoView(), DispatcherPriority.Background);
+
+            //start the timer to show the item
+            OnFlastTimerTick(null, null);
+            FlashTimer.Start();
         }
 
         private void SearchCB_PreviewMouseDown(object sender, MouseButtonEventArgs e)

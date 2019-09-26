@@ -6,7 +6,6 @@ using System.IO;
 using System.Threading.Tasks;
 using NAudio.Wave;
 
-
 namespace RelhaxModpack.UIComponents
 {
     /// <summary>
@@ -18,49 +17,66 @@ namespace RelhaxModpack.UIComponents
         /// <summary>
         /// The direct link to the audio file to preview
         /// </summary>
-        public string MediaURL { get; set; }
+        private string mediaURL { get; set; }
+
+        /// <summary>
+        /// The raw audio data to parse
+        /// </summary>
+        private byte[] audioData { get; set; }
 
         //private
         private Timer UITimer = new Timer();
         private IWavePlayer waveOutDevice = new WaveOut();
-        private MediaFoundationReader audioFileReader2;
+        private MemoryStream audioStream;
+        private WaveStream audioFileReader2;
 
         /// <summary>
         /// Creates an instance of the RelhaxMediaPlayer user control
         /// </summary>
-        public RelhaxMediaPlayer()
+        /// <param name="_audioData">The audio data to use in the preview</param>
+        /// <param name="_mediaURL">The URL to the audio source. Used for audio type parsing.</param>
+        public RelhaxMediaPlayer( string _mediaURL, byte[] _audioData)
         {
+            mediaURL = _mediaURL;
+            audioData = _audioData;
             InitializeComponent();
-        }
-
-        /// <summary>
-        /// Creates an instance of the RelhaxMediaPlayer user control
-        /// </summary>
-        /// <param name="mediaURL">The direct link to the audio file to preview</param>
-        public RelhaxMediaPlayer(string mediaURL)
-        {
-            InitializeComponent();
-            MediaURL = mediaURL;
         }
 
         private async void OnComponentLoad(object sender, RoutedEventArgs e)
         {
+            if (audioData == null)
+                throw new BadMemeException("lol you forgot to set the audio data");
+            if (string.IsNullOrEmpty(mediaURL))
+                throw new BadMemeException("lol you forgot to pass in the Media URL");
+
             //tell the user it's loading the file
             FileName.Text = Translations.GetTranslatedString("loading");
+
             //use an async load
             bool taskComplete = false;
             await Task.Factory.StartNew(() =>
             {
                 try
                 {
-                    audioFileReader2 = new MediaFoundationReader(MediaURL);
+                    audioStream = new MemoryStream(audioData);
+                    switch (Path.GetExtension(mediaURL).ToLower())
+                    {
+                        case ".mp3":
+                            audioFileReader2 = new Mp3FileReader(audioStream);
+                            break;
+                        case ".wav":
+                            audioFileReader2 = new WaveFileReader(audioStream);
+                            break;
+                        default:
+                            throw new NotSupportedException("wave and mp3 only k thanks");
+                    }
                     waveOutDevice.Init(audioFileReader2);
                     waveOutDevice.Stop();
                     taskComplete = true;
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception("Failed to load audio preview: {0}", MediaURL);
+                    Logging.Exception("Failed to load audio preview: {0}", mediaURL);
                     Logging.Exception(ex.ToString());
                 }
             });
@@ -73,18 +89,20 @@ namespace RelhaxModpack.UIComponents
                 Volume.IsEnabled = false;
                 return;
             }
-            
+
             //now that it's loaded, setup the UI
             //https://stackoverflow.com/questions/10371741/naudio-seeking-and-navigation-to-play-from-the-specified-position
             Seekbar.Maximum = (int)audioFileReader2.TotalTime.TotalMilliseconds;
-            FileName.Text = Path.GetFileName(MediaURL);
+            FileName.Text = Path.GetFileName(mediaURL);
+
             //start off the volume at 50%
             Volume.Minimum = 0;
             Volume.Maximum = 100;
             Volume.Value = 50;
-            VolumeNumber.Text = Volume.Value.ToString();
+            VolumeNumber.Text = Volume.Value.ToString("F1");
             waveOutDevice.Volume = (float)(Volume.Value / Volume.Maximum);// 50 / 100 = 0.5f
             waveOutDevice.PlaybackStopped += OnWaveDevicePlaybackStopped;
+
             //setup the UI timer to make the display updated based on position of audio
             UITimer.Interval = 100;
             UITimer.Elapsed += OnUITimerElapse;
@@ -94,10 +112,28 @@ namespace RelhaxModpack.UIComponents
 
         private void OnUITimerElapse(object sender, ElapsedEventArgs e)
         {
-            if (waveOutDevice.PlaybackState != PlaybackState.Playing)
+            if (waveOutDevice == null)
+            {
+                UITimer.Stop();
+                return;
+            }
+            Dispatcher.InvokeAsync(() =>
+            {
+                if (waveOutDevice.PlaybackState != PlaybackState.Playing)
+                    StopButton_Click(null, null);
+
+                if (Seekbar.Minimum <= audioFileReader2.CurrentTime.TotalMilliseconds && audioFileReader2.CurrentTime.TotalMilliseconds <= Seekbar.Maximum)
+                    Seekbar.Value = (int)audioFileReader2.CurrentTime.TotalMilliseconds;
+            });
+        }
+
+        /// <summary>
+        /// Stops playback from an outside source, like if changing previews
+        /// </summary>
+        public void StopPlaybackIfPlaying()
+        {
+            if (waveOutDevice.PlaybackState == PlaybackState.Playing)
                 StopButton_Click(null, null);
-            if (Seekbar.Minimum <= audioFileReader2.CurrentTime.TotalMilliseconds && audioFileReader2.CurrentTime.TotalMilliseconds <= Seekbar.Maximum)
-                Seekbar.Value = (int)audioFileReader2.CurrentTime.TotalMilliseconds;
         }
 
         private void OnWaveDevicePlaybackStopped(object sender, StoppedEventArgs e)
@@ -109,7 +145,7 @@ namespace RelhaxModpack.UIComponents
         private void OnVolumeScroll(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             waveOutDevice.Volume = (float)(Volume.Value / Volume.Maximum);
-            VolumeNumber.Text = Volume.Value.ToString();
+            VolumeNumber.Text = Volume.Value.ToString("F1");
         }
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
@@ -140,23 +176,43 @@ namespace RelhaxModpack.UIComponents
         {
             if (e.LeftButton != System.Windows.Input.MouseButtonState.Pressed)
                 return;
+
+            //because of the unusable first 10 pixels or so
+            //subtract out the area we can't use for scrolling. it's always constant (or very close)
+            ProcessMouseMove(e.GetPosition(Seekbar).X);
+        }
+
+        private void Seekbar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.LeftButton != System.Windows.Input.MouseButtonState.Pressed)
+                return;
+
+            //because of the unusable first 10 pixels or so
+            //subtract out the area we can't use for scrolling. it's always constant (or very close)
+            ProcessMouseMove(e.GetPosition(Seekbar).X);
+        }
+
+        //processes mouse scrolling
+        private void ProcessMouseMove(double mouseX)
+        {
             //pause
             waveOutDevice.Pause();
             UITimer.Stop();
-            //becuase of the unusable first 10 pixels or so
-            //subtract out the area we can't use for scrolling. it's always constant (or very close)
-            //TODO:test
-            double mouseX = e.GetPosition(Seekbar).X;
+
             //get the total scroll bar usable length
-            double scrollWidth = Seekbar.Width - 20;
+            double scrollWidth = Seekbar.ActualWidth - 20;
+
             //make sure it's a positive number (border at beginning of scroll bar)
             if (mouseX < 0)
                 mouseX = 0;
+
             //border at end of scroll bar
             if (mouseX > scrollWidth)
                 mouseX = scrollWidth;
+
             //get the percent of where the seekbar is, 0-1 form
             double seekPos = mouseX / scrollWidth;
+
             //set the seekbar UI value to the scrolled location
             double newPos = Seekbar.Maximum * seekPos;
             Seekbar.Value = (int)newPos;
@@ -181,6 +237,10 @@ namespace RelhaxModpack.UIComponents
                     UITimer = null;
                     waveOutDevice.Dispose();
                     waveOutDevice = null;
+                    audioStream.Dispose();
+                    audioStream = null;
+                    audioFileReader2.Dispose();
+                    audioFileReader2 = null;
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
@@ -209,5 +269,6 @@ namespace RelhaxModpack.UIComponents
             GC.SuppressFinalize(this);
         }
         #endregion
+
     }
 }

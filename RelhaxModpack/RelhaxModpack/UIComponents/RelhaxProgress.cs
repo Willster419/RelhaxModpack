@@ -61,6 +61,16 @@ namespace RelhaxModpack.UIComponents
         public long BytesProcessed, BytesTotal = 0;
 
         /// <summary>
+        /// The number of bytes currently processed in an entry in a thread
+        /// </summary>
+        public long[] BytesProcessedOfAThread;
+
+        /// <summary>
+        /// The number of bytes to total process in an entry in a thread
+        /// </summary>
+        public long[] BytesTotalOfAThread;
+
+        /// <summary>
         /// The name of the file currently being processed
         /// </summary>
         public string Filename = string.Empty;
@@ -81,9 +91,54 @@ namespace RelhaxModpack.UIComponents
         public uint EntriesTotal = 0;
 
         /// <summary>
+        /// The number of processed entries of a zip file of a thread
+        /// </summary>
+        public uint[] EntriesProcessedOfAThread;
+
+        /// <summary>
+        /// The number of total entries of a zip file of a thread
+        /// </summary>
+        public uint[] EntriesTotalOfAThread;
+
+        /// <summary>
+        /// The entry name of a zip file of a thread
+        /// </summary>
+        public string[] EntryFilenameOfAThread;
+
+        /// <summary>
         /// The ID number of the thread that this zip file belongs to
         /// </summary>
         public uint ThreadID = 0;
+
+        /// <summary>
+        /// The total number of extraction threads
+        /// </summary>
+        public uint TotalThreads = 0;
+
+        /// <summary>
+        /// The number of completed extraction threads
+        /// </summary>
+        public uint CompletedThreads = 0;
+
+        /// <summary>
+        /// The extraction installation group
+        /// </summary>
+        public uint InstallGroup = 0;
+
+        /// <summary>
+        /// The total number of install groups
+        /// </summary>
+        public uint TotalInstallGroups = 0;
+
+        /// <summary>
+        /// The number of completed extracted packages that thread [index] has
+        /// </summary>
+        public uint[] CompletedPackagesOfAThread;
+
+        /// <summary>
+        /// The number of packages that thread [index] has
+        /// </summary>
+        public uint[] TotalPackagesofAThread;
 
         /// <summary>
         /// The current status of the installer. Represents the current state of the installer. When it exists, it is also used as an exit code.

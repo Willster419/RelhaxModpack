@@ -36,22 +36,18 @@ namespace RelhaxModpack.Windows
 
         private void WoTRunningForceCloseButton_Click(object sender, RoutedEventArgs e)
         {
-            Logging.Info("Getting WoT process");
-            string WoTCloseButtonText = WoTRunningForceCloseButton.Content as string;
-            WoTRunningForceCloseButton.Content = Translations.GetTranslatedString("tryToClose");
-            Utils.AllowUIToUpdate();
+            Logging.Info("Getting WoT process(es)");
             Process WoTProcess = Utils.GetProcess(Settings.WoTProcessName, Settings.WoTDirectory);
             if(WoTProcess == null)
             {
                 Logging.Error("Failed to get process (null result)");
                 MessageBox.Show(Translations.GetTranslatedString("failedCloseProcess"));
-                WoTRunningForceCloseButton.Content = WoTCloseButtonText;
                 return;
             }
             try
             {
                 WoTProcess.Kill();
-                WoTProcess.WaitForExit(5000);
+                System.Threading.Thread.Sleep(100);
                 if (WoTProcess.HasExited)
                 {
                     Logging.Info("success in ending process!");
@@ -62,7 +58,6 @@ namespace RelhaxModpack.Windows
                 {
                     Logging.Error("Failed to get process (timeout)");
                     MessageBox.Show(Translations.GetTranslatedString("failedCloseProcess"));
-                    WoTRunningForceCloseButton.Content = WoTCloseButtonText;
                     return;
                 }
             }

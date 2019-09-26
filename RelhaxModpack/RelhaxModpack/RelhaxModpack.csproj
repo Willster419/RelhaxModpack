@@ -90,10 +90,11 @@
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="PresentationFramework.Aero2" />
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -122,6 +123,7 @@
     <Compile Include="AtlasesCreator\Packing\ImagePacker.cs" />
     <Compile Include="AtlasesCreator\Packing\OutOfSpaceException.cs" />
     <Compile Include="AtlasesCreator\Packing\RectanglePacker.cs" />
+    <Compile Include="AtlasesCreator\IRelhaxUnmanagedLibrary.cs" />
     <Compile Include="DatabaseComponents\Category.cs" />
     <Compile Include="DatabaseComponents\DatabaseLogic.cs" />
     <Compile Include="DatabaseComponents\DatabasePackage.cs" />
@@ -135,6 +137,7 @@
     <Compile Include="UIComponents\RelhaxHyperlink.xaml.cs">
       <DependentUpon>RelhaxHyperlink.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UIComponents\ZoomBorder.cs" />
     <Compile Include="Utils\GlobalSuppressions.cs" />
     <Compile Include="InstallerComponents\Atlas.cs" />
     <Compile Include="InstallerComponents\InstallEngine.cs" />
@@ -246,6 +249,9 @@
       <DependentUpon>ProgressIndicator.xaml</DependentUpon>
     </Compile>
     <Compile Include="UIComponents\RelhaxWindow.cs" />
+    <Compile Include="Windows\ScalingConfirmation.xaml.cs">
+      <DependentUpon>ScalingConfirmation.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\VersionInfo.xaml.cs">
       <DependentUpon>VersionInfo.xaml</DependentUpon>
     </Compile>
@@ -365,6 +371,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\ScalingConfirmation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\VersionInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -481,6 +491,6 @@ echo     } &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
 echo } &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>"$(TargetDir)sign_modpack.bat - Shortcut.lnk"</PostBuildEvent>
+    <PostBuildEvent>"$(TargetDir)sign_modpack_timestamp.lnk"</PostBuildEvent>
   </PropertyGroup>
 </Project>

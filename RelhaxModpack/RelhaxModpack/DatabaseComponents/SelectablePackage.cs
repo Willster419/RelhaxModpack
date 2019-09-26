@@ -87,7 +87,7 @@ namespace RelhaxModpack
 
         #region Database Properties
         /// <summary>
-        /// Constructor to over-ride DatabasePackage default values
+        /// Create an instance of the SelectablePackage class and over-ride DatabasePackage default values
         /// </summary>
         public SelectablePackage()
         {
@@ -104,9 +104,12 @@ namespace RelhaxModpack
         /// </summary>
         public string NameFormatted
         {
-            get {
-                    return Name.Replace("{version}",Version);
-                }
+            get
+            {
+                return Name
+                    .Replace(@"{version}", Version)
+                    .Replace(@"{author}", Author);
+            }
         }
 
         /// <summary>
@@ -255,8 +258,13 @@ namespace RelhaxModpack
                 //toggle the Tab Color based on if anything is selected, done for level -1 top item
                 if(Level == -1)
                 {
+                    //if the color is not saved yet, then save what the default currently is
                     if (UISettings.NotSelectedTabColor == null)
-                        UISettings.NotSelectedTabColor = (System.Windows.Media.LinearGradientBrush)TabIndex.Background;
+                    {
+                        //windows 10 uses a linear gradient brush (at least mine does)
+                        //windows 7 in classic theme uses a solid color brush
+                        UISettings.NotSelectedTabColor = TabIndex.Background;
+                    }
                     if (_Checked)
                         TabIndex.Background = UISettings.SelectedPanelColor;
                     else
@@ -609,6 +617,63 @@ namespace RelhaxModpack
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// Create an instance of the SelectablePackage class and over-ride DatabasePackage default values, while using values provided for copy objects
+        /// </summary>
+        /// <param name="packageToCopyFrom">The package to copy the information from</param>
+        /// <param name="deep">Set to true to copy list objects, false to use new lists</param>
+        public SelectablePackage(DatabasePackage packageToCopyFrom, bool deep) : base(packageToCopyFrom,deep)
+        {
+            InstallGroup = 4;
+            PatchGroup = 4;
+
+            if (packageToCopyFrom is Dependency dep)
+            {
+                if(deep)
+                {
+                    foreach (DatabaseLogic file in dep.Dependencies)
+                        this.Dependencies.Add(DatabaseLogic.Copy(file));
+                }
+            }
+            else if (packageToCopyFrom is SelectablePackage sp)
+            {
+                this.Type = sp.Type;
+                this.Name = "WRITE_NEW_NAME";
+                this.Visible = sp.Visible;
+                this.Size = 0;
+
+                this.UpdateComment = string.Empty;
+                this.Description = string.Empty;
+                this.PopularMod = false;
+                this._Checked = false;
+
+                this.Level = -2;
+                this.UserFiles = new List<UserFile>();
+                this.Packages = new List<SelectablePackage>();
+                this.Medias = new List<Media>();
+                this.Dependencies = new List<DatabaseLogic>();
+                this.ConflictingPackages = new List<string>();
+                this.ShowInSearchList = sp.ShowInSearchList;
+
+                if (deep)
+                {
+                    this.UpdateComment = sp.UpdateComment;
+                    this.Description = sp.Description;
+                    this.PopularMod = sp.PopularMod;
+                    this._Checked = sp._Checked;
+
+                    foreach (UserFile file in this.UserFiles)
+                        this.UserFiles.Add(UserFile.DeepCopy(file));
+
+                    foreach (Media file in this.Medias)
+                        this.Medias.Add(Media.Copy(file));
+
+                    foreach (DatabaseLogic file in this.Dependencies)
+                        this.Dependencies.Add(DatabaseLogic.Copy(file));
+                }
+            }
         }
         #endregion
     }

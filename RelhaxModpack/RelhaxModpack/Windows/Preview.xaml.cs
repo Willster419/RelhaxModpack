@@ -35,6 +35,7 @@ namespace RelhaxModpack.Windows
         private MemoryStream ImageStream = null;
         private Media CurrentDispalyMedia = null;
         private WebBrowser browser = null;
+        private ZoomBorder zoomBorder = null;
 
         /// <summary>
         /// Create an instance of the Preview window
@@ -49,7 +50,7 @@ namespace RelhaxModpack.Windows
             //check to make sure the Package element exists
             if(Package == null)
             {
-                Logging.Error("Package is null, it should never be null!", nameof(Preview));
+                Logging.Error("Package is null, it should never be null!");
                 MessageBox.Show(Translations.GetTranslatedString("previewEncounteredError"));
                 Close();
             }
@@ -57,7 +58,7 @@ namespace RelhaxModpack.Windows
             //and for the medias element
             if(Package.Medias == null)
             {
-                Logging.Error("Package.Medias is null, it should never be null!", nameof(Preview));
+                Logging.Error("Package.Medias is null, it should never be null!");
                 MessageBox.Show(Translations.GetTranslatedString("previewEncounteredError"));
                 Close();
             }
@@ -195,10 +196,17 @@ namespace RelhaxModpack.Windows
         private async void DisplayMedia(Media media)
         {
             CurrentDispalyMedia = media;
+            //if the child is our media player, then stop and dispose
+            if(MainPreviewBorder.Child != null && MainPreviewBorder.Child is RelhaxMediaPlayer player)
+            {
+                player.StopPlaybackIfPlaying();
+                player.Dispose();
+            }
             //null the child element and make it again
             MainPreviewBorder.Child = null;
             Logging.Debug("loading preview of MediaType {0}, URL={1}", media.MediaType.ToString(), media.URL);
-            switch(media.MediaType)
+            Image pictureViewer;
+            switch (media.MediaType)
             {
                 case MediaType.Unknown:
                 default:
@@ -216,12 +224,48 @@ namespace RelhaxModpack.Windows
                     MainPreviewBorder.Child = browser;
                     break;
                 case MediaType.MediaFile:
-                    MainPreviewBorder.Child = new RelhaxMediaPlayer(media.URL);
+                    //show progress first
+                    MainPreviewBorder.Child = new ProgressBar()
+                    {
+                        Minimum = 0,
+                        Maximum = 1,
+                        Value = 0,
+                        HorizontalAlignment = HorizontalAlignment.Stretch,
+                        VerticalAlignment = VerticalAlignment.Top,
+                        Margin = new Thickness(0, 20, 0, 0),
+                        Height = 20
+                    };
+                    using (WebClient client = new WebClient() { })
+                    {
+                        client.DownloadProgressChanged += Client_DownloadProgressChanged;
+
+                        //now load the media
+                        try
+                        {
+                            byte[] data = await client.DownloadDataTaskAsync(media.URL);
+                            MainPreviewBorder.Child = new RelhaxMediaPlayer(media.URL, data);
+                        }
+                        catch (Exception ex)
+                        {
+                            Logging.Exception("failed to load audio data");
+                            Logging.Exception(ex.ToString());
+                            pictureViewer = new Image
+                            {
+                                ClipToBounds = true
+                            };
+                            pictureViewer.Source = Utils.BitmapToImageSource(Properties.Resources.error_loading_picture);
+                            MainPreviewBorder.Child = pictureViewer;
+                        }
+                    }
                     break;
                 case MediaType.Picture:
                     //https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.image?view=netframework-4.7.2
-                    Image pictureViewer = new Image();
-                    pictureViewer.MouseLeftButtonDown += PictureViewer_MouseLeftButtonDown;
+                    pictureViewer = new Image
+                    {
+                        ClipToBounds = true
+                    };
+                    MainContentControl.MouseRightButtonDown += MainContentControl_MouseRightButtonDown;
+                    MainContentControl.PreviewMouseDoubleClick += MainContentControl_PreviewMouseDoubleClick;
                     MainPreviewBorder.Child = new ProgressBar()
                     {
                         Minimum = 0,
@@ -249,12 +293,25 @@ namespace RelhaxModpack.Windows
                         }
                         catch(Exception ex)
                         {
-                            Logging.Error("failed to load picture");
-                            Logging.Error(ex.ToString());
+                            Logging.Exception("failed to load picture");
+                            Logging.Exception(ex.ToString());
                             pictureViewer.Source = Utils.BitmapToImageSource(Properties.Resources.error_loading_picture);
                         }
-                        MainPreviewBorder.Child = pictureViewer;
                     }
+                    //put the zoom border inside the main preview one. already set, might as well use it
+                    zoomBorder = new ZoomBorder()
+                    {
+                        Child = pictureViewer,
+                        HorizontalAlignment = HorizontalAlignment.Stretch,
+                        VerticalAlignment = VerticalAlignment.Stretch,
+                        BorderThickness = new Thickness(1.0),
+                        BorderBrush = Brushes.Black,
+                        ClipToBounds = true
+                    };
+                    zoomBorder.SizeChanged += ZoomBorder_SizeChanged;
+                    MainPreviewBorder.ClipToBounds = true;
+                    MainPreviewBorder.BorderThickness = new Thickness(0.0);
+                    MainPreviewBorder.Child = zoomBorder;
                     break;
                 case MediaType.Webpage:
                     if (browser != null)
@@ -270,22 +327,44 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        #region image mouse click and resizing
+        private void MainContentControl_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            //only work on left button
+            if (e.LeftButton != MouseButtonState.Pressed)
+                return;
+
+            //send cancel for the mouse click drag in the zoom border
+            if(zoomBorder != null)
+            {
+                zoomBorder.CancelMouseDown = true;
+            }
+
+            if (WindowState != WindowState.Maximized)
+                WindowState = WindowState.Maximized;
+            else
+                WindowState = WindowState.Normal;
+        }
+
+        private void ZoomBorder_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            zoomBorder.Reset();
+        }
+
+        private void MainContentControl_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            zoomBorder.Reset();
+        }
+        #endregion
+
         private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            if(MainPreviewBorder.Child is ProgressBar bar)
+            if (MainPreviewBorder.Child is ProgressBar bar)
             {
                 if (bar.Maximum != e.TotalBytesToReceive)
                     bar.Maximum = e.TotalBytesToReceive;
                 bar.Value = e.BytesReceived;
             }
-        }
-
-        private void PictureViewer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (WindowState != WindowState.Maximized)
-                WindowState = WindowState.Maximized;
-            else
-                WindowState = WindowState.Normal;
         }
 
         private void RelhaxWindow_Closed(object sender, EventArgs e)
@@ -303,7 +382,7 @@ namespace RelhaxModpack.Windows
                 }
             }
 
-            Logging.Debug(" Preview:  Disposing image memory stream");
+            Logging.Debug("Preview:  Disposing image memory stream");
             if(ImageStream != null)
             {
                 ImageStream.Dispose();

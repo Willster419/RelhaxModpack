@@ -40,5 +40,46 @@ namespace RelhaxModpack
         {
             return Pattern;
         }
+
+        /// <summary>
+        /// Create a copy of the UserFile object
+        /// </summary>
+        /// <param name="userFileToCopy">The object to copy</param>
+        /// <returns>A new UserFile object with the same values</returns>
+        public static UserFile Copy(UserFile userFileToCopy)
+        {
+            UserFile file =  new UserFile()
+            {
+                Pattern = userFileToCopy.Pattern,
+#pragma warning disable CS0618 // Type or member is obsolete
+                PlaceBeforeExtraction = userFileToCopy.PlaceBeforeExtraction,
+                SystemInitiated = userFileToCopy.SystemInitiated,
+                Files_saved = new List<string>()
+            };
+
+            return file;
+        }
+
+        /// <summary>
+        /// Create a deep copy of the UserFile object
+        /// </summary>
+        /// <param name="userFileToCopy">The object to copy</param>
+        /// <returns>A new UserFile object with the same values and new list elements with the same values</returns>
+        public static UserFile DeepCopy(UserFile userFileToCopy)
+        {
+            UserFile file = new UserFile()
+            {
+                Pattern = userFileToCopy.Pattern,
+                PlaceBeforeExtraction = userFileToCopy.PlaceBeforeExtraction,
+                SystemInitiated = userFileToCopy.SystemInitiated,
+#pragma warning restore CS0618 // Type or member is obsolete
+                Files_saved = new List<string>()
+            };
+
+            foreach (string s in userFileToCopy.Files_saved)
+                file.Files_saved.Add(s);
+
+            return file;
+        }
     }
 }

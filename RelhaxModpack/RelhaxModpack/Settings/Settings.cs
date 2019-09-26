@@ -101,38 +101,68 @@ namespace RelhaxModpack
         /// <summary>
         /// The absolute path of the application zip file and zip database file folder
         /// </summary>
-        public static readonly string RelhaxDownloadsFolder = Path.Combine(ApplicationStartupPath, "RelhaxDownloads");
+        public static readonly string RelhaxDownloadsFolderPath = Path.Combine(ApplicationStartupPath, "RelhaxDownloads");
+
+        /// <summary>
+        /// The old absolute path of the application zip file and zip database file folder
+        /// </summary>
+        /// [Obsolete]
+        public static readonly string RelhaxDownloadsFolderPathOld = Path.Combine(ApplicationStartupPath, "RelHaxDownloads");
 
         /// <summary>
         /// The absolute path of the application mod backup folder
         /// </summary>
-        public static readonly string RelhaxModBackupFolder = Path.Combine(ApplicationStartupPath, "RelhaxModBackup");
+        public static readonly string RelhaxModBackupFolderPath = Path.Combine(ApplicationStartupPath, "RelhaxModBackup");
+
+        /// <summary>
+        /// The old absolute path of the application mod backup folder
+        /// </summary>
+        /// [Obsolete]
+        public static readonly string RelhaxModBackupFolderPathOld = Path.Combine(ApplicationStartupPath, "RelHaxModBackup");
 
         /// <summary>
         /// The absolute path of the application user selections folder. Default location 
         /// </summary>
-        public static readonly string RelhaxUserSelectionsFolder = Path.Combine(ApplicationStartupPath, "RelhaxUserSelections");
+        public static readonly string RelhaxUserSelectionsFolderPath = Path.Combine(ApplicationStartupPath, "RelhaxUserSelections");
 
         /// <summary>
         /// The old absolute path of the application user selections folder. Old Default location
         /// </summary>
         [Obsolete]
-        public static readonly string RelhaxUserConfigsFolderOld = Path.Combine(ApplicationStartupPath, "RelhaxUserSelections");
+        public static readonly string RelhaxUserSelectionsFolderPathOld = Path.Combine(ApplicationStartupPath, "RelHaxUserConfigs");
 
         /// <summary>
         /// The absolute path of the application folder where users can place custom mod zip files
         /// </summary>
-        public static readonly string RelhaxUserModsFolder = Path.Combine(ApplicationStartupPath, "RelhaxUserMods");
+        public static readonly string RelhaxUserModsFolderPath = Path.Combine(ApplicationStartupPath, "RelhaxUserMods");
+
+        /// <summary>
+        /// The old absolute path of the application folder where users can place custom mod zip files
+        /// </summary>
+        [Obsolete]
+        public static readonly string RelhaxUserModsFolderPathOld = Path.Combine(ApplicationStartupPath, "RelHaxUserMods");
 
         /// <summary>
         /// The absolute path of the application temporary folder
         /// </summary>
-        public static readonly string RelhaxTempFolder = Path.Combine(ApplicationStartupPath, "RelhaxTemp");
+        public static readonly string RelhaxTempFolderPath = Path.Combine(ApplicationStartupPath, "RelhaxTemp");
+
+        /// <summary>
+        /// The old absolute path of the application temporary folder
+        /// </summary>
+        [Obsolete]
+        public static readonly string RelhaxTempFolderPathOld = Path.Combine(ApplicationStartupPath, "RelHaxTemp");
 
         /// <summary>
         /// The absolute path of the application 3rd party dll references folder. Currently used to hold atlas file libraries
         /// </summary>
-        public static readonly string RelhaxLibrariesFolder = Path.Combine(ApplicationStartupPath, "RelhaxLibraries");
+        public static readonly string RelhaxLibrariesFolderPath = Path.Combine(ApplicationStartupPath, "RelhaxLibraries");
+
+        /// <summary>
+        /// The old absolute path of the application 3rd party dll references folder. Currently used to hold atlas file libraries
+        /// </summary>
+        [Obsolete]
+        public static readonly string RelhaxLibrariesFolderPathOld = Path.Combine(ApplicationStartupPath, "RelHaxLibraries");
 
         /// <summary>
         /// The name of the installer folder to hold all patch xml files in
@@ -181,7 +211,7 @@ namespace RelhaxModpack
         /// <summary>
         /// The absolute path to the md5 hash zip file download database file
         /// </summary>
-        public static readonly string MD5HashDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolder, "MD5HashDatabase.xml");
+        public static readonly string MD5HashDatabaseXmlFile = Path.Combine(RelhaxDownloadsFolderPath, "MD5HashDatabase.xml");
 
         /// <summary>
         /// The filename of the selection file used to select mods on default loading of the mod selection list
@@ -202,12 +232,12 @@ namespace RelhaxModpack
         /// The location of the manager info zip file. Contains several xml files with database and client definitions
         /// </summary>
         [Obsolete("Do not use this unless for file deleting, here only for legacy purposes. File is no longer created.")]
-        public static readonly string ManagerInfoDatFile = Path.Combine(RelhaxTempFolder, "managerInfo.dat");
+        public static readonly string ManagerInfoDatFile = Path.Combine(RelhaxTempFolderPath, "managerInfo.dat");
 
         /// <summary>
         /// The absolute path of the selection file used for saving last selection
         /// </summary>
-        public static readonly string LastInstalledConfigFilepath = Path.Combine(RelhaxUserSelectionsFolder, LastSavedConfigFilename);
+        public static readonly string LastInstalledConfigFilepath = Path.Combine(RelhaxUserSelectionsFolderPath, LastSavedConfigFilename);
 
         /// <summary>
         /// The absolute path of the V2 settings file used for saving ModpackSettings
@@ -224,12 +254,12 @@ namespace RelhaxModpack
         /// </summary>
         public static readonly string[] FoldersToCheck = new string[]
         {
-            RelhaxDownloadsFolder,
-            RelhaxModBackupFolder,
-            RelhaxUserSelectionsFolder,
-            RelhaxUserModsFolder,
-            RelhaxTempFolder,
-            RelhaxLibrariesFolder
+            RelhaxDownloadsFolderPath,
+            RelhaxModBackupFolderPath,
+            RelhaxUserSelectionsFolderPath,
+            RelhaxUserModsFolderPath,
+            RelhaxTempFolderPath,
+            RelhaxLibrariesFolderPath
         };
         #endregion
 

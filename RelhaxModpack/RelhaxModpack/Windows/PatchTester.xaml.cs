@@ -460,7 +460,19 @@ namespace RelhaxModpack.Windows
             //set patch from editor to true to enable verbose logging
             if(!patchToTest.FromEditor)
                 patchToTest.FromEditor = true;
-            PatchUtils.RunPatch(patchToTest);
+            Logging.Patcher("Running patch...", LogLevel.Info);
+            switch (PatchUtils.RunPatch(patchToTest))
+            {
+                case PatchExitCode.Error:
+                    Logging.Patcher("Patch failed with errors. Check the log for details.", LogLevel.Error);
+                    break;
+                case PatchExitCode.Warning:
+                    Logging.Patcher("Patch completed with warnings. Check the log for details.", LogLevel.Warning);
+                    break;
+                case PatchExitCode.Success:
+                    Logging.Patcher("Patch completed successfully!", LogLevel.Info);
+                    break;
+            }
         }
 
         private void ApplyChangesButton_Click(object sender, RoutedEventArgs e)

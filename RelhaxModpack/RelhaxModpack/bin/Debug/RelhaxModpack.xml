@@ -54,6 +54,13 @@
             Failed to create the atlas bitmap object
             </summary>
         </member>
+        <member name="T:RelhaxModpack.AtlasesCreator.AtlasProgressDelegate">
+            <summary>
+            The delegate to invoke when calling back to the sender for the AtlasProgres event
+            </summary>
+            <param name="sender">The sending Atlas Creator</param>
+            <param name="e">Event arguments</param>
+        </member>
         <member name="T:RelhaxModpack.AtlasesCreator.AtlasCreator">
             <summary>
             Represents the entire process of building an atlas image
@@ -72,6 +79,11 @@
         <member name="F:RelhaxModpack.AtlasesCreator.AtlasCreator.Token">
             <summary>
             The token for handling a cancel call from the user
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.AtlasesCreator.AtlasCreator.OnAtlasProgres">
+            <summary>
+            The event when atlas child progress occurs
             </summary>
         </member>
         <member name="M:RelhaxModpack.AtlasesCreator.AtlasCreator.ParseModTexturesAsync(System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
@@ -314,6 +326,53 @@
             <param name="placement">Output parameter receiving the rectangle's placement</param>
             <returns>True if space for the rectangle could be allocated</returns>
         </member>
+        <member name="T:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary">
+            <summary>
+            Represents an interface that all unmanaged libraries in the Modpack use. Allows for one method of testing.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.EmbeddedFilename">
+            <summary>
+            Gets the name of the embedded zip file containing the dll, 32 or 64 bit version
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.ExtractedFilename">
+            <summary>
+            Gets the name of the dll file inside the embedded zip file, 32 or 64bit version
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.Filepath">
+            <summary>
+            Gets the absolute path to the dll file
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.IsExtracted">
+            <summary>
+            Determines if the file is extracted to the Filepath property location
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.IsLoaded">
+            <summary>
+            Determines if the library is loaded into memory
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.Load">
+            <summary>
+            Attempts to load the library using the Filepath property
+            </summary>
+            <returns>True if the library load was successful</returns>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.Unload">
+            <summary>
+            Attempts to unload the library
+            </summary>
+            <returns>True if the library was unloaded, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.Extract">
+            <summary>
+            Extracts the embedded compressed library to the location in the Filepath property
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Category">
             <summary>
             a category is what makes up each tab in the mod selection display window. It holds the first level of list of SelectablePackages
@@ -432,6 +491,13 @@
             </summary>
             <returns>The name of the package this object attaches to</returns>
         </member>
+        <member name="M:RelhaxModpack.DatabaseLogic.Copy(RelhaxModpack.DatabaseLogic)">
+            <summary>
+            Create a copy of the given DatabaseLogic object
+            </summary>
+            <param name="databaseLogicToCopy">The object to copy</param>
+            <returns>A new DatabaseLogic object with the same values</returns>
+        </member>
         <member name="T:RelhaxModpack.DatabasePackage">
             <summary>
             A database component is the base class for all other packages
@@ -542,6 +608,11 @@
             Internal instructions for updating the mod for database managers
             </summary>
         </member>
+        <member name="F:RelhaxModpack.DatabasePackage.Author">
+            <summary>
+            The name of the author of the mod/configuration/etc.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.DatabasePackage.AppendExtraction">
             <summary>
             Determines if this package should be put into a list that will be installed last. Used for when the package is possibly overwriting files, for example
@@ -572,6 +643,18 @@
             <summary>
             Provides a complete tree style path to the package using its internal packageName, starting with the category
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.DatabasePackage.#ctor">
+            <summary>
+            Creates an instance of the DatabasePackage class
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.DatabasePackage.#ctor(RelhaxModpack.DatabasePackage,System.Boolean)">
+            <summary>
+            Creates an instance of the DatabasePackage class based on the provided DatabasePackage
+            </summary>
+            <param name="packageToCopy">The package to copy the information from</param>
+            <param name="deep">Set to true to copy list objects, false to use new lists</param>
         </member>
         <member name="T:RelhaxModpack.Dependency">
             <summary>
@@ -613,8 +696,15 @@
         </member>
         <member name="M:RelhaxModpack.Dependency.#ctor">
             <summary>
-            Constructor to over-ride DatabasePackage default values
+            Create an instance of the Dependency class and over-ride DatabasePackage default values
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Dependency.#ctor(RelhaxModpack.DatabasePackage,System.Boolean)">
+            <summary>
+            Create an instance of the Dependency class and over-ride DatabasePackage default values, while using values provided for copy objects
+            </summary>
+            <param name="packageToCopyFrom">The package to copy the information from</param>
+            <param name="deep">Set to true to copy list objects, false to use new lists</param>
         </member>
         <member name="T:RelhaxModpack.DatabaseComponents.IComponentWithDependencies">
             <summary>
@@ -677,6 +767,13 @@
             The string properties of the object
             </summary>
             <returns>The integer code of the MediaType and the first 80 characters of the URL</returns>
+        </member>
+        <member name="M:RelhaxModpack.Media.Copy(RelhaxModpack.Media)">
+            <summary>
+            Create a copy of the Media object
+            </summary>
+            <param name="mediaToCopy">The object to copy</param>
+            <returns>A new Media object with the same values</returns>
         </member>
         <member name="T:RelhaxModpack.PackageComparerByPackageName">
             <summary>
@@ -767,7 +864,7 @@
         </member>
         <member name="M:RelhaxModpack.SelectablePackage.#ctor">
             <summary>
-            Constructor to over-ride DatabasePackage default values
+            Create an instance of the SelectablePackage class and over-ride DatabasePackage default values
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.Name">
@@ -1021,6 +1118,13 @@
             </summary>
             <returns>True if another package at this level is checked and enabled, false otherwise</returns>
         </member>
+        <member name="M:RelhaxModpack.SelectablePackage.#ctor(RelhaxModpack.DatabasePackage,System.Boolean)">
+            <summary>
+            Create an instance of the SelectablePackage class and over-ride DatabasePackage default values, while using values provided for copy objects
+            </summary>
+            <param name="packageToCopyFrom">The package to copy the information from</param>
+            <param name="deep">Set to true to copy list objects, false to use new lists</param>
+        </member>
         <member name="T:RelhaxModpack.Trigger">
             <summary>
             Represents a trigger object used in the installer as an event starter.
@@ -1083,6 +1187,20 @@
             </summary>
             <returns>The string pattern</returns>
         </member>
+        <member name="M:RelhaxModpack.UserFile.Copy(RelhaxModpack.UserFile)">
+            <summary>
+            Create a copy of the UserFile object
+            </summary>
+            <param name="userFileToCopy">The object to copy</param>
+            <returns>A new UserFile object with the same values</returns>
+        </member>
+        <member name="M:RelhaxModpack.UserFile.DeepCopy(RelhaxModpack.UserFile)">
+            <summary>
+            Create a deep copy of the UserFile object
+            </summary>
+            <param name="userFileToCopy">The object to copy</param>
+            <returns>A new UserFile object with the same values and new list elements with the same values</returns>
+        </member>
         <member name="T:RelhaxModpack.UIComponents.RelhaxHyperlink">
             <summary>
             Interaction logic for RelhaxHyperlink.xaml
@@ -1116,6 +1234,40 @@
         <member name="M:RelhaxModpack.UIComponents.RelhaxHyperlink.InitializeComponent">
             <summary>
             InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ZoomBorder">
+            <summary>
+            Represents a border that allows for panning and zooming of the UIElement object inside
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.ZoomBorder.CancelMouseDown">
+            <summary>
+            Cancel the mouse down event for panning
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.ZoomBorder.GetTranslateTransform(System.Windows.UIElement)">
+            <summary>
+            Returns the TranslateTransform part of the UIElement's RenderTransform
+            </summary>
+            <param name="element">The element to get the transformation parameter from</param>
+            <returns>The TranslateTransformpart of the UIElement's RenderTransform</returns>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.ZoomBorder.GetScaleTransform(System.Windows.UIElement)">
+            <summary>
+            Returns the ScaleTransform part of the UIElement's RenderTransform
+            </summary>
+            <param name="element">The element to get the transformation parameter from</param>
+            <returns>The ScaleTransform of the UIElement's RenderTransform</returns>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ZoomBorder.Child">
+            <summary>
+            Gets or Sets the child UIElement inside this border
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.ZoomBorder.Reset">
+            <summary>
+            Reset the scale and translation (zoom and pan) values
             </summary>
         </member>
         <member name="T:RelhaxModpack.UIComponents.ComboBoxItem">
@@ -1577,21 +1729,27 @@
             RelhaxMediaPlayer
             </summary>
         </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxMediaPlayer.MediaURL">
+        <member name="P:RelhaxModpack.UIComponents.RelhaxMediaPlayer.mediaURL">
             <summary>
             The direct link to the audio file to preview
             </summary>
         </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.#ctor">
+        <member name="P:RelhaxModpack.UIComponents.RelhaxMediaPlayer.audioData">
             <summary>
-            Creates an instance of the RelhaxMediaPlayer user control
+            The raw audio data to parse
             </summary>
         </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.#ctor(System.String)">
+        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.#ctor(System.String,System.Byte[])">
             <summary>
             Creates an instance of the RelhaxMediaPlayer user control
             </summary>
-            <param name="mediaURL">The direct link to the audio file to preview</param>
+            <param name="_audioData">The audio data to use in the preview</param>
+            <param name="_mediaURL">The URL to the audio source. Used for audio type parsing.</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.StopPlaybackIfPlaying">
+            <summary>
+            Stops playback from an outside source, like if changing previews
+            </summary>
         </member>
         <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.Dispose(System.Boolean)">
             <summary>
@@ -1682,6 +1840,16 @@
             During copy operations, the number of processed copied bytes, and the total bytes to copy.
             </summary>
         </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.BytesProcessedOfAThread">
+            <summary>
+            The number of bytes currently processed in an entry in a thread
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.BytesTotalOfAThread">
+            <summary>
+            The number of bytes to total process in an entry in a thread
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.Filename">
             <summary>
             The name of the file currently being processed
@@ -1702,9 +1870,54 @@
             The total number of entries in this zip file
             </summary>
         </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.EntriesProcessedOfAThread">
+            <summary>
+            The number of processed entries of a zip file of a thread
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.EntriesTotalOfAThread">
+            <summary>
+            The number of total entries of a zip file of a thread
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.EntryFilenameOfAThread">
+            <summary>
+            The entry name of a zip file of a thread
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.ThreadID">
             <summary>
             The ID number of the thread that this zip file belongs to
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.TotalThreads">
+            <summary>
+            The total number of extraction threads
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.CompletedThreads">
+            <summary>
+            The number of completed extraction threads
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.InstallGroup">
+            <summary>
+            The extraction installation group
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.TotalInstallGroups">
+            <summary>
+            The total number of install groups
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.CompletedPackagesOfAThread">
+            <summary>
+            The number of completed extracted packages that thread [index] has
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.TotalPackagesofAThread">
+            <summary>
+            The number of packages that thread [index] has
             </summary>
         </member>
         <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.InstallStatus">
@@ -2829,6 +3042,11 @@
             The timeout, in seconds, until the FTP upload or download window will close. Set to 0 to disable timeout.
             </summary>
         </member>
+        <member name="F:RelhaxModpack.EditorSettings.SaveAsDatabaseVersion">
+            <summary>
+            The form to save the database in when "save as" is pressed
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.EditorSettings.#ctor">
             <summary>
             Create an instance of the EditorSettings class. Settings should be set via property initialization style.
@@ -2904,6 +3122,11 @@
             The name of the git branch to use when downloading the database. Uses the RelhaxModpackDatabase repository
             </summary>
             <remarks>URL for the repository: https://github.com/Willster419/RelhaxModpackDatabase </remarks>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.AtlasLibrariesCanBeLoaded">
+            <summary>
+            Flag to track when/if the user has MSVCP2013 installed to load the atlas image processing libraries
+            </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.NotifyIfSameDatabase">
             <summary>
@@ -3327,39 +3550,66 @@
             The root filename of the list of selection files
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxDownloadsFolder">
+        <member name="F:RelhaxModpack.Settings.RelhaxDownloadsFolderPath">
             <summary>
             The absolute path of the application zip file and zip database file folder
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxModBackupFolder">
+        <member name="F:RelhaxModpack.Settings.RelhaxDownloadsFolderPathOld">
+            <summary>
+            The old absolute path of the application zip file and zip database file folder
+            </summary>
+            [Obsolete]
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelhaxModBackupFolderPath">
             <summary>
             The absolute path of the application mod backup folder
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxUserSelectionsFolder">
+        <member name="F:RelhaxModpack.Settings.RelhaxModBackupFolderPathOld">
+            <summary>
+            The old absolute path of the application mod backup folder
+            </summary>
+            [Obsolete]
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelhaxUserSelectionsFolderPath">
             <summary>
             The absolute path of the application user selections folder. Default location 
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxUserConfigsFolderOld">
+        <member name="F:RelhaxModpack.Settings.RelhaxUserSelectionsFolderPathOld">
             <summary>
             The old absolute path of the application user selections folder. Old Default location
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxUserModsFolder">
+        <member name="F:RelhaxModpack.Settings.RelhaxUserModsFolderPath">
             <summary>
             The absolute path of the application folder where users can place custom mod zip files
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxTempFolder">
+        <member name="F:RelhaxModpack.Settings.RelhaxUserModsFolderPathOld">
+            <summary>
+            The old absolute path of the application folder where users can place custom mod zip files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelhaxTempFolderPath">
             <summary>
             The absolute path of the application temporary folder
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxLibrariesFolder">
+        <member name="F:RelhaxModpack.Settings.RelhaxTempFolderPathOld">
+            <summary>
+            The old absolute path of the application temporary folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelhaxLibrariesFolderPath">
             <summary>
             The absolute path of the application 3rd party dll references folder. Currently used to hold atlas file libraries
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelhaxLibrariesFolderPathOld">
+            <summary>
+            The old absolute path of the application 3rd party dll references folder. Currently used to hold atlas file libraries
             </summary>
         </member>
         <member name="F:RelhaxModpack.Settings.PatchFolderName">
@@ -3825,6 +4075,12 @@
             </summary>
             <returns>True if the library load was successful</returns>
         </member>
+        <member name="M:RelhaxModpack.RelhaxFreeImageLibrary.Unload">
+            <summary>
+            Attempts to unload the library
+            </summary>
+            <returns>True if the library was unloaded, false otherwise</returns>
+        </member>
         <member name="M:RelhaxModpack.RelhaxFreeImageLibrary.Extract">
             <summary>
             Extracts the embedded compressed library to the location in the Filepath property
@@ -3866,6 +4122,12 @@
             Attempts to load the library using the Filepath property
             </summary>
             <returns>True if the library load was successful</returns>
+        </member>
+        <member name="M:RelhaxModpack.RelhaxNvTexLibrary.Unload">
+            <summary>
+            Attempts to unload the library
+            </summary>
+            <returns>True if the library was unloaded, false otherwise</returns>
         </member>
         <member name="M:RelhaxModpack.RelhaxNvTexLibrary.Extract">
             <summary>
@@ -4168,6 +4430,11 @@
             Create and initialize the AdvancedProgress window
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Windows.AdvancedProgress.ShouldUserInstallBeCalled">
+            <summary>
+            Flag for if the user installation reporter should have been called
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Windows.AdvancedProgress.BackupModsReporter">
             <summary>
             The UI Reporting object for the step of backing up mods
@@ -4391,6 +4658,20 @@
             </summary>
             <summary>
             DatabaseUpdater
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseUpdater.HardCodeRepoPath">
+            <summary>
+            The current path for Willster419's database repository
+            </summary>
+            <remarks>
+            This was done because the database repository is different then the application repository.
+            During debug, this can be set to have the updater (in the repository path) assume that it's in the database repository.
+            </remarks>
+        </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseUpdater.UseHardCodePath">
+            <summary>
+            Flag to use the 
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.DatabaseUpdater.#ctor">
@@ -4650,6 +4931,24 @@
             Creates an instance of the RelhaxWindow class
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.ScalingConfirmation">
+            <summary>
+            Interaction logic for ScalingConfirmation.xaml
+            </summary>
+            <summary>
+            ScalingConfirmation
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ScalingConfirmation.#ctor">
+            <summary>
+            Create an instance of the ScalingConfirmation window
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ScalingConfirmation.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.VersionInfo">
             <summary>
             Interaction logic for VersionInfo.xaml
@@ -4784,6 +5083,11 @@
             The French language
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Languages.Spanish">
+            <summary>
+            The Spanish language
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Languages.Russian">
             <summary>
             The Russian language
@@ -4792,6 +5096,11 @@
         <member name="T:RelhaxModpack.Translations">
             <summary>
             Handles all localization for the application User Interface
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Translations.TranslationsLoaded">
+            <summary>
+            Get if the translation dictionaries have been loaded yet
             </summary>
         </member>
         <member name="F:RelhaxModpack.Translations.LanguageEnglish">
@@ -4814,9 +5123,14 @@
             French language string identifier in national language
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Translations.LanguageSpanish">
+            <summary>
+            Spanish language string identifier in national language
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Translations.LanguageRussian">
             <summary>
-            French language string identifier in national language
+            Russian language string identifier in national language
             </summary>
         </member>
         <member name="M:RelhaxModpack.Translations.SetLanguage(RelhaxModpack.Languages)">
@@ -4955,6 +5269,11 @@
             Multiply by this to convert bytes to megabytes
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Utils.MSVCPLink">
+            <summary>
+            The link to the Microsoft Visual C++ dll package required by the atlas processing libraries
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Utils.FilePathDict">
             <summary>
             The dictionary to store filepath macros
@@ -4989,6 +5308,18 @@
             <summary>
             The manager instance of the Nvidia Texture Tools Library
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Utils.TestLibrary(RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary,System.String,System.Boolean)">
+            <summary>
+            Test the ability to load an unmanaged library
+            </summary>
+            <returns>True if library loaded, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.TestLoadAtlasLibraries(System.Boolean)">
+            <summary>
+            Test the ability to load and unload all the atlas image processing libraries
+            </summary>
+            <returns>True if both libraries loaded, false otherwise</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.GetAssemblyName(System.String)">
             <summary>
@@ -5120,13 +5451,15 @@
             <param name="timeout">The time to wait between retries</param>
             <returns>True if the operation completed successfully, false otherwise</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.SizeSuffix(System.UInt64,System.UInt32,System.Boolean)">
+        <member name="M:RelhaxModpack.Utils.SizeSuffix(System.UInt64,System.UInt32,System.Boolean,System.Boolean)">
             <summary>
             Calculates and returns the size magnitude of the file (kilo, mega, giga...)
             </summary>
             <param name="value">The file size in bytes</param>
             <param name="decimalPlaces">The number of decimal places to maintain in the result</param>
             <param name="sizeSuffix">If it should return the byte symbol with the size amount (KB, MB, etc.)</param>
+            <param name="ignoreSizeWarningIf0">If set to true, the application log will not show values about the passed in value for size calculation being 0. 
+            File of 0 size, for example.</param>
             <returns>The string representation to decimalPlaces of the file size optionally with the bytes parameter</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.GetFilesize(System.String)">
@@ -5458,15 +5791,18 @@
             <param name="strB">the second version</param>
             <returns>less than zero if strA is less than strB, equal to zero if
             strA equals strB, and greater than zero if strA is greater than strB</returns>
-            <remarks> See https://stackoverflow.com/questions/30494/compare-version-identifiers
+            <remarks>
+            See https://stackoverflow.com/questions/30494/compare-version-identifiers
             Samples:
+            strA        | strB
             1.0.0.0     | 1.0.0.1 = -1
             1.0.0.1     | 1.0.0.0 =  1
             1.0.0.0     | 1.0.0.0 =  0
             1, 0.0.0    | 1.0.0.0 =  0
             9, 5, 1, 44 | 3.4.5.6 =  1
             1, 5, 1, 44 | 3.4.5.6 = -1
-            6,5,4,3     | 6.5.4.3 =  0 </remarks>
+            6,5,4,3     | 6.5.4.3 =  0
+            </remarks>
         </member>
         <member name="M:RelhaxModpack.Utils.GetCurrentUniversalFiletimeTimestamp">
             <summary>
@@ -5543,6 +5879,13 @@
             </summary>
             <param name="command">The entire command as a string style commandline</param>
             <returns>True if process start was successful, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.OpenInGoogleTranslate(System.String)">
+            <summary>
+            Opens the selected text in Google translate web page
+            </summary>
+            <param name="message">The text to translate</param>
+            <returns></returns>
         </member>
         <member name="M:RelhaxModpack.Utils.BuildFilepathMacroList">
             <summary>

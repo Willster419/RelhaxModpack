@@ -68,7 +68,7 @@ namespace RelhaxModpack
         /// <summary>
         /// The color to use in the selection list for a tab which is not selected
         /// </summary>
-        public static LinearGradientBrush NotSelectedTabColor = null;
+        public static Brush NotSelectedTabColor = null;
         #endregion
 
         /// <summary>

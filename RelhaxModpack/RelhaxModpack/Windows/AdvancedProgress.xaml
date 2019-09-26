@@ -7,20 +7,26 @@
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         xmlns:user="clr-namespace:RelhaxModpack.UIComponents"
         mc:Ignorable="d"
-        Title="Advanced Installer Progress" Height="600" Width="400"
+        Title="Advanced Installer Progress" Height="600" Width="600"
         LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <Grid Background="#FFE5E5E5" x:Name="MainGrid" Tag="MainGrid">
         <TabControl x:Name="MainTabControl">
             <TabItem Header="Pre-install Tasks" x:Name="PreInstallTab">
-                <StackPanel Background="#FFE5E5E5" x:Name="PreInstallPanel">
-                </StackPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Visible">
+                    <StackPanel Background="#FFE5E5E5" x:Name="PreInstallPanel" CanVerticallyScroll="True">
+                    </StackPanel>
+                </ScrollViewer>
             </TabItem>
             <TabItem Header="Extraction" x:Name="ExtractionTab">
-                <StackPanel Background="#FFE5E5E5" x:Name="ExtractionPanel"/>
+                <ScrollViewer VerticalScrollBarVisibility="Visible">
+                    <StackPanel Background="#FFE5E5E5" x:Name="ExtractionPanel" CanVerticallyScroll="True"/>
+                </ScrollViewer>
             </TabItem>
             <TabItem Header="Post-install tasks" x:Name="PostInstallTab">
-                <StackPanel Background="#FFE5E5E5" x:Name="PostInstallPanel">
-                </StackPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Visible">
+                    <StackPanel Background="#FFE5E5E5" x:Name="PostInstallPanel" CanVerticallyScroll="True">
+                    </StackPanel>
+                </ScrollViewer>
             </TabItem>
         </TabControl>
 

@@ -89,6 +89,11 @@ namespace RelhaxModpack
         public static string BetaDatabaseSelectedBranch = "master";
 
         /// <summary>
+        /// Flag to track when/if the user has MSVCP2013 installed to load the atlas image processing libraries
+        /// </summary>
+        public static bool AtlasLibrariesCanBeLoaded = false;
+
+        /// <summary>
         /// Toggle if the program should notify the user if the database version is the same as the last installed version
         /// </summary>
         public static bool NotifyIfSameDatabase = false;

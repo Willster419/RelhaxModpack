@@ -28,6 +28,7 @@ using Size = System.Drawing.Size;
 using RelhaxModpack.Windows;
 using System.Threading;
 using System.Windows.Media.Imaging;
+using System.Web;
 
 namespace RelhaxModpack
 {
@@ -135,6 +136,11 @@ namespace RelhaxModpack
         /// </summary>
         public const long BYTES_TO_MBYTES = 1048576;
 
+        /// <summary>
+        /// The link to the Microsoft Visual C++ dll package required by the atlas processing libraries
+        /// </summary>
+        public const string MSVCPLink = "https://www.microsoft.com/en-us/download/details.aspx?id=40784";
+
         //MACROS
         //FilePath macro
         //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/how-to-initialize-a-dictionary-with-a-collection-initializer
@@ -203,6 +209,71 @@ namespace RelhaxModpack
         /// The manager instance of the Nvidia Texture Tools Library
         /// </summary>
         public static RelhaxNvTexLibrary NvTexLibrary = new RelhaxNvTexLibrary();
+
+        /// <summary>
+        /// Test the ability to load an unmanaged library
+        /// </summary>
+        /// <returns>True if library loaded, false otherwise</returns>
+        public static bool TestLibrary(IRelhaxUnmanagedLibrary library, string name, bool unload)
+        {
+            Logging.Info("testing {0} library", name);
+            bool libraryLoaded;
+            if (!library.IsLoaded)
+            {
+                if (library.Load())
+                {
+                    Logging.Info("library loaded successfully");
+                    libraryLoaded = true;
+                }
+                else
+                {
+                    Logging.Error("library failed to load");
+                    libraryLoaded = false;
+                }
+            }
+            else
+            {
+                Logging.Info("library already loaded");
+                libraryLoaded = true;
+            }
+
+            if(unload && library.IsLoaded)
+            {
+                Logging.Info("unload requested and library is loaded, unloading");
+                if (library.Unload())
+                {
+                    Logging.Info("library unloaded successfully");
+                }
+                else
+                {
+                    Logging.Error("library failed to unload library");
+                    libraryLoaded = false;
+                }
+            }
+            return libraryLoaded;
+        }
+
+        /// <summary>
+        /// Test the ability to load and unload all the atlas image processing libraries
+        /// </summary>
+        /// <returns>True if both libraries loaded, false otherwise</returns>
+        public static bool TestLoadAtlasLibraries(bool unload)
+        {
+            bool freeImageLoaded = TestLibrary(FreeImageLibrary, "FreeImage", true);
+            bool nvttLoaded = TestLibrary(NvTexLibrary, "nvtt", true);
+
+            if(nvttLoaded && freeImageLoaded)
+            {
+                Logging.Info("TestLoadAtlasLibraries(): both libraries loaded");
+                return true;
+            }
+            else
+            {
+                Logging.Error("TestLoadAtlasLibraries(): failed to load one or more atlas processing libraries: freeImage={0}, nvtt={1}",
+                    freeImageLoaded.ToString(), nvttLoaded.ToString());
+                return false;
+            }
+        }
 
         /// <summary>
         /// Get a complete assembly name based on a matching keyword
@@ -323,10 +394,17 @@ namespace RelhaxModpack
                 XmlUtils.GetXmlStringFromXPath(doc, "//version/relhax_v2_stable").Trim() ://stable
                 XmlUtils.GetXmlStringFromXPath(doc, "//version/relhax_v2_beta").Trim();//beta
 
-            Logging.Info("Current build is {0} Online build is {1}", currentVersion, applicationOnlineVersion);
+            Logging.Info("Current build is {0} online build is {1}", currentVersion, applicationOnlineVersion);
 
             //check if versions are equal
-            return currentVersion.Equals(applicationOnlineVersion);
+            //return currentVersion.Equals(applicationOnlineVersion);
+            //currentVersion = strA, applicationOnline=strB
+            //if currentVersion >  applicationOnline, probably testing, ok
+            //if currentVersion == applicationOnline, same version, ok
+            //if currentVersion <  applicationOnline, update available, not ok
+            //when strA < strB, it returns -1
+            bool outOfDate = (CompareVersions(currentVersion, applicationOnlineVersion) == -1);
+            return !outOfDate;
         }
         #endregion
 
@@ -404,11 +482,16 @@ namespace RelhaxModpack
                     GetAllWindowComponentsVisual(subV, allWindowComponents);
             }
         }
-        //Gets any logical components that are not currently shown (like elemnts behind a tab)
+        //Gets any logical components that are not currently shown (like elements behind a tab)
         private static void GetAllWindowComponentsLogical(FrameworkElement v, List<FrameworkElement> allWindowComponents)
         {
             //NOTE: v has been added
             //have to use var here cause i got NO CLUE what type it is #niceMeme
+            if(v == null)
+            {
+                Logging.Error("parameter \"v\" is null, skipping");
+                return;
+            }
             var children = LogicalTreeHelper.GetChildren(v);
             //Type temp = children.GetType();
             foreach (var child in children)
@@ -731,12 +814,15 @@ namespace RelhaxModpack
         /// <param name="value">The file size in bytes</param>
         /// <param name="decimalPlaces">The number of decimal places to maintain in the result</param>
         /// <param name="sizeSuffix">If it should return the byte symbol with the size amount (KB, MB, etc.)</param>
+        /// <param name="ignoreSizeWarningIf0">If set to true, the application log will not show values about the passed in value for size calculation being 0. 
+        /// File of 0 size, for example.</param>
         /// <returns>The string representation to decimalPlaces of the file size optionally with the bytes parameter</returns>
-        public static string SizeSuffix(ulong value, uint decimalPlaces = 1, bool sizeSuffix = false)
+        public static string SizeSuffix(ulong value, uint decimalPlaces = 1, bool sizeSuffix = false, bool ignoreSizeWarningIf0 = false)
         {
             if (value == 0)
             {
-                Logging.Warning("SizeSuffix value is 0 (why did you even call this method?)");
+                if(!ignoreSizeWarningIf0)
+                    Logging.Warning("SizeSuffix value is 0 (is this the intent?)");
                 if (sizeSuffix)
                     return "0.0 bytes";
                 else
@@ -1930,21 +2016,34 @@ namespace RelhaxModpack
         /// <param name="strB">the second version</param>
         /// <returns>less than zero if strA is less than strB, equal to zero if
         /// strA equals strB, and greater than zero if strA is greater than strB</returns>
-        /// <remarks> See https://stackoverflow.com/questions/30494/compare-version-identifiers
+        /// <remarks>
+        /// See https://stackoverflow.com/questions/30494/compare-version-identifiers
         /// Samples:
+        /// strA        | strB
         /// 1.0.0.0     | 1.0.0.1 = -1
         /// 1.0.0.1     | 1.0.0.0 =  1
         /// 1.0.0.0     | 1.0.0.0 =  0
         /// 1, 0.0.0    | 1.0.0.0 =  0
         /// 9, 5, 1, 44 | 3.4.5.6 =  1
         /// 1, 5, 1, 44 | 3.4.5.6 = -1
-        /// 6,5,4,3     | 6.5.4.3 =  0 </remarks>
+        /// 6,5,4,3     | 6.5.4.3 =  0
+        /// </remarks>
         public static int CompareVersions(string strA, string strB)
         {
-            Version vA = new Version(strA.Replace(",", "."));
-            Version vB = new Version(strB.Replace(",", "."));
+            try
+            {
+                Version vA = new Version(strA.Replace(",", "."));
+                Version vB = new Version(strB.Replace(",", "."));
 
-            return vA.CompareTo(vB);
+                return vA.CompareTo(vB);
+            }
+            catch(Exception ex)
+            {
+                Logging.Exception("failed to parse versions in CompareVersions, vA=strA={0}, vB=strB={1}", strA, strB);
+                Logging.Exception(ex.ToString());
+                //assume out of date
+                return -1;
+            }
         }
 
         /// <summary>
@@ -2130,6 +2229,36 @@ namespace RelhaxModpack
                 Logging.Exception(ex.ToString());
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Opens the selected text in Google translate web page
+        /// </summary>
+        /// <param name="message">The text to translate</param>
+        /// <returns></returns>
+        public static bool OpenInGoogleTranslate(string message)
+        {
+            //sample:
+            //https://translate.google.com/#view=home&op=translate&sl=en&tl=de&text=test
+
+            //replace percent
+            message = message.Replace(@"%", @"percent");
+            message = message.Replace(@"&", @"and");
+
+            //google translate has a limit of 5000 characters
+            if (message.Length > 4999)
+            {
+                message = message.Substring(0, 4999);
+            }
+            string textToSend = HttpUtility.UrlPathEncode(message);
+
+            //replace comma: %2C
+            textToSend = textToSend.Replace(@",", @"%2C");
+
+            //remove colon escapes and slash escapes
+            string completeTemplate = string.Format("https://translate.google.com/#view=home&op=translate&sl=en&tl={0}&text={1}",
+                Translations.GetTranslatedString("GoogleTranslateLanguageKey"), textToSend);
+            return StartProcess(completeTemplate);
         }
         #endregion
 
