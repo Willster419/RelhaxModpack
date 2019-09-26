@@ -95,22 +95,27 @@ namespace RelhaxModpack
         /// English language string identifier in national language
         /// </summary>
         public const string LanguageEnglish = "English";
+
         /// <summary>
         /// Polish language string identifier in national language
         /// </summary>
         public const string LanguagePolish = "Polski";
+
         /// <summary>
         /// German language string identifier in national language
         /// </summary>
         public const string LanguageGerman = "Deutsch";
+
         /// <summary>
         /// French language string identifier in national language
         /// </summary>
         public const string LanguageFrench = "Français";
+
         /// <summary>
         /// Spanish language string identifier in national language
         /// </summary>
         public const string LanguageSpanish = "Español";
+
         /// <summary>
         /// Russian language string identifier in national language
         /// </summary>
@@ -400,6 +405,7 @@ namespace RelhaxModpack
             German.Add("GoogleTranslateLanguageKey", "de");
             Polish.Add("GoogleTranslateLanguageKey", "pl");
             French.Add("GoogleTranslateLanguageKey", "fr");
+            Spanish.Add("GoogleTranslateLanguageKey", "es");
             Russian.Add("GoogleTranslateLanguageKey", "ru");
 
             //Component: at
@@ -641,7 +647,7 @@ namespace RelhaxModpack
             German.Add("BackupModsText", "Sicherung des aktuellen Modsordner");
             Polish.Add("BackupModsText", "Zrób kopię zapasową obecnego pliku z modyfikacjami");
             French.Add("BackupModsText", "Sauvegarder le dossier de mods");
-            Spanish.Add("BackupModsCB", "Crear una copia de seguridad de la carpeta actual de Mods");
+            Spanish.Add("BackupModsText", "Crear una copia de seguridad de la carpeta actual de Mods");
             Russian.Add("BackupModsText", "Сделать резервную копию папки с модификациями");
 
             //Component: BackupModsSizeLabelUsed
@@ -882,7 +888,7 @@ namespace RelhaxModpack
             Polish.Add("CreateShortcutsCBDescription", "Kiedy zaznaczone, utworzone zostaną skróty na pulpicie do modyfikacji z plikami exe (np. konfiguracja WWIIHA)");
             French.Add("CreateShortcutsCBDescription", "Une fois sélectionné, L'installation créera des icônes de raccourci sur votre bureau pour les mods qui ont des" +
                 " fichiers .exe (comme la configuration WWIIHA)");
-            Spanish.Add("CreateShorcutsCBDescription", "Si está seleccionado, creará accesos directos en el escritorio para los mods que sean archivos .exe (p. ej. cofiguración de WWIIHA");
+            Spanish.Add("CreateShortcutsCBDescription", "Si está seleccionado, creará accesos directos en el escritorio para los mods que sean archivos .exe (p. ej. cofiguración de WWIIHA");
             Russian.Add("CreateShortcutsCBDescription", "Если выбрано, то будут созданы ярлыки на рабочем столе для модов, являющимися EXE-файлами (как WWIIHA)");
 
             //Component: DeleteOldPackagesText
@@ -963,7 +969,7 @@ namespace RelhaxModpack
             German.Add("ForceVisibleText", "Alle Pakete sichtbar [!]");
             Polish.Add("ForceVisibleText", "Wymuś widoczność wszystkich pakietów [!]");
             French.Add("ForceVisibleText", "Force tous les paquets visibles [!]");
-            Spanish.Add("ForceVisibleCB", "Forzar visibilidad de todos los paquetes [!]");
+            Spanish.Add("ForceVisibleText", "Forzar visibilidad de todos los paquetes [!]");
             Russian.Add("ForceVisibleText", "Принудительно показать все пакеты [!]");
 
             //Component: ForceVisibleCBDescription
@@ -981,7 +987,7 @@ namespace RelhaxModpack
             German.Add("LoadAutoSyncSelectionFileText", "Auswahldatei laden");
             Polish.Add("LoadAutoSyncSelectionFileText", "Załaduj plik wyboru");
             French.Add("LoadAutoSyncSelectionFileText", "Charger le fichier de sélection");
-            Spanish.Add("LoadAutoSyncSelectionFile", "Cargar archivo de selección");
+            Spanish.Add("LoadAutoSyncSelectionFileText", "Cargar archivo de selección");
             Russian.Add("LoadAutoSyncSelectionFileText", "Загрузить файл предустановки");
 
             //Component: DeveloperSettingsHeader
@@ -1017,7 +1023,7 @@ namespace RelhaxModpack
             German.Add("LauchEditorDescription", "Starte den Datenbank Editor von hier, anstatt über die Befehlszeile");
             Polish.Add("LauchEditorDescription", "Uruchom editor baz danych stąd, zamiast z linii komend");
             French.Add("LauchEditorDescription", "Lancez l'éditeur de base de données à partir d'ici, au lieu de la ligne de commande");
-            Spanish.Add("LaunchEditorDescription", "Inicia el editor de la base de datos desde aquí, en lugar de desde la línea de comandos");
+            Spanish.Add("LauchEditorDescription", "Inicia el editor de la base de datos desde aquí, en lugar de desde la línea de comandos");
             Russian.Add("LauchEditorDescription", "Запуск редактора базы данных непосредственно здесь, а не в коммандной строке");
 
             //Component: ApplyCustomScalingCBDescription
@@ -1148,7 +1154,7 @@ namespace RelhaxModpack
             German.Add("ThemeCustomText", "Benutzerdefiniert");
             Polish.Add("ThemeCustomText", "Własny");
             French.Add("ThemeCustomText", "Personnalisé");
-            Spanish.Add("ThemeCustom", "Personalizado");
+            Spanish.Add("ThemeCustomText", "Personalizado");
             Russian.Add("ThemeCustomText", "Сторонняя");
 
             //Component: ThemeCustomDescription
@@ -1628,7 +1634,7 @@ namespace RelhaxModpack
             German.Add("UseBetaApplicationCBDescription", "Verwende die letzte Beta-Version des ModPack Managers. Fehlerfreie Übersetzungen und Programmstabilität können nicht garantiert werden.");
             Polish.Add("UseBetaApplicationCBDescription", "Użyj ostatniej wersji beta aplikacji. Nie gwarantujemy stabilności ani tłumaczenia aplikacji.");
             French.Add("UseBetaApplicationCBDescription", "Utiliser la dernière version beta. Les traductions et la stabilité de l'application ne sont pas garanties");
-            Spanish.Add("UseBetaApplicationCBDesctipion", "Utiliza la última versión en beta de la aplicación. Las traducciones y estabilidad de la aplicación no están garantizadas");
+            Spanish.Add("UseBetaApplicationCBDescription", "Utiliza la última versión en beta de la aplicación. Las traducciones y estabilidad de la aplicación no están garantizadas");
             Russian.Add("UseBetaApplicationCBDescription", "Использовать последнюю доступную бета-версию программы. Корректность перевода и стабильность приложения не гарантированы.");
 
 
