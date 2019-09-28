@@ -2981,8 +2981,6 @@ namespace RelhaxModpack
 
             //Component:
             //
-            Spanish.Add("WoTRunningHeader", "WoT está en ejecución");
-            Spanish.Add("WoTRunningMessage", "Por favor, cierre World of Tanks para continuar");
             English.Add("zipReadingErrorHeader", "Incomplete Download");
             German.Add("zipReadingErrorHeader", "Unvollständiger Download");
             Polish.Add("zipReadingErrorHeader", "Ściąganie niekompletne");
@@ -3909,6 +3907,7 @@ namespace RelhaxModpack
             German.Add("WoTRunningTitle", "WoT wird gerade ausgeführt.");
             Polish.Add("WoTRunningTitle", "WoT jest uruchomiony");
             French.Add("WoTRunningTitle", "WoT est en cours d`éxecution");
+            Spanish.Add("WoTRunningTitle", "WoT está en ejecución");
             Russian.Add("WoTRunningTitle", "World of Tanks запущен");
 
             //Component: WoTRunningHeader
