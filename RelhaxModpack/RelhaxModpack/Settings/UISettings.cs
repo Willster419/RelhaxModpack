@@ -15,11 +15,27 @@ using System.Reflection;
 
 namespace RelhaxModpack
 {
+    /// <summary>
+    /// Structure to allow for custom color brush elements to be loaded and saved to/from disk
+    /// </summary>
     public struct CustomBrushSetting
     {
+        /// <summary>
+        /// The brush for color application
+        /// </summary>
         public Brush @Brush;
+
+        /// <summary>
+        /// The internal name of the setting
+        /// </summary>
         public string SettingName;
+
         //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/using-structs
+        /// <summary>
+        /// Create an instance of the CustomBrushSetting structure
+        /// </summary>
+        /// <param name="settingName">The internal name of the setting</param>
+        /// <param name="brush">The brush for color application</param>
         public CustomBrushSetting(string settingName, Brush brush)
         { Brush = brush; SettingName = settingName; }
     };
@@ -66,7 +82,7 @@ namespace RelhaxModpack
         /// </summary>
         /// <remarks>Settings that exist in here don't directly map to 1 setting and control other color settings.
         /// For example, changing the color of a selected component in the mod selection list</remarks>
-        public static readonly CustomBrushSetting[] CustomColorSettings = new CustomBrushSetting[]
+        private static readonly CustomBrushSetting[] CustomColorSettings = new CustomBrushSetting[]
         {
             SelectedPanelColor,
             NotSelectedPanelColor,
@@ -483,6 +499,7 @@ namespace RelhaxModpack
         /// Saves all currently enabled color settings to an xml file
         /// </summary>
         /// <param name="savePath">The path to save the xml file to</param>
+        /// <param name="mainWindow">If method is called from MainWindow, use itself for getting its color properties</param>
         public static void DumpAllWindowColorSettingsToFile(string savePath, MainWindow mainWindow = null)
         {
             //make xml document and declaration

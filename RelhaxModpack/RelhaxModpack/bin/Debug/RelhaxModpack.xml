@@ -3874,6 +3874,28 @@
             <param name="classInstance">The actual instance of the class to save from</param>
             <returns></returns>
         </member>
+        <member name="T:RelhaxModpack.CustomBrushSetting">
+            <summary>
+            Structure to allow for custom color brush elements to be loaded and saved to/from disk
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.CustomBrushSetting.Brush">
+            <summary>
+            The brush for color application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.CustomBrushSetting.SettingName">
+            <summary>
+            The internal name of the setting
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.CustomBrushSetting.#ctor(System.String,System.Windows.Media.Brush)">
+            <summary>
+            Create an instance of the CustomBrushSetting structure
+            </summary>
+            <param name="settingName">The internal name of the setting</param>
+            <param name="brush">The brush for color application</param>
+        </member>
         <member name="T:RelhaxModpack.UISettings">
             <summary>
             Handles all custom UI settings
@@ -3956,11 +3978,12 @@
             </summary>
             <param name="p">The color gradient direction to verify</param>
         </member>
-        <member name="M:RelhaxModpack.UISettings.DumpAllWindowColorSettingsToFile(System.String)">
+        <member name="M:RelhaxModpack.UISettings.DumpAllWindowColorSettingsToFile(System.String,RelhaxModpack.MainWindow)">
             <summary>
             Saves all currently enabled color settings to an xml file
             </summary>
             <param name="savePath">The path to save the xml file to</param>
+            <param name="mainWindow">If method is called from MainWindow, use itself for getting its color properties</param>
         </member>
         <member name="T:RelhaxModpack.PatchRegressionTypes">
             <summary>
