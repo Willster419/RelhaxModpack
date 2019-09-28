@@ -168,7 +168,7 @@ namespace RelhaxModpack
 
             //apply settings to UI elements
             progressIndicator.UpdateProgress(2, Translations.GetTranslatedString("loadingSettings"));
-            UISettings.LoadSettings(true);
+            UISettings.LoadSettings();
             UISettings.ApplyUIColorSettings(this);
 
             //check command line settings

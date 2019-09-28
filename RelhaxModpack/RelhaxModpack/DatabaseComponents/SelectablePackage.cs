@@ -223,16 +223,16 @@ namespace RelhaxModpack
                     switch(_Checked)
                     {
                         case true:
-                            if (UIComponent.PanelColor != UISettings.SelectedPanelColor)
-                                UIComponent.PanelColor = UISettings.SelectedPanelColor;
-                                UIComponent.TextColor = UISettings.SelectedTextColor;
+                            if (UIComponent.PanelColor != UISettings.SelectedPanelColor.Brush)
+                                UIComponent.PanelColor = UISettings.SelectedPanelColor.Brush;
+                                UIComponent.TextColor = UISettings.SelectedTextColor.Brush;
                             break;
                         case false:
                             if (!AnyPackagesChecked())
                             {
-                                if (UIComponent.PanelColor != UISettings.NotSelectedPanelColor)
-                                    UIComponent.PanelColor = UISettings.NotSelectedPanelColor;
-                                UIComponent.TextColor = UISettings.NotSelectedTextColor;
+                                if (UIComponent.PanelColor != UISettings.NotSelectedPanelColor.Brush)
+                                    UIComponent.PanelColor = UISettings.NotSelectedPanelColor.Brush;
+                                UIComponent.TextColor = UISettings.NotSelectedTextColor.Brush;
                             }
                             break;
                     }
@@ -243,14 +243,14 @@ namespace RelhaxModpack
                     switch (_Checked)
                     {
                         case true:
-                            if (ParentBorder.Background != UISettings.SelectedPanelColor)
-                                ParentBorder.Background = UISettings.SelectedPanelColor;
+                            if (ParentBorder.Background != UISettings.SelectedPanelColor.Brush)
+                                ParentBorder.Background = UISettings.SelectedPanelColor.Brush;
                             break;
                         case false:
                             if (!AnyPackagesChecked())
                             {
-                                if (ParentBorder.Background != UISettings.NotSelectedPanelColor)
-                                    ParentBorder.Background = UISettings.NotSelectedPanelColor;
+                                if (ParentBorder.Background != UISettings.NotSelectedPanelColor.Brush)
+                                    ParentBorder.Background = UISettings.NotSelectedPanelColor.Brush;
                             }
                             break;
                     }
@@ -266,7 +266,7 @@ namespace RelhaxModpack
                         UISettings.NotSelectedTabColor = TabIndex.Background;
                     }
                     if (_Checked)
-                        TabIndex.Background = UISettings.SelectedPanelColor;
+                        TabIndex.Background = UISettings.SelectedPanelColor.Brush;
                     else
                         TabIndex.Background = UISettings.NotSelectedTabColor;
                     //workaround for legacy:
@@ -274,13 +274,13 @@ namespace RelhaxModpack
                     if (ModpackSettings.ModSelectionView == SelectionView.Legacy)
                     {
                         if (_Checked)
-                            TreeView.Background = UISettings.SelectedPanelColor;
+                            TreeView.Background = UISettings.SelectedPanelColor.Brush;
                         else
-                            TreeView.Background = UISettings.NotSelectedPanelColor;
+                            TreeView.Background = UISettings.NotSelectedPanelColor.Brush;
                     }
                     else if (ModpackSettings.ModSelectionView == SelectionView.DefaultV2)
                         if (!_Checked)
-                            ParentBorder.Background = UISettings.NotSelectedPanelColor;
+                            ParentBorder.Background = UISettings.NotSelectedPanelColor.Brush;
                 }
             }
         }

@@ -3879,18 +3879,11 @@
             Handles all custom UI settings
             </summary>
         </member>
-        <member name="F:RelhaxModpack.UISettings.CustomColorSettingsPath">
+        <member name="F:RelhaxModpack.UISettings.CustomColorSettingsPathV1">
             <summary>
             The name of the Xml element to hold all custom color settings
             </summary>
             <remarks>See CustomSettings array for list of custom colors</remarks>
-        </member>
-        <member name="F:RelhaxModpack.UISettings.CustomSettings">
-            <summary>
-            A list of custom colors for controlling color behavior of components that 
-            </summary>
-            <remarks>Settings that exist in here don't directly map to 1 setting and control other color settings.
-            For example, changing the color of a selected component in the mod selection list</remarks>
         </member>
         <member name="F:RelhaxModpack.UISettings.UIDocument">
             <summary>
@@ -3917,12 +3910,21 @@
             The color to use when a component is not selected in the selection list
             </summary>
         </member>
+        <member name="F:RelhaxModpack.UISettings.CustomColorSettings">
+            <summary>
+            A list of custom colors for controlling color behavior of components that 
+            </summary>
+            <remarks>Settings that exist in here don't directly map to 1 setting and control other color settings.
+            For example, changing the color of a selected component in the mod selection list</remarks>
+        </member>
         <member name="F:RelhaxModpack.UISettings.NotSelectedTabColor">
             <summary>
             The color to use in the selection list for a tab which is not selected
             </summary>
+            <remarks>It starts as null because the color is unknown (and can be different types based on the user's theme).
+            It is set on user selection on a component in the selection list.</remarks>
         </member>
-        <member name="M:RelhaxModpack.UISettings.LoadSettings(System.Boolean)">
+        <member name="M:RelhaxModpack.UISettings.LoadSettings">
             <summary>
             Load the custom color definitions from XML
             </summary>
@@ -3931,13 +3933,13 @@
             <summary>
             Applies custom color settings to a window
             </summary>
-            <param name="w">The Window object to apply color settings to</param>
+            <param name="window">The Window object to apply color settings to</param>
         </member>
         <member name="M:RelhaxModpack.UISettings.ApplyUIColorsettingsV1(System.Windows.Window)">
             <summary>
             Applies color settings to a window of Xml document format 1.0
             </summary>
-            <param name="w">The window to apply changes to</param>
+            <param name="window">The window to apply changes to</param>
         </member>
         <member name="M:RelhaxModpack.UISettings.ParseColorFromString(System.String,System.Windows.Media.Color@)">
             <summary>
