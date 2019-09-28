@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using RelhaxModpack.Windows;
 using System.Globalization;
 using System.Windows.Media.Imaging;
+using System.Reflection;
 
 namespace RelhaxModpack
 {
@@ -398,6 +399,10 @@ namespace RelhaxModpack
                                 componentTag, brushType.InnerText, color1.InnerText, color2.InnerText), Logfiles.Application, LogLevel.Warning);
                             break;
                         }
+                    case "null"://no color type
+                        backgroundColorToChange = null;
+                        someThingApplied = true;
+                        break;
                     default:
                         Logging.Warning(string.Format("unknown type parameter{0} in component {1} ", brushType.InnerText, componentTag));
                         break;
@@ -478,7 +483,7 @@ namespace RelhaxModpack
         /// Saves all currently enabled color settings to an xml file
         /// </summary>
         /// <param name="savePath">The path to save the xml file to</param>
-        public static void DumpAllWindowColorSettingsToFile(string savePath)
+        public static void DumpAllWindowColorSettingsToFile(string savePath, MainWindow mainWindow = null)
         {
             //make xml document and declaration
             XmlDocument doc = new XmlDocument();
@@ -498,14 +503,46 @@ namespace RelhaxModpack
             version.Value = "1.0";
             root.Attributes.Append(version);
             doc.AppendChild(root);
-
+            
             //add all window instances to document:
-            //make windows for all appropriate windows
-            DumpWindowColorSettingsToXml(root, doc, new MainWindow());
+            //MainWindow first
+            DumpWindowColorSettingsToXml(root, doc, mainWindow == null? new MainWindow() : mainWindow);
+            
+            //get list of all windows in "Windows" namespace
+            //https://stackoverflow.com/questions/79693/getting-all-types-in-a-namespace-via-reflection
+            List<Type> windows = Assembly.GetExecutingAssembly().GetTypes().ToList();
+            //only get actual windows where attributes is public 
+            windows = windows.Where(type => 
+                type.IsClass &&
+                !string.IsNullOrEmpty(type.Namespace) &&
+                type.Namespace.Contains("RelhaxModpack.Windows") &&
+                type.Attributes == (TypeAttributes.Public | TypeAttributes.BeforeFieldInit) &&
+                type.BaseType.FullName.Contains("RelhaxModpack.Windows")
+                ).ToList();
+
+            //create instances and save them
+            Window window;
+            foreach (Type type in windows)
+            {
+                Logging.Debug("creating windows instance for UI parsing: {0}", type.Name);
+                try
+                {
+                    window = (Window)Activator.CreateInstance(type);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception("Failed to create window instance of type {0}", type.Name);
+                    Logging.Exception(ex.ToString());
+                    continue;
+                }
+                Logging.Debug("parsing configurable UI elements");
+                DumpWindowColorSettingsToXml(root, doc, window);
+                Logging.Debug("parsing complete, cleanup");
+            }
 
             //save custom color settings to document
             //for now, just use single solid color for these settings
-            foreach(CustomBrushSetting customBrush in CustomColorSettings)
+            foreach (CustomBrushSetting customBrush in CustomColorSettings)
             {
                 string name = customBrush.SettingName;
                 Logging.Debug("saving custom color SolidColorBrush element {0}", name);
@@ -523,8 +560,15 @@ namespace RelhaxModpack
 
         private static void DumpWindowColorSettingsToXml(XmlElement root, XmlDocument doc, Window window)
         {
+            string windowType = window.GetType().Name;
+            //check to make sure we want to save it
+            if (window is RelhaxWindow relhaxWindow && !relhaxWindow.ApplyColorSettings)
+            {
+                Logging.Info("skipping window {0}, not allowed to apply custom color settings",windowType);
+                return;
+            }
             //make window element
-            XmlElement windowElement = doc.CreateElement(window.GetType().Name);
+            XmlElement windowElement = doc.CreateElement(windowType);
 
             //save attributes to element
             ApplyColorattributesToElement(windowElement, window.Background, doc);
@@ -533,28 +577,8 @@ namespace RelhaxModpack
             root.AppendChild(windowElement);
 
             //get list of all framework elements in the window
-            //TODO: this may not work due to visual not being shown
-            //TODO: need to disable translations to save CPU TIME
             List<FrameworkElement> AllUIElements = Utils.GetAllWindowComponentsLogical(window, false);
-            for(int i = 0; i < AllUIElements.Count; )
-            {
-                if (AllUIElements[i].Tag == null)
-                {
-                    AllUIElements.RemoveAt(i);
-                    continue;
-                }
-                if (!(AllUIElements[i].Tag is string s))
-                {
-                    AllUIElements.RemoveAt(i);
-                    continue;
-                }
-                if (string.IsNullOrWhiteSpace(s))
-                {
-                    AllUIElements.RemoveAt(i);
-                    continue;
-                }
-                i++;
-            }
+            AllUIElements = AllUIElements.Where(element => element.Tag != null && element.Tag is string ID && !string.IsNullOrWhiteSpace(ID)).ToList();
 
             //make xml entries for each UI element now
             foreach(FrameworkElement element in AllUIElements)
@@ -573,8 +597,6 @@ namespace RelhaxModpack
                     continue;
                 windowElement.AppendChild(colorSetting);
             }
-
-            window.Close();
         }
 
         private static void ApplyColorattributesToElement(XmlElement colorEntry, Brush brush, XmlDocument doc, Brush textBrush = null)
@@ -634,6 +656,12 @@ namespace RelhaxModpack
                 XmlAttribute color2 = doc.CreateAttribute("color2");
                 color2.Value = radialGradientBrush.GradientStops[radialGradientBrush.GradientStops.Count - 1].Color.ToString(CultureInfo.InvariantCulture);
                 colorEntry.Attributes.Append(color2);
+            }
+            else if (brush == null)
+            {
+                colorType = doc.CreateAttribute("type");
+                colorType.Value = "null";
+                colorEntry.Attributes.Append(colorType);
             }
             else
             {

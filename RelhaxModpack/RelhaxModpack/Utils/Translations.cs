@@ -1171,12 +1171,21 @@ namespace RelhaxModpack
 
             //Component: DumpColorSettingsButtonText
             //
-            English.Add("DumpColorSettingsButtonText", "Dump color settings to xml");
-            German.Add("DumpColorSettingsButtonText", "Speichere die Farbeinstellungen in xml");
-            Polish.Add("DumpColorSettingsButtonText", "Zrzuć ustawienia kolorów do pliku xml");
-            French.Add("DumpColorSettingsButtonText", "Dump des paramètres de couleur au format XML");
-            Spanish.Add("DumpColorSettingsButtonText", "Volcar configuración de colores en formato XML");
-            Russian.Add("DumpColorSettingsButtonText", "Сохранить настройки цвета в XML");
+            English.Add("DumpColorSettingsButtonText", "Save current color settings");
+            German.Add("DumpColorSettingsButtonText", TranslationNeeded);
+            Polish.Add("DumpColorSettingsButtonText", TranslationNeeded);
+            French.Add("DumpColorSettingsButtonText", TranslationNeeded);
+            Spanish.Add("DumpColorSettingsButtonText", TranslationNeeded);
+            Russian.Add("DumpColorSettingsButtonText", TranslationNeeded);
+
+            //Component: DumpColorSettingsSaveSuccess
+            //
+            English.Add("DumpColorSettingsSaveSuccess", "Color settings saved");
+            German.Add("DumpColorSettingsSaveSuccess", TranslationNeeded);
+            Polish.Add("DumpColorSettingsSaveSuccess", TranslationNeeded);
+            French.Add("DumpColorSettingsSaveSuccess", TranslationNeeded);
+            Spanish.Add("DumpColorSettingsSaveSuccess", TranslationNeeded);
+            Russian.Add("DumpColorSettingsSaveSuccess", TranslationNeeded);
 
             //Component: DumpColorSettingsButtonDescription
             //
