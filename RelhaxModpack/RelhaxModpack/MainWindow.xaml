@@ -263,16 +263,24 @@
                 <Image Source="Resources/Images/discord brand.png" Stretch="None"/>
             </uicomponents:LinkButton>
             <uicomponents:LinkButton Grid.Column="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="HomepageButton" x:Name="HomepageButton" Click="OnLinkButtonClick" Link="https://relhaxmodpack.com/">
-                <Image Source="Resources/Images/Home.png" Stretch="None"/>
+                <Border Background="Transparent" Tag="HomepageButtonImageBorder">
+                    <Image Source="Resources/Images/Home.png" Stretch="None"/>
+                </Border>
             </uicomponents:LinkButton>
             <uicomponents:LinkButton Grid.Column="9" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="FindBugAddModButton" x:Name="FindBugAddModButton" Click="OnLinkButtonClick" Link="https://forums.relhaxmodpack.com/">
-                <Image Source="Resources/Images/report.png" Stretch="None"/>
+                <Border Background="Transparent" Tag="FindBugAddModButtonImageBorder">
+                    <Image Source="Resources/Images/report.png" Stretch="None"/>
+                </Border>
             </uicomponents:LinkButton>
             <uicomponents:LinkButton Grid.Column="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="SendEmailButton" x:Name="SendEmailButton" Click="OnLinkButtonClick" Link="mailto:info@relhaxmodpack.com">
-                <Image Source="Resources/Images/EMail.png" Stretch="None"/>
+                <Border Background="Transparent" Tag="SendEmailButtonImageBorder">
+                    <Image Source="Resources/Images/EMail.png" Stretch="None"/>
+                </Border>
             </uicomponents:LinkButton>
             <uicomponents:LinkButton Grid.Column="11" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="DonateButton" x:Name="DonateButton" Click="OnLinkButtonClick" Link="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=76KNV8KXKYNG2">
-                <Image Source="Resources/Images/donation.png" Stretch="None"/>
+                <Border Background="Transparent" Tag="DonateButtonImageBorder">
+                    <Image Source="Resources/Images/donation.png" Stretch="None"/>
+                </Border>
             </uicomponents:LinkButton>
         </Grid>
         <Grid HorizontalAlignment="Stretch" Height="25" Margin="10,596,10,0" VerticalAlignment="Top" Tag="VersionsGrid">
