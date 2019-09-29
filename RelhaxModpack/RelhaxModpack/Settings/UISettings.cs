@@ -55,7 +55,7 @@ namespace RelhaxModpack
     /// </summary>
     public static class UISettings
     {
-        #region statics and constants
+        #region Statics and constants
         /// <summary>
         /// The name of the Xml element to hold all custom color settings
         /// </summary>
@@ -87,11 +87,17 @@ namespace RelhaxModpack
         /// </summary>
         public static CustomBrushSetting NotSelectedTextColor = new CustomBrushSetting(nameof(NotSelectedTextColor), new SolidColorBrush(Colors.BlanchedAlmond));
 
+        //white
         private static SolidColorBrush DarkThemeTextColor = new SolidColorBrush(Colors.White);
 
-        private static SolidColorBrush DarkThemeBackground = new SolidColorBrush(Colors.Black);
+        //very dark grey
+        private static SolidColorBrush DarkThemeBackground = new SolidColorBrush(Color.FromArgb(255,26,26,26));
 
-        private static SolidColorBrush DarkThemeButton = new SolidColorBrush(Colors.DarkGray);
+        //dark gray
+        private static SolidColorBrush DarkThemeButton = new SolidColorBrush(Color.FromArgb(255,48,48,48));
+
+        //lighter gray
+        private static SolidColorBrush DarkThemeTabControls = new SolidColorBrush(Color.FromArgb(255,64,64,64));
 
         private static Dictionary<string, ReplacedBrushes> OriginalColors = new Dictionary<string, ReplacedBrushes>();
 
@@ -120,6 +126,7 @@ namespace RelhaxModpack
         private static string parsedFormatVersion = string.Empty;
         #endregion
 
+        #region Custom theme file stuff
         /// <summary>
         /// Load the custom color definitions from XML
         /// </summary>
@@ -163,6 +170,18 @@ namespace RelhaxModpack
             return true;
         }
 
+        private static void SetDocumentVersion()
+        {
+            //get the UI xml format version of the file
+            string versionXpath = "//" + Settings.UISettingsColorFile + "/@version";
+            parsedFormatVersion = XmlUtils.GetXmlStringFromXPath(UIDocument, versionXpath);
+            Logging.Debug("using xpath search '{0}' found format version '{1}'", versionXpath, parsedFormatVersion.Trim());
+            //trim it
+            parsedFormatVersion = parsedFormatVersion.Trim();
+        }
+        #endregion
+
+        #region Custom color application
         private static void ApplyCustomColorSettingsV1()
         {
             for(int i = 0; i < CustomColorSettings.Count(); i++)
@@ -177,7 +196,7 @@ namespace RelhaxModpack
                     Logging.Info("custom color instance {0} not defined, skipping", instanceName);
                     continue;
                 }
-                if(ApplyBrushSettings(instanceName,instanceName,customColorNode, out Brush customBrushOut))
+                if(ApplyCustomThemeBrushSettings(instanceName,instanceName,customColorNode, out Brush customBrushOut))
                 {
                     customBrush.Brush = customBrushOut;
                 }
@@ -188,18 +207,70 @@ namespace RelhaxModpack
                 }
             }
         }
-
-        private static void SetDocumentVersion()
+        
+         /// <summary>
+         /// Tries to parse a hex code color to a color object
+         /// </summary>
+         /// <param name="color">The string hex code for the color to use</param>
+         /// <param name="outColor">The corresponding color object</param>
+         /// <returns>True if color parsing was successful, a default color otherwise</returns>
+         /// <remarks>Uses the 32bit color codes for generation (Alpha, Red, Green, Blue) Alpha is transparency</remarks>
+        public static bool ParseColorFromString(string color, out Color outColor)
         {
-            //get the UI xml format version of the file
-            string versionXpath = "//" + Settings.UISettingsColorFile + "/@version";
-            parsedFormatVersion = XmlUtils.GetXmlStringFromXPath(UIDocument, versionXpath);
-            Logging.Debug("using xpath search '{0}' found format version '{1}'", versionXpath, parsedFormatVersion.Trim());
-            //trim it
-            parsedFormatVersion = parsedFormatVersion.Trim();
+            outColor = new Color();
+            string aPart = string.Empty;
+            string rPart = string.Empty;
+            string gPart = string.Empty;
+            string bPart = string.Empty;
+            try
+            {
+                aPart = color.Substring(1, 2);
+                rPart = color.Substring(3, 2);
+                gPart = color.Substring(5, 2);
+                bPart = color.Substring(7, 2);
+            }
+            catch (ArgumentException)
+            {
+                Logging.WriteToLog(string.Format("failed to parse color, a={0}, r={1}, g={2}, b={3}", aPart, rPart, gPart, bPart)
+                    , Logfiles.Application, LogLevel.Warning);
+                return false;
+            }
+            if ((byte.TryParse(aPart, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte a)) &&
+                (byte.TryParse(rPart, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte r)) &&
+                (byte.TryParse(gPart, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte g)) &&
+                (byte.TryParse(bPart, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte b)))
+            {
+                outColor = Color.FromArgb(a, r, g, b);
+                return true;
+            }
+            else
+                Logging.WriteToLog(string.Format("failed to parse color, a={0}, r={1}, g={2}, b={3}", aPart, rPart, gPart, bPart)
+                    , Logfiles.Application, LogLevel.Warning);
+            return false;
         }
 
-        #region Apply to window
+        /// <summary>
+        /// Verifies that the points for applying color gradient directions are within 0-1
+        /// </summary>
+        /// <param name="p">The color gradient direction to verify</param>
+        public static void VerifyPoints(Point p)
+        {
+            if (p.X > 1 || p.X < 0)
+            {
+                int settingToUse = p.X > 1 ? 1 : 0;
+                Logging.Warning("point.X is out of bounds (must be between 0 and 1, current value={0}), setting to {1})", p.X, settingToUse);
+                p.X = settingToUse;
+            }
+            if (p.Y > 1 || p.Y < 0)
+            {
+                int settingToUse = p.Y > 1 ? 1 : 0;
+                Logging.Warning("point.Y is out of bounds (must be between 0 and 1, current value={0}), setting to {1})", p.Y, settingToUse);
+                p.Y = settingToUse;
+            }
+        }
+        #endregion
+
+        #region Other theme stuff
         /// <summary>
         /// Applies custom color settings to a window
         /// </summary>
@@ -239,7 +310,7 @@ namespace RelhaxModpack
             {
                 case "1.0":
                     Logging.Info("parsing color settings file using V1 parse method");
-                    ApplyUIColorsettingsV1(window);
+                    ApplyCustomThemeColorsettingsV1(window);
                     break;
                 default:
                     //unknown
@@ -299,7 +370,9 @@ namespace RelhaxModpack
                 }
             }
         }
+        #endregion
 
+        #region Default theme color apply
         private static void ApplyUIDefaultColorSettings(Window window)
         {
             string windowType = window.GetType().Name;
@@ -358,7 +431,9 @@ namespace RelhaxModpack
                 block.Foreground = OriginalColors[block.Tag as string].TextBrush;
             }
         }
+        #endregion
 
+        #region Dark theme color apply
         private static void ApplyUIDarkColorSettings(Window window)
         {
             string windowType = window.GetType().Name;
@@ -409,12 +484,14 @@ namespace RelhaxModpack
                 block.Foreground = DarkThemeTextColor;
             }
         }
-        
+        #endregion
+
+        #region Custom theme color apply
         /// <summary>
         /// Applies color settings to a window of Xml document format 1.0
         /// </summary>
         /// <param name="window">The window to apply changes to</param>
-        private static void ApplyUIColorsettingsV1(Window window)
+        private static void ApplyCustomThemeColorsettingsV1(Window window)
         {
             string windowType = window.GetType().Name;
             //using RelhaxWindow type allows us to directly control/check if the window should be color changed
@@ -436,7 +513,7 @@ namespace RelhaxModpack
                 return;
             }
             //apply window color settings if exist
-            ApplyBrushSettings(window, windowColorNode);
+            ApplyCustomThemeBrushSettings(window, windowColorNode);
 
             //build list of all internal framework components
             List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsVisual(window, false);
@@ -451,35 +528,46 @@ namespace RelhaxModpack
                     XmlNode brushSettings = XmlUtils.GetXmlNodeFromXPath(UIDocument, XPathColorSetting);
                     //make sure setting is there
                     if (brushSettings != null)
-                        ApplyBrushSettings(element, brushSettings);
+                        ApplyCustomThemeBrushSettings(element, brushSettings);
                 }
             }
         }
         
-        private static void ApplyBrushSettings(FrameworkElement element, XmlNode brushSettings)
+        private static void ApplyCustomThemeBrushSettings(FrameworkElement element, XmlNode brushSettings)
         {
             if (element is Control control)
             {
-                if(ApplyBrushSettings(control.Name, (string)control.Tag, brushSettings, out Brush backgroundColorToChange))
+                if(ApplyCustomThemeBrushSettings(control.Name, (string)control.Tag, brushSettings, out Brush backgroundColorToChange))
                 {
-                    control.Background = backgroundColorToChange;
+                    if (backgroundColorToChange != null)
+                        control.Background = backgroundColorToChange;
                     if (!(element is Window))
                     {
-                        if(ApplyTextBrushSettings(control.Name, (string)control.Tag, brushSettings, out Brush textColorToChange))
-                            control.Foreground = textColorToChange;
+                        if(ApplyCustomThemeTextBrushSettings(control.Name, (string)control.Tag, brushSettings, out Brush textColorToChange))
+                            if (textColorToChange != null)
+                                control.Foreground = textColorToChange;
                     }
                 }
             }
             else if (element is Panel panel)
             {
-                if(ApplyBrushSettings(panel.Name, (string)panel.Tag, brushSettings, out Brush backgroundColorToChange))
+                if(ApplyCustomThemeBrushSettings(panel.Name, (string)panel.Tag, brushSettings, out Brush backgroundColorToChange))
                 {
-                    panel.Background = backgroundColorToChange;
+                    if (backgroundColorToChange != null)
+                        panel.Background = backgroundColorToChange;
                 }
-            }  
+            }
+            else if (element is TextBlock block)
+            {
+                if(ApplyCustomThemeBrushSettings(block.Name, (string)block.Tag, brushSettings, out Brush backgroundColorToChange))
+                {
+                    if (backgroundColorToChange != null)
+                        block.Background = backgroundColorToChange;
+                }
+            }
         }
 
-        private static bool ApplyTextBrushSettings(string componentName, string componentTag, XmlNode brushSettings, out Brush textColorToChange)
+        private static bool ApplyCustomThemeTextBrushSettings(string componentName, string componentTag, XmlNode brushSettings, out Brush textColorToChange)
         {
             bool somethingApplied = false;
             textColorToChange = new SolidColorBrush();
@@ -513,7 +601,7 @@ namespace RelhaxModpack
             return somethingApplied;
         }
 
-        private static bool ApplyBrushSettings(string componentName, string componentTag, XmlNode brushSettings, out Brush backgroundColorToChange)
+        private static bool ApplyCustomThemeBrushSettings(string componentName, string componentTag, XmlNode brushSettings, out Brush backgroundColorToChange)
         {
             bool someThingApplied = false;
             backgroundColorToChange = new SolidColorBrush();
@@ -629,67 +717,6 @@ namespace RelhaxModpack
                     componentName, brushType.InnerText), Logfiles.Application, LogLevel.Warning);
             }
             return someThingApplied;
-        }
-        
-        /// <summary>
-        /// Tries to parse a hex code color to a color object
-        /// </summary>
-        /// <param name="color">The string hex code for the color to use</param>
-        /// <param name="outColor">The corresponding color object</param>
-        /// <returns>True if color parsing was successful, a default color otherwise</returns>
-        /// <remarks>Uses the 32bit color codes for generation (Alpha, Red, Green, Blue) Alpha is transparency</remarks>
-        public static bool ParseColorFromString(string color, out Color outColor)
-        {
-            outColor = new Color();
-            string aPart = string.Empty;
-            string rPart = string.Empty;
-            string gPart = string.Empty;
-            string bPart = string.Empty;
-            try
-            {
-                aPart = color.Substring(1,2);
-                rPart = color.Substring(3,2);
-                gPart = color.Substring(5,2);
-                bPart = color.Substring(7,2);
-            }
-            catch(ArgumentException)
-            {
-              Logging.WriteToLog(string.Format("failed to parse color, a={0}, r={1}, g={2}, b={3}",aPart, rPart, gPart, bPart)
-                  ,Logfiles.Application,LogLevel.Warning);
-              return false;
-            }
-            if((byte.TryParse(aPart, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte a)) &&
-                (byte.TryParse(rPart, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte r))&&
-                (byte.TryParse(gPart, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte g))&&
-                (byte.TryParse(bPart, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte b)))
-            {
-                outColor = Color.FromArgb(a, r, g, b);
-                return true;
-            }
-            else
-                Logging.WriteToLog(string.Format("failed to parse color, a={0}, r={1}, g={2}, b={3}",aPart, rPart, gPart, bPart)
-                    ,Logfiles.Application,LogLevel.Warning);
-            return false;
-        }
-        
-        /// <summary>
-        /// Verifies that the points for applying color gradient directions are within 0-1
-        /// </summary>
-        /// <param name="p">The color gradient direction to verify</param>
-        public static void VerifyPoints(Point p)
-        {
-            if(p.X > 1 || p.X < 0)
-            {
-                int settingToUse = p.X > 1 ? 1 : 0;
-                Logging.Warning("point.X is out of bounds (must be between 0 and 1, current value={0}), setting to {1})", p.X,settingToUse);
-                p.X = settingToUse;
-            }
-            if(p.Y > 1 || p.Y < 0)
-            {
-                int settingToUse = p.Y > 1 ? 1 : 0;
-                Logging.Warning("point.Y is out of bounds (must be between 0 and 1, current value={0}), setting to {1})", p.Y, settingToUse);
-                p.Y = settingToUse;
-            }
         }
         #endregion
 
