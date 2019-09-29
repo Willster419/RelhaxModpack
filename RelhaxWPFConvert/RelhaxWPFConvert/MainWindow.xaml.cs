@@ -500,5 +500,13 @@ namespace RelhaxWPFConvert
             
         }
         #endregion
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if ((bool)HighlightButton.IsEnabled)
+                HighlightButton.IsEnabled = false;
+            else
+                HighlightButton.IsEnabled = true;
+        }
     }
 }
