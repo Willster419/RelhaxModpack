@@ -283,16 +283,18 @@
             <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Application Version V{version}" VerticalAlignment="Stretch" x:Name="ApplicationVersionLabel" Tag="ApplicationVersionLabel"/>
             <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Database Version V{version}" VerticalAlignment="Stretch" x:Name="DatabaseVersionLabel" Tag="DatabaseVersionLabel"/>
         </Grid>
-        <Grid HorizontalAlignment="Stretch" Height="208" Margin="10,340,10,0" VerticalAlignment="Top" >
+        <Grid HorizontalAlignment="Stretch" Height="208" Margin="10,340,10,0" VerticalAlignment="Top">
+            <Border HorizontalAlignment="Left" Height="45" Margin="364,0,0,0" VerticalAlignment="Top" Width="150" Tag="LanguageSelectionBorder">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock x:Name="LanguageSelectionTextblock" Tag="LanguageSelectionTextBlock" Text="Language Selection" TextWrapping="Wrap" Margin="0,0,0,5"/>
+                    <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="LanguagesSelector" SelectionChanged="OnLanguageSelectionChanged" Margin="0,0,0,0"/>
+                </StackPanel>
+            </Border>
+            <Button Tag="CancelDownloadButton" x:Name="CancelDownloadInstallButton" Content="Cancel" HorizontalAlignment="Left" Margin="235,14,0,0" VerticalAlignment="Top" Width="118" Height="31" Visibility="Hidden" IsEnabled="False"/>
+            <TextBox HorizontalAlignment="Stretch" Height="92" Margin="2,50,2,0" VerticalAlignment="Top" x:Name="InstallProgressTextBox" TextWrapping="Wrap" IsReadOnly="True"/>
             <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,147,2,0" VerticalAlignment="Top" x:Name="TotalProgressBar"/>
             <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,167,2,0" VerticalAlignment="Top" x:Name="ParentProgressBar"/>
             <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,187,2,0" VerticalAlignment="Top" x:Name="ChildProgressBar"/>
-            <TextBox HorizontalAlignment="Stretch" Height="92" Margin="2,50,2,0" VerticalAlignment="Top" x:Name="InstallProgressTextBox" TextWrapping="Wrap" IsReadOnly="True"/>
-            <GroupBox Header="Language" HorizontalAlignment="Left" Height="45" Margin="360,0,0,0" VerticalAlignment="Top" Width="150" x:Name="LanguageSelectionGB" Tag="LanguageSelectionGB">
-                <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="LanguagesSelector" SelectionChanged="OnLanguageSelectionChanged" Margin="0,0,0,0">
-                </ComboBox>
-            </GroupBox>
-            <Button Tag="CancelDownloadButton" x:Name="CancelDownloadInstallButton" Content="Cancel" HorizontalAlignment="Left" Margin="235,14,0,0" VerticalAlignment="Top" Width="118" Height="31" Visibility="Hidden" IsEnabled="False"/>
         </Grid>
     </Grid>
 </Window>
