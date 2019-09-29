@@ -3102,6 +3102,26 @@
             The unstable private testing database.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.UIThemes">
+            <summary>
+            The list of different types of themes in the application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIThemes.Default">
+            <summary>
+            The default application theme
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIThemes.Dark">
+            <summary>
+            The dark application theme
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIThemes.Custom">
+            <summary>
+            A custom application theme from the UISettings.xml
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.ModpackSettings">
             <summary>
             Provides access to all settings used in the modpack.
@@ -3279,6 +3299,16 @@
             Toggle for if the Preview window should be shown in fullscreen mode
             </summary>
         </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ModSelectionFullscreen">
+            <summary>
+            Toggle for if the ModSelectionView window should be shown in fullscreen mode
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.MinimizeToSystemTray">
+            <summary>
+            t=Toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.ModpackSettings.AutoInstallFrequencyInterval">
             <summary>
             The time, in a specified unit, to check for anew data base version
@@ -3299,11 +3329,6 @@
             The width, in pixels, of the ModSelectionView window
             </summary>
         </member>
-        <member name="F:RelhaxModpack.ModpackSettings.ModSelectionFullscreen">
-            <summary>
-            Toggle for if the ModSelectionView window should be shown in fullscreen mode
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.ModpackSettings.PreviewX">
             <summary>
             The x-coordinate location, in pixels, of the Preview window
@@ -3322,6 +3347,11 @@
         <member name="F:RelhaxModpack.ModpackSettings.PreviewWidth">
             <summary>
             The width, in pixels, of the Preview window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.DisplayScale">
+            <summary>
+            The factor to scale the window size and components by. From 1 to 3 in increments of 0.25
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.AutoOneclickSelectionFilePath">
@@ -3355,14 +3385,9 @@
             The application distribution version to use. When selected, it won't take affect until application restart
             </summary>
         </member>
-        <member name="F:RelhaxModpack.ModpackSettings.MinimizeToSystemTray">
+        <member name="F:RelhaxModpack.ModpackSettings.ApplicationTheme">
             <summary>
-            t=Toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.DisplayScale">
-            <summary>
-            
+            The theme to apply to the application
             </summary>
         </member>
         <member name="M:RelhaxModpack.ModpackSettings.ApplyOldSettings(System.Xml.XmlNodeList)">

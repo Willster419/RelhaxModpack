@@ -157,9 +157,6 @@ namespace RelhaxModpack
             //load and apply modpack settings
             Utils.AllowUIToUpdate();
             Settings.LoadSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null);
-            //note: if loadSettings load the language, apply to UI sets the UI option and triggers translation of MainWindow
-            ApplySettingsToUI();
-
 
             //apply forced debugging settings
 #warning forced debugging settings is active
@@ -168,7 +165,22 @@ namespace RelhaxModpack
 
             //apply settings to UI elements
             progressIndicator.UpdateProgress(2, Translations.GetTranslatedString("loadingSettings"));
-            UISettings.LoadSettings();
+            if(ModpackSettings.ApplicationTheme == UIThemes.Custom)
+            {
+                if (!UISettings.LoadSettings())
+                {
+                    Logging.Warning("failed to load custom UI settings file, make sure file is called{0} and the xml syntax is correct", Settings.UISettingsColorFile);
+                    ModpackSettings.ApplicationTheme = UIThemes.Default;
+                }
+                else
+                {
+                    Logging.Info("{0} was successfully load", Settings.UISettingsColorFile);
+                }
+            }
+
+            //note: if loadSettings load the language, apply to UI sets the UI option and triggers translation of MainWindow
+            ApplySettingsToUI();
+
             UISettings.ApplyUIColorSettings(this);
 
             //check command line settings
@@ -2474,7 +2486,13 @@ namespace RelhaxModpack
 
         private void Theme_Checked(object sender, RoutedEventArgs e)
         {
-
+            if ((bool)ThemeDefault.IsChecked)
+                ModpackSettings.ApplicationTheme = UIThemes.Default;
+            else if ((bool)ThemeDark.IsChecked)
+                ModpackSettings.ApplicationTheme = UIThemes.Dark;
+            else if ((bool)ThemeCustom.IsChecked)
+                ModpackSettings.ApplicationTheme = UIThemes.Custom;
+            UISettings.ApplyUIColorSettings(this);
         }
 
         private void SaveDisabledModsInSelection_Click(object sender, RoutedEventArgs e)
@@ -2659,6 +2677,19 @@ namespace RelhaxModpack
                     break;
                 case UninstallModes.Quick:
                     UninstallQuick.IsChecked = true;
+                    break;
+            }
+
+            switch(ModpackSettings.ApplicationTheme)
+            {
+                case UIThemes.Default:
+                    ThemeDefault.IsChecked = true;
+                    break;
+                case UIThemes.Dark:
+                    ThemeDark.IsChecked = true;
+                    break;
+                case UIThemes.Custom:
+                    ThemeCustom.IsChecked = true;
                     break;
             }
 

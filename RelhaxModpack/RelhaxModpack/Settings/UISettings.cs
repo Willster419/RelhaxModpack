@@ -39,6 +39,17 @@ namespace RelhaxModpack
         public CustomBrushSetting(string settingName, Brush brush)
         { Brush = brush; SettingName = settingName; }
     };
+
+    public struct ReplacedBrushes
+    {
+        public Brush BackgroundBrush;
+
+        public Brush TextBrush;
+
+        public ReplacedBrushes(Brush background, Brush text)
+        { BackgroundBrush = background; TextBrush = text; }
+    }
+
     /// <summary>
     /// Handles all custom UI settings
     /// </summary>
@@ -56,7 +67,6 @@ namespace RelhaxModpack
         /// </summary>
         public static XmlDocument UIDocument;
 
-#warning the color stuff needs to be finished
         /// <summary>
         /// The color to use for when a component is selected in the selection list
         /// </summary>
@@ -76,6 +86,16 @@ namespace RelhaxModpack
         /// The color to use when a component is not selected in the selection list
         /// </summary>
         public static CustomBrushSetting NotSelectedTextColor = new CustomBrushSetting(nameof(NotSelectedTextColor), new SolidColorBrush(Colors.BlanchedAlmond));
+
+        private static SolidColorBrush DarkThemeTextColor = new SolidColorBrush(Colors.White);
+
+        private static SolidColorBrush DarkThemeBackground = new SolidColorBrush(Colors.Black);
+
+        private static SolidColorBrush DarkThemeButton = new SolidColorBrush(Colors.DarkGray);
+
+        private static Dictionary<string, ReplacedBrushes> OriginalColors = new Dictionary<string, ReplacedBrushes>();
+
+        private static Dictionary<string, Brush> BackedUpWindows = new Dictionary<string, Brush>();
 
         /// <summary>
         /// A list of custom colors for controlling color behavior of components that 
@@ -103,13 +123,13 @@ namespace RelhaxModpack
         /// <summary>
         /// Load the custom color definitions from XML
         /// </summary>
-        public static void LoadSettings()
+        public static bool LoadSettings()
         {
             //first check if the file exists
             if(!File.Exists(Settings.UISettingsFileName))
             {
                 Logging.Info("UIDocument file does not exist, using defaults");
-                return;
+                return false;
             }
 
             //try to create a new one first in a temp. If it fails then abort.
@@ -117,7 +137,7 @@ namespace RelhaxModpack
             if(loadedDoc == null)
             {
                 Logging.Error("failed to parse UIDocument, check messages above for parsing errors");
-                return;
+                return false;
             }
             UIDocument = loadedDoc;
             Logging.Info("UIDocument xml file loaded successfully, loading custom color instances");
@@ -126,7 +146,7 @@ namespace RelhaxModpack
             if (string.IsNullOrWhiteSpace(parsedFormatVersion))
             {
                 Logging.Error("UIDocument formatVersion string is null, aborting parsing");
-                return;
+                return false;
             }
             switch (parsedFormatVersion)
             {
@@ -137,9 +157,10 @@ namespace RelhaxModpack
                 default:
                     //unknown
                     Logging.Error("Unknown format string or not supported: {0}", parsedFormatVersion);
-                    return;
+                    return false;
             }
             Logging.Info("Custom color instances loaded");
+            return true;
         }
 
         private static void ApplyCustomColorSettingsV1()
@@ -185,6 +206,22 @@ namespace RelhaxModpack
         /// <param name="window">The Window object to apply color settings to</param>
         public static void ApplyUIColorSettings(Window window)
         {
+            if (!BackedUpWindows.ContainsKey(window.GetType().FullName))
+            {
+                BackupUIDefaultColorSettings(window);
+                BackedUpWindows.Add(window.GetType().FullName, window.Background);
+            }
+            switch (ModpackSettings.ApplicationTheme)
+            {
+                case UIThemes.Default:
+                    Logging.Debug("Applying default UI theme for window {0}", window.GetType().Name);
+                    ApplyUIDefaultColorSettings(window);
+                    return;
+                case UIThemes.Dark:
+                    Logging.Debug("Applying dark UI theme for window {0}", window.GetType().Name);
+                    ApplyUIDarkColorSettings(window);
+                    return;
+            }
             if(UIDocument == null)
             {
                 Logging.Info("UIDocument is null, no custom color settings to apply");
@@ -208,6 +245,158 @@ namespace RelhaxModpack
                     //unknown
                     Logging.Error("Unknown format string or not supported: {0}", parsedFormatVersion);
                     return;
+            }
+        }
+
+        private static void BackupUIDefaultColorSettings(Window window)
+        {
+            //build list of all internal framework components
+            //original: 274
+            //after distinct: 267
+            List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsVisual(window, false).Distinct().ToList();
+            foreach (FrameworkElement element in allWindowControls)
+            {
+                //make sure we have an element that we want color changing
+                if (element.Tag is string ID && !string.IsNullOrWhiteSpace(ID))
+                {
+                    if(element is Control control_)
+                    {
+                        if (!OriginalColors.ContainsKey(ID))
+                        {
+                            OriginalColors.Add(ID, new ReplacedBrushes(control_.Background, control_.Foreground));
+                        }
+                        else
+                        {
+                            throw new BadMemeException("how does the key already exist");
+                        }
+                    }
+                    else if (element is Panel panel_)
+                    {
+                        if (!OriginalColors.ContainsKey(ID))
+                        {
+                            OriginalColors.Add(ID, new ReplacedBrushes(panel_.Background, null));
+                        }
+                        else
+                        {
+                            throw new BadMemeException("how does the key already exist");
+                        }
+                    }
+                    else if (element is TextBlock block)
+                    {
+                        if (!OriginalColors.ContainsKey(ID))
+                        {
+                            OriginalColors.Add(ID, new ReplacedBrushes(block.Background,block.Foreground));
+                        }
+                        else
+                        {
+                            throw new BadMemeException("how does the key already exist");
+                        }
+                    }
+                    else
+                    {
+                        throw new BadMemeException("what is this");
+                    }
+                }
+            }
+        }
+
+        private static void ApplyUIDefaultColorSettings(Window window)
+        {
+            string windowType = window.GetType().Name;
+            //using RelhaxWindow type allows us to directly control/check if the window should be color changed
+            if (window is RelhaxWindow relhaxWindow && !relhaxWindow.ApplyColorSettings)
+            {
+                Logging.Warning("window of type '{0}' is set to not have color setting applied, skipping", windowType);
+                return;
+            }
+
+            ApplyDefaultBrushSettings(window);
+
+            //build list of all internal framework components
+            List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsVisual(window, false).Distinct().ToList();
+            foreach (FrameworkElement element in allWindowControls)
+            {
+                //make sure we have an element that we want color changing
+                if (element.Tag is string ID && !string.IsNullOrWhiteSpace(ID))
+                {
+                    ApplyDefaultBrushSettings(element);
+                }
+            }
+        }
+
+        private static void ApplyDefaultBrushSettings(FrameworkElement element)
+        {
+            if (element is Window window)
+            {
+                window.Background = BackedUpWindows[window.GetType().FullName];
+                return;
+            }
+
+            if(element.Tag is string ID)
+            {
+                if (!OriginalColors.ContainsKey(ID))
+                    throw new BadMemeException("key not found");
+            }
+
+            if (element is Button button)
+            {
+                button.Background = OriginalColors[element.Tag as string].BackgroundBrush;
+                button.Foreground = OriginalColors[element.Tag as string].TextBrush;
+            }
+            else if (element is Control control)
+            {
+                control.Background = OriginalColors[element.Tag as string].BackgroundBrush;
+                control.Foreground = OriginalColors[element.Tag as string].TextBrush;
+            }
+            else if (element is Panel panel)
+            {
+                panel.Background = OriginalColors[element.Tag as string].BackgroundBrush;
+            }
+        }
+
+        private static void ApplyUIDarkColorSettings(Window window)
+        {
+            string windowType = window.GetType().Name;
+            //using RelhaxWindow type allows us to directly control/check if the window should be color changed
+            if (window is RelhaxWindow relhaxWindow && !relhaxWindow.ApplyColorSettings)
+            {
+                Logging.Warning("window of type '{0}' is set to not have color setting applied, skipping", windowType);
+                return;
+            }
+
+            ApplyDarkBrushSettings(window);
+
+            //build list of all internal framework components
+            List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsVisual(window, false);
+            foreach (FrameworkElement element in allWindowControls)
+            {
+                //make sure we have an element that we want color changing
+                if (element.Tag is string ID && !string.IsNullOrWhiteSpace(ID))
+                {
+                    ApplyDarkBrushSettings(element);
+                }
+            }
+        }
+
+        private static void ApplyDarkBrushSettings(FrameworkElement element)
+        {
+            if (element is Window window)
+            {
+                window.Background = DarkThemeBackground;
+            }
+            else if (element is Button button)
+            {
+                button.Background = DarkThemeButton;
+                button.Foreground = DarkThemeTextColor;
+            }
+            else if (element is Control control)
+            {
+                control.Background = DarkThemeBackground;
+                control.Foreground = DarkThemeTextColor;
+            }
+            else if (element is Panel panel)
+            {
+                panel.Background = DarkThemeBackground;
             }
         }
         
