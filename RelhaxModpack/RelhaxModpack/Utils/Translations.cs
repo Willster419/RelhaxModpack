@@ -81,7 +81,9 @@ namespace RelhaxModpack
             //loading header for loading window
             "LoadingHeader",
             //application update notes textbox
-            "ApplicationUpdateNotes"
+            "ApplicationUpdateNotes",
+            //xml string forming in color picker
+            "SampleXmlOutputTextbox"
         };
         private const string TranslationNeeded = "TODO";
         private static readonly string Blank = string.Empty;
@@ -4201,6 +4203,24 @@ namespace RelhaxModpack
             French.Add("Point2Y", TranslationNeeded);
             Spanish.Add("Point2Y", TranslationNeeded);
             Russian.Add("Point2Y", TranslationNeeded);
+
+            //Component: BrushesLink
+            //
+            English.Add("BrushesLink", "Read about brush types here");
+            German.Add("BrushesLink", TranslationNeeded);
+            Polish.Add("BrushesLink", TranslationNeeded);
+            French.Add("BrushesLink", TranslationNeeded);
+            Spanish.Add("BrushesLink", TranslationNeeded);
+            Russian.Add("BrushesLink", TranslationNeeded);
+
+            //Component: SampleXmlOutput
+            //
+            English.Add("SampleXmlOutput", "Sample XML output");
+            German.Add("SampleXmlOutput", TranslationNeeded);
+            Polish.Add("SampleXmlOutput", TranslationNeeded);
+            French.Add("SampleXmlOutput", TranslationNeeded);
+            Spanish.Add("SampleXmlOutput", TranslationNeeded);
+            Russian.Add("SampleXmlOutput", TranslationNeeded);
             #endregion
 
             //apply the bool

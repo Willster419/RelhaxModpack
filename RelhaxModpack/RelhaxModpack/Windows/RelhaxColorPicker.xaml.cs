@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Globalization;
 
 namespace RelhaxModpack.Windows
 {
@@ -69,9 +70,9 @@ namespace RelhaxModpack.Windows
             if (!readyToApply)
                 return;
             //setup variables
-            Color color1;
-            Color color2;
-            Color textColor;
+            Color color1 = new Color();
+            Color color2 = new Color();
+            Color textColor = new Color();
             Point point1 = new Point();
             Point point2 = new Point();
             
@@ -140,6 +141,26 @@ namespace RelhaxModpack.Windows
             Point1Y.Text = string.Format("{0}: {1}", Translations.GetTranslatedString(nameof(Point1Y)), (Point1YSlider.Value).ToString("N2"));
             Point2X.Text = string.Format("{0}: {1}", Translations.GetTranslatedString(nameof(Point2X)), (Point2XSlider.Value).ToString("N2"));
             Point2Y.Text = string.Format("{0}: {1}", Translations.GetTranslatedString(nameof(Point2Y)), (Point2YSlider.Value).ToString("N2"));
+
+            //build sample xml output
+            //<ColorSetting ID="LanguagesSelector" type="LinearGradientBrush" color1="#FFF0F0F0" color2="#FFE5E5E5" point1="0,0" point2="0,1" textColor="#FF000000" />
+            StringBuilder builder = new StringBuilder();
+            builder.AppendFormat("<ColorSetting ID=\"Component_ID\" type=\"{0}\" color1=\"{1}\"",colorType,color1.ToString());
+            if(colorType.Equals("LinearGradientBrush"))
+            {
+                builder.AppendFormat(" color2=\"{0}\" point1=\"{1}\" point2=\"{2}\"",color2.ToString(),
+                    point1.ToString(CultureInfo.InvariantCulture),point2.ToString(CultureInfo.InvariantCulture));
+            }
+            else if (colorType.Equals("RadialGradientBrush"))
+            {
+                builder.AppendFormat(" color2=\"{0}\"", color2.ToString());
+            }
+            if((bool)TextColor.IsChecked)
+            {
+                builder.AppendFormat(" textColor=\"{0}\"", textColor.ToString());
+            }
+            builder.AppendFormat(" />");
+            SampleXmlOutputTextbox.Text = builder.ToString();
         }
     }
 }

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         xmlns:UI ="clr-namespace:RelhaxModpack.UIComponents"
         mc:Ignorable="d"
-        Title="Color Picker" Height="600" Width="600" ResizeMode="CanMinimize" Loaded="RelhaxWindow_Loaded"
+        Title="Color Picker" Height="620" Width="600" ResizeMode="CanMinimize" Loaded="RelhaxWindow_Loaded"
         LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="True">
     <local:RelhaxWindow.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -92,11 +92,11 @@
                         Value="0" IsSnapToTickEnabled="True" ValueChanged="AnySlider_ValueChanged" SmallChange="0.01" LargeChange="0.01" TickFrequency="0.01"/>
             </StackPanel>
         </Grid>
-        <Border x:Name="SampleBackgroundColor" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,436,10,54">
+        <Border x:Name="SampleBackgroundColor" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,436,10,66">
             <TextBlock x:Name="SampleTextColor" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Sample Text"
                        VerticalAlignment="Center" TextAlignment="Center" Visibility="{Binding IsChecked, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=TextColor}"/>
         </Border>
-        <TextBlock x:Name="SampleXmlOutput" HorizontalAlignment="Stretch" Margin="10,0,0,33" TextWrapping="Wrap" Text="Sample XML output" VerticalAlignment="Bottom"/>
-        <TextBox HorizontalAlignment="Stretch" Height="23" Margin="10,0,10,10" TextWrapping="Wrap" VerticalAlignment="Bottom" />
+        <TextBlock x:Name="SampleXmlOutput" HorizontalAlignment="Stretch" Margin="10,0,0,50" TextWrapping="Wrap" Text="Sample XML output" VerticalAlignment="Bottom"/>
+        <TextBox x:Name="SampleXmlOutputTextbox" HorizontalAlignment="Stretch" Height="40" Margin="10,0,10,10" TextWrapping="Wrap" VerticalAlignment="Bottom" IsReadOnly="True"/>
     </Grid>
 </local:RelhaxWindow>
