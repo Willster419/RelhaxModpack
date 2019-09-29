@@ -7,7 +7,7 @@
     xmlns:System="clr-namespace:System;assembly=mscorlib"
     xmlns:uicomponents="clr-namespace:RelhaxModpack.UIComponents" x:Name="TheMainWindow" x:Class="RelhaxModpack.MainWindow"
     mc:Ignorable="d"
-    Title="Relhax" Height="675" Width="550" ResizeMode="CanMinimize"
+    Title="Relhax" Height="660" Width="550" ResizeMode="CanMinimize"
     Loaded="TheMainWindow_Loaded"
     Closing="TheMainWindow_Closing"
     Icon="Resources/modpack_icon.ico">
@@ -275,20 +275,20 @@
                 <Image Source="Resources/Images/donation.png" Stretch="None"/>
             </uicomponents:LinkButton>
         </Grid>
-        <Grid HorizontalAlignment="Stretch" Height="40" Margin="10,596,10,0" VerticalAlignment="Top" >
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Application Version V{version}" VerticalAlignment="Center" x:Name="ApplicationVersionLabel"/>
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Database Version V{version}" VerticalAlignment="Center" Grid.Row="1" x:Name="DatabaseVersionLabel" Margin="0,3,0,0"/>
+        <Grid HorizontalAlignment="Stretch" Height="25" Margin="10,596,10,0" VerticalAlignment="Top" Tag="VersionsGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Application Version V{version}" VerticalAlignment="Stretch" x:Name="ApplicationVersionLabel" Tag="ApplicationVersionLabel"/>
+            <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Database Version V{version}" VerticalAlignment="Stretch" x:Name="DatabaseVersionLabel" Tag="DatabaseVersionLabel"/>
         </Grid>
         <Grid HorizontalAlignment="Stretch" Height="208" Margin="10,340,10,0" VerticalAlignment="Top" >
             <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,147,2,0" VerticalAlignment="Top" x:Name="TotalProgressBar"/>
             <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,167,2,0" VerticalAlignment="Top" x:Name="ParentProgressBar"/>
             <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,187,2,0" VerticalAlignment="Top" x:Name="ChildProgressBar"/>
             <TextBox HorizontalAlignment="Stretch" Height="92" Margin="2,50,2,0" VerticalAlignment="Top" x:Name="InstallProgressTextBox" TextWrapping="Wrap" IsReadOnly="True"/>
-            <GroupBox Header="Language" HorizontalAlignment="Left" Height="45" Margin="360,0,0,0" VerticalAlignment="Top" Width="150" x:Name="LanguageSelectionGB">
+            <GroupBox Header="Language" HorizontalAlignment="Left" Height="45" Margin="360,0,0,0" VerticalAlignment="Top" Width="150" x:Name="LanguageSelectionGB" Tag="LanguageSelectionGB">
                 <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="LanguagesSelector" SelectionChanged="OnLanguageSelectionChanged" Margin="0,0,0,0">
                 </ComboBox>
             </GroupBox>
