@@ -352,6 +352,11 @@ namespace RelhaxModpack
             {
                 panel.Background = OriginalColors[element.Tag as string].BackgroundBrush;
             }
+            else if (element is TextBlock block)
+            {
+                block.Background = OriginalColors[block.Tag as string].BackgroundBrush;
+                block.Foreground = OriginalColors[block.Tag as string].TextBrush;
+            }
         }
 
         private static void ApplyUIDarkColorSettings(Window window)
@@ -397,6 +402,11 @@ namespace RelhaxModpack
             else if (element is Panel panel)
             {
                 panel.Background = DarkThemeBackground;
+            }
+            else if (element is TextBlock block)
+            {
+                block.Background = DarkThemeBackground;
+                block.Foreground = DarkThemeTextColor;
             }
         }
         
