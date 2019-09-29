@@ -130,18 +130,18 @@
                     <StackPanel Grid.Column="1">
                         <TextBlock Text="Select theme:" />
                         <StackPanel Orientation="Vertical" Margin="15,0,0,0">
-                            <RadioButton x:Name="ThemeDefault" Tag="ThemeDefault" Checked="Theme_Checked" IsEnabled="False" IsChecked="True">
+                            <RadioButton x:Name="ThemeDefault" Tag="ThemeDefault" Checked="Theme_Checked">
                                 <TextBlock x:Name="ThemeDefaultText" Text="Default" TextWrapping="Wrap"/>
                             </RadioButton>
-                            <RadioButton x:Name="ThemeDark" Tag="ThemeDark" Checked="Theme_Checked" IsEnabled="False">
+                            <RadioButton x:Name="ThemeDark" Tag="ThemeDark" Checked="Theme_Checked">
                                 <TextBlock x:Name="ThemeDarkText" Text="Dark" TextWrapping="Wrap"/>
                             </RadioButton>
-                            <RadioButton x:Name="ThemeCustom" Tag="ThemeCustom" Checked="Theme_Checked" IsEnabled="False">
+                            <RadioButton x:Name="ThemeCustom" Tag="ThemeCustom" Checked="Theme_Checked">
                                 <TextBlock x:Name="ThemeCustomText" Text="Custom" TextWrapping="Wrap"/>
                             </RadioButton>
                         </StackPanel>
                         <Button Tag="DumpColorSettingsButton" Name="DumpColorSettingsButton" Click="DumpColorSettingsButton_Click" Margin="0,0,0,2">
-                            <TextBlock x:Name="DumpColorSettingsButtonText" Text="Dump color settings to xml" TextWrapping="Wrap"/>
+                            <TextBlock x:Name="DumpColorSettingsButtonText" Text="Save current color settings" TextWrapping="Wrap"/>
                         </Button>
                         <Button Tag="OpenColorPickerButton" Name="OpenColorPickerButton" Click="OpenColorPickerButton_Click">
                             <TextBlock x:Name="OpenColorPickerButtonText" Text="Open color picker" TextWrapping="Wrap"/>
