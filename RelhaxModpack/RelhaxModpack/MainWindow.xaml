@@ -29,14 +29,14 @@
             <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="2" Margin="2" Content="View News" Tag="ViewNewsButton" x:Name="ViewNewsButton" Click="ViewNewsButton_Click"/>
             <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Margin="2" Content="Diagnostic Utilities" Tag="DiagnosticUtilitiesButton" x:Name="DiagnosticUtilitiesButton" Click="DiagnosticUtilitiesButton_Click"/>
         </Grid>
-        <TabControl HorizontalAlignment="Stretch" Height="254" Margin="12,81,12,0" VerticalAlignment="Top" Background="#7FE5E5E5">
+        <TabControl HorizontalAlignment="Stretch" Height="254" Margin="12,81,12,0" VerticalAlignment="Top" Background="#7FE5E5E5" Tag="SettingsTagGroup">
             <TabItem Header="Intro" x:Name="SettingsTabIntro" Tag="SettingsTabIntro" Background="#7FE5E5E5">
-                <Grid Background="#7FE5E5E5">
+                <Grid Background="#7FE5E5E5" Tag="SettingsTabIntroGrid">
                     <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" x:Name="HelperText" Tag="HelperText"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Selection View" x:Name="SettingsTabSelectionView" Tag="SettingsTabSelectionView" Background="#7FE5E5E5">
-                <Grid Background="#7FE5E5E5">
+                <Grid Background="#7FE5E5E5" Tag="SettingsTabSelectionViewGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -62,7 +62,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Installation Settings" x:Name="SettingsTabInstallationSettings" Tag="SettingsTabInstallationSettings" Background="#7FE5E5E5">
-                <Grid Background="#7FE5E5E5">
+                <Grid Background="#7FE5E5E5" Tag="SettingsTabInstallationSettingsGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -98,7 +98,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Application Settings" x:Name="SettingsTabApplicationSettings" Tag="SettingsTabApplicationSettings" Background="#7FE5E5E5">
-                <Grid Background="#7FE5E5E5">
+                <Grid Background="#7FE5E5E5" Tag="SettingsTabApplicationSettingsGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -150,7 +150,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Advanced Settings" x:Name="SettingsTabAdvancedSettings" Tag="SettingsTabAdvancedSettings" Background="#7FE5E5E5">
-                <Grid Background="#7FE5E5E5">
+                <Grid Background="#7FE5E5E5" Tag="SettingsTabAdvancedSettingsGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
