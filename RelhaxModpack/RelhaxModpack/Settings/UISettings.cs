@@ -94,14 +94,20 @@ namespace RelhaxModpack
         private static SolidColorBrush DarkThemeBackground = new SolidColorBrush(Color.FromArgb(255,26,26,26));
 
         //dark gray
-        private static SolidColorBrush DarkThemeButton = new SolidColorBrush(Color.FromArgb(255,48,48,48));
-
-        //lighter gray
-        private static SolidColorBrush DarkThemeTabControls = new SolidColorBrush(Color.FromArgb(255,64,64,64));
+        private static SolidColorBrush DarkThemeButton = new SolidColorBrush(Color.FromArgb(255,42,42,42));
 
         private static Dictionary<string, ReplacedBrushes> OriginalColors = new Dictionary<string, ReplacedBrushes>();
 
         private static Dictionary<string, Brush> BackedUpWindows = new Dictionary<string, Brush>();
+
+        private static Dictionary<string, ReplacedBrushes> DarkThemeCustomBrushes = new Dictionary<string, ReplacedBrushes>()
+        {
+            //{"test", new ReplacedBrushes(null,null) }
+            {"HomepageButtonImageBorder", new ReplacedBrushes(new SolidColorBrush(Color.FromArgb(255,175,175,175)),null) },
+            {"FindBugAddModButtonImageBorder", new ReplacedBrushes(new SolidColorBrush(Color.FromArgb(255,175,175,175)),null) },
+            {"SendEmailButtonImageBorder", new ReplacedBrushes(new SolidColorBrush(Color.FromArgb(255,175,175,175)),null) },
+            {"DonateButtonImageBorder", new ReplacedBrushes(new SolidColorBrush(Color.FromArgb(255,175,175,175)),null) },
+        };
 
         /// <summary>
         /// A list of custom colors for controlling color behavior of components that 
@@ -481,8 +487,18 @@ namespace RelhaxModpack
             }
             else if (element is Button button)
             {
-                button.Background = DarkThemeButton;
-                button.Foreground = DarkThemeTextColor;
+                if (DarkThemeCustomBrushes.ContainsKey(button.Tag as string))
+                {
+                    if (DarkThemeCustomBrushes[button.Tag as string].BackgroundBrush != null)
+                        button.Background = DarkThemeCustomBrushes[button.Tag as string].BackgroundBrush;
+                    if (DarkThemeCustomBrushes[button.Tag as string].TextBrush != null)
+                        button.Foreground = DarkThemeCustomBrushes[button.Tag as string].TextBrush;
+                }
+                else
+                {
+                    button.Background = DarkThemeButton;
+                    button.Foreground = DarkThemeTextColor;
+                }
             }
             else if (element is Control control)
             {
@@ -500,7 +516,14 @@ namespace RelhaxModpack
             }
             else if (element is Border border)
             {
-                border.Background = DarkThemeBackground;
+                if (DarkThemeCustomBrushes.ContainsKey(border.Tag as string))
+                {
+                    border.Background = DarkThemeCustomBrushes[border.Tag as string].BackgroundBrush;
+                }
+                else
+                { 
+                    border.Background = DarkThemeBackground;
+                }
             }
         }
         #endregion
