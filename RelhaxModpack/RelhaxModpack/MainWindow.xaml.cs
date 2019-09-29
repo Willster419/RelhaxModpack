@@ -2675,6 +2675,12 @@ namespace RelhaxModpack
                 AutoInstallCB_Click(null, null);
             }
         }
+
+        private void OpenColorPickerButton_Click(object sender, RoutedEventArgs e)
+        {
+            RelhaxColorPicker colorPicker = new RelhaxColorPicker();
+            colorPicker.ShowDialog();
+        }
         #endregion
 
         //move folders with a special middle step

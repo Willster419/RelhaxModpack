@@ -4441,6 +4441,24 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.RelhaxColorPicker">
+            <summary>
+            Interaction logic for RelhaxColorPicker.xaml
+            </summary>
+            <summary>
+            RelhaxColorPicker
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxColorPicker.#ctor">
+            <summary>
+            Create an instance of the RelhaxColorPicker window
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxColorPicker.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.AdvancedProgress">
             I exist as a branch
              <summary>

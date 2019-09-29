@@ -686,7 +686,7 @@ namespace RelhaxModpack
             }
             if(textBrush != null)
             {
-                //text color (forground)
+                //text color (foreground)
                 textColor = doc.CreateAttribute("textColor");
 
                 //should all be solid color brushes...

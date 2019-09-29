@@ -1187,6 +1187,15 @@ namespace RelhaxModpack
             Spanish.Add("DumpColorSettingsSaveSuccess", TranslationNeeded);
             Russian.Add("DumpColorSettingsSaveSuccess", TranslationNeeded);
 
+            //Component: OpenColorPickerButtonText
+            //
+            English.Add("OpenColorPickerButtonText", "Open color picker");
+            German.Add("OpenColorPickerButtonText", TranslationNeeded);
+            Polish.Add("OpenColorPickerButtonText", TranslationNeeded);
+            French.Add("OpenColorPickerButtonText", TranslationNeeded);
+            Spanish.Add("OpenColorPickerButtonText", TranslationNeeded);
+            Russian.Add("OpenColorPickerButtonText", TranslationNeeded);
+
             //Component: DumpColorSettingsButtonDescription
             //
             English.Add("DumpColorSettingsButtonDescription", "Writes an xml document of all components that can have a custom color applied, to make a custom theme");
@@ -3956,7 +3965,7 @@ namespace RelhaxModpack
             Russian.Add("WoTRunningForceCloseButton", TranslationNeeded);
             #endregion
 
-            #region Sacling Confirmation
+            #region Scaling Confirmation
             //Component: ScalingConfirmationHeader
             //
             English.Add("ScalingConfirmationHeader", "The scaling value has changed. Would you like to keep it?");
@@ -3992,6 +4001,206 @@ namespace RelhaxModpack
             French.Add("ScalingConfirmationDiscard", TranslationNeeded);
             Spanish.Add("ScalingConfirmationDiscard", "Descartar");
             Russian.Add("ScalingConfirmationDiscard", TranslationNeeded);
+            #endregion
+
+            #region Color Picker
+            //Component: ColorType
+            //
+            English.Add("ColorType", "Brush type");
+            German.Add("ColorType", TranslationNeeded);
+            Polish.Add("ColorType", TranslationNeeded);
+            French.Add("ColorType", TranslationNeeded);
+            Spanish.Add("ColorType", TranslationNeeded);
+            Russian.Add("ColorType", TranslationNeeded);
+
+            //Component: SampleTextColor
+            //
+            English.Add("SampleTextColor", "Sample Text");
+            German.Add("SampleTextColor", TranslationNeeded);
+            Polish.Add("SampleTextColor", TranslationNeeded);
+            French.Add("SampleTextColor", TranslationNeeded);
+            Spanish.Add("SampleTextColor", TranslationNeeded);
+            Russian.Add("SampleTextColor", TranslationNeeded);
+
+            //Component: MainColor
+            //
+            English.Add("MainColor", "Main Color");
+            German.Add("MainColor", TranslationNeeded);
+            Polish.Add("MainColor", TranslationNeeded);
+            French.Add("MainColor", TranslationNeeded);
+            Spanish.Add("MainColor", TranslationNeeded);
+            Russian.Add("MainColor", TranslationNeeded);
+
+            //Component: MainColorAlpha
+            //
+            English.Add("MainColorAlpha", "Transparency");
+            German.Add("MainColorAlpha", TranslationNeeded);
+            Polish.Add("MainColorAlpha", TranslationNeeded);
+            French.Add("MainColorAlpha", TranslationNeeded);
+            Spanish.Add("MainColorAlpha", TranslationNeeded);
+            Russian.Add("MainColorAlpha", TranslationNeeded);
+
+            //Component: MainColorRed
+            //
+            English.Add("MainColorRed", "Red");
+            German.Add("MainColorRed", TranslationNeeded);
+            Polish.Add("MainColorRed", TranslationNeeded);
+            French.Add("MainColorRed", TranslationNeeded);
+            Spanish.Add("MainColorRed", TranslationNeeded);
+            Russian.Add("MainColorRed", TranslationNeeded);
+
+            //Component: MainColorBlue
+            //
+            English.Add("MainColorBlue", "Blue");
+            German.Add("MainColorBlue", TranslationNeeded);
+            Polish.Add("MainColorBlue", TranslationNeeded);
+            French.Add("MainColorBlue", TranslationNeeded);
+            Spanish.Add("MainColorBlue", TranslationNeeded);
+            Russian.Add("MainColorBlue", TranslationNeeded);
+
+            //Component: MainColorGreen
+            //
+            English.Add("MainColorGreen", "Green");
+            German.Add("MainColorGreen", TranslationNeeded);
+            Polish.Add("MainColorGreen", TranslationNeeded);
+            French.Add("MainColorGreen", TranslationNeeded);
+            Spanish.Add("MainColorGreen", TranslationNeeded);
+            Russian.Add("MainColorGreen", TranslationNeeded);
+
+            //Component: TextColor
+            //
+            English.Add("TextColor", "Text Color");
+            German.Add("TextColor", TranslationNeeded);
+            Polish.Add("TextColor", TranslationNeeded);
+            French.Add("TextColor", TranslationNeeded);
+            Spanish.Add("TextColor", TranslationNeeded);
+            Russian.Add("TextColor", TranslationNeeded);
+
+            //Component: TextColorAlpha
+            //
+            English.Add("TextColorAlpha", "Transparency");
+            German.Add("TextColorAlpha", TranslationNeeded);
+            Polish.Add("TextColorAlpha", TranslationNeeded);
+            French.Add("TextColorAlpha", TranslationNeeded);
+            Spanish.Add("TextColorAlpha", TranslationNeeded);
+            Russian.Add("TextColorAlpha", TranslationNeeded);
+
+            //Component: TextColorRed
+            //
+            English.Add("TextColorRed", "Red");
+            German.Add("TextColorRed", TranslationNeeded);
+            Polish.Add("TextColorRed", TranslationNeeded);
+            French.Add("TextColorRed", TranslationNeeded);
+            Spanish.Add("TextColorRed", TranslationNeeded);
+            Russian.Add("TextColorRed", TranslationNeeded);
+
+            //Component: TextColorBlue
+            //
+            English.Add("TextColorBlue", "Blue");
+            German.Add("TextColorBlue", TranslationNeeded);
+            Polish.Add("TextColorBlue", TranslationNeeded);
+            French.Add("TextColorBlue", TranslationNeeded);
+            Spanish.Add("TextColorBlue", TranslationNeeded);
+            Russian.Add("TextColorBlue", TranslationNeeded);
+
+            //Component: TextColorGreen
+            //
+            English.Add("TextColorGreen", "Green");
+            German.Add("TextColorGreen", TranslationNeeded);
+            Polish.Add("TextColorGreen", TranslationNeeded);
+            French.Add("TextColorGreen", TranslationNeeded);
+            Spanish.Add("TextColorGreen", TranslationNeeded);
+            Russian.Add("TextColorGreen", TranslationNeeded);
+
+            //Component: SecondColor
+            //
+            English.Add("SecondColor", "Second Color");
+            German.Add("SecondColor", TranslationNeeded);
+            Polish.Add("SecondColor", TranslationNeeded);
+            French.Add("SecondColor", TranslationNeeded);
+            Spanish.Add("SecondColor", TranslationNeeded);
+            Russian.Add("SecondColor", TranslationNeeded);
+
+            //Component: SecondColorAlpha
+            //
+            English.Add("SecondColorAlpha", "Transparency");
+            German.Add("SecondColorAlpha", TranslationNeeded);
+            Polish.Add("SecondColorAlpha", TranslationNeeded);
+            French.Add("SecondColorAlpha", TranslationNeeded);
+            Spanish.Add("SecondColorAlpha", TranslationNeeded);
+            Russian.Add("SecondColorAlpha", TranslationNeeded);
+
+            //Component: SecondColorRed
+            //
+            English.Add("SecondColorRed", "Red");
+            German.Add("SecondColorRed", TranslationNeeded);
+            Polish.Add("SecondColorRed", TranslationNeeded);
+            French.Add("SecondColorRed", TranslationNeeded);
+            Spanish.Add("SecondColorRed", TranslationNeeded);
+            Russian.Add("SecondColorRed", TranslationNeeded);
+
+            //Component: SecondColorBlue
+            //
+            English.Add("SecondColorBlue", "Blue");
+            German.Add("SecondColorBlue", TranslationNeeded);
+            Polish.Add("SecondColorBlue", TranslationNeeded);
+            French.Add("SecondColorBlue", TranslationNeeded);
+            Spanish.Add("SecondColorBlue", TranslationNeeded);
+            Russian.Add("SecondColorBlue", TranslationNeeded);
+
+            //Component: SecondColorGreen
+            //
+            English.Add("SecondColorGreen", "Green");
+            German.Add("SecondColorGreen", TranslationNeeded);
+            Polish.Add("SecondColorGreen", TranslationNeeded);
+            French.Add("SecondColorGreen", TranslationNeeded);
+            Spanish.Add("SecondColorGreen", TranslationNeeded);
+            Russian.Add("SecondColorGreen", TranslationNeeded);
+
+            //Component: PointsBlock
+            //
+            English.Add("PointsBlock", "Point Coordinates");
+            German.Add("PointsBlock", TranslationNeeded);
+            Polish.Add("PointsBlock", TranslationNeeded);
+            French.Add("PointsBlock", TranslationNeeded);
+            Spanish.Add("PointsBlock", TranslationNeeded);
+            Russian.Add("PointsBlock", TranslationNeeded);
+
+            //Component: Point1X
+            //
+            English.Add("Point1X", "Point 1 X");
+            German.Add("Point1X", TranslationNeeded);
+            Polish.Add("Point1X", TranslationNeeded);
+            French.Add("Point1X", TranslationNeeded);
+            Spanish.Add("Point1X", TranslationNeeded);
+            Russian.Add("Point1X", TranslationNeeded);
+
+            //Component: Point1Y
+            //
+            English.Add("Point1Y", "Point 1 Y");
+            German.Add("Point1Y", TranslationNeeded);
+            Polish.Add("Point1Y", TranslationNeeded);
+            French.Add("Point1Y", TranslationNeeded);
+            Spanish.Add("Point1Y", TranslationNeeded);
+            Russian.Add("Point1Y", TranslationNeeded);
+
+            //Component: Point2X
+            //
+            English.Add("Point2X", "Point 2 X");
+            German.Add("Point2X", TranslationNeeded);
+            Polish.Add("Point2X", TranslationNeeded);
+            French.Add("Point2X", TranslationNeeded);
+            Spanish.Add("Point2X", TranslationNeeded);
+            Russian.Add("Point2X", TranslationNeeded);
+
+            //Component: Point2Y
+            //
+            English.Add("Point2Y", "Point 2 Y");
+            German.Add("Point2Y", TranslationNeeded);
+            Polish.Add("Point2Y", TranslationNeeded);
+            French.Add("Point2Y", TranslationNeeded);
+            Spanish.Add("Point2Y", TranslationNeeded);
+            Russian.Add("Point2Y", TranslationNeeded);
             #endregion
 
             //apply the bool
