@@ -220,22 +220,22 @@
         </TabItem>
         <TabItem Header="Highlight Testing" x:Name="HighlightTestingTabItem">
             <Grid>
-                <Button x:Name="HighlightButton" Content="Highlight testing" HorizontalAlignment="Left" Margin="394,15,0,0" VerticalAlignment="Top" Width="106" Style="{DynamicResource HighlightColor}" />
-                <Button Content="Toggle Disable" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="106" Click="Button_Click"/>
-                <TabControl HorizontalAlignment="Left" Height="94" Margin="121,10,0,0" VerticalAlignment="Top" Width="268">
-                    <TabItem Header="TabItem">
+                <Button x:Name="ToggleDisableButton" Content="Toggle Disable" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="106" Click="ToggleDisableButton_Click"/>
+                <Button x:Name="ToggleDarkUIButton" Content="Toggle Dark UI" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="106" Click="ToggleDarkUIButton_Click"/>
+                <TabControl HorizontalAlignment="Left" Height="94" Margin="121,10,0,0" VerticalAlignment="Top" Width="268" x:Name="HighlightTabControl">
+                    <TabItem Header="TabItem" Style="{DynamicResource RelhaxTabItemStyle}" x:Name="HighlightTabItem1">
                         <Grid Background="#FFE5E5E5"/>
                     </TabItem>
-                    <TabItem Header="TabItem">
+                    <TabItem Header="TabItem" x:Name="HighlightTabItem2">
                         <Grid Background="#FFE5E5E5"/>
                     </TabItem>
                 </TabControl>
-                <CheckBox Content="CheckBox" HorizontalAlignment="Left" Margin="394,40,0,0" VerticalAlignment="Top" Width="106"/>
-                <RadioButton Content="RadioButton" HorizontalAlignment="Left" Margin="394,60,0,0" VerticalAlignment="Top" Width="106"/>
-                <ComboBox HorizontalAlignment="Left" Margin="394,80,0,0" VerticalAlignment="Top" Width="106" SelectedIndex="0">
+                <Button x:Name="HighlightButton" Content="Highlight testing" HorizontalAlignment="Left" Margin="394,15,0,0" VerticalAlignment="Top" Width="106" Style="{DynamicResource RelhaxButtonStyle}"/>
+                <CheckBox x:Name="HighlightCheckbox" Content="CheckBox" HorizontalAlignment="Left" Margin="394,40,0,0" VerticalAlignment="Top" Width="106" Style="{DynamicResource RelhaxCheckboxStyle}"/>
+                <RadioButton x:Name="HighlightRadioButton" Content="RadioButton" HorizontalAlignment="Left" Margin="394,60,0,0" VerticalAlignment="Top" Width="106" Style="{DynamicResource RelhaxRadioButtonStyle}"/>
+                <ComboBox x:Name="HighlitCombobox" HorizontalAlignment="Left" Margin="394,80,0,0" VerticalAlignment="Top" Width="106" SelectedIndex="0" Style="{DynamicResource RelhaxComboboxStyle}">
                     <System:String>ComboBox</System:String>
                 </ComboBox>
-                <Button Content="Toggle Dark UI" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="106"/>
             </Grid>
         </TabItem>
     </TabControl>

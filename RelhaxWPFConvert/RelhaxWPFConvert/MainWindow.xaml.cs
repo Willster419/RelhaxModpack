@@ -92,6 +92,9 @@ namespace RelhaxWPFConvert
         {
             //checkbox testing
             testBox1.CheckboxDisabledColor = Colors.Green;
+
+            //init UI color settings
+            UISettings.InitUIBrushes();
         }
 
         #region Task Reporting
@@ -501,12 +504,34 @@ namespace RelhaxWPFConvert
         }
         #endregion
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ToggleDisableButton_Click(object sender, RoutedEventArgs e)
         {
-            if ((bool)HighlightButton.IsEnabled)
-                HighlightButton.IsEnabled = false;
+            Control[] HighlightControls = new Control[]
+            {
+                HighlightButton,
+                HighlightCheckbox,
+                HighlightRadioButton,
+                HighlightTabControl,
+                HighlightTabItem1,
+                HighlightTabItem2,
+                HighlitCombobox
+            };
+
+            foreach(Control control in HighlightControls)
+            {
+                if (control.IsEnabled)
+                    control.IsEnabled = false;
+                else
+                    control.IsEnabled = true;
+            }
+        }
+
+        private void ToggleDarkUIButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (UISettings.ButtonHighlightBrush.Equals(UISettings.DefaultButtonHighlightBrush))
+                UISettings.ButtonHighlightBrush = UISettings.DarkButtonHighlightBrush;
             else
-                HighlightButton.IsEnabled = true;
+                UISettings.ButtonHighlightBrush = UISettings.DefaultButtonHighlightBrush;
         }
     }
 }
