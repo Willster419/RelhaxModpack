@@ -363,6 +363,17 @@ namespace RelhaxModpack
                             throw new BadMemeException("how does the key already exist");
                         }
                     }
+                    else if (element is Border border_)
+                    {
+                        if (!OriginalColors.ContainsKey(ID))
+                        {
+                            OriginalColors.Add(ID, new ReplacedBrushes(border_.Background, null));
+                        }
+                        else
+                        {
+                            throw new BadMemeException("how does the key already exist");
+                        }
+                    }
                     else
                     {
                         throw new BadMemeException("what is this");
@@ -430,6 +441,10 @@ namespace RelhaxModpack
                 block.Background = OriginalColors[block.Tag as string].BackgroundBrush;
                 block.Foreground = OriginalColors[block.Tag as string].TextBrush;
             }
+            else if (element is Border border)
+            {
+                border.Background = OriginalColors[border.Tag as string].BackgroundBrush;
+            }
         }
         #endregion
 
@@ -482,6 +497,10 @@ namespace RelhaxModpack
             {
                 block.Background = DarkThemeBackground;
                 block.Foreground = DarkThemeTextColor;
+            }
+            else if (element is Border border)
+            {
+                border.Background = DarkThemeBackground;
             }
         }
         #endregion
@@ -565,6 +584,14 @@ namespace RelhaxModpack
                         block.Background = backgroundColorToChange;
                 }
             }
+            else if (element is Border border)
+            {
+                if(ApplyCustomThemeBrushSettings(border.Name, (string)border.Tag, brushSettings, out Brush backgroundColorToChange))
+                {
+                    if (backgroundColorToChange != null)
+                        border.Background = backgroundColorToChange;
+                }
+            }
         }
 
         private static bool ApplyCustomThemeTextBrushSettings(string componentName, string componentTag, XmlNode brushSettings, out Brush textColorToChange)
@@ -603,6 +630,9 @@ namespace RelhaxModpack
 
         private static bool ApplyCustomThemeBrushSettings(string componentName, string componentTag, XmlNode brushSettings, out Brush backgroundColorToChange)
         {
+            if (string.IsNullOrEmpty(componentName))
+                componentName = "null";
+
             bool someThingApplied = false;
             backgroundColorToChange = new SolidColorBrush();
             //make sure type is set correctly
