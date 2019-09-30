@@ -75,17 +75,17 @@ namespace RelhaxModpack
         /// <summary>
         /// The color to use for when a component is not selection in the selection list
         /// </summary>
-        public static CustomBrushSetting NotSelectedPanelColor = new CustomBrushSetting(nameof(NotSelectedPanelColor), new SolidColorBrush(Colors.BlanchedAlmond));
+        public static CustomBrushSetting NotSelectedPanelColor = new CustomBrushSetting(nameof(NotSelectedPanelColor), new SolidColorBrush(Colors.White));
 
         /// <summary>
         /// The color to use when a component is selected in the selection list
         /// </summary>
-        public static CustomBrushSetting SelectedTextColor = new CustomBrushSetting(nameof(SelectedTextColor), new SolidColorBrush(Colors.BlanchedAlmond));
+        public static CustomBrushSetting SelectedTextColor = new CustomBrushSetting(nameof(SelectedTextColor), SystemColors.ControlTextBrush);
 
         /// <summary>
         /// The color to use when a component is not selected in the selection list
         /// </summary>
-        public static CustomBrushSetting NotSelectedTextColor = new CustomBrushSetting(nameof(NotSelectedTextColor), new SolidColorBrush(Colors.BlanchedAlmond));
+        public static CustomBrushSetting NotSelectedTextColor = new CustomBrushSetting(nameof(NotSelectedTextColor), SystemColors.ControlTextBrush);
 
         //white
         private static SolidColorBrush DarkThemeTextColor = new SolidColorBrush(Colors.White);
