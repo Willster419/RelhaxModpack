@@ -5,6 +5,7 @@
              xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" x:Class="RelhaxWPFConvert.App"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <local:CustomBrushConverter x:Key="CustomToBrushConverter"/>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
                 <Setter.Value>
@@ -45,7 +46,7 @@
                             <Trigger Property="IsMouseOver" Value="true">
                                 <!-- <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/> -->
                                 <!-- https://stackoverflow.com/questions/34762879/static-binding-doesnt-update-when-resource-changes -->
-                                <Setter Property="Background" TargetName="border" Value="{Binding Path=(local:UISettings.ButtonHighlightBrush)}"/>
+                                <Setter Property="Background" TargetName="border" Value="{Binding Path=(local:UISettings.ButtonHighlightBrushCustom), Converter={StaticResource CustomToBrushConverter}}"/>
                                 <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="true">

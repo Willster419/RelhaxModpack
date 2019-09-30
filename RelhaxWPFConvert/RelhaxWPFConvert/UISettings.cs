@@ -9,9 +9,32 @@ using System.Windows;
 
 namespace RelhaxWPFConvert
 {
+    public struct CustomBrushSetting
+    {
+        /// <summary>
+        /// The brush for color application
+        /// </summary>
+        public readonly Brush @Brush;
+
+        /// <summary>
+        /// The internal name of the setting
+        /// </summary>
+        public readonly string SettingName;
+
+        //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/using-structs
+        /// <summary>
+        /// Create an instance of the CustomBrushSetting structure
+        /// </summary>
+        /// <param name="settingName">The internal name of the setting</param>
+        /// <param name="brush">The brush for color application</param>
+        public CustomBrushSetting(string settingName, Brush brush)
+        { Brush = brush; SettingName = settingName; }
+    };
+
     public static class UISettings
     {
         #region Highlighting properties
+        //public static CustomBrushSetting SelectedPanelColor = new CustomBrushSetting(nameof(SelectedPanelColor), new SolidColorBrush(Colors.BlanchedAlmond));
         //button (highlight)
         private static Brush buttonHighlightBrush;
         public static Brush ButtonHighlightBrush
@@ -25,6 +48,20 @@ namespace RelhaxWPFConvert
                 buttonHighlightBrush = value;
                 OnStaticPropertyChanged(nameof(ButtonHighlightBrush));
             } 
+        }
+
+        private static CustomBrushSetting buttonHighlightBrushCustom = new CustomBrushSetting(nameof(ButtonHighlightBrushCustom), DefaultButtonHighlightBrush);
+        public static CustomBrushSetting ButtonHighlightBrushCustom
+        {
+            get
+            {
+                return buttonHighlightBrushCustom;
+            }
+            set
+            {
+                buttonHighlightBrushCustom = value;
+                OnStaticPropertyChanged(nameof(ButtonHighlightBrushCustom));
+            }
         }
 
         //tabControl (highlight and selected)
@@ -252,12 +289,11 @@ namespace RelhaxWPFConvert
         public static Brush DarkComboboxInsideColorBrush = new SolidColorBrush(Colors.Gray);
         #endregion
 
-
         #region Init and Property handling code
         public static bool ThemeDefault = true;
         public static void InitUIBrushes()
         {
-            ButtonHighlightBrush = DefaultButtonHighlightBrush;
+            ButtonHighlightBrushCustom = UpdateBrush(ButtonHighlightBrushCustom, DefaultButtonHighlightBrush);
 
             TabItemHighlightBrush = DefaultTabItemHighlightBrush;
             TabItemSelectedBrush = DefaultTabItemSelectedBrush;
@@ -275,7 +311,7 @@ namespace RelhaxWPFConvert
 
         public static void ToggleUIBrushes()
         {
-            ButtonHighlightBrush = ThemeDefault? DefaultButtonHighlightBrush : DarkButtonHighlightBrush;
+            ButtonHighlightBrushCustom = UpdateBrush(ButtonHighlightBrushCustom,ThemeDefault ? DefaultButtonHighlightBrush : DarkButtonHighlightBrush);
 
             TabItemHighlightBrush = ThemeDefault ? DefaultTabItemHighlightBrush : DarkTabItemHighlightBrush;
             TabItemSelectedBrush = ThemeDefault ? DefaultTabItemSelectedBrush : DarkTabItemSelectedBrush;
@@ -289,6 +325,11 @@ namespace RelhaxWPFConvert
             ComboboxInsideColorBrush = ThemeDefault ? DefaultComboboxInsideColorBrush : DarkComboboxInsideColorBrush;
             ComboboxOutsideColorBrush = ThemeDefault ? DefaultComboboxOutsideColorBrush : DarkComboboxOutsideColorBrush;
             ComboboxOutsideHighlightBrush = ThemeDefault ? DefaultComboboxOutsideHighlightBrush : DarkComboboxOutsideHighlightBrush;
+        }
+
+        public static CustomBrushSetting UpdateBrush(CustomBrushSetting brush, Brush newBrush)
+        {
+            return new CustomBrushSetting(brush.SettingName,newBrush);
         }
 
         //https://stackoverflow.com/questions/34762879/static-binding-doesnt-update-when-resource-changes
