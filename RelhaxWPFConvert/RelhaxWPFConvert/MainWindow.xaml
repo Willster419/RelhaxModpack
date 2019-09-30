@@ -234,7 +234,9 @@
                 <CheckBox x:Name="HighlightCheckbox" Content="CheckBox" HorizontalAlignment="Left" Margin="394,40,0,0" VerticalAlignment="Top" Width="106" Style="{DynamicResource RelhaxCheckboxStyle}"/>
                 <RadioButton x:Name="HighlightRadioButton" Content="RadioButton" HorizontalAlignment="Left" Margin="394,60,0,0" VerticalAlignment="Top" Width="106" Style="{DynamicResource RelhaxRadioButtonStyle}"/>
                 <ComboBox x:Name="HighlitCombobox" HorizontalAlignment="Left" Margin="394,80,0,0" VerticalAlignment="Top" Width="106" SelectedIndex="0" Style="{DynamicResource RelhaxComboboxStyle}">
-                    <System:String>ComboBox</System:String>
+                    <System:String>ComboBox_1</System:String>
+                    <System:String>ComboBox_2</System:String>
+                    <System:String>ComboBox_3</System:String>
                 </ComboBox>
             </Grid>
         </TabItem>
