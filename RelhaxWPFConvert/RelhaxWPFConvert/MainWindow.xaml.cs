@@ -528,10 +528,23 @@ namespace RelhaxWPFConvert
 
         private void ToggleDarkUIButton_Click(object sender, RoutedEventArgs e)
         {
-            if (UISettings.ButtonHighlightBrush.Equals(UISettings.DefaultButtonHighlightBrush))
-                UISettings.ButtonHighlightBrush = UISettings.DarkButtonHighlightBrush;
+            if (UISettings.ThemeDefault)
+            {
+                UISettings.ThemeDefault = false;
+                HighlightTestingTabItemGrid.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 50, 50, 50));
+                HighlightCheckbox.Background = new SolidColorBrush(Colors.Black);
+                HighlightRadioButton.Background = new SolidColorBrush(Colors.Black);
+                HighlightRadioButton2.Background = new SolidColorBrush(Colors.Black);
+            }
             else
-                UISettings.ButtonHighlightBrush = UISettings.DefaultButtonHighlightBrush;
+            {
+                UISettings.ThemeDefault = true;
+                HighlightTestingTabItemGrid.Background = new SolidColorBrush(Colors.Transparent);
+                HighlightCheckbox.Background = new SolidColorBrush(Colors.Transparent);
+                HighlightRadioButton.Background = new SolidColorBrush(Colors.Transparent);
+                HighlightRadioButton2.Background = new SolidColorBrush(Colors.Transparent);
+            }
+            UISettings.ToggleUIBrushes();
         }
     }
 }

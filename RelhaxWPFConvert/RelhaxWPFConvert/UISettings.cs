@@ -164,15 +164,15 @@ namespace RelhaxWPFConvert
         public static Brush DefaultButtonHighlightBrush = new SolidColorBrush(Color.FromArgb(255, 190, 230, 253));
 
         /*
-           <LinearGradientBrush x:Key="TabItem.Static.Background" EndPoint="0,1" StartPoint="0,0">
-            <GradientStop Color="#F0F0F0" Offset="0.0"/>
-            <GradientStop Color="#E5E5E5" Offset="1.0"/>
+           <LinearGradientBrush x:Key="TabItem.MouseOver.Background" EndPoint="0,1" StartPoint="0,0">
+            <GradientStop Color="#ECF4FC" Offset="0.0"/>
+            <GradientStop Color="#DCECFC" Offset="1.0"/>
            </LinearGradientBrush>
         */
         public static Brush DefaultTabItemHighlightBrush = new LinearGradientBrush(new GradientStopCollection()
         {
-            new GradientStop(Color.FromArgb(255,240,240,240),0),
-            new GradientStop(Color.FromArgb(255,229,229,229),1)
+            new GradientStop(Color.FromArgb(255,236,244,252),0),
+            new GradientStop(Color.FromArgb(255,220,237,252),1)
         })
         {
             EndPoint = new Point(0,1),
@@ -191,12 +191,12 @@ namespace RelhaxWPFConvert
         public static Brush DefaultCheckboxCheckmarkBrush = new SolidColorBrush(Color.FromArgb(255,33,33,33));
 
         //x:Key="RadioButton.MouseOver.Background" Color="#FFF3F9FF"
-        public static Brush DefaultRadioButtonHighlightBrush = new SolidColorBrush(Color.FromArgb(255, 243, 249, 255));
+        public static Brush DefaultRadioButtonHighlightBrush = new SolidColorBrush(Color.FromArgb(255,243,249,255));
 
         //x:Key="RadioButton.MouseOver.Glyph" Color="#FF212121"
         //x:Key="RadioButton.Pressed.Glyph" Color="#FF212121"
         //x:Key="RadioButton.Static.Glyph" Color="#FF212121"
-        public static Brush DefaultRadioButtonCheckmarkBrush = new SolidColorBrush(Color.FromArgb(255, 33, 33, 33));
+        public static Brush DefaultRadioButtonCheckmarkBrush = new SolidColorBrush(Color.FromArgb(255,33,33,33));
 
         /*
           <LinearGradientBrush x:Key="ComboBox.MouseOver.Background" EndPoint="0,1" StartPoint="0,0">
@@ -239,7 +239,7 @@ namespace RelhaxWPFConvert
         public static Brush DarkButtonHighlightBrush = new SolidColorBrush(Color.FromArgb(255, 134, 134, 134));
 
         public static Brush DarkTabItemHighlightBrush = new SolidColorBrush(Color.FromArgb(255, 134, 134, 134));
-        public static Brush DarkTabItemSelectedBrush = new SolidColorBrush(Colors.White);
+        public static Brush DarkTabItemSelectedBrush = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
 
         public static Brush DarkCheckboxHighlightBrush = new SolidColorBrush(Color.FromArgb(255, 134, 134, 134));
         public static Brush DarkCheckboxCheckmarkBrush = new SolidColorBrush(Colors.White);
@@ -247,15 +247,48 @@ namespace RelhaxWPFConvert
         public static Brush DarkRadioButtonHighlightBrush = new SolidColorBrush(Color.FromArgb(255, 134, 134, 134));
         public static Brush DarkRadioButtonCheckmarkBrush = new SolidColorBrush(Colors.White);
 
-        public static Brush DarkComboboxOutsideHighlightBrush = new SolidColorBrush(Color.FromArgb(255, 134, 134, 134));
+        public static Brush DarkComboboxOutsideHighlightBrush = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
         public static Brush DarkComboboxOutsideColorBrush = new SolidColorBrush(Color.FromArgb(255, 134, 134, 134));
+        public static Brush DarkComboboxInsideColorBrush = new SolidColorBrush(Colors.Gray);
         #endregion
 
 
         #region Init and Property handling code
+        public static bool ThemeDefault = true;
         public static void InitUIBrushes()
         {
             ButtonHighlightBrush = DefaultButtonHighlightBrush;
+
+            TabItemHighlightBrush = DefaultTabItemHighlightBrush;
+            TabItemSelectedBrush = DefaultTabItemSelectedBrush;
+
+            CheckboxHighlightBrush = DefaultCheckboxHighlightBrush;
+            CheckboxCheckmarkBrush = DefaultCheckboxCheckmarkBrush;
+
+            RadioButtonHighlightBrush = DefaultRadioButtonHighlightBrush;
+            RadioButtonCheckmarkBrush = DefaultRadioButtonCheckmarkBrush;
+
+            ComboboxInsideColorBrush = DefaultComboboxInsideColorBrush;
+            ComboboxOutsideColorBrush = DefaultComboboxOutsideColorBrush;
+            ComboboxOutsideHighlightBrush = DefaultComboboxOutsideHighlightBrush;
+        }
+
+        public static void ToggleUIBrushes()
+        {
+            ButtonHighlightBrush = ThemeDefault? DefaultButtonHighlightBrush : DarkButtonHighlightBrush;
+
+            TabItemHighlightBrush = ThemeDefault ? DefaultTabItemHighlightBrush : DarkTabItemHighlightBrush;
+            TabItemSelectedBrush = ThemeDefault ? DefaultTabItemSelectedBrush : DarkTabItemSelectedBrush;
+
+            CheckboxHighlightBrush = ThemeDefault ? DefaultCheckboxHighlightBrush : DarkCheckboxHighlightBrush;
+            CheckboxCheckmarkBrush = ThemeDefault ? DefaultCheckboxCheckmarkBrush : DarkCheckboxCheckmarkBrush;
+
+            RadioButtonHighlightBrush = ThemeDefault ? DefaultRadioButtonHighlightBrush : DarkRadioButtonHighlightBrush;
+            RadioButtonCheckmarkBrush = ThemeDefault ? DefaultRadioButtonCheckmarkBrush : DarkRadioButtonCheckmarkBrush;
+
+            ComboboxInsideColorBrush = ThemeDefault ? DefaultComboboxInsideColorBrush : DarkComboboxInsideColorBrush;
+            ComboboxOutsideColorBrush = ThemeDefault ? DefaultComboboxOutsideColorBrush : DarkComboboxOutsideColorBrush;
+            ComboboxOutsideHighlightBrush = ThemeDefault ? DefaultComboboxOutsideHighlightBrush : DarkComboboxOutsideHighlightBrush;
         }
 
         //https://stackoverflow.com/questions/34762879/static-binding-doesnt-update-when-resource-changes
