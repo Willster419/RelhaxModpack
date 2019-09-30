@@ -12,6 +12,7 @@ using RelhaxModpack.Windows;
 using System.Globalization;
 using System.Windows.Media.Imaging;
 using System.Reflection;
+using System.ComponentModel;
 
 namespace RelhaxModpack
 {
@@ -273,6 +274,15 @@ namespace RelhaxModpack
                 Logging.Warning("point.Y is out of bounds (must be between 0 and 1, current value={0}), setting to {1})", p.Y, settingToUse);
                 p.Y = settingToUse;
             }
+        }
+        #endregion
+
+        #region Property stuff for data binding of highlight and combobox colors
+        //https://stackoverflow.com/questions/34762879/static-binding-doesnt-update-when-resource-changes
+        public static event PropertyChangedEventHandler StaticPropertyChanged;
+        private static void OnStaticPropertyChanged(string propertyName)
+        {
+            StaticPropertyChanged?.Invoke(null, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
 
