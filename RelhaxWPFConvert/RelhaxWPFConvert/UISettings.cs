@@ -34,33 +34,18 @@ namespace RelhaxWPFConvert
     public static class UISettings
     {
         #region Highlighting properties
-        //public static CustomBrushSetting SelectedPanelColor = new CustomBrushSetting(nameof(SelectedPanelColor), new SolidColorBrush(Colors.BlanchedAlmond));
         //button (highlight)
-        private static Brush buttonHighlightBrush;
-        public static Brush ButtonHighlightBrush
+        private static CustomBrushSetting buttonHighlightBrush = new CustomBrushSetting(nameof(ButtonHighlightBrush), DefaultButtonHighlightBrush);
+        public static CustomBrushSetting ButtonHighlightBrush
         {
             get
             {
                 return buttonHighlightBrush;
-            } 
+            }
             set
             {
                 buttonHighlightBrush = value;
                 OnStaticPropertyChanged(nameof(ButtonHighlightBrush));
-            } 
-        }
-
-        private static CustomBrushSetting buttonHighlightBrushCustom = new CustomBrushSetting(nameof(ButtonHighlightBrushCustom), DefaultButtonHighlightBrush);
-        public static CustomBrushSetting ButtonHighlightBrushCustom
-        {
-            get
-            {
-                return buttonHighlightBrushCustom;
-            }
-            set
-            {
-                buttonHighlightBrushCustom = value;
-                OnStaticPropertyChanged(nameof(ButtonHighlightBrushCustom));
             }
         }
 
@@ -293,7 +278,7 @@ namespace RelhaxWPFConvert
         public static bool ThemeDefault = true;
         public static void InitUIBrushes()
         {
-            ButtonHighlightBrushCustom = UpdateBrush(ButtonHighlightBrushCustom, DefaultButtonHighlightBrush);
+            ButtonHighlightBrush = UpdateBrush(ButtonHighlightBrush, DefaultButtonHighlightBrush);
 
             TabItemHighlightBrush = DefaultTabItemHighlightBrush;
             TabItemSelectedBrush = DefaultTabItemSelectedBrush;
@@ -311,7 +296,7 @@ namespace RelhaxWPFConvert
 
         public static void ToggleUIBrushes()
         {
-            ButtonHighlightBrushCustom = UpdateBrush(ButtonHighlightBrushCustom,ThemeDefault ? DefaultButtonHighlightBrush : DarkButtonHighlightBrush);
+            ButtonHighlightBrush = UpdateBrush(ButtonHighlightBrush,ThemeDefault ? DefaultButtonHighlightBrush : DarkButtonHighlightBrush);
 
             TabItemHighlightBrush = ThemeDefault ? DefaultTabItemHighlightBrush : DarkTabItemHighlightBrush;
             TabItemSelectedBrush = ThemeDefault ? DefaultTabItemSelectedBrush : DarkTabItemSelectedBrush;
