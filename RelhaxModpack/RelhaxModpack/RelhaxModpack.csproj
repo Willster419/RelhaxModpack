@@ -134,6 +134,7 @@
     <Compile Include="DatabaseComponents\SelectablePackage.cs" />
     <Compile Include="DatabaseComponents\Trigger.cs" />
     <Compile Include="DatabaseComponents\UserFile.cs" />
+    <Compile Include="UIComponents\CustomBrushConverter.cs" />
     <Compile Include="UIComponents\RelhaxHyperlink.xaml.cs">
       <DependentUpon>RelhaxHyperlink.xaml</DependentUpon>
     </Compile>

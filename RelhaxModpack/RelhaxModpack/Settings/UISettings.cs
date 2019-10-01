@@ -88,6 +88,29 @@ namespace RelhaxModpack
         /// </summary>
         public static CustomBrushSetting NotSelectedTextColor = new CustomBrushSetting(nameof(NotSelectedTextColor), SystemColors.ControlTextBrush);
 
+        /// <summary>
+        /// A list of custom colors for controlling color behavior of components that 
+        /// </summary>
+        /// <remarks>Settings that exist in here don't directly map to 1 setting and control other color settings.
+        /// For example, changing the color of a selected component in the mod selection list</remarks>
+        private static readonly CustomBrushSetting[] CustomColorSettings = new CustomBrushSetting[]
+        {
+            SelectedPanelColor,
+            NotSelectedPanelColor,
+            SelectedTextColor,
+            NotSelectedTextColor,
+            ButtonHighlightBrush,
+            TabItemHighlightBrush,
+            TabItemSelectedBrush,
+            CheckboxHighlightBrush,
+            CheckboxCheckmarkBrush,
+            RadioButtonHighlightBrush,
+            RadioButtonCheckmarkBrush,
+            ComboboxOutsideHighlightBrush,
+            ComboboxInsideColorBrush,
+            ComboboxOutsideColorBrush
+        };
+
         //white
         private static SolidColorBrush DarkThemeTextColor = new SolidColorBrush(Colors.White);
 
@@ -110,18 +133,256 @@ namespace RelhaxModpack
             {"DonateButtonImageBorder", new ReplacedBrushes(new SolidColorBrush(Color.FromArgb(255,175,175,175)),null) },
         };
 
-        /// <summary>
-        /// A list of custom colors for controlling color behavior of components that 
-        /// </summary>
-        /// <remarks>Settings that exist in here don't directly map to 1 setting and control other color settings.
-        /// For example, changing the color of a selected component in the mod selection list</remarks>
-        private static readonly CustomBrushSetting[] CustomColorSettings = new CustomBrushSetting[]
+        #region Highlighting properties
+        //button (highlight)
+        private static CustomBrushSetting buttonHighlightBrush = new CustomBrushSetting(nameof(ButtonHighlightBrush),null);
+        public static CustomBrushSetting ButtonHighlightBrush
         {
-            SelectedPanelColor,
-            NotSelectedPanelColor,
-            SelectedTextColor,
-            NotSelectedTextColor
+            get
+            {
+                return buttonHighlightBrush;
+            }
+            set
+            {
+                buttonHighlightBrush = value;
+                OnStaticPropertyChanged(nameof(ButtonHighlightBrush));
+            }
+        }
+
+        //tabControl (highlight and selected)
+        private static CustomBrushSetting tabItemHighlightBrush = new CustomBrushSetting(nameof(TabItemHighlightBrush), null);
+        public static CustomBrushSetting TabItemHighlightBrush
+        {
+            get
+            {
+                return tabItemHighlightBrush;
+            }
+            set
+            {
+                tabItemHighlightBrush = value;
+                OnStaticPropertyChanged(nameof(TabItemHighlightBrush));
+            }
+        }
+
+        private static CustomBrushSetting tabItemSelectedBrush = new CustomBrushSetting(nameof(TabItemSelectedBrush), null);
+        public static CustomBrushSetting TabItemSelectedBrush
+        {
+            get
+            {
+                return tabItemSelectedBrush;
+            }
+            set
+            {
+                tabItemSelectedBrush = value;
+                OnStaticPropertyChanged(nameof(TabItemSelectedBrush));
+            }
+        }
+
+        //checkbox (highlight and mark)
+        private static CustomBrushSetting checkboxHighlightBrush = new CustomBrushSetting(nameof(CheckboxHighlightBrush), null);
+        public static CustomBrushSetting CheckboxHighlightBrush
+        {
+            get
+            {
+                return checkboxHighlightBrush;
+            }
+            set
+            {
+                checkboxHighlightBrush = value;
+                OnStaticPropertyChanged(nameof(CheckboxHighlightBrush));
+            }
+        }
+
+        private static CustomBrushSetting checkboxCheckmarkBrush = new CustomBrushSetting(nameof(CheckboxCheckmarkBrush), null);
+        public static CustomBrushSetting CheckboxCheckmarkBrush
+        {
+            get
+            {
+                return checkboxCheckmarkBrush;
+            }
+            set
+            {
+                checkboxCheckmarkBrush = value;
+                OnStaticPropertyChanged(nameof(CheckboxCheckmarkBrush));
+            }
+        }
+
+        //radioButton (highlight and mark)
+        private static CustomBrushSetting radioButtonHighlightBrush = new CustomBrushSetting(nameof(RadioButtonHighlightBrush), null);
+        public static CustomBrushSetting RadioButtonHighlightBrush
+        {
+            get
+            {
+                return radioButtonHighlightBrush;
+            }
+            set
+            {
+                radioButtonHighlightBrush = value;
+                OnStaticPropertyChanged(nameof(RadioButtonHighlightBrush));
+            }
+        }
+
+        private static CustomBrushSetting radioButtonCheckmarkBrush = new CustomBrushSetting(nameof(RadioButtonCheckmarkBrush), null);
+        public static CustomBrushSetting RadioButtonCheckmarkBrush
+        {
+            get
+            {
+                return radioButtonCheckmarkBrush;
+            }
+            set
+            {
+                radioButtonCheckmarkBrush = value;
+                OnStaticPropertyChanged(nameof(RadioButtonCheckmarkBrush));
+            }
+        }
+
+        //combobox (highlight, outside color, inside color)
+        private static CustomBrushSetting comboboxOutsideHighlightBrush = new CustomBrushSetting(nameof(ComboboxOutsideHighlightBrush), null);
+        public static CustomBrushSetting ComboboxOutsideHighlightBrush
+        {
+            get
+            {
+                return comboboxOutsideHighlightBrush;
+            }
+            set
+            {
+                comboboxOutsideHighlightBrush = value;
+                OnStaticPropertyChanged(nameof(ComboboxOutsideHighlightBrush));
+            }
+        }
+
+        private static CustomBrushSetting comboboxInsideColorBrush = new CustomBrushSetting(nameof(ComboboxInsideColorBrush), null);
+        public static CustomBrushSetting ComboboxInsideColorBrush
+        {
+            get
+            {
+                return comboboxInsideColorBrush;
+            }
+            set
+            {
+                comboboxInsideColorBrush = value;
+                OnStaticPropertyChanged(nameof(ComboboxInsideColorBrush));
+            }
+        }
+
+        private static CustomBrushSetting comboboxOutsideColorBrush = new CustomBrushSetting(nameof(ComboboxOutsideColorBrush), null);
+        public static CustomBrushSetting ComboboxOutsideColorBrush
+        {
+            get
+            {
+                return comboboxOutsideColorBrush;
+            }
+            set
+            {
+                comboboxOutsideColorBrush = value;
+                OnStaticPropertyChanged(nameof(ComboboxOutsideColorBrush));
+            }
+        }
+
+        #endregion
+
+        #region Default UI options
+        //x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"
+        public static Brush DefaultButtonHighlightBrush = new SolidColorBrush(Color.FromArgb(255, 190, 230, 253));
+
+        /*
+           <LinearGradientBrush x:Key="TabItem.MouseOver.Background" EndPoint="0,1" StartPoint="0,0">
+            <GradientStop Color="#ECF4FC" Offset="0.0"/>
+            <GradientStop Color="#DCECFC" Offset="1.0"/>
+           </LinearGradientBrush>
+        */
+        public static Brush DefaultTabItemHighlightBrush = new LinearGradientBrush(new GradientStopCollection()
+        {
+            new GradientStop(Color.FromArgb(255,236,244,252),0),
+            new GradientStop(Color.FromArgb(255,220,237,252),1)
+        })
+        {
+            EndPoint = new Point(0, 1),
+            StartPoint = new Point(0, 0)
         };
+
+        //x:Key="TabItem.Selected.Background" Color="#FFFFFF"
+        public static Brush DefaultTabItemSelectedBrush = new SolidColorBrush(Colors.White);
+
+        //x:Key="OptionMark.MouseOver.Background" Color="#FFF3F9FF"
+        public static Brush DefaultCheckboxHighlightBrush = new SolidColorBrush(Color.FromArgb(255, 243, 249, 255));
+
+        //x:Key="OptionMark.MouseOver.Glyph" Color="#FF212121"
+        //x:Key="OptionMark.Pressed.Glyph" Color="#FF212121"
+        //x:Key="OptionMark.Static.Glyph" Color="#FF212121"
+        public static Brush DefaultCheckboxCheckmarkBrush = new SolidColorBrush(Color.FromArgb(255, 33, 33, 33));
+
+        //x:Key="RadioButton.MouseOver.Background" Color="#FFF3F9FF"
+        public static Brush DefaultRadioButtonHighlightBrush = new SolidColorBrush(Color.FromArgb(255, 243, 249, 255));
+
+        //x:Key="RadioButton.MouseOver.Glyph" Color="#FF212121"
+        //x:Key="RadioButton.Pressed.Glyph" Color="#FF212121"
+        //x:Key="RadioButton.Static.Glyph" Color="#FF212121"
+        public static Brush DefaultRadioButtonCheckmarkBrush = new SolidColorBrush(Color.FromArgb(255, 33, 33, 33));
+
+        /*
+          <LinearGradientBrush x:Key="ComboBox.MouseOver.Background" EndPoint="0,1" StartPoint="0,0">
+            <GradientStop Color="#FFECF4FC" Offset="0.0"/>
+            <GradientStop Color="#FFDCECFC" Offset="1.0"/>
+          </LinearGradientBrush>
+        */
+        public static Brush DefaultComboboxOutsideHighlightBrush = new LinearGradientBrush(new GradientStopCollection()
+        {
+            new GradientStop(Color.FromArgb(255,236,244,252),0),
+            new GradientStop(Color.FromArgb(255,220,236,252),1)
+        })
+        {
+            EndPoint = new Point(0, 1),
+            StartPoint = new Point(0, 0)
+        };
+
+        /*
+          <LinearGradientBrush x:Key="ComboBox.Static.Background" EndPoint="0,1" StartPoint="0,0">
+            <GradientStop Color="#FFF0F0F0" Offset="0.0"/>
+            <GradientStop Color="#FFE5E5E5" Offset="1.0"/>
+          </LinearGradientBrush>
+        */
+        public static Brush DefaultComboboxOutsideColorBrush = new LinearGradientBrush(new GradientStopCollection()
+        {
+            new GradientStop(Color.FromArgb(255,240,240,240),0),
+            new GradientStop(Color.FromArgb(255,229,229,229),1)
+        })
+        {
+            EndPoint = new Point(0, 1),
+            StartPoint = new Point(0, 0)
+        };
+
+        //<Border x:Name="dropDownBorder" BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" BorderThickness="1" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
+        public static Brush DefaultComboboxInsideColorBrush = SystemColors.WindowBrush;
+
+        #endregion
+
+        #region Dark UI options
+
+        public static Brush DarkButtonHighlightBrush = new SolidColorBrush(Color.FromArgb(255, 134, 134, 134));
+
+
+        public static Brush DarkTabItemHighlightBrush = new SolidColorBrush(Color.FromArgb(255, 134, 134, 134));
+
+        public static Brush DarkTabItemSelectedBrush = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
+
+
+        public static Brush DarkCheckboxHighlightBrush = new SolidColorBrush(Color.FromArgb(255, 134, 134, 134));
+
+        public static Brush DarkCheckboxCheckmarkBrush = new SolidColorBrush(Colors.White);
+
+
+        public static Brush DarkRadioButtonHighlightBrush = new SolidColorBrush(Color.FromArgb(255, 134, 134, 134));
+
+        public static Brush DarkRadioButtonCheckmarkBrush = new SolidColorBrush(Colors.White);
+
+
+        public static Brush DarkComboboxOutsideHighlightBrush = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
+
+        public static Brush DarkComboboxOutsideColorBrush = new SolidColorBrush(Color.FromArgb(255, 134, 134, 134));
+
+        public static Brush DarkComboboxInsideColorBrush = new SolidColorBrush(Colors.Gray);
+        #endregion
 
         /// <summary>
         /// The color to use in the selection list for a tab which is not selected
@@ -205,7 +466,8 @@ namespace RelhaxModpack
                 }
                 if(ApplyCustomThemeBrushSettings(instanceName,instanceName,customColorNode, out Brush customBrushOut))
                 {
-                    customBrush.Brush = customBrushOut;
+                    //customBrush.Brush = customBrushOut;
+                    SetBoundedBrushProperty(customBrush, customBrushOut);
                 }
                 else
                 {
@@ -277,16 +539,25 @@ namespace RelhaxModpack
         }
         #endregion
 
-        #region Property stuff for data binding of highlight and combobox colors
+        #region Other theme stuff
         //https://stackoverflow.com/questions/34762879/static-binding-doesnt-update-when-resource-changes
+
         public static event PropertyChangedEventHandler StaticPropertyChanged;
         private static void OnStaticPropertyChanged(string propertyName)
         {
             StaticPropertyChanged?.Invoke(null, new PropertyChangedEventArgs(propertyName));
         }
-        #endregion
 
-        #region Other theme stuff
+        public static CustomBrushSetting UpdateBrush(CustomBrushSetting brush, Brush newBrush)
+        {
+            return new CustomBrushSetting(brush.SettingName, newBrush);
+        }
+
+        private static void SetBoundedBrushProperty(CustomBrushSetting customBrush, Brush brushToSet)
+        {
+            typeof(UISettings).GetProperties().Where(prop => prop.Name.Equals(customBrush.SettingName)).ToList()[0].SetValue(null, UpdateBrush(customBrush, brushToSet));
+        }
+
         /// <summary>
         /// Applies custom color settings to a window
         /// </summary>
@@ -397,6 +668,24 @@ namespace RelhaxModpack
                 }
             }
         }
+
+        public static void ToggleUIBrushesDarkDefault(bool defaultTheme)
+        {
+            ButtonHighlightBrush = UpdateBrush(ButtonHighlightBrush, defaultTheme ? DefaultButtonHighlightBrush : DarkButtonHighlightBrush);
+
+            TabItemHighlightBrush = UpdateBrush(TabItemHighlightBrush, defaultTheme ? DefaultTabItemHighlightBrush : DarkTabItemHighlightBrush);
+            TabItemSelectedBrush = UpdateBrush(TabItemSelectedBrush, defaultTheme ? DefaultTabItemSelectedBrush : DarkTabItemSelectedBrush);
+
+            CheckboxHighlightBrush = UpdateBrush(CheckboxHighlightBrush, defaultTheme ? DefaultCheckboxHighlightBrush : DarkCheckboxHighlightBrush);
+            CheckboxCheckmarkBrush = UpdateBrush(CheckboxCheckmarkBrush, defaultTheme ? DefaultCheckboxCheckmarkBrush : DarkCheckboxCheckmarkBrush);
+
+            RadioButtonHighlightBrush = UpdateBrush(RadioButtonHighlightBrush, defaultTheme ? DefaultRadioButtonHighlightBrush : DarkRadioButtonHighlightBrush);
+            RadioButtonCheckmarkBrush = UpdateBrush(RadioButtonCheckmarkBrush, defaultTheme ? DefaultRadioButtonCheckmarkBrush : DarkRadioButtonCheckmarkBrush);
+
+            ComboboxInsideColorBrush = UpdateBrush(ComboboxInsideColorBrush, defaultTheme ? DefaultComboboxInsideColorBrush : DarkComboboxInsideColorBrush);
+            ComboboxOutsideColorBrush = UpdateBrush(ComboboxOutsideColorBrush, defaultTheme ? DefaultComboboxOutsideColorBrush : DarkComboboxOutsideColorBrush);
+            ComboboxOutsideHighlightBrush = UpdateBrush(ComboboxOutsideHighlightBrush, defaultTheme ? DefaultComboboxOutsideHighlightBrush : DarkComboboxOutsideHighlightBrush);
+        }
         #endregion
 
         #region Default theme color apply
@@ -422,6 +711,8 @@ namespace RelhaxModpack
                     ApplyDefaultBrushSettings(element);
                 }
             }
+
+            ToggleUIBrushesDarkDefault(true);
         }
 
         private static void ApplyDefaultBrushSettings(FrameworkElement element)
@@ -487,6 +778,8 @@ namespace RelhaxModpack
                     ApplyDarkBrushSettings(element);
                 }
             }
+
+            ToggleUIBrushesDarkDefault(false);
         }
 
         private static void ApplyDarkBrushSettings(FrameworkElement element)
