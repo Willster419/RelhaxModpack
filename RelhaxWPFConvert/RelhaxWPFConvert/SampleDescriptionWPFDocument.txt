@@ -1,0 +1,5 @@
+﻿<StackPanel xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+  <TextBlock HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" FontWeight="Bold"
+             Text="Here is a bold sample textblock that is long and takes up multiple lines. But, it is wrapped. Nice!"/>
+  <TextBlock HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" Text="Here's another one that is not bold."/>
+</StackPanel>

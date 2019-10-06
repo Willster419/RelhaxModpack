@@ -25,6 +25,9 @@ using Timer = System.Timers.Timer;
 using System.Runtime.Remoting.Contexts;
 using System.Reflection;
 using System.Security.Cryptography;
+using System.Windows.Documents;
+using System.Xml;
+using System.Windows.Markup;
 
 namespace RelhaxWPFConvert
 {
@@ -397,7 +400,7 @@ namespace RelhaxWPFConvert
             JToken objectt = JToken.Parse(JsonFromFile,settings);
 
             //output
-            string newJson = objectt.ToString(Formatting.Indented, null);
+            string newJson = objectt.ToString(Newtonsoft.Json.Formatting.Indented, null);
             //toString() will now allow for output of previous formatting
             File.WriteAllText("output.json", newJson);
         }
@@ -561,5 +564,22 @@ namespace RelhaxWPFConvert
             }
             UISettings.ToggleUIBrushes();
         }
+
+        #region Description Document Loading testing
+        private void FlowDocumentLoadButton_Click(object sender, RoutedEventArgs e)
+        {
+            //https://stackoverflow.com/questions/2830987/convert-xaml-to-flowdocument-to-display-in-richtextbox-in-wpf
+            //https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.flowdocumentscrollviewer?view=netframework-4.8
+            //https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/flow-document-overview
+            FlowDocument document = XamlReader.Parse(File.ReadAllText("SampleDescriptionFlowDocument.txt")) as FlowDocument;
+            FlowDocumentViewer.Document = document;
+        }
+
+        private void WpfDocumentLoadButton_Click(object sender, RoutedEventArgs e)
+        {
+            object document = XamlReader.Parse(File.ReadAllText("SampleDescriptionWPFDocument.txt"));
+            WpfDocumentViewer.Content = document;
+        }
+        #endregion
     }
 }

@@ -294,5 +294,19 @@
                 </ContentControl>
             </Grid>
         </TabItem>
+        <TabItem Header="Dynamic content Testing" x:Name="DynamicContentTestingTabItem">
+            <Grid x:Name="DynamicContentTestingTabItemGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Flow Document loading" VerticalAlignment="Top"/>
+                <TextBlock Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Wpf Document Loading" VerticalAlignment="Top"/>
+                <Button x:Name="FlowDocumentLoadButton" Content="Load" HorizontalAlignment="Left" Margin="0,16,0,0" VerticalAlignment="Top" Width="75" Click="FlowDocumentLoadButton_Click"/>
+                <Button x:Name="WpfDocumentLoadButton" Content="Load" Grid.Column="1" HorizontalAlignment="Left" Margin="0,16,0,0" VerticalAlignment="Top" Width="75" Click="WpfDocumentLoadButton_Click"/>
+                <FlowDocumentScrollViewer Grid.Column="0" x:Name="FlowDocumentViewer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Visible" Margin="0,41,0,0"/>
+                <ContentPresenter Grid.Column="1" x:Name="WpfDocumentViewer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,41,0,0"/>
+            </Grid>
+        </TabItem>
     </TabControl>
 </Window>
