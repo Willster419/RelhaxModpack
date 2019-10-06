@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows;
+using System.Reflection;
 
 namespace RelhaxWPFConvert
 {
@@ -279,6 +280,8 @@ namespace RelhaxWPFConvert
         public static void InitUIBrushes()
         {
             ButtonHighlightBrush = UpdateBrush(ButtonHighlightBrush, DefaultButtonHighlightBrush);
+            PropertyInfo buttonHighlightBrushProperty = typeof(UISettings).GetProperties().Where(prop => prop.Name.Equals(nameof(ButtonHighlightBrush))).ToList()[0];
+            buttonHighlightBrushProperty.SetValue(null, UpdateBrush(ButtonHighlightBrush, DefaultButtonHighlightBrush));
 
             TabItemHighlightBrush = DefaultTabItemHighlightBrush;
             TabItemSelectedBrush = DefaultTabItemSelectedBrush;

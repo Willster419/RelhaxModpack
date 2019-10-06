@@ -514,7 +514,14 @@ namespace RelhaxWPFConvert
                 HighlightTabControl,
                 HighlightTabItem1,
                 HighlightTabItem2,
-                HighlitCombobox
+                HighlitCombobox,
+                HighlightTextButton,
+                HighlightTextButton2
+            };
+
+            FrameworkElement[] FrameworkControls = new FrameworkElement[]
+            {
+                TestContentPresenter
             };
 
             foreach(Control control in HighlightControls)
@@ -523,6 +530,14 @@ namespace RelhaxWPFConvert
                     control.IsEnabled = false;
                 else
                     control.IsEnabled = true;
+            }
+
+            foreach(FrameworkElement element in FrameworkControls)
+            {
+                if (element.IsEnabled)
+                    element.IsEnabled = false;
+                else
+                    element.IsEnabled = true;
             }
         }
 

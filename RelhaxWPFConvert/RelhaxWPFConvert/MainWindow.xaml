@@ -7,6 +7,47 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="RelhaxWPFConvert.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
+    <Window.Resources>
+        <Style x:Key="TestNewButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <TextBlock x:Name="contentPresenter" Text="Another wrapping test" TextWrapping="Wrap" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <!-- <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/> -->
+                                <!-- https://stackoverflow.com/questions/34762879/static-binding-doesnt-update-when-resource-changes -->
+                                <Setter Property="Background" TargetName="border" Value="{Binding (local:UISettings.ButtonHighlightBrush), Converter={StaticResource CustomToBrushConverter}}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <TabControl x:Name="MainTab">
         <TabItem Header="Scroll views">
             <ScrollViewer HorizontalScrollBarVisibility="Visible" MouseRightButtonUp="ScrollViewer_MouseRightButtonUp">
@@ -230,7 +271,8 @@
                         <Grid Background="#FFE5E5E5"/>
                     </TabItem>
                 </TabControl>
-                <Button x:Name="HighlightButton" Content="Highlight testing" HorizontalAlignment="Left" Margin="394,15,0,0" VerticalAlignment="Top" Width="106" Style="{DynamicResource RelhaxButtonStyle}"/>
+                <Button x:Name="HighlightButton" Content="Highlight testing" HorizontalAlignment="Left" Margin="505,72,0,0" VerticalAlignment="Top" Width="103"
+                        Style="{DynamicResource RelhaxButtonStyle}" Height="45"/>
                 <CheckBox x:Name="HighlightCheckbox" Content="CheckBox" HorizontalAlignment="Left" Margin="394,40,0,0" VerticalAlignment="Top" Width="106" Style="{DynamicResource RelhaxCheckboxStyle}"/>
                 <RadioButton x:Name="HighlightRadioButton" Content="RadioButton" HorizontalAlignment="Left" Margin="394,60,0,0" VerticalAlignment="Top" Width="106" Style="{DynamicResource RelhaxRadioButtonStyle}"/>
                 <RadioButton x:Name="HighlightRadioButton2" Content="RadioButton" HorizontalAlignment="Left" Margin="394,75,0,0" VerticalAlignment="Top" Style="{DynamicResource RelhaxRadioButtonStyle}"/>
@@ -239,6 +281,17 @@
                     <System:String>ComboBox_2</System:String>
                     <System:String>ComboBox_3</System:String>
                 </ComboBox>
+                <Button x:Name="HighlightTextButton" HorizontalAlignment="Left" Margin="505,15,0,0" VerticalAlignment="Top" Width="75" Style="{DynamicResource TestNewButtonStyle}">
+                    <TextBlock Text="Another Highlight testing" TextWrapping="Wrap"/>
+                </Button>
+                <Button x:Name="HighlightTextButton2" HorizontalAlignment="Left" Margin="505,122,0,0" VerticalAlignment="Top" Width="75">
+                    <TextBlock Text="Another Highlight testing" TextWrapping="Wrap" IsEnabled="{Binding IsEnabled, ElementName=HighlightTextButton2}"/>
+                </Button>
+                <ContentControl x:Name="TestContentPresenter" Margin="394,122,286,213">
+                    <ContentControl.Content>
+                        <TextBlock Text="Another Highlight testing" TextWrapping="Wrap"/>
+                    </ContentControl.Content>
+                </ContentControl>
             </Grid>
         </TabItem>
     </TabControl>
