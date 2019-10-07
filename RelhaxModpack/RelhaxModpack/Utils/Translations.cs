@@ -4253,7 +4253,7 @@ namespace RelhaxModpack
             string componentName = frameworkElement.Name;
             if (string.IsNullOrWhiteSpace(componentName))
             {
-                //log debug translation component is blank null or from blacklist
+                //log debug translation component is blank null
                 //Logging.WriteToLog("Translation component name is blank", Logfiles.Application, LogLevel.Debug);
                 return;
             }
@@ -4292,6 +4292,7 @@ namespace RelhaxModpack
                     }
                 }
                 //content controls have only a heder
+                //NOTE: button is this type
                 else if (control is ContentControl contentControl)
                 {
                     //ALWAYS make sure that the header and content are of type string BEFORE over-writing! (what if it is an image?)
