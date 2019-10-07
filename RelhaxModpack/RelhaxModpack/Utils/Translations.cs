@@ -573,14 +573,14 @@ namespace RelhaxModpack
             Russian.Add("ForceManuelGameDetectionCBDescription", "Эта опция для принудительного указания папки с World of Tanks." +
                     "Поставьте галочку только в случае проблем с автоматическим определением расположения игры.");
 
-            //Component: LanguageSelectionGBHeader
+            //Component: LanguageSelectionTextblock
             //
-            English.Add("LanguageSelectionGBHeader", "Language selection");
-            German.Add("LanguageSelectionGBHeader", "Sprachauswahl");
-            Polish.Add("LanguageSelectionGBHeader", "Wybór języka");
-            French.Add("LanguageSelectionGBHeader", "Choix de langue");
-            Spanish.Add("LanguageSelectionGBHeader", "Selección de idioma");
-            Russian.Add("LanguageSelectionGBHeader", "Выбрать язык");
+            English.Add("LanguageSelectionTextblock", "Language selection");
+            German.Add("LanguageSelectionTextblock", "Sprachauswahl");
+            Polish.Add("LanguageSelectionTextblock", "Wybór języka");
+            French.Add("LanguageSelectionTextblock", "Choix de langue");
+            Spanish.Add("LanguageSelectionTextblock", "Selección de idioma");
+            Russian.Add("LanguageSelectionTextblock", "Выбрать язык");
 
             //Component: Forms_ENG_NAButtonDescription
             English.Add("Forms_ENG_NAButtonDescription", "Go to the English-speaking 'World of Tanks' forum page for the NA server");
