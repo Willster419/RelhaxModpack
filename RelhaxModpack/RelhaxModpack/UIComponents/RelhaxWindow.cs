@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace RelhaxModpack.Windows
 {
@@ -64,6 +65,29 @@ namespace RelhaxModpack.Windows
             //apply UI color changes
             if(ApplyColorSettings)
             {
+                foreach(FrameworkElement element in Utils.GetAllWindowComponentsVisual(this,false))
+                {
+                    if(element is Button button)
+                    {
+                        button.Style = (Style)Application.Current.Resources["RelhaxButtonStyle"];
+                    }
+                    else if (element is CheckBox checkbox)
+                    {
+                        checkbox.Style = (Style)Application.Current.Resources["RelhaxCheckboxStyle"];
+                    }
+                    else if (element is RadioButton radioButton)
+                    {
+                        radioButton.Style = (Style)Application.Current.Resources["RelhaxRadioButtonStyle"];
+                    }
+                    else if (element is ComboBox combobox)
+                    {
+                        combobox.Style = (Style)Application.Current.Resources["RelhaxComboboxStyle"];
+                    }
+                    else if (element is TabItem tabItem)
+                    {
+                        tabItem.Style = (Style)Application.Current.Resources["RelhaxTabItemStyle"];
+                    }
+                }
                 UISettings.ApplyUIColorSettings(this);
             }
             //deal with scaling
