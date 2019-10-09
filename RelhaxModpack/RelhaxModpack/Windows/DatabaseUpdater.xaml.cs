@@ -381,9 +381,10 @@ namespace RelhaxModpack.Windows
                 List<SelectablePackage> flatlist = cat.GetFlatPackageList();
                 foreach (SelectablePackage sp in flatlist)
                 {
-                    string nameIndneted = sp.NameFormatted;
+                    
                     if (!@internal)
                     {
+                        string nameIndneted = sp.NameFormatted;
                         for (int i = 0; i < sp.Level; i++)
                         {
                             nameIndneted = "--" + nameIndneted;
@@ -393,7 +394,7 @@ namespace RelhaxModpack.Windows
                     }
                     else
                     {
-                        sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}", nameIndneted, sp.ParentCategory.Name, sp.NameFormatted,
+                        sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}", sp.PackageName, sp.ParentCategory.Name, sp.NameFormatted,
                         sp.Level, string.IsNullOrWhiteSpace(sp.ZipFile) ? notApplicable : sp.ZipFile,
                         string.IsNullOrWhiteSpace(sp.DevURL) ? "" : "=HYPERLINK(\"" + sp.DevURL + "\",\"link\")",
                         sp.Enabled, sp.Visible));
