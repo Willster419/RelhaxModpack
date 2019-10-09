@@ -65,7 +65,10 @@ namespace RelhaxModpack.Windows
             //apply UI color changes
             if(ApplyColorSettings)
             {
-                foreach(FrameworkElement element in Utils.GetAllWindowComponentsVisual(this,false))
+                //get the list
+                List<FrameworkElement> UIComponents = Utils.GetAllWindowComponentsVisual(this, false);
+                UIComponents = UIComponents.Where(component => component.Tag is string ID && !string.IsNullOrEmpty(ID)).ToList();
+                foreach (FrameworkElement element in UIComponents)
                 {
                     if(element is Button button)
                     {
