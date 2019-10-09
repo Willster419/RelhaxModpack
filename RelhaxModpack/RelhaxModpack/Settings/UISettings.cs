@@ -13,6 +13,7 @@ using System.Globalization;
 using System.Windows.Media.Imaging;
 using System.Reflection;
 using System.ComponentModel;
+using System.Windows.Data;
 
 namespace RelhaxModpack
 {
@@ -548,7 +549,7 @@ namespace RelhaxModpack
             StaticPropertyChanged?.Invoke(null, new PropertyChangedEventArgs(propertyName));
         }
 
-        public static CustomBrushSetting UpdateBrush(CustomBrushSetting brush, Brush newBrush)
+        private static CustomBrushSetting UpdateBrush(CustomBrushSetting brush, Brush newBrush)
         {
             return new CustomBrushSetting(brush.SettingName, newBrush);
         }
@@ -556,6 +557,12 @@ namespace RelhaxModpack
         private static void SetBoundedBrushProperty(CustomBrushSetting customBrush, Brush brushToSet)
         {
             typeof(UISettings).GetProperties().Where(prop => prop.Name.Equals(customBrush.SettingName)).ToList()[0].SetValue(null, UpdateBrush(customBrush, brushToSet));
+        }
+
+        private static bool IsComponentBound(FrameworkElement element, DependencyProperty property)
+        {
+            BindingExpression expression = BindingOperations.GetBindingExpression(element, property);
+            return expression != null;
         }
 
         /// <summary>
@@ -695,7 +702,7 @@ namespace RelhaxModpack
             //using RelhaxWindow type allows us to directly control/check if the window should be color changed
             if (window is RelhaxWindow relhaxWindow && !relhaxWindow.ApplyColorSettings)
             {
-                Logging.Warning("window of type '{0}' is set to not have color setting applied, skipping", windowType);
+                Logging.Warning("Window of type '{0}' is set to not have color setting applied, skipping", windowType);
                 return;
             }
 
@@ -719,6 +726,9 @@ namespace RelhaxModpack
         {
             if (element is Window window)
             {
+                if(!BackedUpWindows.ContainsKey(window.GetType().FullName))
+                    throw new BadMemeException("key not found");
+
                 window.Background = BackedUpWindows[window.GetType().FullName];
                 return;
             }
@@ -745,8 +755,25 @@ namespace RelhaxModpack
             }
             else if (element is TextBlock block)
             {
-                block.Background = OriginalColors[block.Tag as string].BackgroundBrush;
-                block.Foreground = OriginalColors[block.Tag as string].TextBrush;
+                bool parentIsButton = (block.Parent is Button);
+                bool textboxForgroundIsBound = IsComponentBound(block, TextBlock.ForegroundProperty);
+                bool textboxBackgroundIsBound = IsComponentBound(block, TextBlock.BackgroundProperty);
+
+                if (parentIsButton)
+                {
+                    Logging.Debug("Textblock (tag={0}) skipped due to parent is button", block.Tag.ToString());
+                    return;
+                }
+
+                if(textboxForgroundIsBound)
+                    Logging.Debug("Textblock foreground (tag={0}) skipped due to data binding", block.Tag.ToString());
+                else
+                    block.Foreground = OriginalColors[block.Tag as string].TextBrush;
+
+                if (textboxBackgroundIsBound)
+                    Logging.Debug("Textblock background(tag={0}) skipped due to data binding", block.Tag.ToString());
+                else
+                    block.Background = OriginalColors[block.Tag as string].BackgroundBrush;
             }
             else if (element is Border border)
             {
