@@ -240,13 +240,13 @@
                     <System:String>ComboBox_2</System:String>
                     <System:String>ComboBox_3</System:String>
                 </ComboBox>
-                <Button x:Name="HighlightTextButton1" Content="Relhax style, string" HorizontalAlignment="Left" Margin="10,109,0,0" VerticalAlignment="Top" Width="223"
-                        Style="{DynamicResource RelhaxButtonStyle}" Height="29"/>
-                <Button x:Name="HighlightTextButton2" HorizontalAlignment="Left" Margin="10,143,0,0" VerticalAlignment="Top" Width="223">
-                    <TextBlock Text="Default style, textblock, enabled bound" TextWrapping="Wrap" IsEnabled="{Binding IsEnabled, ElementName=HighlightTextButton2}"/>
+                <Button x:Name="HighlightTextButton1" Content="Relhax style, string" HorizontalAlignment="Left" Margin="10,118,0,0" VerticalAlignment="Top" Width="140"
+                        Style="{DynamicResource RelhaxButtonStyle}" Height="20"/>
+                <Button x:Name="HighlightTextButton2" HorizontalAlignment="Left" Margin="10,143,0,0" VerticalAlignment="Top" Width="140">
+                    <TextBlock Text="Default style, textblock" TextWrapping="Wrap" />
                 </Button>
-                <Button x:Name="HighlightTextButton3" HorizontalAlignment="Left" Margin="10,168,0,0" VerticalAlignment="Top" Width="223" Style="{DynamicResource RelhaxButtonStyle}">
-                    <TextBlock Text="Relhax style, textblock, enabled bound" TextWrapping="Wrap"  IsEnabledChanged="TextBlock_IsEnabledChanged" />
+                <Button x:Name="HighlightTextButton3" HorizontalAlignment="Left" Margin="10,168,0,0" VerticalAlignment="Top" Width="140" Style="{DynamicResource RelhaxButtonStyle}">
+                    <TextBlock Text="Relhax style, textblock" TextWrapping="Wrap"/>
                 </Button>
                 <ContentControl x:Name="TestContentPresenter" Margin="394,122,286,213">
                     <ContentControl.Content>
