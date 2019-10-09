@@ -511,15 +511,15 @@ namespace RelhaxWPFConvert
         {
             Control[] HighlightControls = new Control[]
             {
-                HighlightButton,
                 HighlightCheckbox,
                 HighlightRadioButton,
                 HighlightTabControl,
                 HighlightTabItem1,
                 HighlightTabItem2,
                 HighlitCombobox,
-                HighlightTextButton,
-                HighlightTextButton2
+                HighlightTextButton1,
+                HighlightTextButton2,
+                HighlightTextButton3
             };
 
             FrameworkElement[] FrameworkControls = new FrameworkElement[]
