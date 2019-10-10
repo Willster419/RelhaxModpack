@@ -98,6 +98,9 @@ namespace RelhaxWPFConvert
 
             //init UI color settings
             UISettings.InitUIBrushes();
+
+            //get value from resource dictionary
+            bool test = (bool)Application.Current.Resources["ApplyColorSettings"];
         }
 
         #region Task Reporting
