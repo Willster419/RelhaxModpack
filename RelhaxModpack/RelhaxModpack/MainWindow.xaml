@@ -12,11 +12,7 @@
     Closing="TheMainWindow_Closing"
     Icon="Resources/modpack_icon.ico">
     <Window.Resources>
-        <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource RelhaxTabItemStyle}"/>
-        <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource RelhaxComboboxStyle}"/>
-        <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource RelhaxRadioButtonStyle}"/>
-        <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource RelhaxCheckboxStyle}"/>
-        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource RelhaxButtonStyle}"/>
+        
     </Window.Resources>
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
         <Grid.Background>
