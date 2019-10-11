@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
         Title="Diagnostics" Height="320" Width="525" ResizeMode="CanMinimize"
-        Loaded="RelhaxWindow_Loaded" LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
+        Loaded="RelhaxWindow_Loaded" LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="False">
     <Grid >
         <TextBox x:Name="DiagnosticsMainTextBox" Tag="DiagnosticsMainTextBox" HorizontalAlignment="Stretch" Height="42" Margin="10,10,10,0" TextWrapping="Wrap" Text="Helpful explanation window" VerticalAlignment="Top" IsReadOnly="True"/>
         <TextBlock Tag="SelectedInstallation" x:Name="SelectedInstallation" HorizontalAlignment="Stretch" Margin="12,57,8,0" TextWrapping="Wrap" Text="Currently Selected Installation:" VerticalAlignment="Top" Height="34" />
@@ -22,18 +22,18 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Button x:Name="ChangeInstallButton" Tag="ChangeInstall" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" Click="ChangeInstall_Click" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-                <TextBlock x:Name="ChangeInstall" Text="Change the currently selected WoT installation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="2,0,2,0" TextAlignment="Center" IsEnabled="{Binding IsEnabled, ElementName=ChangeInstallButton}"/>
+                <TextBlock x:Name="ChangeInstall" Text="Change the currently selected WoT installation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="2,0,2,0" TextAlignment="Center"/>
             </Button>
             <Button x:Name="LaunchWoTLauncherButton" Tag="LaunchWoTLauncher" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"  Click="LaunchWoTLauncher_Click" Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-                <TextBlock x:Name="LaunchWoTLauncher" Text="Start the World of Tanks launcher in integrity validation mode" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="2,0,2,0" TextAlignment="Center" IsEnabled="{Binding IsEnabled, ElementName=LaunchWoTLauncherButton}"/>
+                <TextBlock x:Name="LaunchWoTLauncher" Text="Start the World of Tanks launcher in integrity validation mode" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="2,0,2,0" TextAlignment="Center"/>
             </Button>
             <Button Tag="ClearDownloadCache" x:Name="ClearDownloadCache" Content="Clear download cache" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" Click="ClearDownloadCache_Click" Grid.Column="1" />
             <Button Tag="CollectLogInfo" x:Name="CollectLogInfoButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"  Click="CollectLogInfo_Click" Grid.Row="2" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-                <TextBlock x:Name="CollectLogInfo" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="Collect log files into a zip file to report a problem" Margin="2,0,2,0" TextAlignment="Center" IsEnabled="{Binding IsEnabled, ElementName=CollectLogInfoButton}"/>
+                <TextBlock x:Name="CollectLogInfo" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="Collect log files into a zip file to report a problem" Margin="2,0,2,0" TextAlignment="Center"/>
             </Button>
             <Button Tag="ClearDownloadCacheDatabase" x:Name="ClearDownloadCacheDatabase" Content="Delete download cache database file" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="2,2,2,2" Grid.Column="1" Grid.Row="1"  Click="ClearDownloadCacheDatabase_Click"/>
             <Button Tag="TestLoadImageLibraries" x:Name="TestLoadImageLibrariesButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" Click="TestLoadImageLibrariesButton_Click" Grid.Row="2" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Column="1">
-                <TextBlock x:Name="TestLoadImageLibraries" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="Test loading the atlas image processing libraries" TextAlignment="Center" IsEnabled="{Binding IsEnabled, ElementName=TestLoadImageLibrariesButton}"/>
+                <TextBlock x:Name="TestLoadImageLibraries" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="Test loading the atlas image processing libraries" TextAlignment="Center"/>
             </Button>
         </Grid>
     </Grid>
