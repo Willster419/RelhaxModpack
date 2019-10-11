@@ -565,6 +565,38 @@ namespace RelhaxModpack
             return expression != null;
         }
 
+        public static void ApplyCustomThemes(Window window)
+        {
+            //get the list
+            List<FrameworkElement> UIComponents = Utils.GetAllWindowComponentsVisual(window, false);
+            UIComponents = UIComponents.Where(component => component.Tag is string ID && !string.IsNullOrEmpty(ID)).ToList();
+            foreach (FrameworkElement element in UIComponents)
+            {
+                if (element is Button button)
+                {
+                    //https://stackoverflow.com/questions/1754615/how-to-assign-a-dynamic-resource-style-in-code
+                    //button.Style = (Style)Application.Current.Resources["RelhaxButtonStyle"];
+                    button.SetResourceReference(Button.StyleProperty, "RelhaxButtonStyle");
+                }
+                else if (element is CheckBox checkbox)
+                {
+                    checkbox.Style = (Style)Application.Current.Resources["RelhaxCheckboxStyle"];
+                }
+                else if (element is RadioButton radioButton)
+                {
+                    radioButton.Style = (Style)Application.Current.Resources["RelhaxRadioButtonStyle"];
+                }
+                else if (element is ComboBox combobox)
+                {
+                    combobox.Style = (Style)Application.Current.Resources["RelhaxComboboxStyle"];
+                }
+                else if (element is TabItem tabItem)
+                {
+                    tabItem.Style = (Style)Application.Current.Resources["RelhaxTabItemStyle"];
+                }
+            }
+        }
+
         /// <summary>
         /// Applies custom color settings to a window
         /// </summary>
@@ -619,59 +651,73 @@ namespace RelhaxModpack
             //original: 274
             //after distinct: 267
             List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsVisual(window, false).Distinct().ToList();
+            allWindowControls = allWindowControls.Where(element => element.Tag is string ID && !string.IsNullOrWhiteSpace(ID)).ToList();
             foreach (FrameworkElement element in allWindowControls)
             {
-                //make sure we have an element that we want color changing
-                if (element.Tag is string ID && !string.IsNullOrWhiteSpace(ID))
+                string ID = element.Tag as string;
+
+                //a element that is disabled will have a different current foreground and background applied to it
+                //get around this by temporarily enabling the component, then disabling it
+                bool triggered = false;
+                if(!element.IsEnabled)
                 {
-                    if(element is Control control_)
+                    triggered = true;
+                    element.IsEnabled = true;
+                }
+
+                if (element is Control control_)
+                {
+                    if (!OriginalColors.ContainsKey(ID))
                     {
-                        if (!OriginalColors.ContainsKey(ID))
-                        {
-                            OriginalColors.Add(ID, new ReplacedBrushes(control_.Background, control_.Foreground));
-                        }
-                        else
-                        {
-                            throw new BadMemeException("how does the key already exist");
-                        }
-                    }
-                    else if (element is Panel panel_)
-                    {
-                        if (!OriginalColors.ContainsKey(ID))
-                        {
-                            OriginalColors.Add(ID, new ReplacedBrushes(panel_.Background, null));
-                        }
-                        else
-                        {
-                            throw new BadMemeException("how does the key already exist");
-                        }
-                    }
-                    else if (element is TextBlock block)
-                    {
-                        if (!OriginalColors.ContainsKey(ID))
-                        {
-                            OriginalColors.Add(ID, new ReplacedBrushes(block.Background,block.Foreground));
-                        }
-                        else
-                        {
-                            throw new BadMemeException("how does the key already exist");
-                        }
-                    }
-                    else if (element is Border border_)
-                    {
-                        if (!OriginalColors.ContainsKey(ID))
-                        {
-                            OriginalColors.Add(ID, new ReplacedBrushes(border_.Background, null));
-                        }
-                        else
-                        {
-                            throw new BadMemeException("how does the key already exist");
-                        }
+                        OriginalColors.Add(ID, new ReplacedBrushes(control_.Background, control_.Foreground));
                     }
                     else
                     {
-                        throw new BadMemeException("what is this");
+                        throw new BadMemeException("how does the key already exist");
                     }
+                }
+                else if (element is Panel panel_)
+                {
+                    if (!OriginalColors.ContainsKey(ID))
+                    {
+                        OriginalColors.Add(ID, new ReplacedBrushes(panel_.Background, null));
+                    }
+                    else
+                    {
+                        throw new BadMemeException("how does the key already exist");
+                    }
+                }
+                else if (element is TextBlock block)
+                {
+                    if (!OriginalColors.ContainsKey(ID))
+                    {
+                        OriginalColors.Add(ID, new ReplacedBrushes(block.Background, block.Foreground));
+                    }
+                    else
+                    {
+                        throw new BadMemeException("how does the key already exist");
+                    }
+                }
+                else if (element is Border border_)
+                {
+                    if (!OriginalColors.ContainsKey(ID))
+                    {
+                        OriginalColors.Add(ID, new ReplacedBrushes(border_.Background, null));
+                    }
+                    else
+                    {
+                        throw new BadMemeException("how does the key already exist");
+                    }
+                }
+                else
+                {
+                    throw new BadMemeException("what is this");
+                }
+
+                //and set it back
+                if(triggered)
+                {
+                    element.IsEnabled = false;
                 }
             }
         }
@@ -710,13 +756,10 @@ namespace RelhaxModpack
 
             //build list of all internal framework components
             List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsVisual(window, false).Distinct().ToList();
+            allWindowControls = allWindowControls.Where(element => element.Tag is string ID && !string.IsNullOrWhiteSpace(ID)).ToList();
             foreach (FrameworkElement element in allWindowControls)
             {
-                //make sure we have an element that we want color changing
-                if (element.Tag is string ID && !string.IsNullOrWhiteSpace(ID))
-                {
-                    ApplyDefaultBrushSettings(element);
-                }
+                ApplyDefaultBrushSettings(element);
             }
 
             ToggleUIBrushesDarkDefault(true);
@@ -739,19 +782,28 @@ namespace RelhaxModpack
                     throw new BadMemeException("key not found");
             }
 
+            //don't apply the background or foreground if the component is disabled. so, if it is disabled, enable it, apply the theme, then disabled it again
+            bool componentWasDisabled = !element.IsEnabled;
+            if (componentWasDisabled)
+                element.IsEnabled = true;
+
             if (element is Button button)
             {
-                button.Background = OriginalColors[element.Tag as string].BackgroundBrush;
-                button.Foreground = OriginalColors[element.Tag as string].TextBrush;
+                //https://stackoverflow.com/questions/47663180/setting-background-via-a-function-breaks-controltemplate-triggers
+                //https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence
+                //button.Background = OriginalColors[element.Tag as string].BackgroundBrush;
+                //button.Foreground = OriginalColors[element.Tag as string].TextBrush;
+                button.SetCurrentValue(Button.BackgroundProperty, OriginalColors[element.Tag as string].BackgroundBrush);
+                button.SetCurrentValue(Button.ForegroundProperty, OriginalColors[element.Tag as string].TextBrush);
             }
             else if (element is Control control)
             {
-                control.Background = OriginalColors[element.Tag as string].BackgroundBrush;
-                control.Foreground = OriginalColors[element.Tag as string].TextBrush;
+                control.SetCurrentValue(Control.BackgroundProperty, OriginalColors[element.Tag as string].BackgroundBrush);
+                control.SetCurrentValue(Control.ForegroundProperty, OriginalColors[element.Tag as string].TextBrush);
             }
             else if (element is Panel panel)
             {
-                panel.Background = OriginalColors[element.Tag as string].BackgroundBrush;
+                panel.SetCurrentValue(Panel.BackgroundProperty, OriginalColors[element.Tag as string].BackgroundBrush);
             }
             else if (element is TextBlock block)
             {
@@ -765,20 +817,24 @@ namespace RelhaxModpack
                     return;
                 }
 
-                if(textboxForgroundIsBound)
+                if (textboxForgroundIsBound)
                     Logging.Debug("Textblock foreground (tag={0}) skipped due to data binding", block.Tag.ToString());
                 else
-                    block.Foreground = OriginalColors[block.Tag as string].TextBrush;
+                    block.SetCurrentValue(TextBlock.ForegroundProperty, OriginalColors[block.Tag as string].TextBrush);
 
                 if (textboxBackgroundIsBound)
                     Logging.Debug("Textblock background(tag={0}) skipped due to data binding", block.Tag.ToString());
                 else
-                    block.Background = OriginalColors[block.Tag as string].BackgroundBrush;
+                    block.SetCurrentValue(TextBlock.BackgroundProperty, OriginalColors[block.Tag as string].BackgroundBrush);
             }
             else if (element is Border border)
             {
-                border.Background = OriginalColors[border.Tag as string].BackgroundBrush;
+                border.SetCurrentValue(Border.BackgroundProperty, OriginalColors[border.Tag as string].BackgroundBrush);
             }
+
+            //re-disable if it was originally disabled
+            if (componentWasDisabled)
+                element.IsEnabled = false;
         }
         #endregion
 

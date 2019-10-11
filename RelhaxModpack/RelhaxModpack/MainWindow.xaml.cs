@@ -178,6 +178,9 @@ namespace RelhaxModpack
                 }
             }
 
+            //apply custom UI themeing (only need to explicitly call this for MainWindow)
+            UISettings.ApplyCustomThemes(this);
+
             //note: if loadSettings load the language, apply to UI sets the UI option and triggers translation of MainWindow
             //note: in wpf, the enabled trigger will occur in the loading event, so this will launch the checked events
             ApplySettingsToUI();
