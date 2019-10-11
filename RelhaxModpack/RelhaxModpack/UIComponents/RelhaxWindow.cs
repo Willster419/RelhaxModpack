@@ -65,32 +65,7 @@ namespace RelhaxModpack.Windows
             //apply UI color changes
             if(ApplyColorSettings)
             {
-                //get the list
-                List<FrameworkElement> UIComponents = Utils.GetAllWindowComponentsVisual(this, false);
-                UIComponents = UIComponents.Where(component => component.Tag is string ID && !string.IsNullOrEmpty(ID)).ToList();
-                foreach (FrameworkElement element in UIComponents)
-                {
-                    if(element is Button button)
-                    {
-                        button.Style = (Style)Application.Current.Resources["RelhaxButtonStyle"];
-                    }
-                    else if (element is CheckBox checkbox)
-                    {
-                        checkbox.Style = (Style)Application.Current.Resources["RelhaxCheckboxStyle"];
-                    }
-                    else if (element is RadioButton radioButton)
-                    {
-                        radioButton.Style = (Style)Application.Current.Resources["RelhaxRadioButtonStyle"];
-                    }
-                    else if (element is ComboBox combobox)
-                    {
-                        combobox.Style = (Style)Application.Current.Resources["RelhaxComboboxStyle"];
-                    }
-                    else if (element is TabItem tabItem)
-                    {
-                        tabItem.Style = (Style)Application.Current.Resources["RelhaxTabItemStyle"];
-                    }
-                }
+                UISettings.ApplyCustomThemes(this);
                 UISettings.ApplyUIColorSettings(this);
             }
             //deal with scaling
