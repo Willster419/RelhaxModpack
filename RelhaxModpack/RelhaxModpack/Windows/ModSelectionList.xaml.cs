@@ -842,7 +842,7 @@ namespace RelhaxModpack.Windows
                             BorderThickness = ModpackSettings.EnableBordersLegacyView? new Thickness(1) : new Thickness(0),
                             Child = cat.CategoryHeader.ChildStackPanel,
                             Margin = new Thickness(-25, 0, 0, 0),
-                            Background = UISettings.NotSelectedPanelColor.Brush
+                            Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush
                         };
                         if (cat.CategoryHeader.TreeView.Items.Count > 0)
                             cat.CategoryHeader.TreeView.Items.Clear();
@@ -876,7 +876,7 @@ namespace RelhaxModpack.Windows
                             //background TODO
                             Child = cat.CategoryHeader.ParentStackPanel,
                             Padding = new Thickness(2),
-                            Background = UISettings.NotSelectedPanelColor.Brush
+                            Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush
                         };
                         cat.CategoryHeader.ScrollViewer = new ScrollViewer()
                         {
@@ -967,7 +967,7 @@ namespace RelhaxModpack.Windows
                         BorderBrush = Brushes.Black,
                         BorderThickness = ModpackSettings.EnableBordersDefaultV2View ? new Thickness(1) : new Thickness(0),
                         Child = package.ChildStackPanel,
-                        Background = UISettings.NotSelectedPanelColor.Brush
+                        Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush
                         //background TODO
                     };
                     //custom settings for each border

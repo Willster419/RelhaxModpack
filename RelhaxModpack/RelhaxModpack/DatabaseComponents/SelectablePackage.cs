@@ -223,16 +223,16 @@ namespace RelhaxModpack
                     switch(_Checked)
                     {
                         case true:
-                            if (UIComponent.PanelColor != UISettings.SelectedPanelColor.Brush)
-                                UIComponent.PanelColor = UISettings.SelectedPanelColor.Brush;
-                                UIComponent.TextColor = UISettings.SelectedTextColor.Brush;
+                            if (UIComponent.PanelColor != UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush)
+                                UIComponent.PanelColor = UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush;
+                                UIComponent.TextColor = UISettings.CurrentTheme.SelectionListSelectedTextColor.Brush;
                             break;
                         case false:
                             if (!AnyPackagesChecked())
                             {
-                                if (UIComponent.PanelColor != UISettings.NotSelectedPanelColor.Brush)
-                                    UIComponent.PanelColor = UISettings.NotSelectedPanelColor.Brush;
-                                UIComponent.TextColor = UISettings.NotSelectedTextColor.Brush;
+                                if (UIComponent.PanelColor != UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush)
+                                    UIComponent.PanelColor = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush;
+                                UIComponent.TextColor = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush;
                             }
                             break;
                     }
@@ -243,14 +243,14 @@ namespace RelhaxModpack
                     switch (_Checked)
                     {
                         case true:
-                            if (ParentBorder.Background != UISettings.SelectedPanelColor.Brush)
-                                ParentBorder.Background = UISettings.SelectedPanelColor.Brush;
+                            if (ParentBorder.Background != UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush)
+                                ParentBorder.Background = UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush;
                             break;
                         case false:
                             if (!AnyPackagesChecked())
                             {
-                                if (ParentBorder.Background != UISettings.NotSelectedPanelColor.Brush)
-                                    ParentBorder.Background = UISettings.NotSelectedPanelColor.Brush;
+                                if (ParentBorder.Background != UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush)
+                                    ParentBorder.Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush;
                             }
                             break;
                     }
@@ -266,7 +266,7 @@ namespace RelhaxModpack
                         UISettings.NotSelectedTabColor = TabIndex.Background;
                     }
                     if (_Checked)
-                        TabIndex.Background = UISettings.SelectedPanelColor.Brush;
+                        TabIndex.Background = UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush;
                     else
                         TabIndex.Background = UISettings.NotSelectedTabColor;
                     //workaround for legacy:
@@ -274,13 +274,13 @@ namespace RelhaxModpack
                     if (ModpackSettings.ModSelectionView == SelectionView.Legacy)
                     {
                         if (_Checked)
-                            TreeView.Background = UISettings.SelectedPanelColor.Brush;
+                            TreeView.Background = UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush;
                         else
-                            TreeView.Background = UISettings.NotSelectedPanelColor.Brush;
+                            TreeView.Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush;
                     }
                     else if (ModpackSettings.ModSelectionView == SelectionView.DefaultV2)
                         if (!_Checked)
-                            ParentBorder.Background = UISettings.NotSelectedPanelColor.Brush;
+                            ParentBorder.Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush;
                 }
             }
         }

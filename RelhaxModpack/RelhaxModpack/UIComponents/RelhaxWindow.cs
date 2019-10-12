@@ -65,7 +65,7 @@ namespace RelhaxModpack.Windows
             //apply UI color changes
             if(ApplyColorSettings)
             {
-                UISettings.ApplyCustomThemes(this);
+                UISettings.ApplyCustomStyles(this);
                 UISettings.ApplyUIColorSettings(this);
             }
             //deal with scaling

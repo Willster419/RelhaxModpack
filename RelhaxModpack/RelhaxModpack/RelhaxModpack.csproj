@@ -134,10 +134,17 @@
     <Compile Include="DatabaseComponents\SelectablePackage.cs" />
     <Compile Include="DatabaseComponents\Trigger.cs" />
     <Compile Include="DatabaseComponents\UserFile.cs" />
+    <Compile Include="UIComponents\BoundUISettings.cs" />
+    <Compile Include="UIComponents\ClassColorset.cs" />
+    <Compile Include="UIComponents\ComponentColorset.cs" />
+    <Compile Include="UIComponents\CustomBrush.cs" />
     <Compile Include="UIComponents\CustomBrushConverter.cs" />
     <Compile Include="UIComponents\RelhaxHyperlink.xaml.cs">
       <DependentUpon>RelhaxHyperlink.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UIComponents\Theme.cs" />
+    <Compile Include="UIComponents\Themes.cs" />
+    <Compile Include="UIComponents\WindowColorset.cs" />
     <Compile Include="UIComponents\ZoomBorder.cs" />
     <Compile Include="Utils\GlobalSuppressions.cs" />
     <Compile Include="InstallerComponents\Atlas.cs" />
@@ -275,11 +282,31 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UIComponents\RelhaxRadioButtonStyleDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\RelhaxCheckboxStyleDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\RelhaxComboboxStyleDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UIComponents\RelhaxHyperlink.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UIComponents\RelhaxInstallTaskReporter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\RelhaxButtonStyleDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\RelhaxTabItemStyleDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
