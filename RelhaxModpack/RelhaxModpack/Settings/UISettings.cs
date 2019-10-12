@@ -30,11 +30,6 @@ namespace RelhaxModpack
         public const string CustomColorSettingsPathV1 = "CustomColorSettings";
 
         /// <summary>
-        /// The parsed XML document containing the xml color settings
-        /// </summary>
-        public static XmlDocument UIDocument;
-
-        /// <summary>
         /// The color to use in the selection list for a tab which is not selected
         /// </summary>
         /// <remarks>It starts as null because the color is unknown (and can be different types based on the user's theme).
@@ -146,29 +141,18 @@ namespace RelhaxModpack
                     CurrentTheme = Themes.Dark;
                     ApplyThemeToWindow(window);
                     return;
-            }
-            if(UIDocument == null)
-            {
-                Logging.Info("UIDocument is null, no custom color settings to apply");
-                return;
-            }
-
-            GetDocumentVersion();
-            if (string.IsNullOrWhiteSpace(parsedFormatVersion))
-            {
-                Logging.Error("UIDocument formatVersion string is null, aborting parsing");
-                return;
-            }
-
-            switch (parsedFormatVersion)
-            {
-                case "1.0":
-                    Logging.Info("parsing color settings file using V1 parse method");
-                    ApplyCustomThemeColorsettingsV1(window);
-                    break;
-                default:
-                    //unknown
-                    Logging.Error("Unknown format string or not supported: {0}", parsedFormatVersion);
+                case UIThemes.Custom:
+                    Logging.Debug("Applying custom UI theme for window {0}", window.GetType().Name);
+                    if(Themes.Custom == null)
+                    {
+                        if(!LoadSettingsFile())
+                        {
+                            MessageBox.Show(Translations.GetTranslatedString("failedToParseUISettingsFile"));
+                            return;
+                        }
+                    }
+                    CurrentTheme = Themes.Custom;
+                    ApplyThemeToWindow(window);
                     return;
             }
         }
@@ -559,11 +543,56 @@ namespace RelhaxModpack
         }
         #endregion
 
-        #region Custom theme apply to window
+        #region Custom theme file load/parse
+        /// <summary>
+        /// Load the custom color definitions from XML
+        /// </summary>
+        public static bool LoadSettingsFile()
+        {
+            //first check if the file exists
+            if (!File.Exists(Settings.UISettingsFileName))
+            {
+                Logging.Info("UIDocument file does not exist, using defaults");
+                return false;
+            }
+
+            //try to create a new one first in a temp. If it fails then abort.
+            XmlDocument loadedDoc = XmlUtils.LoadXmlDocument(Settings.UISettingsFileName, XmlLoadType.FromFile);
+            if (loadedDoc == null)
+            {
+                Logging.Error("failed to parse UIDocument, check messages above for parsing errors");
+                return false;
+            }
+
+            //get the UI xml format version of the file
+            string versionXpath = "//" + Settings.UISettingsColorFile + "/@version";
+            parsedFormatVersion = XmlUtils.GetXmlStringFromXPath(loadedDoc, versionXpath);
+            Logging.Debug("using xpath search '{0}' found format version '{1}'", versionXpath, parsedFormatVersion.Trim());
+            parsedFormatVersion = parsedFormatVersion.Trim();
+            if (string.IsNullOrWhiteSpace(parsedFormatVersion))
+            {
+                Logging.Error("UIDocument formatVersion string is null, aborting parsing");
+                return false;
+            }
+
+            Logging.Info("UIDocument xml file parsed successfully, loading custom color instances");
+            switch (parsedFormatVersion)
+            {
+                case "1.0":
+                    Logging.Info("parsing custom color instances file using V1 parse method");
+                    ApplyCustomColorSettingsV1();
+                    break;
+                default:
+                    //unknown
+                    Logging.Error("Unknown format string or not supported: {0}", parsedFormatVersion);
+                    return false;
+            }
+            Logging.Info("Custom color instances loaded");
+            return true;
+        }
+
         private static void ApplyCustomColorSettingsV1()
         {
-            throw new NotImplementedException();
-            /*
             for (int i = 0; i < CustomColorSettings.Count(); i++)
             {
                 CustomBrushSetting customBrush = CustomColorSettings[i];
@@ -587,7 +616,6 @@ namespace RelhaxModpack
                     continue;
                 }
             }
-            */
         }
 
         /// <summary>
@@ -892,61 +920,6 @@ namespace RelhaxModpack
                     componentName, brushType.InnerText), Logfiles.Application, LogLevel.Warning);
             }
             return someThingApplied;
-        }
-        #endregion
-
-        #region Custom theme file load
-        /// <summary>
-        /// Load the custom color definitions from XML
-        /// </summary>
-        public static bool LoadSettings()
-        {
-            //first check if the file exists
-            if (!File.Exists(Settings.UISettingsFileName))
-            {
-                Logging.Info("UIDocument file does not exist, using defaults");
-                return false;
-            }
-
-            //try to create a new one first in a temp. If it fails then abort.
-            XmlDocument loadedDoc = XmlUtils.LoadXmlDocument(Settings.UISettingsFileName, XmlLoadType.FromFile);
-            if (loadedDoc == null)
-            {
-                Logging.Error("failed to parse UIDocument, check messages above for parsing errors");
-                return false;
-            }
-            UIDocument = loadedDoc;
-            Logging.Info("UIDocument xml file loaded successfully, loading custom color instances");
-
-            GetDocumentVersion();
-            if (string.IsNullOrWhiteSpace(parsedFormatVersion))
-            {
-                Logging.Error("UIDocument formatVersion string is null, aborting parsing");
-                return false;
-            }
-            switch (parsedFormatVersion)
-            {
-                case "1.0":
-                    Logging.Info("parsing custom color instances file using V1 parse method");
-                    ApplyCustomColorSettingsV1();
-                    break;
-                default:
-                    //unknown
-                    Logging.Error("Unknown format string or not supported: {0}", parsedFormatVersion);
-                    return false;
-            }
-            Logging.Info("Custom color instances loaded");
-            return true;
-        }
-
-        private static void GetDocumentVersion()
-        {
-            //get the UI xml format version of the file
-            string versionXpath = "//" + Settings.UISettingsColorFile + "/@version";
-            parsedFormatVersion = XmlUtils.GetXmlStringFromXPath(UIDocument, versionXpath);
-            Logging.Debug("using xpath search '{0}' found format version '{1}'", versionXpath, parsedFormatVersion.Trim());
-            //trim it
-            parsedFormatVersion = parsedFormatVersion.Trim();
         }
         #endregion
 

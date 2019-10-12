@@ -167,7 +167,7 @@ namespace RelhaxModpack
             progressIndicator.UpdateProgress(2, Translations.GetTranslatedString("loadingSettings"));
             if(ModpackSettings.ApplicationTheme == UIThemes.Custom)
             {
-                if (!UISettings.LoadSettings())
+                if (!UISettings.LoadSettingsFile())
                 {
                     Logging.Warning("failed to load custom UI settings file, make sure file is called{0} and the xml syntax is correct", Settings.UISettingsColorFile);
                     ModpackSettings.ApplicationTheme = UIThemes.Default;

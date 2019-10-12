@@ -495,5 +495,7 @@ namespace RelhaxModpack.UIComponents
                 }
             }
         };
+
+        public static Theme Custom = null;
     }
 }
