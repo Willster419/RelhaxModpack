@@ -956,31 +956,77 @@ namespace RelhaxModpack
         /// </summary>
         /// <param name="savePath">The path to save the xml file to</param>
         /// <param name="mainWindow">If method is called from MainWindow, use itself for getting its color properties</param>
-        public static void DumpAllWindowColorSettingsToFile(string savePath, MainWindow mainWindow = null)
+        public static void DumpAllWindowColorSettingsToFile(string savePath, MainWindow mainWindow)
         {
-            throw new NotImplementedException();
-            //make xml document and declaration
             XmlDocument doc = new XmlDocument();
-            XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
 
-            //append declaration to document
+            //create and add declaration
+            XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
             doc.AppendChild(dec);
 
             //make root element and version attribute
             XmlElement root = doc.CreateElement(Settings.UISettingsColorFile);
-
             //NOTE: version attribute should be incremented when large change in color loading structure is done
             //allows us to make whole new method to load UI settings
             XmlAttribute version = doc.CreateAttribute("version");
-
-            //append to document
             version.Value = "1.0";
+
+            //append version attribute to element, and element to main doc
             root.Attributes.Append(version);
             doc.AppendChild(root);
-            
+
+            //write all CustomBrush objects from the theme
+            //create xml header element
+            XmlElement customBrushRoot = doc.CreateElement("GlobalCustomBrushes");
+            //get list of all custom brush elements in the application
+            List<PropertyInfo> customBrushes = CurrentTheme.GetType().GetProperties().Where(prop => prop.PropertyType.Equals(typeof(CustomBrush))).ToList();
+            foreach(PropertyInfo property in customBrushes)
+            {
+                XmlElement customBrushXml = doc.CreateElement(property.Name);
+                CustomBrush customBrush = property.GetValue(CurrentTheme) as CustomBrush;
+                if (customBrush.IsValid)
+                {
+                    WriteColorAttributesToXmlElement(customBrushXml, customBrush.Brush, doc);
+                    customBrushRoot.AppendChild(customBrushXml);
+                }
+            }
+            root.AppendChild(customBrushRoot);
+
+            //write all ClassColorset objects from the theme
+            //create xml header element
+            XmlElement classColorsetxmlRoot = doc.CreateElement("ClassColorsets");
+            List<PropertyInfo> classColorsets = CurrentTheme.GetType().GetProperties().Where(prop => prop.PropertyType.Equals(typeof(ClassColorset))).ToList();
+            foreach(PropertyInfo property in classColorsets)
+            {
+                XmlElement classColorsetXml = doc.CreateElement(property.Name);
+                ClassColorset classColorset = property.GetValue(CurrentTheme) as ClassColorset;
+
+                //get type property
+                XmlAttribute classColorsetType = doc.CreateAttribute("ComponentType");
+                classColorsetType.Value = classColorset.ClassType.Name;
+                classColorsetXml.Attributes.Append(classColorsetType);
+
+                //get customBrushes
+                List<PropertyInfo> classColorsetBrushes = classColorset.GetType().GetProperties().Where(prop => prop.PropertyType.Equals(typeof(CustomBrush))).ToList();
+                foreach(PropertyInfo brushProperty in classColorsetBrushes)
+                {
+                    XmlElement brushName = doc.CreateElement(brushProperty.Name);
+                    CustomBrush brush = brushProperty.GetValue(classColorset) as CustomBrush;
+                    if(brush != null && brush.IsValid)
+                    {
+                        WriteColorAttributesToXmlElement(brushName, brush.Brush, doc);
+                        classColorsetXml.AppendChild(brushName);
+                    }
+                }
+
+                //add to root holder
+                classColorsetxmlRoot.AppendChild(classColorsetXml);
+            }
+            root.AppendChild(classColorsetxmlRoot);
+
             //add all window instances to document:
             //MainWindow first
-            DumpWindowColorSettingsToXml(root, doc, mainWindow == null? new MainWindow() : mainWindow);
+            WriteWindowComponentSettingsToXml(root, doc, mainWindow);
             
             //get list of all windows in "Windows" namespace
             //https://stackoverflow.com/questions/79693/getting-all-types-in-a-namespace-via-reflection
@@ -1009,75 +1055,82 @@ namespace RelhaxModpack
                     Logging.Exception(ex.ToString());
                     continue;
                 }
-                Logging.Debug("parsing configurable UI elements");
-                DumpWindowColorSettingsToXml(root, doc, window);
-                Logging.Debug("parsing complete, cleanup");
-            }
 
-            //save custom color settings to document
-            //for now, just use single solid color for these settings
-            /*
-            foreach (CustomBrushSetting customBrush in CustomColorSettings)
-            {
-                string name = customBrush.SettingName;
-                Logging.Debug("saving custom color SolidColorBrush element {0}", name);
-                XmlElement element = doc.CreateElement(name);
-                XmlAttribute color = doc.CreateAttribute("color1");
-                //color1.Value = solidColorBrush.Color.ToString(CultureInfo.InvariantCulture);
-                color.Value = (customBrush.Brush as SolidColorBrush).Color.ToString(CultureInfo.InvariantCulture);
-                element.Attributes.Append(color);
-                root.AppendChild(element);
+                //check if we should include this into the definitions file
+                if (window is RelhaxWindow relhaxWindow)
+                {
+                    if(relhaxWindow.ApplyColorSettings)
+                    {
+                        if (CurrentTheme.WindowColorsets.ContainsKey(relhaxWindow.GetType()))
+                        {
+                            Logging.Debug("RelhaxWindow instance {0} is allowed to be customized, include in theme saving", type.Name);
+                        }
+                        else
+                        {
+                            Logging.Debug("RelhaxWindow instance {0} is allowed to be customized, but has no custom tag components, don't include in theme saving", type.Name);
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        Logging.Debug("RelhaxWindow instance {0} is not allowed to be customized, don't include in theme saving", type.Name);
+                        continue;
+                    }
+                }
+                else
+                    Logging.Warning("found window instance {0} that isn't of RelhaxWindow class. Is this the intent?", type.Name);
+
+                WriteWindowComponentSettingsToXml(root, doc, window);
             }
-            */
 
             //save xml file
             doc.Save(savePath);
         }
 
-        private static void DumpWindowColorSettingsToXml(XmlElement root, XmlDocument doc, Window window)
+        private static void WriteWindowComponentSettingsToXml(XmlElement documentRoot, XmlDocument doc, Window window)
         {
-            string windowType = window.GetType().Name;
-            //check to make sure we want to save it
-            if (window is RelhaxWindow relhaxWindow && !relhaxWindow.ApplyColorSettings)
-            {
-                Logging.Info("skipping window {0}, not allowed to apply custom color settings",windowType);
-                return;
-            }
             //make window element
+            string windowType = window.GetType().Name;
             XmlElement windowElement = doc.CreateElement(windowType);
 
             //save attributes to element
-            ApplyColorattributesToElement(windowElement, window.Background, doc);
+            WriteColorAttributesToXmlElement(windowElement, window.Background, doc);
+            documentRoot.AppendChild(windowElement);
 
-            //same to root
-            root.AppendChild(windowElement);
+            WindowColorset windowColorset = CurrentTheme.WindowColorsets[window.GetType()];
 
-            //get list of all framework elements in the window
-            List<FrameworkElement> AllUIElements = Utils.GetAllWindowComponentsLogical(window, false);
-            AllUIElements = AllUIElements.Where(element => element.Tag != null && element.Tag is string ID && !string.IsNullOrWhiteSpace(ID)).ToList();
-
-            //make xml entries for each UI element now
-            foreach(FrameworkElement element in AllUIElements)
+            foreach(ComponentColorset colorset in windowColorset.ComponentColorsets.Values.ToList())
             {
-                XmlElement colorSetting = doc.CreateElement("ColorSetting");
-                string ID = (string)element.Tag;
-                //save attributes to element
-                XmlAttribute elementID = doc.CreateAttribute("ID");
-                elementID.Value = ID;
-                colorSetting.Attributes.Append(elementID);
-                if (element is Panel panel)
-                    ApplyColorattributesToElement(colorSetting, panel.Background, doc);
-                else if (element is Control control)
-                    ApplyColorattributesToElement(colorSetting, control.Background, doc, control.Foreground);
-                else
-                    continue;
-                windowElement.AppendChild(colorSetting);
+                XmlElement component = doc.CreateElement(nameof(ComponentColorset));
+
+                //ID
+                XmlAttribute IDAttribute = doc.CreateAttribute("ID");
+                IDAttribute.Value = colorset.ID;
+                component.Attributes.Append(IDAttribute);
+
+                //Background brush
+                XmlElement backgroundBrushXml = doc.CreateElement(nameof(colorset.BackgroundBrush));
+                if (colorset.BackgroundBrush != null && colorset.BackgroundBrush.IsValid)
+                {
+                    WriteColorAttributesToXmlElement(backgroundBrushXml, colorset.BackgroundBrush.Brush, doc);
+                    component.AppendChild(backgroundBrushXml);
+                }
+
+                //Foreground brush
+                XmlElement foregroundBrushXml = doc.CreateElement(nameof(colorset.ForegroundBrush));
+                if (colorset.ForegroundBrush != null && colorset.ForegroundBrush.IsValid)
+                {
+                    WriteColorAttributesToXmlElement(foregroundBrushXml, colorset.ForegroundBrush.Brush, doc);
+                    component.AppendChild(foregroundBrushXml);
+                }
+
+                windowElement.AppendChild(component);
             }
         }
 
-        private static void ApplyColorattributesToElement(XmlElement colorEntry, Brush brush, XmlDocument doc, Brush textBrush = null)
+        private static void WriteColorAttributesToXmlElement(XmlElement colorEntry, Brush brush, XmlDocument doc)
         {
-            XmlAttribute colorType, color1, textColor;
+            XmlAttribute colorType, color1;
 
             if(brush is SolidColorBrush solidColorBrush)
             {
@@ -1142,16 +1195,6 @@ namespace RelhaxModpack
             else
             {
                 Logging.WriteToLog("Unknown background type: " + brush.GetType().ToString(), Logfiles.Application, LogLevel.Debug);
-            }
-            if(textBrush != null)
-            {
-                //text color (foreground)
-                textColor = doc.CreateAttribute("textColor");
-
-                //should all be solid color brushes...
-                SolidColorBrush solidColorTextBrush = (SolidColorBrush)textBrush;
-                textColor.Value = solidColorTextBrush.Color.ToString(CultureInfo.InvariantCulture);
-                colorEntry.Attributes.Append(textColor);
             }
         }
         #endregion
