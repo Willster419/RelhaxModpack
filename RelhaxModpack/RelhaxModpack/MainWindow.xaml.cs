@@ -2488,13 +2488,22 @@ namespace RelhaxModpack
 
         private void Theme_Checked(object sender, RoutedEventArgs e)
         {
+            //ModpackSettings is desited theme
             if ((bool)ThemeDefault.IsChecked)
                 ModpackSettings.ApplicationTheme = UIThemes.Default;
             else if ((bool)ThemeDark.IsChecked)
                 ModpackSettings.ApplicationTheme = UIThemes.Dark;
             else if ((bool)ThemeCustom.IsChecked)
                 ModpackSettings.ApplicationTheme = UIThemes.Custom;
+            //try to apply it
             UISettings.ApplyUIColorSettings(this);
+            //load the result back in
+            if (UISettings.CurrentTheme.Equals(Themes.Default))
+                ThemeDefault.IsChecked = true;
+            else if (UISettings.CurrentTheme.Equals(Themes.Dark))
+                ThemeDark.IsChecked = true;
+            else if (UISettings.CurrentTheme.Equals(Themes.Custom))
+                ThemeCustom.IsChecked = true;
         }
 
         private void SaveDisabledModsInSelection_Click(object sender, RoutedEventArgs e)

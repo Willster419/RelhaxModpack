@@ -145,10 +145,17 @@ namespace RelhaxModpack
                     Logging.Debug("Applying custom UI theme for window {0}", window.GetType().Name);
                     if(Themes.Custom == null)
                     {
-                        if(!LoadSettingsFile())
+                        Logging.Info("Custom theme definition is null, load from xml file");
+                        if (!LoadSettingsFile())
                         {
+                            Logging.Info("Custom theme load failed. Enable verbose logging for more information");
                             MessageBox.Show(Translations.GetTranslatedString("failedToParseUISettingsFile"));
                             return;
+                        }
+                        else
+                        {
+                            Logging.Info("Custom theme loaded successfully");
+                            MessageBox.Show(Translations.GetTranslatedString("UISettingsFileApplied"));
                         }
                     }
                     CurrentTheme = Themes.Custom;
@@ -309,11 +316,11 @@ namespace RelhaxModpack
             //make an instance of mainWindow to get the default component colors
             //note control is not backed up, because it is so generic that it should not have a default
             //at the theme applying level, this would be from a tag (not class) level. but this can change between themes
-            MainWindow win = new MainWindow();
+            TemplateWindow templateWindow = new TemplateWindow();
 
-            List<FrameworkElement> mainWindowComponents = Utils.GetAllWindowComponentsLogical(win, false).Distinct().ToList();
+            List<FrameworkElement> templateWindowComponents = Utils.GetAllWindowComponentsLogical(templateWindow, false).Distinct().ToList();
 
-            Button b = mainWindowComponents.First( element => element is Button) as Button;
+            Button b = templateWindowComponents.First( element => element is Button) as Button;
             Themes.Default.ButtonColorset.BackgroundBrush = new CustomBrush()
             {
                 IsValid = true,
@@ -325,7 +332,7 @@ namespace RelhaxModpack
                 Brush = b.Foreground
             };
 
-            TabItem ti = mainWindowComponents.First(element => element is TabItem) as TabItem;
+            TabItem ti = templateWindowComponents.First(element => element is TabItem) as TabItem;
             Themes.Default.TabItemColorset.BackgroundBrush = new CustomBrush()
             {
                 IsValid = true,
@@ -337,7 +344,7 @@ namespace RelhaxModpack
                 Brush = ti.Foreground
             };
 
-            CheckBox cb = mainWindowComponents.First(element => element is CheckBox) as CheckBox;
+            CheckBox cb = templateWindowComponents.First(element => element is CheckBox) as CheckBox;
             Themes.Default.CheckboxColorset.BackgroundBrush = new CustomBrush()
             {
                 IsValid = true,
@@ -349,7 +356,7 @@ namespace RelhaxModpack
                 Brush = cb.Foreground
             };
 
-            RadioButton rb = mainWindowComponents.First(element => element is RadioButton) as RadioButton;
+            RadioButton rb = templateWindowComponents.First(element => element is RadioButton) as RadioButton;
             Themes.Default.RadioButtonColorset.BackgroundBrush = new CustomBrush()
             {
                 IsValid = true,
@@ -361,7 +368,9 @@ namespace RelhaxModpack
                 Brush = rb.Foreground
             };
 
-            TextBlock textBlock = mainWindowComponents.First(element => element is TextBlock) as TextBlock;
+            //combobox is all bound components, no need to get defaults
+
+            TextBlock textBlock = templateWindowComponents.First(element => element is TextBlock) as TextBlock;
             Themes.Default.TextblockColorset.BackgroundBrush = new CustomBrush()
             {
                 IsValid = true,
@@ -373,14 +382,14 @@ namespace RelhaxModpack
                 Brush = textBlock.Foreground
             };
 
-            Border border = mainWindowComponents.First(element => element is Border) as Border;
+            Border border = templateWindowComponents.First(element => element is Border) as Border;
             Themes.Default.BorderColorset.BackgroundBrush = new CustomBrush()
             {
                 IsValid = true,
                 Brush = border.Background
             };
 
-            Panel panel = mainWindowComponents.First(element => element is Panel) as Panel;
+            Panel panel = templateWindowComponents.First(element => element is Panel) as Panel;
             Themes.Default.PanelColorset.BackgroundBrush = new CustomBrush()
             {
                 IsValid = true,
@@ -496,11 +505,11 @@ namespace RelhaxModpack
                 return false;
             }
 
-            Logging.Info("UIDocument xml file parsed successfully, loading custom color instances");
+            Logging.Info("UIDocument is valid xml and format definition, loading custom color instances");
             switch (parsedFormatVersion)
             {
                 case "1.0":
-                    Logging.Info("parsing custom color instances file using V1 parse method");
+                    Logging.Info("Parsing custom color instances file using V1 parse method");
                     return LoadCustomThemeV1(loadedDoc);
                 default:
                     //unknown
@@ -514,23 +523,21 @@ namespace RelhaxModpack
             Theme customThemeToLoad = new Theme();
 
             //load global brushes
-            List<PropertyInfo> customBrushes = CurrentTheme.GetType().GetProperties().Where(prop => prop.PropertyType.Equals(typeof(CustomBrush))).ToList();
+            List<PropertyInfo> customBrushes = customThemeToLoad.GetType().GetProperties().Where(prop => prop.PropertyType.Equals(typeof(CustomBrush))).ToList();
             foreach (PropertyInfo property in customBrushes)
             {
-                XmlNode globalBrush = XmlUtils.GetXmlNodeFromXPath(doc, string.Format("//{0}/GlobalCustomBrushes/{1}", Settings.UISettingsColorFile, property.Name));
+                string xPath = string.Format("//{0}/GlobalCustomBrushes/{1}", Settings.UISettingsColorFile, property.Name);
+                Logging.Debug("Searching for global brush {0} using xpath {1}", property.Name, xPath);
+                XmlNode globalBrush = XmlUtils.GetXmlNodeFromXPath(doc, xPath);
                 if(globalBrush == null)
                 {
-                    Logging.Error("failed to get brush setting for global custom brush {0}", property.Name);
+                    Logging.Error("failed to get xml brush setting definition");
                     return false;
                 }
-                if (ApplyCustomThemeBrushSettings(property.Name,property.Name,globalBrush as XmlElement, out Brush brush))
+                if(ApplyCustomThemeCustomBrushSettings(property.Name,globalBrush as XmlElement, out CustomBrush customBrush))
                 {
-                    CustomBrush customBrush = new CustomBrush()
-                    {
-                        IsValid = true,
-                        Brush = brush
-                    };
                     property.SetValue(customThemeToLoad, customBrush);
+                    Logging.Debug("global brush successfully applied");
                 }
                 else
                 {
@@ -540,10 +547,12 @@ namespace RelhaxModpack
             }
 
             //load classColorset brushes
-            List<PropertyInfo> classColorsets = CurrentTheme.GetType().GetProperties().Where(prop => prop.PropertyType.Equals(typeof(ClassColorset))).ToList();
-            foreach (PropertyInfo property in customBrushes)
+            List<PropertyInfo> classColorsets = customThemeToLoad.GetType().GetProperties().Where(prop => prop.PropertyType.Equals(typeof(ClassColorset))).ToList();
+            foreach (PropertyInfo property in classColorsets)
             {
-                XmlElement classColorsetXmlElement = XmlUtils.GetXmlNodeFromXPath(doc, string.Format("//{0}/ClassColorsets/{1}", Settings.UISettingsColorFile, property.Name)) as XmlElement;
+                string xPath = string.Format("//{0}/ClassColorsets/{1}", Settings.UISettingsColorFile, property.Name);
+                Logging.Debug("Searching for class definition {0} using xpath {1}", property.Name, xPath);
+                XmlElement classColorsetXmlElement = XmlUtils.GetXmlNodeFromXPath(doc, xPath) as XmlElement;
                 if (classColorsetXmlElement == null)
                 {
                     Logging.Error("failed to get brush setting for global custom brush {0}", property.Name);
@@ -561,7 +570,104 @@ namespace RelhaxModpack
             }
 
             //load windowColorset brushes
+            if(customThemeToLoad.WindowColorsets == null)
+            {
+                customThemeToLoad.WindowColorsets = new Dictionary<Type, WindowColorset>();
+            }
+            List<Type> windows = Assembly.GetExecutingAssembly().GetTypes().ToList();
+            //only get actual windows where attributes is public 
+            windows = windows.Where(type =>
+                type.IsClass &&
+                !string.IsNullOrEmpty(type.Namespace) &&
+                type.Namespace.Contains("RelhaxModpack.Windows") &&
+                type.Attributes == (TypeAttributes.Public | TypeAttributes.BeforeFieldInit) &&
+                type.BaseType.FullName.Contains("RelhaxModpack.Windows")
+                ).ToList();
+            //insert mainWindow
+            windows.Insert(0, typeof(MainWindow));
 
+            Window window = null;
+            foreach (Type type in windows)
+            {
+                Logging.Debug("Creating UI component properties of windowType {0} for loading", type.Name);
+                try
+                {
+                    window = (Window)Activator.CreateInstance(type);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception("Failed to create window instance of type {0}", type.Name);
+                    Logging.Exception(ex.ToString());
+                    continue;
+                }
+
+                if (window is RelhaxWindow relhaxWindow)
+                {
+                    if (!relhaxWindow.ApplyColorSettings)
+                    {
+                        Logging.Info("window type {0} is set to not load custom types, skipping", type.Name);
+                        window = null;
+                        continue;
+                    }
+                }
+                else if (!(window is MainWindow))
+                    Logging.Warning("Window type {0} is not RelhaxWindow type!", type.Name);
+
+                string xmlPath = string.Format("//{0}/{1}", Settings.UISettingsColorFile, type.Name);
+                Logging.Debug("Using XmlPath {0} for finding window instance definitions", xmlPath);
+                XmlElement classColorsetWindowXmlElement = XmlUtils.GetXmlNodeFromXPath(doc, xmlPath) as XmlElement;
+                if(classColorsetWindowXmlElement == null)
+                {
+                    Logging.Debug("no xml definition found for window {0} (used xmlPath {1})", type.Name, xmlPath);
+                    continue;
+                }
+
+                WindowColorset windowColorset = new WindowColorset();
+                if (ApplyCustomThemeCustomBrushSettings(type.Name,classColorsetWindowXmlElement,out CustomBrush windowCustomBrush))
+                    windowColorset.BackgroundBrush = windowCustomBrush;
+                else
+                    Logging.Debug("failed to parse color definition for window {0}", type.Name);
+
+                if (windowColorset.ComponentColorsets == null)
+                    windowColorset.ComponentColorsets = new Dictionary<string, ComponentColorset>();
+
+                //get all components of that windowType that have tags
+                List<FrameworkElement> windowComponents = Utils.GetAllWindowComponentsLogical(window, false).Distinct().ToList();
+                windowComponents = windowComponents.Where(ele => ele.Tag is string str && !string.IsNullOrWhiteSpace(str)).ToList();
+                foreach(FrameworkElement element in windowComponents)
+                {
+                    string ID = element.Tag as string;
+                    //select the CompoenentCOlorset where ID matches
+                    string xPath = string.Format("//ComponentColorset[@ID='{0}']", ID);
+                    Logging.Debug("Searching for ComponentColorset definition with xpath {0}", xPath);
+                    XmlElement customBrushXml = classColorsetWindowXmlElement.SelectSingleNode(xPath) as XmlElement;
+                    if (customBrushXml != null)
+                    {
+                        Logging.Debug("Entry found, attempting to parse color settings");
+                        ComponentColorset componentColorset = new ComponentColorset() { ID = ID };
+
+                        XmlElement backgroundBrushXml = customBrushXml.SelectSingleNode("BackgroundBrush") as XmlElement;
+                        if (ApplyCustomThemeCustomBrushSettings(ID, backgroundBrushXml, out CustomBrush componentBackgroundBrush))
+                            componentColorset.BackgroundBrush = componentBackgroundBrush;
+                        else
+                            componentColorset.BackgroundBrush = new CustomBrush();
+
+                        XmlElement foregroundBrushXml = customBrushXml.SelectSingleNode("ForegroundBrush") as XmlElement;
+                        if (ApplyCustomThemeCustomBrushSettings(ID, foregroundBrushXml, out CustomBrush componentForegroundBrush))
+                            componentColorset.ForegroundBrush = componentForegroundBrush;
+                        else
+                            componentColorset.ForegroundBrush = new CustomBrush();
+
+                        windowColorset.ComponentColorsets.Add(ID, componentColorset);
+                        Logging.Debug("Color settings parsed");
+                    }
+                    else
+                        Logging.Debug("Entry not found");
+                }
+
+                //add to dict
+                customThemeToLoad.WindowColorsets.Add(type, windowColorset);
+            }
 
             Themes.Custom = customThemeToLoad;
             return true;
@@ -577,7 +683,7 @@ namespace RelhaxModpack
 
             //get the class type
             string classType = classColorsetXmlElement.Attributes["ComponentType"].Value;
-            switch(classType)
+            switch (classType)
             {
                 case "RadioButton":
                     classColorset.ClassThemeDefinition = new RadioButtonClassThemeDefinition();
@@ -611,48 +717,66 @@ namespace RelhaxModpack
                     return false;
             }
 
+            Logging.Debug("Class definition {0} can load the following brush definitions", classType);
+            Logging.Debug("Background={0}, Bound={1}", classColorset.ClassThemeDefinition.BackgroundAllowed, !string.IsNullOrEmpty(classColorset.ClassThemeDefinition.BackgroundBoundName));
+            Logging.Debug("Foreground={0}, Bound={1}", classColorset.ClassThemeDefinition.ForegroundAllowed, !string.IsNullOrEmpty(classColorset.ClassThemeDefinition.ForegroundBoundName));
+            Logging.Debug("Highlight={0}, Bound={1}", classColorset.ClassThemeDefinition.HighlightAllowed, !string.IsNullOrEmpty(classColorset.ClassThemeDefinition.HighlightBoundName));
+            Logging.Debug("Select={0}, Bound={1}", classColorset.ClassThemeDefinition.SelectAllowed, !string.IsNullOrEmpty(classColorset.ClassThemeDefinition.SelectBoundName));
+
             //background
-            customBrushToApply = nameof(classColorset.BackgroundBrush);
-            customBrushElement = classColorsetXmlElement.SelectSingleNode(customBrushToApply) as XmlElement;
-            if (!ApplyCustomBrushToClassComponent(customBrushToApply, customBrushElement, out CustomBrush rbcustomBrushBackground))
-                parsingSuccess = false;
-            classColorset.BackgroundBrush = rbcustomBrushBackground;
+            if (classColorset.ClassThemeDefinition.BackgroundAllowed)
+            {
+                customBrushToApply = nameof(classColorset.BackgroundBrush);
+                customBrushElement = classColorsetXmlElement.SelectSingleNode(customBrushToApply) as XmlElement;
+                if (!ApplyCustomThemeCustomBrushSettings(customBrushToApply, customBrushElement, out CustomBrush rbcustomBrushBackground))
+                    parsingSuccess = false;
+                classColorset.BackgroundBrush = rbcustomBrushBackground;
+            }
 
             //foreground
-            customBrushToApply = nameof(classColorset.ForegroundBrush);
-            customBrushElement = classColorsetXmlElement.SelectSingleNode(customBrushToApply) as XmlElement;
-            if (!ApplyCustomBrushToClassComponent(customBrushToApply, customBrushElement, out CustomBrush rbcustomBrushForeground))
-                parsingSuccess = false;
-            classColorset.ForegroundBrush = rbcustomBrushForeground;
+            if (classColorset.ClassThemeDefinition.ForegroundAllowed)
+            {
+                customBrushToApply = nameof(classColorset.ForegroundBrush);
+                customBrushElement = classColorsetXmlElement.SelectSingleNode(customBrushToApply) as XmlElement;
+                if (!ApplyCustomThemeCustomBrushSettings(customBrushToApply, customBrushElement, out CustomBrush rbcustomBrushForeground))
+                    parsingSuccess = false;
+                classColorset.ForegroundBrush = rbcustomBrushForeground;
+            }
 
             //highlight
-            customBrushToApply = nameof(classColorset.HighlightBrush);
-            customBrushElement = classColorsetXmlElement.SelectSingleNode(customBrushToApply) as XmlElement;
-            if (!ApplyCustomBrushToClassComponent(customBrushToApply, customBrushElement, out CustomBrush rbcustomBrushHighlight))
-                parsingSuccess = false;
-            classColorset.HighlightBrush = rbcustomBrushHighlight;
+            if (classColorset.ClassThemeDefinition.HighlightAllowed)
+            {
+                customBrushToApply = nameof(classColorset.HighlightBrush);
+                customBrushElement = classColorsetXmlElement.SelectSingleNode(customBrushToApply) as XmlElement;
+                if (!ApplyCustomThemeCustomBrushSettings(customBrushToApply, customBrushElement, out CustomBrush rbcustomBrushHighlight))
+                    parsingSuccess = false;
+                classColorset.HighlightBrush = rbcustomBrushHighlight;
+            }
 
             //selected
-            customBrushToApply = nameof(classColorset.SelectedBrush);
-            customBrushElement = classColorsetXmlElement.SelectSingleNode(customBrushToApply) as XmlElement;
-            if (!ApplyCustomBrushToClassComponent(customBrushToApply, customBrushElement, out CustomBrush rbcustomBrushSelect))
-                parsingSuccess = false;
-            classColorset.SelectedBrush = rbcustomBrushSelect;
+            if (classColorset.ClassThemeDefinition.SelectAllowed)
+            { 
+                customBrushToApply = nameof(classColorset.SelectedBrush);
+                customBrushElement = classColorsetXmlElement.SelectSingleNode(customBrushToApply) as XmlElement;
+                if (!ApplyCustomThemeCustomBrushSettings(customBrushToApply, customBrushElement, out CustomBrush rbcustomBrushSelect))
+                    parsingSuccess = false;
+                classColorset.SelectedBrush = rbcustomBrushSelect;
+            }
 
             return parsingSuccess;
         }
 
-        private static bool ApplyCustomBrushToClassComponent(string customBrushName, XmlElement classColorsetxmlBrushElement, out CustomBrush customBrush)
+        private static bool ApplyCustomThemeCustomBrushSettings(string customBrushName, XmlElement customBrushElement, out CustomBrush customBrush)
         {
             customBrush = null;
-
-            if (classColorsetxmlBrushElement == null)
+            //a null xml element means that the element should not be modified
+            if (customBrushElement == null)
             {
-                Logging.Error("ClassColorset object is missing a CustomBrush definition: '{0}'", customBrushName);
-                return false;
+                customBrush = new CustomBrush();
+                return true;
             }
 
-            if(ApplyCustomThemeBrushSettings(customBrushName,customBrushName,classColorsetxmlBrushElement,out Brush brush))
+            if(ApplyCustomThemeBrushSettings(customBrushName,customBrushName,customBrushElement,out Brush brush))
             {
                 customBrush = new CustomBrush()
                 {
@@ -662,25 +786,31 @@ namespace RelhaxModpack
             }
             else
             {
-                Logging.Error("Failed to parse class customBrush {0} for class colorSet {1}", customBrushName, classColorsetxmlBrushElement.Name);
+                Logging.Error("Failed to parse brush settings for CustomBrush {0} for Xml definition {1}", customBrushName, customBrushElement.Name);
                 return false;
             }
             return true;
         }
 
-        private static bool ApplyCustomThemeBrushSettings(string componentName, string componentTag, XmlElement brushSettings, out Brush backgroundColorToChange)
+        private static bool ApplyCustomThemeBrushSettings(string componentName, string componentTag, XmlElement brushSettings, out Brush colorToOutput)
         {
             if (string.IsNullOrEmpty(componentName))
                 componentName = "null";
 
             bool someThingApplied = false;
-            backgroundColorToChange = new SolidColorBrush();
+            colorToOutput = new SolidColorBrush();
             //make sure type is set correctly
             XmlAttribute brushType = brushSettings.Attributes["type"];
             if (brushType == null)
             {
                 Logging.Warning("failed to apply brush setting: type attribute not exist!");
                 return false;
+            }
+            if(brushType.InnerText.ToLower().Equals("null"))
+            {
+                colorToOutput = null;
+                someThingApplied = true;
+                return someThingApplied;
             }
             //https://docs.microsoft.com/en-us/dotnet/api/system.windows.media.color.fromargb?view=netframework-4.7.2#System_Windows_Media_Color_FromArgb_System_Byte_System_Byte_System_Byte_System_Byte_
             XmlAttribute color1 = brushSettings.Attributes["color1"];
@@ -696,7 +826,7 @@ namespace RelhaxModpack
                     case "SolidColorBrush"://color=1
                         if (ParseColorFromString(color1.InnerText, out Color kolor1_solid))
                         {
-                            backgroundColorToChange = new SolidColorBrush(kolor1_solid);
+                            colorToOutput = new SolidColorBrush(kolor1_solid);
                             someThingApplied = true;
                             break;
                         }
@@ -742,7 +872,7 @@ namespace RelhaxModpack
                             }
                             VerifyPoints(point_1);
                             VerifyPoints(point_2);
-                            backgroundColorToChange = new LinearGradientBrush(kolor1_linear, kolor2_linear, point_1, point_2);
+                            colorToOutput = new LinearGradientBrush(kolor1_linear, kolor2_linear, point_1, point_2);
                             someThingApplied = true;
                             break;
                         }
@@ -762,7 +892,7 @@ namespace RelhaxModpack
                         if (ParseColorFromString(color1.InnerText, out Color kolor1_radial)
                             && ParseColorFromString(color2.InnerText, out Color kolor2_radial))
                         {
-                            backgroundColorToChange = new RadialGradientBrush(kolor1_radial, kolor2_radial);
+                            colorToOutput = new RadialGradientBrush(kolor1_radial, kolor2_radial);
                             someThingApplied = true;
                             break;
                         }
@@ -772,10 +902,6 @@ namespace RelhaxModpack
                                 componentTag, brushType.InnerText, color1.InnerText, color2.InnerText), Logfiles.Application, LogLevel.Warning);
                             break;
                         }
-                    case "null"://no color type
-                        backgroundColorToChange = null;
-                        someThingApplied = true;
-                        break;
                     default:
                         Logging.Warning(string.Format("unknown type parameter{0} in component {1} ", brushType.InnerText, componentTag));
                         break;
@@ -902,20 +1028,48 @@ namespace RelhaxModpack
                 XmlElement classColorsetXml = doc.CreateElement(property.Name);
                 ClassColorset classColorset = property.GetValue(CurrentTheme) as ClassColorset;
 
-                //get type property
+                //save type property
                 XmlAttribute classColorsetType = doc.CreateAttribute("ComponentType");
                 classColorsetType.Value = classColorset.ClassThemeDefinition.ClassType.Name;
                 classColorsetXml.Attributes.Append(classColorsetType);
 
-                //get customBrushes
-                List<PropertyInfo> classColorsetBrushes = classColorset.GetType().GetProperties().Where(prop => prop.PropertyType.Equals(typeof(CustomBrush))).ToList();
-                foreach(PropertyInfo brushProperty in classColorsetBrushes)
+                //save customBrushes
+                if(classColorset.ClassThemeDefinition.BackgroundAllowed && classColorset.BackgroundBrush != null)
                 {
-                    XmlElement brushName = doc.CreateElement(brushProperty.Name);
-                    CustomBrush brush = brushProperty.GetValue(classColorset) as CustomBrush;
-                    if(brush != null && brush.IsValid)
+                    XmlElement brushName = doc.CreateElement(nameof(classColorset.BackgroundBrush));
+                    if (classColorset.BackgroundBrush.IsValid)
                     {
-                        WriteColorAttributesToXmlElement(brushName, brush.Brush, doc);
+                        WriteColorAttributesToXmlElement(brushName, classColorset.BackgroundBrush.Brush, doc);
+                        classColorsetXml.AppendChild(brushName);
+                    }
+                }
+
+                if (classColorset.ClassThemeDefinition.ForegroundAllowed && classColorset.ForegroundBrush != null)
+                {
+                    XmlElement brushName = doc.CreateElement(nameof(classColorset.ForegroundBrush));
+                    if (classColorset.ForegroundBrush.IsValid)
+                    {
+                        WriteColorAttributesToXmlElement(brushName, classColorset.ForegroundBrush.Brush, doc);
+                        classColorsetXml.AppendChild(brushName);
+                    }
+                }
+
+                if (classColorset.ClassThemeDefinition.HighlightAllowed && classColorset.HighlightBrush != null)
+                {
+                    XmlElement brushName = doc.CreateElement(nameof(classColorset.HighlightBrush));
+                    if (classColorset.HighlightBrush.IsValid)
+                    {
+                        WriteColorAttributesToXmlElement(brushName, classColorset.HighlightBrush.Brush, doc);
+                        classColorsetXml.AppendChild(brushName);
+                    }
+                }
+
+                if (classColorset.ClassThemeDefinition.SelectAllowed && classColorset.SelectedBrush != null)
+                {
+                    XmlElement brushName = doc.CreateElement(nameof(classColorset.SelectedBrush));
+                    if (classColorset.SelectedBrush.IsValid)
+                    {
+                        WriteColorAttributesToXmlElement(brushName, classColorset.SelectedBrush.Brush, doc);
                         classColorsetXml.AppendChild(brushName);
                     }
                 }

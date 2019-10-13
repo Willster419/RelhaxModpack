@@ -4957,6 +4957,19 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.TemplateWindow">
+            <summary>
+            Interaction logic for TemplateWindow.xaml
+            </summary>
+            <summary>
+            TemplateWindow
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.TemplateWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.VersionInfo">
             <summary>
             Interaction logic for VersionInfo.xaml
