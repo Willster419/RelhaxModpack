@@ -184,7 +184,10 @@ namespace RelhaxModpack
             if (customWindowDefinition)
             {
                 if (CurrentTheme.WindowColorsets[window.GetType()].BackgroundBrush.IsValid)
-                    window.Background = CurrentTheme.WindowColorsets[window.GetType()].BackgroundBrush.Brush;
+                {
+                    //window.Background = CurrentTheme.WindowColorsets[window.GetType()].BackgroundBrush.Brush;
+                    window.SetCurrentValue(Window.BackgroundProperty, CurrentTheme.WindowColorsets[window.GetType()].BackgroundBrush.Brush);
+                }
             }
 
             //build list of all internal framework components
@@ -204,13 +207,25 @@ namespace RelhaxModpack
                 if (colorset.ClassThemeDefinition.BackgroundAllowed && string.IsNullOrEmpty(colorset.ClassThemeDefinition.BackgroundBoundName))
                 {
                     if (colorset.BackgroundBrush != null && colorset.BackgroundBrush.IsValid)
-                        element.SetCurrentValue(colorset.ClassThemeDefinition.BackgroundDependencyProperty, colorset.BackgroundBrush.Brush);
+                    {
+                        //if highlight and selected aren't allowed, then set via local
+                        if (colorset.ClassThemeDefinition.BackgroundAppliedLocal)
+                            element.GetType().GetProperty("Background").SetValue(element, colorset.BackgroundBrush.Brush);
+                        //else set via currentValue
+                        else
+                            element.SetCurrentValue(colorset.ClassThemeDefinition.BackgroundDependencyProperty, colorset.BackgroundBrush.Brush);
+                    }
                 }
 
                 if (colorset.ClassThemeDefinition.ForegroundAllowed && string.IsNullOrEmpty(colorset.ClassThemeDefinition.ForegroundBoundName))
                 {
                     if (colorset.ForegroundBrush != null && colorset.ForegroundBrush.IsValid)
-                        element.SetCurrentValue(colorset.ClassThemeDefinition.ForegroundDependencyProperty, colorset.ForegroundBrush.Brush);
+                    {
+                        if (colorset.ClassThemeDefinition.ForegroundAppliedLocal)
+                            element.GetType().GetProperty("Foreground").SetValue(element, colorset.ForegroundBrush.Brush);
+                        else
+                            element.SetCurrentValue(colorset.ClassThemeDefinition.ForegroundDependencyProperty, colorset.ForegroundBrush.Brush);
+                    }
                 }
 
                 //re-disable if it was originally disabled
@@ -249,18 +264,30 @@ namespace RelhaxModpack
             if (componentWasDisabled)
                 element.IsEnabled = true;
 
-            ClassColorset classColorset = DetermineClassColorSet(element);
+            ClassColorset colorset = DetermineClassColorSet(element);
 
-            if (classColorset.ClassThemeDefinition.BackgroundAllowed && string.IsNullOrEmpty(classColorset.ClassThemeDefinition.BackgroundBoundName))
+            if (colorset.ClassThemeDefinition.BackgroundAllowed && string.IsNullOrEmpty(colorset.ClassThemeDefinition.BackgroundBoundName))
             {
                 if (componentColorSet.BackgroundBrush != null && componentColorSet.BackgroundBrush.IsValid)
-                    element.SetCurrentValue(classColorset.ClassThemeDefinition.BackgroundDependencyProperty, componentColorSet.BackgroundBrush.Brush);
+                {
+                    //if highlight and selected aren't allowed, then set via local
+                    if (colorset.ClassThemeDefinition.BackgroundAppliedLocal)
+                        element.GetType().GetProperty("Background").SetValue(element, componentColorSet.BackgroundBrush.Brush);
+                    //else set via currentValue
+                    else
+                        element.SetCurrentValue(colorset.ClassThemeDefinition.BackgroundDependencyProperty, componentColorSet.BackgroundBrush.Brush);
+                }
             }
 
-            if (classColorset.ClassThemeDefinition.ForegroundAllowed && string.IsNullOrEmpty(classColorset.ClassThemeDefinition.ForegroundBoundName))
+            if (colorset.ClassThemeDefinition.ForegroundAllowed && string.IsNullOrEmpty(colorset.ClassThemeDefinition.ForegroundBoundName))
             {
                 if (componentColorSet.ForegroundBrush != null && componentColorSet.ForegroundBrush.IsValid)
-                    element.SetCurrentValue(classColorset.ClassThemeDefinition.ForegroundDependencyProperty, componentColorSet.ForegroundBrush.Brush);
+                {
+                    if (colorset.ClassThemeDefinition.ForegroundAppliedLocal)
+                        element.GetType().GetProperty("Foreground").SetValue(element, componentColorSet.ForegroundBrush.Brush);
+                    else
+                        element.SetCurrentValue(colorset.ClassThemeDefinition.ForegroundDependencyProperty, componentColorSet.ForegroundBrush.Brush);
+                }
             }
 
             //re-disable if it was originally disabled

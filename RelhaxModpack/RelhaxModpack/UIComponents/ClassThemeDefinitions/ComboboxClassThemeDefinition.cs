@@ -15,11 +15,13 @@ namespace RelhaxModpack.UIComponents.ClassThemeDefinitions
         //background
         public bool BackgroundAllowed { get; } = true;
         public string BackgroundBoundName { get; } = nameof(BoundUISettings.ComboboxOutsideColorBrush);
+        public bool BackgroundAppliedLocal { get; } = false;
         public DependencyProperty BackgroundDependencyProperty { get; } = null;
 
         //foreground
         public bool ForegroundAllowed { get; } = true;
         public string ForegroundBoundName { get; } = nameof(BoundUISettings.ComboboxInsideColorBrush);
+        public bool ForegroundAppliedLocal { get; } = false;
         public DependencyProperty ForegroundDependencyProperty { get; } = null;
 
         //highlight

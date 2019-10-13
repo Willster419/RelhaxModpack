@@ -15,11 +15,13 @@ namespace RelhaxModpack.UIComponents.ClassThemeDefinitions
         //background
         public bool BackgroundAllowed { get; } = true;
         public string BackgroundBoundName { get; } = string.Empty;
+        public bool BackgroundAppliedLocal { get; } = true;
         public DependencyProperty BackgroundDependencyProperty { get; } = TextBlock.BackgroundProperty;
 
         //foreground
         public bool ForegroundAllowed { get; } = true;
         public string ForegroundBoundName { get; } = string.Empty;
+        public bool ForegroundAppliedLocal { get; } = true;
         public DependencyProperty ForegroundDependencyProperty { get; } = TextBlock.ForegroundProperty;
 
         //highlight

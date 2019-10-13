@@ -14,11 +14,13 @@ namespace RelhaxModpack.UIComponents.ClassThemeDefinitions
         //background
         bool BackgroundAllowed { get; }
         string BackgroundBoundName { get; }
+        bool BackgroundAppliedLocal { get; }
         DependencyProperty BackgroundDependencyProperty { get; }
 
         //foreground
         bool ForegroundAllowed { get; }
         string ForegroundBoundName { get; }
+        bool ForegroundAppliedLocal { get; }
         DependencyProperty ForegroundDependencyProperty { get; }
 
         //highlight
