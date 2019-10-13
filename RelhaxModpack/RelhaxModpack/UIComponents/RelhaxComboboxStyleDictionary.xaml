@@ -252,7 +252,7 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    <Style x:Key="RelhaxComboboxStyle" TargetType="{x:Type ComboBox}">
+    <Style x:Key="RelhaxComboboxStyle" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Background" Value="{Binding Path=(local:BoundUISettings.ComboboxOutsideColorBrush), Converter={StaticResource CustomToBrushConverter}}"/>
         <Setter Property="BorderBrush" Value="{StaticResource ComboBox.Static.Border}"/>
