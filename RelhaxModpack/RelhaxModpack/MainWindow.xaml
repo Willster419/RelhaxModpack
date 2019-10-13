@@ -298,7 +298,7 @@
             <Border HorizontalAlignment="Left" Height="45" Margin="364,0,0,0" VerticalAlignment="Top" Width="150" Tag="LanguageSelectionBorder">
                 <StackPanel Orientation="Vertical">
                     <TextBlock x:Name="LanguageSelectionTextblock" Tag="LanguageSelectionTextBlock" Text="Language Selection" TextWrapping="Wrap" Margin="0,0,0,5"/>
-                    <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="LanguagesSelector" SelectionChanged="OnLanguageSelectionChanged" Margin="0,0,0,0"/>
+                    <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="LanguagesSelector" SelectionChanged="OnLanguageSelectionChanged" Margin="0,0,0,0" Tag="LanguageSelectionCombobox"/>
                 </StackPanel>
             </Border>
             <Button Tag="CancelDownloadButton" x:Name="CancelDownloadInstallButton" Content="Cancel" HorizontalAlignment="Left" Margin="235,14,0,0" VerticalAlignment="Top" Width="118" Height="31" Visibility="Hidden" IsEnabled="False"/>
