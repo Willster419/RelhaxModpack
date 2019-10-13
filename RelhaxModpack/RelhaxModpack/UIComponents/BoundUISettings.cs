@@ -174,16 +174,14 @@ namespace RelhaxModpack.UIComponents
         {
             return new CustomBrush
             {
-                BoundPropertyName = brushToApply.BoundPropertyName,
-                IsBound = brushToApply.IsBound,
                 IsValid = brushToApply.IsValid,
                 Brush = brushToApply.Brush
             };
         }
 
-        public static void SetBrushProperty(CustomBrush customBrush)
+        public static void SetBrushProperty(CustomPropertyBrush customBrush)
         {
-            typeof(BoundUISettings).GetProperty(customBrush.BoundPropertyName).SetValue(null, UpdateBrush(customBrush));
+            typeof(BoundUISettings).GetProperty(customBrush.BrushPropertyName).SetValue(null, UpdateBrush(customBrush));
         }
 
         private static bool IsComponentBound(FrameworkElement element, DependencyProperty property)

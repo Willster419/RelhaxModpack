@@ -136,6 +136,16 @@
     <Compile Include="DatabaseComponents\UserFile.cs" />
     <Compile Include="UIComponents\BoundUISettings.cs" />
     <Compile Include="UIComponents\ClassColorset.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\BorderClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\ButtonClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\CheckboxClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\ComboboxClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\ControlClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\IClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\PanelClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\RadioButtonClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\TabItemClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\TextBlockClassThemeDefinition.cs" />
     <Compile Include="UIComponents\ComponentColorset.cs" />
     <Compile Include="UIComponents\CustomBrush.cs" />
     <Compile Include="UIComponents\CustomBrushConverter.cs" />

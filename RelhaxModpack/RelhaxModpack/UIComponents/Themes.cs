@@ -1,4 +1,5 @@
-﻿using RelhaxModpack.Windows;
+﻿using RelhaxModpack.UIComponents.ClassThemeDefinitions;
+using RelhaxModpack.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,28 +39,24 @@ namespace RelhaxModpack.UIComponents
             },
             ButtonColorset = new ClassColorset()
             {
-                ClassType = typeof(Button),
+                ClassThemeDefinition = new ButtonClassThemeDefinition(),
                 //empty definition(s) to be built at runtime
                 BackgroundBrush = null,
                 ForegroundBrush = null,
                 SelectedBrush = null,
                 HighlightBrush = new CustomBrush()
                 {
-                    IsBound = true,
-                    BoundPropertyName = nameof(BoundUISettings.ButtonHighlightBrush),
                     IsValid = true,
                     Brush = new SolidColorBrush(Color.FromArgb(255, 190, 230, 253))
                 }
             },
             TabItemColorset = new ClassColorset()
             {
-                ClassType = typeof(TabItem),
+                ClassThemeDefinition = new TabItemClassThemeDefinition(),
                 BackgroundBrush = null,
                 ForegroundBrush = null,
                 HighlightBrush = new CustomBrush()
                 {
-                    IsBound = true,
-                    BoundPropertyName = nameof(BoundUISettings.TabItemHighlightBrush),
                     IsValid = true,
                     Brush = new LinearGradientBrush(new GradientStopCollection()
                     {
@@ -73,59 +70,49 @@ namespace RelhaxModpack.UIComponents
                 },
                 SelectedBrush = new CustomBrush()
                 {
-                    IsBound = true,
-                    BoundPropertyName = nameof(BoundUISettings.TabItemSelectedBrush),
                     IsValid = true,
                     Brush = new SolidColorBrush(Colors.White)
                 }
             },
             CheckboxColorset = new ClassColorset()
             {
-                ClassType = typeof(CheckBox),
+                ClassThemeDefinition = new CheckboxClassThemeDefinition(),
                 BackgroundBrush = null,
                 ForegroundBrush = null,
                 HighlightBrush = new CustomBrush()
                 {
-                    IsBound = true,
-                    BoundPropertyName = nameof(BoundUISettings.CheckboxHighlightBrush),
                     IsValid = true,
                     Brush = new SolidColorBrush(Color.FromArgb(255, 243, 249, 255))
                 },
                 SelectedBrush = new CustomBrush()
                 {
-                    IsBound = true,
-                    BoundPropertyName = nameof(BoundUISettings.CheckboxCheckmarkBrush),
                     IsValid = true,
                     Brush = new SolidColorBrush(Color.FromArgb(255, 33, 33, 33))
                 }
             },
             RadioButtonColorset = new ClassColorset()
             {
-                ClassType = typeof(RadioButton),
+                ClassThemeDefinition = new RadioButtonClassThemeDefinition(),
+                //gotten at run time
                 BackgroundBrush = null,
+                //gotten at run time
                 ForegroundBrush = null,
                 HighlightBrush = new CustomBrush()
                 {
-                    IsBound = true,
-                    BoundPropertyName = nameof(BoundUISettings.RadioButtonHighlightBrush),
                     IsValid = true,
                     Brush = new SolidColorBrush(Color.FromArgb(255, 243, 249, 255)),
                 },
                 SelectedBrush = new CustomBrush()
                 {
-                    IsBound = true,
-                    BoundPropertyName = nameof(BoundUISettings.RadioButtonCheckmarkBrush),
                     IsValid = true,
                     Brush = new SolidColorBrush(Color.FromArgb(255, 33, 33, 33)),
                 }
             },
             ComboboxColorset = new ClassColorset()
             {
-                ClassType = typeof(ComboBox),
+                ClassThemeDefinition = new ComboboxClassThemeDefinition(),
                 BackgroundBrush = new CustomBrush()
                 {
-                    IsBound = true,
-                    BoundPropertyName = nameof(BoundUISettings.ComboboxOutsideColorBrush),
                     IsValid = true,
                     Brush = new LinearGradientBrush(new GradientStopCollection()
                     {
@@ -139,15 +126,11 @@ namespace RelhaxModpack.UIComponents
                 },
                 ForegroundBrush = new CustomBrush()
                 {
-                    IsBound = true,
-                    BoundPropertyName = nameof(BoundUISettings.ComboboxInsideColorBrush),
                     IsValid = true,
                     Brush = SystemColors.WindowBrush
                 },
                 HighlightBrush = new CustomBrush()
                 {
-                    IsBound = true,
-                    BoundPropertyName = nameof(BoundUISettings.ComboboxOutsideHighlightBrush),
                     IsValid = true,
                     Brush = new LinearGradientBrush(new GradientStopCollection()
                     {
@@ -162,21 +145,22 @@ namespace RelhaxModpack.UIComponents
                 SelectedBrush = null
             },
             //empty definition to not apply any changes
+            //colorSet object and xml object MUST exist for parsing to work!
             ControlColorset = new ClassColorset()
             {
-                ClassType = typeof(Control)
+                ClassThemeDefinition = new ControlClassThemeDefinition()
             },
             BorderColorset = new ClassColorset()
             {
-                ClassType = typeof(Border)
+                ClassThemeDefinition = new BorderClassThemeDefinition()
             },
             PanelColorset = new ClassColorset()
             {
-                ClassType = typeof(Panel)
+                ClassThemeDefinition = new PanelClassThemeDefinition()
             },
             TextblockColorset = new ClassColorset()
             {
-                ClassType = typeof(TextBlock)
+                ClassThemeDefinition = new TextBlockClassThemeDefinition()
             },
             WindowColorsets = new Dictionary<Type, WindowColorset>()
         };
@@ -220,141 +204,112 @@ namespace RelhaxModpack.UIComponents
             },
             ButtonColorset = new ClassColorset()
             {
-                ClassType = typeof(Button),
+                ClassThemeDefinition = new ButtonClassThemeDefinition(),
                 //empty definition(s)
                 BackgroundBrush = new CustomBrush()
                 {
-                    IsBound = false,
                     IsValid = true,
                     Brush = DarkThemeButton
                 },
                 ForegroundBrush = new CustomBrush()
                 {
-                    IsBound = false,
                     IsValid = true,
                     Brush = DarkThemeTextColor
                 },
                 SelectedBrush = null,
                 HighlightBrush = new CustomBrush()
                 {
-                    IsBound = true,
-                    //this string name will need to link with the property name
-                    BoundPropertyName = nameof(BoundUISettings.ButtonHighlightBrush),
                     IsValid = true,
                     Brush = new SolidColorBrush(Color.FromArgb(255, 134, 134, 134))
                 }
             },
             TabItemColorset = new ClassColorset()
             {
-                ClassType = typeof(TabItem),
+                ClassThemeDefinition = new TabItemClassThemeDefinition(),
                 BackgroundBrush = new CustomBrush()
                 {
-                    IsBound = false,
                     IsValid = true,
                     Brush = DarkThemeBackground
                 },
                 ForegroundBrush = new CustomBrush()
                 {
-                    IsBound = false,
                     IsValid = true,
                     Brush = DarkThemeTextColor
                 },
                 HighlightBrush = new CustomBrush()
                 {
-                    IsBound = true,
-                    BoundPropertyName = nameof(BoundUISettings.TabItemHighlightBrush),
                     IsValid = true,
                     Brush = new SolidColorBrush(Color.FromArgb(255, 134, 134, 134))
                 },
                 SelectedBrush = new CustomBrush()
                 {
-                    IsBound = true,
-                    BoundPropertyName = nameof(BoundUISettings.TabItemSelectedBrush),
                     IsValid = true,
                     Brush = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150))
                 }
             },
             CheckboxColorset = new ClassColorset()
             {
-                ClassType = typeof(CheckBox),
+                ClassThemeDefinition = new CheckboxClassThemeDefinition(),
                 BackgroundBrush = new CustomBrush()
                 {
-                    IsBound = false,
                     IsValid = true,
                     Brush = DarkThemeBackground
                 },
                 ForegroundBrush = new CustomBrush()
                 {
-                    IsBound = false,
                     IsValid = true,
                     Brush = DarkThemeTextColor
                 },
                 HighlightBrush = new CustomBrush()
                 {
-                    IsBound = true,
-                    BoundPropertyName = nameof(BoundUISettings.CheckboxHighlightBrush),
                     IsValid = true,
                     Brush = new SolidColorBrush(Color.FromArgb(255, 134, 134, 134))
                 },
                 SelectedBrush = new CustomBrush()
                 {
-                    IsBound = true,
-                    BoundPropertyName = nameof(BoundUISettings.CheckboxCheckmarkBrush),
                     IsValid = true,
                     Brush = new SolidColorBrush(Colors.White)
                 }
             },
             RadioButtonColorset = new ClassColorset()
             {
-                ClassType = typeof(RadioButton),
+                ClassThemeDefinition = new RadioButtonClassThemeDefinition(),
                 BackgroundBrush = new CustomBrush()
                 {
-                    IsBound = false,
                     IsValid = true,
                     Brush = DarkThemeBackground
                 },
                 ForegroundBrush = new CustomBrush()
                 {
-                    IsBound = false,
                     IsValid = true,
                     Brush = DarkThemeTextColor
                 },
                 HighlightBrush = new CustomBrush()
                 {
-                    IsBound = true,
-                    BoundPropertyName = nameof(BoundUISettings.RadioButtonHighlightBrush),
                     IsValid = true,
                     Brush = new SolidColorBrush(Color.FromArgb(255, 134, 134, 134)),
                 },
                 SelectedBrush = new CustomBrush()
                 {
-                    IsBound = true,
-                    BoundPropertyName = nameof(BoundUISettings.RadioButtonCheckmarkBrush),
                     IsValid = true,
                     Brush = new SolidColorBrush(Colors.White),
                 }
             },
             ComboboxColorset = new ClassColorset()
             {
-                ClassType = typeof(ComboBox),
+                ClassThemeDefinition = new ComboboxClassThemeDefinition(),
                 BackgroundBrush = new CustomBrush()
                 {
-                    IsBound = true,
-                    BoundPropertyName = nameof(BoundUISettings.ComboboxOutsideColorBrush),
                     IsValid = true,
                     Brush = new SolidColorBrush(Color.FromArgb(255, 134, 134, 134))
                 },
                 ForegroundBrush = new CustomBrush()
                 {
-                    IsBound = true,
-                    BoundPropertyName = nameof(BoundUISettings.ComboboxInsideColorBrush),
                     IsValid = true,
                     Brush = new SolidColorBrush(Colors.Gray)
                 },
                 HighlightBrush = new CustomBrush()
                 {
-                    IsBound = true,
-                    BoundPropertyName = nameof(BoundUISettings.ComboboxOutsideHighlightBrush),
                     IsValid = true,
                     Brush = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150))
                 },
@@ -362,52 +317,46 @@ namespace RelhaxModpack.UIComponents
             },
             PanelColorset = new ClassColorset()
             {
-                ClassType = typeof(Panel),
+                ClassThemeDefinition = new PanelClassThemeDefinition(),
                 BackgroundBrush = new CustomBrush()
                 {
-                    IsBound = false,
                     IsValid = true,
                     Brush = DarkThemeBackground
                 }
             },
             BorderColorset = new ClassColorset()
             {
-                ClassType = typeof(Border),
+                ClassThemeDefinition = new BorderClassThemeDefinition(),
                 BackgroundBrush = new CustomBrush()
                 {
-                    IsBound = false,
                     IsValid = true,
                     Brush = DarkThemeBackground
                 }
             },
             TextblockColorset = new ClassColorset()
             {
-                ClassType = typeof(TextBlock),
+                ClassThemeDefinition = new TextBlockClassThemeDefinition(),
                 BackgroundBrush = new CustomBrush()
                 {
-                    IsBound = false,
                     IsValid = true,
                     Brush = DarkThemeBackground
                 },
                 ForegroundBrush = new CustomBrush()
                 {
-                    IsBound = false,
                     IsValid = true,
                     Brush = DarkThemeTextColor
                 }
             },
             ControlColorset = new ClassColorset()
             {
-                ClassType = typeof(Control),
+                ClassThemeDefinition = new ControlClassThemeDefinition(),
                 BackgroundBrush = new CustomBrush()
                 {
-                    IsBound = false,
                     IsValid = true,
                     Brush = DarkThemeBackground
                 },
                 ForegroundBrush = new CustomBrush()
                 {
-                    IsBound = false,
                     IsValid = true,
                     Brush = DarkThemeTextColor
                 }
@@ -420,7 +369,6 @@ namespace RelhaxModpack.UIComponents
                         WindowType = typeof(MainWindow),
                         BackgroundBrush = new CustomBrush()
                         {
-                            IsBound = false,
                             IsValid = true,
                             Brush = DarkThemeBackground
                         },
@@ -433,7 +381,6 @@ namespace RelhaxModpack.UIComponents
                                     ForegroundBrush = null,
                                     BackgroundBrush = new CustomBrush()
                                     {
-                                        IsBound = false,
                                         IsValid = true,
                                         Brush = DarkThemeImageButtonBackground
                                     }
@@ -446,7 +393,6 @@ namespace RelhaxModpack.UIComponents
                                     ForegroundBrush = null,
                                     BackgroundBrush = new CustomBrush()
                                     {
-                                        IsBound = false,
                                         IsValid = true,
                                         Brush = DarkThemeImageButtonBackground
                                     }
@@ -459,7 +405,6 @@ namespace RelhaxModpack.UIComponents
                                     ForegroundBrush = null,
                                     BackgroundBrush = new CustomBrush()
                                     {
-                                        IsBound = false,
                                         IsValid = true,
                                         Brush = DarkThemeImageButtonBackground
                                     }
@@ -472,7 +417,6 @@ namespace RelhaxModpack.UIComponents
                                     ForegroundBrush = null,
                                     BackgroundBrush = new CustomBrush()
                                     {
-                                        IsBound = false,
                                         IsValid = true,
                                         Brush = DarkThemeImageButtonBackground
                                     }
@@ -487,7 +431,6 @@ namespace RelhaxModpack.UIComponents
                         WindowType = typeof(Diagnostics),
                         BackgroundBrush = new CustomBrush()
                         {
-                            IsBound = false,
                             IsValid = true,
                             Brush = DarkThemeBackground
                         }

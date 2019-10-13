@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using RelhaxModpack.UIComponents.ClassThemeDefinitions;
 
 namespace RelhaxModpack.UIComponents
 {
     public class ClassColorset
     {
-        public Type ClassType { get; set; } = null;
+        public IClassThemeDefinition ClassThemeDefinition { get; set; } = null;
 
         public CustomBrush BackgroundBrush { get; set; } = null;
 
@@ -19,19 +20,19 @@ namespace RelhaxModpack.UIComponents
 
         public CustomBrush SelectedBrush { get; set; } = null;
 
-        public List<CustomBrush> BoundedBrushes
+        public List<CustomPropertyBrush> BoundedBrushes
         {
             get
             {
-                List <CustomBrush> list = new List<CustomBrush>();
-                if (BackgroundBrush != null && BackgroundBrush.IsValid && BackgroundBrush.IsBound)
-                    list.Add(BackgroundBrush);
-                if (ForegroundBrush != null && ForegroundBrush.IsValid && ForegroundBrush.IsBound)
-                    list.Add(ForegroundBrush);
-                if (HighlightBrush != null && HighlightBrush.IsValid && HighlightBrush.IsBound)
-                    list.Add(HighlightBrush);
-                if (SelectedBrush != null && SelectedBrush.IsValid && SelectedBrush.IsBound)
-                    list.Add(SelectedBrush);
+                List <CustomPropertyBrush> list = new List<CustomPropertyBrush>();
+                if (BackgroundBrush != null && BackgroundBrush.IsValid && !string.IsNullOrEmpty(ClassThemeDefinition.BackgroundBoundName))
+                    list.Add(new CustomPropertyBrush() {IsValid=BackgroundBrush.IsValid, Brush=BackgroundBrush.Brush, BrushPropertyName = ClassThemeDefinition.BackgroundBoundName });
+                if (ForegroundBrush != null && ForegroundBrush.IsValid && !string.IsNullOrEmpty(ClassThemeDefinition.ForegroundBoundName))
+                    list.Add(new CustomPropertyBrush() { IsValid = ForegroundBrush.IsValid, Brush = ForegroundBrush.Brush, BrushPropertyName = ClassThemeDefinition.ForegroundBoundName });
+                if (HighlightBrush != null && HighlightBrush.IsValid && !string.IsNullOrEmpty(ClassThemeDefinition.HighlightBoundName))
+                    list.Add(new CustomPropertyBrush() { IsValid = HighlightBrush.IsValid, Brush = HighlightBrush.Brush, BrushPropertyName = ClassThemeDefinition.HighlightBoundName });
+                if (SelectedBrush != null && SelectedBrush.IsValid && !string.IsNullOrEmpty(ClassThemeDefinition.SelectBoundName))
+                    list.Add(new CustomPropertyBrush() { IsValid = SelectedBrush.IsValid, Brush = SelectedBrush.Brush, BrushPropertyName = ClassThemeDefinition.SelectBoundName });
                 return list;
             }
         }

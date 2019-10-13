@@ -3910,11 +3910,6 @@
             </summary>
             <remarks>See CustomSettings array for list of custom colors</remarks>
         </member>
-        <member name="F:RelhaxModpack.UISettings.UIDocument">
-            <summary>
-            The parsed XML document containing the xml color settings
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.UISettings.NotSelectedTabColor">
             <summary>
             The color to use in the selection list for a tab which is not selected
@@ -3927,6 +3922,11 @@
             Applies custom color settings to a window
             </summary>
             <param name="window">The Window object to apply color settings to</param>
+        </member>
+        <member name="M:RelhaxModpack.UISettings.LoadSettingsFile">
+            <summary>
+            Load the custom color definitions from XML
+            </summary>
         </member>
         <member name="M:RelhaxModpack.UISettings.ParseColorFromString(System.String,System.Windows.Media.Color@)">
             <summary>
@@ -3942,17 +3942,6 @@
             Verifies that the points for applying color gradient directions are within 0-1
             </summary>
             <param name="p">The color gradient direction to verify</param>
-        </member>
-        <member name="M:RelhaxModpack.UISettings.ApplyCustomThemeColorsettingsV1(System.Windows.Window)">
-            <summary>
-            Applies color settings to a window of Xml document format 1.0
-            </summary>
-            <param name="window">The window to apply changes to</param>
-        </member>
-        <member name="M:RelhaxModpack.UISettings.LoadSettings">
-            <summary>
-            Load the custom color definitions from XML
-            </summary>
         </member>
         <member name="M:RelhaxModpack.UISettings.DumpAllWindowColorSettingsToFile(System.String,RelhaxModpack.MainWindow)">
             <summary>

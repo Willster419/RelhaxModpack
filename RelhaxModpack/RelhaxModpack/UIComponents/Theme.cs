@@ -44,11 +44,11 @@ namespace RelhaxModpack.UIComponents
 
         public Dictionary<Type, WindowColorset> WindowColorsets { get; set; } = null;
         
-        public List<CustomBrush> BoundedClassColorsetBrushes
+        public List<CustomPropertyBrush> BoundedClassColorsetBrushes
         {
             get
             {
-                List<CustomBrush> list = new List<CustomBrush>();
+                List<CustomPropertyBrush> list = new List<CustomPropertyBrush>();
                 list.AddRange(RadioButtonColorset.BoundedBrushes);
                 list.AddRange(CheckboxColorset.BoundedBrushes);
                 list.AddRange(ButtonColorset.BoundedBrushes);

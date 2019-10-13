@@ -9,12 +9,13 @@ namespace RelhaxModpack.UIComponents
 {
     public class CustomBrush
     {
-        public Brush Brush = null;
+        public Brush Brush { get; set; } = null;
 
-        public bool IsValid = false;
+        public bool IsValid { get; set; } = false;
+    }
 
-        public bool IsBound = false;
-
-        public string BoundPropertyName = string.Empty;
+    public class CustomPropertyBrush : CustomBrush
+    {
+        public string BrushPropertyName { get; set; } = string.Empty;
     }
 }

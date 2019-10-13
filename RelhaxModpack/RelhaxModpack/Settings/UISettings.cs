@@ -15,6 +15,7 @@ using System.Reflection;
 using System.ComponentModel;
 using System.Windows.Data;
 using RelhaxModpack.UIComponents;
+using RelhaxModpack.UIComponents.ClassThemeDefinitions;
 
 namespace RelhaxModpack
 {
@@ -43,7 +44,7 @@ namespace RelhaxModpack
             set
             {
                 currentTheme = value;
-                foreach(CustomBrush customBrush in currentTheme.BoundedClassColorsetBrushes)
+                foreach(CustomPropertyBrush customBrush in currentTheme.BoundedClassColorsetBrushes)
                 {
                     BoundUISettings.SetBrushProperty(customBrush);
                 }
@@ -112,7 +113,6 @@ namespace RelhaxModpack
                     WindowType = window.GetType(),
                     BackgroundBrush = new CustomBrush()
                     {
-                        IsBound = false,
                         IsValid = true,
                         Brush = window.Background
                     },
@@ -188,89 +188,19 @@ namespace RelhaxModpack
                 if (componentWasDisabled)
                     element.IsEnabled = true;
 
-                ClassColorset colorset = null;
-                if (element is RadioButton radioButton)
+                ClassColorset colorset = DetermineClassColorSet(element);
+
+                if (colorset.ClassThemeDefinition.BackgroundAllowed && string.IsNullOrEmpty(colorset.ClassThemeDefinition.BackgroundBoundName))
                 {
-                    //button.SetCurrentValue(Button.BackgroundProperty, OriginalColors[element.Tag as string].BackgroundBrush);
-                    colorset = CurrentTheme.CheckboxColorset;
-
-                    if (colorset.BackgroundBrush != null && colorset.BackgroundBrush.IsValid && !colorset.BackgroundBrush.IsBound)
-                        radioButton.SetCurrentValue(RadioButton.BackgroundProperty, colorset.BackgroundBrush.Brush);
-
-                    if (colorset.ForegroundBrush != null && colorset.ForegroundBrush.IsValid && !colorset.ForegroundBrush.IsBound)
-                        radioButton.SetCurrentValue(RadioButton.ForegroundProperty, colorset.ForegroundBrush.Brush);
+                    if (colorset.BackgroundBrush != null && colorset.BackgroundBrush.IsValid)
+                        element.SetCurrentValue(colorset.ClassThemeDefinition.BackgroundDependencyProperty, colorset.BackgroundBrush.Brush);
                 }
-                else if (element is CheckBox checkbox)
+
+                if (colorset.ClassThemeDefinition.ForegroundAllowed && string.IsNullOrEmpty(colorset.ClassThemeDefinition.ForegroundBoundName))
                 {
-                    colorset = CurrentTheme.CheckboxColorset;
-
-                    if (colorset.BackgroundBrush != null && colorset.BackgroundBrush.IsValid && !colorset.BackgroundBrush.IsBound)
-                        checkbox.SetCurrentValue(CheckBox.BackgroundProperty, colorset.BackgroundBrush.Brush);
-
-                    if (colorset.ForegroundBrush != null && colorset.ForegroundBrush.IsValid && !colorset.ForegroundBrush.IsBound)
-                        checkbox.SetCurrentValue(CheckBox.ForegroundProperty, colorset.ForegroundBrush.Brush);
+                    if (colorset.ForegroundBrush != null && colorset.ForegroundBrush.IsValid)
+                        element.SetCurrentValue(colorset.ClassThemeDefinition.ForegroundDependencyProperty, colorset.ForegroundBrush.Brush);
                 }
-                else if (element is Button button)
-                {
-                    colorset = CurrentTheme.ButtonColorset;
-
-                    if (colorset.BackgroundBrush != null && colorset.BackgroundBrush.IsValid && !colorset.BackgroundBrush.IsBound)
-                        button.SetCurrentValue(Button.BackgroundProperty, colorset.BackgroundBrush.Brush);
-
-                    if (colorset.ForegroundBrush != null && colorset.ForegroundBrush.IsValid && !colorset.ForegroundBrush.IsBound)
-                        button.SetCurrentValue(Button.ForegroundProperty, colorset.ForegroundBrush.Brush);
-                }
-                else if (element is TabItem tabItem)
-                {
-                    colorset = CurrentTheme.TabItemColorset;
-
-                    if (colorset.BackgroundBrush != null && colorset.BackgroundBrush.IsValid && !colorset.BackgroundBrush.IsBound)
-                        tabItem.SetCurrentValue(TabItem.BackgroundProperty, colorset.BackgroundBrush.Brush);
-
-                    if (colorset.ForegroundBrush != null && colorset.ForegroundBrush.IsValid && !colorset.ForegroundBrush.IsBound)
-                        tabItem.SetCurrentValue(TabItem.ForegroundProperty, colorset.ForegroundBrush.Brush);
-                }
-                else if (element is ComboBox combobox)
-                {
-                    colorset = CurrentTheme.ComboboxColorset;
-                    //nothing to apply, it's all bounded
-                }
-                else if (element is Panel panel)
-                {
-                    colorset = CurrentTheme.PanelColorset;
-
-                    if (colorset.BackgroundBrush != null && colorset.BackgroundBrush.IsValid && !colorset.BackgroundBrush.IsBound)
-                        panel.SetCurrentValue(Panel.BackgroundProperty, colorset.BackgroundBrush.Brush);
-                }
-                else if (element is TextBlock textblock)
-                {
-                    colorset = CurrentTheme.TextblockColorset;
-
-                    if (colorset.BackgroundBrush != null && colorset.BackgroundBrush.IsValid && !colorset.BackgroundBrush.IsBound)
-                        textblock.SetCurrentValue(TextBlock.BackgroundProperty, colorset.BackgroundBrush.Brush);
-
-                    if (colorset.ForegroundBrush != null && colorset.ForegroundBrush.IsValid && !colorset.ForegroundBrush.IsBound)
-                        textblock.SetCurrentValue(TextBlock.ForegroundProperty, colorset.ForegroundBrush.Brush);
-                }
-                else if (element is Border border)
-                {
-                    colorset = CurrentTheme.BorderColorset;
-
-                    if (colorset.BackgroundBrush != null && colorset.BackgroundBrush.IsValid && !colorset.BackgroundBrush.IsBound)
-                        border.SetCurrentValue(Border.BackgroundProperty, colorset.BackgroundBrush.Brush);
-                }
-                else if (element is Control control)
-                {
-                    colorset = CurrentTheme.ControlColorset;
-
-                    if (colorset.BackgroundBrush != null && colorset.BackgroundBrush.IsValid && !colorset.BackgroundBrush.IsBound)
-                        control.SetCurrentValue(Control.BackgroundProperty, colorset.BackgroundBrush.Brush);
-
-                    if (colorset.ForegroundBrush != null && colorset.ForegroundBrush.IsValid && !colorset.ForegroundBrush.IsBound)
-                        control.SetCurrentValue(Control.ForegroundProperty, colorset.ForegroundBrush.Brush);
-                }
-                else
-                    throw new BadMemeException("what the hell is this control");
 
                 //re-disable if it was originally disabled
                 if (componentWasDisabled)
@@ -301,72 +231,75 @@ namespace RelhaxModpack
             }
         }
 
-        private static void ApplyThemeToComponent(FrameworkElement element, ComponentColorset colorset)
+        private static void ApplyThemeToComponent(FrameworkElement element, ComponentColorset componentColorSet)
         {
-            if (element is RadioButton radioButton)
-            {
-                if (colorset.BackgroundBrush != null && colorset.BackgroundBrush.IsValid && !colorset.BackgroundBrush.IsBound)
-                    radioButton.SetCurrentValue(RadioButton.BackgroundProperty, colorset.BackgroundBrush.Brush);
+            //don't apply the background or foreground if the component is disabled. so, if it is disabled, enable it, apply the theme, then disabled it again
+            bool componentWasDisabled = !element.IsEnabled;
+            if (componentWasDisabled)
+                element.IsEnabled = true;
 
-                if (colorset.ForegroundBrush != null && colorset.ForegroundBrush.IsValid && !colorset.ForegroundBrush.IsBound)
-                    radioButton.SetCurrentValue(RadioButton.ForegroundProperty, colorset.ForegroundBrush.Brush);
-            }
-            else if (element is CheckBox checkbox)
-            {
-                if (colorset.BackgroundBrush != null && colorset.BackgroundBrush.IsValid && !colorset.BackgroundBrush.IsBound)
-                    checkbox.SetCurrentValue(CheckBox.BackgroundProperty, colorset.BackgroundBrush.Brush);
+            ClassColorset classColorset = DetermineClassColorSet(element);
 
-                if (colorset.ForegroundBrush != null && colorset.ForegroundBrush.IsValid && !colorset.ForegroundBrush.IsBound)
-                    checkbox.SetCurrentValue(CheckBox.ForegroundProperty, colorset.ForegroundBrush.Brush);
-            }
-            else if (element is Button button)
+            if (classColorset.ClassThemeDefinition.BackgroundAllowed && string.IsNullOrEmpty(classColorset.ClassThemeDefinition.BackgroundBoundName))
             {
-                if (colorset.BackgroundBrush != null && colorset.BackgroundBrush.IsValid && !colorset.BackgroundBrush.IsBound)
-                    button.SetCurrentValue(Button.BackgroundProperty, colorset.BackgroundBrush.Brush);
+                if (componentColorSet.BackgroundBrush != null && componentColorSet.BackgroundBrush.IsValid)
+                    element.SetCurrentValue(classColorset.ClassThemeDefinition.BackgroundDependencyProperty, componentColorSet.BackgroundBrush.Brush);
+            }
 
-                if (colorset.ForegroundBrush != null && colorset.ForegroundBrush.IsValid && !colorset.ForegroundBrush.IsBound)
-                    button.SetCurrentValue(Button.ForegroundProperty, colorset.ForegroundBrush.Brush);
-            }
-            else if (element is TabItem tabItem)
+            if (classColorset.ClassThemeDefinition.ForegroundAllowed && string.IsNullOrEmpty(classColorset.ClassThemeDefinition.ForegroundBoundName))
             {
-                if (colorset.BackgroundBrush != null && colorset.BackgroundBrush.IsValid && !colorset.BackgroundBrush.IsBound)
-                    tabItem.SetCurrentValue(TabItem.BackgroundProperty, colorset.BackgroundBrush.Brush);
+                if (componentColorSet.ForegroundBrush != null && componentColorSet.ForegroundBrush.IsValid)
+                    element.SetCurrentValue(classColorset.ClassThemeDefinition.ForegroundDependencyProperty, componentColorSet.ForegroundBrush.Brush);
+            }
 
-                if (colorset.ForegroundBrush != null && colorset.ForegroundBrush.IsValid && !colorset.ForegroundBrush.IsBound)
-                    tabItem.SetCurrentValue(TabItem.ForegroundProperty, colorset.ForegroundBrush.Brush);
-            }
-            else if (element is ComboBox combobox)
+            //re-disable if it was originally disabled
+            if (componentWasDisabled)
+                element.IsEnabled = false;
+        }
+
+        private static ClassColorset DetermineClassColorSet(FrameworkElement element)
+        {
+            ClassColorset colorset = null;
+            if (element is RadioButton)
             {
+                colorset = CurrentTheme.CheckboxColorset;
+            }
+            else if (element is CheckBox)
+            {
+                colorset = CurrentTheme.CheckboxColorset;
+            }
+            else if (element is Button)
+            {
+                colorset = CurrentTheme.ButtonColorset;
+            }
+            else if (element is TabItem)
+            {
+                colorset = CurrentTheme.TabItemColorset;
+            }
+            else if (element is ComboBox)
+            {
+                colorset = CurrentTheme.ComboboxColorset;
                 //nothing to apply, it's all bounded
             }
-            else if (element is Panel panel)
+            else if (element is Panel)
             {
-                if (colorset.BackgroundBrush != null && colorset.BackgroundBrush.IsValid && !colorset.BackgroundBrush.IsBound)
-                    panel.SetCurrentValue(Panel.BackgroundProperty, colorset.BackgroundBrush.Brush);
+                colorset = CurrentTheme.PanelColorset;
             }
-            else if (element is TextBlock textblock)
+            else if (element is TextBlock)
             {
-                if (colorset.BackgroundBrush != null && colorset.BackgroundBrush.IsValid && !colorset.BackgroundBrush.IsBound)
-                    textblock.SetCurrentValue(TextBlock.BackgroundProperty, colorset.BackgroundBrush.Brush);
-
-                if (colorset.ForegroundBrush != null && colorset.ForegroundBrush.IsValid && !colorset.ForegroundBrush.IsBound)
-                    textblock.SetCurrentValue(TextBlock.ForegroundProperty, colorset.ForegroundBrush.Brush);
+                colorset = CurrentTheme.TextblockColorset;
             }
-            else if (element is Border border)
+            else if (element is Border)
             {
-                if (colorset.BackgroundBrush != null && colorset.BackgroundBrush.IsValid && !colorset.BackgroundBrush.IsBound)
-                    border.SetCurrentValue(Border.BackgroundProperty, colorset.BackgroundBrush.Brush);
+                colorset = CurrentTheme.BorderColorset;
             }
-            else if (element is Control control)
+            else if (element is Control)
             {
-                if (colorset.BackgroundBrush != null && colorset.BackgroundBrush.IsValid && !colorset.BackgroundBrush.IsBound)
-                    control.SetCurrentValue(Control.BackgroundProperty, colorset.BackgroundBrush.Brush);
-
-                if (colorset.ForegroundBrush != null && colorset.ForegroundBrush.IsValid && !colorset.ForegroundBrush.IsBound)
-                    control.SetCurrentValue(Control.ForegroundProperty, colorset.ForegroundBrush.Brush);
+                colorset = CurrentTheme.ControlColorset;
             }
             else
                 throw new BadMemeException("what the hell is this control");
+            return colorset;
         }
         #endregion
 
@@ -383,13 +316,11 @@ namespace RelhaxModpack
             Button b = mainWindowComponents.First( element => element is Button) as Button;
             Themes.Default.ButtonColorset.BackgroundBrush = new CustomBrush()
             {
-                IsBound = false,
                 IsValid = true,
                 Brush = b.Background
             };
             Themes.Default.ButtonColorset.ForegroundBrush = new CustomBrush()
             {
-                IsBound = false,
                 IsValid = true,
                 Brush = b.Foreground
             };
@@ -397,13 +328,11 @@ namespace RelhaxModpack
             TabItem ti = mainWindowComponents.First(element => element is TabItem) as TabItem;
             Themes.Default.TabItemColorset.BackgroundBrush = new CustomBrush()
             {
-                IsBound = false,
                 IsValid = true,
                 Brush = ti.Background
             };
             Themes.Default.TabItemColorset.ForegroundBrush = new CustomBrush()
             {
-                IsBound = false,
                 IsValid = true,
                 Brush = ti.Foreground
             };
@@ -411,13 +340,11 @@ namespace RelhaxModpack
             CheckBox cb = mainWindowComponents.First(element => element is CheckBox) as CheckBox;
             Themes.Default.CheckboxColorset.BackgroundBrush = new CustomBrush()
             {
-                IsBound = false,
                 IsValid = true,
                 Brush = cb.Background
             };
             Themes.Default.CheckboxColorset.ForegroundBrush = new CustomBrush()
             {
-                IsBound = false,
                 IsValid = true,
                 Brush = cb.Foreground
             };
@@ -425,13 +352,11 @@ namespace RelhaxModpack
             RadioButton rb = mainWindowComponents.First(element => element is RadioButton) as RadioButton;
             Themes.Default.RadioButtonColorset.BackgroundBrush = new CustomBrush()
             {
-                IsBound = false,
                 IsValid = true,
                 Brush = rb.Background
             };
             Themes.Default.RadioButtonColorset.ForegroundBrush = new CustomBrush()
             {
-                IsBound = false,
                 IsValid = true,
                 Brush = rb.Foreground
             };
@@ -439,13 +364,11 @@ namespace RelhaxModpack
             TextBlock textBlock = mainWindowComponents.First(element => element is TextBlock) as TextBlock;
             Themes.Default.TextblockColorset.BackgroundBrush = new CustomBrush()
             {
-                IsBound = false,
                 IsValid = true,
                 Brush = textBlock.Background
             };
             Themes.Default.TextblockColorset.ForegroundBrush = new CustomBrush()
             {
-                IsBound = false,
                 IsValid = true,
                 Brush = textBlock.Foreground
             };
@@ -453,7 +376,6 @@ namespace RelhaxModpack
             Border border = mainWindowComponents.First(element => element is Border) as Border;
             Themes.Default.BorderColorset.BackgroundBrush = new CustomBrush()
             {
-                IsBound = false,
                 IsValid = true,
                 Brush = border.Background
             };
@@ -461,7 +383,6 @@ namespace RelhaxModpack
             Panel panel = mainWindowComponents.First(element => element is Panel) as Panel;
             Themes.Default.PanelColorset.BackgroundBrush = new CustomBrush()
             {
-                IsBound = false,
                 IsValid = true,
                 Brush = panel.Background
             };
@@ -580,228 +501,174 @@ namespace RelhaxModpack
             {
                 case "1.0":
                     Logging.Info("parsing custom color instances file using V1 parse method");
-                    ApplyCustomColorSettingsV1();
-                    break;
+                    return LoadCustomThemeV1(loadedDoc);
                 default:
                     //unknown
                     Logging.Error("Unknown format string or not supported: {0}", parsedFormatVersion);
                     return false;
             }
-            Logging.Info("Custom color instances loaded");
+        }
+
+        private static bool LoadCustomThemeV1(XmlDocument doc)
+        {
+            Theme customThemeToLoad = new Theme();
+
+            //load global brushes
+            List<PropertyInfo> customBrushes = CurrentTheme.GetType().GetProperties().Where(prop => prop.PropertyType.Equals(typeof(CustomBrush))).ToList();
+            foreach (PropertyInfo property in customBrushes)
+            {
+                XmlNode globalBrush = XmlUtils.GetXmlNodeFromXPath(doc, string.Format("//{0}/GlobalCustomBrushes/{1}", Settings.UISettingsColorFile, property.Name));
+                if(globalBrush == null)
+                {
+                    Logging.Error("failed to get brush setting for global custom brush {0}", property.Name);
+                    return false;
+                }
+                if (ApplyCustomThemeBrushSettings(property.Name,property.Name,globalBrush as XmlElement, out Brush brush))
+                {
+                    CustomBrush customBrush = new CustomBrush()
+                    {
+                        IsValid = true,
+                        Brush = brush
+                    };
+                    property.SetValue(customThemeToLoad, customBrush);
+                }
+                else
+                {
+                    Logging.Error("failed to parse brush setting for global custom brush {0}", property.Name);
+                    return false;
+                }
+            }
+
+            //load classColorset brushes
+            List<PropertyInfo> classColorsets = CurrentTheme.GetType().GetProperties().Where(prop => prop.PropertyType.Equals(typeof(ClassColorset))).ToList();
+            foreach (PropertyInfo property in customBrushes)
+            {
+                XmlElement classColorsetXmlElement = XmlUtils.GetXmlNodeFromXPath(doc, string.Format("//{0}/ClassColorsets/{1}", Settings.UISettingsColorFile, property.Name)) as XmlElement;
+                if (classColorsetXmlElement == null)
+                {
+                    Logging.Error("failed to get brush setting for global custom brush {0}", property.Name);
+                    return false;
+                }
+                if(ApplyCustomThemeClassColorsetBrushSettings(classColorsetXmlElement, out ClassColorset classColorset))
+                {
+                    property.SetValue(customThemeToLoad, classColorset);
+                }
+                else
+                {
+                    Logging.Error("failed to parse brush setting for class definition brush {0}", property.Name);
+                    return false;
+                }
+            }
+
+            //load windowColorset brushes
+
+
+            Themes.Custom = customThemeToLoad;
             return true;
         }
 
-        private static void ApplyCustomColorSettingsV1()
+        private static bool ApplyCustomThemeClassColorsetBrushSettings(XmlElement classColorsetXmlElement, out ClassColorset classColorset)
         {
-            for (int i = 0; i < CustomColorSettings.Count(); i++)
+            classColorset = new ClassColorset();
+
+            XmlElement customBrushElement = null;
+            string customBrushToApply = string.Empty;
+            bool parsingSuccess = true;
+
+            //get the class type
+            string classType = classColorsetXmlElement.Attributes["ComponentType"].Value;
+            switch(classType)
             {
-                CustomBrushSetting customBrush = CustomColorSettings[i];
-                string instanceName = customBrush.SettingName;
-                string customColorSettingXpath = string.Format("//{0}/{1}", Settings.UISettingsColorFile, instanceName);
-                Logging.Debug("using xpath {0} to set color of custom property {1}", customColorSettingXpath, instanceName);
-                XmlNode customColorNode = XmlUtils.GetXmlNodeFromXPath(UIDocument, customColorSettingXpath);
-                if (customColorNode == null)
-                {
-                    Logging.Info("custom color instance {0} not defined, skipping", instanceName);
-                    continue;
-                }
-                if (ApplyCustomThemeBrushSettings(instanceName, instanceName, customColorNode, out Brush customBrushOut))
-                {
-                    //customBrush.Brush = customBrushOut;
-                    SetBoundedBrushProperty(customBrush, customBrushOut);
-                }
-                else
-                {
-                    Logging.Warning("failed to apply color settings for custom instance {0}", instanceName);
-                    continue;
-                }
+                case "RadioButton":
+                    classColorset.ClassThemeDefinition = new RadioButtonClassThemeDefinition();
+                    break;
+                case "CheckBox":
+                    classColorset.ClassThemeDefinition = new CheckboxClassThemeDefinition();
+                    break;
+                case "Button":
+                    classColorset.ClassThemeDefinition = new ButtonClassThemeDefinition();
+                    break;
+                case "TabItem":
+                    classColorset.ClassThemeDefinition = new TabItemClassThemeDefinition();
+                    break;
+                case "ComboBox":
+                    classColorset.ClassThemeDefinition = new ComboboxClassThemeDefinition();
+                    break;
+                case "Panel":
+                    classColorset.ClassThemeDefinition = new PanelClassThemeDefinition();
+                    break;
+                case "TextBlock":
+                    classColorset.ClassThemeDefinition = new TextBlockClassThemeDefinition();
+                    break;
+                case "Border":
+                    classColorset.ClassThemeDefinition = new BorderClassThemeDefinition();
+                    break;
+                case "Control":
+                    classColorset.ClassThemeDefinition = new ControlClassThemeDefinition();
+                    break;
+                default:
+                    Logging.Error("Unknown theme class control type: {0}", classType);
+                    return false;
             }
+
+            //background
+            customBrushToApply = nameof(classColorset.BackgroundBrush);
+            customBrushElement = classColorsetXmlElement.SelectSingleNode(customBrushToApply) as XmlElement;
+            if (!ApplyCustomBrushToClassComponent(customBrushToApply, customBrushElement, out CustomBrush rbcustomBrushBackground))
+                parsingSuccess = false;
+            classColorset.BackgroundBrush = rbcustomBrushBackground;
+
+            //foreground
+            customBrushToApply = nameof(classColorset.ForegroundBrush);
+            customBrushElement = classColorsetXmlElement.SelectSingleNode(customBrushToApply) as XmlElement;
+            if (!ApplyCustomBrushToClassComponent(customBrushToApply, customBrushElement, out CustomBrush rbcustomBrushForeground))
+                parsingSuccess = false;
+            classColorset.ForegroundBrush = rbcustomBrushForeground;
+
+            //highlight
+            customBrushToApply = nameof(classColorset.HighlightBrush);
+            customBrushElement = classColorsetXmlElement.SelectSingleNode(customBrushToApply) as XmlElement;
+            if (!ApplyCustomBrushToClassComponent(customBrushToApply, customBrushElement, out CustomBrush rbcustomBrushHighlight))
+                parsingSuccess = false;
+            classColorset.HighlightBrush = rbcustomBrushHighlight;
+
+            //selected
+            customBrushToApply = nameof(classColorset.SelectedBrush);
+            customBrushElement = classColorsetXmlElement.SelectSingleNode(customBrushToApply) as XmlElement;
+            if (!ApplyCustomBrushToClassComponent(customBrushToApply, customBrushElement, out CustomBrush rbcustomBrushSelect))
+                parsingSuccess = false;
+            classColorset.SelectedBrush = rbcustomBrushSelect;
+
+            return parsingSuccess;
         }
 
-        /// <summary>
-        /// Tries to parse a hex code color to a color object
-        /// </summary>
-        /// <param name="color">The string hex code for the color to use</param>
-        /// <param name="outColor">The corresponding color object</param>
-        /// <returns>True if color parsing was successful, a default color otherwise</returns>
-        /// <remarks>Uses the 32bit color codes for generation (Alpha, Red, Green, Blue) Alpha is transparency</remarks>
-        public static bool ParseColorFromString(string color, out Color outColor)
+        private static bool ApplyCustomBrushToClassComponent(string customBrushName, XmlElement classColorsetxmlBrushElement, out CustomBrush customBrush)
         {
-            outColor = new Color();
-            string aPart = string.Empty;
-            string rPart = string.Empty;
-            string gPart = string.Empty;
-            string bPart = string.Empty;
-            try
+            customBrush = null;
+
+            if (classColorsetxmlBrushElement == null)
             {
-                aPart = color.Substring(1, 2);
-                rPart = color.Substring(3, 2);
-                gPart = color.Substring(5, 2);
-                bPart = color.Substring(7, 2);
-            }
-            catch (ArgumentException)
-            {
-                Logging.WriteToLog(string.Format("failed to parse color, a={0}, r={1}, g={2}, b={3}", aPart, rPart, gPart, bPart)
-                    , Logfiles.Application, LogLevel.Warning);
+                Logging.Error("ClassColorset object is missing a CustomBrush definition: '{0}'", customBrushName);
                 return false;
             }
-            if ((byte.TryParse(aPart, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte a)) &&
-                (byte.TryParse(rPart, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte r)) &&
-                (byte.TryParse(gPart, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte g)) &&
-                (byte.TryParse(bPart, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte b)))
-            {
-                outColor = Color.FromArgb(a, r, g, b);
-                return true;
-            }
-            else
-                Logging.WriteToLog(string.Format("failed to parse color, a={0}, r={1}, g={2}, b={3}", aPart, rPart, gPart, bPart)
-                    , Logfiles.Application, LogLevel.Warning);
-            return false;
-        }
 
-        /// <summary>
-        /// Verifies that the points for applying color gradient directions are within 0-1
-        /// </summary>
-        /// <param name="p">The color gradient direction to verify</param>
-        public static void VerifyPoints(Point p)
-        {
-            if (p.X > 1 || p.X < 0)
+            if(ApplyCustomThemeBrushSettings(customBrushName,customBrushName,classColorsetxmlBrushElement,out Brush brush))
             {
-                int settingToUse = p.X > 1 ? 1 : 0;
-                Logging.Warning("point.X is out of bounds (must be between 0 and 1, current value={0}), setting to {1})", p.X, settingToUse);
-                p.X = settingToUse;
-            }
-            if (p.Y > 1 || p.Y < 0)
-            {
-                int settingToUse = p.Y > 1 ? 1 : 0;
-                Logging.Warning("point.Y is out of bounds (must be between 0 and 1, current value={0}), setting to {1})", p.Y, settingToUse);
-                p.Y = settingToUse;
-            }
-        }
-
-        /// <summary>
-        /// Applies color settings to a window of Xml document format 1.0
-        /// </summary>
-        /// <param name="window">The window to apply changes to</param>
-        private static void ApplyCustomThemeColorsettingsV1(Window window)
-        {
-            string windowType = window.GetType().Name;
-            //using RelhaxWindow type allows us to directly control/check if the window should be color changed
-            if (window is RelhaxWindow relhaxWindow && !relhaxWindow.ApplyColorSettings)
-            {
-                Logging.Warning("window of type '{0}' is set to not have color setting applied, skipping", windowType);
-                return;
-            }
-
-            //build the xpath string
-            //root of the file is the fileName, has an array of elements with each name is the type of the window
-            string XpathWindow = string.Format("//{0}/{1}", Settings.UISettingsColorFile, windowType);
-            Logging.Debug("using window type xpath string {0}", XpathWindow);
-            XmlNode windowColorNode = XmlUtils.GetXmlNodeFromXPath(UIDocument, XpathWindow);
-
-            if (windowColorNode == null)
-            {
-                Logging.Error("failed to get the window color node using xml search path {0}", XpathWindow);
-                return;
-            }
-            //apply window color settings if exist
-            ApplyCustomThemeBrushSettings(window, windowColorNode);
-
-            //build list of all internal framework components
-            List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsVisual(window, false);
-            foreach (FrameworkElement element in allWindowControls)
-            {
-                //make sure we have an element that we want color changing
-                if (element.Tag is string ID && !string.IsNullOrWhiteSpace(ID))
+                customBrush = new CustomBrush()
                 {
-                    //https://msdn.microsoft.com/en-us/library/ms256086(v=vs.110).aspx
-                    //get the xpath component
-                    string XPathColorSetting = string.Format("//{0}/{1}/ColorSetting[@ID = \"{2}\"]", Settings.UISettingsColorFile, windowType, ID);
-                    XmlNode brushSettings = XmlUtils.GetXmlNodeFromXPath(UIDocument, XPathColorSetting);
-                    //make sure setting is there
-                    if (brushSettings != null)
-                        ApplyCustomThemeBrushSettings(element, brushSettings);
-                }
-            }
-        }
-
-        private static void ApplyCustomThemeBrushSettings(FrameworkElement element, XmlNode brushSettings)
-        {
-            if (element is Control control)
-            {
-                if (ApplyCustomThemeBrushSettings(control.Name, (string)control.Tag, brushSettings, out Brush backgroundColorToChange))
-                {
-                    if (backgroundColorToChange != null)
-                        control.Background = backgroundColorToChange;
-                    if (!(element is Window))
-                    {
-                        if (ApplyCustomThemeTextBrushSettings(control.Name, (string)control.Tag, brushSettings, out Brush textColorToChange))
-                            if (textColorToChange != null)
-                                control.Foreground = textColorToChange;
-                    }
-                }
-            }
-            else if (element is Panel panel)
-            {
-                if (ApplyCustomThemeBrushSettings(panel.Name, (string)panel.Tag, brushSettings, out Brush backgroundColorToChange))
-                {
-                    if (backgroundColorToChange != null)
-                        panel.Background = backgroundColorToChange;
-                }
-            }
-            else if (element is TextBlock block)
-            {
-                if (ApplyCustomThemeBrushSettings(block.Name, (string)block.Tag, brushSettings, out Brush backgroundColorToChange))
-                {
-                    if (backgroundColorToChange != null)
-                        block.Background = backgroundColorToChange;
-                }
-            }
-            else if (element is Border border)
-            {
-                if (ApplyCustomThemeBrushSettings(border.Name, (string)border.Tag, brushSettings, out Brush backgroundColorToChange))
-                {
-                    if (backgroundColorToChange != null)
-                        border.Background = backgroundColorToChange;
-                }
-            }
-        }
-
-        private static bool ApplyCustomThemeTextBrushSettings(string componentName, string componentTag, XmlNode brushSettings, out Brush textColorToChange)
-        {
-            bool somethingApplied = false;
-            textColorToChange = new SolidColorBrush();
-            //make sure type is set correctly
-            XmlAttribute brushType = brushSettings.Attributes["type"];
-            if (brushType == null)
-            {
-                Logging.Warning("failed to apply brush setting: type attribute not exist!");
-                return false;
-            }
-            XmlAttribute textColor = brushSettings.Attributes["textColor"];
-            //try to apply the text color
-            if (textColor != null)
-            {
-                if (ParseColorFromString(textColor.InnerText, out Color color))
-                {
-                    textColorToChange = new SolidColorBrush(color);
-                    somethingApplied = true;
-                }
-                else
-                {
-                    Logging.WriteToLog(string.Format("failed to parse color to {0}, type={1}, color1={2}, ",
-                        componentTag, brushType.InnerText, textColor.InnerText), Logfiles.Application, LogLevel.Warning);
-                }
+                    IsValid = true,
+                    Brush = brush
+                };
             }
             else
             {
-                Logging.WriteToLog(string.Format("skipping text coloring of control {0}: textColor is null", componentName),
-                    Logfiles.Application, LogLevel.Warning);
+                Logging.Error("Failed to parse class customBrush {0} for class colorSet {1}", customBrushName, classColorsetxmlBrushElement.Name);
+                return false;
             }
-            return somethingApplied;
+            return true;
         }
 
-        private static bool ApplyCustomThemeBrushSettings(string componentName, string componentTag, XmlNode brushSettings, out Brush backgroundColorToChange)
+        private static bool ApplyCustomThemeBrushSettings(string componentName, string componentTag, XmlElement brushSettings, out Brush backgroundColorToChange)
         {
             if (string.IsNullOrEmpty(componentName))
                 componentName = "null";
@@ -824,7 +691,7 @@ namespace RelhaxModpack
             {
                 Point point_1;
                 Point point_2;
-                switch (brushType.InnerText)//TODO
+                switch (brushType.InnerText)
                 {
                     case "SolidColorBrush"://color=1
                         if (ParseColorFromString(color1.InnerText, out Color kolor1_solid))
@@ -921,6 +788,67 @@ namespace RelhaxModpack
             }
             return someThingApplied;
         }
+
+        /// <summary>
+        /// Tries to parse a hex code color to a color object
+        /// </summary>
+        /// <param name="color">The string hex code for the color to use</param>
+        /// <param name="outColor">The corresponding color object</param>
+        /// <returns>True if color parsing was successful, a default color otherwise</returns>
+        /// <remarks>Uses the 32bit color codes for generation (Alpha, Red, Green, Blue) Alpha is transparency</remarks>
+        public static bool ParseColorFromString(string color, out Color outColor)
+        {
+            outColor = new Color();
+            string aPart = string.Empty;
+            string rPart = string.Empty;
+            string gPart = string.Empty;
+            string bPart = string.Empty;
+            try
+            {
+                aPart = color.Substring(1, 2);
+                rPart = color.Substring(3, 2);
+                gPart = color.Substring(5, 2);
+                bPart = color.Substring(7, 2);
+            }
+            catch (ArgumentException)
+            {
+                Logging.WriteToLog(string.Format("failed to parse color, a={0}, r={1}, g={2}, b={3}", aPart, rPart, gPart, bPart)
+                    , Logfiles.Application, LogLevel.Warning);
+                return false;
+            }
+            if ((byte.TryParse(aPart, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte a)) &&
+                (byte.TryParse(rPart, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte r)) &&
+                (byte.TryParse(gPart, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte g)) &&
+                (byte.TryParse(bPart, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte b)))
+            {
+                outColor = Color.FromArgb(a, r, g, b);
+                return true;
+            }
+            else
+                Logging.WriteToLog(string.Format("failed to parse color, a={0}, r={1}, g={2}, b={3}", aPart, rPart, gPart, bPart)
+                    , Logfiles.Application, LogLevel.Warning);
+            return false;
+        }
+
+        /// <summary>
+        /// Verifies that the points for applying color gradient directions are within 0-1
+        /// </summary>
+        /// <param name="p">The color gradient direction to verify</param>
+        public static void VerifyPoints(Point p)
+        {
+            if (p.X > 1 || p.X < 0)
+            {
+                int settingToUse = p.X > 1 ? 1 : 0;
+                Logging.Warning("point.X is out of bounds (must be between 0 and 1, current value={0}), setting to {1})", p.X, settingToUse);
+                p.X = settingToUse;
+            }
+            if (p.Y > 1 || p.Y < 0)
+            {
+                int settingToUse = p.Y > 1 ? 1 : 0;
+                Logging.Warning("point.Y is out of bounds (must be between 0 and 1, current value={0}), setting to {1})", p.Y, settingToUse);
+                p.Y = settingToUse;
+            }
+        }
         #endregion
 
         #region Custom theme file save
@@ -976,7 +904,7 @@ namespace RelhaxModpack
 
                 //get type property
                 XmlAttribute classColorsetType = doc.CreateAttribute("ComponentType");
-                classColorsetType.Value = classColorset.ClassType.Name;
+                classColorsetType.Value = classColorset.ClassThemeDefinition.ClassType.Name;
                 classColorsetXml.Attributes.Append(classColorsetType);
 
                 //get customBrushes
