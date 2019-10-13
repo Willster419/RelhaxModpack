@@ -100,7 +100,7 @@ namespace RelhaxModpack
                 isDefaultThemeBackedUp = true;
             }
 
-            //if the colorset object does not exist for this window in the theme, then make it
+            //if the colorset object does not exist for this window in the default theme, then make it
             WindowColorset windowColorset = null;
             if(Themes.Default.WindowColorsets.ContainsKey(window.GetType()))
             {
@@ -133,12 +133,15 @@ namespace RelhaxModpack
             {
                 case UIThemes.Default:
                     Logging.Debug("Applying default UI theme for window {0}", window.GetType().Name);
-                    CurrentTheme = Themes.Default;
+                    //only apply it if need be so that we're not constantly setting the bindings
+                    if(!CurrentTheme.Equals(Themes.Default))
+                        CurrentTheme = Themes.Default;
                     ApplyThemeToWindow(window);
                     return;
                 case UIThemes.Dark:
                     Logging.Debug("Applying dark UI theme for window {0}", window.GetType().Name);
-                    CurrentTheme = Themes.Dark;
+                    if (!CurrentTheme.Equals(Themes.Dark))
+                        CurrentTheme = Themes.Dark;
                     ApplyThemeToWindow(window);
                     return;
                 case UIThemes.Custom:
@@ -158,7 +161,8 @@ namespace RelhaxModpack
                             MessageBox.Show(Translations.GetTranslatedString("UISettingsFileApplied"));
                         }
                     }
-                    CurrentTheme = Themes.Custom;
+                    if (!CurrentTheme.Equals(Themes.Custom))
+                        CurrentTheme = Themes.Custom;
                     ApplyThemeToWindow(window);
                     return;
             }
@@ -520,7 +524,7 @@ namespace RelhaxModpack
 
         private static bool LoadCustomThemeV1(XmlDocument doc)
         {
-            Theme customThemeToLoad = new Theme();
+            Theme customThemeToLoad = new Theme() { ThemeName = "Custom", FileName = Settings.UISettingsColorFile };
 
             //load global brushes
             List<PropertyInfo> customBrushes = customThemeToLoad.GetType().GetProperties().Where(prop => prop.PropertyType.Equals(typeof(CustomBrush))).ToList();
