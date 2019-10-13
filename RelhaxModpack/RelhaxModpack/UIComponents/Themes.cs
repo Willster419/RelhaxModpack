@@ -435,6 +435,17 @@ namespace RelhaxModpack.UIComponents
                             Brush = DarkThemeBackground
                         }
                     }
+                },
+                {
+                    typeof(NewsViewer), new WindowColorset()
+                    {
+                        WindowType = typeof(NewsViewer),
+                        BackgroundBrush = new CustomBrush()
+                        {
+                            IsValid = true,
+                            Brush = DarkThemeBackground
+                        }
+                    }
                 }
             }
         };
