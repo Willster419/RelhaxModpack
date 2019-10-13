@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace RelhaxModpack.UIComponents
 {
@@ -52,6 +53,22 @@ namespace RelhaxModpack.UIComponents
             { System.Diagnostics.Process.Start(URL); }
             catch
             { }
+        }
+
+        private Brush foregroundBrush = null;
+        private void userControl_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            ChildTextblock.Foreground = Brushes.DarkRed;
+        }
+
+        private void userControl_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            this.Foreground = foregroundBrush;
+        }
+
+        private void userControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            foregroundBrush = this.Foreground;
         }
     }
 }
