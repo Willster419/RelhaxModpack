@@ -143,9 +143,9 @@ namespace RelhaxModpack.Windows
             Point2Y.Text = string.Format("{0}: {1}", Translations.GetTranslatedString(nameof(Point2Y)), (Point2YSlider.Value).ToString("N2"));
 
             //build sample xml output
-            //<ColorSetting ID="LanguagesSelector" type="LinearGradientBrush" color1="#FFF0F0F0" color2="#FFE5E5E5" point1="0,0" point2="0,1" textColor="#FF000000" />
+            //<BackgroundBrush type="LinearGradientBrush" color1="#FFF0F0F0" color2="#FFE5E5E5" point1="0,0" point2="0,1"/>
             StringBuilder builder = new StringBuilder();
-            builder.AppendFormat("<ColorSetting ID=\"Component_ID\" type=\"{0}\" color1=\"{1}\"",colorType,color1.ToString());
+            builder.AppendFormat("<BackgroundBrush type=\"{0}\" color1=\"{1}\"", colorType,color1.ToString());
             if(colorType.Equals("LinearGradientBrush"))
             {
                 builder.AppendFormat(" color2=\"{0}\" point1=\"{1}\" point2=\"{2}\"",color2.ToString(),
@@ -154,10 +154,6 @@ namespace RelhaxModpack.Windows
             else if (colorType.Equals("RadialGradientBrush"))
             {
                 builder.AppendFormat(" color2=\"{0}\"", color2.ToString());
-            }
-            if((bool)TextColor.IsChecked)
-            {
-                builder.AppendFormat(" textColor=\"{0}\"", textColor.ToString());
             }
             builder.AppendFormat(" />");
             SampleXmlOutputTextbox.Text = builder.ToString();
