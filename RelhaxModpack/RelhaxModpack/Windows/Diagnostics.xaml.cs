@@ -108,11 +108,15 @@ namespace RelhaxModpack.Windows
                 Settings.RelhaxSettingsFilepath,
                 Settings.LastInstalledConfigFilepath,
                 //stuff in the tanks location (need to be combined here cause it can change from installation)
-                Path.Combine(Settings.WoTDirectory,"logs",Logging.InstallLogFilename),
+                Path.Combine(Settings.WoTDirectory, "logs", Logging.InstallLogFilename),
                 Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilename),
-                Path.Combine(Settings.WoTDirectory, "python.log"),
-                Path.Combine(Settings.WoTDirectory, "xvm.log"),
-                Path.Combine(Settings.WoTDirectory, "pmod.log")
+                //stuff in 32bit and 64bit folders
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, "python.log"),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, "xvm.log"),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, "pmod.log"),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, "python.log"),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, "xvm.log"),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, "pmod.log")
             };
 
             //use a nice diagnostic window to check if the user wants to include any other files
