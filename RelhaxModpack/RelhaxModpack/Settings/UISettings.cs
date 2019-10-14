@@ -59,7 +59,7 @@ namespace RelhaxModpack
         public static void ApplyCustomStyles(Window window)
         {
             //get the list
-            List<FrameworkElement> UIComponents = Utils.GetAllWindowComponentsVisual(window, false);
+            List<FrameworkElement> UIComponents = Utils.GetAllWindowComponentsLogical(window, false);
             UIComponents = UIComponents.Where(component => component.Tag is string ID && !string.IsNullOrEmpty(ID)).ToList();
             foreach (FrameworkElement element in UIComponents)
             {
@@ -196,7 +196,7 @@ namespace RelhaxModpack
             }
 
             //build list of all internal framework components
-            List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsVisual(window, false).Distinct().ToList();
+            List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsLogical(window, false).Distinct().ToList();
             allWindowControls = allWindowControls.Where(element => element.Tag is string ID && !string.IsNullOrWhiteSpace(ID)).ToList();
 
             //apply all class level color sets
@@ -452,7 +452,7 @@ namespace RelhaxModpack
         private static void BackupDefaultComponentColorSettings(Window window)
         {
             //backup the component colorsettings (per window)
-            List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsVisual(window, false).Distinct().ToList();
+            List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsLogical(window, false).Distinct().ToList();
             allWindowControls = allWindowControls.Where(element => element.Tag is string ID && !string.IsNullOrWhiteSpace(ID)).ToList();
 
             WindowColorset windowColorset = Themes.Default.WindowColorsets[window.GetType()];
