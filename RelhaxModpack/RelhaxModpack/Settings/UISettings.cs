@@ -146,6 +146,7 @@ namespace RelhaxModpack
                     return;
                 case UIThemes.Custom:
                     Logging.Debug("Applying custom UI theme for window {0}", window.GetType().Name);
+                    bool themewasNullDisplayMessage = false;
                     if(Themes.Custom == null)
                     {
                         Logging.Info("Custom theme definition is null, load from xml file");
@@ -157,13 +158,17 @@ namespace RelhaxModpack
                         }
                         else
                         {
-                            Logging.Info("Custom theme loaded successfully");
-                            MessageBox.Show(Translations.GetTranslatedString("UISettingsFileApplied"));
+                            themewasNullDisplayMessage = true;
                         }
                     }
                     if (!CurrentTheme.Equals(Themes.Custom))
                         CurrentTheme = Themes.Custom;
                     ApplyThemeToWindow(window);
+                    if(themewasNullDisplayMessage)
+                    {
+                        Logging.Info("Custom theme loaded successfully");
+                        MessageBox.Show(Translations.GetTranslatedString("UISettingsFileApplied"));
+                    }
                     return;
             }
         }
