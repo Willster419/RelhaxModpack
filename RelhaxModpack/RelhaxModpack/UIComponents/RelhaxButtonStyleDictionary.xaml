@@ -62,6 +62,7 @@
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Foreground" Value="{StaticResource Button.Disabled.Foreground}"/>
             </Trigger>
+            <!-- https://www.dotnetcurry.com/wpf/1142/resources-wpf-static-dynamic-difference -->
             <Trigger Property="IsEnabled" Value="True">
                 <Setter Property="Foreground" Value="{DynamicResource ResourceKey=testResource}"/>
             </Trigger>
