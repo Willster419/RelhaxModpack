@@ -42,6 +42,8 @@ namespace RelhaxModpack.UIComponents
 
         public ClassColorset ControlColorset { get; set; } = null;
 
+        public ClassColorset ProgressBarColorset { get; set; } = null;
+
         public Dictionary<Type, WindowColorset> WindowColorsets { get; set; } = null;
         
         public List<CustomPropertyBrush> BoundedClassColorsetBrushes

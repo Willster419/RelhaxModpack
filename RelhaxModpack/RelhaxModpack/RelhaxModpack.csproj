@@ -143,6 +143,7 @@
     <Compile Include="UIComponents\ClassThemeDefinitions\ControlClassThemeDefinition.cs" />
     <Compile Include="UIComponents\ClassThemeDefinitions\IClassThemeDefinition.cs" />
     <Compile Include="UIComponents\ClassThemeDefinitions\PanelClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\ProgressbarClassThemeDefinition.cs" />
     <Compile Include="UIComponents\ClassThemeDefinitions\RadioButtonClassThemeDefinition.cs" />
     <Compile Include="UIComponents\ClassThemeDefinitions\TabItemClassThemeDefinition.cs" />
     <Compile Include="UIComponents\ClassThemeDefinitions\TextBlockClassThemeDefinition.cs" />

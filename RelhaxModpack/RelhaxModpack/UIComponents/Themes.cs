@@ -162,6 +162,10 @@ namespace RelhaxModpack.UIComponents
             {
                 ClassThemeDefinition = new TextBlockClassThemeDefinition()
             },
+            ProgressBarColorset = new ClassColorset()
+            {
+                ClassThemeDefinition = new ProgressbarClassThemeDefinition()
+            },
             WindowColorsets = new Dictionary<Type, WindowColorset>()
         };
 
@@ -185,22 +189,22 @@ namespace RelhaxModpack.UIComponents
             SelectionListSelectedPanelColor = new CustomBrush()
             {
                 IsValid = true,
-                Brush = new SolidColorBrush(Colors.BlanchedAlmond)
+                Brush = DarkThemeButton
             },
             SelectionListNotSelectedPanelColor = new CustomBrush()
             {
                 IsValid = true,
-                Brush = new SolidColorBrush(Colors.White)
+                Brush = DarkThemeBackground
             },
             SelectionListSelectedTextColor = new CustomBrush()
             {
                 IsValid = true,
-                Brush = SystemColors.ControlTextBrush
+                Brush = DarkThemeTextColor
             },
             SelectionListNotSelectedTextColor = new CustomBrush()
             {
                 IsValid = true,
-                Brush = SystemColors.ControlTextBrush
+                Brush = DarkThemeTextColor
             },
             ButtonColorset = new ClassColorset()
             {
@@ -293,6 +297,28 @@ namespace RelhaxModpack.UIComponents
                 {
                     IsValid = true,
                     Brush = new SolidColorBrush(Colors.White),
+                }
+            },
+            ProgressBarColorset = new ClassColorset()
+            {
+                ClassThemeDefinition = new ProgressbarClassThemeDefinition(),
+                BackgroundBrush = new CustomBrush()
+                {
+                    IsValid = true,
+                    Brush = DarkThemeButton
+                },
+                ForegroundBrush = new CustomBrush()
+                {
+                    IsValid = true,
+                    Brush = new LinearGradientBrush(new GradientStopCollection()
+                    {
+                        new GradientStop(Color.FromArgb(95, 95, 95, 95), 0),
+                        new GradientStop(Color.FromArgb(255, 0, 0, 255), 1)
+                    })
+                    {
+                        EndPoint = new Point(0.75, 1),
+                        StartPoint = new Point(0.25, 0)
+                    }
                 }
             },
             ComboboxColorset = new ClassColorset()
