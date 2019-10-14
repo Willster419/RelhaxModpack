@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Diagnostics" Height="320" Width="525" ResizeMode="CanMinimize"
         Loaded="RelhaxWindow_Loaded" LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True">
-    <Grid >
+    <Grid Tag="DiagnosticsGrid">
         <TextBox x:Name="DiagnosticsMainTextBox" Tag="DiagnosticsMainTextBox" HorizontalAlignment="Stretch" Height="42" Margin="10,10,10,0" TextWrapping="Wrap" Text="Helpful explanation window" VerticalAlignment="Top" IsReadOnly="True"/>
         <TextBlock Tag="SelectedInstallation" x:Name="SelectedInstallation" HorizontalAlignment="Stretch" Margin="12,57,8,0" TextWrapping="Wrap" Text="Currently Selected Installation:" VerticalAlignment="Top" Height="34" />
         <TextBox Tag="DiagnosticsStatusTextBox" x:Name="DiagnosticsStatusTextBox" HorizontalAlignment="Stretch" Height="50" Margin="12,230,8,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True"/>

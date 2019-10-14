@@ -11,7 +11,7 @@
     <local:RelhaxWindow.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </local:RelhaxWindow.Resources>
-    <Grid>
+    <Grid Tag="ColorPickerGrid">
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="10,10,10,0">
             <TextBlock x:Name="ColorType" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Brush Type" VerticalAlignment="Top" Margin="0,0,10,0" Tag="ColorType"/>
             <UI:RelhaxHyperlink x:Name="BrushesLink" Text="Read about brush types here" URL="https://docs.microsoft.com/en-us/dotnet/framework/wpf/graphics-multimedia/wpf-brushes-overview"

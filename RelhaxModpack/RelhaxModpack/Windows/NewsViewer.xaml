@@ -8,7 +8,7 @@
                     mc:Ignorable="d"
         Title="News" Height="450" Width="420" MinWidth="420" MinHeight="450" Loaded="RelhaxWindow_Loaded"
         LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True">
-    <Grid>
+    <Grid Tag="NewViewGrid">
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,31">
             <TabItem Tag="database_Update_Tab" x:Name="database_Update_Tab" Header="Database News">
                 <Grid Background="#FFE5E5E5">

@@ -8,7 +8,7 @@
         Title="AddPicturesZip" Height="330" Width="600" MinHeight="75" MinWidth="100"
         LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True"
         Icon="/RelhaxModpack;component/Resources/modpack_icon.ico">
-    <Grid>
+    <Grid Tag="AddPIcturesMainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition/>
