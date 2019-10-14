@@ -16,7 +16,7 @@ namespace RelhaxModpack.UIComponents.ClassThemeDefinitions
         public bool BackgroundAllowed { get; } = true;
         public string BackgroundBoundName { get; } = string.Empty;
 
-        public bool BackgroundAppliedLocal { get; } = false;
+        public bool BackgroundAppliedLocal { get; } = true;
         public DependencyProperty BackgroundDependencyProperty { get; } = Border.BackgroundProperty;
 
         //foreground
