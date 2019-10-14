@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelhaxModpack.Windows;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -256,8 +257,15 @@ namespace RelhaxModpack.UIComponents
 
         private void RelhaxTaskReporter_Loaded(object sender, RoutedEventArgs e)
         {
-            if(LoadedAfterApply)
-                UISettings.ApplyThemeToRootComponent(this, false); 
+            if (LoadedAfterApply)
+            {
+                WindowColorset advancedColorset = null;
+                if (UISettings.CurrentTheme.WindowColorsets != null && UISettings.CurrentTheme.WindowColorsets.ContainsKey(typeof(AdvancedProgress)))
+                {
+                    advancedColorset = UISettings.CurrentTheme.WindowColorsets[typeof(AdvancedProgress)];
+                }
+                UISettings.ApplyThemeToRootComponent(this, false, advancedColorset);
+            }
         }
     }
 }

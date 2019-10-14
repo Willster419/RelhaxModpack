@@ -197,7 +197,7 @@ namespace RelhaxModpack
             ApplyThemeToRootComponent(window, customWindowDefinition);
         }
 
-        public static void ApplyThemeToRootComponent(FrameworkElement rootElement, bool customWindowDefinition)
+        public static void ApplyThemeToRootComponent(FrameworkElement rootElement, bool customWindowDefinition, WindowColorset wcolorset = null)
         {
             //build list of all internal framework components
             List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsLogical(rootElement, false).Distinct().ToList();
@@ -251,7 +251,11 @@ namespace RelhaxModpack
             //apply component level color sets
             if (customWindowDefinition)
             {
-                WindowColorset windowColorset = CurrentTheme.WindowColorsets[rootElement.GetType()];
+                WindowColorset windowColorset = null;
+                if (wcolorset != null)
+                    windowColorset = wcolorset;
+                else
+                    windowColorset = CurrentTheme.WindowColorsets[rootElement.GetType()];
                 Dictionary<string, ComponentColorset> customDictionaries = windowColorset.ComponentColorsets;
                 if (customDictionaries != null)
                 {
@@ -1212,6 +1216,12 @@ namespace RelhaxModpack
             documentRoot.AppendChild(windowElement);
 
             WindowColorset windowColorset = CurrentTheme.WindowColorsets[window.GetType()];
+
+            if (windowColorset.ComponentColorsets == null)
+            {
+                Logging.Debug("windowColorset for type {0}, is this expected?",windowColorset.WindowType.Name);
+                return;
+            }
 
             foreach(ComponentColorset colorset in windowColorset.ComponentColorsets.Values.ToList())
             {
