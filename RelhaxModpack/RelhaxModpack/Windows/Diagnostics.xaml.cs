@@ -27,13 +27,22 @@ namespace RelhaxModpack.Windows
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
             //check to make sure a selected tanks installation is selected
-            if (string.IsNullOrWhiteSpace(Settings.WoTDirectory))
-                ToggleUIOptions(false);
-            else
-                ToggleUIOptions(true);
+            ToggleCollectInfoButton();
+        }
 
-            //set the currently selected installation text
-            SelectedInstallation.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("SelectedInstallation"), Translations.GetTranslatedString("SelectedInstallationNone"));
+        private void ToggleCollectInfoButton()
+        {
+            if (string.IsNullOrWhiteSpace(Settings.WoTDirectory))
+            {
+                CollectLogInfoButton.IsEnabled = false;
+                SelectedInstallation.Text = string.Format("{0}\n{1}",
+                    Translations.GetTranslatedString("SelectedInstallation"), Translations.GetTranslatedString("SelectedInstallationNone"));
+            }
+            else
+            {
+                CollectLogInfoButton.IsEnabled = true;
+                SelectedInstallation.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("SelectedInstallation"), Settings.WoTDirectory);
+            }
         }
 
         private void ChangeInstall_Click(object sender, RoutedEventArgs e)
@@ -52,7 +61,7 @@ namespace RelhaxModpack.Windows
             if ((bool)manualWoTFind.ShowDialog())
             {
                 Settings.WoTDirectory = Path.GetDirectoryName(manualWoTFind.FileName);
-                SelectedInstallation.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("SelectedInstallation"), Settings.WoTDirectory);
+                Settings.WoTDirectory = Settings.WoTDirectory.Replace(Settings.WoT32bitFolderWithSlash, string.Empty).Replace(Settings.WoT64bitFolderWithSlash, string.Empty);
                 Logging.Info("Diagnostics: Selected WoT install -> {0}",Settings.WoTDirectory);
             }
             else
@@ -61,10 +70,7 @@ namespace RelhaxModpack.Windows
             }
 
             //check to make sure a selected tanks installation is selected
-            if (string.IsNullOrWhiteSpace(Settings.WoTDirectory))
-                ToggleUIOptions(false);
-            else
-                ToggleUIOptions(true);
+            ToggleCollectInfoButton();
         }
 
         private void LaunchWoTLauncher_Click(object sender, RoutedEventArgs e)
@@ -84,7 +90,8 @@ namespace RelhaxModpack.Windows
             }
             catch (Exception ex)
             {
-                Logging.Exception("LaunchWoTLauncher_Click", ex);
+                Logging.Exception("LaunchWoTLauncher_Click");
+                Logging.Exception(ex.ToString());
                 DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("failedStartLauncherRepairMode");
                 return;
             }
@@ -127,13 +134,15 @@ namespace RelhaxModpack.Windows
                 if(File.Exists(file))
                     apz.FilesToAddList.Items.Add(file);
 
-            if((bool)apz.ShowDialog())
+            if(!(bool)apz.ShowDialog())
             {
-                foreach (string s in apz.FilesToAddList.Items)
-                    if(!filesToCollect.Contains(s))
-                        filesToCollect.Add(s);
+                DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("canceled");
+                return;
             }
-            apz = null;
+
+            foreach (string s in apz.FilesToAddList.Items)
+                if (!filesToCollect.Contains(s))
+                    filesToCollect.Add(s);
 
             //check in the list to make sure that the entries are valid and paths exist
             Logging.Info("Filtering list of files to collect");
@@ -188,11 +197,6 @@ namespace RelhaxModpack.Windows
                 Logging.Exception(zex.ToString());
                 DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("failedCreateZipfile");
             }
-        }
-
-        private void ToggleUIOptions(bool toggle)
-        {
-            CollectLogInfoButton.IsEnabled = toggle;
         }
 
         private async void ClearDownloadCache_Click(object sender, RoutedEventArgs e)
