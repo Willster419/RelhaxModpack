@@ -54,7 +54,8 @@ namespace RelhaxModpack
         private bool loading = false;
         private string oldModpackTitle = string.Empty;
         //temp list of components not to toggle
-        Control[] tempDisabledBlacklist = null;
+        Control[] disabledBlacklist = null;
+        Control[] enabledBlacklist = null;
         //backup components
         private bool disableTriggersBackupVal = true;
         private long backupFolderTotalSize = 0;
@@ -87,10 +88,24 @@ namespace RelhaxModpack
         {
             InitializeComponent();
             WindowState = WindowState.Minimized;
-            tempDisabledBlacklist = new Control[]
+            disabledBlacklist = new Control[]
             {
                 DisableTriggersCB,
                 VerboseLoggingCB
+            };
+            enabledBlacklist = new Control[]
+            {
+                ViewNewsButton,
+                Forms_ENG_EUButton,
+                Forms_GER_EUButton,
+                Forms_ENG_NAButton,
+                FacebookButton,
+                TwitterButton,
+                DiscordButton,
+                HomepageButton,
+                FindBugAddModButton,
+                SendEmailButton,
+                DonateButton
             };
         }
 
@@ -1973,8 +1988,10 @@ namespace RelhaxModpack
             {
                 if (control is Button || control is CheckBox || control is RadioButton)
                 {
-                    if (tempDisabledBlacklist.Contains(control))
+                    if (disabledBlacklist.Contains(control))
                         control.IsEnabled = false;
+                    else if (enabledBlacklist.Contains(control))
+                        control.IsEnabled = true;
                     else
                         control.IsEnabled = toggle;
                 }
