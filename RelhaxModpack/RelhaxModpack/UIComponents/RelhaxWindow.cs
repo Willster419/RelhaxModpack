@@ -47,9 +47,6 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public RelhaxWindow() : base()
         {
-            //get the original width and height
-            OriginalHeight = Height;
-            OriginalWidth = Width;
             //subscribe to the loaded event to load custom code
             Loaded += OnWindowLoaded;
         }
@@ -57,8 +54,11 @@ namespace RelhaxModpack.Windows
         //hook into the window loaded event to apply things that should be done to all child windows of the mainWindow
         private void OnWindowLoaded(object sender, RoutedEventArgs e)
         {
+            //get the original width and height
+            OriginalHeight = Height;
+            OriginalWidth = Width;
             //deal with the translations
-            if(LocalizeWindow)
+            if (LocalizeWindow)
             {
                 Translations.LocalizeWindow(this, ApplyToolTips);
             }
