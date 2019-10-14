@@ -5921,7 +5921,7 @@
             <param name="type">The type of macro replace operation</param>
             <returns>The replaced string</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.AutoFindWoTDirectory(System.String@)">
+        <member name="M:RelhaxModpack.Utils.AutoFindWoTDirectory">
             <summary>
             Checks the registry to get the latest location of where WoT is installed
             </summary>

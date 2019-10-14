@@ -949,7 +949,8 @@ namespace RelhaxModpack
 
                 //parse WoT root directory
                 Logging.WriteToLog("started looking for WoT root directory", Logfiles.Application, LogLevel.Debug);
-                if (!Utils.AutoFindWoTDirectory(ref Settings.WoTDirectory) || ModpackSettings.ForceManuel)
+                string autoSearchResult = Utils.AutoFindWoTDirectory();
+                if (string.IsNullOrEmpty(autoSearchResult) || ModpackSettings.ForceManuel)
                 {
                     Logging.WriteToLog("auto detect failed or user requests manual", Logfiles.Application, LogLevel.Debug);
                     OpenFileDialog manualWoTFind = new OpenFileDialog()
@@ -964,7 +965,7 @@ namespace RelhaxModpack
                     };
                     if ((bool)manualWoTFind.ShowDialog())
                     {
-                        Settings.WoTDirectory = manualWoTFind.FileName;
+                        autoSearchResult = manualWoTFind.FileName;
                     }
                     else
                     {
@@ -973,7 +974,7 @@ namespace RelhaxModpack
                         return;
                     }
                 }
-                Settings.WoTDirectory = Path.GetDirectoryName(Settings.WoTDirectory);
+                Settings.WoTDirectory = Path.GetDirectoryName(autoSearchResult);
                 Logging.Info("Wot root directory parsed as " + Settings.WoTDirectory);
 
                 //check to make sure the application is not in the same directory as the WoT install
@@ -1791,7 +1792,8 @@ namespace RelhaxModpack
 
             //parse WoT root directory
             Logging.WriteToLog("started looking for WoT root directory", Logfiles.Application, LogLevel.Debug);
-            if (!Utils.AutoFindWoTDirectory(ref Settings.WoTDirectory) || ModpackSettings.ForceManuel)
+            string autoSearchResult = Utils.AutoFindWoTDirectory();
+            if (string.IsNullOrEmpty(autoSearchResult) || ModpackSettings.ForceManuel)
             {
                 Logging.WriteToLog("auto detect failed or user requests manual", Logfiles.Application, LogLevel.Debug);
                 OpenFileDialog manualWoTFind = new OpenFileDialog()
@@ -1807,7 +1809,7 @@ namespace RelhaxModpack
                 };
                 if ((bool)manualWoTFind.ShowDialog())
                 {
-                    Settings.WoTDirectory = manualWoTFind.FileName;
+                    autoSearchResult = manualWoTFind.FileName;
                 }
                 else
                 {
@@ -1816,7 +1818,7 @@ namespace RelhaxModpack
                     return;
                 }
             }
-            Settings.WoTDirectory = Path.GetDirectoryName(Settings.WoTDirectory);
+            Settings.WoTDirectory = Path.GetDirectoryName(autoSearchResult);
             Logging.Info("Wot root directory parsed as " + Settings.WoTDirectory);
 
             //get the version of tanks in the format of the res_mods version folder i.e. 0.9.17.0.3
