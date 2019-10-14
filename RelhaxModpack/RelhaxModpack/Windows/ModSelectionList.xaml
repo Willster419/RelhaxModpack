@@ -18,7 +18,7 @@
         <TextBlock x:Name="InstallingTo" HorizontalAlignment="Left" Margin="10,26,0,0" TextWrapping="Wrap" Text="Installing to: " VerticalAlignment="Top" Tag="InstallingTo"/>
         <TextBlock x:Name="InstallingAsWoTVersion" HorizontalAlignment="Left" Margin="10,42,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Tag="InstallingAsWoTVersion"
                    Text="Installing as WoT version: " />
-        <TabControl x:Name="ModTabGroups" HorizontalAlignment="Stretch" Margin="10,94,10,60" VerticalAlignment="Stretch" />
+        <TabControl x:Name="ModTabGroups" HorizontalAlignment="Stretch" Margin="10,94,10,60" VerticalAlignment="Stretch" Tag="SelectionListTabs"/>
         <Button x:Name="CollapseAllRealButton" HorizontalAlignment="Right" Margin="0,10,140,0" VerticalAlignment="Top" Width="125" Height="35"
                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="CollapseAllRealButton_Click" Tag="CollapseAllButton">
             <TextBlock x:Name="CollapseAllButton" Text="Collapse current tab" TextWrapping="Wrap" TextAlignment="Center"/>
