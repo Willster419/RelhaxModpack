@@ -879,11 +879,17 @@ namespace RelhaxModpack
             // this searchlist is long, maybe 30-40 entries (system depended), but the best possibility to find a currently installed WoT game.
             foreach (string path in searchPathWoT)
             {
-                if (File.Exists(path))
+                string potentialResult = path;
+                //if it has win32 or win64, filter it out
+                if (potentialResult.Contains("win32") || potentialResult.Contains("win64"))
                 {
-                    Logging.Manager(string.Format("valid game path found: {0}", path));
+                    potentialResult = potentialResult.Replace("win32\\", string.Empty).Replace("win64\\", string.Empty);
+                }
+                if (File.Exists(potentialResult))
+                {
+                    Logging.Manager(string.Format("valid game path found: {0}", potentialResult));
                     // write the path to the central value holder
-                    tanksLocation = path;
+                    tanksLocation = potentialResult;
                     // return the path
                     return path;
                 }
