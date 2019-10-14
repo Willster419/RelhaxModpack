@@ -310,14 +310,15 @@ namespace RelhaxModpack.Windows
                         break;
                     if (RestoreDataXmlUnpackReporter == null)
                     {
-                        RestoreDataXmlUnpackReporter = new RelhaxInstallTaskReporter()
+                        RestoreDataXmlUnpackReporter = new RelhaxInstallTaskReporter(nameof(RestoreDataXmlUnpackReporter))
                         {
                             IsSubProgressActive = true,
                             TaskTitle = progress.InstallStatus == InstallerExitCodes.RestoreUserdataError ?
                                 Translations.GetTranslatedString("AdvancedInstallRestoreData") : Translations.GetTranslatedString("AdvancedInstallXmlUnpack"),
                             ReportState = TaskReportState.Active,
                             TaskMaximum = 3,
-                            TaskMinimum = 0
+                            TaskMinimum = 0,
+                            LoadedAfterApply = true
                         };
                         PostInstallPanel.Children.Add(RestoreDataXmlUnpackReporter);
                     }
@@ -351,11 +352,12 @@ namespace RelhaxModpack.Windows
                         break;
                     if (PatchReporter == null)
                     {
-                        PatchReporter = new RelhaxInstallTaskReporter()
+                        PatchReporter = new RelhaxInstallTaskReporter(nameof(PatchReporter))
                         {
                             IsSubProgressActive = false,
                             TaskTitle = Translations.GetTranslatedString("AdvancedInstallPatchFiles"),
-                            ReportState = TaskReportState.Active
+                            ReportState = TaskReportState.Active,
+                            LoadedAfterApply = true
                         };
                         PostInstallPanel.Children.Add(PatchReporter);
                     }
@@ -378,11 +380,12 @@ namespace RelhaxModpack.Windows
                         break;
                     if (ShortcutsReporter == null)
                     {
-                        ShortcutsReporter = new RelhaxInstallTaskReporter()
+                        ShortcutsReporter = new RelhaxInstallTaskReporter(nameof(ShortcutsReporter))
                         {
                             IsSubProgressActive = false,
                             TaskTitle = Translations.GetTranslatedString("AdvancedInstallPatchFiles"),
-                            ReportState = TaskReportState.Active
+                            ReportState = TaskReportState.Active,
+                            LoadedAfterApply = true
                         };
                         PostInstallPanel.Children.Add(ShortcutsReporter);
                     }
@@ -401,11 +404,12 @@ namespace RelhaxModpack.Windows
                 case InstallerExitCodes.ContourIconAtlasError:
                     if (AtlasReporter == null && progress.ParrentTotal > 0)
                     {
-                        AtlasReporter = new RelhaxInstallTaskReporter()
+                        AtlasReporter = new RelhaxInstallTaskReporter(nameof(AtlasReporter))
                         {
                             IsSubProgressActive = true,
                             TaskTitle = Translations.GetTranslatedString("AdvancedInstallCreateAtlas"),
-                            ReportState = TaskReportState.Active
+                            ReportState = TaskReportState.Active,
+                            LoadedAfterApply = true
                         };
                         PostInstallPanel.Children.Add(AtlasReporter);
                     }
@@ -437,10 +441,11 @@ namespace RelhaxModpack.Windows
                 case InstallerExitCodes.CleanupError:
                     if (FontInstallTrimDownloadCacheCleanupReporter == null)
                     {
-                        FontInstallTrimDownloadCacheCleanupReporter = new RelhaxInstallTaskReporter()
+                        FontInstallTrimDownloadCacheCleanupReporter = new RelhaxInstallTaskReporter(nameof(FontInstallTrimDownloadCacheCleanupReporter))
                         {
                             IsSubProgressActive = false,
-                            ReportState = TaskReportState.Active
+                            ReportState = TaskReportState.Active,
+                            LoadedAfterApply = true
                         };
                         PostInstallPanel.Children.Add(FontInstallTrimDownloadCacheCleanupReporter);
                     }

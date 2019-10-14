@@ -194,9 +194,13 @@ namespace RelhaxModpack
                     window.SetCurrentValue(Window.BackgroundProperty, CurrentTheme.WindowColorsets[window.GetType()].BackgroundBrush.Brush);
                 }
             }
+            ApplyThemeToRootComponent(window, customWindowDefinition);
+        }
 
+        public static void ApplyThemeToRootComponent(FrameworkElement rootElement, bool customWindowDefinition)
+        {
             //build list of all internal framework components
-            List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsLogical(window, false).Distinct().ToList();
+            List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsLogical(rootElement, false).Distinct().ToList();
             allWindowControls = allWindowControls.Where(element => element.Tag is string ID && !string.IsNullOrWhiteSpace(ID)).ToList();
 
             //apply all class level color sets
@@ -231,7 +235,7 @@ namespace RelhaxModpack
                         else
                         {
                             element.SetCurrentValue(colorset.ClassThemeDefinition.ForegroundDependencyProperty, colorset.ForegroundBrush.Brush);
-                            if(element is Button button)
+                            if (element is Button button)
                             {
                                 button.Resources["testResource"] = colorset.ForegroundBrush.Brush;
                             }
@@ -247,7 +251,7 @@ namespace RelhaxModpack
             //apply component level color sets
             if (customWindowDefinition)
             {
-                WindowColorset windowColorset = CurrentTheme.WindowColorsets[window.GetType()];
+                WindowColorset windowColorset = CurrentTheme.WindowColorsets[rootElement.GetType()];
                 Dictionary<string, ComponentColorset> customDictionaries = windowColorset.ComponentColorsets;
                 if (customDictionaries != null)
                 {
@@ -255,7 +259,7 @@ namespace RelhaxModpack
                     {
                         //check if it exists in the list
                         string ID = element.Tag as string;
-                        if(customDictionaries.ContainsKey(ID))
+                        if (customDictionaries.ContainsKey(ID))
                         {
                             //apply it based on class type
                             ComponentColorset colorset = customDictionaries[ID];

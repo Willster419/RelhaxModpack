@@ -1315,11 +1315,12 @@ namespace RelhaxModpack
                 if (ModpackSettings.BackupModFolder)
                 {
                     Logging.Debug("adding backupModFolder reporter");
-                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
+                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter(nameof(AdvancedProgressWindow.BackupModsReporter))
                     {
                         IsSubProgressActive = true,
                         TaskTitle = Translations.GetTranslatedString("AdvancedInstallBackupMods"),
-                        ReportState = TaskReportState.Inactive
+                        ReportState = TaskReportState.Inactive,
+                        LoadedAfterApply = false
                     };
                     AdvancedProgressWindow.PreInstallPanel.Children.Add(reporter);
                     AdvancedProgressWindow.BackupModsReporter = reporter;
@@ -1330,10 +1331,11 @@ namespace RelhaxModpack
                 {
                     Logging.Debug("adding userData/clearCache/deleteLogs reporter: SaveUserData={0}, ClearCache={1}, DeleteLogs={2}",
                         ModpackSettings.SaveUserData, ModpackSettings.ClearCache, ModpackSettings.DeleteLogs);
-                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
+                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter(nameof(AdvancedProgressWindow.BackupDataClearCacheClearLogsReporter))
                     {
                         IsSubProgressActive = false,
-                        ReportState = TaskReportState.Inactive
+                        ReportState = TaskReportState.Inactive,
+                        LoadedAfterApply = false
                     };
                     AdvancedProgressWindow.PreInstallPanel.Children.Add(reporter);
                     AdvancedProgressWindow.BackupDataClearCacheClearLogsReporter = reporter;
@@ -1343,11 +1345,12 @@ namespace RelhaxModpack
                 if (ModpackSettings.CleanInstallation)
                 {
                     Logging.Debug("adding CleanInstallation reporter");
-                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
+                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter(nameof(AdvancedProgressWindow.CleanModsReporter))
                     {
                         IsSubProgressActive = false,
                         TaskTitle = Translations.GetTranslatedString("AdvancedInstallClearMods"),
-                        ReportState = TaskReportState.Inactive
+                        ReportState = TaskReportState.Inactive,
+                        LoadedAfterApply = false
                     };
                     AdvancedProgressWindow.PreInstallPanel.Children.Add(reporter);
                     AdvancedProgressWindow.CleanModsReporter = reporter;
@@ -1359,11 +1362,12 @@ namespace RelhaxModpack
                 Logging.Debug("adding {0} reporters (MultiCoreExtraction={1}", numThreads, ModpackSettings.MulticoreExtraction);
                 for (int i = 0; i < numThreads; i++)
                 {
-                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
+                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter(nameof(AdvancedProgressWindow.ExtractionModsReporters) + i)
                     {
                         IsSubProgressActive = true,
                         TaskTitle = string.Format("{0} {1}", Translations.GetTranslatedString("AdvancedInstallInstallMods"), (i + 1).ToString()),
-                        ReportState = TaskReportState.Inactive
+                        ReportState = TaskReportState.Inactive,
+                        LoadedAfterApply = false
                     };
                     AdvancedProgressWindow.ExtractionPanel.Children.Add(reporter);
                     AdvancedProgressWindow.ExtractionModsReporters[i] = reporter;
@@ -1373,11 +1377,12 @@ namespace RelhaxModpack
                 if (userModsToInstall.Count > 0)
                 {
                     Logging.Debug("adding userMods reporter");
-                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
+                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter(nameof(AdvancedProgressWindow.ExtractionUserModsReporter))
                     {
                         IsSubProgressActive = true,
                         TaskTitle = Translations.GetTranslatedString("AdvancedInstallInstallUserMods"),
-                        ReportState = TaskReportState.Inactive
+                        ReportState = TaskReportState.Inactive,
+                        LoadedAfterApply = false
                     };
                     AdvancedProgressWindow.ExtractionPanel.Children.Add(reporter);
                     AdvancedProgressWindow.ExtractionUserModsReporter = reporter;

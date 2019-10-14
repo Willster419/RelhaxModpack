@@ -1397,7 +1397,7 @@
             RelhaxInstallTaskReporter
             </summary>
         </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.#ctor">
+        <member name="M:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.#ctor(System.String)">
             <summary>
             Create an instance of the RelhaxInstallTaskReporter and init the UI side of it
             </summary>
