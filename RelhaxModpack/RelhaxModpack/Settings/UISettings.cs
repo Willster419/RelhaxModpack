@@ -447,7 +447,7 @@ namespace RelhaxModpack
 
                 //check if the key already exists first
                 if (windowDictionary.ContainsKey(ID))
-                    throw new BadMemeException("how does the key already exist");
+                    throw new BadMemeException("duplicate key");
 
                 //a element that is disabled will have a different current foreground and background applied to it
                 //get around this by temporarily enabling the component, then disabling it
