@@ -1795,6 +1795,24 @@ namespace RelhaxModpack
             French.Add("loadingBranches", TranslationNeeded);
             Spanish.Add("loadingBranches", "Cargando ramas");
             Russian.Add("loadingBranches", TranslationNeeded);
+
+            //Component: failedToParseUISettingsFile
+            //"branch" is this context is git respoitory branches
+            English.Add("failedToParseUISettingsFile", "Failed to apply the theme. Check the log for details. Enable \"Verbose Logging\" for additional information.");
+            German.Add("failedToParseUISettingsFile", TranslationNeeded);
+            Polish.Add("failedToParseUISettingsFile", TranslationNeeded);
+            French.Add("failedToParseUISettingsFile", TranslationNeeded);
+            Spanish.Add("failedToParseUISettingsFile", TranslationNeeded);
+            Russian.Add("failedToParseUISettingsFile", TranslationNeeded);
+
+            //Component: UISettingsFileApplied
+            //the message when the UISettings.xml file is parsed and the custom theme is loaded
+            English.Add("UISettingsFileApplied", "Theme applied");
+            German.Add("UISettingsFileApplied", TranslationNeeded);
+            Polish.Add("UISettingsFileApplied", TranslationNeeded);
+            French.Add("UISettingsFileApplied", TranslationNeeded);
+            Spanish.Add("UISettingsFileApplied", TranslationNeeded);
+            Russian.Add("UISettingsFileApplied", TranslationNeeded);
             #endregion
 
             #region ModSelectionList
@@ -3431,6 +3449,53 @@ namespace RelhaxModpack
             French.Add("loadingAtlasImageLibrariesFail", TranslationNeeded);
             Spanish.Add("loadingAtlasImageLibrariesFail", "No se han podido cargar las librerías de procesamiento de imágenes de atlas");
             Russian.Add("loadingAtlasImageLibrariesFail", TranslationNeeded);
+            #endregion
+
+            #region Add zip files Dialog
+            //Component: DiagnosticsAddSelectionsPicturesLabel
+            //the message when the UISettings.xml file is parsed and the custom theme is loaded
+            English.Add("DiagnosticsAddSelectionsPicturesLabel", "Add any additional files here (your selection file, picture, etc.)");
+            German.Add("DiagnosticsAddSelectionsPicturesLabel", TranslationNeeded);
+            Polish.Add("DiagnosticsAddSelectionsPicturesLabel", TranslationNeeded);
+            French.Add("DiagnosticsAddSelectionsPicturesLabel", TranslationNeeded);
+            Spanish.Add("DiagnosticsAddSelectionsPicturesLabel", TranslationNeeded);
+            Russian.Add("DiagnosticsAddSelectionsPicturesLabel", TranslationNeeded);
+
+            //Component: DiagnosticsAddFilesButton
+            //the message when the UISettings.xml file is parsed and the custom theme is loaded
+            English.Add("DiagnosticsAddFilesButton", "Add Files");
+            German.Add("DiagnosticsAddFilesButton", TranslationNeeded);
+            Polish.Add("DiagnosticsAddFilesButton", TranslationNeeded);
+            French.Add("DiagnosticsAddFilesButton", TranslationNeeded);
+            Spanish.Add("DiagnosticsAddFilesButton", TranslationNeeded);
+            Russian.Add("DiagnosticsAddFilesButton", TranslationNeeded);
+
+            //Component: DiagnosticsRemoveSelectedButton
+            //the message when the UISettings.xml file is parsed and the custom theme is loaded
+            English.Add("DiagnosticsRemoveSelectedButton", "RemoveSelected");
+            German.Add("DiagnosticsRemoveSelectedButton", TranslationNeeded);
+            Polish.Add("DiagnosticsRemoveSelectedButton", TranslationNeeded);
+            French.Add("DiagnosticsRemoveSelectedButton", TranslationNeeded);
+            Spanish.Add("DiagnosticsRemoveSelectedButton", TranslationNeeded);
+            Russian.Add("DiagnosticsRemoveSelectedButton", TranslationNeeded);
+
+            //Component: DiagnosticsContinueButton
+            //the message when the UISettings.xml file is parsed and the custom theme is loaded
+            English.Add("DiagnosticsContinueButton", "Continue");
+            German.Add("DiagnosticsContinueButton", TranslationNeeded);
+            Polish.Add("DiagnosticsContinueButton", TranslationNeeded);
+            French.Add("DiagnosticsContinueButton", TranslationNeeded);
+            Spanish.Add("DiagnosticsContinueButton", TranslationNeeded);
+            Russian.Add("DiagnosticsContinueButton", TranslationNeeded);
+
+            //Component: cantRemoveDefaultFile
+            //
+            English.Add("cantRemoveDefaultFile", "Cannot remove a file to be added by default.");
+            German.Add("cantRemoveDefaultFile", TranslationNeeded);
+            Polish.Add("cantRemoveDefaultFile", TranslationNeeded);
+            French.Add("cantRemoveDefaultFile", TranslationNeeded);
+            Spanish.Add("cantRemoveDefaultFile", TranslationNeeded);
+            Russian.Add("cantRemoveDefaultFile", TranslationNeeded);
             #endregion
 
             #region Preview Window

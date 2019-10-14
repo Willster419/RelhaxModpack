@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Path = System.IO.Path;
 
 namespace RelhaxModpack.Windows
 {
@@ -54,7 +55,12 @@ namespace RelhaxModpack.Windows
             for (int i = 0; i < FilesToAddList.SelectedItems.Count; i++)
             {
                 if (FilesToAddalways.Contains(FilesToAddList.SelectedItems[i]))
-                    MessageBox.Show("CantRemoveDefaultFile");
+                {
+                    string filename = FilesToAddList.SelectedItems[i] as string;
+                    if (string.IsNullOrEmpty(filename))
+                        filename = "null";
+                    MessageBox.Show(string.Format("{0}: {1}", Translations.GetTranslatedString("cantRemoveDefaultFile"), Path.GetFileName(filename)));
+                }
                 else
                 {
                     FilesToAddList.Items.Remove(FilesToAddList.SelectedItems[i]);
