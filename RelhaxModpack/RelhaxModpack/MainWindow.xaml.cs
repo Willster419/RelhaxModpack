@@ -89,10 +89,6 @@ namespace RelhaxModpack
             WindowState = WindowState.Minimized;
             tempDisabledBlacklist = new Control[]
             {
-                ThemeDefault,
-                ThemeDark,
-                ThemeCustom,
-                UseBetaApplicationCB,
                 DisableTriggersCB,
                 VerboseLoggingCB
             };
