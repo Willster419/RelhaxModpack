@@ -62,6 +62,9 @@
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Foreground" Value="{StaticResource Button.Disabled.Foreground}"/>
             </Trigger>
+            <Trigger Property="IsEnabled" Value="True">
+                <Setter Property="Foreground" Value="{DynamicResource ResourceKey=testResource}"/>
+            </Trigger>
         </Style.Triggers>
     </Style>
 </ResourceDictionary>

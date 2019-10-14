@@ -229,7 +229,13 @@ namespace RelhaxModpack
                         if (colorset.ClassThemeDefinition.ForegroundAppliedLocal)
                             element.GetType().GetProperty("Foreground").SetValue(element, colorset.ForegroundBrush.Brush);
                         else
+                        {
                             element.SetCurrentValue(colorset.ClassThemeDefinition.ForegroundDependencyProperty, colorset.ForegroundBrush.Brush);
+                            if(element is Button button)
+                            {
+                                button.Resources["testResource"] = colorset.ForegroundBrush.Brush;
+                            }
+                        }
                     }
                 }
 
@@ -291,7 +297,13 @@ namespace RelhaxModpack
                     if (colorset.ClassThemeDefinition.ForegroundAppliedLocal)
                         element.GetType().GetProperty("Foreground").SetValue(element, componentColorSet.ForegroundBrush.Brush);
                     else
+                    {
                         element.SetCurrentValue(colorset.ClassThemeDefinition.ForegroundDependencyProperty, componentColorSet.ForegroundBrush.Brush);
+                        if (element is Button button)
+                        {
+                            button.Resources["testResource"] = componentColorSet.ForegroundBrush.Brush;
+                        }
+                    }
                 }
             }
 
@@ -314,6 +326,10 @@ namespace RelhaxModpack
             else if (element is Button)
             {
                 colorset = CurrentTheme.ButtonColorset;
+            }
+            else if (element is ProgressBar)
+            {
+                colorset = CurrentTheme.ProgressBarColorset;
             }
             else if (element is TabItem)
             {
@@ -747,6 +763,9 @@ namespace RelhaxModpack
                     break;
                 case "Control":
                     classColorset.ClassThemeDefinition = new ControlClassThemeDefinition();
+                    break;
+                case "ProgressBar":
+                    classColorset.ClassThemeDefinition = new ProgressbarClassThemeDefinition();
                     break;
                 default:
                     Logging.Error("Unknown theme class control type: {0}", classType);
