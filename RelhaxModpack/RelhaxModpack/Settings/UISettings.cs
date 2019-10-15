@@ -197,10 +197,10 @@ namespace RelhaxModpack
             ApplyThemeToRootComponent(window, customWindowDefinition);
         }
 
-        public static void ApplyThemeToRootComponent(FrameworkElement rootElement, bool customWindowDefinition, WindowColorset wcolorset = null)
+        public static void ApplyThemeToRootComponent(FrameworkElement rootElement, bool customWindowDefinition, WindowColorset wcolorset = null, bool includeSelf = false)
         {
             //build list of all internal framework components
-            List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsLogical(rootElement, false).Distinct().ToList();
+            List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsLogical(rootElement, includeSelf).Distinct().ToList();
             allWindowControls = allWindowControls.Where(element => element.Tag is string ID && !string.IsNullOrWhiteSpace(ID)).ToList();
 
             //apply all class level color sets

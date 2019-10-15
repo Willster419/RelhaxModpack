@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Net;
 using System.IO;
 using System.Xml;
+using RelhaxModpack.UIComponents;
 
 namespace RelhaxModpack.Windows
 {
@@ -67,6 +68,8 @@ namespace RelhaxModpack.Windows
         private async void OnApplicationLoading(object sender, RoutedEventArgs e)
         {
             DeveloperSelectionsContinueButton.IsEnabled = false;
+
+            //download and parse xml document
             string selectionsXMlString = string.Empty;
             using (client = new WebClient())
             {
@@ -81,37 +84,40 @@ namespace RelhaxModpack.Windows
                     Close();
                 }
             }
-            XmlDocument doc = new XmlDocument();
-            try
+            XmlDocument doc = XmlUtils.LoadXmlDocument(selectionsXMlString,XmlLoadType.FromString);
+            if(doc == null)
             {
-                doc.LoadXml(selectionsXMlString);
-            }
-            catch (XmlException xmlex)
-            {
-                Logging.Exception(xmlex.ToString());
                 MessageBox.Show(Translations.GetTranslatedString("failedToParseSelections"));
-                return;
+                Close();
             }
 
-            //load selections into stackpanel
+            //make sure the selection file has selection objects
             XmlNodeList selectionsList = XmlUtils.GetXmlNodesFromXPath(doc, "//selections/selection");
             if(selectionsList == null || selectionsList.Count == 0)
             {
                 Logging.Error("selectionsList is null or count is 0 after download");
                 MessageBox.Show(Translations.GetTranslatedString("failedToParseSelections"));
-                return;
+                Close();
             }
+
+            //get windowComponent
+            WindowColorset developerSelectionColorset = UISettings.CurrentTheme.WindowColorsets[typeof(DeveloperSelectionsViewer)];
+
+            //load selections into stackpanel
             bool firstOne = true;
             foreach (XmlNode node in selectionsList)
             {
-                DeveloperSelectionsStackPanel.Children.Add(new RadioButton()
+                RadioButton selectionButton = new RadioButton()
                 {
                     Content = node.Attributes["displayName"],
                     ToolTip = Translations.GetTranslatedString("lastModified") + ": " + node.Attributes["lastModified"],
                     Tag = node.InnerText,
-                    IsChecked = firstOne
-                });
+                    IsChecked = firstOne,
+                    Style = (Style)Application.Current.Resources["RelhaxRadioButtonStyle"]
+                };
+                DeveloperSelectionsStackPanel.Children.Add(selectionButton);
                 firstOne = false;
+                UISettings.ApplyThemeToRootComponent(selectionButton, developerSelectionColorset.ComponentColorsets != null, developerSelectionColorset, true);
             }
 
             //enable the button to select them
