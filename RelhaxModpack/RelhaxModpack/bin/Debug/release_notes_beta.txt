@@ -1,3 +1,12 @@
+Application version 0.29.3.1 (2019-10-14)
+https://www.virustotal.com/gui/file/be7d950cbbcfe585396a9a5c8188a34daeeab9f78113e254811b5c2fc9cd1fd5/detection
+- Fixed crash when trying to save a UI document template of dark theme.
+- Fixed issue not allowing UI themes to be applied to post install tab of advanced install progress window.
+- Fixed issue now allowing UI themes to be applied to developer selections viewer.
+- Re-wrote older sections of developer selections viewer for new coding and API standards.
+- Fixed bugs of developer selections viewer not closing properly based on some loading errors.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 0.29.3.0 (2019-10-14)
 https://www.virustotal.com/gui/file/7b8e86d957bfc962c24e95b246066906fe228d348e79b8992b946d675594e6fc/detection
 - Fixed the auto-detection bug of finding your WoT install. The entire process is completly re-written.
