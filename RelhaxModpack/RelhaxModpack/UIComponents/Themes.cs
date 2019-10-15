@@ -494,6 +494,17 @@ namespace RelhaxModpack.UIComponents
                             Brush = DarkThemeBackground
                         }
                     }
+                },
+                {
+                    typeof(DeveloperSelectionsViewer), new WindowColorset()
+                    {
+                        WindowType = typeof(DeveloperSelectionsViewer),
+                        BackgroundBrush = new CustomBrush()
+                        {
+                            IsValid = true,
+                            Brush = DarkThemeBackground
+                        }
+                    }
                 }
             }
         };
