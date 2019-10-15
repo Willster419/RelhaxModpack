@@ -82,6 +82,7 @@ namespace RelhaxModpack.Windows
                     Logging.Exception(ex.ToString());
                     MessageBox.Show(Translations.GetTranslatedString("failedToParseSelections"));
                     Close();
+                    return;
                 }
             }
             XmlDocument doc = XmlUtils.LoadXmlDocument(selectionsXMlString,XmlLoadType.FromString);
@@ -89,6 +90,7 @@ namespace RelhaxModpack.Windows
             {
                 MessageBox.Show(Translations.GetTranslatedString("failedToParseSelections"));
                 Close();
+                return;
             }
 
             //make sure the selection file has selection objects
@@ -98,6 +100,7 @@ namespace RelhaxModpack.Windows
                 Logging.Error("selectionsList is null or count is 0 after download");
                 MessageBox.Show(Translations.GetTranslatedString("failedToParseSelections"));
                 Close();
+                return;
             }
 
             //get windowComponent
@@ -135,7 +138,7 @@ namespace RelhaxModpack.Windows
                 }
                 else if (!FileToLoad.Equals("LOCAL"))
                 {
-                    //checkif a radio button is selected. to do that, set LoadSelection to false. forces a button to set it to true
+                    //check if a radio button is selected. to do that, set LoadSelection to false. forces a button to set it to true
                     LoadSelection = false;
                     foreach (RadioButton button in DeveloperSelectionsStackPanel.Children)
                     {
