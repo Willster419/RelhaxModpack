@@ -45,6 +45,7 @@ namespace RelhaxModpack
     /// </summary>
     public partial class App : Application
     {
+        bool exceptionShown = false;
         ExceptionCaptureDisplay exceptionCaptureDisplay = new ExceptionCaptureDisplay();
         //when application is brought to foreground
         private void Application_Activated(object sender, EventArgs e)
@@ -223,11 +224,17 @@ namespace RelhaxModpack
         //https://stackoverflow.com/questions/793100/globally-catch-exceptions-in-a-wpf-application
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            if (!Logging.IsLogDisposed(Logfiles.Application) && Logging.IsLogOpen(Logfiles.Application))
-                Logging.WriteToLog(e.Exception.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
-            exceptionCaptureDisplay.ExceptionText = e.Exception.ToString();
-            exceptionCaptureDisplay.ShowDialog();
-            CloseApplicationLog(true);
+            if (!exceptionShown)
+            {
+                exceptionShown = true;
+                if (!Logging.IsLogDisposed(Logfiles.Application) && Logging.IsLogOpen(Logfiles.Application))
+                {
+                    Logging.WriteToLog(e.Exception.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
+                }
+                exceptionCaptureDisplay.ExceptionText = e.Exception.ToString();
+                exceptionCaptureDisplay.ShowDialog();
+                CloseApplicationLog(true);
+            }
         }
     }
 }
