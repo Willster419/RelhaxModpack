@@ -17,6 +17,7 @@ namespace RelhaxModpack.UIComponents
         {
             ThemeName = "Default",
             FileName = string.Empty,
+
             SelectionListSelectedPanelColor = new CustomBrush()
             {
                 IsValid = true,
@@ -37,6 +38,42 @@ namespace RelhaxModpack.UIComponents
                 IsValid = true,
                 Brush = SystemColors.ControlTextBrush
             },
+            SelectionListBorderColor = new CustomBrush()
+            {
+                IsValid = true,
+                Brush = Brushes.Black
+            },
+            SelectionListActiveTabHeaderBackgroundColor = new CustomBrush()
+            {
+                IsValid = true,
+                Brush = Brushes.White
+            },
+            SelectionListActiveTabHeaderTextColor = new CustomBrush()
+            {
+                IsValid = true,
+                Brush = SystemColors.ControlTextBrush
+            },
+            SelectionListNotActiveHasNoSelectionsBackgroundColor = new CustomBrush()
+            {
+                IsValid = false,
+                Brush = null
+            },
+            SelectionListNotActiveHasNoSelectionsTextColor = new CustomBrush()
+            {
+                IsValid = true,
+                Brush = SystemColors.ControlTextBrush
+            },
+            SelectionListNotActiveHasSelectionsBackgroundColor = new CustomBrush()
+            {
+                IsValid = true,
+                Brush = new SolidColorBrush(Colors.BlanchedAlmond)
+            },
+            SelectionListNotActiveHasSelectionsTextColor = new CustomBrush()
+            {
+                IsValid = true,
+                Brush = SystemColors.ControlTextBrush
+            },
+
             ButtonColorset = new ClassColorset()
             {
                 ClassThemeDefinition = new ButtonClassThemeDefinition(),
@@ -179,6 +216,8 @@ namespace RelhaxModpack.UIComponents
         //dark gray but lighter for button
         private static SolidColorBrush DarkThemeButton = new SolidColorBrush(Color.FromArgb(255, 42, 42, 42));
 
+        private static SolidColorBrush DarkThemeActiveTab = new SolidColorBrush(Color.FromArgb(255, 100, 100, 100));
+
         private static SolidColorBrush DarkThemeImageButtonBackground = new SolidColorBrush(Color.FromArgb(255, 175, 175, 175));
         #endregion
 
@@ -186,6 +225,7 @@ namespace RelhaxModpack.UIComponents
         {
             ThemeName = "Dark",
             FileName = string.Empty,
+
             SelectionListSelectedPanelColor = new CustomBrush()
             {
                 IsValid = true,
@@ -206,6 +246,42 @@ namespace RelhaxModpack.UIComponents
                 IsValid = true,
                 Brush = DarkThemeTextColor
             },
+            SelectionListBorderColor = new CustomBrush()
+            {
+                IsValid = true,
+                Brush = Brushes.LightGray
+            },
+            SelectionListActiveTabHeaderBackgroundColor = new CustomBrush()
+            {
+                IsValid = true,
+                Brush = DarkThemeActiveTab
+            },
+            SelectionListActiveTabHeaderTextColor = new CustomBrush()
+            {
+                IsValid = true,
+                Brush = DarkThemeTextColor
+            },
+            SelectionListNotActiveHasNoSelectionsBackgroundColor = new CustomBrush()
+            {
+                IsValid = false,
+                Brush = DarkThemeBackground
+            },
+            SelectionListNotActiveHasNoSelectionsTextColor = new CustomBrush()
+            {
+                IsValid = true,
+                Brush = DarkThemeTextColor
+            },
+            SelectionListNotActiveHasSelectionsBackgroundColor = new CustomBrush()
+            {
+                IsValid = true,
+                Brush = new SolidColorBrush(Colors.BlanchedAlmond)
+            },
+            SelectionListNotActiveHasSelectionsTextColor = new CustomBrush()
+            {
+                IsValid = true,
+                Brush = SystemColors.ControlTextBrush
+            },
+
             ButtonColorset = new ClassColorset()
             {
                 ClassThemeDefinition = new ButtonClassThemeDefinition(),
