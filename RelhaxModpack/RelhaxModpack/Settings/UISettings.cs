@@ -38,6 +38,7 @@ namespace RelhaxModpack
         public static Brush NotSelectedTabColor = null;
 
         private static Theme currentTheme = Themes.Default;
+
         public static Theme CurrentTheme
         {
             get { return currentTheme; }
