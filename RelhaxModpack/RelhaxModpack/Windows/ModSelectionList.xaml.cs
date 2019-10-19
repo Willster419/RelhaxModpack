@@ -767,16 +767,15 @@ namespace RelhaxModpack.Windows
                     HorizontalAlignment = HorizontalAlignment.Left,
                     HorizontalContentAlignment = HorizontalAlignment.Left,
                     VerticalContentAlignment = VerticalAlignment.Center,
-                    //FONT/BACKGROUND TODO
                     IsChecked = false,
                     IsEnabled = true,
                     Content = package.NameDisplay,
                     PopularModVisability = Visibility.Hidden,
-                    GreyAreaVisability = Visibility.Hidden
+                    GreyAreaVisability = Visibility.Hidden,
+                    Foreground = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush
                 };
                 package.UIComponent = userMod;
                 userMod.Click += OnUserPackageClick;
-                //EVENT TODO
                 userStackPanel.Children.Add(userMod);
             }
         }
@@ -794,7 +793,6 @@ namespace RelhaxModpack.Windows
                 //make the tab page
                 cat.TabPage = new TabItem()
                 {
-                    //Background TODO
                     Header = cat.Name,
                     //HorizontalAlignment = HorizontalAlignment.Left,
                     //VerticalAlignment = VerticalAlignment.Center,
@@ -842,7 +840,7 @@ namespace RelhaxModpack.Windows
                             BorderThickness = ModpackSettings.EnableBordersLegacyView? new Thickness(1) : new Thickness(0),
                             Child = cat.CategoryHeader.ChildStackPanel,
                             Margin = new Thickness(-25, 0, 0, 0),
-                            Background = UISettings.NotSelectedPanelColor
+                            Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush
                         };
                         if (cat.CategoryHeader.TreeView.Items.Count > 0)
                             cat.CategoryHeader.TreeView.Items.Clear();
@@ -851,13 +849,12 @@ namespace RelhaxModpack.Windows
                         //for root element, hook into expandable element
                         cat.CategoryHeader.TreeViewItem.Collapsed += TreeViewItem_Collapsed;
                         cat.CategoryHeader.TreeViewItem.Expanded += (sender, e) => { e.Handled = true; };
-                        //TODO BACKGROUND
                         RelhaxWPFCheckBox box = new RelhaxWPFCheckBox()
                         {
                             Package = cat.CategoryHeader,
                             Content = cat.CategoryHeader.NameFormatted,
-                            HorizontalAlignment = HorizontalAlignment.Left
-                            //forground TODO
+                            HorizontalAlignment = HorizontalAlignment.Left,
+                            Foreground = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush
                         };
                         cat.CategoryHeader.UIComponent = box;
                         box.Click += OnWPFComponentCheck;
@@ -873,25 +870,22 @@ namespace RelhaxModpack.Windows
                         cat.CategoryHeader.ParentStackPanel = new StackPanel();
                         cat.CategoryHeader.ParentBorder = new Border()
                         {
-                            //background TODO
                             Child = cat.CategoryHeader.ParentStackPanel,
                             Padding = new Thickness(2),
-                            Background = UISettings.NotSelectedPanelColor
+                            Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush
                         };
                         cat.CategoryHeader.ScrollViewer = new ScrollViewer()
                         {
-                            //BACKROUND TODO
                             Content = cat.CategoryHeader.ParentBorder
                         };
                         //tab page -> scrollViewer -> Border -> stackPanel
                         cat.TabPage.Content = cat.CategoryHeader.ScrollViewer;
-                        //COLOR UI BACKGROUND TODO
                         //create checkbox for inside selecteionlist
                         RelhaxWPFCheckBox cb2 = new RelhaxWPFCheckBox()
                         {
                             Package = cat.CategoryHeader,
                             Content = cat.CategoryHeader.NameFormatted,
-                            //Foreground = Settings.GetTextColorWPF(),//TODO
+                            Foreground = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush,
                             HorizontalAlignment = HorizontalAlignment.Left
                         };
                         cb2.Click += OnWPFComponentCheck;
@@ -967,8 +961,7 @@ namespace RelhaxModpack.Windows
                         BorderBrush = Brushes.Black,
                         BorderThickness = ModpackSettings.EnableBordersDefaultV2View ? new Thickness(1) : new Thickness(0),
                         Child = package.ChildStackPanel,
-                        Background = UISettings.NotSelectedPanelColor
-                        //background TODO
+                        Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush
                     };
                     //custom settings for each border
                     switch(ModpackSettings.ModSelectionView)
@@ -989,8 +982,6 @@ namespace RelhaxModpack.Windows
                         {
                             ToolTip = package.ToolTipString,
                             Package = package,
-                            //FONT? TODO
-                            //TODO: DOES HORIZONAL BREAK LEGACY??
                             HorizontalAlignment = HorizontalAlignment.Left,
                             HorizontalContentAlignment = HorizontalAlignment.Left,
                             VerticalContentAlignment = VerticalAlignment.Center,
@@ -1000,7 +991,6 @@ namespace RelhaxModpack.Windows
                             GreyAreaVisability = package.GreyAreaMod? Visibility.Visible : Visibility.Hidden,
                             //the UI building code ONLY deals with BUILDING the UI, not loading configuration options!!
                             //so make it false and later when loading selection it will mark it
-                            //BACKGROUND FORGROUND TODO
                             IsChecked = false
                         };
                         break;
@@ -1015,7 +1005,6 @@ namespace RelhaxModpack.Windows
                         {
                             ToolTip = package.ToolTipString,
                             Package = package,
-                            //FONT? TODO
                             HorizontalAlignment = HorizontalAlignment.Left,
                             HorizontalContentAlignment = HorizontalAlignment.Left,
                             VerticalContentAlignment = VerticalAlignment.Center,
@@ -1024,7 +1013,6 @@ namespace RelhaxModpack.Windows
                             IsChecked = false,
                             PopularModVisability = package.PopularMod ? Visibility.Visible : Visibility.Hidden,
                             GreyAreaVisability = package.GreyAreaMod ? Visibility.Visible : Visibility.Hidden
-                            //BACKGROUND FORGROUND TODO
                         };
                         break;
                 }
@@ -1088,7 +1076,6 @@ namespace RelhaxModpack.Windows
                     IsEnabled = false,
                     //FONT?
                     MinWidth = 100,
-                    //TODO: BELOW OK IN LEGACY?
                     MaxWidth = 420,//yes, really
                     HorizontalAlignment = HorizontalAlignment.Left
                 };

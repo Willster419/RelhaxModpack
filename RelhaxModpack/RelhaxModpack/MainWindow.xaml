@@ -7,10 +7,13 @@
     xmlns:System="clr-namespace:System;assembly=mscorlib"
     xmlns:uicomponents="clr-namespace:RelhaxModpack.UIComponents" x:Name="TheMainWindow" x:Class="RelhaxModpack.MainWindow"
     mc:Ignorable="d"
-    Title="Relhax" Height="675" Width="550" ResizeMode="CanMinimize"
+    Title="Relhax" Height="660" Width="550" ResizeMode="CanMinimize"
     Loaded="TheMainWindow_Loaded"
     Closing="TheMainWindow_Closing"
     Icon="Resources/modpack_icon.ico">
+    <Window.Resources>
+        
+    </Window.Resources>
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
         <Grid.Background>
             <ImageBrush ImageSource="Resources/Images/WoT brand light grey.png"/>
@@ -29,14 +32,14 @@
             <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="2" Margin="2" Content="View News" Tag="ViewNewsButton" x:Name="ViewNewsButton" Click="ViewNewsButton_Click"/>
             <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Margin="2" Content="Diagnostic Utilities" Tag="DiagnosticUtilitiesButton" x:Name="DiagnosticUtilitiesButton" Click="DiagnosticUtilitiesButton_Click"/>
         </Grid>
-        <TabControl HorizontalAlignment="Stretch" Height="254" Margin="12,81,12,0" VerticalAlignment="Top" Background="#7FE5E5E5">
+        <TabControl HorizontalAlignment="Stretch" Height="254" Margin="12,81,12,0" VerticalAlignment="Top" Background="#7FE5E5E5" Tag="SettingsTagGroup">
             <TabItem Header="Intro" x:Name="SettingsTabIntro" Tag="SettingsTabIntro" Background="#7FE5E5E5">
-                <Grid Background="#7FE5E5E5">
+                <Grid Background="#7FE5E5E5" Tag="SettingsTabIntroGrid">
                     <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" x:Name="HelperText" Tag="HelperText"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Selection View" x:Name="SettingsTabSelectionView" Tag="SettingsTabSelectionView" Background="#7FE5E5E5">
-                <Grid Background="#7FE5E5E5">
+                <Grid Background="#7FE5E5E5" Tag="SettingsTabSelectionViewGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -62,7 +65,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Installation Settings" x:Name="SettingsTabInstallationSettings" Tag="SettingsTabInstallationSettings" Background="#7FE5E5E5">
-                <Grid Background="#7FE5E5E5">
+                <Grid Background="#7FE5E5E5" Tag="SettingsTabInstallationSettingsGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -98,7 +101,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Application Settings" x:Name="SettingsTabApplicationSettings" Tag="SettingsTabApplicationSettings" Background="#7FE5E5E5">
-                <Grid Background="#7FE5E5E5">
+                <Grid Background="#7FE5E5E5" Tag="SettingsTabApplicationSettingsGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -130,24 +133,27 @@
                     <StackPanel Grid.Column="1">
                         <TextBlock Text="Select theme:" />
                         <StackPanel Orientation="Vertical" Margin="15,0,0,0">
-                            <RadioButton x:Name="ThemeDefault" Tag="ThemeDefault" Checked="Theme_Checked" IsEnabled="False" IsChecked="True">
+                            <RadioButton x:Name="ThemeDefault" Tag="ThemeDefault" Checked="Theme_Checked">
                                 <TextBlock x:Name="ThemeDefaultText" Text="Default" TextWrapping="Wrap"/>
                             </RadioButton>
-                            <RadioButton x:Name="ThemeDark" Tag="ThemeDark" Checked="Theme_Checked" IsEnabled="False">
+                            <RadioButton x:Name="ThemeDark" Tag="ThemeDark" Checked="Theme_Checked">
                                 <TextBlock x:Name="ThemeDarkText" Text="Dark" TextWrapping="Wrap"/>
                             </RadioButton>
-                            <RadioButton x:Name="ThemeCustom" Tag="ThemeCustom" Checked="Theme_Checked" IsEnabled="False">
+                            <RadioButton x:Name="ThemeCustom" Tag="ThemeCustom" Checked="Theme_Checked">
                                 <TextBlock x:Name="ThemeCustomText" Text="Custom" TextWrapping="Wrap"/>
                             </RadioButton>
                         </StackPanel>
-                        <Button Tag="DumpColorSettingsButton" Name="DumpColorSettingsButton" Click="DumpColorSettingsButton_Click">
-                            <TextBlock x:Name="DumpColorSettingsButtonText" Text="Dump color settings to xml" TextWrapping="Wrap"/>
+                        <Button Tag="DumpColorSettingsButton" Name="DumpColorSettingsButton" Click="DumpColorSettingsButton_Click" Margin="0,0,0,2">
+                            <TextBlock x:Name="DumpColorSettingsButtonText" Text="Save current color settings" TextWrapping="Wrap"/>
+                        </Button>
+                        <Button Tag="OpenColorPickerButton" Name="OpenColorPickerButton" Click="OpenColorPickerButton_Click">
+                            <TextBlock x:Name="OpenColorPickerButtonText" Text="Open color picker" TextWrapping="Wrap"/>
                         </Button>
                     </StackPanel>
                 </Grid>
             </TabItem>
             <TabItem Header="Advanced Settings" x:Name="SettingsTabAdvancedSettings" Tag="SettingsTabAdvancedSettings" Background="#7FE5E5E5">
-                <Grid Background="#7FE5E5E5">
+                <Grid Background="#7FE5E5E5" Tag="SettingsTabAdvancedSettingsGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -241,55 +247,65 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <uicomponents:LinkButton x:Name="Forms_ENG_EUButton" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Click="OnLinkButtonClick" Link="http://forum.worldoftanks.eu/index.php?/topic/623269-">
+            <uicomponents:LinkButton x:Name="Forms_ENG_EUButton" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Tag="Forms_ENG_EUButton"  Margin="3,0,3,0" Click="OnLinkButtonClick" Link="http://forum.worldoftanks.eu/index.php?/topic/623269-">
                 <Image Source="Resources/Images/flag gb.png" Stretch="None" x:Name="EU_ENG_forms_image"/>
             </uicomponents:LinkButton>
-            <uicomponents:LinkButton Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="Forms_GER_EUButton" Click="OnLinkButtonClick" Link="http://forum.worldoftanks.eu/index.php?/topic/624499-">
+            <uicomponents:LinkButton Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="Forms_GER_EUButton" x:Name="Forms_GER_EUButton" Click="OnLinkButtonClick" Link="http://forum.worldoftanks.eu/index.php?/topic/624499-">
                 <Image Source="Resources/Images/flag de.png" Stretch="None"/>
             </uicomponents:LinkButton>
-            <uicomponents:LinkButton Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="Forms_ENG_NAButton" Click="OnLinkButtonClick" Link="http://forum.worldoftanks.com/index.php?/topic/535868-">
+            <uicomponents:LinkButton Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="Forms_ENG_NAButton" x:Name="Forms_ENG_NAButton" Click="OnLinkButtonClick" Link="http://forum.worldoftanks.com/index.php?/topic/535868-">
                 <Image Source="Resources/Images/flag us.png" Stretch="None"/>
             </uicomponents:LinkButton>
-            <uicomponents:LinkButton Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="FacebookButton" Click="OnLinkButtonClick" Link="https://www.facebook.com/relhax.modpack.1">
+            <uicomponents:LinkButton Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="FacebookButton" x:Name="FacebookButton" Click="OnLinkButtonClick" Link="https://www.facebook.com/relhax.modpack.1">
                 <Image Source="Resources/Images/facebook brand.png" Stretch="None"/>
             </uicomponents:LinkButton>
-            <uicomponents:LinkButton Grid.Column="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="TwitterButton" Click="OnLinkButtonClick" Link="https://twitter.com/relhaxmodpack">
+            <uicomponents:LinkButton Grid.Column="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="TwitterButton" x:Name="TwitterButton" Click="OnLinkButtonClick" Link="https://twitter.com/relhaxmodpack">
                 <Image Source="Resources/Images/twitter brand.png" Stretch="None"/>
             </uicomponents:LinkButton>
-            <uicomponents:LinkButton Grid.Column="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="DiscordButton" Click="OnLinkButtonClick" Link="https://discord.gg/58fdPvK">
+            <uicomponents:LinkButton Grid.Column="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="DiscordButton" x:Name="DiscordButton" Click="OnLinkButtonClick" Link="https://discord.gg/58fdPvK">
                 <Image Source="Resources/Images/discord brand.png" Stretch="None"/>
             </uicomponents:LinkButton>
-            <uicomponents:LinkButton Grid.Column="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="HomepageButton" Click="OnLinkButtonClick" Link="https://relhaxmodpack.com/">
-                <Image Source="Resources/Images/Home.png" Stretch="None"/>
+            <uicomponents:LinkButton Grid.Column="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="HomepageButton" x:Name="HomepageButton" Click="OnLinkButtonClick" Link="https://relhaxmodpack.com/">
+                <Border Background="Transparent" Tag="HomepageButtonImageBorder">
+                    <Image Source="Resources/Images/Home.png" Stretch="None"/>
+                </Border>
             </uicomponents:LinkButton>
-            <uicomponents:LinkButton Grid.Column="9" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="FindBugAddModButton" Click="OnLinkButtonClick" Link="https://forums.relhaxmodpack.com/">
-                <Image Source="Resources/Images/report.png" Stretch="None"/>
+            <uicomponents:LinkButton Grid.Column="9" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="FindBugAddModButton" x:Name="FindBugAddModButton" Click="OnLinkButtonClick" Link="https://forums.relhaxmodpack.com/">
+                <Border Background="Transparent" Tag="FindBugAddModButtonImageBorder">
+                    <Image Source="Resources/Images/report.png" Stretch="None"/>
+                </Border>
             </uicomponents:LinkButton>
-            <uicomponents:LinkButton Grid.Column="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="SendEmailButton" Click="OnLinkButtonClick" Link="mailto:info@relhaxmodpack.com">
-                <Image Source="Resources/Images/EMail.png" Stretch="None"/>
+            <uicomponents:LinkButton Grid.Column="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="SendEmailButton" x:Name="SendEmailButton" Click="OnLinkButtonClick" Link="mailto:info@relhaxmodpack.com">
+                <Border Background="Transparent" Tag="SendEmailButtonImageBorder">
+                    <Image Source="Resources/Images/EMail.png" Stretch="None"/>
+                </Border>
             </uicomponents:LinkButton>
-            <uicomponents:LinkButton Grid.Column="11" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="DonateButton" Click="OnLinkButtonClick" Link="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=76KNV8KXKYNG2">
-                <Image Source="Resources/Images/donation.png" Stretch="None"/>
+            <uicomponents:LinkButton Grid.Column="11" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="DonateButton" x:Name="DonateButton" Click="OnLinkButtonClick" Link="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=76KNV8KXKYNG2">
+                <Border Background="Transparent" Tag="DonateButtonImageBorder">
+                    <Image Source="Resources/Images/donation.png" Stretch="None"/>
+                </Border>
             </uicomponents:LinkButton>
         </Grid>
-        <Grid HorizontalAlignment="Stretch" Height="40" Margin="10,596,10,0" VerticalAlignment="Top" >
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Application Version V{version}" VerticalAlignment="Center" x:Name="ApplicationVersionLabel"/>
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Database Version V{version}" VerticalAlignment="Center" Grid.Row="1" x:Name="DatabaseVersionLabel" Margin="0,3,0,0"/>
+        <Grid HorizontalAlignment="Stretch" Height="25" Margin="10,596,10,0" VerticalAlignment="Top" Tag="VersionsGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Application Version V{version}" VerticalAlignment="Stretch" x:Name="ApplicationVersionLabel" Tag="ApplicationVersionLabel"/>
+            <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Database Version V{version}" VerticalAlignment="Stretch" x:Name="DatabaseVersionLabel" Tag="DatabaseVersionLabel"/>
         </Grid>
-        <Grid HorizontalAlignment="Stretch" Height="208" Margin="10,340,10,0" VerticalAlignment="Top" >
-            <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,147,2,0" VerticalAlignment="Top" x:Name="TotalProgressBar"/>
-            <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,167,2,0" VerticalAlignment="Top" x:Name="ParentProgressBar"/>
-            <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,187,2,0" VerticalAlignment="Top" x:Name="ChildProgressBar"/>
-            <TextBox HorizontalAlignment="Stretch" Height="92" Margin="2,50,2,0" VerticalAlignment="Top" x:Name="InstallProgressTextBox" TextWrapping="Wrap" IsReadOnly="True"/>
-            <GroupBox Header="Language" HorizontalAlignment="Left" Height="45" Margin="360,0,0,0" VerticalAlignment="Top" Width="150" x:Name="LanguageSelectionGB">
-                <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Tag="LanguagesSelector" x:Name="LanguagesSelector" SelectionChanged="OnLanguageSelectionChanged" Margin="0,0,0,0">
-                </ComboBox>
-            </GroupBox>
+        <Grid HorizontalAlignment="Stretch" Height="208" Margin="10,340,10,0" VerticalAlignment="Top">
+            <Border HorizontalAlignment="Left" Height="45" Margin="364,0,0,0" VerticalAlignment="Top" Width="150" Tag="LanguageSelectionBorder">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock x:Name="LanguageSelectionTextblock" Tag="LanguageSelectionTextBlock" Text="Language Selection" TextWrapping="Wrap" Margin="0,0,0,5"/>
+                    <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="LanguagesSelector" SelectionChanged="OnLanguageSelectionChanged" Margin="0,0,0,0" Tag="LanguageSelectionCombobox"/>
+                </StackPanel>
+            </Border>
             <Button Tag="CancelDownloadButton" x:Name="CancelDownloadInstallButton" Content="Cancel" HorizontalAlignment="Left" Margin="235,14,0,0" VerticalAlignment="Top" Width="118" Height="31" Visibility="Hidden" IsEnabled="False"/>
+            <TextBox HorizontalAlignment="Stretch" Height="92" Margin="2,50,2,0" VerticalAlignment="Top" x:Name="InstallProgressTextBox" TextWrapping="Wrap" IsReadOnly="True" Tag="InstallProgressTextBox"/>
+            <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,147,2,0" VerticalAlignment="Top" x:Name="TotalProgressBar" Tag="TotalProgressBar"/>
+            <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,167,2,0" VerticalAlignment="Top" x:Name="ParentProgressBar" Tag="ParentProgressBar"/>
+            <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,187,2,0" VerticalAlignment="Top" x:Name="ChildProgressBar" Tag="ChildProgressBar"/>
         </Grid>
     </Grid>
 </Window>

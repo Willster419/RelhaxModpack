@@ -134,9 +134,28 @@
     <Compile Include="DatabaseComponents\SelectablePackage.cs" />
     <Compile Include="DatabaseComponents\Trigger.cs" />
     <Compile Include="DatabaseComponents\UserFile.cs" />
+    <Compile Include="UIComponents\BoundUISettings.cs" />
+    <Compile Include="UIComponents\ClassColorset.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\BorderClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\ButtonClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\CheckboxClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\ComboboxClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\ControlClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\IClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\PanelClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\ProgressbarClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\RadioButtonClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\TabItemClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\TextBlockClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ComponentColorset.cs" />
+    <Compile Include="UIComponents\CustomBrush.cs" />
+    <Compile Include="UIComponents\CustomBrushConverter.cs" />
     <Compile Include="UIComponents\RelhaxHyperlink.xaml.cs">
       <DependentUpon>RelhaxHyperlink.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UIComponents\Theme.cs" />
+    <Compile Include="UIComponents\Themes.cs" />
+    <Compile Include="UIComponents\WindowColorset.cs" />
     <Compile Include="UIComponents\ZoomBorder.cs" />
     <Compile Include="Utils\GlobalSuppressions.cs" />
     <Compile Include="InstallerComponents\Atlas.cs" />
@@ -204,6 +223,9 @@
     <Compile Include="Windows\NewsViewer.xaml.cs">
       <DependentUpon>NewsViewer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\RelhaxColorPicker.xaml.cs">
+      <DependentUpon>RelhaxColorPicker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\RelhaxMediaPlayer.xaml.cs">
       <DependentUpon>RelhaxMediaPlayer.xaml</DependentUpon>
     </Compile>
@@ -252,6 +274,9 @@
     <Compile Include="Windows\ScalingConfirmation.xaml.cs">
       <DependentUpon>ScalingConfirmation.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\TemplateWindow.xaml.cs">
+      <DependentUpon>TemplateWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\VersionInfo.xaml.cs">
       <DependentUpon>VersionInfo.xaml</DependentUpon>
     </Compile>
@@ -271,11 +296,31 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UIComponents\RelhaxRadioButtonStyleDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\RelhaxCheckboxStyleDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\RelhaxComboboxStyleDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UIComponents\RelhaxHyperlink.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UIComponents\RelhaxInstallTaskReporter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\RelhaxButtonStyleDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\RelhaxTabItemStyleDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -367,11 +412,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\RelhaxColorPicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\RelhaxMediaPlayer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\ScalingConfirmation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\TemplateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1397,7 +1397,7 @@
             RelhaxInstallTaskReporter
             </summary>
         </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.#ctor">
+        <member name="M:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.#ctor(System.String)">
             <summary>
             Create an instance of the RelhaxInstallTaskReporter and init the UI side of it
             </summary>
@@ -3102,6 +3102,26 @@
             The unstable private testing database.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.UIThemes">
+            <summary>
+            The list of different types of themes in the application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIThemes.Default">
+            <summary>
+            The default application theme
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIThemes.Dark">
+            <summary>
+            The dark application theme
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIThemes.Custom">
+            <summary>
+            A custom application theme from the UISettings.xml
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.ModpackSettings">
             <summary>
             Provides access to all settings used in the modpack.
@@ -3279,6 +3299,16 @@
             Toggle for if the Preview window should be shown in fullscreen mode
             </summary>
         </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ModSelectionFullscreen">
+            <summary>
+            Toggle for if the ModSelectionView window should be shown in fullscreen mode
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.MinimizeToSystemTray">
+            <summary>
+            t=Toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.ModpackSettings.AutoInstallFrequencyInterval">
             <summary>
             The time, in a specified unit, to check for anew data base version
@@ -3299,11 +3329,6 @@
             The width, in pixels, of the ModSelectionView window
             </summary>
         </member>
-        <member name="F:RelhaxModpack.ModpackSettings.ModSelectionFullscreen">
-            <summary>
-            Toggle for if the ModSelectionView window should be shown in fullscreen mode
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.ModpackSettings.PreviewX">
             <summary>
             The x-coordinate location, in pixels, of the Preview window
@@ -3322,6 +3347,11 @@
         <member name="F:RelhaxModpack.ModpackSettings.PreviewWidth">
             <summary>
             The width, in pixels, of the Preview window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.DisplayScale">
+            <summary>
+            The factor to scale the window size and components by. From 1 to 3 in increments of 0.25
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.AutoOneclickSelectionFilePath">
@@ -3355,14 +3385,9 @@
             The application distribution version to use. When selected, it won't take affect until application restart
             </summary>
         </member>
-        <member name="F:RelhaxModpack.ModpackSettings.MinimizeToSystemTray">
+        <member name="F:RelhaxModpack.ModpackSettings.ApplicationTheme">
             <summary>
-            t=Toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.DisplayScale">
-            <summary>
-            
+            The theme to apply to the application
             </summary>
         </member>
         <member name="M:RelhaxModpack.ModpackSettings.ApplyOldSettings(System.Xml.XmlNodeList)">
@@ -3879,65 +3904,29 @@
             Handles all custom UI settings
             </summary>
         </member>
-        <member name="F:RelhaxModpack.UISettings.CustomColorSettingsPath">
+        <member name="F:RelhaxModpack.UISettings.CustomColorSettingsPathV1">
             <summary>
             The name of the Xml element to hold all custom color settings
             </summary>
             <remarks>See CustomSettings array for list of custom colors</remarks>
         </member>
-        <member name="F:RelhaxModpack.UISettings.CustomSettings">
-            <summary>
-            A list of custom colors for controlling color behavior of components that 
-            </summary>
-            <remarks>Settings that exist in here don't directly map to 1 setting and control other color settings.
-            For example, changing the color of a selected component in the mod selection list</remarks>
-        </member>
-        <member name="F:RelhaxModpack.UISettings.UIDocument">
-            <summary>
-            The parsed XML document containing the xml color settings
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UISettings.SelectedPanelColor">
-            <summary>
-            The color to use for when a component is selected in the selection list
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UISettings.NotSelectedPanelColor">
-            <summary>
-            The color to use for when a component is not selection in the selection list
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UISettings.SelectedTextColor">
-            <summary>
-            The color to use when a component is selected in the selection list
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UISettings.NotSelectedTextColor">
-            <summary>
-            The color to use when a component is not selected in the selection list
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.UISettings.NotSelectedTabColor">
             <summary>
             The color to use in the selection list for a tab which is not selected
             </summary>
-        </member>
-        <member name="M:RelhaxModpack.UISettings.LoadSettings(System.Boolean)">
-            <summary>
-            Load the custom color definitions from XML
-            </summary>
+            <remarks>It starts as null because the color is unknown (and can be different types based on the user's theme).
+            It is set on user selection on a component in the selection list.</remarks>
         </member>
         <member name="M:RelhaxModpack.UISettings.ApplyUIColorSettings(System.Windows.Window)">
             <summary>
             Applies custom color settings to a window
             </summary>
-            <param name="w">The Window object to apply color settings to</param>
+            <param name="window">The Window object to apply color settings to</param>
         </member>
-        <member name="M:RelhaxModpack.UISettings.ApplyUIColorsettingsV1(System.Windows.Window)">
+        <member name="M:RelhaxModpack.UISettings.LoadSettingsFile">
             <summary>
-            Applies color settings to a window of Xml document format 1.0
+            Load the custom color definitions from XML
             </summary>
-            <param name="w">The window to apply changes to</param>
         </member>
         <member name="M:RelhaxModpack.UISettings.ParseColorFromString(System.String,System.Windows.Media.Color@)">
             <summary>
@@ -3954,11 +3943,12 @@
             </summary>
             <param name="p">The color gradient direction to verify</param>
         </member>
-        <member name="M:RelhaxModpack.UISettings.DumpAllWindowColorSettingsToFile(System.String)">
+        <member name="M:RelhaxModpack.UISettings.DumpAllWindowColorSettingsToFile(System.String,RelhaxModpack.MainWindow)">
             <summary>
             Saves all currently enabled color settings to an xml file
             </summary>
             <param name="savePath">The path to save the xml file to</param>
+            <param name="mainWindow">If method is called from MainWindow, use itself for getting its color properties</param>
         </member>
         <member name="T:RelhaxModpack.PatchRegressionTypes">
             <summary>
@@ -4412,6 +4402,24 @@
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.NewsViewer.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.RelhaxColorPicker">
+            <summary>
+            Interaction logic for RelhaxColorPicker.xaml
+            </summary>
+            <summary>
+            RelhaxColorPicker
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxColorPicker.#ctor">
+            <summary>
+            Create an instance of the RelhaxColorPicker window
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxColorPicker.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>
@@ -4945,6 +4953,19 @@
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.ScalingConfirmation.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.TemplateWindow">
+            <summary>
+            Interaction logic for TemplateWindow.xaml
+            </summary>
+            <summary>
+            TemplateWindow
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.TemplateWindow.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>
@@ -5900,7 +5921,7 @@
             <param name="type">The type of macro replace operation</param>
             <returns>The replaced string</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.AutoFindWoTDirectory(System.String@)">
+        <member name="M:RelhaxModpack.Utils.AutoFindWoTDirectory">
             <summary>
             Checks the registry to get the latest location of where WoT is installed
             </summary>

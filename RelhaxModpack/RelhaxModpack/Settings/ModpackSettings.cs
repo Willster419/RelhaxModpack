@@ -64,6 +64,27 @@ namespace RelhaxModpack
     }
 
     /// <summary>
+    /// The list of different types of themes in the application
+    /// </summary>
+    public enum UIThemes
+    {
+        /// <summary>
+        /// The default application theme
+        /// </summary>
+        Default,
+
+        /// <summary>
+        /// The dark application theme
+        /// </summary>
+        Dark,
+
+        /// <summary>
+        /// A custom application theme from the UISettings.xml
+        /// </summary>
+        Custom
+    }
+
+    /// <summary>
     /// Provides access to all settings used in the modpack.
     /// </summary>
     public static class ModpackSettings
@@ -245,6 +266,16 @@ namespace RelhaxModpack
         public static bool PreviewFullscreen = false;
 
         /// <summary>
+        /// Toggle for if the ModSelectionView window should be shown in fullscreen mode
+        /// </summary>
+        public static bool ModSelectionFullscreen = false;
+
+        /// <summary>
+        /// t=Toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
+        /// </summary>
+        public static bool MinimizeToSystemTray = false;
+
+        /// <summary>
         /// The time, in a specified unit, to check for anew data base version
         /// </summary>
         public static int AutoInstallFrequencyInterval = 10;
@@ -265,11 +296,6 @@ namespace RelhaxModpack
         public static int ModSelectionWidth = 800;
 
         /// <summary>
-        /// Toggle for if the ModSelectionView window should be shown in fullscreen mode
-        /// </summary>
-        public static bool ModSelectionFullscreen = false;
-
-        /// <summary>
         /// The x-coordinate location, in pixels, of the Preview window
         /// </summary>
         public static int PreviewX = 0;
@@ -288,6 +314,11 @@ namespace RelhaxModpack
         /// The width, in pixels, of the Preview window
         /// </summary>
         public static int PreviewWidth = 450;
+
+        /// <summary>
+        /// The factor to scale the window size and components by. From 1 to 3 in increments of 0.25
+        /// </summary>
+        public static double DisplayScale = 0;
 
         /// <summary>
         /// The path to the auto or one click selection file
@@ -321,14 +352,9 @@ namespace RelhaxModpack
         public static ApplicationVersions ApplicationDistroVersion = ApplicationVersions.Stable;
 
         /// <summary>
-        /// t=Toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
+        /// The theme to apply to the application
         /// </summary>
-        public static bool MinimizeToSystemTray = false;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static double DisplayScale = 0;
+        public static UIThemes ApplicationTheme = UIThemes.Default;
         #endregion
 
         #region Legacy compatibility

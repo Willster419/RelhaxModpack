@@ -2,12 +2,27 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:RelhaxModpack"
+             xmlns:localUI="clr-namespace:RelhaxModpack.UIComponents"
+             xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
              StartupUri="MainWindow.xaml"
              Activated="Application_Activated"
              Deactivated="Application_Deactivated"
              Exit="Application_Exit"
              Startup="Application_Startup" DispatcherUnhandledException="Application_DispatcherUnhandledException">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- https://stackoverflow.com/questions/44469204/in-wpf-how-to-reference-a-staticresource-in-app-xaml-from-merged-dictionary -->
+                <ResourceDictionary>
+                    <localUI:CustomBrushConverter x:Key="CustomToBrushConverter"/>
+                </ResourceDictionary>
+                <!-- <ResourceDictionary Source="RelhaxThemes.xaml"/> -->
+                <ResourceDictionary Source="UIComponents/RelhaxButtonStyleDictionary.xaml"/>
+                <ResourceDictionary Source="UIComponents/RelhaxCheckboxStyleDictionary.xaml"/>
+                <ResourceDictionary Source="UIComponents/RelhaxComboboxStyleDictionary.xaml"/>
+                <ResourceDictionary Source="UIComponents/RelhaxRadioButtonStyleDictionary.xaml"/>
+                <ResourceDictionary Source="UIComponents/RelhaxTabItemStyleDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

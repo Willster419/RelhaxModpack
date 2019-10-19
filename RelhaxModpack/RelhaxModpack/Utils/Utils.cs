@@ -109,6 +109,12 @@ namespace RelhaxModpack
         }
     }
 
+    public struct RegistrySearch
+    {
+        public RegistryKey Root;
+        public string Searchpath;
+    }
+
     /// <summary>
     /// A utility class for static functions used in various places in the modpack
     /// </summary>
@@ -2335,92 +2341,99 @@ namespace RelhaxModpack
         /// </summary>
         /// <param name="WoTRoot">The string to set to the WoT path</param>
         /// <returns>True if operation success</returns>
-        public static bool AutoFindWoTDirectory(ref string WoTRoot)
+        public static string AutoFindWoTDirectory()
         {
             List<string> searchPathWoT = new List<string>();
-            string[] registryPathArray;
+            RegistryKey result = null;
 
-            // here we need the value for the searchlist
-            // check replay link
-            registryPathArray = new string[] { @"HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.wotreplay\shell\open\command", @"HKEY_CURRENT_USER\Software\Classes\.wotreplay\shell\open\command" };
-            foreach (string regEntry in registryPathArray)
+            //check replay link locations (the last game instance the user opened)
+            //key is null, value is path
+            RegistrySearch[] registryEntriesGroup1 = new RegistrySearch[]
             {
-                // get values from from registry
-                object obj = Registry.GetValue(regEntry, "", -1);
-                // if it is not "null", it is containing possible a string
-                if (obj != null)
-                {
-                    try
-                    {
-                        // add the thing to the checklist, but remove the Quotation Marks in front of the string and the trailing -> " "%1"
-                        searchPathWoT.Add(((string)obj).Substring(1).Substring(0, ((string)obj).Length - 7));
-                    }
-                    catch
-                    { } // only exception catching
-                }
-            }
+                new RegistrySearch(){Root = Registry.LocalMachine, Searchpath = @"SOFTWARE\Classes\.wotreplay\shell\open\command"},
+                new RegistrySearch(){Root = Registry.CurrentUser, Searchpath = @"Software\Classes\.wotreplay\shell\open\command"}
+            };
 
-            // here we need the value for the searchlist
-            string regPath = @"HKEY_CURRENT_USER\Software\Wargaming.net\Launcher\Apps\wot";
-            RegistryKey subKeyHandle = Registry.CurrentUser.OpenSubKey(regPath.Replace(@"HKEY_CURRENT_USER\", ""));
-            if (subKeyHandle != null)
+            foreach (RegistrySearch searchPath in registryEntriesGroup1)
             {
-                // get the value names at the reg Key one by one
-                foreach (string valueName in subKeyHandle.GetValueNames())
+                Logging.Debug("Searching in registry root {0} with path {1}", searchPath.Root.Name, searchPath.Searchpath);
+                result = GetRegistryKeys(searchPath);
+                if (result != null)
                 {
-                    // read the value from the regPath
-                    object obj = Registry.GetValue(regPath, valueName, -1);
-                    if (obj != null)
+                    foreach (string valueInKey in result.GetValueNames())
                     {
-                        try
+                        string possiblePath = result.GetValue(valueInKey) as string;
+                        if (!string.IsNullOrWhiteSpace(possiblePath) && possiblePath.ToLower().Contains("worldoftanks.exe"))
                         {
-                            // we did get only a path to used WoT folders, so add the game name to the path and add it to the checklist
-                            searchPathWoT.Add(Path.Combine((string)obj, "WorldOfTanks.exe"));
-                        }
-                        catch
-                        { } // only exception catching
-                    }
-                }
-            }
-
-            // here we need the value name for the searchlist
-            registryPathArray = new string[] { @"Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\MuiCache", @"Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Compatibility Assistant\Store" };
-            foreach (string p in registryPathArray)
-            {
-                // set the handle to the registry key
-                subKeyHandle = Registry.CurrentUser.OpenSubKey(p);
-                if (subKeyHandle == null) continue;            // subKeyHandle == null not existsting
-                // parse all value names of the registry key abouve
-                foreach (string valueName in subKeyHandle.GetValueNames())
-                {
-                    try
-                    {
-                        // if the lower string "worldoftanks.exe" is contained => match !!
-                        if (valueName.ToLower().Contains("Worldoftanks.exe".ToLower()))
-                        {
-                            // remove (replace it with "") the attachment ".ApplicationCompany" or ".FriendlyAppName" in the string and add the string to the searchlist
-                            searchPathWoT.Add(valueName.Replace(".ApplicationCompany", "").Replace(".FriendlyAppName", ""));
+                            //trim front
+                            possiblePath = possiblePath.Substring(1);
+                            //trim end
+                            possiblePath = possiblePath.Substring(0, possiblePath.Length - 6);
+                            Logging.Debug("possible path found: {0}", possiblePath);
+                            searchPathWoT.Add(possiblePath);
                         }
                     }
-                    catch
-                    { } // only exception catching
+                    result.Dispose();
+                    result = null;
                 }
             }
 
-            // this searchlist is long, maybe 30-40 entries (system depended), but the best possibility to find a currently installed WoT game.
+            //key is WoT path, don't care about value
+            RegistrySearch[] registryEntriesGroup2 = new RegistrySearch[]
+            {
+                new RegistrySearch(){Root = Registry.CurrentUser, Searchpath = @"Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\MuiCache"},
+                new RegistrySearch(){Root = Registry.CurrentUser, Searchpath = @"Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Compatibility Assistant\Store"}
+            };
+
+            foreach (RegistrySearch searchPath in registryEntriesGroup2)
+            {
+                Logging.Debug("Searching in registry root {0} with path {1}", searchPath.Root.Name, searchPath.Searchpath);
+                result = GetRegistryKeys(searchPath);
+                if (result != null)
+                {
+                    foreach(string possiblePath in result.GetValueNames())
+                    {
+                        if(!string.IsNullOrWhiteSpace(possiblePath) && possiblePath.ToLower().Contains("worldoftanks.exe"))
+                        {
+                            Logging.Debug("possible path found: {0}", possiblePath);
+                            searchPathWoT.Add(possiblePath);
+                        }
+                    }
+                    result.Dispose();
+                    result = null;
+                }
+            }
+
             foreach (string path in searchPathWoT)
             {
-                if (File.Exists(path))
+                string potentialResult = path;
+                //if it has win32 or win64, filter it out
+                if(potentialResult.Contains("win32") || potentialResult.Contains("win64"))
                 {
-                    Logging.Info("valid game path found: {0}", path);
-                    // write the path to the central value holder
-                    WoTRoot = path;
-                    // return the path
-                    return true;
+                    potentialResult = potentialResult.Replace("win32\\", string.Empty).Replace("win64\\", string.Empty);
+                }
+                if (File.Exists(potentialResult))
+                {
+                    Logging.Info("valid game path found: {0}", potentialResult);
+                    return potentialResult;
                 }
             }
             //return false if nothing found
-            return false;
+            return null;
+        }
+
+        private static RegistryKey GetRegistryKeys(RegistrySearch search)
+        {
+            try
+            {
+                return search.Root.OpenSubKey(search.Searchpath);
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception("Failed to get registry entry");
+                Logging.Exception(ex.ToString());
+                return null;
+            }
         }
         #endregion
 

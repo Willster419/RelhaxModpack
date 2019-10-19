@@ -1,3 +1,33 @@
+Application version 0.29.3.1 (2019-10-14)
+https://www.virustotal.com/gui/file/be7d950cbbcfe585396a9a5c8188a34daeeab9f78113e254811b5c2fc9cd1fd5/detection
+- Fixed crash when trying to save a UI document template of dark theme.
+- Fixed issue not allowing UI themes to be applied to post install tab of advanced install progress window.
+- Fixed issue now allowing UI themes to be applied to developer selections viewer.
+- Re-wrote older sections of developer selections viewer for new coding and API standards.
+- Fixed bugs of developer selections viewer not closing properly based on some loading errors.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.3.0 (2019-10-14)
+https://www.virustotal.com/gui/file/7b8e86d957bfc962c24e95b246066906fe228d348e79b8992b946d675594e6fc/detection
+- Fixed the auto-detection bug of finding your WoT install. The entire process is completly re-written.
+- Added initial implimentation of the UI themeing system. It includes a built-in dark theme.
+- The UI themeing system also includes the ability to customize a custom theme via the "Custom" option, loading a theme from an xml file.
+- You can base your custom theme off of the dark theme or the default.
+- There are 3 types of theme levels: "global colorsets", "class colorsets", "component colorsets".
+- Global are always applied, class are applied for a UI component type (like button), and component applies to an individual component.
+- Added a color picker to allow you to customize your colors and see what they look like.
+- Fixed issue with window size of some windows not adjusting properly when scaling was enabled.
+- Fixed placement of components of the add files to diagnostic zip window.
+- Enabled the ability to use the beta application.
+- Fixed various coloring issues.
+- Improved interface of database updater tool.
+- Fixed output of database csv file.
+- Fixed logic issues and bugs with the diagnostic and add files to diagnostic zip windows.
+- Other verious fixes.
+- Added translation TODO entries.
+- Updated translations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 0.29.2.2 (2019-09-25)
 https://www.virustotal.com/gui/file/ec39c8ea1886c94a92af50efc27017ba1bacbf3e0c94e6975ed4e16c27485761/detection
 - Added spanish translatons. Thanks to LordFelix of the EU server.

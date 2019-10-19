@@ -7,8 +7,8 @@
                     xmlns:ui="clr-namespace:RelhaxModpack.UIComponents"
                     mc:Ignorable="d"
         Title="News" Height="450" Width="420" MinWidth="420" MinHeight="450" Loaded="RelhaxWindow_Loaded"
-        LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
-    <Grid>
+        LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True">
+    <Grid Tag="NewViewGrid">
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,31">
             <TabItem Tag="database_Update_Tab" x:Name="database_Update_Tab" Header="Database News">
                 <Grid Background="#FFE5E5E5">
@@ -23,6 +23,7 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <ui:RelhaxHyperlink x:Name="ViewNewsOnGoogleTranslate" HorizontalAlignment="Left" Margin="5,0,0,10" VerticalAlignment="Bottom" Tag="ViewNewsOnGoogleTranslate" Text="View this on Google Translate"/>
+        <!--Foreground="#FF0066CC"-->
+        <ui:RelhaxHyperlink x:Name="ViewNewsOnGoogleTranslate" HorizontalAlignment="Left" Margin="5,0,0,10" VerticalAlignment="Bottom" Tag="ViewNewsOnGoogleTranslate" Text="View this on Google Translate" Foreground="#FF0066CC"/>
     </Grid>
 </local:RelhaxWindow>

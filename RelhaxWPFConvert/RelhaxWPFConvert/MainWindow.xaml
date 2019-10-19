@@ -1,11 +1,14 @@
-﻿<Window x:Class="RelhaxWPFConvert.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxWPFConvert"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="RelhaxWPFConvert.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
+    <Window.Resources>
+    </Window.Resources>
     <TabControl x:Name="MainTab">
         <TabItem Header="Scroll views">
             <ScrollViewer HorizontalScrollBarVisibility="Visible" MouseRightButtonUp="ScrollViewer_MouseRightButtonUp">
@@ -128,8 +131,8 @@
                                 <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0">Some random text</Label>
-                            <TextBox Grid.Column="1" ></TextBox>
+                            <Label Grid.Column="0" Content="Some random text"/>
+                            <TextBox Grid.Column="1" />
                         </Grid>
                     </local:StretchingTreeViewItem>
                 </local:StretchingTreeView>
@@ -188,8 +191,7 @@
                     </Grid>
                 </GroupBox>
                 <GroupBox Header="Scaling Test" HorizontalAlignment="Left" Height="54" Margin="561,164,0,0" VerticalAlignment="Top" Width="215">
-                    <Button x:Name="ScallingTest" Content="1.5x scalling" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="ScallingTest_Click" >
-                    </Button>
+                    <Button x:Name="ScallingTest" Content="1.5x scalling" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="ScallingTest_Click" />
                 </GroupBox>
                 <GroupBox Header="Task Cancel Stuff" x:Name="TaskCancelTestingGroupBox" HorizontalAlignment="Left" Height="102" Margin="561,223,0,0" VerticalAlignment="Top" Width="215">
                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -201,12 +203,9 @@
                 </GroupBox>
                 <GroupBox Header="Hyperlink" HorizontalAlignment="Left" Height="63" Margin="351,262,0,0" VerticalAlignment="Top" Width="205">
                     <Grid >
-                        <TextBlock VerticalAlignment="Top" Height="22" HorizontalAlignment="Left">
-                            <!-- https://stackoverflow.com/questions/10238694/example-using-hyperlink-in-wpf#comment33979391_10238715 -->
-                            <Hyperlink NavigateUri="https://bing.com">
-                                <TextBlock x:Name="hyperLinkText" Text="reeee"/>
-                            </Hyperlink>
-                        </TextBlock>
+                        <TextBlock VerticalAlignment="Top" Height="22" HorizontalAlignment="Left"><!-- https://stackoverflow.com/questions/10238694/example-using-hyperlink-in-wpf#comment33979391_10238715 --><Hyperlink NavigateUri="https://bing.com"><InlineUIContainer>
+                                    <TextBlock x:Name="hyperLinkText" Text="reeee"/>
+                                </InlineUIContainer></Hyperlink></TextBlock>
                         <local:RelhaxHyperlink x:Name="CustomHyperlink" HorizontalAlignment="Left" VerticalAlignment="Top" Height="22" URL="https://bing.com" Text="This is a test" Margin="34,0,0,0"/>
                         <Button x:Name="changeHyperlinkTextLikeTranslations" Click="ChangeHyperlinkTextLikeTranslations_Click" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="128" Content="Change hyperlink text" Margin="0,22,0,0"/>
                     </Grid>
@@ -219,6 +218,55 @@
                     <Image x:Name="ImageDisplay" Source="Resources/popular_icon.png"/>
                 </local:ZoomBorder>
                 <Slider HorizontalAlignment="Left" Margin="0,0,0,10" VerticalAlignment="Bottom" Width="786"/>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Highlight Testing" x:Name="HighlightTestingTabItem">
+            <Grid x:Name="HighlightTestingTabItemGrid">
+                <Button x:Name="ToggleDisableButton" Content="Toggle Disable" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="106" Click="ToggleDisableButton_Click"/>
+                <Button x:Name="ToggleDarkUIButton" Content="Toggle Dark UI" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="106" Click="ToggleDarkUIButton_Click"/>
+                <TabControl HorizontalAlignment="Left" Height="94" Margin="121,10,0,0" VerticalAlignment="Top" Width="268" x:Name="HighlightTabControl">
+                    <TabItem Header="TabItem" Style="{DynamicResource RelhaxTabItemStyle}" x:Name="HighlightTabItem1">
+                        <Grid Background="#FFE5E5E5"/>
+                    </TabItem>
+                    <TabItem Header="TabItem" x:Name="HighlightTabItem2" Style="{DynamicResource RelhaxTabItemStyle}">
+                        <Grid Background="#FFE5E5E5"/>
+                    </TabItem>
+                </TabControl>
+                <CheckBox x:Name="HighlightCheckbox" Content="CheckBox" HorizontalAlignment="Left" Margin="394,40,0,0" VerticalAlignment="Top" Width="106" Style="{DynamicResource RelhaxCheckboxStyle}"/>
+                <RadioButton x:Name="HighlightRadioButton" Content="RadioButton" HorizontalAlignment="Left" Margin="394,60,0,0" VerticalAlignment="Top" Width="106" Style="{DynamicResource RelhaxRadioButtonStyle}"/>
+                <RadioButton x:Name="HighlightRadioButton2" Content="RadioButton" HorizontalAlignment="Left" Margin="394,75,0,0" VerticalAlignment="Top" Style="{DynamicResource RelhaxRadioButtonStyle}"/>
+                <ComboBox x:Name="HighlitCombobox" HorizontalAlignment="Left" Margin="394,95,0,0" VerticalAlignment="Top" Width="106" SelectedIndex="0" Style="{DynamicResource RelhaxComboboxStyle}">
+                    <System:String>ComboBox_1</System:String>
+                    <System:String>ComboBox_2</System:String>
+                    <System:String>ComboBox_3</System:String>
+                </ComboBox>
+                <Button x:Name="HighlightTextButton1" Content="Relhax style, string" HorizontalAlignment="Left" Margin="10,118,0,0" VerticalAlignment="Top" Width="140"
+                        Style="{DynamicResource RelhaxButtonStyle}" Height="20"/>
+                <Button x:Name="HighlightTextButton2" HorizontalAlignment="Left" Margin="10,143,0,0" VerticalAlignment="Top" Width="140">
+                    <TextBlock Text="Default style, textblock" TextWrapping="Wrap" />
+                </Button>
+                <Button x:Name="HighlightTextButton3" HorizontalAlignment="Left" Margin="10,168,0,0" VerticalAlignment="Top" Width="140" Style="{DynamicResource RelhaxButtonStyle}">
+                    <TextBlock Text="Relhax style, textblock" TextWrapping="Wrap"/>
+                </Button>
+                <ContentControl x:Name="TestContentPresenter" Margin="394,122,286,213">
+                    <ContentControl.Content>
+                        <TextBlock Text="Another Highlight testing" TextWrapping="Wrap"/>
+                    </ContentControl.Content>
+                </ContentControl>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Dynamic content Testing" x:Name="DynamicContentTestingTabItem">
+            <Grid x:Name="DynamicContentTestingTabItemGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Flow Document loading" VerticalAlignment="Top"/>
+                <TextBlock Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Wpf Document Loading" VerticalAlignment="Top"/>
+                <Button x:Name="FlowDocumentLoadButton" Content="Load" HorizontalAlignment="Left" Margin="0,16,0,0" VerticalAlignment="Top" Width="75" Click="FlowDocumentLoadButton_Click"/>
+                <Button x:Name="WpfDocumentLoadButton" Content="Load" Grid.Column="1" HorizontalAlignment="Left" Margin="0,16,0,0" VerticalAlignment="Top" Width="75" Click="WpfDocumentLoadButton_Click"/>
+                <FlowDocumentScrollViewer Grid.Column="0" x:Name="FlowDocumentViewer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Visible" Margin="0,41,0,0"/>
+                <ContentPresenter Grid.Column="1" x:Name="WpfDocumentViewer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,41,0,0"/>
             </Grid>
         </TabItem>
     </TabControl>

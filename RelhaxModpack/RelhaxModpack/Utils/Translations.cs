@@ -81,7 +81,9 @@ namespace RelhaxModpack
             //loading header for loading window
             "LoadingHeader",
             //application update notes textbox
-            "ApplicationUpdateNotes"
+            "ApplicationUpdateNotes",
+            //xml string forming in color picker
+            "SampleXmlOutputTextbox"
         };
         private const string TranslationNeeded = "TODO";
         private static readonly string Blank = string.Empty;
@@ -571,14 +573,14 @@ namespace RelhaxModpack
             Russian.Add("ForceManuelGameDetectionCBDescription", "Эта опция для принудительного указания папки с World of Tanks." +
                     "Поставьте галочку только в случае проблем с автоматическим определением расположения игры.");
 
-            //Component: LanguageSelectionGBHeader
+            //Component: LanguageSelectionTextblock
             //
-            English.Add("LanguageSelectionGBHeader", "Language selection");
-            German.Add("LanguageSelectionGBHeader", "Sprachauswahl");
-            Polish.Add("LanguageSelectionGBHeader", "Wybór języka");
-            French.Add("LanguageSelectionGBHeader", "Choix de langue");
-            Spanish.Add("LanguageSelectionGBHeader", "Selección de idioma");
-            Russian.Add("LanguageSelectionGBHeader", "Выбрать язык");
+            English.Add("LanguageSelectionTextblock", "Language selection");
+            German.Add("LanguageSelectionTextblock", "Sprachauswahl");
+            Polish.Add("LanguageSelectionTextblock", "Wybór języka");
+            French.Add("LanguageSelectionTextblock", "Choix de langue");
+            Spanish.Add("LanguageSelectionTextblock", "Selección de idioma");
+            Russian.Add("LanguageSelectionTextblock", "Выбрать язык");
 
             //Component: Forms_ENG_NAButtonDescription
             English.Add("Forms_ENG_NAButtonDescription", "Go to the English-speaking 'World of Tanks' forum page for the NA server");
@@ -1171,12 +1173,30 @@ namespace RelhaxModpack
 
             //Component: DumpColorSettingsButtonText
             //
-            English.Add("DumpColorSettingsButtonText", "Dump color settings to xml");
-            German.Add("DumpColorSettingsButtonText", "Speichere die Farbeinstellungen in xml");
-            Polish.Add("DumpColorSettingsButtonText", "Zrzuć ustawienia kolorów do pliku xml");
-            French.Add("DumpColorSettingsButtonText", "Dump des paramètres de couleur au format XML");
-            Spanish.Add("DumpColorSettingsButtonText", "Volcar configuración de colores en formato XML");
-            Russian.Add("DumpColorSettingsButtonText", "Сохранить настройки цвета в XML");
+            English.Add("DumpColorSettingsButtonText", "Save current color settings");
+            German.Add("DumpColorSettingsButtonText", TranslationNeeded);
+            Polish.Add("DumpColorSettingsButtonText", TranslationNeeded);
+            French.Add("DumpColorSettingsButtonText", TranslationNeeded);
+            Spanish.Add("DumpColorSettingsButtonText", TranslationNeeded);
+            Russian.Add("DumpColorSettingsButtonText", TranslationNeeded);
+
+            //Component: DumpColorSettingsSaveSuccess
+            //
+            English.Add("DumpColorSettingsSaveSuccess", "Color settings saved");
+            German.Add("DumpColorSettingsSaveSuccess", TranslationNeeded);
+            Polish.Add("DumpColorSettingsSaveSuccess", TranslationNeeded);
+            French.Add("DumpColorSettingsSaveSuccess", TranslationNeeded);
+            Spanish.Add("DumpColorSettingsSaveSuccess", TranslationNeeded);
+            Russian.Add("DumpColorSettingsSaveSuccess", TranslationNeeded);
+
+            //Component: OpenColorPickerButtonText
+            //
+            English.Add("OpenColorPickerButtonText", "Open color picker");
+            German.Add("OpenColorPickerButtonText", TranslationNeeded);
+            Polish.Add("OpenColorPickerButtonText", TranslationNeeded);
+            French.Add("OpenColorPickerButtonText", TranslationNeeded);
+            Spanish.Add("OpenColorPickerButtonText", TranslationNeeded);
+            Russian.Add("OpenColorPickerButtonText", TranslationNeeded);
 
             //Component: DumpColorSettingsButtonDescription
             //
@@ -1775,6 +1795,24 @@ namespace RelhaxModpack
             French.Add("loadingBranches", TranslationNeeded);
             Spanish.Add("loadingBranches", "Cargando ramas");
             Russian.Add("loadingBranches", TranslationNeeded);
+
+            //Component: failedToParseUISettingsFile
+            //"branch" is this context is git respoitory branches
+            English.Add("failedToParseUISettingsFile", "Failed to apply the theme. Check the log for details. Enable \"Verbose Logging\" for additional information.");
+            German.Add("failedToParseUISettingsFile", TranslationNeeded);
+            Polish.Add("failedToParseUISettingsFile", TranslationNeeded);
+            French.Add("failedToParseUISettingsFile", TranslationNeeded);
+            Spanish.Add("failedToParseUISettingsFile", TranslationNeeded);
+            Russian.Add("failedToParseUISettingsFile", TranslationNeeded);
+
+            //Component: UISettingsFileApplied
+            //the message when the UISettings.xml file is parsed and the custom theme is loaded
+            English.Add("UISettingsFileApplied", "Theme applied");
+            German.Add("UISettingsFileApplied", TranslationNeeded);
+            Polish.Add("UISettingsFileApplied", TranslationNeeded);
+            French.Add("UISettingsFileApplied", TranslationNeeded);
+            Spanish.Add("UISettingsFileApplied", TranslationNeeded);
+            Russian.Add("UISettingsFileApplied", TranslationNeeded);
             #endregion
 
             #region ModSelectionList
@@ -2981,8 +3019,6 @@ namespace RelhaxModpack
 
             //Component:
             //
-            Spanish.Add("WoTRunningHeader", "WoT está en ejecución");
-            Spanish.Add("WoTRunningMessage", "Por favor, cierre World of Tanks para continuar");
             English.Add("zipReadingErrorHeader", "Incomplete Download");
             German.Add("zipReadingErrorHeader", "Unvollständiger Download");
             Polish.Add("zipReadingErrorHeader", "Ściąganie niekompletne");
@@ -3413,6 +3449,53 @@ namespace RelhaxModpack
             French.Add("loadingAtlasImageLibrariesFail", TranslationNeeded);
             Spanish.Add("loadingAtlasImageLibrariesFail", "No se han podido cargar las librerías de procesamiento de imágenes de atlas");
             Russian.Add("loadingAtlasImageLibrariesFail", TranslationNeeded);
+            #endregion
+
+            #region Add zip files Dialog
+            //Component: DiagnosticsAddSelectionsPicturesLabel
+            //the message when the UISettings.xml file is parsed and the custom theme is loaded
+            English.Add("DiagnosticsAddSelectionsPicturesLabel", "Add any additional files here (your selection file, picture, etc.)");
+            German.Add("DiagnosticsAddSelectionsPicturesLabel", TranslationNeeded);
+            Polish.Add("DiagnosticsAddSelectionsPicturesLabel", TranslationNeeded);
+            French.Add("DiagnosticsAddSelectionsPicturesLabel", TranslationNeeded);
+            Spanish.Add("DiagnosticsAddSelectionsPicturesLabel", TranslationNeeded);
+            Russian.Add("DiagnosticsAddSelectionsPicturesLabel", TranslationNeeded);
+
+            //Component: DiagnosticsAddFilesButton
+            //the message when the UISettings.xml file is parsed and the custom theme is loaded
+            English.Add("DiagnosticsAddFilesButton", "Add Files");
+            German.Add("DiagnosticsAddFilesButton", TranslationNeeded);
+            Polish.Add("DiagnosticsAddFilesButton", TranslationNeeded);
+            French.Add("DiagnosticsAddFilesButton", TranslationNeeded);
+            Spanish.Add("DiagnosticsAddFilesButton", TranslationNeeded);
+            Russian.Add("DiagnosticsAddFilesButton", TranslationNeeded);
+
+            //Component: DiagnosticsRemoveSelectedButton
+            //the message when the UISettings.xml file is parsed and the custom theme is loaded
+            English.Add("DiagnosticsRemoveSelectedButton", "RemoveSelected");
+            German.Add("DiagnosticsRemoveSelectedButton", TranslationNeeded);
+            Polish.Add("DiagnosticsRemoveSelectedButton", TranslationNeeded);
+            French.Add("DiagnosticsRemoveSelectedButton", TranslationNeeded);
+            Spanish.Add("DiagnosticsRemoveSelectedButton", TranslationNeeded);
+            Russian.Add("DiagnosticsRemoveSelectedButton", TranslationNeeded);
+
+            //Component: DiagnosticsContinueButton
+            //the message when the UISettings.xml file is parsed and the custom theme is loaded
+            English.Add("DiagnosticsContinueButton", "Continue");
+            German.Add("DiagnosticsContinueButton", TranslationNeeded);
+            Polish.Add("DiagnosticsContinueButton", TranslationNeeded);
+            French.Add("DiagnosticsContinueButton", TranslationNeeded);
+            Spanish.Add("DiagnosticsContinueButton", TranslationNeeded);
+            Russian.Add("DiagnosticsContinueButton", TranslationNeeded);
+
+            //Component: cantRemoveDefaultFile
+            //
+            English.Add("cantRemoveDefaultFile", "Cannot remove a file to be added by default.");
+            German.Add("cantRemoveDefaultFile", TranslationNeeded);
+            Polish.Add("cantRemoveDefaultFile", TranslationNeeded);
+            French.Add("cantRemoveDefaultFile", TranslationNeeded);
+            Spanish.Add("cantRemoveDefaultFile", TranslationNeeded);
+            Russian.Add("cantRemoveDefaultFile", TranslationNeeded);
             #endregion
 
             #region Preview Window
@@ -3909,6 +3992,7 @@ namespace RelhaxModpack
             German.Add("WoTRunningTitle", "WoT wird gerade ausgeführt.");
             Polish.Add("WoTRunningTitle", "WoT jest uruchomiony");
             French.Add("WoTRunningTitle", "WoT est en cours d`éxecution");
+            Spanish.Add("WoTRunningTitle", "WoT está en ejecución");
             Russian.Add("WoTRunningTitle", "World of Tanks запущен");
 
             //Component: WoTRunningHeader
@@ -3948,7 +4032,7 @@ namespace RelhaxModpack
             Russian.Add("WoTRunningForceCloseButton", TranslationNeeded);
             #endregion
 
-            #region Sacling Confirmation
+            #region Scaling Confirmation
             //Component: ScalingConfirmationHeader
             //
             English.Add("ScalingConfirmationHeader", "The scaling value has changed. Would you like to keep it?");
@@ -3986,6 +4070,224 @@ namespace RelhaxModpack
             Russian.Add("ScalingConfirmationDiscard", TranslationNeeded);
             #endregion
 
+            #region Color Picker
+            //Component: ColorType
+            //
+            English.Add("ColorType", "Brush type");
+            German.Add("ColorType", TranslationNeeded);
+            Polish.Add("ColorType", TranslationNeeded);
+            French.Add("ColorType", TranslationNeeded);
+            Spanish.Add("ColorType", TranslationNeeded);
+            Russian.Add("ColorType", TranslationNeeded);
+
+            //Component: SampleTextColor
+            //
+            English.Add("SampleTextColor", "Sample Text");
+            German.Add("SampleTextColor", TranslationNeeded);
+            Polish.Add("SampleTextColor", TranslationNeeded);
+            French.Add("SampleTextColor", TranslationNeeded);
+            Spanish.Add("SampleTextColor", TranslationNeeded);
+            Russian.Add("SampleTextColor", TranslationNeeded);
+
+            //Component: MainColor
+            //
+            English.Add("MainColor", "Main Color");
+            German.Add("MainColor", TranslationNeeded);
+            Polish.Add("MainColor", TranslationNeeded);
+            French.Add("MainColor", TranslationNeeded);
+            Spanish.Add("MainColor", TranslationNeeded);
+            Russian.Add("MainColor", TranslationNeeded);
+
+            //Component: MainColorAlpha
+            //
+            English.Add("MainColorAlpha", "Transparency");
+            German.Add("MainColorAlpha", TranslationNeeded);
+            Polish.Add("MainColorAlpha", TranslationNeeded);
+            French.Add("MainColorAlpha", TranslationNeeded);
+            Spanish.Add("MainColorAlpha", TranslationNeeded);
+            Russian.Add("MainColorAlpha", TranslationNeeded);
+
+            //Component: MainColorRed
+            //
+            English.Add("MainColorRed", "Red");
+            German.Add("MainColorRed", TranslationNeeded);
+            Polish.Add("MainColorRed", TranslationNeeded);
+            French.Add("MainColorRed", TranslationNeeded);
+            Spanish.Add("MainColorRed", TranslationNeeded);
+            Russian.Add("MainColorRed", TranslationNeeded);
+
+            //Component: MainColorBlue
+            //
+            English.Add("MainColorBlue", "Blue");
+            German.Add("MainColorBlue", TranslationNeeded);
+            Polish.Add("MainColorBlue", TranslationNeeded);
+            French.Add("MainColorBlue", TranslationNeeded);
+            Spanish.Add("MainColorBlue", TranslationNeeded);
+            Russian.Add("MainColorBlue", TranslationNeeded);
+
+            //Component: MainColorGreen
+            //
+            English.Add("MainColorGreen", "Green");
+            German.Add("MainColorGreen", TranslationNeeded);
+            Polish.Add("MainColorGreen", TranslationNeeded);
+            French.Add("MainColorGreen", TranslationNeeded);
+            Spanish.Add("MainColorGreen", TranslationNeeded);
+            Russian.Add("MainColorGreen", TranslationNeeded);
+
+            //Component: TextColor
+            //
+            English.Add("TextColor", "Text Color");
+            German.Add("TextColor", TranslationNeeded);
+            Polish.Add("TextColor", TranslationNeeded);
+            French.Add("TextColor", TranslationNeeded);
+            Spanish.Add("TextColor", TranslationNeeded);
+            Russian.Add("TextColor", TranslationNeeded);
+
+            //Component: TextColorAlpha
+            //
+            English.Add("TextColorAlpha", "Transparency");
+            German.Add("TextColorAlpha", TranslationNeeded);
+            Polish.Add("TextColorAlpha", TranslationNeeded);
+            French.Add("TextColorAlpha", TranslationNeeded);
+            Spanish.Add("TextColorAlpha", TranslationNeeded);
+            Russian.Add("TextColorAlpha", TranslationNeeded);
+
+            //Component: TextColorRed
+            //
+            English.Add("TextColorRed", "Red");
+            German.Add("TextColorRed", TranslationNeeded);
+            Polish.Add("TextColorRed", TranslationNeeded);
+            French.Add("TextColorRed", TranslationNeeded);
+            Spanish.Add("TextColorRed", TranslationNeeded);
+            Russian.Add("TextColorRed", TranslationNeeded);
+
+            //Component: TextColorBlue
+            //
+            English.Add("TextColorBlue", "Blue");
+            German.Add("TextColorBlue", TranslationNeeded);
+            Polish.Add("TextColorBlue", TranslationNeeded);
+            French.Add("TextColorBlue", TranslationNeeded);
+            Spanish.Add("TextColorBlue", TranslationNeeded);
+            Russian.Add("TextColorBlue", TranslationNeeded);
+
+            //Component: TextColorGreen
+            //
+            English.Add("TextColorGreen", "Green");
+            German.Add("TextColorGreen", TranslationNeeded);
+            Polish.Add("TextColorGreen", TranslationNeeded);
+            French.Add("TextColorGreen", TranslationNeeded);
+            Spanish.Add("TextColorGreen", TranslationNeeded);
+            Russian.Add("TextColorGreen", TranslationNeeded);
+
+            //Component: SecondColor
+            //
+            English.Add("SecondColor", "Second Color");
+            German.Add("SecondColor", TranslationNeeded);
+            Polish.Add("SecondColor", TranslationNeeded);
+            French.Add("SecondColor", TranslationNeeded);
+            Spanish.Add("SecondColor", TranslationNeeded);
+            Russian.Add("SecondColor", TranslationNeeded);
+
+            //Component: SecondColorAlpha
+            //
+            English.Add("SecondColorAlpha", "Transparency");
+            German.Add("SecondColorAlpha", TranslationNeeded);
+            Polish.Add("SecondColorAlpha", TranslationNeeded);
+            French.Add("SecondColorAlpha", TranslationNeeded);
+            Spanish.Add("SecondColorAlpha", TranslationNeeded);
+            Russian.Add("SecondColorAlpha", TranslationNeeded);
+
+            //Component: SecondColorRed
+            //
+            English.Add("SecondColorRed", "Red");
+            German.Add("SecondColorRed", TranslationNeeded);
+            Polish.Add("SecondColorRed", TranslationNeeded);
+            French.Add("SecondColorRed", TranslationNeeded);
+            Spanish.Add("SecondColorRed", TranslationNeeded);
+            Russian.Add("SecondColorRed", TranslationNeeded);
+
+            //Component: SecondColorBlue
+            //
+            English.Add("SecondColorBlue", "Blue");
+            German.Add("SecondColorBlue", TranslationNeeded);
+            Polish.Add("SecondColorBlue", TranslationNeeded);
+            French.Add("SecondColorBlue", TranslationNeeded);
+            Spanish.Add("SecondColorBlue", TranslationNeeded);
+            Russian.Add("SecondColorBlue", TranslationNeeded);
+
+            //Component: SecondColorGreen
+            //
+            English.Add("SecondColorGreen", "Green");
+            German.Add("SecondColorGreen", TranslationNeeded);
+            Polish.Add("SecondColorGreen", TranslationNeeded);
+            French.Add("SecondColorGreen", TranslationNeeded);
+            Spanish.Add("SecondColorGreen", TranslationNeeded);
+            Russian.Add("SecondColorGreen", TranslationNeeded);
+
+            //Component: PointsBlock
+            //
+            English.Add("PointsBlock", "Point Coordinates");
+            German.Add("PointsBlock", TranslationNeeded);
+            Polish.Add("PointsBlock", TranslationNeeded);
+            French.Add("PointsBlock", TranslationNeeded);
+            Spanish.Add("PointsBlock", TranslationNeeded);
+            Russian.Add("PointsBlock", TranslationNeeded);
+
+            //Component: Point1X
+            //
+            English.Add("Point1X", "Point 1 X");
+            German.Add("Point1X", TranslationNeeded);
+            Polish.Add("Point1X", TranslationNeeded);
+            French.Add("Point1X", TranslationNeeded);
+            Spanish.Add("Point1X", TranslationNeeded);
+            Russian.Add("Point1X", TranslationNeeded);
+
+            //Component: Point1Y
+            //
+            English.Add("Point1Y", "Point 1 Y");
+            German.Add("Point1Y", TranslationNeeded);
+            Polish.Add("Point1Y", TranslationNeeded);
+            French.Add("Point1Y", TranslationNeeded);
+            Spanish.Add("Point1Y", TranslationNeeded);
+            Russian.Add("Point1Y", TranslationNeeded);
+
+            //Component: Point2X
+            //
+            English.Add("Point2X", "Point 2 X");
+            German.Add("Point2X", TranslationNeeded);
+            Polish.Add("Point2X", TranslationNeeded);
+            French.Add("Point2X", TranslationNeeded);
+            Spanish.Add("Point2X", TranslationNeeded);
+            Russian.Add("Point2X", TranslationNeeded);
+
+            //Component: Point2Y
+            //
+            English.Add("Point2Y", "Point 2 Y");
+            German.Add("Point2Y", TranslationNeeded);
+            Polish.Add("Point2Y", TranslationNeeded);
+            French.Add("Point2Y", TranslationNeeded);
+            Spanish.Add("Point2Y", TranslationNeeded);
+            Russian.Add("Point2Y", TranslationNeeded);
+
+            //Component: BrushesLink
+            //
+            English.Add("BrushesLink", "Read about brush types here");
+            German.Add("BrushesLink", TranslationNeeded);
+            Polish.Add("BrushesLink", TranslationNeeded);
+            French.Add("BrushesLink", TranslationNeeded);
+            Spanish.Add("BrushesLink", TranslationNeeded);
+            Russian.Add("BrushesLink", TranslationNeeded);
+
+            //Component: SampleXmlOutput
+            //
+            English.Add("SampleXmlOutput", "Sample XML output");
+            German.Add("SampleXmlOutput", TranslationNeeded);
+            Polish.Add("SampleXmlOutput", TranslationNeeded);
+            French.Add("SampleXmlOutput", TranslationNeeded);
+            Spanish.Add("SampleXmlOutput", TranslationNeeded);
+            Russian.Add("SampleXmlOutput", TranslationNeeded);
+            #endregion
+
             //apply the bool
             TranslationsLoaded = true;
         }
@@ -4016,7 +4318,7 @@ namespace RelhaxModpack
             string componentName = frameworkElement.Name;
             if (string.IsNullOrWhiteSpace(componentName))
             {
-                //log debug translation component is blank null or from blacklist
+                //log debug translation component is blank null
                 //Logging.WriteToLog("Translation component name is blank", Logfiles.Application, LogLevel.Debug);
                 return;
             }
@@ -4055,6 +4357,7 @@ namespace RelhaxModpack
                     }
                 }
                 //content controls have only a heder
+                //NOTE: button is this type
                 else if (control is ContentControl contentControl)
                 {
                     //ALWAYS make sure that the header and content are of type string BEFORE over-writing! (what if it is an image?)

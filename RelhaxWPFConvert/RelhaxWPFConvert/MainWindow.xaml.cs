@@ -25,6 +25,9 @@ using Timer = System.Timers.Timer;
 using System.Runtime.Remoting.Contexts;
 using System.Reflection;
 using System.Security.Cryptography;
+using System.Windows.Documents;
+using System.Xml;
+using System.Windows.Markup;
 
 namespace RelhaxWPFConvert
 {
@@ -92,6 +95,12 @@ namespace RelhaxWPFConvert
         {
             //checkbox testing
             testBox1.CheckboxDisabledColor = Colors.Green;
+
+            //init UI color settings
+            UISettings.InitUIBrushes();
+
+            //get value from resource dictionary
+            bool test = (bool)Application.Current.Resources["ApplyColorSettings"];
         }
 
         #region Task Reporting
@@ -394,7 +403,7 @@ namespace RelhaxWPFConvert
             JToken objectt = JToken.Parse(JsonFromFile,settings);
 
             //output
-            string newJson = objectt.ToString(Formatting.Indented, null);
+            string newJson = objectt.ToString(Newtonsoft.Json.Formatting.Indented, null);
             //toString() will now allow for output of previous formatting
             File.WriteAllText("output.json", newJson);
         }
@@ -498,6 +507,81 @@ namespace RelhaxWPFConvert
         private void ImageDisplay_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             
+        }
+        #endregion
+
+        private void ToggleDisableButton_Click(object sender, RoutedEventArgs e)
+        {
+            Control[] HighlightControls = new Control[]
+            {
+                HighlightCheckbox,
+                HighlightRadioButton,
+                HighlightTabControl,
+                HighlightTabItem1,
+                HighlightTabItem2,
+                HighlitCombobox,
+                HighlightTextButton1,
+                HighlightTextButton2,
+                HighlightTextButton3
+            };
+
+            FrameworkElement[] FrameworkControls = new FrameworkElement[]
+            {
+                TestContentPresenter
+            };
+
+            foreach(Control control in HighlightControls)
+            {
+                if (control.IsEnabled)
+                    control.IsEnabled = false;
+                else
+                    control.IsEnabled = true;
+            }
+
+            foreach(FrameworkElement element in FrameworkControls)
+            {
+                if (element.IsEnabled)
+                    element.IsEnabled = false;
+                else
+                    element.IsEnabled = true;
+            }
+        }
+
+        private void ToggleDarkUIButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (UISettings.ThemeDefault)
+            {
+                UISettings.ThemeDefault = false;
+                HighlightTestingTabItemGrid.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 50, 50, 50));
+                HighlightCheckbox.Background = new SolidColorBrush(Colors.Black);
+                HighlightRadioButton.Background = new SolidColorBrush(Colors.Black);
+                HighlightRadioButton2.Background = new SolidColorBrush(Colors.Black);
+            }
+            else
+            {
+                UISettings.ThemeDefault = true;
+                HighlightTestingTabItemGrid.Background = new SolidColorBrush(Colors.Transparent);
+                HighlightCheckbox.Background = new SolidColorBrush(Colors.Transparent);
+                HighlightRadioButton.Background = new SolidColorBrush(Colors.Transparent);
+                HighlightRadioButton2.Background = new SolidColorBrush(Colors.Transparent);
+            }
+            UISettings.ToggleUIBrushes();
+        }
+
+        #region Description Document Loading testing
+        private void FlowDocumentLoadButton_Click(object sender, RoutedEventArgs e)
+        {
+            //https://stackoverflow.com/questions/2830987/convert-xaml-to-flowdocument-to-display-in-richtextbox-in-wpf
+            //https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.flowdocumentscrollviewer?view=netframework-4.8
+            //https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/flow-document-overview
+            FlowDocument document = XamlReader.Parse(File.ReadAllText("SampleDescriptionFlowDocument.txt")) as FlowDocument;
+            FlowDocumentViewer.Document = document;
+        }
+
+        private void WpfDocumentLoadButton_Click(object sender, RoutedEventArgs e)
+        {
+            object document = XamlReader.Parse(File.ReadAllText("SampleDescriptionWPFDocument.txt"));
+            WpfDocumentViewer.Content = document;
         }
         #endregion
     }

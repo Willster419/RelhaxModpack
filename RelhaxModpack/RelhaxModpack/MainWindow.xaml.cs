@@ -54,7 +54,8 @@ namespace RelhaxModpack
         private bool loading = false;
         private string oldModpackTitle = string.Empty;
         //temp list of components not to toggle
-        Control[] tempDisabledBlacklist = null;
+        Control[] disabledBlacklist = null;
+        Control[] enabledBlacklist = null;
         //backup components
         private bool disableTriggersBackupVal = true;
         private long backupFolderTotalSize = 0;
@@ -87,14 +88,24 @@ namespace RelhaxModpack
         {
             InitializeComponent();
             WindowState = WindowState.Minimized;
-            tempDisabledBlacklist = new Control[]
+            disabledBlacklist = new Control[]
             {
-                ThemeDefault,
-                ThemeDark,
-                ThemeCustom,
-                UseBetaApplicationCB,
                 DisableTriggersCB,
                 VerboseLoggingCB
+            };
+            enabledBlacklist = new Control[]
+            {
+                ViewNewsButton,
+                Forms_ENG_EUButton,
+                Forms_GER_EUButton,
+                Forms_ENG_NAButton,
+                FacebookButton,
+                TwitterButton,
+                DiscordButton,
+                HomepageButton,
+                FindBugAddModButton,
+                SendEmailButton,
+                DonateButton
             };
         }
 
@@ -157,9 +168,6 @@ namespace RelhaxModpack
             //load and apply modpack settings
             Utils.AllowUIToUpdate();
             Settings.LoadSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null);
-            //note: if loadSettings load the language, apply to UI sets the UI option and triggers translation of MainWindow
-            ApplySettingsToUI();
-
 
             //apply forced debugging settings
 #warning forced debugging settings is active
@@ -168,8 +176,25 @@ namespace RelhaxModpack
 
             //apply settings to UI elements
             progressIndicator.UpdateProgress(2, Translations.GetTranslatedString("loadingSettings"));
-            UISettings.LoadSettings(true);
-            UISettings.ApplyUIColorSettings(this);
+            if(ModpackSettings.ApplicationTheme == UIThemes.Custom)
+            {
+                if (!UISettings.LoadSettingsFile())
+                {
+                    Logging.Warning("failed to load custom UI settings file, make sure file is called{0} and the xml syntax is correct", Settings.UISettingsColorFile);
+                    ModpackSettings.ApplicationTheme = UIThemes.Default;
+                }
+                else
+                {
+                    Logging.Info("{0} was successfully load", Settings.UISettingsColorFile);
+                }
+            }
+
+            //apply custom UI themeing (only need to explicitly call this for MainWindow)
+            UISettings.ApplyCustomStyles(this);
+
+            //note: if loadSettings load the language, apply to UI sets the UI option and triggers translation of MainWindow
+            //note: in wpf, the enabled trigger will occur in the loading event, so this will launch the checked events
+            ApplySettingsToUI();
 
             //check command line settings
             CommandLineSettings.ParseCommandLineConflicts();
@@ -935,7 +960,8 @@ namespace RelhaxModpack
 
                 //parse WoT root directory
                 Logging.WriteToLog("started looking for WoT root directory", Logfiles.Application, LogLevel.Debug);
-                if (!Utils.AutoFindWoTDirectory(ref Settings.WoTDirectory) || ModpackSettings.ForceManuel)
+                string autoSearchResult = Utils.AutoFindWoTDirectory();
+                if (string.IsNullOrEmpty(autoSearchResult) || ModpackSettings.ForceManuel)
                 {
                     Logging.WriteToLog("auto detect failed or user requests manual", Logfiles.Application, LogLevel.Debug);
                     OpenFileDialog manualWoTFind = new OpenFileDialog()
@@ -950,7 +976,7 @@ namespace RelhaxModpack
                     };
                     if ((bool)manualWoTFind.ShowDialog())
                     {
-                        Settings.WoTDirectory = manualWoTFind.FileName;
+                        autoSearchResult = manualWoTFind.FileName;
                     }
                     else
                     {
@@ -959,7 +985,7 @@ namespace RelhaxModpack
                         return;
                     }
                 }
-                Settings.WoTDirectory = Path.GetDirectoryName(Settings.WoTDirectory);
+                Settings.WoTDirectory = Path.GetDirectoryName(autoSearchResult);
                 Logging.Info("Wot root directory parsed as " + Settings.WoTDirectory);
 
                 //check to make sure the application is not in the same directory as the WoT install
@@ -1289,11 +1315,12 @@ namespace RelhaxModpack
                 if (ModpackSettings.BackupModFolder)
                 {
                     Logging.Debug("adding backupModFolder reporter");
-                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
+                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter(nameof(AdvancedProgressWindow.BackupModsReporter))
                     {
                         IsSubProgressActive = true,
                         TaskTitle = Translations.GetTranslatedString("AdvancedInstallBackupMods"),
-                        ReportState = TaskReportState.Inactive
+                        ReportState = TaskReportState.Inactive,
+                        LoadedAfterApply = false
                     };
                     AdvancedProgressWindow.PreInstallPanel.Children.Add(reporter);
                     AdvancedProgressWindow.BackupModsReporter = reporter;
@@ -1304,10 +1331,11 @@ namespace RelhaxModpack
                 {
                     Logging.Debug("adding userData/clearCache/deleteLogs reporter: SaveUserData={0}, ClearCache={1}, DeleteLogs={2}",
                         ModpackSettings.SaveUserData, ModpackSettings.ClearCache, ModpackSettings.DeleteLogs);
-                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
+                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter(nameof(AdvancedProgressWindow.BackupDataClearCacheClearLogsReporter))
                     {
                         IsSubProgressActive = false,
-                        ReportState = TaskReportState.Inactive
+                        ReportState = TaskReportState.Inactive,
+                        LoadedAfterApply = false
                     };
                     AdvancedProgressWindow.PreInstallPanel.Children.Add(reporter);
                     AdvancedProgressWindow.BackupDataClearCacheClearLogsReporter = reporter;
@@ -1317,11 +1345,12 @@ namespace RelhaxModpack
                 if (ModpackSettings.CleanInstallation)
                 {
                     Logging.Debug("adding CleanInstallation reporter");
-                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
+                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter(nameof(AdvancedProgressWindow.CleanModsReporter))
                     {
                         IsSubProgressActive = false,
                         TaskTitle = Translations.GetTranslatedString("AdvancedInstallClearMods"),
-                        ReportState = TaskReportState.Inactive
+                        ReportState = TaskReportState.Inactive,
+                        LoadedAfterApply = false
                     };
                     AdvancedProgressWindow.PreInstallPanel.Children.Add(reporter);
                     AdvancedProgressWindow.CleanModsReporter = reporter;
@@ -1333,11 +1362,12 @@ namespace RelhaxModpack
                 Logging.Debug("adding {0} reporters (MultiCoreExtraction={1}", numThreads, ModpackSettings.MulticoreExtraction);
                 for (int i = 0; i < numThreads; i++)
                 {
-                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
+                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter(nameof(AdvancedProgressWindow.ExtractionModsReporters) + i)
                     {
                         IsSubProgressActive = true,
                         TaskTitle = string.Format("{0} {1}", Translations.GetTranslatedString("AdvancedInstallInstallMods"), (i + 1).ToString()),
-                        ReportState = TaskReportState.Inactive
+                        ReportState = TaskReportState.Inactive,
+                        LoadedAfterApply = false
                     };
                     AdvancedProgressWindow.ExtractionPanel.Children.Add(reporter);
                     AdvancedProgressWindow.ExtractionModsReporters[i] = reporter;
@@ -1347,11 +1377,12 @@ namespace RelhaxModpack
                 if (userModsToInstall.Count > 0)
                 {
                     Logging.Debug("adding userMods reporter");
-                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
+                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter(nameof(AdvancedProgressWindow.ExtractionUserModsReporter))
                     {
                         IsSubProgressActive = true,
                         TaskTitle = Translations.GetTranslatedString("AdvancedInstallInstallUserMods"),
-                        ReportState = TaskReportState.Inactive
+                        ReportState = TaskReportState.Inactive,
+                        LoadedAfterApply = false
                     };
                     AdvancedProgressWindow.ExtractionPanel.Children.Add(reporter);
                     AdvancedProgressWindow.ExtractionUserModsReporter = reporter;
@@ -1777,7 +1808,8 @@ namespace RelhaxModpack
 
             //parse WoT root directory
             Logging.WriteToLog("started looking for WoT root directory", Logfiles.Application, LogLevel.Debug);
-            if (!Utils.AutoFindWoTDirectory(ref Settings.WoTDirectory) || ModpackSettings.ForceManuel)
+            string autoSearchResult = Utils.AutoFindWoTDirectory();
+            if (string.IsNullOrEmpty(autoSearchResult) || ModpackSettings.ForceManuel)
             {
                 Logging.WriteToLog("auto detect failed or user requests manual", Logfiles.Application, LogLevel.Debug);
                 OpenFileDialog manualWoTFind = new OpenFileDialog()
@@ -1793,7 +1825,7 @@ namespace RelhaxModpack
                 };
                 if ((bool)manualWoTFind.ShowDialog())
                 {
-                    Settings.WoTDirectory = manualWoTFind.FileName;
+                    autoSearchResult = manualWoTFind.FileName;
                 }
                 else
                 {
@@ -1802,7 +1834,7 @@ namespace RelhaxModpack
                     return;
                 }
             }
-            Settings.WoTDirectory = Path.GetDirectoryName(Settings.WoTDirectory);
+            Settings.WoTDirectory = Path.GetDirectoryName(autoSearchResult);
             Logging.Info("Wot root directory parsed as " + Settings.WoTDirectory);
 
             //get the version of tanks in the format of the res_mods version folder i.e. 0.9.17.0.3
@@ -1961,8 +1993,10 @@ namespace RelhaxModpack
             {
                 if (control is Button || control is CheckBox || control is RadioButton)
                 {
-                    if (tempDisabledBlacklist.Contains(control))
+                    if (disabledBlacklist.Contains(control))
                         control.IsEnabled = false;
+                    else if (enabledBlacklist.Contains(control))
+                        control.IsEnabled = true;
                     else
                         control.IsEnabled = toggle;
                 }
@@ -2028,8 +2062,9 @@ namespace RelhaxModpack
             if (result)
             {
                 Logging.Info("Saving color settings dump to " + saveFileDialog.FileName);
-                UISettings.DumpAllWindowColorSettingsToFile(saveFileDialog.FileName);
+                UISettings.DumpAllWindowColorSettingsToFile(saveFileDialog.FileName, this);
                 Logging.Info("Color settings saved");
+                MessageBox.Show(Translations.GetTranslatedString("DumpColorSettingsSaveSuccess"));
             }
         }
 
@@ -2473,7 +2508,22 @@ namespace RelhaxModpack
 
         private void Theme_Checked(object sender, RoutedEventArgs e)
         {
-
+            //ModpackSettings is desited theme
+            if ((bool)ThemeDefault.IsChecked)
+                ModpackSettings.ApplicationTheme = UIThemes.Default;
+            else if ((bool)ThemeDark.IsChecked)
+                ModpackSettings.ApplicationTheme = UIThemes.Dark;
+            else if ((bool)ThemeCustom.IsChecked)
+                ModpackSettings.ApplicationTheme = UIThemes.Custom;
+            //try to apply it
+            UISettings.ApplyUIColorSettings(this);
+            //load the result back in
+            if (UISettings.CurrentTheme.Equals(Themes.Default))
+                ThemeDefault.IsChecked = true;
+            else if (UISettings.CurrentTheme.Equals(Themes.Dark))
+                ThemeDark.IsChecked = true;
+            else if (UISettings.CurrentTheme.Equals(Themes.Custom))
+                ThemeCustom.IsChecked = true;
         }
 
         private void SaveDisabledModsInSelection_Click(object sender, RoutedEventArgs e)
@@ -2661,6 +2711,19 @@ namespace RelhaxModpack
                     break;
             }
 
+            switch(ModpackSettings.ApplicationTheme)
+            {
+                case UIThemes.Default:
+                    ThemeDefault.IsChecked = true;
+                    break;
+                case UIThemes.Dark:
+                    ThemeDark.IsChecked = true;
+                    break;
+                case UIThemes.Custom:
+                    ThemeCustom.IsChecked = true;
+                    break;
+            }
+
             //apply beta database settings
             if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Beta)
             {
@@ -2673,6 +2736,12 @@ namespace RelhaxModpack
             {
                 AutoInstallCB_Click(null, null);
             }
+        }
+
+        private void OpenColorPickerButton_Click(object sender, RoutedEventArgs e)
+        {
+            RelhaxColorPicker colorPicker = new RelhaxColorPicker();
+            colorPicker.ShowDialog();
         }
         #endregion
 

@@ -109,7 +109,6 @@
                 <Grid Background="#FFE5E5E5">
                     <StackPanel >
                         <Button x:Name="DatabaseOutputStep1" Content="Step 1: Load database" HorizontalContentAlignment="Left" Click="OnLoadModInfo"/>
-                        <TextBox x:Name="DatabaseOutputLoadedPath" Height="35" TextWrapping="Wrap" />
                         <Button x:Name="DatabaseOutputStep2a" Content="Step 2a: Generate internal spreadsheet (csv)" HorizontalContentAlignment="Left" Click="DatabaseOutputStep2a_Click"/>
                         <Button x:Name="DatabaseOutputStep2b" Content="Step 2b: Generate user spreadsheet (csv)" HorizontalContentAlignment="Left" Click="DatabaseOutputStep2b_Click"/>
                     </StackPanel>
