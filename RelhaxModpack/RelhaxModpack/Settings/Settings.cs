@@ -164,13 +164,13 @@ namespace RelhaxModpack
         [Obsolete]
         public static readonly string RelhaxLibrariesFolderPathOld = Path.Combine(ApplicationStartupPath, "RelHaxLibraries");
 
-        public static readonly string WoT64bitFolder = "win64";
+        public const string WoT64bitFolder = "win64";
 
-        public static readonly string WoT32bitFolder = "win32";
+        public const string WoT32bitFolder = "win32";
 
-        public static readonly string WoT64bitFolderWithSlash = "\\win64";
+        public const string WoT64bitFolderWithSlash = "\\win64";
 
-        public static readonly string WoT32bitFolderWithSlash = "\\win32";
+        public const string WoT32bitFolderWithSlash = "\\win32";
 
         /// <summary>
         /// The name of the installer folder to hold all patch xml files in
