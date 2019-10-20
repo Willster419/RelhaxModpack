@@ -579,6 +579,7 @@ namespace RelhaxModpack.Windows
                     {
                         AddPackage(cat.Packages);
                     });
+                    Utils.AllowUIToUpdate();
                 }
 
                 //perform any final loading to do
