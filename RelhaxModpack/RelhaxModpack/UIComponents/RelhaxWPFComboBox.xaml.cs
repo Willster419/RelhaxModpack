@@ -21,6 +21,8 @@ namespace RelhaxModpack.UIComponents
     /// </summary>
     public partial class RelhaxWPFComboBox : ComboBox
     {
+        public bool AddedToList { get; set; } = false;
+
         /// <summary>
         /// Create an instance of the RelhaxWPFComboBox class
         /// </summary>

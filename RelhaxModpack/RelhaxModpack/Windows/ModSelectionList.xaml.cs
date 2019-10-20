@@ -1088,12 +1088,12 @@ namespace RelhaxModpack.Windows
                 package.Parent.RelhaxWPFComboBoxList[boxIndex] = new RelhaxWPFComboBox()
                 {
                     IsEditable = false,
-                    Name = "notAddedYet",
                     IsEnabled = false,
                     //FONT?
                     MinWidth = 100,
                     MaxWidth = 420,//yes, really
-                    HorizontalAlignment = HorizontalAlignment.Left
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    AddedToList = false
                 };
             }
             ComboBoxItem cbi = new ComboBoxItem(package, package.NameDisplay)
@@ -1102,10 +1102,10 @@ namespace RelhaxModpack.Windows
                 Content = package.NameDisplay
             };
             package.Parent.RelhaxWPFComboBoxList[boxIndex].Items.Add(cbi);
-            if (package.Parent.RelhaxWPFComboBoxList[boxIndex].Name.Equals("notAddedYet"))
+            if (!package.Parent.RelhaxWPFComboBoxList[boxIndex].AddedToList)
             {
-                //lol add it
-                package.Parent.RelhaxWPFComboBoxList[boxIndex].Name = "added";
+                //add it
+                package.Parent.RelhaxWPFComboBoxList[boxIndex].AddedToList = true;
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].PreviewMouseRightButtonDown += Generic_MouseDown;
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].SelectionChanged += OnSingleDDPackageClick;
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].Handler = OnSingleDDPackageClick;
