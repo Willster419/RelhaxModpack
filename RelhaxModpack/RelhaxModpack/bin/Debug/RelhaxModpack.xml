@@ -1072,7 +1072,7 @@
         </member>
         <member name="P:RelhaxModpack.SelectablePackage.IsStructureEnabled">
             <summary>
-            Determines if the UI package structure to this package is of all enabled components.
+            Determines if all parent packages leading to this package are enabled. In other words, it checks if the path to this package is enabled
             </summary>
         </member>
         <member name="P:RelhaxModpack.SelectablePackage.NameDisplay">
