@@ -19,7 +19,7 @@ namespace RelhaxModpack.UIComponents
     /// <summary>
     /// Interaction logic for RelhaxWPFComboBox.xaml
     /// </summary>
-    public partial class RelhaxWPFComboBox : ComboBox, IPackageUIComponent, INotifyPropertyChanged
+    public partial class RelhaxWPFComboBox : ComboBox, INotifyPropertyChanged
     {
         /// <summary>
         /// Create an instance of the RelhaxWPFComboBox class
@@ -30,60 +30,9 @@ namespace RelhaxModpack.UIComponents
         }
 
         /// <summary>
-        /// The package associated with this UI component
-        /// </summary>
-        public SelectablePackage Package { get; set; }
-
-#warning this needs to be investigated. Why not use the onChecked and onEnabled?
-        /// <summary>
         /// The event to subscribe to when the selection is changed
         /// </summary>
         public SelectionChangedEventHandler Handler;
-
-        /// <summary>
-        /// This is not implemented
-        /// </summary>
-        /// <param name="Enabled">The value from the SelectablePackage</param>
-        public void OnEnabledChanged(bool Enabled)
-        {
-
-        }
-
-        /// <summary>
-        /// This is not implemented
-        /// </summary>
-        /// <param name="Checked">The value from the SelectablePackage</param>
-        public void OnCheckedChanged(bool Checked)
-        {
-
-        }
-
-        /// <summary>
-        /// This is not implemented
-        /// </summary>
-        public Brush TextColor
-        {
-            get
-            { return null; }
-            set
-            { }
-        }
-
-        /// <summary>
-        /// Set the brush of the ComboBox Panel Background property 
-        /// </summary>
-        public Brush PanelColor
-        {
-            get
-            {
-                return Package.ParentBorder == null ? null : Package.ParentBorder.Background;
-            }
-            set
-            {
-                if (Package.ParentBorder != null)
-                    Package.ParentBorder.Background = value;
-            }
-        }
 
         /// <summary>
         /// Called from the database object to update the UI on a combobox selection change
@@ -103,7 +52,8 @@ namespace RelhaxModpack.UIComponents
                     if (Handler != null)
                         SelectionChanged += Handler;
                     continue;
-                }//if value is false it will uncheck all the packages
+                }
+                //if value is false it will uncheck all the packages
                 if (cbi.Package.Enabled && cbi.Package.Checked)
                     cbi.Package.Checked = false;
             }
