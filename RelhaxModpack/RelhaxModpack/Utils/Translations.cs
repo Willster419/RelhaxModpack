@@ -2041,31 +2041,31 @@ namespace RelhaxModpack
 
             //Component: 
             //
-            English.Add("modDeactivated", "The package (ID = \"{0}\") is currently deactivated in the modpack and could not to be selected to install.");
-            German.Add("modDeactivated", "Das Paket (ID = \"{0}\") ist vorrübergehend deaktiviert und kann nicht für die Installation ausgewählt werden");
-            Polish.Add("modDeactivated", "Pakiet (ID = „{0}”) jest obecnie nieaktywny w modpacku i nie można go wybrać do instalacji.");
-            French.Add("modDeactivated", "Le paquet (ID = \"{0}\") est actuellement désactivé dans le modpack et n'a pas pu être sélectionné pour l'installation.");
-            Spanish.Add("modDeactivated", "El paquete (ID = \"{0}\") está actualmente desactivado en el modpack y no ha podido ser seleccionado para la instalación");
-            Russian.Add("modDeactivated", "Пакет (ID= \"{0}\") в настоящее время отключён и недоступен для выбора и установки в модпаке.");
+            English.Add("modDeactivated", "The following packages are currently deactivated in the modpack and could not to be selected to install");
+            German.Add("modDeactivated", TranslationNeeded);
+            Polish.Add("modDeactivated", TranslationNeeded);
+            French.Add("modDeactivated", TranslationNeeded);
+            Spanish.Add("modDeactivated", TranslationNeeded);
+            Russian.Add("modDeactivated", TranslationNeeded);
 
             //Component: 
             //
-            English.Add("modsNotFoundTechnical", "The following mods could not be found and were most likely removed. There are only technical names available:\n{0}");
-            German.Add("modsNotFoundTechnical", "Die folgenden Modifikationen können nicht gefunden werden und wurden wahrscheinlich entfernt/gelöscht. Es sind leider nur technische Namen verfügbar:\n{0}");
-            Polish.Add("modsNotFoundTechnical", "Następujące modyfikacje nie zostały znalezione, najprawdopodobniej zostały usunięte:\n{0}");
-            French.Add("modsNotFoundTechnical", "Les mods suivants n'ont pas pu être trouvés et ont probablement été supprimés. Il n'y a que des noms techniques disponibles:\n{0}");
-            Spanish.Add("modsNotFoundTechincal", "Los siguientes mods no han podido ser encontraodos y lo más probable es que hayan sido eliminados. Sólo se dispone de los nombres técnicos:\n{0}");
-            Russian.Add("modsNotFoundTechnical", "Данные моды не найдены, вероятно они были удалены. Есть только их техническое название:\n{0}");
+            English.Add("modsNotFoundTechnical", "The following packages could not be found and were most likely removed");
+            German.Add("modsNotFoundTechnical", TranslationNeeded);
+            Polish.Add("modsNotFoundTechnical", TranslationNeeded);
+            French.Add("modsNotFoundTechnical", TranslationNeeded);
+            Spanish.Add("modsNotFoundTechincal", TranslationNeeded);
+            Russian.Add("modsNotFoundTechnical", TranslationNeeded);
 
 
             //Component: 
             //
-            English.Add("modsBrokenStructure", "The following mods were disabled due to modifications in the package structure. You need to re-check them if you want to install them:\n");
-            German.Add("modsBrokenStructure", "Die folgenden Mods wurden aufgrund von Änderungen in der Paketstruktur deaktiviert. Du mußt sie erneut auswählen, wenn du sie installieren möchtest:\n");
-            Polish.Add("modsBrokenStructure", "Następujące modyfikacje zostały wyłączone ze względu na zmiany w strukturze paczki. Zaznacz je ponownie, jeśli chcesz je zainstalować:\n");
-            French.Add("modsBrokenStructure", "Les mods suivants ont été désactivés en raison de modifications dans la structure du paquet: vous devez les vérifier de nouveau si vous voulez les installer:\n");
-            Spanish.Add("modsBrokenStructure", "Los siguientes mods fueron desabilitados debido a modificaciones en la estructura del paquete. Debe volver a seleccionarlos si desea instalarlos:\n");
-            Russian.Add("modsBrokenStructure", "Данные моды были отключены в связи с изменением структуры пакета. Вы можете перепроверить их в случае, если хотите установить их:\n");
+            English.Add("modsBrokenStructure", "The following packages were disabled due to modifications in the package structure. You need to re-check them if you want to install them");
+            German.Add("modsBrokenStructure", TranslationNeeded);
+            Polish.Add("modsBrokenStructure", TranslationNeeded);
+            French.Add("modsBrokenStructure", TranslationNeeded);
+            Spanish.Add("modsBrokenStructure", TranslationNeeded);
+            Russian.Add("modsBrokenStructure", TranslationNeeded);
 
 
             //Component: 

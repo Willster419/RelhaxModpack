@@ -1819,22 +1819,26 @@ namespace RelhaxModpack.Windows
                 if(disabledMods.Count > 0)
                 {
                     //disabled selections
-                    MessageBox.Show(Translations.GetTranslatedString("modDeactivated") + "\n" + string.Join("\n",disabledMods));
+                    MessageBox.Show(string.Format("{0}: {1}{2}",
+                        Translations.GetTranslatedString("modDeactivated"), Environment.NewLine, string.Join(Environment.NewLine, disabledMods)));
                 }
                 if(stringSelections.Count > 0)
                 {
                     //removed selections
-                    MessageBox.Show(Translations.GetTranslatedString("modsNotFoundTechnical") + "\n" + string.Join("\n", stringSelections));
+                    MessageBox.Show(string.Format("{0}: {1}{2}",
+                        Translations.GetTranslatedString("modsNotFoundTechnical"), Environment.NewLine, string.Join(Environment.NewLine, stringSelections));
                 }
                 if(stringUserSelections.Count > 0)
                 {
                     //removed user selections
-                    MessageBox.Show(Translations.GetTranslatedString("modsNotFoundTechnical") + "\n" + string.Join("\n", stringUserSelections));
+                    MessageBox.Show(string.Format("{0}: {1}{2}",
+                        Translations.GetTranslatedString("modsNotFoundTechnical"), Environment.NewLine, string.Join(Environment.NewLine, stringUserSelections));
                 }
                 if(disabledStructureMods.Count > 0)
                 {
                     //removed structure user selections
-                    MessageBox.Show(Translations.GetTranslatedString("modsBrokenStructure") + "\n" + string.Join("\n", disabledStructureMods));
+                    MessageBox.Show(string.Format("{0}: {1}{2}",
+                        Translations.GetTranslatedString("modsBrokenStructure"), Environment.NewLine, string.Join(Environment.NewLine, disabledStructureMods));
                 }
             }
         }
