@@ -105,7 +105,7 @@ namespace RelhaxModpack.Windows
         private bool continueInstallation  = false;
         private ProgressIndicator loadingProgress;
         private bool LoadingUI = false;
-        private List<SelectablePackage> userMods;
+        private Category UserCategory = null;
         private Preview p;
         const int FLASH_TICK_INTERVAL = 250;
         const int NUM_FLASH_TICKS = 5;
@@ -177,7 +177,7 @@ namespace RelhaxModpack.Windows
                 ParsedCategoryList = ParsedCategoryList,
                 Dependencies = Dependencies,
                 GlobalDependencies = GlobalDependencies,
-                UserMods = userMods
+                UserMods = UserCategory.Packages
             });
         }
 
@@ -591,10 +591,11 @@ namespace RelhaxModpack.Windows
                 {
                     //add the user mods
                     AddUserMods();
-                    //finish loading
+
                     //update the text on the list
                     InstallingTo.Text = string.Format(Translations.GetTranslatedString("InstallingTo"), Settings.WoTDirectory);
                     InstallingAsWoTVersion.Text = string.Format(Translations.GetTranslatedString("InstallingAsWoTVersion"), Settings.WoTClientVersion);
+
                     //determind if the collapse and expand buttons should be visible
                     switch (ModpackSettings.ModSelectionView)
                     {
@@ -673,9 +674,6 @@ namespace RelhaxModpack.Windows
                         }
                     }
 
-                    //set the version of WoT we are installing for
-                    InstallingAsWoTVersion.Text = string.Format(Translations.GetTranslatedString("InstallingAsWoTVersion"), Settings.WoTClientVersion);
-
                     //like hook up the flashing timer
                     FlashTimer.Tick += OnFlastTimerTick;
 
@@ -690,8 +688,14 @@ namespace RelhaxModpack.Windows
                     //set the loading flag back to false
                     LoadingUI = false;
 
+                    //set the UI color to null so it's grabbed first time
+                    UISettings.NotSelectedTabColor = null;
+
+                    //set tabs UI coloring
+                    ModTabGroups_SelectionChanged(null, null);
+
                     //if auto install or one-click install, don't show the UI
-                    if(ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall || !string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
+                    if (ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall || !string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
                     {
                         OnSelectionListReturn(this, new SelectionListEventArgs()
                         {
@@ -699,7 +703,7 @@ namespace RelhaxModpack.Windows
                             ParsedCategoryList = ParsedCategoryList,
                             Dependencies = Dependencies,
                             GlobalDependencies = GlobalDependencies,
-                            UserMods = userMods
+                            UserMods = UserCategory.Packages
                         });
                     }
                     else
@@ -729,7 +733,9 @@ namespace RelhaxModpack.Windows
         {
             //get a list of all zip files in the folder
             string[] zipFilesUserMods = Utils.DirectorySearch(Settings.RelhaxUserModsFolderPath, SearchOption.TopDirectoryOnly, false, @"*.zip", 5, 3, true);
-            userMods = new List<SelectablePackage>();
+
+            //init database components
+            UserCategory = new Category();
             foreach (string s in zipFilesUserMods)
             {
                 SelectablePackage sp = new SelectablePackage
@@ -744,7 +750,7 @@ namespace RelhaxModpack.Windows
                 };
                 //circular reference because
                 sp.Parent = sp.TopParent = sp;
-                userMods.Add(sp);
+                UserCategory.Packages.Add(sp);
             }
         }
 
@@ -755,11 +761,15 @@ namespace RelhaxModpack.Windows
             {
                 Name = "UserMods",
                 Header = Translations.GetTranslatedString("userMods"),
+                Style = (Style)Application.Current.Resources["RelhaxSelectionListTabItemStyle"]
             };
+            userTab.Resources.Add("TabItemHeaderSelectedBackground", UISettings.CurrentTheme.SelectionListActiveTabHeaderBackgroundColor.Brush);
             userTab.RequestBringIntoView += OnUserModsTabSelected;
             userTab.Content = userStackPanel;
             ModTabGroups.Items.Add(userTab);
-            foreach(SelectablePackage package in userMods)
+            UserCategory.TabPage = userTab;
+
+            foreach(SelectablePackage package in UserCategory.Packages)
             {
                 RelhaxWPFCheckBox userMod = new RelhaxWPFCheckBox()
                 {
@@ -799,8 +809,13 @@ namespace RelhaxModpack.Windows
                     //MinWidth = 50,
                     //MaxWidth = 150,
                     //Width = 0
-                    Tag = cat
+                    Tag = cat,
+                    Style = (Style)Application.Current.Resources["RelhaxSelectionListTabItemStyle"]
                 };
+
+                //add brush resource
+                cat.TabPage.Resources.Add("TabItemHeaderSelectedBackground", UISettings.CurrentTheme.SelectionListActiveTabHeaderBackgroundColor.Brush);
+
                 //make and attach the category header
                 cat.CategoryHeader = new SelectablePackage()
                 {
@@ -836,7 +851,7 @@ namespace RelhaxModpack.Windows
                         cat.CategoryHeader.ChildStackPanel = new StackPanel();
                         cat.CategoryHeader.ChildBorder = new Border()
                         {
-                            BorderBrush = Brushes.Black,
+                            BorderBrush = UISettings.CurrentTheme.SelectionListBorderColor.Brush,
                             BorderThickness = ModpackSettings.EnableBordersLegacyView? new Thickness(1) : new Thickness(0),
                             Child = cat.CategoryHeader.ChildStackPanel,
                             Margin = new Thickness(-25, 0, 0, 0),
@@ -854,7 +869,7 @@ namespace RelhaxModpack.Windows
                             Package = cat.CategoryHeader,
                             Content = cat.CategoryHeader.NameFormatted,
                             HorizontalAlignment = HorizontalAlignment.Left,
-                            Foreground = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush
+                            Foreground = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush,
                         };
                         cat.CategoryHeader.UIComponent = box;
                         box.Click += OnWPFComponentCheck;
@@ -872,7 +887,7 @@ namespace RelhaxModpack.Windows
                         {
                             Child = cat.CategoryHeader.ParentStackPanel,
                             Padding = new Thickness(2),
-                            Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush
+                            Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush,
                         };
                         cat.CategoryHeader.ScrollViewer = new ScrollViewer()
                         {
@@ -895,7 +910,7 @@ namespace RelhaxModpack.Windows
                         cat.CategoryHeader.ChildStackPanel = new StackPanel();
                         cat.CategoryHeader.ChildBorder = new Border()
                         {
-                            BorderBrush = Brushes.Black,
+                            BorderBrush = UISettings.CurrentTheme.SelectionListBorderColor.Brush,
                             BorderThickness = ModpackSettings.EnableBordersDefaultV2View? new Thickness(1) : new Thickness(0),
                             Child = cat.CategoryHeader.ChildStackPanel,
                             Padding = new Thickness(15,0,0,0)
@@ -958,7 +973,7 @@ namespace RelhaxModpack.Windows
                     package.ChildStackPanel = new StackPanel();
                     package.ChildBorder = new Border()
                     {
-                        BorderBrush = Brushes.Black,
+                        BorderBrush = BorderBrush = UISettings.CurrentTheme.SelectionListBorderColor.Brush,
                         BorderThickness = ModpackSettings.EnableBordersDefaultV2View ? new Thickness(1) : new Thickness(0),
                         Child = package.ChildStackPanel,
                         Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush
@@ -989,8 +1004,7 @@ namespace RelhaxModpack.Windows
                             IsEnabled = package.IsStructureEnabled,
                             PopularModVisability = package.PopularMod? Visibility.Visible : Visibility.Hidden,
                             GreyAreaVisability = package.GreyAreaMod? Visibility.Visible : Visibility.Hidden,
-                            //the UI building code ONLY deals with BUILDING the UI, not loading configuration options!!
-                            //so make it false and later when loading selection it will mark it
+                            Foreground = BorderBrush = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush,
                             IsChecked = false
                         };
                         break;
@@ -1012,7 +1026,8 @@ namespace RelhaxModpack.Windows
                             IsEnabled = package.IsStructureEnabled,
                             IsChecked = false,
                             PopularModVisability = package.PopularMod ? Visibility.Visible : Visibility.Hidden,
-                            GreyAreaVisability = package.GreyAreaMod ? Visibility.Visible : Visibility.Hidden
+                            GreyAreaVisability = package.GreyAreaMod ? Visibility.Visible : Visibility.Hidden,
+                            Foreground = BorderBrush = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush,
                         };
                         break;
                 }
@@ -1428,6 +1443,64 @@ namespace RelhaxModpack.Windows
                     PropagateDownNotChecked(childPackage);
             }
         }
+
+        private void ModTabGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (LoadingUI)
+                return;
+            if (ParsedCategoryList == null)
+                return;
+
+            List<Category> listWithUserCat = new List<Category>();
+            listWithUserCat.AddRange(ParsedCategoryList);
+            listWithUserCat.Add(UserCategory);
+
+            foreach (Category category in listWithUserCat)
+            {
+                TabItem TabIndex = category.TabPage;
+                //if the color is not saved yet, then save what the default currently is
+                if (UISettings.NotSelectedTabColor == null)
+                {
+                    //windows 10 uses a linear gradient brush (at least mine does)
+                    //windows 7 in classic theme uses a solid color brush
+                    if (UISettings.CurrentTheme.Equals(Themes.Default))
+                    {
+                        UISettings.NotSelectedTabColor = TabIndex.Background;
+                    }
+                    else
+                    {
+                        UISettings.NotSelectedTabColor = UISettings.CurrentTheme.SelectionListNotActiveHasNoSelectionsBackgroundColor.Brush;
+                    }
+                }
+
+                //3 possible conditions:
+                // if (active){ }
+                // else
+                // {
+                //  if (has selections) { }
+                //  else{ }
+                // }
+
+                if (TabIndex.IsSelected)
+                {
+                    //brush is set in tab resources when created as trigger
+                    TabIndex.Foreground = UISettings.CurrentTheme.SelectionListActiveTabHeaderTextColor.Brush;
+                }
+                else
+                {
+                    if (category.AnyPackagesChecked())
+                    {
+                        TabIndex.Background = UISettings.CurrentTheme.SelectionListNotActiveHasSelectionsBackgroundColor.Brush;
+                        TabIndex.Foreground = UISettings.CurrentTheme.SelectionListNotActiveHasSelectionsTextColor.Brush;
+                    }
+                    else
+                    {
+                        TabIndex.Background = UISettings.NotSelectedTabColor;
+                        TabIndex.Foreground = UISettings.CurrentTheme.SelectionListNotActiveHasNoSelectionsTextColor.Brush;
+                    }
+                }
+            }
+        }
         #endregion
 
         #region Preview Code
@@ -1626,7 +1699,11 @@ namespace RelhaxModpack.Windows
         private void OnClearSelectionsClick(object sender, RoutedEventArgs e)
         {
             Logging.Info("Clearing selections");
+            //clear in lists
             Utils.ClearSelections(ParsedCategoryList);
+            Utils.ClearSelections(new List<Category>() { UserCategory});
+            //update selection list UI
+            ModTabGroups_SelectionChanged(null, null);
             Logging.Info("Selections cleared");
             MessageBox.Show(Translations.GetTranslatedString("selectionsCleared"));
         }
@@ -1709,7 +1786,7 @@ namespace RelhaxModpack.Windows
                 }
             }
             //do the same as above but for user mods
-            foreach(SelectablePackage package in userMods)
+            foreach(SelectablePackage package in UserCategory.Packages)
             {
                 if(stringUserSelections.Contains(Path.GetFileNameWithoutExtension(package.ZipFile)) && File.Exists(Path.Combine(Settings.RelhaxUserModsFolderPath,package.ZipFile)))
                 {
@@ -1786,7 +1863,7 @@ namespace RelhaxModpack.Windows
             }
 
             //check user mods
-            foreach (SelectablePackage m in userMods)
+            foreach (SelectablePackage m in UserCategory.Packages)
             {
                 if (m.Checked)
                 {

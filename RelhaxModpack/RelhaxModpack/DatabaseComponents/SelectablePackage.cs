@@ -183,13 +183,17 @@ namespace RelhaxModpack
             }
             set
             {
+                //set the internal checked value
                 _Checked = value;
-                int dropDownSelectionType = -1;
-                //inside here is for not comboboxes (checked)
+
+                //if the UI component is not null (it's a checkbox or radiobutton), then run the UI code
                 if (UIComponent != null)
                 {
                     UIComponent.OnCheckedChanged(value);
                 }
+
+                //check if this selection is a dropdown type
+                int dropDownSelectionType = -1;
                 if (Type == SelectionTypes.single_dropdown1)
                 {
                     dropDownSelectionType = 0;
@@ -198,9 +202,11 @@ namespace RelhaxModpack
                 {
                     dropDownSelectionType = 1;
                 }
+
                 //inside here is for comboboxes (checked)
                 if (Enabled && dropDownSelectionType > -1 && IsStructureEnabled)
                 {
+                    //go to the parent array list above this that holds the combobox and run the UI code
                     switch (ModpackSettings.ModSelectionView)
                     {
                         case SelectionView.DefaultV2:
@@ -211,76 +217,78 @@ namespace RelhaxModpack
                             break;
                     }
                 }
-                //inside here is for color change
-                bool actuallyDoColorChange = false;
+
+                //determine if we should perform color change on the UI component(s)
+                bool UIComponentColorChange = false;
                 if (ModpackSettings.ModSelectionView == SelectionView.DefaultV2 && ModpackSettings.EnableColorChangeDefaultV2View)
-                    actuallyDoColorChange = true;
+                    UIComponentColorChange = true;
                 else if (ModpackSettings.ModSelectionView == SelectionView.Legacy && ModpackSettings.EnableColorChangeLegacyView)
-                    actuallyDoColorChange = true;
-                if(UIComponent != null && actuallyDoColorChange)
+                    UIComponentColorChange = true;
+
+                if(UIComponentColorChange && Visible && IsStructureVisible)
                 {
-                    //set panel and text color based on true or false
-                    switch(_Checked)
+                    if (UIComponent != null)
                     {
-                        case true:
-                            if (UIComponent.PanelColor != UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush)
-                                UIComponent.PanelColor = UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush;
+                        //set panel and text color based on true or false for checkbox or radiobutton
+                        switch (_Checked)
+                        {
+                            case true:
+                                if (UIComponent.PanelColor != UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush)
+                                    UIComponent.PanelColor = UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush;
                                 UIComponent.TextColor = UISettings.CurrentTheme.SelectionListSelectedTextColor.Brush;
-                            break;
-                        case false:
-                            if (!AnyPackagesChecked())
+                                break;
+                            case false:
+                                if (!AnyPackagesChecked())
+                                {
+                                    if (UIComponent.PanelColor != UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush)
+                                        UIComponent.PanelColor = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush;
+                                    UIComponent.TextColor = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush;
+                                }
+                                break;
+                        }
+                    }
+                    else if (dropDownSelectionType > -1)
+                    {
+                        //set panel and text color based on true of false for dropdown option
+                        switch (_Checked)
+                        {
+                            case true:
+                                if (ParentBorder.Background != UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush)
+                                    ParentBorder.Background = UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush;
+                                break;
+                            case false:
+                                if (!AnyPackagesChecked())
+                                {
+                                    if (ParentBorder.Background != UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush)
+                                        ParentBorder.Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush;
+                                }
+                                break;
+                        }
+                    }
+                    //toggle the Tab Color based on if anything is selected, done for level -1 top item
+                    if (Level == -1)
+                    {
+                        //workarounds
+                        //top item is not going to correct color
+                        if (ModpackSettings.ModSelectionView == SelectionView.Legacy)
+                        {
+                            if (_Checked)
                             {
-                                if (UIComponent.PanelColor != UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush)
-                                    UIComponent.PanelColor = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush;
-                                UIComponent.TextColor = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush;
+                                TreeView.Background = UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush;
                             }
-                            break;
-                    }
-                }
-                else if (Visible && dropDownSelectionType > -1 && actuallyDoColorChange && IsStructureVisible)
-                {
-                    //in here means it's a dropdown and doing color change
-                    switch (_Checked)
-                    {
-                        case true:
-                            if (ParentBorder.Background != UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush)
-                                ParentBorder.Background = UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush;
-                            break;
-                        case false:
-                            if (!AnyPackagesChecked())
+                            else
                             {
-                                if (ParentBorder.Background != UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush)
-                                    ParentBorder.Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush;
+                                TreeView.Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush;
                             }
-                            break;
+                        }
+                        else if (ModpackSettings.ModSelectionView == SelectionView.DefaultV2)
+                        {
+                            if (!_Checked)
+                            {
+                                ParentBorder.Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush;
+                            }
+                        }
                     }
-                }
-                //toggle the Tab Color based on if anything is selected, done for level -1 top item
-                if(Level == -1)
-                {
-                    //if the color is not saved yet, then save what the default currently is
-                    if (UISettings.NotSelectedTabColor == null)
-                    {
-                        //windows 10 uses a linear gradient brush (at least mine does)
-                        //windows 7 in classic theme uses a solid color brush
-                        UISettings.NotSelectedTabColor = TabIndex.Background;
-                    }
-                    if (_Checked)
-                        TabIndex.Background = UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush;
-                    else
-                        TabIndex.Background = UISettings.NotSelectedTabColor;
-                    //workaround for legacy:
-                    //top item is not going to correct color
-                    if (ModpackSettings.ModSelectionView == SelectionView.Legacy)
-                    {
-                        if (_Checked)
-                            TreeView.Background = UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush;
-                        else
-                            TreeView.Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush;
-                    }
-                    else if (ModpackSettings.ModSelectionView == SelectionView.DefaultV2)
-                        if (!_Checked)
-                            ParentBorder.Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush;
                 }
             }
         }
@@ -493,7 +501,7 @@ namespace RelhaxModpack
         }
 
         /// <summary>
-        /// Determines if the UI package structure to this package is of all enabled components.
+        /// Determines if all parent packages leading to this package are enabled. In other words, it checks if the path to this package is enabled
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
         public bool IsStructureEnabled
