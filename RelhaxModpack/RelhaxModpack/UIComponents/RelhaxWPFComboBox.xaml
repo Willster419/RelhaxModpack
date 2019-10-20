@@ -6,8 +6,7 @@
              xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
              x:Name="comboBox"
              x:Class="RelhaxModpack.UIComponents.RelhaxWPFComboBox"
-             mc:Ignorable="d"
-             Style="{DynamicResource RelhaxComboboxStyle}" >
+             mc:Ignorable="d">
     <ComboBox.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -268,7 +267,7 @@
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
-        <Style x:Key="RelhaxComboboxStyle" TargetType="{x:Type ComboBox}">
+        <Style TargetType="{x:Type local:RelhaxWPFComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
             <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
             <Setter Property="Background" Value="{StaticResource ComboBox.Static.Background}"/>
             <Setter Property="BorderBrush" Value="{StaticResource ComboBox.Static.Border}"/>
