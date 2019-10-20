@@ -1826,19 +1826,19 @@ namespace RelhaxModpack.Windows
                 {
                     //removed selections
                     MessageBox.Show(string.Format("{0}: {1}{2}",
-                        Translations.GetTranslatedString("modsNotFoundTechnical"), Environment.NewLine, string.Join(Environment.NewLine, stringSelections));
+                        Translations.GetTranslatedString("modsNotFoundTechnical"), Environment.NewLine, string.Join(Environment.NewLine, stringSelections)));
                 }
                 if(stringUserSelections.Count > 0)
                 {
                     //removed user selections
                     MessageBox.Show(string.Format("{0}: {1}{2}",
-                        Translations.GetTranslatedString("modsNotFoundTechnical"), Environment.NewLine, string.Join(Environment.NewLine, stringUserSelections));
+                        Translations.GetTranslatedString("modsNotFoundTechnical"), Environment.NewLine, string.Join(Environment.NewLine, stringUserSelections)));
                 }
                 if(disabledStructureMods.Count > 0)
                 {
                     //removed structure user selections
                     MessageBox.Show(string.Format("{0}: {1}{2}",
-                        Translations.GetTranslatedString("modsBrokenStructure"), Environment.NewLine, string.Join(Environment.NewLine, disabledStructureMods));
+                        Translations.GetTranslatedString("modsBrokenStructure"), Environment.NewLine, string.Join(Environment.NewLine, disabledStructureMods)));
                 }
             }
         }
