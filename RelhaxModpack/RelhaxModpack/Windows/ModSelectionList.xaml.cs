@@ -1163,8 +1163,10 @@ namespace RelhaxModpack.Windows
             SelectablePackage spc = null;
             if (sender is RelhaxWPFComboBox cb2)
             {
+                //get the UI cbi struct and the internal SeletablePackage
                 ComboBoxItem cbi = (ComboBoxItem)cb2.SelectedItem;
                 spc = cbi.Package;
+                //only enable the package if the structure leading to this package is enabled
                 if(cb2.SelectedIndex == 0 && spc.IsStructureEnabled && !spc.Checked)
                 {
                     OnSingleDDPackageClick(sender, e);
