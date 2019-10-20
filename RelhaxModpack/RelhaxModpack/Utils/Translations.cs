@@ -1177,7 +1177,7 @@ namespace RelhaxModpack
             German.Add("DumpColorSettingsButtonText", TranslationNeeded);
             Polish.Add("DumpColorSettingsButtonText", TranslationNeeded);
             French.Add("DumpColorSettingsButtonText", TranslationNeeded);
-            Spanish.Add("DumpColorSettingsButtonText", TranslationNeeded);
+            Spanish.Add("DumpColorSettingsButtonText", "Guardar configuración de colores");
             Russian.Add("DumpColorSettingsButtonText", TranslationNeeded);
 
             //Component: DumpColorSettingsSaveSuccess
@@ -1186,7 +1186,7 @@ namespace RelhaxModpack
             German.Add("DumpColorSettingsSaveSuccess", TranslationNeeded);
             Polish.Add("DumpColorSettingsSaveSuccess", TranslationNeeded);
             French.Add("DumpColorSettingsSaveSuccess", TranslationNeeded);
-            Spanish.Add("DumpColorSettingsSaveSuccess", TranslationNeeded);
+            Spanish.Add("DumpColorSettingsSaveSuccess", "Configuración de colores guardada");
             Russian.Add("DumpColorSettingsSaveSuccess", TranslationNeeded);
 
             //Component: OpenColorPickerButtonText
@@ -1195,7 +1195,7 @@ namespace RelhaxModpack
             German.Add("OpenColorPickerButtonText", TranslationNeeded);
             Polish.Add("OpenColorPickerButtonText", TranslationNeeded);
             French.Add("OpenColorPickerButtonText", TranslationNeeded);
-            Spanish.Add("OpenColorPickerButtonText", TranslationNeeded);
+            Spanish.Add("OpenColorPickerButtonText", "Abrir selector de colores");
             Russian.Add("OpenColorPickerButtonText", TranslationNeeded);
 
             //Component: DumpColorSettingsButtonDescription
@@ -1802,7 +1802,7 @@ namespace RelhaxModpack
             German.Add("failedToParseUISettingsFile", TranslationNeeded);
             Polish.Add("failedToParseUISettingsFile", TranslationNeeded);
             French.Add("failedToParseUISettingsFile", TranslationNeeded);
-            Spanish.Add("failedToParseUISettingsFile", TranslationNeeded);
+            Spanish.Add("failedToParseUISettingsFile", "No se ha podido aplicar el tema. Compruebe el archivo de registro para más detalles. Habilite \"Registro Verboso\" para información adicional.");
             Russian.Add("failedToParseUISettingsFile", TranslationNeeded);
 
             //Component: UISettingsFileApplied
@@ -1811,7 +1811,7 @@ namespace RelhaxModpack
             German.Add("UISettingsFileApplied", TranslationNeeded);
             Polish.Add("UISettingsFileApplied", TranslationNeeded);
             French.Add("UISettingsFileApplied", TranslationNeeded);
-            Spanish.Add("UISettingsFileApplied", TranslationNeeded);
+            Spanish.Add("UISettingsFileApplied", "Tema aplicado");
             Russian.Add("UISettingsFileApplied", TranslationNeeded);
             #endregion
 
@@ -3458,7 +3458,7 @@ namespace RelhaxModpack
             German.Add("DiagnosticsAddSelectionsPicturesLabel", TranslationNeeded);
             Polish.Add("DiagnosticsAddSelectionsPicturesLabel", TranslationNeeded);
             French.Add("DiagnosticsAddSelectionsPicturesLabel", TranslationNeeded);
-            Spanish.Add("DiagnosticsAddSelectionsPicturesLabel", TranslationNeeded);
+            Spanish.Add("DiagnosticsAddSelectionsPicturesLabel", "Añada archivos adicionales aquí (archivos de selección, imágenes, etc.)");
             Russian.Add("DiagnosticsAddSelectionsPicturesLabel", TranslationNeeded);
 
             //Component: DiagnosticsAddFilesButton
@@ -3467,7 +3467,7 @@ namespace RelhaxModpack
             German.Add("DiagnosticsAddFilesButton", TranslationNeeded);
             Polish.Add("DiagnosticsAddFilesButton", TranslationNeeded);
             French.Add("DiagnosticsAddFilesButton", TranslationNeeded);
-            Spanish.Add("DiagnosticsAddFilesButton", TranslationNeeded);
+            Spanish.Add("DiagnosticsAddFilesButton", "Añadir archivos");
             Russian.Add("DiagnosticsAddFilesButton", TranslationNeeded);
 
             //Component: DiagnosticsRemoveSelectedButton
@@ -3476,7 +3476,7 @@ namespace RelhaxModpack
             German.Add("DiagnosticsRemoveSelectedButton", TranslationNeeded);
             Polish.Add("DiagnosticsRemoveSelectedButton", TranslationNeeded);
             French.Add("DiagnosticsRemoveSelectedButton", TranslationNeeded);
-            Spanish.Add("DiagnosticsRemoveSelectedButton", TranslationNeeded);
+            Spanish.Add("DiagnosticsRemoveSelectedButton", "Eliminar seleccionados");
             Russian.Add("DiagnosticsRemoveSelectedButton", TranslationNeeded);
 
             //Component: DiagnosticsContinueButton
@@ -3485,7 +3485,7 @@ namespace RelhaxModpack
             German.Add("DiagnosticsContinueButton", TranslationNeeded);
             Polish.Add("DiagnosticsContinueButton", TranslationNeeded);
             French.Add("DiagnosticsContinueButton", TranslationNeeded);
-            Spanish.Add("DiagnosticsContinueButton", TranslationNeeded);
+            Spanish.Add("DiagnosticsContinueButton", "Continuar");
             Russian.Add("DiagnosticsContinueButton", TranslationNeeded);
 
             //Component: cantRemoveDefaultFile
@@ -3494,7 +3494,7 @@ namespace RelhaxModpack
             German.Add("cantRemoveDefaultFile", TranslationNeeded);
             Polish.Add("cantRemoveDefaultFile", TranslationNeeded);
             French.Add("cantRemoveDefaultFile", TranslationNeeded);
-            Spanish.Add("cantRemoveDefaultFile", TranslationNeeded);
+            Spanish.Add("cantRemoveDefaultFile", "No se puede eliminar un archivo que debe ser añadido por defecto.");
             Russian.Add("cantRemoveDefaultFile", TranslationNeeded);
             #endregion
 
@@ -4077,7 +4077,7 @@ namespace RelhaxModpack
             German.Add("ColorType", TranslationNeeded);
             Polish.Add("ColorType", TranslationNeeded);
             French.Add("ColorType", TranslationNeeded);
-            Spanish.Add("ColorType", TranslationNeeded);
+            Spanish.Add("ColorType", "Tipo de pincel");
             Russian.Add("ColorType", TranslationNeeded);
 
             //Component: SampleTextColor
@@ -4086,7 +4086,7 @@ namespace RelhaxModpack
             German.Add("SampleTextColor", TranslationNeeded);
             Polish.Add("SampleTextColor", TranslationNeeded);
             French.Add("SampleTextColor", TranslationNeeded);
-            Spanish.Add("SampleTextColor", TranslationNeeded);
+            Spanish.Add("SampleTextColor", "Texto de muestra");
             Russian.Add("SampleTextColor", TranslationNeeded);
 
             //Component: MainColor
@@ -4095,7 +4095,7 @@ namespace RelhaxModpack
             German.Add("MainColor", TranslationNeeded);
             Polish.Add("MainColor", TranslationNeeded);
             French.Add("MainColor", TranslationNeeded);
-            Spanish.Add("MainColor", TranslationNeeded);
+            Spanish.Add("MainColor", "Color Principal");
             Russian.Add("MainColor", TranslationNeeded);
 
             //Component: MainColorAlpha
@@ -4104,7 +4104,7 @@ namespace RelhaxModpack
             German.Add("MainColorAlpha", TranslationNeeded);
             Polish.Add("MainColorAlpha", TranslationNeeded);
             French.Add("MainColorAlpha", TranslationNeeded);
-            Spanish.Add("MainColorAlpha", TranslationNeeded);
+            Spanish.Add("MainColorAlpha", "Transparencia");
             Russian.Add("MainColorAlpha", TranslationNeeded);
 
             //Component: MainColorRed
@@ -4113,7 +4113,7 @@ namespace RelhaxModpack
             German.Add("MainColorRed", TranslationNeeded);
             Polish.Add("MainColorRed", TranslationNeeded);
             French.Add("MainColorRed", TranslationNeeded);
-            Spanish.Add("MainColorRed", TranslationNeeded);
+            Spanish.Add("MainColorRed", "Rojo");
             Russian.Add("MainColorRed", TranslationNeeded);
 
             //Component: MainColorBlue
@@ -4122,7 +4122,7 @@ namespace RelhaxModpack
             German.Add("MainColorBlue", TranslationNeeded);
             Polish.Add("MainColorBlue", TranslationNeeded);
             French.Add("MainColorBlue", TranslationNeeded);
-            Spanish.Add("MainColorBlue", TranslationNeeded);
+            Spanish.Add("MainColorBlue", "Azul");
             Russian.Add("MainColorBlue", TranslationNeeded);
 
             //Component: MainColorGreen
@@ -4131,7 +4131,7 @@ namespace RelhaxModpack
             German.Add("MainColorGreen", TranslationNeeded);
             Polish.Add("MainColorGreen", TranslationNeeded);
             French.Add("MainColorGreen", TranslationNeeded);
-            Spanish.Add("MainColorGreen", TranslationNeeded);
+            Spanish.Add("MainColorGreen", "Verde");
             Russian.Add("MainColorGreen", TranslationNeeded);
 
             //Component: TextColor
@@ -4140,7 +4140,7 @@ namespace RelhaxModpack
             German.Add("TextColor", TranslationNeeded);
             Polish.Add("TextColor", TranslationNeeded);
             French.Add("TextColor", TranslationNeeded);
-            Spanish.Add("TextColor", TranslationNeeded);
+            Spanish.Add("TextColor", "Color del Texto");
             Russian.Add("TextColor", TranslationNeeded);
 
             //Component: TextColorAlpha
@@ -4149,7 +4149,7 @@ namespace RelhaxModpack
             German.Add("TextColorAlpha", TranslationNeeded);
             Polish.Add("TextColorAlpha", TranslationNeeded);
             French.Add("TextColorAlpha", TranslationNeeded);
-            Spanish.Add("TextColorAlpha", TranslationNeeded);
+            Spanish.Add("TextColorAlpha", "Transparencia");
             Russian.Add("TextColorAlpha", TranslationNeeded);
 
             //Component: TextColorRed
@@ -4158,7 +4158,7 @@ namespace RelhaxModpack
             German.Add("TextColorRed", TranslationNeeded);
             Polish.Add("TextColorRed", TranslationNeeded);
             French.Add("TextColorRed", TranslationNeeded);
-            Spanish.Add("TextColorRed", TranslationNeeded);
+            Spanish.Add("TextColorRed", "Rojo");
             Russian.Add("TextColorRed", TranslationNeeded);
 
             //Component: TextColorBlue
@@ -4167,7 +4167,7 @@ namespace RelhaxModpack
             German.Add("TextColorBlue", TranslationNeeded);
             Polish.Add("TextColorBlue", TranslationNeeded);
             French.Add("TextColorBlue", TranslationNeeded);
-            Spanish.Add("TextColorBlue", TranslationNeeded);
+            Spanish.Add("TextColorBlue", "Azul");
             Russian.Add("TextColorBlue", TranslationNeeded);
 
             //Component: TextColorGreen
@@ -4176,7 +4176,7 @@ namespace RelhaxModpack
             German.Add("TextColorGreen", TranslationNeeded);
             Polish.Add("TextColorGreen", TranslationNeeded);
             French.Add("TextColorGreen", TranslationNeeded);
-            Spanish.Add("TextColorGreen", TranslationNeeded);
+            Spanish.Add("TextColorGreen", "Verde");
             Russian.Add("TextColorGreen", TranslationNeeded);
 
             //Component: SecondColor
@@ -4185,7 +4185,7 @@ namespace RelhaxModpack
             German.Add("SecondColor", TranslationNeeded);
             Polish.Add("SecondColor", TranslationNeeded);
             French.Add("SecondColor", TranslationNeeded);
-            Spanish.Add("SecondColor", TranslationNeeded);
+            Spanish.Add("SecondColor", "Color Secundario");
             Russian.Add("SecondColor", TranslationNeeded);
 
             //Component: SecondColorAlpha
@@ -4194,7 +4194,7 @@ namespace RelhaxModpack
             German.Add("SecondColorAlpha", TranslationNeeded);
             Polish.Add("SecondColorAlpha", TranslationNeeded);
             French.Add("SecondColorAlpha", TranslationNeeded);
-            Spanish.Add("SecondColorAlpha", TranslationNeeded);
+            Spanish.Add("SecondColorAlpha", "Transparencia");
             Russian.Add("SecondColorAlpha", TranslationNeeded);
 
             //Component: SecondColorRed
@@ -4203,7 +4203,7 @@ namespace RelhaxModpack
             German.Add("SecondColorRed", TranslationNeeded);
             Polish.Add("SecondColorRed", TranslationNeeded);
             French.Add("SecondColorRed", TranslationNeeded);
-            Spanish.Add("SecondColorRed", TranslationNeeded);
+            Spanish.Add("SecondColorRed", "Rojo");
             Russian.Add("SecondColorRed", TranslationNeeded);
 
             //Component: SecondColorBlue
@@ -4212,7 +4212,7 @@ namespace RelhaxModpack
             German.Add("SecondColorBlue", TranslationNeeded);
             Polish.Add("SecondColorBlue", TranslationNeeded);
             French.Add("SecondColorBlue", TranslationNeeded);
-            Spanish.Add("SecondColorBlue", TranslationNeeded);
+            Spanish.Add("SecondColorBlue", "Azul");
             Russian.Add("SecondColorBlue", TranslationNeeded);
 
             //Component: SecondColorGreen
@@ -4221,7 +4221,7 @@ namespace RelhaxModpack
             German.Add("SecondColorGreen", TranslationNeeded);
             Polish.Add("SecondColorGreen", TranslationNeeded);
             French.Add("SecondColorGreen", TranslationNeeded);
-            Spanish.Add("SecondColorGreen", TranslationNeeded);
+            Spanish.Add("SecondColorGreen", "Verde");
             Russian.Add("SecondColorGreen", TranslationNeeded);
 
             //Component: PointsBlock
@@ -4230,7 +4230,7 @@ namespace RelhaxModpack
             German.Add("PointsBlock", TranslationNeeded);
             Polish.Add("PointsBlock", TranslationNeeded);
             French.Add("PointsBlock", TranslationNeeded);
-            Spanish.Add("PointsBlock", TranslationNeeded);
+            Spanish.Add("PointsBlock", "Coordenadas del punto");
             Russian.Add("PointsBlock", TranslationNeeded);
 
             //Component: Point1X
@@ -4239,7 +4239,7 @@ namespace RelhaxModpack
             German.Add("Point1X", TranslationNeeded);
             Polish.Add("Point1X", TranslationNeeded);
             French.Add("Point1X", TranslationNeeded);
-            Spanish.Add("Point1X", TranslationNeeded);
+            Spanish.Add("Point1X", "X del Punto 1");
             Russian.Add("Point1X", TranslationNeeded);
 
             //Component: Point1Y
@@ -4248,7 +4248,7 @@ namespace RelhaxModpack
             German.Add("Point1Y", TranslationNeeded);
             Polish.Add("Point1Y", TranslationNeeded);
             French.Add("Point1Y", TranslationNeeded);
-            Spanish.Add("Point1Y", TranslationNeeded);
+            Spanish.Add("Point1Y", "Y del Punto 1");
             Russian.Add("Point1Y", TranslationNeeded);
 
             //Component: Point2X
@@ -4257,7 +4257,7 @@ namespace RelhaxModpack
             German.Add("Point2X", TranslationNeeded);
             Polish.Add("Point2X", TranslationNeeded);
             French.Add("Point2X", TranslationNeeded);
-            Spanish.Add("Point2X", TranslationNeeded);
+            Spanish.Add("Point2X", "X del Punto 2");
             Russian.Add("Point2X", TranslationNeeded);
 
             //Component: Point2Y
@@ -4266,7 +4266,7 @@ namespace RelhaxModpack
             German.Add("Point2Y", TranslationNeeded);
             Polish.Add("Point2Y", TranslationNeeded);
             French.Add("Point2Y", TranslationNeeded);
-            Spanish.Add("Point2Y", TranslationNeeded);
+            Spanish.Add("Point2Y", "Y del Punto 2");
             Russian.Add("Point2Y", TranslationNeeded);
 
             //Component: BrushesLink
@@ -4275,7 +4275,7 @@ namespace RelhaxModpack
             German.Add("BrushesLink", TranslationNeeded);
             Polish.Add("BrushesLink", TranslationNeeded);
             French.Add("BrushesLink", TranslationNeeded);
-            Spanish.Add("BrushesLink", TranslationNeeded);
+            Spanish.Add("BrushesLink", "Lea sobre los tipos de pincel aquí");
             Russian.Add("BrushesLink", TranslationNeeded);
 
             //Component: SampleXmlOutput
@@ -4284,7 +4284,7 @@ namespace RelhaxModpack
             German.Add("SampleXmlOutput", TranslationNeeded);
             Polish.Add("SampleXmlOutput", TranslationNeeded);
             French.Add("SampleXmlOutput", TranslationNeeded);
-            Spanish.Add("SampleXmlOutput", TranslationNeeded);
+            Spanish.Add("SampleXmlOutput", "Salida de XML de muestra");
             Russian.Add("SampleXmlOutput", TranslationNeeded);
             #endregion
 
