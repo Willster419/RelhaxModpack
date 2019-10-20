@@ -19,7 +19,7 @@ namespace RelhaxModpack.UIComponents
     /// <summary>
     /// Interaction logic for RelhaxWPFComboBox.xaml
     /// </summary>
-    public partial class RelhaxWPFComboBox : ComboBox, INotifyPropertyChanged
+    public partial class RelhaxWPFComboBox : ComboBox
     {
         /// <summary>
         /// Create an instance of the RelhaxWPFComboBox class
@@ -46,11 +46,15 @@ namespace RelhaxModpack.UIComponents
                 ComboBoxItem cbi = (ComboBoxItem)Items[i];
                 if (cbi.Package.Equals(spc) && value && cbi.Package.Enabled)
                 {
+                    //unsubscribe before changing the selected item
                     if (Handler != null)
                         SelectionChanged -= Handler;
+                    //change it
                     SelectedItem = cbi;
+                    //re-subscribe
                     if (Handler != null)
                         SelectionChanged += Handler;
+                    //continue as to not uncheck this value, now that it's checked
                     continue;
                 }
                 //if value is false it will uncheck all the packages
@@ -64,40 +68,5 @@ namespace RelhaxModpack.UIComponents
                 SelectionChanged += Handler;
             }
         }
-
-        #region Data UI Binding
-        private Color _DisabledColor = Colors.DarkGray;
-
-        /// <summary>
-        /// Set the value of the disabled component color
-        /// </summary>
-        public Color DisabledColor
-        {
-            get
-            {
-                return _DisabledColor;
-            }
-            set
-            {
-                _DisabledColor = value;
-                OnPropertyChanged(nameof(DisabledColor));
-            }
-        }
-
-        //https://stackoverflow.com/questions/34651123/wpf-binding-a-background-color-initializes-but-not-updating
-        /// <summary>
-        /// Event to trigger when an internal property is changed. It forces a UI update
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// Method to invoke the PropertyChanged event to update the UI
-        /// </summary>
-        /// <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
     }
 }

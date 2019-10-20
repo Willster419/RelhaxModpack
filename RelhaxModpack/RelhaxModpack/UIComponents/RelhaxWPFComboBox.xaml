@@ -53,7 +53,7 @@
         </LinearGradientBrush>
         <SolidColorBrush x:Key="ComboBox.Pressed.Editable.Button.Border" Color="#FF569DE5"/>
         <SolidColorBrush x:Key="ComboBox.Disabled.Glyph" Color="#FFBFBFBF"/>
-        <SolidColorBrush x:Key="ComboBox.Disabled.Background" Color="{Binding DisabledColor, ElementName=comboBox}"/>
+        <SolidColorBrush x:Key="ComboBox.Disabled.Background" Color="DarkGray"/>
         <SolidColorBrush x:Key="ComboBox.Disabled.Border" Color="Transparent"/>
         <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Background" Color="#FFFFFFFF"/>
         <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Border" Color="#FFBFBFBF"/>

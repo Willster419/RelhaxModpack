@@ -30,7 +30,7 @@
         <SolidColorBrush x:Key="RadioButton.MouseOver.Background" Color="#FFF3F9FF"/>
         <SolidColorBrush x:Key="RadioButton.MouseOver.Border" Color="#FF5593FF"/>
         <SolidColorBrush x:Key="RadioButton.MouseOver.Glyph" Color="#FF212121"/>
-        <SolidColorBrush x:Key="RadioButton.Disabled.Background" Color="{Binding DisabledColor, ElementName=radioButton}"/>
+        <SolidColorBrush x:Key="RadioButton.Disabled.Background" Color="DarkGray"/>
         <SolidColorBrush x:Key="RadioButton.Disabled.Border" Color="Transparent"/>
         <SolidColorBrush x:Key="RadioButton.Disabled.Glyph" Color="#FF707070"/>
         <SolidColorBrush x:Key="RadioButton.Pressed.Background" Color="#FFD9ECFF"/>
