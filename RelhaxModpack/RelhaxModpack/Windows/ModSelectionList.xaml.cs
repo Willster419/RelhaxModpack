@@ -839,7 +839,8 @@ namespace RelhaxModpack.Windows
                         {
                             Background = System.Windows.Media.Brushes.Transparent,
                             HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
-                            HorizontalContentAlignment = System.Windows.HorizontalAlignment.Stretch
+                            HorizontalContentAlignment = System.Windows.HorizontalAlignment.Stretch,
+                            IsExpanded = true
                         };
                         cat.CategoryHeader.RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
                         cat.CategoryHeader.TreeView = new StretchingTreeView()
@@ -1061,7 +1062,7 @@ namespace RelhaxModpack.Windows
                             package.TreeViewItem.Expanded += (sender, e) => { e.Handled = true; };
                             package.TreeViewItem.Collapsed += (sender, e) => { e.Handled = true; };
                             //expand the tree view item
-                            package.TreeViewItem.IsExpanded = true;
+                            package.TreeViewItem.IsExpanded = !ModpackSettings.ShowOptionsCollapsedLegacy;
                             //and add the treeviewitem to the stackpanel
                             package.Parent.ChildStackPanel.Children.Add(package.TreeViewItem);
                             break;
@@ -2095,7 +2096,21 @@ namespace RelhaxModpack.Windows
             //https://stackoverflow.com/questions/38532196/bringintoview-is-not-working
             //Note that due to the dispatcher's priority queue, the content may not be available as soon as you make changes (such as select a tab).
             //In that case, you may want to post the bring-into-view request in a lower priority:
-            await Dispatcher.InvokeAsync(() => ctrl.BringIntoView(), DispatcherPriority.Background);
+            await Dispatcher.InvokeAsync(() =>
+            {
+                //need to expand the package to this item if selection is legacy
+                if(ModpackSettings.ModSelectionView == SelectionView.Legacy)
+                {
+                    SelectablePackage package = committedItem.Package;
+                    while(package.Level > -1)
+                    {
+                        if (!package.TreeViewItem.IsExpanded)
+                            package.TreeViewItem.IsExpanded = true;
+                        package = package.Parent;
+                    }
+                }
+                ctrl.BringIntoView();
+            }, DispatcherPriority.Background);
 
             //start the timer to show the item
             OnFlastTimerTick(null, null);

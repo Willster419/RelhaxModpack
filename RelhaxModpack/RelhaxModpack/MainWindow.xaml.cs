@@ -2648,6 +2648,7 @@ namespace RelhaxModpack
             DeleteOldPackagesCB.IsChecked = ModpackSettings.DeleteCacheFiles;
             MinimizeToSystemTray.IsChecked = ModpackSettings.MinimizeToSystemTray;
             AdvancedInstallationProgress.IsChecked = ModpackSettings.AdvancedInstalProgress;
+            ShowOptionsCollapsedLegacyCB.IsChecked = ModpackSettings.ShowOptionsCollapsedLegacy;
 
             //apply auto sync time unit and amount
             AutoSyncFrequencyTexbox.Text = ModpackSettings.AutoInstallFrequencyInterval.ToString();
@@ -2742,6 +2743,11 @@ namespace RelhaxModpack
         {
             RelhaxColorPicker colorPicker = new RelhaxColorPicker();
             colorPicker.ShowDialog();
+        }
+
+        private void ShowOptionsCollapsedLegacyCB_Click(object sender, RoutedEventArgs e)
+        {
+            ModpackSettings.ShowOptionsCollapsedLegacy = (bool)ShowOptionsCollapsedLegacyCB.IsChecked;
         }
         #endregion
 

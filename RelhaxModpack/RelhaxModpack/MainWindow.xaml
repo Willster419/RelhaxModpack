@@ -62,6 +62,9 @@
                     <CheckBox Tag="EnableColorChangeLegacyCB" x:Name="EnableColorChangeLegacyCB" Grid.Column="1" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Click="OnLegacySelectColorChenged">
                         <TextBlock x:Name="EnableColorChangeLegacyText" Text="Enable Color Change" TextWrapping="Wrap"/>
                     </CheckBox>
+                    <CheckBox Tag="ShowOptionsCollapsedLegacyCB" x:Name="ShowOptionsCollapsedLegacyCB" Grid.Column="1" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top" Click="ShowOptionsCollapsedLegacyCB_Click">
+                        <TextBlock x:Name="ShowOptionsCollapsedLegacyText" Text="Show options collapsed on start" TextWrapping="Wrap"/>
+                    </CheckBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Installation Settings" x:Name="SettingsTabInstallationSettings" Tag="SettingsTabInstallationSettings" Background="#7FE5E5E5">
