@@ -186,13 +186,7 @@ namespace RelhaxModpack
                 //set the internal checked value
                 _Checked = value;
 
-                //if the UI component is not null (it's a checkbox or radiobutton), then run the UI code
-                if (UIComponent != null)
-                {
-                    UIComponent.OnCheckedChanged(value);
-                }
-
-                //check if this selection is a dropdown type
+                //run code to determine if a standard option or a dropdown
                 int dropDownSelectionType = -1;
                 if (Type == SelectionTypes.single_dropdown1)
                 {
@@ -203,18 +197,28 @@ namespace RelhaxModpack
                     dropDownSelectionType = 1;
                 }
 
-                //inside here is for comboboxes (checked)
-                if (Enabled && dropDownSelectionType > -1 && IsStructureEnabled)
+                //run the checked UI code
+                //if the UI component is not null, it's a checkbox or radiobutton
+                if (UIComponent != null)
                 {
-                    //go to the parent array list above this that holds the combobox and run the UI code
-                    switch (ModpackSettings.ModSelectionView)
+                    UIComponent.OnCheckedChanged(value);
+                }
+                //null UI component is a combobox
+                else
+                {
+                    //inside here is for comboboxes (checked)
+                    if (Enabled && dropDownSelectionType > -1 && IsStructureEnabled)
                     {
-                        case SelectionView.DefaultV2:
-                            Parent.RelhaxWPFComboBoxList[dropDownSelectionType].OnDropDownSelectionChanged(this, value);
-                            break;
-                        case SelectionView.Legacy:
-                            Parent.RelhaxWPFComboBoxList[dropDownSelectionType].OnDropDownSelectionChanged(this, value);
-                            break;
+                        //go to the parent array list above this that holds the combobox and run the UI code
+                        switch (ModpackSettings.ModSelectionView)
+                        {
+                            case SelectionView.DefaultV2:
+                                Parent.RelhaxWPFComboBoxList[dropDownSelectionType].OnDropDownSelectionChanged(this, value);
+                                break;
+                            case SelectionView.Legacy:
+                                Parent.RelhaxWPFComboBoxList[dropDownSelectionType].OnDropDownSelectionChanged(this, value);
+                                break;
+                        }
                     }
                 }
 
@@ -227,6 +231,7 @@ namespace RelhaxModpack
 
                 if(UIComponentColorChange && Visible && IsStructureVisible)
                 {
+                    //if the UI component is not null, it's a checkbox or radiobutton
                     if (UIComponent != null)
                     {
                         //set panel and text color based on true or false for checkbox or radiobutton
@@ -247,6 +252,7 @@ namespace RelhaxModpack
                                 break;
                         }
                     }
+                    //null UI component is a combobox
                     else if (dropDownSelectionType > -1)
                     {
                         //set panel and text color based on true of false for dropdown option
@@ -265,6 +271,7 @@ namespace RelhaxModpack
                                 break;
                         }
                     }
+
                     //toggle the Tab Color based on if anything is selected, done for level -1 top item
                     if (Level == -1)
                     {
