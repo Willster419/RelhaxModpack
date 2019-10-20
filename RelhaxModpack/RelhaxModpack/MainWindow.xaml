@@ -197,6 +197,9 @@
                             <TextBlock x:Name="ApplyCustomScalingLabel" Tag="ApplyCustomScalingLabel" DockPanel.Dock="Right" Text="0.00x" Margin="0,0,5,0" IsEnabled="True" TextWrapping="Wrap"/>
                             <Slider x:Name="ApplyCustomScalingSlider" Tag="ApplyCustomScalingSlider" Margin="5,0,5,0" Minimum="1" Maximum="3" Value="1" IsEnabled="True" HorizontalAlignment="Stretch" DockPanel.Dock="Left" PreviewMouseUp="ApplyCustomScalingSlider_MouseUp" SmallChange="0.25" IsSnapToTickEnabled="True" LargeChange="0.25" TickFrequency="0.25"/>
                         </DockPanel>
+                        <Button x:Name="LauchEditor" Tag="LauchEditor" Margin="0,2,0,0" Click="LauchEditor_Click" IsEnabled="False" Visibility="Hidden">
+                            <TextBlock x:Name="LauchEditorText" Text="Launch Database Editor" TextWrapping="Wrap"/>
+                        </Button>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
                         <CheckBox x:Name="AutoInstallCB" Tag="EnableModsAutoSyncCheckbox" IsEnabled="True" Click="AutoInstallCB_Click">
@@ -204,6 +207,9 @@
                         </CheckBox>
                         <CheckBox x:Name="OneClickInstallCB" Tag="AutoInstallCheckbox" IsEnabled="True" Click="OneClickInstallCB_Click">
                             <TextBlock x:Name="OneClickInstallText" Text="Enable one-click install" TextWrapping="Wrap"/>
+                        </CheckBox>
+                        <CheckBox x:Name="AutoOneclickShowWarningOnSelectionsFailButton" Tag="AutoOneclickShowWarningOnSelectionsFailButton" IsEnabled="True" Margin="15,2,0,0" Click="AutoOneclickShowWarningOnSelectionsFailButton_Click">
+                            <TextBlock x:Name="AutoOneclickShowWarningOnSelectionsFailText" Text="Show warning if selection document has errors when loaded" TextWrapping="Wrap"/>
                         </CheckBox>
                         <TextBox Tag="AutoSyncSelectionFileTextBox"  x:Name="AutoInstallOneClickInstallSelectionFilePath" Height="46" TextWrapping="Wrap" Margin="0,3,0,0" VerticalScrollBarVisibility="Auto"/>
                         <Button x:Name="LoadAutoSyncSelectionFile" Tag="LoadAutoSyncSelectionFile" HorizontalAlignment="Stretch" Margin="0,3,0,0" Click="LoadAutoSyncSelectionFile_Click" IsEnabled="True">
@@ -228,9 +234,6 @@
                         <CheckBox x:Name="ExportModeCB" Tag="ExportModeCB" Margin="15,0,0,0" Click="ExportModeCB_Click" IsEnabled="True">
                             <TextBlock x:Name="ExportModeText" Text="Export mode" TextWrapping="Wrap"/>
                         </CheckBox>
-                        <Button x:Name="LauchEditor" Tag="LauchEditor" Margin="20,0,0,0" Click="LauchEditor_Click" IsEnabled="False" Visibility="Hidden">
-                            <TextBlock x:Name="LauchEditorText" Text="Launch Database Editor" TextWrapping="Wrap"/>
-                        </Button>
                     </StackPanel>
                 </Grid>
             </TabItem>

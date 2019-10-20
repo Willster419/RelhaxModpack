@@ -2207,7 +2207,8 @@ namespace RelhaxModpack
 
             //display the backup file sizes (if requested)
             if (displaySize)
-                BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"), backupFiles.Count(), Utils.SizeSuffix((ulong)backupFolderTotalSize, 1, true));
+                BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"),
+                    backupFiles.Count(), Utils.SizeSuffix((ulong)backupFolderTotalSize, 1, true));
         }
         #endregion
 
@@ -2419,8 +2420,11 @@ namespace RelhaxModpack
                     Translations.SetLanguage(Languages.Spanish);
                     break;
             }
-            Translations.LocalizeWindow(this, true);
-            ApplyCustomUILocalizations(!loading);
+            if (!loading)
+            {
+                Translations.LocalizeWindow(this, true);
+                ApplyCustomUILocalizations(!loading);
+            }
         }
 
         private void VerboseLoggingCB_Click(object sender, RoutedEventArgs e)
@@ -2649,6 +2653,7 @@ namespace RelhaxModpack
             MinimizeToSystemTray.IsChecked = ModpackSettings.MinimizeToSystemTray;
             AdvancedInstallationProgress.IsChecked = ModpackSettings.AdvancedInstalProgress;
             ShowOptionsCollapsedLegacyCB.IsChecked = ModpackSettings.ShowOptionsCollapsedLegacy;
+            AutoOneclickShowWarningOnSelectionsFailButton.IsChecked = ModpackSettings.AutoOneclickShowWarningOnSelectionsFail;
 
             //apply auto sync time unit and amount
             AutoSyncFrequencyTexbox.Text = ModpackSettings.AutoInstallFrequencyInterval.ToString();
@@ -2748,6 +2753,11 @@ namespace RelhaxModpack
         private void ShowOptionsCollapsedLegacyCB_Click(object sender, RoutedEventArgs e)
         {
             ModpackSettings.ShowOptionsCollapsedLegacy = (bool)ShowOptionsCollapsedLegacyCB.IsChecked;
+        }
+
+        private void AutoOneclickShowWarningOnSelectionsFailButton_Click(object sender, RoutedEventArgs e)
+        {
+            ModpackSettings.AutoOneclickShowWarningOnSelectionsFail = (bool)AutoOneclickShowWarningOnSelectionsFailButton.IsChecked;
         }
         #endregion
 

@@ -281,6 +281,11 @@ namespace RelhaxModpack
         public static bool ShowOptionsCollapsedLegacy = false;
 
         /// <summary>
+        /// Toggle if during auto or one click load if the application should inform if any selection errors during selection file load
+        /// </summary>
+        public static bool AutoOneclickShowWarningOnSelectionsFail = false;
+
+        /// <summary>
         /// The time, in a specified unit, to check for anew data base version
         /// </summary>
         public static int AutoInstallFrequencyInterval = 10;

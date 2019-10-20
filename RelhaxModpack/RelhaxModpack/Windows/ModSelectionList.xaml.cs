@@ -617,6 +617,7 @@ namespace RelhaxModpack.Windows
                     //process loading selections after loading UI
                     XmlDocument SelectionsDocument = null;
                     bool shouldLoadSomething = false;
+                    bool loadSuccess = false;
                     if (ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall)
                     {
                         //check that the file exists before trying to load it
@@ -665,7 +666,7 @@ namespace RelhaxModpack.Windows
                     {
                         if(SelectionsDocument != null)
                         {
-                            LoadSelection(SelectionsDocument, true);
+                            loadSuccess = LoadSelection(SelectionsDocument, true);
                         }
                         else
                         {
@@ -700,7 +701,7 @@ namespace RelhaxModpack.Windows
                     {
                         OnSelectionListReturn(this, new SelectionListEventArgs()
                         {
-                            ContinueInstallation = true,
+                            ContinueInstallation = loadSuccess,
                             ParsedCategoryList = ParsedCategoryList,
                             Dependencies = Dependencies,
                             GlobalDependencies = GlobalDependencies,
@@ -1720,7 +1721,7 @@ namespace RelhaxModpack.Windows
             MessageBox.Show(Translations.GetTranslatedString("selectionsCleared"));
         }
 
-        private void LoadSelection(XmlDocument document, bool silent)
+        private bool LoadSelection(XmlDocument document, bool silent)
         {
             //get the string version of the document, determine what to do from there
             string selectionVersion;
@@ -1730,19 +1731,18 @@ namespace RelhaxModpack.Windows
             switch(selectionVersion)
             {
                 case "2.0":
-                    LoadSelectionV2(document, silent);
-                break;
+                    return LoadSelectionV2(document, silent);
 
                 default:
                     //log we don't know wtf it is
                     Logging.Warning("Unknown selection version: " + selectionVersion + ", aborting");
                     if(!silent)
                         MessageBox.Show(string.Format(Translations.GetTranslatedString("unknownselectionFileFormat"),selectionVersion));
-                    return;
+                    return false;
             }
         }
 
-        private void LoadSelectionV2(XmlDocument document, bool silent)
+        private bool LoadSelectionV2(XmlDocument document, bool silent)
         {
             //first uncheck everyting
             Utils.ClearSelections(ParsedCategoryList);
@@ -1811,8 +1811,24 @@ namespace RelhaxModpack.Windows
             //now check for the correct structure of mods
             List<SelectablePackage> brokenMods = IsValidStructure(ParsedCategoryList);
             Logging.Info("Broken mods structure count: " + brokenMods.Count);
+
+            //
+            int totalBrokenCount = disabledMods.Count + brokenMods.Count + stringSelections.Count + stringUserSelections.Count;
+            if (totalBrokenCount > 0 && (ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall) && ModpackSettings.AutoOneclickShowWarningOnSelectionsFail)
+            {
+                Logging.Info("Selection issues with auto or one click enabled, with message warning enabled. Show message.");
+                MessageBoxResult  result = MessageBox.Show(
+                    Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueHeader"),
+                    Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueBody"), MessageBoxButton.YesNo);
+                if(result == MessageBoxResult.No)
+                {
+                    Logging.Info("User selected stop installation");
+                    return false;
+                }
+            }
+
             //only report issues if silent is false. true means its doing something like auto selections or
-            if(!silent)
+            else if(!silent)
             {
                 Logging.Info("Informing user of {0} disabled selections, {1} broken selections, {2} removed selections, {3} removed user selections",
                 disabledMods.Count, brokenMods.Count, stringSelections.Count, stringUserSelections.Count);
@@ -1841,6 +1857,7 @@ namespace RelhaxModpack.Windows
                         Translations.GetTranslatedString("modsBrokenStructure"), Environment.NewLine, string.Join(Environment.NewLine, disabledStructureMods)));
                 }
             }
+            return true;
         }
 
         private void SaveSelection(string savePath, bool silent)
