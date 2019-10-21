@@ -856,6 +856,24 @@ namespace RelhaxModpack
             Spanish.Add("EnableColorChangeLegacyCBDescription", "Activa el cambio de color al des/seleccionar un Mod o configuración");
             Russian.Add("EnableColorChangeLegacyCBDescription", "Включить замену цветов при выборе мода или конфигурации");
 
+            //Component: ShowOptionsCollapsedLegacyText
+            //
+            English.Add("ShowOptionsCollapsedLegacyText", "Show options collapsed on start");
+            German.Add("ShowOptionsCollapsedLegacyText", TranslationNeeded);
+            Polish.Add("ShowOptionsCollapsedLegacyText", TranslationNeeded);
+            French.Add("ShowOptionsCollapsedLegacyText", TranslationNeeded);
+            Spanish.Add("ShowOptionsCollapsedLegacyText", TranslationNeeded);
+            Russian.Add("ShowOptionsCollapsedLegacyText", TranslationNeeded);
+
+            //Component: ShowOptionsCollapsedLegacyCBDescription
+            //
+            English.Add("ShowOptionsCollapsedLegacyCBDescription", "When checked, all options in the selection list (except at the category level) will be collapsed.");
+            German.Add("ShowOptionsCollapsedLegacyCBDescription", TranslationNeeded);
+            Polish.Add("ShowOptionsCollapsedLegacyCBDescription", TranslationNeeded);
+            French.Add("ShowOptionsCollapsedLegacyCBDescription", TranslationNeeded);
+            Spanish.Add("ShowOptionsCollapsedLegacyCBDescription", TranslationNeeded);
+            Russian.Add("ShowOptionsCollapsedLegacyCBDescription", TranslationNeeded);
+
 
             //Component: ClearLogFilesText
             //
@@ -949,6 +967,25 @@ namespace RelhaxModpack
             French.Add("OneClickInstallCBDescription", "Activer le programme d'installation pour charger automatiquement votre fichier de sélection et l'installer");
             Spanish.Add("OneClickInstallCBDescription", "Permite al instalador cargar automáticamente el archivo de selección e instalarlo");
             Russian.Add("OneClickInstallCBDescription", "Позволить установщику автоматически запустить установку модов сразу после выбора предустановки");
+
+            //Component: AutoOneclickShowWarningOnSelectionsFailText
+            //
+            English.Add("AutoOneclickShowWarningOnSelectionsFailText", "Show warning if selection document has errors when loaded");
+            German.Add("AutoOneclickShowWarningOnSelectionsFailText", TranslationNeeded);
+            Polish.Add("AutoOneclickShowWarningOnSelectionsFailText", TranslationNeeded);
+            French.Add("AutoOneclickShowWarningOnSelectionsFailText", TranslationNeeded);
+            Spanish.Add("AutoOneclickShowWarningOnSelectionsFailText", TranslationNeeded);
+            Russian.Add("AutoOneclickShowWarningOnSelectionsFailText", TranslationNeeded);
+
+            //Component: AutoOneclickShowWarningOnSelectionsFailButtonDescription
+            //
+            English.Add("AutoOneclickShowWarningOnSelectionsFailButtonDescription", "When using one-click or auto install, show a warning to cancel install if any" +
+                " errors occured when applying the selection file.");
+            German.Add("AutoOneclickShowWarningOnSelectionsFailButtonDescription", TranslationNeeded);
+            Polish.Add("AutoOneclickShowWarningOnSelectionsFailButtonDescription", TranslationNeeded);
+            French.Add("AutoOneclickShowWarningOnSelectionsFailButtonDescription", TranslationNeeded);
+            Spanish.Add("AutoOneclickShowWarningOnSelectionsFailButtonDescription", TranslationNeeded);
+            Russian.Add("AutoOneclickShowWarningOnSelectionsFailButtonDescription", TranslationNeeded);
 
             //Component: ForceEnabledText
             //
