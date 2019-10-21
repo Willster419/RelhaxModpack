@@ -1605,6 +1605,8 @@ namespace RelhaxModpack.InstallerComponents
                     Prog.EntryFilenameOfAThread = new string[tasks.Count()];
                     Prog.BytesProcessedOfAThread = new long[tasks.Count()];
                     Prog.BytesTotalOfAThread = new long[tasks.Count()];
+                    Prog.WaitingOnDownloadOfAThread = new bool[tasks.Count()];
+                    Prog.FilenameOfAThread = new string[tasks.Count()];
 
                     for (int k = 0; k < tasks.Count(); k++)
                     {
@@ -2106,11 +2108,29 @@ namespace RelhaxModpack.InstallerComponents
                     //check if we are installing while downloading and this package is still downloading
                     if (ModpackSettings.InstallWhileDownloading && package.DownloadFlag)
                     {
-                        Prog.WaitingOnDownload = true;
-                        Prog.Filename = package.ZipFile;
-                        Prog.BytesProcessed = package.BytesDownloaded;
-                        Prog.BytesTotal = package.BytesToDownload;
-                        Progress.Report(Prog);
+                        if (ModpackSettings.AdvancedInstalProgress)
+                        {
+                            if (package.IsCurrentlyDownloading)
+                            {
+                                Prog.WaitingOnDownloadOfAThread[threadNum] = true;
+                                Prog.FilenameOfAThread[threadNum] = package.ZipFile;
+                                Prog.BytesProcessedOfAThread[threadNum] = package.BytesDownloaded;
+                                Prog.BytesTotalOfAThread[threadNum] = package.BytesToDownload;
+                                Prog.ThreadID = (uint)threadNum;
+                                Progress.Report(Prog);
+                            }
+                        }
+                        else
+                        {
+                            if (package.IsCurrentlyDownloading)
+                            {
+                                Prog.WaitingOnDownload = true;
+                                Prog.Filename = package.ZipFile;
+                                Prog.BytesProcessed = package.BytesDownloaded;
+                                Prog.BytesTotal = package.BytesToDownload;
+                                Progress.Report(Prog);
+                            }
+                        }
                         continue;
                     }
                     //else check if we are installing while downloading and this package's extraction has started
@@ -2125,7 +2145,16 @@ namespace RelhaxModpack.InstallerComponents
 
                         //flag that this package's extraction has started
                         package.ExtractionStarted = true;
-                        Prog.WaitingOnDownload = false;
+
+                        if (ModpackSettings.AdvancedInstalProgress)
+                        {
+                            Prog.WaitingOnDownloadOfAThread[threadNum] = false;
+                        }
+                        else
+                        {
+                            Prog.WaitingOnDownload = false;
+                        }
+
                         Progress.Report(Prog);
 
                         //stop if the zipfile name is blank (no actual zipfile to extract)
@@ -2357,6 +2386,7 @@ namespace RelhaxModpack.InstallerComponents
                         Prog.ChildTotal = (int)e.TotalBytesToTransfer;
                         Prog.BytesProcessedOfAThread[(uint)(sender as RelhaxZipFile).ThreadID] = e.BytesTransferred;
                         Prog.BytesTotalOfAThread[(uint)(sender as RelhaxZipFile).ThreadID] = e.TotalBytesToTransfer;
+                        Prog.FilenameOfAThread[(uint)(sender as RelhaxZipFile).ThreadID] = e.ArchiveName;
                         Prog.EntryFilename = e.CurrentEntry.FileName;
                         Prog.EntryFilenameOfAThread[(uint)(sender as RelhaxZipFile).ThreadID] = e.CurrentEntry.FileName;
                         Prog.Filename = e.ArchiveName;

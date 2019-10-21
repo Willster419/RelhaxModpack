@@ -1595,10 +1595,10 @@ namespace RelhaxModpack
                                 Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                             line2 = string.Format("{0}: {1} {2} {3} {4} {5}", Translations.GetTranslatedString("installExtractingCompletedThreads"), e.CompletedThreads.ToString(),
                                 Translations.GetTranslatedString("of"), e.TotalThreads.ToString(), Translations.GetTranslatedString("installExtractingOfGroup"), e.InstallGroup.ToString());
+                            line3 = Path.GetFileName(e.Filename);
                             if (ModpackSettings.InstallWhileDownloading && e.WaitingOnDownload)
                             {
-                                line3 = Path.GetFileName(e.Filename) + string.Format(" ({0}...)", Translations.GetTranslatedString("downloading"));
-                                line4 = string.Empty;
+                                line4 = string.Format(" ({0}...)", Translations.GetTranslatedString("Downloading"));
                                 if (ChildProgressBar.Maximum != e.BytesTotal)
                                     ChildProgressBar.Maximum = e.BytesTotal;
                                 if (ChildProgressBar.Minimum != 0)
@@ -1608,7 +1608,6 @@ namespace RelhaxModpack
                             }
                             else
                             {
-                                line3 = Path.GetFileName(e.Filename);
                                 line4 = e.EntryFilename;
                             }
                         }
@@ -1618,10 +1617,10 @@ namespace RelhaxModpack
                             ChildProgressBar.Value = e.BytesProcessed;
                             line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installExtractingMods"), e.ParrentCurrent.ToString(),
                                 Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
+                            line2 = Path.GetFileName(e.Filename);
                             if (ModpackSettings.InstallWhileDownloading && e.WaitingOnDownload)
                             {
-                                line2 = Path.GetFileName(e.Filename) + string.Format(" ({0}...)", Translations.GetTranslatedString("downloading"));
-                                line3 = string.Empty;
+                                line3 = string.Format(" ({0}...)", Translations.GetTranslatedString("Downloading"));
                                 line4 = string.Empty;
                                 if (ChildProgressBar.Maximum != e.BytesTotal)
                                     ChildProgressBar.Maximum = e.BytesTotal;
@@ -1632,7 +1631,6 @@ namespace RelhaxModpack
                             }
                             else
                             {
-                                line2 = Path.GetFileName(e.Filename);
                                 line3 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installZipFileEntry"), e.EntriesProcessed.ToString(),
                                 Translations.GetTranslatedString("of"), e.EntriesTotal.ToString());
                                 line4 = e.EntryFilename;
@@ -1723,7 +1721,9 @@ namespace RelhaxModpack
                         try
                         {
                             Logging.Info("Async download of {0} start", package.ZipFile);
+                            package.IsCurrentlyDownloading = true;
                             await client.DownloadFileTaskAsync(fileToDownload, fileToSaveTo);
+                            package.IsCurrentlyDownloading = false;
                             Logging.Info("Async download of {0} finish", package.ZipFile);
                             retryCount = 0;
                             package.DownloadFlag = false;

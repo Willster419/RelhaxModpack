@@ -168,6 +168,11 @@ namespace RelhaxModpack
         /// </summary>
         public long BytesDownloaded = 0;
 
+        /// <summary>
+        /// Flag to determine if this package is the one currently downloading, used if "install while download" is true
+        /// </summary>
+        public bool IsCurrentlyDownloading = false;
+
         //append extraction flag
         /// <summary>
         /// Determines if this package should be put into a list that will be installed last. Used for when the package is possibly overwriting files, for example
