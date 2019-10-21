@@ -75,6 +75,8 @@ namespace RelhaxModpack
         private double downloadRateDisplay;
         //remaining time
         private long remainingMilliseconds;
+        //reference for downloading the package to keep track of the async download
+        private DatabasePackage downloadingPackage = null;
 
         /// <summary>
         /// The original width and height of the application before applying scaling
@@ -1593,8 +1595,22 @@ namespace RelhaxModpack
                                 Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                             line2 = string.Format("{0}: {1} {2} {3} {4} {5}", Translations.GetTranslatedString("installExtractingCompletedThreads"), e.CompletedThreads.ToString(),
                                 Translations.GetTranslatedString("of"), e.TotalThreads.ToString(), Translations.GetTranslatedString("installExtractingOfGroup"), e.InstallGroup.ToString());
-                            line3 = Path.GetFileName(e.Filename);
-                            line4 = e.EntryFilename;
+                            if (ModpackSettings.InstallWhileDownloading && e.WaitingOnDownload)
+                            {
+                                line3 = Path.GetFileName(e.Filename) + string.Format(" ({0}...)", Translations.GetTranslatedString("downloading"));
+                                line4 = string.Empty;
+                                if (ChildProgressBar.Maximum != e.BytesTotal)
+                                    ChildProgressBar.Maximum = e.BytesTotal;
+                                if (ChildProgressBar.Minimum != 0)
+                                    ChildProgressBar.Minimum = 0;
+                                if (ChildProgressBar.Value != e.BytesProcessed)
+                                    ChildProgressBar.Value = e.BytesProcessed;
+                            }
+                            else
+                            {
+                                line3 = Path.GetFileName(e.Filename);
+                                line4 = e.EntryFilename;
+                            }
                         }
                         else
                         {
@@ -1602,10 +1618,25 @@ namespace RelhaxModpack
                             ChildProgressBar.Value = e.BytesProcessed;
                             line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installExtractingMods"), e.ParrentCurrent.ToString(),
                                 Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
-                            line2 = Path.GetFileName(e.Filename);
-                            line3 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installZipFileEntry"), e.EntriesProcessed.ToString(),
+                            if (ModpackSettings.InstallWhileDownloading && e.WaitingOnDownload)
+                            {
+                                line2 = Path.GetFileName(e.Filename) + string.Format(" ({0}...)", Translations.GetTranslatedString("downloading"));
+                                line3 = string.Empty;
+                                line4 = string.Empty;
+                                if (ChildProgressBar.Maximum != e.BytesTotal)
+                                    ChildProgressBar.Maximum = e.BytesTotal;
+                                if (ChildProgressBar.Minimum != 0)
+                                    ChildProgressBar.Minimum = 0;
+                                if (ChildProgressBar.Value != e.BytesProcessed)
+                                    ChildProgressBar.Value = e.BytesProcessed;
+                            }
+                            else
+                            {
+                                line2 = Path.GetFileName(e.Filename);
+                                line3 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installZipFileEntry"), e.EntriesProcessed.ToString(),
                                 Translations.GetTranslatedString("of"), e.EntriesTotal.ToString());
-                            line4 = e.EntryFilename;
+                                line4 = e.EntryFilename;
+                            }
                         }
                         break;
                     case InstallerComponents.InstallerExitCodes.UserExtractionError:
@@ -1669,11 +1700,20 @@ namespace RelhaxModpack
             using (WebClient client = new WebClient())
             {
                 this.client = client;
+                this.client.DownloadProgressChanged += (sender, args) =>
+                {
+                    if(downloadingPackage != null)
+                    {
+                        downloadingPackage.BytesDownloaded = args.BytesReceived;
+                        downloadingPackage.BytesToDownload = args.TotalBytesToReceive;
+                    }
+                };
                 int retryCount = 3;
                 string fileToDownload = string.Empty;
                 string fileToSaveTo = string.Empty;
                 foreach (DatabasePackage package in packagesToDownload)
                 {
+                    downloadingPackage = package;
                     retryCount = 3;
                     while (retryCount > 0)
                     {

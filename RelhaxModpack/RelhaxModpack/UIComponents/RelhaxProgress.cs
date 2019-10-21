@@ -61,6 +61,11 @@ namespace RelhaxModpack.UIComponents
         public long BytesProcessed, BytesTotal = 0;
 
         /// <summary>
+        /// Flag to mark if the install engine is waiting on a package to download
+        /// </summary>
+        public bool WaitingOnDownload = false;
+
+        /// <summary>
         /// The number of bytes currently processed in an entry in a thread
         /// </summary>
         public long[] BytesProcessedOfAThread;

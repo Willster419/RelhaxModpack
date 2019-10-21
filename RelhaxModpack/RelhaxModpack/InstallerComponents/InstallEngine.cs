@@ -2106,6 +2106,11 @@ namespace RelhaxModpack.InstallerComponents
                     //check if we are installing while downloading and this package is still downloading
                     if (ModpackSettings.InstallWhileDownloading && package.DownloadFlag)
                     {
+                        Prog.WaitingOnDownload = true;
+                        Prog.Filename = package.ZipFile;
+                        Prog.BytesProcessed = package.BytesDownloaded;
+                        Prog.BytesTotal = package.BytesToDownload;
+                        Progress.Report(Prog);
                         continue;
                     }
                     //else check if we are installing while downloading and this package's extraction has started
@@ -2120,6 +2125,8 @@ namespace RelhaxModpack.InstallerComponents
 
                         //flag that this package's extraction has started
                         package.ExtractionStarted = true;
+                        Prog.WaitingOnDownload = false;
+                        Progress.Report(Prog);
 
                         //stop if the zipfile name is blank (no actual zipfile to extract)
                         if (!string.IsNullOrWhiteSpace(package.ZipFile))

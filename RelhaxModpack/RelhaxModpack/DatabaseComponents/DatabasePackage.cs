@@ -158,6 +158,10 @@ namespace RelhaxModpack
         /// </summary>
         public string Author = string.Empty;
 
+        public long BytesToDownload = 0;
+
+        public long BytesDownloaded = 0;
+
         //append extraction flag
         /// <summary>
         /// Determines if this package should be put into a list that will be installed last. Used for when the package is possibly overwriting files, for example
