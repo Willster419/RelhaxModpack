@@ -613,6 +613,16 @@
             The name of the author of the mod/configuration/etc.
             </summary>
         </member>
+        <member name="F:RelhaxModpack.DatabasePackage.BytesToDownload">
+            <summary>
+            The number of bytes to download, used if "install while download" is true
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage.BytesDownloaded">
+            <summary>
+            The number of bytes currently downloaded, used if "install while download" is true
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.DatabasePackage.AppendExtraction">
             <summary>
             Determines if this package should be put into a list that will be installed last. Used for when the package is possibly overwriting files, for example
@@ -1512,11 +1522,6 @@
             Set the brush of the Checkbox Panel Background property 
             </summary>
         </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.DisabledColor">
-            <summary>
-            Set the value of the disabled component color
-            </summary>
-        </member>
         <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.PopularModVisability">
             <summary>
             Set the visibility of the popular mod icon
@@ -1556,36 +1561,9 @@
             Create an instance of the RelhaxWPFComboBox class
             </summary>
         </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.Package">
-            <summary>
-            The package associated with this UI component
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.UIComponents.RelhaxWPFComboBox.Handler">
             <summary>
             The event to subscribe to when the selection is changed
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.OnEnabledChanged(System.Boolean)">
-            <summary>
-            This is not implemented
-            </summary>
-            <param name="Enabled">The value from the SelectablePackage</param>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.OnCheckedChanged(System.Boolean)">
-            <summary>
-            This is not implemented
-            </summary>
-            <param name="Checked">The value from the SelectablePackage</param>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.TextColor">
-            <summary>
-            This is not implemented
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.PanelColor">
-            <summary>
-            Set the brush of the ComboBox Panel Background property 
             </summary>
         </member>
         <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.OnDropDownSelectionChanged(RelhaxModpack.SelectablePackage,System.Boolean)">
@@ -1594,22 +1572,6 @@
             </summary>
             <param name="spc">The SelectablePakage that caused the update</param>
             <param name="value">The checked value</param>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.DisabledColor">
-            <summary>
-            Set the value of the disabled component color
-            </summary>
-        </member>
-        <member name="E:RelhaxModpack.UIComponents.RelhaxWPFComboBox.PropertyChanged">
-            <summary>
-            Event to trigger when an internal property is changed. It forces a UI update
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.OnPropertyChanged(System.String)">
-            <summary>
-            Method to invoke the PropertyChanged event to update the UI
-            </summary>
-            <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
         </member>
         <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.InitializeComponent">
             <summary>
@@ -1654,11 +1616,6 @@
         <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.PanelColor">
             <summary>
             Set the brush of the RadioButton Panel Background property 
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.DisabledColor">
-            <summary>
-            Set the value of the disabled component color
             </summary>
         </member>
         <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.PopularModVisability">
@@ -1840,6 +1797,16 @@
             During copy operations, the number of processed copied bytes, and the total bytes to copy.
             </summary>
         </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.WaitingOnDownload">
+            <summary>
+            Flag to mark if the install engine is waiting on a package to download
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.WaitingOnDownloadOfAThread">
+            <summary>
+            Flag to mark if the install engine is waiting on a package to download in a thread
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.BytesProcessedOfAThread">
             <summary>
             The number of bytes currently processed in an entry in a thread
@@ -1853,6 +1820,11 @@
         <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.Filename">
             <summary>
             The name of the file currently being processed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.FilenameOfAThread">
+            <summary>
+            The name of the file currently being processed in a thread
             </summary>
         </member>
         <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.EntryFilename">
@@ -3306,7 +3278,17 @@
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.MinimizeToSystemTray">
             <summary>
-            t=Toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
+            Toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ShowOptionsCollapsedLegacy">
+            <summary>
+            Toggle for if the selection list options in Legacy view should be collapsed by default on start
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.AutoOneclickShowWarningOnSelectionsFail">
+            <summary>
+            Toggle if during auto or one click load if the application should inform if any selection errors during selection file load
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.AutoInstallFrequencyInterval">
