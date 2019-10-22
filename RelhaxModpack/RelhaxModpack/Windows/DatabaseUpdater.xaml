@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
-        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="RelhaxModpack.Windows.DatabaseUpdater"
+    x:Class="RelhaxModpack.Windows.DatabaseUpdater"
         mc:Ignorable="d"
         Title="DatabaseUpdater" Height="480" Width="1200" MinHeight="300" MinWidth="400"
         Loaded="RelhaxWindow_Loaded" Closing="OnApplicationClose" LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
@@ -17,7 +17,7 @@
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
         <Grid Grid.Column="2" HorizontalAlignment="Left" Height="100" Margin="179,269,0,0" VerticalAlignment="Top" Width="100"/>
         <TabControl x:Name="TabController" HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" SelectionChanged="TabControl_SelectionChanged" >
-            <TabItem x:Name="AuthStatusTab" Header="Auth Status">
+            <TabItem x:Name="AuthStatusTab" Header="Authorization Status">
                 <Grid Background="#FFE5E5E5">
                     <TextBlock x:Name="PasswordLabel" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Please Enter password to use this tool" VerticalAlignment="Top"/>
                     <TextBox x:Name="PaswordTextbox" HorizontalAlignment="Stretch" Height="46" Margin="10,26,10,0" TextWrapping="Wrap" VerticalAlignment="Top" KeyDown="PaswordTextbox_KeyDown"/>
@@ -95,7 +95,7 @@
             <TabItem x:Name="CleanZipFoldersTab" Header="Clean Zip folders">
                 <Grid Background="#FFE5E5E5">
                     <StackPanel>
-                        <Button x:Name="CleanFoldersOnlineStep1" Content="Step 1: Parse onine folders via supported__clients.xml" HorizontalContentAlignment="Left" Click="CleanFoldersOnlineStep1_Click"/>
+                        <Button x:Name="CleanFoldersOnlineStep1" Content="Step 1: Parse online folders via supported__clients.xml" HorizontalContentAlignment="Left" Click="CleanFoldersOnlineStep1_Click"/>
                         <ComboBox x:Name="CleanFoldersOnlineStep2b"/>
                         <Button x:Name="CleanFoldersOnlineStep2" Content="Step 2: Get list of trash files" HorizontalContentAlignment="Left" Click="CleanFoldersOnlineStep2_Click"/>
                         <Button x:Name="CleanFoldersOnlineStep3" Content="Step 3: Confirm start Process to delete old zip files" HorizontalContentAlignment="Left" Click="CleanFoldersOnlineStep3_Click"/>
@@ -125,8 +125,8 @@
                 <Grid Background="#FFE5E5E5">
                     <StackPanel>
                         <Button x:Name="RemapInstallStatStep1" Content="Download and load current stats"/>
-                        <Button x:Name="RemapInstallStatStep2" Content="Downlaod and apply remapping"/>
-                        <TextBlock x:Name="RemapInstallStep3aDesc" Text="Prepend database file with name"/>
+                        <Button x:Name="RemapInstallStatStep2" Content="Download and apply remapping"/>
+                        <TextBlock x:Name="RemapInstallStep3aDesc" Text="Append stat file name with..."/>
                         <TextBox x:Name="RemapInstallStatStep3a"/>
                         <Button x:Name="RemapInstallStatStep3b" Content="Upload statistics to folder"/>
                         <Button x:Name="RemapInstallStatStep4" Content="Delete current stats and replace with latest mapping tag"/>
