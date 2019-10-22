@@ -33,7 +33,7 @@
                     <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
                         <TextBox x:Name="UpdateDatabaseStep0" Height="23" TextWrapping="Wrap" Text="Step 0: Pull latest database!!!" TextAlignment="Left" IsReadOnly="True"/>
                         <Button x:Name="UpdateDatabaseStep1" Content="Step 1: Load modInfo.xml" HorizontalContentAlignment="Left" Click="OnLoadModInfo"/>
-                        <Button x:Name="UpdateDatabaseStep2" Content="Step 2: Update zip database via PHP script" HorizontalContentAlignment="Left"  Click="UpdateDatabaseStep2_Click"/>
+                        <Button x:Name="UpdateDatabaseStep2" Content="Step 2: Update zip database via PHP script (bigmods)" HorizontalContentAlignment="Left"  Click="UpdateDatabaseStep2_Click"/>
                         <Button x:Name="UpdateDatabaseStep3" Content="Step 3: Prepare database update" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep3_Click"/>
                         <Button x:Name="UpdateDatabaseStep4" Content="Step 4: Upload changed" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep4_Click"/>
                         <Button x:Name="UpdateDatabaseStep5" Content="Step 5: Run script CreateModInfo.php (wotmods)" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep5_Click"/>
@@ -65,7 +65,7 @@
                         <TextBox x:Name="UpdateApplicationV1Step6" Height="23" TextWrapping="Wrap" Text="Step 6: Update manager_info.xml file in database repo and commit"/>
                         <Button x:Name="UpdateApplicationV1Step7a" Content="Step 7a: Upload RelhaxModpack.exe to wotmods" HorizontalContentAlignment="Left" Click="UpdateApplicationV1UploadApplicationStable"/>
                         <Button x:Name="UpdateApplicationV1Step7b" Content="Step 7b: Upload RelhaxModpackBeta.exe to wotmods" HorizontalContentAlignment="Left" Click="UpdateApplicationV1UploadApplicationBeta"/>
-                        <Button x:Name="UpdateApplicationV1Step8" Content="Step 8: Upload manager_info.xml on wotmods and bigmods" HorizontalContentAlignment="Left" Click="UpdateApplicationV1UploadManagerInfo"/>
+                        <Button x:Name="UpdateApplicationV1Step8" Content="Step 8: Upload manager_info.xml to wotmods and bigmods" HorizontalContentAlignment="Left" Click="UpdateApplicationV1UploadManagerInfo"/>
                         <Button x:Name="UpdateApplicationV1Step9" Content="Step 9: Run script CreateUpdatePackages.php (wotmods)" HorizontalContentAlignment="Left" Click="UpdateApplicationV1CreateUpdatePackages"/>
                         <Button x:Name="UpdateApplicationV1Step10a" Content="Step 10a: Run script CreateManagerInfo.php (wotmods)" HorizontalContentAlignment="Left" Click="UpdateApplicationV1CreateManagerInfoWotmods"/>
                         <Button x:Name="UpdateApplicationV1Step10b" Content="Step 10b: Run script CreateManagerInfo.php (bigmods)" HorizontalContentAlignment="Left" Click="UpdateApplicationV1CreateManagerInfoBigmods"/>
@@ -84,7 +84,7 @@
                         <TextBox x:Name="UpdateApplicationV2Step6" Height="23" TextWrapping="Wrap" Text="Step 6: Update manager_info.xml file in database repo and commit"/>
                         <Button x:Name="UpdateApplicationV2Step7a" Content="Step 7a: Upload RelhaxModpack.exe to bigmods" HorizontalContentAlignment="Left" Click="UpdateApplicationV2UploadApplicationStable"/>
                         <Button x:Name="UpdateApplicationV2Step7b" Content="Step 7b: Upload RelhaxModpackBeta.exe to bigmods" HorizontalContentAlignment="Left" Click="UpdateApplicationV2UploadApplicationBeta"/>
-                        <Button x:Name="UpdateApplicationV2Step8" Content="Step 8: Upload manager_info.xml on wotmods and bigmods" HorizontalContentAlignment="Left" Click="UpdateApplicationV2UploadManagerInfo"/>
+                        <Button x:Name="UpdateApplicationV2Step8" Content="Step 8: Upload manager_info.xml to wotmods and bigmods" HorizontalContentAlignment="Left" Click="UpdateApplicationV2UploadManagerInfo"/>
                         <Button x:Name="UpdateApplicationV2Step9" Content="Step 9: Run script CreateUpdatePackages.php (bigmods)" HorizontalContentAlignment="Left" Click="UpdateApplicationV2CreateUpdatePackages"/>
                         <Button x:Name="UpdateApplicationV2Step10a" Content="Step 10a: Run script CreateManagerInfo.php (wotmods)" HorizontalContentAlignment="Left" Click="UpdateApplicationV2CreateManagerInfoWotmods"/>
                         <Button x:Name="UpdateApplicationV2Step10b" Content="Step 10b: Run script CreateManagerInfo.php (bigmods)" HorizontalContentAlignment="Left" Click="UpdateApplicationV2CreateManagerInfoBigmods"/>
