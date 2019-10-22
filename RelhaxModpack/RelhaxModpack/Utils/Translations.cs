@@ -507,7 +507,7 @@ namespace RelhaxModpack
             //Component: InstallModpackButtonDescription
             //
             English.Add("InstallModpackButtonDescription", "Select the mods you want to install to your WoT client");
-            German.Add("InstallModpackButtonDescription", "Wähle die Mods aus, die du auf deinem WoT CLient installieren möchtest");
+            German.Add("InstallModpackButtonDescription", "Wähle die Mods aus, die du auf deinem WoT Client installieren möchtest");
             Polish.Add("InstallModpackButtonDescription", "Zaznacz modyfikacje, które chcesz zainstalować w swoim kliencie WoT");
             French.Add("InstallModpackButtonDescription", "Sélectionnez les mods que vous souhaitez installer sur votre client WoT");
             Spanish.Add("InstallModpackButtonDescription", "Seleccione los Mods que quiere instalar a su cliente de WoT");
@@ -525,7 +525,7 @@ namespace RelhaxModpack
             //Component: UninstallModpackButtonDescription
             //
             English.Add("UninstallModpackButtonDescription", "Remove *all* mods installed to your WoT client");
-            German.Add("UninstallModpackButtonDescription", "*Alle* Mods entfernen, die auf deinem WoT-Client installiert sind");
+            German.Add("UninstallModpackButtonDescription", "*Alle* Mods entfernen, die auf deinem WoT Client installiert sind");
             Polish.Add("UninstallModpackButtonDescription", "Usuń wszystkie zainstalowane modyfikacje do klienta WoT");
             French.Add("UninstallModpackButtonDescription", "Supprimer *tous* les mods installés sur votre client WoT");
             Spanish.Add("UninstallModpackButtonDescription", "Eliminar *todos* los Mods installados en su cliente de WoT");
@@ -534,7 +534,7 @@ namespace RelhaxModpack
             //Component: ViewNewsButton
             //
             English.Add("ViewNewsButton", "View update news");
-            German.Add("ViewNewsButton", "Aktualisierungsnachrichten");
+            German.Add("ViewNewsButton", "Aktualisierungen");
             Polish.Add("ViewNewsButton", "Zobacz wiadomości o aktualizacjach");
             French.Add("ViewNewsButton", "Voir les mises à jour");
             Spanish.Add("ViewNewsButton", "Ver noticias de actualizaciones");
@@ -735,7 +735,7 @@ namespace RelhaxModpack
             //Component: AllowStatsGatherText
             //
             English.Add("AllowStatsGatherText", "Allow statistics gathering of mod usage");
-            German.Add("AllowStatsGatherText", "Erlaube Statistiken über die Mod-Nutzung");
+            German.Add("AllowStatsGatherText", "Sende Satistik zur Mod-Nutzung");
             Polish.Add("AllowStatsGatherText", "Pozwól na gromadzenie statystyk dot. użycia modyfikacji");
             French.Add("AllowStatsGatherText", "Autoriser la collecte de statistiques sur l'utilisation des mods");
             Spanish.Add("AllowStatsGatherText", "Permitir recoleccón de estadísticas sobre el uso de Mods");
@@ -971,7 +971,7 @@ namespace RelhaxModpack
             //Component: AutoOneclickShowWarningOnSelectionsFailText
             //
             English.Add("AutoOneclickShowWarningOnSelectionsFailText", "Show warning if selection document has errors when loaded");
-            German.Add("AutoOneclickShowWarningOnSelectionsFailText", "Zeige Warnung wenn ein Fehler mit der Auswahldatei auftritt");
+            German.Add("AutoOneclickShowWarningOnSelectionsFailText", "Warnung bei Fehler mit der Auswahldatei");
             Polish.Add("AutoOneclickShowWarningOnSelectionsFailText", TranslationNeeded);
             French.Add("AutoOneclickShowWarningOnSelectionsFailText", TranslationNeeded);
             Spanish.Add("AutoOneclickShowWarningOnSelectionsFailText", TranslationNeeded);
@@ -1122,7 +1122,7 @@ namespace RelhaxModpack
             //Component: SaveDisabledModsInSelectionText
             //
             English.Add("SaveDisabledModsInSelectionText", "Keep disabled mods when saving selection");
-            German.Add("SaveDisabledModsInSelectionText", "Behalte deaktivierte Mods bei, wenn du die Auswahl speicherst");
+            German.Add("SaveDisabledModsInSelectionText", "Behalte deaktivierte Mods beim Speichern der Auswahl");
             Polish.Add("SaveDisabledModsInSelectionText", "Zachowaj wyłączone modyfikacje podczas zapisywania wyboru");
             French.Add("SaveDisabledModsInSelectionText", "Conserver les mods désactivés lors de l'enregistrement de la sélection");
             Spanish.Add("SaveDisabledModsInSelectionText", "Conservar los mods deshabilitados cuando se guarde la selección");
@@ -1349,7 +1349,7 @@ namespace RelhaxModpack
             //Component: NotifyIfSameDatabaseText
             //
             English.Add("NotifyIfSameDatabaseText", "Inform if no new database available");
-            German.Add("NotifyIfSameDatabaseText", "Hinweis wenn keine Aktuallisierungen erfolgt sind");
+            German.Add("NotifyIfSameDatabaseText", "Hinweis wenn es keine Aktuallisierungen gibt");
             Polish.Add("NotifyIfSameDatabaseText", "Poinformuj, jeśli nie będzie dostępna nowa baza danych");
             French.Add("NotifyIfSameDatabaseText", "Informer si aucune nouvelle base de données est disponible");
             Spanish.Add("NotifyIfSameDatabaseText", "Informar si no hay nueva base de datos");
@@ -1358,7 +1358,7 @@ namespace RelhaxModpack
             //Component: NotifyIfSameDatabaseCBDescription
             //
             English.Add("NotifyIfSameDatabaseCBDescription", "Notify you if your last installed database version is the same. If so, it means that there is no update to any mods.");
-            German.Add("NotifyIfSameDatabaseCBDescription", "Dich benachrichtigen: Die letzte verwendete Datenbank ist die selbe, d.h. es gibt keine Aktualisierungen und Veränderungen.");
+            German.Add("NotifyIfSameDatabaseCBDescription", "Erhalte eine Benachrichtigung wenn es keine Aktualisierung der Datenbank gegeben hat und diese den selben Stand wie beim letzten Start aufweist.");
             Polish.Add("NotifyIfSameDatabaseCBDescription", "Powiadom, jeśli ostatnia zainstalowana wersja bazy danych jest taka sama. Jeśli tak, to nie ma potrzeby aktualizacji modyfikacji.");
             French.Add("NotifyIfSameDatabaseCBDescription", "Avertir si votre dernière version de base de données installée est identique. Si c'est le cas," +
                 " cela signifie qu'il n'y a pas de mise à jour de mods.");
@@ -1453,7 +1453,7 @@ namespace RelhaxModpack
             //Component: DiagnosticUtilitiesButton
             //
             English.Add("DiagnosticUtilitiesButton", "Diagnostic utilities");
-            German.Add("DiagnosticUtilitiesButton", "Diagnosedienstprogramme");
+            German.Add("DiagnosticUtilitiesButton", "Diagnosedienst");
             Polish.Add("DiagnosticUtilitiesButton", "Narzędzia diagnostyczne");
             French.Add("DiagnosticUtilitiesButton", "Utilitaires de diagnostique");
             Spanish.Add("DiagnosticUtilitiesButton", "Utilidades de diagnóstico");
@@ -1667,7 +1667,7 @@ namespace RelhaxModpack
 
             //Component: UseBetaDatabaseText
             English.Add("UseBetaDatabaseText", "Use beta database");
-            German.Add("UseBetaDatabaseText", "Nutze Beta-Datenbank");
+            German.Add("UseBetaDatabaseText", "Beta-Datenbank");
             Polish.Add("UseBetaDatabaseText", "Użyj wersji beta bazy danych");
             French.Add("UseBetaDatabaseText", "Utiliser la base de données beta");
             Spanish.Add("UseBetaDatabaseText", "Utilizar la base de datos en beta");
@@ -1684,7 +1684,7 @@ namespace RelhaxModpack
 
             //Component: UseBetaApplicationText
             English.Add("UseBetaApplicationText", "Use beta application");
-            German.Add("UseBetaApplicationText", "Nutze die Beta-Version des Installers");
+            German.Add("UseBetaApplicationText", "Beta-Version des Installers");
             Polish.Add("UseBetaApplicationText", "Użyj wersji beta bazy aplikacji");
             French.Add("UseBetaApplicationText", "Utiliser l'application beta");
             Spanish.Add("UseBetaApplicationText", "Utilizar la aplicación en beta");
@@ -1837,7 +1837,7 @@ namespace RelhaxModpack
             //Component: failedToParseUISettingsFile
             //"branch" is this context is git respoitory branches
             English.Add("failedToParseUISettingsFile", "Failed to apply the theme. Check the log for details. Enable \"Verbose Logging\" for additional information.");
-            German.Add("failedToParseUISettingsFile", "Fehler beim Anwenden. Überprüfe log für Details. Aktiviere \"Verbose Logging\" für erweiterte informationen.");
+            German.Add("failedToParseUISettingsFile", "Fehler beim Anwenden. Überprüfe log für Details. Aktiviere \"Ausführliche Protokollierung\" für erweiterte informationen.");
             Polish.Add("failedToParseUISettingsFile", TranslationNeeded);
             French.Add("failedToParseUISettingsFile", TranslationNeeded);
             Spanish.Add("failedToParseUISettingsFile", "No se ha podido aplicar el tema. Compruebe el archivo de registro para más detalles. Habilite \"Registro Verboso\" para información adicional.");
@@ -1919,12 +1919,12 @@ namespace RelhaxModpack
 
             //Component: SearchTB
             //
-            English.Add("SearchTB", "Search for a mod...");
-            German.Add("SearchTB", "Suche einen Mod ...");
-            Polish.Add("SearchTB", "Szukaj modyfikacji… ");
-            French.Add("SearchTB", "Rechercher un mod ...");
-            Spanish.Add("SearchTB", "Buscar un mod...");
-            Russian.Add("SearchTB", "Найти мод...");
+            English.Add("SearchTB", "Search for a mod: ");
+            German.Add("SearchTB", "Suche einen Mod: ");
+            Polish.Add("SearchTB", "Szukaj modyfikacji:  ");
+            French.Add("SearchTB", "Rechercher un mod: ");
+            Spanish.Add("SearchTB", "Buscar un mod: ");
+            Russian.Add("SearchTB", "Найти мод: ");
 
             //Component: SeachTBDescription
             //
@@ -2157,7 +2157,7 @@ namespace RelhaxModpack
             //Component: ExpandAllButton
             //
             English.Add("ExpandAllButton", "Expand Current Tab");
-            German.Add("ExpandAllButton", "Erweitere alle Einträge der aktuellen Registerkarte");
+            German.Add("ExpandAllButton", "Erweitere aktuelle Registerkarte");
             Polish.Add("ExpandAllButton", "Rozwiń bieżącą kartę");
             French.Add("ExpandAllButton", "Elargir l'onglet");
             Spanish.Add("ExpandAllButton", "Expandir pestaña actual");
@@ -2166,7 +2166,7 @@ namespace RelhaxModpack
             //Component: CollapseAllButton
             //
             English.Add("CollapseAllButton", "Collapse Current Tab");
-            German.Add("CollapseAllButton", "Reduziere alle Einträge der aktuellen Registerkarte");
+            German.Add("CollapseAllButton", "Reduziere aktuelle Registerkarte");
             Polish.Add("CollapseAllButton", "Zwiń bieżącą kartę");
             French.Add("CollapseAllButton", "Réduire l'onglet");
             Spanish.Add("CollapseAllButton", "Colapsar pestaña actual");
@@ -3805,7 +3805,7 @@ namespace RelhaxModpack
             //Component: AdvancedInstallTrimDownloadCache
             //
             English.Add("AdvancedInstallTrimDownloadCache", "Trim download cache");
-            German.Add("AdvancedInstallTrimDownloadCache", "Download-Cache kürzen");
+            German.Add("AdvancedInstallTrimDownloadCache", "Download Cache kürzen");
             Polish.Add("AdvancedInstallTrimDownloadCache", "Ogranicz ściąganie plików cache");
             French.Add("AdvancedInstallTrimDownloadCache", "Réduire le cache de téléchargement");
             Spanish.Add("AdvancedInstallTrimDownloadCache", "Recortar la caché de descarga");
@@ -3825,20 +3825,20 @@ namespace RelhaxModpack
             #region News Viewer
             //Component: application_Update_TabHeader
             //
-            English.Add("application_Update_TabHeader", "Application News");
-            German.Add("application_Update_TabHeader", "App Neuigkeiten");
+            English.Add("application_Update_TabHeader", "Application");
+            German.Add("application_Update_TabHeader", "App");
             Polish.Add("application_Update_TabHeader", TranslationNeeded);
-            French.Add("application_Update_TabHeader", "Nouvelles d'application");
-            Spanish.Add("application_Update_TabHeader", "Novedades de la aplicación");
+            French.Add("application_Update_TabHeader", "Application");
+            Spanish.Add("application_Update_TabHeader", "Aplicación");
             Russian.Add("application_Update_TabHeader", "Новости приложения");
 
             //Component: database_Update_TabHeader
             //
-            English.Add("database_Update_TabHeader", "Database News");
-            German.Add("database_Update_TabHeader", "Datenbank Neuigkeiten");
+            English.Add("database_Update_TabHeader", "Database");
+            German.Add("database_Update_TabHeader", "Datenbank");
             Polish.Add("database_Update_TabHeader", TranslationNeeded);
-            French.Add("database_Update_TabHeader", "Nouvelles de la base de données");
-            Spanish.Add("database_Update_TabHeader", "Novedades de la base de datos");
+            French.Add("database_Update_TabHeader", "Base de données");
+            Spanish.Add("database_Update_TabHeader", "Base de datos");
             Russian.Add("database_Update_TabHeader", "Новости базы данных");
 
             //Component: ViewNewsOnGoogleTranslate
@@ -4036,7 +4036,7 @@ namespace RelhaxModpack
             //Component: WoTRunningHeader
             //
             English.Add("WoTRunningHeader", "It looks like your WoT install is currently open. Please close it before we can proceed");
-            German.Add("WoTRunningHeader", "Es sieht so aus als wäre Wot geöffnet. Bitte schließe das Programm um fortzufahren");
+            German.Add("WoTRunningHeader", "Es sieht so aus als wäre WoT geöffnet. Bitte schließe das Programm um fortzufahren");
             Polish.Add("WoTRunningHeader", TranslationNeeded);
             French.Add("WoTRunningHeader", TranslationNeeded);
             Spanish.Add("WoTRunningHeader", "Parece que su instalación de WoT está abierta. Por favor, ciérrela para poder continuar");
@@ -4112,7 +4112,7 @@ namespace RelhaxModpack
             //Component: ColorType
             //
             English.Add("ColorType", "Brush type");
-            German.Add("ColorType", "Typ Bürste");
+            German.Add("ColorType", "Pinseltyp");
             Polish.Add("ColorType", TranslationNeeded);
             French.Add("ColorType", TranslationNeeded);
             Spanish.Add("ColorType", "Tipo de pincel");
@@ -4310,7 +4310,7 @@ namespace RelhaxModpack
             //Component: BrushesLink
             //
             English.Add("BrushesLink", "Read about brush types here");
-            German.Add("BrushesLink", "Lies mehr über den Typ Bürste hier");
+            German.Add("BrushesLink", "Lies mehr über den Pinseltyp hier");
             Polish.Add("BrushesLink", TranslationNeeded);
             French.Add("BrushesLink", TranslationNeeded);
             Spanish.Add("BrushesLink", "Lea sobre los tipos de pincel aquí");
