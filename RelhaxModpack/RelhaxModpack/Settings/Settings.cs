@@ -168,9 +168,9 @@ namespace RelhaxModpack
 
         public const string WoT32bitFolder = "win32";
 
-        public const string WoT64bitFolderWithSlash = "\\win64";
+        public static readonly string WoT64bitFolderWithSlash = Path.DirectorySeparatorChar + WoT64bitFolder;
 
-        public const string WoT32bitFolderWithSlash = "\\win32";
+        public static readonly string WoT32bitFolderWithSlash = Path.DirectorySeparatorChar + WoT32bitFolder;
 
         /// <summary>
         /// The name of the installer folder to hold all patch xml files in
