@@ -308,7 +308,7 @@
                 </StackPanel>
             </Border>
             <Button Tag="CancelDownloadButton" x:Name="CancelDownloadInstallButton" Content="Cancel" HorizontalAlignment="Left" Margin="235,14,0,0" VerticalAlignment="Top" Width="118" Height="31" Visibility="Hidden" IsEnabled="False"/>
-            <TextBox HorizontalAlignment="Stretch" Height="92" Margin="2,50,2,0" VerticalAlignment="Top" x:Name="InstallProgressTextBox" TextWrapping="Wrap" IsReadOnly="True" Tag="InstallProgressTextBox"/>
+            <TextBox HorizontalAlignment="Stretch" Height="92" Margin="2,50,2,0" VerticalAlignment="Top" x:Name="InstallProgressTextBox" TextWrapping="Wrap" IsReadOnly="True" Tag="InstallProgressTextBox" IsUndoEnabled="False"/>
             <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,147,2,0" VerticalAlignment="Top" x:Name="TotalProgressBar" Tag="TotalProgressBar"/>
             <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,167,2,0" VerticalAlignment="Top" x:Name="ParentProgressBar" Tag="ParentProgressBar"/>
             <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,187,2,0" VerticalAlignment="Top" x:Name="ChildProgressBar" Tag="ChildProgressBar"/>
