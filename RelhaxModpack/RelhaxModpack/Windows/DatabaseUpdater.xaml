@@ -121,6 +121,18 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
+            <TabItem x:Name="RemapInstallStatsTab" Header="Remap install statistics">
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel>
+                        <Button x:Name="RemapInstallStatStep1" Content="Download and load current stats"/>
+                        <Button x:Name="RemapInstallStatStep2" Content="Downlaod and apply remapping"/>
+                        <TextBlock x:Name="RemapInstallStep3aDesc" Text="Prepend database file with name"/>
+                        <TextBox x:Name="RemapInstallStatStep3a"/>
+                        <Button x:Name="RemapInstallStatStep3b" Content="Upload statistics to folder"/>
+                        <Button x:Name="RemapInstallStatStep4" Content="Delete current stats and replace with latest mapping tag"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
         </TabControl>
         <TextBox x:Name="LogOutput" Grid.Column="2" HorizontalAlignment="Stretch" Margin="0,0,0,30" TextWrapping="Wrap" VerticalAlignment="Stretch"
                  VerticalScrollBarVisibility="Visible" TextChanged="LogOutput_TextChanged" IsReadOnly="True"/>
