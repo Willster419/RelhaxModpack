@@ -388,7 +388,7 @@ namespace RelhaxModpack
             English.Add("InstallModpackButtonDescription", "Select the mods you want to install to your WoT client");
             German.Add("InstallModpackButtonDescription", "Wählen Sie die Mods aus, die Sie auf ihrem WoT CLient installieren möchten");
             Polish.Add("InstallModpackButtonDescription", "Zaznacz modyfikacje, które chcesz zainstalować w swoim kliencie WoT");
-            French.Add("InstallModpackButtonDescription", TranslationNeeded);
+            French.Add("InstallModpackButtonDescription", "Sélectionner les mods que vous voulez installer pour votre client WoT");
             Russian.Add("InstallModpackButtonDescription", "Выберите моды, которые вы хотите установить в клиент World of Tanks");
 
             //Component: UninstallModpackButton
@@ -404,7 +404,7 @@ namespace RelhaxModpack
             English.Add("UninstallModpackButtonDescription", "Remove *all* mods installed to your WoT client");
             German.Add("UninstallModpackButtonDescription", "*Alle* Mods entfernen, die auf deinem WoT-Client installiert sind");
             Polish.Add("UninstallModpackButtonDescription", "Usuń wszystkie zainstalowane modyfikacje do klienta WoT");
-            French.Add("UninstallModpackButtonDescription", "Retirer *tousù les mods installés sur votre client WoT");
+            French.Add("UninstallModpackButtonDescription", "Retirer *tous* les mods installés sur votre client WoT");
             Russian.Add("UninstallModpackButtonDescription", "Удаление *всех* установленных в клиент WoT модификаций");
 
             //Component: ViewNewsButton
