@@ -1,3 +1,12 @@
+Application version 0.29.3.3 (2019-10-21)
+https://www.virustotal.com/gui/file/c4ca6837aa6f4a02e3f537717f087e9cd75d2ad67ddaf0a6016061b0ac004afd/detection
+- Updated german translations (thanks Elektrosmoker).
+- Changed textbox property for advanced progress UI reporter objects to read-only.
+- Updated descriptions of steps for processes in database updater window.
+- Added install statistic remapping (future feature, this is UI frontend only).
+- Other minor improvements.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 0.29.3.2 (2019-10-20)
 https://www.virustotal.com/gui/file/5c18786b44baaa3c38607188e4a217679d6714a679fc196cf2a8a192cc6d5822/detection
 - Fixed bugs with dark UI in selection list when colorchange option is off (both selection views).
