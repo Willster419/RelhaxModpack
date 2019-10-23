@@ -160,16 +160,19 @@ namespace RelhaxModpack
             Translations.SetLanguage(Languages.English);
             LanguagesSelector.SelectedIndex = 0;
 
-            //apply translation settings after loading so it's at least in English
+            //load and apply modpack settings
+            Settings.LoadSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null);
+
+            //note: if loadSettings load the language, apply to UI sets the UI option and triggers translation of MainWindow
+            //note: in wpf, the enabled trigger will occur in the loading event, so this will launch the checked events
+            ApplySettingsToUI();
+
+            //apply translation settings after loading selected language
             Translations.LocalizeWindow(this, true);
             ApplyCustomUILocalizations(false);
 
             //create tray icons and menus
             CreateTray();
-
-            //load and apply modpack settings
-            Utils.AllowUIToUpdate();
-            Settings.LoadSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null);
 
             //apply forced debugging settings
 #warning forced debugging settings is active
@@ -193,10 +196,6 @@ namespace RelhaxModpack
 
             //apply custom UI themeing (only need to explicitly call this for MainWindow)
             UISettings.ApplyCustomStyles(this);
-
-            //note: if loadSettings load the language, apply to UI sets the UI option and triggers translation of MainWindow
-            //note: in wpf, the enabled trigger will occur in the loading event, so this will launch the checked events
-            ApplySettingsToUI();
 
             //check command line settings
             CommandLineSettings.ParseCommandLineConflicts();
