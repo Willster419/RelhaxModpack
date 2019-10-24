@@ -1913,7 +1913,7 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.Info("...skipped (no font files to install)");
             else
             {
-                CreateFontsTask = Task.Factory.StartNew(() =>
+                CreateFontsTask = Task.Factory.StartNew(async () =>
                 {
                     Logging.Debug("checking system installed fonts to remove duplicates");
 
@@ -1954,7 +1954,7 @@ namespace RelhaxModpack.InstallerComponents
                         }
 
                         CancellationToken.ThrowIfCancellationRequested();
-                        Logging.Info("Attempting to install fonts: {0}", string.Join(",", realFontsToInstall));
+                        Logging.Info("Attempting to install fonts: {0}", string.Join(", ", realFontsToInstall));
                         ProcessStartInfo info = new ProcessStartInfo
                         {
                             FileName = fontRegPath,
@@ -1967,14 +1967,39 @@ namespace RelhaxModpack.InstallerComponents
                         try
                         {
                             Process installFontss = new Process() { StartInfo = info };
+                            Logging.Debug("FontReg process starts");
                             installFontss.Start();
-                            installFontss.WaitForExit();
+                            int timeoutSeconds = 10;
+                            bool exited = false;
+                            Logging.Debug("FontReg process waiting to close");
+                            for(int i = 0; i < timeoutSeconds; i++)
+                            {
+                                await Task.Delay(1000);
+                                if(installFontss.HasExited)
+                                {
+                                    Logging.Debug("FontReg process has exited");
+                                    exited = true;
+                                    break;
+                                }
+                                else
+                                {
+                                    Logging.Debug("FontReg process has not exited, check {0} of {1}", i++, timeoutSeconds);
+                                }
+                            }
+                            if(!exited)
+                            {
+                                Logging.Error("FontReg has not exited after 10 seconds, killing process");
+                                installFontss.Kill();
+                                Logging.Error("FontReg failed to finish cleanly, process was killed early");
+                                MessageBox.Show(string.Format("{0}{1}{2}{3}{4}", Translations.GetTranslatedString("fontsPromptError_1"), Environment.NewLine,
+                                    Settings.WoTDirectory, Environment.NewLine, Translations.GetTranslatedString("fontsPromptError_2")));
+                            }
                             Logging.Info("FontReg.exe ExitCode: " + installFontss.ExitCode);
                             Logging.Info("Installing of fonts complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
                         }
                         catch (Exception ex)
                         {
-                            Logging.Error("could not start font installer:{0}{1}", Environment.NewLine, ex.ToString());
+                            Logging.Exception("could not start font installer:{0}{1}", Environment.NewLine, ex.ToString());
                             MessageBox.Show(string.Format("{0}{1}{2}{3}{4}", Translations.GetTranslatedString("fontsPromptError_1"), Environment.NewLine,
                                 Settings.WoTDirectory, Environment.NewLine, Translations.GetTranslatedString("fontsPromptError_2")));
                         }
