@@ -1851,6 +1851,24 @@ namespace RelhaxModpack
             French.Add("UISettingsFileApplied", TranslationNeeded);
             Spanish.Add("UISettingsFileApplied", "Tema aplicado");
             Russian.Add("UISettingsFileApplied", TranslationNeeded);
+
+            //Component: failedToFindWoTExe
+            //the message when the UISettings.xml file is parsed and the custom theme is loaded
+            English.Add("failedToFindWoTExe", "Failed to get the WoT client installation location. Please send a bug report to the developer.");
+            German.Add("failedToFindWoTExe", TranslationNeeded);
+            Polish.Add("failedToFindWoTExe", TranslationNeeded);
+            French.Add("failedToFindWoTExe", TranslationNeeded);
+            Spanish.Add("failedToFindWoTExe", TranslationNeeded);
+            Russian.Add("failedToFindWoTExe", TranslationNeeded);
+
+            //Component: failedToFindWoTVersionXml
+            //the message when the UISettings.xml file is parsed and the custom theme is loaded
+            English.Add("failedToFindWoTVersionXml", "Failed to get WoT client installation version information. Check if the file 'version.xml' exists in the 'World_of_Tanks' directory.");
+            German.Add("failedToFindWoTVersionXml", TranslationNeeded);
+            Polish.Add("failedToFindWoTVersionXml", TranslationNeeded);
+            French.Add("failedToFindWoTVersionXml", TranslationNeeded);
+            Spanish.Add("failedToFindWoTVersionXml", TranslationNeeded);
+            Russian.Add("failedToFindWoTVersionXml", TranslationNeeded);
             #endregion
 
             #region ModSelectionList

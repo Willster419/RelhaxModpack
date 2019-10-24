@@ -966,8 +966,14 @@ namespace RelhaxModpack
 
                 //parse WoT root directory
                 Logging.WriteToLog("started looking for WoT root directory", Logfiles.Application, LogLevel.Debug);
-                string autoSearchResult = Utils.AutoFindWoTDirectory();
-                if (string.IsNullOrEmpty(autoSearchResult) || ModpackSettings.ForceManuel)
+                string searchResult = string.Empty;
+                //only run the code if the user wants to auto find the WoT directory (which is default)
+                if(!ModpackSettings.ForceManuel)
+                {
+                    searchResult = Utils.AutoFindWoTDirectory();
+                }
+
+                if (string.IsNullOrEmpty(searchResult) || ModpackSettings.ForceManuel)
                 {
                     Logging.WriteToLog("auto detect failed or user requests manual", Logfiles.Application, LogLevel.Debug);
                     OpenFileDialog manualWoTFind = new OpenFileDialog()
@@ -982,7 +988,7 @@ namespace RelhaxModpack
                     };
                     if ((bool)manualWoTFind.ShowDialog())
                     {
-                        autoSearchResult = manualWoTFind.FileName;
+                        searchResult = manualWoTFind.FileName;
                     }
                     else
                     {
@@ -991,8 +997,33 @@ namespace RelhaxModpack
                         return;
                     }
                 }
-                Settings.WoTDirectory = Path.GetDirectoryName(autoSearchResult);
+
+                //check to make sure it is the root application, not the win32/64 versions
+                if(searchResult.Contains(Settings.WoT32bitFolderWithSlash) || searchResult.Contains(Settings.WoT64bitFolderWithSlash))
+                {
+                    searchResult = searchResult.Replace(Settings.WoT32bitFolderWithSlash, string.Empty).Replace(Settings.WoT64bitFolderWithSlash, string.Empty);
+                }
+
+                //check to make sure a valid game path has been returned and the setting file exists in that directory
+                if (string.IsNullOrEmpty(searchResult) || (!File.Exists(searchResult)))
+                {
+                    Logging.Error("Failed to detect WoT exe from path {0}", searchResult);
+                    MessageBox.Show(Translations.GetTranslatedString("failedToFindWoTExe"));
+                    ToggleUIButtons(true);
+                    return;
+                }
+
+                Settings.WoTDirectory = Path.GetDirectoryName(searchResult);
                 Logging.Info("Wot root directory parsed as " + Settings.WoTDirectory);
+
+                string versionXml = Path.Combine(Settings.WoTDirectory, Settings.WoTVersionXml);
+                if (!File.Exists(versionXml))
+                {
+                    Logging.Error("Failed to find WoT version.xml file or the file does not exist! '{0}", versionXml);
+                    MessageBox.Show(Translations.GetTranslatedString("failedToFindWoTVersionXml"));
+                    ToggleUIButtons(true);
+                    return;
+                }
 
                 //check to make sure the application is not in the same directory as the WoT install
                 if (Settings.WoTDirectory.Equals(Settings.ApplicationStartupPath))
@@ -1019,7 +1050,7 @@ namespace RelhaxModpack
 
                 //get the version of tanks in the format
                 //of the res_mods version folder i.e. 0.9.17.0.3
-                string versionTemp = XmlUtils.GetXmlStringFromXPath(Path.Combine(Settings.WoTDirectory, "version.xml"), "//version.xml/version");
+                string versionTemp = XmlUtils.GetXmlStringFromXPath(versionXml, Settings.WoTVersionXmlXpath);
                 Settings.WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2).Trim();
                 Logging.Info("detected client version: {0}", Settings.WoTClientVersion);
 

@@ -172,6 +172,8 @@ namespace RelhaxModpack
 
         public static readonly string WoT32bitFolderWithSlash = Path.DirectorySeparatorChar + WoT32bitFolder;
 
+        public const string WoTVersionXml = "version.xml";
+
         /// <summary>
         /// The name of the installer folder to hold all patch xml files in
         /// </summary>
@@ -362,6 +364,8 @@ namespace RelhaxModpack
         /// The name of the WoT process used for detecting if it is running
         /// </summary>
         public const string WoTProcessName = "WorldOfTanks";
+
+        public const string WoTVersionXmlXpath = "//version.xml/version";
 
         /// <summary>
         /// The current distribution version of the application.
