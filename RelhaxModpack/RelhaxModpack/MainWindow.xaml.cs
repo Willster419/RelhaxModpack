@@ -146,7 +146,7 @@ namespace RelhaxModpack
             progressIndicator.UpdateProgress(0);
             Utils.AllowUIToUpdate();
 
-            //load translations into combobox
+            //load the supported translations into combobox
             LanguagesSelector.Items.Clear();
             LanguagesSelector.Items.Add(Translations.LanguageEnglish);
             LanguagesSelector.Items.Add(Translations.LanguageFrench);
@@ -158,16 +158,17 @@ namespace RelhaxModpack
             //load translation hashes and set default language
             Translations.LoadTranslations();
             Translations.SetLanguage(Languages.English);
+            //disconnect event handler before application
+            LanguagesSelector.SelectionChanged -= OnLanguageSelectionChanged;
             LanguagesSelector.SelectedIndex = 0;
+            LanguagesSelector.SelectionChanged += OnLanguageSelectionChanged;
 
             //load and apply modpack settings
+            Utils.AllowUIToUpdate();
             Settings.LoadSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null);
 
-            //note: if loadSettings load the language, apply to UI sets the UI option and triggers translation of MainWindow
-            //note: in wpf, the enabled trigger will occur in the loading event, so this will launch the checked events
-            ApplySettingsToUI();
-
-            //apply translation settings after loading selected language
+            //apply translation settings
+            Translations.SetLanguage(ModpackSettings.Language);
             Translations.LocalizeWindow(this, true);
             ApplyCustomUILocalizations(false);
 
@@ -196,6 +197,10 @@ namespace RelhaxModpack
 
             //apply custom UI themeing (only need to explicitly call this for MainWindow)
             UISettings.ApplyCustomStyles(this);
+
+            //note: if loadSettings load the language, apply to UI sets the UI option and triggers translation of MainWindow
+            //note: in wpf, the enabled trigger will occur in the loading event, so this will launch the checked events
+            ApplySettingsToUI();
 
             //check command line settings
             CommandLineSettings.ParseCommandLineConflicts();
@@ -2233,7 +2238,7 @@ namespace RelhaxModpack
             }
         }
 
-        private void ApplyCustomUILocalizations(bool displaySize)
+        private void ApplyCustomUILocalizations(bool displayBackupModsSize)
         {
             //set the application information text box
             ApplicationVersionLabel.Text = Translations.GetTranslatedString("applicationVersion") + " " + Utils.GetApplicationVersion();
@@ -2245,7 +2250,7 @@ namespace RelhaxModpack
             MulticoreExtractionCoresCountLabel.Text = string.Format(Translations.GetTranslatedString("MulticoreExtractionCoresCountLabel"), Settings.NumLogicalProcesors);
 
             //display the backup file sizes (if requested)
-            if (displaySize)
+            if (displayBackupModsSize)
                 BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"),
                     backupFiles.Count(), Utils.SizeSuffix((ulong)backupFolderTotalSize, 1, true));
         }
@@ -2462,7 +2467,11 @@ namespace RelhaxModpack
             if (!loading)
             {
                 Translations.LocalizeWindow(this, true);
-                ApplyCustomUILocalizations(!loading);
+                ApplyCustomUILocalizations(true);
+            }
+            else
+            {
+                Logging.Error("This method should not be access when loading=true!");
             }
         }
 
