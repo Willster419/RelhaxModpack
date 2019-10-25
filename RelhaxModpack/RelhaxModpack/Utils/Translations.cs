@@ -2884,7 +2884,7 @@ namespace RelhaxModpack
             Polish.Add("installZipFileEntry", TranslationNeeded);
             French.Add("installZipFileEntry", TranslationNeeded);
             Spanish.Add("installZipFileEntry", "Entrada de archivo");
-            Russian.Add("installZipFileEntry", "Название файла");
+            Russian.Add("installZipFileEntry", "Файл");
 
             //Component: installExtractingCompletedThreads
             //
