@@ -442,14 +442,16 @@ namespace RelhaxModpack.Windows
         private async void UpdateApplicationV1UploadApplicationStable(object sender, RoutedEventArgs e)
         {
             ToggleUI((TabController.SelectedItem as TabItem), false);
-            ReportProgress("Running Upload Stable Application");
+            ReportProgress("Locate V1 application");
             if (!(bool)SelectV1Application.ShowDialog())
             {
                 ToggleUI((TabController.SelectedItem as TabItem), true);
+                ReportProgress("Canceled");
                 return;
             }
+            ReportProgress("Located");
 
-            ReportProgress("Uploading stable exe to wotmods...");
+            ReportProgress("Uploading stable V1 application to wotmods...");
             using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
             {
                 await client.UploadFileTaskAsync(PrivateStuff.FTPModpackRoot + Path.GetFileName(SelectV1Application.FileName), SelectV1Application.FileName);
@@ -461,14 +463,16 @@ namespace RelhaxModpack.Windows
         private async void UpdateApplicationV1UploadApplicationBeta(object sender, RoutedEventArgs e)
         {
             ToggleUI((TabController.SelectedItem as TabItem), false);
-            ReportProgress("Running Upload Beta Application");
+            ReportProgress("Locate V1 beta application");
             if (!(bool)SelectV1Application.ShowDialog())
             {
                 ToggleUI((TabController.SelectedItem as TabItem), true);
+                ReportProgress("Canceled");
                 return;
             }
+            ReportProgress("Located");
 
-            ReportProgress("Uploading beta exe to wotmods...");
+            ReportProgress("Uploading beta V1 application to wotmods...");
             using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
             {
                 await client.UploadFileTaskAsync(PrivateStuff.FTPModpackRoot + Path.GetFileName(SelectV1Application.FileName), SelectV1Application.FileName);
@@ -480,7 +484,7 @@ namespace RelhaxModpack.Windows
         private async void UpdateApplicationV1UploadManagerInfo(object sender, RoutedEventArgs e)
         {
             ToggleUI((TabController.SelectedItem as TabItem), false);
-            ReportProgress("Running upload manager_info.xml");
+            ReportProgress("Running upload manager_info.xml to wotmods and bigmods");
             if (!(bool)SelectManagerInfoXml.ShowDialog())
             {
                 ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -525,14 +529,16 @@ namespace RelhaxModpack.Windows
         private async void UpdateApplicationV2UploadApplicationStable(object sender, RoutedEventArgs e)
         {
             ToggleUI((TabController.SelectedItem as TabItem), false);
-            ReportProgress("Running Upload Stable Application");
+            ReportProgress("Locate stable V2 application");
             if (!(bool)SelectV2Application.ShowDialog())
             {
                 ToggleUI((TabController.SelectedItem as TabItem), true);
+                ReportProgress("Canceled");
                 return;
             }
+            ReportProgress("Located");
 
-            ReportProgress("Uploading stable exe to wotmods...");
+            ReportProgress("Uploading stable V2 application to bigmods...");
             using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
             {
                 await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackRelhaxModpack + Path.GetFileName(SelectV2Application.FileName), SelectV2Application.FileName);
@@ -544,14 +550,16 @@ namespace RelhaxModpack.Windows
         private async void UpdateApplicationV2UploadApplicationBeta(object sender, RoutedEventArgs e)
         {
             ToggleUI((TabController.SelectedItem as TabItem), false);
-            ReportProgress("Running Upload Beta Application");
+            ReportProgress("Locate beta V2 application");
             if (!(bool)SelectV2Application.ShowDialog())
             {
                 ToggleUI((TabController.SelectedItem as TabItem), true);
+                ReportProgress("Canceled");
                 return;
             }
+            ReportProgress("Located");
 
-            ReportProgress("Uploading beta exe to wotmods...");
+            ReportProgress("Uploading beta V2 application to bigmods...");
             using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
             {
                 await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackRelhaxModpack + Path.GetFileName(SelectV2Application.FileName), SelectV2Application.FileName);
@@ -563,7 +571,7 @@ namespace RelhaxModpack.Windows
         private async void UpdateApplicationV2UploadManagerInfo(object sender, RoutedEventArgs e)
         {
             ToggleUI((TabController.SelectedItem as TabItem), false);
-            ReportProgress("Running upload manager_info.xml");
+            ReportProgress("Running upload manager_info.xml to wotmods and bigmods");
             if (!(bool)SelectManagerInfoXml.ShowDialog())
             {
                 ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -831,9 +839,10 @@ namespace RelhaxModpack.Windows
             //getting local crcs and comparing them on server
             //init UI
             ReportProgress("Starting DatabaseUpdate step 3");
+            ReportProgress("Preparing database update");
 
             //checks
-            if(string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
+            if (string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
             {
                 ReportProgress("wot online folder version is empty");
                 ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -1279,6 +1288,7 @@ namespace RelhaxModpack.Windows
             ToggleUI((TabController.SelectedItem as TabItem), false);
             //check for stuff
             ReportProgress("Starting DatabaseUpdate step 4");
+            ReportProgress("Uploading changed files");
 
             //checks
             if (string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
@@ -1312,17 +1322,17 @@ namespace RelhaxModpack.Windows
             using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
             {
                 //upload new modINfo file
-                ReportProgress("Saving and uploading new modInfo.xml to live server folder");
+                ReportProgress("Saving and uploading new modInfo.xml to legacy wotmods V1 live server folder");
                 await client.UploadFileTaskAsync(PrivateStuff.ModInfosLocation + CurrentModInfoXml, SelectModInfo.FileName);
                 SetProgress(20);
 
                 //upload manager_version.xml
-                ReportProgress("Uploading new manager_version.xml to wotmods");
+                ReportProgress("Uploading new manager_version.xml to legacy wotmods location");
                 await client.UploadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + Settings.ManagerVersion, ManagerVersionPath);
                 SetProgress(40);
 
                 //upload databaseUpdate.txt
-                ReportProgress("uploading new databaseUpdate.txt");
+                ReportProgress("uploading new databaseUpdate.txt to legacy wotmods location");
                 await client.UploadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + DatabaseUpdateFilename, DatabaseUpdatePath);
                 SetProgress(60);
             }
@@ -1350,7 +1360,7 @@ namespace RelhaxModpack.Windows
                 versionRoot.AppendChild(supported_client);
                 supportedClients.Save(SupportedClientsPath);
 
-                ReportProgress("Uploading new supported_clients.xml to wotmods");
+                ReportProgress("Uploading new supported_clients.xml to legacy wotmods location");
                 using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
                 {
                     await client.UploadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + Settings.SupportedClients, SupportedClientsPath);
@@ -1375,7 +1385,7 @@ namespace RelhaxModpack.Windows
         private async void UpdateDatabaseStep5_Click(object sender, RoutedEventArgs e)
         {
             ReportProgress("Starting update database step 5...");
-            ReportProgress("Running script to create mod info");
+            ReportProgress("Running script to create mod info on bigmods");
             await RunPhpScript(PrivateStuff.WotmodsNetworkCredential, PrivateStuff.CreateModInfoPHP, 100000);
         }
 
@@ -1388,7 +1398,7 @@ namespace RelhaxModpack.Windows
 
         private async void UpdateDatabaseStep6b_Click(object sender, RoutedEventArgs e)
         {
-            ReportProgress("Starting Update database step 6a...");
+            ReportProgress("Starting Update database step 6b...");
             ReportProgress("Running script to create manager info (bigmods)");
             await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateManagerInfoPHP, 100000);
         }

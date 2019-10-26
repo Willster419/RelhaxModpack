@@ -61,6 +61,16 @@ namespace RelhaxModpack.UIComponents
         public long BytesProcessed, BytesTotal = 0;
 
         /// <summary>
+        /// Flag to mark if the install engine is waiting on a package to download
+        /// </summary>
+        public bool WaitingOnDownload = false;
+
+        /// <summary>
+        /// Flag to mark if the install engine is waiting on a package to download in a thread
+        /// </summary>
+        public bool[] WaitingOnDownloadOfAThread;
+
+        /// <summary>
         /// The number of bytes currently processed in an entry in a thread
         /// </summary>
         public long[] BytesProcessedOfAThread;
@@ -74,6 +84,11 @@ namespace RelhaxModpack.UIComponents
         /// The name of the file currently being processed
         /// </summary>
         public string Filename = string.Empty;
+
+        /// <summary>
+        /// The name of the file currently being processed in a thread
+        /// </summary>
+        public string[] FilenameOfAThread;
 
         /// <summary>
         /// During zip file extraction, the entry inside the zip file being processed

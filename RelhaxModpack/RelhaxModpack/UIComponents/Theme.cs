@@ -15,7 +15,6 @@ namespace RelhaxModpack.UIComponents
 
         public string FileName { get; set; } = string.Empty;
 
-
         public CustomBrush SelectionListSelectedPanelColor { get; set; } = null;
 
         public CustomBrush SelectionListNotSelectedPanelColor { get; set; } = null;
@@ -23,6 +22,20 @@ namespace RelhaxModpack.UIComponents
         public CustomBrush SelectionListSelectedTextColor { get; set; } = null;
 
         public CustomBrush SelectionListNotSelectedTextColor { get; set; } = null;
+
+        public CustomBrush SelectionListBorderColor { get; set; } = null;
+
+        public CustomBrush SelectionListActiveTabHeaderBackgroundColor { get; set; } = null;
+
+        public CustomBrush SelectionListActiveTabHeaderTextColor { get; set; } = null;
+
+        public CustomBrush SelectionListNotActiveHasSelectionsBackgroundColor { get; set; } = null;
+
+        public CustomBrush SelectionListNotActiveHasSelectionsTextColor { get; set; } = null;
+
+        public CustomBrush SelectionListNotActiveHasNoSelectionsBackgroundColor { get; set; } = null;
+
+        public CustomBrush SelectionListNotActiveHasNoSelectionsTextColor { get; set; } = null;
 
         public ClassColorset RadioButtonColorset { get; set; } = null;
 

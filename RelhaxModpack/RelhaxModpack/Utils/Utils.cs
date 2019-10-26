@@ -2408,9 +2408,9 @@ namespace RelhaxModpack
             {
                 string potentialResult = path;
                 //if it has win32 or win64, filter it out
-                if(potentialResult.Contains("win32") || potentialResult.Contains("win64"))
+                if (potentialResult.Contains(Settings.WoT32bitFolderWithSlash) || potentialResult.Contains(Settings.WoT64bitFolderWithSlash))
                 {
-                    potentialResult = potentialResult.Replace("win32\\", string.Empty).Replace("win64\\", string.Empty);
+                    potentialResult = potentialResult.Replace(Settings.WoT32bitFolderWithSlash, string.Empty).Replace(Settings.WoT64bitFolderWithSlash, string.Empty);
                 }
                 if (File.Exists(potentialResult))
                 {

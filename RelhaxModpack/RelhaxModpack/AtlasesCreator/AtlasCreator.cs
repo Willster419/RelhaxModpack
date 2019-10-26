@@ -125,6 +125,7 @@ namespace RelhaxModpack.AtlasesCreator
                 Logging.Info("static: mod images parsing starting");
                 modParseStopwatch.Restart();
                 realModTextures = new List<Texture>();
+                Logging.Debug("static: mod texture folder count: {0}", allModFolderPaths.Count);
                 foreach (string folder in allModFolderPaths)
                 {
                     string realFolder = Utils.MacroReplace(folder, ReplacementTypes.FilePath);

@@ -296,15 +296,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="UIComponents\RelhaxRadioButtonStyleDictionary.xaml">
+    <Page Include="UIComponents\StyleDictionaries\RelhaxRadioButtonStyleDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\RelhaxCheckboxStyleDictionary.xaml">
+    <Page Include="UIComponents\StyleDictionaries\RelhaxCheckboxStyleDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\RelhaxComboboxStyleDictionary.xaml">
+    <Page Include="UIComponents\StyleDictionaries\RelhaxComboboxStyleDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -316,11 +316,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\RelhaxButtonStyleDictionary.xaml">
+    <Page Include="UIComponents\StyleDictionaries\RelhaxButtonStyleDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\RelhaxTabItemStyleDictionary.xaml">
+    <Page Include="UIComponents\StyleDictionaries\RelhaxSelectionListTabItemStyleDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\StyleDictionaries\RelhaxTabItemStyleDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

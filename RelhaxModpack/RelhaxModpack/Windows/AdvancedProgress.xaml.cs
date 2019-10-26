@@ -256,26 +256,42 @@ namespace RelhaxModpack.Windows
                             progress.InstallGroup);
                     }
 
-                    builder.AppendFormat("{0}\n", progress.Filename);
-
-                    if (progress.EntriesProcessedOfAThread != null && progress.EntriesTotalOfAThread != null)
+                    if(progress.WaitingOnDownloadOfAThread != null && progress.WaitingOnDownloadOfAThread[progress.ThreadID])
                     {
-                        builder.AppendFormat("{0} {1} {2} {3}\n", Translations.GetTranslatedString("installZipFileEntry"), progress.EntriesProcessedOfAThread[progress.ThreadID],
-                                Translations.GetTranslatedString("of"), progress.EntriesTotalOfAThread[progress.ThreadID]);
+                        if(ExtractionModsReporters[progress.ThreadID].ReportState == TaskReportState.Inactive)
+                        {
+                            ExtractionModsReporters[progress.ThreadID].ReportState = TaskReportState.Active;
+                        }
 
-                        if (ExtractionModsReporters[progress.ThreadID].TaskMinimum != 0)
-                            ExtractionModsReporters[progress.ThreadID].TaskMinimum = 0;
-                        if (ExtractionModsReporters[progress.ThreadID].TaskMaximum != (int)progress.EntriesTotalOfAThread[progress.ThreadID])
-                            ExtractionModsReporters[progress.ThreadID].TaskMaximum = (int)progress.EntriesTotalOfAThread[progress.ThreadID];
-                        if (ExtractionModsReporters[progress.ThreadID].TaskValue != (int)progress.EntriesProcessedOfAThread[progress.ThreadID])
-                            ExtractionModsReporters[progress.ThreadID].TaskValue = (int)progress.EntriesProcessedOfAThread[progress.ThreadID];
+                        if(progress.FilenameOfAThread != null)
+                            builder.AppendFormat("{0}\n({1})...", Path.GetFileName(progress.FilenameOfAThread[progress.ThreadID]), Translations.GetTranslatedString("Downloading"));
+                    }
+                    else
+                    {
+                        if (progress.FilenameOfAThread != null)
+                            builder.AppendFormat("{0}\n", Path.GetFileName(progress.FilenameOfAThread[progress.ThreadID]));
+
+                        if (progress.EntriesProcessedOfAThread != null && progress.EntriesTotalOfAThread != null)
+                        {
+                            builder.AppendFormat("{0} {1} {2} {3}\n", Translations.GetTranslatedString("installZipFileEntry"), progress.EntriesProcessedOfAThread[progress.ThreadID],
+                                    Translations.GetTranslatedString("of"), progress.EntriesTotalOfAThread[progress.ThreadID]);
+
+                            if (ExtractionModsReporters[progress.ThreadID].TaskMinimum != 0)
+                                ExtractionModsReporters[progress.ThreadID].TaskMinimum = 0;
+                            if (ExtractionModsReporters[progress.ThreadID].TaskMaximum != (int)progress.EntriesTotalOfAThread[progress.ThreadID])
+                                ExtractionModsReporters[progress.ThreadID].TaskMaximum = (int)progress.EntriesTotalOfAThread[progress.ThreadID];
+                            if (ExtractionModsReporters[progress.ThreadID].TaskValue != (int)progress.EntriesProcessedOfAThread[progress.ThreadID])
+                                ExtractionModsReporters[progress.ThreadID].TaskValue = (int)progress.EntriesProcessedOfAThread[progress.ThreadID];
+                        }
+
+                        if (progress.EntryFilenameOfAThread != null)
+                            builder.AppendFormat("{0}\n", progress.EntryFilenameOfAThread[progress.ThreadID]);
+
                     }
 
-                    if(progress.EntryFilenameOfAThread != null)
-                        builder.AppendFormat("{0}\n", progress.EntryFilenameOfAThread[progress.ThreadID]);
-
-                    if(progress.BytesProcessedOfAThread != null && progress.BytesTotalOfAThread != null)
+                    if (progress.BytesProcessedOfAThread != null && progress.BytesTotalOfAThread != null)
                     {
+
                         if (ExtractionModsReporters[progress.ThreadID].SubTaskMinimum != 0)
                             ExtractionModsReporters[progress.ThreadID].SubTaskMinimum = 0;
                         if (ExtractionModsReporters[progress.ThreadID].SubTaskMaximum != (int)progress.BytesTotalOfAThread[progress.ThreadID])

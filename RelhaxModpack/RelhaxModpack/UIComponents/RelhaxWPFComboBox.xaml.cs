@@ -19,8 +19,10 @@ namespace RelhaxModpack.UIComponents
     /// <summary>
     /// Interaction logic for RelhaxWPFComboBox.xaml
     /// </summary>
-    public partial class RelhaxWPFComboBox : ComboBox, IPackageUIComponent, INotifyPropertyChanged
+    public partial class RelhaxWPFComboBox : ComboBox
     {
+        public bool AddedToList { get; set; } = false;
+
         /// <summary>
         /// Create an instance of the RelhaxWPFComboBox class
         /// </summary>
@@ -30,60 +32,9 @@ namespace RelhaxModpack.UIComponents
         }
 
         /// <summary>
-        /// The package associated with this UI component
-        /// </summary>
-        public SelectablePackage Package { get; set; }
-
-#warning this needs to be investigated. Why not use the onChecked and onEnabled?
-        /// <summary>
         /// The event to subscribe to when the selection is changed
         /// </summary>
         public SelectionChangedEventHandler Handler;
-
-        /// <summary>
-        /// This is not implemented
-        /// </summary>
-        /// <param name="Enabled">The value from the SelectablePackage</param>
-        public void OnEnabledChanged(bool Enabled)
-        {
-
-        }
-
-        /// <summary>
-        /// This is not implemented
-        /// </summary>
-        /// <param name="Checked">The value from the SelectablePackage</param>
-        public void OnCheckedChanged(bool Checked)
-        {
-
-        }
-
-        /// <summary>
-        /// This is not implemented
-        /// </summary>
-        public Brush TextColor
-        {
-            get
-            { return null; }
-            set
-            { }
-        }
-
-        /// <summary>
-        /// Set the brush of the ComboBox Panel Background property 
-        /// </summary>
-        public Brush PanelColor
-        {
-            get
-            {
-                return Package.ParentBorder == null ? null : Package.ParentBorder.Background;
-            }
-            set
-            {
-                if (Package.ParentBorder != null)
-                    Package.ParentBorder.Background = value;
-            }
-        }
 
         /// <summary>
         /// Called from the database object to update the UI on a combobox selection change
@@ -97,13 +48,18 @@ namespace RelhaxModpack.UIComponents
                 ComboBoxItem cbi = (ComboBoxItem)Items[i];
                 if (cbi.Package.Equals(spc) && value && cbi.Package.Enabled)
                 {
+                    //unsubscribe before changing the selected item
                     if (Handler != null)
                         SelectionChanged -= Handler;
+                    //change it
                     SelectedItem = cbi;
+                    //re-subscribe
                     if (Handler != null)
                         SelectionChanged += Handler;
+                    //continue as to not uncheck this value, now that it's checked
                     continue;
-                }//if value is false it will uncheck all the packages
+                }
+                //if value is false it will uncheck all the packages
                 if (cbi.Package.Enabled && cbi.Package.Checked)
                     cbi.Package.Checked = false;
             }
@@ -114,42 +70,5 @@ namespace RelhaxModpack.UIComponents
                 SelectionChanged += Handler;
             }
         }
-
-        #region Data UI Binding
-        private Color _DisabledColor = Colors.DarkGray;
-
-        /// <summary>
-        /// Set the value of the disabled component color
-        /// </summary>
-        public Color DisabledColor
-        {
-            get
-            {
-                return _DisabledColor;
-            }
-            set
-            {
-                _DisabledColor = value;
-                OnPropertyChanged(nameof(DisabledColor));
-            }
-        }
-
-        //https://stackoverflow.com/questions/34651123/wpf-binding-a-background-color-initializes-but-not-updating
-        /// <summary>
-        /// Event to trigger when an internal property is changed. It forces a UI update
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// Method to invoke the PropertyChanged event to update the UI
-        /// </summary>
-        /// <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
-        protected void OnPropertyChanged(string propertyName)
-        {
-            var handle = PropertyChanged;
-            if (handle != null)
-                handle(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
     }
 }

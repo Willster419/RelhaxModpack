@@ -1463,9 +1463,12 @@ namespace RelhaxModpack.InstallerComponents
             Progress.Report(Prog);
             string[] logsToDelete = new string[]
             {
-                Path.Combine(Settings.WoTDirectory, "python.log"),
-                Path.Combine(Settings.WoTDirectory, "xvm.log"),
-                Path.Combine(Settings.WoTDirectory, "pmod.log"),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, "python.log"),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, "xvm.log"),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, "pmod.log"),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, "python.log"),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, "xvm.log"),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, "pmod.log"),
                 Path.Combine(Settings.WoTDirectory, "WoTLauncher.log"),
                 Path.Combine(Settings.WoTDirectory, "cef.log")
             };
@@ -1602,6 +1605,8 @@ namespace RelhaxModpack.InstallerComponents
                     Prog.EntryFilenameOfAThread = new string[tasks.Count()];
                     Prog.BytesProcessedOfAThread = new long[tasks.Count()];
                     Prog.BytesTotalOfAThread = new long[tasks.Count()];
+                    Prog.WaitingOnDownloadOfAThread = new bool[tasks.Count()];
+                    Prog.FilenameOfAThread = new string[tasks.Count()];
 
                     for (int k = 0; k < tasks.Count(); k++)
                     {
@@ -1908,7 +1913,7 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.Info("...skipped (no font files to install)");
             else
             {
-                CreateFontsTask = Task.Factory.StartNew(() =>
+                CreateFontsTask = Task.Factory.StartNew(async () =>
                 {
                     Logging.Debug("checking system installed fonts to remove duplicates");
 
@@ -1949,7 +1954,7 @@ namespace RelhaxModpack.InstallerComponents
                         }
 
                         CancellationToken.ThrowIfCancellationRequested();
-                        Logging.Info("Attempting to install fonts: {0}", string.Join(",", realFontsToInstall));
+                        Logging.Info("Attempting to install fonts: {0}", string.Join(", ", realFontsToInstall));
                         ProcessStartInfo info = new ProcessStartInfo
                         {
                             FileName = fontRegPath,
@@ -1962,14 +1967,39 @@ namespace RelhaxModpack.InstallerComponents
                         try
                         {
                             Process installFontss = new Process() { StartInfo = info };
+                            Logging.Debug("FontReg process starts");
                             installFontss.Start();
-                            installFontss.WaitForExit();
+                            int timeoutSeconds = 10;
+                            bool exited = false;
+                            Logging.Debug("FontReg process waiting to close");
+                            for(int i = 0; i < timeoutSeconds; i++)
+                            {
+                                await Task.Delay(1000);
+                                if(installFontss.HasExited)
+                                {
+                                    Logging.Debug("FontReg process has exited");
+                                    exited = true;
+                                    break;
+                                }
+                                else
+                                {
+                                    Logging.Debug("FontReg process has not exited, check {0} of {1}", i++, timeoutSeconds);
+                                }
+                            }
+                            if(!exited)
+                            {
+                                Logging.Error("FontReg has not exited after 10 seconds, killing process");
+                                installFontss.Kill();
+                                Logging.Error("FontReg failed to finish cleanly, process was killed early");
+                                MessageBox.Show(string.Format("{0}{1}{2}{3}{4}", Translations.GetTranslatedString("fontsPromptError_1"), Environment.NewLine,
+                                    Settings.WoTDirectory, Environment.NewLine, Translations.GetTranslatedString("fontsPromptError_2")));
+                            }
                             Logging.Info("FontReg.exe ExitCode: " + installFontss.ExitCode);
                             Logging.Info("Installing of fonts complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
                         }
                         catch (Exception ex)
                         {
-                            Logging.Error("could not start font installer:{0}{1}", Environment.NewLine, ex.ToString());
+                            Logging.Exception("could not start font installer:{0}{1}", Environment.NewLine, ex.ToString());
                             MessageBox.Show(string.Format("{0}{1}{2}{3}{4}", Translations.GetTranslatedString("fontsPromptError_1"), Environment.NewLine,
                                 Settings.WoTDirectory, Environment.NewLine, Translations.GetTranslatedString("fontsPromptError_2")));
                         }
@@ -2103,6 +2133,29 @@ namespace RelhaxModpack.InstallerComponents
                     //check if we are installing while downloading and this package is still downloading
                     if (ModpackSettings.InstallWhileDownloading && package.DownloadFlag)
                     {
+                        if (ModpackSettings.AdvancedInstalProgress)
+                        {
+                            if (package.IsCurrentlyDownloading)
+                            {
+                                Prog.WaitingOnDownloadOfAThread[threadNum] = true;
+                                Prog.FilenameOfAThread[threadNum] = package.ZipFile;
+                                Prog.BytesProcessedOfAThread[threadNum] = package.BytesDownloaded;
+                                Prog.BytesTotalOfAThread[threadNum] = package.BytesToDownload;
+                                Prog.ThreadID = (uint)threadNum;
+                                Progress.Report(Prog);
+                            }
+                        }
+                        else
+                        {
+                            if (package.IsCurrentlyDownloading)
+                            {
+                                Prog.WaitingOnDownload = true;
+                                Prog.Filename = package.ZipFile;
+                                Prog.BytesProcessed = package.BytesDownloaded;
+                                Prog.BytesTotal = package.BytesToDownload;
+                                Progress.Report(Prog);
+                            }
+                        }
                         continue;
                     }
                     //else check if we are installing while downloading and this package's extraction has started
@@ -2117,6 +2170,17 @@ namespace RelhaxModpack.InstallerComponents
 
                         //flag that this package's extraction has started
                         package.ExtractionStarted = true;
+
+                        if (ModpackSettings.AdvancedInstalProgress)
+                        {
+                            Prog.WaitingOnDownloadOfAThread[threadNum] = false;
+                        }
+                        else
+                        {
+                            Prog.WaitingOnDownload = false;
+                        }
+
+                        Progress.Report(Prog);
 
                         //stop if the zipfile name is blank (no actual zipfile to extract)
                         if (!string.IsNullOrWhiteSpace(package.ZipFile))
@@ -2347,6 +2411,7 @@ namespace RelhaxModpack.InstallerComponents
                         Prog.ChildTotal = (int)e.TotalBytesToTransfer;
                         Prog.BytesProcessedOfAThread[(uint)(sender as RelhaxZipFile).ThreadID] = e.BytesTransferred;
                         Prog.BytesTotalOfAThread[(uint)(sender as RelhaxZipFile).ThreadID] = e.TotalBytesToTransfer;
+                        Prog.FilenameOfAThread[(uint)(sender as RelhaxZipFile).ThreadID] = e.ArchiveName;
                         Prog.EntryFilename = e.CurrentEntry.FileName;
                         Prog.EntryFilenameOfAThread[(uint)(sender as RelhaxZipFile).ThreadID] = e.CurrentEntry.FileName;
                         Prog.Filename = e.ArchiveName;

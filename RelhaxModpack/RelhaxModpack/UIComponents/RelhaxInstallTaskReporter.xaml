@@ -9,7 +9,7 @@
         <StackPanel x:Name="MainGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <TextBlock HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding TaskTitle, ElementName=RelhaxTaskReporter}" VerticalAlignment="Top" x:Name="TaskName" />
             <TextBox HorizontalAlignment="Stretch" Height="70" TextWrapping="Wrap" Margin="0,3,0,0" Text="{Binding TaskText, ElementName=RelhaxTaskReporter}"
-                     VerticalAlignment="Top" x:Name="TaskStatus" />
+                     VerticalAlignment="Top" x:Name="TaskStatus" IsReadOnly="True" IsUndoEnabled="False"/>
             <ProgressBar HorizontalAlignment="Stretch" Height="10" Margin="0,3,0,0" VerticalAlignment="Top" x:Name="TaskProgress1"
                          Maximum="{Binding TaskMaximum, ElementName=RelhaxTaskReporter}" Minimum="{Binding TaskMinimum, ElementName=RelhaxTaskReporter}"
                          Value="{Binding TaskValue, ElementName=RelhaxTaskReporter}"/>

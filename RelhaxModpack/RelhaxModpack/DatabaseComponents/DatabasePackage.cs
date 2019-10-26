@@ -158,6 +158,21 @@ namespace RelhaxModpack
         /// </summary>
         public string Author = string.Empty;
 
+        /// <summary>
+        /// The number of bytes to download, used if "install while download" is true
+        /// </summary>
+        public long BytesToDownload = 0;
+
+        /// <summary>
+        /// The number of bytes currently downloaded, used if "install while download" is true
+        /// </summary>
+        public long BytesDownloaded = 0;
+
+        /// <summary>
+        /// Flag to determine if this package is the one currently downloading, used if "install while download" is true
+        /// </summary>
+        public bool IsCurrentlyDownloading = false;
+
         //append extraction flag
         /// <summary>
         /// Determines if this package should be put into a list that will be installed last. Used for when the package is possibly overwriting files, for example

@@ -97,7 +97,7 @@ namespace RelhaxModpack
             //put blacklist fields here
             nameof(PropertiesToExclude)
         };
-        #region Save-able modpack settings
+        #region Saveable modpack settings
         /// <summary>
         /// The custom path to the ModInfo.xml file if loading in test mode
         /// </summary>
@@ -271,9 +271,19 @@ namespace RelhaxModpack
         public static bool ModSelectionFullscreen = false;
 
         /// <summary>
-        /// t=Toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
+        /// Toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
         /// </summary>
         public static bool MinimizeToSystemTray = false;
+
+        /// <summary>
+        /// Toggle for if the selection list options in Legacy view should be collapsed by default on start
+        /// </summary>
+        public static bool ShowOptionsCollapsedLegacy = false;
+
+        /// <summary>
+        /// Toggle if during auto or one click load if the application should inform if any selection errors during selection file load
+        /// </summary>
+        public static bool AutoOneclickShowWarningOnSelectionsFail = false;
 
         /// <summary>
         /// The time, in a specified unit, to check for anew data base version
@@ -318,7 +328,7 @@ namespace RelhaxModpack
         /// <summary>
         /// The factor to scale the window size and components by. From 1 to 3 in increments of 0.25
         /// </summary>
-        public static double DisplayScale = 0;
+        public static double DisplayScale = 1.0f;
 
         /// <summary>
         /// The path to the auto or one click selection file

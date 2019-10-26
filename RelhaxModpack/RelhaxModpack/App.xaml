@@ -17,11 +17,12 @@
                     <localUI:CustomBrushConverter x:Key="CustomToBrushConverter"/>
                 </ResourceDictionary>
                 <!-- <ResourceDictionary Source="RelhaxThemes.xaml"/> -->
-                <ResourceDictionary Source="UIComponents/RelhaxButtonStyleDictionary.xaml"/>
-                <ResourceDictionary Source="UIComponents/RelhaxCheckboxStyleDictionary.xaml"/>
-                <ResourceDictionary Source="UIComponents/RelhaxComboboxStyleDictionary.xaml"/>
-                <ResourceDictionary Source="UIComponents/RelhaxRadioButtonStyleDictionary.xaml"/>
-                <ResourceDictionary Source="UIComponents/RelhaxTabItemStyleDictionary.xaml"/>
+                <ResourceDictionary Source="UIComponents/StyleDictionaries/RelhaxButtonStyleDictionary.xaml"/>
+                <ResourceDictionary Source="UIComponents/StyleDictionaries/RelhaxCheckboxStyleDictionary.xaml"/>
+                <ResourceDictionary Source="UIComponents/StyleDictionaries/RelhaxComboboxStyleDictionary.xaml"/>
+                <ResourceDictionary Source="UIComponents/StyleDictionaries/RelhaxRadioButtonStyleDictionary.xaml"/>
+                <ResourceDictionary Source="UIComponents/StyleDictionaries/RelhaxTabItemStyleDictionary.xaml"/>
+                <ResourceDictionary Source="UIComponents/StyleDictionaries/RelhaxSelectionListTabItemStyleDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

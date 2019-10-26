@@ -37,7 +37,13 @@ namespace RelhaxModpack
         /// It is set on user selection on a component in the selection list.</remarks>
         public static Brush NotSelectedTabColor = null;
 
+        public static readonly string[] NullAllowedGlobalBrushes = new string[]
+        {
+            "SelectionListNotActiveHasNoSelectionsBackgroundColor"
+        };
+
         private static Theme currentTheme = Themes.Default;
+
         public static Theme CurrentTheme
         {
             get { return currentTheme; }
@@ -589,11 +595,20 @@ namespace RelhaxModpack
                 string xPath = string.Format("//{0}/GlobalCustomBrushes/{1}", Settings.UISettingsColorFile, property.Name);
                 Logging.Debug("Searching for global brush {0} using xpath {1}", property.Name, xPath);
                 XmlNode globalBrush = XmlUtils.GetXmlNodeFromXPath(doc, xPath);
-                if(globalBrush == null)
+
+                if(NullAllowedGlobalBrushes.Contains(property.Name) && globalBrush == null)
+                {
+                    Logging.Debug("brush {0} is null, but on null allowed list. Set brush as invalid can continue", property.Name);
+                    property.SetValue(customThemeToLoad, new CustomBrush() { IsValid = false, Brush = null });
+                    continue;
+                }
+
+                if(!NullAllowedGlobalBrushes.Contains(property.Name) && globalBrush == null)
                 {
                     Logging.Error("failed to get xml brush setting definition");
                     return false;
                 }
+
                 if(ApplyCustomThemeCustomBrushSettings(property.Name,globalBrush as XmlElement, out CustomBrush customBrush))
                 {
                     property.SetValue(customThemeToLoad, customBrush);
@@ -1078,6 +1093,10 @@ namespace RelhaxModpack
                 {
                     WriteColorAttributesToXmlElement(customBrushXml, customBrush.Brush, doc);
                     customBrushRoot.AppendChild(customBrushXml);
+                }
+                else
+                {
+                    Logging.Info("GlobalBrush {0} is invalid, not saving. (note you can still make a custom definition for it if you wish)", property.Name);
                 }
             }
             root.AppendChild(customBrushRoot);

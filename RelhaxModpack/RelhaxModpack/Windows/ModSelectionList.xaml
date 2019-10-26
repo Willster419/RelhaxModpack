@@ -18,7 +18,7 @@
         <TextBlock x:Name="InstallingTo" HorizontalAlignment="Left" Margin="10,26,0,0" TextWrapping="Wrap" Text="Installing to: " VerticalAlignment="Top" Tag="InstallingTo"/>
         <TextBlock x:Name="InstallingAsWoTVersion" HorizontalAlignment="Left" Margin="10,42,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Tag="InstallingAsWoTVersion"
                    Text="Installing as WoT version: " />
-        <TabControl x:Name="ModTabGroups" HorizontalAlignment="Stretch" Margin="10,94,10,60" VerticalAlignment="Stretch" Tag="SelectionListTabs"/>
+        <TabControl x:Name="ModTabGroups" HorizontalAlignment="Stretch" Margin="10,94,10,60" VerticalAlignment="Stretch" Tag="SelectionListTabs" SelectionChanged="ModTabGroups_SelectionChanged"/>
         <Button x:Name="CollapseAllRealButton" HorizontalAlignment="Right" Margin="0,10,140,0" VerticalAlignment="Top" Width="125" Height="35"
                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="CollapseAllRealButton_Click" Tag="CollapseAllButton">
             <TextBlock x:Name="CollapseAllButton" Text="Collapse current tab" TextWrapping="Wrap" TextAlignment="Center"/>
@@ -27,7 +27,7 @@
                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="ExpandAllRealButton_Click" Tag="ExpandAllButton">
             <TextBlock x:Name="ExpandAllButton" Text="Expand current tab" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
-        <TextBlock x:Name="SearchTB" HorizontalAlignment="Right" Margin="0,52,270,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Width="251"
+        <TextBlock x:Name="SearchTB" HorizontalAlignment="Right" Margin="0,52,270,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" 
                    TextAlignment="Right" Padding="3" Tag="SearchTB" Text="Search for a mod..."/>
         <ComboBox x:Name="SearchCB" Tag="SearchCB" HorizontalAlignment="Right" Margin="0,52,10,0" VerticalAlignment="Top" Width="255" PreviewKeyDown="SearchCB_PreviewKeyDown"
                   KeyUp="SearchCB_KeyUp" IsEditable="True" IsTextSearchEnabled="False" PreviewMouseDown="SearchCB_PreviewMouseDown" ItemsSource="{Binding}" ItemsPanel="{StaticResource VSP}"/>
