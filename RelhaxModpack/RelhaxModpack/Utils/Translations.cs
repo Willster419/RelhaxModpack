@@ -862,7 +862,7 @@ namespace RelhaxModpack
             German.Add("ShowOptionsCollapsedLegacyText", "Optionen einklappen");
             Polish.Add("ShowOptionsCollapsedLegacyText", "Zwiń wszystkie opcje");
             French.Add("ShowOptionsCollapsedLegacyText", TranslationNeeded);
-            Spanish.Add("ShowOptionsCollapsedLegacyText", TranslationNeeded);
+            Spanish.Add("ShowOptionsCollapsedLegacyText", "Colapsar todas las opciones al iniciar");
             Russian.Add("ShowOptionsCollapsedLegacyText", "Показывать опции свёрнутыми");
 
             //Component: ShowOptionsCollapsedLegacyCBDescription
@@ -871,7 +871,7 @@ namespace RelhaxModpack
             German.Add("ShowOptionsCollapsedLegacyCBDescription", "Bei Auswahl wird die Optionen Liste bis auf die Hauptkategorien eingeklappt");
             Polish.Add("ShowOptionsCollapsedLegacyCBDescription", "Zwija wszystkie elementy drzewka wyboru na liście (z wyjątkiem kategorii).");
             French.Add("ShowOptionsCollapsedLegacyCBDescription", TranslationNeeded);
-            Spanish.Add("ShowOptionsCollapsedLegacyCBDescription", TranslationNeeded);
+            Spanish.Add("ShowOptionsCollapsedLegacyCBDescription", "Cuando está marcada, todas las opciones de la lista de selección (excepto las de nivel categoría) serán colapsadas");
             Russian.Add("ShowOptionsCollapsedLegacyCBDescription", "Если включено, то списки модов для выбора (кроме категорий) будут свёрнуты.");
 
 
@@ -981,7 +981,7 @@ namespace RelhaxModpack
             German.Add("AutoOneclickShowWarningOnSelectionsFailText", "Warnung bei Fehler mit der Auswahldatei");
             Polish.Add("AutoOneclickShowWarningOnSelectionsFailText", "Ostrzeż w przypadku błędów"); // Shortened. Kept splitting into two lines. @Nullmaruzero
             French.Add("AutoOneclickShowWarningOnSelectionsFailText", TranslationNeeded);
-            Spanish.Add("AutoOneclickShowWarningOnSelectionsFailText", TranslationNeeded);
+            Spanish.Add("AutoOneclickShowWarningOnSelectionsFailText", "Mostrar una advertencia si el documento de selección tiene errores al cargar");
             Russian.Add("AutoOneclickShowWarningOnSelectionsFailText", "Показывать предупреждение, если шаблон предустановки загружен с ошибками");
 
             //Component: AutoOneclickShowWarningOnSelectionsFailButtonDescription
@@ -992,7 +992,7 @@ namespace RelhaxModpack
                 "ein Fehler mit der Auswahldatei auftritt");
             Polish.Add("AutoOneclickShowWarningOnSelectionsFailButtonDescription", "Ostrzega i umożliwia przerwanie jeśli podczas Automatycznej Instalacji lub Instalacji na Kliknięcie wystąpią błędy z plikiem kolekcji.");
             French.Add("AutoOneclickShowWarningOnSelectionsFailButtonDescription", TranslationNeeded);
-            Spanish.Add("AutoOneclickShowWarningOnSelectionsFailButtonDescription", TranslationNeeded);
+            Spanish.Add("AutoOneclickShowWarningOnSelectionsFailButtonDescription", "Cuando se utiliza instalación automática o en un clic, mostrar una advertencia para cancelar si ocurre algún error al aplicar el archivo de selección");
             Russian.Add("AutoOneclickShowWarningOnSelectionsFailButtonDescription", "При использовании функции установки в один клик или автоматической установки будет показываться предупреждение. У вас будет возможность прервать установку в случае появления ошибок.");
 
             //Component: ForceEnabledText
@@ -1865,7 +1865,7 @@ namespace RelhaxModpack
             German.Add("failedToFindWoTExe", TranslationNeeded);
             Polish.Add("failedToFindWoTExe", "Nie udało się odnaleźć folderu instalacji klienta WoT. Prosimy zgłosić ten błąd twórcom.");
             French.Add("failedToFindWoTExe", TranslationNeeded);
-            Spanish.Add("failedToFindWoTExe", TranslationNeeded);
+            Spanish.Add("failedToFindWoTExe", "No se ha podido localizar la instalación del cliente de WoT. Por favor, envíe un informe de errores al desarrollador.");
             Russian.Add("failedToFindWoTExe", "Не удалось получить расположение клиента WoT. Пожалуйста, отправьте отчёт об ошибке разработчику.");
 
             //Component: failedToFindWoTVersionXml
@@ -1874,7 +1874,7 @@ namespace RelhaxModpack
             German.Add("failedToFindWoTVersionXml", TranslationNeeded);
             Polish.Add("failedToFindWoTVersionXml", "Nie udało się ustalić wersji klienta WoT. Sprawdź, czy plik 'version.xml' znajduje się w folderze gry (domyślnie: World_of_Tanks).");
             French.Add("failedToFindWoTVersionXml", TranslationNeeded);
-            Spanish.Add("failedToFindWoTVersionXml", TranslationNeeded);
+            Spanish.Add("failedToFindWoTVersionXml", "No se ha podido obtener información de la versión instalada de WoT. Compruebe que el archivo 'version.xml' existe en el directorio 'World_of_Tanks'.");
             Russian.Add("failedToFindWoTVersionXml", "Не удалось получить информацию о версии клиента WoT. Проверьте наличие файла 'version.xml' в папке с игрой.");
             #endregion
 
@@ -2109,7 +2109,7 @@ namespace RelhaxModpack
             German.Add("modDeactivated", "Die folgenden Pakete sind deaktiviert und können nciht zur Installation gewählt werden");
             Polish.Add("modDeactivated", "Poniższe pakiety zostały na chwilę obecną dezaktywowane i nie mogą być zainstalowane");
             French.Add("modDeactivated", "Le package (ID = \"{0\") est actuellement désactivé dans le modpack et ne peut pas être sélectionner à l'installation");
-            Spanish.Add("modDeactivated", TranslationNeeded);
+            Spanish.Add("modDeactivated", "Los siguientes paquetes están actualmente desactivados en el modpack y no han podido ser seleccionados para instalar");
             Russian.Add("modDeactivated", "Следующие пакеты отключены в модпаке на данный момент и не могут быть выбраны для установки");
 
             //Component:
@@ -2118,7 +2118,7 @@ namespace RelhaxModpack
             German.Add("modsNotFoundTechnical", "Die folgenden Pakete konnten nicht gefunden werden und wurden wahrscheinlich entfernt");
             Polish.Add("modsNotFoundTechnical", "Nie udało się znaleźć poniższych pakietów, prawdopodobnie zostały usunięte");
             French.Add("modsNotFoundTechnical", TranslationNeeded);
-            Spanish.Add("modsNotFoundTechincal", TranslationNeeded);
+            Spanish.Add("modsNotFoundTechincal", "Los siguientes paquetes no han sido encontrados, y han sido probablemente eliminados");
             Russian.Add("modsNotFoundTechnical", "Следующие пакеты не найдены, вероятно, они были удалены.");
 
 
@@ -2128,7 +2128,7 @@ namespace RelhaxModpack
             German.Add("modsBrokenStructure", "Die folgenden Pakete wurden aufgrund Modifizierungen an der Datenbankstruktur deaktiviert und müssen neu ausgewählt werden.");
             Polish.Add("modsBrokenStructure", "Poniższe pakiety zostały na chwilę obecną dezaktywowane z powodu zmian w strukturze pakietu. Jeśli chcesz je zainstalować, musisz je zaznaczyć ponownie.");
             French.Add("modsBrokenStructure", TranslationNeeded);
-            Spanish.Add("modsBrokenStructure", TranslationNeeded);
+            Spanish.Add("modsBrokenStructure", "Los siguientes paquetes han sido deshabilitados debido a modificaciones en la estructura de paquetes. Deberá volver a seleccionarlos si quiere instalarlos.");
             Russian.Add("modsBrokenStructure", "Следующие пакеты были отключены в связи с изменениями в структуре пакета. Вам нужно перепроверить их, если хотите произвести установку.");
 
 
