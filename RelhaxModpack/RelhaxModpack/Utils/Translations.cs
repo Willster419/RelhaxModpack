@@ -2991,7 +2991,7 @@ namespace RelhaxModpack
             Spanish.Add("AtlasExtraction", "Extrayendo archivo de Atlas");
             Russian.Add("AtlasExtraction", "Распаковывается файл-атлас");
 
-            //Component:
+            //Component: copyingFile
             //
             English.Add("copyingFile", "Copying file");
             German.Add("copyingFile", "Kopieren von Dateien");
@@ -3000,7 +3000,7 @@ namespace RelhaxModpack
             Spanish.Add("copyingFile", "Copiando archivo");
             Russian.Add("copyingFile", "Копирование файла");
 
-            //Component:
+            //Component: deletingFile
             //
             English.Add("deletingFile", "Deleting file");
             German.Add("deletingFile", "Lösche Datei");
@@ -3009,12 +3009,11 @@ namespace RelhaxModpack
             Spanish.Add("deletingFile", "Eliminando archivo");
             Russian.Add("deletingFile", "Удаление файла");
 
-            //Component DeleteMods
+            //Component scanningModsFolders
             //
             English.Add("scanningModsFolders", "Scanning mods folders ...");
             German.Add("scanningModsFolders", "Durchsuche Mod Verzeichnisse ...");
             Polish.Add("scanningModsFolders", "Analizowanie folderu modów");
-            Polish.Add("scanningModsFolders", "Skanowanie folderu modyfikacji");
             French.Add("scanningModsFolders", "Scan des dossiers mods...");
             Spanish.Add("scanningModsFolders", "Escaneando carpetas de mods...");
             Russian.Add("scanningModsFolders", "Сканируются папки модов...");
