@@ -2319,14 +2319,6 @@ namespace RelhaxModpack
             Spanish.Add("Downloading", "Descargando");
             Russian.Add("Downloading", "Идёт скачивание");
 
-            //Component: seconds
-            //
-            English.Add("seconds", "seconds");
-            German.Add("seconds", "Sekunden");
-            Polish.Add("seconds", "sekund");
-            French.Add("seconds", "Secondes");
-            Russian.Add("seconds", "сек.");
-
             //Component:
             //
             English.Add("patching", "Patching");
