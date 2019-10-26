@@ -602,7 +602,7 @@ namespace RelhaxModpack
             English.Add("Forms_GER_EUButtonDescription", "Go to the German-speaking 'World of Tanks' forum page for the EU server");
             German.Add("Forms_GER_EUButtonDescription", "Gehe zur deutschsprachigen 'World of Tanks' Forum Seite für den EU Server");
             Polish.Add("Forms_GER_EUButtonDescription", "Idź do niemieckojęzycznego forum 'World of Tanks' dla serwerów NA");
-            French.Add("Forms_GER_EUButtonDescription", "Aller sur la page Allemande du forum de World of Tanks pour le serveur EU);
+            French.Add("Forms_GER_EUButtonDescription", "Aller sur la page Allemande du forum de World of Tanks pour le serveur EU");
             Spanish.Add("Forms_GER_EUButtonDescription", "Acceder a la página en alemán del foro de 'World of Tanks' del servidor de EU");
             Russian.Add("Forms_ENG_GERButtonDescription", "Перейти на страницу модпака на World of Tanks EU (страница на немецком)");
 
@@ -964,7 +964,7 @@ namespace RelhaxModpack
             English.Add("OneClickInstallCBDescription", "Enable the installer to automatically load your selection file and install it");
             German.Add("OneClickInstallCBDescription", "Mit dieser Funktion wird deine Auswahldatei automatisch geladen und installiert wenn du auf den Wähle Mods Knopf drückst.");
             Polish.Add("OneClickInstallCBDescription", "Automatycznie załaduj plik konfiguracji i zainstaluj go");
-            French.Add("OneClickInstallCBDescription", "Autoriser l'installateur à automatiquement charger votre sélection de fichier et à l'installer);
+            French.Add("OneClickInstallCBDescription", "Autoriser l'installateur à automatiquement charger votre sélection de fichier et à l'installer");
             Spanish.Add("OneClickInstallCBDescription", "Permite al instalador cargar automáticamente el archivo de selección e instalarlo");
             Russian.Add("OneClickInstallCBDescription", "Позволить установщику автоматически запустить установку модов сразу после выбора предустановки");
 
@@ -1203,7 +1203,7 @@ namespace RelhaxModpack
             English.Add("ThemeCustomText", "Custom");
             German.Add("ThemeCustomText", "Benutzerdefiniert");
             Polish.Add("ThemeCustomText", "Własny");
-            French.Add("ThemeCustom", "Personnaliser);
+            French.Add("ThemeCustom", "Personnaliser");
             Spanish.Add("ThemeCustomText", "Personalizado");
             Russian.Add("ThemeCustomText", "Сторонняя");
 
@@ -1986,8 +1986,8 @@ namespace RelhaxModpack
             //
             English.Add("FirstTimeUserModsWarning", "This tab is for selecting zip files you place in the \"RelhaxUserMods\" folder. They must be zip files, and should use a root directory folder of the \"World_of_Tanks\" directory");
             German.Add("FirstTimeUserModsWarning", "Auf dieser Registerkarte kannst du ZIP-Dateien auswählen, die du im Ordner \"RelhaxUserMods\" ablegst. Es müssen Zip-Dateien sein und sollten einen Stammverzeichnisordner des Verzeichnisses \"World_of_Tanks\" verwenden");
-            Polish.Add("FirstTimeUserModsWarning", "Ta karta służy do wybierania plików zip umieszczanych w folderze \"RelhaxUserMods\". Muszą to być pliki zip i powinny używać katalogu głównego katalogu \"World_of_Tanks\");
-            French.Add("FirstTimeUserModsWarning", "Cet onglet sert à sélectionner les fichiers zip que vous placez dans le dossier \"RelhaxUserMods\". Ils doivent être des fichiers zip et doivent utiliser un dossier de répertoire racine du répertoire \"World_of_Tanks\");
+            Polish.Add("FirstTimeUserModsWarning", "Ta karta służy do wybierania plików zip umieszczanych w folderze \"RelhaxUserMods\". Muszą to być pliki zip i powinny używać katalogu głównego katalogu \"World_of_Tanks\"");
+            French.Add("FirstTimeUserModsWarning", "Cet onglet sert à sélectionner les fichiers zip que vous placez dans le dossier \"RelhaxUserMods\". Ils doivent être des fichiers zip et doivent utiliser un dossier de répertoire racine du répertoire \"World_of_Tanks\"");
             Spanish.Add("FirstTimeUserModsWarning", "Esta pestaña es para seleccionar archivos zip en el directorio \"RelhaxUserMods\". Deben ser archivos zip, y derían usar un directorio raíz del directorio \"World_of_Tanks\"");
             Russian.Add("FirstTimeUserModsWarning", "Данная вкладка предназначена для выбора модов, расположенных в папке \"RelhaxUserMods\". Они должны быть в виде ZIP-архивов и использовать корневую папку World of Tanks.");
 
@@ -2870,7 +2870,7 @@ namespace RelhaxModpack
             English.Add("installClearLogs", "Deleting log files");
             German.Add("installClearLogs", "Protokolldateien löschen");
             Polish.Add("installClearLogs", "Usuwanie logów");
-            French.Add("installClearLogs", "Suppression des fichiers logs);
+            French.Add("installClearLogs", "Suppression des fichiers logs");
             Spanish.Add("installClearLogs", "Eliminando archivos de registro");
             Russian.Add("installClearLogs", "Удаляются log-файлы");
 
@@ -2986,7 +2986,7 @@ namespace RelhaxModpack
             English.Add("installCleanup", "Cleaning Up");
             German.Add("installCleanup", "Räume auf");
             Polish.Add("installCleanup", "Czyszczenie");
-            French.Add("installCleanup", "Nettoyer";
+            French.Add("installCleanup", "Nettoyer");
             Spanish.Add("installCleanup", "Limpiando");
             Russian.Add("installCleanup", "Очистка...");
 
