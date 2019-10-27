@@ -682,7 +682,7 @@ namespace RelhaxModpack
         /// </summary>
         /// <param name="xmlUnpack">The Xml unpack instructions object</param>
         /// <param name="unpackBuilder">The stringBuilder to log the generated files location for the install log</param>
-        public static void UnpackXmlFile(XmlUnpack xmlUnpack, StringBuilder unpackBuilder)
+        public static bool UnpackXmlFile(XmlUnpack xmlUnpack, StringBuilder unpackBuilder)
         {
             //log info for debugging if need be
             Logging.Info(xmlUnpack.DumpInfoToLog);
@@ -696,7 +696,7 @@ namespace RelhaxModpack
             if(File.Exists(destinationCompletePath))
             {
                 Logging.Info("Replacement file already exists, skipping");
-                return;
+                return true;
             }
 
             Utils.Unpack(xmlUnpack.Pkg, sourceCompletePath, destinationCompletePath);
@@ -707,10 +707,12 @@ namespace RelhaxModpack
             {
                 XmlBinaryHandler binaryHandler = new XmlBinaryHandler();
                 binaryHandler.UnpackXmlFile(destinationCompletePath);
+                return true;
             }
             catch (Exception xmlUnpackExceptino)
             {
                 Logging.Exception(xmlUnpackExceptino.ToString());
+                return false;
             }
         }
         #endregion
