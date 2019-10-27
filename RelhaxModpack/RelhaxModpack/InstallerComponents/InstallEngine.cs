@@ -2771,9 +2771,7 @@ namespace RelhaxModpack.InstallerComponents
                             if (tsk.Status == TaskStatus.Canceled || tsk.Status == TaskStatus.Faulted || tsk.Status == TaskStatus.RanToCompletion)
                                 break;
                         }
-                        tsk.Dispose();
                     }
-                    InstallerCreatedTasks = null;
                     Logging.Info("all child threads stopped, stopping master");
                 }
                 else
