@@ -19,6 +19,8 @@ using System.Timers;
 using System.Threading;
 using Timer = System.Timers.Timer;
 using Microsoft.Win32;
+using System.Text;
+using RelhaxModpack.InstallerComponents;
 
 namespace RelhaxModpack
 {
@@ -1474,7 +1476,7 @@ namespace RelhaxModpack
 
             //run install
             Logging.Debug("running installation from MainWindow");
-            InstallerComponents.RelhaxInstallFinishedEventArgs results = await installEngine.RunInstallationAsync(progress);
+            RelhaxInstallFinishedEventArgs results = await installEngine.RunInstallationAsync(progress);
             Logging.Debug("installation has finished, returned to MainWindow");
             installEngine.Dispose();
             installEngine = null;
@@ -1506,8 +1508,10 @@ namespace RelhaxModpack
             TotalProgressBar.Value = TotalProgressBar.Maximum;
 
             //after waiting for the installation...
-            if (results.ExitCode == InstallerComponents.InstallerExitCodes.Success)
+            if (results.ExitCode == InstallerExitCodes.Success)
             {
+                if(ModpackSettings.VerboseLogging)
+                    DisplayAndLogInstallErrors(results, false);
                 if (ModpackSettings.ShowInstallCompleteWindow)
                 {
                     InstallFinished installFinished = new InstallFinished();
@@ -1528,16 +1532,28 @@ namespace RelhaxModpack
             }
             else
             {
-                //explain why if failed
-                MessageBox.Show(string.Format("{0}{1}{2}", Translations.GetTranslatedString("installFailed") + ":", Environment.NewLine, results.ExitCode.ToString()));
-                //and log
-                Logging.WriteToLog(string.Format("Installer failed to install, exit code {0}\n{1}", results.ExitCode.ToString(), results.ErrorMessage),
-                    Logfiles.Application, LogLevel.Exception);
+                DisplayAndLogInstallErrors(results, true);
                 ToggleUIButtons(true);
             }
             //Run task to get backup text file size if a backup was done
             if(ModpackSettings.BackupModFolder)
                 GetBackupFilesizesAsync(true);
+        }
+
+        private void DisplayAndLogInstallErrors(RelhaxInstallFinishedEventArgs results, bool addResultsExitCode)
+        {
+            if (results.InstallFailedSteps.Count > 0)
+            {
+                StringBuilder errorBuilder = new StringBuilder();
+                errorBuilder.AppendFormat("{0}{1}", Translations.GetTranslatedString("installFailed") + ":", Environment.NewLine);
+                if (!results.InstallFailedSteps.Contains(results.ExitCode) && addResultsExitCode)
+                    results.InstallFailedSteps.Add(results.ExitCode);
+                errorBuilder.Append(string.Join(Environment.NewLine, results.InstallFailedSteps));
+
+                Logging.Exception("The installer failed in the following steps: {0}", string.Join(",", results.InstallFailedSteps));
+
+                MessageBox.Show(errorBuilder.ToString());
+            }
         }
 
         private void OnInstallProgressChanged(object sender, RelhaxInstallerProgress e)

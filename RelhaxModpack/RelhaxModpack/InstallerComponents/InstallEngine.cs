@@ -171,6 +171,8 @@ namespace RelhaxModpack.InstallerComponents
         /// Reference to list of dependencies
         /// </summary>
         public List<DatabasePackage> GlobalDependencies;
+
+        public List<InstallerExitCodes> InstallFailedSteps = new List<InstallerExitCodes>();
     }
 
     /// <summary>
@@ -735,7 +737,11 @@ namespace RelhaxModpack.InstallerComponents
                     Prog.Filename = xmlUnpack.FileName;
                     Progress.Report(Prog);
 
-                    XmlUtils.UnpackXmlFile(xmlUnpack, unpackBuilder);
+                    if(!XmlUtils.UnpackXmlFile(xmlUnpack, unpackBuilder))
+                    {
+                        if (!InstallFinishedArgs.InstallFailedSteps.Contains(InstallerExitCodes.XmlUnpackError))
+                            InstallFinishedArgs.InstallFailedSteps.Add(InstallerExitCodes.XmlUnpackError);
+                    }
                 }
                 Logging.Installer(unpackBuilder.ToString());
                 Logging.Info("Unpack of xml files complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
@@ -773,7 +779,11 @@ namespace RelhaxModpack.InstallerComponents
                         ProgPatch.ParrentCurrent++;
                         LockProgress();
 
-                        PatchUtils.RunPatch(patch);
+                        if(PatchUtils.RunPatch(patch) == PatchExitCode.Error)
+                        {
+                            if (!InstallFinishedArgs.InstallFailedSteps.Contains(InstallerExitCodes.PatchError))
+                                InstallFinishedArgs.InstallFailedSteps.Add(InstallerExitCodes.PatchError);
+                        }
                     }
                     Logging.Info("Patching of files complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
                     ProgPatch.TotalCurrent = (int)InstallerExitCodes.PatchError;
@@ -1866,6 +1876,8 @@ namespace RelhaxModpack.InstallerComponents
                             if ( code != AtlasesCreator.FailCode.None)
                             {
                                 Logging.Exception("Failed to create atlas file {0}: {1}", Path.GetFileName(atlasData.AtlasFile), code.ToString());
+                                if (!InstallFinishedArgs.InstallFailedSteps.Contains(InstallerExitCodes.ContourIconAtlasError))
+                                    InstallFinishedArgs.InstallFailedSteps.Add(InstallerExitCodes.ContourIconAtlasError);
                                 return;
                             }
                         }
