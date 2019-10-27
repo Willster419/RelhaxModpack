@@ -118,7 +118,7 @@ namespace RelhaxModpack.AtlasesCreator
 
             //set the mapfile name
             Atlas.MapFile = string.Format("{0}.xml", Path.GetFileNameWithoutExtension(Atlas.AtlasFile));
-            Logging.Debug("atlas file {0}: set map name as {1}", Path.GetFileName(Atlas.AtlasFile), Path.GetFileName(Atlas.MapFile));
+            Logging.Debug("[atlas file {0}]: set map name as {1}", Path.GetFileName(Atlas.AtlasFile), Path.GetFileName(Atlas.MapFile));
 
             //set location to extract original WG atlas files
             tempAtlasImageFile = Path.Combine(Settings.RelhaxTempFolderPath, Atlas.AtlasFile);
@@ -131,9 +131,9 @@ namespace RelhaxModpack.AtlasesCreator
                 File.Delete(tempAtlasMapFile);
 
             //extract the map and atlas files
-            Logging.Info("atlas file {0}: unpack of atlas and map starting", Path.GetFileName(Atlas.AtlasFile));
+            Logging.Info("[atlas file {0}]: unpack of atlas and map starting", Path.GetFileName(Atlas.AtlasFile));
             stopwatch.Restart();
-            Logging.Debug("atlas file {0}: atlas file unpack", Path.GetFileName(Atlas.AtlasFile));
+            Logging.Debug("[atlas file {0}]: atlas file unpack", Path.GetFileName(Atlas.AtlasFile));
             lock(AtlasUtils.AtlasLoaderLockObject)
             {
                 Utils.Unpack(Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.AtlasFile), tempAtlasImageFile);
@@ -141,7 +141,7 @@ namespace RelhaxModpack.AtlasesCreator
             OnAtlasProgres?.Invoke(this,null);
             Token.ThrowIfCancellationRequested();
 
-            Logging.Debug("atlas file {0}: map file unpack", Path.GetFileName(Atlas.AtlasFile));
+            Logging.Debug("[atlas file {0}]: map file unpack", Path.GetFileName(Atlas.AtlasFile));
             lock (AtlasUtils.AtlasLoaderLockObject)
             {
                 Utils.Unpack(Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.MapFile), tempAtlasMapFile);
@@ -150,19 +150,19 @@ namespace RelhaxModpack.AtlasesCreator
             Token.ThrowIfCancellationRequested();
 
             stopwatch.Stop();
-            Logging.Info("atlas file {0}: unpack completed in {1} msec", Path.GetFileName(Atlas.AtlasFile), stopwatch.ElapsedMilliseconds);
+            Logging.Info("[atlas file {0}]: unpack completed in {1} msec", Path.GetFileName(Atlas.AtlasFile), stopwatch.ElapsedMilliseconds);
             stopwatch.Restart();
 
             //parse the xml map file into the list of subtextures
-            Logging.Info("atlas file {0}: parsing map file", Path.GetFileName(Atlas.AtlasFile));
-            Logging.Debug("atlas file {0}: using map file {1}", Path.GetFileName(Atlas.AtlasFile), tempAtlasMapFile);
+            Logging.Info("[atlas file {0}]: parsing map file", Path.GetFileName(Atlas.AtlasFile));
+            Logging.Debug("[atlas file {0}]: using map file {1}", Path.GetFileName(Atlas.AtlasFile), tempAtlasMapFile);
             Atlas.TextureList = LoadMapFile(tempAtlasMapFile);
             OnAtlasProgres?.Invoke(this, null);
 
             //using the parsed size and location definitions from above, copy each individual subtexture to the texture list
             Size originalAtlasSize = new Size();
-            Logging.Info("atlas file {0}: loading atlas to bitmap data", Path.GetFileName(Atlas.AtlasFile));
-            Logging.Debug("atlas file {0}: using atlas file {1}", Path.GetFileName(Atlas.AtlasFile), tempAtlasImageFile);
+            Logging.Info("[atlas file {0}]: loading atlas to bitmap data", Path.GetFileName(Atlas.AtlasFile));
+            Logging.Debug("[atlas file {0}]: using atlas file {1}", Path.GetFileName(Atlas.AtlasFile), tempAtlasImageFile);
             stopwatch.Restart();
             lock (AtlasUtils.AtlasLoaderLockObject)
             {
@@ -176,7 +176,7 @@ namespace RelhaxModpack.AtlasesCreator
             originalAtlasSize = atlasImage.Size;
 
             //copy the subtexture bitmap data to each texture bitmap data
-            Logging.Info("atlas file {0}: parsing bitmap data", Path.GetFileName(Atlas.AtlasFile));
+            Logging.Info("[atlas file {0}]: parsing bitmap data", Path.GetFileName(Atlas.AtlasFile));
             //lock the atlas image into memory
             Rectangle rect = new Rectangle(0, 0, atlasImage.Width, atlasImage.Height);
             BitmapData atlasLock = atlasImage.LockBits(rect, ImageLockMode.ReadOnly, atlasImage.PixelFormat);
@@ -206,7 +206,7 @@ namespace RelhaxModpack.AtlasesCreator
             OnAtlasProgres?.Invoke(this, null);
 
             stopwatch.Stop();
-            Logging.Info("atlas file {0}: parsing bitmap data completed in {1} msec", Path.GetFileName(Atlas.AtlasFile), stopwatch.ElapsedMilliseconds);
+            Logging.Info("[atlas file {0}]: parsing bitmap data completed in {1} msec", Path.GetFileName(Atlas.AtlasFile), stopwatch.ElapsedMilliseconds);
 
             //prepare atlas objects for processing
             Atlas.AtlasFile = Path.Combine(Atlas.AtlasSaveDirectory, Atlas.AtlasFile);
@@ -238,34 +238,34 @@ namespace RelhaxModpack.AtlasesCreator
             //
             if ((originalAtlasSize.Height * originalAtlasSize.Width) > (Atlas.AtlasWidth * Atlas.AtlasHeight))
             {
-                Logging.Warning("atlas file {0}: max possible size is smaller then original size", Path.GetFileName(Atlas.AtlasFile));
+                Logging.Warning("[atlas file {0}]: max possible size is smaller then original size", Path.GetFileName(Atlas.AtlasFile));
                 Logging.Warning("original h x w:     {1} x {2}", originalAtlasSize.Height, originalAtlasSize.Width);
                 Logging.Warning("max possible h x w: {3} x {4}", Atlas.AtlasHeight, Atlas.AtlasWidth);
             }
             else
             {
-                Logging.Debug("atlas file {0}: max possible size of new atlas file-> {1} (h) x {2} (w)", Path.GetFileName(Atlas.AtlasFile), Atlas.AtlasHeight, Atlas.AtlasWidth);
+                Logging.Debug("[atlas file {0}]: max possible size of new atlas file-> {1} (h) x {2} (w)", Path.GetFileName(Atlas.AtlasFile), Atlas.AtlasHeight, Atlas.AtlasWidth);
             }
 
             //wait for task here
-            Logging.Info("atlas file {0}: waiting for mod texture parse task", Path.GetFileName(Atlas.AtlasFile));
+            Logging.Info("[atlas file {0}]: waiting for mod texture parse task", Path.GetFileName(Atlas.AtlasFile));
             AtlasUtils.ParseModTexturesTask.Wait();
-            Logging.Info("atlas file {0}: mod texture parse task complete, continue execution", Path.GetFileName(Atlas.AtlasFile));
+            Logging.Info("[atlas file {0}]: mod texture parse task complete, continue execution", Path.GetFileName(Atlas.AtlasFile));
             OnAtlasProgres?.Invoke(this, null);
 
             //check if any custom mod contour icons were parsed
             if (AtlasUtils.ModContourIconImages.Count > 0)
             {
-                Logging.Info("atlas file {0}: {1} custom icons parsed", Path.GetFileName(Atlas.AtlasFile), AtlasUtils.ModContourIconImages.Count);
+                Logging.Info("[atlas file {0}]: {1} custom icons parsed", Path.GetFileName(Atlas.AtlasFile), AtlasUtils.ModContourIconImages.Count);
             }
             else
             {
-                Logging.Info("atlas file {0}: 0 custom icons parsed for atlas file {1}, no need to make a custom atlas!", AtlasUtils.ModContourIconImages.Count, Path.GetFileName(Atlas.AtlasFile));
+                Logging.Info("[atlas file {0}]: 0 custom icons parsed for atlas file {1}, no need to make a custom atlas!", AtlasUtils.ModContourIconImages.Count, Path.GetFileName(Atlas.AtlasFile));
                 return FailCode.None;
             }
             
             //replace the original atlas textures with the mod ones
-            Logging.Info("atlas file {0}: mod images replacing starting", Path.GetFileName(Atlas.AtlasFile));
+            Logging.Info("[atlas file {0}]: mod images replacing starting", Path.GetFileName(Atlas.AtlasFile));
             stopwatch.Restart();
             for (int i = 0; i < Atlas.TextureList.Count; i++)
             {
@@ -287,10 +287,10 @@ namespace RelhaxModpack.AtlasesCreator
             }
             OnAtlasProgres?.Invoke(this, null);
             stopwatch.Stop();
-            Logging.Info("atlas file {0}: mod images replacing completed in {1} msec", Path.GetFileName(Atlas.AtlasFile), stopwatch.ElapsedMilliseconds);
+            Logging.Info("[atlas file {0}]: mod images replacing completed in {1} msec", Path.GetFileName(Atlas.AtlasFile), stopwatch.ElapsedMilliseconds);
             
             //(finally) run the atlas creator program
-            Logging.Info("atlas file {0}: building starting", Path.GetFileName(Atlas.AtlasFile));
+            Logging.Info("[atlas file {0}]: building starting", Path.GetFileName(Atlas.AtlasFile));
             stopwatch.Restart();
 
             // pack the image, generating a map only if desired
@@ -301,13 +301,13 @@ namespace RelhaxModpack.AtlasesCreator
             OnAtlasProgres?.Invoke(this, null);
             if (result != 0)
             {
-                Logging.Error("atlas file {0}: There was an error making the image sheet", Path.GetFileName(Atlas.AtlasFile));
+                Logging.Error("[atlas file {0}]: There was an error making the image sheet", Path.GetFileName(Atlas.AtlasFile));
                 //error result 7 = "failed to pack image" most likely it won't fit
                 return result;
             }
             else
             {
-                Logging.Info("atlas file {0}: Success Packing into {1} x {2} pixel", Path.GetFileName(Atlas.AtlasFile), outputImage.Height, outputImage.Width);
+                Logging.Info("[atlas file {0}]: Success Packing into {1} x {2} pixel", Path.GetFileName(Atlas.AtlasFile), outputImage.Height, outputImage.Width);
             }
 
             //save it to the class for disposal
@@ -320,7 +320,7 @@ namespace RelhaxModpack.AtlasesCreator
             //then save
             SaveDDS(Atlas.AtlasFile, outputImage);
             OnAtlasProgres?.Invoke(this, null);
-            Logging.Info("atlas file {0}: successfully created Atlas image: {1}", Path.GetFileName(Atlas.AtlasFile), Atlas.AtlasFile);
+            Logging.Info("[atlas file {0}]: successfully created Atlas image: {1}", Path.GetFileName(Atlas.AtlasFile), Atlas.AtlasFile);
 
             //export the mapfile
             //delete one if it exists
@@ -330,10 +330,10 @@ namespace RelhaxModpack.AtlasesCreator
             //then save
             SaveMapfile(Atlas.MapFile, outputMap);
             OnAtlasProgres?.Invoke(this, null);
-            Logging.Info("atlas file {0}: successfully created map: {1}", Path.GetFileName(Atlas.AtlasFile), Atlas.MapFile);
+            Logging.Info("[atlas file {0}]: successfully created map: {1}", Path.GetFileName(Atlas.AtlasFile), Atlas.MapFile);
 
             stopwatch.Stop();
-            Logging.Info("atlas file {0}: building completed in {1} msec", Path.GetFileName(Atlas.AtlasFile), stopwatch.ElapsedMilliseconds);
+            Logging.Info("[atlas file {0}]: building completed in {1} msec", Path.GetFileName(Atlas.AtlasFile), stopwatch.ElapsedMilliseconds);
             
             return FailCode.None;
         }
@@ -468,7 +468,7 @@ namespace RelhaxModpack.AtlasesCreator
         #region IDisposable Support
         private void DisposeCleanup()
         {
-            Logging.Info("atlas file {0}: disposing resources from DisposeCleanup()", Path.GetFileName(Atlas.AtlasFile));
+            Logging.Info("[atlas file {0}]: disposing resources from DisposeCleanup()", Path.GetFileName(Atlas.AtlasFile));
             //dispose main atlas image
             if (atlasImage != null)
             {
