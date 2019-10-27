@@ -82,12 +82,7 @@ namespace RelhaxModpack.AtlasesCreator
         /// <summary>
         /// The object of atlas arguments for building the image
         /// </summary>
-        public Atlas Atlas;
-
-        /// <summary>
-        /// Object that exists in all Atlas creation threads. Used for sensitive areas of code that can only be executed by one thread at a time
-        /// </summary>
-        public object DebugLockObject;
+        public Atlas Atlas = null;
 
         /// <summary>
         /// The token for handling a cancel call from the user
@@ -101,97 +96,11 @@ namespace RelhaxModpack.AtlasesCreator
 
         private ImagePacker imagePacker = new ImagePacker();
         private Stopwatch stopwatch = new Stopwatch();
-        private Bitmap atlasImage;
-        private Bitmap outputAtlasImage;
+        private Bitmap atlasImage = null;
+        private Bitmap outputAtlasImage = null;
 
         private string tempAtlasImageFile;
         private string tempAtlasMapFile;
-
-        private static Task parseModTexturesTask;
-        private static List<Texture> realModTextures;
-        private static Stopwatch modParseStopwatch = new Stopwatch();
-
-        /// <summary>
-        /// Loads all mod textures from disk into texture objects. This is done on a separate thread so it is not done redundantly multiple times on each atlas thread
-        /// </summary>
-        /// <param name="allModFolderPaths">The list of absolute paths containing images to be loaded</param>
-        /// <param name="token">The cancellation token</param>
-        /// <returns>The list of textures</returns>
-        public static Task ParseModTexturesAsync(List<string> allModFolderPaths, CancellationToken token)
-        {
-            parseModTexturesTask = Task.Run(() =>
-            {
-                //override bitmaps with what exists in the mods folders
-                Logging.Info("static: mod images parsing starting");
-                modParseStopwatch.Restart();
-                realModTextures = new List<Texture>();
-                Logging.Debug("static: mod texture folder count: {0}", allModFolderPaths.Count);
-                foreach (string folder in allModFolderPaths)
-                {
-                    string realFolder = Utils.MacroReplace(folder, ReplacementTypes.FilePath);
-                    Logging.Info("static: checking for images in directory {0}", realFolder);
-                    token.ThrowIfCancellationRequested();
-                    if (!Directory.Exists(realFolder))
-                    {
-                        Logging.Warning("static: directory {0} does not exist, skipping", realFolder);
-                        continue;
-                    }
-
-                    //get every image file in the folder
-                    File.SetAttributes(realFolder, FileAttributes.Normal);
-                    FileInfo[] customContourIcons = new string[] { "*.jpg", "*.png", "*.bmp" }
-                                .SelectMany(i => new DirectoryInfo(realFolder).GetFiles(i, SearchOption.TopDirectoryOnly))
-                                .ToArray();
-
-                    if (customContourIcons.Count() == 0)
-                    {
-                        Logging.Warning("static: directory {0} does not contain image files, skipping", realFolder);
-                        continue;
-                    }
-
-                    foreach (FileInfo customContourIcon in customContourIcons)
-                    {
-                        token.ThrowIfCancellationRequested();
-                        //load the custom image into the texture list
-                        string filename = Path.GetFileNameWithoutExtension(customContourIcon.Name);
-                        //load the bitmap as well
-                        Bitmap newImage = Image.FromFile(customContourIcon.FullName) as Bitmap;
-                        //don't care about the x an y for the mod textures
-                        realModTextures.Add(new Texture()
-                        {
-                            Name = filename,
-                            Height = newImage.Height,
-                            Width = newImage.Width,
-                            X = 0,
-                            Y = 0,
-                            AtlasImage = newImage
-                        });
-                    }
-                }
-                Logging.Info("static: mod images parsing completed in {0} msec", modParseStopwatch.ElapsedMilliseconds);
-                modParseStopwatch.Stop();
-            });
-            return parseModTexturesTask;
-        }
-
-        /// <summary>
-        /// Dispose of all textures in the shared mod texture list
-        /// </summary>
-        public static void DisposeparseModTextures()
-        {
-            if (realModTextures != null)
-            {
-                foreach (Texture tex in realModTextures)
-                {
-                    if (tex.AtlasImage != null)
-                    {
-                        tex.AtlasImage.Dispose();
-                        tex.AtlasImage = null;
-                    }
-                }
-                realModTextures = null;
-            }
-        }
 
         /// <summary>
         /// Create the atlas image
@@ -202,8 +111,6 @@ namespace RelhaxModpack.AtlasesCreator
             //input checks
             if (Atlas == null)
                 throw new BadMemeException("you forgot to set the atlas object. nice.");
-            if (DebugLockObject == null)
-                throw new BadMemeException("you forgot to set the debug lock object. very nice.");
 
             //create the save directory if it does not already exist
             if (!Directory.Exists(Atlas.AtlasSaveDirectory))
@@ -227,7 +134,7 @@ namespace RelhaxModpack.AtlasesCreator
             Logging.Info("atlas file {0}: unpack of atlas and map starting", Path.GetFileName(Atlas.AtlasFile));
             stopwatch.Restart();
             Logging.Debug("atlas file {0}: atlas file unpack", Path.GetFileName(Atlas.AtlasFile));
-            lock(DebugLockObject)
+            lock(AtlasUtils.AtlasLoaderLockObject)
             {
                 Utils.Unpack(Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.AtlasFile), tempAtlasImageFile);
             }
@@ -235,7 +142,7 @@ namespace RelhaxModpack.AtlasesCreator
             Token.ThrowIfCancellationRequested();
 
             Logging.Debug("atlas file {0}: map file unpack", Path.GetFileName(Atlas.AtlasFile));
-            lock (DebugLockObject)
+            lock (AtlasUtils.AtlasLoaderLockObject)
             {
                 Utils.Unpack(Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.MapFile), tempAtlasMapFile);
             }
@@ -257,7 +164,7 @@ namespace RelhaxModpack.AtlasesCreator
             Logging.Info("atlas file {0}: loading atlas to bitmap data", Path.GetFileName(Atlas.AtlasFile));
             Logging.Debug("atlas file {0}: using atlas file {1}", Path.GetFileName(Atlas.AtlasFile), tempAtlasImageFile);
             stopwatch.Restart();
-            lock (DebugLockObject)
+            lock (AtlasUtils.AtlasLoaderLockObject)
             {
                 //the native library can only be used once at a time
                 atlasImage = LoadDDS(tempAtlasImageFile);
@@ -270,6 +177,9 @@ namespace RelhaxModpack.AtlasesCreator
 
             //copy the subtexture bitmap data to each texture bitmap data
             Logging.Info("atlas file {0}: parsing bitmap data", Path.GetFileName(Atlas.AtlasFile));
+            //lock the atlas image into memory
+            Rectangle rect = new Rectangle(0, 0, atlasImage.Width, atlasImage.Height);
+            BitmapData atlasLock = atlasImage.LockBits(rect, ImageLockMode.ReadOnly, atlasImage.PixelFormat);
             foreach (Texture texture in Atlas.TextureList)
             {
                 Token.ThrowIfCancellationRequested();
@@ -286,9 +196,13 @@ namespace RelhaxModpack.AtlasesCreator
                 {
                     Logging.Exception("failed to clone atlas image data");
                     Logging.Exception(ex.ToString());
+                    atlasImage.UnlockBits(atlasLock);
+                    atlasImage.Dispose();
                     return FailCode.ImageImporter;
                 }
             }
+            atlasImage.UnlockBits(atlasLock);
+            atlasImage.Dispose();
             OnAtlasProgres?.Invoke(this, null);
 
             stopwatch.Stop();
@@ -335,18 +249,18 @@ namespace RelhaxModpack.AtlasesCreator
 
             //wait for task here
             Logging.Info("atlas file {0}: waiting for mod texture parse task", Path.GetFileName(Atlas.AtlasFile));
-            parseModTexturesTask.Wait();
+            AtlasUtils.ParseModTexturesTask.Wait();
             Logging.Info("atlas file {0}: mod texture parse task complete, continue execution", Path.GetFileName(Atlas.AtlasFile));
             OnAtlasProgres?.Invoke(this, null);
 
             //check if any custom mod contour icons were parsed
-            if (realModTextures.Count > 0)
+            if (AtlasUtils.ModContourIconImages.Count > 0)
             {
-                Logging.Info("atlas file {0}: {1} custom icons parsed", Path.GetFileName(Atlas.AtlasFile), realModTextures.Count);
+                Logging.Info("atlas file {0}: {1} custom icons parsed", Path.GetFileName(Atlas.AtlasFile), AtlasUtils.ModContourIconImages.Count);
             }
             else
             {
-                Logging.Info("atlas file {0}: 0 custom icons parsed for atlas file {1}, no need to make a custom atlas!", realModTextures.Count, Path.GetFileName(Atlas.AtlasFile));
+                Logging.Info("atlas file {0}: 0 custom icons parsed for atlas file {1}, no need to make a custom atlas!", AtlasUtils.ModContourIconImages.Count, Path.GetFileName(Atlas.AtlasFile));
                 return FailCode.None;
             }
             
@@ -358,7 +272,7 @@ namespace RelhaxModpack.AtlasesCreator
                 Token.ThrowIfCancellationRequested();
 
                 //get the matching texture, if it exists
-                Texture[] originalResults = realModTextures.Where(texturee => texturee.Name.Equals(Atlas.TextureList[i].Name)).ToArray();
+                Texture[] originalResults = AtlasUtils.ModContourIconImages.Where(texturee => texturee.Name.Equals(Atlas.TextureList[i].Name)).ToArray();
                 if (originalResults.Count() == 0)
                     continue;
                 Texture textureResult = originalResults[originalResults.Count() - 1];
