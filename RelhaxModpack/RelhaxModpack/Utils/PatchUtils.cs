@@ -295,7 +295,7 @@ namespace RelhaxModpack
                         if (i == replacePathSplit.Count() - 2)
                         {
                             string textToAddIntoNode = replacePathSplit[replacePathSplit.Count() - 1];
-                            textToAddIntoNode = Utils.MacroReplace(textToAddIntoNode, ReplacementTypes.PatchArguements);
+                            textToAddIntoNode = Utils.MacroReplace(textToAddIntoNode, ReplacementTypes.PatchArguementsReplace);
                             Logging.Debug("adding text: {0}", textToAddIntoNode);
                             addElementToMake.InnerText = textToAddIntoNode;
                         }
@@ -766,7 +766,7 @@ namespace RelhaxModpack
 
             //last item in array is item to add
             string valueToAdd = addPathArray[addPathArray.Count - 1];
-            valueToAdd = Utils.MacroReplace(valueToAdd, ReplacementTypes.PatchArguements);
+            valueToAdd = Utils.MacroReplace(valueToAdd, ReplacementTypes.PatchArguementsReplace);
 
             //then remove it
             addPathArray.RemoveAt(addPathArray.Count - 1);
@@ -1016,7 +1016,7 @@ namespace RelhaxModpack
             valueToAdd = valueToAdd.Split(new string[] { @"[index=" }, StringSplitOptions.None)[0];
 
             //and run the result through the un-escape
-            valueToAdd = Utils.MacroReplace(valueToAdd, ReplacementTypes.PatchArguements);
+            valueToAdd = Utils.MacroReplace(valueToAdd, ReplacementTypes.PatchArguementsReplace);
 
             JArray array = JsonArrayGet(p, root);
             if (array == null)
@@ -1253,6 +1253,8 @@ namespace RelhaxModpack
                 jsonValue = c.ToString();
             else if (result.Value is bool b)
                 jsonValue = b.ToString().ToLower();
+            else if (result.Value == null)
+                jsonValue = Utils.PatchJsonNullEscape;
             else
                 jsonValue = result.Value.ToString();
             return jsonValue;
@@ -1261,7 +1263,9 @@ namespace RelhaxModpack
         private static void UpdateJsonValue(JValue jvalue, string value)
         {
             //determine what type value should be used for the json item based on attempted parsing
-            if (Utils.ParseBool(value, out bool resultBool))
+            if (value.Equals(Utils.PatchJsonNullEscape))
+                jvalue.Value = null;
+            else if (Utils.ParseBool(value, out bool resultBool))
                 jvalue.Value = resultBool;
             else if (Utils.ParseInt(value, out int resultInt))
                 jvalue.Value = resultInt;
@@ -1269,7 +1273,7 @@ namespace RelhaxModpack
                 jvalue.Value = resultFloat;
             else
                 jvalue.Value = value;
-            Logging.Debug("Json value parsed as {0}", jvalue.Value.GetType().ToString());
+            Logging.Debug("Json value parsed as data type {0}", jvalue.Value == null? Utils.PatchJsonNullEscape : jvalue.Value.GetType().ToString());
         }
 
         private static JValue CreateJsonValue(string value)

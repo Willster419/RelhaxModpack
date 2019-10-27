@@ -45,7 +45,7 @@ namespace RelhaxModpack
         /// <summary>
         /// Replacing patch arguments of the patch object
         /// </summary>
-        PatchArguements,
+        PatchArguementsReplace,
 
         /// <summary>
         /// Replacing modpack created macros (like [quote]) with the corresponding characters
@@ -157,9 +157,9 @@ namespace RelhaxModpack
         public static Dictionary<string, string> FilePathDict = new Dictionary<string, string>();
 
         /// <summary>
-        /// The dictionary to store patch argument macros
+        /// The dictionary to store patch argument (replace) macros
         /// </summary>
-        public static Dictionary<string, string> PatchArguementsDict = new Dictionary<string, string>()
+        public static Dictionary<string, string> PatchArguementsReplaceDict = new Dictionary<string, string>()
         {
             {@"[sl]", @"/" }
         };
@@ -203,6 +203,8 @@ namespace RelhaxModpack
             {"\r", @"\r" },
             {"\t", @"\t" }
         };
+
+        public const string PatchJsonNullEscape = "[null]";
         #endregion
 
         #region Unmanaged Library stuff
@@ -2302,8 +2304,8 @@ namespace RelhaxModpack
                 case ReplacementTypes.FilePath:
                     dictionary = FilePathDict;
                     break;
-                case ReplacementTypes.PatchArguements:
-                    dictionary = PatchArguementsDict;
+                case ReplacementTypes.PatchArguementsReplace:
+                    dictionary = PatchArguementsReplaceDict;
                     break;
                 case ReplacementTypes.PatchFiles:
                     dictionary = PatchFilesDict;
