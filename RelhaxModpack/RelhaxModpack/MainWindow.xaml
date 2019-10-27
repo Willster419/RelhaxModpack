@@ -96,11 +96,19 @@
                         <CheckBox IsEnabled="True" Tag="InstallWhileDownloadingCB" x:Name="InstallWhileDownloadingCB" Click="OnImmidateExtarctionChanged">
                             <TextBlock x:Name="InstallWhileDownloadingText" Text="Extract while downloading" TextWrapping="Wrap"/>
                         </CheckBox>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <CheckBox Tag="ShowInstallCompleteWindowCB" x:Name="ShowInstallCompleteWindowCB" Click="OnShowInstallCompleteWindowChanged">
+                            <TextBlock x:Name="ShowInstallCompleteWindowText" Text="Show install complete window" TextWrapping="Wrap"/>
+                        </CheckBox>
+                        <CheckBox Tag="BackupModsCB" x:Name="BackupModsCB" Click="OnBackupModsChanged" IsEnabled="True">
+                            <TextBlock x:Name="BackupModsText" Text="Backup mods folder before installation" TextWrapping="Wrap"/>
+                        </CheckBox>
+                        <TextBlock x:Name="BackupModsSizeLabelUsed" Text="Backups: {0}  Size: {1}" Margin="20,0,0,0" TextWrapping="Wrap"/>
                         <CheckBox x:Name="DeleteOldPackagesCB" Tag="DeleteOldPackagesCB" Click="DeleteOldCacheFiles_Click">
                             <TextBlock x:Name="DeleteOldPackagesText" Text="Delete old packages" TextWrapping="Wrap"/>
                         </CheckBox>
                     </StackPanel>
-                    <StackPanel Grid.Column="1"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Application Settings" x:Name="SettingsTabApplicationSettings" Tag="SettingsTabApplicationSettings" Background="#7FE5E5E5">
@@ -119,18 +127,22 @@
                         <CheckBox Tag="ForceManuelGameDetectionCB" x:Name="ForceManuelGameDetectionCB" Click="OnForceManuelGameDetectionChanged">
                             <TextBlock x:Name="ForceManuelGameDetectionText" Text="Force manual game detection" TextWrapping="Wrap"/>
                         </CheckBox>
-                        <CheckBox Tag="ShowInstallCompleteWindowCB" x:Name="ShowInstallCompleteWindowCB" Click="OnShowInstallCompleteWindowChanged">
-                            <TextBlock x:Name="ShowInstallCompleteWindowText" Text="Show install complete window" TextWrapping="Wrap"/>
-                        </CheckBox>
-                        <CheckBox Tag="BackupModsCB" x:Name="BackupModsCB" Click="OnBackupModsChanged" IsEnabled="True">
-                            <TextBlock x:Name="BackupModsText" Text="Backup mods folder before installation" TextWrapping="Wrap"/>
-                        </CheckBox>
-                        <TextBlock x:Name="BackupModsSizeLabelUsed" Text="Backups: {0}  Size: {1}" Margin="20,0,0,0" TextWrapping="Wrap"/>
                         <CheckBox x:Name="SaveDisabledModsInSelection" Tag="SaveDisabledModsInSelection" Click="SaveDisabledModsInSelection_Click">
                             <TextBlock x:Name="SaveDisabledModsInSelectionText" Text="Keep disabled mods when saving selection" TextWrapping="Wrap"/>
                         </CheckBox>
                         <CheckBox x:Name="AdvancedInstallationProgress" Tag="AdvancedInstallationProgress" IsEnabled="True" Click="AdvancedInstallationProgress_Click">
                             <TextBlock x:Name="AdvancedInstallationProgressText" Text="Show advanced installation progress window" TextWrapping="Wrap"/>
+                        </CheckBox>
+                        <CheckBox x:Name="MinimizeToSystemTray" Tag="MinimizeToSystemTray" Click="MinimizeToSystemTray_Click">
+                            <TextBlock x:Name="MinimizeToSystemTrayText" Text="Minimize to system tray" TextWrapping="Wrap"/>
+                        </CheckBox>
+                        <!-- Use a margin of 20 to give it a tree affect-->
+                        <CheckBox Tag="UseBetaDatabaseCB" x:Name="UseBetaDatabaseCB" Click="OnUseBetaDatabaseChanged">
+                            <TextBlock x:Name="UseBetaDatabaseText" Text="Use beta database" TextWrapping="Wrap"/>
+                        </CheckBox>
+                        <ComboBox Tag="UseBetaDatabaseBranches" x:Name="UseBetaDatabaseBranches" SelectionChanged="OnBetaDatabaseSelectionChanged" Margin="20,0,0,0" IsEnabled="False"/>
+                        <CheckBox Tag="UseBetaApplicationCB" x:Name="UseBetaApplicationCB" Click="OnUseBetaAppChanged">
+                            <TextBlock x:Name="UseBetaApplicationText" Text="Use beta application" TextWrapping="Wrap"/>
                         </CheckBox>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
@@ -152,6 +164,12 @@
                         <Button Tag="OpenColorPickerButton" Name="OpenColorPickerButton" Click="OpenColorPickerButton_Click">
                             <TextBlock x:Name="OpenColorPickerButtonText" Text="Open color picker" TextWrapping="Wrap"/>
                         </Button>
+                        <TextBlock x:Name="ApplyCustomScalingText" Tag="ApplyCustomSclaingCB" Text="Application scaling"/>
+                        <!-- https://stackoverflow.com/questions/832216/wpf-how-to-make-controls-stretch-in-a-stackpanel -->
+                        <DockPanel HorizontalAlignment="Stretch" LastChildFill="True">
+                            <TextBlock x:Name="ApplyCustomScalingLabel" Tag="ApplyCustomScalingLabel" DockPanel.Dock="Right" Text="0.00x" Margin="0,0,5,0" IsEnabled="True" TextWrapping="Wrap"/>
+                            <Slider x:Name="ApplyCustomScalingSlider" Tag="ApplyCustomScalingSlider" Margin="5,0,5,0" Minimum="1" Maximum="3" Value="1" IsEnabled="True" HorizontalAlignment="Stretch" DockPanel.Dock="Left" PreviewMouseUp="ApplyCustomScalingSlider_MouseUp" SmallChange="0.25" IsSnapToTickEnabled="True" LargeChange="0.25" TickFrequency="0.25"/>
+                        </DockPanel>
                     </StackPanel>
                 </Grid>
             </TabItem>
@@ -162,14 +180,6 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0">
-                        <!-- Use a margin of 20 to give it a tree affect-->
-                        <CheckBox Tag="UseBetaDatabaseCB" x:Name="UseBetaDatabaseCB" Click="OnUseBetaDatabaseChanged">
-                            <TextBlock x:Name="UseBetaDatabaseText" Text="Use beta database" TextWrapping="Wrap"/>
-                        </CheckBox>
-                        <ComboBox Tag="UseBetaDatabaseBranches" x:Name="UseBetaDatabaseBranches" SelectionChanged="OnBetaDatabaseSelectionChanged" Margin="20,0,0,0" IsEnabled="False"/>
-                        <CheckBox Tag="UseBetaApplicationCB" x:Name="UseBetaApplicationCB" Click="OnUseBetaAppChanged">
-                            <TextBlock x:Name="UseBetaApplicationText" Text="Use beta application" TextWrapping="Wrap"/>
-                        </CheckBox>
                         <TextBlock Text="Uninstall Mode:" Tag="UninstallModeGroupBox" x:Name="UninstallModeGroupBox" TextWrapping="Wrap"/>
                         <StackPanel Orientation="Horizontal">
                             <RadioButton x:Name="UninstallDefault" Tag="UninstallDefault" Margin="20,0,0,0" Checked="UninstallDefault_Checked">
@@ -179,9 +189,6 @@
                                 <TextBlock x:Name="UninstallQuickText" Text="Quick" TextWrapping="Wrap"/>
                             </RadioButton>
                         </StackPanel>
-                        <CheckBox x:Name="MinimizeToSystemTray" Tag="MinimizeToSystemTray" Click="MinimizeToSystemTray_Click">
-                            <TextBlock x:Name="MinimizeToSystemTrayText" Text="Minimize to system tray" TextWrapping="Wrap"/>
-                        </CheckBox>
                         <CheckBox x:Name="VerboseLoggingCB" Tag="VerboseLoggingCB" Click="VerboseLoggingCB_Click" IsChecked="True" IsEnabled="False">
                             <TextBlock x:Name="VerboseLoggingText" Text="Verbose Logging" TextWrapping="Wrap"/>
                         </CheckBox>
@@ -191,15 +198,16 @@
                         <CheckBox x:Name="AllowStatsGatherCB" Tag="AllowStatsGatherCB" Click="AllowStatsGatherCB_Click">
                             <TextBlock x:Name="AllowStatsGatherText" Text="Allow statistics gathering of mod usage" TextWrapping="Wrap"/>
                         </CheckBox>
-                        <TextBlock x:Name="ApplyCustomScalingText" Tag="ApplyCustomSclaingCB" Text="Application scaling"/>
-                        <!-- https://stackoverflow.com/questions/832216/wpf-how-to-make-controls-stretch-in-a-stackpanel -->
-                        <DockPanel HorizontalAlignment="Stretch" LastChildFill="True">
-                            <TextBlock x:Name="ApplyCustomScalingLabel" Tag="ApplyCustomScalingLabel" DockPanel.Dock="Right" Text="0.00x" Margin="0,0,5,0" IsEnabled="True" TextWrapping="Wrap"/>
-                            <Slider x:Name="ApplyCustomScalingSlider" Tag="ApplyCustomScalingSlider" Margin="5,0,5,0" Minimum="1" Maximum="3" Value="1" IsEnabled="True" HorizontalAlignment="Stretch" DockPanel.Dock="Left" PreviewMouseUp="ApplyCustomScalingSlider_MouseUp" SmallChange="0.25" IsSnapToTickEnabled="True" LargeChange="0.25" TickFrequency="0.25"/>
-                        </DockPanel>
-                        <Button x:Name="LauchEditor" Tag="LauchEditor" Margin="0,2,0,0" Click="LauchEditor_Click" IsEnabled="False" Visibility="Hidden">
-                            <TextBlock x:Name="LauchEditorText" Text="Launch Database Editor" TextWrapping="Wrap"/>
-                        </Button>
+                        <TextBlock x:Name="DeveloperSettingsHeader" Tag="DeveloperSettingsHeader" Text="Developer Settings" TextWrapping="Wrap"/>
+                        <CheckBox x:Name="ForceEnabledCB" Tag="ForceEnabledCB" Margin="15,0,0,0" Click="ForceEnabledCB_Clicked">
+                            <TextBlock x:Name="ForceEnabledText" Text="Force all components enabled" TextWrapping="Wrap"/>
+                        </CheckBox>
+                        <CheckBox x:Name="ForceVisibleCB" Tag="ForceVisibleCB" Margin="15,0,0,0" Click="ForceVisibleCB_Click">
+                            <TextBlock x:Name="ForceVisibleText" Text="Force all components visible" TextWrapping="Wrap"/>
+                        </CheckBox>
+                        <CheckBox x:Name="ExportModeCB" Tag="ExportModeCB" Margin="15,0,0,0" Click="ExportModeCB_Click" IsEnabled="True">
+                            <TextBlock x:Name="ExportModeText" Text="Export mode" TextWrapping="Wrap"/>
+                        </CheckBox>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
                         <CheckBox x:Name="AutoInstallCB" Tag="EnableModsAutoSyncCheckbox" IsEnabled="True" Click="AutoInstallCB_Click">
@@ -224,16 +232,9 @@
                                 <System:String>Days</System:String>
                             </ComboBox>
                         </StackPanel>
-                        <TextBlock x:Name="DeveloperSettingsHeader" Tag="DeveloperSettingsHeader" Text="Developer Settings" TextWrapping="Wrap"/>
-                        <CheckBox x:Name="ForceEnabledCB" Tag="ForceEnabledCB" Margin="15,0,0,0" Click="ForceEnabledCB_Clicked">
-                            <TextBlock x:Name="ForceEnabledText" Text="Force all components enabled" TextWrapping="Wrap"/>
-                        </CheckBox>
-                        <CheckBox x:Name="ForceVisibleCB" Tag="ForceVisibleCB" Margin="15,0,0,0" Click="ForceVisibleCB_Click">
-                            <TextBlock x:Name="ForceVisibleText" Text="Force all components visible" TextWrapping="Wrap"/>
-                        </CheckBox>
-                        <CheckBox x:Name="ExportModeCB" Tag="ExportModeCB" Margin="15,0,0,0" Click="ExportModeCB_Click" IsEnabled="True">
-                            <TextBlock x:Name="ExportModeText" Text="Export mode" TextWrapping="Wrap"/>
-                        </CheckBox>
+                        <Button x:Name="LauchEditor" Tag="LauchEditor" Margin="0,2,0,0" Click="LauchEditor_Click" IsEnabled="False" Visibility="Hidden">
+                            <TextBlock x:Name="LauchEditorText" Text="Launch Database Editor" TextWrapping="Wrap"/>
+                        </Button>
                     </StackPanel>
                 </Grid>
             </TabItem>
