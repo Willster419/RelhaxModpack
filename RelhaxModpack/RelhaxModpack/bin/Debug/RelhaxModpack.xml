@@ -5190,7 +5190,7 @@
             Replacing macros with file paths
             </summary>
         </member>
-        <member name="F:RelhaxModpack.ReplacementTypes.PatchArguements">
+        <member name="F:RelhaxModpack.ReplacementTypes.PatchArguementsReplace">
             <summary>
             Replacing patch arguments of the patch object
             </summary>
@@ -5287,9 +5287,9 @@
             The dictionary to store filepath macros
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utils.PatchArguementsDict">
+        <member name="F:RelhaxModpack.Utils.PatchArguementsReplaceDict">
             <summary>
-            The dictionary to store patch argument macros
+            The dictionary to store patch argument (replace) macros
             </summary>
         </member>
         <member name="F:RelhaxModpack.Utils.PatchFilesDict">
