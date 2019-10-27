@@ -952,38 +952,47 @@ namespace RelhaxModpack
                 //parse the value to a string for comparison
                 string jsonValue = JsonGetCompare(result);
 
-                //only update the value if the regex search matches
-                if(Regex.IsMatch(jsonValue,p.Search))
+                try
                 {
-                    if (edit)
+                    //only update the value if the regex search matches
+                    if (Regex.IsMatch(jsonValue, p.Search))
                     {
-                        Logging.Debug("regex match for result {0}, applying edit to {1}", jsonValue, p.Replace);
-                        UpdateJsonValue(result, p.Replace);
-                    }
-                    else
-                    {
-                        Logging.Debug("regex match for result {0}, removing", jsonValue);
-                        //check if parent is array, we should not be removing from an array in this function
-                        if(result.Parent is JArray)
+                        if (edit)
                         {
-                            Logging.Error("Selected from p.path is JValue and parent is JArray. Use arrayRemove for this function");
-                            return PatchExitCode.Error;
-                        }
-                        //get the jProperty above it and remove itself
-                        else if (result.Parent is JProperty prop)
-                        {
-                            prop.Remove();
+                            Logging.Debug("regex match for result {0}, applying edit to {1}", jsonValue, p.Replace);
+                            UpdateJsonValue(result, p.Replace);
                         }
                         else
                         {
-                            Logging.Error("unknown parent type: {0}", result.Parent.GetType().ToString());
-                            return PatchExitCode.Error;
+                            Logging.Debug("regex match for result {0}, removing", jsonValue);
+                            //check if parent is array, we should not be removing from an array in this function
+                            if (result.Parent is JArray)
+                            {
+                                Logging.Error("Selected from p.path is JValue and parent is JArray. Use arrayRemove for this function");
+                                return PatchExitCode.Error;
+                            }
+                            //get the jProperty above it and remove itself
+                            else if (result.Parent is JProperty prop)
+                            {
+                                prop.Remove();
+                            }
+                            else
+                            {
+                                Logging.Error("unknown parent type: {0}", result.Parent.GetType().ToString());
+                                return PatchExitCode.Error;
+                            }
                         }
                     }
+                    else
+                    {
+                        Logging.Debug("json value {0} matches jsonPath but does not match regex search {1}", jsonValue, p.Search);
+                    }
                 }
-                else
+                catch (ArgumentException argEx)
                 {
-                    Logging.Debug("json value {0} matches jsonPath but does not match regex search {1}", jsonValue, p.Search);
+                    Logging.Error("Invalid Regex search command");
+                    Logging.Error(argEx.Message);
+                    return PatchExitCode.Error;
                 }
             }
             return PatchExitCode.Success;
@@ -1104,13 +1113,22 @@ namespace RelhaxModpack
                 else //assuming jobject
                     jsonResult = array[i].ToString();
 
-                if (Regex.IsMatch(jsonResult, p.Search))
+                try
                 {
-                    found = true;
-                    array[i].Remove();
-                    i--;
-                    if (remove)
-                        break;
+                    if (Regex.IsMatch(jsonResult, p.Search))
+                    {
+                        found = true;
+                        array[i].Remove();
+                        i--;
+                        if (remove)
+                            break;
+                    }
+                }
+                catch (ArgumentException argEx)
+                {
+                    Logging.Error("Invalid Regex search command");
+                    Logging.Error(argEx.Message);
+                    return PatchExitCode.Error;
                 }
             }
             if (!found)
