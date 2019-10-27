@@ -3891,12 +3891,12 @@ namespace RelhaxModpack
             #region First Load acks (yes i wrote that to avoid spelling the whole thing cause I may not know how even enough for auto correct to fix it)
             //Component: AgreementLicense
             //
-            English.Add("AgreementLicense", "You have read and agree to the ");
-            German.Add("AgreementLicense", "Du hast Folgendes gelesen und zugestimmt: ");
+            English.Add("AgreementLicense", "I have read and agree to the ");
+            German.Add("AgreementLicense", TranslationNeeded);
             Polish.Add("AgreementLicense", "Przeczytałem/am i zgadzam się z postanowieniami");
-            French.Add("AgreementLicense", "Vous avez lu et accepté l'");
-            Spanish.Add("AgreementLicense", "Ha leído y consiente ");
-            Russian.Add("AgreementLicense", "Вы прочли и согласны с ");
+            French.Add("AgreementLicense", TranslationNeeded);
+            Spanish.Add("AgreementLicense", TranslationNeeded);
+            Russian.Add("AgreementLicense", TranslationNeeded);
 
             //Component: LicenseLink
             //
@@ -3909,30 +3909,30 @@ namespace RelhaxModpack
 
             //Component: AgreementSupport1
             //
-            English.Add("AgreementSupport1", "If you need support you can either visit our ");
-            German.Add("AgreementSupport1", "Falls du Unterstützung benötigst, besuche entweder unser ");
-            Polish.Add("AgreementSupport1", "Jeśli potrzebujesz wsparcia, możesz odwiedzić nasze ");
-            French.Add("AgreementSupport1", "Si vous avez besoin de support, vous pouvez toujours visiter notre ");
-            Spanish.Add("AgreementSupport1", "Si necesita soporte, puede visitar nuestro ");
-            Russian.Add("AgreementSupport1", "Если понадобится помощь, вы смодете посетить наш ");
+            English.Add("AgreementSupport1", "I understand that I can receive support on the dedicated ");
+            German.Add("AgreementSupport1", TranslationNeeded);
+            Polish.Add("AgreementSupport1", "Rozumiem, że mogę uzyskać wsparcie na dedykowanym ");
+            French.Add("AgreementSupport1", "Je comprends que je peux recevoir de l’aide sur le ");
+            Spanish.Add("AgreementSupport1", "Entiendo que puedo recibir soporte en el ");
+            Russian.Add("AgreementSupport1", "Я понимаю, что могу обратиться за помощью ");
 
             //Component: AgreementSupportForums
             //
             English.Add("AgreementSupportForums", "Forums");
-            German.Add("AgreementSupportForums", "Forum");
+            German.Add("AgreementSupportForums", TranslationNeeded);
             Polish.Add("AgreementSupportForums", "Forum");
             French.Add("AgreementSupportForums", "Forum");
-            Spanish.Add("AgreementSupportForums", "foro");
-            Russian.Add("AgreementSupportForums", "форум");
+            Spanish.Add("AgreementSupportForums", "Foro");
+            Russian.Add("AgreementSupportForums", "на форум");
 
             //Component: AgreementSupport2
             //
-            English.Add("AgreementSupport2", " or our ");
-            German.Add("AgreementSupport2", " oder unseren ");
-            Polish.Add("AgreementSupport2", " lub nasz serwer ");
-            French.Add("AgreementSupport2", "ou notre");
-            Spanish.Add("AgreementSupport2", " o nuestro ");
-            Russian.Add("AgreementSupport2", " или наш ");
+            English.Add("AgreementSupport2", " or ");
+            German.Add("AgreementSupport2", TranslationNeeded);
+            Polish.Add("AgreementSupport2", " lub serwerze ");
+            French.Add("AgreementSupport2", " ou le ");
+            Spanish.Add("AgreementSupport2", " dedicado y ");
+            Russian.Add("AgreementSupport2", " или на сервер в ");
 
             //Component: AgreementSupportDiscord
             //
