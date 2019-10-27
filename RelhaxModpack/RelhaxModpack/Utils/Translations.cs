@@ -664,6 +664,15 @@ namespace RelhaxModpack
             Spanish.Add("BackupModsSizeLabelUsed", "Copias de seguridad: {0}  Tamaño: {1}");
             Russian.Add("BackupModsSizeLabelUsed", "Бэкапов: {0} Размер: {1}");
 
+            //Component: backupModsSizeCalculating
+            //
+            English.Add("backupModsSizeCalculating", "Calculating backups size...");
+            German.Add("backupModsSizeCalculating", TranslationNeeded);
+            Polish.Add("backupModsSizeCalculating", TranslationNeeded);
+            French.Add("backupModsSizeCalculating", TranslationNeeded);
+            Spanish.Add("backupModsSizeCalculating", TranslationNeeded);
+            Russian.Add("backupModsSizeCalculating", TranslationNeeded);
+
             //Component: BackupModsCBDescription
             //
             English.Add("BackupModsCBDescription", "Select this to make a backup of your current mods installation." +

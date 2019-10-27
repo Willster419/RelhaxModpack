@@ -158,6 +158,7 @@ namespace RelhaxModpack
             //load translation hashes and set default language
             Translations.LoadTranslations();
             Translations.SetLanguage(Languages.English);
+
             //disconnect event handler before application
             LanguagesSelector.SelectionChanged -= OnLanguageSelectionChanged;
             LanguagesSelector.SelectedIndex = 0;
@@ -264,21 +265,7 @@ namespace RelhaxModpack
             }
             else
             {
-                Logging.Debug("starting async task of getting file sizes of backups");
-                Task.Run(() =>
-                {
-                    backupFolderTotalSize = 0;
-                    backupFiles = Utils.DirectorySearch(Settings.RelhaxModBackupFolderPath, SearchOption.TopDirectoryOnly, false, "*.zip", 5, 3, false);
-                    foreach (string file in backupFiles)
-                    {
-                        backupFolderTotalSize += Utils.GetFilesize(file);
-                    }
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"), backupFiles.Count(), Utils.SizeSuffix((ulong)backupFolderTotalSize, 1, true));
-                    });
-                    Logging.Debug("completed async task of getting file sizes of backups");
-                });
+                GetBackupFilesizesAsync(false);
             }
 
             Logging.Debug("checking if application is up to date");
@@ -1548,6 +1535,9 @@ namespace RelhaxModpack
                     Logfiles.Application, LogLevel.Exception);
                 ToggleUIButtons(true);
             }
+            //Run task to get backup text file size if a backup was done
+            if(ModpackSettings.BackupModFolder)
+                GetBackupFilesizesAsync(true);
         }
 
         private void OnInstallProgressChanged(object sender, RelhaxInstallerProgress e)
@@ -2872,6 +2862,35 @@ namespace RelhaxModpack
             Directory.Move(middlePath, newPath);
 
             Logging.Info("upgrade of folder {0} successful", Path.GetFileName(newPath));
+        }
+
+        //asyncronously get the file sizes of backups
+        private async Task GetBackupFilesizesAsync(bool displayGettingSize)
+        {
+            Task.Run(() =>
+            {
+                Logging.Debug("starting async task of getting file sizes of backups");
+                if (displayGettingSize)
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("backupModsSizeCalculating"), backupFiles.Count(), Utils.SizeSuffix((ulong)backupFolderTotalSize, 1, true));
+                    });
+                }
+
+                backupFolderTotalSize = 0;
+                backupFiles = Utils.DirectorySearch(Settings.RelhaxModBackupFolderPath, SearchOption.TopDirectoryOnly, false, "*.zip", 5, 3, false);
+                foreach (string file in backupFiles)
+                {
+                    backupFolderTotalSize += Utils.GetFilesize(file);
+                }
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"), backupFiles.Count(), Utils.SizeSuffix((ulong)backupFolderTotalSize, 1, true));
+                });
+                Logging.Debug("completed async task of getting file sizes of backups");
+            });
         }
     }
 }
