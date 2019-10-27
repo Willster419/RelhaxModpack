@@ -160,8 +160,8 @@ namespace RelhaxModpack.AtlasesCreator
                         AtlasBuilders[i].Dispose();
                         AtlasBuilders[i] = null;
                     }
-                    AtlasBuilders = null;
                 }
+                AtlasBuilders = null;
             }
         }
     }
