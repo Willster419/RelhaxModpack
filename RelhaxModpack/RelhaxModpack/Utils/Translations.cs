@@ -3233,14 +3233,15 @@ namespace RelhaxModpack
             Spanish.Add("InstallationCompleteCloseApp", "¿Cerrar la aplicación?");
             Russian.Add("InstallationCompleteCloseApp", "Закрыть приложение?");
 
-            //Component: StartXVMStatButton_Click
+            //Component: xvmUrlLocalisation
             //localisation to which page you will jump
             English.Add("xvmUrlLocalisation", "en");
             German.Add("xvmUrlLocalisation", "de");
             Polish.Add("xvmUrlLocalisation", "en");
             French.Add("xvmUrlLocalisation", "fr");
-            Spanish.Add("xvmURLLocalisation", "es"); //? No Spanish on XVM website. Mistake? @Nullmaruzero
-            Russian.Add("xvmUrlLocalisation", "ru");
+            Spanish.Add("xvmUrlLocalisation", "en"); //? No Spanish on XVM website. Mistake? @Nullmaruzero
+            //this seems like a bug, but it's what they have it set as
+            Russian.Add("xvmUrlLocalisation", "uk");
 
             //Component: CouldNotStartProcess
             //
