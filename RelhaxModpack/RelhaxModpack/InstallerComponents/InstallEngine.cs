@@ -346,6 +346,48 @@ namespace RelhaxModpack.InstallerComponents
                 //check for cancellation
                 CheckForCancel();
 
+                //step 13: cleanup
+                OldTime = InstallStopWatch.Elapsed;
+
+                //only update the task status for cleanup if the task is not faulted
+                if (!taskk.IsFaulted)
+                {
+                    Prog.TotalCurrent++;
+                    InstallFinishedArgs.ExitCode = InstallerExitCodes.CleanupError;
+                    Prog.InstallStatus = InstallerExitCodes.CleanupError;
+                    Progress.Report(Prog);
+                }
+
+                //but we still want to always cleanup
+                Logging.Info(string.Format("Cleanup, current install time = {0} msec", (int)InstallStopWatch.Elapsed.TotalMilliseconds));
+                if (!ModpackSettings.ExportMode)
+                {
+                    if (Cleanup())
+                    {
+                        Logging.Info("Cleanup complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
+                        if (!taskk.IsFaulted)
+                        { 
+                            Prog.TotalCurrent++;
+                            InstallFinishedArgs.ExitCode = InstallerExitCodes.Success;
+                            Prog.InstallStatus = InstallerExitCodes.Success;
+                            Progress.Report(Prog);
+                        }
+                    }
+                    else
+                    {
+                        Logging.Info("Cleanup failed, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
+                        if (!taskk.IsFaulted)
+                        {
+                            Prog.TotalCurrent++;
+                            InstallFinishedArgs.ExitCode = InstallerExitCodes.CleanupError;
+                            Prog.InstallStatus = InstallerExitCodes.CleanupError;
+                            Progress.Report(Prog);
+                        }
+                    }
+                }
+                else
+                    Logging.Info("...skipped (ModpackSettings.ExportMode = true)");
+
                 //stop the log file if it was started
                 if (Logging.IsLogOpen(Logfiles.Installer))
                     Logging.DisposeLogging(Logfiles.Installer);
@@ -793,25 +835,6 @@ namespace RelhaxModpack.InstallerComponents
             }
             else
                 Logging.Info("...skipped (ModpackSettings.DeleteCacheFiles = false)");
-
-
-            //step 13: cleanup
-            OldTime = InstallStopWatch.Elapsed;
-            Prog.TotalCurrent++;
-            InstallFinishedArgs.ExitCode = InstallerExitCodes.CleanupError;
-            Prog.InstallStatus = InstallerExitCodes.CleanupError;
-            Progress.Report(Prog);
-
-            Logging.Info(string.Format("Cleanup, current install time = {0} msec", (int)InstallStopWatch.Elapsed.TotalMilliseconds));
-            if(!ModpackSettings.ExportMode)
-            {
-                if (!Cleanup())
-                    return InstallFinishedArgs;
-                Logging.Info("Cleanup complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
-            }
-            else
-                Logging.Info("...skipped (ModpackSettings.ExportMode = true)");
-
 
             if (!DisableTriggersForInstall)
             {
