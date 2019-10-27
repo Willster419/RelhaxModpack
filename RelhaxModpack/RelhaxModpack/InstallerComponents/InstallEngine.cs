@@ -1724,7 +1724,7 @@ namespace RelhaxModpack.InstallerComponents
                 string tempBackupFolder = Path.Combine(Settings.RelhaxTempFolderPath, package.PackageName);
                 if(!Directory.Exists(tempBackupFolder))
                 {
-                    Logging.WriteToLog(string.Format("folder {0} does not exist, skipping", package.PackageName), Logfiles.Application, LogLevel.Error);
+                    Logging.WriteToLog(string.Format("folder {0} does not exist, skipping", package.PackageName), Logfiles.Application, LogLevel.Warning);
                 }
 
                 //the list of files that was backed up already exists in a list called Files_saved. use that as the list of files to restore
