@@ -137,7 +137,7 @@ namespace RelhaxModpack
             if (!File.Exists(p.CompletePath))
             {
                 Logging.Warning("File '{0}' not found", p.CompletePath);
-                return PatchExitCode.Error;
+                return PatchExitCode.Warning;
             }
 
             //if from the editor, enable verbose logging (allows it to get debug log statements)
