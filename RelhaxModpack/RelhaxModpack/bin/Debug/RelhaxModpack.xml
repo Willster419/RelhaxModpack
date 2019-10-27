@@ -71,11 +71,6 @@
             The object of atlas arguments for building the image
             </summary>
         </member>
-        <member name="F:RelhaxModpack.AtlasesCreator.AtlasCreator.DebugLockObject">
-            <summary>
-            Object that exists in all Atlas creation threads. Used for sensitive areas of code that can only be executed by one thread at a time
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.AtlasesCreator.AtlasCreator.Token">
             <summary>
             The token for handling a cancel call from the user
@@ -84,19 +79,6 @@
         <member name="E:RelhaxModpack.AtlasesCreator.AtlasCreator.OnAtlasProgres">
             <summary>
             The event when atlas child progress occurs
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.AtlasCreator.ParseModTexturesAsync(System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
-            <summary>
-            Loads all mod textures from disk into texture objects. This is done on a separate thread so it is not done redundantly multiple times on each atlas thread
-            </summary>
-            <param name="allModFolderPaths">The list of absolute paths containing images to be loaded</param>
-            <param name="token">The cancellation token</param>
-            <returns>The list of textures</returns>
-        </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.AtlasCreator.DisposeparseModTextures">
-            <summary>
-            Dispose of all textures in the shared mod texture list
             </summary>
         </member>
         <member name="M:RelhaxModpack.AtlasesCreator.AtlasCreator.CreateAtlas">
@@ -114,6 +96,19 @@
         <member name="M:RelhaxModpack.AtlasesCreator.AtlasCreator.Dispose">
             <summary>
             Dispose of the Atlas Creator (mostly disposing image data)
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.AtlasUtils.LoadModContourIconsAsync(System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
+            <summary>
+            Loads all mod textures from disk into texture objects. This is done on a separate thread so it is not done redundantly multiple times on each atlas thread
+            </summary>
+            <param name="allModFolderPaths">The list of absolute paths containing mod contour icon images to be loaded</param>
+            <param name="token">The cancellation token</param>
+            <returns>The list of textures</returns>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.AtlasUtils.DisposeparseModTextures">
+            <summary>
+            Dispose of all textures in the shared mod texture list
             </summary>
         </member>
         <member name="T:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker">
