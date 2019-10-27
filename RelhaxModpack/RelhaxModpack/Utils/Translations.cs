@@ -3178,13 +3178,14 @@ namespace RelhaxModpack
             Russian.Add("DeleteBackupFolder", "Бэкапы");
 
             //Component: installFailed
-            //
-            English.Add("installFailed", "The installation failed at step");
-            German.Add("installFailed", "Die Installation misslang bei Schritt");
-            Polish.Add("installFailed", "Instalacja nie powiodła się w kroku"); // ASSUMED: Something goes after that, otherwise it's awkward. @Nullmaruzero
+            //Error message to show at the end of an unsucessfull instalaltion
+            //"The installation failed at the following steps: {newline} {failed_steps_list}
+            English.Add("installFailed", "The installation failed at the following steps");
+            German.Add("installFailed", TranslationNeeded);
+            Polish.Add("installFailed", TranslationNeeded);
             French.Add("installFailed", TranslationNeeded);
-            Spanish.Add("installFailed", "La instalación ha fallado en el paso");
-            Russian.Add("installFailed", "Произошла ошибка в процессе установки на этапе");
+            Spanish.Add("installFailed", TranslationNeeded);
+            Russian.Add("installFailed", TranslationNeeded);
             #endregion
 
             #region Install finished window
