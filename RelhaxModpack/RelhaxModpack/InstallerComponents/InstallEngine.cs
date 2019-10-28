@@ -528,14 +528,17 @@ namespace RelhaxModpack.InstallerComponents
 
             //step 1 on install: backup user mods
             OldTime = InstallStopWatch.Elapsed;
-            //unknown error is last step in ints
+
+            //unknown error is last step in ints, use it as the total
             Prog.TotalTotal = (int)InstallerExitCodes.UnknownError;
+
             Prog.TotalCurrent = 1;
             InstallFinishedArgs.ExitCode = InstallerExitCodes.BackupModsError;
             Prog.InstallStatus = InstallerExitCodes.BackupModsError;
             Progress.Report(Prog);
+            CancellationToken.ThrowIfCancellationRequested();
 
-            Logging.Info("Backup of mods, current install time = 0 msec");
+            Logging.Info("Backup of mods, current install time = {0} msec", (int)InstallStopWatch.Elapsed.TotalMilliseconds);
             if (ModpackSettings.BackupModFolder && !ModpackSettings.ExportMode)
             {
                 if (! BackupMods())
@@ -553,6 +556,7 @@ namespace RelhaxModpack.InstallerComponents
             InstallFinishedArgs.ExitCode = InstallerExitCodes.BackupDataError;
             Prog.InstallStatus = InstallerExitCodes.BackupDataError;
             Progress.Report(Prog);
+            CancellationToken.ThrowIfCancellationRequested();
 
             Logging.Info(string.Format("Backup of user data, current install time = {0} msec",
                 (int)InstallStopWatch.Elapsed.TotalMilliseconds));
@@ -573,6 +577,7 @@ namespace RelhaxModpack.InstallerComponents
             InstallFinishedArgs.ExitCode = InstallerExitCodes.ClearCacheError;
             Prog.InstallStatus = InstallerExitCodes.ClearCacheError;
             Progress.Report(Prog);
+            CancellationToken.ThrowIfCancellationRequested();
 
             Logging.Info(string.Format("Cleaning of cache folders, current install time = {0} msec",
                 (int)InstallStopWatch.Elapsed.TotalMilliseconds));
@@ -593,6 +598,7 @@ namespace RelhaxModpack.InstallerComponents
             InstallFinishedArgs.ExitCode = InstallerExitCodes.ClearLogsError;
             Prog.InstallStatus = InstallerExitCodes.ClearLogsError;
             Progress.Report(Prog);
+            CancellationToken.ThrowIfCancellationRequested();
 
             Logging.Info(string.Format("Cleaning of logs, current install time = {0} msec",
                 (int)InstallStopWatch.Elapsed.TotalMilliseconds));
@@ -613,6 +619,7 @@ namespace RelhaxModpack.InstallerComponents
             InstallFinishedArgs.ExitCode = InstallerExitCodes.CleanModsError;
             Prog.InstallStatus = InstallerExitCodes.CleanModsError;
             Progress.Report(Prog);
+            CancellationToken.ThrowIfCancellationRequested();
 
             Logging.Info(string.Format("Cleaning of mods folders, current install time = {0} msec",
                 (int)InstallStopWatch.Elapsed.TotalMilliseconds));
@@ -648,6 +655,7 @@ namespace RelhaxModpack.InstallerComponents
             InstallFinishedArgs.ExitCode = InstallerExitCodes.ExtractionError;
             Prog.InstallStatus = InstallerExitCodes.ExtractionError;
             Progress.Report(Prog);
+            CancellationToken.ThrowIfCancellationRequested();
 
             Logging.Info(string.Format("Extracting mods, current install time = {0} msec",
                 (int)InstallStopWatch.Elapsed.TotalMilliseconds));
@@ -663,6 +671,7 @@ namespace RelhaxModpack.InstallerComponents
             InstallFinishedArgs.ExitCode = InstallerExitCodes.UserExtractionError;
             Prog.InstallStatus = InstallerExitCodes.UserExtractionError;
             Progress.Report(Prog);
+            CancellationToken.ThrowIfCancellationRequested();
 
             Logging.Info("Extracting usermods, current install time = {0} msec", (int)InstallStopWatch.Elapsed.TotalMilliseconds);
             Logging.Info("UserPackages to install: {0}", UserPackagesToInstall.Count);
@@ -701,6 +710,7 @@ namespace RelhaxModpack.InstallerComponents
             InstallFinishedArgs.ExitCode = InstallerExitCodes.RestoreUserdataError;
             Prog.InstallStatus = InstallerExitCodes.RestoreUserdataError;
             Progress.Report(Prog);
+            CancellationToken.ThrowIfCancellationRequested();
 
             Logging.Info(string.Format("Restore of user data, current install time = {0} msec", (int)InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.SaveUserData)
@@ -730,6 +740,7 @@ namespace RelhaxModpack.InstallerComponents
             Prog.ParrentCurrent = Prog.ChildCurrent = 0;
             Prog.Filename = string.Empty;
             Progress.Report(Prog);
+            CancellationToken.ThrowIfCancellationRequested();
 
             Logging.Info(string.Format("Unpack of xml files, current install time = {0} msec", (int)InstallStopWatch.Elapsed.TotalMilliseconds));
             List<XmlUnpack> xmlUnpacks = MakeXmlUnpackList();
@@ -745,8 +756,9 @@ namespace RelhaxModpack.InstallerComponents
                     Prog.ParrentCurrent++;
                     Prog.Filename = xmlUnpack.FileName;
                     Progress.Report(Prog);
+                    CancellationToken.ThrowIfCancellationRequested();
 
-                    if(!XmlUtils.UnpackXmlFile(xmlUnpack, unpackBuilder))
+                    if (!XmlUtils.UnpackXmlFile(xmlUnpack, unpackBuilder))
                     {
                         if (!InstallFinishedArgs.InstallFailedSteps.Contains(InstallerExitCodes.XmlUnpackError))
                             InstallFinishedArgs.InstallFailedSteps.Add(InstallerExitCodes.XmlUnpackError);
@@ -758,7 +770,7 @@ namespace RelhaxModpack.InstallerComponents
             else
                 Logging.Info("...skipped (no XmlUnpack entries parsed");
 
-            //step 9: patch files (async option)
+            //step 9: patch files (async)
             OldTime = InstallStopWatch.Elapsed;
             Logging.Info(string.Format("Patching of files, current install time = {0} msec",
                 (int)InstallStopWatch.Elapsed.TotalMilliseconds));
@@ -1323,10 +1335,12 @@ namespace RelhaxModpack.InstallerComponents
                 Prog.ParrentCurrent++;
                 Prog.ParrentCurrentProgress = package.NameFormatted;
                 Progress.Report(Prog);
-                foreach(UserFile files in package.UserFiles)
+                CancellationToken.ThrowIfCancellationRequested();
+
+                foreach (UserFile files in package.UserFiles)
                 {
                     //clear the list of files_saved, just in case
-                    files.Files_saved.Clear();
+                    files.FilesSaved.Clear();
 
                     //use the search parameter to get the actual files to move
                     //remove the mistake I made over a year ago of the double slashes
@@ -1398,11 +1412,12 @@ namespace RelhaxModpack.InstallerComponents
                         Progress.Report(Prog);
                         string destination = Path.Combine(tempFolderPath, Path.GetFileName(file));
 
-                        //check if destinatino exists first before replace
+                        //check if destination exists first before replace
                         if (File.Exists(destination))
                             File.Delete(destination);
+
                         File.Move(file, destination);
-                        files.Files_saved.Add(file);
+                        files.FilesSaved.Add(file);
                     }
                 }
                 Logging.Info("backup data of {0} finished", package.PackageName);
@@ -1730,7 +1745,7 @@ namespace RelhaxModpack.InstallerComponents
                 //the list of files that was backed up already exists in a list called Files_saved. use that as the list of files to restore
                 foreach (UserFile files in package.UserFiles)
                 {
-                    foreach(string savedFile in files.Files_saved)
+                    foreach(string savedFile in files.FilesSaved)
                     {
                         //Files_saved should have the complete path of the destination
                         string fileSourcePath = Path.Combine(Settings.RelhaxTempFolderPath, package.PackageName, Path.GetFileName(savedFile));
