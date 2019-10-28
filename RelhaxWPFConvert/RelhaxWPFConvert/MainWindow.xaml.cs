@@ -28,6 +28,7 @@ using System.Security.Cryptography;
 using System.Windows.Documents;
 using System.Xml;
 using System.Windows.Markup;
+using Microsoft.WindowsAPICodePack.Taskbar;
 
 namespace RelhaxWPFConvert
 {
@@ -46,6 +47,7 @@ namespace RelhaxWPFConvert
     {
         private CancellationToken ct;
         private CancellationTokenSource tokenSource2;
+        private TaskbarManager taskbarInstance;
 
         public MainWindow()
         {
@@ -101,6 +103,14 @@ namespace RelhaxWPFConvert
 
             //get value from resource dictionary
             bool test = (bool)Application.Current.Resources["ApplyColorSettings"];
+
+            //task bar stuff
+            //https://www.fluxbytes.com/csharp/how-to-display-a-progressbar-in-taskbar-in-c/
+            if (TaskbarManager.IsPlatformSupported)
+            {
+                taskbarInstance = TaskbarManager.Instance;
+                taskbarInstance.SetProgressState(TaskbarProgressBarState.NoProgress);
+            }
         }
 
         #region Task Reporting
@@ -584,5 +594,17 @@ namespace RelhaxWPFConvert
             WpfDocumentViewer.Content = document;
         }
         #endregion
+
+        private void SetTaskbarProgress_Click(object sender, RoutedEventArgs e)
+        {
+            if (int.TryParse(TaskbarProgressSet.Text,out int result))
+            {
+                if (result > 0 && 100 > result)
+                {
+                    taskbarInstance.SetProgressState(TaskbarProgressBarState.Normal);
+                    taskbarInstance.SetProgressValue(result, 100);
+                }
+            }
+        }
     }
 }
