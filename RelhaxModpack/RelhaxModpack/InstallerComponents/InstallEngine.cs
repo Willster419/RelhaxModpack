@@ -286,6 +286,7 @@ namespace RelhaxModpack.InstallerComponents
         private RelhaxInstallerProgress Prog = null;
         private string XvmFolderName = string.Empty;
         private Dictionary<string, string> OriginalPatchNames = new Dictionary<string, string>();
+        private string backupZipfileNameForCancelDeletion = string.Empty;
 
         //async progress reporters
         private RelhaxInstallerProgress ProgPatch = null;
@@ -1251,6 +1252,7 @@ namespace RelhaxModpack.InstallerComponents
             //create the directory for this version to backup to
             string zipFileName = string.Format("{0:yyyy-MM-dd-HH-mm-ss}_{1}.zip", DateTime.Now,Settings.WoTClientVersion);
             string zipFileFullPath = Path.Combine(Settings.RelhaxModBackupFolderPath, zipFileName);
+            backupZipfileNameForCancelDeletion = zipFileFullPath;
             Logging.Debug("started backupMods(), making zipfile {0}", zipFileFullPath);
 
             //make a zip file of the mods and res_mods and appdata
@@ -1288,6 +1290,9 @@ namespace RelhaxModpack.InstallerComponents
                 //save the file. all the time to wait is in this method, so add the event handler here
                 backupZip.SaveProgress += BackupZip_SaveProgress;
                 Prog.ParrentCurrentProgress = string.Empty;
+
+                CancellationToken.ThrowIfCancellationRequested();
+
                 backupZip.Save();
             }
             Logging.Debug("finished backupMods()");
@@ -1296,6 +1301,10 @@ namespace RelhaxModpack.InstallerComponents
 
         private void BackupZip_SaveProgress(object sender, SaveProgressEventArgs e)
         {
+            if(CancellationToken.IsCancellationRequested)
+            {
+                e.Cancel = true;
+            }
             //we only want entry bytes read for report (let's *try* to be efficient here)
             switch (e.EventType)
             {
@@ -2822,6 +2831,12 @@ namespace RelhaxModpack.InstallerComponents
                         }
                     }
                     Logging.Info("all child threads stopped, stopping master");
+                    //delete the backup file as well
+                    if(ModpackSettings.BackupModFolder && !string.IsNullOrEmpty(backupZipfileNameForCancelDeletion))
+                    {
+                        if (File.Exists(backupZipfileNameForCancelDeletion))
+                            Utils.FileDelete(backupZipfileNameForCancelDeletion);
+                    }
                 }
                 else
                 {
