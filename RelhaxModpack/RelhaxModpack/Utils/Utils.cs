@@ -2284,6 +2284,7 @@ namespace RelhaxModpack
             FilePathDict.Add(@"{tanksversion}", Settings.WoTClientVersion);
             FilePathDict.Add(@"{tanksonlinefolderversion}", Settings.WoTModpackOnlineFolderVersion);
             FilePathDict.Add(@"{appdata}", Settings.AppDataFolder);
+            FilePathDict.Add(@"{appData}", Settings.AppDataFolder);
             FilePathDict.Add(@"{app}", Settings.WoTDirectory);
             FilePathDict.Add(@"versiondir", Settings.WoTClientVersion);
         }
