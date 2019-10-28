@@ -668,7 +668,7 @@ namespace RelhaxModpack
             //
             English.Add("backupModsSizeCalculating", "Calculating backups size...");
             German.Add("backupModsSizeCalculating", TranslationNeeded);
-            Polish.Add("backupModsSizeCalculating", TranslationNeeded);
+            Polish.Add("backupModsSizeCalculating", "Obliczanie..."); // ASSUMED: Used as a temporary label instead of backup sizes.
             French.Add("backupModsSizeCalculating", TranslationNeeded);
             Spanish.Add("backupModsSizeCalculating", TranslationNeeded);
             Russian.Add("backupModsSizeCalculating", TranslationNeeded);
@@ -3182,7 +3182,7 @@ namespace RelhaxModpack
             //"The installation failed at the following steps: {newline} {failed_steps_list}
             English.Add("installFailed", "The installation failed at the following steps");
             German.Add("installFailed", TranslationNeeded);
-            Polish.Add("installFailed", TranslationNeeded);
+            Polish.Add("installFailed", "Instalacja niepowiodła się przy następujących krokach");
             French.Add("installFailed", TranslationNeeded);
             Spanish.Add("installFailed", TranslationNeeded);
             Russian.Add("installFailed", TranslationNeeded);
