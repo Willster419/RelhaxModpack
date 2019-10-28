@@ -196,8 +196,13 @@ namespace RelhaxModpack.AtlasesCreator
                 {
                     Logging.Exception("failed to clone atlas image data");
                     Logging.Exception(ex.ToString());
-                    atlasImage.UnlockBits(atlasLock);
-                    atlasImage.Dispose();
+                    try
+                    {
+                        atlasImage.UnlockBits(atlasLock);
+                        atlasImage.Dispose();
+                    }
+                    catch
+                    { }
                     return FailCode.ImageImporter;
                 }
             }
