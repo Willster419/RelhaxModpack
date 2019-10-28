@@ -1339,6 +1339,8 @@ namespace RelhaxModpack.InstallerComponents
 
                 foreach (UserFile files in package.UserFiles)
                 {
+                    CancellationToken.ThrowIfCancellationRequested();
+
                     //clear the list of files_saved, just in case
                     files.FilesSaved.Clear();
 
@@ -1410,6 +1412,8 @@ namespace RelhaxModpack.InstallerComponents
                         Prog.ChildCurrent++;
                         Prog.Filename = file;
                         Progress.Report(Prog);
+                        CancellationToken.ThrowIfCancellationRequested();
+
                         string destination = Path.Combine(tempFolderPath, Path.GetFileName(file));
 
                         //check if destination exists first before replace
@@ -1448,6 +1452,8 @@ namespace RelhaxModpack.InstallerComponents
             //delete if possibly from previous install
             if (Directory.Exists(AppPathTempFolder))
                 Utils.DirectoryDelete(AppPathTempFolder, true);
+
+            CancellationToken.ThrowIfCancellationRequested();
             //and make the folder at the end
             Directory.CreateDirectory(AppPathTempFolder);
 
@@ -1464,7 +1470,10 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.WriteToLog("Processing cache file/folder to move: " + file, Logfiles.Application, LogLevel.Debug);
                 if(File.Exists(Path.Combine(Settings.AppDataFolder, file)))
                 {
-                    try { File.Move(Path.Combine(Settings.AppDataFolder, file), Path.Combine(AppPathTempFolder, file)); }
+                    try
+                    {
+                        File.Move(Path.Combine(Settings.AppDataFolder, file), Path.Combine(AppPathTempFolder, file));
+                    }
                     catch (Exception ex)
                     {
                         Logging.Exception(ex.ToString());
@@ -1535,6 +1544,7 @@ namespace RelhaxModpack.InstallerComponents
             Prog.ParrentCurrent = Prog.ChildCurrent = 0;
             Prog.Filename = string.Empty;
             Progress.Report(Prog);
+
             string[] logsToDelete = new string[]
             {
                 Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, "python.log"),
@@ -1546,14 +1556,18 @@ namespace RelhaxModpack.InstallerComponents
                 Path.Combine(Settings.WoTDirectory, "WoTLauncher.log"),
                 Path.Combine(Settings.WoTDirectory, "cef.log")
             };
+
             Prog.ParrentTotal = logsToDelete.Count();
-            Progress.Report(Prog);
+
             foreach(string s in logsToDelete)
             {
                 Logging.WriteToLog("Processing log file (if exists) " + s, Logfiles.Application, LogLevel.Info);
+
                 Prog.ParrentCurrent++;
                 Prog.Filename = s;
                 Progress.Report(Prog);
+                CancellationToken.ThrowIfCancellationRequested();
+
                 if (File.Exists(s))
                 {
                     if (!Utils.FileDelete(s))
@@ -1593,6 +1607,7 @@ namespace RelhaxModpack.InstallerComponents
             Prog.ChildTotal = Prog.ParrentTotal = 1;
             Prog.Filename = string.Empty;
             Progress.Report(Prog);
+            CancellationToken.ThrowIfCancellationRequested();
 
             //this is the only really new one. for each install group, spawn a bunch of threads to start the install process
             //get the number of threads we will use for each of the install steps
@@ -1611,6 +1626,7 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.Info("Install Group " + i + " starts now");
                 Prog.InstallGroup = (uint)i;
                 Progress.Report(Prog);
+                CancellationToken.ThrowIfCancellationRequested();
 
                 //clear the list of child tasks
                 InstallerCreatedTasks.Clear();
@@ -1636,6 +1652,7 @@ namespace RelhaxModpack.InstallerComponents
                             packa.Size = (ulong)Utils.GetFilesize(zipFile);
                         Logging.Debug("size parsed to {0}", packa.Size.ToString());
                     }
+                    CancellationToken.ThrowIfCancellationRequested();
 
                     //then sort the packages by the size parameter (largest files on top)
                     //https://stackoverflow.com/questions/3309188/how-to-sort-a-listt-by-a-property-in-the-object
@@ -1671,6 +1688,7 @@ namespace RelhaxModpack.InstallerComponents
 
                     //start the threads
                     Logging.Debug("Starting {0} threads", tasks.Count());
+
                     //setup progress reporting for threads
                     Prog.CompletedPackagesOfAThread = new uint[tasks.Count()];
                     Prog.TotalPackagesofAThread = new uint[tasks.Count()];
@@ -1681,6 +1699,8 @@ namespace RelhaxModpack.InstallerComponents
                     Prog.BytesTotalOfAThread = new long[tasks.Count()];
                     Prog.WaitingOnDownloadOfAThread = new bool[tasks.Count()];
                     Prog.FilenameOfAThread = new string[tasks.Count()];
+
+                    CancellationToken.ThrowIfCancellationRequested();
 
                     for (int k = 0; k < tasks.Count(); k++)
                     {
@@ -1712,6 +1732,7 @@ namespace RelhaxModpack.InstallerComponents
                     //and log it all
                     Logging.Debug("all threads started on group {0}, master thread now waiting on Task.WaitAll(tasks)", i);
                     Task.WaitAll(tasks.Where(task => task != null).ToArray());
+                    CancellationToken.ThrowIfCancellationRequested();
                 }
 
                 Logging.Info("Install Group " + i + " finishes now");
@@ -1734,6 +1755,7 @@ namespace RelhaxModpack.InstallerComponents
                 Prog.ChildCurrent++;
                 Progress.Report(Prog);
                 Logging.Info(string.Format("Restore data of package {0} starting", package.PackageName));
+                CancellationToken.ThrowIfCancellationRequested();
 
                 //check if the package name folder exists first
                 string tempBackupFolder = Path.Combine(Settings.RelhaxTempFolderPath, package.PackageName);
@@ -1747,6 +1769,8 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     foreach(string savedFile in files.FilesSaved)
                     {
+                        CancellationToken.ThrowIfCancellationRequested();
+
                         //Files_saved should have the complete path of the destination
                         string fileSourcePath = Path.Combine(Settings.RelhaxTempFolderPath, package.PackageName, Path.GetFileName(savedFile));
                         if (File.Exists(fileSourcePath))
@@ -1780,9 +1804,11 @@ namespace RelhaxModpack.InstallerComponents
                 (int)InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.CreateShortcuts)
             {
+                CancellationToken.ThrowIfCancellationRequested();
                 List<Shortcut> shortcuts = MakeShortcutList();
                 if (shortcuts.Count > 0)
                 {
+                    CancellationToken.ThrowIfCancellationRequested();
                     StringBuilder shortcutBuilder = new StringBuilder();
                     shortcutBuilder.AppendLine("/*   Shortcuts   */");
                     ShortcutsTask = Task.Factory.StartNew(() =>
@@ -1830,6 +1856,8 @@ namespace RelhaxModpack.InstallerComponents
             AtlasUtils.DisposeOfAllAtlasResources();
             AtlasUtils.AtlasBuilders = new List<AtlasCreator>();
 
+            CancellationToken.ThrowIfCancellationRequested();
+
             //create and parse atlas lists from xml files
             List<Atlas> atlases = MakeAtlasList();
             if (atlases.Count > 0)
@@ -1842,6 +1870,7 @@ namespace RelhaxModpack.InstallerComponents
                 ProgAtlas.ChildCurrent = 0;
                 ProgAtlas.InstallStatus = InstallerExitCodes.ContourIconAtlasError;
                 LockProgress();
+                CancellationToken.ThrowIfCancellationRequested();
 
                 //load the unmanaged libraries if they are not loaded already
                 AtlasUtils.VerifyImageLibsLoaded();
@@ -1977,6 +2006,7 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.Info("...skipped (no font files to install)");
             else
             {
+                CancellationToken.ThrowIfCancellationRequested();
                 FontsTask = Task.Factory.StartNew(async () =>
                 {
                     Logging.Debug("checking system installed fonts to remove duplicates");
@@ -2090,6 +2120,7 @@ namespace RelhaxModpack.InstallerComponents
             Prog.ParrentTotal = 2;
             Prog.Filename = string.Empty;
             Progress.Report(Prog);
+            CancellationToken.ThrowIfCancellationRequested();
 
             //get a list of all packages in the database with zip files
             List<DatabasePackage> allFlatList = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList).Where(package => !string.IsNullOrWhiteSpace(package.ZipFile)).ToList();
@@ -2106,6 +2137,7 @@ namespace RelhaxModpack.InstallerComponents
             }
             Prog.ParrentCurrent = 1;
             Progress.Report(Prog);
+            CancellationToken.ThrowIfCancellationRequested();
 
             //update the list to only have the filename, not the complete path
             zipFilesInCache = zipFilesInCache.Select(str => Path.GetFileName(str)).ToList();
@@ -2124,6 +2156,7 @@ namespace RelhaxModpack.InstallerComponents
                     Prog.ChildCurrent++;
                     Prog.Filename = zipfile;
                     Progress.Report(Prog);
+                    CancellationToken.ThrowIfCancellationRequested();
 
                     Utils.FileDelete(Path.Combine(Settings.RelhaxDownloadsFolderPath, zipfile));
                 }
@@ -2461,6 +2494,7 @@ namespace RelhaxModpack.InstallerComponents
                 case ZipProgressEventType.Extracting_EntryBytesWritten:
                 case ZipProgressEventType.Extracting_BeforeExtractEntry:
                 case ZipProgressEventType.Extracting_AfterExtractEntry:
+                    CancellationToken.ThrowIfCancellationRequested();
                     lock (Progress)
                     {
                         Prog.BytesProcessed = (int)e.BytesTransferred;
@@ -2798,8 +2832,11 @@ namespace RelhaxModpack.InstallerComponents
                 if (!ModpackSettings.ExportMode)
                 {
                     Logging.Debug("creating mods and res_mods if they don't already exist, just in case");
-                    foreach (string s in new string[] { Path.Combine(Settings.WoTDirectory, "res_mods", Settings.WoTClientVersion),
-                    Path.Combine(Settings.WoTDirectory, "mods", Settings.WoTClientVersion) })
+                    foreach (string s in new string[]
+                    {
+                        Path.Combine(Settings.WoTDirectory, "res_mods", Settings.WoTClientVersion),
+                        Path.Combine(Settings.WoTDirectory, "mods", Settings.WoTClientVersion)
+                    })
                     {
                         if (!Directory.Exists(s))
                             Directory.CreateDirectory(s);

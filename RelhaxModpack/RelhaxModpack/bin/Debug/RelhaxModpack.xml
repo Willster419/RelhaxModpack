@@ -1186,7 +1186,7 @@
             Entry will be processed in any case (if package is checked), even if "save user data" option is "false"
             </summary>
         </member>
-        <member name="P:RelhaxModpack.UserFile.Files_saved">
+        <member name="P:RelhaxModpack.UserFile.FilesSaved">
             <summary>
             The list of actual files saved to the temporary backup directory. Contains the full path and file name
             </summary>
