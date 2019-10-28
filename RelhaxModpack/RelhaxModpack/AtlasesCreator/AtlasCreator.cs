@@ -177,37 +177,40 @@ namespace RelhaxModpack.AtlasesCreator
 
             //copy the subtexture bitmap data to each texture bitmap data
             Logging.Info("[atlas file {0}]: parsing bitmap data", Path.GetFileName(Atlas.AtlasFile));
-            //lock the atlas image into memory
-            Rectangle rect = new Rectangle(0, 0, atlasImage.Width, atlasImage.Height);
-            BitmapData atlasLock = atlasImage.LockBits(rect, ImageLockMode.ReadOnly, atlasImage.PixelFormat);
-            foreach (Texture texture in Atlas.TextureList)
+            lock (atlasImage)
             {
-                Token.ThrowIfCancellationRequested();
-                //copy the texture bitmap data into the texture bitmap object
-                //https://docs.microsoft.com/en-us/dotnet/api/system.drawing.bitmap.clone?redirectedfrom=MSDN&view=netframework-4.8#System_Drawing_Bitmap_Clone_System_Drawing_Rectangle_System_Drawing_Imaging_PixelFormat_
-                //rectangle of desired area to clone
-                Rectangle textureRect = new Rectangle(texture.X, texture.Y, texture.Width, texture.Height);
-                //copy the bitmap
-                try
+                //lock the atlas image into memory
+                Rectangle rect = new Rectangle(0, 0, atlasImage.Width, atlasImage.Height);
+                BitmapData atlasLock = atlasImage.LockBits(rect, ImageLockMode.ReadOnly, atlasImage.PixelFormat);
+                foreach (Texture texture in Atlas.TextureList)
                 {
-                    texture.AtlasImage = atlasImage.Clone(textureRect, atlasImage.PixelFormat);
-                }
-                catch(Exception ex)
-                {
-                    Logging.Exception("failed to clone atlas image data");
-                    Logging.Exception(ex.ToString());
+                    Token.ThrowIfCancellationRequested();
+                    //copy the texture bitmap data into the texture bitmap object
+                    //https://docs.microsoft.com/en-us/dotnet/api/system.drawing.bitmap.clone?redirectedfrom=MSDN&view=netframework-4.8#System_Drawing_Bitmap_Clone_System_Drawing_Rectangle_System_Drawing_Imaging_PixelFormat_
+                    //rectangle of desired area to clone
+                    Rectangle textureRect = new Rectangle(texture.X, texture.Y, texture.Width, texture.Height);
+                    //copy the bitmap
                     try
                     {
-                        atlasImage.UnlockBits(atlasLock);
-                        atlasImage.Dispose();
+                        texture.AtlasImage = atlasImage.Clone(textureRect, atlasImage.PixelFormat);
                     }
-                    catch
-                    { }
-                    return FailCode.ImageImporter;
+                    catch (Exception ex)
+                    {
+                        Logging.Exception("failed to clone atlas image data");
+                        Logging.Exception(ex.ToString());
+                        try
+                        {
+                            atlasImage.UnlockBits(atlasLock);
+                            atlasImage.Dispose();
+                        }
+                        catch
+                        { }
+                        return FailCode.ImageImporter;
+                    }
                 }
+                atlasImage.UnlockBits(atlasLock);
+                atlasImage.Dispose();
             }
-            atlasImage.UnlockBits(atlasLock);
-            atlasImage.Dispose();
             OnAtlasProgres?.Invoke(this, null);
 
             stopwatch.Stop();
@@ -365,9 +368,16 @@ namespace RelhaxModpack.AtlasesCreator
             //flip it because it's upside down because reasons.
             surface.FlipVertically();
 
-            //stride is row pitch
-
-            return new Bitmap(surface.Width, surface.Height, surface.Pitch, System.Drawing.Imaging.PixelFormat.Format32bppArgb, surface.DataPtr);
+            //https://stackoverflow.com/questions/2433481/is-passing-system-drawing-bitmap-across-class-libraries-unreliable
+            Bitmap temp = new Bitmap(surface.Width, surface.Height, surface.Pitch, PixelFormat.Format32bppArgb, surface.DataPtr);
+            Bitmap copy = new Bitmap(temp.Width, temp.Height);
+            copy.SetResolution(temp.HorizontalResolution, temp.VerticalResolution);
+            using (Graphics graphics = Graphics.FromImage(copy))
+            {
+                graphics.DrawImageUnscaled(temp, 0, 0);
+            }
+            temp.Dispose();
+            return copy;
         }
 
         private void SaveDDS(string filename, Bitmap image)
