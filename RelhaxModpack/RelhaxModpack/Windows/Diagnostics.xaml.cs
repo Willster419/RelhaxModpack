@@ -27,20 +27,22 @@ namespace RelhaxModpack.Windows
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
             //check to make sure a selected tanks installation is selected
-            ToggleCollectInfoButton();
+            ToggleInstallLocationNeededButtons();
         }
 
-        private void ToggleCollectInfoButton()
+        private void ToggleInstallLocationNeededButtons()
         {
             if (string.IsNullOrWhiteSpace(Settings.WoTDirectory))
             {
                 CollectLogInfoButton.IsEnabled = false;
+                DownloadWGPatchFiles.IsEnabled = false;
                 SelectedInstallation.Text = string.Format("{0}\n{1}",
                     Translations.GetTranslatedString("SelectedInstallation"), Translations.GetTranslatedString("SelectedInstallationNone"));
             }
             else
             {
                 CollectLogInfoButton.IsEnabled = true;
+                DownloadWGPatchFiles.IsEnabled = false;
                 SelectedInstallation.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("SelectedInstallation"), Settings.WoTDirectory);
             }
         }
@@ -70,7 +72,7 @@ namespace RelhaxModpack.Windows
             }
 
             //check to make sure a selected tanks installation is selected
-            ToggleCollectInfoButton();
+            ToggleInstallLocationNeededButtons();
         }
 
         private void LaunchWoTLauncher_Click(object sender, RoutedEventArgs e)
@@ -257,6 +259,11 @@ namespace RelhaxModpack.Windows
                 }
                 Logging.Info("Diagnostics: Test load image libraries fail");
             }
+        }
+
+        private void DownloadWGPatchFiles_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("placeholder");
         }
     }
 }

@@ -1,3 +1,22 @@
+Application version 0.29.3.6 (2019-10-27)
+https://www.virustotal.com/gui/file/7f0188265d4b4fe13e2a26e7dfb9ee24071483f49b91d035c68749d955e9b252/detection
+- Fixed bug of the selected language (other than english) not loading on application start.
+- Added a check in waiting for the font installation process. It is stopped after 10 seconds (it should never take longer then that).
+- Fixed bugs with manual detection if user sets the WoT exe in win32 or win64.
+- Updated Spanish, French, Polish, Russian translations.
+- Added getting the backup folder size to after an installation is complete and if a backup was performed.
+- Fixed issues with xvm URL launch from advanced install finished window.
+- Fixed UI issues with Media text field display in database editor.
+- Changed installer logic so that if it fails or is canceled, it will still clean up the temporary created folders.
+- Added error handling for malformed Json patch instruction files.
+- Changed some errors to warning level events in the patcher.
+- Added error handling for xmlUnpack()
+- Added install failed information if verbose logging is enabled. (Like if the instal finishes but patches failed).
+- Improved resource disposal and cleanup after an installation.
+- Re-worked the atlas creation steps to make it more readable and better code structured.
+- Added more logging information during installation.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 0.29.3.3 (2019-10-21)
 https://www.virustotal.com/gui/file/c4ca6837aa6f4a02e3f537717f087e9cd75d2ad67ddaf0a6016061b0ac004afd/detection
 - Updated german translations (thanks Elektrosmoker).
