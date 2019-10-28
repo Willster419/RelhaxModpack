@@ -1450,7 +1450,7 @@ namespace RelhaxModpack
 
             Logging.Debug("creating install engine, cancel options and progress reporting");
             //and create and link the install engine
-            installEngine = new InstallerComponents.InstallEngine()
+            installEngine = new InstallEngine()
             {
                 FlatListSelectablePackages = flatListSelect,
                 OrderedPackagesToInstall = orderedPackagesToInstall,
