@@ -3983,17 +3983,17 @@ namespace RelhaxModpack
 
             //Component: V2UpgradeNoticeText
             //
-            English.Add("V2UpgradeNoticeText", "It looks like you are running an upgrade from V1 to V2 for the first time." +
-                " Pressing continue will result in an upgrade to file structure that cannot be reverted. It is recommended to make a backup of your V1 folder before continuing");
-            German.Add("V2UpgradeNoticeText", "Es sieht so aus, als würdest du zum ersten Mal ein Upgrade von V1 auf V2 ausführen. " +
-                " Wenn du auf Fortsetzen klickst, wird ein Upgrade der Dateistruktur durchgeführt, das nicht wiederhergestellt werden kann. Es wird empfohlen, eine Sicherungskopie deines V1-Ordners zu erstellen, bevor du fortfährst");
+            English.Add("V2UpgradeNoticeText", "It looks like you are running an upgrade from V1 to V2 for the first time.\n" +
+                "Pressing continue will result in an upgrade to the file structure that cannot be reverted. It is recommended to make a backup of your V1 folder before continuing");
+            German.Add("V2UpgradeNoticeText", "Es sieht so aus, als würdest du zum ersten Mal ein Upgrade von V1 auf V2 ausführen.\n" +
+                "Wenn du auf Fortsetzen klickst, wird ein Upgrade der Dateistruktur durchgeführt, das nicht wiederhergestellt werden kann. Es wird empfohlen, eine Sicherungskopie deines V1-Ordners zu erstellen, bevor du fortfährst");
             Polish.Add("V2UpgradeNoticeText", "Wygląda na to, że przeprowadzasz aktualizację z wersji V1 na V2 po raz pierwszy.\n" +
-                " Kliknięcie 'Kontynuuj' nieodwracalnie przekonwertuje strukturę plików.\nPrzed kontynuacją zaleca się stworzenie kopii zapasowej folderu z wersją V1."); //Line-breaks, guessing it will be more readable. @Nullmaruzero
-            French.Add("V2UpgradeNoticeText", "Il semble que vous exécutiez une mise à niveau de V1 à V2 pour la première fois. "+
+                "Kliknięcie 'Kontynuuj' nieodwracalnie przekonwertuje strukturę plików.\nPrzed kontynuacją zaleca się stworzenie kopii zapasowej folderu z wersją V1."); //Line-breaks, guessing it will be more readable. @Nullmaruzero
+            French.Add("V2UpgradeNoticeText", "Il semble que vous exécutiez une mise à niveau de V1 à V2 pour la première fois.\n"+
                 "Appuyer sur Continuer entraînera une mise à niveau de la structure de fichiers qui ne peut pas être annulée. Il est recommandé de faire une sauvegarde de votre dossier V1 avant de continuer.");
-            Spanish.Add("V2UpgradeNoticeText", "Parece que está ejecutando la actualización de V1 a V2 por primera vez." +
-                " Pulsar continuar resultará en una actualización de la estructura de archivos que no puede ser revertida. Se recomienda crear una copia de seguridad de su carpeta V1 antes de continuar");
-            Russian.Add("V2UpgradeNoticeText", "Похоже, что вы производите апгрейд с V1 на V2 в первый раз. Нажатие кнопки продолжения произведёт обновление структуры файлов, которое невозможно откатить. Рекомендуется создание бэкапа папки с V1 перед продолжением");
+            Spanish.Add("V2UpgradeNoticeText", "Parece que está ejecutando la actualización de V1 a V2 por primera vez.\n" +
+                "Pulsar continuar resultará en una actualización de la estructura de archivos que no puede ser revertida. Se recomienda crear una copia de seguridad de su carpeta V1 antes de continuar");
+            Russian.Add("V2UpgradeNoticeText", "Похоже, что вы производите апгрейд с V1 на V2 в первый раз.\nНажатие кнопки продолжения произведёт обновление структуры файлов, которое невозможно откатить. Рекомендуется создание бэкапа папки с V1 перед продолжением");
 
             //Component: upgradingStructure
             //
