@@ -1,3 +1,10 @@
+Application version 0.29.3.7 (2019-10-28)
+https://www.virustotal.com/gui/file/6e4f841d5d9bd1b028a5b2692a657214ae7ceddbc1084f5af586c3c5bbc2b7dc/detection
+- FINALLY fixed the intermidant issue of contour icon atlas creation failing randomly.
+- Fixed UI placement of text components in the First Load Acknowledgements window.
+- Updated polish and english translations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 0.29.3.6 (2019-10-27)
 https://www.virustotal.com/gui/file/7f0188265d4b4fe13e2a26e7dfb9ee24071483f49b91d035c68749d955e9b252/detection
 - Fixed bug of the selected language (other than english) not loading on application start.
