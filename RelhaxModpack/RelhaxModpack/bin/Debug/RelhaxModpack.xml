@@ -4370,6 +4370,19 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.GameCenterUpdateDownloader">
+            <summary>
+            Interaction logic for GameCenterUpdateDownloader.xaml
+            </summary>
+            <summary>
+            GameCenterUpdateDownloader
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.GameCenterUpdateDownloader.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.NewsViewer">
             <summary>
             Interaction logic for NewsViewer.xaml
