@@ -5167,7 +5167,7 @@
             Loads all translation dictionaries. Should only be done once (at application start)
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Translations.LocalizeWindow(System.Windows.Window,System.Boolean)">
+        <member name="M:RelhaxModpack.Translations.LocalizeWindow(System.Windows.Window,System.Boolean,System.Boolean)">
             <summary>
             Applies localized text translations for the passed in window
             See the comments in the method for more information

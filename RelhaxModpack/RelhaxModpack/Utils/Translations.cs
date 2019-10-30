@@ -1,3 +1,4 @@
+using RelhaxModpack.Windows;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -4364,6 +4365,10 @@ namespace RelhaxModpack
             Russian.Add("SampleXmlOutput", "Пример на XML");
             #endregion
 
+            #region Game Center download utility
+
+            #endregion
+
             //apply the bool
             TranslationsLoaded = true;
         }
@@ -4376,8 +4381,31 @@ namespace RelhaxModpack
         /// </summary>
         /// <param name="window">The window to apply translations to</param>
         /// <param name="applyToolTips">Set to true to seach and apply tooltips to the components</param>
-        public static void LocalizeWindow(Window window, bool applyToolTips)
+        public static void LocalizeWindow(Window window, bool applyToolTips, bool applyWindowTitle)
         {
+            if (applyWindowTitle)
+            {
+                string typeName = window.GetType().Name;
+                if (window is RelhaxWindow)
+                {
+                    if (Exists(typeName))
+                    {
+                        window.Title = GetTranslatedString(typeName);
+                    }
+                    else
+                    {
+                        Logging.Warning("Translation requested of window {0} but key for window title does not exist!");
+                    }
+                }
+                else if (window is MainWindow)
+                {
+                    Logging.Debug("MainWindow Title localization skipped");
+                }
+                else
+                {
+                    Logging.Warning("Window type {0} is not of RelhaxWindow but translation requested!", typeName);
+                }
+            }
             //Get a list of all visual class controls curently presend and loaded in the window
             List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsVisual(window, false);
             foreach(FrameworkElement v in allWindowControls)
