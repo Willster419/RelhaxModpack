@@ -221,6 +221,9 @@
       <DependentUpon>FirstLoadAcknowledgments.xaml</DependentUpon>
     </Compile>
     <Compile Include="UIComponents\IPackageUIComponent.cs" />
+    <Compile Include="Windows\GameCenterUpdateDownloader.xaml.cs">
+      <DependentUpon>GameCenterUpdateDownloader.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\NewsViewer.xaml.cs">
       <DependentUpon>NewsViewer.xaml</DependentUpon>
     </Compile>
@@ -390,6 +393,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\FirstLoadAcknowledgments.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\GameCenterUpdateDownloader.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

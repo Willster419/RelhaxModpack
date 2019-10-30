@@ -1,0 +1,68 @@
+﻿<local:RelhaxWindow x:Class="RelhaxModpack.Windows.GameCenterUpdateDownloader"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RelhaxModpack.Windows"
+        mc:Ignorable="d"
+        Title="GameCenterUpdateDownloader" Height="350" Width="650">
+    <Grid>
+        <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <TabItem Header="Select WoT Client" IsEnabled="True" IsSelected="True" x:Name="GcDownloadStep1" >
+                <Grid Background="#FFE5E5E5" Tag="GcDownloadStep1">
+                    <Button HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75">
+                        <TextBlock Text="Cancel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    </Button>
+                    <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75">
+                        <TextBlock Text="Next" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    </Button>
+                    <TextBlock HorizontalAlignment="Stretch" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Close Game Center" IsEnabled="False" x:Name="GcDownloadStep2">
+                <Grid Background="#FFE5E5E5" Tag="GcDownloadStep2">
+                    <Button HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75">
+                        <TextBlock Text="Previous" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    </Button>
+                    <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75">
+                        <TextBlock Text="Next" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    </Button>
+                    <TextBlock HorizontalAlignment="Stretch" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Get Update Information" IsEnabled="False" x:Name="GcDownloadStep3">
+                <Grid Background="#FFE5E5E5" Tag="GcDownloadStep3">
+                    <Button HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75">
+                        <TextBlock Text="Previous" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    </Button>
+                    <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75">
+                        <TextBlock Text="Next" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    </Button>
+                    <TextBlock HorizontalAlignment="Stretch" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Download Update Files" IsEnabled="False" x:Name="GcDownloadStep4">
+                <Grid Background="#FFE5E5E5" Tag="GcDownloadStep4">
+                    <Button HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75">
+                        <TextBlock Text="Previous" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    </Button>
+                    <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75">
+                        <TextBlock Text="Next" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    </Button>
+                    <TextBlock HorizontalAlignment="Stretch" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Complete!" IsEnabled="False" x:Name="GcDownloadStep5">
+                <Grid Background="#FFE5E5E5" Tag="GcDownloadStep5">
+                    <Button HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75">
+                        <TextBlock Text="Previous" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    </Button>
+                    <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75">
+                        <TextBlock Text="Close" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    </Button>
+                    <TextBlock HorizontalAlignment="Stretch" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</local:RelhaxWindow>
